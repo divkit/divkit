@@ -55,6 +55,7 @@ data class Pager internal constructor(
             id = additive.id ?: properties.id,
             infiniteScroll = additive.infiniteScroll ?: properties.infiniteScroll,
             itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
+            itemCountVariable = additive.itemCountVariable ?: properties.itemCountVariable,
             itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
             items = additive.items ?: properties.items,
             layoutMode = additive.layoutMode ?: properties.layoutMode,
@@ -163,6 +164,10 @@ data class Pager internal constructor(
          * Sets collection elements dynamically using `data` and `prototypes`.
          */
         val itemBuilder: Property<CollectionItemBuilder>?,
+        /**
+         * Name of the variable to store the number of pager elements available to the user.
+         */
+        val itemCountVariable: Property<String>?,
         /**
          * Spacing between elements.
          * Default value: `{"type": "fixed","value":0}`.
@@ -295,6 +300,7 @@ data class Pager internal constructor(
             result.tryPutProperty("id", id)
             result.tryPutProperty("infinite_scroll", infiniteScroll)
             result.tryPutProperty("item_builder", itemBuilder)
+            result.tryPutProperty("item_count_variable", itemCountVariable)
             result.tryPutProperty("item_spacing", itemSpacing)
             result.tryPutProperty("items", items)
             result.tryPutProperty("layout_mode", layoutMode)
@@ -359,6 +365,7 @@ data class Pager internal constructor(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -407,6 +414,7 @@ fun DivScope.pager(
     id: String? = null,
     infiniteScroll: Boolean? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemCountVariable: String? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
@@ -453,6 +461,7 @@ fun DivScope.pager(
         id = valueOrNull(id),
         infiniteScroll = valueOrNull(infiniteScroll),
         itemBuilder = valueOrNull(itemBuilder),
+        itemCountVariable = valueOrNull(itemCountVariable),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
@@ -501,6 +510,7 @@ fun DivScope.pager(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -549,6 +559,7 @@ fun DivScope.pagerProps(
     id: String? = null,
     infiniteScroll: Boolean? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemCountVariable: String? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
@@ -594,6 +605,7 @@ fun DivScope.pagerProps(
     id = valueOrNull(id),
     infiniteScroll = valueOrNull(infiniteScroll),
     itemBuilder = valueOrNull(itemBuilder),
+    itemCountVariable = valueOrNull(itemCountVariable),
     itemSpacing = valueOrNull(itemSpacing),
     items = valueOrNull(items),
     layoutMode = valueOrNull(layoutMode),
@@ -641,6 +653,7 @@ fun DivScope.pagerProps(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -689,6 +702,7 @@ fun TemplateScope.pagerRefs(
     id: ReferenceProperty<String>? = null,
     infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
+    itemCountVariable: ReferenceProperty<String>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
@@ -734,6 +748,7 @@ fun TemplateScope.pagerRefs(
     id = id,
     infiniteScroll = infiniteScroll,
     itemBuilder = itemBuilder,
+    itemCountVariable = itemCountVariable,
     itemSpacing = itemSpacing,
     items = items,
     layoutMode = layoutMode,
@@ -781,6 +796,7 @@ fun TemplateScope.pagerRefs(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -829,6 +845,7 @@ fun Pager.override(
     id: String? = null,
     infiniteScroll: Boolean? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemCountVariable: String? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
@@ -875,6 +892,7 @@ fun Pager.override(
         id = valueOrNull(id) ?: properties.id,
         infiniteScroll = valueOrNull(infiniteScroll) ?: properties.infiniteScroll,
         itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
+        itemCountVariable = valueOrNull(itemCountVariable) ?: properties.itemCountVariable,
         itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
         items = valueOrNull(items) ?: properties.items,
         layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
@@ -923,6 +941,7 @@ fun Pager.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -971,6 +990,7 @@ fun Pager.defer(
     id: ReferenceProperty<String>? = null,
     infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
+    itemCountVariable: ReferenceProperty<String>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
@@ -1017,6 +1037,7 @@ fun Pager.defer(
         id = id ?: properties.id,
         infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
         itemBuilder = itemBuilder ?: properties.itemBuilder,
+        itemCountVariable = itemCountVariable ?: properties.itemCountVariable,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
@@ -1065,6 +1086,7 @@ fun Pager.defer(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -1113,6 +1135,7 @@ fun Pager.modify(
     id: Property<String>? = null,
     infiniteScroll: Property<Boolean>? = null,
     itemBuilder: Property<CollectionItemBuilder>? = null,
+    itemCountVariable: Property<String>? = null,
     itemSpacing: Property<FixedSize>? = null,
     items: Property<List<Div>>? = null,
     layoutMode: Property<PagerLayoutMode>? = null,
@@ -1159,6 +1182,7 @@ fun Pager.modify(
         id = id ?: properties.id,
         infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
         itemBuilder = itemBuilder ?: properties.itemBuilder,
+        itemCountVariable = itemCountVariable ?: properties.itemCountVariable,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
         layoutMode = layoutMode ?: properties.layoutMode,
@@ -1239,6 +1263,7 @@ fun Pager.evaluate(
         id = properties.id,
         infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
         itemBuilder = properties.itemBuilder,
+        itemCountVariable = properties.itemCountVariable,
         itemSpacing = properties.itemSpacing,
         items = properties.items,
         layoutMode = properties.layoutMode,
@@ -1287,6 +1312,7 @@ fun Pager.evaluate(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -1335,6 +1361,7 @@ fun Component<Pager>.override(
     id: String? = null,
     infiniteScroll: Boolean? = null,
     itemBuilder: CollectionItemBuilder? = null,
+    itemCountVariable: String? = null,
     itemSpacing: FixedSize? = null,
     items: List<Div>? = null,
     layoutMode: PagerLayoutMode? = null,
@@ -1382,6 +1409,7 @@ fun Component<Pager>.override(
         id = valueOrNull(id),
         infiniteScroll = valueOrNull(infiniteScroll),
         itemBuilder = valueOrNull(itemBuilder),
+        itemCountVariable = valueOrNull(itemCountVariable),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
         layoutMode = valueOrNull(layoutMode),
@@ -1430,6 +1458,7 @@ fun Component<Pager>.override(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -1478,6 +1507,7 @@ fun Component<Pager>.defer(
     id: ReferenceProperty<String>? = null,
     infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
+    itemCountVariable: ReferenceProperty<String>? = null,
     itemSpacing: ReferenceProperty<FixedSize>? = null,
     items: ReferenceProperty<List<Div>>? = null,
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
@@ -1525,6 +1555,7 @@ fun Component<Pager>.defer(
         id = id,
         infiniteScroll = infiniteScroll,
         itemBuilder = itemBuilder,
+        itemCountVariable = itemCountVariable,
         itemSpacing = itemSpacing,
         items = items,
         layoutMode = layoutMode,
@@ -1606,6 +1637,7 @@ fun Component<Pager>.evaluate(
         id = null,
         infiniteScroll = infiniteScroll,
         itemBuilder = null,
+        itemCountVariable = null,
         itemSpacing = null,
         items = null,
         layoutMode = null,
@@ -1654,6 +1686,7 @@ fun Component<Pager>.evaluate(
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
+ * @param itemCountVariable Name of the variable to store the number of pager elements available to the user.
  * @param itemSpacing Spacing between elements.
  * @param items Pager elements. Page-by-page transition options can be implemented using:<li>`div-action://set_current_item?id=&item=` — set the current page with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — go to the next page inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — go to the previous page inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
@@ -1702,6 +1735,7 @@ fun Component<Pager>.modify(
     id: Property<String>? = null,
     infiniteScroll: Property<Boolean>? = null,
     itemBuilder: Property<CollectionItemBuilder>? = null,
+    itemCountVariable: Property<String>? = null,
     itemSpacing: Property<FixedSize>? = null,
     items: Property<List<Div>>? = null,
     layoutMode: Property<PagerLayoutMode>? = null,
@@ -1749,6 +1783,7 @@ fun Component<Pager>.modify(
         id = id,
         infiniteScroll = infiniteScroll,
         itemBuilder = itemBuilder,
+        itemCountVariable = itemCountVariable,
         itemSpacing = itemSpacing,
         items = items,
         layoutMode = layoutMode,
