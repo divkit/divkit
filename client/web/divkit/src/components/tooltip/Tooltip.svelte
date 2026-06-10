@@ -13,7 +13,6 @@
 
 <script lang="ts">
     import { afterUpdate, getContext, onDestroy, onMount } from 'svelte';
-    import { fade } from 'svelte/transition';
 
     import rootCss from '../Root.module.css';
     import css from './Tooltip.module.css';

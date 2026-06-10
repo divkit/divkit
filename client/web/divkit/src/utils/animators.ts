@@ -10,6 +10,7 @@ import { correctNonNegativeNumber } from './correctNonNegativeNumber';
 import { correctPositiveNumber } from './correctPositiveNumber';
 import { getEasing } from './easing';
 import { lerp } from './lerp';
+import { isPrefersReducedMotion } from './isPrefersReducedMotion';
 
 function correctDirection(direction: string | undefined): AnimatorDirection | undefined {
     if (direction === 'normal' || direction === 'reverse' || direction === 'alternate' || direction === 'alternate_reverse') {
@@ -70,7 +71,12 @@ export function createAnimator(
 
     let animationTime = 0;
     let localTime = performance.now();
-    const maxTime = repeatCount === Infinity ? Infinity : repeatCount * duration + delay;
+
+    const iterationDuration = (repeatCount === Infinity || !isPrefersReducedMotion()) ?
+        duration :
+        0;
+
+    const maxTime = repeatCount === Infinity ? Infinity : repeatCount * iterationDuration + delay;
 
     function mix(t: number): string | number {
         if (animator.type === 'color_animator') {
@@ -94,9 +100,9 @@ export function createAnimator(
         animationTime += diff;
 
         if (animationTime >= delay) {
-            let iterationNumber = Math.floor((animationTime - delay) / duration);
+            let iterationNumber = Math.floor((animationTime - delay) / iterationDuration);
 
-            let t = (animationTime - delay - iterationNumber * duration) / duration;
+            let t = (animationTime - delay - iterationNumber * iterationDuration) / iterationDuration;
 
             if (iterationNumber >= repeatCount) {
                 iterationNumber = repeatCount - 1;
