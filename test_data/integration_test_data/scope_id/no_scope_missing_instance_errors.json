@@ -1,0 +1,114 @@
+{
+  "description": "No scope_id. Global lookup. Instance is not found. Expected: error.",
+  "div_data": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "text": "no target elements here"
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "scroll_to_missing",
+          "typed": {
+            "type": "scroll_to",
+            "id": "inner_gallery",
+            "destination": {
+              "type": "start"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'inner_gallery' not found"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "scroll_by_missing",
+          "typed": {
+            "type": "scroll_by",
+            "id": "inner_gallery",
+            "offset": 1
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'inner_gallery' not found"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "video_missing",
+          "typed": {
+            "type": "video",
+            "id": "inner_video",
+            "action": "start"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'inner_video' not found"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "animator_start_missing",
+          "typed": {
+            "type": "animator_start",
+            "animator_id": "inner_animator"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'inner_animator' not found"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "animator_stop_missing",
+          "typed": {
+            "type": "animator_stop",
+            "animator_id": "inner_animator"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'inner_animator' not found"
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

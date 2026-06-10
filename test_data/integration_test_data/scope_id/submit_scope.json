@@ -1,0 +1,127 @@
+{
+  "description": "submit. scope_id-related cases. container_id is duplicated across 3 item_builder items.",
+  "div_data": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "item_builder": {
+              "data": [
+                {
+                  "i": 1
+                },
+                {
+                  "i": 2
+                },
+                {
+                  "i": 3
+                }
+              ],
+              "prototypes": [
+                {
+                  "id": "item_@{getIntegerFromDict(it, 'i')}",
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "container",
+                        "id": "form_container",
+                        "variables": [
+                          {
+                            "type": "string",
+                            "name": "field1",
+                            "value": "hello"
+                          }
+                        ],
+                        "items": [
+                          {
+                            "type": "text",
+                            "text": "form"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "submit_no_scope_duplicate",
+          "typed": {
+            "type": "submit",
+            "container_id": "form_container",
+            "request": {
+              "url": ""
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'form_container' is ambiguous"
+        },
+        {
+          "type": "action",
+          "value": "submit_no_scope_duplicate"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "submit_scope_not_found",
+          "scope_id": "nonexistent_scope",
+          "typed": {
+            "type": "submit",
+            "container_id": "form_container",
+            "request": {
+              "url": ""
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Scope with id 'nonexistent_scope' not found"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "submit_scope_item1_missing_container",
+          "scope_id": "item_1",
+          "typed": {
+            "type": "submit",
+            "container_id": "missing_form",
+            "request": {
+              "url": ""
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'missing_form' not found within scope 'item_1'"
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}

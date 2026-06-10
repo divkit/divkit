@@ -1,0 +1,127 @@
+{
+  "description": "show_tooltip / hide_tooltip. scope_id-related cases. Tooltip id is duplicated across 3 item_builder items.",
+  "div_data": {
+    "card": {
+      "log_id": "test",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "item_builder": {
+              "data": [
+                {
+                  "i": 1
+                },
+                {
+                  "i": 2
+                },
+                {
+                  "i": 3
+                }
+              ],
+              "prototypes": [
+                {
+                  "id": "item_@{getIntegerFromDict(it, 'i')}",
+                  "div": {
+                    "type": "text",
+                    "text": "anchor @{getIntegerFromDict(it, 'i')}",
+                    "tooltips": [
+                      {
+                        "id": "inner_tooltip",
+                        "position": "bottom",
+                        "duration": 0,
+                        "div": {
+                          "type": "text",
+                          "text": "tip"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "div_actions": [
+        {
+          "log_id": "show_tooltip_no_scope_duplicate",
+          "typed": {
+            "type": "show_tooltip",
+            "id": "inner_tooltip",
+            "multiple": true
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'inner_tooltip' is ambiguous"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "hide_tooltip_no_scope_duplicate",
+          "typed": {
+            "type": "hide_tooltip",
+            "id": "inner_tooltip"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'inner_tooltip' is ambiguous"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "show_tooltip_scope_not_found",
+          "scope_id": "nonexistent_scope",
+          "typed": {
+            "type": "show_tooltip",
+            "id": "inner_tooltip",
+            "multiple": false
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Scope with id 'nonexistent_scope' not found"
+        }
+      ],
+      "platforms": []
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "hide_tooltip_scope_not_found",
+          "scope_id": "nonexistent_scope",
+          "typed": {
+            "type": "hide_tooltip",
+            "id": "inner_tooltip"
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Scope with id 'nonexistent_scope' not found"
+        }
+      ],
+      "platforms": []
+    }
+  ]
+}
