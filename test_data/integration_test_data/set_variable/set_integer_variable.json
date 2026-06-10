@@ -96,6 +96,36 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set from integer out of 32-bit range",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "result",
+            "value": {
+              "type": "integer",
+              "value": "@{1767214800000 + 10}"
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "result",
+          "value": {
+            "type": "integer",
+            "value": 1767214800010
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
     }
   ]
 }

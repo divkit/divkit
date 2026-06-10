@@ -8,7 +8,6 @@ import { evalExpression, type VariablesMap } from './eval';
 import { dateToString, gatherVarsFromAst, stringifyColor } from './utils';
 import { type LogError, wrapError } from '../utils/wrapError';
 import { parseColor } from '../utils/correctColor';
-import { MAX_INT32, MIN_INT32 } from './const';
 import { simpleUnescapeString } from './simpleUnescapeString';
 import { cacheGet, cacheSet } from './parserCache';
 import type { CustomFunctions } from './funcs/customFuncs';
@@ -93,8 +92,8 @@ class ExpressionBinding {
                 logError(wrapError(new Error('Expression execution error')));
             }
             if (result.type === 'integer') {
-                if ((value as number) > MAX_INT32 || (value as number) < MIN_INT32) {
-                    logError(wrapError(new Error('Expression result is out of 32-bit int range')));
+                if ((value as number) > Number.MAX_SAFE_INTEGER || (value as number) < Number.MIN_SAFE_INTEGER) {
+                    logError(wrapError(new Error('Expression result is out of safe int range')));
                     return {
                         result: undefined as T,
                         usedVars: res.usedVars
