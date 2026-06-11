@@ -28,7 +28,7 @@ class RuntimeStoreImplTest {
 
     private val runtimeProvider = mock<ExpressionsRuntimeProvider> {
         on { createRootRuntime(any(), any(), any(), any()) } doReturn rootRuntime
-        on { createChildRuntime(any(), any(), any(), any()) } doReturn childRuntime
+        on { createChildRuntime(any(), any(), any()) } doReturn childRuntime
     }
     private val underTest = RuntimeStoreImpl(mock(), DivDataTag("test"), runtimeProvider, mock()).apply {
         putRuntime(rootRuntime, "", null)

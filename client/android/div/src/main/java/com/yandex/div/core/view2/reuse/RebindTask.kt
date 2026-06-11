@@ -54,6 +54,7 @@ internal class RebindTaskImpl(
     private val oldResolver: ExpressionResolver,
     private val newResolver: ExpressionResolver,
     private val reporter: ComplexRebindReporter,
+    private val path: DivStatePath,
 ) : RebindTask {
     private val bindingPoints = mutableSetOf<ExistingToken>()
     private val idsToBind = mutableListOf<ExistingToken>()
@@ -104,7 +105,7 @@ internal class RebindTaskImpl(
             return false
         }
         val existingToken = ExistingToken(
-            item = existingItem.toItemBuilderResult(oldResolver),
+            item = existingItem.toItemBuilderResult(oldResolver, path),
             view = rootView,
             childIndex = 0,
             parentToken = null,
@@ -114,7 +115,7 @@ internal class RebindTaskImpl(
             return false
         }
         val newToken = NewToken(
-            item = newItem.toItemBuilderResult(newResolver),
+            item = newItem.toItemBuilderResult(newResolver, path),
             childIndex = 0,
             lastExistingParent = null,
         )

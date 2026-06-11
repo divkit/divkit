@@ -3,7 +3,10 @@ package com.yandex.div.internal.core
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.expression.variables.ConstantsProvider
+import com.yandex.div.core.state.DivPathUtils.append
+import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -20,70 +23,90 @@ import com.yandex.div2.DivTabs
 internal const val INDEX_VARIABLE_NAME = "index"
 
 @InternalApi
-fun DivContainer.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
-    buildItems(items, itemBuilder, resolver)
+fun DivContainer.buildItems(resolver: ExpressionResolver, path: DivStatePath): List<DivItemBuilderResult> =
+    buildItems(items, itemBuilder, resolver, path)
 
 @InternalApi
-fun DivGallery.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
-    buildItems(items, itemBuilder, resolver)
+fun DivGallery.buildItems(resolver: ExpressionResolver, path: DivStatePath): List<DivItemBuilderResult> =
+    buildItems(items, itemBuilder, resolver, path)
 
 @InternalApi
-fun DivPager.buildItems(resolver: ExpressionResolver): List<DivItemBuilderResult> =
-    buildItems(items, itemBuilder, resolver)
+fun DivPager.buildItems(resolver: ExpressionResolver,  path: DivStatePath): List<DivItemBuilderResult> =
+    buildItems(items, itemBuilder, resolver, path)
 
 private fun buildItems(
     items: List<Div>?,
     itemBuilder: DivCollectionItemBuilder?,
-    resolver: ExpressionResolver
+    resolver: ExpressionResolver,
+    path: DivStatePath,
 ): List<DivItemBuilderResult> {
-    return itemBuilder?.build(resolver)
-        ?: items?.toDivItemBuilderResult(resolver)
+    return itemBuilder?.build(resolver, path)
+        ?: items?.toDivItemBuilderResult(resolver, path)
         ?: emptyList()
 }
 
-internal fun DivCollectionItemBuilder.build(resolver: ExpressionResolver): List<DivItemBuilderResult> =
-    data.evaluate(resolver).mapIndexedNotNull { i, obj -> buildItem(obj, i, resolver) }
+internal fun DivCollectionItemBuilder.build(
+    resolver: ExpressionResolver,
+    path: DivStatePath,
+): List<DivItemBuilderResult> =
+    data.evaluate(resolver).mapIndexedNotNull { i, obj -> buildItem(obj, i, resolver, path) }
 
 private fun DivCollectionItemBuilder.buildItem(
     data: Any,
     index: Int,
     resolver: ExpressionResolver,
+    path: DivStatePath,
 ): DivItemBuilderResult? {
-    val newResolver = getItemResolver(data, index, resolver) ?: return null
+    val (newResolver, childPath) = getItemResolverAndPath(data, index, resolver, path) ?: return null
     val prototype = prototypes.find { it.selector.evaluate(newResolver) } ?: return null
-    return prototype.div.copy(prototype.id?.evaluate(newResolver)).toItemBuilderResult(newResolver)
+    return prototype.div.copy(prototype.id?.evaluate(newResolver)).toItemBuilderResult(newResolver, childPath)
 }
 
-internal fun DivCollectionItemBuilder.getItemResolver(resolver: ExpressionResolver): ExpressionResolver {
+internal fun DivCollectionItemBuilder.getItemResolver(
+    resolver: ExpressionResolver,
+    path: DivStatePath,
+): ExpressionResolver {
     data.evaluate(resolver).forEach<Any> { i, obj ->
-        getItemResolver(obj, i, resolver)?.let { return it }
+        getItemResolverAndPath(obj, i, resolver, path)?.let { (childResolver, _) -> return childResolver }
     }
     return resolver
 }
 
-private fun DivCollectionItemBuilder.getItemResolver(
+private fun DivCollectionItemBuilder.getItemResolverAndPath(
     dataElement: Any,
     index: Int,
     resolver: ExpressionResolver,
-) = getItemBuilderResolver(dataElementName, dataElement, index, resolver, "")
+    path: DivStatePath,
+) = getItemResolverAndPath(dataElementName, dataElement, index, resolver, path, "")
 
-internal fun getItemBuilderResolver(
+internal fun getItemResolver(
     dataElementName: String,
     dataElement: Any,
     index: Int,
     resolver: ExpressionResolver,
+    path: DivStatePath,
     pathPrefix: String,
-): ExpressionResolver? {
-    val resolverImpl = resolver.asImpl ?: return resolver
+): ExpressionResolver? = getItemResolverAndPath(dataElementName, dataElement, index, resolver, path, pathPrefix)?.first
+
+private fun getItemResolverAndPath(
+    dataElementName: String,
+    dataElement: Any,
+    index: Int,
+    resolver: ExpressionResolver,
+    path: DivStatePath,
+    pathPrefix: String,
+): Pair<ExpressionResolver, DivStatePath>? {
+    val resolverImpl = resolver.asImpl ?: return null
     val validElement = resolverImpl.validateItemBuilderDataElement(dataElement, index) ?: return null
     val pathSegment = "$pathPrefix$dataElement:$index"
-    return resolverImpl.runtimeStore.getOrPutItemBuilderResolver(resolverImpl.childPath(pathSegment)) {
+    val childPath = path.appendDiv(pathSegment)
+    return resolverImpl.runtimeStore.getOrPutItemBuilderResolver(childPath.fullPath) {
         val localDataProvider = ConstantsProvider(mapOf(
             dataElementName to validElement,
             INDEX_VARIABLE_NAME to index.toLong()
         ))
         resolverImpl.withConstants(pathSegment, localDataProvider)
-    }
+    } to childPath
 }
 
 private fun Div.copy(id: String? = value().id): Div {
@@ -135,27 +158,41 @@ val DivGallery.nonNullItems: List<Div> get() = items ?: emptyList()
 
 val DivGrid.nonNullItems: List<Div> get() = items ?: emptyList()
 
-internal fun DivGrid.itemsToDivItemBuilderResult(resolver: ExpressionResolver) =
-    nonNullItems.toDivItemBuilderResult(resolver)
+internal fun DivGrid.itemsToDivItemBuilderResult(resolver: ExpressionResolver, path: DivStatePath) =
+    nonNullItems.toDivItemBuilderResult(resolver, path)
 
 val DivPager.nonNullItems: List<Div> get() = items ?: emptyList()
 
-internal fun DivTabs.itemsToDivItemBuilderResult(resolver: ExpressionResolver) =
-    items.map { it.div.toItemBuilderResult(resolver) }
+internal fun DivTabs.itemsToDivItemBuilderResult(resolver: ExpressionResolver, path: DivStatePath) =
+    items.map { it.div.toItemBuilderResult(resolver, path) }
 
-internal fun DivState.statesToDivItemBuilderResult(resolver: ExpressionResolver) =
-    states.mapNotNull { state -> state.div?.toItemBuilderResult(resolver) }
+internal fun DivState.statesToDivItemBuilderResult(
+    resolver: ExpressionResolver,
+    path: DivStatePath,
+): List<DivItemBuilderResult> {
+    val id = getId()
+    val paths = states.mapNotNull {
+        it.div ?: return@mapNotNull null
+        path.append(id, it, it.stateId)
+    }
+    return states.mapIndexedNotNull { index, state -> state.div?.toItemBuilderResult(resolver, paths[index]) }
+}
 
-internal fun List<Div>.toDivItemBuilderResult(resolver: ExpressionResolver): List<DivItemBuilderResult> {
+internal fun List<Div>.toDivItemBuilderResult(
+    resolver: ExpressionResolver,
+    path: DivStatePath,
+): List<DivItemBuilderResult> {
     val ids = getIds()
     return mapIndexed { index, div ->
-        val targetResolver = resolver.asImpl?.let { impl ->
-            val path = impl.childPath(ids[index])
-            impl.runtimeStore.getOrCreateRuntime(path, div, resolver).expressionResolver
-        } ?: resolver
-
-        div.toItemBuilderResult(targetResolver)
+        val childPath = path.appendDiv(ids[index])
+        val targetResolver = resolver.asImpl?.runtimeStore
+            ?.getOrCreateRuntime(childPath.fullPath, div, resolver)?.expressionResolver
+            ?: resolver
+        div.toItemBuilderResult(targetResolver, childPath)
     }
 }
 
-internal fun Div.toItemBuilderResult(resolver: ExpressionResolver) = DivItemBuilderResult(this, resolver)
+internal fun Div.toItemBuilderResult(
+    resolver: ExpressionResolver,
+    path: DivStatePath,
+) = DivItemBuilderResult(this, resolver, path)

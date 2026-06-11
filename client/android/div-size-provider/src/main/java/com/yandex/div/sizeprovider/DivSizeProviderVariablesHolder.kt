@@ -3,8 +3,6 @@ package com.yandex.div.sizeprovider
 import com.yandex.div.core.Disposable
 import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -12,6 +10,7 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivSize
 
+@Deprecated("For internal usage")
 class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber {
 
     private val changedVariables = mutableListOf<String>()
@@ -28,22 +27,22 @@ class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber 
 
     override fun visit(data: Div.Container, resolver: ExpressionResolver) {
         defaultVisit(data, resolver)
-        data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
+        data.value.items?.forEach { visit(it, resolver) }
     }
 
     override fun visit(data: Div.Grid, resolver: ExpressionResolver) {
         defaultVisit(data, resolver)
-        data.value.nonNullItems.forEach { visit(it, resolver) }
+        data.value.items?.forEach { visit(it, resolver) }
     }
 
     override fun visit(data: Div.Gallery, resolver: ExpressionResolver) {
         defaultVisit(data, resolver)
-        data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
+        data.value.items?.forEach { visit(it, resolver) }
     }
 
     override fun visit(data: Div.Pager, resolver: ExpressionResolver) {
         defaultVisit(data, resolver)
-        data.value.buildItems(resolver).forEach { visit(it.div, it.expressionResolver) }
+        data.value.items?.forEach { visit(it, resolver) }
     }
 
     override fun visit(data: Div.Tabs, resolver: ExpressionResolver) {

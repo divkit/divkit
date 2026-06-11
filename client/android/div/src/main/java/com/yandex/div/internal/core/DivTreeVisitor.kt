@@ -79,7 +79,7 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         path: DivStatePath,
         parent: T,
     ): T {
-        val builtItems = build(resolver)
+        val builtItems = build(resolver, path)
         val ids = builtItems.getItemIds()
         builtItems.forEachIndexed { index, item ->
             val childPath = path.appendDiv(ids[index])

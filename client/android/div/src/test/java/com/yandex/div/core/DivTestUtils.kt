@@ -76,9 +76,7 @@ internal fun ViewGroup.childrenToFlatList(): List<View> {
 }
 
 internal fun mockExpressionResolver(): ExpressionResolver {
-    val resolver = mock<ExpressionResolverImpl> {
-        on { childPath(any()) } doReturn ""
-    }
+    val resolver = mock<ExpressionResolverImpl>()
     val runtime = ExpressionsRuntime(resolver)
     val runtimeStore = mock<RuntimeStore> {
         on { getOrCreateRuntime(any(), any(), any()) } doReturn runtime

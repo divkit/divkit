@@ -65,7 +65,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
             if (patchDivs != null) {
                 removeItem(index)
 
-                val patchItems = patchDivs.toDivItemBuilderResult(bindingContext.expressionResolver)
+                val patchItems = patchDivs.toDivItemBuilderResult(bindingContext.expressionResolver, path)
                 addItems(index, patchItems)
 
                 index += patchDivs.size - 1
@@ -77,15 +77,15 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
 
         // Apply patch inside items if needed
         patch.patches.keys.filter { it !in appliedToListPatchIds }.forEach { idToFind ->
-            for (i in items.indices) {
-                val childDiv = items[i].div
+            items.forEachIndexed { i, item ->
+                val childDiv = item.div
                 divPatchApply.patchDivChild(
                     parentView = recyclerView ?: bindingContext.divView,
                     childDiv,
                     idToFind,
                     bindingContext.expressionResolver
                 )?.let { newDiv ->
-                    setItem(i, DivItemBuilderResult(newDiv, bindingContext.expressionResolver))
+                    setItem(i, DivItemBuilderResult(newDiv, item.expressionResolver, item.path))
                     return@forEach
                 }
             }

@@ -7,7 +7,6 @@ import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionView
 import com.yandex.div.core.player.DivPlayerView
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -23,7 +22,6 @@ internal class DivVideoView @JvmOverloads constructor(
     Releasable,
     MediaReleasable {
 
-    var path: DivStatePath? = null
     private val videoSubscriptions = mutableListOf<Disposable>()
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

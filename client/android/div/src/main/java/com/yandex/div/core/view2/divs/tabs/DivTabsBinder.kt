@@ -94,7 +94,7 @@ internal class DivTabsBinder @Inject constructor(
                 return@bindView
             }
         } else {
-            baseBinder.bindView(context, view, div, oldDiv)
+            baseBinder.bindView(context, view, div, oldDiv, path)
             view.bind(context, div.value, oldDiv?.value)
         }
 

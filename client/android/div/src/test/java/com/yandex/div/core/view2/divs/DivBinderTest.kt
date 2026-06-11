@@ -48,9 +48,7 @@ open class DivBinderTest {
 
     internal val context = RuntimeEnvironment.application
     private val oldExpressionResolver = mock<ExpressionResolver>()
-    internal val resolver = mock<ExpressionResolverImpl> {
-        on { childPath(any()) } doReturn ""
-    }
+    internal val resolver = mock<ExpressionResolverImpl>()
     private val runtime = mock<ExpressionsRuntime> {
         on { expressionResolver } doReturn resolver
     }
@@ -99,9 +97,5 @@ open class DivBinderTest {
 
     init {
         whenever(resolver.runtimeStore).doReturn(runtimeStore)
-    }
-
-    companion object {
-        internal const val CARD_ID = "id"
     }
 }

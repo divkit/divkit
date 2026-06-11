@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -10,6 +11,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DivSeparatorBinderTest : DivBinderTest() {
 
+    private val path = DivStatePath.fromState(0)
     private val binder = DivSeparatorBinder(
         baseBinder,
     )
@@ -20,7 +22,7 @@ class DivSeparatorBinderTest : DivBinderTest() {
         val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivSeparatorView
         view.layoutParams = defaultLayoutParams()
 
-        binder.bindView(bindingContext, view, div)
+        binder.bindView(bindingContext, view, div, path)
 
         assertActionApplied(bindingContext, view, Expected.ACTION_URI)
     }
@@ -31,7 +33,7 @@ class DivSeparatorBinderTest : DivBinderTest() {
         val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivSeparatorView
         view.layoutParams = defaultLayoutParams()
 
-        binder.bindView(bindingContext, view, div)
+        binder.bindView(bindingContext, view, div, path)
 
         assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
     }

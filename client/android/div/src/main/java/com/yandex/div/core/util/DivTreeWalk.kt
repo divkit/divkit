@@ -1,5 +1,6 @@
 package com.yandex.div.core.util
 
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.itemsToDivItemBuilderResult
@@ -15,24 +16,26 @@ private typealias Converter<T> = (DivItemBuilderResult) -> T
  */
 internal fun <T> Div.walk(
     resolver: ExpressionResolver,
+    path: DivStatePath,
     converter: Converter<T?>,
-): DivTreeWalk<T> = DivTreeWalk(this, resolver, converter)
+): DivTreeWalk<T> = DivTreeWalk(this, resolver, path, converter)
 
-internal fun Div.walk(resolver: ExpressionResolver) = walk(resolver) { it }
+internal fun Div.walk(resolver: ExpressionResolver, path: DivStatePath) = walk(resolver, path) { it }
 
 internal class DivTreeWalk<T> private constructor(
     private val root: Div,
     private val resolver: ExpressionResolver,
+    private val path: DivStatePath,
     private val onEnter: ((Div) -> Boolean)?,
     private val onLeave: ((Div) -> Unit)?,
     private val converter: Converter<T?>,
     private val maxDepth: Int = Int.MAX_VALUE,
 ) : Sequence<T> {
 
-    internal constructor(root: Div, resolver: ExpressionResolver, converter: Converter<T?>) :
-        this(root, resolver, null, null, converter)
+    internal constructor(root: Div, resolver: ExpressionResolver, path: DivStatePath, converter: Converter<T?>) :
+        this(root, resolver, path, null, null, converter)
 
-    override fun iterator(): Iterator<T> = DivTreeWalkIterator(root, resolver, converter)
+    override fun iterator(): Iterator<T> = DivTreeWalkIterator(root, resolver, path, converter)
 
     /**
      * Sets a [predicate], that is called on any entered container div (div-container, div-gallery, etc.)
@@ -41,7 +44,7 @@ internal class DivTreeWalk<T> private constructor(
      * If the [predicate] returns `false` the div is not entered and neither it nor its children are visited.
      */
     fun onEnter(predicate: (Div) -> Boolean): DivTreeWalk<T> {
-        return DivTreeWalk(root, resolver, onEnter = predicate, onLeave = onLeave, converter, maxDepth = maxDepth)
+        return DivTreeWalk(root, resolver, path, onEnter = predicate, onLeave = onLeave, converter, maxDepth = maxDepth)
     }
 
     /**
@@ -49,7 +52,7 @@ internal class DivTreeWalk<T> private constructor(
      * and after it is visited itself.
      */
     fun onLeave(function: (Div) -> Unit): DivTreeWalk<T> {
-        return DivTreeWalk(root, resolver, onEnter = onEnter, onLeave = function, converter, maxDepth = maxDepth)
+        return DivTreeWalk(root, resolver, path, onEnter = onEnter, onLeave = function, converter, maxDepth = maxDepth)
     }
 
     /**
@@ -65,17 +68,18 @@ internal class DivTreeWalk<T> private constructor(
             throw IllegalArgumentException("depth must be positive, but was $depth.")
         }
 
-        return DivTreeWalk(root, resolver, onEnter, onLeave, converter, depth)
+        return DivTreeWalk(root, resolver, path, onEnter, onLeave, converter, depth)
     }
 
     private inner class DivTreeWalkIterator(
         private val root: Div,
         private val resolver: ExpressionResolver,
+        private val path: DivStatePath,
         private val converter: Converter<T?>,
     ) : AbstractIterator<T>() {
 
         private val stack = ArrayDeque<Node>().apply {
-            addLast(node(root.toItemBuilderResult(resolver)))
+            addLast(node(root.toItemBuilderResult(resolver, path)))
         }
 
         override fun computeNext() {
@@ -156,7 +160,7 @@ internal class DivTreeWalk<T> private constructor(
 
             var children = this.children
             if (children == null) {
-                children = item.div.getItems(item.expressionResolver)
+                children = item.div.getItems(item.expressionResolver, item.path)
                 this.children = children
             }
 
@@ -170,7 +174,7 @@ internal class DivTreeWalk<T> private constructor(
     }
 }
 
-private fun Div.getItems(resolver: ExpressionResolver): List<DivItemBuilderResult> {
+private fun Div.getItems(resolver: ExpressionResolver, path: DivStatePath): List<DivItemBuilderResult> {
     return when (this) {
         is Div.Text -> emptyList()
         is Div.Image -> emptyList()
@@ -183,11 +187,11 @@ private fun Div.getItems(resolver: ExpressionResolver): List<DivItemBuilderResul
         is Div.Select -> emptyList()
         is Div.Video -> emptyList()
         is Div.Switch -> emptyList()
-        is Div.Container -> value.buildItems(resolver)
-        is Div.Grid -> value.itemsToDivItemBuilderResult(resolver)
-        is Div.Gallery -> value.buildItems(resolver)
-        is Div.Pager -> value.buildItems(resolver)
-        is Div.Tabs -> value.itemsToDivItemBuilderResult(resolver)
-        is Div.State -> value.statesToDivItemBuilderResult(resolver)
+        is Div.Container -> value.buildItems(resolver, path)
+        is Div.Grid -> value.itemsToDivItemBuilderResult(resolver, path)
+        is Div.Gallery -> value.buildItems(resolver, path)
+        is Div.Pager -> value.buildItems(resolver, path)
+        is Div.Tabs -> value.itemsToDivItemBuilderResult(resolver, path)
+        is Div.State -> value.statesToDivItemBuilderResult(resolver, path)
     }
 }

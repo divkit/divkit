@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs.widgets
 
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.TransientView
@@ -13,11 +14,13 @@ internal interface DivHolderView<T: Div> : DivBorderSupports,
 
     var div: T?
     var bindingContext: BindingContext?
+    var path: DivStatePath?
 
     override fun release() {
         super.release()
         div = null
         bindingContext = null
+        path = null
         releaseBorderDrawer()
     }
 }
@@ -29,6 +32,8 @@ internal class DivHolderViewMixin<T: Div> : DivHolderView<T>,
     override var div: T? = null
 
     override var bindingContext: BindingContext? = null
+
+    override var path: DivStatePath? = null
 
     override val subscriptions = mutableListOf<Disposable>()
 }

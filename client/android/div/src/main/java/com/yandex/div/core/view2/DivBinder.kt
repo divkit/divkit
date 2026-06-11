@@ -93,10 +93,10 @@ internal class DivBinder @Inject constructor(
         }
 
         return when (div) {
-            is Div.Text -> bindText(context, view, div)
-            is Div.Image -> bindImage(context, view, div)
-            is Div.GifImage -> bindGifImage(context, view, div)
-            is Div.Separator -> bindSeparator(context, view, div)
+            is Div.Text -> bindText(context, view, div, path)
+            is Div.Image -> bindImage(context, view, div, path)
+            is Div.GifImage -> bindGifImage(context, view, div, path)
+            is Div.Separator -> bindSeparator(context, view, div, path)
             is Div.Container -> bindContainer(context, view, div, path)
             is Div.Grid -> bindGrid(context, view, div, path)
             is Div.Gallery -> bindGallery(context, view, div, path)
@@ -104,7 +104,7 @@ internal class DivBinder @Inject constructor(
             is Div.Tabs -> bindTabs(context, view, div, path)
             is Div.State -> bindState(context, view, div, path)
             is Div.Custom -> bindCustom(context, view, div, path)
-            is Div.Indicator -> bindIndicator(context, view, div)
+            is Div.Indicator -> bindIndicator(context, view, div, path)
             is Div.Slider -> bindSlider(context, view, div, path)
             is Div.Input -> bindInput(context, view, div, path)
             is Div.Select -> bindSelect(context, view, div, path)
@@ -122,20 +122,20 @@ internal class DivBinder @Inject constructor(
         pagerIndicatorConnector.attach()
     }
 
-    private fun bindText(context: BindingContext, view: View, data: Div.Text) {
-        textBinder.bindView(context, view as DivLineHeightTextView, data)
+    private fun bindText(context: BindingContext, view: View, data: Div.Text, path: DivStatePath) {
+        textBinder.bindView(context, view as DivLineHeightTextView, data, path)
     }
 
-    private fun bindImage(context: BindingContext, view: View, data: Div.Image) {
-        imageBinder.bindView(context, view as DivImageView, data)
+    private fun bindImage(context: BindingContext, view: View, data: Div.Image, path: DivStatePath) {
+        imageBinder.bindView(context, view as DivImageView, data, path)
     }
 
-    private fun bindGifImage(context: BindingContext, view: View, data: Div.GifImage) {
-        gifImageBinder.bindView(context, view as DivGifImageView, data)
+    private fun bindGifImage(context: BindingContext, view: View, data: Div.GifImage, path: DivStatePath) {
+        gifImageBinder.bindView(context, view as DivGifImageView, data, path)
     }
 
-    private fun bindSeparator(context: BindingContext, view: View, data: Div.Separator) {
-        separatorBinder.bindView(context, view as DivSeparatorView, data)
+    private fun bindSeparator(context: BindingContext, view: View, data: Div.Separator, path: DivStatePath) {
+        separatorBinder.bindView(context, view as DivSeparatorView, data, path)
     }
 
     private fun bindContainer(context: BindingContext, view: View, data: Div.Container, path: DivStatePath) {
@@ -166,8 +166,8 @@ internal class DivBinder @Inject constructor(
         customBinder.bindView(context, view as DivCustomWrapper, data, path)
     }
 
-    private fun bindIndicator(context: BindingContext, view: View, data: Div.Indicator) {
-        indicatorBinder.bindView(context, view as DivPagerIndicatorView, data)
+    private fun bindIndicator(context: BindingContext, view: View, data: Div.Indicator, path: DivStatePath) {
+        indicatorBinder.bindView(context, view as DivPagerIndicatorView, data, path)
     }
 
     private fun bindSlider(context: BindingContext, view: View, data: Div.Slider, path: DivStatePath) {
@@ -194,37 +194,42 @@ internal class DivBinder @Inject constructor(
         view.applyMargins(data.margins, resolver)
     }
 
-    fun setDataWithoutBinding(context: BindingContext, view: View, div: Div) = when (div) {
-        is Div.Text -> (view as DivLineHeightTextView).setDataWithoutBinding(context, div)
-        is Div.Image -> (view as DivImageView).setDataWithoutBinding(context, div)
-        is Div.GifImage -> (view as DivGifImageView).setDataWithoutBinding(context, div)
-        is Div.Separator -> (view as DivSeparatorView).setDataWithoutBinding(context, div)
-        is Div.Container -> setContainerData(context, view, div)
-        is Div.Grid -> setGridData(context, view, div)
-        is Div.Gallery -> (view as DivRecyclerView).setDataWithoutBinding(context, div)
-        is Div.Pager -> (view as DivPagerView).setDataWithoutBinding(context, div)
-        is Div.Tabs -> (view as DivTabsLayout).setDataWithoutBinding(context, div)
-        is Div.State -> (view as DivStateLayout).setDataWithoutBinding(context, div)
-        is Div.Custom -> (view as DivCustomWrapper).setDataWithoutBinding(context, div)
-        is Div.Indicator -> (view as DivPagerIndicatorView).setDataWithoutBinding(context, div)
-        is Div.Slider -> (view as DivSliderView).setDataWithoutBinding(context, div)
-        is Div.Input -> (view as DivInputView).setDataWithoutBinding(context, div)
-        is Div.Select -> (view as DivSelectView).setDataWithoutBinding(context, div)
-        is Div.Video -> (view as DivVideoView).setDataWithoutBinding(context, div)
-        is Div.Switch -> (view as DivSwitchView).setDataWithoutBinding(context, div)
+    fun setDataWithoutBinding(context: BindingContext, view: View, div: Div, path: DivStatePath) = when (div) {
+        is Div.Text -> (view as DivLineHeightTextView).setDataWithoutBinding(context, div, path)
+        is Div.Image -> (view as DivImageView).setDataWithoutBinding(context, div, path)
+        is Div.GifImage -> (view as DivGifImageView).setDataWithoutBinding(context, div, path)
+        is Div.Separator -> (view as DivSeparatorView).setDataWithoutBinding(context, div, path)
+        is Div.Container -> setContainerData(context, view, div, path)
+        is Div.Grid -> setGridData(context, view, div, path)
+        is Div.Gallery -> (view as DivRecyclerView).setDataWithoutBinding(context, div, path)
+        is Div.Pager -> (view as DivPagerView).setDataWithoutBinding(context, div, path)
+        is Div.Tabs -> (view as DivTabsLayout).setDataWithoutBinding(context, div, path)
+        is Div.State -> (view as DivStateLayout).setDataWithoutBinding(context, div, path)
+        is Div.Custom -> (view as DivCustomWrapper).setDataWithoutBinding(context, div, path)
+        is Div.Indicator -> (view as DivPagerIndicatorView).setDataWithoutBinding(context, div, path)
+        is Div.Slider -> (view as DivSliderView).setDataWithoutBinding(context, div, path)
+        is Div.Input -> (view as DivInputView).setDataWithoutBinding(context, div, path)
+        is Div.Select -> (view as DivSelectView).setDataWithoutBinding(context, div, path)
+        is Div.Video -> (view as DivVideoView).setDataWithoutBinding(context, div, path)
+        is Div.Switch -> (view as DivSwitchView).setDataWithoutBinding(context, div, path)
     }
 
-    private fun <T: Div> DivHolderView<T>.setDataWithoutBinding(context: BindingContext, newDiv: T) {
+    private fun <T: Div> DivHolderView<T>.setDataWithoutBinding(
+        context: BindingContext,
+        newDiv: T,
+        newPath: DivStatePath,
+    ) {
         div = newDiv
         bindingContext = context
+        path = newPath
     }
 
-    private fun setContainerData(context: BindingContext, view: View, data: Div.Container) {
-        containerBinder.setDataWithoutBinding(context, view as ViewGroup, data)
+    private fun setContainerData(context: BindingContext, view: View, data: Div.Container, path: DivStatePath) {
+        containerBinder.setDataWithoutBinding(context, view as ViewGroup, data, path)
     }
 
-    private fun setGridData(context: BindingContext, view: View, data: Div.Grid) {
-        gridBinder.setDataWithoutBinding(context, view as DivGridLayout, data)
+    private fun setGridData(context: BindingContext, view: View, data: Div.Grid, path: DivStatePath) {
+        gridBinder.setDataWithoutBinding(context, view as DivGridLayout, data, path)
     }
 }
 

@@ -30,7 +30,7 @@ internal class DivMultipleStateSwitcher @Inject constructor(
                 rootView.tryFindStateDivAndLayout(state, path, resolver) ?: return
 
             if (viewByPath != null && viewByPath !in boundLayouts) {
-                val viewPath = viewByPath.path ?: path
+                val viewPath = viewByPath.currentStatePath ?: path
                 val bindingContext = viewByPath.bindingContext ?: divView.bindingContext
                 divBinder.bind(bindingContext, viewByPath, divByPath, viewPath.parentState())
                 boundLayouts += viewByPath

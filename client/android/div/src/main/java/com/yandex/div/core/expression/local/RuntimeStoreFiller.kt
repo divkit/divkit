@@ -25,11 +25,7 @@ internal class RuntimeStoreFiller(
         val runtime = runtimeProvider.createRootRuntime(data, tag.id, errorCollector, store)
         store.putRuntime(runtime, "", null)
         data.states.forEach { state ->
-            val path = DivStatePath.fromState(state)
-            val stateResolver = runtime.expressionResolver.let {
-                if (state.div.hasLocalData) it else it.copy(path.fullPath)
-            }
-            visit(state.div, path, store, runtime, stateResolver)
+            visit(state.div, DivStatePath.fromState(state), store, runtime)
         }
         return runtime
     }
@@ -69,12 +65,21 @@ internal class RuntimeStoreFiller(
         parentRuntime: ExpressionsRuntime,
         intermediateResolver: ExpressionResolverImpl?,
     ): ExpressionsRuntime {
-        val runtime = if (div.hasLocalData) {
-            val parentResolver = intermediateResolver ?: parentRuntime.expressionResolver
-            runtimeProvider.createChildRuntime(path.fullPath, div, parentResolver, errorCollector)
-        } else {
-            val resolver = intermediateResolver ?: parentRuntime.expressionResolver.copyToChild(path.lastDivId)
-            runtimeProvider.createRuntimeWithResolver(div, resolver, errorCollector)
+        val runtime = when {
+            div.hasLocalData -> {
+                val parentResolver = intermediateResolver ?: parentRuntime.expressionResolver
+                runtimeProvider.createChildRuntime(div, parentResolver, errorCollector)
+            }
+            intermediateResolver != null ->
+                runtimeProvider.createRuntimeWithResolver(div, intermediateResolver, errorCollector)
+
+            div.value().variableTriggers?.isNotEmpty() == true ->
+                runtimeProvider.createRuntimeWithResolver(div, parentRuntime.expressionResolver, errorCollector)
+
+            else -> {
+                store.addPathForRuntime(parentRuntime, path.fullPath)
+                return parentRuntime
+            }
         }
 
         store.putRuntime(runtime, path.fullPath, parentRuntime)
@@ -112,7 +117,7 @@ internal class RuntimeStoreFiller(
         store: RuntimeStoreImpl,
         runtime: ExpressionsRuntime,
     ) {
-        val builtItems = build(runtime.expressionResolver)
+        val builtItems = build(runtime.expressionResolver, path)
         val ids = builtItems.getItemIds()
         builtItems.forEachIndexed { index, item ->
             visit(item.div, path.appendDiv(ids[index]), store, runtime, item.expressionResolver.asImpl)

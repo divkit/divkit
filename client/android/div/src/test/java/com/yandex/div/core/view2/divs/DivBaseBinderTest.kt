@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.dagger.Div2ViewComponent
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.DivTransitionHandler
@@ -44,16 +45,17 @@ class DivBaseBinderTest {
         on { viewComponent } doReturn viewComponent
     }
     private val context = BindingContext(divView, ExpressionResolver.EMPTY)
+    private val path = DivStatePath.fromState(0)
 
     @Test
     fun `do not apply paddings when same`() {
         val div = createDiv(paddings = paddingsBottom1)
         val oldDiv = createDiv(paddings = paddingsBottom1)
 
-        baseBinder.bindView(context, view, oldDiv, null)
+        baseBinder.bindView(context, view, oldDiv, null, path)
         clearInvocations(view)
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(context, view, div, oldDiv, path)
 
         verify(view, never()).setPadding(any(), any(), any(), any())
         verify(view, never()).requestLayout()
@@ -64,10 +66,10 @@ class DivBaseBinderTest {
         val div = createDiv(paddings = paddingsBottom1)
         val oldDiv = createDiv(paddings = paddingsBottom2)
 
-        baseBinder.bindView(context, view, oldDiv, null)
+        baseBinder.bindView(context, view, oldDiv, null, path)
         clearInvocations(view)
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(context, view, div, oldDiv, path)
 
         verify(view, never()).setPadding(any(), any(), any(), any())
         verify(view, never()).requestLayout()
@@ -78,7 +80,7 @@ class DivBaseBinderTest {
         val div = createDiv(paddings = paddingsBottom1)
         val oldDiv = createDiv(paddings = paddingsTop)
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(context, view, div, oldDiv, path)
 
         verify(view).setPadding(any(), any(), any(), any())
         verify(view, atLeastOnce()).requestLayout()
@@ -88,7 +90,7 @@ class DivBaseBinderTest {
     fun `not clear animation when view is visible`() {
         val div = createDiv(transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE))
 
-        baseBinder.bindView(context, view, div, null)
+        baseBinder.bindView(context, view, div, null, path)
 
         verify(view, never()).clearAnimation()
     }
@@ -100,7 +102,7 @@ class DivBaseBinderTest {
             transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
         )
 
-        baseBinder.bindView(context, view, div, null)
+        baseBinder.bindView(context, view, div, null, path)
 
         verify(view).clearAnimation()
     }
@@ -112,7 +114,7 @@ class DivBaseBinderTest {
             transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
         )
 
-        baseBinder.bindView(context, view, div, null)
+        baseBinder.bindView(context, view, div, null, path)
 
         verify(view).clearAnimation()
     }

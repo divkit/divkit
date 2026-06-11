@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.colorsEqualToConstant
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.evaluateGravity
@@ -70,7 +71,12 @@ internal class DivTextBinder @Inject constructor(
     @ExperimentFlag(HYPHENATION_SUPPORT_ENABLED) private val isHyphenationEnabled: Boolean
 ) : DivViewBinder<Div.Text, DivText, DivLineHeightTextView>(baseBinder) {
 
-    override fun DivLineHeightTextView.bind(bindingContext: BindingContext, div: DivText, oldDiv: DivText?) {
+    override fun DivLineHeightTextView.bind(
+        bindingContext: BindingContext,
+        div: DivText,
+        oldDiv: DivText?,
+        path: DivStatePath,
+    ) {
         configureView(bindingContext, this)
 
         applyDivActions(
@@ -97,8 +103,8 @@ internal class DivTextBinder @Inject constructor(
         bindUnderline(div, oldDiv, expressionResolver)
         bindStrikethrough(div, oldDiv, expressionResolver)
         bindMaxLines(bindingContext, div, oldDiv, expressionResolver)
-        bindText(bindingContext, div, oldDiv)
-        bindEllipsis(bindingContext, div, oldDiv)
+        bindText(bindingContext, div, oldDiv, path)
+        bindEllipsis(bindingContext, div, oldDiv, path)
         bindEllipsize(div, oldDiv, expressionResolver)
         bindTextGradient(bindingContext.divView, div, oldDiv, expressionResolver)
         bindTextShadow(div, oldDiv, expressionResolver)
@@ -572,31 +578,33 @@ internal class DivTextBinder @Inject constructor(
         bindingContext: BindingContext,
         newDiv: DivText,
         oldDiv: DivText?,
+        path: DivStatePath,
     ) {
         if (newDiv.ranges == null && newDiv.rangeBuilder == null
             && newDiv.images == null && newDiv.imageBuilder == null) {
             bindPlainText(bindingContext, newDiv, oldDiv)
         } else {
-            bindRichText(bindingContext, newDiv)
+            bindRichText(bindingContext, newDiv, path)
         }
     }
 
     private fun DivLineHeightTextView.bindRichText(
         bindingContext: BindingContext,
         newDiv: DivText,
+        path: DivStatePath,
     ) {
         val resolver = bindingContext.expressionResolver
-        applyRichText(bindingContext, newDiv)
+        applyRichText(bindingContext, newDiv, path)
         applyHyphenation(newDiv.text.evaluate(resolver))
 
         addSubscription(
             newDiv.text.observe(resolver) { text ->
-                applyRichText(bindingContext, newDiv)
+                applyRichText(bindingContext, newDiv, path)
                 applyHyphenation(text)
             }
         )
 
-        val callback = { _: Any -> applyRichText(bindingContext, newDiv) }
+        val callback = { _: Any -> applyRichText(bindingContext, newDiv, path) }
 
         addSubscription(newDiv.fontSize.observe(resolver, callback))
         addSubscription(newDiv.fontSizeUnit.observe(resolver, callback))
@@ -604,20 +612,21 @@ internal class DivTextBinder @Inject constructor(
         addSubscription(newDiv.lineHeight?.observe(resolver, callback))
 
         newDiv.ranges?.forEach { range -> subscribeToRange(range, resolver, callback) }
-        bindRangeBuilder(newDiv.rangeBuilder, resolver, callback)
+        bindRangeBuilder(newDiv.rangeBuilder, resolver, path, callback)
 
         newDiv.images?.forEach { image -> subscribeToImage(image, resolver, callback) }
-        bindImageBuilder(newDiv.imageBuilder, resolver, callback)
+        bindImageBuilder(newDiv.imageBuilder, resolver, path, callback)
     }
 
     private fun ExpressionSubscriber.bindRangeBuilder(
         rangeBuilder: DivText.RangeBuilder?,
         resolver: ExpressionResolver,
+        path: DivStatePath,
         callback: (Any) -> Unit,
     ) {
         rangeBuilder ?: return
         addSubscription(rangeBuilder.data.observe(resolver, callback))
-        val itemResolver = rangeBuilder.getItemResolver(resolver)
+        val itemResolver = rangeBuilder.getItemResolver(resolver, path)
         rangeBuilder.prototypes.forEach { prototype ->
             addSubscription(prototype.selector.observe(itemResolver, callback))
             subscribeToRange(prototype.range, itemResolver, callback)
@@ -627,11 +636,12 @@ internal class DivTextBinder @Inject constructor(
     private fun ExpressionSubscriber.bindImageBuilder(
         imageBuilder: DivText.ImageBuilder?,
         resolver: ExpressionResolver,
+        path: DivStatePath,
         callback: (Any) -> Unit,
     ) {
         imageBuilder ?: return
         addSubscription(imageBuilder.data.observe(resolver, callback))
-        val itemResolver = imageBuilder.getItemResolver(resolver)
+        val itemResolver = imageBuilder.getItemResolver(resolver, path)
         imageBuilder.prototypes.forEach { prototype ->
             addSubscription(prototype.selector.observe(itemResolver, callback))
             subscribeToImage(prototype.image, itemResolver, callback)
@@ -657,9 +667,10 @@ internal class DivTextBinder @Inject constructor(
 
     private fun TextView.applyRichText(
         bindingContext: BindingContext,
-        div: DivText
+        div: DivText,
+        path: DivStatePath,
     ) {
-        spannedTextBuilder.buildText(bindingContext, this, div) { spannedText ->
+        spannedTextBuilder.buildText(bindingContext, this, div, path) { spannedText ->
             setText(spannedText, TextView.BufferType.NORMAL)
         }
     }
@@ -780,6 +791,7 @@ internal class DivTextBinder @Inject constructor(
         bindingContext: BindingContext,
         newDiv: DivText,
         oldDiv: DivText?,
+        path: DivStatePath,
     ) {
         val ellipsis = newDiv.ellipsis
         if (ellipsis?.ranges == null && ellipsis?.rangeBuilder == null
@@ -787,7 +799,7 @@ internal class DivTextBinder @Inject constructor(
             && ellipsis?.actions == null) {
             bindPlainEllipsis(newDiv.ellipsis, oldDiv?.ellipsis, bindingContext.expressionResolver)
         } else {
-            bindRichEllipsis(bindingContext, newDiv)
+            bindRichEllipsis(bindingContext, newDiv, path)
         }
     }
 
@@ -818,25 +830,27 @@ internal class DivTextBinder @Inject constructor(
     private fun DivLineHeightTextView.bindRichEllipsis(
         bindingContext: BindingContext,
         newDiv: DivText,
+        path: DivStatePath,
     ) {
-        applyRichEllipsis(bindingContext, newDiv)
+        applyRichEllipsis(bindingContext, newDiv, path)
 
         val ellipsis = newDiv.ellipsis ?: return
 
         val resolver = bindingContext.expressionResolver
-        val callback = { _: Any -> applyRichEllipsis(bindingContext, newDiv) }
+        val callback = { _: Any -> applyRichEllipsis(bindingContext, newDiv, path) }
         addSubscription(ellipsis.text.observe(resolver, callback))
 
         ellipsis.ranges?.forEach { range -> subscribeToRange(range, resolver, callback) }
-        bindRangeBuilder(ellipsis.rangeBuilder, resolver, callback)
+        bindRangeBuilder(ellipsis.rangeBuilder, resolver, path, callback)
 
         ellipsis.images?.forEach { image -> subscribeToImage(image, resolver, callback) }
-        bindImageBuilder(ellipsis.imageBuilder, resolver, callback)
+        bindImageBuilder(ellipsis.imageBuilder, resolver, path, callback)
     }
 
     private fun EllipsizedTextView.applyRichEllipsis(
         bindingContext: BindingContext,
         newDiv: DivText,
+        path: DivStatePath,
     ) {
         val ellipsis = newDiv.ellipsis
         if (ellipsis == null) {
@@ -848,7 +862,8 @@ internal class DivTextBinder @Inject constructor(
             bindingContext = bindingContext,
             textView = this,
             divText = newDiv,
-            ellipsis
+            ellipsis,
+            path,
         ) { ellipsis ->
             this.ellipsis = ellipsis
         }

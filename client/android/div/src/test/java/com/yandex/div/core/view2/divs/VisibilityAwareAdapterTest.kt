@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -25,6 +26,7 @@ import org.mockito.kotlin.mock
 class VisibilityAwareAdapterTest {
 
     private val resolver = mock<ExpressionResolver>()
+    private val path = DivStatePath.fromState(0)
 
     /**
      * Notification kinds recorded by [TestAdapter] so tests can assert the
@@ -194,17 +196,10 @@ class VisibilityAwareAdapterTest {
         assertEquals(listOf(Notification.Removed(1)), adapter.notifications)
     }
 
-    private fun item(visibility: DivVisibility): DivItemBuilderResult =
-        DivItemBuilderResult(
-            div = Div.Container(DivContainer(visibility = Expression.constant(visibility))),
-            expressionResolver = resolver,
-        )
+    private fun item(visibility: DivVisibility) = item(Expression.constant(visibility))
 
-    private fun item(expression: Expression<DivVisibility>): DivItemBuilderResult =
-        DivItemBuilderResult(
-            div = Div.Container(DivContainer(visibility = expression)),
-            expressionResolver = resolver,
-        )
+    private fun item(expression: Expression<DivVisibility>) =
+        DivItemBuilderResult(Div.Container(DivContainer(visibility = expression)), resolver, path)
 
     /**
      * Mutable visibility expression used to drive `subscribeOnElements` callbacks in tests.

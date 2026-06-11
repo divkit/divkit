@@ -94,8 +94,8 @@ internal class DivContainerBinder @Inject constructor(
             return
         }
 
-        baseBinder.bindView(context, view, div, oldDiv)
-        view.bind(context, div.value, oldDiv?.value)
+        baseBinder.bindView(context, view, div, oldDiv, path)
+        view.bind(context, div.value, oldDiv?.value, path)
 
         for (childView in view.children) {
             context.divView.unbindViewFromDiv(childView)
@@ -108,6 +108,7 @@ internal class DivContainerBinder @Inject constructor(
         bindingContext: BindingContext,
         div: DivContainer,
         oldDiv: DivContainer?,
+        path: DivStatePath,
     ) {
         applyDivActions(
             bindingContext,
@@ -144,7 +145,7 @@ internal class DivContainerBinder @Inject constructor(
     ) {
         val divView = context.divView
         val resolver = context.expressionResolver
-        val items = div.buildItems(resolver)
+        val items = div.buildItems(resolver, path)
 
         var oldItems = (this as DivCollectionHolder).items
         when {
@@ -158,7 +159,7 @@ internal class DivContainerBinder @Inject constructor(
             divView.complexRebindInProgress -> oldItems = null
             oldDiv != null &&
                 DivComparator.areValuesReplaceable(oldDiv, div, oldResolver, context.expressionResolver) &&
-                DivComparator.areChildrenReplaceable(oldItems, items) -> Unit
+                DivComparator.areChildrenReplaceable(oldItems, items, path, path) -> Unit
 
             else -> {
                 replaceWithReuse(divView, oldItems, items)
@@ -177,8 +178,8 @@ internal class DivContainerBinder @Inject constructor(
         errorCollector: ErrorCollector,
     ) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver) {
-            val newItems = builder.build(context.expressionResolver)
+        bindItemBuilder(builder, context.expressionResolver, path) {
+            val newItems = builder.build(context.expressionResolver, path)
             val oldItems = (this as DivCollectionHolder).items ?: emptyList()
             replaceWithReuse(context.divView, oldItems, newItems)
             applyItems(context, div, div, newItems, oldItems, path, errorCollector)
@@ -238,7 +239,7 @@ internal class DivContainerBinder @Inject constructor(
         var shift = 0
         val patchedItems = newDiv.itemBuilder?.let { items } ?: items.flatMapIndexed { index, item ->
             applyPatchToChild(bindingContext, item.div, index + shift)
-                .map { div -> DivItemBuilderResult(div, item.expressionResolver) }
+                .map { div -> DivItemBuilderResult(div, item.expressionResolver, item.path) }
                 .also { shift += it.size - 1 }
         }
 
@@ -713,14 +714,19 @@ internal class DivContainerBinder @Inject constructor(
         }
     }
 
-    fun setDataWithoutBinding(bindingContext: BindingContext, view: ViewGroup, div: Div.Container) {
+    fun setDataWithoutBinding(
+        bindingContext: BindingContext,
+        view: ViewGroup,
+        div: Div.Container,
+        path: DivStatePath,
+    ) {
         @Suppress("UNCHECKED_CAST")
         (view as DivHolderView<Div.Container>).div = div
         val binder = divBinder.get()
-        div.value.buildItems(bindingContext.expressionResolver).forEachIndexed { index, item ->
+        div.value.buildItems(bindingContext.expressionResolver, path).forEachIndexed { index, item ->
             val childView = view.getChildAt(index)
             val context = childView.bindingContext ?: bindingContext
-            binder.setDataWithoutBinding(context, childView, item.div)
+            binder.setDataWithoutBinding(context, childView, item.div, item.path)
         }
     }
 

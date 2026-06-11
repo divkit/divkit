@@ -3,6 +3,7 @@ package com.yandex.div.internal.core
 import android.net.Uri
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivText
 import org.json.JSONObject
@@ -10,26 +11,30 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 class DivTextImageBuilderTest {
 
+    private val path = DivStatePath.fromState(0)
     private val store = mock<RuntimeStoreImpl> {
-        on { getOrPutItemBuilderResolver(any(), any()) } doAnswer {
-            createResolver(it.arguments[0] as String)
+        on { getOrPutItemBuilderResolver(any(), any()) } doAnswer { answer ->
+            val path = answer.arguments[0] as String
+            if (path.endsWith(":0")) {
+                createResolver().also { firstResolver = it }
+            } else {
+                createResolver().also { secondResolver = it }
+            }
         }
     }
-    private val resolver = createResolver("")
+    private val resolver = createResolver()
+    private var firstResolver: ExpressionResolverImpl? = null
+    private var secondResolver: ExpressionResolverImpl? = null
 
-    private fun createResolver(path: String): ExpressionResolverImpl =
-        ExpressionResolverImpl(path, store, mock(), mock(), mock())
+    private fun createResolver(): ExpressionResolverImpl = ExpressionResolverImpl(store, mock(), mock(), mock())
 
     @Test
     fun `builder produces an image per data element`() {
@@ -40,7 +45,7 @@ class DivTextImageBuilderTest {
             )
         )
 
-        val images = text.buildImages(resolver)
+        val images = text.buildImages(resolver, path)
 
         assertEquals(3, images?.size)
     }
@@ -55,7 +60,7 @@ class DivTextImageBuilderTest {
             )
         )
 
-        val images = text.buildImages(resolver)
+        val images = text.buildImages(resolver, path)
 
         assertEquals(1, images?.size)
         assertEquals(7L, images?.first()?.image?.start?.evaluate(resolver))
@@ -65,7 +70,7 @@ class DivTextImageBuilderTest {
     fun `static images are used when no builder is set`() {
         val text = createText(images = listOf(image(), image()))
 
-        val images = text.buildImages(resolver)
+        val images = text.buildImages(resolver, path)
 
         assertEquals(2, images?.size)
         images?.forEach { assertSame(resolver, it.resolver) }
@@ -83,7 +88,7 @@ class DivTextImageBuilderTest {
             )
         )
 
-        val images = text.buildImages(resolver)
+        val images = text.buildImages(resolver, path)
 
         assertEquals(2, images?.size)
         assertEquals(10L, images?.get(0)?.image?.start?.evaluate(resolver))
@@ -99,14 +104,14 @@ class DivTextImageBuilderTest {
             )
         )
 
-        val images = text.buildImages(resolver)
+        val images = text.buildImages(resolver, path)
 
         assertEquals(1, images?.size)
     }
 
     @Test
     fun `null when neither images nor builder are set`() {
-        val images = createText().buildImages(resolver)
+        val images = createText().buildImages(resolver, path)
 
         assertNull(images)
     }
@@ -121,7 +126,7 @@ class DivTextImageBuilderTest {
             )
         )
 
-        val images = ellipsis.buildImages(resolver)
+        val images = ellipsis.buildImages(resolver, path)
 
         assertEquals(2, images?.size)
     }
@@ -137,7 +142,7 @@ class DivTextImageBuilderTest {
             )
         )
 
-        val images = ellipsis.buildImages(resolver)
+        val images = ellipsis.buildImages(resolver, path)
 
         assertEquals(1, images?.size)
         assertEquals(7L, images?.first()?.image?.start?.evaluate(resolver))
@@ -176,8 +181,11 @@ class DivTextImageBuilderTest {
 
     private fun selectorForIndex(index: Int): Expression<Boolean> = mock {
         on { evaluate(any()) } doAnswer {
-            val r = it.arguments[0] as ExpressionResolverImpl
-            r.path.endsWith(":$index")
+            when (it.arguments[0]) {
+                firstResolver -> index == 0
+                secondResolver -> index == 1
+                else -> false
+            }
         }
         on { observe(any(), anyOrNull()) } doReturn mock()
     }

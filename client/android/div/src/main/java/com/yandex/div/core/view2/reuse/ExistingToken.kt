@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.reuse
 
 import android.view.View
 import android.view.ViewGroup
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
@@ -30,6 +31,8 @@ internal class ExistingToken(
 ) : Token(item, childIndex) {
 
     fun getChildrenTokens(parentToken: ExistingToken? = null): List<ExistingToken> {
+        val resolver = item.expressionResolver
+        val path = item.path
         return when (div) {
             is Div.Text -> emptyList()
             is Div.Image -> emptyList()
@@ -41,26 +44,34 @@ internal class ExistingToken(
             is Div.Select -> emptyList()
             is Div.Video -> emptyList()
             is Div.Switch -> emptyList()
-            is Div.Container -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
-            is Div.Custom -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
-            is Div.Grid -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
-            is Div.Gallery -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
-            is Div.Pager -> div.value.itemsToExistingTokenList(item.expressionResolver, parentToken)
+            is Div.Container -> div.value.itemsToExistingTokenList(resolver, parentToken,path)
+            is Div.Custom -> div.value.itemsToExistingTokenList(resolver, parentToken, path)
+            is Div.Grid -> div.value.itemsToExistingTokenList(resolver, parentToken, path)
+            is Div.Gallery -> div.value.itemsToExistingTokenList(resolver, parentToken, path)
+            is Div.Pager -> div.value.itemsToExistingTokenList(resolver, parentToken, path)
             is Div.Tabs -> throw RebindTask.UnsupportedElementException(div::class.java) // Not supported yet. Only full rebind
-            is Div.State -> stateToExistingTokenList(item.expressionResolver, parentToken)
+            is Div.State -> stateToExistingTokenList(resolver, parentToken, path)
         }
     }
 
-    private fun DivContainer.itemsToExistingTokenList(resolver: ExpressionResolver, parentToken: ExistingToken?): List<ExistingToken> {
-        return simpleItemsToExistingTokenList(buildItems(resolver), parentToken)
+    private fun DivContainer.itemsToExistingTokenList(
+        resolver: ExpressionResolver,
+        parentToken: ExistingToken?,
+        path: DivStatePath,
+    ): List<ExistingToken> {
+        return simpleItemsToExistingTokenList(buildItems(resolver, path), parentToken)
     }
 
-    private fun DivCustom.itemsToExistingTokenList(resolver: ExpressionResolver, parentToken: ExistingToken?): List<ExistingToken> {
+    private fun DivCustom.itemsToExistingTokenList(
+        resolver: ExpressionResolver,
+        parentToken: ExistingToken?,
+        path: DivStatePath,
+    ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()
         val customView = ((view as? DivCustomWrapper)?.customView as? ViewGroup) ?: return emptyList()
         nonNullItems.forEachIndexed { index, item ->
             val token = ExistingToken(
-                item = item.toItemBuilderResult(resolver),
+                item = item.toItemBuilderResult(resolver, path),
                 view = customView.getChildAt(index) ?: return emptyList(),
                 childIndex = index,
                 parentToken = parentToken ?: this@ExistingToken,
@@ -72,27 +83,30 @@ internal class ExistingToken(
 
     private fun DivGrid.itemsToExistingTokenList(
         resolver: ExpressionResolver,
-        parentToken: ExistingToken?
-    ): List<ExistingToken> = simpleItemsToExistingTokenList(itemsToDivItemBuilderResult(resolver), parentToken)
+        parentToken: ExistingToken?,
+        path: DivStatePath,
+    ): List<ExistingToken> = simpleItemsToExistingTokenList(itemsToDivItemBuilderResult(resolver, path), parentToken)
 
     private fun stateToExistingTokenList(
         resolver: ExpressionResolver,
-        parentToken: ExistingToken?
+        parentToken: ExistingToken?,
+        path: DivStatePath,
     ): List<ExistingToken> {
         val stateDiv = (view as? DivStateLayout)?.activeStateDiv ?: return emptyList()
-        return simpleItemsToExistingTokenList(listOf(stateDiv).toDivItemBuilderResult(resolver), parentToken)
+        return simpleItemsToExistingTokenList(listOf(stateDiv).toDivItemBuilderResult(resolver, path), parentToken)
     }
 
     private fun DivPager.itemsToExistingTokenList(
         resolver: ExpressionResolver,
-        parentToken: ExistingToken?
+        parentToken: ExistingToken?,
+        path: DivStatePath,
     ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()
         val pager = (view as? DivPagerView)?.viewPager ?: return emptyList()
         val adapter = (pager.adapter as? DivPagerAdapter) ?: return emptyList()
         val activeHashes = adapter.itemsToShow.map { it.div.hash() }
 
-        buildItems(resolver).forEachIndexed { index, newItem ->
+        buildItems(resolver, path).forEachIndexed { index, newItem ->
             if (newItem.div.hash() in activeHashes) {
                 val childViewIndex = activeHashes.indexOf(newItem.div.hash())
                 val targetView = view.getPageView(childViewIndex) ?: return@forEachIndexed
@@ -111,13 +125,14 @@ internal class ExistingToken(
 
     private fun DivGallery.itemsToExistingTokenList(
         resolver: ExpressionResolver,
-        parentToken: ExistingToken?
+        parentToken: ExistingToken?,
+        path: DivStatePath,
     ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()
         val adapter = ((view as? DivRecyclerView)?.adapter as? DivGalleryAdapter) ?: return emptyList()
         val activeHashes = adapter.visibleItems.map { it.div.hash() }
 
-        buildItems(resolver).forEachIndexed { index, newItem ->
+        buildItems(resolver, path).forEachIndexed { index, newItem ->
             if (newItem.div.hash() in activeHashes) {
                 val targetView = view.getItemView(index) ?: return@forEachIndexed
                 val token = ExistingToken(

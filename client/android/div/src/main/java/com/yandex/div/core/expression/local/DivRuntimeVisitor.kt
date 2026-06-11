@@ -126,7 +126,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         runtime: ExpressionsRuntime,
     ) {
-        val builtItems = build(runtime.expressionResolver)
+        val builtItems = build(runtime.expressionResolver, path)
         val ids = builtItems.getItemIds()
         builtItems.forEachIndexed { index, item ->
             val childPath = path.appendDiv(ids[index])

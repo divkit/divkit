@@ -24,6 +24,7 @@ import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.text.DivBackgroundSpan
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.toPorterDuffMode
@@ -91,6 +92,7 @@ internal class SpannedTextBuilder @Inject constructor(
         bindingContext: BindingContext,
         textView: TextView,
         divText: DivText,
+        path: DivStatePath,
         textConsumer: TextConsumer? = null
     ): Spanned {
         return buildText(
@@ -98,8 +100,8 @@ internal class SpannedTextBuilder @Inject constructor(
             textView,
             divText,
             divText.text.evaluate(bindingContext.expressionResolver),
-            divText.buildRanges(bindingContext.expressionResolver),
-            divText.buildImages(bindingContext.expressionResolver),
+            divText.buildRanges(bindingContext.expressionResolver, path),
+            divText.buildImages(bindingContext.expressionResolver, path),
             null,
             textConsumer
         )
@@ -110,14 +112,15 @@ internal class SpannedTextBuilder @Inject constructor(
         textView: TextView,
         divText: DivText,
         ellipsis: DivText.Ellipsis,
+        path: DivStatePath,
         textConsumer: TextConsumer? = null
     ): Spanned {
         return buildText(bindingContext,
             textView,
             divText,
             ellipsis.text.evaluate(bindingContext.expressionResolver),
-            ellipsis.buildRanges(bindingContext.expressionResolver),
-            ellipsis.buildImages(bindingContext.expressionResolver),
+            ellipsis.buildRanges(bindingContext.expressionResolver, path),
+            ellipsis.buildImages(bindingContext.expressionResolver, path),
             ellipsis.actions,
             textConsumer,
             inEllipsis = true

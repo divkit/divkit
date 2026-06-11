@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.os.Build
 import android.text.Layout
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.spannable.SpannedTextBuilder
@@ -23,6 +24,7 @@ class DivTextBinderTest : DivBinderTest() {
 
     private val typefaceResolver = mock<DivTypefaceResolver>()
     private val spannedTextBuilder = mock<SpannedTextBuilder>()
+    private val path = DivStatePath.fromState(0)
     private val binder = createBinder()
 
     @Before
@@ -35,7 +37,7 @@ class DivTextBinderTest : DivBinderTest() {
     fun `url action applied`() {
         val (divText, view) = createTestData("with_action.json")
 
-        binder.bindView(bindingContext, view, divText)
+        binder.bindView(bindingContext, view, divText, path)
 
         assertActionApplied(bindingContext, view, Expected.ACTION_URI)
     }
@@ -44,7 +46,7 @@ class DivTextBinderTest : DivBinderTest() {
     fun `state action applied`() {
         val (divText, view) = createTestData("with_set_state_action.json")
 
-        binder.bindView(bindingContext, view, divText)
+        binder.bindView(bindingContext, view, divText, path)
 
         assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
     }
@@ -54,7 +56,7 @@ class DivTextBinderTest : DivBinderTest() {
     fun `apply hyphenation for text with soft hyphens`() {
         val (divText, view) = createTestData("with_hyphenation.json")
 
-        binder.bindView(bindingContext, view, divText)
+        binder.bindView(bindingContext, view, divText, path)
 
         Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NORMAL, view.hyphenationFrequency)
     }
@@ -65,7 +67,7 @@ class DivTextBinderTest : DivBinderTest() {
         val binder = createBinder(isHyphenationEnabled = false)
         val (divText, view) = createTestData("with_hyphenation.json")
 
-        binder.bindView(bindingContext, view, divText)
+        binder.bindView(bindingContext, view, divText, path)
 
         Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NONE, view.hyphenationFrequency)
     }
@@ -75,7 +77,7 @@ class DivTextBinderTest : DivBinderTest() {
     fun `apply hyphenation if text has ellipsis`() {
         val (divText, view) = createTestData("with_hyphenation_ellipsis.json")
 
-        binder.bindView(bindingContext, view, divText)
+        binder.bindView(bindingContext, view, divText, path)
 
         Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NORMAL, view.hyphenationFrequency)
     }
@@ -85,11 +87,11 @@ class DivTextBinderTest : DivBinderTest() {
     fun `reset hyphenation after text has no soft hyphens`() {
         val (divText, view) = createTestData("with_hyphenation.json")
 
-        binder.bindView(bindingContext, view, divText)
+        binder.bindView(bindingContext, view, divText, path)
 
         val (newDivText, newView) = createTestData("with_action.json")
 
-        binder.bindView(bindingContext, newView, newDivText)
+        binder.bindView(bindingContext, newView, newDivText, path)
 
         Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NONE, newView.hyphenationFrequency)
     }

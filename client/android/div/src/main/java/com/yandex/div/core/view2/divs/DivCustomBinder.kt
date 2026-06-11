@@ -45,7 +45,7 @@ internal class DivCustomBinder @Inject constructor(
             }
         }
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(context, view, div, oldDiv, path)
         baseBinder.bindId(divView, view, null)
 
         val divValue = div.value

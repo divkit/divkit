@@ -1,5 +1,7 @@
 package com.yandex.div.core.view2.animations
 
+import com.yandex.div.core.state.DivPathUtils.fromState
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.isWrapContainer
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.buildItems
@@ -33,27 +35,37 @@ internal object DivComparator {
             return false
         }
 
-        return areDivsReplaceable(oldState.div, newState.div, oldResolver, newResolver, reporter).also {
+        return areDivsReplaceable(
+            oldState.div, newState.div,
+            oldResolver, newResolver,
+            DivStatePath.fromState(oldState), DivStatePath.fromState(newState),
+            reporter,
+        ).also {
             if (it) reporter?.onComparisonSuccess()
         }
     }
 
     fun areDivsReplaceable(
-        old: Div?,
-        new: Div?,
-        oldResolver: ExpressionResolver,
-        newResolver: ExpressionResolver,
+        old: Div?, new: Div?,
+        oldResolver: ExpressionResolver, newResolver: ExpressionResolver,
+        oldPath: DivStatePath?, newPath: DivStatePath,
         reporter: DivComparatorReporter? = null,
     ): Boolean {
         if (old?.javaClass != new?.javaClass) {
             reporter?.onComparisonDifferentClasses()
             return false
         }
-        if (old == null || new == null || old === new) {
+        if (old == null || new == null || old === new || oldPath == null) {
             return true
         }
         return areValuesReplaceable(old.value(), new.value(), oldResolver, newResolver, reporter) &&
-            areChildrenReplaceable(extractChildren(old, oldResolver), extractChildren(new, newResolver), reporter)
+            areChildrenReplaceable(
+                extractChildren(old, oldResolver, oldPath),
+                extractChildren(new, newResolver, newPath),
+                oldPath,
+                newPath,
+                reporter,
+            )
     }
 
     fun areValuesReplaceable(
@@ -87,6 +99,8 @@ internal object DivComparator {
     fun areChildrenReplaceable(
         oldChildren: List<DivItemBuilderResult>,
         newChildren: List<DivItemBuilderResult>,
+        oldPath: DivStatePath,
+        newPath: DivStatePath,
         reporter: DivComparatorReporter? = null,
     ): Boolean {
         if (oldChildren.size != newChildren.size) {
@@ -96,19 +110,22 @@ internal object DivComparator {
 
         return oldChildren.zip(newChildren).all {
             areDivsReplaceable(
-                it.first.div,
-                it.second.div,
-                it.first.expressionResolver,
-                it.second.expressionResolver,
-                reporter
+                it.first.div, it.second.div,
+                it.first.expressionResolver, it.second.expressionResolver,
+                oldPath, newPath,
+                reporter,
             )
         }
     }
 
-    private fun extractChildren(div: Div, resolver: ExpressionResolver): List<DivItemBuilderResult> {
+    private fun extractChildren(
+        div: Div,
+        resolver: ExpressionResolver,
+        path: DivStatePath,
+    ): List<DivItemBuilderResult> {
         return when (div) {
-            is Div.Container -> div.value.buildItems(resolver)
-            is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver)
+            is Div.Container -> div.value.buildItems(resolver, path)
+            is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver, path)
             is Div.Image -> emptyList()
             is Div.GifImage -> emptyList()
             is Div.Text -> emptyList()

@@ -27,7 +27,7 @@ internal object DivPathUtils {
         if (this !is ViewGroup) {
             return null
         }
-        if (this is DivStateLayout && this.path?.lastStateEquals(path) == true) {
+        if (this is DivStateLayout && this.currentStatePath?.lastStateEquals(path) == true) {
             return this
         }
 
@@ -36,12 +36,12 @@ internal object DivPathUtils {
         for (child in children) {
             val childView: DivStateLayout? = child.findStateLayout(path)
             if (childView != null) {
-                if (candidate?.path.toString() == childView.path.toString()) {
+                if (candidate?.currentStatePath.toString() == childView.currentStatePath.toString()) {
                     // At this point we have resolved at least 2 DivStateLayouts which
                     // may contain target state. We'll stop here to prevent unexpected
                     // behavior of switching to ambiguous state.
                     throw StateConflictException("Error resolving state for '$path'. " +
-                            "Found multiple elements that respond to path '${childView.path}'!")
+                            "Found multiple elements that respond to path '${childView.currentStatePath}'!")
                 }
                 candidate = childView
             }
@@ -61,7 +61,7 @@ internal object DivPathUtils {
         }
         var foundDiv: Div? = this
         states.forEach { (divId, _) ->
-            foundDiv = foundDiv?.findByPath(divId, resolver) ?: return null
+            foundDiv = foundDiv?.findByPath(divId, resolver, path) ?: return null
         }
         return foundDiv
     }
@@ -117,18 +117,18 @@ internal object DivPathUtils {
         }.distinct()
     }
 
-    private fun Div.findByPath(divId: String, resolver: ExpressionResolver): Div? {
+    private fun Div.findByPath(divId: String, resolver: ExpressionResolver, path: DivStatePath): Div? {
         return when (this) {
             is Div.State -> {
                 takeIf { value.getId() == divId }
-                    ?: value.states.findRecursively(divId, resolver) { it.div }
+                    ?: value.states.findRecursively(divId, resolver, path) { it.div }
             }
-            is Div.Tabs -> value.items.findRecursively(divId, resolver) { it.div }
-            is Div.Container -> value.buildItems(resolver).findRecursively(divId)
-            is Div.Grid -> value.nonNullItems.findRecursively(divId, resolver)
-            is Div.Gallery -> value.buildItems(resolver).findRecursively(divId)
-            is Div.Pager -> value.buildItems(resolver).findRecursively(divId)
-            is Div.Custom -> value.items?.findRecursively(divId, resolver)
+            is Div.Tabs -> value.items.findRecursively(divId, resolver, path) { it.div }
+            is Div.Container -> value.buildItems(resolver, path).findRecursively(divId, path)
+            is Div.Grid -> value.nonNullItems.findRecursively(divId, resolver, path)
+            is Div.Gallery -> value.buildItems(resolver, path).findRecursively(divId, path)
+            is Div.Pager -> value.buildItems(resolver, path).findRecursively(divId, path)
+            is Div.Custom -> value.items?.findRecursively(divId, resolver, path)
             is Div.Text -> null
             is Div.Image -> null
             is Div.Slider -> null
@@ -145,11 +145,12 @@ internal object DivPathUtils {
     private fun <T> Iterable<T>.findRecursively(
         divId: String,
         resolver: ExpressionResolver,
+        path: DivStatePath,
         getDiv: (T) -> Div? = { it as Div? },
-    ): Div? = firstNotNullOfOrNull { getDiv(it)?.findByPath(divId, resolver) }
+    ): Div? = firstNotNullOfOrNull { getDiv(it)?.findByPath(divId, resolver, path) }
 
-    private fun Iterable<DivItemBuilderResult>.findRecursively(divId: String): Div? =
-        firstNotNullOfOrNull { (div, resolver) -> div.findByPath(divId, resolver) }
+    private fun Iterable<DivItemBuilderResult>.findRecursively(divId: String, path: DivStatePath): Div? =
+        firstNotNullOfOrNull { (div, resolver) -> div.findByPath(divId, resolver, path) }
 
     internal fun DivState.getId(errorCallback: (() -> Unit)? = null): String = divId ?: id ?: run {
         errorCallback?.invoke()

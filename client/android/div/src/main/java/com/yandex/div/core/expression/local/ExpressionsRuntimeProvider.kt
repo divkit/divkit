@@ -75,14 +75,12 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             storedValueProvider,
             functionProvider,
             warningSender,
-            path = "",
             runtimeStore,
             errorCollector,
         )
     }
 
     fun createChildRuntime(
-        path: String,
         div: Div,
         parentResolver: ExpressionResolverImpl,
         errorCollector: ErrorCollector,
@@ -106,7 +104,6 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             parentResolver.evaluator.evaluationContext.storedValueProvider,
             functionProvider,
             parentResolver.evaluator.evaluationContext.warningSender,
-            path,
             parentResolver.runtimeStore,
             errorCollector,
         )
@@ -119,14 +116,13 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         storedValueProvider: StoredValueProvider,
         functionProvider: FunctionProvider,
         warningSender: WarningSender,
-        path: String,
         runtimeStore: RuntimeStore,
         errorCollector: ErrorCollector,
     ): ExpressionsRuntime {
         val evaluationContext =
             EvaluationContext(variableController, storedValueProvider, functionProvider, warningSender)
         val evaluator = Evaluator(evaluationContext)
-        val resolver = ExpressionResolverImpl(path, runtimeStore, variableController, evaluator, errorCollector)
+        val resolver = ExpressionResolverImpl(runtimeStore, variableController, evaluator, errorCollector)
 
         var propertyExecutor: PropertyVariableExecutorImpl? = null
 

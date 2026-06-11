@@ -17,6 +17,7 @@ import androidx.core.graphics.withSave
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.allSightActions
@@ -248,7 +249,7 @@ internal fun View.bindStates(bindingContext: BindingContext, binder: DivBinder) 
     traverseViewHierarchy(this) { currentView ->
         if (currentView !is DivStateLayout) return@traverseViewHierarchy true
         val div = currentView.div ?: return@traverseViewHierarchy false
-        val path = currentView.path ?: return@traverseViewHierarchy false
+        val path = currentView.currentStatePath ?: return@traverseViewHierarchy false
         binder.bind(bindingContext, currentView, div, path.parentState())
         false
     }
@@ -346,10 +347,15 @@ internal val View.asDivHolderView: DivHolderView<*>? get() {
 
 internal val View.bindingContext: BindingContext? get() = asDivHolderView?.bindingContext
 
-internal fun bindItemBuilder(builder: DivCollectionItemBuilder, resolver: ExpressionResolver, callback: (Any) -> Unit) {
+internal fun bindItemBuilder(
+    builder: DivCollectionItemBuilder,
+    resolver: ExpressionResolver,
+    path: DivStatePath,
+    callback: (Any) -> Unit,
+) {
     builder.data.observe(resolver, callback)
 
-    val itemResolver = builder.getItemResolver(resolver)
+    val itemResolver = builder.getItemResolver(resolver, path)
     builder.prototypes.forEach {
         it.selector.observe(itemResolver, callback)
     }

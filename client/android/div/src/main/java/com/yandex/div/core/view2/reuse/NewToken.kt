@@ -17,6 +17,7 @@ internal class NewToken(
 
     fun getChildrenTokens(): List<NewToken> {
         val resolver = item.expressionResolver
+        val path = item.path
         return when (val div = item.div) {
             is Div.Text -> listOf()
             is Div.Image -> listOf()
@@ -28,15 +29,15 @@ internal class NewToken(
             is Div.Select -> listOf()
             is Div.Video -> listOf()
             is Div.Switch -> listOf()
-            is Div.Container -> div.value.buildItems(resolver).itemsToNewTokenList()
-            is Div.Custom -> div.value.nonNullItems.toDivItemBuilderResult(resolver).itemsToNewTokenList()
-            is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver).itemsToNewTokenList()
-            is Div.Gallery -> div.value.buildItems(resolver).itemsToNewTokenList()
-            is Div.Pager -> div.value.buildItems(resolver).itemsToNewTokenList()
-            is Div.Tabs -> div.value.itemsToDivItemBuilderResult(resolver).itemsToNewTokenList()
+            is Div.Container -> div.value.buildItems(resolver, path).itemsToNewTokenList()
+            is Div.Custom -> div.value.nonNullItems.toDivItemBuilderResult(resolver, path).itemsToNewTokenList()
+            is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver, path).itemsToNewTokenList()
+            is Div.Gallery -> div.value.buildItems(resolver, path).itemsToNewTokenList()
+            is Div.Pager -> div.value.buildItems(resolver, path).itemsToNewTokenList()
+            is Div.Tabs -> div.value.itemsToDivItemBuilderResult(resolver, path).itemsToNewTokenList()
             is Div.State -> {
                 val stateToBindDiv = div.value.getDefaultState(resolver)?.div ?: return listOf()
-                listOf(stateToBindDiv.toItemBuilderResult(resolver)).itemsToNewTokenList()
+                listOf(stateToBindDiv.toItemBuilderResult(resolver, path)).itemsToNewTokenList()
             }
         }
     }

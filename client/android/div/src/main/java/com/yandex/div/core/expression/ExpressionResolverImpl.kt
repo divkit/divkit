@@ -28,10 +28,6 @@ import com.yandex.div.json.typeMismatch
 import org.json.JSONObject
 
 internal class ExpressionResolverImpl(
-    /**
-     * Unique path by which resolver could be found at [RuntimeStore].
-     */
-    val path: String,
     val runtimeStore: RuntimeStore,
     val variableController: VariableController,
     val evaluator: Evaluator,
@@ -236,7 +232,6 @@ internal class ExpressionResolverImpl(
                                constants: ConstantsProvider): ExpressionResolverImpl {
         val variableAndConstantController = VariableAndConstantController(variableController, constants)
         return ExpressionResolverImpl(
-            path = childPath(pathSegment),
             runtimeStore = this.runtimeStore,
             variableController = variableAndConstantController,
             evaluator = Evaluator(
@@ -258,12 +253,4 @@ internal class ExpressionResolverImpl(
             null
         }
     }
-
-    fun copy(path: String) =
-        ExpressionResolverImpl(path, runtimeStore, variableController, evaluator, errorCollector)
-
-    fun copyToChild(pathSegment: String) =
-        ExpressionResolverImpl(childPath(pathSegment), runtimeStore, variableController, evaluator, errorCollector)
-
-    fun childPath(childSegment: String) = if (path.isEmpty()) childSegment else "$path/$childSegment"
 }

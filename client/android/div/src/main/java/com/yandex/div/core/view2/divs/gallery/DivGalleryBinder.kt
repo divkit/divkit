@@ -52,14 +52,14 @@ internal class DivGalleryBinder @Inject constructor(
             return
         }
 
-        baseBinder.bindView(context, view, div, oldDiv)
+        baseBinder.bindView(context, view, div, oldDiv, path)
         view.bind(context, div.value, path)
     }
 
     private fun DivRecyclerView.bind(bindingContext: BindingContext, div: DivGallery, path: DivStatePath) {
         val resolver = bindingContext.expressionResolver
         val galleryAdapter =
-            DivGalleryAdapter(div.buildItems(resolver), bindingContext, divBinder.get(), viewCreator, path)
+            DivGalleryAdapter(div.buildItems(resolver, path), bindingContext, divBinder.get(), viewCreator, path)
         val reusableObserver = { _: Any -> updateDecorations(bindingContext, div, galleryAdapter) }
         addSubscription(div.orientation.observe(resolver, reusableObserver))
         addSubscription(div.scrollbar.observe(resolver, reusableObserver))
@@ -75,7 +75,7 @@ internal class DivGalleryBinder @Inject constructor(
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         adapter = galleryAdapter
-        bindItemBuilder(bindingContext, div)
+        bindItemBuilder(bindingContext, div, path)
         resetAnimatorAndRestoreOnLayout()
         updateDecorations(bindingContext, div, galleryAdapter)
     }
@@ -203,10 +203,10 @@ internal class DivGalleryBinder @Inject constructor(
         }
     }
 
-    private fun DivRecyclerView.bindItemBuilder(context: BindingContext, div: DivGallery) {
+    private fun DivRecyclerView.bindItemBuilder(context: BindingContext, div: DivGallery, path: DivStatePath) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver) {
-            (adapter as DivGalleryAdapter?)?.setItems(builder.build(context.expressionResolver))
+        bindItemBuilder(builder, context.expressionResolver, path) {
+            (adapter as DivGalleryAdapter?)?.setItems(builder.build(context.expressionResolver, path))
         }
     }
 }

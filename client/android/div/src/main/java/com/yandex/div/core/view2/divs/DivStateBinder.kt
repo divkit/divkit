@@ -108,7 +108,7 @@ internal class DivStateBinder @Inject constructor(
 
         val oldDiv = view.activeStateDiv
         if (oldDivState !== div) {
-            baseBinder.bindView(context, view, div, oldDiv)
+            baseBinder.bindView(context, view, div, oldDiv, path)
             view.bind(context, divValue, oldDivState?.value, newState, path)
         }
 
@@ -182,6 +182,7 @@ internal class DivStateBinder @Inject constructor(
                 resolver, oldResolver,
                 parentTransitions,
                 divView,
+                path,
             )?.let { transition ->
                 TransitionManager.endTransitions(sceneRoot)
                 SceneRootWatcher.watchFor(sceneRoot, transition)
@@ -197,7 +198,11 @@ internal class DivStateBinder @Inject constructor(
             }
         } else if (newStateDivValue != null) {
             val areDivsReplaceable = outgoing != null && oldResolver != null &&
-                DivComparator.areDivsReplaceable(oldDiv, newStateDiv, oldResolver, resolver)
+                DivComparator.areDivsReplaceable(
+                    oldDiv, newStateDiv,
+                    oldResolver, resolver,
+                    path.append(id, oldState, oldState.stateId), currentPath,
+                )
             incoming =
                 if (areDivsReplaceable) outgoing else getIncomingView(reusableIncomingView, newStateDiv, resolver)
             if (!areDivsReplaceable) {
@@ -254,7 +259,7 @@ internal class DivStateBinder @Inject constructor(
         }
 
         activeStateDiv = newStateDiv
-        this.path = currentPath
+        currentStatePath = currentPath
 
         if (outgoing != null) {
             runtimeVisitor.createAndAttachRuntimesToState(divView, divState, path, resolver)
@@ -366,18 +371,20 @@ internal class DivStateBinder @Inject constructor(
         resolver: ExpressionResolver, oldResolver: ExpressionResolver?,
         parentItems: Sequence<TransitionData>?,
         divView: Div2View,
+        path: DivStatePath,
     ): Transition? {
         oldResolver ?: return setupAnimation(incomingState, outgoingState, incoming, outgoing, resolver, null)
 
         return if (divState.allowsTransitionsOnStateChange(resolver)
-            && (outgoingState.div?.containsStateInnerTransitions(oldResolver) == true
-                || incomingState.div?.containsStateInnerTransitions(resolver) == true)) {
+            && (outgoingState.div?.containsStateInnerTransitions(oldResolver, path) == true
+                || incomingState.div?.containsStateInnerTransitions(resolver, path) == true)) {
             setupTransitions(
                 divView.viewComponent.transitionBuilder,
                 divView.viewComponent.stateTransitionHolder,
                 incomingState, outgoingState,
                 resolver, oldResolver,
-                parentItems
+                parentItems,
+                path,
             )
         } else {
             setupAnimation(incomingState, outgoingState, incoming, outgoing, resolver, oldResolver)
@@ -394,12 +401,13 @@ internal class DivStateBinder @Inject constructor(
         incomingState: DivState.State, outgoingState: DivState.State,
         incomingResolver: ExpressionResolver, outgoingResolver: ExpressionResolver,
         parentTransitions: Sequence<TransitionData>?,
+        path: DivStatePath,
     ) : Transition? {
         if (incomingState == outgoingState) {
             return null
         }
 
-        val outgoingTransitions = outgoingState.toTransitionSequence(outgoingResolver, isIncoming = false)
+        val outgoingTransitions = outgoingState.toTransitionSequence(outgoingResolver, path, isIncoming = false)
         val from = when {
             parentTransitions == null -> outgoingTransitions
             outgoingTransitions == null -> parentTransitions
@@ -407,7 +415,7 @@ internal class DivStateBinder @Inject constructor(
         }
         val transition = transitionBuilder.buildTransitions(
             from = from,
-            to = incomingState.toTransitionSequence(incomingResolver, isIncoming = true)
+            to = incomingState.toTransitionSequence(incomingResolver, path, isIncoming = true)
         )
 
         transitionHolder.append(transition)
@@ -416,9 +424,10 @@ internal class DivStateBinder @Inject constructor(
 
     private fun DivState.State.toTransitionSequence(
         resolver: ExpressionResolver,
+        path: DivStatePath,
         isIncoming: Boolean
     ): Sequence<TransitionData>? {
-        return div?.walk(resolver) { item ->
+        return div?.walk(resolver, path) { item ->
             item.toTransitionData(isIncoming) { div ->
                 div.transitionTriggers?.allowsTransitionsOnStateChange() ?: true
             }

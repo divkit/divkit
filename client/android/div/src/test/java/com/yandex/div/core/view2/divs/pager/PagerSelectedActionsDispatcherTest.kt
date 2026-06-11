@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.mockExpressionResolver
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.divView
@@ -37,10 +38,11 @@ class PagerSelectedActionsDispatcherTest {
     private val div = UnitTestData(PAGER_DIR, "pager_selected_actions.json").div
     private val divPager = div.value() as DivPager
     private val resolver = mockExpressionResolver()
+    private val path = DivStatePath.fromState(0)
 
     private val underTest = PagerSelectedActionsDispatcher(
         divView,
-        divPager.buildItems(resolver),
+        divPager.buildItems(resolver, path),
         actionPerformer
     )
 
@@ -55,7 +57,7 @@ class PagerSelectedActionsDispatcherTest {
 
         val underTest = PagerSelectedActionsDispatcher(
             divView,
-            divPager.buildItems(resolver),
+            divPager.buildItems(resolver, path),
             actionPerformer
         )
         underTest.whenAttached()

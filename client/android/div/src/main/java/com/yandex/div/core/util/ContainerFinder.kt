@@ -35,7 +35,7 @@ internal class ContainerFinder(private val id: String) : DivTreeVisitor<Unit>() 
 
     override fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath) {
         if (data.value().id == id) {
-            containers.add(data.toItemBuilderResult(resolver))
+            containers.add(data.toItemBuilderResult(resolver, path))
         }
     }
 }

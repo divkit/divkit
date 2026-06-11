@@ -31,9 +31,9 @@ internal class DivStateLayout @JvmOverloads constructor(
 ) : FrameContainerLayout(context, attrs, defStyleAttr),
     DivHolderView<Div.State> by DivHolderViewMixin() {
 
-    var path: DivStatePath? = null
+    var currentStatePath: DivStatePath? = null
     val stateId: String?
-        get() = path?.lastStateId
+        get() = currentStatePath?.lastStateId
     private val swipeListener = SwipeListener()
     private val gestureDetector = GestureDetectorCompat(context, swipeListener, Handler(Looper.getMainLooper()))
     var swipeOutCallback: (() -> Unit)? = null

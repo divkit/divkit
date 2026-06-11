@@ -7,6 +7,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.expressionSubscriber
@@ -44,12 +45,13 @@ internal class DivBaseBinder @Inject constructor(
     private val divAccessibilityBinder: DivAccessibilityBinder,
     private val layoutParamsBinder: DivLayoutParamsBinder,
 ) {
-    fun bindView(context: BindingContext, view: View, div: Div, oldDiv: Div?) {
+    fun bindView(context: BindingContext, view: View, div: Div, oldDiv: Div?, path: DivStatePath) {
         @Suppress("UNCHECKED_CAST")
         (view as DivHolderView<Div>).let {
             it.closeAllSubscription()
             it.div = div
             it.bindingContext = context
+            it.path = path
         }
         view.bind(context, div.value(), oldDiv?.value())
     }

@@ -30,9 +30,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 import java.util.TimeZone
@@ -92,7 +89,6 @@ class ExpressionResolverImplTest {
     )
 
     private val underTest = ExpressionResolverImpl(
-        "",
         mock(),
         externalVariables,
         Evaluator(evaluationContext),
@@ -101,7 +97,6 @@ class ExpressionResolverImplTest {
 
     private val withFuncGetCallback = { callback: () -> Unit ->
         ExpressionResolverImpl(
-            "",
             mock(),
             VariableControllerImpl(mock()),
             Evaluator(

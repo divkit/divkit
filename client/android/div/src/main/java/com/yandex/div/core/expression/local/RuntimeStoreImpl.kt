@@ -72,28 +72,27 @@ internal class RuntimeStoreImpl(
         }
 
         if (!div.needLocalRuntime) {
-            pathToRuntime[path] = parentRuntime
+            addPathForRuntime(parentRuntime, path)
             return parentRuntime
         }
 
-        val runtime = runtimeProvider.createChildRuntime(
-            path = path,
-            div = div,
-            parentResolver = parentResolver,
-            errorCollector = errorCollector,
-        )
+        val runtime = runtimeProvider.createChildRuntime(div, parentResolver, errorCollector)
         putRuntime(runtime, path, parentRuntime)
         return runtime
     }
 
     override fun getRuntimeWithOrNull(resolver: ExpressionResolver) = resolverToRuntime[resolver]
 
+    internal fun addPathForRuntime(runtime: ExpressionsRuntime, path: String) {
+        pathToRuntime[path] = runtime
+    }
+
     internal fun putRuntime(
         runtime: ExpressionsRuntime,
         path: String,
         parentRuntime: ExpressionsRuntime?,
     ) {
-        pathToRuntime[path] = runtime
+        addPathForRuntime(runtime, path)
         resolverToRuntime[runtime.expressionResolver] = runtime
         allRuntimes.addObserver(runtime)
         tree.storeRuntime(runtime, parentRuntime, path)
@@ -118,12 +117,7 @@ internal class RuntimeStoreImpl(
 
         return when {
             div.needLocalRuntime -> {
-                runtimeProvider.createChildRuntime(
-                    path = pathString,
-                    div = div,
-                    parentResolver = resolver,
-                    errorCollector = errorCollector,
-                ).also {
+                runtimeProvider.createChildRuntime(div, resolver, errorCollector).also {
                     putRuntime(it, pathString, parentRuntime)
                 }
             }
@@ -134,7 +128,7 @@ internal class RuntimeStoreImpl(
             }
             else -> {
                 parentRuntime.also {
-                    pathToRuntime[pathString] = parentRuntime
+                    addPathForRuntime(it, pathString)
                 }
             }
         }

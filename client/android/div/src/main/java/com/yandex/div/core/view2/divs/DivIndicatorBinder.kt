@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import android.graphics.Color
 import android.util.DisplayMetrics
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.findNearest
 import com.yandex.div.core.util.observeFixedSize
 import com.yandex.div.core.util.observeRoundedRectangleShape
@@ -30,19 +31,26 @@ internal class DivIndicatorBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val pagerIndicatorConnector: PagerIndicatorConnector
 ) : DivViewBinder<Div.Indicator, DivIndicator, DivPagerIndicatorView>(baseBinder) {
-    override fun bindView(context: BindingContext, view: DivPagerIndicatorView, div: Div.Indicator) {
+
+    override fun bindView(
+        context: BindingContext,
+        view: DivPagerIndicatorView,
+        div: Div.Indicator,
+        path: DivStatePath,
+    ) {
         val divView = context.divView
         divView.rootDiv()?.let { rootDiv ->
+            val path = divView.currentRootPath
             val rootDivResolver = divView.runtimeStore
-                .getOrCreateRuntime(divView.currentRootPath.fullPath, rootDiv, divView.expressionResolver)
+                .getOrCreateRuntime(path.fullPath, rootDiv, divView.expressionResolver)
                 .expressionResolver
-            findNearest<DivPager>(rootDiv, rootDivResolver, div.value()) {
+            findNearest<DivPager>(rootDiv, rootDivResolver, path, div.value()) {
                 div.value.pagerId == null || it.id == div.value.pagerId
             }?.let { pagerToAttach ->
                 pagerIndicatorConnector.submitIndicator(view, pagerToAttach)
             }
         }
-        super.bindView(context, view, div)
+        super.bindView(context, view, div, path)
     }
 
     override fun DivPagerIndicatorView.bind(bindingContext: BindingContext, div: DivIndicator, oldDiv: DivIndicator?) {

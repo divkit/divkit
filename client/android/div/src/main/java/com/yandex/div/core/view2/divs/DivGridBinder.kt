@@ -79,13 +79,17 @@ internal class DivGridBinder @Inject constructor(
         val resolver = bindingContext.expressionResolver
         val items = div.nonNullItems
 
-        tryRebindPlainContainerChildren(bindingContext.divView, items.toDivItemBuilderResult(resolver), divViewCreator)
+        tryRebindPlainContainerChildren(
+            bindingContext.divView,
+            items.toDivItemBuilderResult(resolver, path),
+            divViewCreator,
+        )
 
         val dispatchedItems = dispatchBinding(bindingContext, items, path)
         trackVisibilityActions(
             bindingContext.divView,
-            dispatchedItems.toDivItemBuilderResult(resolver),
-            oldDiv?.items?.toDivItemBuilderResult(resolver),
+            dispatchedItems.toDivItemBuilderResult(resolver, path),
+            oldDiv?.items?.toDivItemBuilderResult(resolver, path),
         )
     }
 
@@ -188,13 +192,14 @@ internal class DivGridBinder @Inject constructor(
         }
     }
 
-    fun setDataWithoutBinding(bindingContext: BindingContext, view: DivGridLayout, div: Div.Grid) {
+    fun setDataWithoutBinding(bindingContext: BindingContext, view: DivGridLayout, div: Div.Grid, path: DivStatePath) {
         view.div = div
         val items = div.value.nonNullItems
+        val ids = items.getIds()
         for (gridIndex in items.indices) {
             val childView = view.getChildAt(gridIndex)
             val context = childView.bindingContext ?: bindingContext
-            divBinder.get().setDataWithoutBinding(context, childView, items[gridIndex])
+            divBinder.get().setDataWithoutBinding(context, childView, items[gridIndex], path.appendDiv(ids[gridIndex]))
         }
     }
 }

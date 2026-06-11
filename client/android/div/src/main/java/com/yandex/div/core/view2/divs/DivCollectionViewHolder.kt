@@ -21,6 +21,7 @@ internal abstract class DivCollectionViewHolder(
 ) : RecyclerView.ViewHolder(viewWrapper) {
 
     protected var oldDiv: Div? = null
+    private var oldPath: DivStatePath? = null
 
     open fun bind(bindingContext: BindingContext, div: Div, position: Int, path: DivStatePath) {
         val divView = bindingContext.divView
@@ -28,18 +29,20 @@ internal abstract class DivCollectionViewHolder(
 
         if (viewWrapper.tryRebindRecycleContainerChildren(divView, div)) {
             oldDiv = div
+            oldPath = path
             return
         }
 
         val childView = viewWrapper.child
-            ?.takeIf { oldDiv != null }
+            ?.takeIf { oldDiv != null && oldPath != null }
             ?.takeIf { child ->
                 (child as? DivHolderView<*>)?.bindingContext?.expressionResolver?.let {
-                    DivComparator.areDivsReplaceable(oldDiv, div, it, resolver)
+                    DivComparator.areDivsReplaceable(oldDiv, div, it, resolver, oldPath, path)
                 } == true
             } ?: createChildView(bindingContext, div).also { viewWrapper.addView(it) }
 
         oldDiv = div
+        oldPath = path
 
         divView.runtimeStore.resolveRuntimeWith(path, div, resolver, parentContext.expressionResolver)
 

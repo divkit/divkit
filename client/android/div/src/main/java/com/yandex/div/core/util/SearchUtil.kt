@@ -1,6 +1,7 @@
 package com.yandex.div.core.util
 
 import android.util.Log
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -33,6 +34,7 @@ internal class SearchRoute<T>(
 internal inline fun <reified T: DivBase> findNearest(
     rootDiv: Div,
     expressionResolver: ExpressionResolver,
+    path: DivStatePath,
     seeker: DivBase,
     matchCondition: (T) -> Boolean,
 ): T? {
@@ -40,7 +42,7 @@ internal inline fun <reified T: DivBase> findNearest(
     val searchRoutes = mutableListOf<SearchRoute<T>>()
     val finishedRoutes = mutableMapOf<T, Int>()
 
-    val visitor = rootDiv.walk(expressionResolver)
+    val visitor = rootDiv.walk(expressionResolver, path)
         .onEnter {
             searchRoutes.forEach {
                 it.onEnter()

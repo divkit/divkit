@@ -2,6 +2,7 @@ package com.yandex.div.internal.core
 
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivText
 import org.json.JSONObject
@@ -9,26 +10,30 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 class DivTextRangeBuilderTest {
 
+    private val path = DivStatePath.fromState(0)
     private val store = mock<RuntimeStoreImpl> {
-        on { getOrPutItemBuilderResolver(any(), any()) } doAnswer {
-            createResolver(it.arguments[0] as String)
+        on { getOrPutItemBuilderResolver(any(), any()) } doAnswer { answer ->
+            val path = answer.arguments[0] as String
+            if (path.endsWith(":0")) {
+                createResolver().also { firstResolver = it }
+            } else {
+                createResolver().also { secondResolver = it }
+            }
         }
     }
-    private val resolver = createResolver("")
+    private val resolver = createResolver()
+    private var firstResolver: ExpressionResolverImpl? = null
+    private var secondResolver: ExpressionResolverImpl? = null
 
-    private fun createResolver(path: String): ExpressionResolverImpl =
-        ExpressionResolverImpl(path, store, mock(), mock(), mock())
+    private fun createResolver(): ExpressionResolverImpl = ExpressionResolverImpl(store, mock(), mock(), mock())
 
     @Test
     fun `builder produces a range per data element`() {
@@ -39,7 +44,7 @@ class DivTextRangeBuilderTest {
             )
         )
 
-        val ranges = text.buildRanges(resolver)
+        val ranges = text.buildRanges(resolver, path)
 
         assertEquals(3, ranges?.size)
     }
@@ -54,7 +59,7 @@ class DivTextRangeBuilderTest {
             )
         )
 
-        val ranges = text.buildRanges(resolver)
+        val ranges = text.buildRanges(resolver, path)
 
         assertEquals(1, ranges?.size)
         assertEquals(7L, ranges?.first()?.range?.start?.evaluate(resolver))
@@ -64,7 +69,7 @@ class DivTextRangeBuilderTest {
     fun `static ranges are used when no builder is set`() {
         val text = createText(ranges = listOf(range(), range()))
 
-        val ranges = text.buildRanges(resolver)
+        val ranges = text.buildRanges(resolver, path)
 
         assertEquals(2, ranges?.size)
         ranges?.forEach { assertSame(resolver, it.resolver) }
@@ -82,7 +87,7 @@ class DivTextRangeBuilderTest {
             )
         )
 
-        val ranges = text.buildRanges(resolver)
+        val ranges = text.buildRanges(resolver, path)
 
         assertEquals(2, ranges?.size)
         assertEquals(10L, ranges?.get(0)?.range?.start?.evaluate(resolver))
@@ -98,14 +103,14 @@ class DivTextRangeBuilderTest {
             )
         )
 
-        val ranges = text.buildRanges(resolver)
+        val ranges = text.buildRanges(resolver, path)
 
         assertEquals(1, ranges?.size)
     }
 
     @Test
     fun `null when neither ranges nor builder are set`() {
-        val ranges = createText().buildRanges(resolver)
+        val ranges = createText().buildRanges(resolver, path)
 
         assertNull(ranges)
     }
@@ -120,7 +125,7 @@ class DivTextRangeBuilderTest {
             )
         )
 
-        val ranges = ellipsis.buildRanges(resolver)
+        val ranges = ellipsis.buildRanges(resolver, path)
 
         assertEquals(2, ranges?.size)
     }
@@ -136,7 +141,7 @@ class DivTextRangeBuilderTest {
             )
         )
 
-        val ranges = ellipsis.buildRanges(resolver)
+        val ranges = ellipsis.buildRanges(resolver, path)
 
         assertEquals(1, ranges?.size)
         assertEquals(7L, ranges?.first()?.range?.start?.evaluate(resolver))
@@ -172,8 +177,11 @@ class DivTextRangeBuilderTest {
 
     private fun selectorForIndex(index: Int): Expression<Boolean> = mock {
         on { evaluate(any()) } doAnswer {
-            val r = it.arguments[0] as ExpressionResolverImpl
-            r.path.endsWith(":$index")
+            when (it.arguments[0]) {
+                firstResolver -> index == 0
+                secondResolver -> index == 1
+                else -> false
+            }
         }
         on { observe(any(), anyOrNull()) } doReturn mock()
     }

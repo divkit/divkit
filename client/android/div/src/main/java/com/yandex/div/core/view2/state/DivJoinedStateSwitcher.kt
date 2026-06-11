@@ -37,7 +37,7 @@ internal class DivJoinedStateSwitcher @Inject constructor(
             if (viewByPath != null) {
                 view = viewByPath
                 div = divByPath
-                path = viewByPath.path ?: commonPath
+                path = viewByPath.currentStatePath ?: commonPath
             }
         }
 

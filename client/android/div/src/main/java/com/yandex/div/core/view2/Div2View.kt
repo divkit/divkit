@@ -548,7 +548,7 @@ class Div2View private constructor(
         val rootChanges = patch.changes.find { it.id == oldRootDiv?.value()?.id } ?: run {
             rebind(oldData, reporter)
             _divData = newDivData
-            div2Component.divBinder.setDataWithoutBinding(bindingContext, getChildAt(0), state.div)
+            div2Component.divBinder.setDataWithoutBinding(bindingContext, getChildAt(0), state.div, currentRootPath)
             return true
         }
 
@@ -571,7 +571,9 @@ class Div2View private constructor(
             newRootDiv,
             expressionResolver,
             expressionResolver,
-            bindingReporter
+            currentRootPath,
+            currentRootPath,
+            bindingReporter,
         )
         return when {
             isDataReplaceable -> {
@@ -989,10 +991,9 @@ class Div2View private constructor(
         rootView?.clearTreeAnimations()
 
         val isReplaceable = rootView != null && DivComparator.areDivsReplaceable(
-                currentState?.div,
-                newState.div,
-                expressionResolver,
-                expressionResolver
+            currentState?.div, newState.div,
+            expressionResolver, expressionResolver,
+            currentRootPath, DivStatePath.fromState(newState),
         )
         val newStateView = if (isReplaceable) {
             updateState(stateId, temporary)
@@ -1123,7 +1124,7 @@ class Div2View private constructor(
             addLast(divData?.transitionAnimationSelector?.evaluate(resolver) ?: DivTransitionSelector.NONE)
         }
 
-        return div.walk(resolver) { item ->
+        return div.walk(resolver, currentRootPath) { item ->
             item.toTransitionData(isIncoming) { div ->
                 div.transitionTriggers?.allowsTransitionsOnDataChange()
                     ?: selectors.lastOrNull()?.allowsTransitionsOnDataChange()
@@ -1395,7 +1396,8 @@ class Div2View private constructor(
                 div2Component.divBinder,
                 oldExpressionResolver,
                 expressionResolver,
-                reporter
+                reporter,
+                currentRootPath,
             )
         } else {
             RebindTask.NO_OP

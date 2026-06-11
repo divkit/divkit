@@ -65,7 +65,7 @@ class DivStateBinderTest: DivBinderTest() {
     fun `first state path applied when no defaultStateId`() {
         stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
 
-        assertEquals(pathToState("first"), stateLayout.path)
+        assertEquals(pathToState("first"), stateLayout.currentStatePath)
     }
 
     @Test
@@ -76,7 +76,7 @@ class DivStateBinderTest: DivBinderTest() {
 
         stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
 
-        assertEquals(pathToState("default"), stateLayout.path)
+        assertEquals(pathToState("default"), stateLayout.currentStatePath)
     }
 
     @Test
@@ -84,7 +84,7 @@ class DivStateBinderTest: DivBinderTest() {
         switchToState("second")
         stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
 
-        assertEquals(pathToState("second"), stateLayout.path)
+        assertEquals(pathToState("second"), stateLayout.currentStatePath)
     }
 
     @Test
@@ -92,7 +92,7 @@ class DivStateBinderTest: DivBinderTest() {
         switchToState("empty")
         stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
 
-        assertEquals(pathToState("empty"), stateLayout.path)
+        assertEquals(pathToState("empty"), stateLayout.currentStatePath)
     }
 
     @Test

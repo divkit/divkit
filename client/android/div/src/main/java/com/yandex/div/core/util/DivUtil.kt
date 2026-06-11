@@ -14,6 +14,7 @@ import com.yandex.div.core.animation.EaseOutInterpolator
 import com.yandex.div.core.animation.SpringInterpolator
 import com.yandex.div.core.animation.reversed
 import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.bitmap.BitmapFilter
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.toPx
@@ -179,16 +180,16 @@ internal fun DivBorder.getCornerRadii(
     )
 }
 
-internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver): Boolean {
+internal fun Div.containsStateInnerTransitions(resolver: ExpressionResolver, path: DivStatePath): Boolean {
     with(value()) {
         if (transitionIn != null || transitionChange != null || transitionOut != null) {
             return true
         }
     }
     return when (this) {
-        is Div.Container -> value.buildItems(resolver)
-            .any { it.div.containsStateInnerTransitions(it.expressionResolver) }
-        is Div.Grid -> value.nonNullItems.any { it.containsStateInnerTransitions(resolver) }
+        is Div.Container -> value.buildItems(resolver, path)
+            .any { it.div.containsStateInnerTransitions(it.expressionResolver, it.path) }
+        is Div.Grid -> value.nonNullItems.any { it.containsStateInnerTransitions(resolver, path) }
         is Div.Text -> false
         is Div.Image -> false
         is Div.GifImage -> false
