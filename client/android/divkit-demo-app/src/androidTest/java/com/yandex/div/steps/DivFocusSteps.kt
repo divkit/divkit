@@ -1,13 +1,16 @@
 package com.yandex.div.steps
 
 import android.view.View
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.rule.ActivityTestRule
 import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div.view.checkNotExist
+import com.yandex.divkit.demo.DummyActivity
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matcher
@@ -17,7 +20,12 @@ import org.hamcrest.Matchers.equalTo
 internal fun divFocus(f: DivFocusSteps.() -> Unit) = f(DivFocusSteps())
 
 @StepsDsl
-internal class DivFocusSteps {
+internal class DivFocusSteps : DivTestAssetSteps() {
+
+    fun ActivityTestRule<DummyActivity>.buildContainer() {
+        testAsset = "ui_test_data/focus/actions.json"
+        buildContainer(MATCH_PARENT, MATCH_PARENT)
+    }
 
     fun clickOnTopInput(): Unit = step("Click on top input") {
         clickOnView(topInputMatcher)

@@ -1,6 +1,7 @@
 package com.yandex.div.steps
 
 import android.graphics.Point
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -9,11 +10,13 @@ import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.rule.ActivityTestRule
 import com.yandex.div.utils.ViewCoordinatesHelper.clickAtPosition
 import com.yandex.div.utils.ViewCoordinatesHelper.getViewCenterCoordinates
 import com.yandex.div.utils.clickOutside
 import com.yandex.div.utils.swipeLeftOutside
 import com.yandex.div2.DivTooltip
+import com.yandex.divkit.demo.DummyActivity
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.assertNoPopupsAreDisplayed
@@ -21,7 +24,13 @@ import com.yandex.test.util.assertNoPopupsAreDisplayed
 internal fun tooltipDiv(f: DivTooltipSteps.() -> Unit) = f(DivTooltipSteps())
 
 @StepsDsl
-internal class DivTooltipSteps {
+internal class DivTooltipSteps : DivTestAssetSteps() {
+
+    fun ActivityTestRule<DummyActivity>.buildContainer() {
+        testAsset = "ui_test_data/tooltips/div_tooltips.json"
+        buildContainer(MATCH_PARENT, MATCH_PARENT)
+    }
+
     fun showTooltip(p: DivTooltip.Position): Unit = step("show tooltip with position: $p") {
         onView(withText(DivTooltip.Position.toString(p))).perform(click())
     }

@@ -1,25 +1,23 @@
 package com.yandex.div
 
+import androidx.test.rule.ActivityTestRule
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.divFocusTypedActions
-import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
-import com.yandex.test.rules.ActivityParamsTestRule
+import com.yandex.divkit.demo.DummyActivity
 import org.junit.Rule
 import org.junit.Test
 
 class TypedFocusActionsTest {
 
+    private val activityRule = ActivityTestRule(DummyActivity::class.java)
+
     @get:Rule
-    val rule = uiTestRule {
-        ActivityParamsTestRule(
-            DivScreenshotActivity::class.java,
-            DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to "ui_test_data/focus/focus-element-and-clear-actions.json"
-        )
-    }
+    val rule = uiTestRule { activityRule }
 
     @Test
     fun focusViewFocusInput() {
         divFocusTypedActions {
+            activityRule.buildContainer()
             triggerFocusInputAction()
             assert { checkInputFocused() }
         }
@@ -28,6 +26,7 @@ class TypedFocusActionsTest {
     @Test
     fun clearFocusRemovesFocusFromInput() {
         divFocusTypedActions {
+            activityRule.buildContainer()
             triggerFocusInputAction()
             waitForClearFocusActionTriggered()
 

@@ -1,26 +1,25 @@
 package com.yandex.div
 
+import androidx.test.rule.ActivityTestRule
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.tooltipDiv
 import com.yandex.div2.DivTooltip.Position
-import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
-import com.yandex.test.rules.ActivityParamsTestRule
+import com.yandex.divkit.demo.DummyActivity
 import com.yandex.test.util.Report.step
 import org.junit.Rule
 import org.junit.Test
 
 class DivTooltipTest {
+
+    private val activityRule = ActivityTestRule(DummyActivity::class.java)
+
     @Rule
     @JvmField
-    val rule = uiTestRule {
-        ActivityParamsTestRule(
-            DivScreenshotActivity::class.java,
-            DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to "ui_test_data/tooltips/div_tooltips.json"
-        )
-    }
+    val rule = uiTestRule { activityRule }
 
     @Test
     fun tooltipIsDismissedAfterClickOutside() {
+        tooltipDiv { activityRule.buildContainer() }
         Position.values().forEach {
             checkTooltip(it)
         }
@@ -29,6 +28,7 @@ class DivTooltipTest {
     @Test
     fun tooltipIsDismissedAfterSwipeOutside() {
         tooltipDiv {
+            activityRule.buildContainer()
             showTooltip(Position.TOP_LEFT)
             assert {
                 tooltipShown()
@@ -45,6 +45,7 @@ class DivTooltipTest {
     @Test
     fun tooltipActionsAreHandled() {
         tooltipDiv {
+            activityRule.buildContainer()
             showTooltip(Position.TOP)
 
             clickTooltip()
@@ -60,6 +61,7 @@ class DivTooltipTest {
     @Test
     fun tooltipIsNotDismissedWhenCloseByTapOutsideIsFalse() {
         tooltipDiv {
+            activityRule.buildContainer()
             showNonCloseByTapOutsideTooltip()
             
             assert {
@@ -82,6 +84,7 @@ class DivTooltipTest {
     @Test
     fun tooltipTapOutsideActionsAreExecuted() {
         tooltipDiv {
+            activityRule.buildContainer()
             assert {
                 outsideActionsCalledIsFalse()
             }
@@ -99,6 +102,7 @@ class DivTooltipTest {
     @Test
     fun nonModalTooltipAllowsClickingUnderlyingElements() {
         tooltipDiv {
+            activityRule.buildContainer()
             assert {
                 nonModalButtonClickedIsFalse()
             }
