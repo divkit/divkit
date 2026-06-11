@@ -295,6 +295,11 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-indicator",
                 // div-slider
                 "snapshot_test_data/div-slider",
+                // image-formats
+                "snapshot_test_data/image-formats/animated-webp",
+                "snapshot_test_data/image-formats/gif",
+                "snapshot_test_data/image-formats/png",
+                "snapshot_test_data/image-formats/webp",
             ).expandDirectories().withEscapedParameter()
         }
 

@@ -49,7 +49,7 @@ private fun toColorFilter(tintColor: Int, tintMode: DivBlendMode): ColorFilter {
         DivBlendMode.SOURCE_ATOP -> BlendMode.SrcAtop
         DivBlendMode.DARKEN -> BlendMode.Darken
         DivBlendMode.LIGHTEN -> BlendMode.Lighten
-        DivBlendMode.MULTIPLY -> BlendMode.Multiply
+        DivBlendMode.MULTIPLY -> BlendMode.Modulate
         DivBlendMode.SCREEN -> BlendMode.Screen
     }
     return ColorFilter.tint(tintColor.toColor(), blendMode)
