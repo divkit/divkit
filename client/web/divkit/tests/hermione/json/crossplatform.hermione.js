@@ -98,6 +98,9 @@ function createIntegrationTestCase(testCase, testPath) {
                 await this.browser.yaOpenCrossplatformJson(testPath, {
                     result_type: resultType
                 });
+                await this.browser.execute(() => {
+                    localStorage.clear();
+                });
 
                 if (item.div_actions) {
                     for (let j = 0; j < item.div_actions.length; j++) {
@@ -132,6 +135,10 @@ function createIntegrationTestCase(testCase, testPath) {
                     /* if (errors[j].expression) {
                         str += ' Expression: ' + errors[j].expression.replace(/\\/g, '\\\\');
                     } */
+
+                    if (str !== expected.value) {
+                        console.error({actual: str, expected});
+                    }
 
                     str.should.equal(expected.value);
                 }

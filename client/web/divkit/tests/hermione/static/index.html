@@ -222,6 +222,28 @@
                     extensions: new Map([
                         ['size_provider', Ya.DivKit.SizeProvider],
                     ]),
+                    store: {
+                        get: function(name, type, scope) {
+                            try {
+                                const json = localStorage.getItem('divkit:' + (scope || 'global') + ':' + name);
+                                if (json) {
+                                    const parsed = JSON.parse(json);
+                                    if (type === parsed.type && Date.now() < parsed.lifetime && parsed.value) {
+                                        return parsed.value;
+                                    }
+                                }
+                            } catch (err) {
+                                //
+                            }
+                        },
+                        set: function(name, type, value, lifetime, scope) {
+                            try {
+                                localStorage.setItem('divkit:' + (scope || 'global') + ':' + name, JSON.stringify({ value, type, lifetime: Date.now() + lifetime * 1000 }));
+                            } catch (err) {
+                                //
+                            }
+                        },
+                    },
                     typefaceProvider(fontFamily) {
                         if (fontFamily === 'condensed') {
                             return 'YS Text Condenced';
