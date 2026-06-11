@@ -1,3 +1,16 @@
+## 32.54.0
+
+# Android Client:
+* Added support of media resources preloading for `DivData` in `DivPreloader`.
+* Fixed possible ANR at variable change during async binding.
+* Fixed shimmer deadlock bug when animation duration scale is zero.
+
+# Web Client:
+* Added support for the `press_start_actions` and `press_end_actions` properties in the `slider`.
+* Allowed `integer`s to be in range `[-9007199254740991, 9007199254740991]` instead of range `[-2147483648, 2147483647]` after expression execution.
+* Animators with a limited number of repetitions now respect the system's "prefer reduced motion" setting.
+
+
 ## 32.53.0
 
 # Android Client:
