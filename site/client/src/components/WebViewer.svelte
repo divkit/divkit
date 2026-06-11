@@ -20,9 +20,6 @@
     } from '../data/webStructure';
     import { jsonStore } from '../data/jsonStore';
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
-    import { editorMode } from '../data/editorMode';
-    import { codeRunStore } from '../data/valueStore';
-    import { runCode } from '../utils/shortcuts';
     import { webViewerErrors } from '../data/webViewerErrors';
     import { sampleWarningStore } from '../data/sampleWarningStore';
     import { templatesCheck } from '../utils/templatesCheck';
@@ -265,13 +262,7 @@
                 ></div>
             </div>
         {/if}
-        <div bind:this={rootPreview} class="web-viewer__content-inner">
-            {#if $editorMode !== 'json' && !$codeRunStore}
-                <div class="web-viewer__run-placeholder">
-                    {$l10n('runCodeFirst').replace('%s', runCode.toString())}
-                </div>
-            {/if}
-        </div>
+        <div bind:this={rootPreview} class="web-viewer__content-inner"></div>
     </div>
 
     {#if componentsCount && renderTime}
@@ -438,12 +429,6 @@
 
     .web-viewer__info-icon_time {
         background: var(--accent2);
-    }
-
-    .web-viewer__run-placeholder {
-        padding: 20px;
-        background: var(--bg-secondary);
-        border-radius: 10px;
     }
 
     .web-viewer__warning {
