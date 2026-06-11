@@ -161,7 +161,6 @@ module.exports = [{
         // monaco
         'editor.worker': 'monaco-editor/esm/vs/editor/editor.worker.js',
         'json.worker': 'monaco-editor/esm/vs/language/json/json.worker',
-        'typescript.worker': 'monaco-editor/esm/vs/language/typescript/ts.worker'
     },
     plugins: [
     ]

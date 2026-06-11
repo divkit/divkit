@@ -13,7 +13,6 @@ const { v4: uuidv4 } = require('uuid');
 
 const {connectMongo, setMongo, getMongo} = require('./src/mongo');
 const ONE_HOUR_IN_MS = 1000 * 60 * 60;
-const {runTs} = require('./src/runTs');
 const {publishJsonUpdate, subscribeJsonUpdate, unsubscribeJsonUpdate} = require('./src/redis');
 
 connectMongo().then(() => {
@@ -193,61 +192,6 @@ router.get('/api/source', async ctx => {
         console.error(err);
 
         ctx.status = 500;
-    }
-});
-
-router.post('/api/runTs', async ctx => {
-    const code = ctx.request.body.code;
-    const uuid = ctx.request.body.uuid;
-    const writeKey = ctx.request.body.writeKey;
-
-    ctx.set('Cache-Control', 'no-cache,no-store,max-age=0,must-revalidate');
-
-    if (!code || code.length > MAX_DATA_LEN) {
-        ctx.status = 400;
-        return;
-    }
-
-    const item = (uuid && writeKey) ? await getMongo(uuid, {uuid: 1, writeKey: 1}) : null;
-
-    if (uuid && writeKey && !(item && item.writeKey === writeKey)) {
-        ctx.status = 400;
-        return;
-    }
-
-    try {
-        const res = await runTs(code);
-        const strResult = JSON.stringify(res);
-
-        if (strResult.length > MAX_DATA_LEN) {
-            throw new DataViolationError('Too much data');
-        }
-
-        if (item) {
-            await setMongo(uuid, {
-                json: strResult
-            });
-        }
-
-        ctx.body = {
-            ok: 1,
-            result: strResult
-        };
-
-        publishJsonUpdate(JSON.stringify({
-            uuid,
-            data: res
-        }));
-    } catch (err) {
-        console.error(err);
-        if (err instanceof DataViolationError) {
-            ctx.status = 400;
-        } else {
-            ctx.status = 500;
-        }
-        ctx.body = {
-            error: String(err && err.message || err || 'Unknown error')
-        };
     }
 });
 
