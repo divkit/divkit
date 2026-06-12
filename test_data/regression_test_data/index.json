@@ -1179,7 +1179,8 @@
         "Message appears: Menu Item 1 selected",
         "Menu with 2 items appears."
       ],
-      "file": "actions/menu.json"
+      "file": "actions/menu.json",
+      "case_id": 512
     },
     {
       "title": "Div errors visualization",
