@@ -324,6 +324,8 @@ public final class GalleryView: BlockView {
   private func resyncPagerContentOffset() {
     guard let model,
           !model.scrollMode.isDefault,
+          !collectionView.isDragging,
+          !collectionView.isDecelerating,
           case .paging = state.contentPosition else { return }
 
     collectionView.performWithDetachedDelegate {
@@ -405,8 +407,8 @@ extension GalleryView: ScrollHandlerDelegate {
       scrollRange: state.scrollRange,
       animated: true
     )
-    
-    // In default scroll mode, we skip notifying global observers on every frame 
+
+    // In default scroll mode, we skip notifying global observers on every frame
     // to prevent heavy layout recalculations, as the state is only needed for restoration.
     // Pager modes still notify, but PagerView filters them.
     setState(newState, notifyingObservers: !model.scrollMode.isDefault)
