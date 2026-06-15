@@ -33,6 +33,8 @@
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { edgeInsertsMultiply } from '../../utils/edgeInsetsMultiply';
     import { wrapError } from '../../utils/wrapError';
+    import { constStore } from '../../utils/constStore';
+    import { getElementsFromItemBuilder } from '../../utils/itemBuilder';
 
     export let componentContext: ComponentContext<DivTextData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -82,6 +84,8 @@
     let wholeTextCloudBgOpacity: number | undefined;
     let usedTintColors: [string, TintMode][] = [];
     let rootTextStyles: typeof $jsonRootTextStyles = {};
+    let ranges: MaybeMissing<TextRange[] | undefined>;
+    let images: MaybeMissing<TextImage[] | undefined>;
 
     $: if (componentContext.json) {
         fontSize = 12;
@@ -132,6 +136,15 @@
     $: jsonSelectable = componentContext.getDerivedFromVars(componentContext.json.selectable);
     $: jsonAutoEllipsize = componentContext.getDerivedFromVars(componentContext.json.auto_ellipsize);
     $: jsonPaddings = componentContext.getDerivedFromVars(componentContext.json.paddings);
+
+    // eslint-disable-next-line no-nested-ternary
+    $: jsonRangeBuilderData = typeof componentContext.json.range_builder?.data === 'string' ? componentContext.getDerivedFromVars(
+        componentContext.json.range_builder?.data, undefined, true
+    ) : (componentContext.json.range_builder?.data ? constStore(componentContext.json.range_builder.data) : undefined);
+    // eslint-disable-next-line no-nested-ternary
+    $: jsonImageBuilderData = typeof componentContext.json.image_builder?.data === 'string' ? componentContext.getDerivedFromVars(
+        componentContext.json.image_builder?.data, undefined, true
+    ) : (componentContext.json.image_builder?.data ? constStore(componentContext.json.image_builder.data) : undefined);
 
     $: {
         if (typeof componentContext.json.text === 'string') {
@@ -454,7 +467,33 @@
             undefined;
     }
 
-    $: updateRenderList(text, $jsonRanges, $jsonImages, rootTextStyles);
+    $: {
+        if (
+            componentContext.json.range_builder &&
+            Array.isArray($jsonRangeBuilderData) &&
+            Array.isArray(componentContext.json.range_builder.prototypes)
+        ) {
+            const builder = componentContext.json.range_builder;
+            ranges = getElementsFromItemBuilder($jsonRangeBuilderData, rootCtx, componentContext, builder, 'range');
+        } else {
+            ranges = $jsonRanges;
+        }
+    }
+
+    $: {
+        if (
+            componentContext.json.image_builder &&
+            Array.isArray($jsonImageBuilderData) &&
+            Array.isArray(componentContext.json.image_builder.prototypes)
+        ) {
+            const builder = componentContext.json.image_builder;
+            images = getElementsFromItemBuilder($jsonImageBuilderData, rootCtx, componentContext, builder, 'image');
+        } else {
+            images = $jsonImages;
+        }
+    }
+
+    $: updateRenderList(text, ranges, images, rootTextStyles);
 
     $: mods = {
         singleline,

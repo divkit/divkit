@@ -2,7 +2,8 @@
   "description": "Text ranges generated dynamically via range_builder.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "card": {
     "log_id": "snapshot_test_card",

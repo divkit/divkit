@@ -107,6 +107,28 @@ export interface TextEllipsis {
     // images
 }
 
+export interface RangeBuilderPrototype {
+    selector?: BooleanInt;
+    range: TextRange;
+}
+
+export interface RangeBuilder {
+    data: object[];
+    prototypes: RangeBuilderPrototype[];
+    data_element_name?: string;
+}
+
+export interface ImageBuilderPrototype {
+    selector?: BooleanInt;
+    image: TextImage;
+}
+
+export interface ImageBuilder {
+    data: object[];
+    prototypes: ImageBuilderPrototype[];
+    data_element_name?: string;
+}
+
 export interface DivTextData extends DivBaseData, DivActionableData, TextStyles {
     type: 'text';
     // font_size_unit;
@@ -119,7 +141,9 @@ export interface DivTextData extends DivBaseData, DivActionableData, TextStyles 
     text_gradient?: GradientBackground;
     text: string;
     ranges?: TextRange[];
+    range_builder?: RangeBuilder;
     images?: TextImage[];
+    image_builder?: ImageBuilder;
     // ellipsis;
     selectable?: BooleanInt;
     truncate?: Truncate;

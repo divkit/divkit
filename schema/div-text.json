@@ -368,7 +368,10 @@
           "platforms": [
             "android",
             "ios"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "Ellipsis is not supported."
+          }
         },
         "images": {
           "type": "array",
@@ -382,7 +385,10 @@
           "platforms": [
             "android",
             "ios"
-          ]
+          ],
+          "unsupported_platforms": {
+            "web": "Ellipsis is not supported."
+          }
         }
       },
       "required": [
@@ -512,7 +518,8 @@
           "$ref": "#/definitions/range_builder",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "images": {
@@ -531,7 +538,8 @@
           "$ref": "#/definitions/image_builder",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "ellipsis": {
