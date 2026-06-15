@@ -10,6 +10,7 @@ import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivAction
 
@@ -43,8 +44,7 @@ private fun ActionMenu(menuHolder: ActionMenuHolder) {
                 text = { Text(item.text.observedValue()) },
                 onClick = {
                     menuHolder.dismiss()
-                    localComponent.actionHandler.handle(
-                        context = localComponent.actionHandlingContext,
+                    localComponent.handleActions(
                         actions = item.actions ?: item.action?.let { listOf(it) } ?: emptyList(),
                         source = DivActionSource.TAP
                     )

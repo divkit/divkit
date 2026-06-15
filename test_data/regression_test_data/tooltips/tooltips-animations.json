@@ -60,12 +60,12 @@
                   "animation_in": {
                     "name": "fade",
                     "interpolator": "ease",
-                    "duration": 2000
+                    "duration": 1000
                   },
                   "animation_out": {
                     "name": "fade",
                     "interpolator": "ease",
-                    "duration": 2000
+                    "duration": 1000
                   },
                   "id": "tooltip_fade",
                   "position": "bottom",
@@ -80,72 +80,39 @@
                   },
                   "div": {
                     "type": "container",
-                    "orientation": "overlap",
                     "width": {
                       "type": "wrap_content"
                     },
+                    "paddings": {
+                      "left": 20,
+                      "top": 20,
+                      "right": 20,
+                      "bottom": 20
+                    },
                     "items": [
                       {
-                        "type": "container",
+                        "type": "text",
                         "width": {
                           "type": "wrap_content"
                         },
                         "paddings": {
-                          "left": 20,
-                          "top": 20,
-                          "right": 20,
-                          "bottom": 20
+                          "left": 16,
+                          "top": 16,
+                          "right": 16,
+                          "bottom": 16
                         },
-                        "items": [
+                        "background": [
                           {
-                            "type": "text",
-                            "width": {
-                              "type": "wrap_content"
-                            },
-                            "paddings": {
-                              "left": 16,
-                              "top": 16,
-                              "right": 16,
-                              "bottom": 16
-                            },
-                            "background": [
-                              {
-                                "type": "solid",
-                                "color": "#799eb7"
-                              }
-                            ],
-                            "border": {
-                              "corner_radius": 6
-                            },
-                            "text_color": "#2C3E50",
-                            "text": "Fade tooltip"
+                            "type": "solid",
+                            "color": "#799eb7"
                           }
-                        ]
-                      },
-                      {
-                        "type": "image",
-                        "width": {
-                          "type": "fixed",
-                          "value": 44
+                        ],
+                        "border": {
+                          "corner_radius": 6
                         },
-                        "height": {
-                          "type": "fixed",
-                          "value": 44
-                        },
-                        "paddings": {
-                          "left": 12,
-                          "right": 12,
-                          "top": 12,
-                          "bottom": 12
-                        },
-                        "action": {
-                          "log_id": "hide_tooltip",
-                          "url": "div-action://hide_tooltip?id=tooltip_fade"
-                        },
-                        "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
-                        "tint_color": "#000000",
-                        "alignment_horizontal": "left",
-                        "alignment_vertical": "top"
+                        "font_size": 18,
+                        "text_color": "#2C3E50",
+                        "text": "Fade tooltip"
                       }
                     ]
                   }
@@ -166,12 +133,12 @@
                   "animation_in": {
                     "name": "scale",
                     "interpolator": "ease",
-                    "duration": 500
+                    "duration": 1000
                   },
                   "animation_out": {
                     "name": "scale",
                     "interpolator": "ease",
-                    "duration": 500
+                    "duration": 1000
                   },
                   "id": "tooltip_scale",
                   "position": "bottom",
@@ -186,72 +153,39 @@
                   },
                   "div": {
                     "type": "container",
-                    "orientation": "overlap",
                     "width": {
                       "type": "wrap_content"
                     },
+                    "paddings": {
+                      "left": 20,
+                      "top": 20,
+                      "right": 20,
+                      "bottom": 20
+                    },
                     "items": [
                       {
-                        "type": "container",
+                        "type": "text",
                         "width": {
                           "type": "wrap_content"
                         },
                         "paddings": {
-                          "left": 20,
-                          "top": 20,
-                          "right": 20,
-                          "bottom": 20
+                          "left": 16,
+                          "top": 16,
+                          "right": 16,
+                          "bottom": 16
                         },
-                        "items": [
+                        "background": [
                           {
-                            "type": "text",
-                            "width": {
-                              "type": "wrap_content"
-                            },
-                            "paddings": {
-                              "left": 16,
-                              "top": 16,
-                              "right": 16,
-                              "bottom": 16
-                            },
-                            "background": [
-                              {
-                                "type": "solid",
-                                "color": "#799eb7"
-                              }
-                            ],
-                            "border": {
-                              "corner_radius": 6
-                            },
-                            "text_color": "#2C3E50",
-                            "text": "Scale tooltip"
+                            "type": "solid",
+                            "color": "#799eb7"
                           }
-                        ]
-                      },
-                      {
-                        "type": "image",
-                        "width": {
-                          "type": "fixed",
-                          "value": 44
+                        ],
+                        "border": {
+                          "corner_radius": 6
                         },
-                        "height": {
-                          "type": "fixed",
-                          "value": 44
-                        },
-                        "paddings": {
-                          "left": 12,
-                          "right": 12,
-                          "top": 12,
-                          "bottom": 12
-                        },
-                        "action": {
-                          "log_id": "hide_tooltip",
-                          "url": "div-action://hide_tooltip?id=tooltip_scale"
-                        },
-                        "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
-                        "tint_color": "#000000",
-                        "alignment_horizontal": "left",
-                        "alignment_vertical": "top"
+                        "font_size": 18,
+                        "text_color": "#2C3E50",
+                        "text": "Scale tooltip"
                       }
                     ]
                   }
@@ -348,6 +282,7 @@
                         "border": {
                           "corner_radius": 6
                         },
+                        "font_size": 18,
                         "text_color": "#2C3E50",
                         "text": "Title tooltip"
                       }

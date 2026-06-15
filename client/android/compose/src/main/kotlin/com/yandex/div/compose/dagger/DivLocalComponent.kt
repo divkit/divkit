@@ -7,6 +7,7 @@ import com.yandex.div.compose.DivException
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
+import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.triggers.DivTriggerStorage
@@ -15,6 +16,7 @@ import com.yandex.div.compose.variables.DivVariableAdapter
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
@@ -45,6 +47,10 @@ internal interface DivLocalComponent {
             @BindsInstance variableController: DivVariableController
         ): DivLocalComponent
     }
+}
+
+internal fun DivLocalComponent.handleActions(actions: List<DivAction>, source: DivActionSource) {
+    actionHandler.handle(actionHandlingContext, actions, source)
 }
 
 internal val LocalComponent = compositionLocalOf<DivLocalComponent> {

@@ -8,6 +8,7 @@ import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.state.WithRootStatePath
 import com.yandex.div.compose.timers.observe
+import com.yandex.div.compose.tooltips.TooltipsHost
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.DivBlockView
@@ -62,6 +63,7 @@ fun DivView(
                     data = rootState.div,
                     modifier = modifier
                 )
+                TooltipsHost()
             }
         }
     }

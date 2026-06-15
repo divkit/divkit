@@ -16,6 +16,7 @@ import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -62,7 +63,7 @@ private fun DivLocalComponent.createHandler(
     if (actions.isEmpty()) {
         return null
     }
-    return { actionHandler.handle(actionHandlingContext, actions, source) }
+    return { handleActions(actions, source) }
 }
 
 @Composable

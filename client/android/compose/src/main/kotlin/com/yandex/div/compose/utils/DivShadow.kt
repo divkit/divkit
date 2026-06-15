@@ -13,8 +13,8 @@ internal fun DivShadow.observeShadow(alpha: Float): Shadow {
     val shadowColor = color.observedColorValue()
     val shadowAlpha = this.alpha.observedFloatValue()
     val blur = blur.observedValue().toDp().toPx()
-    val offsetX = offset.x.observedValue().toPx()
-    val offsetY = offset.y.observedValue().toPx()
+    val offsetX = offset.x.observedPxValue()
+    val offsetY = offset.y.observedPxValue()
 
     return Shadow(
         color = shadowColor.copy(alpha = shadowAlpha * alpha),

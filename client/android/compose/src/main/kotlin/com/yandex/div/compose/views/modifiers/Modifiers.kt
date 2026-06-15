@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.tooltips.tooltipAnchors
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.observeHorizontalInsets
@@ -87,7 +88,9 @@ internal fun Modifier.apply(
         modifier = modifier.testTag(it)
     }
 
-    return modifier.accessibility(data)
+    return modifier
+        .accessibility(data)
+        .tooltipAnchors(data.tooltips)
 }
 
 @Composable

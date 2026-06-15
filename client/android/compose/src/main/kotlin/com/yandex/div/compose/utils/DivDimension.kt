@@ -10,3 +10,8 @@ import com.yandex.div2.DivDimension
 internal fun DivDimension.observedValue(): Dp {
     return value.observedFloatValue().toDp(unit.observedValue())
 }
+
+@Composable
+internal fun DivDimension.observedPxValue(): Float {
+    return observedValue().toPx()
+}

@@ -15,7 +15,6 @@ import androidx.compose.ui.platform.LocalDensity
 import coil3.ImageLoader
 import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.decodePreview
@@ -47,12 +46,7 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
         onDispose { player.release() }
     }
 
-    ObserveVideoActions(
-        player = player,
-        data = data,
-        actionHandler = LocalComponent.current.actionHandler,
-        actionHandlingContext = LocalComponent.current.actionHandlingContext,
-    )
+    ObserveVideoActions(player, data)
 
     data.elapsedTimeVariable?.let { variableName ->
         ObserveElapsedTimeVariable(player = player, variableName = variableName)

@@ -8,9 +8,11 @@ import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
 import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
+import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.div2.DivActionSetVariable
+import com.yandex.div2.DivActionShowTooltip
 import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivActionUpdateStructure
@@ -91,6 +93,12 @@ fun dictSetValueAction(
     )
 }
 
+fun hideTooltipAction(id: String): DivActionTyped {
+    return DivActionTyped.HideTooltip(
+        DivActionHideTooltip(id = constant(id))
+    )
+}
+
 fun setStateAction(
     stateId: Expression<String>,
     temporary: Boolean = true,
@@ -125,6 +133,12 @@ fun setStoredValueAction(
 fun setVariableAction(name: String, value: DivTypedValue): DivActionTyped {
     return DivActionTyped.SetVariable(
         DivActionSetVariable(value = value, variableName = constant(name))
+    )
+}
+
+fun showTooltipAction(id: String): DivActionTyped {
+    return DivActionTyped.ShowTooltip(
+        DivActionShowTooltip(id = constant(id))
     )
 }
 

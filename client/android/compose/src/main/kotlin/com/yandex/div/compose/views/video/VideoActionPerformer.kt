@@ -17,14 +17,18 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun ObserveVideoActions(
     player: DivVideoPlayer,
-    data: DivVideo,
-    actionHandler: DivActionHandler,
-    actionHandlingContext: DivActionHandlingContext,
+    data: DivVideo
 ) {
-    val reporter = LocalComponent.current.reporter
+    val localComponent = LocalComponent.current
     LaunchedEffect(player, data) {
-        val performer = VideoActionPerformer(player, data, actionHandler, actionHandlingContext, reporter)
-        performer.perform()
+        val actionPerformer = VideoActionPerformer(
+            player,
+            data,
+            localComponent.actionHandler,
+            localComponent.actionHandlingContext,
+            localComponent.reporter
+        )
+        actionPerformer.observe()
     }
 }
 
@@ -36,7 +40,7 @@ private class VideoActionPerformer(
     private val reporter: DivReporter,
 ) {
 
-    suspend fun perform() = coroutineScope {
+    suspend fun observe() = coroutineScope {
         launch { observePlayingChanges() }
         launch { observeBufferingChanges() }
         launch { observeEndedChanges() }

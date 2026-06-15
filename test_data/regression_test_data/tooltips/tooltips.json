@@ -54,7 +54,7 @@
           "items": [
             {
               "type": "button",
-              "text": "tooltip with close button",
+              "text": "Tooltip with close button",
               "tooltips": [
                 {
                   "id": "tooltip",
@@ -107,6 +107,7 @@
                             "border": {
                               "corner_radius": 6
                             },
+                            "font_size": 18,
                             "text_color": "#2C3E50",
                             "text": "Title tooltip"
                           }
@@ -116,11 +117,11 @@
                         "type": "image",
                         "width": {
                           "type": "fixed",
-                          "value": 44
+                          "value": 48
                         },
                         "height": {
                           "type": "fixed",
-                          "value": 44
+                          "value": 48
                         },
                         "paddings": {
                           "left": 12,
@@ -150,7 +151,7 @@
             },
             {
               "type": "button",
-              "text": "animated tooltip with visibility and disappear action",
+              "text": "Tooltip with default animation and visibility/disappear actions",
               "tooltips": [
                 {
                   "id": "tooltip_with_visibility",
@@ -190,6 +191,7 @@
                         "border": {
                           "corner_radius": 6
                         },
+                        "font_size": 18,
                         "text_color": "#2C3E50",
                         "text": "Title tooltip"
                       }
@@ -231,7 +233,7 @@
             },
             {
               "type": "button",
-              "text": "non-animated tooltip with visibility and disappear action",
+              "text": "Tooltip without animation and with visibility/disappear actions",
               "tooltips": [
                 {
                   "id": "non_animated_tooltip_with_visibility",
@@ -277,6 +279,7 @@
                         "border": {
                           "corner_radius": 6
                         },
+                        "font_size": 18,
                         "text_color": "#2C3E50",
                         "text": "Title tooltip"
                       }
