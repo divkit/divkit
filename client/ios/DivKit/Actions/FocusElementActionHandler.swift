@@ -16,6 +16,20 @@ final class FocusElementActionHandler {
       isFocused: true,
       element: IdAndCardId(id: elementId, cardId: cardId)
     )
+
+    let state = TextInputViewState(
+      pendingSelection: .textEnd
+    )
+    context.blockStateStorage.setPendingState(
+      id: elementId,
+      cardId: cardId,
+      state: state
+    )
+
     context.updateCard(.state(cardId))
   }
+}
+
+extension TextInputViewState.Selection {
+  static let textEnd = TextInputViewState.Selection(start: -1, end: -1)
 }
