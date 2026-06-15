@@ -56,7 +56,7 @@
     import type { ComponentContext, ComponentKey, PagerRegisterData } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
-    import type { Variable } from '../../expressions/variable';
+    import { createVariable, type Variable } from '../../expressions/variable';
     import type { Overflow } from '../../../typings/common';
     import type { EdgeInsets } from '../../types/edgeInserts';
 
@@ -170,6 +170,9 @@
     $: jsonCrossAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.cross_axis_alignment);
     $: jsonScrollAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.scroll_axis_alignment);
     $: jsonInfiniteScroll = componentContext.getDerivedFromVars(componentContext.json.infinite_scroll);
+    $: jsonItemCountVariable = componentContext.json.item_count_variable;
+
+    $: itemCountVariable = jsonItemCountVariable && (componentContext.getVariable(jsonItemCountVariable, 'integer') || rootCtx.awaitGlobalVariable(jsonItemCountVariable, 'integer', 0)) || createVariable('temp', 'integer', 0);
 
     $: {
         infinite = correctBooleanInt($jsonInfiniteScroll, infinite);
@@ -271,7 +274,7 @@
 
         items.forEach(item => {
             children.push(
-                componentContext.getDerivedFromVars({
+                item.getDerivedFromVars({
                     width: item.json.width,
                     height: item.json.height,
                     visibility: item.json.visibility
@@ -481,6 +484,10 @@
                 }
             });
         }
+
+        if (itemCountVariable) {
+            itemCountVariable.setValue(size);
+        }
     }
 
     function runSelectedActions(currentItem: number): void {
@@ -678,7 +685,7 @@
         const defaultItem = componentContext.getJsonWithVars(componentContext.json.default_item);
         if (typeof defaultItem === 'number' && defaultItem >= 0 && defaultItem < items.length) {
             currentItem = prevSelectedItem = defaultItem;
-            pagerDataUpdate(items.length, defaultItem);
+            pagerDataUpdate(visibleItemsWithOutDuplicates, defaultItem);
         }
 
         init();

@@ -35,4 +35,5 @@ export interface DivPagerData extends DivBaseData {
     default_item?: number;
     // page_transformation
     infinite_scroll?: BooleanInt;
+    item_count_variable?: string;
 }

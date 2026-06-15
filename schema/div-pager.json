@@ -77,6 +77,7 @@
           "$ref": "div-variable-name.json",
           "$description": "translations.json#/div_pager_items_count_variable",
           "platforms": [
+            "web"
           ]
         },
         "item_builder": {
