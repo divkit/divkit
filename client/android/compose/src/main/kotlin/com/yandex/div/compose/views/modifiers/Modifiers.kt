@@ -56,12 +56,16 @@ internal fun Modifier.apply(
     } else {
         0f
     }
-    if (alphaValue < 1f) {
-        modifier = modifier.alpha(alphaValue)
-    }
-
     data.transform?.let {
         modifier = modifier.transform(it)
+    }
+
+    data.border?.let {
+        modifier = modifier.borderShadow(it, alphaValue)
+    }
+
+    if (alphaValue < 1f) {
+        modifier = modifier.alpha(alphaValue)
     }
 
     data.border?.let {

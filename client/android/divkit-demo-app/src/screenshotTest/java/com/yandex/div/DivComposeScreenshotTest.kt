@@ -295,6 +295,8 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-indicator",
                 // div-slider
                 "snapshot_test_data/div-slider",
+                // div-shadow
+                "snapshot_test_data/div-shadow",
                 // image-formats
                 "snapshot_test_data/image-formats/animated-webp",
                 "snapshot_test_data/image-formats/gif",
