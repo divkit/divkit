@@ -43,6 +43,7 @@ fun composeScreenshotRule(
     val expectedSuite = if (compareWithView) Div2ScreenshotTest::class.qualifiedName ?: "" else ""
     return screenshotRule(casePath, activityRule, relativePath, expectedSuite) {
         waitForIdlingResource(activityRule.activity.imageLoadingTracker)
+        waitForIdlingResource(activityRule.activity.composeIdlingTracker)
     }
 }
 

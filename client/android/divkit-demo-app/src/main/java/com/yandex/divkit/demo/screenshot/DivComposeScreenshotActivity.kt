@@ -47,8 +47,11 @@ class DivComposeScreenshotActivity : ComponentActivity() {
 
     val imageLoadingTracker = ComposeImageLoadingTracker()
 
+    val composeIdlingTracker = ComposeSnapshotIdlingResource()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        composeIdlingTracker.start()
 
         val imageLoaderProvider = ImageLoaderProvider {
             ImageLoader.Builder(context = this)
@@ -107,6 +110,11 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         actions.forEach {
             divContext.debugFeatures.performAction(data = data, action = it)
         }
+    }
+
+    override fun onDestroy() {
+        composeIdlingTracker.close()
+        super.onDestroy()
     }
 
     companion object {
