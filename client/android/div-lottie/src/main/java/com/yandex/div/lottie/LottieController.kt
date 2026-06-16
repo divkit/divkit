@@ -13,7 +13,7 @@ import com.airbnb.lottie.*
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.widget.DivViewDelegate
 import com.yandex.div.core.widget.LoadableImageView
-import com.yandex.div.internal.lottie.LottieData
+import com.yandex.div.internal.extensions.lottie.LottieData
 
 /**
  * LottieAnimationView implements only happy flow scenario, so this is custom view

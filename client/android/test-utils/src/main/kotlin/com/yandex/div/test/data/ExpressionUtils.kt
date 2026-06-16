@@ -1,6 +1,7 @@
 package com.yandex.div.test.data
 
 import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
+import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE
 import com.yandex.div.internal.parser.TYPE_HELPER_INT
 import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.internal.parser.TypeHelper
@@ -29,6 +30,17 @@ fun booleanExpression(expression: String): Expression<Boolean> {
         validator = { true },
         logger = { fail(it.message) },
         typeHelper = TYPE_HELPER_BOOLEAN,
+    )
+}
+
+fun doubleExpression(expression: String): Expression<Double> {
+    return Expression.MutableExpression<Double, Double>(
+        expressionKey = "test",
+        rawExpression = expression,
+        converter = { it },
+        validator = { true },
+        logger = { fail(it.message) },
+        typeHelper = TYPE_HELPER_DOUBLE,
     )
 }
 

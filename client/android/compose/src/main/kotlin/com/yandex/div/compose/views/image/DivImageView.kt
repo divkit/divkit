@@ -30,6 +30,7 @@ internal fun DivImageView(
 
     DivImageContent(
         modifier = modifier,
+        data = data,
         model = data.imageUrl.observedValue(),
         contentScale = data.scale.observedContentScale(),
         alignment = toAlignment(

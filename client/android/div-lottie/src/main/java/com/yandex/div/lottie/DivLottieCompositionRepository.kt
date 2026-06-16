@@ -8,7 +8,7 @@ import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieResult
 import com.yandex.div.core.preload.PreloadResult
 import com.yandex.div.core.preload.UriPreloadResult
-import com.yandex.div.internal.lottie.LottieData
+import com.yandex.div.internal.extensions.lottie.LottieData
 
 internal class DivLottieCompositionRepository(
     private val networkCache: DivLottieNetworkCache,

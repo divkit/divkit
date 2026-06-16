@@ -13,6 +13,7 @@ import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
+import com.yandex.div.internal.extensions.ShimmerExtensionParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivGifImage
@@ -30,7 +31,7 @@ private const val MILLIS_IN_SECOND = 1000
  * It should be set to [SystemClock.uptimeMillis] of the start of the first animation.
  */
 open class DivShimmerExtensionHandler(
-        private var animationStartTime: Long = 0L
+    private var animationStartTime: Long = 0L
 ) : DivExtensionHandler {
 
     override fun matches(div: DivBase): Boolean {
@@ -43,11 +44,16 @@ open class DivShimmerExtensionHandler(
         } ?: false
     }
 
-    override fun bindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
-        val params: JSONObject? = div.extensions?.find { extension ->
+    override fun bindView(
+        divView: Div2View,
+        expressionResolver: ExpressionResolver,
+        view: View,
+        div: DivBase
+    ) {
+        val paramsJson: JSONObject? = div.extensions?.find { extension ->
             return@find extension.id == EXTENSION_ID
         }?.params
-        val data = ShimmerData.fromJson(params)
+        val params = ShimmerExtensionParams.fromJson(paramsJson)
 
         val imageView = view as? LoadableImage ?: return
         if (imageView.isImageLoaded || imageView.isImagePreview) {
@@ -57,20 +63,28 @@ open class DivShimmerExtensionHandler(
             animationStartTime = SystemClock.uptimeMillis()
         }
         val drawable = ShimmerDrawable(
-            initialConfig = data.createShimmer(expressionResolver),
+            initialConfig = params.createShimmer(expressionResolver),
             animationStartTime = animationStartTime,
             animationsEnabled = { divView.context.isAnimationsEnabled() },
         )
-        data.observeTo(drawable, expressionResolver)
+        params.observeTo(drawable, expressionResolver)
         imageView.setImage(drawable)
         view.setTag(R.id.div_shimmer_drawable, drawable)
     }
 
-    override fun unbindView(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) {
+    override fun unbindView(
+        divView: Div2View,
+        expressionResolver: ExpressionResolver,
+        view: View,
+        div: DivBase
+    ) {
         (view.getTag(R.id.div_shimmer_drawable) as? ShimmerDrawable)?.stop()
     }
 
-    private fun ShimmerData.observeTo(drawable: ShimmerDrawable, resolver: ExpressionResolver) {
+    private fun ShimmerExtensionParams.observeTo(
+        drawable: ShimmerDrawable,
+        resolver: ExpressionResolver
+    ) {
         fun updateDrawable() {
             drawable.config = createShimmer(resolver)
         }
@@ -81,7 +95,9 @@ open class DivShimmerExtensionHandler(
         duration.observe(resolver) { updateDrawable() }
     }
 
-    private fun ShimmerData.createShimmer(resolver: ExpressionResolver): ShimmerDrawable.Config {
+    private fun ShimmerExtensionParams.createShimmer(
+        resolver: ExpressionResolver
+    ): ShimmerDrawable.Config {
         val colors = colors.evaluate(resolver)
         val locations = locations.evaluate(resolver)
         val angle = angle.evaluate(resolver)
@@ -100,11 +116,11 @@ open class DivShimmerExtensionHandler(
         }
 
         return ShimmerDrawable.Config(
-                colors = colors.toIntArray(),
-                locations = locations.map { it.toFloat() }.toFloatArray(),
-                angle = angle,
-                duration = (duration * MILLIS_IN_SECOND).roundToLong(),
-                cornerRadius = cornerRadiusConfig,
+            colors = colors.toIntArray(),
+            locations = locations.map { it.toFloat() }.toFloatArray(),
+            angle = angle,
+            duration = (duration * MILLIS_IN_SECOND).roundToLong(),
+            cornerRadius = cornerRadiusConfig,
         )
     }
 
@@ -125,4 +141,3 @@ open class DivShimmerExtensionHandler(
 private fun Long?.dpToPx(metrics: DisplayMetrics): Float {
     return this?.toIntSafely()?.dpToPxF(metrics) ?: 0f
 }
-

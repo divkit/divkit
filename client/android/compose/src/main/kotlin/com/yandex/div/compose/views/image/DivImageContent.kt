@@ -5,10 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,32 +13,39 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.rememberAsyncImagePainter
 import coil3.transform.Transformation
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div2.DivBase
 
 @Composable
 internal fun DivImageContent(
     modifier: Modifier,
+    data: DivBase,
     model: Any,
     contentScale: ContentScale,
     alignment: Alignment,
     placeholderColor: Color,
     transformations: List<Transformation> = emptyList(),
     colorFilter: ColorFilter? = null,
-    preview: @Composable () -> Any? = { null },
+    preview: @Composable () -> Any?
 ) {
-    val imageLoader = divContext.component.imageLoader
+    val imageStateStorage = LocalDivViewContext.current.component.imageStateStorage
 
     val imageRequestParams = ImageRequestParams(
         data = model,
         transformations = transformations
     )
-    val imageRequest = rememberImageRequest(imageRequestParams)
 
-    var isImageLoaded by remember(imageRequestParams) { mutableStateOf(false) }
+    DisposableEffect(imageRequestParams) {
+        onDispose {
+            imageStateStorage.setIsLoaded(data, false)
+        }
+    }
 
+    val isImageLoaded = imageStateStorage.isLoaded(data)
     val previewModel = if (isImageLoaded) null else preview()
     val previewRequest = if (previewModel == null) {
         null
@@ -61,6 +65,7 @@ internal fun DivImageContent(
     }
 
     Box(modifier = backgroundModifier) {
+        val imageLoader = divContext.component.imageLoader
         if (!isImageLoaded && previewRequest != null) {
             val previewPainter = rememberAsyncImagePainter(
                 model = previewRequest,
@@ -76,11 +81,12 @@ internal fun DivImageContent(
             )
         }
 
+        val imageRequest = rememberImageRequest(imageRequestParams)
         val imagePainter = rememberAsyncImagePainter(
             model = imageRequest,
             imageLoader = imageLoader,
             onSuccess = {
-                isImageLoaded = true
+                imageStateStorage.setIsLoaded(data, true)
             }
         )
         imagePainter.observeNetworkRestoration()

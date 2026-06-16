@@ -13,10 +13,10 @@ import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.images.asImageBase
 import com.yandex.div.core.annotations.ExperimentalApi
-import com.yandex.div.internal.lottie.LottieData
-import com.yandex.div.internal.lottie.LottieExtensionParams
-import com.yandex.div.internal.lottie.LottieExtensionParamsParser
-import com.yandex.div.internal.lottie.LottieRepeatMode
+import com.yandex.div.internal.extensions.lottie.LottieData
+import com.yandex.div.internal.extensions.lottie.LottieExtensionParams
+import com.yandex.div.internal.extensions.lottie.LottieExtensionParamsParser
+import com.yandex.div.internal.extensions.lottie.LottieRepeatMode
 import org.json.JSONObject
 
 /**

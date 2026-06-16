@@ -10,10 +10,10 @@ import com.yandex.div.core.preload.PreloadingRegistry
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.lottie.LottieExtensionParams
-import com.yandex.div.internal.lottie.LottieExtensionParamsParser
-import com.yandex.div.internal.lottie.LottieRepeat
-import com.yandex.div.internal.lottie.LottieRepeatMode
+import com.yandex.div.internal.extensions.lottie.LottieExtensionParams
+import com.yandex.div.internal.extensions.lottie.LottieExtensionParamsParser
+import com.yandex.div.internal.extensions.lottie.LottieRepeat
+import com.yandex.div.internal.extensions.lottie.LottieRepeatMode
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivExtension

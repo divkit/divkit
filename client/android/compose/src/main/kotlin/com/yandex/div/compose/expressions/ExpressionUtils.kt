@@ -36,6 +36,11 @@ fun Expression<Double>?.observedFloatValue(defaultValue: Float): Float {
 }
 
 @Composable
+fun Expression<Long>?.observedIntValue(defaultValue: Int): Int {
+    return observedValue(defaultValue.toLong()).toInt()
+}
+
+@Composable
 fun <T : Any> Expression<T>.observedValue(): T {
     val expressionResolver = expressionResolver
     return when (this) {

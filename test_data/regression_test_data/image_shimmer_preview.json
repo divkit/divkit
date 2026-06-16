@@ -1,24 +1,51 @@
 {
   "card": {
+    "variables": [
+      {
+        "name": "gif_visibility",
+        "type": "string",
+        "value": "gone"
+      }
+    ],
     "log_id": "test",
     "states": [
       {
         "state_id": 0,
         "div": {
           "type": "container",
+          "paddings": {
+            "left": 20,
+            "right": 20,
+            "top": 20,
+            "bottom": 20
+          },
           "items": [
+            {
+              "type": "text",
+              "text": "Show gif",
+              "font_size": 24,
+              "font_weight": "medium",
+              "margins": {
+                "bottom": 20
+              },
+              "action": {
+                "log_id": "show_gif",
+                "url": "div-action://set_variable?name=gif_visibility&value=visible"
+              }
+            },
             {
               "type": "image",
               "image_url": "empty://",
-              "alignment_vertical": "top",
-              "alignment_horizontal": "center",
               "width": {
                 "type": "fixed",
-                "value": 300
+                "value": 250
               },
               "height": {
                 "type": "fixed",
-                "value": 300
+                "value": 250
+              },
+              "margins": {
+                "bottom": 20
               },
               "extensions": [
                 {
@@ -26,9 +53,35 @@
                   "params": {
                     "corner_radius": {
                       "top-left": 0,
-                      "top-right": 8,
-                      "bottom-left": 16,
-                      "bottom-right": 32
+                      "top-right": 20,
+                      "bottom-left": 40,
+                      "bottom-right": 60
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "gif",
+              "gif_url": "empty://",
+              "width": {
+                "type": "fixed",
+                "value": 250
+              },
+              "height": {
+                "type": "fixed",
+                "value": 250
+              },
+              "visibility": "@{gif_visibility}",
+              "extensions": [
+                {
+                  "id": "shimmer",
+                  "params": {
+                    "corner_radius": {
+                      "top-left": 0,
+                      "top-right": 20,
+                      "bottom-left": 40,
+                      "bottom-right": 60
                     }
                   }
                 }

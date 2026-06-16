@@ -2757,7 +2757,7 @@
       "file": "tabs-item-actions.json"
     },
     {
-      "title": "Image Shimmer Preview",
+      "title": "Shimmer Extension",
       "case_id": 143,
       "file": "image_shimmer_preview.json",
       "platforms": [

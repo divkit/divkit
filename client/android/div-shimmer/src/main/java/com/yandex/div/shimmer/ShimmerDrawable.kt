@@ -30,9 +30,9 @@ import kotlin.math.tan
  * It should be set to [SystemClock.uptimeMillis] of the start of the first animation.
  */
 class ShimmerDrawable @JvmOverloads constructor(
-        initialConfig: Config,
-        private val animationStartTime: Long,
-        private val animationsEnabled: () -> Boolean = { true },
+    initialConfig: Config,
+    private val animationStartTime: Long,
+    private val animationsEnabled: () -> Boolean = { true },
 ) : Drawable(), Animatable {
     var config: Config = initialConfig
         set(value) {
@@ -102,21 +102,24 @@ class ShimmerDrawable @JvmOverloads constructor(
         val dy: Float
 
         when (normalizeAngle(config.angle.toInt())) {
-            in 45 until  135 -> {
+            in 45 until 135 -> {
                 rotate -= 90
                 dx = 0f
                 dy = offsetSymmetric(-translateHeight(), animatedValue)
             }
+
             in 225 until 315 -> {
                 rotate -= 270
                 dx = 0f
                 dy = offsetSymmetric(translateHeight(), animatedValue)
             }
+
             in 135 until 225 -> {
                 rotate -= 180
                 dx = offsetSymmetric(translateWidth(), animatedValue)
                 dy = 0f
             }
+
             else -> { // 315 until 45
                 dx = offsetSymmetric(-translateWidth(), animatedValue)
                 dy = 0f
@@ -197,13 +200,13 @@ class ShimmerDrawable @JvmOverloads constructor(
         val endX = if (vertical) 0f else boundsWidth.toFloat()
         val endY = if (vertical) boundsHeight.toFloat() else 0f
         shimmerPaint.shader = LinearGradient(
-                0f,
-                0f,
-                endX,
-                endY,
-                config.colors,
-                config.locations,
-                Shader.TileMode.CLAMP
+            0f,
+            0f,
+            endX,
+            endY,
+            config.colors,
+            config.locations,
+            Shader.TileMode.CLAMP
         )
     }
 
@@ -232,13 +235,13 @@ class ShimmerDrawable @JvmOverloads constructor(
      * Configuration class for [ShimmerDrawable]
      */
     class Config(
-            val colors: IntArray,
-            val locations: FloatArray,
-            val angle: Double,
-            val duration: Long,
-            val repeatDelay: Long = 0,
-            val startDelay: Long = 0,
-            val cornerRadius: CornerRadiusConfig? = null,
+        val colors: IntArray,
+        val locations: FloatArray,
+        val angle: Double,
+        val duration: Long,
+        val repeatDelay: Long = 0,
+        val startDelay: Long = 0,
+        val cornerRadius: CornerRadiusConfig? = null,
     )
 
     class CornerRadiusConfig(
