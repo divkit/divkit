@@ -3,6 +3,7 @@ package com.yandex.morda.perftests.div
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
 import com.yandex.div.internal.util.getStringOrNull
+import com.yandex.divkit.perftests.BasePerformanceTest
 import com.yandex.divkit.perftests.DIV_FEED_BENCHMARK_ACTIVITY
 import com.yandex.divkit.perftests.PACKAGE_NAME
 import com.yandex.divkit.perftests.divFeedBenchmarkActivityExtras
@@ -21,7 +22,7 @@ import org.junit.Test
     defaultRepeat = 50,
     timeoutSeconds = 3000
 )
-class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
+class Div2RecyclingPerformanceTest : BasePerformanceTest() {
     private var assets = arrayOf("with_templates.json")
 
     @Before
@@ -42,9 +43,8 @@ class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
     @Test
     fun feedScroll() {
         utils.run {
-            report(packageName = PACKAGE_NAME, tag = "feed_scroll") {
+            report(tag = "feed_scroll") {
                 startActivity(
-                    packageName = PACKAGE_NAME,
                     activityClass = DIV_FEED_BENCHMARK_ACTIVITY,
                     extras = divFeedBenchmarkActivityExtras(
                         assetNames = assets
@@ -81,11 +81,7 @@ class Div2RecyclingPerformanceTest : Div2BasePerformanceTest() {
         val cardAssets = utils.withOptions {
             getStringOrNull(KEY_CARD_ASSETS)
         }
-        return if (cardAssets == null) {
-            emptyArray()
-        } else {
-            cardAssets.split(',').toTypedArray()
-        }
+        return cardAssets?.split(',')?.toTypedArray() ?: emptyArray()
     }
 
     private companion object {

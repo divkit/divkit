@@ -2,12 +2,10 @@ package com.yandex.divkit.benchmark.div.histogram
 
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.histogram.HistogramBridge
-import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.RenderConfiguration
 import com.yandex.div.internal.KLog
 import com.yandex.divkit.benchmark.perf.PerfMetricReporter
-import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 
@@ -24,14 +22,6 @@ internal class DemoHistogramConfiguration(
 private const val TAG = "DIV_HISTOGRAM_LOGGER"
 
 class LoggingHistogramBridge : HistogramBridge {
-
-    private val lastSavedHistograms: HashMap<String, TimeHistogram> = HashMap()
-
-    fun getLastSavedHistogram(name: String): TimeHistogram? {
-        return if (lastSavedHistograms.containsKey(name)) {
-            lastSavedHistograms[name]
-        } else null
-    }
 
     override fun recordBooleanHistogram(name: String, sample: Boolean) {
         recordHistogram(name, sample)
@@ -84,13 +74,6 @@ class LoggingHistogramBridge : HistogramBridge {
 
     private fun recordHistogram(name: String, sample: Long) {
         KLog.d(TAG) { "$name: $sample" }
-        val histogramName = name.removeSuffix(".Cool").removeSuffix(".Cold").removeSuffix(".Warm")
-        val histogramCallType = name.takeLast(4)
-        lastSavedHistograms[histogramName] = TimeHistogram(
-            histogramName,
-            histogramCallType,
-            sample,
-        )
     }
 
     private fun recordHistogram(name: String, sample: Boolean) {
@@ -101,16 +84,6 @@ class LoggingHistogramBridge : HistogramBridge {
         @Volatile
         @VisibleForTesting
         var dispatcher: HistogramDispatcher? = null
-    }
-
-    class TimeHistogram(
-        val name: String,
-        @HistogramCallType val histogramCallType: String,
-        val value: Long,
-    ) {
-        override fun toString(): String {
-            return "$name.$histogramCallType: $value"
-        }
     }
 }
 

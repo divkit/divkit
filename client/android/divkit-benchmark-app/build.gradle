@@ -4,7 +4,7 @@ import groovy.json.JsonOutput
 plugins {
     id 'com.android.application'
     id 'kotlin-parcelize'
-    alias(libs.plugins.screenshotTestPlugin)
+    alias(libs.plugins.kotlin.compose)
 }
 
 apply from: "${project.projectDir}/../div-common.gradle"
@@ -23,10 +23,11 @@ android {
     }
 
     defaultConfig {
+        minSdk = 23
+
         applicationId 'com.yandex.divkit.benchmark'
         versionCode divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
-        buildConfigField "boolean", "THROW_ASSERTS", "${!providers.gradleProperty("screenshot-tests").isPresent()}"
         buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(providers.gradleProperty("httpHeaders").getOrElse("{}"))
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -65,6 +66,7 @@ android {
 
 dependencies {
     implementation project(path: ':assertion')
+    implementation project(path: ':compose')
     implementation project(path: ':div')
     implementation project(path: ':div-gesture')
     implementation project(path: ':div-lottie')
@@ -75,21 +77,22 @@ dependencies {
     implementation project(path: ':div-shimmer')
     implementation project(path: ':div-shine')
     implementation project(path: ':div-size-provider')
+    implementation project(path: ':div-video-m3')
     implementation project(path: ':divkit-regression-testing')
     implementation project(path: ':fonts')
+    implementation project(path: ':glide')
     implementation project(path: ':logging')
-    implementation project(path: ':screenshot-test-runtime')
     implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
     implementation project(path: ':video-custom')
-    implementation project(path: ':div-video-m3')
-    implementation project(path: ':glide')
 
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.foundation
+    implementation libs.androidx.compose.ui
     implementation libs.androidx.preference
     implementation libs.kotlin.reflect
-    implementation libs.okhttp
-
     implementation libs.markwon
+    implementation libs.okhttp
 
     // ============================================================ \\
     // HELLO, USERNAME!                                             \\
@@ -105,18 +108,6 @@ dependencies {
     androidTestImplementation libs.hamcrest.library
     androidTestImplementation libs.androidx.lifecycle.viewmodel
     androidTestImplementation libs.androidx.viewpager2
-}
-
-screenshotTests {
-    def isInIde = providers.systemProperty("idea.active").map(Boolean::parseBoolean).getOrElse(false)
-    enabled = providers.gradleProperty("screenshot-tests").isPresent() || isInIde
-    enableComparison = !providers.gradleProperty("disable-screenshot-comparison").isPresent()
-    strictComparison = providers.gradleProperty("screenshot-strict-comparison").isPresent()
-    testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
-    referencesDir = "src/screenshotTest/screenshots"
-    providers.gradleProperty("screenshot-dir").orNull?.with { dir ->
-        screenshotDir = dir
-    }
 }
 
 android.applicationVariants.configureEach { variant ->

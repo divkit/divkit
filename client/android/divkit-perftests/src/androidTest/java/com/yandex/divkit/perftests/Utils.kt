@@ -8,29 +8,23 @@ import androidx.test.uiautomator.SearchCondition
 import com.yandex.perftests.runner.PerfTestUtils
 import com.yandex.perftests.runner.ProcessReporter
 
-internal fun PerfTestUtils.grantPermission(packageName: String, permission: String) {
-    device.executeShellCommand("pm grant $packageName $permission")
-}
-
 internal fun PerfTestUtils.startActivity(
-    packageName: String,
     activityClass: String,
     extras: Bundle = Bundle.EMPTY,
-    waitCondition: SearchCondition<*>? = null,
-    launchTimeout: Long = 30_000L
+    waitCondition: SearchCondition<*>? = null
 ) {
     val context = InstrumentationRegistry.getInstrumentation().targetContext
     val intent = Intent().apply {
-        component = ComponentName(packageName, activityClass)
+        component = ComponentName(PACKAGE_NAME, activityClass)
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
         putExtras(extras)
     }
     context.startActivity(intent)
 
     if (waitCondition == null) {
-        device.waitForWindowUpdate(null, launchTimeout)
+        device.waitForWindowUpdate(null, TIMEOUT)
     } else {
-        device.wait(waitCondition, launchTimeout)
+        device.wait(waitCondition, TIMEOUT)
             ?: throw RuntimeException("Wait condition was not satisfied! ")
     }
 }
@@ -40,8 +34,10 @@ internal fun PerfTestUtils.pressBack(delay: Long = 1000L) {
     Thread.sleep(delay)
 }
 
-internal inline fun PerfTestUtils.report(packageName: String, tag: String, action: () -> Unit) {
-    val reporter = ProcessReporter(packageName, device)
+internal inline fun PerfTestUtils.report(tag: String, action: () -> Unit) {
+    val reporter = ProcessReporter(PACKAGE_NAME, device)
     action()
     reporter.report(tag)
 }
+
+private const val TIMEOUT: Long = 30_000L

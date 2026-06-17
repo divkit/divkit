@@ -2,6 +2,7 @@ package com.yandex.morda.perftests.div
 
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
+import com.yandex.divkit.perftests.BasePerformanceTest
 import com.yandex.divkit.perftests.DIV_STATE_BENCHMARK_ACTIVITY
 import com.yandex.divkit.perftests.PACKAGE_NAME
 import com.yandex.divkit.perftests.divStateBenchmarkActivityExtras
@@ -18,7 +19,7 @@ import org.junit.Test
     defaultRepeat = 50,
     timeoutSeconds = 3000
 )
-class Div2StatePerformanceTest : Div2BasePerformanceTest() {
+class Div2StatePerformanceTest : BasePerformanceTest() {
     @PerfTestParameter(
         importantMetrics = [
             "Div.Binding.Cold",
@@ -33,9 +34,8 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
     @Test
     fun singleStateChange() {
         utils.run {
-            report(packageName = PACKAGE_NAME, tag = "single_state_change") {
+            report(tag = "single_state_change") {
                 startActivity(
-                    packageName = PACKAGE_NAME,
                     activityClass = DIV_STATE_BENCHMARK_ACTIVITY,
                     extras = divStateBenchmarkActivityExtras(
                         assetName = "div2-perf/state-benchmark-single-change.json",
@@ -75,9 +75,8 @@ class Div2StatePerformanceTest : Div2BasePerformanceTest() {
     @Test
     fun multipleStateChange() {
         utils.run {
-            report(packageName = PACKAGE_NAME, tag = "multiple_state_change") {
+            report(tag = "multiple_state_change") {
                 startActivity(
-                    packageName = PACKAGE_NAME,
                     activityClass = DIV_STATE_BENCHMARK_ACTIVITY,
                     extras = divStateBenchmarkActivityExtras(
                         assetName = "div2-perf/state-benchmark-multiple-change.json",

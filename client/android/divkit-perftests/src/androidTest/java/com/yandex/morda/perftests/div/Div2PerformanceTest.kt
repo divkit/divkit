@@ -2,6 +2,7 @@ package com.yandex.morda.perftests.div
 
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
+import com.yandex.divkit.perftests.BasePerformanceTest
 import com.yandex.divkit.perftests.DIV_BENCHMARK_ACTIVITY
 import com.yandex.divkit.perftests.PACKAGE_NAME
 import com.yandex.divkit.perftests.divBenchmarkActivityExtras
@@ -19,7 +20,7 @@ import org.junit.Test
     defaultRepeat = 50,
     timeoutSeconds = 3000
 )
-class Div2PerformanceTest : Div2BasePerformanceTest() {
+class Div2PerformanceTest : BasePerformanceTest() {
     @Before
     fun setUp() {
         utils.forceStop()
@@ -43,9 +44,8 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
     @Test
     fun withTemplates() {
         utils.run {
-            report(packageName = PACKAGE_NAME, tag = "with_templates") {
+            report(tag = "with_templates") {
                 startActivity(
-                    packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityExtras(
                         assetName = "with_templates.json"
@@ -102,9 +102,8 @@ class Div2PerformanceTest : Div2BasePerformanceTest() {
     @Test
     fun withoutTemplates() {
         utils.run {
-            report(packageName = PACKAGE_NAME, tag = "without_templates") {
+            report(tag = "without_templates") {
                 startActivity(
-                    packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityExtras(
                         assetName = "without_templates.json",

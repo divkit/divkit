@@ -6,6 +6,10 @@ import androidx.lifecycle.lifecycleScope
 import com.yandex.divkit.benchmark.div.divContext
 import kotlinx.coroutines.launch
 
+/**
+ * Start activity with default data:
+ * adb shell am start -n com.yandex.divkit.benchmark/.Div2BenchmarkActivity --es asset_name with_templates.json
+ */
 class Div2BenchmarkActivity : AppCompatActivity() {
 
     private lateinit var benchmark: Div2Benchmark

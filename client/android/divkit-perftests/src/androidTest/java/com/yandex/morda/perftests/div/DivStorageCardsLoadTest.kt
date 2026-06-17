@@ -2,6 +2,7 @@ package com.yandex.morda.perftests.div
 
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
+import com.yandex.divkit.perftests.BasePerformanceTest
 import com.yandex.divkit.perftests.DIV_STORAGE_BENCHMARK_ACTIVITY
 import com.yandex.divkit.perftests.PACKAGE_NAME
 import com.yandex.divkit.perftests.divStorageBenchmarkActivityExtras
@@ -19,7 +20,7 @@ import org.junit.Test
     defaultRepeat = 50,
     timeoutSeconds = 3000
 )
-class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
+class DivStorageCardsLoadTest : BasePerformanceTest() {
     @Before
     fun setUp() {
         utils.forceStop()
@@ -34,17 +35,20 @@ class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
     @Test
     fun withTemplates() {
         utils.run {
-            report(packageName = PACKAGE_NAME, tag = "with_templates") {
+            report(tag = "with_templates") {
                 startActivity(
-                    packageName = PACKAGE_NAME,
                     activityClass = DIV_STORAGE_BENCHMARK_ACTIVITY,
                     extras = divStorageBenchmarkActivityExtras(
-                        assetNames = arrayOf("with_templates.json",
-                            "div2-perf/state-benchmark-multiple-change.json"),
-                        prohibitedHistograms = arrayOf("Storage.Templates.Load",
+                        assetNames = arrayOf(
+                            "with_templates.json",
+                            "div2-perf/state-benchmark-multiple-change.json"
+                        ),
+                        prohibitedHistograms = arrayOf(
+                            "Storage.Templates.Load",
                             "com.yandex.divkit.demo.Storage.Templates.Parsing",
                             "com.yandex.divkit.demo.Storage.Data.Load",
-                            "com.yandex.divkit.demo.Storage.Templates.Load"),
+                            "com.yandex.divkit.demo.Storage.Templates.Load"
+                        ),
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
@@ -65,14 +69,16 @@ class DivStorageCardsLoadTest: Div2BasePerformanceTest() {
     @Test
     fun withoutTemplates() {
         utils.run {
-            report(packageName = PACKAGE_NAME, tag = "without_templates") {
+            report(tag = "without_templates") {
                 startActivity(
-                    packageName = PACKAGE_NAME,
                     activityClass = DIV_STORAGE_BENCHMARK_ACTIVITY,
                     extras = divStorageBenchmarkActivityExtras(
-                        assetNames = arrayOf("without_templates.json",
-                            "div2-perf/state-benchmark-multiple-change.json"),
-                        prohibitedHistograms = arrayOf("Storage.Templates.Load",
+                        assetNames = arrayOf(
+                            "without_templates.json",
+                            "div2-perf/state-benchmark-multiple-change.json"
+                        ),
+                        prohibitedHistograms = arrayOf(
+                            "Storage.Templates.Load",
                             "Storage.Templates.Parsing",
                             "com.yandex.divkit.demo.Storage.Data.Load",
                             "com.yandex.divkit.demo.Storage.Templates.Parsing",

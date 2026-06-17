@@ -39,8 +39,6 @@ class VisualAssertionErrorHandler(private val application: Application) : Assert
         }
     }
 
-    fun resetSuppressed() = suppressed.edit().clear().apply()
-
     private fun createSuppressCheckBox(activity: Activity, assertionError: AssertionError): CheckBox {
         return CheckBox(activity).apply {
             text = ASSERT_DIALOG_SUPPRESS

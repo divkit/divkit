@@ -2,6 +2,7 @@ package com.yandex.morda.perftests.div
 
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
+import com.yandex.divkit.perftests.BasePerformanceTest
 import com.yandex.divkit.perftests.DIV_BENCHMARK_ACTIVITY
 import com.yandex.divkit.perftests.PACKAGE_NAME
 import com.yandex.divkit.perftests.divBenchmarkActivityRebindExtras
@@ -19,7 +20,7 @@ import org.junit.Test
     defaultRepeat = 50,
     timeoutSeconds = 3000
 )
-class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
+class Div2RebindPerformanceTest : BasePerformanceTest() {
     @Before
     fun setUp() {
         utils.forceStop()
@@ -96,9 +97,8 @@ class Div2RebindPerformanceTest : Div2BasePerformanceTest() {
 
     private fun doRebindTest(tag: String, rebindAsset: String) {
         utils.run {
-            report(packageName = PACKAGE_NAME, tag = tag) {
+            report(tag = tag) {
                 startActivity(
-                    packageName = PACKAGE_NAME,
                     activityClass = DIV_BENCHMARK_ACTIVITY,
                     extras = divBenchmarkActivityRebindExtras(
                         assetName = "div2-perf/rebind-original-layout.json",
