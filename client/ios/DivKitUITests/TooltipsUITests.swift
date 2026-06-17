@@ -27,8 +27,8 @@ final class TooltipsUITests: XCTestCase {
 
   private lazy var tooltip: XCUIElement = app.staticTexts["Title tooltip"]
 
-  private lazy var toggleTooltipButton: XCUIElement = elementsQuery
-    .staticTexts["tooltip with close button"]
+  private lazy var showTooltipButton: XCUIElement = elementsQuery
+    .staticTexts["Tooltip with close button"]
 
   private lazy var closeTooltipButton: XCUIElement = app.buttons["close tooltip"]
 
@@ -60,13 +60,13 @@ final class TooltipsUITests: XCTestCase {
     goTo(test: .closeOnSwitchOrientation)
 
     setPosition(.bottom)
-    toggleTooltipButton.tap()
+    showTooltipButton.tap()
     XCTAssertTrue(tooltip.exists)
 
     device.orientation = .landscapeRight
     XCTAssertTrue(!tooltip.exists) // tooltip closed
 
-    toggleTooltipButton.tap()
+    showTooltipButton.tap()
     device.orientation = .portrait
     XCTAssertTrue(!tooltip.exists) // tooltip closed again
   }
@@ -84,9 +84,9 @@ final class TooltipsUITests: XCTestCase {
   private func checkSightActionsForTooltip(withAnimation animation: Animation) {
     let showTooltipButton = switch animation {
     case .enabled:
-      elementsQuery.staticTexts["animated tooltip with visibility and disappear action"]
+      elementsQuery.staticTexts["Tooltip with default animation and visibility/disappear actions"]
     case .disabled:
-      elementsQuery.staticTexts["non-animated tooltip with visibility and disappear action"]
+      elementsQuery.staticTexts["Tooltip without animation and with visibility/disappear actions"]
     }
     showTooltipButton.tap()
     checkSightAction(of: .visibility)
@@ -114,7 +114,7 @@ final class TooltipsUITests: XCTestCase {
   private func checkTooltip(for position: Position) {
     setPosition(position)
 
-    toggleTooltipButton.tap() // Open tooltip
+    showTooltipButton.tap() // Open tooltip
     XCTAssertTrue(tooltip.exists)
 
     closeTooltipButton.tap() // Close tooltip

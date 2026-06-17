@@ -49,7 +49,7 @@
           "items": [
             {
               "type": "button",
-              "text": "tooltip with close button",
+              "text": "Tooltip with close button",
               "margins": {
                 "top": 60
               },
