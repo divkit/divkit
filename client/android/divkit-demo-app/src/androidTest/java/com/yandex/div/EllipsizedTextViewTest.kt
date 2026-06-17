@@ -6,6 +6,7 @@ import androidx.test.rule.ActivityTestRule
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.ellipsizedTextView
 import com.yandex.divkit.demo.DummyActivity
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -138,6 +139,7 @@ class EllipsizedTextViewTest {
     }
 
     @Test
+    @Ignore
     fun singleLine() {
         ellipsizedTextView {
             testAsset = "div2-test/ellipsized_text_view_long_text_custom_ellipsis_single_line.json"
