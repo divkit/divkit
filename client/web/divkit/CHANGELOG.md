@@ -1,3 +1,10 @@
+## 32.55.0 (June 22, 2026)
+
+* Added support for the `item_count_variable` property in `pager`.
+* Added support for the `range_builder` and `image_builder` properties in `text`.
+* Fixed an issue with the variable resolution in `pager` in rare cases.
+
+
 ## 32.54.0 (June 15, 2026)
 
 * Added support for the `press_start_actions` and `press_end_actions` properties in the `slider`.
