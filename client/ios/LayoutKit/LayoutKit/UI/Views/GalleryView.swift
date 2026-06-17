@@ -324,6 +324,7 @@ public final class GalleryView: BlockView {
   private func resyncPagerContentOffset() {
     guard let model,
           !model.scrollMode.isDefault,
+          !collectionView.isTracking,
           !collectionView.isDragging,
           !collectionView.isDecelerating,
           case .paging = state.contentPosition else { return }
@@ -433,6 +434,7 @@ extension GalleryView {
   }
 
   private func onDidEndScroll(scrollStartOffset: CGFloat? = nil) {
+
     let newState = GalleryViewState(
       contentPosition: state.contentPosition,
       itemsCount: model.items.count,
