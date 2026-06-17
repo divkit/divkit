@@ -76,6 +76,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
                 "snapshot_test_data/div-text/multiline-text.json",
                 "snapshot_test_data/div-text/one-line-text.json",
                 "snapshot_test_data/div-text/right-text-alignment.json",
+                "snapshot_test_data/div-text/text-alignment-rtl.json",
                 "snapshot_test_data/div-text/single-line-height.json",
                 "snapshot_test_data/div-text/small-line-height-for-font.json",
                 "snapshot_test_data/div-text/solid-background.json",

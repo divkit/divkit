@@ -14,7 +14,9 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.DivBlockView
@@ -38,6 +40,7 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
     val wrapLayoutState = resolveWrapLayoutState(data, isHorizontal = true)
     val visibleItems = data.visibleItems()
     val childRects = rememberChildRects(visibleItems.size)
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
@@ -59,6 +62,7 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
                 wrapLayoutState.mainAxisEndPadding.toPx(),
                 wrapLayoutState.crossAxisStartPadding.toPx(),
                 wrapLayoutState.crossAxisEndPadding.toPx(),
+                isRtl = isRtl,
             )
         }
 
@@ -85,6 +89,7 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
     val wrapLayoutState = resolveWrapLayoutState(data, isHorizontal = false)
     val visibleItems = data.visibleItems()
     val childRects = rememberChildRects(visibleItems.size)
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
@@ -106,6 +111,7 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
                 wrapLayoutState.mainAxisEndPadding.toPx(),
                 wrapLayoutState.crossAxisStartPadding.toPx(),
                 wrapLayoutState.crossAxisEndPadding.toPx(),
+                isRtl = isRtl,
             )
         }
 

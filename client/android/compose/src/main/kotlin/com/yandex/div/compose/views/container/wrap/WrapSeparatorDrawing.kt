@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.mirrorHorizontallyIfRtl
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.container.SeparatorVisibility
 import com.yandex.div2.DivContainer
@@ -139,85 +140,90 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
     edgeSepPadEndPx: Float,
     edgeLineSepPadTopPx: Float,
     edgeLineSepPadBottomPx: Float,
+    isRtl: Boolean,
 ) {
     if (childRects.isEmpty()) return
-    val lines = groupIntoHorizontalLines(childRects)
+
+    val rects = mirrorXIfRtl(childRects, isRtl)
+    val lines = groupIntoHorizontalLines(rects)
     if (lines.isEmpty()) return
 
-    if (lineSepVisibility.showAtStart && lineSepInfo != null) {
-        val lineTop = lines.first().crossAxisMin
-        drawLineSeparatorH(
-            lineSepInfo,
-            separatorBottom = lineTop - edgeLineSepPadTopPx + lineSepInfo.totalHeightDp.toPx(),
-            contentLeft = -edgeSepPadStartPx,
-            contentRight = size.width + edgeSepPadEndPx,
-        )
-    }
-
-    lines.forEachIndexed { lineIdx, line ->
-        if (lineIdx > 0 && lineSepVisibility.showBetween && lineSepInfo != null) {
-            val prevLine = lines[lineIdx - 1]
-            val gapTop = prevLine.crossAxisMax
-            val gapBottom = line.crossAxisMin
-            val gapCenter = (gapTop + gapBottom) / 2
-            val sepHalfHeight = lineSepInfo.totalHeightDp.toPx() / 2
+    mirrorHorizontallyIfRtl(isRtl) {
+        if (lineSepVisibility.showAtStart && lineSepInfo != null) {
+            val lineTop = lines.first().crossAxisMin
             drawLineSeparatorH(
                 lineSepInfo,
-                separatorBottom = gapCenter + sepHalfHeight,
+                separatorBottom = lineTop - edgeLineSepPadTopPx + lineSepInfo.totalHeightDp.toPx(),
                 contentLeft = -edgeSepPadStartPx,
                 contentRight = size.width + edgeSepPadEndPx,
             )
         }
 
-        val lineTop = line.crossAxisMin
-        val lineBottom = line.crossAxisMax
-
-        for (i in line.firstIndex..line.lastIndex) {
-            val rect = childRects[i]
-            if (rect == Rect.Zero) continue
-
-            if (i == line.firstIndex && sepVisibility.showAtStart && sepInfo != null) {
-                drawItemSeparatorH(
-                    sepInfo,
-                    separatorRight = rect.left - (edgeSepPadStartPx - sepInfo.totalWidthDp.toPx()) / 2,
-                    lineTop = lineTop,
-                    lineBottom = lineBottom,
+        lines.forEachIndexed { lineIdx, line ->
+            if (lineIdx > 0 && lineSepVisibility.showBetween && lineSepInfo != null) {
+                val prevLine = lines[lineIdx - 1]
+                val gapTop = prevLine.crossAxisMax
+                val gapBottom = line.crossAxisMin
+                val gapCenter = (gapTop + gapBottom) / 2
+                val sepHalfHeight = lineSepInfo.totalHeightDp.toPx() / 2
+                drawLineSeparatorH(
+                    lineSepInfo,
+                    separatorBottom = gapCenter + sepHalfHeight,
+                    contentLeft = -edgeSepPadStartPx,
+                    contentRight = size.width + edgeSepPadEndPx,
                 )
             }
 
-            if (i > line.firstIndex && sepVisibility.showBetween && sepInfo != null) {
-                val prevRect = childRects[i - 1]
-                val gapCenter = (prevRect.right + rect.left) / 2
-                val sepHalfWidth = sepInfo.totalWidthDp.toPx() / 2
-                drawItemSeparatorH(
-                    sepInfo,
-                    separatorRight = gapCenter + sepHalfWidth,
-                    lineTop = lineTop,
-                    lineBottom = lineBottom,
-                )
-            }
+            val lineTop = line.crossAxisMin
+            val lineBottom = line.crossAxisMax
 
-            if (i == line.lastIndex && sepVisibility.showAtEnd && sepInfo != null) {
-                drawItemSeparatorH(
-                    sepInfo,
-                    separatorRight = rect.right + sepInfo.totalWidthDp.toPx() +
-                        (edgeSepPadEndPx - sepInfo.totalWidthDp.toPx()) / 2,
-                    lineTop = lineTop,
-                    lineBottom = lineBottom,
-                )
+            for (i in line.firstIndex..line.lastIndex) {
+                val rect = rects[i]
+                if (rect == Rect.Zero) continue
+
+                if (i == line.firstIndex && sepVisibility.showAtStart && sepInfo != null) {
+                    drawItemSeparatorH(
+                        sepInfo,
+                        separatorRight = rect.left - (edgeSepPadStartPx - sepInfo.totalWidthDp.toPx()) / 2,
+                        lineTop = lineTop,
+                        lineBottom = lineBottom,
+                    )
+                }
+
+                if (i > line.firstIndex && sepVisibility.showBetween && sepInfo != null) {
+                    val prevRect = rects[i - 1]
+                    val gapCenter = (prevRect.right + rect.left) / 2
+                    val sepHalfWidth = sepInfo.totalWidthDp.toPx() / 2
+                    drawItemSeparatorH(
+                        sepInfo,
+                        separatorRight = gapCenter + sepHalfWidth,
+                        lineTop = lineTop,
+                        lineBottom = lineBottom,
+                    )
+                }
+
+                if (i == line.lastIndex && sepVisibility.showAtEnd && sepInfo != null) {
+                    drawItemSeparatorH(
+                        sepInfo,
+                        separatorRight = rect.right + sepInfo.totalWidthDp.toPx() +
+                            (edgeSepPadEndPx - sepInfo.totalWidthDp.toPx()) / 2,
+                        lineTop = lineTop,
+                        lineBottom = lineBottom,
+                    )
+                }
             }
         }
-    }
 
-    if (lineSepVisibility.showAtEnd && lineSepInfo != null) {
-        val lineBottom = lines.last().crossAxisMax
-        drawLineSeparatorH(
-            lineSepInfo,
-            separatorBottom = lineBottom + edgeLineSepPadBottomPx -
-                (edgeLineSepPadBottomPx - lineSepInfo.totalHeightDp.toPx()) / 2,
-            contentLeft = -edgeSepPadStartPx,
-            contentRight = size.width + edgeSepPadEndPx,
-        )
+        if (lineSepVisibility.showAtEnd && lineSepInfo != null) {
+            val lineBottom = lines.last().crossAxisMax
+            drawLineSeparatorH(
+                lineSepInfo,
+                separatorBottom = lineBottom + edgeLineSepPadBottomPx -
+                    (edgeLineSepPadBottomPx - lineSepInfo.totalHeightDp.toPx()) / 2,
+                contentLeft = -edgeSepPadStartPx,
+                contentRight = size.width + edgeSepPadEndPx,
+            )
+        }
     }
 }
 
@@ -231,85 +237,99 @@ internal fun DrawScope.drawVerticalWrapSeparators(
     edgeSepPadEndPx: Float,
     edgeLineSepPadStartPx: Float,
     edgeLineSepPadEndPx: Float,
+    isRtl: Boolean,
 ) {
     if (childRects.isEmpty()) return
-    val lines = groupIntoVerticalLines(childRects)
+
+    val rects = mirrorXIfRtl(childRects, isRtl)
+    val lines = groupIntoVerticalLines(rects)
     if (lines.isEmpty()) return
 
-    if (lineSepVisibility.showAtStart && lineSepInfo != null) {
-        val lineLeft = lines.first().crossAxisMin
-        drawLineSeparatorV(
-            lineSepInfo,
-            separatorRight = lineLeft - edgeLineSepPadStartPx + lineSepInfo.totalWidthDp.toPx(),
-            contentTop = -edgeSepPadStartPx,
-            contentBottom = size.height + edgeSepPadEndPx,
-        )
-    }
-
-    lines.forEachIndexed { lineIdx, line ->
-        if (lineIdx > 0 && lineSepVisibility.showBetween && lineSepInfo != null) {
-            val prevLine = lines[lineIdx - 1]
-            val gapLeft = prevLine.crossAxisMax
-            val gapRight = line.crossAxisMin
-            val gapCenter = (gapLeft + gapRight) / 2
-            val sepHalfWidth = lineSepInfo.totalWidthDp.toPx() / 2
+    mirrorHorizontallyIfRtl(isRtl) {
+        if (lineSepVisibility.showAtStart && lineSepInfo != null) {
+            val lineLeft = lines.first().crossAxisMin
             drawLineSeparatorV(
                 lineSepInfo,
-                separatorRight = gapCenter + sepHalfWidth,
+                separatorRight = lineLeft - edgeLineSepPadStartPx + lineSepInfo.totalWidthDp.toPx(),
                 contentTop = -edgeSepPadStartPx,
                 contentBottom = size.height + edgeSepPadEndPx,
             )
         }
 
-        val lineLeft = line.crossAxisMin
-        val lineRight = line.crossAxisMax
-
-        for (i in line.firstIndex..line.lastIndex) {
-            val rect = childRects[i]
-            if (rect == Rect.Zero) continue
-
-            if (i == line.firstIndex && sepVisibility.showAtStart && sepInfo != null) {
-                drawItemSeparatorV(
-                    sepInfo,
-                    separatorBottom = rect.top - (edgeSepPadStartPx - sepInfo.totalHeightDp.toPx()) / 2,
-                    lineLeft = lineLeft,
-                    lineRight = lineRight,
+        lines.forEachIndexed { lineIdx, line ->
+            if (lineIdx > 0 && lineSepVisibility.showBetween && lineSepInfo != null) {
+                val prevLine = lines[lineIdx - 1]
+                val gapLeft = prevLine.crossAxisMax
+                val gapRight = line.crossAxisMin
+                val gapCenter = (gapLeft + gapRight) / 2
+                val sepHalfWidth = lineSepInfo.totalWidthDp.toPx() / 2
+                drawLineSeparatorV(
+                    lineSepInfo,
+                    separatorRight = gapCenter + sepHalfWidth,
+                    contentTop = -edgeSepPadStartPx,
+                    contentBottom = size.height + edgeSepPadEndPx,
                 )
             }
 
-            if (i > line.firstIndex && sepVisibility.showBetween && sepInfo != null) {
-                val prevRect = childRects[i - 1]
-                val gapCenter = (prevRect.bottom + rect.top) / 2
-                val sepHalfHeight = sepInfo.totalHeightDp.toPx() / 2
-                drawItemSeparatorV(
-                    sepInfo,
-                    separatorBottom = gapCenter + sepHalfHeight,
-                    lineLeft = lineLeft,
-                    lineRight = lineRight,
-                )
-            }
+            val lineLeft = line.crossAxisMin
+            val lineRight = line.crossAxisMax
 
-            if (i == line.lastIndex && sepVisibility.showAtEnd && sepInfo != null) {
-                drawItemSeparatorV(
-                    sepInfo,
-                    separatorBottom = rect.bottom + sepInfo.totalHeightDp.toPx() +
-                        (edgeSepPadEndPx - sepInfo.totalHeightDp.toPx()) / 2,
-                    lineLeft = lineLeft,
-                    lineRight = lineRight,
-                )
+            for (i in line.firstIndex..line.lastIndex) {
+                val rect = rects[i]
+                if (rect == Rect.Zero) continue
+
+                if (i == line.firstIndex && sepVisibility.showAtStart && sepInfo != null) {
+                    drawItemSeparatorV(
+                        sepInfo,
+                        separatorBottom = rect.top - (edgeSepPadStartPx - sepInfo.totalHeightDp.toPx()) / 2,
+                        lineLeft = lineLeft,
+                        lineRight = lineRight,
+                    )
+                }
+
+                if (i > line.firstIndex && sepVisibility.showBetween && sepInfo != null) {
+                    val prevRect = rects[i - 1]
+                    val gapCenter = (prevRect.bottom + rect.top) / 2
+                    val sepHalfHeight = sepInfo.totalHeightDp.toPx() / 2
+                    drawItemSeparatorV(
+                        sepInfo,
+                        separatorBottom = gapCenter + sepHalfHeight,
+                        lineLeft = lineLeft,
+                        lineRight = lineRight,
+                    )
+                }
+
+                if (i == line.lastIndex && sepVisibility.showAtEnd && sepInfo != null) {
+                    drawItemSeparatorV(
+                        sepInfo,
+                        separatorBottom = rect.bottom + sepInfo.totalHeightDp.toPx() +
+                            (edgeSepPadEndPx - sepInfo.totalHeightDp.toPx()) / 2,
+                        lineLeft = lineLeft,
+                        lineRight = lineRight,
+                    )
+                }
             }
         }
-    }
 
-    if (lineSepVisibility.showAtEnd && lineSepInfo != null) {
-        val lineRight = lines.last().crossAxisMax
-        drawLineSeparatorV(
-            lineSepInfo,
-            separatorRight = lineRight + edgeLineSepPadEndPx -
-                (edgeLineSepPadEndPx - lineSepInfo.totalWidthDp.toPx()) / 2,
-            contentTop = -edgeSepPadStartPx,
-            contentBottom = size.height + edgeSepPadEndPx,
-        )
+        if (lineSepVisibility.showAtEnd && lineSepInfo != null) {
+            val lineRight = lines.last().crossAxisMax
+            drawLineSeparatorV(
+                lineSepInfo,
+                separatorRight = lineRight + edgeLineSepPadEndPx -
+                    (edgeLineSepPadEndPx - lineSepInfo.totalWidthDp.toPx()) / 2,
+                contentTop = -edgeSepPadStartPx,
+                contentBottom = size.height + edgeSepPadEndPx,
+            )
+        }
+    }
+}
+
+private fun DrawScope.mirrorXIfRtl(childRects: List<Rect>, isRtl: Boolean): List<Rect> {
+    if (!isRtl) return childRects
+    val width = size.width
+    return childRects.map { rect ->
+        if (rect == Rect.Zero) rect
+        else Rect(left = width - rect.right, top = rect.top, right = width - rect.left, bottom = rect.bottom)
     }
 }
 

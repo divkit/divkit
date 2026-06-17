@@ -35,6 +35,7 @@ import androidx.compose.ui.util.lerp
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.mirrorHorizontallyIfRtl
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div2.DivTabs
@@ -170,23 +171,25 @@ private fun ScrollableTitleRow(
     val rowModifier = modifier
         .clipToBounds()
         .drawBehind {
-            drawInactiveTabBackgrounds(
-                listState = listState,
-                inactiveBackground = inactiveBackground,
-                titleStartOffsetPx = titleStartOffsetPx,
-                tabShape = tabShape,
-                layoutDirection = layoutDirection,
-                density = density,
-            )
-            drawActiveTabIndicator(
-                listState = listState,
-                pagerState = pagerState,
-                activeBackground = activeBackground,
-                titleStartOffsetPx = titleStartOffsetPx,
-                tabShape = tabShape,
-                layoutDirection = layoutDirection,
-                density = density,
-            )
+            mirrorHorizontallyIfRtl(layoutDirection == LayoutDirection.Rtl) {
+                drawInactiveTabBackgrounds(
+                    listState = listState,
+                    inactiveBackground = inactiveBackground,
+                    titleStartOffsetPx = titleStartOffsetPx,
+                    tabShape = tabShape,
+                    layoutDirection = layoutDirection,
+                    density = density,
+                )
+                drawActiveTabIndicator(
+                    listState = listState,
+                    pagerState = pagerState,
+                    activeBackground = activeBackground,
+                    titleStartOffsetPx = titleStartOffsetPx,
+                    tabShape = tabShape,
+                    layoutDirection = layoutDirection,
+                    density = density,
+                )
+            }
         }
     LazyRow(
         state = listState,

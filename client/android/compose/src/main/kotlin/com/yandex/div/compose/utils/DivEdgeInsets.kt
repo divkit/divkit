@@ -2,7 +2,9 @@ package com.yandex.div.compose.utils
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivBase
@@ -52,8 +54,15 @@ internal fun DivBase.observeVerticalMarginsSum(): Dp {
 private fun DivEdgeInsets?.observeHorizontalInsets(unit: DivSizeUnit): Pair<Dp, Dp> {
     this ?: return Pair(0.dp, 0.dp)
 
-    if (start == null && end == null) {
-        return Pair(left.observedValue().toDp(unit), right.observedValue().toDp(unit))
+    if (start != null || end != null) {
+        return Pair(start?.observedValue()?.toDp(unit) ?: 0.dp, end?.observedValue()?.toDp(unit) ?: 0.dp)
     }
-    return Pair(start?.observedValue()?.toDp(unit) ?: 0.dp, end?.observedValue()?.toDp(unit) ?: 0.dp)
+
+    val left = left.observedValue().toDp(unit)
+    val right = right.observedValue().toDp(unit)
+    return if (LocalLayoutDirection.current == LayoutDirection.Rtl) {
+        Pair(right, left)
+    } else {
+        Pair(left, right)
+    }
 }

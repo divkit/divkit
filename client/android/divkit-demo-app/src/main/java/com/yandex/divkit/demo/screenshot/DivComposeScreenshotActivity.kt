@@ -91,8 +91,10 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         }
         data = DivData(environment, json.getJSONObject("card"))
 
+        val configuration = ScreenshotTestConfiguration.from(json)
         val view = ComposeView(divContext).apply {
             id = R.id.screenshot_view
+            configuration.applyTo(this)
             setContent {
                 DivView(data = data)
             }

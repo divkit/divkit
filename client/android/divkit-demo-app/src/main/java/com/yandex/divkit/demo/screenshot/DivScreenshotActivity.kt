@@ -102,18 +102,7 @@ class DivScreenshotActivity : AppCompatActivity() {
     }
 
     private fun View.applyConfiguration() {
-        val divJson = getTestCaseJson()
-        val configuration = if (divJson.has("configuration")) {
-            divJson.getJSONObject("configuration")
-        } else {
-            return
-        }
-
-        if (configuration.has("layout_direction")) {
-            if (configuration.getString("layout_direction") == "rtl") {
-                layoutDirection = View.LAYOUT_DIRECTION_RTL
-            }
-        }
+        ScreenshotTestConfiguration.from(getTestCaseJson()).applyTo(this)
     }
 
     fun stopAnimations() = divView.stopAnimations()
