@@ -84,6 +84,14 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
   var effectiveBackgroundColor: UIColor? { childView?.effectiveBackgroundColor }
 
+  deinit {
+    // The flight container lives in a structural ancestor, not in this view, so
+    // StateBlockView's leftover-animation sweep can't reach it. If this view is
+    // discarded mid-flight (e.g. recreated on a fast state switch), remove the
+    // orphaned container here so it doesn't linger in the hierarchy.
+    transitionChangeAnimationContainer?.removeFromSuperview()
+  }
+
   override func layoutSubviews() {
     super.layoutSubviews()
     guard isFirstChildLayout || animationChange == nil else {
@@ -111,7 +119,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
   ) {
     guard let childView,
           let animationChange,
-          let parentView = superview else {
+          let (anchorView, animationParent) = resolveAnimationHost() else {
       return
     }
 
@@ -122,11 +130,11 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     self.childView = nil
 
     let startFrameInParent = CGRect(
-      origin: parentView.convert(startFrame.origin, from: container),
+      origin: animationParent.convert(startFrame.origin, from: container),
       size: startFrame.size
     )
     let finishFrameInParent = CGRect(
-      origin: parentView.convert(finishFrame.origin, from: container),
+      origin: animationParent.convert(finishFrame.origin, from: container),
       size: finishFrame.size
     )
 
@@ -136,10 +144,19 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     transitionChangeAnimationContainer.frame = startFrameInParent
     transitionChangeAnimationContainer.clipsToBounds = false
     transitionChangeAnimationContainer.addSubview(childView)
+    // Seed the content with the source size. A layout pass before the animation
+    // may already have sized childView to the destination, which would make the
+    // in-animation size assignment a no-op (position would animate, size would
+    // snap). Starting from the source size gives its bounds a real delta to
+    // interpolate.
+    childView.frame = CGRect(origin: .zero, size: transitionChangeAnimationContainer.bounds.size)
     self.isHidden = true
 
-    parentView.addSubview(transitionChangeAnimationContainer)
-    parentView.layoutIfNeeded()
+    // Host the flight in the real structural parent at the element's own
+    // z-position, so decorations (action, border, ...) don't clip it while its
+    // sibling z-order is preserved.
+    animationParent.insertSubview(transitionChangeAnimationContainer, aboveSubview: anchorView)
+    animationParent.layoutIfNeeded()
 
     UIView.animate(
       withDuration: animationChange.duration,
@@ -149,12 +166,12 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
         transitionChangeAnimationContainer.frame = finishFrameInParent
         childView.frame.size = transitionChangeAnimationContainer.bounds.size
         childView.layoutIfNeeded()
-        parentView.layoutIfNeeded()
+        animationParent.layoutIfNeeded()
       },
       completion: { [weak self] _ in
         self?.isHidden = false
         self?.animationChange = nil
-        if transitionChangeAnimationContainer.superview == parentView {
+        if transitionChangeAnimationContainer.superview == animationParent {
           self?.childView = childView
           self?.transitionChangeAnimationContainer = nil
         }
@@ -242,6 +259,15 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     queuedAnimation?.cancel()
     queuedAnimation = nil
     transitionChangeAnimationContainer = nil
+  }
+
+  private func resolveAnimationHost() -> (anchor: UIView, parent: UIView)? {
+    var anchor: UIView = self
+    while let superview = anchor.superview, superview is DecoratingViewProtocol {
+      anchor = superview
+    }
+    guard let parent = anchor.superview else { return nil }
+    return (anchor, parent)
   }
 }
 

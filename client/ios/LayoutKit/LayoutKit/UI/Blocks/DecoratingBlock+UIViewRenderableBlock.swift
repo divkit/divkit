@@ -4,6 +4,8 @@ import Foundation
 import UIKit
 import VGSL
 
+protocol DecoratingViewProtocol {}
+
 extension DecoratingBlock {
   static func makeBlockView() -> BlockView {
     DecoratingView()
@@ -103,7 +105,7 @@ extension LongTapActions {
 }
 
 private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsTrackingContainer,
-  TooltipProtocol {
+  TooltipProtocol, DecoratingViewProtocol {
   enum HighlightState {
     case normal
     case highlighted
@@ -448,6 +450,8 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     layer.maskedCorners = boundary.corners
     layer.mask = boundary.layer
 
+    addCornerRadiusAnimation()
+
     if let border = model.border {
       if shouldMakeBorderLayer,
          let borderLayer = model.boundary.makeBorderLayer(for: bounds.size, border: border) {
@@ -607,6 +611,25 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       tooltipView: tooltipView,
       tooltipAnchorView: self
     )
+  }
+
+  /// `cornerRadius` isn't interpolated by UIView block animations
+  private func addCornerRadiusAnimation() {
+    guard let presentation = layer.presentation(),
+          presentation.cornerRadius != layer.cornerRadius,
+          let hostAnimation = ["position", "bounds.size", "bounds"]
+          .lazy
+          .compactMap({ self.layer.animation(forKey: $0) })
+          .first(where: { $0.duration > 0 }) else {
+      return
+    }
+
+    let animation = CABasicAnimation(keyPath: "cornerRadius")
+    animation.fromValue = presentation.cornerRadius
+    animation.toValue = layer.cornerRadius
+    animation.duration = hostAnimation.duration
+    animation.timingFunction = hostAnimation.timingFunction
+    layer.add(animation, forKey: "cornerRadius")
   }
 
   private func configureRecognizers() {
