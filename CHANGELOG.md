@@ -1,3 +1,18 @@
+## 32.55.0
+
+# iOS Client:
+* Fixed an issue where the pager would freeze between pages when its size changed during scrolling.
+* Fixed the `focus_element` action not moving the text cursor to the end of an already focused input field.
+* Fixed transition_change "change_bounds" animation being clipped by action, border and other decorations.
+* Fixed transition_change "change_bounds" animation not animating the element's size.
+* Implemented scope_id support for video actions.
+
+# Web Client:
+* Added support for the `item_count_variable` property in `pager`.
+* Added support for the `range_builder` and `image_builder` properties in `text`.
+* Fixed an issue with the variable resolution in `pager` in rare cases.
+
+
 ## 32.54.0
 
 # Android Client:
