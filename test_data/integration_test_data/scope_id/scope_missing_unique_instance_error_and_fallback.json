@@ -104,7 +104,9 @@
           "value": "Scope with id 'nonexistent_scope' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [

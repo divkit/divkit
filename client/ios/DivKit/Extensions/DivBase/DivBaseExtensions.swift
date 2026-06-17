@@ -14,7 +14,7 @@ extension DivBase {
   ) throws -> Block {
     let identity = context.currentDivId
       ?? context.path.description
-    setupContext(context: context, identity: identity)
+    setupContext(context: context)
 
     let extensionHandlers = setupExtensionsHandlers(context: context)
     let expressionResolver = context.expressionResolver
@@ -155,8 +155,7 @@ extension DivBase {
   }
 
   private func setupContext(
-    context: DivBlockModelingContext,
-    identity: String
+    context: DivBlockModelingContext
   ) {
     setupContextWithVariablesAndFunctions(context: context)
 
@@ -166,7 +165,9 @@ extension DivBase {
       triggers: variableTriggers ?? []
     )
 
-    context.idToPath[path.cardId.path + identity] = path
+    if let id = context.currentDivId {
+      context.idToPath.add(path, forId: path.cardId.path + id)
+    }
 
     animators?.forEach { animator in
       context.animatorController?.initializeIfNeeded(

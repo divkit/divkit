@@ -5,20 +5,22 @@ import Serialization
 import VGSL
 
 public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
+  public typealias Scope = DivActionSetStoredValue.Scope
+
   public static let type: String = "set_stored_value"
   public let parent: String?
   public let lifetime: Field<Expression<Int>>?
   public let name: Field<Expression<String>>?
+  public let scope: Field<Expression<Scope>>?
   public let value: Field<DivTypedValueTemplate>?
-  public let scope: Field<Expression<String>>?
 
   public convenience init(dictionary: [String: Any], templateToType: [TemplateName: String]) throws {
     self.init(
       parent: dictionary["type"] as? String,
       lifetime: dictionary.getOptionalExpressionField("lifetime"),
       name: dictionary.getOptionalExpressionField("name"),
-      value: dictionary.getOptionalField("value", templateToType: templateToType),
-      scope: dictionary.getOptionalExpressionField("scope")
+      scope: dictionary.getOptionalExpressionField("scope"),
+      value: dictionary.getOptionalField("value", templateToType: templateToType)
     )
   }
 
@@ -26,26 +28,26 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
     parent: String?,
     lifetime: Field<Expression<Int>>? = nil,
     name: Field<Expression<String>>? = nil,
-    value: Field<DivTypedValueTemplate>? = nil,
-    scope: Field<Expression<String>>? = nil
+    scope: Field<Expression<Scope>>? = nil,
+    value: Field<DivTypedValueTemplate>? = nil
   ) {
     self.parent = parent
     self.lifetime = lifetime
     self.name = name
-    self.value = value
     self.scope = scope
+    self.value = value
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionSetStoredValueTemplate?) -> DeserializationResult<DivActionSetStoredValue> {
     let lifetimeValue = { parent?.lifetime?.resolveValue(context: context) ?? .noValue }()
     let nameValue = { parent?.name?.resolveValue(context: context) ?? .noValue }()
-    let valueValue = { parent?.value?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let scopeValue = { parent?.scope?.resolveOptionalValue(context: context) ?? .noValue }()
+    let valueValue = { parent?.value?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
       lifetimeValue.errorsOrWarnings?.map { .nestedObjectError(field: "lifetime", error: $0) },
       nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) },
-      scopeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scope", error: $0) }
+      scopeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scope", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     if case .noValue = lifetimeValue {
       errors.append(.requiredFieldIsMissing(field: "lifetime"))
@@ -66,8 +68,8 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
     let result = DivActionSetStoredValue(
       lifetime: { lifetimeNonNil }(),
       name: { nameNonNil }(),
-      value: { valueNonNil }(),
-      scope: { scopeValue.value }()
+      scope: { scopeValue.value }(),
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -78,8 +80,8 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
     }
     var lifetimeValue: DeserializationResult<Expression<Int>> = { parent?.lifetime?.value() ?? .noValue }()
     var nameValue: DeserializationResult<Expression<String>> = { parent?.name?.value() ?? .noValue }()
+    var scopeValue: DeserializationResult<Expression<DivActionSetStoredValue.Scope>> = { parent?.scope?.value() ?? .noValue }()
     var valueValue: DeserializationResult<DivTypedValue> = .noValue
-    var scopeValue: DeserializationResult<Expression<String>> = { parent?.scope?.value() ?? .noValue }()
     _ = {
       // Each field is parsed in its own lambda to keep the stack size managable
       // Otherwise the compiler will allocate stack for each intermediate variable
@@ -96,13 +98,13 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-          if key == "value" {
-           valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
+          if key == "scope" {
+           scopeValue = deserialize(__dictValue).merged(with: scopeValue)
           }
         }()
         _ = {
-          if key == "scope" {
-           scopeValue = deserialize(__dictValue).merged(with: scopeValue)
+          if key == "value" {
+           valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).merged(with: valueValue)
           }
         }()
         _ = {
@@ -116,26 +118,25 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+         if key == parent?.scope?.link {
+           scopeValue = scopeValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
-         if key == parent?.scope?.link {
-           scopeValue = scopeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.value?.link {
+           valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
           }
         }()
       }
     }()
     if let parent = parent {
       _ = { valueValue = valueValue.merged(with: { parent.value?.resolveValue(context: context, useOnlyLinks: true) }) }()
-      _ = { scopeValue = scopeValue.merged(with: { parent.scope?.resolveOptionalValue(context: context) }) }()
     }
     var errors = mergeErrors(
       lifetimeValue.errorsOrWarnings?.map { .nestedObjectError(field: "lifetime", error: $0) },
       nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) },
-      scopeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scope", error: $0) }
+      scopeValue.errorsOrWarnings?.map { .nestedObjectError(field: "scope", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     if case .noValue = lifetimeValue {
       errors.append(.requiredFieldIsMissing(field: "lifetime"))
@@ -156,8 +157,8 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
     let result = DivActionSetStoredValue(
       lifetime: { lifetimeNonNil }(),
       name: { nameNonNil }(),
-      value: { valueNonNil }(),
-      scope: { scopeValue.value }()
+      scope: { scopeValue.value }(),
+      value: { valueNonNil }()
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
@@ -173,8 +174,8 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
       parent: nil,
       lifetime: lifetime ?? mergedParent.lifetime,
       name: name ?? mergedParent.name,
-      value: value ?? mergedParent.value,
-      scope: scope ?? mergedParent.scope
+      scope: scope ?? mergedParent.scope,
+      value: value ?? mergedParent.value
     )
   }
 
@@ -185,8 +186,8 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
       parent: nil,
       lifetime: merged.lifetime,
       name: merged.name,
-      value: try merged.value?.resolveParent(templates: templates),
-      scope: merged.scope
+      scope: merged.scope,
+      value: try merged.value?.resolveParent(templates: templates)
     )
   }
 }

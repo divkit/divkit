@@ -167,7 +167,9 @@
           "value": "Element with id 'inner_video' is ambiguous in scope"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [

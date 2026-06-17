@@ -12,7 +12,7 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
   public let logLimit: Field<Expression<Int>>? // constraint: number >= 0; default value: 1
   public let payload: Field<[String: Any]>?
   public let referer: Field<Expression<URL>>?
-  public let scopeId: Field<String>?
+  public let scopeId: Field<Expression<String>>?
   public let typed: Field<DivActionTypedTemplate>?
   public let url: Field<Expression<URL>>?
   public let visibilityPercentage: Field<Expression<Int>>? // constraint: number >= 0 && number < 100; default value: 0
@@ -26,7 +26,7 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
       logLimit: dictionary.getOptionalExpressionField("log_limit"),
       payload: dictionary.getOptionalField("payload"),
       referer: dictionary.getOptionalExpressionField("referer", transform: URL.makeFromNonEncodedString),
-      scopeId: dictionary.getOptionalField("scope_id"),
+      scopeId: dictionary.getOptionalExpressionField("scope_id"),
       typed: dictionary.getOptionalField("typed", templateToType: templateToType),
       url: dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString),
       visibilityPercentage: dictionary.getOptionalExpressionField("visibility_percentage")
@@ -41,7 +41,7 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
     logLimit: Field<Expression<Int>>? = nil,
     payload: Field<[String: Any]>? = nil,
     referer: Field<Expression<URL>>? = nil,
-    scopeId: Field<String>? = nil,
+    scopeId: Field<Expression<String>>? = nil,
     typed: Field<DivActionTypedTemplate>? = nil,
     url: Field<Expression<URL>>? = nil,
     visibilityPercentage: Field<Expression<Int>>? = nil
@@ -119,7 +119,7 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
     var logLimitValue: DeserializationResult<Expression<Int>> = { parent?.logLimit?.value() ?? .noValue }()
     var payloadValue: DeserializationResult<[String: Any]> = { parent?.payload?.value() ?? .noValue }()
     var refererValue: DeserializationResult<Expression<URL>> = { parent?.referer?.value() ?? .noValue }()
-    var scopeIdValue: DeserializationResult<String> = { parent?.scopeId?.value() ?? .noValue }()
+    var scopeIdValue: DeserializationResult<Expression<String>> = { parent?.scopeId?.value() ?? .noValue }()
     var typedValue: DeserializationResult<DivActionTyped> = .noValue
     var urlValue: DeserializationResult<Expression<URL>> = { parent?.url?.value() ?? .noValue }()
     var visibilityPercentageValue: DeserializationResult<Expression<Int>> = { parent?.visibilityPercentage?.value() ?? .noValue }()

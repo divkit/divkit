@@ -40,7 +40,7 @@ public final class DivAction: @unchecked Sendable {
   public let menuItems: [MenuItem]?
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
-  public let scopeId: String?
+  public let scopeId: Expression<String>?
   public let typed: DivActionTyped?
   public let url: Expression<URL>?
 
@@ -60,6 +60,10 @@ public final class DivAction: @unchecked Sendable {
     resolver.resolveUrl(referer)
   }
 
+  public func resolveScopeId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(scopeId)
+  }
+
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
     resolver.resolveUrl(url)
   }
@@ -73,7 +77,7 @@ public final class DivAction: @unchecked Sendable {
       menuItems: try dictionary.getOptionalArray("menu_items", transform: { (dict: [String: Any]) in try? DivAction.MenuItem(dictionary: dict, context: context) }),
       payload: try dictionary.getOptionalField("payload", context: context),
       referer: try dictionary.getOptionalExpressionField("referer", transform: URL.makeFromNonEncodedString, context: context),
-      scopeId: try dictionary.getOptionalField("scope_id", context: context),
+      scopeId: try dictionary.getOptionalExpressionField("scope_id", context: context),
       typed: try dictionary.getOptionalField("typed", transform: { (dict: [String: Any]) in try DivActionTyped(dictionary: dict, context: context) }),
       url: try dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString, context: context)
     )
@@ -87,7 +91,7 @@ public final class DivAction: @unchecked Sendable {
     menuItems: [MenuItem]? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
-    scopeId: String? = nil,
+    scopeId: Expression<String>? = nil,
     typed: DivActionTyped? = nil,
     url: Expression<URL>? = nil
   ) {
@@ -145,7 +149,7 @@ extension DivAction: Serializable {
     result["menu_items"] = menuItems?.map { $0.toDictionary() }
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()
-    result["scope_id"] = scopeId
+    result["scope_id"] = scopeId?.toValidSerializationValue()
     result["typed"] = typed?.toDictionary()
     result["url"] = url?.toValidSerializationValue()
     return result

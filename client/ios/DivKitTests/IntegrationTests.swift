@@ -111,6 +111,12 @@ private func runTest(_ testData: IntegrationTestData) async {
           reporter.errorMessages.contains(message),
           "Error: [\(message)] is not found in errors: \(reporter.errorMessages)"
         )
+
+      case let .action(logId):
+        XCTAssert(
+          reporter.reportedLogIds.contains(logId),
+          "Action with log_id [\(logId)] was not reported. Reported: \(reporter.reportedLogIds)"
+        )
       }
     }
   }
@@ -120,9 +126,14 @@ private func runTest(_ testData: IntegrationTestData) async {
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
   private(set) var errorMessages = Set<String>()
+  private(set) var reportedLogIds = Set<String>()
 
   func reportError(cardId _: DivCardID, error: DivError) {
     errorMessages.insert(error.message)
+  }
+
+  func reportAction(cardId _: DivCardID, info: DivActionInfo) {
+    reportedLogIds.insert(info.logId)
   }
 
   func insertErrorMessage(_ message: String) {
@@ -197,6 +208,7 @@ private struct IntegrationTestCase: Decodable {
 private enum Expected: Decodable {
   case variable(String, ExpectedValue)
   case error(String)
+  case action(String)
 
   private enum CodingKeys: String, CodingKey {
     case variableName = "variable_name", type, value
@@ -213,6 +225,8 @@ private enum Expected: Decodable {
       self = .variable(variableName, variable)
     case "error":
       self = try .error(container.decode(String.self, forKey: .value))
+    case "action":
+      self = try .action(container.decode(String.self, forKey: .value))
     default:
       throw DecodingError.valueNotFound(
         String.self,
@@ -303,6 +317,7 @@ extension [Expected] {
           $0[DivVariableName(rawValue: name)] = defaultValue
         }
       case .error: break
+      case .action: break
       }
     }
   }

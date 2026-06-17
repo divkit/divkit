@@ -44,7 +44,7 @@ public final class DivActionHandler {
   private let timerActionHandler: TimerActionHandler
   private let tooltipActionHandler: TooltipActionHandler
   private let updateStructureActionHandler = UpdateStructureActionHandler()
-  private let videoActionHandler = VideoActionHandler()
+  private let videoActionHandler: VideoActionHandler
 
   /// Do not create `DivActionHandler`. Use the instance from `DivKitComponents`.
   @_spi(Legacy)
@@ -122,6 +122,7 @@ public final class DivActionHandler {
     self.flags = flags
 
     animatorActionHandler = AnimatorActionHandler(animatorController: animatorController)
+    videoActionHandler = VideoActionHandler()
     downloadActionHandler = DownloadActionHandler(
       patchProvider: patchProvider,
       updateCard: updateCard
@@ -198,11 +199,38 @@ public final class DivActionHandler {
       return
     }
 
-    let path = if let scopeId = action.scopeId {
-      idToPath[path.cardId.path + scopeId] ?? path
-    } else {
-      path
+    let scopeId = action.resolveScopeId(expressionResolver)
+
+    let scopePaths: [UIElementPath] = scopeId.map { scopeId in
+      idToPath[path.cardId.path + scopeId]
+    } ?? []
+
+    if let scopeId {
+      if scopePaths.isEmpty {
+        reporter.reportError(
+          cardId: path.cardId,
+          error: DivUnknownWarning(
+            "Scope with id '\(scopeId)' not found",
+            path: path
+          )
+        )
+      } else if scopePaths.count > 1 {
+        reporter.reportError(
+          cardId: path.cardId,
+          error: DivUnknownError(
+            message: "Scope with id '\(scopeId)' is ambiguous",
+            path: path
+          )
+        )
+        return
+      }
     }
+
+    let actionPathResolver = ActionPathResolver(
+      reporter: reporter,
+      idToPath: idToPath
+    )
+
     let info = action.resolveInfo(expressionResolver, path: path, source: source)
     let context = DivActionHandlingContext(
       info: info,
@@ -210,7 +238,9 @@ public final class DivActionHandler {
       actionHandler: self,
       blockStateStorage: blockStateStorage,
       variablesStorage: variablesStorage,
-      updateCard: updateCard
+      updateCard: updateCard,
+      sourcePath: path,
+      scopePath: scopePaths.first
     )
 
     switch action.typed {
@@ -257,11 +287,20 @@ public final class DivActionHandler {
     case let .divActionUpdateStructure(action):
       updateStructureActionHandler.handle(action, context: context)
     case let .divActionVideo(action):
-      videoActionHandler.handle(action, context: context)
+      videoActionHandler.handle(
+        action,
+        context: context,
+        pathResolver: actionPathResolver
+      )
     case .divActionCustom:
       customActionHandler?.handle(context: context, sender: sender)
     case .none:
-      handleUrl(action, context: context, sender: sender)
+      handleUrl(
+        action,
+        context: context,
+        pathResolver: actionPathResolver,
+        sender: sender
+      )
     }
 
     reporter.reportAction(context: context)
@@ -276,6 +315,7 @@ public final class DivActionHandler {
   private func handleUrl(
     _ action: DivActionBase,
     context: DivActionHandlingContext,
+    pathResolver: ActionPathResolver,
     sender: AnyObject?
   ) {
     guard let url = context.info.url else {
@@ -360,12 +400,12 @@ public final class DivActionHandler {
           )
         }
       case let .video(id: id, action: action):
-        context.blockStateStorage.setState(
+        videoActionHandler.handle(
           id: id,
-          cardId: cardId,
-          state: VideoBlockViewState(state: action == .play ? .playing : .paused)
+          action: action,
+          context: context,
+          pathResolver: pathResolver
         )
-        context.updateCard(.state(cardId))
       case let .timer(timerId, action):
         timerActionHandler.handle(cardId: cardId, timerId: timerId, action: action)
       case let .setStoredValue(storedValue, scope):

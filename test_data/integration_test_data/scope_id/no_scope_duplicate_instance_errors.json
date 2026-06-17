@@ -135,7 +135,9 @@
           "value": "Element with id 'inner_video' is ambiguous"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [

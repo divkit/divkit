@@ -8,12 +8,13 @@ public protocol DivActionBase: Serializable, Sendable {
   var payload: [String: Any]? { get }
   var typed: DivActionTyped? { get }
   var url: Expression<URL>? { get }
-  var scopeId: String? { get }
+  var scopeId: Expression<String>? { get }
   var isEnabled: Expression<Bool> { get }
 
   func resolveLogId(_ resolver: ExpressionResolver) -> String?
   func resolveLogUrl(_ resolver: ExpressionResolver) -> URL?
   func resolveReferer(_ resolver: ExpressionResolver) -> URL?
+  func resolveScopeId(_ resolver: ExpressionResolver) -> String?
   func resolveUrl(_ resolver: ExpressionResolver) -> URL?
   func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool
 }
@@ -37,6 +38,10 @@ extension DivActionBase {
 
   func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(isEnabled) ?? true
+  }
+
+  func resolveScopeId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(scopeId)
   }
 
   func makeDivActionPayload(

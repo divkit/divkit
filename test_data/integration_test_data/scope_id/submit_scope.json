@@ -71,10 +71,6 @@
         {
           "type": "error",
           "value": "Element with id 'form_container' is ambiguous"
-        },
-        {
-          "type": "action",
-          "value": "submit_no_scope_duplicate"
         }
       ],
       "platforms": []

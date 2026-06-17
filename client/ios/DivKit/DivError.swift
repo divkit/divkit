@@ -145,6 +145,12 @@ struct DivExpressionError: Error, DivError {
   }
 }
 
+struct MessageError: Error, CustomStringConvertible {
+  let message: String
+
+  var description: String { message }
+}
+
 struct DivUnknownError: Error, DivError {
   let kind = DivErrorKind.unknown
   let message: String
@@ -155,6 +161,10 @@ struct DivUnknownError: Error, DivError {
     self.message = (error as CustomStringConvertible).description
     self.path = path
     DivKitLogger.error(description)
+  }
+
+  init(message: String, path: UIElementPath) {
+    self.init(MessageError(message: message), path: path)
   }
 }
 

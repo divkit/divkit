@@ -2,19 +2,18 @@ import LayoutKit
 import VGSL
 
 final class IdToPath {
-  private var idToPath = [UIElementPath: UIElementPath]()
+  private var idToPath = [UIElementPath: Set<UIElementPath>]()
   private let lock = AllocatedUnfairLock()
 
-  subscript(id: UIElementPath) -> UIElementPath? {
-    get {
-      lock.withLock {
-        idToPath[id]
-      }
+  subscript(id: UIElementPath) -> [UIElementPath] {
+    lock.withLock {
+      idToPath[id].map { Array($0) } ?? []
     }
-    set {
-      lock.withLock {
-        idToPath[id] = newValue
-      }
+  }
+
+  func add(_ path: UIElementPath, forId id: UIElementPath) {
+    lock.withLock {
+      _ = idToPath[id, default: Set<UIElementPath>()].insert(path)
     }
   }
 

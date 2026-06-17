@@ -23,6 +23,7 @@ import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
 import com.yandex.div.internal.core.VariableMutationHandler;
 import com.yandex.div.json.ParsingErrorLogger;
+import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionResolver;
 import com.yandex.div2.DivAction;
 import com.yandex.div2.DivActionTyped;
@@ -108,7 +109,8 @@ public class DivActionHandler {
         if (DivDownloadActionHandler.canHandle(url, view)) {
             return DivDownloadActionHandler.handleAction(action, (Div2View) view, resolver);
         }
-        return handleAction(action.scopeId, url, view, resolver);
+        String scopeId = action.scopeId != null ? action.scopeId.evaluate(resolver) : null;
+        return handleAction(scopeId, url, view, resolver);
     }
 
     /**
@@ -239,7 +241,8 @@ public class DivActionHandler {
         if (DivDownloadActionHandler.canHandle(url, view)) {
             return DivDownloadActionHandler.handleVisibilityAction(action, (Div2View) view, resolver);
         }
-        return handleAction(action.getScopeId(), url, view, resolver);
+        String scopeId = action.getScopeId() != null ? action.getScopeId().evaluate(resolver) : null;
+        return handleAction(scopeId, url, view, resolver);
     }
 
     /**
@@ -569,7 +572,7 @@ public class DivActionHandler {
 
     private boolean tryHandleCustomTypedAction(
             @Nullable DivActionTyped action,
-            @Nullable String scopeId,
+            @Nullable Expression<String> scopeId,
             @Nullable JSONObject payload,
             @NonNull DivViewFacade view,
             @NonNull ExpressionResolver resolver,
@@ -577,7 +580,8 @@ public class DivActionHandler {
             @Nullable String reason
     ) {
         if (!(action instanceof DivActionTyped.Custom)) return false;
-        handleCustomTypedAction(action, scopeId, view, actionUid, reason, payload != null
+        String scopeIdResolved = scopeId != null ? scopeId.evaluate(resolver) : null;
+        handleCustomTypedAction(action, scopeIdResolved, view, actionUid, reason, payload != null
                 ? new JSONObjectEvaluator(payload, resolver, asLogger(view))
                 : null);
         return true;

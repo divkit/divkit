@@ -24,10 +24,20 @@ public func divAction(
     isEnabled: .value(isEnabled),
     logId: .value(logId),
     payload: payload,
-    scopeId: scopeId,
+    scopeId: scopeId.map { .value($0) },
     typed: typed,
     url: urlParam
   )
+}
+
+public func divActionVideo(
+  id: String,
+  action: DivActionVideo.Action = .start
+) -> DivActionTyped {
+  .divActionVideo(DivActionVideo(
+    action: .value(action),
+    id: .value(id)
+  ))
 }
 
 public func divData(

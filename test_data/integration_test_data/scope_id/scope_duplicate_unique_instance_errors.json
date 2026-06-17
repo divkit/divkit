@@ -134,7 +134,9 @@
           "value": "Scope with id 'scope_element' is ambiguous"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [

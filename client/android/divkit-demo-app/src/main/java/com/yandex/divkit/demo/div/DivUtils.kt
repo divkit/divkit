@@ -198,7 +198,7 @@ open class DemoDivActionHandler(private val uriHandler: DivkitDemoUriHandler) : 
                                 ),
                                 variableName = constant("color"))
                         ),
-                        scopeId = scopeId,
+                        scopeId = scopeId?.let { constant(it) },
                         logId = constant("color change"),
                     )
 

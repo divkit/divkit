@@ -5,7 +5,7 @@
       "$description": "translations.json#/div_action_base_log_id"
     },
     "scope_id": {
-      "$ref": "common.json#/id",
+      "type": "string",
       "$description": "translations.json#/div_action_base_scope_id",
       "platforms": [
         "android",

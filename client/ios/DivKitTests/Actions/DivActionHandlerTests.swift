@@ -4,6 +4,13 @@ import LayoutKit
 import XCTest
 
 final class DivActionHandlerTests: XCTestCase {
+  private struct ScopedVideoLayout {
+    let blockStateStorage: DivBlockStateStorage
+    let handler: DivActionHandler
+    let firstVideoPath: UIElementPath
+    let secondVideoPath: UIElementPath
+  }
+
   private var flags: DivFlagsInfo = .default
   private var patchProvider = MockPatchProvider()
   private let reporter = MockReporter()
@@ -12,7 +19,7 @@ final class DivActionHandlerTests: XCTestCase {
 
   private lazy var actionHandler: DivActionHandler! = {
     let idToPath = IdToPath()
-    idToPath[cardId.path + "element_id"] = cardId.path + "element_id"
+    idToPath.add(cardId.path + "element_id", forId: cardId.path + "element_id")
     return DivActionHandler(
       flags: flags,
       idToPath: idToPath,
@@ -600,6 +607,40 @@ final class DivActionHandlerTests: XCTestCase {
     )
   }
 
+  func test_VideoAction_withScopeId_firstContainer_updatesOnlyFirstVideo() {
+    let layout = makeScopedVideoLayout()
+    let playing = VideoBlockViewState(state: .playing)
+    let paused = VideoBlockViewState(state: .paused)
+
+    layout.handler.handle(
+      divAction(scopeId: "first", typed: divActionVideo(id: "bears_video", action: .start)),
+      path: cardId.path + "button",
+      source: .tap,
+      sender: nil
+    )
+
+    XCTAssertNil(reporter.lastError)
+    XCTAssertEqual(layout.blockStateStorage.getState(layout.firstVideoPath), playing)
+    XCTAssertEqual(layout.blockStateStorage.getState(layout.secondVideoPath), paused)
+  }
+
+  func test_VideoAction_withScopeId_secondContainer_updatesOnlySecondVideo() {
+    let layout = makeScopedVideoLayout()
+    let playing = VideoBlockViewState(state: .playing)
+    let paused = VideoBlockViewState(state: .paused)
+
+    layout.handler.handle(
+      divAction(scopeId: "second", typed: divActionVideo(id: "bears_video", action: .start)),
+      path: cardId.path + "button",
+      source: .tap,
+      sender: nil
+    )
+
+    XCTAssertNil(reporter.lastError)
+    XCTAssertEqual(layout.blockStateStorage.getState(layout.secondVideoPath), playing)
+    XCTAssertEqual(layout.blockStateStorage.getState(layout.firstVideoPath), paused)
+  }
+
   func test_ActionIsReported() {
     handle(
       DivAction(
@@ -648,6 +689,58 @@ final class DivActionHandlerTests: XCTestCase {
 
   private func setVariableValue(_ name: DivVariableName, _ value: DivVariableValue) {
     variablesStorage.set(cardId: cardId, variables: [name: value])
+  }
+
+  private func makeScopedVideoLayout() -> ScopedVideoLayout {
+    let blockStateStorage = DivBlockStateStorage()
+    let idToPath = IdToPath()
+    let firstContainerPath = elementPath("0/container/0/first")
+    let secondContainerPath = elementPath("0/container/1/second")
+    let firstVideoPath = elementPath("0/container/0/first/0/bears_video")
+    let secondVideoPath = elementPath("0/container/1/second/0/bears_video")
+    registerScopedVideoLayout(
+      idToPath: idToPath,
+      firstContainerPath: firstContainerPath,
+      secondContainerPath: secondContainerPath,
+      firstVideoPath: firstVideoPath,
+      secondVideoPath: secondVideoPath
+    )
+
+    let paused = VideoBlockViewState(state: .paused)
+    blockStateStorage.setState(path: firstVideoPath, state: paused)
+    blockStateStorage.setState(path: secondVideoPath, state: paused)
+
+    let handler = DivActionHandler(
+      blockStateStorage: blockStateStorage,
+      idToPath: idToPath,
+      reporter: reporter,
+      stateManagement: stateManagement,
+      variablesStorage: variablesStorage
+    )
+
+    return ScopedVideoLayout(
+      blockStateStorage: blockStateStorage,
+      handler: handler,
+      firstVideoPath: firstVideoPath,
+      secondVideoPath: secondVideoPath
+    )
+  }
+
+  private func elementPath(_ path: String) -> UIElementPath {
+    UIElementPath(cardId.rawValue) + path.split(separator: "/").map(String.init)
+  }
+
+  private func registerScopedVideoLayout(
+    idToPath: IdToPath,
+    firstContainerPath: UIElementPath,
+    secondContainerPath: UIElementPath,
+    firstVideoPath: UIElementPath,
+    secondVideoPath: UIElementPath
+  ) {
+    idToPath.add(firstVideoPath, forId: cardId.path + "bears_video")
+    idToPath.add(secondVideoPath, forId: cardId.path + "bears_video")
+    idToPath.add(firstContainerPath, forId: cardId.path + "first")
+    idToPath.add(secondContainerPath, forId: cardId.path + "second")
   }
 }
 

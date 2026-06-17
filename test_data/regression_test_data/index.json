@@ -3330,6 +3330,27 @@
       "file": "video/video_aspect.json"
     },
     {
+      "title": "Video with scope_id in item_builder",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivVideo",
+        "DivAction"
+      ],
+      "steps": [
+        "Tap play on video 1",
+        "Tap play on video 2",
+        "Tap pause on video 2"
+      ],
+      "expected_results": [
+        "Video 1 starts playing",
+        "Video 2 starts playing",
+        "Video 2 stops playing"
+      ],
+      "file": "video/scope_id_item_builder.json"
+    },
+    {
       "title": "Tooltips with typed actions",
       "case_id": 179,
       "platforms": [

@@ -11,7 +11,7 @@ public final class DivVisibilityAction: DivSightAction, @unchecked Sendable {
   public let logLimit: Expression<Int> // constraint: number >= 0; default value: 1
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
-  public let scopeId: String?
+  public let scopeId: Expression<String>?
   public let typed: DivActionTyped?
   public let url: Expression<URL>?
   public let visibilityDuration: Expression<Int> // constraint: number >= 0; default value: 800
@@ -31,6 +31,10 @@ public final class DivVisibilityAction: DivSightAction, @unchecked Sendable {
 
   public func resolveReferer(_ resolver: ExpressionResolver) -> URL? {
     resolver.resolveUrl(referer)
+  }
+
+  public func resolveScopeId(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveString(scopeId)
   }
 
   public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
@@ -62,7 +66,7 @@ public final class DivVisibilityAction: DivSightAction, @unchecked Sendable {
       logLimit: try dictionary.getOptionalExpressionField("log_limit", validator: Self.logLimitValidator, context: context),
       payload: try dictionary.getOptionalField("payload", context: context),
       referer: try dictionary.getOptionalExpressionField("referer", transform: URL.makeFromNonEncodedString, context: context),
-      scopeId: try dictionary.getOptionalField("scope_id", context: context),
+      scopeId: try dictionary.getOptionalExpressionField("scope_id", context: context),
       typed: try dictionary.getOptionalField("typed", transform: { (dict: [String: Any]) in try DivActionTyped(dictionary: dict, context: context) }),
       url: try dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString, context: context),
       visibilityDuration: try dictionary.getOptionalExpressionField("visibility_duration", validator: Self.visibilityDurationValidator, context: context),
@@ -77,7 +81,7 @@ public final class DivVisibilityAction: DivSightAction, @unchecked Sendable {
     logLimit: Expression<Int>? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
-    scopeId: String? = nil,
+    scopeId: Expression<String>? = nil,
     typed: DivActionTyped? = nil,
     url: Expression<URL>? = nil,
     visibilityDuration: Expression<Int>? = nil,
@@ -142,7 +146,7 @@ extension DivVisibilityAction: Serializable {
     result["log_limit"] = logLimit.toValidSerializationValue()
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()
-    result["scope_id"] = scopeId
+    result["scope_id"] = scopeId?.toValidSerializationValue()
     result["typed"] = typed?.toDictionary()
     result["url"] = url?.toValidSerializationValue()
     result["visibility_duration"] = visibilityDuration.toValidSerializationValue()

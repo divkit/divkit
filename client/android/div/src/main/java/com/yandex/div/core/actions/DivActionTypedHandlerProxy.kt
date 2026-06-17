@@ -4,6 +4,7 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.downloader.DivDownloadActionHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.Assert
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionTyped
@@ -23,7 +24,7 @@ internal object DivActionTypedHandlerProxy {
     }
 
     private fun handleAction(
-        scopeId: String?,
+        scopeId: Expression<String>?,
         action: DivActionTyped?,
         view: DivViewFacade,
         resolver: ExpressionResolver,
@@ -39,6 +40,6 @@ internal object DivActionTypedHandlerProxy {
         if (action is DivActionTyped.Download) {
             return DivDownloadActionHandler.handleAction(action.value, downloadCallbacks, view, resolver)
         }
-        return view.div2Component.actionTypedHandlerCombiner.handleAction(scopeId, action, view, resolver)
+        return view.div2Component.actionTypedHandlerCombiner.handleAction(scopeId?.evaluate(resolver), action, view, resolver)
     }
 }

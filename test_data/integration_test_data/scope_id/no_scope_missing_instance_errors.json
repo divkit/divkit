@@ -72,7 +72,9 @@
           "value": "Element with id 'inner_video' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [

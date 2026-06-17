@@ -144,6 +144,7 @@ final class DivBlockProvider {
 
     shouldRecalculateVisibility = true
     dataErrors.forEach { context.errorsStorage.add($0) }
+    divKitComponents.resetIdToPath(cardId: cardId)
     do {
       block = try measurements.renderTime.updateMeasure {
         try divData.makeBlock(

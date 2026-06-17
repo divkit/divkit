@@ -35,7 +35,7 @@ public final class DivKitComponents {
   @_spi(Internal)
   public let visibilityCounter = DivVisibilityCounter()
   public let persistentValuesStorage: Clearable
-    
+
   let persistentValuesStorageInternal = DivPersistentValuesStorage()
 
   private let animatorController = DivAnimatorController()
@@ -411,6 +411,10 @@ public final class DivKitComponents {
     )
   }
   #endif
+
+  func resetIdToPath(cardId: DivCardID) {
+    idToPath.reset(cardId: cardId)
+  }
 
   private func debugErrorCollector(
     for cardId: DivCardID,

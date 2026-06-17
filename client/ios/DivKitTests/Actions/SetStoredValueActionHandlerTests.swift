@@ -205,15 +205,15 @@ private func action(
   DivActionSetStoredValue(
     lifetime: .value(lifetime),
     name: .value(name),
-    value: value,
     scope: scope.map {
       switch $0 {
       case .global:
-        return .value("global")
+        .value(DivActionSetStoredValue.Scope.global)
       case .card:
-        return .value("card")
+        .value(DivActionSetStoredValue.Scope.card)
       }
-    }
+    },
+    value: value
   )
 }
 

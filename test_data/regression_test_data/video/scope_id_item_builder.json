@@ -1,0 +1,132 @@
+{
+  "templates": {
+    "control_button": {
+      "type": "image",
+      "aspect": {
+        "ratio": 1
+      },
+      "scale": "fit",
+      "width": {
+        "type": "fixed",
+        "value": 44
+      }
+    }
+  },
+  "card": {
+    "log_id": "video",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "item_builder": {
+            "data": [
+              {
+                "id": "first",
+                "url": "https://yastatic.net/s3/home/divkit/bears.mp4"
+              },
+              {
+                "id": "second",
+                "url": "https://yastatic.net/s3/home/divkit/bears.mp4"
+              }
+            ],
+            "data_element_name": "item",
+            "prototypes": [
+              {
+                "id": "@{item.getString('id')}",
+                "div": {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "border": {
+                    "corner_radius": 20
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#aaa"
+                    }
+                  ],
+                  "items": [
+                    {
+                      "type": "video",
+                      "id": "bears_video",
+                      "video_sources": [
+                        {
+                          "type": "video_source",
+                          "url": "@{item.getUrl('url')}",
+                          "mime_type": "video/mp4"
+                        }
+                      ],
+                      "muted": true,
+                      "height": {
+                        "type": "fixed",
+                        "value": 120
+                      }
+                    },
+                    {
+                      "type": "container",
+                      "orientation": "horizontal",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "height": {
+                        "type": "wrap_content"
+                      },
+                      "content_alignment_horizontal": "center",
+                      "items": [
+                        {
+                          "type": "control_button",
+                          "image_url": "https://yastatic.net/s3/home/divkit/play_button.png",
+                          "margins": {
+                            "right": 16
+                          },
+                          "paddings": {
+                            "top": 3,
+                            "bottom": 3
+                          },
+                          "actions": [
+                            {
+                              "log_id": "play",
+                              "url": "div-action://video?id=bears_video&action=start",
+                              "scope_id": "@{item.getString('id')}"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "control_button",
+                          "image_url": "https://yastatic.net/s3/home/divkit/pause_button.png",
+                          "paddings": {
+                            "top": 3,
+                            "bottom": 3
+                          },
+                          "actions": [
+                            {
+                              "log_id": "pause",
+                              "scope_id": "@{item.getString('id')}",
+                              "typed": {
+                                "type": "video",
+                                "id": "bears_video",
+                                "action": "pause"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

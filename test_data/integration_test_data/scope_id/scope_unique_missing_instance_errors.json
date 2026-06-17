@@ -138,7 +138,9 @@
           "value": "Element with id 'nonexistent_video' not found in scope"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [

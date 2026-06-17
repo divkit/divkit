@@ -144,7 +144,7 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
   public let menuItems: Field<[MenuItemTemplate]>?
   public let payload: Field<[String: Any]>?
   public let referer: Field<Expression<URL>>?
-  public let scopeId: Field<String>?
+  public let scopeId: Field<Expression<String>>?
   public let typed: Field<DivActionTypedTemplate>?
   public let url: Field<Expression<URL>>?
 
@@ -157,7 +157,7 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
       menuItems: dictionary.getOptionalArray("menu_items", templateToType: templateToType),
       payload: dictionary.getOptionalField("payload"),
       referer: dictionary.getOptionalExpressionField("referer", transform: URL.makeFromNonEncodedString),
-      scopeId: dictionary.getOptionalField("scope_id"),
+      scopeId: dictionary.getOptionalExpressionField("scope_id"),
       typed: dictionary.getOptionalField("typed", templateToType: templateToType),
       url: dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString)
     )
@@ -171,7 +171,7 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
     menuItems: Field<[MenuItemTemplate]>? = nil,
     payload: Field<[String: Any]>? = nil,
     referer: Field<Expression<URL>>? = nil,
-    scopeId: Field<String>? = nil,
+    scopeId: Field<Expression<String>>? = nil,
     typed: Field<DivActionTypedTemplate>? = nil,
     url: Field<Expression<URL>>? = nil
   ) {
@@ -244,7 +244,7 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
     var menuItemsValue: DeserializationResult<[DivAction.MenuItem]> = .noValue
     var payloadValue: DeserializationResult<[String: Any]> = { parent?.payload?.value() ?? .noValue }()
     var refererValue: DeserializationResult<Expression<URL>> = { parent?.referer?.value() ?? .noValue }()
-    var scopeIdValue: DeserializationResult<String> = { parent?.scopeId?.value() ?? .noValue }()
+    var scopeIdValue: DeserializationResult<Expression<String>> = { parent?.scopeId?.value() ?? .noValue }()
     var typedValue: DeserializationResult<DivActionTyped> = .noValue
     var urlValue: DeserializationResult<Expression<URL>> = { parent?.url?.value() ?? .noValue }()
     _ = {
