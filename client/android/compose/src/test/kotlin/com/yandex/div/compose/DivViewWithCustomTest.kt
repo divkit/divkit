@@ -2,6 +2,7 @@ package com.yandex.div.compose
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -63,7 +64,7 @@ class DivViewWithCustomTest {
 
 private class CustomTextViewFactory : DivCustomViewFactory {
     @Composable
-    override fun Content(environment: DivCustomEnvironment) {
+    override fun Content(modifer: Modifier, environment: DivCustomEnvironment) {
         Text(text = environment.data.customProps?.getString("text") ?: "")
     }
 }

@@ -3,7 +3,6 @@ package com.yandex.div.compose.extensions
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -21,7 +20,6 @@ class DivExtensionEnvironment internal constructor(
     val data: Div,
     val extension: DivExtension,
     val expressionResolver: ExpressionResolver,
-    val modifier: Modifier,
     val reporter: DivReporter
 ) {
     @Composable

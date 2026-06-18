@@ -2,6 +2,7 @@ package com.yandex.div.compose.custom
 
 import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.yandex.div.core.annotations.ExperimentalApi
 
 /**
@@ -21,5 +22,10 @@ interface DivCustomViewFactory {
      * Composes the custom element.
      */
     @Composable
-    fun Content(environment: DivCustomEnvironment)
+    fun Content(modifier: Modifier, environment: DivCustomEnvironment)
+
+    /**
+     * Preloads resources required by the custom element before it is shown.
+     */
+    suspend fun preload(environment: DivCustomEnvironment) = Unit
 }

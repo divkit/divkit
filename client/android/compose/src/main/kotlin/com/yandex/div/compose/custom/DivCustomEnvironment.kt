@@ -18,7 +18,6 @@ import com.yandex.div2.DivCustom
 class DivCustomEnvironment internal constructor(
     val data: DivCustom,
     val expressionResolver: ExpressionResolver,
-    val modifier: Modifier,
     val items: @Composable () -> Unit,
     val item: @Composable (index: Int, modifier: Modifier) -> Unit,
 )

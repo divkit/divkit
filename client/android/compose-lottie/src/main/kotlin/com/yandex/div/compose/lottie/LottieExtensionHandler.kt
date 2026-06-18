@@ -26,11 +26,13 @@ import org.json.JSONObject
 @ExperimentalApi
 class LottieExtensionHandler(
     private val assetMapper: (String) -> String? = { null },
-    private val rawResMapper: (String) -> Int? = { null }
+    private val rawResMapper: (String) -> Int? = { null },
+    private val networkCache: LottieNetworkCache = LottieNetworkCache.STUB,
 ) : DivExtensionHandler {
 
     @Composable
     override fun Content(
+        modifier: Modifier,
         environment: DivExtensionEnvironment,
         content: @Composable (modifier: Modifier) -> Unit
     ) {
@@ -42,9 +44,12 @@ class LottieExtensionHandler(
 
         val paramsJson = environment.extension.params
         val params = remember(paramsJson) { parseParams(paramsJson, environment) } ?: return
-        val composition by rememberLottieComposition(params.data.toCompositionSpec())
+        val compositionSpec = remember(params.data, networkCache) {
+            params.data.toCompositionSpec(networkCache)
+        }
+        val composition by rememberLottieComposition(compositionSpec)
         LottieAnimation(
-            modifier = environment.modifier,
+            modifier = modifier,
             alignment = image.observedAlignment(),
             composition = composition,
             contentScale = image.observedContentScale(),
@@ -53,6 +58,18 @@ class LottieExtensionHandler(
             restartOnPlay = false,
             reverseOnRepeat = params.repeatMode == LottieRepeatMode.REVERSE
         )
+    }
+
+    override suspend fun preload(environment: DivExtensionEnvironment) {
+        val parser = LottieExtensionParamsParser(
+            assetMapper = assetMapper,
+            rawResMapper = rawResMapper,
+            reportError = { environment.reporter.reportError(it) }
+        )
+        val url = environment.extension.params?.let {
+            parser.parseUrl(it, environment.expressionResolver)
+        } ?: return
+        networkCache.save(url.toString())
     }
 
     private fun parseParams(
@@ -83,11 +100,12 @@ private val LottieExtensionParams.iterations: Int
         }
     }
 
-private fun LottieData.toCompositionSpec(): LottieCompositionSpec {
+private fun LottieData.toCompositionSpec(cache: LottieNetworkCache): LottieCompositionSpec {
     return when (this) {
         is LottieData.Asset -> LottieCompositionSpec.Asset(assetName)
         is LottieData.Json -> LottieCompositionSpec.JsonString(json)
         is LottieData.RawRes -> LottieCompositionSpec.RawRes(id)
-        is LottieData.Url -> LottieCompositionSpec.Url(url)
+        is LottieData.Url -> cache.get(url)?.let { LottieCompositionSpec.JsonString(it) }
+            ?: LottieCompositionSpec.Url(url)
     }
 }

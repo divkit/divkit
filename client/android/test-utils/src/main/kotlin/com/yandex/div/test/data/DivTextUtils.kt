@@ -1,5 +1,6 @@
 package com.yandex.div.test.data
 
+import android.net.Uri
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -22,6 +23,7 @@ fun text(
     disappearActions: List<DivDisappearAction>? = null,
     doubleTapActions: List<DivAction>? = null,
     id: String? = null,
+    images: List<DivText.Image>? = null,
     longTapActions: List<DivAction>? = null,
     text: String,
     tooltips: List<DivTooltip>? = null,
@@ -36,6 +38,7 @@ fun text(
         disappearActions = disappearActions,
         doubleTapActions = doubleTapActions,
         id = id,
+        images = images,
         longTapActions = longTapActions,
         text = constant(text),
         tooltips = tooltips,
@@ -57,6 +60,7 @@ fun text(
     functions: List<DivFunction>? = null,
     height: DivSize = wrapContent(),
     id: String? = null,
+    images: List<DivText.Image>? = null,
     longTapActions: List<DivAction>? = null,
     text: Expression<String>,
     textColor: Color? = null,
@@ -78,6 +82,7 @@ fun text(
             fontSize = constant(fontSize),
             height = height,
             id = id,
+            images = images,
             longtapActions = longTapActions,
             text = text,
             textColor = textColor?.let { constant(it.value) } ?: constant(0xFF000000.toInt()),
@@ -89,3 +94,13 @@ fun text(
         )
     )
 }
+
+fun textImage(
+    url: Expression<Uri>,
+    start: Expression<Long> = constant(0L),
+    preloadRequired: Expression<Boolean> = constant(false),
+) = DivText.Image(
+    url = url,
+    start = start,
+    preloadRequired = preloadRequired,
+)

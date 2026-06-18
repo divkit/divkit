@@ -24,7 +24,6 @@ internal fun DivCustomView(
     val environment = DivCustomEnvironment(
         data = data,
         expressionResolver = expressionResolver,
-        modifier = modifier,
         items = {
             for (child in childItems) {
                 DivBlockView(child)
@@ -34,5 +33,5 @@ internal fun DivCustomView(
             DivBlockView(childItems[index], modifier)
         },
     )
-    factory.Content(environment)
+    factory.Content(modifier, environment)
 }

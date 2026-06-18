@@ -3,6 +3,7 @@ package com.yandex.div.compose.custom
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.yandex.div.core.annotations.ExperimentalApi
 
@@ -23,11 +24,11 @@ abstract class DivCustomAndroidViewFactory : DivCustomViewFactory {
     open fun release(view: View) = Unit
 
     @Composable
-    final override fun Content(environment: DivCustomEnvironment) {
+    final override fun Content(modifier: Modifier, environment: DivCustomEnvironment) {
         key(environment.data.customType) {
             AndroidView(
                 factory = { createView(environment) },
-                modifier = environment.modifier,
+                modifier = modifier,
                 update = { bindView(it, environment) },
                 onRelease = { release(it) },
             )
