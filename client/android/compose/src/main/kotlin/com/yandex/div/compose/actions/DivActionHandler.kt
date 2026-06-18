@@ -18,7 +18,6 @@ import com.yandex.div2.DivActionScrollTo
 import com.yandex.div2.DivActionSetCursorPosition
 import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivActionTyped
-import com.yandex.div2.DivActionVideo
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction
 import org.json.JSONObject
@@ -36,7 +35,8 @@ internal class DivActionHandler @Inject constructor(
     private val setVariableActionHandler: SetVariableActionHandler,
     private val timerActionHandler: TimerActionHandler,
     private val tooltipActionHandler: TooltipActionHandler,
-    private val updateStructureActionHandler: UpdateStructureActionHandler
+    private val updateStructureActionHandler: UpdateStructureActionHandler,
+    private val videoActionHandler: VideoActionHandler
 ) {
 
     fun handle(
@@ -173,7 +173,8 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.UpdateStructure ->
                 updateStructureActionHandler.handle(context, action.value)
 
-            is DivActionTyped.Video -> notSupported(DivActionVideo.TYPE)
+            is DivActionTyped.Video ->
+                videoActionHandler.handle(context, action.value)
         }
     }
 
@@ -201,7 +202,7 @@ internal class DivActionHandler @Inject constructor(
                 timerActionHandler.handle(action)
 
             is DivUntypedAction.Video ->
-                notSupported("video")
+                videoActionHandler.handle(action)
         }
     }
 

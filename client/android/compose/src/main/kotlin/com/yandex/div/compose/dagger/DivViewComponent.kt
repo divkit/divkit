@@ -10,6 +10,7 @@ import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.compose.tooltips.TooltipStateStorage
+import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
@@ -31,6 +32,7 @@ internal interface DivViewComponent {
     val stateStorage: DivStateStorage
     val timerStorage: TimerStorage
     val tooltipStateStorage: TooltipStateStorage
+    val videoPlayerStorage: VideoPlayerStorage
     val visibilityActionTracker: VisibilityActionTracker
 
     @get:Named(Names.HOST_VARIABLES)

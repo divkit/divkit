@@ -32,7 +32,8 @@ internal class ActionHandlerEnvironment {
         setVariableActionHandler: SetVariableActionHandler = mock(),
         timerActionHandler: TimerActionHandler = mock(),
         tooltipActionHandler: TooltipActionHandler = mock(),
-        updateStructureActionHandler: UpdateStructureActionHandler = mock()
+        updateStructureActionHandler: UpdateStructureActionHandler = mock(),
+        videoActionHandler: VideoActionHandler = mock()
     ) {
         actionHandler = DivActionHandler(
             actionMenuHolder = mock(),
@@ -45,7 +46,8 @@ internal class ActionHandlerEnvironment {
             setVariableActionHandler = setVariableActionHandler,
             timerActionHandler = timerActionHandler,
             tooltipActionHandler = tooltipActionHandler,
-            updateStructureActionHandler = updateStructureActionHandler
+            updateStructureActionHandler = updateStructureActionHandler,
+            videoActionHandler = videoActionHandler
         )
     }
 

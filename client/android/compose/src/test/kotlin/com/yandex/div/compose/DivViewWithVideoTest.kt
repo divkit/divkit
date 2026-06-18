@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.actions.DivActionData
 import com.yandex.div.compose.actions.DivActionHandlingContext
@@ -18,7 +20,9 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
+import com.yandex.div.test.data.text
 import com.yandex.div.test.data.video
 import com.yandex.div.test.data.videoSource
 import com.yandex.div2.Div
@@ -316,6 +320,78 @@ class DivViewWithVideoTest {
         assertEquals(7_500L, playerFactory.lastCreatedPlayer!!.currentTimeMs.value)
     }
 
+    @Test
+    fun `video start action plays the targeted player`() {
+        setContent(
+            container(
+                items = listOf(
+                    video(id = "video", videoSources = listOf(videoSource())),
+                    text(
+                        action = action(url = "div-action://video?id=video&action=start"),
+                        text = constant("button"),
+                    ),
+                )
+            )
+        )
+
+        rule.waitForIdle()
+        val player = playerFactory.lastCreatedPlayer!!
+        assertEquals(0, player.playCount)
+
+        rule.onNodeWithText("button").performClick()
+
+        assertEquals(1, player.playCount)
+    }
+
+    @Test
+    fun `video pause action pauses the targeted player`() {
+        setContent(
+            container(
+                items = listOf(
+                    video(id = "video", videoSources = listOf(videoSource())),
+                    text(
+                        action = action(url = "div-action://video?id=video&action=pause"),
+                        text = constant("button"),
+                    ),
+                )
+            )
+        )
+
+        rule.waitForIdle()
+        val player = playerFactory.lastCreatedPlayer!!
+        assertEquals(0, player.pauseCount)
+
+        rule.onNodeWithText("button").performClick()
+
+        assertEquals(1, player.pauseCount)
+    }
+
+    @Test
+    fun `error is reported when video action targets unknown id`() {
+        reporter.failOnError = false
+
+        setContent(
+            container(
+                items = listOf(
+                    video(id = "video", videoSources = listOf(videoSource())),
+                    text(
+                        action = action(url = "div-action://video?id=unknown&action=start"),
+                        text = constant("button"),
+                    ),
+                )
+            )
+        )
+
+        rule.waitForIdle()
+        rule.onNodeWithText("button").performClick()
+
+        assertEquals(
+            "No video with id 'unknown' found for video action 'START'",
+            reporter.lastError
+        )
+        assertEquals(0, playerFactory.lastCreatedPlayer!!.playCount)
+    }
+
     private fun setContent(content: Div) {
         rule.setContent(
             configuration = configuration,
@@ -362,9 +438,18 @@ private class FakeDivVideoPlayer : DivVideoPlayer {
         private set
     var released: Boolean = false
         private set
+    var playCount: Int = 0
+        private set
+    var pauseCount: Int = 0
+        private set
 
-    override fun play() = Unit
-    override fun pause() = Unit
+    override fun play() {
+        playCount++
+    }
+
+    override fun pause() {
+        pauseCount++
+    }
 
     override fun seek(timeMs: Long) {
         currentTimeMsState.value = timeMs

@@ -8,6 +8,7 @@ import com.yandex.div.compose.dagger.DivViewComponent
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.timers.TimerStorage
+import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
@@ -31,6 +32,9 @@ internal class DivViewContext(
 
     val timerStorage: TimerStorage
         get() = component.timerStorage
+
+    val videoPlayerStorage: VideoPlayerStorage
+        get() = component.videoPlayerStorage
 
     val visibilityActionTracker: VisibilityActionTracker
         get() = component.visibilityActionTracker

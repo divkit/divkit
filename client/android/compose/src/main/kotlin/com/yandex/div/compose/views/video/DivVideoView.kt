@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.FixedScale
 import androidx.compose.ui.platform.LocalDensity
 import coil3.ImageLoader
 import coil3.compose.rememberAsyncImagePainter
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
@@ -25,6 +26,7 @@ import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoResolution
 import com.yandex.div.compose.video.DivVideoSource
+import com.yandex.div.compose.video.registerPlayer
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoScale
 import com.yandex.div2.DivVideoSource as Div2VideoSource
@@ -44,6 +46,10 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
 
     DisposableEffect(player) {
         onDispose { player.release() }
+    }
+
+    data.id?.let {
+        LocalDivViewContext.current.videoPlayerStorage.registerPlayer(it, player)
     }
 
     ObserveVideoActions(player, data)
