@@ -19,7 +19,9 @@ struct DivContainerSizeModifier: DivSizeModifier {
       return
     }
 
-    let isWrapContentWidth = container.getTransformedWidth(context).isIntrinsic
+    let resolver = context.expressionResolver
+    let transformedWidth = container.getTransformedWidth(context)
+    let isWrapContentWidth = transformedWidth.isIntrinsic
     switch orientation {
     case .horizontal:
       if isWrapContentWidth, items.hasHorizontallyMatchParent {
@@ -31,7 +33,9 @@ struct DivContainerSizeModifier: DivSizeModifier {
         shouldOverrideWidth = false
       }
     case .vertical, .overlap:
-      if isWrapContentWidth, items.allHorizontallyMatchParent {
+      if isWrapContentWidth,
+         items.allHorizontallyMatchParent,
+         !hasPositiveMinSize(transformedWidth, resolver) {
         context.addWarning(
           message: "All items in DivContainer with wrap_content width has match_parent width"
         )
@@ -41,8 +45,8 @@ struct DivContainerSizeModifier: DivSizeModifier {
       }
     }
 
-    let isWrapContentHeight = container.getTransformedHeight(context).isIntrinsic
-      && container.aspect == nil
+    let transformedHeight = container.getTransformedHeight(context)
+    let isWrapContentHeight = transformedHeight.isIntrinsic && container.aspect == nil
     switch orientation {
     case .vertical:
       if isWrapContentHeight, items.hasVerticallyMatchParent {
@@ -54,7 +58,9 @@ struct DivContainerSizeModifier: DivSizeModifier {
         shouldOverrideHeight = false
       }
     case .horizontal, .overlap:
-      if isWrapContentHeight, items.allVerticallyMatchParent {
+      if isWrapContentHeight,
+         items.allVerticallyMatchParent,
+         !hasPositiveMinSize(transformedHeight, resolver) {
         context.addWarning(
           message: "All items in DivContainer with wrap_content height has match_parent height"
         )
@@ -78,4 +84,11 @@ struct DivContainerSizeModifier: DivSizeModifier {
     }
     return height
   }
+}
+
+private func hasPositiveMinSize(_ size: DivSize, _ resolver: ExpressionResolver) -> Bool {
+  guard case let .divWrapContentSize(wrapContent) = size else {
+    return false
+  }
+  return (wrapContent.minSize?.resolveValue(resolver) ?? 0) > 0
 }
