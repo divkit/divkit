@@ -51,24 +51,22 @@ class DivContext private constructor(
         get() = component.debugFeatures
 
     /**
+     * Starts preloading resources for the given [DivData] and suspends until complete.
+     *
+     * Can be called before showing [DivView] to warm up the cache.
+     * Cancel the calling coroutine to stop preloading early.
+     */
+    suspend fun preload(data: DivData) = component.preloader.preload(data)
+
+    /**
      * Removes [DivView] context associated with the given [com.yandex.div2.DivData].
      */
     fun clearViewContext(data: DivData) {
         component.viewContextStorage.remove(data)
     }
 
-    internal fun getViewContext(data: DivData): DivViewContext {
-        component.viewContextStorage.get(data)?.let {
-            return it
-        }
-
-        return DivViewContext(
-            data = data,
-            component = component.viewComponent().build(cardId = data.logId)
-        ).also {
-            component.viewContextStorage.put(data, it)
-        }
-    }
+    internal fun getViewContext(data: DivData): DivViewContext =
+        component.viewContextFactory.getOrCreate(data)
 }
 
 private fun createComponent(

@@ -10,15 +10,16 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
 
 class CustomTextViewFactory(private val text: String) : DivCustomViewFactory {
     @Composable
-    override fun Content(environment: DivCustomEnvironment) {
+    override fun Content(modifier: Modifier, environment: DivCustomEnvironment) {
         Box(
-            modifier = environment.modifier,
+            modifier = modifier,
             contentAlignment = Alignment.CenterStart
         ) {
             BasicText(text = text)
@@ -28,7 +29,7 @@ class CustomTextViewFactory(private val text: String) : DivCustomViewFactory {
 
 class ChronometerViewFactory : DivCustomViewFactory {
     @Composable
-    override fun Content(environment: DivCustomEnvironment) {
+    override fun Content(modifier: Modifier, environment: DivCustomEnvironment) {
         AndroidView(
             factory = { context ->
                 Chronometer(context).apply {
@@ -43,7 +44,7 @@ class ChronometerViewFactory : DivCustomViewFactory {
                     textSize = 20f
                 }
             },
-            modifier = environment.modifier,
+            modifier = modifier,
             update = { view ->
                 view.apply {
                     base = SystemClock.elapsedRealtime()
@@ -56,15 +57,15 @@ class ChronometerViewFactory : DivCustomViewFactory {
 
 class CustomContainerViewFactory : DivCustomViewFactory {
     @Composable
-    override fun Content(environment: DivCustomEnvironment) {
-        Column(modifier = environment.modifier) { environment.items() }
+    override fun Content(modifier: Modifier, environment: DivCustomEnvironment) {
+        Column(modifier = modifier) { environment.items() }
     }
 }
 
 class NestedScrollViewFactory : DivCustomViewFactory {
     @Composable
-    override fun Content(environment: DivCustomEnvironment) {
-        Column(modifier = environment.modifier.verticalScroll(rememberScrollState())) {
+    override fun Content(modifier: Modifier, environment: DivCustomEnvironment) {
+        Column(modifier = modifier.verticalScroll(rememberScrollState())) {
             environment.items()
         }
     }

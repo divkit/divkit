@@ -80,11 +80,11 @@ private fun BaseViewWithExtensions(
     }
 
     extensionHandler.Content(
+        modifier = modifier,
         environment = DivExtensionEnvironment(
             data = data,
             extension = extension,
             expressionResolver = expressionResolver,
-            modifier = modifier,
             reporter = LocalComponent.current.reporter
         ),
         content = { modifier ->

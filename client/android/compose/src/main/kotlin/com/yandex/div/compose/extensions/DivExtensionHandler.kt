@@ -17,7 +17,13 @@ interface DivExtensionHandler {
      */
     @Composable
     fun Content(
+        modifier: Modifier,
         environment: DivExtensionEnvironment,
         content: @Composable (modifier: Modifier) -> Unit
     )
+
+    /**
+     * Preloads resources required by the extension before the element is shown.
+     */
+    suspend fun preload(environment: DivExtensionEnvironment) = Unit
 }

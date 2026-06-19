@@ -1,9 +1,12 @@
 package com.yandex.div.test.data
 
+import android.net.Uri
+import com.yandex.div.internal.parser.STRING_TO_URI
 import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
 import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE
 import com.yandex.div.internal.parser.TYPE_HELPER_INT
 import com.yandex.div.internal.parser.TYPE_HELPER_STRING
+import com.yandex.div.internal.parser.TYPE_HELPER_URI
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivVisibility
@@ -52,6 +55,17 @@ fun intExpression(expression: String): Expression<Long> {
         validator = { true },
         logger = { fail(it.message) },
         typeHelper = TYPE_HELPER_INT,
+    )
+}
+
+fun uriExpression(expression: String): Expression<Uri> {
+    return Expression.MutableExpression(
+        expressionKey = "test",
+        rawExpression = expression,
+        converter = STRING_TO_URI,
+        validator = { true },
+        logger = { fail(it.message) },
+        typeHelper = TYPE_HELPER_URI,
     )
 }
 

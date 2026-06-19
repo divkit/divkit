@@ -111,11 +111,12 @@ private class WrapperExtensionHandler : DivExtensionHandler {
 
     @Composable
     override fun Content(
+        modifier: Modifier,
         environment: DivExtensionEnvironment,
         content: @Composable (modifier: Modifier) -> Unit
     ) {
         val id = environment.extension.params?.getString("id") ?: ""
-        Box(modifier = environment.modifier.testTag(id)) {
+        Box(modifier = modifier.testTag(id)) {
             content(Modifier)
         }
     }

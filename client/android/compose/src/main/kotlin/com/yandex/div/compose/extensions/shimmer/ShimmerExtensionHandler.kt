@@ -42,6 +42,7 @@ class ShimmerExtensionHandler : DivExtensionHandler {
 
     @Composable
     override fun Content(
+        modifier: Modifier,
         environment: DivExtensionEnvironment,
         content: @Composable (modifier: Modifier) -> Unit
     ) {
@@ -49,9 +50,9 @@ class ShimmerExtensionHandler : DivExtensionHandler {
             .isLoaded(environment.data.value())
         val params = environment.extension.params
         val modifier = if (isImageLoaded || params == null) {
-            environment.modifier
+            modifier
         } else {
-            environment.modifier.shimmer(params)
+            modifier.shimmer(params)
         }
         content(modifier)
     }
