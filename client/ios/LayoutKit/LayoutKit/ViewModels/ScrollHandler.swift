@@ -132,7 +132,8 @@ final class ScrollHandler {
     oldPosition: GalleryViewState.Position?,
     newPosition: GalleryViewState.Position,
     newLayout: Bool,
-    animated: Bool
+    animated: Bool,
+    direction: ScrollNavigationDirection = .none
   ) {
     guard !state.isUserInitiatedScroll, oldPosition != newPosition else {
       return
@@ -143,6 +144,7 @@ final class ScrollHandler {
     let position = infiniteScroll?.getNewPositionForState(
       oldPosition: oldPosition,
       newPosition: newPosition,
+      direction: direction,
       updateToPosition: { index in
         delegate?.updateOffsetDetached(layout.contentOffset(pageIndex: index))
       }

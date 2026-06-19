@@ -154,7 +154,8 @@ public final class GalleryView: BlockView {
     layoutFactory: @escaping LayoutFactory = GalleryViewLayout.init,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
-    renderingDelegate: RenderingDelegate?
+    renderingDelegate: RenderingDelegate?,
+    navigationDirection: ScrollNavigationDirection = .none
   ) {
     guard !configurationInProgress else { return }
 
@@ -215,7 +216,8 @@ public final class GalleryView: BlockView {
     if willHandlePositionChange {
       configureByNewState(
         oldContentPosition: oldState?.contentPosition,
-        newLayout: oldModel?.path != model.path
+        newLayout: oldModel?.path != model.path,
+        navigationDirection: navigationDirection
       )
     }
   }
@@ -250,7 +252,8 @@ public final class GalleryView: BlockView {
 
   private func configureByNewState(
     oldContentPosition: GalleryViewState.Position?,
-    newLayout: Bool
+    newLayout: Bool,
+    navigationDirection: ScrollNavigationDirection
   ) {
     switch deferredStateSetting {
     case .idle where frame.size == .zero,
@@ -261,7 +264,8 @@ public final class GalleryView: BlockView {
         oldPosition: oldContentPosition,
         newPosition: state.contentPosition,
         newLayout: newLayout,
-        animated: state.animated
+        animated: state.animated,
+        direction: navigationDirection
       )
     }
   }
@@ -434,7 +438,6 @@ extension GalleryView {
   }
 
   private func onDidEndScroll(scrollStartOffset: CGFloat? = nil) {
-
     let newState = GalleryViewState(
       contentPosition: state.contentPosition,
       itemsCount: model.items.count,

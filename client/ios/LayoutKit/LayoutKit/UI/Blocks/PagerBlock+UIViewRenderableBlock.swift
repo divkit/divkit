@@ -88,7 +88,8 @@ private final class PagerView: BlockView {
       layoutFactory: layoutFactory,
       observer: self,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate
+      renderingDelegate: renderingDelegate,
+      navigationDirection: state.navigationDirection
     )
 
     let isNewModel = model != self.model

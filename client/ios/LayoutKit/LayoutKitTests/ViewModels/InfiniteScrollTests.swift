@@ -279,6 +279,134 @@ final class InfiniteScrollTests: XCTestCase {
     XCTAssertNil(result)
   }
 
+  // MARK: - getNewPositionForState directional (set_next_item / set_previous_item)
+
+  func test_getNewPositionForState_forward_lastToFirst_teleportsForwardAcrossSeam() {
+    let scroll = makePagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 6),
+      newPosition: .paging(index: 2),
+      direction: .forward,
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    // Teleport just before the first real page, then animate forward onto it.
+    XCTAssertEqual(teleportedTo, 1)
+    XCTAssertEqual(result, .paging(index: 2))
+  }
+
+  func test_getNewPositionForState_forward_normalStep_doesNotTeleport() {
+    let scroll = makePagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 4),
+      newPosition: .paging(index: 5),
+      direction: .forward,
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertNil(teleportedTo)
+    XCTAssertEqual(result, .paging(index: 5))
+  }
+
+  func test_getNewPositionForState_backward_firstToLast_teleportsBackwardAcrossSeam() {
+    let scroll = makePagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 2),
+      newPosition: .paging(index: 6),
+      direction: .backward,
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    // Teleport just after the last real page, then animate backward onto it.
+    XCTAssertEqual(teleportedTo, 7)
+    XCTAssertEqual(result, .paging(index: 6))
+  }
+
+  func test_getNewPositionForState_backward_normalStep_doesNotTeleport() {
+    let scroll = makePagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 5),
+      newPosition: .paging(index: 4),
+      direction: .backward,
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertNil(teleportedTo)
+    XCTAssertEqual(result, .paging(index: 4))
+  }
+
+  // MARK: - Two real items (the pager.json case): firstReal and lastReal are adjacent, so the
+
+  // legacy index-based heuristic cannot tell a normal step from a wrap. Direction disambiguates.
+
+  func test_twoItems_next_fromFirst_animatesForwardWithoutTeleport() {
+    let scroll = makeTwoItemPagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 2), // Item 0 (first real)
+      newPosition: .paging(index: 3), // Item 1 (last real)
+      direction: .forward,
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertNil(teleportedTo)
+    XCTAssertEqual(result, .paging(index: 3))
+  }
+
+  func test_twoItems_next_fromLast_wrapsForwardAcrossSeam() {
+    let scroll = makeTwoItemPagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 3), // Item 1 (last real)
+      newPosition: .paging(index: 2), // Item 0 (first real)
+      direction: .forward,
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertEqual(teleportedTo, 1) // buffered copy of last → animate forward to 2
+    XCTAssertEqual(result, .paging(index: 2))
+  }
+
+  func test_twoItems_previous_fromLast_animatesBackwardWithoutTeleport() {
+    let scroll = makeTwoItemPagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 3), // Item 1 (last real)
+      newPosition: .paging(index: 2), // Item 0 (first real)
+      direction: .backward,
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertNil(teleportedTo)
+    XCTAssertEqual(result, .paging(index: 2))
+  }
+
+  func test_twoItems_previous_fromFirst_wrapsBackwardAcrossSeam() {
+    let scroll = makeTwoItemPagerScroll()
+    var teleportedTo: CGFloat?
+
+    let result = scroll.getNewPositionForState(
+      oldPosition: .paging(index: 2), // Item 0 (first real)
+      newPosition: .paging(index: 3), // Item 1 (last real)
+      direction: .backward,
+      updateToPosition: { teleportedTo = $0 }
+    )
+
+    XCTAssertEqual(teleportedTo, 4) // buffered copy of first → animate backward to 3
+    XCTAssertEqual(result, .paging(index: 3))
+  }
+
   // MARK: - getNewPositionForState
 
   // 5 real items + bufferSize 2 → origins indices:
@@ -288,6 +416,17 @@ final class InfiniteScrollTests: XCTestCase {
   private func makePagerScroll() -> InfiniteScroll {
     InfiniteScroll(
       origins: [0, 20, 40, 60, 80, 100, 120, 140, 160],
+      bufferSize: 2
+    )
+  }
+
+  // 2 real items + bufferSize 2 → origins indices:
+  //   0,1 = buffered copies of last (Items 0,1 duplicates)
+  //   2,3 = real Items 0,1   (first=2, last=3 — adjacent!)
+  //   4,5 = buffered copies of first (Items 0,1 duplicates)
+  private func makeTwoItemPagerScroll() -> InfiniteScroll {
+    InfiniteScroll(
+      origins: [0, 20, 40, 60, 80, 100],
       bufferSize: 2
     )
   }

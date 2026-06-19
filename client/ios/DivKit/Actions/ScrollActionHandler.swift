@@ -108,12 +108,21 @@ final class ScrollActionHandler {
 
     let index = state.normalizeCurrentIndex(overflow: overflow, withIncrement: step)
 
+    let direction: ScrollNavigationDirection = if step > 0 {
+      .forward
+    } else if step < 0 {
+      .backward
+    } else {
+      .none
+    }
+
     scrollToItemInternal(
       state: state,
       cardId: cardId,
       id: id,
       clampedIndex: index,
-      animated: animated
+      animated: animated,
+      direction: direction
     )
   }
 
@@ -257,12 +266,13 @@ final class ScrollActionHandler {
     cardId: DivCardID,
     id: String,
     clampedIndex: Int,
-    animated: Bool
+    animated: Bool,
+    direction: ScrollNavigationDirection = .none
   ) {
     blockStateStorage.setPendingState(
       id: id,
       cardId: cardId,
-      state: state.makeState(clampedIndex, animated)
+      state: state.makeState(clampedIndex, animated, direction)
     )
 
     updateCard(.state(cardId))
@@ -274,7 +284,8 @@ protocol CollectionTypeViewState: ElementState {
   var currentItemIndex: Int { get }
   var animated: Bool { get }
 
-  var makeState: (_ clampedIndex: Int, _ animated: Bool) -> Self { get }
+  var makeState: (_ clampedIndex: Int, _ animated: Bool, _ direction: ScrollNavigationDirection)
+    -> Self { get }
   func normalizeCurrentIndex(overflow: OverflowMode, withIncrement increment: Int) -> Int
 }
 
@@ -329,8 +340,9 @@ extension GalleryViewState: CollectionTypeViewState {
     }
   }
 
-  var makeState: (_ clampedIndex: Int, _ animated: Bool) -> GalleryViewState {
-    { clampedIndex, animated in
+  var makeState: (_ clampedIndex: Int, _ animated: Bool, _ direction: ScrollNavigationDirection)
+    -> GalleryViewState {
+    { clampedIndex, animated, _ in
       GalleryViewState(
         contentPosition: .paging(index: CGFloat(clampedIndex)),
         itemsCount: itemsCount,
@@ -351,13 +363,15 @@ extension PagerViewState: CollectionTypeViewState {
     Int(currentPage)
   }
 
-  var makeState: (_ clampedIndex: Int, _ animated: Bool) -> PagerViewState {
-    { clampedIndex, animated in
+  var makeState: (_ clampedIndex: Int, _ animated: Bool, _ direction: ScrollNavigationDirection)
+    -> PagerViewState {
+    { clampedIndex, animated, direction in
       PagerViewState(
         numberOfPages: itemsCount,
         currentPage: clampedIndex,
         animated: animated,
-        isInfiniteScrollable: self.isInfiniteScrollable
+        isInfiniteScrollable: self.isInfiniteScrollable,
+        navigationDirection: direction
       )
     }
   }
@@ -387,8 +401,9 @@ extension TabViewState: CollectionTypeViewState {
     Int(selectedPageIndex)
   }
 
-  var makeState: (_ clampedIndex: Int, _ animated: Bool) -> TabViewState {
-    { clampedIndex, _ in
+  var makeState: (_ clampedIndex: Int, _ animated: Bool, _ direction: ScrollNavigationDirection)
+    -> TabViewState {
+    { clampedIndex, _, _ in
       TabViewState(
         selectedPageIndex: CGFloat(clampedIndex),
         countOfPages: itemsCount

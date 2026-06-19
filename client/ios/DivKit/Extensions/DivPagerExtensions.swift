@@ -63,7 +63,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     let storage = context.blockStateStorage
 
     if let pending = storage.takePendingState(path) as? PagerViewState {
-      storage.setState(path: path, state: pending)
+      storage.setState(path: path, state: pending.withNavigationDirection(.none))
       return pending
     }
 
