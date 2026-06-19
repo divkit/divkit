@@ -1,11 +1,13 @@
 package com.yandex.divkit.benchmark.div.histogram
 
-import androidx.annotation.VisibleForTesting
 import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.RenderConfiguration
 import com.yandex.div.internal.KLog
 import com.yandex.divkit.benchmark.perf.PerfMetricReporter
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 
@@ -22,6 +24,8 @@ internal class DemoHistogramConfiguration(
 private const val TAG = "DIV_HISTOGRAM_LOGGER"
 
 class LoggingHistogramBridge : HistogramBridge {
+    private val _histograms = MutableStateFlow("")
+    val histograms: StateFlow<String> = _histograms.asStateFlow()
 
     override fun recordBooleanHistogram(name: String, sample: Boolean) {
         recordHistogram(name, sample)
@@ -49,7 +53,6 @@ class LoggingHistogramBridge : HistogramBridge {
         bucketCount: Int
     ) {
         recordHistogram(name, sample.toLong())
-        dispatcher?.dispatch(name)
         if (sample <= 0) return
         PerfMetricReporter.reportCountMetric(name, sample.toLong())
     }
@@ -63,7 +66,6 @@ class LoggingHistogramBridge : HistogramBridge {
         bucketCount: Int
     ) {
         recordHistogram(name, duration)
-        dispatcher?.dispatch(name)
         if (duration <= 0) return
         PerfMetricReporter.reportTimeMetric(name, unit, duration)
     }
@@ -73,20 +75,12 @@ class LoggingHistogramBridge : HistogramBridge {
     }
 
     private fun recordHistogram(name: String, sample: Long) {
-        KLog.d(TAG) { "$name: $sample" }
+        KLog.d(TAG) { "$name: ${sample / 1000} ms" }
+        _histograms.value = name
     }
 
     private fun recordHistogram(name: String, sample: Boolean) {
         KLog.d(TAG) { "$name: $sample" }
+        _histograms.value = name
     }
-
-    companion object {
-        @Volatile
-        @VisibleForTesting
-        var dispatcher: HistogramDispatcher? = null
-    }
-}
-
-fun interface HistogramDispatcher {
-    fun dispatch(histogramName: String)
 }

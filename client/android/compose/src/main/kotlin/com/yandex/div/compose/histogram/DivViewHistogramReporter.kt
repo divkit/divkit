@@ -25,32 +25,32 @@ internal class DivViewHistogramReporter @Inject constructor(
 
     @Composable
     @SuppressLint("ComposableNaming")
-    fun measure(content: @Composable () -> Unit) {
-        if (!configuration.isEnabled) {
-            content()
-            return
+    inline fun measure(content: @Composable () -> Unit) {
+        val isEnabled = configuration.isEnabled
+        if (isEnabled) {
+            onCompositionStarted()
         }
-
-        onCompositionStarted()
 
         content()
 
-        val view = LocalView.current
-        DisposableEffect(Unit) {
-            onCompositionFinished()
+        if (isEnabled) {
+            val view = LocalView.current
+            DisposableEffect(Unit) {
+                onCompositionFinished()
 
-            var listener: ViewTreeObserver.OnDrawListener? = null
-            listener = ViewTreeObserver.OnDrawListener {
-                onDrawFinished()
-                view.post {
-                    view.viewTreeObserver.removeOnDrawListener(listener)
+                var listener: ViewTreeObserver.OnDrawListener? = null
+                listener = ViewTreeObserver.OnDrawListener {
+                    onDrawFinished()
+                    view.post {
+                        view.viewTreeObserver.removeOnDrawListener(listener)
+                    }
                 }
-            }
-            view.viewTreeObserver.addOnDrawListener(listener)
+                view.viewTreeObserver.addOnDrawListener(listener)
 
-            onDispose {
-                view.viewTreeObserver.removeOnDrawListener(listener)
-                reset()
+                onDispose {
+                    view.viewTreeObserver.removeOnDrawListener(listener)
+                    reset()
+                }
             }
         }
     }

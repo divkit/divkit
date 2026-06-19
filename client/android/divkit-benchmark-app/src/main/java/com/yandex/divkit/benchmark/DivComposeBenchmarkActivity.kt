@@ -1,8 +1,15 @@
 package com.yandex.divkit.benchmark
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.lifecycle.lifecycleScope
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
@@ -13,27 +20,78 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.benchmark.utils.JsonAssetReader
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Start activity with default data:
  * adb shell am start -n com.yandex.divkit.benchmark/.DivComposeBenchmarkActivity --es asset_name with_templates.json
  */
+@SuppressLint("SetTextI18n")
 class DivComposeBenchmarkActivity : AppCompatActivity() {
+    private val histogramBridge = LoggingHistogramBridge()
+
+    private lateinit var composeView: ComposeView
+    private lateinit var textView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val data = parseDivData()
-        val composeView = ComposeView(createDivContext()).apply {
-            setContent {
-                DivView(data)
-            }
+        val rootLayout = FrameLayout(this)
+        setContentView(rootLayout)
+
+        textView = TextView(this).apply {
+            textSize = 24f
+            gravity = Gravity.CENTER
+            rootLayout.addView(this)
         }
 
-        val rootLayout = ProfilingLayout(this).apply {
-            addView(composeView)
+        composeView = ComposeView(createDivContext()).apply {
+            rootLayout.addView(this)
         }
-        setContentView(rootLayout)
+
+        lifecycleScope.launch {
+            runBenchmark()
+        }
+    }
+
+    private suspend fun runBenchmark() = coroutineScope {
+        showMessage("Parsing DivData...")
+
+        val data = withContext(Dispatchers.IO) {
+            parseDivData()
+        }
+
+        showMessage("Rendering cold DivView...")
+
+        composeView.setContent {
+            DivView(
+                data = data,
+                modifier = Modifier.safeDrawingPadding()
+            )
+        }
+
+        withTimeout(30.seconds) {
+            histogramBridge.histograms.first { it == "DivCompose.Render.Total.Cold" }
+        }
+
+        composeView.setContent { }
+
+        showMessage("Rendering warm DivView...")
+
+        composeView.setContent {
+            DivView(
+                data = data,
+                modifier = Modifier.safeDrawingPadding()
+            )
+        }
     }
 
     private fun parseDivData(): DivData {
@@ -55,11 +113,16 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
                 histogramConfiguration = object : DivHistogramConfiguration {
                     override val isEnabled = true
                     override val componentName = ""
-                    override val histogramBridge = LoggingHistogramBridge()
+                    override val histogramBridge = this@DivComposeBenchmarkActivity.histogramBridge
                 },
                 reporter = FailingReporter
             )
         )
+    }
+
+    private suspend fun showMessage(message: String) {
+        textView.text = message
+        delay(100.milliseconds)
     }
 }
 

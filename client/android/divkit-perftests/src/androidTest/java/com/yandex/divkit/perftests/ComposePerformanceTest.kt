@@ -22,7 +22,9 @@ class ComposePerformanceTest : BasePerformanceTest() {
     @PerfTestParameter(
         importantMetrics = [
             "DivCompose.Render.Composition.Cold",
+            "DivCompose.Render.Composition.Warm",
             "DivCompose.Render.Total.Cold",
+            "DivCompose.Render.Total.Warm",
         ]
     )
     @Test
@@ -37,7 +39,9 @@ class ComposePerformanceTest : BasePerformanceTest() {
 
             waitAllMetrics(
                 "DivCompose.Render.Composition.Cold",
+                "DivCompose.Render.Composition.Warm",
                 "DivCompose.Render.Total.Cold",
+                "DivCompose.Render.Total.Warm",
             )
         }
     }
