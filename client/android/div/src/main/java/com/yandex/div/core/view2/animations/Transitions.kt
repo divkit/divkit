@@ -6,6 +6,7 @@ import androidx.transition.TransitionSet
 import androidx.transition.Visibility
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivChangeTransition
 
 internal inline fun TransitionSet.forEach(crossinline block: (Transition) -> Unit) {
     val count = transitionCount
@@ -44,6 +45,7 @@ internal fun Transition.enumerateTargetIds(): List<Int> {
 
 internal inline fun DivItemBuilderResult.toTransitionData(
     isIncoming: Boolean,
+    inheritedChange: DivChangeTransition? = null,
     allowsTransitions: (DivBase) -> Boolean,
 ): TransitionData? {
     val div = div.value()
@@ -59,7 +61,7 @@ internal inline fun DivItemBuilderResult.toTransitionData(
         }
     }
 
-    val transitionChange = div.transitionChange?.let { DivTransition.Change(it) }
+    val transitionChange = (div.transitionChange ?: inheritedChange)?.let { DivTransition.Change(it) }
     val transitionOut = div.transitionOut?.let { DivTransition.Appearance(it, Visibility.MODE_OUT) }
 
     if (transitionChange == null && transitionOut == null) return null

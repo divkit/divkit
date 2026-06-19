@@ -95,6 +95,7 @@ import com.yandex.div.util.INVALID_STATE_ID
 import com.yandex.div.util.getInitialStateId
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivChangeTransition
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
@@ -1123,18 +1124,25 @@ class Div2View private constructor(
         val selectors = ArrayDeque<DivTransitionSelector>().apply {
             addLast(divData?.transitionAnimationSelector?.evaluate(resolver) ?: DivTransitionSelector.NONE)
         }
+        val inheritedChange = ArrayDeque<DivChangeTransition?>()
 
         return div.walk(resolver, currentRootPath) { item ->
-            item.toTransitionData(isIncoming) { div ->
+            item.toTransitionData(isIncoming, inheritedChange.lastOrNull()) { div ->
                 div.transitionTriggers?.allowsTransitionsOnDataChange()
                     ?: selectors.lastOrNull()?.allowsTransitionsOnDataChange()
                     ?: false
             }
         }.onEnter { div ->
-            if (div is Div.State) selectors.addLast(div.value.transitionAnimationSelector.evaluate(resolver))
+            if (div is Div.State) {
+                selectors.addLast(div.value.transitionAnimationSelector.evaluate(resolver))
+                inheritedChange.addLast(null)
+            } else {
+                inheritedChange.addLast(div.value().transitionChange ?: inheritedChange.lastOrNull())
+            }
             true
         }.onLeave { div ->
             if (div is Div.State) selectors.removeLast()
+            inheritedChange.removeLast()
         }
     }
 

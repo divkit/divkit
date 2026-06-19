@@ -57,6 +57,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingValue
 import com.yandex.div2.Div
 import com.yandex.div2.DivAnimation
+import com.yandex.div2.DivChangeTransition
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivState
@@ -427,11 +428,18 @@ internal class DivStateBinder @Inject constructor(
         path: DivStatePath,
         isIncoming: Boolean
     ): Sequence<TransitionData>? {
+        val inheritedChange = ArrayDeque<DivChangeTransition?>()
         return div?.walk(resolver, path) { item ->
-            item.toTransitionData(isIncoming) { div ->
+            item.toTransitionData(isIncoming, inheritedChange.lastOrNull()) { div ->
                 div.transitionTriggers?.allowsTransitionsOnStateChange() ?: true
             }
-        }?.onEnter { div -> div !is Div.State }
+        }?.onEnter { div ->
+            if (div is Div.State) return@onEnter false
+            inheritedChange.addLast(div.value().transitionChange ?: inheritedChange.lastOrNull())
+            true
+        }?.onLeave { div ->
+            if (div !is Div.State) inheritedChange.removeLast()
+        }
     }
 
     private fun setupAnimation(
