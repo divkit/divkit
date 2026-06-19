@@ -150,6 +150,12 @@
             "web": "Not relevant.",
             "android": "Not relevant."
           }
+        },
+        "infinite_scroll": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_gallery_infinite_scroll",
+          "platforms": []
         }
       }
     }
