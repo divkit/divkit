@@ -1056,10 +1056,10 @@ mod tests {
     }
 
     #[test]
-    fn test_div_gallery_cross_content_alignment_enum() {
-        assert_eq!(DivGalleryCrossContentAlignment::Start.value(), "start");
-        assert_eq!(DivGalleryCrossContentAlignment::Center.value(), "center");
-        assert_eq!(DivGalleryCrossContentAlignment::End.value(), "end");
+    fn test_div_gallery_content_alignment_enum() {
+        assert_eq!(DivGalleryContentAlignment::Start.value(), "start");
+        assert_eq!(DivGalleryContentAlignment::Center.value(), "center");
+        assert_eq!(DivGalleryContentAlignment::End.value(), "end");
     }
 
     #[test]

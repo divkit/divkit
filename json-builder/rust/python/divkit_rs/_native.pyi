@@ -117,6 +117,10 @@ class DivActionScrollByOverflow(str, enum.Enum):
     CLAMP = 'clamp'
     RING = 'ring'
 
+class DivActionSetStoredValueScope(str, enum.Enum):
+    GLOBAL = 'global'
+    CARD = 'card'
+
 class DivActionTarget(str, enum.Enum):
     SELF = '_self'
     BLANK = '_blank'
@@ -221,7 +225,7 @@ class DivFontWeight(str, enum.Enum):
     REGULAR = 'regular'
     BOLD = 'bold'
 
-class DivGalleryCrossContentAlignment(str, enum.Enum):
+class DivGalleryContentAlignment(str, enum.Enum):
     START = 'start'
     CENTER = 'center'
     END = 'end'
@@ -640,6 +644,24 @@ class DivActionScrollTo(PyDivEntity):
         **kwargs: Any,
     ) -> None: ...
 
+class DivActionSetCursorPosition(PyDivEntity):
+    def __init__(
+        self,
+        *,
+        id: str | None = None,
+        position: DivActionSetCursorPositionPosition | None = None,
+        **kwargs: Any,
+    ) -> None: ...
+
+class DivActionSetCursorPositionPosition(PyDivEntity):
+    def __init__(
+        self,
+        *,
+        end: int | str | None = None,
+        start: int | str | None = None,
+        **kwargs: Any,
+    ) -> None: ...
+
 class DivActionSetState(PyDivEntity):
     def __init__(
         self,
@@ -655,6 +677,7 @@ class DivActionSetStoredValue(PyDivEntity):
         *,
         lifetime: int | str | None = None,
         name: str | None = None,
+        scope: DivActionSetStoredValueScope | str | None = None,
         value: DivTypedValue | None = None,
         **kwargs: Any,
     ) -> None: ...
@@ -1251,13 +1274,14 @@ class DivGallery(_DivComponentBase):
         accessibility: DivAccessibility | None = None,
         alignment_horizontal: DivAlignmentHorizontal | str | None = None,
         alignment_vertical: DivAlignmentVertical | str | None = None,
+        allow_tap_while_scroll: bool | str | None = None,
         alpha: float | str | None = None,
         animators: Sequence[DivAnimator] | None = None,
         background: Sequence[DivBackground] | None = None,
         border: DivBorder | None = None,
         column_count: int | str | None = None,
         column_span: int | str | None = None,
-        cross_content_alignment: DivGalleryCrossContentAlignment | str | None = None,
+        cross_content_alignment: DivGalleryContentAlignment | str | None = None,
         cross_spacing: int | str | None = None,
         default_item: int | str | None = None,
         disappear_actions: Sequence[DivDisappearAction] | None = None,
@@ -1266,6 +1290,7 @@ class DivGallery(_DivComponentBase):
         functions: Sequence[DivFunction] | None = None,
         height: DivSize | None = None,
         id: str | None = None,
+        infinite_scroll: bool | int | str | None = None,
         item_builder: DivCollectionItemBuilder | None = None,
         item_spacing: int | str | None = None,
         items: Sequence[Div] | None = None,
@@ -1276,6 +1301,7 @@ class DivGallery(_DivComponentBase):
         restrict_parent_scroll: bool | int | str | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
+        scroll_content_alignment: DivGalleryContentAlignment | str | None = None,
         scroll_mode: DivGalleryScrollMode | str | None = None,
         scrollbar: DivGalleryScrollbar | str | None = None,
         selected_actions: Sequence[DivAction] | None = None,
@@ -1808,6 +1834,7 @@ class DivPager(_DivComponentBase):
         id: str | None = None,
         infinite_scroll: bool | int | str | None = None,
         item_builder: DivCollectionItemBuilder | None = None,
+        item_count_variable: str | None = None,
         item_spacing: DivFixedSize | None = None,
         items: Sequence[Div] | None = None,
         layout_mode: DivPagerLayoutMode | None = None,
@@ -2192,6 +2219,8 @@ class DivSlider(_DivComponentBase):
         max_value: int | str | None = None,
         min_value: int | str | None = None,
         paddings: DivEdgeInsets | None = None,
+        press_end_actions: Sequence[DivAction] | None = None,
+        press_start_actions: Sequence[DivAction] | None = None,
         ranges: Sequence[DivSliderRange] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
@@ -2480,6 +2509,7 @@ class DivTabsTabTitleStyle(PyDivEntity):
         active_background_color: str | None = None,
         active_font_variation_settings: dict[str, Any] | str | None = None,
         active_font_weight: DivFontWeight | str | None = None,
+        active_font_weight_value: int | str | None = None,
         active_text_color: str | None = None,
         animation_duration: int | str | None = None,
         animation_type: TabTitleStyleAnimationType | str | None = None,
@@ -2492,6 +2522,7 @@ class DivTabsTabTitleStyle(PyDivEntity):
         inactive_background_color: str | None = None,
         inactive_font_variation_settings: dict[str, Any] | str | None = None,
         inactive_font_weight: DivFontWeight | str | None = None,
+        inactive_font_weight_value: int | str | None = None,
         inactive_text_color: str | None = None,
         item_spacing: int | str | None = None,
         letter_spacing: float | str | None = None,
@@ -2535,6 +2566,7 @@ class DivText(_DivComponentBase):
         hover_end_actions: Sequence[DivAction] | None = None,
         hover_start_actions: Sequence[DivAction] | None = None,
         id: str | None = None,
+        image_builder: DivTextImageBuilder | None = None,
         images: Sequence[DivTextImage] | None = None,
         layout_provider: DivLayoutProvider | None = None,
         letter_spacing: float | str | None = None,
@@ -2546,6 +2578,7 @@ class DivText(_DivComponentBase):
         paddings: DivEdgeInsets | None = None,
         press_end_actions: Sequence[DivAction] | None = None,
         press_start_actions: Sequence[DivAction] | None = None,
+        range_builder: DivTextRangeBuilder | None = None,
         ranges: Sequence[DivTextRange] | None = None,
         reuse_id: str | None = None,
         row_span: int | str | None = None,
@@ -2582,7 +2615,9 @@ class DivTextEllipsis(PyDivEntity):
         self,
         *,
         actions: Sequence[DivAction] | None = None,
+        image_builder: DivTextImageBuilder | None = None,
         images: Sequence[DivTextImage] | None = None,
+        range_builder: DivTextRangeBuilder | None = None,
         ranges: Sequence[DivTextRange] | None = None,
         text: str | None = None,
         **kwargs: Any,
@@ -2602,6 +2637,16 @@ class DivTextImage(PyDivEntity):
         tint_mode: DivBlendMode | str | None = None,
         url: str | None = None,
         width: DivFixedSize | None = None,
+        **kwargs: Any,
+    ) -> None: ...
+
+class DivTextImageBuilder(PyDivEntity):
+    def __init__(
+        self,
+        *,
+        data: list[Any] | str | None = None,
+        data_element_name: str | None = None,
+        prototypes: Sequence[ImageBuilderPrototype] | None = None,
         **kwargs: Any,
     ) -> None: ...
 
@@ -2640,6 +2685,16 @@ class DivTextRangeBorder(PyDivEntity):
         *,
         corner_radius: int | str | None = None,
         stroke: DivStroke | None = None,
+        **kwargs: Any,
+    ) -> None: ...
+
+class DivTextRangeBuilder(PyDivEntity):
+    def __init__(
+        self,
+        *,
+        data: list[Any] | str | None = None,
+        data_element_name: str | None = None,
+        prototypes: Sequence[RangeBuilderPrototype] | None = None,
         **kwargs: Any,
     ) -> None: ...
 
@@ -2785,7 +2840,8 @@ class DivVideo(_DivComponentBase):
         muted: bool | int | str | None = None,
         paddings: DivEdgeInsets | None = None,
         pause_actions: Sequence[DivAction] | None = None,
-        player_settings_payload: dict[str, Any] | None = None,
+        playback_speed: float | str | None = None,
+        player_settings_payload: dict[str, Any] | str | None = None,
         preload_required: bool | int | str | None = None,
         preview: str | None = None,
         repeatable: bool | int | str | None = None,
@@ -2874,6 +2930,15 @@ class ImageAccessibility(PyDivEntity):
         **kwargs: Any,
     ) -> None: ...
 
+class ImageBuilderPrototype(PyDivEntity):
+    def __init__(
+        self,
+        *,
+        image: DivTextImage | None = None,
+        selector: bool | int | str | None = None,
+        **kwargs: Any,
+    ) -> None: ...
+
 class IndexDestination(PyDivEntity):
     def __init__(
         self,
@@ -2896,6 +2961,14 @@ class IntegerVariable(PyDivEntity):
         *,
         name: str | None = None,
         value: int | str | None = None,
+        **kwargs: Any,
+    ) -> None: ...
+
+class ItemIdDestination(PyDivEntity):
+    def __init__(
+        self,
+        *,
+        value: str | None = None,
         **kwargs: Any,
     ) -> None: ...
 
@@ -2933,6 +3006,15 @@ class PropertyVariable(PyDivEntity):
         new_value_variable_name: str | None = None,
         set: Sequence[DivAction] | None = None,
         value_type: DivEvaluableType | str | None = None,
+        **kwargs: Any,
+    ) -> None: ...
+
+class RangeBuilderPrototype(PyDivEntity):
+    def __init__(
+        self,
+        *,
+        range: DivTextRange | None = None,
+        selector: bool | int | str | None = None,
         **kwargs: Any,
     ) -> None: ...
 
@@ -2988,8 +3070,8 @@ class UrlVariable(PyDivEntity):
 
 Div: TypeAlias = DivImage | DivGifImage | DivText | DivSeparator | DivContainer | DivGrid | DivGallery | DivPager | DivTabs | DivState | DivCustom | DivIndicator | DivSlider | DivSwitch | DivInput | DivSelect | DivVideo
 DivActionCopyToClipboardContent: TypeAlias = ContentText | ContentUrl
-DivActionScrollDestination: TypeAlias = OffsetDestination | IndexDestination | StartDestination | EndDestination
-DivActionTyped: TypeAlias = DivActionAnimatorStart | DivActionAnimatorStop | DivActionArrayInsertValue | DivActionArrayRemoveValue | DivActionArraySetValue | DivActionClearFocus | DivActionCopyToClipboard | DivActionDictSetValue | DivActionDownload | DivActionFocusElement | DivActionHideTooltip | DivActionScrollBy | DivActionScrollTo | DivActionSetState | DivActionSetStoredValue | DivActionSetVariable | DivActionShowTooltip | DivActionSubmit | DivActionTimer | DivActionUpdateStructure | DivActionVideo | DivActionCustom
+DivActionScrollDestination: TypeAlias = OffsetDestination | IndexDestination | StartDestination | EndDestination | ItemIdDestination
+DivActionTyped: TypeAlias = DivActionAnimatorStart | DivActionAnimatorStop | DivActionArrayInsertValue | DivActionArrayRemoveValue | DivActionArraySetValue | DivActionClearFocus | DivActionCopyToClipboard | DivActionDictSetValue | DivActionDownload | DivActionFocusElement | DivActionHideTooltip | DivActionScrollBy | DivActionScrollTo | DivActionSetState | DivActionSetStoredValue | DivActionSetVariable | DivActionShowTooltip | DivActionSubmit | DivActionTimer | DivActionUpdateStructure | DivActionVideo | DivActionCustom | DivActionSetCursorPosition
 DivAnimator: TypeAlias = DivColorAnimator | DivNumberAnimator
 DivAppearanceTransition: TypeAlias = DivAppearanceSetTransition | DivFadeTransition | DivScaleTransition | DivSlideTransition
 DivBackground: TypeAlias = DivLinearGradient | DivRadialGradient | DivImageBackground | DivSolidBackground | DivNinePatchBackground
