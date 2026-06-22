@@ -39,7 +39,7 @@ dependencies = [
 
 [[package]]
 name = "divkit-rs"
-version = "32.39.0-post2"
+version = "32.55.0"
 dependencies = [
  "md-5",
  "pyo3",
