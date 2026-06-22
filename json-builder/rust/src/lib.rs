@@ -752,11 +752,11 @@ mod tests {
 
     #[test]
     fn test_number_variable() {
-        let var = NumberVariable::new().name("count").value(3.14);
+        let var = NumberVariable::new().name("count").value(3.125);
         let result = var.dict();
         assert_eq!(result["type"], "number");
         assert_eq!(result["name"], "count");
-        assert_eq!(result["value"], 3.14);
+        assert_eq!(result["value"], 3.125);
     }
 
     #[test]
@@ -1181,7 +1181,7 @@ mod tests {
     fn test_divvalue_to_json_primitives() {
         assert_eq!(DivValue::Null.to_json(), Value::Null);
         assert_eq!(DivValue::Int(42).to_json(), json!(42));
-        assert_eq!(DivValue::Float(3.14).to_json(), json!(3.14));
+        assert_eq!(DivValue::Float(3.125).to_json(), json!(3.125));
         assert_eq!(DivValue::String("hello".into()).to_json(), json!("hello"));
         assert_eq!(DivValue::Bool(true).to_json(), json!(true));
         assert_eq!(DivValue::Bool(false).to_json(), json!(false));
@@ -1293,9 +1293,9 @@ mod tests {
 
     #[test]
     fn test_divvalue_from_f64() {
-        let v: DivValue = 2.718f64.into();
+        let v: DivValue = 2.625f64.into();
         match v {
-            DivValue::Float(f) => assert!((f - 2.718).abs() < f64::EPSILON),
+            DivValue::Float(f) => assert!((f - 2.625).abs() < f64::EPSILON),
             _ => panic!("Expected Float"),
         }
     }
@@ -1518,26 +1518,29 @@ mod tests {
 
     #[test]
     fn test_constraints_is_not_empty() {
-        let mut c = super::Constraints::default();
-        c.minimum = Some(0.0);
+        let c = super::Constraints {
+            minimum: Some(0.0),
+            ..Default::default()
+        };
         assert!(!c.is_empty());
     }
 
     #[test]
     fn test_constraints_to_json_map() {
-        let mut c = super::Constraints::default();
-        c.minimum = Some(0.0);
-        c.maximum = Some(100.0);
-        c.min_length = Some(1);
-        c.max_length = Some(255);
-        c.format = Some("uri".to_string());
-        c.regex = Some("^https://".to_string());
-        c.min_items = Some(1);
-        c.max_items = Some(10);
-        c.unique_items = Some(true);
-        c.multiple_of = Some(2.0);
-        c.exclusive_minimum = Some(-1.0);
-        c.exclusive_maximum = Some(101.0);
+        let c = super::Constraints {
+            minimum: Some(0.0),
+            maximum: Some(100.0),
+            min_length: Some(1),
+            max_length: Some(255),
+            format: Some("uri".to_string()),
+            regex: Some("^https://".to_string()),
+            min_items: Some(1),
+            max_items: Some(10),
+            unique_items: Some(true),
+            multiple_of: Some(2.0),
+            exclusive_minimum: Some(-1.0),
+            exclusive_maximum: Some(101.0),
+        };
 
         let map = c.to_json_map();
         assert_eq!(map["minimum"], json!(0.0));
@@ -1569,8 +1572,10 @@ mod tests {
 
     #[test]
     fn test_field_descriptor_with_constraints() {
-        let mut c = super::Constraints::default();
-        c.minimum = Some(0.0);
+        let c = super::Constraints {
+            minimum: Some(0.0),
+            ..Default::default()
+        };
         let fd = super::FieldDescriptor::new("value").with_constraints(c);
         assert_eq!(fd.constraints.minimum, Some(0.0));
     }
@@ -1780,9 +1785,11 @@ mod tests {
     fn test_schema_with_constraints() {
         use super::schema::SchemaGenerator;
 
-        let mut constraints = super::Constraints::default();
-        constraints.minimum = Some(0.0);
-        constraints.maximum = Some(100.0);
+        let constraints = super::Constraints {
+            minimum: Some(0.0),
+            maximum: Some(100.0),
+            ..Default::default()
+        };
 
         let descriptors = vec![super::FieldDescriptor::new("value").with_constraints(constraints)];
 
@@ -2283,6 +2290,124 @@ mod tests {
                 other => panic!("expected Map, got {:?}", other),
             },
             other => panic!("expected Array, got {:?}", other),
+        }
+    }
+
+    /// Multi-Ref AnyOf: coerce boolean value inside a discriminated union.
+    /// DivActionSetVariable.value is AnyOf([Ref("BooleanValue"), Ref("IntegerValue"), ...]).
+    /// When the map has type="boolean", resolve to BooleanValue and coerce Int(0) → Bool(false).
+    #[test]
+    fn test_coerce_multi_ref_boolean_value() {
+        use super::field::SchemaFieldType;
+        use super::py_entity::coerce_for_schema;
+
+        // Schema for DivActionSetVariable.value: AnyOf of multiple Refs
+        let st = SchemaFieldType::AnyOf(vec![
+            SchemaFieldType::Ref("StringValue".into()),
+            SchemaFieldType::Ref("IntegerValue".into()),
+            SchemaFieldType::Ref("BooleanValue".into()),
+        ]);
+
+        let map = DivValue::Map(vec![
+            ("type".to_string(), DivValue::String("boolean".to_string())),
+            ("value".to_string(), DivValue::Int(0)),
+        ]);
+
+        let result = coerce_for_schema(map, &st);
+        match result {
+            DivValue::Map(entries) => {
+                let (_, val) = entries.iter().find(|(k, _)| k == "value").unwrap();
+                assert!(
+                    matches!(val, DivValue::Bool(false)),
+                    "expected Bool(false), got {:?}",
+                    val
+                );
+            }
+            other => panic!("expected Map, got {:?}", other),
+        }
+    }
+
+    /// Multi-Ref AnyOf: coerce string to integer inside a discriminated union.
+    /// When the map has type="integer", resolve to IntegerValue and coerce String("5") → Int(5).
+    #[test]
+    fn test_coerce_multi_ref_integer_value() {
+        use super::field::SchemaFieldType;
+        use super::py_entity::coerce_for_schema;
+
+        let st = SchemaFieldType::AnyOf(vec![
+            SchemaFieldType::Ref("StringValue".into()),
+            SchemaFieldType::Ref("IntegerValue".into()),
+            SchemaFieldType::Ref("BooleanValue".into()),
+        ]);
+
+        let map = DivValue::Map(vec![
+            ("type".to_string(), DivValue::String("integer".to_string())),
+            ("value".to_string(), DivValue::String("42".to_string())),
+        ]);
+
+        let result = coerce_for_schema(map, &st);
+        match result {
+            DivValue::Map(entries) => {
+                let (_, val) = entries.iter().find(|(k, _)| k == "value").unwrap();
+                assert!(
+                    matches!(val, DivValue::Int(42)),
+                    "expected Int(42), got {:?}",
+                    val
+                );
+            }
+            other => panic!("expected Map, got {:?}", other),
+        }
+    }
+
+    /// Multi-Ref: nested two levels deep. DivAction.typed → DivActionSetVariable → BooleanValue.
+    /// The typed field has AnyOf of many Refs; value inside set_variable also has AnyOf of many Refs.
+    #[test]
+    fn test_coerce_multi_ref_nested_set_variable_bool() {
+        use super::field::SchemaFieldType;
+        use super::py_entity::coerce_for_schema;
+
+        // Schema for DivAction.typed
+        let st = SchemaFieldType::AnyOf(vec![
+            SchemaFieldType::Ref("DivActionAnimatorStart".into()),
+            SchemaFieldType::Ref("DivActionSetVariable".into()),
+            SchemaFieldType::Ref("DivActionCustom".into()),
+        ]);
+
+        let map = DivValue::Map(vec![
+            (
+                "type".to_string(),
+                DivValue::String("set_variable".to_string()),
+            ),
+            (
+                "variable_name".to_string(),
+                DivValue::String("loading".to_string()),
+            ),
+            (
+                "value".to_string(),
+                DivValue::Map(vec![
+                    ("type".to_string(), DivValue::String("boolean".to_string())),
+                    ("value".to_string(), DivValue::Int(1)),
+                ]),
+            ),
+        ]);
+
+        let result = coerce_for_schema(map, &st);
+        match result {
+            DivValue::Map(entries) => {
+                let (_, typed_value) = entries.iter().find(|(k, _)| k == "value").unwrap();
+                match typed_value {
+                    DivValue::Map(inner_entries) => {
+                        let (_, val) = inner_entries.iter().find(|(k, _)| k == "value").unwrap();
+                        assert!(
+                            matches!(val, DivValue::Bool(true)),
+                            "expected Bool(true), got {:?}",
+                            val
+                        );
+                    }
+                    other => panic!("expected inner Map, got {:?}", other),
+                }
+            }
+            other => panic!("expected Map, got {:?}", other),
         }
     }
 }

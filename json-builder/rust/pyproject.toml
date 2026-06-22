@@ -38,6 +38,7 @@ testpaths = ["tests"]
 [tool.ruff]
 target-version = "py310"
 line-length = 100
+exclude = ["python/divkit_rs/_native.pyi"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]

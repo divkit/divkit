@@ -424,7 +424,7 @@ impl PyDivEntity {
         if let Some(val) = self.fields.get(name) {
             divvalue_to_py(py, val)
         } else if self.type_meta.field_names.iter().any(|f| f == name) {
-            Ok(py.None().into())
+            Ok(py.None())
         } else {
             Err(pyo3::exceptions::PyAttributeError::new_err(format!(
                 "'{}' object has no attribute '{}'",
@@ -720,7 +720,8 @@ fn resolve_ref_for_map<'a>(
                 crate::generated::schema_registry::entity_field_descriptors(ref_name)
             {
                 if descs.iter().any(|d| {
-                    d.name == "type" && d.default.as_ref().and_then(|v| v.as_str()) == Some(type_name)
+                    d.name == "type"
+                        && d.default.as_ref().and_then(|v| v.as_str()) == Some(type_name)
                 }) {
                     return Some(ref_name);
                 }

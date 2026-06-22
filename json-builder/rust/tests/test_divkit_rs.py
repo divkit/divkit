@@ -11,6 +11,7 @@ import divkit_rs
 import pytest
 from divkit_rs import (
     BaseDiv,
+    BooleanVariable,
     DivAction,
     DivActionClearFocus,
     DivActionCopyToClipboard,
@@ -29,12 +30,15 @@ from divkit_rs import (
     DivBorder,
     DivContainer,
     DivCornersRadius,
+    DivDimension,
     DivEdgeInsets,
     DivFixedSize,
     DivFontWeight,
     DivImage,
     DivLinearGradient,
     DivMatchParentSize,
+    DivPoint,
+    DivShadow,
     DivSolidBackground,
     DivState,
     DivStateState,
@@ -49,10 +53,6 @@ from divkit_rs import (
     DivVisibility,
     DivVisibilityAction,
     DivWrapContentSize,
-    BooleanVariable,
-    DivPoint,
-    DivDimension,
-    DivShadow,
     Field,
     IndexDestination,
     IntegerVariable,
@@ -107,10 +107,16 @@ class TestJsonOutputParity:
 
     def test_corners_radius_all_keys(self):
         d = DivCornersRadius(
-            top_left=1, top_right=2, bottom_left=3, bottom_right=4,
+            top_left=1,
+            top_right=2,
+            bottom_left=3,
+            bottom_right=4,
         ).dict()
         assert list(sorted(d.keys())) == [
-            "bottom-left", "bottom-right", "top-left", "top-right",
+            "bottom-left",
+            "bottom-right",
+            "top-left",
+            "top-right",
         ]
 
     # --- whole-number floats stay as float ---
@@ -1484,8 +1490,7 @@ class TestPydivkitCompatibilityLayer:
 
         related_before = Root().related_templates()
         assert all(
-            template.template_name != "late.related.module.LateTpl"
-            for template in related_before
+            template.template_name != "late.related.module.LateTpl" for template in related_before
         )
 
         LateTpl = type(
@@ -1521,7 +1526,10 @@ class TestPydivkitCompatibilityLayer:
             {
                 "tpl_type": MidTpl,
                 "tpl_entity": MidTpl(items=[]),
-                "tpl_dict": {"type": MidTpl.template_name, "items": [{"type": LeafTpl.template_name}]},
+                "tpl_dict": {
+                    "type": MidTpl.template_name,
+                    "items": [{"type": LeafTpl.template_name}],
+                },
                 "tpl_list": [MidTpl(items=[]), {"type": LeafTpl.template_name}],
             }
         )
@@ -1670,16 +1678,18 @@ class TestRawDictCoercion:
         assert d["border"]["has_shadow"] is True
 
     def test_border_dict_shadow_alpha_int_coerced_to_float(self):
-        d = DivContainer(items=[], border={
-            "shadow": {"alpha": 1, "offset": {"x": {"value": 0}, "y": {"value": -2}}}
-        }).dict()
+        d = DivContainer(
+            items=[],
+            border={"shadow": {"alpha": 1, "offset": {"x": {"value": 0}, "y": {"value": -2}}}},
+        ).dict()
         assert isinstance(d["border"]["shadow"]["alpha"], float)
         assert d["border"]["shadow"]["alpha"] == 1.0
 
     def test_border_dict_shadow_offset_value_int_coerced_to_float(self):
-        d = DivContainer(items=[], border={
-            "shadow": {"alpha": 1, "offset": {"x": {"value": 0}, "y": {"value": -2}}}
-        }).dict()
+        d = DivContainer(
+            items=[],
+            border={"shadow": {"alpha": 1, "offset": {"x": {"value": 0}, "y": {"value": -2}}}},
+        ).dict()
         assert isinstance(d["border"]["shadow"]["offset"]["x"]["value"], float)
         assert isinstance(d["border"]["shadow"]["offset"]["y"]["value"], float)
         assert d["border"]["shadow"]["offset"]["y"]["value"] == -2.0
@@ -1689,7 +1699,61 @@ class TestRawDictCoercion:
         assert d["actions"][0]["is_enabled"] is True
 
     def test_corners_radius_dict_keys_hyphenated(self):
-        d = DivContainer(items=[], border={"corners_radius": {"top_left": 24, "top_right": 24}}).dict()
+        d = DivContainer(
+            items=[], border={"corners_radius": {"top_left": 24, "top_right": 24}}
+        ).dict()
         cr = d["border"]["corners_radius"]
         assert "top-left" in cr, f"expected top-left, got keys: {list(cr.keys())}"
         assert "top-right" in cr
+
+
+class TestMultiRefCoercion:
+    """Coercion inside discriminated union fields (AnyOf with multiple Refs)."""
+
+    def test_boolean_value_int_coerced_to_bool(self):
+        """BooleanValue.value: Int(0) → Bool(false) when passed as raw dict."""
+        d = DivActionSetVariable(
+            variable_name="flag",
+            value={"type": "boolean", "value": 0},
+        ).dict()
+        assert d["value"]["value"] is False
+
+    def test_boolean_value_int_1_coerced_to_true(self):
+        d = DivActionSetVariable(
+            variable_name="flag",
+            value={"type": "boolean", "value": 1},
+        ).dict()
+        assert d["value"]["value"] is True
+
+    def test_integer_value_str_coerced_to_int(self):
+        """IntegerValue.value: String("42") → Int(42) when passed as raw dict."""
+        d = DivActionSetVariable(
+            variable_name="tab",
+            value={"type": "integer", "value": "42"},
+        ).dict()
+        assert d["value"]["value"] == 42
+        assert type(d["value"]["value"]) is int
+
+    def test_nested_in_action_typed(self):
+        """Full chain: DivAction.typed → set_variable → BooleanValue."""
+        d = DivAction(
+            log_id="test",
+            typed={
+                "type": "set_variable",
+                "variable_name": "loading",
+                "value": {"type": "boolean", "value": 0},
+            },
+        ).dict()
+        assert d["typed"]["value"]["value"] is False
+
+    def test_nested_integer_in_action_typed(self):
+        d = DivAction(
+            log_id="test",
+            typed={
+                "type": "set_variable",
+                "variable_name": "selected_tab",
+                "value": {"type": "integer", "value": "1"},
+            },
+        ).dict()
+        assert d["typed"]["value"]["value"] == 1
+        assert type(d["typed"]["value"]["value"]) is int
