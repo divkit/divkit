@@ -1,3 +1,16 @@
+## 32.56.0
+
+# Android Client:
+* `transition_change` set on a container now cascades to its child elements that have an `id` but don't declare their own `transition_change`, so they animate their bounds on state and data changes instead of snapping to the final layout.
+
+# iOS Client:
+* A `match_parent` item on the cross-axis of a `wrap_content` container now stretches to match the largest content among such items; when the container defines a `min_size`, the item (and its nested `match_parent` content) stretches to fill that size.
+* Fixed infinite scroll pager animation direction: `set_next_item` now always animates forward and `set_previous_item` backward across the loop boundary.
+
+# Web Client:
+* Fixed an issue where disabled `menu_items` in `action` were displayed.
+
+
 ## 32.55.0
 
 # iOS Client:
