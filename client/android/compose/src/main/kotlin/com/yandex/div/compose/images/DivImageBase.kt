@@ -3,8 +3,7 @@ package com.yandex.div.compose.images
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
-import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.toAlignment
+import com.yandex.div.compose.utils.observedAlignment
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -39,10 +38,7 @@ class DivImageBase(
 ) {
     @Composable
     fun observedAlignment(): Alignment {
-        return toAlignment(
-            contentAlignmentHorizontal.observedValue(),
-            contentAlignmentVertical.observedValue()
-        )
+        return observedAlignment(contentAlignmentHorizontal, contentAlignmentVertical)
     }
 
     @Composable

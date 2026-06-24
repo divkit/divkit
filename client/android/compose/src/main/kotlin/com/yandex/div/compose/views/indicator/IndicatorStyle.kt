@@ -3,6 +3,7 @@ package com.yandex.div.compose.views.indicator
 import androidx.compose.runtime.Composable
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toPx
@@ -54,7 +55,7 @@ internal fun DivIndicator.observeIndicatorStyle(): IndicatorStyle {
             minimumShape = minimumShape,
             spaceBetweenCenters = 0f,
             itemSpacing = placement.value.itemSpacing.observedValue().toPx(),
-            maxVisibleItems = placement.value.maxVisibleItems.observedValue().toInt(),
+            maxVisibleItems = placement.value.maxVisibleItems.observedIntValue(),
             isStretch = true,
             animation = animation.observedValue(),
         )

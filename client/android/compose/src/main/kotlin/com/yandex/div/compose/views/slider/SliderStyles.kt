@@ -5,12 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeHorizontalInsets
+import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toColor
-import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivCircleShape
@@ -182,7 +183,7 @@ private fun DivRoundedRectangleShape.observeDrawable(drawable: DivShapeDrawable)
     return SliderDrawable(
         width = itemWidth.observedValue().toPx(),
         height = itemHeight.observedValue().toPx(),
-        color = (backgroundColor ?: drawable.color).observedValue().toColor(),
+        color = (backgroundColor ?: drawable.color).observedColorValue(),
         radius = cornerRadius.observedValue().toPx(),
         stroke = (stroke ?: drawable.stroke)?.observeStroke()
     )
@@ -194,7 +195,7 @@ private fun DivCircleShape.observeDrawable(drawable: DivShapeDrawable): SliderDr
     return SliderDrawable(
         width = radius * 2f,
         height = radius * 2f,
-        color = (backgroundColor ?: drawable.color).observedValue().toColor(),
+        color = (backgroundColor ?: drawable.color).observedColorValue(),
         radius = radius,
         stroke = (stroke ?: drawable.stroke)?.observeStroke()
     )
@@ -203,8 +204,8 @@ private fun DivCircleShape.observeDrawable(drawable: DivShapeDrawable): SliderDr
 @Composable
 private fun DivStroke.observeStroke(): SliderStroke {
     return SliderStroke(
-        color = color.observedValue().toColor(),
-        width = width.observedFloatValue().toDp(unit.observedValue()).toPx(),
+        color = color.observedColorValue(),
+        width = width.observedPxValue(unit),
         pathEffect = when (style) {
             is DivStrokeStyle.Dashed -> PathEffect.dashPathEffect(floatArrayOf(6.dp.toPx(), 2.dp.toPx()))
             is DivStrokeStyle.Solid -> null
@@ -214,16 +215,16 @@ private fun DivStroke.observeStroke(): SliderStroke {
 
 @Composable
 private fun DivSlider.TextStyle.observeTextStyle(): SliderTextStyle {
-    val size = fontSize.observedValue().toDp(fontSizeUnit.observedValue()).toPx()
-    val weight = fontWeightValue?.observedValue()?.toInt()
+    val size = fontSize.observedPxValue(fontSizeUnit)
+    val weight = fontWeightValue?.observedIntValue()
         ?: fontWeight?.observedValue()?.toTypefaceWeight()
         ?: Typeface.NORMAL
     return SliderTextStyle(
         fontSize = size,
-        letterSpacing = letterSpacing.observedValue().toFloat() / fontSize.observedValue().coerceAtLeast(1L),
+        letterSpacing = letterSpacing.observedFloatValue() / fontSize.observedValue().coerceAtLeast(1L),
         typeface = Typeface.create(fontFamily?.observedValue(), weight),
-        offsetX = offset?.x?.observedValue()?.toPx() ?: 0f,
-        offsetY = offset?.y?.observedValue()?.toPx() ?: 0f,
+        offsetX = offset?.x?.observedPxValue() ?: 0f,
+        offsetY = offset?.y?.observedPxValue() ?: 0f,
         color = textColor.observedValue()
     )
 }

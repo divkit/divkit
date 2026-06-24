@@ -36,7 +36,7 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.mirrorHorizontallyIfRtl
-import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div2.DivTabs
 import kotlinx.coroutines.flow.first
@@ -96,9 +96,7 @@ private fun observeIntrinsicWidth(
     val textMeasurer = rememberTextMeasurer()
     val textStyle = style.observeTextStyle(isSelected = false)
     val horizontalTabPaddings = (style.paddings.left.observedIntValue() + style.paddings.right.observedIntValue()).dp
-    val delimiterWidth = titleDelimiter?.let {
-        it.width.value.observedValue().toDp(it.width.unit.observedValue())
-    } ?: 0.dp
+    val delimiterWidth = titleDelimiter?.width?.observedValue() ?: 0.dp
 
     val textWidthPx = items.sumOf { item ->
         textMeasurer.measure(
@@ -164,7 +162,7 @@ private fun ScrollableTitleRow(
     val activeBackground = style.activeBackgroundColor.observedColorValue()
     val inactiveBackground = style.inactiveBackgroundColor?.observedColorValue() ?: Color.Transparent
     val tabShape = style.observeTabShape()
-    val titleStartOffsetPx = titleDelimiter.observeTitleStartOffsetPx(itemSpacing)
+    val titleStartOffsetPx = titleDelimiter?.observeTitleStartOffsetPx(itemSpacing) ?: 0
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
 
@@ -291,9 +289,8 @@ private fun DrawScope.drawActiveTabIndicator(
 }
 
 @Composable
-private fun DivTabs.TabTitleDelimiter?.observeTitleStartOffsetPx(itemSpacing: Dp): Int {
-    this ?: return 0
-    val width = width.value.observedValue().toDp(width.unit.observedValue())
+private fun DivTabs.TabTitleDelimiter.observeTitleStartOffsetPx(itemSpacing: Dp): Int {
+    val width = width.observedValue()
     return with(LocalDensity.current) { (width + itemSpacing).roundToPx() }
 }
 

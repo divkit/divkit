@@ -17,6 +17,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.combineAlignment
 import com.yandex.div.compose.utils.isWrapContent
+import com.yandex.div.compose.utils.observedAlignment
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div.compose.views.DivBlockView
@@ -36,12 +37,14 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
         widthWrapContent = data.width.isWrapContent,
         heightWrapContent = data.height.isWrapContent,
     )
-    val contentAlignment = combineAlignment(
-        data.contentAlignmentHorizontal.observedValue().toHorizontalAlignment(),
-        data.contentAlignmentVertical.observedValue().toVerticalAlignment(),
-    )
 
-    Box(modifier, contentAlignment = contentAlignment) {
+    Box(
+        modifier,
+        contentAlignment = observedAlignment(
+            data.contentAlignmentHorizontal,
+            data.contentAlignmentVertical
+        )
+    ) {
         Grid(
             config = {
                 columnTracks.forEach { column(it) }

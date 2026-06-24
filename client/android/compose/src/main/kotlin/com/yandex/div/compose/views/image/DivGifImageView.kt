@@ -6,6 +6,7 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.decodePreview
 import com.yandex.div.compose.images.observedContentScale
+import com.yandex.div.compose.utils.observedAlignment
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivGifImage
 
@@ -19,9 +20,9 @@ internal fun DivGifImageView(
         data = data,
         model = data.gifUrl.observedValue(),
         contentScale = data.scale.observedContentScale(),
-        alignment = toAlignment(
-            data.contentAlignmentHorizontal.observedValue(),
-            data.contentAlignmentVertical.observedValue()
+        alignment = observedAlignment(
+            data.contentAlignmentHorizontal,
+            data.contentAlignmentVertical
         ),
         placeholderColor = data.placeholderColor.observedColorValue(),
         preview = {

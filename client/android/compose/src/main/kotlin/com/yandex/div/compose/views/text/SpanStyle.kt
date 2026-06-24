@@ -8,7 +8,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
@@ -16,8 +15,8 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeShadow
 import com.yandex.div.compose.text.letterSpacing
+import com.yandex.div.compose.text.observedTextDecoration
 import com.yandex.div.compose.text.rememberFontFamily
-import com.yandex.div.compose.text.textDecoration
 import com.yandex.div.compose.text.toFontWeight
 import com.yandex.div.compose.utils.toTextUnit
 import com.yandex.div2.DivText
@@ -25,46 +24,31 @@ import com.yandex.div2.DivText
 @Composable
 internal fun DivText.Range.observeSpanStyle(
     baseFontSize: Int,
-    baseTextColorAlpha: Float,
-    density: Density,
+    baseTextColorAlpha: Float
 ): SpanStyle {
-    val rangeColor = textColor?.observedColorValue()
     val rangeFontSize = fontSize?.observedIntValue()
     val rangeFontWeight = fontWeight?.observedValue()
     val rangeFontWeightValue = fontWeightValue?.observedIntValue()
-    val rangeLetterSpacing = letterSpacing?.observedFloatValue()
-    val rangeStrike = strike?.observedValue()
-    val rangeUnderline = underline?.observedValue()
-    val rangeFontFamily = fontFamily?.observedValue()
-    val rangeFontFeatureSettings = fontFeatureSettings?.observedValue()
-    val rangeFontVariationSettings = fontVariationSettings?.observedValue()
-
-    val spanFontWeight = rangeFontWeight.toFontWeight(rangeFontWeightValue)
-    val spanTextDecoration = textDecoration(rangeStrike, rangeUnderline)
-    val spanFontSize = rangeFontSize?.toTextUnit(fontSizeUnit.observedValue(), density)
+    val spanFontSize = rangeFontSize?.toTextUnit(fontSizeUnit.observedValue())
         ?: TextUnit.Unspecified
-    val spanLetterSpacing = rangeLetterSpacing?.let {
+    val spanLetterSpacing = letterSpacing?.observedFloatValue()?.let {
         letterSpacing(it, rangeFontSize ?: baseFontSize)
     } ?: TextUnit.Unspecified
     val spanFontFamily = rememberFontFamily(
-        fontFamily = rangeFontFamily,
+        fontFamily = fontFamily?.observedValue(),
         fontWeight = rangeFontWeight,
         fontWeightValue = rangeFontWeightValue,
-        fontVariationSettings = rangeFontVariationSettings,
+        fontVariationSettings = fontVariationSettings?.observedValue(),
     )
-    val spanShadow = textShadow?.observeShadow(baseTextColorAlpha)
-
-    val spanBrush = rangeColor?.let { SolidColorShaderBrush(it) }
-
     return SpanStyle(
-        brush = spanBrush,
+        brush = textColor?.observedColorValue()?.let { SolidColorShaderBrush(it) },
         fontSize = spanFontSize,
         fontFamily = spanFontFamily,
-        fontWeight = spanFontWeight,
+        fontWeight = rangeFontWeight.toFontWeight(rangeFontWeightValue),
         letterSpacing = spanLetterSpacing,
-        textDecoration = spanTextDecoration,
-        shadow = spanShadow,
-        fontFeatureSettings = rangeFontFeatureSettings?.takeIf { it.isNotBlank() },
+        textDecoration = observedTextDecoration(strike, underline),
+        shadow = textShadow?.observeShadow(baseTextColorAlpha),
+        fontFeatureSettings = fontFeatureSettings?.observedValue()?.takeIf { it.isNotBlank() },
     )
 }
 

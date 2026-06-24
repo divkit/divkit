@@ -7,41 +7,37 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
-import com.yandex.div.compose.images.rememberImageRequest
-import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.observedContentScale
+import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div.compose.utils.observedAlignment
 import com.yandex.div.compose.views.image.resolveTransformations
 import com.yandex.div2.DivImageBackground
 import kotlin.math.roundToInt
 
 @Composable
 internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
-    val context = divContext
-    val density = LocalDensity.current.density
-
     val imageAlpha = data.alpha.observedFloatValue()
     val contentScale = data.scale.observedContentScale()
 
-    val alignment = toAlignment(
-        data.contentAlignmentHorizontal.observedValue(),
-        data.contentAlignmentVertical.observedValue()
+    val alignment = observedAlignment(
+        data.contentAlignmentHorizontal,
+        data.contentAlignmentVertical
     )
 
     val imageRequestParams = ImageRequestParams(
         data = data.imageUrl.observedValue(),
-        transformations = data.filters.resolveTransformations(context, density)
+        transformations = data.filters.resolveTransformations()
     )
     val painter = rememberAsyncImagePainter(
         model = rememberImageRequest(imageRequestParams),
-        imageLoader = context.component.imageLoader
+        imageLoader = divContext.component.imageLoader
     )
     painter.observeNetworkRestoration()
 

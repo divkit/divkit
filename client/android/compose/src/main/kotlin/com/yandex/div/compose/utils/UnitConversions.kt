@@ -23,30 +23,43 @@ internal fun Double.toDp(): Dp {
 }
 
 @Composable
-fun Float.toDp(unit: DivSizeUnit): Dp {
-    val float = this
+internal fun Float.toDp(unit: DivSizeUnit): Dp {
     return when (unit) {
-        DivSizeUnit.DP, DivSizeUnit.SP -> float.dp
-        DivSizeUnit.PX -> with(LocalDensity.current) { float.toDp() }
+        DivSizeUnit.DP, DivSizeUnit.SP -> dp
+        DivSizeUnit.PX -> with(LocalDensity.current) { this@toDp.toDp() }
     }
 }
 
 @Composable
-fun Long.toDp(unit: DivSizeUnit): Dp {
+internal fun Long.toDp(unit: DivSizeUnit): Dp {
     return toFloat().toDp(unit)
 }
 
 @Composable
-fun Dp.toPx(): Float {
+internal fun Float.toPx(unit: DivSizeUnit): Float {
+    return when (unit) {
+        DivSizeUnit.DP, DivSizeUnit.SP -> dp.toPx()
+        DivSizeUnit.PX -> this
+    }
+}
+
+@Composable
+internal fun Long.toPx(unit: DivSizeUnit): Float {
+    return toFloat().toPx(unit)
+}
+
+@Composable
+internal fun Dp.toPx(): Float {
     return with(LocalDensity.current) {
         this@toPx.toPx()
     }
 }
 
-internal fun Int.toTextUnit(unit: DivSizeUnit, density: Density): TextUnit {
+@Composable
+internal fun Int.toTextUnit(unit: DivSizeUnit): TextUnit {
     return when (unit) {
-        DivSizeUnit.SP -> this.sp
-        DivSizeUnit.DP -> this.sp // DP and SP are the same at default font scale
-        DivSizeUnit.PX -> with(density) { this@toTextUnit.toDp().toSp() }
+        DivSizeUnit.SP -> sp
+        DivSizeUnit.DP -> sp // DP and SP are the same at default font scale
+        DivSizeUnit.PX -> with(LocalDensity.current) { this@toTextUnit.toSp() }
     }
 }

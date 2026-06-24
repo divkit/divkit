@@ -7,9 +7,8 @@ import androidx.compose.ui.graphics.toArgb
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.utils.toColor
-import com.yandex.div.compose.utils.toDp
-import com.yandex.div.compose.utils.toPx
 import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivRadialGradient
@@ -66,7 +65,7 @@ private fun DivRadialGradientCenter.observeCenter(): RadialGradientBrush.Center 
     return when (this) {
         is DivRadialGradientCenter.Fixed ->
             RadialGradientBrush.Center.Fixed(
-                value.value.observedValue().toDp(value.unit.observedValue()).toPx()
+                value.value.observedPxValue(value.unit)
             )
         is DivRadialGradientCenter.Relative ->
             RadialGradientBrush.Center.Relative(value.value.observedFloatValue())
@@ -78,7 +77,7 @@ private fun DivRadialGradientRadius.observeRadius(): RadialGradientBrush.Radius 
     return when (this) {
         is DivRadialGradientRadius.FixedSize ->
             RadialGradientBrush.Radius.Fixed(
-                value.value.observedValue().toDp(unit = value.unit.observedValue()).toPx()
+                value.value.observedPxValue(value.unit)
             )
         is DivRadialGradientRadius.Relative ->
             RadialGradientBrush.Radius.Relative(value.value.observedValue())

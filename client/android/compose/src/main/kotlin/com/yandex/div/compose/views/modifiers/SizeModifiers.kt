@@ -13,8 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.DivAlignmentHorizontal
@@ -66,8 +66,8 @@ private fun Modifier.applySizeBounds(
     maxSize: DivSizeUnitValue?,
     isWidth: Boolean,
 ): Modifier {
-    val min = minSize?.toDpSize()
-    val max = maxSize?.toDpSize()
+    val min = minSize?.toDp()
+    val max = maxSize?.toDp()
     if (min == null && max == null) return this
     if (min != null && max != null && min > max) return this
     return if (isWidth) {
@@ -78,6 +78,6 @@ private fun Modifier.applySizeBounds(
 }
 
 @Composable
-private fun DivSizeUnitValue.toDpSize(): Dp {
-    return value.observedValue().toDp(unit.observedValue())
+private fun DivSizeUnitValue.toDp(): Dp {
+    return value.observedDpValue(unit)
 }

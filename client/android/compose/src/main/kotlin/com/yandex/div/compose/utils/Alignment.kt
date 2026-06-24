@@ -1,7 +1,10 @@
 package com.yandex.div.compose.utils
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
+import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 
@@ -20,6 +23,14 @@ internal fun DivAlignmentVertical.toVerticalAlignment(): Alignment.Vertical =
         DivAlignmentVertical.BOTTOM -> Alignment.Bottom
         else -> Alignment.Top
     }
+
+@Composable
+internal fun observedAlignment(
+    horizontal: Expression<DivAlignmentHorizontal>,
+    vertical: Expression<DivAlignmentVertical>
+): Alignment {
+    return toAlignment(horizontal.observedValue(), vertical.observedValue())
+}
 
 internal fun toAlignment(
     horizontal: DivAlignmentHorizontal,

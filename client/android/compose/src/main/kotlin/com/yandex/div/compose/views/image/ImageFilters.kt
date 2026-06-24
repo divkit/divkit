@@ -1,8 +1,9 @@
 package com.yandex.div.compose.views.image
 
-import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
 import coil3.transform.Transformation
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.reportWarning
@@ -10,13 +11,13 @@ import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFilterRtlMirror
 
 @Composable
-internal fun List<DivFilter>?.resolveTransformations(
-    context: Context,
-    density: Float,
-): List<Transformation> {
+internal fun List<DivFilter>?.resolveTransformations(): List<Transformation> {
     if (this == null) {
         return emptyList()
     }
+
+    val context = divContext
+    val density = LocalDensity.current.density
 
     return mapNotNull { filter ->
         when (filter) {

@@ -22,9 +22,9 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeRoundedCornerShape
+import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx
-import com.yandex.div.compose.utils.observedValue as observedDimensionValue
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivShadow
 import com.yandex.div2.DivStroke
@@ -110,8 +110,8 @@ private fun Modifier.divShadow(
 
     val color = shadow?.color?.observedColorValue() ?: DEFAULT_SHADOW_COLOR
     val radius = shadow?.blur?.observedValue()?.toDp() ?: DEFAULT_SHADOW_ELEVATION
-    val offsetX = shadow?.offset?.x?.observedDimensionValue() ?: DEFAULT_SHADOW_OFFSET_X
-    val offsetY = shadow?.offset?.y?.observedDimensionValue() ?: DEFAULT_SHADOW_OFFSET_Y
+    val offsetX = shadow?.offset?.x?.observedDpValue() ?: DEFAULT_SHADOW_OFFSET_X
+    val offsetY = shadow?.offset?.y?.observedDpValue() ?: DEFAULT_SHADOW_OFFSET_Y
 
     return dropShadow(
         shape = shape,

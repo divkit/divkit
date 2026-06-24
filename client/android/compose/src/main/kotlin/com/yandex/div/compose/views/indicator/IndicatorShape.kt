@@ -3,10 +3,8 @@ package com.yandex.div.compose.views.indicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.yandex.div.compose.expressions.observedColorValue
-import com.yandex.div.compose.expressions.observedFloatValue
-import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div2.DivCircleShape
 import com.yandex.div2.DivIndicator
@@ -56,7 +54,7 @@ internal fun DivRoundedRectangleShape.toShapeParams(fallbackColor: Color): Shape
     val strokeWidthPx: Float
     val strokeColorPx: Color
     if (stroke != null) {
-        strokeWidthPx = stroke.width.observedFloatValue().toDp(stroke.unit.observedValue()).toPx()
+        strokeWidthPx = stroke.width.observedPxValue(stroke.unit)
         strokeColorPx = stroke.color.observedColorValue()
     } else {
         strokeWidthPx = 0f

@@ -1,7 +1,6 @@
 package com.yandex.div.compose.text
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,35 +35,27 @@ internal fun observeBaseTextStyle(
     fontFeatureSettings: Expression<String>? = null,
     fontVariationSettings: Expression<JSONObject>? = null,
 ): TextStyle {
-    val color = textColor.observedColorValue()
     val sizeUnit = fontSizeUnit.observedValue()
     val weight = fontWeight?.observedValue()
     val weightValue = fontWeightValue?.observedIntValue()
-    val variationSettings = fontVariationSettings?.observedValue()
-    val density = LocalDensity.current
-
-    val textSize = fontSize.toTextUnit(sizeUnit, density)
-    val resolvedLineHeight = lineHeight?.observedIntValue()?.toTextUnit(sizeUnit, density)
-    val resolvedFontWeight = weight.toFontWeight(weightValue)
+    val textSize = fontSize.toTextUnit(sizeUnit)
+    val resolvedLineHeight = lineHeight?.observedIntValue()?.toTextUnit(sizeUnit)
     val resolvedLetterSpacing = letterSpacing(letterSpacing.observedFloatValue(), fontSize)
     val resolvedFontFamily = rememberFontFamily(
         fontFamily = fontFamily?.observedValue(),
         fontWeight = weight,
         fontWeightValue = weightValue,
-        fontVariationSettings = variationSettings,
+        fontVariationSettings = fontVariationSettings?.observedValue(),
     )
-    val textAlign = textAlignmentHorizontal.toTextAlign()
-    val lineHeightStyle = lineHeightStyle(resolvedLineHeight, textSize)
-
     return TextStyle(
-        color = color,
+        color = textColor.observedColorValue(),
         fontSize = textSize,
         fontFamily = resolvedFontFamily,
-        fontWeight = resolvedFontWeight,
+        fontWeight = weight.toFontWeight(weightValue),
         letterSpacing = resolvedLetterSpacing,
-        textAlign = textAlign,
+        textAlign = textAlignmentHorizontal.toTextAlign(),
         lineHeight = resolvedLineHeight ?: TextUnit.Unspecified,
-        lineHeightStyle = lineHeightStyle,
+        lineHeightStyle = lineHeightStyle(resolvedLineHeight, textSize),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
         fontFeatureSettings = fontFeatureSettings?.observedValue()?.takeIf { it.isNotBlank() },
     )
@@ -117,12 +108,13 @@ internal fun letterSpacing(letterSpacing: Float, fontSize: Int): TextUnit {
     }
 }
 
-internal fun textDecoration(
-    strike: DivLineStyle?,
-    underline: DivLineStyle?,
+@Composable
+internal fun observedTextDecoration(
+    strike: Expression<DivLineStyle>?,
+    underline: Expression<DivLineStyle>?,
 ): TextDecoration? {
-    val hasStrike = strike == DivLineStyle.SINGLE
-    val hasUnderline = underline == DivLineStyle.SINGLE
+    val hasStrike = strike?.observedValue() == DivLineStyle.SINGLE
+    val hasUnderline = underline?.observedValue() == DivLineStyle.SINGLE
     return when {
         hasStrike && hasUnderline -> TextDecoration.combine(
             listOf(TextDecoration.LineThrough, TextDecoration.Underline)

@@ -21,7 +21,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.observeInsets
-import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.DivTabs
 
 @Composable
@@ -57,19 +57,21 @@ internal fun TabTitleItem(
 
 @Composable
 private fun TabTitleDelimiter(delimiter: DivTabs.TabTitleDelimiter) {
-    val width = delimiter.width.value.observedValue().toDp(delimiter.width.unit.observedValue())
-    val height = delimiter.height.value.observedValue().toDp(delimiter.height.unit.observedValue())
-    val imageLoader = divContext.component.imageLoader
-
     val request = rememberImageRequest(
         ImageRequestParams(
             data = delimiter.imageUrl.observedValue(),
             transformations = emptyList(),
         )
     )
-    val painter = rememberAsyncImagePainter(model = request, imageLoader = imageLoader)
+    val painter = rememberAsyncImagePainter(
+        model = request,
+        imageLoader = divContext.component.imageLoader
+    )
     Image(
-        modifier = Modifier.size(width = width, height = height),
+        modifier = Modifier.size(
+            width = delimiter.width.observedValue(),
+            height = delimiter.height.observedValue()
+        ),
         painter = painter,
         contentDescription = null,
     )

@@ -5,19 +5,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import com.yandex.div.compose.expressions.observedFloatValue
-import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.toDp
-import com.yandex.div.compose.utils.toPx
+import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div2.DivPivot
-import com.yandex.div2.DivPivotFixed
 import com.yandex.div2.DivTransform
 
 @Composable
 internal fun Modifier.transform(transform: DivTransform): Modifier {
     val rotation = transform.rotation?.observedFloatValue() ?: 0f
-
-    val pivotX = transform.pivotX.observePivot()
-    val pivotY = transform.pivotY.observePivot()
+    val pivotX = transform.pivotX.observedPivot()
+    val pivotY = transform.pivotY.observedPivot()
 
     return graphicsLayer {
         rotationZ = rotation
@@ -39,15 +35,9 @@ private sealed class Pivot {
 }
 
 @Composable
-private fun DivPivot.observePivot(): Pivot {
+private fun DivPivot.observedPivot(): Pivot {
     return when (this) {
         is DivPivot.Percentage -> Pivot.Fraction(value.value.observedFloatValue() / 100f)
-        is DivPivot.Fixed -> Pivot.Fixed(value.toPx())
+        is DivPivot.Fixed -> Pivot.Fixed(value.value.observedPxValue(value.unit))
     }
-}
-
-@Composable
-private fun DivPivotFixed.toPx(): Float {
-    val value = value?.observedValue()?.toFloat() ?: return 0f
-    return value.toDp(unit.observedValue()).toPx()
 }

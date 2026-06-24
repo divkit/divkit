@@ -7,11 +7,11 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivDimension
 
 @Composable
-internal fun DivDimension.observedValue(): Dp {
-    return value.observedFloatValue().toDp(unit.observedValue())
+internal fun DivDimension.observedDpValue(): Dp {
+    return value.observedDpValue(unit)
 }
 
 @Composable
 internal fun DivDimension.observedPxValue(): Float {
-    return observedValue().toPx()
+    return value.observedPxValue(unit)
 }
