@@ -1640,7 +1640,7 @@
         const filtered: Action[] = [];
 
         for (let i = 0; i < actions.length; ++i) {
-            let action = getJson(actions[i]);
+            let action = getJson(actions[i]) as Action;
             const isEnabled = action.is_enabled;
             if (isEnabled === 0 || isEnabled === false) {
                 continue;
@@ -1675,11 +1675,20 @@
                     }
                 }
             } else if (opts.node && Array.isArray(action.menu_items) && action.menu_items.length) {
-                menu = {
-                    items: action.menu_items,
-                    node: opts.node,
-                    componentContext: opts.componentContext
-                };
+                const items = action.menu_items.filter(item => {
+                    const actions = Array.isArray(item.actions) ? item.actions : (item.action && [item.action] || []);
+
+                    return actions.filter(action => {
+                        return action.is_enabled !== false;
+                    }).length > 0;
+                });
+                if (items.length > 0) {
+                    menu = {
+                        items,
+                        node: opts.node,
+                        componentContext: opts.componentContext
+                    };
+                }
             }
         }
         actions.forEach(action => {
