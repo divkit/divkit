@@ -423,6 +423,7 @@ fun Action.modify(
  * @param logId Logging ID.
  * @param logUrl URL for logging.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  */
@@ -433,6 +434,7 @@ fun Action.evaluate(
     logId: ExpressionProperty<String>? = null,
     logUrl: ExpressionProperty<Url>? = null,
     referer: ExpressionProperty<Url>? = null,
+    scopeId: ExpressionProperty<String>? = null,
     target: ExpressionProperty<Action.Target>? = null,
     url: ExpressionProperty<Url>? = null,
 ): Action = Action(
@@ -444,7 +446,7 @@ fun Action.evaluate(
         menuItems = properties.menuItems,
         payload = properties.payload,
         referer = referer ?: properties.referer,
-        scopeId = properties.scopeId,
+        scopeId = scopeId ?: properties.scopeId,
         target = target ?: properties.target,
         typed = properties.typed,
         url = url ?: properties.url,

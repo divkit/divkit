@@ -369,6 +369,7 @@ fun VisibilityAction.modify(
  * @param logId Logging ID.
  * @param logLimit Limit on the number of loggings. If `0`, the limit is removed.
  * @param referer Referer URL for logging.
+ * @param scopeId The ID of the element whose scope will be used for changing variable values when the action is performed.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction).
  * @param visibilityDuration Time in milliseconds during which an element must be visible to trigger `visibility-action`.
  * @param visibilityPercentage Percentage of the visible part of an element that triggers `visibility-action`.
@@ -380,6 +381,7 @@ fun VisibilityAction.evaluate(
     logId: ExpressionProperty<String>? = null,
     logLimit: ExpressionProperty<Int>? = null,
     referer: ExpressionProperty<Url>? = null,
+    scopeId: ExpressionProperty<String>? = null,
     url: ExpressionProperty<Url>? = null,
     visibilityDuration: ExpressionProperty<Int>? = null,
     visibilityPercentage: ExpressionProperty<Int>? = null,
@@ -391,7 +393,7 @@ fun VisibilityAction.evaluate(
         logLimit = logLimit ?: properties.logLimit,
         payload = properties.payload,
         referer = referer ?: properties.referer,
-        scopeId = properties.scopeId,
+        scopeId = scopeId ?: properties.scopeId,
         typed = properties.typed,
         url = url ?: properties.url,
         visibilityDuration = visibilityDuration ?: properties.visibilityDuration,

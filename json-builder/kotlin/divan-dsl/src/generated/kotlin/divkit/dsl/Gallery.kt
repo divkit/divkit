@@ -56,6 +56,7 @@ data class Gallery internal constructor(
             functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
             id = additive.id ?: properties.id,
+            infiniteScroll = additive.infiniteScroll ?: properties.infiniteScroll,
             itemBuilder = additive.itemBuilder ?: properties.itemBuilder,
             itemSpacing = additive.itemSpacing ?: properties.itemSpacing,
             items = additive.items ?: properties.items,
@@ -169,6 +170,11 @@ data class Gallery internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
+        /**
+         * Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+         * Default value: `false`.
+         */
+        val infiniteScroll: Property<Boolean>?,
         /**
          * Sets collection elements dynamically using `data` and `prototypes`.
          */
@@ -307,6 +313,7 @@ data class Gallery internal constructor(
             result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("infinite_scroll", infiniteScroll)
             result.tryPutProperty("item_builder", itemBuilder)
             result.tryPutProperty("item_spacing", itemSpacing)
             result.tryPutProperty("items", items)
@@ -389,6 +396,7 @@ data class Gallery internal constructor(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -439,6 +447,7 @@ fun DivScope.gallery(
     functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
+    infiniteScroll: Boolean? = null,
     itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: Int? = null,
     items: List<Div>? = null,
@@ -487,6 +496,7 @@ fun DivScope.gallery(
         functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        infiniteScroll = valueOrNull(infiniteScroll),
         itemBuilder = valueOrNull(itemBuilder),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
@@ -537,6 +547,7 @@ fun DivScope.gallery(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -587,6 +598,7 @@ fun DivScope.galleryProps(
     functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
+    infiniteScroll: Boolean? = null,
     itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: Int? = null,
     items: List<Div>? = null,
@@ -634,6 +646,7 @@ fun DivScope.galleryProps(
     functions = valueOrNull(functions),
     height = valueOrNull(height),
     id = valueOrNull(id),
+    infiniteScroll = valueOrNull(infiniteScroll),
     itemBuilder = valueOrNull(itemBuilder),
     itemSpacing = valueOrNull(itemSpacing),
     items = valueOrNull(items),
@@ -683,6 +696,7 @@ fun DivScope.galleryProps(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -733,6 +747,7 @@ fun TemplateScope.galleryRefs(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
@@ -780,6 +795,7 @@ fun TemplateScope.galleryRefs(
     functions = functions,
     height = height,
     id = id,
+    infiniteScroll = infiniteScroll,
     itemBuilder = itemBuilder,
     itemSpacing = itemSpacing,
     items = items,
@@ -829,6 +845,7 @@ fun TemplateScope.galleryRefs(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -879,6 +896,7 @@ fun Gallery.override(
     functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
+    infiniteScroll: Boolean? = null,
     itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: Int? = null,
     items: List<Div>? = null,
@@ -927,6 +945,7 @@ fun Gallery.override(
         functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
         id = valueOrNull(id) ?: properties.id,
+        infiniteScroll = valueOrNull(infiniteScroll) ?: properties.infiniteScroll,
         itemBuilder = valueOrNull(itemBuilder) ?: properties.itemBuilder,
         itemSpacing = valueOrNull(itemSpacing) ?: properties.itemSpacing,
         items = valueOrNull(items) ?: properties.items,
@@ -977,6 +996,7 @@ fun Gallery.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -1027,6 +1047,7 @@ fun Gallery.defer(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
@@ -1075,6 +1096,7 @@ fun Gallery.defer(
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
         itemBuilder = itemBuilder ?: properties.itemBuilder,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
@@ -1125,6 +1147,7 @@ fun Gallery.defer(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -1175,6 +1198,7 @@ fun Gallery.modify(
     functions: Property<List<Function>>? = null,
     height: Property<Size>? = null,
     id: Property<String>? = null,
+    infiniteScroll: Property<Boolean>? = null,
     itemBuilder: Property<CollectionItemBuilder>? = null,
     itemSpacing: Property<Int>? = null,
     items: Property<List<Div>>? = null,
@@ -1223,6 +1247,7 @@ fun Gallery.modify(
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
         id = id ?: properties.id,
+        infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
         itemBuilder = itemBuilder ?: properties.itemBuilder,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = items ?: properties.items,
@@ -1263,6 +1288,7 @@ fun Gallery.modify(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param orientation Gallery orientation.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
@@ -1285,6 +1311,7 @@ fun Gallery.evaluate(
     crossContentAlignment: ExpressionProperty<Gallery.ContentAlignment>? = null,
     crossSpacing: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
+    infiniteScroll: ExpressionProperty<Boolean>? = null,
     itemSpacing: ExpressionProperty<Int>? = null,
     orientation: ExpressionProperty<Gallery.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
@@ -1315,6 +1342,7 @@ fun Gallery.evaluate(
         functions = properties.functions,
         height = properties.height,
         id = properties.id,
+        infiniteScroll = infiniteScroll ?: properties.infiniteScroll,
         itemBuilder = properties.itemBuilder,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = properties.items,
@@ -1365,6 +1393,7 @@ fun Gallery.evaluate(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -1415,6 +1444,7 @@ fun Component<Gallery>.override(
     functions: List<Function>? = null,
     height: Size? = null,
     id: String? = null,
+    infiniteScroll: Boolean? = null,
     itemBuilder: CollectionItemBuilder? = null,
     itemSpacing: Int? = null,
     items: List<Div>? = null,
@@ -1464,6 +1494,7 @@ fun Component<Gallery>.override(
         functions = valueOrNull(functions),
         height = valueOrNull(height),
         id = valueOrNull(id),
+        infiniteScroll = valueOrNull(infiniteScroll),
         itemBuilder = valueOrNull(itemBuilder),
         itemSpacing = valueOrNull(itemSpacing),
         items = valueOrNull(items),
@@ -1514,6 +1545,7 @@ fun Component<Gallery>.override(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -1564,6 +1596,7 @@ fun Component<Gallery>.defer(
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
     id: ReferenceProperty<String>? = null,
+    infiniteScroll: ReferenceProperty<Boolean>? = null,
     itemBuilder: ReferenceProperty<CollectionItemBuilder>? = null,
     itemSpacing: ReferenceProperty<Int>? = null,
     items: ReferenceProperty<List<Div>>? = null,
@@ -1613,6 +1646,7 @@ fun Component<Gallery>.defer(
         functions = functions,
         height = height,
         id = id,
+        infiniteScroll = infiniteScroll,
         itemBuilder = itemBuilder,
         itemSpacing = itemSpacing,
         items = items,
@@ -1653,6 +1687,7 @@ fun Component<Gallery>.defer(
  * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemSpacing Spacing between elements.
  * @param orientation Gallery orientation.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
@@ -1675,6 +1710,7 @@ fun Component<Gallery>.evaluate(
     crossContentAlignment: ExpressionProperty<Gallery.ContentAlignment>? = null,
     crossSpacing: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
+    infiniteScroll: ExpressionProperty<Boolean>? = null,
     itemSpacing: ExpressionProperty<Int>? = null,
     orientation: ExpressionProperty<Gallery.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
@@ -1706,6 +1742,7 @@ fun Component<Gallery>.evaluate(
         functions = null,
         height = null,
         id = null,
+        infiniteScroll = infiniteScroll,
         itemBuilder = null,
         itemSpacing = itemSpacing,
         items = null,
@@ -1756,6 +1793,7 @@ fun Component<Gallery>.evaluate(
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
  * @param itemBuilder Sets collection elements dynamically using `data` and `prototypes`.
  * @param itemSpacing Spacing between elements.
  * @param items Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp\|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp\|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.
@@ -1806,6 +1844,7 @@ fun Component<Gallery>.modify(
     functions: Property<List<Function>>? = null,
     height: Property<Size>? = null,
     id: Property<String>? = null,
+    infiniteScroll: Property<Boolean>? = null,
     itemBuilder: Property<CollectionItemBuilder>? = null,
     itemSpacing: Property<Int>? = null,
     items: Property<List<Div>>? = null,
@@ -1855,6 +1894,7 @@ fun Component<Gallery>.modify(
         functions = functions,
         height = height,
         id = id,
+        infiniteScroll = infiniteScroll,
         itemBuilder = itemBuilder,
         itemSpacing = itemSpacing,
         items = items,
