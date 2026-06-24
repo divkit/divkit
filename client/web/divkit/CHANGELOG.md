@@ -1,3 +1,8 @@
+## 32.56.0 (June 29, 2026)
+
+* Fixed an issue where disabled `menu_items` in `action` were displayed.
+
+
 ## 32.55.0 (June 22, 2026)
 
 * Added support for the `item_count_variable` property in `pager`.
