@@ -128,6 +128,15 @@
           "version_added": "31.10.0"
         }
       }
+    },
+    {
+      "id": "pager_item_count_variable",
+      "name": "Pager property <code>item_count_variable</code>",
+      "compat": {
+        "web": {
+          "version_added": "32.55.0"
+        }
+      }
     }
   ]
 }
