@@ -40,6 +40,7 @@ internal object DivActionTypedHandlerProxy {
         if (action is DivActionTyped.Download) {
             return DivDownloadActionHandler.handleAction(action.value, downloadCallbacks, view, resolver)
         }
-        return view.div2Component.actionTypedHandlerCombiner.handleAction(scopeId?.evaluate(resolver), action, view, resolver)
+        val scope = scopeId?.evaluate(resolver)
+        return view.div2Component.actionTypedHandlerCombiner.handleAction(scope, action, view, resolver)
     }
 }
