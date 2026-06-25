@@ -54,6 +54,11 @@
     let substrateComponentContext: ComponentContext | undefined;
     let modal = true;
     let prevFocusedElement: Element | null = null;
+    let bringToTopNode: HTMLElement | undefined;
+    let bringToTopOrigVisibility = '';
+    let bringToTopClone: HTMLElement | undefined;
+    let bringToTopCloneContainer: HTMLElement;
+    let bringToTopObserver: ResizeObserver | undefined;
 
     $: {
         if (componentContext) {
@@ -256,17 +261,33 @@
     function onIntroEnd(): void {
         if (substrateContainer) {
             tooltipNode.insertBefore(substrateContainer, childrenContainer);
+            tooltipNode.insertBefore(bringToTopCloneContainer, childrenContainer);
         }
     }
 
     function onOutroStart(): void {
         if (substratePlace?.parentElement && substrateContainer) {
             substratePlace.parentElement.insertBefore(substrateContainer, substratePlace);
+            substratePlace.parentElement.insertBefore(bringToTopCloneContainer, substratePlace);
             substrateContainer.animate({ opacity: [1, 0] }, {
                 duration: animationOutDuration,
                 easing: 'ease-in-out'
             });
         }
+    }
+
+    function updateBringToTopClone(): void {
+        if (!bringToTopClone || !bringToTopNode) {
+            return;
+        }
+
+        const bbox = bringToTopNode.getBoundingClientRect();
+        bringToTopClone.style.position = 'absolute';
+        bringToTopClone.style.left = `${bbox.left}px`;
+        bringToTopClone.style.top = `${bbox.top}px`;
+        bringToTopClone.style.width = `${bbox.width}px`;
+        bringToTopClone.style.height = `${bbox.height}px`;
+        bringToTopClone.style.margin = '0';
     }
 
     onMount(() => {
@@ -288,6 +309,23 @@
         if (modal) {
             openedTooltipsStack.push(tooltipNode);
         }
+
+        if (substrateComponentContext && substrateContainer && data.bring_to_top_id) {
+            bringToTopNode = rootCtx.findComponentById(data.bring_to_top_id)?.getViewInfo('node')?.() || undefined;
+
+            if (bringToTopNode) {
+                bringToTopClone = bringToTopNode.cloneNode(true) as HTMLElement;
+                bringToTopCloneContainer.appendChild(bringToTopClone);
+                bringToTopOrigVisibility = bringToTopNode.style.visibility;
+                bringToTopNode.style.visibility = 'hidden';
+
+                bringToTopObserver = new ResizeObserver(updateBringToTopClone);
+                bringToTopObserver.observe(bringToTopNode);
+                updateBringToTopClone();
+            }
+        } else {
+            bringToTopNode = undefined;
+        }
     });
 
     afterUpdate(() => {
@@ -302,6 +340,14 @@
         }
         if (substrateComponentContext) {
             substrateComponentContext.destroy();
+        }
+
+        if (bringToTopNode && bringToTopClone) {
+            bringToTopNode.style.visibility = bringToTopOrigVisibility;
+        }
+
+        if (bringToTopObserver) {
+            bringToTopObserver.disconnect();
         }
 
         resizeObserver?.disconnect();
@@ -341,7 +387,12 @@
             />
         </div>
 
-        <div bind:this={substratePlace} />
+        <div bind:this={substratePlace}></div>
+        <div
+            class={css['tooltip__clone-container']}
+            bind:this={bringToTopCloneContainer}
+            inert
+        ></div>
     {/if}
 
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
@@ -406,7 +457,12 @@
             />
         </div>
 
-        <div bind:this={substratePlace} />
+        <div bind:this={substratePlace}></div>
+        <div
+            class={css['tooltip__clone-container']}
+            bind:this={bringToTopCloneContainer}
+            inert
+        ></div>
     {/if}
 
     <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->

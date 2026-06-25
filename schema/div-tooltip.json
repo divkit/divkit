@@ -111,7 +111,8 @@
       "$description": "translations.json#/div_tooltip_bring_to_top_id",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   },

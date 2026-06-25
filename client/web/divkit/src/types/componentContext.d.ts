@@ -31,6 +31,10 @@ export type ComponentKey = string | {
     data: object;
 };
 
+export interface InfoGetter {
+    node: () => HTMLElement;
+}
+
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     path: string[];
     parent?: ComponentContext;
@@ -51,6 +55,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     pagers?: Map<string | undefined, PagerData | null>;
     pagerListeners?: Map<string | undefined, PagerListener[]>;
     key?: ComponentKey;
+    viewInfo: Partial<InfoGetter>;
 
     logError(error: WrappedError): void;
     execAnyActions(
@@ -92,5 +97,8 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     registerState(stateId: string, setState: StateSetter): () => void;
     registerPager(pagerId: string | undefined): PagerRegisterData;
     listenPager(pagerId: string | undefined, listener: PagerListener): () => void;
+    attachViewInfo<K extends keyof InfoGetter>(name: K, getter: InfoGetter[K]): void;
+    detachViewInfo<K extends keyof InfoGetter>(name: K): void;
+    getViewInfo<K extends keyof InfoGetter>(name: K): InfoGetter[K] | undefined;
     destroy(): void;
 }

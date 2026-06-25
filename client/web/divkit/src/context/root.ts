@@ -73,6 +73,7 @@ export interface RootCtxValue {
     pagerMouseDragEnabled: boolean;
     videoPlayerProvider?: VideoPlayerProvider | undefined;
     awaitGlobalVariable(variableName: string, variableType: VariableType, value: unknown): Variable;
+    findComponentById(id: string): ComponentContext | undefined;
 
     // Devtool
     componentDevtool?({

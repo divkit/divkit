@@ -154,6 +154,7 @@ export interface Tooltip {
     close_by_tap_outside?: boolean;
     background_accessibility_description?: string;
     substrate_div?: DivBaseData;
+    bring_to_top_id?: string;
 }
 
 export interface DivLayoutProvider {

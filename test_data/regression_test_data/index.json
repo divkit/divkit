@@ -3529,7 +3529,8 @@
       "title": "Tooltip with bring to top view",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "Tooltips"

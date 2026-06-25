@@ -1133,8 +1133,10 @@
             dev = devtool(node, rootCtx, componentContext, devapi);
         }
 
+        componentContext.attachViewInfo('node', () => node);
         registred = {
             destroy() {
+                componentContext.detachViewInfo('node');
                 if (idUnregister) {
                     idUnregister();
                     idUnregister = undefined;

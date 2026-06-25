@@ -69,3 +69,11 @@
     grid-template-rows: 100%;
     pointer-events: none;
 }
+
+.tooltip__clone-container {
+    position: fixed;
+    z-index: var(--divkit-tooltip-overlay-z-index);
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}

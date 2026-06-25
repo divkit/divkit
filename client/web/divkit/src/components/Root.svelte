@@ -2026,6 +2026,7 @@
             json: {} as DivBaseData,
             path: [],
             templateContext: {},
+            viewInfo: {},
             logError(error) {
                 error.additional = error.additional || {};
                 error.additional.path = ctx.path.join('/');
@@ -2304,6 +2305,15 @@
                     }
                 };
             },
+            attachViewInfo(name, getter) {
+                this.viewInfo[name] = getter;
+            },
+            detachViewInfo(name) {
+                delete this.viewInfo[name];
+            },
+            getViewInfo(name) {
+                return this.viewInfo[name];
+            },
             destroy() {
                 const set = componentContextMap.get(ctx.id);
                 if (set) {
@@ -2337,6 +2347,21 @@
             timeouts.push(timeout);
         } else {
             clearTimeout(timeout);
+        }
+    }
+
+    function findComponentById(id: string): ComponentContext | undefined {
+        const set = componentContextMap.get(id);
+        if (set) {
+            if (set.size > 1) {
+                logError(wrapError(new Error('Multiple components with id'), {
+                    additional: {
+                        id
+                    }
+                }));
+                return;
+            }
+            return set.values().next().value;
         }
     }
 
@@ -2378,6 +2403,7 @@
         videoPlayerProvider,
         awaitGlobalVariable,
         componentDevtool: process.env.DEVTOOL ? componentDevtoolReal : undefined,
+        findComponentById,
         devtoolCreateHierarchy: process.env.DEVTOOL ? devtoolCreateHierarchy : 'lazy'
     });
 
