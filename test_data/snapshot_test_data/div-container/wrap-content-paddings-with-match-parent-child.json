@@ -1,0 +1,59 @@
+{
+  "description": "Container with `width: wrap_content` and a single child with explicit `width: match_parent`. The container's red background must be visible as a uniform gap of the configured padding around the white text-background on every side. If the wrap_content container miscalculates paddings, the match_parent child overflows into the padding area and the red gap disappears.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffFC5230"
+            }
+          ],
+          "border": {
+            "corner_radius": 16
+          },
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "paddings": {
+            "start": 32,
+            "end": 32,
+            "top": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "text": "match_parent text",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "font_size": 24,
+              "line_height": 28,
+              "text_color": "#000000",
+              "text_alignment_horizontal": "center"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
