@@ -3,6 +3,7 @@ package com.yandex.div.compose.extensions
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -15,8 +16,9 @@ import com.yandex.div2.DivExtension
  * @see DivExtensionHandler
  */
 @ExperimentalApi
+@Stable
 @SuppressLint("ComposableNaming")
-class DivExtensionEnvironment internal constructor(
+data class DivExtensionEnvironment internal constructor(
     val data: Div,
     val extension: DivExtension,
     val expressionResolver: ExpressionResolver,
