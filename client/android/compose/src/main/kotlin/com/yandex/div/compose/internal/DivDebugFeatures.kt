@@ -40,4 +40,16 @@ class DivDebugFeatures @Inject internal constructor(
             )
         }
     }
+
+
+    /**
+     * Forces recomposition of [com.yandex.div.compose.DivView] associated with the given [DivData].
+     *
+     * Has no effect if histograms are disabled.
+     *
+     * @see com.yandex.div.histogram.HistogramConfiguration
+     */
+    fun forceRecomposition(data: DivData) {
+        viewContextStorage.get(data)?.component?.histogramReporter?.forceRecomposition()
+    }
 }

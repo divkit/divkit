@@ -4,6 +4,10 @@ import android.annotation.SuppressLint
 import android.view.ViewTreeObserver
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalView
 import com.yandex.div.compose.dagger.DivViewScope
 import java.util.concurrent.TimeUnit
@@ -22,45 +26,49 @@ internal class DivViewHistogramReporter @Inject constructor(
     private var compositionDuration: Duration? = null
     private var totalDuration: Duration? = null
     private var state = "Cold"
+    private var counter by mutableIntStateOf(0)
 
     @Composable
     @SuppressLint("ComposableNaming")
     inline fun measure(content: @Composable () -> Unit) {
-        val isEnabled = configuration.isEnabled
-        if (isEnabled) {
-            onCompositionStarted()
+        if (!configuration.isEnabled) {
+            content()
+            return
         }
 
-        content()
+        key(counter) {
+            onCompositionStarted()
+            content()
+        }
 
-        if (isEnabled) {
-            val view = LocalView.current
-            DisposableEffect(Unit) {
-                onCompositionFinished()
+        val view = LocalView.current
+        DisposableEffect(counter) {
+            onCompositionFinished()
 
-                var listener: ViewTreeObserver.OnDrawListener? = null
-                listener = ViewTreeObserver.OnDrawListener {
-                    onDrawFinished()
-                    view.post {
-                        view.viewTreeObserver.removeOnDrawListener(listener)
-                    }
-                }
-                view.viewTreeObserver.addOnDrawListener(listener)
-
-                onDispose {
+            var listener: ViewTreeObserver.OnDrawListener? = null
+            listener = ViewTreeObserver.OnDrawListener {
+                onDrawFinished()
+                view.post {
                     view.viewTreeObserver.removeOnDrawListener(listener)
-                    reset()
                 }
             }
+            view.viewTreeObserver.addOnDrawListener(listener)
+
+            onDispose {
+                view.viewTreeObserver.removeOnDrawListener(listener)
+            }
         }
+    }
+
+    fun forceRecomposition() {
+        counter++
     }
 
     private fun now() = TimeSource.Monotonic.markNow()
 
     private fun onCompositionStarted() {
-        if (compositionStartedTime == null) {
-            compositionStartedTime = now()
-        }
+        reset()
+        compositionStartedTime = now()
     }
 
     private fun onCompositionFinished() {
@@ -72,7 +80,8 @@ internal class DivViewHistogramReporter @Inject constructor(
     private fun onDrawFinished() {
         if (totalDuration == null) {
             totalDuration = compositionStartedTime?.elapsedNow()
-            report()
+            report(name = "DivCompose.Render.Composition", duration = compositionDuration)
+            report(name = "DivCompose.Render.Total", duration = totalDuration)
             state = "Warm"
         }
     }
@@ -81,11 +90,6 @@ internal class DivViewHistogramReporter @Inject constructor(
         compositionStartedTime = null
         compositionDuration = null
         totalDuration = null
-    }
-
-    private fun report() {
-        report(name = "DivCompose.Render.Composition", duration = compositionDuration)
-        report(name = "DivCompose.Render.Total", duration = totalDuration)
     }
 
     private fun report(name: String, duration: Duration?) {
@@ -98,8 +102,8 @@ internal class DivViewHistogramReporter @Inject constructor(
         configuration.histogramBridge.recordTimeHistogram(
             "$name.$state",
             duration.inWholeMicroseconds,
-            minBucketValue,
-            maxBucketValue,
+            minValue,
+            maxValue,
             timeUnit,
             bucketCount
         )
@@ -107,6 +111,6 @@ internal class DivViewHistogramReporter @Inject constructor(
 }
 
 private val timeUnit = TimeUnit.MICROSECONDS
-private val minBucketValue = timeUnit.convert(1L, TimeUnit.MILLISECONDS)
-private val maxBucketValue = timeUnit.convert(10L, TimeUnit.SECONDS)
+private val minValue = timeUnit.convert(1L, TimeUnit.MILLISECONDS)
+private val maxValue = timeUnit.convert(10L, TimeUnit.SECONDS)
 private const val bucketCount = 50

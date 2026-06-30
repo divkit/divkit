@@ -32,12 +32,13 @@ import kotlin.time.Duration.Companion.seconds
 
 /**
  * Start activity with default data:
- * adb shell am start -n com.yandex.divkit.benchmark/.DivComposeBenchmarkActivity --es asset_name with_templates.json
+ * adb shell am start -n com.yandex.divkit.benchmark/.DivComposeBenchmarkActivity --es asset_name with_templates.json --es warm_render_mode RESET_CONTENT
  */
 @SuppressLint("SetTextI18n")
 class DivComposeBenchmarkActivity : AppCompatActivity() {
     private val histogramBridge = LoggingHistogramBridge()
 
+    private lateinit var divContext: DivContext
     private lateinit var composeView: ComposeView
     private lateinit var textView: TextView
 
@@ -53,7 +54,8 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
             rootLayout.addView(this)
         }
 
-        composeView = ComposeView(createDivContext()).apply {
+        divContext = createDivContext()
+        composeView = ComposeView(divContext).apply {
             rootLayout.addView(this)
         }
 
@@ -78,20 +80,30 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
             )
         }
 
-        withTimeout(30.seconds) {
-            histogramBridge.histograms.first { it == "DivCompose.Render.Total.Cold" }
+        waitHistogram("DivCompose.Render.Total.Cold")
+
+        val modeString = intent.getStringExtra("warm_render_mode")
+            ?: throw RuntimeException("Extra is required: warm_render_mode")
+        when (WarmRenderMode.valueOf(modeString)) {
+            WarmRenderMode.RECOMPOSITION -> {
+                divContext.debugFeatures.forceRecomposition(data)
+            }
+
+            WarmRenderMode.RESET_CONTENT -> {
+                showMessage("Rendering warm DivView...")
+
+                composeView.setContent {
+                    DivView(
+                        data = data,
+                        modifier = Modifier.safeDrawingPadding()
+                    )
+                }
+            }
         }
 
-        composeView.setContent { }
+        waitHistogram("DivCompose.Render.Total.Warm")
 
-        showMessage("Rendering warm DivView...")
-
-        composeView.setContent {
-            DivView(
-                data = data,
-                modifier = Modifier.safeDrawingPadding()
-            )
-        }
+        showMessage("Finished")
     }
 
     private fun parseDivData(): DivData {
@@ -121,9 +133,21 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
     }
 
     private suspend fun showMessage(message: String) {
+        composeView.setContent { }
         textView.text = message
         delay(100.milliseconds)
     }
+
+    private suspend fun waitHistogram(name: String) {
+        withTimeout(15.seconds) {
+            histogramBridge.histograms.first { it == name }
+        }
+    }
+}
+
+private enum class WarmRenderMode {
+    RECOMPOSITION,
+    RESET_CONTENT
 }
 
 private object FailingReporter : DivReporter(), ParsingErrorLogger {
