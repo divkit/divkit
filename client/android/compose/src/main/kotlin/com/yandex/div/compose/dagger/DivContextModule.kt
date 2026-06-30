@@ -9,6 +9,7 @@ import coil3.ImageLoader
 import coil3.request.allowHardware
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.images.DivkitAssetUriMapper
+import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.images.gifDecoderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.preload.CoilImagePreloader
@@ -56,18 +57,16 @@ internal interface DivContextModule {
         @Provides
         fun provideImageLoader(
             context: Context,
-            debugConfiguration: DivDebugConfiguration
+            imageLoaderConfiguration: ImageLoaderConfiguration,
         ): ImageLoader {
-            val debugImageLoader = debugConfiguration.imageLoaderProvider?.provide()
-            if (debugImageLoader != null) {
-                return debugImageLoader
-            }
             return ImageLoader.Builder(context = context)
                 .allowHardware(false)
                 .components {
+                    imageLoaderConfiguration.applyComponents(this)
                     add(DivkitAssetUriMapper())
                     add(gifDecoderFactory())
                 }
+                .eventListener(imageLoaderConfiguration.eventListener)
                 .build()
         }
 

@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
+import coil3.ComponentRegistry
+import coil3.EventListener
 import coil3.ImageLoader
 import coil3.asImage
 import coil3.decode.DecodeResult
@@ -13,20 +15,17 @@ import coil3.decode.Decoder
 import coil3.decode.ImageSource
 import coil3.fetch.SourceFetchResult
 import coil3.request.Options
-import coil3.request.allowHardware
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
-import com.yandex.div.compose.images.DivkitAssetUriMapper
+import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.images.gifDecoderFactory
-import com.yandex.div.compose.internal.DivDebugConfiguration
-import com.yandex.div.compose.internal.ImageLoaderProvider
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.R
@@ -53,30 +52,26 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         composeIdlingTracker.start()
 
-        val imageLoaderProvider = ImageLoaderProvider {
-            ImageLoader.Builder(context = this)
-                .allowHardware(false)
-                .components {
-                    add(DivkitAssetUriMapper())
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        add(gifDecoderFactory())
-                    } else {
-                        add(GifFirstFrameDecoder.Factory())
-                    }
+        val imageLoaderConfiguration = object: ImageLoaderConfiguration {
+            override val eventListener: EventListener
+                get() = imageLoadingTracker
+
+            override fun applyComponents(builder: ComponentRegistry.Builder) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    builder.add(gifDecoderFactory())
+                } else {
+                    builder.add(GifFirstFrameDecoder.Factory())
                 }
-                .eventListener(imageLoadingTracker)
-                .build()
+            }
         }
 
         divContext = DivContext(
             baseContext = this,
             configuration = DivComposeConfiguration(
                 fontSourceProvider = ComposeFontSourceProvider(),
-                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(this))
+                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(this)),
+                imageLoaderConfiguration = imageLoaderConfiguration,
             ),
-            debugConfiguration = DivDebugConfiguration(
-                imageLoaderProvider = imageLoaderProvider
-            )
         )
 
         intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {

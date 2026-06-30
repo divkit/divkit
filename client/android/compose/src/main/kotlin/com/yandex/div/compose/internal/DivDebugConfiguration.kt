@@ -17,15 +17,12 @@ import kotlin.time.TimeSource
 @OptIn(ExperimentalTime::class)
 class DivDebugConfiguration(
     val coroutineScope: CoroutineScope? = null,
-    val imageLoaderProvider: ImageLoaderProvider? = null,
     val timeSource: TimeSource?
 ) {
     constructor(
         coroutineScope: CoroutineScope? = null,
-        imageLoaderProvider: ImageLoaderProvider? = null,
     ): this(
         coroutineScope = coroutineScope,
-        imageLoaderProvider = imageLoaderProvider,
         timeSource = null
     )
 }
