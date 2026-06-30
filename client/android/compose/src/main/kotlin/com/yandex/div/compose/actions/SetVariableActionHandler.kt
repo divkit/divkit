@@ -1,7 +1,6 @@
 package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.variables.castAndSetValue
 import com.yandex.div.internal.variables.evaluate
@@ -26,7 +25,7 @@ internal class SetVariableActionHandler @Inject constructor(
 
         try {
             variable.castAndSetValue(action.value.evaluate(expressionResolver))
-        } catch (e: VariableMutationException) {
+        } catch (e: Exception) {
             reporter.reportError(e)
         }
     }
@@ -44,7 +43,7 @@ internal class SetVariableActionHandler @Inject constructor(
 
         try {
             variable.set(action.value)
-        } catch (e: VariableMutationException) {
+        } catch (e: Exception) {
             reporter.reportError(e)
         }
     }

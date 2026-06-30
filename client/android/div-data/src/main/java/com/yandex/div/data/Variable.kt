@@ -7,7 +7,6 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.data.PropertyDelegate
-import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.util.ParsingValueUtils.parseAsBoolean
 import com.yandex.div.internal.util.ParsingValueUtils.parseAsColor
 import com.yandex.div.internal.util.ParsingValueUtils.parseAsDouble
@@ -133,7 +132,7 @@ sealed class Variable {
         @MainThread
         @Throws(VariableMutationException::class)
         fun set(newValue: Color) {
-            value = Color(STRING_TO_COLOR_INT(newValue))
+            value = Color(newValue.value)
         }
     }
 

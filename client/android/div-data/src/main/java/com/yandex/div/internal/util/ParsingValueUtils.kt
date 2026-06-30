@@ -5,7 +5,6 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
-import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -44,8 +43,8 @@ object ParsingValueUtils {
 
     fun String.parseAsColor(): Color {
         return try {
-            Color(STRING_TO_COLOR_INT(this))
-        } catch (e: ClassCastException) {
+            Color.parse(this)
+        } catch (e: IllegalArgumentException) {
             throw VariableMutationException(cause = e)
         }
     }

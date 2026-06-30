@@ -169,6 +169,19 @@ class SetVariableActionHandlerTest {
     }
 
     @Test
+    fun `div-action with invalid color value`() {
+        reporter.failOnError = false
+
+        val variable = Variable.ColorVariable("color", 0xAABBCC)
+        variableController.declare(variable)
+
+        handle(action(url = "div-action://set_variable?name=color&value=invalid"))
+
+        assertEquals(color(0xAABBCC), variable.getValue())
+        assertEquals("Failed to parse Color: invalid", reporter.lastError)
+    }
+
+    @Test
     fun `div-action with invalid integer value`() {
         reporter.failOnError = false
 

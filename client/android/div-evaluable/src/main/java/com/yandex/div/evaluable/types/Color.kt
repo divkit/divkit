@@ -15,7 +15,7 @@ value class Color(val value: Int) {
      * Return the red component of a color int. This is the same as saying
      * (color >> 16) & 0xFF
      */
-    fun red()= value shr 16 and 0xFF
+    fun red() = value shr 16 and 0xFF
 
     /**
      * Copied from android.graphics.Color.
@@ -50,7 +50,7 @@ value class Color(val value: Int) {
          * @param blue Blue component ([0..255]) of the color
          */
         fun argb(alpha: Int, red: Int, green: Int, blue: Int) =
-                Color(alpha shl 24 or (red shl 16) or (green shl 8) or blue)
+            Color(alpha shl 24 or (red shl 16) or (green shl 8) or blue)
 
         /**
          * Copied from android.graphics.Color.
@@ -80,8 +80,8 @@ value class Color(val value: Int) {
             NumberFormatException::class
         )
         fun parse(colorString: String): Color {
-            require(colorString.isNotEmpty()) { "Expected color string, actual string is empty" }
-            require(colorString[0] == '#') { "Unknown color $colorString" }
+            require(colorString.isNotEmpty()) { "Failed to parse Color: string is empty" }
+            require(colorString[0] == '#') { "Failed to parse Color: $colorString" }
             val normalizedColorString = when (colorString.length) {
                 4 -> {
                     val r: Char = colorString[1]
@@ -89,6 +89,7 @@ value class Color(val value: Int) {
                     val b: Char = colorString[3]
                     String(charArrayOf('f', 'f', r, r, g, g, b, b))
                 }
+
                 5 -> {
                     val a: Char = colorString[1]
                     val r: Char = colorString[2]
@@ -96,14 +97,17 @@ value class Color(val value: Int) {
                     val b: Char = colorString[4]
                     String(charArrayOf(a, a, r, r, g, g, b, b))
                 }
+
                 7 -> {
                     "ff" + colorString.substring(1)
                 }
+
                 9 -> {
                     colorString.substring(1)
                 }
+
                 else -> {
-                    throw IllegalArgumentException("Unknown color $colorString")
+                    throw IllegalArgumentException("Failed to parse Color: $colorString")
                 }
             }
             return Color(normalizedColorString.toLong(16).toInt())

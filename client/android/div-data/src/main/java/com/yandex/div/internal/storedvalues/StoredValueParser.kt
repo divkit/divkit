@@ -5,7 +5,6 @@ import com.yandex.div.data.StoredValue
 import com.yandex.div.data.StoredValue.*
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
-import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.util.toBoolean
 import kotlin.text.toBooleanStrictOrNull
 import kotlin.text.toLong
@@ -39,7 +38,7 @@ class StoredValueParser(
 
             Type.COLOR ->
                 try {
-                    ColorStoredValue(name, Color(STRING_TO_COLOR_INT(value)))
+                    ColorStoredValue(name, Color.parse(value))
                 } catch (_: IllegalArgumentException) {
                     reportError("Failed to parse stored value: $value")
                     null

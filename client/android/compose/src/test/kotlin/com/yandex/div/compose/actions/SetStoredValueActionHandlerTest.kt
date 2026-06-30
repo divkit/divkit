@@ -112,6 +112,18 @@ class SetStoredValueActionHandlerTest {
     }
 
     @Test
+    fun `div-action with invalid number value`() {
+        reporter.failOnError = false
+
+        handle(
+            action(url = "div-action://set_stored_value?name=value&type=number&value=invalid value&lifetime=1000")
+        )
+
+        assertEquals("Failed to parse stored value: invalid value", reporter.lastError)
+        assertNull(getValue("value"))
+    }
+
+    @Test
     fun `div-action with boolean value`() {
         handle(
             action(url = "div-action://set_stored_value?name=value&type=boolean&value=true&lifetime=1000")
@@ -130,14 +142,14 @@ class SetStoredValueActionHandlerTest {
     }
 
     @Test
-    fun `div-action with invalid number value`() {
+    fun `div-action with invalid color value`() {
         reporter.failOnError = false
 
         handle(
-            action(url = "div-action://set_stored_value?name=value&type=number&value=invalid value&lifetime=1000")
+            action(url = "div-action://set_stored_value?name=value&type=color&value=invalid&lifetime=1000")
         )
 
-        assertEquals("Failed to parse stored value: invalid value", reporter.lastError)
+        assertEquals("Failed to parse stored value: invalid", reporter.lastError)
         assertNull(getValue("value"))
     }
 
