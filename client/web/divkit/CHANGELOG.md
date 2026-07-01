@@ -1,3 +1,8 @@
+## 32.57.0 (July 6, 2026)
+
+* Added support for the `bring_to_top_id` property in `tooltip`.
+
+
 ## 32.56.0 (June 29, 2026)
 
 * Fixed an issue where disabled `menu_items` in `action` were displayed.
