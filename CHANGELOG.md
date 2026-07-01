@@ -1,3 +1,9 @@
+## 32.50.3
+
+# Android Client:
+* Fixed `paddings` of a `wrap_content` container being ignored when a child has `width: match_parent`. The child no longer overflows into the container's horizontal padding area.
+
+
 ## 32.50.2
 
 # Android Client:
