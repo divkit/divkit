@@ -1,3 +1,12 @@
+## 32.57.0
+
+# Android Client:
+* Fixed `paddings` of a `wrap_content` container being ignored when a child has `width: match_parent`. The child no longer overflows into the container's horizontal padding area.
+
+# Web Client:
+* Added support for the `bring_to_top_id` property in `tooltip`.
+
+
 ## 32.56.0
 
 # Android Client:
