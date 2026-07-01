@@ -453,7 +453,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     private fun measureMatchParentWidthChild(child: View, heightMeasureSpec: Int) {
         if (!hasSignificantHeight(child, heightMeasureSpec)) return
-        measureVerticalFirstTime(child, makeExactSpec(maxCrossSize + horizontalPaddings), heightMeasureSpec,
+        measureVerticalFirstTime(child, makeExactSpec(maxCrossSize), heightMeasureSpec,
             considerWidth = false, considerHeight = true)
         skippedMatchParentChildren -= child
     }
