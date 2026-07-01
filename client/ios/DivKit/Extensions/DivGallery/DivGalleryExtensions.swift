@@ -74,7 +74,7 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
         return newState
       }
       scrollRange = nil
-      animated = true
+      animated = false
     }
 
     let clampedIndex = index.clamp(0.0...CGFloat(max(itemsCount - 1, 0)))
