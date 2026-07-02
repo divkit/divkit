@@ -1,0 +1,79 @@
+{
+  "description": "Rotation pivot is correct after sizes change via variable",
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "size",
+        "type": "integer",
+        "value": 1
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "^",
+              "width": {
+                "type": "fixed",
+                "value": "@{size}"
+              },
+              "height": {
+                "type": "fixed",
+                "value": "@{size}"
+              },
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "font_size": 40,
+              "transform": {
+                "rotation": 180
+              }
+            },
+            {
+              "type": "text",
+              "text": "Set size to 100",
+              "text_alignment_horizontal": "center",
+              "font_size": 18,
+              "paddings": {
+                "left": 32,
+                "right": 32,
+                "top": 20,
+                "bottom": 20
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFDDDD"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "set_size",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "size",
+                    "value": {
+                      "type": "integer",
+                      "value": 100
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

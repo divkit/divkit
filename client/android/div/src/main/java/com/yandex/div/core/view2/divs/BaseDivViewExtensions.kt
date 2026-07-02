@@ -16,7 +16,7 @@ import androidx.annotation.MainThread
 import androidx.core.graphics.withSave
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
-import androidx.core.view.doOnPreDraw
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
@@ -55,6 +55,7 @@ import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPivotFixed
 import com.yandex.div2.DivPivotPercentage
 import com.yandex.div2.DivSizeUnit
+import com.yandex.div2.DivTransform
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     if (insets == null) {
@@ -134,15 +135,34 @@ internal fun View.applyTransform(
         return
     }
 
-    if (width == 0 && height == 0) {
-        doOnPreDraw {
-            pivotX = getPivotValue(width, transform.pivotX, resolver)
-            pivotY = getPivotValue(height, transform.pivotY, resolver)
-        }
-    } else {
+    applyTransformPivot(transform, resolver)
+}
+
+internal fun View.applyTransformPivot(transform: DivTransform, resolver: ExpressionResolver) {
+    if (width != 0 || height != 0) {
         pivotX = getPivotValue(width, transform.pivotX, resolver)
         pivotY = getPivotValue(height, transform.pivotY, resolver)
     }
+    // If dimensions are zero, pivot will be set on first layout via the OnLayoutChangeListener
+    // registered in bindTransform.
+}
+
+internal fun View.observeTransformPivot(
+    transform: DivTransform,
+    resolver: ExpressionResolver
+): Disposable {
+    val listener = View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+        val newWidth = right - left
+        val newHeight = bottom - top
+        val oldWidth = oldRight - oldLeft
+        val oldHeight = oldBottom - oldTop
+        if (newWidth != oldWidth || newHeight != oldHeight) {
+            v.pivotX = getPivotValue(newWidth, transform.pivotX, resolver)
+            v.pivotY = getPivotValue(newHeight, transform.pivotY, resolver)
+        }
+    }
+    addOnLayoutChangeListener(listener)
+    return Disposable { removeOnLayoutChangeListener(listener) }
 }
 
 private fun View.getPivotValue(len: Int, divPivot: DivPivot, resolver: ExpressionResolver): Float {

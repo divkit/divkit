@@ -4887,6 +4887,19 @@
       ],
       "file": "visibility_actions/visibility_action_with_local_variable_in_url.json",
       "case_id": 500
+    },
+    {
+      "title": "Rotation pivot after rebind with size change",
+      "tags": [
+        "DivTransform"
+      ],
+      "steps": [
+        "Tap the 'Set size to 100' button"
+      ],
+      "expected_results": [
+        "The symbol '^' appears and is displayed upside down (rotated 180 degrees)"
+      ],
+      "file": "div-transform/transform_rotation_after_rebind.json"
     }
   ]
 }

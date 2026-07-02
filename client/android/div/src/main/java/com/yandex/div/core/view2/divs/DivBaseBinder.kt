@@ -463,13 +463,20 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
+        val transform = newDiv.transform
+
+        // Always track size changes to keep pivot correct after layout changes (including rebind).
+        if (transform != null) {
+            subscriber.addSubscription(observeTransformPivot(transform, resolver))
+        }
+
         if (newDiv.transform.equalsToConstant(oldDiv?.transform)) {
             return
         }
 
         applyTransform(newDiv, resolver)
 
-        if (newDiv.transform.isConstant()) {
+        if (transform == null || newDiv.transform.isConstant()) {
             return
         }
 
