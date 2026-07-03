@@ -48,19 +48,6 @@ class ComposePerformanceTest : BasePerformanceTest() {
         runTest(tag = "reset_content", mode = "RESET_CONTENT")
     }
 
-    @PerfTestParameter(
-        importantMetrics = [
-            "DivCompose.Render.Composition.Cold",
-            "DivCompose.Render.Composition.Warm",
-            "DivCompose.Render.Total.Cold",
-            "DivCompose.Render.Total.Warm",
-        ]
-    )
-    @Test
-    fun withTemplates() {
-        runTest(tag = "with_templates", mode = "RESET_CONTENT")
-    }
-
     private fun runTest(tag: String, mode: String) {
         utils.run {
             report(tag = tag) {
