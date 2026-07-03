@@ -39,17 +39,14 @@ internal fun Modifier.borderClip(data: DivBorder): Modifier {
 @Composable
 internal fun Modifier.borderStroke(data: DivBorder): Modifier {
     val stroke = data.stroke ?: return this
-    val shape = data.toShape()
-    return borderStrokeWithShape(stroke, shape)
+    return borderStrokeWithShape(stroke, data.toShape())
 }
 
 @Composable
 internal fun Modifier.borderShadow(data: DivBorder, contentAlpha: Float): Modifier {
     if (contentAlpha <= 0f) return this
     if (!data.hasShadow.observedValue()) return this
-
-    val shape = data.toShape()
-    return divShadow(data.shadow, shape, contentAlpha)
+    return shadow(data.shadow, data.toShape(), contentAlpha)
 }
 
 @Composable
@@ -64,16 +61,11 @@ private fun DivBorder.toShape(): Shape {
 @Composable
 private fun Modifier.borderStrokeWithShape(stroke: DivStroke, shape: Shape): Modifier {
     val color = stroke.color.observedColorValue()
-    val width = stroke.widthToDp()
+    val width = stroke.width.observedDpValue(stroke.unit)
     return when (stroke.style) {
         is DivStrokeStyle.Solid -> border(BorderStroke(width, color), shape)
         is DivStrokeStyle.Dashed -> drawBehindDashedBorder(color, width, shape)
     }
-}
-
-@Composable
-private fun DivStroke.widthToDp(): Dp {
-    return width.observedFloatValue().toDp(unit.observedValue())
 }
 
 @Composable
@@ -100,7 +92,7 @@ private fun Modifier.drawBehindDashedBorder(
 }
 
 @Composable
-private fun Modifier.divShadow(
+private fun Modifier.shadow(
     shadow: DivShadow?,
     shape: Shape,
     contentAlpha: Float
