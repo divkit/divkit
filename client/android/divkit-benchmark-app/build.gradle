@@ -23,10 +23,10 @@ android {
     }
 
     defaultConfig {
+        applicationId = 'com.yandex.divkit.benchmark'
         minSdk = 23
+        versionCode = divkitVersion.versionCode + divkitVersion.buildNumber
 
-        applicationId 'com.yandex.divkit.benchmark'
-        versionCode divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
         buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(providers.gradleProperty("httpHeaders").getOrElse("{}"))
 

@@ -2,7 +2,7 @@ apply plugin: "kotlin-android"
 apply plugin: "kotlin-allopen"
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk = rootProject.ext.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -10,11 +10,11 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdk = rootProject.ext.minSdkVersion
+        targetSdk = rootProject.ext.targetSdkVersion
 
-        versionName divkitVersion.baseVersionName
-        versionCode divkitVersion.versionCode
+        versionName = divkitVersion.baseVersionName
+        versionCode = divkitVersion.versionCode
 
         vectorDrawables.useSupportLibrary = true
     }
