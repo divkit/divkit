@@ -1,13 +1,19 @@
 import Foundation
+import LayoutKit
 
 final class SubmitActionHandler {
   private let submitter: DivSubmitter
+  private let pathResolver: ActionPathResolver
 
-  init(submitter: DivSubmitter) {
+  init(submitter: DivSubmitter, pathResolver: ActionPathResolver) {
     self.submitter = submitter
+    self.pathResolver = pathResolver
   }
 
-  func handle(_ action: DivActionSubmit, context: DivActionHandlingContext) {
+  func handle(
+    _ action: DivActionSubmit,
+    context: DivActionHandlingContext
+  ) {
     let resolver = context.expressionResolver
 
     guard let url = action.request.resolveUrl(resolver) else {
@@ -19,9 +25,29 @@ final class SubmitActionHandler {
       return
     }
 
+    pathResolver.resolve(
+      id: containerId,
+      context: context
+    ) { containerPath in
+      submit(
+        action: action,
+        url: url,
+        context: context,
+        resolver: resolver,
+        containerPath: containerPath
+      )
+    }
+  }
+
+  private func submit(
+    action: DivActionSubmit,
+    url: URL,
+    context: DivActionHandlingContext,
+    resolver: ExpressionResolver,
+    containerPath: UIElementPath
+  ) {
     guard let containerVariables = context.variablesStorage.getOnlyElementVariables(
-      cardId: context.cardId,
-      elementId: containerId
+      path: containerPath
     ) else {
       return
     }

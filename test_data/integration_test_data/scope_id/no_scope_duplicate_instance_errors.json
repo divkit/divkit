@@ -97,7 +97,9 @@
           "value": "Element with id 'inner_gallery' is ambiguous"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -116,7 +118,9 @@
           "value": "Element with id 'inner_gallery' is ambiguous"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -152,10 +156,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Element with id 'inner_animator' is ambiguous"
+          "value": "Animator with id 'inner_animator' is ambiguous"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -170,10 +176,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Element with id 'inner_animator' is ambiguous"
+          "value": "Animator with id 'inner_animator' is ambiguous"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

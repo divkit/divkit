@@ -61,28 +61,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Element with id 'inner_tooltip' is ambiguous"
+          "value": "Tooltip with id 'inner_tooltip' is ambiguous"
         }
       ],
-      "platforms": []
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "hide_tooltip_no_scope_duplicate",
-          "typed": {
-            "type": "hide_tooltip",
-            "id": "inner_tooltip"
-          }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Element with id 'inner_tooltip' is ambiguous"
-        }
-      ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -102,7 +86,9 @@
           "value": "Scope with id 'nonexistent_scope' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -121,7 +107,9 @@
           "value": "Scope with id 'nonexistent_scope' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

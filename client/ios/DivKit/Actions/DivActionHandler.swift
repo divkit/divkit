@@ -34,7 +34,7 @@ public final class DivActionHandler {
   private let copyToClipboardActionHandler = CopyToClipboardActionHandler()
   private let dictSetValueActionHandler = DictSetValueActionHandler()
   private let downloadActionHandler: DownloadActionHandler
-  private let focusElementActionHandler = FocusElementActionHandler()
+  private let focusElementActionHandler: FocusElementActionHandler
   private let scrollActionHandler: ScrollActionHandler
   private let setCursorPositionActionHandler = SetCursorPositionActionHandler()
   private let setStateActionHandler: SetStateActionHandler
@@ -121,25 +121,38 @@ public final class DivActionHandler {
     self.idToPath = idToPath
     self.flags = flags
 
-    animatorActionHandler = AnimatorActionHandler(animatorController: animatorController)
-    videoActionHandler = VideoActionHandler()
+    let actionPathResolver = ActionPathResolver(reporter: reporter, idToPath: idToPath)
+
+    animatorActionHandler = AnimatorActionHandler(
+      animatorController: animatorController,
+      reporter: reporter
+    )
+    focusElementActionHandler = FocusElementActionHandler(pathResolver: actionPathResolver)
+    videoActionHandler = VideoActionHandler(
+      pathResolver: actionPathResolver
+    )
     downloadActionHandler = DownloadActionHandler(
       patchProvider: patchProvider,
       updateCard: updateCard
     )
     scrollActionHandler = ScrollActionHandler(
       blockStateStorage: blockStateStorage,
+      pathResolver: actionPathResolver,
       updateCard: updateCard
     )
     setStateActionHandler = SetStateActionHandler(stateUpdater: stateUpdater)
     setStoredValueActionHandler = SetStoredValueActionHandler(
       persistentValuesStorage: persistentValuesStorage
     )
-    submitActionHandler = SubmitActionHandler(submitter: submitter)
+    submitActionHandler = SubmitActionHandler(
+      submitter: submitter,
+      pathResolver: actionPathResolver
+    )
     timerActionHandler = TimerActionHandler(performer: performTimerAction)
     tooltipActionHandler = TooltipActionHandler(
       performer: tooltipActionPerformer,
-      showTooltip: showTooltip
+      showTooltip: showTooltip,
+      reporter: reporter
     )
   }
 
@@ -226,11 +239,6 @@ public final class DivActionHandler {
       }
     }
 
-    let actionPathResolver = ActionPathResolver(
-      reporter: reporter,
-      idToPath: idToPath
-    )
-
     let info = action.resolveInfo(expressionResolver, path: path, source: source)
     let context = DivActionHandlingContext(
       info: info,
@@ -289,8 +297,7 @@ public final class DivActionHandler {
     case let .divActionVideo(action):
       videoActionHandler.handle(
         action,
-        context: context,
-        pathResolver: actionPathResolver
+        context: context
       )
     case .divActionCustom:
       customActionHandler?.handle(context: context, sender: sender)
@@ -298,7 +305,6 @@ public final class DivActionHandler {
       handleUrl(
         action,
         context: context,
-        pathResolver: actionPathResolver,
         sender: sender
       )
     }
@@ -315,7 +321,6 @@ public final class DivActionHandler {
   private func handleUrl(
     _ action: DivActionBase,
     context: DivActionHandlingContext,
-    pathResolver: ActionPathResolver,
     sender: AnyObject?
   ) {
     guard let url = context.info.url else {
@@ -326,10 +331,13 @@ public final class DivActionHandler {
       let cardId = context.cardId
       switch intent {
       case let .showTooltip(id, multiple):
-        let tooltipInfo = TooltipInfo(id: id, showsOnStart: false, multiple: multiple)
-        tooltipActionHandler.showTooltip(tooltipInfo)
+        tooltipActionHandler.handleShowTooltip(
+          id: id,
+          multiple: multiple,
+          context: context
+        )
       case let .hideTooltip(id):
-        tooltipActionHandler.hideTooltip(id: id)
+        tooltipActionHandler.handleHideTooltip(id: id, context: context)
       case let .download(patchUrl):
         downloadActionHandler.handle(
           url: patchUrl,
@@ -349,62 +357,17 @@ public final class DivActionHandler {
           name: DivVariableName(rawValue: name),
           value: value
         )
-      case let .setCurrentItem(id, index):
-        scrollActionHandler.scrollToItem(cardId: cardId, id: id, index: index, animated: true)
-      case let .setNextItem(id, step, overflow):
-        scrollActionHandler.scrollToNextItem(
-          cardId: cardId,
+      case let .scrollAction(id, scrollAction):
+        scrollActionHandler.handleScrollAction(
+          context: context,
           id: id,
-          step: step,
-          overflow: overflow,
-          animated: true
+          scrollAction: scrollAction
         )
-      case let .setPreviousItem(id, step, overflow):
-        scrollActionHandler.scrollToNextItem(
-          cardId: cardId,
-          id: id,
-          step: -step,
-          overflow: overflow,
-          animated: true
-        )
-      case let .scroll(id, mode):
-        switch mode {
-        case .start:
-          scrollActionHandler.scrollToStart(cardId: cardId, id: id, animated: true)
-        case .end:
-          scrollActionHandler.scrollToEnd(cardId: cardId, id: id, animated: true)
-        case let .forward(offset, overflow):
-          scrollActionHandler.scrollToOffset(
-            cardId: cardId,
-            id: id,
-            offset: offset,
-            isRelative: true,
-            overflow: overflow,
-            animated: true
-          )
-        case let .backward(offset, overflow):
-          scrollActionHandler.scrollToOffset(
-            cardId: cardId,
-            id: id,
-            offset: -offset,
-            isRelative: true,
-            overflow: overflow,
-            animated: true
-          )
-        case let .position(position):
-          scrollActionHandler.scrollToOffset(
-            cardId: cardId,
-            id: id,
-            offset: position,
-            animated: true
-          )
-        }
       case let .video(id: id, action: action):
         videoActionHandler.handle(
           id: id,
           action: action,
-          context: context,
-          pathResolver: pathResolver
+          context: context
         )
       case let .timer(timerId, action):
         timerActionHandler.handle(cardId: cardId, timerId: timerId, action: action)

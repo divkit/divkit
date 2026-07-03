@@ -10,7 +10,7 @@ import UIKit
 /// Conforming to this protocol allows your class to perform actions related to tooltips. It
 /// introduces two methods to control the display of tooltips:
 /// - `showTooltip(info:)`: Use this method to show a tooltip with the provided `TooltipInfo`.
-/// - `hideTooltip(id:)`: Use this method to hide the tooltip identified by the given `id`.
+/// - `hideTooltip(info:)`: Use this method to hide the tooltip described by `TooltipInfo`.
 public protocol TooltipActionPerformer {
   /// Shows a tooltip with the provided `TooltipInfo`.
   ///
@@ -30,10 +30,10 @@ public protocol TooltipActionPerformer {
   /// - Returns: `true` if the tooltip was shown, `false` otherwise.
   func showTooltipAsync(info: TooltipInfo) async -> Bool
 
-  /// Hides the tooltip identified by the given `id`.
+  /// Hides the tooltip described by the given `TooltipInfo`.
   ///
-  /// - Parameter id: The identifier of the tooltip to hide.
-  func hideTooltip(id: String)
+  /// - Parameter identity: The `TooltipIdentity` containing the tooltip id and optional scope.
+  func hideTooltip(identity: TooltipIdentity)
 }
 
 extension TooltipActionPerformer {
@@ -103,7 +103,7 @@ public class DefaultTooltipManager: TooltipManager {
 
   private var handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
-  private var showingTooltips = [String: TooltipContainerView]()
+  private var showingTooltips = [TooltipIdentity: TooltipContainerView]()
   private var previousOrientation = UIDevice.current.orientation
 
   private let lock = AllocatedUnfairLock()
@@ -136,17 +136,27 @@ public class DefaultTooltipManager: TooltipManager {
   }
 
   public func showTooltip(info: TooltipInfo) {
-    guard let prep = prepareShow(info: info) else { return }
-    Task { @MainActor in _ = await completeShow(info: info, prep: prep) }
+    guard !showingTooltips.keys.contains(info.identity),
+          let anchorView = findAnchorView(for: info),
+          let prep = presenter.prepare() else { return }
+    Task {
+      @MainActor in _ = await performShow(
+        info: info,
+        anchorView: anchorView,
+        prep: prep
+      )
+    }
   }
 
   public func showTooltipAsync(info: TooltipInfo) async -> Bool {
-    guard let prep = prepareShow(info: info) else { return false }
-    return await completeShow(info: info, prep: prep)
+    guard !showingTooltips.keys.contains(info.identity) else { return false }
+    guard let anchorView = findAnchorView(for: info) else { return false }
+    guard let prep = presenter.prepare() else { return false }
+    return await performShow(info: info, anchorView: anchorView, prep: prep)
   }
 
-  public func hideTooltip(id: String) {
-    guard let tooltipView = showingTooltips[id] else { return }
+  public func hideTooltip(identity: TooltipIdentity) {
+    guard let tooltipView = showingTooltips[identity] else { return }
     tooltipView.close(animated: true)
   }
 
@@ -189,33 +199,55 @@ public class DefaultTooltipManager: TooltipManager {
     previousOrientation = orientation
   }
 
-  private func prepareShow(
-    info: TooltipInfo
-  ) -> (constraint: CGRect, coordinateSpace: UIView?)? {
-    guard !showingTooltips.keys.contains(info.id) else { return nil }
-    return presenter.prepare()
+  private func findAnchorView(for info: TooltipInfo) -> TooltipAnchorView? {
+    let matchingViews = existingAnchorViews.reduce(into: [TooltipAnchorView]()) { views, view in
+      if let view,
+         view.firstMatchingTooltip(
+           id: info.id,
+           scopePath: info.scopePath
+         ) != nil {
+        views.append(view)
+      }
+    }
+
+    let suffix = info.scopePath == nil ? "" : " in scope"
+    switch matchingViews.count {
+    case 0:
+      info.onError?("Tooltip with id '\(info.id)' not found" + suffix)
+      return nil
+    case 1:
+      return matchingViews.first
+    default:
+      info.onError?("Tooltip with id '\(info.id)' is ambiguous" + suffix)
+      return nil
+    }
   }
 
   @MainActor
-  private func completeShow(
+  private func performShow(
     info: TooltipInfo,
+    anchorView: TooltipAnchorView,
     prep: (constraint: CGRect, coordinateSpace: UIView?)
   ) async -> Bool {
-    let (constraint, coordinateSpace) = prep
+    guard let tooltip = await anchorView.makeTooltip(
+      id: info.id,
+      scopePath: info.scopePath,
+      in: prep.constraint,
+      relativeTo: prep.coordinateSpace
+    ) else { return false }
+    await displayTooltip(tooltip, info: info)
+    return true
+  }
 
-    guard let tooltip = await existingAnchorViews.compactMap(
-      concurrencyLimit: 1,
-      transform: {
-        await $0?.makeTooltip(id: info.id, in: constraint, relativeTo: coordinateSpace)
-      }
-    ).first else { return false }
-
+  @MainActor
+  private func displayTooltip(_ tooltip: Tooltip, info: TooltipInfo) async {
+    let key = info.identity
     let view = TooltipContainerView(
       tooltip: tooltip,
       handleAction: handleAction,
       onCloseAction: { [weak self] in
         guard let self else { return }
-        showingTooltips.removeValue(forKey: tooltip.params.id)
+        showingTooltips.removeValue(forKey: key)
         let hasRemainingModals = !showingTooltips.values.filter(\.isModal).isEmpty
         presenter.onClosed(tooltipID: tooltip.params.id, hasRemainingModals: hasRemainingModals)
       },
@@ -225,31 +257,36 @@ public class DefaultTooltipManager: TooltipManager {
     )
 
     presenter.present(view, for: tooltip)
-
     view.animateAppear()
-
     UIAccessibility.postDelayed(notification: .screenChanged, argument: view)
-
-    showingTooltips[info.id] = view
+    showingTooltips[key] = view
 
     let duration = tooltip.params.duration
     if !duration.isZero {
       try? await Task.sleep(nanoseconds: UInt64(duration.nanoseconds))
-      hideTooltip(id: tooltip.params.id)
+      showingTooltips[key]?.close(animated: true)
     }
-
-    return true
   }
 }
 
 extension TooltipAnchorView {
+  typealias Tooltip = DefaultTooltipManager.Tooltip
+
+  fileprivate func firstMatchingTooltip(id: String, scopePath: UIElementPath?) -> BlockTooltip? {
+    if let scopePath {
+      guard path?.starts(with: scopePath) == true else { return nil }
+    }
+    return tooltips.first(where: { $0.id == id })
+  }
+
   @MainActor
   fileprivate func makeTooltip(
     id: String,
+    scopePath: UIElementPath?,
     in constraint: CGRect,
     relativeTo containerView: UIView? = nil
-  ) async -> DefaultTooltipManager.Tooltip? {
-    guard let tooltip = tooltips.first(where: { $0.id == id }) else {
+  ) async -> Tooltip? {
+    guard let tooltip = firstMatchingTooltip(id: id, scopePath: scopePath) else {
       return nil
     }
 
@@ -297,7 +334,7 @@ public final class DefaultTooltipManager: TooltipManager {
 
   public func showTooltip(info _: TooltipInfo) {}
   public func showTooltipAsync(info _: TooltipInfo) async -> Bool { false }
-  public func hideTooltip(id _: String) {}
+  public func hideTooltip(identity _: TooltipIdentity) {}
 }
 #endif
 

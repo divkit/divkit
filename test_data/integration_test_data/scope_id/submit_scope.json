@@ -62,7 +62,7 @@
             "type": "submit",
             "container_id": "form_container",
             "request": {
-              "url": ""
+              "url": "div-action://stub"
             }
           }
         }
@@ -73,7 +73,9 @@
           "value": "Element with id 'form_container' is ambiguous"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -84,7 +86,7 @@
             "type": "submit",
             "container_id": "form_container",
             "request": {
-              "url": ""
+              "url": "div-action://stub"
             }
           }
         }
@@ -95,7 +97,9 @@
           "value": "Scope with id 'nonexistent_scope' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -106,7 +110,7 @@
             "type": "submit",
             "container_id": "missing_form",
             "request": {
-              "url": ""
+              "url": "div-action://stub"
             }
           }
         }
@@ -114,10 +118,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Element with id 'missing_form' not found within scope 'item_1'"
+          "value": "Element with id 'missing_form' not found in scope"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

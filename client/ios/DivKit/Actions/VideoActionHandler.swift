@@ -3,10 +3,15 @@ import LayoutKit
 import VGSL
 
 struct VideoActionHandler {
+  private let pathResolver: ActionPathResolver
+
+  init(pathResolver: ActionPathResolver) {
+    self.pathResolver = pathResolver
+  }
+
   func handle(
     _ action: DivActionVideo,
-    context: DivActionHandlingContext,
-    pathResolver: ActionPathResolver
+    context: DivActionHandlingContext
   ) {
     let expressionResolver = context.expressionResolver
     guard let id = action.resolveId(expressionResolver),
@@ -18,14 +23,14 @@ struct VideoActionHandler {
     case .start: .play
     case .pause: .pause
     }
-    handle(id: id, action: videoAction, context: context, pathResolver: pathResolver)
+
+    handle(id: id, action: videoAction, context: context)
   }
 
   func handle(
     id: String,
     action: DivVideoAction,
-    context: DivActionHandlingContext,
-    pathResolver: ActionPathResolver
+    context: DivActionHandlingContext
   ) {
     pathResolver.resolve(id: id, context: context) { path in
       context.blockStateStorage.setState(

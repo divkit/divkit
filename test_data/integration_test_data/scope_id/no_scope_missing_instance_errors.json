@@ -34,7 +34,9 @@
           "value": "Element with id 'inner_gallery' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -53,7 +55,9 @@
           "value": "Element with id 'inner_gallery' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -89,10 +93,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Element with id 'inner_animator' not found"
+          "value": "Animator with id 'inner_animator' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -107,10 +113,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Element with id 'inner_animator' not found"
+          "value": "Animator with id 'inner_animator' not found"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

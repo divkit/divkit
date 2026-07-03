@@ -127,7 +127,9 @@
           "value": "Element with id 'inner_gallery' is ambiguous in scope"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -147,7 +149,9 @@
           "value": "Element with id 'inner_gallery' is ambiguous in scope"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -185,10 +189,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Element with id 'inner_animator' is ambiguous in scope"
+          "value": "Animator with id 'inner_animator' is ambiguous in scope"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "div_actions": [
@@ -204,10 +210,12 @@
       "expected": [
         {
           "type": "error",
-          "value": "Element with id 'inner_animator' is ambiguous in scope"
+          "value": "Animator with id 'inner_animator' is ambiguous in scope"
         }
       ],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }

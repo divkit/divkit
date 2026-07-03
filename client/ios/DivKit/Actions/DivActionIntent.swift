@@ -1,16 +1,22 @@
 import Foundation
 import VGSL
 
+
+
 enum DivActionIntent: Hashable {
+  enum Scroll: Hashable {
+    case setCurrentItem(index: Int)
+    case setNextItem(step: Int, overflow: OverflowMode)
+    case setPreviousItem(step: Int, overflow: OverflowMode)
+    case scroll(mode: ScrollMode)
+  }
+
   case showTooltip(id: String, multiple: Bool)
   case hideTooltip(id: String)
   case download(patchUrl: URL)
   case setState(divStatePath: DivStatePath, lifetime: DivStateLifetime)
   case setVariable(name: String, value: String)
-  case setCurrentItem(id: String, index: Int)
-  case setNextItem(id: String, step: Int, overflow: OverflowMode)
-  case setPreviousItem(id: String, step: Int, overflow: OverflowMode)
-  case scroll(id: String, mode: ScrollMode)
+  case scrollAction(id: String, Scroll)
   case timer(id: String, action: DivTimerAction)
   case video(id: String, action: DivVideoAction)
   case setStoredValue(DivStoredValue, DivStoredValueScope)
@@ -52,42 +58,42 @@ enum DivActionIntent: Hashable {
       guard let id = url.id, let index = url.item else {
         return nil
       }
-      self = .setCurrentItem(id: id, index: index)
+      self = .scrollAction(id: id, .setCurrentItem(index: index))
     case "set_next_item":
       guard let id = url.id else {
         return nil
       }
-      self = .setNextItem(id: id, step: url.step ?? 1, overflow: url.overflow)
+      self = .scrollAction(id: id, .setNextItem(step: url.step ?? 1, overflow: url.overflow))
     case "set_previous_item":
       guard let id = url.id else {
         return nil
       }
-      self = .setPreviousItem(id: id, step: url.step ?? 1, overflow: url.overflow)
+      self = .scrollAction(id: id, .setPreviousItem(step: url.step ?? 1, overflow: url.overflow))
     case "scroll_forward":
       guard let id = url.id, let step = url.step else {
         return nil
       }
-      self = .scroll(id: id, mode: .forward(step, overflow: url.overflow))
+      self = .scrollAction(id: id, .scroll(mode: .forward(step, overflow: url.overflow)))
     case "scroll_backward":
       guard let id = url.id, let step = url.step else {
         return nil
       }
-      self = .scroll(id: id, mode: .backward(step, overflow: url.overflow))
+      self = .scrollAction(id: id, .scroll(mode: .backward(step, overflow: url.overflow)))
     case "scroll_to_position":
       guard let id = url.id, let step = url.step else {
         return nil
       }
-      self = .scroll(id: id, mode: .position(step))
+      self = .scrollAction(id: id, .scroll(mode: .position(step)))
     case "scroll_to_start":
       guard let id = url.id else {
         return nil
       }
-      self = .scroll(id: id, mode: .start)
+      self = .scrollAction(id: id, .scroll(mode: .start))
     case "scroll_to_end":
       guard let id = url.id else {
         return nil
       }
-      self = .scroll(id: id, mode: .end)
+      self = .scrollAction(id: id, .scroll(mode: .end))
     case "timer":
       guard let id = url.id, let action = url.timerAction else {
         return nil

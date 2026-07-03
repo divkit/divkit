@@ -5,16 +5,22 @@ import VGSL
 final class ScrollActionHandler {
   private let blockStateStorage: DivBlockStateStorage
   private let updateCard: DivActionHandler.UpdateCardAction
+  private let pathResolver: ActionPathResolver
 
   init(
     blockStateStorage: DivBlockStateStorage,
+    pathResolver: ActionPathResolver,
     updateCard: @escaping DivActionHandler.UpdateCardAction
   ) {
     self.blockStateStorage = blockStateStorage
     self.updateCard = updateCard
+    self.pathResolver = pathResolver
   }
 
-  func handle(_ action: DivActionScrollBy, context: DivActionHandlingContext) {
+  func handle(
+    _ action: DivActionScrollBy,
+    context: DivActionHandlingContext
+  ) {
     let expressionResolver = context.expressionResolver
     guard let id = action.resolveId(expressionResolver) else {
       return
@@ -26,58 +32,160 @@ final class ScrollActionHandler {
     }
 
     let itemCount = action.resolveItemCount(expressionResolver)
-    let cardId = context.cardId
     let animated = action.resolveAnimated(expressionResolver)
 
-    if itemCount == 0 {
-      let offset = action.resolveOffset(expressionResolver)
-      scrollToOffset(
-        cardId: cardId,
-        id: id,
-        offset: offset,
-        isRelative: true,
-        overflow: overflow,
-        animated: animated
-      )
-    } else {
-      scrollToNextItem(
-        cardId: cardId,
-        id: id,
-        step: itemCount,
-        overflow: overflow,
-        animated: animated
-      )
+    pathResolver.resolve(id: id, context: context) { path in
+      if itemCount == 0 {
+        let offset = action.resolveOffset(expressionResolver)
+        scrollToOffset(
+          context: context,
+          path: path,
+          offset: offset,
+          isRelative: true,
+          overflow: overflow,
+          animated: animated
+        )
+      } else {
+        scrollToNextItem(
+          context: context,
+          path: path,
+          step: itemCount,
+          overflow: overflow,
+          animated: animated
+        )
+      }
     }
   }
 
-  func handle(_ action: DivActionScrollTo, context: DivActionHandlingContext) {
+  func handle(
+    _ action: DivActionScrollTo,
+    context: DivActionHandlingContext
+  ) {
     let expressionResolver = context.expressionResolver
     guard let id = action.resolveId(expressionResolver) else {
       return
     }
 
-    let cardId = context.cardId
     let animated = action.resolveAnimated(expressionResolver)
 
-    switch action.destination {
-    case let .indexDestination(destination):
-      if let index = destination.resolveValue(expressionResolver) {
-        scrollToItem(cardId: cardId, id: id, index: index, animated: animated)
+    pathResolver.resolve(id: id, context: context) { path in
+      switch action.destination {
+      case let .indexDestination(destination):
+        if let index = destination.resolveValue(expressionResolver) {
+          scrollToItem(
+            context: context,
+            path: path,
+            index: index,
+            animated: animated
+          )
+        }
+      case let .offsetDestination(destination):
+        if let value = destination.resolveValue(expressionResolver) {
+          scrollToOffset(
+            context: context,
+            path: path,
+            offset: value,
+            animated: animated
+          )
+        }
+      case .startDestination:
+        scrollToStart(
+          context: context,
+          path: path,
+          animated: animated
+        )
+      case .endDestination:
+        scrollToEnd(
+          context: context,
+          path: path,
+          animated: animated
+        )
       }
-    case let .offsetDestination(destination):
-      if let value = destination.resolveValue(expressionResolver) {
-        scrollToOffset(cardId: cardId, id: id, offset: value, animated: animated)
-      }
-    case .startDestination:
-      scrollToStart(cardId: cardId, id: id, animated: animated)
-    case .endDestination:
-      scrollToEnd(cardId: cardId, id: id, animated: animated)
     }
   }
 
-  func scrollToItem(cardId: DivCardID, id: String, index: Int, animated: Bool) {
-    guard let state = getState(cardId: cardId, id: id) else {
-      DivKitLogger.error("Unexpected state type for \(id)")
+  func handleScrollAction(
+    context: DivActionHandlingContext,
+    id: String,
+    scrollAction: DivActionIntent.Scroll
+  ) {
+    pathResolver.resolve(id: id, context: context) { path in
+      switch scrollAction {
+      case let .setCurrentItem(index):
+        scrollToItem(
+          context: context,
+          path: path,
+          index: index,
+          animated: true
+        )
+      case let .setNextItem(step, overflow):
+        scrollToNextItem(
+          context: context,
+          path: path,
+          step: step,
+          overflow: overflow,
+          animated: true
+        )
+      case let .setPreviousItem(step, overflow):
+        scrollToNextItem(
+          context: context,
+          path: path,
+          step: -step,
+          overflow: overflow,
+          animated: true
+        )
+      case let .scroll(mode):
+        switch mode {
+        case .start:
+          scrollToStart(
+            context: context,
+            path: path,
+            animated: true
+          )
+        case .end:
+          scrollToEnd(
+            context: context,
+            path: path,
+            animated: true
+          )
+        case let .forward(offset, overflow):
+          scrollToOffset(
+            context: context,
+            path: path,
+            offset: offset,
+            isRelative: true,
+            overflow: overflow,
+            animated: true
+          )
+        case let .backward(offset, overflow):
+          scrollToOffset(
+            context: context,
+            path: path,
+            offset: -offset,
+            isRelative: true,
+            overflow: overflow,
+            animated: true
+          )
+        case let .position(position):
+          scrollToOffset(
+            context: context,
+            path: path,
+            offset: position,
+            animated: true
+          )
+        }
+      }
+    }
+  }
+
+  private func scrollToItem(
+    context: DivActionHandlingContext,
+    path: UIElementPath,
+    index: Int,
+    animated: Bool
+  ) {
+    guard let state = getState(path) else {
+      DivKitLogger.error("Unexpected state type for \(path)")
       return
     }
 
@@ -87,22 +195,22 @@ final class ScrollActionHandler {
 
     scrollToItemInternal(
       state: state,
-      cardId: cardId,
-      id: id,
+      context: context,
+      path: path,
       clampedIndex: clampedIndex,
       animated: animated
     )
   }
 
-  func scrollToNextItem(
-    cardId: DivCardID,
-    id: String,
+  private func scrollToNextItem(
+    context: DivActionHandlingContext,
+    path: UIElementPath,
     step: Int,
     overflow: OverflowMode,
     animated: Bool
   ) {
-    guard let state = getState(cardId: cardId, id: id) else {
-      DivKitLogger.error("Unexpected state type for \(id)")
+    guard let state = getState(path) else {
+      DivKitLogger.error("Unexpected state type for \(path)")
       return
     }
 
@@ -118,25 +226,26 @@ final class ScrollActionHandler {
 
     scrollToItemInternal(
       state: state,
-      cardId: cardId,
-      id: id,
+      context: context,
+      path: path,
       clampedIndex: index,
       animated: animated,
       direction: direction
     )
   }
 
-  func scrollToOffset(
-    cardId: DivCardID,
-    id: String,
+  private func scrollToOffset(
+    context: DivActionHandlingContext,
+    path: UIElementPath,
     offset: Int,
     isRelative: Bool = false,
     overflow: OverflowMode = .clamp,
     animated: Bool
   ) {
-    guard let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId),
+    let cardId = context.cardId
+    guard let state: GalleryViewState = blockStateStorage.getState(path),
           case let .offset(currentPosition, _) = state.contentPosition else {
-      DivKitLogger.error("Unexpected state type for \(id)")
+      DivKitLogger.error("Unexpected state type for \(path)")
       return
     }
 
@@ -149,9 +258,9 @@ final class ScrollActionHandler {
       size: range,
       overflow: overflow
     )
+
     blockStateStorage.setPendingState(
-      id: id,
-      cardId: cardId,
+      path,
       state: GalleryViewState(
         contentPosition: .offset(position),
         itemsCount: state.itemsCount,
@@ -163,53 +272,71 @@ final class ScrollActionHandler {
     updateCard(.state(cardId))
   }
 
-  func scrollToStart(cardId: DivCardID, id: String, animated: Bool) {
+  private func scrollToStart(
+    context: DivActionHandlingContext,
+    path: UIElementPath,
+    animated: Bool
+  ) {
     // should update offset for gallery
-    if let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId),
+    if let state: GalleryViewState = blockStateStorage.getState(path),
        case .offset = state.contentPosition {
-      scrollToOffset(cardId: cardId, id: id, offset: 0, animated: animated)
+      scrollToOffset(
+        context: context,
+        path: path,
+        offset: 0,
+        animated: animated
+      )
       return
     }
 
-    guard let state = getState(cardId: cardId, id: id) else {
-      DivKitLogger.error("Unexpected state type for \(id)")
+    guard let state = getState(path) else {
+      DivKitLogger.error("Unexpected state type for \(path)")
       return
     }
 
     scrollToItemInternal(
       state: state,
-      cardId: cardId,
-      id: id,
+      context: context,
+      path: path,
       clampedIndex: 0,
       animated: animated
     )
   }
 
-  func scrollToEnd(cardId: DivCardID, id: String, animated: Bool) {
+  private func scrollToEnd(
+    context: DivActionHandlingContext,
+    path: UIElementPath,
+    animated: Bool
+  ) {
     // should update offset for gallery
-    if let state: GalleryViewState = blockStateStorage.getState(id, cardId: cardId),
+    if let state: GalleryViewState = blockStateStorage.getState(path),
        case .offset = state.contentPosition {
       if let scrollRange = state.scrollRange {
-        scrollToOffset(cardId: cardId, id: id, offset: Int(scrollRange), animated: animated)
+        scrollToOffset(
+          context: context,
+          path: path,
+          offset: Int(scrollRange),
+          animated: animated
+        )
       }
       return
     }
 
-    guard let state = getState(cardId: cardId, id: id) else {
-      DivKitLogger.error("Unexpected state type for \(id)")
+    guard let state = getState(path) else {
+      DivKitLogger.error("Unexpected state type for \(path)")
       return
     }
     scrollToItemInternal(
       state: state,
-      cardId: cardId,
-      id: id,
+      context: context,
+      path: path,
       clampedIndex: state.itemsCount - 1,
       animated: animated
     )
   }
 
-  private func getState(cardId: DivCardID, id: String) -> CollectionTypeViewState? {
-    blockStateStorage.getStateUntyped(id, cardId: cardId) as? CollectionTypeViewState
+  private func getState(_ path: UIElementPath) -> CollectionTypeViewState? {
+    blockStateStorage.getStateUntyped(path) as? CollectionTypeViewState
   }
 
   private func normalizeOffset(
@@ -263,19 +390,22 @@ final class ScrollActionHandler {
 
   private func scrollToItemInternal(
     state: CollectionTypeViewState,
-    cardId: DivCardID,
-    id: String,
+    context: DivActionHandlingContext,
+    path: UIElementPath,
     clampedIndex: Int,
     animated: Bool,
     direction: ScrollNavigationDirection = .none
   ) {
     blockStateStorage.setPendingState(
-      id: id,
-      cardId: cardId,
-      state: state.makeState(clampedIndex, animated, direction)
+      path,
+      state: state.makeState(
+        clampedIndex,
+        animated,
+        direction
+      )
     )
 
-    updateCard(.state(cardId))
+    updateCard(.state(context.cardId))
   }
 }
 

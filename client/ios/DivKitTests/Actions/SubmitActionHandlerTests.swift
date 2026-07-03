@@ -8,10 +8,13 @@ import Testing
 struct SubmitActionHandlerTests {
   private let submitter = MockSubmitter()
   private let variablesStorage = DivVariablesStorage()
+  private let idToPath = IdToPath()
   private let handler: DivActionHandler
 
   init() {
+    idToPath.add(cardId.path + containerId, forId: cardId.path + containerId)
     handler = DivActionHandler(
+      idToPath: idToPath,
       submitter: submitter,
       variablesStorage: variablesStorage
     )
@@ -77,6 +80,21 @@ struct SubmitActionHandlerTests {
 
   @Test
   func submit_ContainerWithDuplicatedId() {
+    let duplicateIdToPath = IdToPath()
+    duplicateIdToPath.add(
+      cardId.path + "container_1" + containerId,
+      forId: cardId.path + containerId
+    )
+    duplicateIdToPath.add(
+      cardId.path + "container_2" + containerId,
+      forId: cardId.path + containerId
+    )
+    let duplicateHandler = DivActionHandler(
+      idToPath: duplicateIdToPath,
+      submitter: submitter,
+      variablesStorage: variablesStorage
+    )
+
     variablesStorage.initializeIfNeeded(
       path: cardId.path + "container_1" + containerId,
       variables: ["var_1": .string("value_1")]
@@ -86,7 +104,7 @@ struct SubmitActionHandlerTests {
       variables: ["var_2": .string("value_2")]
     )
 
-    handler.handleSubmit(containerId: containerId)
+    duplicateHandler.handleSubmit(containerId: containerId)
 
     #expect(submitter.lastData == nil)
   }
@@ -114,16 +132,66 @@ struct SubmitActionHandlerTests {
     )
     #expect(submitter.lastRequest == expectedRequest)
   }
+
+  @Test
+  func submit_withScopeId_firstScope_submitsFirstContainerVariables() {
+    let handler = makeScopedSubmitHandler()
+
+    handler.handleSubmit(scopeId: firstScopeId)
+
+    #expect(submitter.lastData?["var_1"] == "value_1")
+    #expect(submitter.lastData?["var_2"] == nil)
+  }
+
+  @Test
+  func submit_withScopeId_secondScope_submitsSecondContainerVariables() {
+    let handler = makeScopedSubmitHandler()
+
+    handler.handleSubmit(scopeId: secondScopeId)
+
+    #expect(submitter.lastData?["var_1"] == nil)
+    #expect(submitter.lastData?["var_2"] == "value_2")
+  }
+
+  private func makeScopedSubmitHandler() -> DivActionHandler {
+    let firstScopePath = cardId.path + "scope_container0" + firstScopeId
+    let secondScopePath = cardId.path + "scope_container1" + secondScopeId
+    let firstContainerPath = firstScopePath + containerId
+    let secondContainerPath = secondScopePath + containerId
+
+    let scopedIdToPath = IdToPath()
+    scopedIdToPath.add(firstScopePath, forId: cardId.path + firstScopeId)
+    scopedIdToPath.add(secondScopePath, forId: cardId.path + secondScopeId)
+    scopedIdToPath.add(firstContainerPath, forId: cardId.path + containerId)
+    scopedIdToPath.add(secondContainerPath, forId: cardId.path + containerId)
+
+    variablesStorage.initializeIfNeeded(
+      path: firstContainerPath,
+      variables: ["var_1": .string("value_1")]
+    )
+    variablesStorage.initializeIfNeeded(
+      path: secondContainerPath,
+      variables: ["var_2": .string("value_2")]
+    )
+
+    return DivActionHandler(
+      idToPath: scopedIdToPath,
+      submitter: submitter,
+      variablesStorage: variablesStorage
+    )
+  }
 }
 
 extension DivActionHandler {
   fileprivate func handleSubmit(
     containerId: String = containerId,
-    request: DivActionSubmit.Request = .init(url: .value(testUrl))
+    request: DivActionSubmit.Request = .init(url: .value(testUrl)),
+    scopeId: String? = nil
   ) {
     handle(
       divAction(
         logId: "action_id",
+        scopeId: scopeId,
         typed: .divActionSubmit(
           DivActionSubmit(
             containerId: .value(containerId),
@@ -157,3 +225,5 @@ private final class MockSubmitter: DivSubmitter {
 private let testUrl = URL(string: "https://example.com")!
 private let cardId = DivBlockModelingContext.testCardId
 private let containerId = "container_id"
+private let firstScopeId = "first_scope"
+private let secondScopeId = "second_scope"

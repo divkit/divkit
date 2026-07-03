@@ -839,6 +839,7 @@ extension DecoratingView {
 
 extension DecoratingView: TooltipAnchorView {
   var tooltips: [BlockTooltip] { model.tooltips }
+  var path: UIElementPath? { model.path }
 }
 
 extension DecoratingView: UIGestureRecognizerDelegate {

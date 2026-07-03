@@ -252,6 +252,26 @@ public final class DivVariablesStorage {
     }
   }
 
+  func getOnlyElementVariables(path: UIElementPath) -> DivVariables? {
+    lock.withLock {
+      guard let storage = localStorages[path] else {
+        return [:]
+      }
+
+      guard storage.initialPath == path else {
+        return [:]
+      }
+
+      if let propertiesValues = getOnlyElementProperties(path: path) {
+        let propertiesWithVariableValues = propertiesValues
+          .compactMapValues { $0.toVariableValue() }
+        return storage.values.merging(propertiesWithVariableValues) { _, new in new }
+      }
+
+      return storage.values
+    }
+  }
+
   func getVariableValue<T>(
     path: UIElementPath,
     name: DivVariableName
@@ -337,6 +357,18 @@ public final class DivVariablesStorage {
     }
 
     guard storage.initialPath?.leaf == elementId else {
+      return [:]
+    }
+
+    return storage.values
+  }
+
+  private func getOnlyElementProperties(path: UIElementPath) -> DivProperties? {
+    guard let storage = propertiesStorages[path] else {
+      return nil
+    }
+
+    guard storage.initialPath == path else {
       return [:]
     }
 

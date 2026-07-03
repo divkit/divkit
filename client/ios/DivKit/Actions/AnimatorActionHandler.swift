@@ -2,9 +2,11 @@ import Foundation
 
 final class AnimatorActionHandler {
   private let animatorController: DivAnimatorController
+  private let reporter: DivReporter
 
-  init(animatorController: DivAnimatorController) {
+  init(animatorController: DivAnimatorController, reporter: DivReporter) {
     self.animatorController = animatorController
+    self.reporter = reporter
   }
 
   func handle(_ action: DivActionAnimatorStart, context: DivActionHandlingContext) {
@@ -33,7 +35,7 @@ final class AnimatorActionHandler {
     let direction = action.resolveDirection(resolver)?.direction
       ?? definition?.base.resolveDirection(resolver).direction
 
-    animatorController.startAnimator(
+    let result = animatorController.startAnimator(
       path: context.path,
       id: action.animatorId,
       startValue: startValue,
@@ -44,9 +46,48 @@ final class AnimatorActionHandler {
       progressInterpolator: interpolator,
       repeatCount: repeatCount
     )
+
+    reportErrorIfNeeded(
+      result: result,
+      animatorId: action.animatorId,
+      context: context
+    )
   }
 
   func handle(_ action: DivActionAnimatorStop, context: DivActionHandlingContext) {
-    animatorController.stopAnimator(path: context.path, id: action.animatorId)
+    let result = animatorController.stopAnimator(
+      path: context.path,
+      id: action.animatorId
+    )
+
+    reportErrorIfNeeded(
+      result: result,
+      animatorId: action.animatorId,
+      context: context
+    )
+  }
+
+  private func scopeSuffix(_ context: DivActionHandlingContext) -> String {
+    context.scopePath == nil ? "" : " in scope"
+  }
+
+  private func reportErrorIfNeeded(
+    result: DivAnimatorController.ActionResult,
+    animatorId: String,
+    context: DivActionHandlingContext
+  ) {
+    guard let message: String = switch result {
+    case .success:
+      nil
+    case .notFound:
+      "Animator with id '\(animatorId)' not found\(scopeSuffix(context))"
+    case .ambiguousId:
+      "Animator with id '\(animatorId)' is ambiguous\(scopeSuffix(context))"
+    } else { return }
+
+    reporter.reportError(
+      cardId: context.cardId,
+      error: DivUnknownError(message: message, path: context.sourcePath)
+    )
   }
 }

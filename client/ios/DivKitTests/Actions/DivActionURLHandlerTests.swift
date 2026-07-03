@@ -9,8 +9,11 @@ struct DivActionURLHandlerTests {
   private let blockStateStorage = DivBlockStateStorage()
 
   init() {
+    let idToPath = IdToPath()
+    idToPath.add(cardId.path + elementId, forId: cardId.path + elementId)
     actionHandler = DivActionHandler(
-      blockStateStorage: blockStateStorage
+      blockStateStorage: blockStateStorage,
+      idToPath: idToPath
     )
   }
 

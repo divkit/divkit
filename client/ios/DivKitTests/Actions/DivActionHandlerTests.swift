@@ -757,19 +757,3 @@ private func dictValue(_ value: [String: Any]) -> DivTypedValue {
 }
 
 private let cardId: DivCardID = "test_card"
-
-private final class MockReporter: DivReporter {
-  private(set) var lastCardId: DivCardID?
-  private(set) var lastActionInfo: DivActionInfo?
-  private(set) var lastError: DivError?
-
-  func reportAction(cardId: DivCardID, info: DivActionInfo) {
-    lastCardId = cardId
-    lastActionInfo = info
-  }
-
-  func reportError(cardId: DivCardID, error: DivError) {
-    lastCardId = cardId
-    lastError = error
-  }
-}

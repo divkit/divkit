@@ -40,7 +40,7 @@ public final class DivBlockStateStorage {
     }
   }
 
-  private var _pendingStates: [IdAndCardId: ElementState] = [:]
+  private var _pendingStates: [StateKey: ElementState] = [:]
 
   private var focusedElement: FocusedElement = .none {
     didSet {
@@ -181,7 +181,7 @@ public final class DivBlockStateStorage {
   public func reset(cardId: DivCardID) {
     lock.withLock {
       _states = _states.filter { $0.key.cardID != cardId }
-      _pendingStates = _pendingStates.filter { $0.key.cardId != cardId }
+      _pendingStates = _pendingStates.filter { $0.key.cardID != cardId }
       if getFocusedElement()?.cardId == cardId {
         focusedElement = .none
       }
@@ -191,20 +191,27 @@ public final class DivBlockStateStorage {
   func setPendingState(id: String, cardId: DivCardID, state: ElementState) {
     let key = IdAndCardId(id: id, cardId: cardId)
     lock.withLock {
-      _pendingStates[key] = state
+      _pendingStates[.id(key)] = state
     }
     setState(id: id, cardId: cardId, state: state)
   }
 
+  func setPendingState(_ path: UIElementPath, state: ElementState) {
+    lock.withLock {
+      _pendingStates[.path(path)] = state
+    }
+    setState(path: path, state: state)
+  }
+
   func takePendingState(_ path: UIElementPath) -> ElementState? {
-    let key = IdAndCardId(path: path)
+    let key = StateKey.path(path)
     return lock.withLock {
       _pendingStates.removeValue(forKey: key)
     }
   }
 
   func peekPendingState(_ path: UIElementPath) -> ElementState? {
-    let key = IdAndCardId(path: path)
+    let key = StateKey.path(path)
     return lock.withLock {
       _pendingStates[key]
     }

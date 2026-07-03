@@ -1,6 +1,12 @@
 import LayoutKit
 
 final class FocusElementActionHandler {
+  private let pathResolver: ActionPathResolver
+
+  init(pathResolver: ActionPathResolver) {
+    self.pathResolver = pathResolver
+  }
+
   func handle(_ action: DivActionFocusElement, context: DivActionHandlingContext) {
     guard let elementId = action.resolveElementId(context.expressionResolver) else {
       return
@@ -12,21 +18,14 @@ final class FocusElementActionHandler {
       context.updateCard(.state(previousCard))
     }
 
-    context.blockStateStorage.setFocused(
-      isFocused: true,
-      element: IdAndCardId(id: elementId, cardId: cardId)
-    )
-
-    let state = TextInputViewState(
-      pendingSelection: .textEnd
-    )
-    context.blockStateStorage.setPendingState(
-      id: elementId,
-      cardId: cardId,
-      state: state
-    )
-
-    context.updateCard(.state(cardId))
+    pathResolver.resolve(id: elementId, context: context) { path in
+      context.blockStateStorage.setFocused(isFocused: true, path: path)
+      context.blockStateStorage.setPendingState(
+        path,
+        state: TextInputViewState(pendingSelection: .textEnd)
+      )
+      context.updateCard(.state(cardId))
+    }
   }
 }
 

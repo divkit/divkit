@@ -226,6 +226,8 @@
 		8D9283372F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */; };
 		983406132E85C3A4004B1AA3 /* DivTemplatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */; };
 		98730C102EDF3C8B00016117 /* DivSystemPropertyManagersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */; };
+		989DF7F72FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DF7F62FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift */; };
+		989DF7F82FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DF7F52FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift */; };
 		98C920F42C8F46EE00B2FFD8 /* LookinServer in Frameworks */ = {isa = PBXBuildFile; productRef = 98C920F32C8F46EE00B2FFD8 /* LookinServer */; };
 		98D560C02ECB4DAC00D01478 /* SkipRunLoopCycles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D560BF2ECB4DAC00D01478 /* SkipRunLoopCycles.swift */; };
 		98D560C22ECCF6C600D01478 /* VisibleBoundsTracking+VisibilityHierarchyDepth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D560C12ECCF6C600D01478 /* VisibleBoundsTracking+VisibilityHierarchyDepth.swift */; };
@@ -555,6 +557,8 @@
 		983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTemplatesTests.swift; sourceTree = "<group>"; };
 		986F57972CD68E8400990A2A /* DivKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivSystemPropertyManagersTests.swift; sourceTree = "<group>"; };
+		989DF7F52FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusElementActionHandlerTests.swift; sourceTree = "<group>"; };
+		989DF7F62FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipActionHandlerTests.swift; sourceTree = "<group>"; };
 		98D560BF2ECB4DAC00D01478 /* SkipRunLoopCycles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkipRunLoopCycles.swift; sourceTree = "<group>"; };
 		98D560C12ECCF6C600D01478 /* VisibleBoundsTracking+VisibilityHierarchyDepth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VisibleBoundsTracking+VisibilityHierarchyDepth.swift"; sourceTree = "<group>"; };
 		9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationTests.swift; sourceTree = "<group>"; };
@@ -583,6 +587,7 @@
 				DivBuilders.swift,
 				FakeImageHolder.swift,
 				MockDivBlockModelingContext.swift,
+				MockReporter.swift,
 				MockURLResourceRequester.swift,
 			);
 			target = 9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */;
@@ -980,6 +985,8 @@
 				8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */,
 				8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */,
 				8C06622F2D09A42800B30CE3 /* SetStoredValueActionHandlerTests.swift */,
+				989DF7F52FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift */,
+				989DF7F62FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -1914,6 +1921,8 @@
 				8C7B1BFE2865C01C0036EF4C /* DivSerializationTests.swift in Sources */,
 				98730C102EDF3C8B00016117 /* DivSystemPropertyManagersTests.swift in Sources */,
 				8C23F43529DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValue.swift in Sources */,
+				989DF7F72FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift in Sources */,
+				989DF7F82FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift in Sources */,
 				8C23F43C29DDB3810069F3F7 /* ArrayWithTransformTests.swift in Sources */,
 				8C22BBB92B037BA20076BAEB /* EntityWithJsonPropertyTemplate.swift in Sources */,
 				8C23F43429DDB3810069F3F7 /* EntityWithStringEnumPropertyTemplate.swift in Sources */,

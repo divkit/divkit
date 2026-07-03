@@ -3,6 +3,12 @@ import LayoutKit
 import VGSL
 
 final class DivAnimatorController {
+  enum ActionResult {
+    case success
+    case notFound
+    case ambiguousId
+  }
+
   private struct Entry {
     var animator: Animator
     var definition: DivAnimator
@@ -17,6 +23,7 @@ final class DivAnimatorController {
     }
   }
 
+  @discardableResult
   func startAnimator(
     path: UIElementPath,
     id: String,
@@ -27,9 +34,14 @@ final class DivAnimatorController {
     direction: AnimationDirection?,
     progressInterpolator: ProgressInterpolator?,
     repeatCount: RepeatCount?
-  ) {
+  ) -> ActionResult {
     lock.withLock {
-      entries[path + id]?.animator.start(
+      let matchedEntries = getEntries(path: path, id: id)
+      guard matchedEntries.count == 1, let entry = matchedEntries.first else {
+        return matchedEntries.isEmpty ? .notFound : .ambiguousId
+      }
+
+      entry.animator.start(
         startValue: startValue,
         endValue: endValue,
         duration: duration,
@@ -38,17 +50,31 @@ final class DivAnimatorController {
         progressInterpolator: progressInterpolator,
         repeatCount: repeatCount
       )
+      return .success
     }
   }
 
-  func stopAnimator(path: UIElementPath, id: String) {
+  @discardableResult
+  func stopAnimator(path: UIElementPath, id: String) -> ActionResult {
     lock.withLock {
-      entries[path + id]?.animator.stop()
+      let matchedEntries = getEntries(path: path, id: id)
+      guard matchedEntries.count == 1, let entry = matchedEntries.first else {
+        return matchedEntries.isEmpty ? .notFound : .ambiguousId
+      }
+
+      entry.animator.stop()
+      return .success
     }
   }
 
   func definition(path: UIElementPath, id: String) -> DivAnimator? {
-    lock.withLock { entries[path + id]?.definition }
+    lock.withLock {
+      let matchedEntries = getEntries(path: path, id: id)
+      guard matchedEntries.count == 1, let entry = matchedEntries.first else {
+        return nil
+      }
+      return entry.definition
+    }
   }
 
   func initializeIfNeeded(
@@ -87,5 +113,15 @@ final class DivAnimatorController {
         return $0.key.cardId != cardId
       }
     }
+  }
+
+  private func getEntries(path: UIElementPath, id: String) -> [Entry] {
+    entries.keys
+      .filter { $0.starts(with: path) && $0.leaf == id }
+      .reduce(into: [Entry]()) { result, key in
+        if let entry = entries[key] {
+          result.append(entry)
+        }
+      }
   }
 }

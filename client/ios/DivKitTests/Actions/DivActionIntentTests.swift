@@ -89,7 +89,7 @@ struct DivActionIntentTests {
   func setCurrentItem() {
     #expect(
       intent("div-action://set_current_item?id=div_id&item=10") ==
-        .setCurrentItem(id: "div_id", index: 10)
+        DivActionIntent.scrollAction(id: "div_id", .setCurrentItem(index: 10))
     )
   }
 
@@ -102,7 +102,7 @@ struct DivActionIntentTests {
   func setNextItem() {
     #expect(
       intent("div-action://set_next_item?id=div_id&step=3&overflow=ring") ==
-        .setNextItem(id: "div_id", step: 3, overflow: .ring)
+        DivActionIntent.scrollAction(id: "div_id", .setNextItem(step: 3, overflow: .ring))
     )
   }
 
@@ -110,7 +110,7 @@ struct DivActionIntentTests {
   func setPreviousItem() {
     #expect(
       intent("div-action://set_previous_item?id=div_id&step=3&overflow=clamp") ==
-        .setPreviousItem(id: "div_id", step: 3, overflow: .clamp)
+        DivActionIntent.scrollAction(id: "div_id", .setPreviousItem(step: 3, overflow: .clamp))
     )
   }
 
@@ -171,7 +171,8 @@ struct DivActionIntentTests {
   @Test
   func setStoredValue_ScopeGlobal() {
     #expect(
-      intent("div-action://set_stored_value?name=var&value=v&type=string&lifetime=100&scope=global") ==
+      intent("div-action://set_stored_value?name=var&value=v&type=string&lifetime=100&scope=global"
+      ) ==
         .setStoredValue(
           DivStoredValue(name: "var", value: "v", type: .string, lifetimeInSec: 100),
           .global
@@ -182,7 +183,8 @@ struct DivActionIntentTests {
   @Test
   func setStoredValue_ScopeCard() {
     #expect(
-      intent("div-action://set_stored_value?name=var&value=v&type=string&lifetime=100&scope=card") ==
+      intent("div-action://set_stored_value?name=var&value=v&type=string&lifetime=100&scope=card"
+      ) ==
         .setStoredValue(
           DivStoredValue(name: "var", value: "v", type: .string, lifetimeInSec: 100),
           .card
