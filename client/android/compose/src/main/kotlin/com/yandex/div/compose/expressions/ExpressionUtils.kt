@@ -1,13 +1,15 @@
 package com.yandex.div.compose.expressions
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.utils.toColor
+import com.yandex.div.core.Disposable
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionResolver
 
 @Composable
 fun <T : Any> Expression<T>?.observedValue(defaultValue: T): T {
@@ -16,16 +18,14 @@ fun <T : Any> Expression<T>?.observedValue(defaultValue: T): T {
         null -> defaultValue
         is Expression.ConstantExpression -> evaluate(expressionResolver)
         else -> {
-            val state = remember(this, expressionResolver) {
-                mutableStateOf(defaultValue)
+            val observer = remember(this, expressionResolver) {
+                ExpressionObserver(
+                    expression = this,
+                    expressionResolver = expressionResolver,
+                    transform = { it }
+                )
             }
-
-            DisposableEffect(this, expressionResolver) {
-                val disposable = observeAndGet(expressionResolver) { state.value = it }
-                onDispose { disposable.close() }
-            }
-
-            state.value
+            observer.value
         }
     }
 }
@@ -46,16 +46,14 @@ fun <T : Any> Expression<T>.observedValue(): T {
     return when (this) {
         is Expression.ConstantExpression -> evaluate(expressionResolver)
         else -> {
-            val state = remember(this, expressionResolver) {
-                mutableStateOf(evaluate(expressionResolver))
+            val observer = remember(this, expressionResolver) {
+                ExpressionObserver(
+                    expression = this,
+                    expressionResolver = expressionResolver,
+                    transform = { it }
+                )
             }
-
-            DisposableEffect(this, expressionResolver) {
-                val disposable = observe(expressionResolver) { state.value = it }
-                onDispose { disposable.close() }
-            }
-
-            state.value
+            observer.value
         }
     }
 }
@@ -85,16 +83,37 @@ internal fun <T : Any, R> Expression<T>.observedValue(transform: (T) -> R): R {
             }
 
         else -> {
-            val state = remember(this, expressionResolver) {
-                mutableStateOf(transform(evaluate(expressionResolver)))
+            val observer = remember(this, expressionResolver) {
+                ExpressionObserver(
+                    expression = this,
+                    expressionResolver = expressionResolver,
+                    transform = transform
+                )
             }
-
-            DisposableEffect(this, expressionResolver) {
-                val disposable = observe(expressionResolver) { state.value = transform(it) }
-                onDispose { disposable.close() }
-            }
-
-            state.value
+            observer.value
         }
     }
+}
+
+private class ExpressionObserver<T : Any, R>(
+    private val expression: Expression<T>,
+    private val expressionResolver: ExpressionResolver,
+    private val transform: (T) -> R
+) : RememberObserver {
+    private val state = mutableStateOf(transform(expression.evaluate(expressionResolver)))
+
+    private var subscription: Disposable? = null
+
+    val value: R get() = state.value
+
+    override fun onRemembered() {
+        subscription = expression.observe(expressionResolver) { state.value = transform(it) }
+    }
+
+    override fun onForgotten() {
+        subscription?.close()
+        subscription = null
+    }
+
+    override fun onAbandoned() = Unit
 }

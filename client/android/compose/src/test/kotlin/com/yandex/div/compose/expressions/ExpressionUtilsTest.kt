@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -26,8 +27,13 @@ class ExpressionUtilsTest {
     @get:Rule
     val composeRule = createComposeRule()
 
+    private val reporter = TestReporter()
     private val variableController = DivVariableController()
-    private val localComponent = mockLocalComponent(variableController = variableController)
+
+    private val localComponent = mockLocalComponent(
+        reporter = reporter,
+        variableController = variableController
+    )
 
     @Test
     fun `observed value changes when variable changes`() {
@@ -50,15 +56,43 @@ class ExpressionUtilsTest {
     }
 
     @Test
+    fun `observedValue() with default value yields resolved expression`() {
+        val expression = intExpression("@{20}")
+        var observedValue by mutableStateOf(0)
+
+        setContent {
+            observedValue = expression.observedIntValue(defaultValue = 10)
+        }
+
+        assertEquals(20, observedValue)
+    }
+
+    @Test
     fun `observed value has default value if expression is null`() {
         val expression: Expression<Int>? = null
         var observedValue by mutableStateOf(0)
 
         setContent {
-            observedValue = expression.observedValue(10)
+            observedValue = expression.observedValue(defaultValue = 10)
         }
 
         assertEquals(10, observedValue)
+    }
+
+    // TODO: observedValue(defaultValue) must yield the given default value for invalid expression,
+    //  but MutableExpression.evaluate() returns type default value for invalid expressions.
+    @Test
+    fun `observedValue() with default value yields type default value if expression is invalid`() {
+        reporter.failOnError = false
+
+        val expression = intExpression("@{invalid_expression}", failOnError = false)
+        var observedValue by mutableStateOf(-1)
+
+        setContent {
+            observedValue = expression.observedIntValue(defaultValue = 10)
+        }
+
+        assertEquals(0, observedValue)
     }
 
     @Test

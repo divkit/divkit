@@ -47,13 +47,16 @@ fun doubleExpression(expression: String): Expression<Double> {
     )
 }
 
-fun intExpression(expression: String): Expression<Long> {
+fun intExpression(
+    expression: String,
+    failOnError: Boolean = true
+): Expression<Long> {
     return Expression.MutableExpression<Long, Long>(
         expressionKey = "test",
         rawExpression = expression,
         converter = { it },
         validator = { true },
-        logger = { fail(it.message) },
+        logger = { if (failOnError) fail(it.message) },
         typeHelper = TYPE_HELPER_INT,
     )
 }
