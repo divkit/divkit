@@ -28,6 +28,7 @@ internal fun Modifier.apply(
         .applyIf(applyMargins) { padding(divBase.margins) }
         .size(div)
         .visibilityActions(divBase)
+        .applyIfNotNull(divBase.transform) { transform(it) }
         .appearance(divBase)
         // The actions must be applied AFTER the transformations and the border clipping in order
         // to have correct touch and animation area.
