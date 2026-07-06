@@ -8,6 +8,11 @@
           "name": "result",
           "type": "number",
           "value": 0
+        },
+        {
+          "name": "input_value",
+          "type": "string",
+          "value": "test"
         }
       ],
       "states": [
@@ -66,6 +71,11 @@
                             "mime_type": "video/mp4"
                           }
                         ]
+                      },
+                      {
+                        "type": "input",
+                        "id": "inner_input",
+                        "text_variable": "input_value"
                       }
                     ]
                   }
@@ -182,6 +192,31 @@
         {
           "type": "error",
           "value": "Animator with id 'nonexistent_animator' not found in scope"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_cursor_position_missing_in_scope",
+          "scope_id": "item_1",
+          "typed": {
+            "type": "set_cursor_position",
+            "id": "nonexistent_input",
+            "position": {
+              "start": 0,
+              "end": 0
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'nonexistent_input' not found in scope"
         }
       ],
       "platforms": [

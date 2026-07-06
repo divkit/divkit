@@ -8,6 +8,11 @@
           "name": "result",
           "type": "number",
           "value": 0
+        },
+        {
+          "name": "input_value",
+          "type": "string",
+          "value": "test"
         }
       ],
       "states": [
@@ -50,6 +55,11 @@
                     "mime_type": "video/mp4"
                   }
                 ]
+              },
+              {
+                "type": "input",
+                "id": "inner_input",
+                "text_variable": "input_value"
               }
             ]
           }
@@ -88,9 +98,25 @@
             "id": "inner_video",
             "action": "start"
           }
+        },
+        {
+          "log_id": "set_cursor_position_scope_missing",
+          "scope_id": "nonexistent_scope",
+          "typed": {
+            "type": "set_cursor_position",
+            "id": "inner_input",
+            "position": {
+              "start": 0,
+              "end": 0
+            }
+          }
         }
       ],
       "expected": [
+        {
+          "type": "error",
+          "value": "Scope with id 'nonexistent_scope' not found"
+        },
         {
           "type": "error",
           "value": "Scope with id 'nonexistent_scope' not found"

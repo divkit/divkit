@@ -1,6 +1,12 @@
 import LayoutKit
 
-final class SetCursorPositionActionHandler {
+struct SetCursorPositionActionHandler {
+  private let pathResolver: ActionPathResolver
+
+  init(pathResolver: ActionPathResolver) {
+    self.pathResolver = pathResolver
+  }
+
   func handle(_ action: DivActionSetCursorPosition, context: DivActionHandlingContext) {
     let resolver = context.expressionResolver
     guard let id = action.resolveId(resolver),
@@ -14,8 +20,11 @@ final class SetCursorPositionActionHandler {
     let state = TextInputViewState(
       pendingSelection: TextInputViewState.Selection(start: start, end: end)
     )
-    context.blockStateStorage.setPendingState(id: id, cardId: context.cardId, state: state)
-    context.blockStateStorage.setFocused(isFocused: true, element: IdAndCardId(id: id, cardId: context.cardId))
-    context.updateCard(.state(context.cardId))
+
+    pathResolver.resolve(id: id, context: context) { path in
+      context.blockStateStorage.setPendingState(path, state: state)
+      context.blockStateStorage.setFocused(isFocused: true, path: path)
+      context.updateCard(.state(context.cardId))
+    }
   }
 }

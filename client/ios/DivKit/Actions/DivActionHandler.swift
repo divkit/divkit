@@ -36,7 +36,7 @@ public final class DivActionHandler {
   private let downloadActionHandler: DownloadActionHandler
   private let focusElementActionHandler: FocusElementActionHandler
   private let scrollActionHandler: ScrollActionHandler
-  private let setCursorPositionActionHandler = SetCursorPositionActionHandler()
+  private let setCursorPositionActionHandler: SetCursorPositionActionHandler
   private let setStateActionHandler: SetStateActionHandler
   private let setStoredValueActionHandler: SetStoredValueActionHandler
   private let setVariableActionHandler = SetVariableActionHandler()
@@ -128,6 +128,9 @@ public final class DivActionHandler {
       reporter: reporter
     )
     focusElementActionHandler = FocusElementActionHandler(pathResolver: actionPathResolver)
+    setCursorPositionActionHandler = SetCursorPositionActionHandler(
+      pathResolver: actionPathResolver
+    )
     videoActionHandler = VideoActionHandler(
       pathResolver: actionPathResolver
     )

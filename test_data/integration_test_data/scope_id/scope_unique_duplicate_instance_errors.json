@@ -8,6 +8,11 @@
           "name": "result",
           "type": "number",
           "value": 0
+        },
+        {
+          "name": "input_value",
+          "type": "string",
+          "value": "test"
         }
       ],
       "states": [
@@ -97,6 +102,16 @@
                         "variable_name": "result"
                       }
                     ]
+                  },
+                  {
+                    "type": "input",
+                    "id": "inner_input",
+                    "text_variable": "input_value"
+                  },
+                  {
+                    "type": "input",
+                    "id": "inner_input",
+                    "text_variable": "input_value"
                   }
                 ]
               }
@@ -211,6 +226,31 @@
         {
           "type": "error",
           "value": "Animator with id 'inner_animator' is ambiguous in scope"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_cursor_position_dup_in_scope",
+          "scope_id": "item_1",
+          "typed": {
+            "type": "set_cursor_position",
+            "id": "inner_input",
+            "position": {
+              "start": 0,
+              "end": 0
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Element with id 'inner_input' is ambiguous in scope"
         }
       ],
       "platforms": [

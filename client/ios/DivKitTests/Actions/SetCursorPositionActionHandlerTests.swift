@@ -6,11 +6,18 @@ import Testing
 @Suite
 struct SetCursorPositionActionHandlerTests {
   private let blockStateStorage = DivBlockStateStorage()
+  private let idToPath = IdToPath()
   private var handler: DivActionHandler
 
+  private var inputPath: UIElementPath {
+    cardId.path + inputId
+  }
+
   init() {
+    idToPath.add(cardId.path + inputId, forId: cardId.path + inputId)
     handler = DivActionHandler(
       blockStateStorage: blockStateStorage,
+      idToPath: idToPath,
       updateCard: { _ in }
     )
   }
@@ -59,6 +66,7 @@ struct SetCursorPositionActionHandlerTests {
     var updateCount = 0
     handler = DivActionHandler(
       blockStateStorage: blockStateStorage,
+      idToPath: idToPath,
       updateCard: { _ in updateCount += 1 }
     )
 
@@ -67,7 +75,121 @@ struct SetCursorPositionActionHandlerTests {
     #expect(updateCount == 1)
   }
 
+  // MARK: – Scope id
+
+  @Test
+  func setCursorPosition_withScopeId_firstScope_setsCursorOnFirstInput() {
+    let layout = makeScopedSetCursorPositionLayout()
+
+    layout.handler.handle(
+      divAction(
+        logId: "action_id",
+        scopeId: "first",
+        typed: .divActionSetCursorPosition(
+          DivActionSetCursorPosition(
+            id: .value("input"),
+            position: DivActionSetCursorPosition.Position(
+              end: .value(7),
+              start: .value(3)
+            )
+          )
+        )
+      ),
+      path: cardId.path + "button",
+      source: .tap,
+      sender: nil
+    )
+
+    #expect(layout.reporter.lastError == nil)
+    #expect(layout.blockStateStorage.isFocused(path: layout.firstInputPath))
+    #expect(!layout.blockStateStorage.isFocused(path: layout.secondInputPath))
+  }
+
+  @Test
+  func setCursorPosition_withScopeId_secondScope_setsCursorOnSecondInput() {
+    let layout = makeScopedSetCursorPositionLayout()
+
+    layout.handler.handle(
+      divAction(
+        logId: "action_id",
+        scopeId: "second",
+        typed: .divActionSetCursorPosition(
+          DivActionSetCursorPosition(
+            id: .value("input"),
+            position: DivActionSetCursorPosition.Position(
+              end: .value(7),
+              start: .value(3)
+            )
+          )
+        )
+      ),
+      path: cardId.path + "button",
+      source: .tap,
+      sender: nil
+    )
+
+    #expect(layout.reporter.lastError == nil)
+    #expect(layout.blockStateStorage.isFocused(path: layout.secondInputPath))
+    #expect(!layout.blockStateStorage.isFocused(path: layout.firstInputPath))
+  }
+
+  @Test
+  func setCursorPosition_withoutScopeId_ambiguousId_reportsErrorAndDoesNotSetCursor() {
+    let layout = makeScopedSetCursorPositionLayout()
+
+    layout.handler.handle(
+      divAction(
+        logId: "action_id",
+        typed: .divActionSetCursorPosition(
+          DivActionSetCursorPosition(
+            id: .value("input"),
+            position: DivActionSetCursorPosition.Position(
+              end: .value(7),
+              start: .value(3)
+            )
+          )
+        )
+      ),
+      path: cardId.path + "button",
+      source: .tap,
+      sender: nil
+    )
+
+    #expect(layout.reporter.lastError != nil)
+    #expect(!layout.blockStateStorage.isFocused(path: layout.firstInputPath))
+    #expect(!layout.blockStateStorage.isFocused(path: layout.secondInputPath))
+  }
+
   // MARK: – Helpers
+
+  private func makeScopedSetCursorPositionLayout() -> ScopedSetCursorPositionLayout {
+    let blockStateStorage = DivBlockStateStorage()
+    let idToPath = IdToPath()
+    let firstScopePath = cardId.path + "container" + "0" + "first"
+    let secondScopePath = cardId.path + "container" + "1" + "second"
+    let firstInputPath = firstScopePath + "0" + "input"
+    let secondInputPath = secondScopePath + "0" + "input"
+
+    idToPath.add(firstScopePath, forId: cardId.path + "first")
+    idToPath.add(secondScopePath, forId: cardId.path + "second")
+    idToPath.add(firstInputPath, forId: cardId.path + "input")
+    idToPath.add(secondInputPath, forId: cardId.path + "input")
+
+    let reporter = MockReporter()
+    let handler = DivActionHandler(
+      blockStateStorage: blockStateStorage,
+      idToPath: idToPath,
+      reporter: reporter
+    )
+
+    return ScopedSetCursorPositionLayout(
+      blockStateStorage: blockStateStorage,
+      handler: handler,
+      reporter: reporter,
+      firstInputPath: firstInputPath,
+      secondInputPath: secondInputPath
+    )
+  }
 
   private func handleSetCursorPosition(start: Int, end: Int? = nil) {
     handler.handle(
@@ -89,9 +211,17 @@ struct SetCursorPositionActionHandlerTests {
   }
 
   private func getState() -> TextInputViewState? {
-    blockStateStorage.getState(inputId, cardId: cardId)
+    blockStateStorage.getState(inputPath)
   }
 }
 
 private let cardId = DivBlockModelingContext.testCardId
 private let inputId = "input_1"
+
+private struct ScopedSetCursorPositionLayout {
+  let blockStateStorage: DivBlockStateStorage
+  let handler: DivActionHandler
+  let reporter: MockReporter
+  let firstInputPath: UIElementPath
+  let secondInputPath: UIElementPath
+}

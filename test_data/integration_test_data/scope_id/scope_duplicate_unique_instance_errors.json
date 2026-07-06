@@ -183,6 +183,31 @@
       "platforms": [
         "ios"
       ]
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "set_cursor_position_dup_scope",
+          "scope_id": "scope_element",
+          "typed": {
+            "type": "set_cursor_position",
+            "id": "inner_input",
+            "position": {
+              "start": 0,
+              "end": 0
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "error",
+          "value": "Scope with id 'scope_element' is ambiguous"
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
     }
   ]
 }
