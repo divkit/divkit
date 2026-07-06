@@ -77,6 +77,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
   private var queuedAnimation: DispatchWorkItem?
   private var child: Block?
   private var isFirstChildLayout: Bool = true
+  private var isAnimatingIn: Bool = false
 
   var hasAnimationIn: Bool {
     animationIn != nil
@@ -206,6 +207,17 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
       return
     }
 
+    // Don't restart an appearance animation that is already running. A block can be reconfigured
+    // several times in quick succession (e.g. variable-driven rebuilds during initial load); without
+    // this guard the animation gets re-triggered mid-flight, producing a half-appear/hide/appear jank.
+    guard !isAnimatingIn else { return }
+
+    // Only start once the view is laid out, so the transition is actually visible. addWithAnimation
+    // can be called before layout settles; defer to a later call instead of consuming the animation
+    // invisibly.
+    guard bounds.width > 0, bounds.height > 0 else { return }
+
+    isAnimatingIn = true
     childView.isHidden = true
     let minDelay = animationIn.sortedChronologically().first?.delay ?? 0
 
@@ -216,6 +228,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
         completion: { [weak self] in
           self?.queuedAnimation = nil
           self?.animationIn = nil
+          self?.isAnimatingIn = false
         }
       )
     }
@@ -248,7 +261,14 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
       renderingDelegate: renderingDelegate,
       superview: self
     )
-    self.animationIn = animationIn
+    // Preserve a pending appearance animation across reconfigurations. During the first on-screen
+    // load the block can be reconfigured several times in quick succession; a reconfigure with
+    // `animationIn == nil` would otherwise overwrite the freshly-attached appearance animation before
+    // it plays, swallowing the first-appearance transition. The play completion clears `animationIn`,
+    // so the animation still runs exactly once.
+    if animationIn != nil {
+      self.animationIn = animationIn
+    }
     self.animationOut = animationOut
     self.animationChange = animationChange
 
@@ -259,6 +279,7 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     queuedAnimation?.cancel()
     queuedAnimation = nil
     transitionChangeAnimationContainer = nil
+    isAnimatingIn = false
   }
 
   private func resolveAnimationHost() -> (anchor: UIView, parent: UIView)? {
