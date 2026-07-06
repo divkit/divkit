@@ -1,12 +1,14 @@
 package com.yandex.div.compose.actions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
 
-internal class DivActions(
+@Stable
+internal data class DivActions(
     val tapActions: List<DivAction>,
     val doubleTapActions: List<DivAction>,
     val longTapActions: List<DivAction>,
