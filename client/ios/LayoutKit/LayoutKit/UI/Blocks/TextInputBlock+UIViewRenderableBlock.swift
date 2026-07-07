@@ -388,14 +388,16 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     }
 
     if !singleLineInput.isHidden {
-      if let from = singleLineInput.position(from: singleLineInput.beginningOfDocument, offset: start),
-         let to = singleLineInput.position(from: singleLineInput.beginningOfDocument, offset: end) {
+      if let from = singleLineInput.position(
+        from: singleLineInput.beginningOfDocument,
+        offset: start
+      ),
+        let to = singleLineInput.position(from: singleLineInput.beginningOfDocument, offset: end) {
         singleLineInput.selectedTextRange = singleLineInput.textRange(from: from, to: to)
       }
     } else {
       multiLineInput.selectedRange = NSRange(location: start, length: end - start)
     }
-
   }
 
   private func focusTextInput() {
@@ -1008,6 +1010,12 @@ private class PatchedUITextField: UITextField {
       super.paste(sender)
     }
   }
+
+  #if DEBUG
+  override func caretRect(for position: UITextPosition) -> CGRect {
+    EnvironmentVars.isSnapshotTesting ? .zero : super.caretRect(for: position)
+  }
+  #endif
 }
 
 private class PatchedUITextView: UITextView {
@@ -1032,6 +1040,12 @@ private class PatchedUITextView: UITextView {
       super.paste(sender)
     }
   }
+
+  #if DEBUG
+  override func caretRect(for position: UITextPosition) -> CGRect {
+    EnvironmentVars.isSnapshotTesting ? .zero : super.caretRect(for: position)
+  }
+  #endif
 }
 
 private let additionalOffset = 40.0

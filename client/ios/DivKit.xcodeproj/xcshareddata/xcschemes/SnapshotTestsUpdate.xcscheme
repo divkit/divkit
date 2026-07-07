@@ -79,6 +79,10 @@
             argument = "UPDATE_SNAPSHOTS"
             isEnabled = "YES">
          </CommandLineArgument>
+         <CommandLineArgument
+            argument = "SNAPSHOTS_TESTING"
+            isEnabled = "YES">
+         </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
    <ProfileAction

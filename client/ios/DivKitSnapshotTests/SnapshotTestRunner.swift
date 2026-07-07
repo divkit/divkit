@@ -6,9 +6,7 @@ import VGSL
 
 let testCardId = DivCardID(rawValue: "test_card_id")
 
-private let mode = ProcessInfo.processInfo.arguments.contains("UPDATE_SNAPSHOTS")
-  ? TestMode.update
-  : TestMode.verify
+private let mode: TestMode = EnvironmentVars.isSnapshotsUpdateMode ? .update : .verify
 
 private var customActionHandler: DivCustomActionHandling {
   SnapshotCustomActionHandler()
