@@ -54,7 +54,6 @@
 
     const direction = rootCtx.direction;
 
-    let prevId: string | undefined;
     let input: HTMLInputElement;
     let tracksInner: HTMLElement;
     let switchedTracks = false;
@@ -511,18 +510,12 @@
     }
 
     $: if (componentContext.json && input) {
-        if (prevId) {
-            rootCtx.unregisterFocusable(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('focus');
 
         if (componentContext.id && !componentContext.fakeElement) {
-            prevId = componentContext.id;
-            rootCtx.registerFocusable(prevId, {
-                focus() {
-                    if (input) {
-                        input.focus();
-                    }
+            componentContext.attachViewInfo('focus', () => {
+                if (input) {
+                    input.focus();
                 }
             });
         }
@@ -531,10 +524,7 @@
     onDestroy(() => {
         cleanupPress?.();
         cleanupPress = undefined;
-        if (prevId) {
-            rootCtx.unregisterFocusable(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('focus');
     });
 </script>
 

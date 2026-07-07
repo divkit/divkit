@@ -82,7 +82,6 @@
 
     const direction = rootCtx.direction;
 
-    let prevId: string | undefined;
     let input: HTMLInputElement | HTMLSpanElement;
     let isPressed = false;
     let inputMask: BaseInputMask | null = null;
@@ -656,26 +655,21 @@
     }
 
     $: if (input && componentContext.json) {
-        if (prevId) {
-            rootCtx.unregisterFocusable(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('focus');
+        componentContext.detachViewInfo('setCursorPosition');
 
         if (componentContext.id && !componentContext.fakeElement) {
-            prevId = componentContext.id;
-            rootCtx.registerFocusable(prevId, {
-                focus() {
-                    if (input) {
-                        input.focus();
-                        setCursorPosition(value.length, value.length);
-                    }
-                },
-                setCursorPosition(start, end) {
-                    if (document.activeElement !== input) {
-                        input.focus();
-                    }
-                    setCursorPosition(start === -1 ? value.length : start, end === -1 ? value.length : end);
-                },
+            componentContext.attachViewInfo('focus', () => {
+                if (input) {
+                    input.focus();
+                    setCursorPosition(value.length, value.length);
+                }
+            });
+            componentContext.attachViewInfo('setCursorPosition', (start, end) => {
+                if (document.activeElement !== input) {
+                    input.focus();
+                }
+                setCursorPosition(start === -1 ? value.length : start, end === -1 ? value.length : end);
             });
         }
     }
@@ -694,10 +688,8 @@
     onDestroy(() => {
         mounted = false;
 
-        if (prevId) {
-            rootCtx.unregisterFocusable(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('focus');
+        componentContext.detachViewInfo('setCursorPosition');
     });
 </script>
 

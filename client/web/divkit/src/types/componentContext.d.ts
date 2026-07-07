@@ -33,11 +33,14 @@ export type ComponentKey = string | {
 
 export interface InfoGetter {
     node: () => HTMLElement;
+    focus: () => void;
+    setCursorPosition: (start: number, end: number) => void;
 }
 
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     path: string[];
     parent?: ComponentContext;
+    children?: Set<ComponentContext>;
 
     json: MaybeMissing<T>;
     origJson?: MaybeMissing<DivBaseData> | undefined;

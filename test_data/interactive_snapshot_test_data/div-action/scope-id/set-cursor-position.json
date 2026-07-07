@@ -1,7 +1,8 @@
 {
   "description": "Set_cursor_action with scope_id",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "templates": {

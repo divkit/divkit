@@ -25,7 +25,6 @@
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
     const direction = rootCtx.direction;
 
-    let prevId: string | undefined;
     let input: HTMLInputElement;
     let value = false;
     let hasError = false;
@@ -113,28 +112,19 @@
     }
 
     $: if (input && componentContext.json) {
-        if (prevId) {
-            rootCtx.unregisterFocusable(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('focus');
 
         if (componentContext.id && !componentContext.fakeElement) {
-            prevId = componentContext.id;
-            rootCtx.registerFocusable(prevId, {
-                focus() {
-                    if (input) {
-                        input.focus();
-                    }
+            componentContext.attachViewInfo('focus', () => {
+                if (input) {
+                    input.focus();
                 }
             });
         }
     }
 
     onDestroy(() => {
-        if (prevId) {
-            rootCtx.unregisterFocusable(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('focus');
     });
 </script>
 

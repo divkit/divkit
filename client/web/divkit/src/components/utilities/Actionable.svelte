@@ -374,11 +374,9 @@
 
     onMount(() => {
         if (id && !hasInnerFocusable) {
-            rootCtx.registerFocusable(id, {
-                focus() {
-                    if (node && (href || hasJSAction)) {
-                        node.focus();
-                    }
+            componentContext.attachViewInfo('focus', () => {
+                if (node && (href || hasJSAction)) {
+                    node.focus();
                 }
             });
         }
@@ -392,7 +390,7 @@
         }
 
         if (id && !hasInnerFocusable) {
-            rootCtx.unregisterFocusable(id);
+            componentContext.detachViewInfo('focus');
         }
         if (longtapTimer) {
             clearTimeout(longtapTimer);

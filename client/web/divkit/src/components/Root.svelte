@@ -63,11 +63,11 @@
     import type { SwitchElements } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
     import type { VideoElements } from '../types/video';
-    import type { ComponentContext, StateSetter } from '../types/componentContext';
+    import type { ComponentContext, InfoGetter, StateSetter } from '../types/componentContext';
     import type { Store, StoreAllTypes, StoreScope, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
-    import { ROOT_CTX, type FocusableMethods, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
+    import { ROOT_CTX, type NodeGetter, type ParentMethods, type RootCtxValue, type Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
     import { type LogError, wrapError, type WrappedError } from '../utils/wrapError';
     import { checkCustomFunction, customFunctionWrap, mergeCustomFunctions, type CustomFunctions } from '../expressions/funcs/customFuncs';
@@ -1229,6 +1229,42 @@
         execActionInternal(getJsonWithVars(logError, action, undefined, true), action);
     }
 
+    function findComponentContextWithInfo<K extends keyof InfoGetter>(
+        scope: ComponentContext,
+        id: string | undefined,
+        infoName: K
+    ): ComponentContext | undefined {
+        if (!id) {
+            return;
+        }
+
+        const found = new Set<ComponentContext>();
+
+        const walk = (context: ComponentContext) => {
+            if (context.children) {
+                for (const child of context.children) {
+                    walk(child);
+                }
+            }
+            if (context.id === id && context.getViewInfo(infoName)) {
+                found.add(context);
+            }
+        };
+        walk(scope);
+
+        if (found.size === 1) {
+            return [...found][0];
+        } else if (found.size > 1) {
+            scope.logError(wrapError(new Error(`Element with id '${id}' is ambiguous`), {
+                additional: {
+                    count: found.size
+                }
+            }));
+        } else {
+            scope.logError(wrapError(new Error(`Element with id '${id}' not found`)));
+        }
+    }
+
     async function execActionInternal(
         action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
         origAction: MaybeMissing<Action | VisibilityAction | DisappearAction>,
@@ -1236,37 +1272,59 @@
     ): Promise<void> {
         const scopeId = action.scope_id;
         const log = (componentContext?.logError || logError);
+        const actionTyped = action.typed;
+
+        const isNewLogic = actionTyped?.type === 'focus_element' ||
+            actionTyped?.type === 'clear_focus' ||
+            actionTyped?.type === 'set_cursor_position';
+
+        let scopeContext = rootComponentContext;
 
         if (scopeId) {
             const set = componentContextMap.get(scopeId);
             if (set && set?.size > 1) {
-                log(wrapError(new Error(`Ambiguous scope id. There are ${set.size} divs with id '${scopeId}'`), {
-                    additional: {
-                        count: set.size,
-                        scopeId
-                    }
-                }));
+                if (isNewLogic) {
+                    logError(wrapError(new Error(`Scope with id '${scopeId}' is ambiguous`), {
+                        additional: {
+                            count: set.size
+                        }
+                    }));
+                    return;
+                    // eslint-disable-next-line no-else-return
+                } else {
+                    log(wrapError(new Error(`Ambiguous scope id. There are ${set.size} divs with id '${scopeId}'`), {
+                        additional: {
+                            count: set.size,
+                            scopeId
+                        }
+                    }));
+                }
             } else if (set?.size === 1) {
                 const first = set.values().next().value;
                 if (first) {
+                    scopeContext = first;
                     componentContext = first;
                 }
             } else {
-                log(wrapError(new Error('The scope with the specified scope_id is missing'), {
-                    additional: {
-                        scopeId
-                    }
-                }));
-                return;
+                // eslint-disable-next-line no-lonely-if
+                if (isNewLogic) {
+                    log(wrapError(new Error(`Scope with id '${scopeId}' not found`)));
+                } else {
+                    log(wrapError(new Error('The scope with the specified scope_id is missing'), {
+                        additional: {
+                            scopeId
+                        }
+                    }));
+                    return;
+                }
             }
         }
-
-        const actionUrl = action.url ? String(action.url) : '';
-        const actionTyped = action.typed;
 
         if (!filterEnabledActions(action)) {
             return;
         }
+
+        const actionUrl = action.url ? String(action.url) : '';
 
         if (actionTyped) {
             switch (actionTyped.type) {
@@ -1315,15 +1373,12 @@
                     copyToClipboard(log, actionTyped);
                     break;
                 case 'focus_element': {
-                    const methods = actionTyped.element_id && focusableMap.get(actionTyped.element_id);
-                    if (methods) {
-                        methods.focus();
-                    } else {
-                        log(wrapError(new Error('Incorrect focus_element action'), {
-                            additional: {
-                                elementId: actionTyped.element_id
-                            }
-                        }));
+                    const target = findComponentContextWithInfo(scopeContext, actionTyped.element_id, 'focus');
+                    if (target) {
+                        const info = target.getViewInfo('focus');
+                        if (info) {
+                            info();
+                        }
                     }
                     break;
                 }
@@ -1489,10 +1544,14 @@
                 case 'set_cursor_position': {
                     const start = actionTyped.position?.start;
                     const end = actionTyped.position?.end ?? start;
-                    const methods = actionTyped.id && focusableMap.get(actionTyped.id);
-
-                    if (methods && methods.setCursorPosition && typeof start === 'number' && typeof end === 'number' && actionTyped.position?.type === 'absolute') {
-                        methods.setCursorPosition(start, end);
+                    if (typeof start === 'number' && typeof end === 'number' && actionTyped.position?.type === 'absolute') {
+                        const target = findComponentContextWithInfo(scopeContext, actionTyped.id, 'setCursorPosition');
+                        if (target) {
+                            const info = target.getViewInfo('setCursorPosition');
+                            if (info) {
+                                info(start, end);
+                            }
+                        }
                     } else {
                         log(wrapError(new Error('Incorrect set_cursor_position action'), {
                             additional: {
@@ -1816,7 +1875,6 @@
 
     const instancesMap: Map<string, unknown> = new Map();
     const parentOfMap: Map<string, ParentMethods> = new Map();
-    const focusableMap: Map<string, FocusableMethods> = new Map();
     const tooltipMap: Map<string, {
         onwerNode: HTMLElement;
         tooltip: MaybeMissing<Tooltip>;
@@ -1858,14 +1916,6 @@
 
     function unregisterParentOf(id: string): void {
         parentOfMap.delete(id);
-    }
-
-    function registerFocusable(id: string, methods: FocusableMethods): void {
-        focusableMap.set(id, methods);
-    }
-
-    function unregisterFocusable(id: string): void {
-        focusableMap.delete(id);
     }
 
     function registerTooltip(onwerNode: HTMLElement, tooltip: MaybeMissing<Tooltip>): void {
@@ -2322,12 +2372,17 @@
                         componentContextMap.delete(ctx.id);
                     }
                 }
+                if (ctx.parent && ctx.parent.children) {
+                    ctx.parent.children.delete(ctx);
+                }
             },
         };
 
         if (from) {
             ctx.parent = from;
             ctx.path = from.path.slice();
+            from.children ||= new Set();
+            from.children.add(ctx);
 
             if (from.fakeElement) {
                 ctx.fakeElement = from.fakeElement;
@@ -2383,8 +2438,6 @@
         unregisterTooltip,
         onTooltipClose,
         tooltipRoot,
-        registerFocusable,
-        unregisterFocusable,
         addSvgFilter,
         removeSvgFilter,
         registerId,

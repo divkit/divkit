@@ -1,7 +1,8 @@
 {
   "description": "Focus_element with scope_id",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "div_data": {
     "templates": {

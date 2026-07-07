@@ -34,7 +34,6 @@
 
     const direction = rootCtx.direction;
 
-    let prevId: string | undefined;
     let select: HTMLSelectElement;
     let hasError = false;
     let selectText = '';
@@ -213,28 +212,19 @@
     };
 
     $: if (componentContext.json && select) {
-        if (prevId) {
-            rootCtx.unregisterFocusable(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('focus');
 
         if (componentContext.id && !componentContext.fakeElement) {
-            prevId = componentContext.id;
-            rootCtx.registerFocusable(prevId, {
-                focus() {
-                    if (select) {
-                        select.focus();
-                    }
+            componentContext.attachViewInfo('focus', () => {
+                if (select) {
+                    select.focus();
                 }
             });
         }
     }
 
     onDestroy(() => {
-        if (prevId) {
-            rootCtx.unregisterFocusable(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('focus');
     });
 </script>
 

@@ -18,11 +18,6 @@ export interface ParentMethods {
     isSingleMode: boolean;
 }
 
-export interface FocusableMethods {
-    focus: () => void;
-    setCursorPosition?: (start: number, end: number) => void;
-}
-
 export type ExecAnyActionsFunc = (actions: MaybeMissing<Action[]> | undefined, opts?: {
     componentContext?: ComponentContext;
     processUrls?: boolean;
@@ -52,8 +47,6 @@ export interface RootCtxValue {
     unregisterTooltip(tooltip: MaybeMissing<Tooltip>): void;
     onTooltipClose(internalId: number): void;
     tooltipRoot: HTMLElement | undefined;
-    registerFocusable(id: string, methods: FocusableMethods): void;
-    unregisterFocusable(id: string): void;
     addSvgFilter(color: string, mode: TintMode): string;
     removeSvgFilter(color: string | undefined, mode: TintMode): void;
     registerId(id: string, getter: NodeGetter): () => void;
