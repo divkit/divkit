@@ -1,6 +1,9 @@
 [versions]
 agp = "8.12.3"
 android-lint = "31.12.3"  # agp + "23.0.0"
+android-compileSdk = "36"
+android-minSdk = "21"
+android-targetSdk = "36"
 androidsvg = "1.4"
 coil = "3.1.0"
 exoplayer = "2.18.4"
@@ -196,6 +199,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.17.1" }
 kotlin-allopen = { id = "org.jetbrains.kotlin.plugin.allopen", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }

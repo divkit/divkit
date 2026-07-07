@@ -2,10 +2,10 @@ import com.yandex.div.gradle.FileExtensions
 import groovy.json.JsonOutput
 
 plugins {
-    id 'com.android.application'
-    id 'kotlin-parcelize'
+    alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.screenshotTestPlugin)
+    id 'kotlin-parcelize'
 }
 
 apply from: "${project.projectDir}/../div-common.gradle"
@@ -80,7 +80,7 @@ android {
     }
 
     lint {
-        baseline file("lint-baseline.xml")
+        baseline = file("lint-baseline.xml")
     }
 }
 

@@ -1,26 +1,21 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.yandex.divkit.sample"
 
     buildFeatures {
-        buildConfig = true
         viewBinding = true
     }
 
-    compileSdk = rootProject.ext["compileSdkVersion"] as Int
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.yandex.divkit.sample"
         minSdk = 23
-        targetSdk = rootProject.ext["targetSdkVersion"] as Int
+        targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0.0"
     }

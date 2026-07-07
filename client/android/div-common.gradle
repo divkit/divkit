@@ -2,7 +2,7 @@ apply plugin: "kotlin-android"
 apply plugin: "kotlin-allopen"
 
 android {
-    compileSdk = rootProject.ext.compileSdkVersion
+    compileSdk = libs.versions.android.compileSdk.get().toInteger()
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -10,8 +10,8 @@ android {
     }
 
     defaultConfig {
-        minSdk = rootProject.ext.minSdkVersion
-        targetSdk = rootProject.ext.targetSdkVersion
+        minSdk = libs.versions.android.minSdk.get().toInteger()
+        targetSdk = libs.versions.android.targetSdk.get().toInteger()
 
         versionName = divkitVersion.baseVersionName
         versionCode = divkitVersion.versionCode

@@ -30,6 +30,7 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin.allopen) apply false
+    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
 }
@@ -37,12 +38,6 @@ plugins {
 apply plugin: "org.jetbrains.kotlinx.binary-compatibility-validator"
 
 apply from: "$projectDir/version.gradle"
-
-ext {
-    minSdkVersion = 21
-    compileSdkVersion = 36
-    targetSdkVersion = 36
-}
 
 allprojects {
     repositories {

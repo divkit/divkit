@@ -5,8 +5,8 @@ version = divkitVersion.baseVersionName
 
 kotlin {
     androidLibrary {
-        compileSdk = rootProject.ext.compileSdkVersion
-        minSdk = rootProject.ext.minSdkVersion
+        compileSdk = libs.versions.android.compileSdk.get().toInteger()
+        minSdk = libs.versions.android.minSdk.get().toInteger()
     }
 }
 

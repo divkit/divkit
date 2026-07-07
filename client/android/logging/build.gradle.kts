@@ -35,7 +35,7 @@ afterEvaluate {
             withType<MavenPublication>().configureEach {
                 if (name == "kotlinMultiplatform") {
                     val buildDir = project.layout.buildDirectory
-                    val minSdk = rootProject.ext["minSdkVersion"] as Int
+                    val minSdk = libs.versions.android.minSdk.get().toInt()
 
                     val groupNamespace = project.group.toString().replace(':', '.')
                     val moduleNamespace = project.name.replace('-', '.')
