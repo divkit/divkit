@@ -1,24 +1,25 @@
 import LayoutKit
+import VGSL
 
 @_spi(Internal)
 public final class DivVisibilityCounter {
-  private var storage: [UIElementPath: UInt] = [:]
+  private let storage = AllocatedUnfairLock<[UIElementPath: UInt]>(uncheckedState: [:])
 
   init() {}
 
   public func reset() {
-    storage.removeAll()
+    storage.withLock { $0.removeAll() }
   }
 
   public func reset(cardId: DivCardID) {
-    storage = storage.filter { $0.key.root != cardId.rawValue }
+    storage.withLock { $0 = $0.filter { $0.key.root != cardId.rawValue } }
   }
 
   func visibilityCount(for path: UIElementPath) -> UInt {
-    storage[path] ?? 0
+    storage.withLock { $0[path] ?? 0 }
   }
 
   func incrementCount(for path: UIElementPath) {
-    storage[path] = visibilityCount(for: path) + 1
+    storage.withLock { $0[path] = ($0[path] ?? 0) + 1 }
   }
 }
