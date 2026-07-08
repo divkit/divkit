@@ -1,6 +1,6 @@
 [project]
 name = "pydivkit"
-version = "32.53.0"
+version = "32.53.4"
 description = "DivKit python library"
 readme = "README.md"
 keywords = ["divkit", "sdk"]
