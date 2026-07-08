@@ -63,24 +63,63 @@ public final class FixedLengthMaskFormatter: MaskFormatter {
     let textString = String(text)
 
     if let rawCursorPosition {
-      let cursorIndex = rawCursorPosition.cursorPosition.rawValue
-      if cursorIndex < rawText.endIndex {
-        let pos = rawText.distance(from: rawText.startIndex, to: cursorIndex)
-        if pos >= rawData.count {
-          newCursorPosition = .init(rawValue: textString.endIndex)
-        } else if rawCursorPosition.afterNonDecodingSymbols || pos == 0 {
-          newCursorPosition = .init(rawValue: rawData[pos].index)
-        } else {
-          newCursorPosition = .init(rawValue: textString.index(after: rawData[pos - 1].index))
-        }
-      } else {
-        newCursorPosition = .init(rawValue: textString.endIndex)
-      }
+      let cursorIndex = min(
+        rawCursorPosition.cursorPosition.rawValue,
+        rawText.endIndex
+      )
+      newCursorPosition = resolveCursorPosition(
+        rawText: rawText,
+        cursorIndex: cursorIndex,
+        rawCursorPosition: rawCursorPosition,
+        textString: textString,
+        rawData: rawData
+      )
     }
 
     return InputData(text: textString, cursorPosition: newCursorPosition, rawData: rawData)
   }
 
+  private func resolveCursorPosition(
+    rawText: String,
+    cursorIndex: String.Index,
+    rawCursorPosition: CursorData,
+    textString: String,
+    rawData: [InputData.RawCharacter]
+  ) -> CursorPosition {
+    let pos = rawText.distance(from: rawText.startIndex, to: cursorIndex)
+
+    return if pos >= rawData.count {
+      if !rawData.isEmpty {
+        .init(
+          rawValue: textString.index(after: rawData[rawData.count - 1].index)
+        )
+      } else if alwaysVisible {
+        .init(rawValue: firstDecodingTextIndex(in: textString))
+      } else {
+        .init(rawValue: textString.endIndex)
+      }
+    } else {
+      if rawCursorPosition.afterNonDecodingSymbols || pos == 0 {
+        .init(rawValue: rawData[pos].index)
+      } else {
+        .init(rawValue: textString.index(after: rawData[pos - 1].index))
+      }
+    }
+  }
+
+  private func firstDecodingTextIndex(in text: String) -> String.Index {
+    var textIndex = text.startIndex
+    for element in pattern {
+      if decoding[element] != nil {
+        return textIndex
+      }
+      if textIndex < text.endIndex {
+        textIndex = text.index(after: textIndex)
+      }
+    }
+    return text.endIndex
+  }
+  
   public func equals(_ other: MaskFormatter) -> Bool {
     guard let other = other as? FixedLengthMaskFormatter else {
       return false

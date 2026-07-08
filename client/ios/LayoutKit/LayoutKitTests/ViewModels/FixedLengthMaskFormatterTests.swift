@@ -63,6 +63,43 @@ final class FixedLengthMaskFormatterTests: XCTestCase {
       10
     )
   }
+
+  func test_cursorPositionWithAlwaysVisiblePlaceholders() {
+    let formatter = makeFormatter(alwaysVisible: true)
+    let rawText = "503"
+    let formattedText = "+7 (503) ___-__-__"
+    // "+7 (503) ___-__-__"
+    // "    012  3       "
+    XCTAssertEqual(
+      formatter.formatted(rawText: rawText, rawCursorPosition: .init(3, true)).cursorPosition,
+      7
+    )
+    let cursorAfterLastEnteredChar = formatter
+      .formatted(rawText: rawText, rawCursorPosition: .init(4, true)).cursorPosition
+    XCTAssertEqual(cursorAfterLastEnteredChar, 7)
+    XCTAssertNotEqual(
+      cursorAfterLastEnteredChar?.rawValue,
+      formattedText.endIndex
+    )
+  }
+
+  func test_cursorPositionAfterInsertWithAlwaysVisiblePlaceholders() {
+    let formatter = makeFormatter(alwaysVisible: true)
+    let validator = MaskValidator(formatter: formatter)
+    let data = validator.formatted(rawText: "503")
+    data.checkInputData(text: "+7 (503) ___-__-__", rawText: "503")
+
+    let (newRawText, cursor) = validator.addSymbols(
+      at: data.text.rangeOfCharsIn(9..<9),
+      data: data,
+      string: "1"
+    )
+    XCTAssertEqual(newRawText, "5031")
+    let formattedCursor = formatter
+      .formatted(rawText: newRawText, rawCursorPosition: cursor).cursorPosition
+    XCTAssertEqual(formattedCursor, 10)
+    XCTAssertNotEqual(formattedCursor?.rawValue, data.text.endIndex)
+  }
 }
 
 private func makeFormatter(alwaysVisible: Bool) -> FixedLengthMaskFormatter {
