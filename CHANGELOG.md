@@ -1,3 +1,23 @@
+## 32.58.0
+
+# Android Client:
+* Fix rotation pivot-point reset after layout size changes.
+
+# iOS Client:
+* DivVisibilityCounter is now thread safe.
+* Fixed appearance animations (`transition_in`) being skipped on the first render or restarted mid-flight when a block is reconfigured rapidly (e.g. during fast data/variable updates).
+* Implemented scope_id support for focus actions.
+* Implemented scope_id support for scroll actions.
+* Implemented scope_id support for set cursor position actions.
+* Implemented scope_id support for submit actions.
+* Implemented scope_id support for tooltips actions.
+* Remove redundant DivGallery animation on default_item resolve.
+* Retain cursor position after mask change in FixedLengthMaskFormatter.
+
+# Web Client:
+* Added support of scoped search for elements with given `id` in `focus_element` and `set_cursor_position` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
+
+
 ## 32.57.0
 
 # Android Client:

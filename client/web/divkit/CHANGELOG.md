@@ -1,3 +1,8 @@
+## 32.58.0 (July 13, 2026)
+
+* Added support of scoped search for elements with given `id` in `focus_element` and `set_cursor_position` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
+
+
 ## 32.57.0 (July 6, 2026)
 
 * Added support for the `bring_to_top_id` property in `tooltip`.
