@@ -1,0 +1,78 @@
+{
+  "description": "Horizontal wrap_content-height container with min_size and a single match_parent-height child (and a match_parent-height text inside it). The container's min_size gives a concrete cross size, so the child and the text stretch to fill it instead of hugging their content.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#f00"
+                }
+              ],
+              "content_alignment_vertical": "center",
+              "height": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 56
+                }
+              },
+              "items": [
+                {
+                  "type": "container",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "paddings": {
+                    "right": 50
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#0f0"
+                    }
+                  ],
+                  "items": [
+                    {
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#aaa"
+                        }
+                      ],
+                      "text_alignment_vertical": "center",
+                      "text_alignment_horizontal": "center",
+                      "text": "Sample text",
+                      "type": "text",
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "height": {
+                        "type": "match_parent"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
