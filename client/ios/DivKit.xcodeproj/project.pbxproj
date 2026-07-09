@@ -640,6 +640,7 @@
 				UI/Base/GenericCollectionLayoutTests.swift,
 				UI/Base/ScrollableContentPagerTests.swift,
 				"UI/Blocks/Array+UIViewRenderableTests.swift",
+				UI/Blocks/DecoratingViewActionAnimationFreezeTests.swift,
 				"UI/Blocks/UIViewRenderable+AccessibilityTests.swift",
 				UI/Views/GradientStopsPremultipliedTests.swift,
 				UI/Views/TabbedPages/TabListSelectionDataSourceImplTests.swift,

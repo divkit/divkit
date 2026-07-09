@@ -718,9 +718,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     let startAnimation = DispatchWorkItem { [weak self] in
       self?.perform(actionAnimation, animated: animated) {
         self?.animationStartTime = nil
-        self?.pendingAnimationWorkItem = nil
       }
       self?.animationStartTime = Date()
+      self?.pendingAnimationWorkItem = nil
     }
     pendingAnimationWorkItem = startAnimation
 
