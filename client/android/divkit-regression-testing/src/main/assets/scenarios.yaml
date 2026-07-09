@@ -876,19 +876,6 @@ expect:
 paths:
   - 'regression_test_data/single_line_input.json'
 ---
-title: Manage VideoCustom
-tags: [ 'VideoCustom' ]
-steps:
-  - Tap on 'play', 'pause', 'reset'
-expect:
-  - On tap on 'play' video continue
-  - On tap on 'pause' video pause
-  - On tap on 'reset' video starts from the beginning
-  - If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused
-  - If video wasn't paused, on tap on 'reset' the video starts playing from beginning
-paths:
-  - 'regression_test_data/video/video_controls.json'
----
 title: 'State transition trigger'
 steps:
   - Press "To liked"

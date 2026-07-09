@@ -11,13 +11,10 @@ import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.RenderConfiguration
 import com.yandex.div.picasso.PicassoDivImageLoader
-import com.yandex.div.video.custom.VideoCache
-import com.yandex.div.video.custom.VideoCustomViewController
 import com.yandex.divkit.demo.div.DemoDivImageLoaderWrapper
 import com.yandex.divkit.demo.div.editor.NaiveSSLContext
 import com.yandex.divkit.demo.div.histogram.DemoHistogramConfiguration
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
-import com.yandex.divkit.demo.div.video.DemoVideoCustomImageCache
 import com.yandex.divkit.demo.regression.RegressionComposeViewCreator
 import com.yandex.divkit.demo.regression.RegressionDiv2ViewCreator
 import com.yandex.divkit.demo.regression.RegressionSwitchingViewCreator
@@ -26,7 +23,6 @@ import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.connectivityManager
 import com.yandex.divkit.regression.di.`Yatagan$RegressionComponent`
-import kotlinx.coroutines.MainScope
 import okhttp3.OkHttpClient
 import okhttp3.internal.http2.Header
 import okhttp3.internal.toHeaderList
@@ -68,8 +64,6 @@ internal object Container {
 
     val httpClient = httpClientBuilder.build()
 
-    val applicationCoroutineScope = MainScope()
-
     val webSocketFactory: WebSocketFactory by lazy {
         WebSocketFactory()
             .setSSLContext(NaiveSSLContext.getInstance("TLS"))
@@ -98,17 +92,6 @@ internal object Container {
     var imageLoaderOverride: DemoDivImageLoaderWrapper? = null
 
     val uriHandler by lazy { DivkitDemoUriHandler(context) }
-
-    val videoCustomViewController by lazy {
-        val imageCache = DemoVideoCustomImageCache(context)
-        val cache = VideoCache(
-            imageLoader,
-            { imageCache },
-            context
-        )
-
-        VideoCustomViewController(cache, applicationCoroutineScope, context)
-    }
 
     val flagPreferenceProvider by lazy { FlagPreferenceProvider(context) }
 

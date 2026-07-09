@@ -10,8 +10,6 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.rive.OkHttpDivRiveNetworkDelegate
 import com.yandex.div.rive.RiveCustomViewAdapter
-import com.yandex.div.video.custom.VideoCustomAdapter
-import com.yandex.div.video.custom.VideoCustomViewController
 import com.yandex.div2.DivCustom
 import okhttp3.OkHttpClient
 
@@ -19,14 +17,12 @@ private const val TAG = "DivCustomViewAdapter"
 
 class DemoDivCustomViewAdapter(
     baseContext: Context,
-    videoCustomViewController: VideoCustomViewController
 ): DivCustomContainerViewAdapter {
 
     private val demoCustomContainerAdapter: DemoCustomContainerAdapter = DemoCustomContainerAdapter()
-    private val videoCustomAdapter = VideoCustomAdapter(videoCustomViewController)
     private val divRiveAdapter =
         RiveCustomViewAdapter.Builder(baseContext, OkHttpDivRiveNetworkDelegate(OkHttpClient.Builder().build())).build()
-    private val adapters = listOf(videoCustomAdapter, divRiveAdapter, demoCustomContainerAdapter)
+    private val adapters = listOf(divRiveAdapter, demoCustomContainerAdapter)
     override fun preload(
         div: DivCustom,
         callBack: DivPreloader.Callback

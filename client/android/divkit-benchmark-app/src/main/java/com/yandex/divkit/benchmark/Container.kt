@@ -7,14 +7,10 @@ import com.yandex.div.glide.GlideDivImageLoader
 import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.RenderConfiguration
-import com.yandex.div.video.custom.VideoCache
-import com.yandex.div.video.custom.VideoCustomViewController
 import com.yandex.divkit.benchmark.div.DemoDivImageLoaderWrapper
 import com.yandex.divkit.benchmark.div.histogram.DemoHistogramConfiguration
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
-import com.yandex.divkit.benchmark.div.video.DemoVideoCustomImageCache
 import com.yandex.divkit.benchmark.utils.NaiveSSLContext
-import kotlinx.coroutines.MainScope
 import okhttp3.OkHttpClient
 import okhttp3.internal.http2.Header
 import okhttp3.internal.toHeaderList
@@ -50,22 +46,9 @@ internal object Container {
 
     val httpClient = httpClientBuilder.build()
 
-    val applicationCoroutineScope = MainScope()
-
     val imageLoader by lazy {
         val loader = GlideDivImageLoader(context)
         DemoDivImageLoaderWrapper(loader)
-    }
-
-    val videoCustomViewController by lazy {
-        val imageCache = DemoVideoCustomImageCache(context)
-        val cache = VideoCache(
-            imageLoader,
-            { imageCache },
-            context
-        )
-
-        VideoCustomViewController(cache, applicationCoroutineScope, context)
     }
 
     val histogramConfiguration by lazy {

@@ -37,7 +37,7 @@ fun divConfiguration(
     logDelegate: ScenarioLogDelegate = ScenarioLogDelegate.Stub
 ): DivConfiguration.Builder {
     return DivConfiguration.Builder(Container.imageLoader)
-        .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
+        .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
         .enableAccessibility(true)

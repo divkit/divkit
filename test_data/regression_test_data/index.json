@@ -2614,27 +2614,6 @@
       "file": "select_with_default.json"
     },
     {
-      "title": "Manage VideoCustom",
-      "case_id": 210,
-      "platforms": [
-        "android"
-      ],
-      "tags": [
-        "VideoCustom"
-      ],
-      "steps": [
-        "Tap on 'play', 'pause', 'reset'"
-      ],
-      "expected_results": [
-        "On tap on 'play' video continue",
-        "On tap on 'pause' video pause",
-        "On tap on 'reset' video starts from the beginning",
-        "If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused",
-        "If video wasn't paused, on tap on 'reset' the video starts playing from beginning"
-      ],
-      "file": "video/video_controls.json"
-    },
-    {
       "title": "State transition trigger",
       "case_id": 82,
       "steps": [

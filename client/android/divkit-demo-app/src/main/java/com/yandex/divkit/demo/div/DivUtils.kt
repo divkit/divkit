@@ -66,7 +66,7 @@ fun divConfiguration(
     val flagPreferenceProvider = Container.flagPreferenceProvider
     return DivConfiguration.Builder(Container.imageLoader)
         .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
-        .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
+        .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
         .enableAccessibility(true)

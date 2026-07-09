@@ -128,7 +128,7 @@ override fun downloadPatch(
 ```
 DivCustom is used for supporting your own div types.
 Note: unlike with `RecyclerView.Adapter`, divs send the release event for the views that will definitely not be used anymore. So you can either clean up some data or reuse the same view and pass it to the next CreateView call.
-For an example of `DivCustom`, see our video custom implementation. The layout is [here](https://github.com/divkit/divkit/blob/main/test_data/regression_test_data/video/video_controls.json). You can view the adapter implementation [here](https://github.com/divkit/divkit/blob/main/client/android/video-custom/src/main/java/com/yandex/div/video/custom/VideoCustomAdapter.kt).
+For an example of `DivCustom`, see our [DemoCustomContainerAdapter](https://github.com/divkit/divkit/blob/main/client/android/divkit-demo-app/src/main/java/com/yandex/divkit/demo/div/DemoCustomContainerAdapter.kt). Example layouts: [custom-card.json](https://github.com/divkit/divkit/blob/main/test_data/regression_test_data/custom-card.json) for simple custom views, [custom-container.json](https://github.com/divkit/divkit/blob/main/test_data/regression_test_data/custom-container.json) for custom view groups with nested DivKit items.
 #### Extensions.
 If a div layout is suitable for you, but you want to add an action, use extensions. They're also suitable if you need to edit data in divs from the client, and the main layout must come from the server.
 Examples of our extensions: [pinch-to-zoom](https://github.com/divkit/divkit/tree/main/client/android/div-pinch-to-zoom/src/main/java/com/yandex/div/zoom) and [lottie](https://github.com/divkit/divkit/tree/main/client/android/div-lottie/src/main/java/com/yandex/div/lottie).

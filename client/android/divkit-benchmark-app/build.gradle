@@ -83,7 +83,6 @@ dependencies {
     implementation project(path: ':logging')
     implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
-    implementation project(path: ':video-custom')
 
     implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.compose.foundation

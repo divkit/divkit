@@ -6,8 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import com.yandex.div.internal.KLog
-import com.yandex.div.video.custom.VideoCustomUriHandler
-import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.uri.CustomTabColors
 import com.yandex.divkit.demo.uri.startBrowserActivity
 import java.lang.ref.WeakReference
@@ -21,7 +19,6 @@ open class DivkitDemoUriHandler(context: Context) {
     private val httpUriHandler = HttpUriHandler(context)
     private val viewportUriHandler = ViewportUriHandler(this)
     private val yellowSkinUriHandler = YellowSkinUriHandler(context)
-    private val videoCustomUriHandler = VideoCustomUriHandler(Container.videoCustomViewController)
 
     private var _handlingActivity: WeakReference<Activity?>? = null
 
@@ -39,7 +36,6 @@ open class DivkitDemoUriHandler(context: Context) {
             "http", "https" -> httpUriHandler.handle(uri, returnIntent)
             "viewport" -> viewportUriHandler.handle(uri, returnIntent)
             "yellowskin" -> yellowSkinUriHandler.handle(uri, returnIntent)
-            "custom_video" -> videoCustomUriHandler.handleUri(uri)
             else -> false
         }
 

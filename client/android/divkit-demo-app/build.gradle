@@ -109,7 +109,6 @@ dependencies {
     implementation project(path: ':screenshot-test-runtime')
     implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
-    implementation project(path: ':video-custom')
 
     implementation libs.androidx.browser
     implementation libs.androidx.constraintlayout
