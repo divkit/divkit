@@ -27,6 +27,7 @@ extension TextInputBlock {
     inputView.setFilters(filters)
     inputView.setTextAlignmentHorizontal(textAlignmentHorizontal)
     inputView.setTextAlignmentVertical(textAlignmentVertical)
+    inputView.setMultiLineMode(multiLineMode)
     inputView.setText(
       textValue: textValue,
       rawTextValue: rawTextValue,
@@ -35,7 +36,6 @@ extension TextInputBlock {
     )
     inputView.setHint(hint)
     inputView.setHighlightColor(highlightColor)
-    inputView.setMultiLineMode(multiLineMode)
     inputView.setMaxVisibleLines(maxVisibleLines)
     inputView.setSelectAllOnFocus(selectAllOnFocus)
     inputView.setParentScrollView(parentScrollView)
@@ -324,7 +324,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     typo: Typo,
     mask: MaskValidator?
   ) {
-    self.typo = typo.with(alignment: textAlignment)
+    let newTypo = typo.with(alignment: textAlignment)
+    let typoChanged = self.typo != newTypo
+    self.typo = newTypo
     self.textValue = textValue
 
     setupMaskedViewModel(mask: mask, rawTextValue: rawTextValue)
@@ -335,7 +337,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       } else {
         textValue.value
       }
-      setTextData(text)
+      if text != currentText || typoChanged {
+        setTextData(text)
+      }
     }
 
     updateHintVisibility()
@@ -463,24 +467,44 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func setTextData(_ text: String) {
     guard let typo else { return }
     let attributedText = text.with(typo: typo)
-    multiLineInput.attributedText = attributedText
-    if let selectedRange = singleLineInput.selectedTextRange {
-      let shouldResetRange = maskedViewModel == nil && text != singleLineInput.attributedText?
-        .string
-      singleLineInput.attributedText = attributedText
 
-      if shouldResetRange {
-        let endPosition = singleLineInput.endOfDocument
-        singleLineInput.selectedTextRange = singleLineInput.textRange(
-          from: endPosition,
-          to: endPosition
-        )
-      } else {
-        singleLineInput.selectedTextRange = selectedRange
-      }
+    if multiLineInput.isHidden {
+      setSingleLineTextData(text: text, attributedText: attributedText)
+    } else {
+      setMultiLineTextData(text: text, attributedText: attributedText)
     }
+
     multiLineInput.typingAttributes = typo.attributes
     singleLineInput.defaultTextAttributes = typo.attributes
+  }
+
+  private func setMultiLineTextData(text: String, attributedText: NSAttributedString) {
+    let selectedRange = multiLineInput.selectedRange
+    let shouldResetRange = maskedViewModel == nil && text != multiLineInput.attributedText.string
+    multiLineInput.attributedText = attributedText
+
+    if shouldResetRange {
+      let endLocation = (attributedText.string as NSString).length
+      multiLineInput.selectedRange = NSRange(location: endLocation, length: 0)
+    } else {
+      multiLineInput.selectedRange = selectedRange
+    }
+  }
+
+  private func setSingleLineTextData(text: String, attributedText: NSAttributedString) {
+    guard let selectedRange = singleLineInput.selectedTextRange else { return }
+    let shouldResetRange = maskedViewModel == nil && text != singleLineInput.attributedText?.string
+    singleLineInput.attributedText = attributedText
+
+    if shouldResetRange {
+      let endPosition = singleLineInput.endOfDocument
+      singleLineInput.selectedTextRange = singleLineInput.textRange(
+        from: endPosition,
+        to: endPosition
+      )
+    } else {
+      singleLineInput.selectedTextRange = selectedRange
+    }
   }
 
   private func setupMaskedViewModel(

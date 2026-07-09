@@ -108,10 +108,12 @@
             },
             {
               "type": "input_field",
+              "id": "input_without_actions",
               "text_variable": "text_without_actions"
             },
             {
               "type": "value_text",
+              "id": "mirror_without_actions",
               "text": "Text: @{text_without_actions}"
             },
             {

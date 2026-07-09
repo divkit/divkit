@@ -607,6 +607,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AppLaunchUITests.swift,
+				TextInputMultilineUITests.swift,
 				TooltipsUITests.swift,
 			);
 			target = 986F57962CD68E8400990A2A /* DivKitUITests */;
