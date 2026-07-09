@@ -140,6 +140,9 @@
         },
         "ios": {
           "version_added": "32.36.0"
+        },
+        "web": {
+          "version_added": "32.57.0"
         }
       }
     }
