@@ -77,7 +77,6 @@
     },
     {
       "title": "Focus action 2",
-      "case_id": 14,
       "platforms": [
         "web"
       ],
@@ -4573,7 +4572,6 @@
     },
     {
       "title": "Indicator auto-binding (no pager ids)",
-      "case_id": 200,
       "platforms": [
         "android",
         "ios",
@@ -4592,7 +4590,6 @@
     },
     {
       "title": "Indicator auto-binding (same pager ids)",
-      "case_id": 201,
       "platforms": [
         "android",
         "ios",
@@ -4773,8 +4770,7 @@
         "After switching the screen theme, the dark square becomes light and the light square becomes dark",
         "The animation triggered by the button should change to one that matches the current color scheme"
       ],
-      "file": "animations/animators/color_scheme_dependent_color_animator.json",
-      "case_id": 485
+      "file": "animations/animators/color_scheme_dependent_color_animator.json"
     },
     {
       "title": "Restart color animator with changed end_value",
