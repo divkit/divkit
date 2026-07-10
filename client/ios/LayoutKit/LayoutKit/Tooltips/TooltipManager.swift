@@ -89,6 +89,87 @@ public class DefaultTooltipManager: TooltipManager {
     public let bringToTopId: String?
   }
 
+  class TooltipStates {
+    enum State {
+      case pending
+      case visible(TooltipContainerView)
+    }
+
+    private var tooltips: [TooltipIdentity: State] = [:]
+    private let lock = AllocatedUnfairLock()
+
+    var hasOpenModals: Bool {
+      lock.withLock {
+        tooltips.values.contains {
+          if case let .visible(view) = $0 {
+            view.isModal
+          } else {
+            false
+          }
+        }
+      }
+    }
+
+    func tryReserve(_ identity: TooltipIdentity) -> Bool {
+      lock.withLock {
+        guard !tooltips.keys.contains(identity) else {
+          return false
+        }
+
+        tooltips[identity] = .pending
+        return true
+      }
+    }
+
+    func isReserved(_ identity: TooltipIdentity) -> Bool {
+      lock.withLock {
+        tooltips.keys.contains(identity)
+      }
+    }
+
+    func addVisible(_ identity: TooltipIdentity, view: TooltipContainerView) {
+      lock.withLock {
+        tooltips[identity] = .visible(view)
+      }
+    }
+
+    func removePending(_ identity: TooltipIdentity) {
+      lock.withLock {
+        if case .pending = tooltips[identity] {
+          tooltips[identity] = nil
+        }
+      }
+    }
+
+    @discardableResult
+    func remove(
+      _ identity: TooltipIdentity
+    ) -> TooltipContainerView? {
+      lock.withLock {
+        defer { tooltips[identity] = nil }
+        return if case let .visible(view) = tooltips[identity] {
+          view
+        } else {
+          nil
+        }
+      }
+    }
+
+    func reset() {
+      let viewsToClose: [TooltipContainerView] = lock.withLock {
+        let views = tooltips.values.reduce(into: [TooltipContainerView]()) {
+          if case let .visible(view) = $1 {
+            $0.append(view)
+          }
+        }
+        tooltips.removeAll()
+        return views
+      }
+
+      viewsToClose.forEach { $0.close(animated: false) }
+    }
+  }
+
   private struct WeakBlockView {
     weak var view: BlockView?
 
@@ -103,7 +184,7 @@ public class DefaultTooltipManager: TooltipManager {
 
   private var handleAction: (UIActionEvent) -> Void
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
-  private var showingTooltips = [TooltipIdentity: TooltipContainerView]()
+  private var stateStore = TooltipStates()
   private var previousOrientation = UIDevice.current.orientation
 
   private let lock = AllocatedUnfairLock()
@@ -136,9 +217,14 @@ public class DefaultTooltipManager: TooltipManager {
   }
 
   public func showTooltip(info: TooltipInfo) {
-    guard !showingTooltips.keys.contains(info.identity),
-          let anchorView = findAnchorView(for: info),
-          let prep = presenter.prepare() else { return }
+    guard stateStore.tryReserve(info.identity) else {
+      return
+    }
+    guard let anchorView = findAnchorView(for: info),
+          let prep = presenter.prepare() else {
+      stateStore.removePending(info.identity)
+      return
+    }
     Task {
       @MainActor in _ = await performShow(
         info: info,
@@ -149,15 +235,19 @@ public class DefaultTooltipManager: TooltipManager {
   }
 
   public func showTooltipAsync(info: TooltipInfo) async -> Bool {
-    guard !showingTooltips.keys.contains(info.identity) else { return false }
-    guard let anchorView = findAnchorView(for: info) else { return false }
-    guard let prep = presenter.prepare() else { return false }
+    guard stateStore.tryReserve(info.identity) else { return false }
+
+    guard let anchorView = findAnchorView(for: info),
+          let prep = presenter.prepare() else {
+      stateStore.removePending(info.identity)
+      return false
+    }
+
     return await performShow(info: info, anchorView: anchorView, prep: prep)
   }
 
   public func hideTooltip(identity: TooltipIdentity) {
-    guard let tooltipView = showingTooltips[identity] else { return }
-    tooltipView.close(animated: true)
+    stateStore.remove(identity)?.close(animated: true)
   }
 
   public func tooltipAnchorViewAdded(anchorView: TooltipAnchorView) {
@@ -176,8 +266,7 @@ public class DefaultTooltipManager: TooltipManager {
 
   public func reset() {
     viewsById.removeAll()
-    showingTooltips.values.forEach { $0.close(animated: false) }
-    showingTooltips = [:]
+    stateStore.reset()
     presenter.reset()
   }
 
@@ -229,27 +318,35 @@ public class DefaultTooltipManager: TooltipManager {
     anchorView: TooltipAnchorView,
     prep: (constraint: CGRect, coordinateSpace: UIView?)
   ) async -> Bool {
+    defer {
+      stateStore.removePending(info.identity)
+    }
+
     guard let tooltip = await anchorView.makeTooltip(
       id: info.id,
       scopePath: info.scopePath,
       in: prep.constraint,
       relativeTo: prep.coordinateSpace
     ) else { return false }
-    await displayTooltip(tooltip, info: info)
-    return true
+    return await displayTooltip(tooltip, info: info)
   }
 
   @MainActor
-  private func displayTooltip(_ tooltip: Tooltip, info: TooltipInfo) async {
+  private func displayTooltip(_ tooltip: Tooltip, info: TooltipInfo) async -> Bool {
     let key = info.identity
+
+    guard stateStore.isReserved(key) else { return false }
+
     let view = TooltipContainerView(
       tooltip: tooltip,
       handleAction: handleAction,
       onCloseAction: { [weak self] in
         guard let self else { return }
-        showingTooltips.removeValue(forKey: key)
-        let hasRemainingModals = !showingTooltips.values.filter(\.isModal).isEmpty
-        presenter.onClosed(tooltipID: tooltip.params.id, hasRemainingModals: hasRemainingModals)
+        stateStore.remove(key)
+        presenter.onClosed(
+          tooltipID: tooltip.params.id,
+          hasRemainingModals: stateStore.hasOpenModals
+        )
       },
       getViewById: { [weak self] in
         self?.viewsById[$0]?.view
@@ -259,13 +356,15 @@ public class DefaultTooltipManager: TooltipManager {
     presenter.present(view, for: tooltip)
     view.animateAppear()
     UIAccessibility.postDelayed(notification: .screenChanged, argument: view)
-    showingTooltips[key] = view
+    stateStore.addVisible(key, view: view)
 
     let duration = tooltip.params.duration
     if !duration.isZero {
       try? await Task.sleep(nanoseconds: UInt64(duration.nanoseconds))
-      showingTooltips[key]?.close(animated: true)
+      stateStore.remove(key)?.close(animated: true)
     }
+
+    return true
   }
 }
 

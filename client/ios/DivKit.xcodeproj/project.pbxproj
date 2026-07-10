@@ -637,6 +637,7 @@
 				Blocks/TabsBlockTests.swift,
 				Blocks/TextInputBlockTests.swift,
 				Blocks/WrapperBlockTests.swift,
+				Tooltips/TooltipStatesStoreTests.swift,
 				UI/Base/GenericCollectionLayoutTests.swift,
 				UI/Base/ScrollableContentPagerTests.swift,
 				"UI/Blocks/Array+UIViewRenderableTests.swift",
