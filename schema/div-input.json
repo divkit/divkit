@@ -171,6 +171,12 @@
             "web"
           ]
         },
+        "hide_suggestions_bar": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_input_hide_suggestions_bar",
+          "platforms": []
+        },
         "mask": {
           "$ref": "div-input-mask.json",
           "$description": "translations.json#/div_input_mask",

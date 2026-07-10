@@ -78,6 +78,7 @@ public final class DivInput: DivBase, @unchecked Sendable {
   public let fontWeightValue: Expression<Int>? // constraint: number > 0
   public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
+  public let hideSuggestionsBar: Expression<Bool> // default value: false
   public let highlightColor: Expression<Color>?
   public let hintColor: Expression<Color> // default value: #73000000
   public let hintText: Expression<String>?
@@ -162,6 +163,10 @@ public final class DivInput: DivBase, @unchecked Sendable {
 
   public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(fontWeightValue)
+  }
+
+  public func resolveHideSuggestionsBar(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(hideSuggestionsBar) ?? false
   }
 
   public func resolveHighlightColor(_ resolver: ExpressionResolver) -> Color? {
@@ -280,6 +285,7 @@ public final class DivInput: DivBase, @unchecked Sendable {
       fontWeightValue: try dictionary.getOptionalExpressionField("font_weight_value", validator: Self.fontWeightValueValidator, context: context),
       functions: try dictionary.getOptionalArray("functions", transform: { (dict: [String: Any]) in try? DivFunction(dictionary: dict, context: context) }),
       height: try dictionary.getOptionalField("height", transform: { (dict: [String: Any]) in try DivSize(dictionary: dict, context: context) }),
+      hideSuggestionsBar: try dictionary.getOptionalExpressionField("hide_suggestions_bar", context: context),
       highlightColor: try dictionary.getOptionalExpressionField("highlight_color", transform: Color.color(withHexString:), context: context),
       hintColor: try dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:), context: context),
       hintText: try dictionary.getOptionalExpressionField("hint_text", context: context),
@@ -344,6 +350,7 @@ public final class DivInput: DivBase, @unchecked Sendable {
     fontWeightValue: Expression<Int>? = nil,
     functions: [DivFunction]? = nil,
     height: DivSize? = nil,
+    hideSuggestionsBar: Expression<Bool>? = nil,
     highlightColor: Expression<Color>? = nil,
     hintColor: Expression<Color>? = nil,
     hintText: Expression<String>? = nil,
@@ -405,6 +412,7 @@ public final class DivInput: DivBase, @unchecked Sendable {
     self.fontWeightValue = fontWeightValue
     self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
+    self.hideSuggestionsBar = hideSuggestionsBar ?? .value(false)
     self.highlightColor = highlightColor
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
     self.hintText = hintText
@@ -500,89 +508,90 @@ extension DivInput: Equatable {
     }
     guard
       lhs.height == rhs.height,
-      lhs.highlightColor == rhs.highlightColor,
-      lhs.hintColor == rhs.hintColor
+      lhs.hideSuggestionsBar == rhs.hideSuggestionsBar,
+      lhs.highlightColor == rhs.highlightColor
     else {
       return false
     }
     guard
+      lhs.hintColor == rhs.hintColor,
       lhs.hintText == rhs.hintText,
-      lhs.id == rhs.id,
-      lhs.isEnabled == rhs.isEnabled
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.isEnabled == rhs.isEnabled,
       lhs.keyboardType == rhs.keyboardType,
-      lhs.layoutProvider == rhs.layoutProvider,
-      lhs.letterSpacing == rhs.letterSpacing
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.margins == rhs.margins,
-      lhs.mask == rhs.mask
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.mask == rhs.mask,
       lhs.maxLength == rhs.maxLength,
-      lhs.maxVisibleLines == rhs.maxVisibleLines,
-      lhs.nativeInterface == rhs.nativeInterface
+      lhs.maxVisibleLines == rhs.maxVisibleLines
     else {
       return false
     }
     guard
+      lhs.nativeInterface == rhs.nativeInterface,
       lhs.paddings == rhs.paddings,
-      lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectAllOnFocus == rhs.selectAllOnFocus,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.textAlignmentHorizontal == rhs.textAlignmentHorizontal,
       lhs.textAlignmentVertical == rhs.textAlignmentVertical,
-      lhs.textColor == rhs.textColor,
-      lhs.textVariable == rhs.textVariable
+      lhs.textColor == rhs.textColor
     else {
       return false
     }
     guard
+      lhs.textVariable == rhs.textVariable,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transformations == rhs.transformations
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transformations == rhs.transformations,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.validators == rhs.validators,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.validators == rhs.validators
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -621,6 +630,7 @@ extension DivInput: Serializable {
     result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
+    result["hide_suggestions_bar"] = hideSuggestionsBar.toValidSerializationValue()
     result["highlight_color"] = highlightColor?.toValidSerializationValue()
     result["hint_color"] = hintColor.toValidSerializationValue()
     result["hint_text"] = hintText?.toValidSerializationValue()

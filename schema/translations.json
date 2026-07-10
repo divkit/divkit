@@ -1583,6 +1583,10 @@
     "en": "Highlighting input text when focused.",
     "ru": "Выделение введенного текста при получении фокуса."
   },
+  "div_input_hide_suggestions_bar": {
+    "en": "Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.",
+    "ru": "Скрывает или показывает панель с подсказками над виртуальной клавиатурой. На платформах, где система не поддерживает скрытие панели с подсказками, будет работать поведение системы по умолчанию."
+  },
   "div_input_short": {
     "en": "Text input field.",
     "ru": "Поле ввода текста."

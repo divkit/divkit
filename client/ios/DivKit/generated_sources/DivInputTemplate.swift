@@ -118,6 +118,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
   public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
   public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
+  public let hideSuggestionsBar: Field<Expression<Bool>>? // default value: false
   public let highlightColor: Field<Expression<Color>>?
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
   public let hintText: Field<Expression<String>>?
@@ -182,6 +183,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
       functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
+      hideSuggestionsBar: dictionary.getOptionalExpressionField("hide_suggestions_bar"),
       highlightColor: dictionary.getOptionalExpressionField("highlight_color", transform: Color.color(withHexString:)),
       hintColor: dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:)),
       hintText: dictionary.getOptionalExpressionField("hint_text"),
@@ -247,6 +249,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     fontWeightValue: Field<Expression<Int>>? = nil,
     functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
+    hideSuggestionsBar: Field<Expression<Bool>>? = nil,
     highlightColor: Field<Expression<Color>>? = nil,
     hintColor: Field<Expression<Color>>? = nil,
     hintText: Field<Expression<String>>? = nil,
@@ -309,6 +312,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     self.fontWeightValue = fontWeightValue
     self.functions = functions
     self.height = height
+    self.hideSuggestionsBar = hideSuggestionsBar
     self.highlightColor = highlightColor
     self.hintColor = hintColor
     self.hintText = hintText
@@ -372,6 +376,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     let fontWeightValueValue = { parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue }()
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let hideSuggestionsBarValue = { parent?.hideSuggestionsBar?.resolveOptionalValue(context: context) ?? .noValue }()
     let highlightColorValue = { parent?.highlightColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
     let hintColorValue = { parent?.hintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
     let hintTextValue = { parent?.hintText?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -433,6 +438,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+      hideSuggestionsBarValue.errorsOrWarnings?.map { .nestedObjectError(field: "hide_suggestions_bar", error: $0) },
       highlightColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "highlight_color", error: $0) },
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
@@ -503,6 +509,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: { fontWeightValueValue.value }(),
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
+      hideSuggestionsBar: { hideSuggestionsBarValue.value }(),
       highlightColor: { highlightColorValue.value }(),
       hintColor: { hintColorValue.value }(),
       hintText: { hintTextValue.value }(),
@@ -571,6 +578,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     var fontWeightValueValue: DeserializationResult<Expression<Int>> = { parent?.fontWeightValue?.value() ?? .noValue }()
     var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
+    var hideSuggestionsBarValue: DeserializationResult<Expression<Bool>> = { parent?.hideSuggestionsBar?.value() ?? .noValue }()
     var highlightColorValue: DeserializationResult<Expression<Color>> = { parent?.highlightColor?.value() ?? .noValue }()
     var hintColorValue: DeserializationResult<Expression<Color>> = { parent?.hintColor?.value() ?? .noValue }()
     var hintTextValue: DeserializationResult<Expression<String>> = { parent?.hintText?.value() ?? .noValue }()
@@ -726,6 +734,11 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
         _ = {
           if key == "height" {
            heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
+          }
+        }()
+        _ = {
+          if key == "hide_suggestions_bar" {
+           hideSuggestionsBarValue = deserialize(__dictValue).merged(with: hideSuggestionsBarValue)
           }
         }()
         _ = {
@@ -1029,6 +1042,11 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
+         if key == parent?.hideSuggestionsBar?.link {
+           hideSuggestionsBarValue = hideSuggestionsBarValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.highlightColor?.link {
            highlightColorValue = highlightColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
           }
@@ -1270,6 +1288,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+      hideSuggestionsBarValue.errorsOrWarnings?.map { .nestedObjectError(field: "hide_suggestions_bar", error: $0) },
       highlightColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "highlight_color", error: $0) },
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
@@ -1340,6 +1359,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: { fontWeightValueValue.value }(),
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
+      hideSuggestionsBar: { hideSuggestionsBarValue.value }(),
       highlightColor: { highlightColorValue.value }(),
       hintColor: { hintColorValue.value }(),
       hintText: { hintTextValue.value }(),
@@ -1413,6 +1433,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: fontWeightValue ?? mergedParent.fontWeightValue,
       functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
+      hideSuggestionsBar: hideSuggestionsBar ?? mergedParent.hideSuggestionsBar,
       highlightColor: highlightColor ?? mergedParent.highlightColor,
       hintColor: hintColor ?? mergedParent.hintColor,
       hintText: hintText ?? mergedParent.hintText,
@@ -1481,6 +1502,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: merged.fontWeightValue,
       functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
+      hideSuggestionsBar: merged.hideSuggestionsBar,
       highlightColor: merged.highlightColor,
       hintColor: merged.hintColor,
       hintText: merged.hintText,
