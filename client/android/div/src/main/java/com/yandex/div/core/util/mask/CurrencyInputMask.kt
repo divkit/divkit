@@ -55,9 +55,10 @@ internal class CurrencyInputMask(
     }
 
     override fun overrideRawValue(newRawValue: String) {
-        val parsed = currencyFormatter.parse(newRawValue) ?: 0
-
-        invalidateMaskDataForFormatted(parsed)
+        if (newRawValue.isNotEmpty()) {
+            val parsed = currencyFormatter.parse(newRawValue) ?: 0
+            invalidateMaskDataForFormatted(parsed)
+        }
 
         super.overrideRawValue(newRawValue)
     }
