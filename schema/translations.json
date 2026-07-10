@@ -1015,6 +1015,10 @@
     "en": "Extension ID.",
     "ru": "Идентификатор расширения."
   },
+  "div_extension_is_enabled": {
+    "en": "Controls whether the extension is enabled (`true` by default). When `false`, the extension is not applied to the element.",
+    "ru": "Параметр управляет включением расширения (по умолчанию `true`). При `false` расширение не применяется к элементу."
+  },
   "div_extension_params": {
     "en": "Additional extension parameters.",
     "ru": "Дополнительные параметры расширения."
