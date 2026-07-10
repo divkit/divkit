@@ -173,10 +173,13 @@ class DivSizeProviderExtensionHandlerTest {
 
     private fun setExtension(widthVariable: String? = null, heightVariable: String? = null) =
         whenever(div.extensions).doReturn(listOf(
-            DivExtension(SIZE_PROVIDER_EXTENSION_ID, JSONObject().apply {
-                widthVariable?.let { put(SIZE_PROVIDER_PARAM_WIDTH, it) }
-                heightVariable?.let { put(SIZE_PROVIDER_PARAM_HEIGHT, it) }
-            })
+            DivExtension(
+                id = SIZE_PROVIDER_EXTENSION_ID,
+                params = JSONObject().apply {
+                    widthVariable?.let { put(SIZE_PROVIDER_PARAM_WIDTH, it) }
+                    heightVariable?.let { put(SIZE_PROVIDER_PARAM_HEIGHT, it) }
+                }
+            )
         ))
 
     private fun bindExtension() = underTest.bindView(divView, resolver, view, div)
