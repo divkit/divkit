@@ -321,11 +321,11 @@
                 };
             });
 
-            firstDuplicates.forEach((_it, index) => {
-                visibleToAllMap[visibleItems.length + index] = index;
+            firstDuplicates.forEach((it, index) => {
+                visibleToAllMap[visibleItems.length + index] = it.index;
             });
-            lastDuplicates.forEach((_it, index) => {
-                visibleToAllMap[index - DUPLICATES_IN_INFINITE] = visibleItems.length - DUPLICATES_IN_INFINITE + index;
+            lastDuplicates.forEach((it, index) => {
+                visibleToAllMap[index - DUPLICATES_IN_INFINITE] = it.index;
             });
 
             visibleItems = ([] as typeof visibleItems).concat(lastDuplicates, visibleItems, firstDuplicates);
