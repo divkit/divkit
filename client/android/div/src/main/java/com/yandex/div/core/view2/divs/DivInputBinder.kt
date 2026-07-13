@@ -392,12 +392,13 @@ internal class DivInputBinder @Inject constructor(
             val fieldValue = editable?.toString() ?: ""
 
             inputMask?.run {
-                if (value != fieldValue) {
-                    applyChangeFrom(text?.toString() ?: "", selectionStart)
-                    setText(value)
+                applyChangeFrom(text?.toString() ?: "", selectionStart)
+                val formatted = value
+                if (formatted != fieldValue) {
+                    setText(formatted)
                     setSelection(cursorPosition)
-                    setSecondVariable(value)
                 }
+                setSecondVariable(formatted)
                 valueUpdater(rawValue.replace(',', '.'))
                 return
             }

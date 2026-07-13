@@ -133,6 +133,39 @@ class PhoneMaskTest {
         phoneMask.assertMask("+1 (234) 567-89-0100", 1)
     }
 
+    @Test
+    fun `reapplying the same value after overriding invalid raw keeps the plus`() {
+        val phoneMask = createPhoneMask()
+
+        phoneMask.overrideRawValue("hello")
+        phoneMask.applyChangeFrom(phoneMask.value)
+
+        Assert.assertEquals("+", phoneMask.value)
+        Assert.assertEquals("", phoneMask.rawValue)
+    }
+
+    @Test
+    fun `reapplying the same value after overriding raw with trailing digits keeps universal format`() {
+        val phoneMask = createPhoneMask()
+
+        phoneMask.overrideRawValue("hello123")
+        phoneMask.applyChangeFrom(phoneMask.value)
+
+        Assert.assertEquals("+123", phoneMask.value)
+        Assert.assertEquals("123", phoneMask.rawValue)
+    }
+
+    @Test
+    fun `applying a real change still re-derives the mask pattern`() {
+        val phoneMask = createPhoneMask()
+        phoneMask.overrideRawValue("hello")
+
+        phoneMask.applyChangeFrom("+7", 2)
+
+        Assert.assertEquals("+7 (", phoneMask.value)
+        Assert.assertEquals("7", phoneMask.rawValue)
+    }
+
     private fun createPhoneMask(): PhoneInputMask {
         return PhoneInputMask { }
     }

@@ -13,6 +13,8 @@ internal class PhoneInputMask(
     }
 
     override fun applyChangeFrom(newValue: String, position: Int?) {
+        if (newValue == value) return
+
         val textDiff = TextDiff.build(value, newValue).let { initialDiff ->
             if (position == null) return@let initialDiff
             TextDiff(
