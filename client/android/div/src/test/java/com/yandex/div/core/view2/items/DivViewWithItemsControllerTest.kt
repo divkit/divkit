@@ -9,6 +9,7 @@ import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -20,7 +21,7 @@ import org.robolectric.RobolectricTestRunner
 internal class DivViewWithItemsControllerTest {
 
     private val divItemsView = mock<DivViewWithItems> {
-        on { currentItem } doReturn CURRENT_ITEM
+        on { getNearestItem(any()) } doReturn NEAREST_ITEM
         on { itemCount } doReturn ITEM_COUNT
         on { metrics } doReturn mock()
     }
@@ -53,38 +54,38 @@ internal class DivViewWithItemsControllerTest {
 
     @Test
     fun `handle set current item`() {
-        underTest.setCurrentItem(3)
-        verify(divItemsView).currentItem = 3
+        underTest.setCurrentItem(3, true)
+        verify(divItemsView).setCurrentItem(3, true)
     }
 
     @Test
     fun `handle set next item`() {
-        underTest.changeCurrentItemByStep(null, 1)
-        verify(divItemsView).currentItem = CURRENT_ITEM + 1
+        underTest.changeCurrentItemByStep(null, 1, true)
+        verify(divItemsView).setCurrentItem(NEAREST_ITEM, true)
     }
 
     @Test
     fun `handle set previous item`() {
-        underTest.changeCurrentItemByStep(null, -1)
-        verify(divItemsView).currentItem = CURRENT_ITEM - 1
+        underTest.changeCurrentItemByStep(null, -1, true)
+        verify(divItemsView).setCurrentItem(NEAREST_ITEM, true)
     }
 
     @Test
     fun `handle set next item with overflow ring`() {
-        whenever(divItemsView.itemCount).thenReturn(CURRENT_ITEM + 1)
-        underTest.changeCurrentItemByStep("ring", 1)
-        verify(divItemsView).currentItem = 0
+        whenever(divItemsView.itemCount).thenReturn(NEAREST_ITEM)
+        underTest.changeCurrentItemByStep("ring", 1, true)
+        verify(divItemsView).setCurrentItem(0, true)
     }
 
     @Test
     fun `handle set previous item with overflow ring`() {
-        whenever(divItemsView.currentItem).thenReturn(0)
-        underTest.changeCurrentItemByStep("ring", -1)
-        verify(divItemsView).currentItem = ITEM_COUNT - 1
+        whenever(divItemsView.getNearestItem(any())).thenReturn(-1)
+        underTest.changeCurrentItemByStep("ring", -1, true)
+        verify(divItemsView).setCurrentItem(ITEM_COUNT - 1, true)
     }
 
     companion object {
-        const val CURRENT_ITEM = 2
+        const val NEAREST_ITEM = 2
         const val ITEM_COUNT = 4
     }
 }

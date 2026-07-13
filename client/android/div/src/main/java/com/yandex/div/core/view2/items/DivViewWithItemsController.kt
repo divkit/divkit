@@ -10,44 +10,29 @@ internal class DivViewWithItemsController @VisibleForTesting(otherwise = Visible
     private val view: DivViewWithItems
 ) {
 
-    fun setCurrentItem(index: Int, animated: Boolean = true) {
-        if (animated) {
-            view.currentItem = index
-        } else {
-            view.setCurrentItemNoAnimation(index)
-        }
-    }
+    fun setCurrentItem(index: Int, animated: Boolean) = view.setCurrentItem(index, animated)
 
-    fun changeCurrentItemByStep(overflow: String?, step: Int = 1, animated: Boolean = true) {
-        val strategy = createStrategy(overflow)
-        val index = when {
-            step > 0 -> strategy.nextItem(step)
-            step < 0 -> strategy.previousItem(-step)
-            else -> return
-        }
+    fun changeCurrentItemByStep(overflow: String?, step: Int, animated: Boolean) {
+        if (step == 0) return
+        val strategy = createStrategy(step, overflow)
+        val index = strategy.targetItem(step)
         setCurrentItem(index, animated)
     }
 
-    fun scrollByOffset(overflow: String? = null, offset: Int, animated: Boolean = true) {
+    fun scrollByOffset(overflow: String?, offset: Int, animated: Boolean) {
         if (offset == 0) return
-        val strategy = createStrategy(overflow)
-        view.scrollTo(strategy.positionAfterScrollBy(offset), animated = animated)
+        val strategy = createStrategy(offset, overflow)
+        view.scrollTo(strategy.positionAfterScrollBy(offset), animated)
     }
 
-    fun scrollTo(offset: Int, animated: Boolean = true) {
-        view.scrollTo(offset, DivSizeUnit.DP, animated)
-    }
+    fun scrollTo(offset: Int, animated: Boolean) = view.scrollTo(offset, animated, DivSizeUnit.DP)
 
-    fun scrollToEnd(animated: Boolean = false) {
-        view.scrollToTheEnd(animated)
-    }
+    fun scrollToEnd(animated: Boolean) = view.scrollToTheEnd(animated)
 
-    fun scrollToStart(animated: Boolean = false) {
-        setCurrentItem(0, animated)
-    }
+    fun scrollToStart(animated: Boolean) = setCurrentItem(0, animated)
 
     @Throws(RuntimeException::class)
-    fun scrollToItemId(id: String, animated: Boolean = false) {
+    fun scrollToItemId(id: String, animated: Boolean) {
         val indices = view.getIndicesOfItemWithId(id)
 
         val exception = when {
@@ -60,10 +45,10 @@ internal class DivViewWithItemsController @VisibleForTesting(otherwise = Visible
         setCurrentItem(indices.first(), animated)
     }
 
-    private fun createStrategy(overflow: String? = null): OverflowItemStrategy {
+    private fun createStrategy(step: Int, overflow: String?): OverflowItemStrategy {
         return OverflowItemStrategy.create(
             overflow,
-            view.currentItem,
+            view.getNearestItem(ScrollDirection.from(step)),
             view.itemCount,
             view.scrollRange,
             view.scrollOffset,
@@ -78,11 +63,10 @@ internal class DivViewWithItemsController @VisibleForTesting(otherwise = Visible
             scopeId: String?,
             view: DivViewFacade,
             actionType: String,
-            direction: Direction = Direction.NEXT,
         ): DivViewWithItemsController? {
             val divView = view as? Div2View ?: return null
             val targetView = divView.findTargetView<DivScrollActionHolder>(id, actionType, scopeId) ?: return null
-            val viewWithItems = DivViewWithItems.create(targetView) { direction } ?: return null
+            val viewWithItems = DivViewWithItems.create(targetView) ?: return null
             return DivViewWithItemsController(viewWithItems)
         }
     }

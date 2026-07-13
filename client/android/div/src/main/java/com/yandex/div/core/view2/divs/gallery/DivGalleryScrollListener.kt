@@ -1,14 +1,11 @@
 package com.yandex.div.core.view2.divs.gallery
 
-import android.view.View
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.bindingContext
-import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div2.DivGallery
 import kotlin.math.abs
 
@@ -48,7 +45,7 @@ internal class DivGalleryScrollListener(
         super.onScrolled(recyclerView, dx, dy)
         val minimumDelta = when (minimumSignificantDx > 0) {
             true -> minimumSignificantDx
-            else -> galleryItemHelper.width() / 20
+            else -> galleryItemHelper.size() / 20
         }
         totalDelta += abs(dx) + abs(dy)  // because in galleries we used only one scroll direction at a time
         if (totalDelta > minimumDelta) {

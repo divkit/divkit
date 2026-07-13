@@ -12,10 +12,10 @@ internal class DivGallerySmoothScroller(
 ): LinearSmoothScroller(recyclerView.context) {
 
     override fun calculateDxToMakeVisible(view: View, snapPreference: Int) =
-        recyclerView.snapHelper.distanceToItem(recyclerView, view)
+        recyclerView.snapHelper.distanceToItem(view)
 
     override fun calculateDyToMakeVisible(view: View, snapPreference: Int) =
-        recyclerView.snapHelper.distanceToItem(recyclerView, view)
+        recyclerView.snapHelper.distanceToItem(view)
 
     override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics) =
         MILLISECONDS_PER_INCH / displayMetrics.densityDpi

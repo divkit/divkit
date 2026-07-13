@@ -1,22 +1,22 @@
 package androidx.recyclerview.widget
 
 import android.view.View
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div2.DivGallery
+import com.yandex.div2.DivGallery.ContentAlignment
 
 internal class DivLinearLayoutManager(
     override val bindingContext: BindingContext,
     override val view: DivRecyclerView,
-    @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL,
-    override val crossContentAlignment: DivGallery.ContentAlignment,
+    @RecyclerView.Orientation orientation: Int,
+    override val crossContentAlignment: ContentAlignment,
 ) : LinearLayoutManager(view.context, orientation, false), DivGalleryItemHelper {
 
-    override val childrenToRelayout = HashSet<View>()
+    private var anchor = 0
 
-    override fun getItemDiv(position: Int) = (view.adapter as DivGalleryAdapter).visibleItems.getOrNull(position)
+    override val childrenToRelayout = HashSet<View>()
 
     override fun toLayoutManager() = this
 
@@ -28,6 +28,7 @@ internal class DivLinearLayoutManager(
     override fun onLayoutCompleted(state: RecyclerView.State?) {
         _onLayoutCompleted(state)
         super.onLayoutCompleted(state)
+        anchor = view.snapHelper.getAnchor()
     }
 
     override fun layoutDecoratedWithMargins(child: View, left: Int, top: Int, right: Int, bottom: Int) {
@@ -88,8 +89,7 @@ internal class DivLinearLayoutManager(
     override fun findLastCompletelyVisibleItemPosition() = findCompletelyVisibleItemPosition(itemCount - 1, 0)
 
     private fun findCompletelyVisibleItemPosition(fromIndex: Int, toIndex: Int): Int {
-        val isHorizontal = orientation == RecyclerView.HORIZONTAL
-        val parentSize = if (isHorizontal) view.width else view.height
+        val parentSize = size()
         val range = if (fromIndex <= toIndex) fromIndex .. toIndex else fromIndex downTo toIndex
         for (i in range) {
             val child = getChildAt(i) ?: continue
@@ -104,11 +104,57 @@ internal class DivLinearLayoutManager(
 
     override fun lastVisibleItemPosition(): Int = findLastVisibleItemPosition()
 
+    /**
+     * @param direction physical scroll direction
+     */
+    override fun getNearestItemPosition(direction: Int): Int {
+        val reversed = isHorizontal && view.isLayoutRtl()
+        val range = if ((direction >= 0) != reversed) 0 .. itemCount else itemCount downTo 0
+        var lastFoundPosition = RecyclerView.NO_POSITION
+        for (i in range) {
+            val child = view.findViewHolderForAdapterPosition(i)?.itemView ?: continue
+            lastFoundPosition = i
+            val offset = getIndexOffsetIfIsNearest(child.getAnchor(), direction, reversed) ?: continue
+            return i + offset
+        }
+        return if (reversed) lastFoundPosition - 1 else lastFoundPosition + 1
+    }
+
+    private fun View.getAnchor(): Int {
+        return when (view.snapHelper.alignment) {
+            ContentAlignment.START -> {
+                when {
+                    !isHorizontal -> top
+                    view.isLayoutRtl() -> right
+                    else -> left
+                }
+            }
+
+            ContentAlignment.CENTER -> if (isHorizontal) (left + right) / 2 else (top + bottom) / 2
+
+            ContentAlignment.END -> {
+                when {
+                    !isHorizontal -> bottom
+                    view.isLayoutRtl() -> left
+                    else -> right
+                }
+            }
+        }
+    }
+
+    private fun getIndexOffsetIfIsNearest(childAnchor: Int, direction: Int, reversed: Boolean): Int? {
+        return when {
+            childAnchor > anchor -> if (direction >= 0) 0 else null
+            childAnchor < anchor -> if (direction < 0) 0 else null
+            direction >= 0 -> if (reversed) -1 else 1
+            reversed -> 1
+            else -> -1
+        }
+    }
+
     override fun _getChildAt(index: Int): View? = getChildAt(index)
 
     override fun _getPosition(child: View): Int = getPosition(child)
-
-    override fun width(): Int = width
 
     override fun getLayoutManagerOrientation(): Int = orientation
 

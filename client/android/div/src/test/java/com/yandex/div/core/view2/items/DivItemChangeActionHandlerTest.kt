@@ -55,7 +55,7 @@ class DivItemChangeActionHandlerTest {
         )
 
         assertTrue(result)
-        verify(controller)?.setCurrentItem(3)
+        verify(controller)?.setCurrentItem(3, true)
     }
 
     @Test
@@ -67,7 +67,7 @@ class DivItemChangeActionHandlerTest {
         )
 
         assertTrue(result)
-        verify(controller)?.changeCurrentItemByStep(null, 1)
+        verify(controller)?.changeCurrentItemByStep(null, 1, true)
     }
 
     @Test
@@ -79,7 +79,7 @@ class DivItemChangeActionHandlerTest {
         )
 
         assertTrue(result)
-        verify(controller)?.changeCurrentItemByStep(null, -1)
+        verify(controller)?.changeCurrentItemByStep(null, -1, true)
     }
 
     @Test
@@ -136,7 +136,7 @@ class DivItemChangeActionHandlerTest {
         )
 
         assertTrue(result)
-        verify(controller)?.changeCurrentItemByStep("ring", 1)
+        verify(controller)?.changeCurrentItemByStep("ring", 1, true)
     }
 
     @Test
@@ -148,7 +148,7 @@ class DivItemChangeActionHandlerTest {
         )
 
         assertTrue(result)
-        verify(controller)?.changeCurrentItemByStep("ring", -1)
+        verify(controller)?.changeCurrentItemByStep("ring", -1, true)
     }
 
     @Implements(DivViewWithItemsController.Companion::class)
@@ -161,7 +161,6 @@ class DivItemChangeActionHandlerTest {
             scopeId: String?,
             view: DivViewFacade,
             actionType: String,
-            direction: Direction = Direction.NEXT,
         ): DivViewWithItemsController? = controller
     }
 

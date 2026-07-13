@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.items
 
-import android.util.DisplayMetrics
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,12 +14,12 @@ internal class ClampOverflowItemStrategyTest(private val testCase: TestCase) {
         @Parameterized.Parameters(name = "{0}")
         fun data(): List<TestCase> {
             val itemCount = 5
-            val edgeCase1 = TestCase(currentItem = 0, itemCount = itemCount, nextItem = 1, previousItem = 0)
+            val edgeCase1 = TestCase(nearestItem = -1, itemCount = itemCount, nextItem = 0, previousItem = 0)
             val edgeCase2 = TestCase(
-                currentItem = itemCount - 1,
+                nearestItem = itemCount,
                 itemCount = itemCount,
                 nextItem = itemCount - 1,
-                previousItem = itemCount - 2
+                previousItem = itemCount - 1
             )
             return baseOverflowCases(itemCount, edgeCase1, edgeCase2)
         }
@@ -28,18 +27,55 @@ internal class ClampOverflowItemStrategyTest(private val testCase: TestCase) {
 
     @Test
     fun `next item`() {
-        val underTest = OverflowItemStrategy.Clamp(currentItem = testCase.currentItem, itemCount = testCase.itemCount, scrollRange = 0,
-        scrollOffset = 0, metrics = mock())
+        val underTest = OverflowItemStrategy.Clamp(
+            testCase.nearestItem,
+            testCase.itemCount,
+            scrollRange = 0,
+            scrollOffset = 0,
+            metrics = mock()
+        )
 
-        Assert.assertEquals(testCase.nextItem, underTest.nextItem())
+        Assert.assertEquals(testCase.expected, underTest.targetItem(1))
     }
 
+    @Test
+    fun `item after next`() {
+        val underTest = OverflowItemStrategy.Clamp(
+            testCase.nearestItem,
+            testCase.itemCount,
+            scrollRange = 0,
+            scrollOffset = 0,
+            metrics = mock()
+        )
+
+        Assert.assertEquals(testCase.nextItem, underTest.targetItem(2))
+    }
 
     @Test
     fun `previous item`() {
-        val underTest = OverflowItemStrategy.Clamp(currentItem = testCase.currentItem, itemCount = testCase.itemCount, scrollRange = 0,
-            scrollOffset = 0, metrics = mock())
+        val underTest = OverflowItemStrategy.Clamp(
+            testCase.nearestItem,
+            testCase.itemCount,
+            scrollRange = 0,
+            scrollOffset = 0,
+            metrics = mock()
+        )
 
-        Assert.assertEquals(testCase.previousItem, underTest.previousItem())
+        Assert.assertEquals(testCase.expected, underTest.targetItem(-1))
     }
+
+    @Test
+    fun `item before previous`() {
+        val underTest = OverflowItemStrategy.Clamp(
+            testCase.nearestItem,
+            testCase.itemCount,
+            scrollRange = 0,
+            scrollOffset = 0,
+            metrics = mock()
+        )
+
+        Assert.assertEquals(testCase.previousItem, underTest.targetItem(-2))
+    }
+
+    private val TestCase.expected get() = if (itemCount > 0) nearestItem.coerceIn(0, itemCount - 1) else -1
 }

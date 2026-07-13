@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div2.DivGallery.ContentAlignment
 
-internal class DivGallerySnapHelper : PagerSnapHelper() {
+internal class DivGallerySnapHelper(private val view: RecyclerView) : PagerSnapHelper() {
 
     var itemSpacing: Int = 0
     var alignment: ContentAlignment = ContentAlignment.CENTER
@@ -26,14 +26,17 @@ internal class DivGallerySnapHelper : PagerSnapHelper() {
             ?: OrientationHelper.createHorizontalHelper(layoutManager).also { _horizontalHelper = it }
     }
 
+    private fun RecyclerView.LayoutManager.getOrientationHelper(): OrientationHelper =
+        if (canScrollHorizontally()) getHorizontalHelper(this) else getVerticalHelper(this)
+
     override fun findTargetSnapPosition(manager: RecyclerView.LayoutManager, velocityX: Int, velocityY: Int) =
         (manager as DivGalleryItemHelper).findTargetSnapPosition(velocityX, velocityY)
 
     private fun DivGalleryItemHelper.findTargetSnapPosition(velocityX: Int, velocityY: Int): Int {
-        val velocity = if (getLayoutManagerOrientation() == LinearLayoutManager.HORIZONTAL) {
-            if (toLayoutManager().layoutDirection == View.LAYOUT_DIRECTION_LTR) velocityX else -velocityX
-        } else {
-            velocityY
+        val velocity = when {
+            getLayoutManagerOrientation() == LinearLayoutManager.VERTICAL -> velocityY
+            view.isLayoutRtl() -> -velocityX
+            else -> velocityX
         }
 
         val nextCompletelyVisibleItemPosition = if (velocity < 0) {
@@ -67,15 +70,28 @@ internal class DivGallerySnapHelper : PagerSnapHelper() {
         return array
     }
 
-    fun distanceToItem(view: RecyclerView, targetView: View): Int {
+    fun distanceToItem(targetView: View): Int {
         val layoutManager = view.layoutManager ?: return 0
-        val helper = if (layoutManager.canScrollHorizontally()) {
-            getHorizontalHelper(layoutManager)
-        } else {
-            getVerticalHelper(layoutManager)
-        }
+        val helper = layoutManager.getOrientationHelper()
         return -distanceToItem(layoutManager, targetView, helper)
     }
+
+    fun getAnchor(): Int {
+        val layoutManager = view.layoutManager ?: return 0
+        val isHorizontal = layoutManager.canScrollHorizontally()
+        val helper = layoutManager.getOrientationHelper()
+
+        if (alignment == ContentAlignment.CENTER) return helper.end / 2
+
+        return helper.getSideAnchor(
+            isStart = alignment == ContentAlignment.START,
+            reverse = isHorizontal && view.isLayoutRtl(),
+            offset = layoutManager.gridGalleryOffset,
+        )
+    }
+
+    private fun OrientationHelper.getSideAnchor(isStart: Boolean, reverse: Boolean, offset: Int) =
+        if (isStart != reverse) startAfterPadding + offset else endAfterPadding - offset
 
     private fun distanceToItem(
         layoutManager: RecyclerView.LayoutManager,

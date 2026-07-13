@@ -23,7 +23,7 @@ class DivViewWithItemsTest {
             on { resources } doReturn resources
         }
         assertThat(
-            DivViewWithItems.create(view) { Direction.NEXT },
+            DivViewWithItems.create(view),
             instanceOf(DivViewWithItems.Gallery::class.java)
         )
     }
@@ -34,7 +34,7 @@ class DivViewWithItemsTest {
             on { resources } doReturn resources
         }
         assertThat(
-            DivViewWithItems.create(view) { Direction.NEXT },
+            DivViewWithItems.create(view),
             instanceOf(DivViewWithItems.Pager::class.java)
         )
     }
@@ -45,13 +45,13 @@ class DivViewWithItemsTest {
             on { resources } doReturn resources
         }
         assertThat(
-            DivViewWithItems.create(view) { Direction.NEXT },
+            DivViewWithItems.create(view),
             instanceOf(DivViewWithItems.Tabs::class.java)
         )
     }
 
     @Test
     fun `cannot create`() {
-        assertNull(DivViewWithItems.create(mock<DivScrollActionHolder>()) { Direction.NEXT })
+        assertNull(DivViewWithItems.create(mock<DivScrollActionHolder>()))
     }
 }

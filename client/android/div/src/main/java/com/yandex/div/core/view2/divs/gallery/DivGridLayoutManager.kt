@@ -24,8 +24,6 @@ internal class DivGridLayoutManager(
 
     override val childrenToRelayout = HashSet<View>()
 
-    override fun getItemDiv(position: Int) = (view.adapter as DivGalleryAdapter).visibleItems.getOrNull(position)
-
     private fun spacingByOrientation(alongOrientation: Int) =
         if (alongOrientation == orientation) itemSpacing else crossSpacing
 
@@ -143,11 +141,11 @@ internal class DivGridLayoutManager(
         return indexes.last()
     }
 
+    override fun getNearestItemPosition(direction: Int) = RecyclerView.NO_POSITION
+
     override fun _getChildAt(index: Int): View? = getChildAt(index)
 
     override fun _getPosition(child: View): Int = getPosition(child)
-
-    override fun width(): Int = width
 
     override fun getLayoutManagerOrientation(): Int = orientation
 

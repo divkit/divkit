@@ -26,7 +26,10 @@ internal interface DivGalleryItemHelper {
 
     val childrenToRelayout: MutableSet<View>
 
-    fun getItemDiv(position: Int): DivItemBuilderResult?
+    val isHorizontal get() = getLayoutManagerOrientation() == RecyclerView.HORIZONTAL
+
+    fun getItemDiv(position: Int): DivItemBuilderResult? =
+        (view.adapter as? DivGalleryAdapter)?.visibleItems?.getOrNull(position)
 
     fun toLayoutManager(): RecyclerView.LayoutManager
 
@@ -126,7 +129,8 @@ internal interface DivGalleryItemHelper {
     fun lastCompletelyVisibleItemPosition(): Int
     fun firstVisibleItemPosition(): Int
     fun lastVisibleItemPosition(): Int
-    fun width(): Int
+    fun getNearestItemPosition(direction: Int): Int
+    fun size(): Int = toLayoutManager().run { if (isHorizontal) width else height }
     fun instantScrollToPosition(position: Int, offset: Int)
     fun getLayoutManagerOrientation(): Int
 
@@ -161,8 +165,6 @@ internal interface DivGalleryItemHelper {
         }
         view.scrollBy(distance, distance)
     }
-
-    private val isHorizontal get() = getLayoutManagerOrientation() == RecyclerView.HORIZONTAL
 
     private val View.scrollOffset: Int get() {
         return if (!isHorizontal) {

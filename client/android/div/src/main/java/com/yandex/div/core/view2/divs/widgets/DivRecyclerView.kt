@@ -60,7 +60,7 @@ internal class DivRecyclerView @JvmOverloads constructor(
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
 
     var scrollMode = ScrollMode.DEFAULT
-    val snapHelper = DivGallerySnapHelper()
+    val snapHelper = DivGallerySnapHelper(this)
     private var needFling = false
     private var beforeScrollFocusPosition = NO_POSITION
 

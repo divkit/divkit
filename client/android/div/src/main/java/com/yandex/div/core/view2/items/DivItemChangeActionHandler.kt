@@ -52,8 +52,7 @@ internal object DivItemChangeActionHandler {
             return false
         }
         val authority = uri.authority ?: return false
-        val viewController = DivViewWithItemsController.create(id, scopeId, view, authority, direction(authority))
-            ?: return false
+        val viewController = DivViewWithItemsController.create(id, scopeId, view, authority) ?: return false
         val animated = uri.getQueryParameter(PARAM_ANIMATED)?.toBoolean() ?: true
         return when (authority) {
             AUTHORITY_SET_CURRENT_ITEM -> handleSetCurrentItem(uri, animated, viewController)
@@ -85,7 +84,7 @@ internal object DivItemChangeActionHandler {
             KAssert.fail { "$rawItem is not a number" }
             return false
         }
-        viewController.setCurrentItem(item, animated = animated)
+        viewController.setCurrentItem(item, animated)
         return true
     }
 
@@ -135,7 +134,7 @@ internal object DivItemChangeActionHandler {
         viewController: DivViewWithItemsController
     ): Boolean {
         val step = uri.getStepParam()
-        viewController.scrollTo(step, animated = animated)
+        viewController.scrollTo(step, animated)
         return true
     }
 
@@ -192,13 +191,5 @@ internal object DivItemChangeActionHandler {
         val overflow = uri.getQueryParameter(PARAM_OVERFLOW)
         actionOnViewController(overflow, step)
         return true
-    }
-
-    private fun direction(authority: String?): Direction {
-        return when (authority) {
-            AUTHORITY_PREVIOUS_ITEM -> Direction.PREVIOUS
-            AUTHORITY_NEXT_ITEM -> Direction.NEXT
-            else -> Direction.NEXT
-        }
     }
 }
