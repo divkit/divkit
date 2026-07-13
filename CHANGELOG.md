@@ -2,6 +2,7 @@
 
 # Android Client:
 * Fix rotation pivot-point reset after layout size changes.
+* Fixed crash in `div-input` with currency mask when text input is empty.
 
 # iOS Client:
 * DivVisibilityCounter is now thread safe.
