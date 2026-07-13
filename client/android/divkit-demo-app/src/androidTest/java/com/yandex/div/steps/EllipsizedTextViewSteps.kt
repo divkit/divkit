@@ -54,8 +54,8 @@ internal class EllipsizedTextViewSteps : DivTestAssetSteps() {
         }
     }
 
-    fun ActivityTestRule<*>.buildContainer(height: Int? = null): Unit = step("Build container") {
-        buildContainer(height ?: activity.contentView!!.width / 2, ViewGroup.LayoutParams.MATCH_PARENT)
+    fun ActivityTestRule<*>.buildContainer(width: Int? = null): Unit = step("Build container") {
+        buildContainer(width ?: (activity.contentView!!.width / 2), ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
     fun assert(f: EllipsizedTextViewAssertions.() -> Unit) = f(EllipsizedTextViewAssertions())
@@ -105,7 +105,7 @@ internal class EllipsizedTextViewAssertions {
         }
 }
 
-private fun longText() = onView(withText(startsWith("This is a very long text")))
+private fun longText() = onView(withText(startsWith("This is a")))
 private fun firstText() = onView(isAssignableFrom(EllipsizedTextView::class.java))
 
 private fun withHeight(lines: Int) = object : TypeSafeMatcher<View>() {
@@ -129,7 +129,7 @@ private fun withHeight(lines: Int) = object : TypeSafeMatcher<View>() {
             return false
         }
         return with(item) {
-            height == textHeight(lines) + compoundPaddingBottom + compoundPaddingBottom
+            height == textHeight(lines) + compoundPaddingTop + compoundPaddingBottom
         }
     }
 }

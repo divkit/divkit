@@ -1,6 +1,13 @@
 {
   "card": {
     "log_id": "pinch_to_zoom_with_long_tap",
+    "variables": [
+      {
+        "name": "status",
+        "type": "string",
+        "value": "initial"
+      }
+    ],
     "states": [
       {
         "state_id": 0,
@@ -26,10 +33,14 @@
               ],
               "longtap_actions": [
                 {
-                  "url": "tel:0987654321",
+                  "url": "div-action://set_variable?name=status&value=long_tap",
                   "log_id": "longtap_actions"
                 }
               ]
+            },
+            {
+              "type": "text",
+              "text": "@{status}"
             }
           ]
         }

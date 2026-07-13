@@ -1,9 +1,18 @@
 package com.yandex.div.steps
 
 import android.graphics.Point
+import android.view.InputDevice
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.WindowManager
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.GeneralClickAction
+import androidx.test.espresso.action.Press
+import androidx.test.espresso.action.Tap
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
@@ -44,7 +53,7 @@ internal class DivTooltipSteps : DivTestAssetSteps() {
     }
 
     fun clickTooltip(): Unit = step("click on tooltip") {
-        tooltip().perform(click())
+        tooltip().perform(tooltipClick())
     }
     
     fun closeTooltip(): Unit = step("close tooltip") {
@@ -110,3 +119,28 @@ internal class DivTooltipAssertions {
 }
 
 private fun tooltip() = onView(withText("tooltip_text")).inRoot(isPlatformPopup())
+
+private fun tooltipClick(): ViewAction {
+    return ViewActions.actionWithAssertions(
+        GeneralClickAction(
+            Tap.SINGLE,
+            ::tooltipCoordinates,
+            Press.FINGER,
+            InputDevice.SOURCE_UNKNOWN,
+            MotionEvent.BUTTON_PRIMARY
+        )
+    )
+}
+
+private fun tooltipCoordinates(view: View): FloatArray {
+    val coords = floatArrayOf(0f, 0f)
+    val params = view.findDecorViewParams() ?: return coords
+    coords[0] = params.x.toFloat() + view.width / 2
+    coords[1] = params.y.toFloat() + view.height / 2
+    return coords
+}
+
+private fun View.findDecorViewParams(): WindowManager.LayoutParams? {
+    val parentView = parent as? View ?: return null
+    return parentView.layoutParams as? WindowManager.LayoutParams ?: parentView.findDecorViewParams()
+}

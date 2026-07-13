@@ -23,12 +23,10 @@ class PinchToZoomTest {
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
 
-            withIntending {
-                zoomAndHold()
+            zoomAndHold()
 
-                assert {
-                    checkNoLongAction()
-                }
+            assert {
+                checkNoLongAction()
             }
         }
     }
@@ -41,12 +39,10 @@ class PinchToZoomTest {
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
 
-            withIntending {
-                longClickOnImage()
+            longClickOnImage()
 
-                assert {
-                    checkLongAction()
-                }
+            assert {
+                checkLongAction()
             }
         }
     }

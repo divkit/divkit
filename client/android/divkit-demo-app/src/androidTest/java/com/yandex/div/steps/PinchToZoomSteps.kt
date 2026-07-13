@@ -1,10 +1,6 @@
 package com.yandex.div.steps
 
-import android.app.Activity
-import android.app.Instrumentation
-import android.content.Intent
 import android.graphics.PointF
-import android.net.Uri
 import android.os.SystemClock
 import android.view.MotionEvent
 import android.view.View
@@ -15,15 +11,12 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.GeneralLocation
 import androidx.test.espresso.action.ViewActions.longClick
-import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.intent.matcher.IntentMatchers.anyIntent
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withClassName
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
-import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matcher
 
@@ -34,17 +27,6 @@ internal class PinchToZoomSteps : DivTestAssetSteps() {
 
     init {
         testAsset = "ui_test_data/pinch-to-zoom-longtap-actions.json"
-    }
-
-    fun withIntending(block: () -> Unit) {
-        Intents.init()
-        Intents.intending(anyIntent())
-            .respondWith(Instrumentation.ActivityResult(Activity.RESULT_OK, null))
-        try {
-            block()
-        } finally {
-            Intents.release()
-        }
     }
 
     fun longClickOnImage(): Unit = step("Long click on image") {
@@ -81,15 +63,11 @@ internal class PinchToZoomSteps : DivTestAssetSteps() {
 internal class PinchToZoomAssertions {
 
     fun checkNoLongAction(): Unit = step("Check no long actions") {
-        Intents.assertNoUnverifiedIntents()
+        onView(withText("initial")).check(matches(isDisplayed()))
     }
 
     fun checkLongAction(): Unit = step("Check long action") {
-        Intents.intended(
-            allOf(
-                hasAction(Intent.ACTION_VIEW), hasData(Uri.parse("tel:0987654321"))
-            )
-        )
+        onView(withText("long_tap")).check(matches(isDisplayed()))
     }
 }
 

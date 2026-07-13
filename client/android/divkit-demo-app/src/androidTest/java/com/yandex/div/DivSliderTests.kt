@@ -227,6 +227,8 @@ class DivSliderTests {
             pressThumbDown()
 
             assert { hasTextOnScreen("Holding slider") }
+
+            releaseThumbUp()
         }
     }
 
