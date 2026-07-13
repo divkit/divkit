@@ -48,6 +48,12 @@ class DivEditorAdapter(val context: Div2Context) :
         }
     }
 
+    fun performAction(action: String) {
+        viewHolderList.forEach { holder ->
+            holder.performAction(action)
+        }
+    }
+
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<DivEditorItem>() {
             override fun areItemsTheSame(oldItem: DivEditorItem, newItem: DivEditorItem) =

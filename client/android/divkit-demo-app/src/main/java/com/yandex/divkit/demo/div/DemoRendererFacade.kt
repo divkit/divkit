@@ -2,18 +2,13 @@ package com.yandex.divkit.demo.div
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.data.DivParsingEnvironment
-import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.utils.applyPatchByConfig
-import org.json.JSONException
-import org.json.JSONObject
+import com.yandex.divkit.demo.utils.handleActionString
 
 interface DemoRendererFacade {
     val view: View
@@ -40,7 +35,6 @@ interface DemoRendererFacade {
 class Div2RendererFacade(
     container: ViewGroup,
     private val divContext: Div2Context,
-    private val actionHandler: DemoDivActionHandler,
 ) : DemoRendererFacade {
 
     private val divView = Div2View(divContext).apply {
@@ -63,12 +57,7 @@ class Div2RendererFacade(
     }
 
     override fun performAction(action: String) {
-        try {
-            val divAction = parseDivAction(action)
-            actionHandler.handleAction(divAction, divView, divView.expressionResolver)
-        } catch (_: JSONException) {
-            actionHandler.handleActionUrl(action.toUri(), divView)
-        }
+        divView.handleActionString(action)
     }
 
     override fun applyPatch(divPatch: DivPatch, errorCallback: () -> Unit): Boolean {
@@ -85,9 +74,4 @@ class Div2RendererFacade(
     override fun cleanup() {
         divView.cleanup()
     }
-}
-
-private fun parseDivAction(action: String): DivAction {
-    val env = DivParsingEnvironment(ParsingErrorLogger.LOG)
-    return DivAction(env, JSONObject(action))
 }

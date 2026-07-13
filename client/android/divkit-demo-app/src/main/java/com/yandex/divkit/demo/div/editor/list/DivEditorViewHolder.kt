@@ -5,12 +5,17 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.utils.applyPatchByConfig
+import com.yandex.divkit.demo.utils.handleActionString
 import com.yandex.divkit.demo.utils.setDataByConfig
 
 class DivEditorViewHolder(val div2View: Div2View) : RecyclerView.ViewHolder(div2View) {
 
     fun setData(divItem: DivEditorItem) {
         div2View.setDataByConfig(divItem.data, DivDataTag(divItem.id), null)
+    }
+
+    fun performAction(action: String) {
+        div2View.handleActionString(action)
     }
 
     fun applyPatch(patch: DivPatch, errorCallback: () -> Unit) {

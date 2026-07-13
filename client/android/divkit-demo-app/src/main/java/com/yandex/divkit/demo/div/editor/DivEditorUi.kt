@@ -98,6 +98,14 @@ class DivEditorUi(
         }
     }
 
+    fun performAction(action: String) {
+        if (isSingleCard) {
+            activeRenderer.performAction(action)
+        } else {
+            div2Adapter.performAction(action)
+        }
+    }
+
     private fun setRendererData(data: DivData, tag: DivDataTag) {
         lastDivData = data
         lastDivDataTag = tag

@@ -144,7 +144,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         div2Adapter = DivEditorAdapter(divContext)
         globalVariableController.bindWith(divContext)
 
-        val viewRenderer = Div2RendererFacade(binding.singleContainer, divContext, actionHandler)
+        val viewRenderer = Div2RendererFacade(binding.singleContainer, divContext)
         val composeRenderer = ComposeRendererFacade(
             container = binding.composeContainer,
             variableController = divContext.divVariableController
@@ -313,7 +313,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .setPositiveButton("Perform action") { _, _ ->
                 val action = editText.text.toString()
                 preferences.edit().putString(KEY_DIV2_ACTION_URL, action).apply()
-                divEditorUi.activeRenderer.performAction(action)
+                divEditorUi.performAction(action)
             }
         adb.create().show()
     }
