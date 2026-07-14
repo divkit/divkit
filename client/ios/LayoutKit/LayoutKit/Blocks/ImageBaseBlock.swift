@@ -62,8 +62,8 @@ extension ImageBaseBlock {
       }
 
       return clamp(intrinsicWidth, min: minWidth, max: maxWidth)
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
   }
 
@@ -93,8 +93,8 @@ extension ImageBaseBlock {
       }
 
       return clamp(intrinsicHeight, min: minHeight, max: maxHeight)
-    case .trait(.weighted):
-      return 0
+    case let .trait(.weighted(_, minHeight, _)):
+      return minHeight
     case let .ratio(ratio):
       return width / CGFloat(ratio)
     }
@@ -146,7 +146,7 @@ extension ImageBaseBlock {
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .trait(.weighted(value)) = height else {
+    guard case let .trait(.weighted(value, _, _)) = height else {
       assertionFailure("cannot get weightOfVerticallyResizableBlock for non resizable block")
       return .default
     }

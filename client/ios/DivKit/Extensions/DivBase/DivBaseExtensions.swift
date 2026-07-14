@@ -299,8 +299,12 @@ extension LayoutTrait {
         minSize: minSize - insets.sum,
         maxSize: maxSize - insets.sum
       )
-    case .weighted:
-      self
+    case let .weighted(weight, minSize, maxSize):
+      .weighted(
+        weight,
+        minSize: minSize - insets.sum,
+        maxSize: maxSize - insets.sum
+      )
     }
   }
 }

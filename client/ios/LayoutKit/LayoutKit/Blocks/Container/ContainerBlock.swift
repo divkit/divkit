@@ -145,12 +145,31 @@ public final class ContainerBlock: BlockWithLayout {
       children.map(\.content.intrinsicContentWidth).max() ?? 0
     }
 
-    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
+    switch widthTrait {
+    case let .intrinsic(_, minSize, maxSize),
+         let .weighted(_, minSize, maxSize):
       result = clamp(result, min: minSize, max: maxSize)
+    case .fixed:
+      break
     }
 
     cached.intrinsicWidth = result
     return result
+  }
+
+  public var unconstrainedIntrinsicContentWidth: CGFloat {
+    guard case let .intrinsic(_, minSize, _) = widthTrait else {
+      return intrinsicContentWidth
+    }
+
+    let result: CGFloat = switch layoutDirection {
+    case .horizontal:
+      (children.map(\.content.intrinsicContentWidth) + gaps).reduce(0, +)
+    case .vertical:
+      children.map(\.content.intrinsicContentWidth).max() ?? 0
+    }
+
+    return max(result, minSize)
   }
 
   public var widthOfHorizontallyNonResizableBlock: CGFloat {
@@ -191,7 +210,7 @@ public final class ContainerBlock: BlockWithLayout {
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = heightTrait else {
+    guard case let .weighted(value, _, _) = heightTrait else {
       assertionFailure("try to get weight for non resizable block")
       return LayoutTrait.Weight.default
     }
@@ -199,7 +218,7 @@ public final class ContainerBlock: BlockWithLayout {
   }
 
   public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = widthTrait else {
+    guard case let .weighted(value, _, _) = widthTrait else {
       assertionFailure("try to get weight for non resizable block")
       return LayoutTrait.Weight.default
     }
@@ -314,7 +333,8 @@ public final class ContainerBlock: BlockWithLayout {
         axialAlignment: axialAlignment,
         crossAlignment: crossAlignment,
         size: CGSize(width: width, height: .zero),
-        needCompressConstrainedBlocks: false
+        needCompressConstrainedBlocks: false,
+        crossAxisIsIndefinite: true
       )
       result = layout.blockFrames.map(\.maxY).max() ?? 0
     case .vertical:
@@ -322,8 +342,12 @@ public final class ContainerBlock: BlockWithLayout {
       result = (childrenHeights + gaps).reduce(0, +)
     }
 
-    if case let .intrinsic(_, minSize, maxSize) = heightTrait {
+    switch heightTrait {
+    case let .intrinsic(_, minSize, maxSize),
+         let .weighted(_, minSize, maxSize):
       result = clamp(result, min: minSize, max: maxSize)
+    case .fixed:
+      break
     }
 
     cached.intrinsicHeight = (width: width, height: result)
@@ -360,7 +384,8 @@ public final class ContainerBlock: BlockWithLayout {
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
       crossAlignment: crossAlignment,
-      size: CGSize(width: .zero, height: height)
+      size: CGSize(width: .zero, height: height),
+      crossAxisIsIndefinite: true
     )
     result = layout.blockFrames.map(\.maxX).max() ?? 0
     cached.nonResizableSize = (width: result, height: height)
@@ -525,6 +550,11 @@ private func makeChildrenWithSeparators(
 
   return childrenWithSeparators
 }
+
+// Exposes trait-aware minWidth/minHeight/maxWidth/maxHeight (via the BlockWithWidthTrait /
+// BlockWithHeightTrait default extensions) so that match_parent children inside a container
+// correctly clamp by the container's own widthTrait/heightTrait min/max bounds.
+extension ContainerBlock: BlockWithTraits {}
 
 extension ContainerBlock: Equatable {
   public static func ==(lhs: ContainerBlock, rhs: ContainerBlock) -> Bool {

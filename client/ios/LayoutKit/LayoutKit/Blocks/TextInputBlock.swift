@@ -101,10 +101,9 @@ public final class TextInputBlock: BlockWithTraits {
     switch widthTrait {
     case let .fixed(value):
       value
-    case let .intrinsic(_, minSize, _):
+    case let .intrinsic(_, minSize, _),
+         let .weighted(_, minSize, _):
       minSize
-    case .weighted:
-      0
     }
   }
 
@@ -212,8 +211,8 @@ public final class TextInputBlock: BlockWithTraits {
           .heightForWidth(width, maxNumberOfLines: maxVisibleLines)
       )
       return clamp(textHeight + verticalPaddings, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
   }
 

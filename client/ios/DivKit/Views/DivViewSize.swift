@@ -1,5 +1,6 @@
 import Foundation
 import LayoutKit
+import VGSL
 
 /// ``DivViewSize`` represents the sizing information for a division card.
 ///
@@ -36,6 +37,11 @@ public struct DivViewSize: Equatable {
   private let constrainedWidth: Bool
   private let constrainedHeight: Bool
 
+  private let minWidth: CGFloat
+  private let maxWidth: CGFloat
+  private let minHeight: CGFloat
+  private let maxHeight: CGFloat
+
   public init(block: Block) {
     let width: DivDimension = block
       .isHorizontallyResizable ? .matchParent : .desired(block.widthOfHorizontallyNonResizableBlock)
@@ -44,6 +50,10 @@ public struct DivViewSize: Equatable {
     self.height = height
     self.constrainedWidth = block.isHorizontallyConstrained
     self.constrainedHeight = block.isVerticallyConstrained
+    self.minWidth = block.minWidth
+    self.maxWidth = block.maxWidth
+    self.minHeight = block.minHeight
+    self.maxHeight = block.maxHeight
   }
 
   /// Computes the actual size for a ``DivView`` given its parent's size.
@@ -57,7 +67,7 @@ public struct DivViewSize: Equatable {
     let width: CGFloat
     switch self.width {
     case .matchParent:
-      width = parentViewSize.width
+      width = clamp(parentViewSize.width, min: minWidth, max: maxWidth)
     case let .desired(value):
       if constrainedWidth {
         width = min(value, parentViewSize.width)
@@ -71,7 +81,7 @@ public struct DivViewSize: Equatable {
 
     let height: CGFloat = switch self.height {
     case .matchParent:
-      parentViewSize.height
+      clamp(parentViewSize.height, min: minHeight, max: maxHeight)
     case let .desired(value):
       value
     case let .dependsOnOtherDimensionSize(heightForWidth):

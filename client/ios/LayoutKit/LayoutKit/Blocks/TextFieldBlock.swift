@@ -162,10 +162,9 @@ public final class TextFieldBlock: Block {
     switch widthTrait {
     case let .fixed(value):
       value
-    case let .intrinsic(_, minSize, _):
+    case let .intrinsic(_, minSize, _),
+         let .weighted(_, minSize, _):
       minSize
-    case .weighted:
-      0
     }
   }
 
@@ -181,7 +180,7 @@ public final class TextFieldBlock: Block {
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = heightTrait else {
+    guard case let .weighted(value, _, _) = heightTrait else {
       assertionFailure("try to get weight for non resizable block")
       return .default
     }
@@ -189,7 +188,7 @@ public final class TextFieldBlock: Block {
   }
 
   public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = widthTrait else {
+    guard case let .weighted(value, _, _) = widthTrait else {
       assertionFailure("try to get weight for non resizable block")
       return .default
     }
@@ -252,8 +251,8 @@ public final class TextFieldBlock: Block {
       let textHeight = text.heightForWidth(width, maxNumberOfLines: maxIntrinsicNumberOfLines)
       let height = ceil(textHeight + headerHeight + gap)
       return clamp(height, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
   }
 

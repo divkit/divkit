@@ -52,7 +52,7 @@ extension DivSeparator: DivBlockModeling {
         color: delimiterStyle.resolveColor(context.expressionResolver),
         direction: delimiterOrientation.direction
       )
-    case let .weighted(weight):
+    case let .weighted(weight, _, _):
       separatorBlock = SeparatorBlock(
         color: delimiterStyle.resolveColor(context.expressionResolver),
         direction: delimiterOrientation.direction,

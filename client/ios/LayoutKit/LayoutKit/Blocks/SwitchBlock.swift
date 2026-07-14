@@ -23,8 +23,8 @@ public final class SwitchBlock: Block {
       value
     case .intrinsic:
       uiSwitchSize.width
-    case .weighted:
-      0
+    case let .weighted(_, minSize, _):
+      minSize
     }
   }
 
@@ -81,8 +81,8 @@ public final class SwitchBlock: Block {
       value
     case .intrinsic:
       uiSwitchSize.height
-    case .weighted:
-      0
+    case let .weighted(_, minSize, _):
+      minSize
     }
   }
 

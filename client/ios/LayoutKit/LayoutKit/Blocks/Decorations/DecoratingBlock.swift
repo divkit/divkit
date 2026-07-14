@@ -41,6 +41,29 @@ final class DecoratingBlock: WrapperBlock {
     intrinsicContentWidth
   }
 
+  var unconstrainedIntrinsicContentWidth: CGFloat {
+    child.unconstrainedIntrinsicContentWidth.roundedToScreenScale + paddings.horizontal.sum
+  }
+
+  // The size bounds are around the child's content, so the paddings must be added back, mirroring
+  // `intrinsicContentWidth`. Otherwise a resizable (match_parent) child clamped by min/max would be
+  // sized to the content bounds instead of the element bounds, losing the paddings.
+  var minWidth: CGFloat {
+    child.minWidth + paddings.horizontal.sum
+  }
+
+  var maxWidth: CGFloat {
+    child.maxWidth + paddings.horizontal.sum
+  }
+
+  var minHeight: CGFloat {
+    child.minHeight + paddings.vertical.sum
+  }
+
+  var maxHeight: CGFloat {
+    child.maxHeight + paddings.vertical.sum
+  }
+
   init(
     child: Block,
     backgroundColor: Color = DecoratingBlock.defaultBackgroundColor,

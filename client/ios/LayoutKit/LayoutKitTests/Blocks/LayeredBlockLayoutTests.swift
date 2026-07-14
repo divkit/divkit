@@ -19,6 +19,28 @@ final class LayeredBlockLayoutTests: XCTestCase {
     XCTAssertEqual(blockFrames.first?.height, testSize.height)
   }
 
+  func test_WhenChildFillsHeight_StretchesToContainerHeightClampedByMax() {
+    // A match_parent-height overlap child is modeled as constrained wrap_content + fillsHeight: it
+    // stretches to the container height, but a max_size cap keeps it from growing past its bound.
+    func child(maxHeight: CGFloat) -> LayeredBlock.Child {
+      LayeredBlock.Child(
+        content: TextBlock(
+          widthTrait: .intrinsic,
+          heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: maxHeight),
+          text: NSAttributedString(string: "x"),
+          accessibilityElement: nil
+        ),
+        fillsHeight: true
+      )
+    }
+    let block = LayeredBlock(children: [child(maxHeight: 80), child(maxHeight: .infinity)])
+
+    let blockFrames = block.makeChildrenFrames(size: testSize)
+
+    // testSize.height == 200: capped child holds 80, unconstrained child fills to 200.
+    XCTAssertEqual(blockFrames.map(\.height), [80, 200])
+  }
+
   func test_WhenHorizontalChildrenAlignmentIsCenter_IntrinsicWidthChildIsCentered() {
     let block = LayeredBlock(
       horizontalChildrenAlignment: .center,

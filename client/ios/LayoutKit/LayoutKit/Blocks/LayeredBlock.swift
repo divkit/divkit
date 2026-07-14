@@ -6,10 +6,23 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
   public struct Child: Equatable {
     public var content: Block
     public let alignment: BlockAlignment2D
+    /// Set for a child that was `match_parent` on an axis where the layered container is
+    /// `wrap_content`. Such a child is modeled as a constrained `wrap_content` (so the container
+    /// can wrap to its content), but must then stretch back to fill the resolved container size on
+    /// that axis — clamped by its own min/max.
+    public let fillsWidth: Bool
+    public let fillsHeight: Bool
 
-    public init(content: Block, alignment: BlockAlignment2D = .default) {
+    public init(
+      content: Block,
+      alignment: BlockAlignment2D = .default,
+      fillsWidth: Bool = false,
+      fillsHeight: Bool = false
+    ) {
       self.content = content
       self.alignment = alignment
+      self.fillsWidth = fillsWidth
+      self.fillsHeight = fillsHeight
     }
   }
 
@@ -28,8 +41,9 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
     case let .intrinsic(_, minSize, maxSize):
       let width = children.map(\.content.intrinsicContentWidth).max() ?? 0
       return clamp(width, min: minSize, max: maxSize)
-    case .weighted:
-      return children.map(\.content.intrinsicContentWidth).max() ?? 0
+    case let .weighted(_, minSize, maxSize):
+      let width = children.map(\.content.intrinsicContentWidth).max() ?? 0
+      return clamp(width, min: minSize, max: maxSize)
     }
   }
 
@@ -71,8 +85,9 @@ public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
     case let .intrinsic(_, minSize, maxSize):
       let height = children.map(\.content).intrinsicHeights(forWidth: width).max() ?? 0
       return clamp(height, min: minSize, max: maxSize)
-    case .weighted:
-      return children.map(\.content).intrinsicHeights(forWidth: width).max() ?? 0
+    case let .weighted(_, minSize, maxSize):
+      let height = children.map(\.content).intrinsicHeights(forWidth: width).max() ?? 0
+      return clamp(height, min: minSize, max: maxSize)
     }
   }
 
@@ -115,7 +130,9 @@ extension LayeredBlock: ElementStateUpdating {
     let newChildren = try children.map {
       try LayeredBlock.Child(
         content: $0.content.updated(withStates: states),
-        alignment: $0.alignment
+        alignment: $0.alignment,
+        fillsWidth: $0.fillsWidth,
+        fillsHeight: $0.fillsHeight
       )
     }
 
@@ -136,7 +153,9 @@ extension LayeredBlock: ElementFocusUpdating {
     let newChildren = try children.map {
       try LayeredBlock.Child(
         content: $0.content.updated(path: path, isFocused: isFocused),
-        alignment: $0.alignment
+        alignment: $0.alignment,
+        fillsWidth: $0.fillsWidth,
+        fillsHeight: $0.fillsHeight
       )
     }
 
@@ -163,5 +182,6 @@ extension LayeredBlock: Equatable {
 extension LayeredBlock.Child {
   public static func ==(lhs: LayeredBlock.Child, rhs: LayeredBlock.Child) -> Bool {
     lhs.alignment == rhs.alignment && lhs.content == rhs.content
+      && lhs.fillsWidth == rhs.fillsWidth && lhs.fillsHeight == rhs.fillsHeight
   }
 }

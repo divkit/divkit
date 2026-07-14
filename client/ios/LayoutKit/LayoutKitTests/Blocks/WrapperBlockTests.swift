@@ -13,6 +13,25 @@ final class WrapperBlockTests: XCTestCase {
     XCTAssertEqual(updatedGalleryBlock?.state, state)
   }
 
+  func test_DecoratingBlock_addsPaddingsToMinMaxBounds() {
+    let child = TextBlock(
+      widthTrait: .weighted(.default, minSize: -16, maxSize: 134),
+      heightTrait: .fixed(50),
+      text: NSAttributedString(string: "x"),
+      accessibilityElement: nil
+    )
+    let decorated = child.addingEdgeInsets(
+      EdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+    )
+
+    XCTAssertEqual(decorated.minWidth, 0)
+    XCTAssertEqual(decorated.maxWidth, 150)
+    XCTAssertEqual(
+      decorated.size(forResizableBlockSize: CGSize(width: 360, height: 100)).width,
+      150
+    )
+  }
+
   func test_whenChildHasReuseId_hasSameReuseId() throws {
     let reuseId = "testReuseId"
     let childBlock = GalleryBlockTestModels.base.addingDecorations(

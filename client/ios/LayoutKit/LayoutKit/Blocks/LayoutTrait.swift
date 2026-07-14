@@ -10,8 +10,8 @@ public enum LayoutTrait: Equatable {
   case intrinsic(constrained: Bool, minSize: CGFloat, maxSize: CGFloat)
 
   /// Corresponding dimension of a parent block is filled by weighted blocks resized according to
-  /// their weights
-  case weighted(Weight)
+  /// their weights, optionally bounded by minSize and maxSize.
+  case weighted(Weight, minSize: CGFloat = 0, maxSize: CGFloat = .infinity)
 
   public struct Weight: RawRepresentable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral,
     Equatable, Comparable {

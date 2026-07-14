@@ -55,6 +55,43 @@ final class PagerViewLayoutTests: XCTestCase {
     ], [[40.0, 440.0, 840.0], [390.0, 390.0, 390.0]])
   }
 
+  func test_HorizontalPager_clampsResizableItemHeightToConstraints() {
+    func item(minHeight: CGFloat, maxHeight: CGFloat) -> GalleryViewModel.Item {
+      GalleryViewModel.Item(
+        crossAlignment: .leading,
+        content: TextBlock(
+          widthTrait: .fixed(120),
+          heightTrait: .weighted(.default, minSize: minHeight, maxSize: maxHeight),
+          text: NSAttributedString(string: "x"),
+          accessibilityElement: nil
+        )
+      )
+    }
+    let metrics = GalleryViewMetrics(
+      axialInsetMode: .fixed(values: SideInsets(leading: 0.0, trailing: 0.0)),
+      spacings: [4.0, 4.0],
+      crossSpacing: 0.0
+    )
+    let model = GalleryViewModel(
+      items: [
+        item(minHeight: 0, maxHeight: .infinity),
+        item(minHeight: 120, maxHeight: .infinity),
+        item(minHeight: 0, maxHeight: 80),
+      ],
+      metrics: metrics,
+      path: UIElementPath("1")
+    )
+    let layout = PagerViewLayout(
+      model: model,
+      alignment: .center,
+      layoutMode: .neighbourPageSize(10.0),
+      boundsSize: CGSize(width: 360.0, height: 100.0)
+    )
+
+    // match_parent pages fill the 100pt cross size, each clamped to its own min/max.
+    XCTAssertEqual(layout.blockFrames.map(\.height), [100, 120, 80])
+  }
+
   private func makeNeighbouredTestLayout() -> PagerViewLayout {
     let metrics = GalleryViewMetrics(
       axialInsetMode: InsetMode.fixed(

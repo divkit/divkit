@@ -36,8 +36,8 @@ public final class PageControlBlock: BlockWithTraits {
       }
 
       return clamp(width, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
   }
 
@@ -66,8 +66,9 @@ public final class PageControlBlock: BlockWithTraits {
     case let .intrinsic(_, minSize, maxSize):
       let height = configuration.pageSize.height * configuration.highlightedHeightScale
       return clamp(height, min: minSize, max: maxSize)
-    case .weighted:
-      return configuration.pageSize.height * configuration.highlightedHeightScale
+    case let .weighted(_, minSize, maxSize):
+      let height = configuration.pageSize.height * configuration.highlightedHeightScale
+      return clamp(height, min: minSize, max: maxSize)
     }
   }
 

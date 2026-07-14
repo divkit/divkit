@@ -35,8 +35,8 @@ public final class PagerBlock: BlockWithTraits {
         layoutMode: layoutMode
       ).width
       return clamp(width, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
   }
 
@@ -78,8 +78,8 @@ public final class PagerBlock: BlockWithTraits {
         layoutMode: layoutMode
       ).height
       return clamp(height, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
   }
 

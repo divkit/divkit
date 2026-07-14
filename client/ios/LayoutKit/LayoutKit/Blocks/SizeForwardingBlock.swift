@@ -54,6 +54,18 @@ extension SizeForwardingBlock {
     sizeProvider.minHeight
   }
 
+  public var maxWidth: CGFloat {
+    sizeProvider.maxWidth
+  }
+
+  public var maxHeight: CGFloat {
+    sizeProvider.maxHeight
+  }
+
+  public var unconstrainedIntrinsicContentWidth: CGFloat {
+    sizeProvider.unconstrainedIntrinsicContentWidth
+  }
+
   public var reuseId: String {
     sizeProvider.reuseId
   }

@@ -37,6 +37,11 @@ struct ContainerBlockLayout {
   let crossAlignment: ContainerBlock.CrossAlignment
   let size: CGSize
   let needCompressConstrainedBlocks: Bool
+  /// When true, the container's cross-axis size was derived from `wrap_content` and is therefore
+  /// indefinite (it equals the tallest/widest child). In that mode, a child whose cross-axis size
+  /// is `match_parent` does NOT stretch to the parent's resolved cross size — it falls back to its
+  /// own intrinsic content size (already clamped by the match_parent min/max).
+  let crossAxisIsIndefinite: Bool
   let axialAlignmentManager: AxialAlignmentManager
 
   var leftInset: CGFloat {
@@ -85,7 +90,8 @@ struct ContainerBlockLayout {
     axialAlignment: ContainerBlock.AxialAlignment,
     crossAlignment: ContainerBlock.CrossAlignment,
     size: CGSize,
-    needCompressConstrainedBlocks: Bool = true
+    needCompressConstrainedBlocks: Bool = true,
+    crossAxisIsIndefinite: Bool = false
   ) {
     precondition(gaps.count == children.count + 1)
     self.blockLayoutDirection = blockLayoutDirection
@@ -94,6 +100,7 @@ struct ContainerBlockLayout {
     self.layoutMode = layoutMode
     self.crossAlignment = crossAlignment
     self.size = size
+    self.crossAxisIsIndefinite = crossAxisIsIndefinite
     self.axialAlignmentManager = AxialAlignmentManager(
       layoutDirection: layoutDirection,
       axialAlignment: axialAlignment
@@ -166,27 +173,32 @@ struct ContainerBlockLayout {
         - resizableBlocksData.marginsSize
     )
 
-    let spaceAvailablePerWeightUnit = max(0, spaceAvailableForResizableBlocks) / resizableBlocksData
-      .totalWeight
-
+    let measures: [ResizableBlockMeasure.Measure] = blocks.map {
+      switch layoutDirection {
+      case .horizontal: $0.horizontalMeasure
+      case .vertical: $0.verticalMeasure
+      }
+    }
     let blockMeasure = ResizableBlockMeasure(
-      resizableBlockCount: resizableBlocksData.blocksCount,
-      lengthAvailablePerWeightUnit: spaceAvailablePerWeightUnit,
+      measures: measures,
       lengthAvailableForResizableBlocks: spaceAvailableForResizableBlocks
     )
 
     let constrainedBlocks = blocks
       .filter { $0.isConstrained(in: layoutDirection) }
+    let constrainedBlockSizes = constrainedBlocks.map {
+      ConstrainedBlockSize(
+        size: $0.unconstrainedSizeOfNonResizableBlock(in: layoutDirection, layoutSize: size),
+        minSize: $0.minSize(in: layoutDirection),
+        maxSize: $0.maxSize(in: layoutDirection)
+      )
+    }
+    let unconstrainedExcess = zip(constrainedBlockSizes, constrainedBlocks)
+      .map { $0.size - $1.sizeOfNonResizableBlock(in: layoutDirection, layoutSize: size) }
+      .reduce(0, +)
     let constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
-      blockSizes: constrainedBlocks
-        .map { .init(
-          size: $0.sizeOfNonResizableBlock(
-            in: layoutDirection,
-            layoutSize: size
-          ),
-          minSize: $0.minSize(in: layoutDirection)
-        ) },
-      lengthToDecrease: spaceAvailableForResizableBlocks < 0 ? -spaceAvailableForResizableBlocks : 0
+      blockSizes: constrainedBlockSizes,
+      lengthToDecrease: max(0, unconstrainedExcess - spaceAvailableForResizableBlocks)
     )
 
     switch layoutDirection {
@@ -308,8 +320,20 @@ struct ContainerBlockLayout {
         constrainedHeight: needCompressConstrainedBlocks ? size.height : .infinity
       )
 
+      if crossAxisIsIndefinite, block.isVerticallyResizable {
+        blockSize.height = clamp(
+          block.intrinsicContentHeight(forWidth: blockSize.width),
+          min: block.minHeight,
+          max: block.maxHeight
+        )
+      }
+
       if child.fillsCrossAxis {
-        blockSize.height = max(blockSize.height, size.height)
+        blockSize.height = clamp(
+          max(blockSize.height, size.height),
+          min: block.minHeight,
+          max: block.maxHeight
+        )
       }
 
       containerAscent = getMaxAscent(
@@ -349,14 +373,23 @@ struct ContainerBlockLayout {
       let block = child.content
       var width: CGFloat
       if block.isHorizontallyResizable {
-        width = size.width
+        // wrap_content cross-axis: match_parent width children fall back to their own
+        // intrinsic content width (already clamped by the match_parent min/max).
+        // Definite cross-axis: the child stretches to the container width, then clamps by its
+        // own match_parent min/max (mirrors Block.sizeFor and the gallery/pager item clamps).
+        let offered = crossAxisIsIndefinite ? block.intrinsicContentWidth : size.width
+        width = clamp(offered, min: block.minWidth, max: block.maxWidth)
       } else {
         let intrinsicWidth = block.widthOfHorizontallyNonResizableBlock
-        width = block.isHorizontallyConstrained ? min(intrinsicWidth, size.width) : intrinsicWidth
+        width = block.isHorizontallyConstrained
+          ? max(min(intrinsicWidth, size.width), block.minWidth)
+          : intrinsicWidth
       }
 
       if child.fillsCrossAxis {
-        width = max(width, size.width)
+        // Fill the wrap_content cross-axis, but stay within the child's own match_parent min/max:
+        // a max_size-capped child holds its cap instead of stretching to the parent.
+        width = clamp(max(width, size.width), min: block.minWidth, max: block.maxWidth)
       }
 
       let height: CGFloat = if block.isVerticallyResizable {
@@ -452,17 +485,28 @@ func widthsOfHorizontallyNonResizableBlocksIn(_ blocks: [Block]) -> [CGFloat] {
 
 extension Block {
   fileprivate var horizontalMeasure: ResizableBlockMeasure.Measure {
-    isHorizontallyResizable ? .resizable(
+    guard isHorizontallyResizable else { return .nonResizable }
+    // The margins are reserved separately and the distribution operates on the margin-excluded
+    // space, so the min/max bounds it clamps must exclude the margins too. Otherwise the margins
+    // are counted twice and the block is frozen at (content + margins).
+    let reservedSpace = (self as? PaddingProvidingBlock)?.margins(direction: .horizontal) ?? 0.0
+    return .resizable(
       weightOfHorizontallyResizableBlock,
-      reservedSpace: (self as? PaddingProvidingBlock)?.margins(direction: .horizontal) ?? 0.0
-    ) : .nonResizable
+      minSize: minWidth - reservedSpace,
+      maxSize: maxWidth - reservedSpace,
+      reservedSpace: reservedSpace
+    )
   }
 
   fileprivate var verticalMeasure: ResizableBlockMeasure.Measure {
-    isVerticallyResizable ? .resizable(
+    guard isVerticallyResizable else { return .nonResizable }
+    let reservedSpace = (self as? PaddingProvidingBlock)?.margins(direction: .vertical) ?? 0.0
+    return .resizable(
       weightOfVerticallyResizableBlock,
-      reservedSpace: (self as? PaddingProvidingBlock)?.margins(direction: .vertical) ?? 0.0
-    ) : .nonResizable
+      minSize: minHeight - reservedSpace,
+      maxSize: maxHeight - reservedSpace,
+      reservedSpace: reservedSpace
+    )
   }
 }
 
@@ -500,6 +544,21 @@ extension Block {
     direction == .horizontal ?
       minWidth :
       minHeight
+  }
+
+  fileprivate func maxSize(in direction: Direction) -> CGFloat {
+    direction == .horizontal ?
+      maxWidth :
+      maxHeight
+  }
+
+  fileprivate func unconstrainedSizeOfNonResizableBlock(
+    in direction: Direction,
+    layoutSize: CGSize
+  ) -> CGFloat {
+    direction == .horizontal ?
+      unconstrainedIntrinsicContentWidth :
+      sizeOfNonResizableBlock(in: direction, layoutSize: layoutSize)
   }
 }
 

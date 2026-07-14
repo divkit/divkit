@@ -86,9 +86,20 @@ public final class TextBlock: BlockWithTraits {
       return result
     case let .fixed(value):
       return value
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
+  }
+
+  public var unconstrainedIntrinsicContentWidth: CGFloat {
+    guard case let .intrinsic(_, minSize, maxSize) = widthTrait else {
+      return intrinsicContentWidth
+    }
+    let width = ceil(
+      text.sizeForWidth(tightenWidth ? maxSize : .infinity)
+        .width + additionalTextInsets.horizontal.sum
+    )
+    return max(width, minSize)
   }
 
   public init(
@@ -199,8 +210,8 @@ public final class TextBlock: BlockWithTraits {
       )
     case let .fixed(value):
       value
-    case .weighted:
-      0
+    case let .weighted(_, minSize, _):
+      minSize
     }
   }
 

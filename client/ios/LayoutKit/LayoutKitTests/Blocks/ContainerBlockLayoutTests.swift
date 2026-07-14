@@ -25,6 +25,140 @@ extension ContainerBlockLayout {
 }
 
 final class ContainerBlockLayoutTests: XCTestCase {
+  func test_WeightedItemsWithMargins_distributeContentEqually() {
+    let margin: CGFloat = 100
+
+    func item(margin: CGFloat) -> Block {
+      let text = TextBlock(
+        widthTrait: .resizable,
+        heightTrait: .fixed(93),
+        text: NSAttributedString(string: "x"),
+        accessibilityElement: nil
+      )
+      // Background wrapper makes the inner block a PaddingProvidingBlock, so the outer block's
+      // paddings are recognised as margins (reservedSpace) — same structure as the real card.
+      let inner = DecoratingBlock(child: text)
+      return margin > 0
+        ? DecoratingBlock(
+          child: inner,
+          paddings: EdgeInsets(top: 0, left: 0, bottom: 0, right: margin)
+        )
+        : inner
+    }
+
+    let layout = ContainerBlockLayout(
+      blocks: [item(margin: margin), item(margin: margin), item(margin: 0)],
+      gaps: [0, 0, 0, 0],
+      layoutDirection: .horizontal,
+      size: CGSize(width: 314, height: 93)
+    )
+
+    let frames = layout.blockFrames
+    // Content width = frame width minus the item's own margin; all three must be equal.
+    XCTAssertEqual(frames[0].width - margin, frames[2].width)
+    XCTAssertEqual(frames[1].width - margin, frames[2].width)
+  }
+
+  func test_VerticalContainer_clampsResizableCrossAxisWidthToConstraints() {
+    func item(minWidth: CGFloat, maxWidth: CGFloat) -> Block {
+      TextBlock(
+        widthTrait: .weighted(.default, minSize: minWidth, maxSize: maxWidth),
+        heightTrait: .fixed(20),
+        text: NSAttributedString(string: "x"),
+        accessibilityElement: nil
+      )
+    }
+
+    let layout = ContainerBlockLayout(
+      blocks: [
+        item(minWidth: 0, maxWidth: .infinity),
+        item(minWidth: 0, maxWidth: 300),
+        item(minWidth: 400, maxWidth: .infinity),
+      ],
+      gaps: [0, 0, 0, 0],
+      layoutDirection: .vertical,
+      size: CGSize(width: 360, height: 100)
+    )
+
+    // match_parent width children fill the 360pt cross size, each clamped to its own min/max:
+    // unbounded stays 360, max:300 shrinks, min:400 overflows.
+    XCTAssertEqual(layout.blockFrames.map(\.width), [360, 300, 400])
+  }
+
+  func test_VerticalWrapContainer_fillsCrossAxisRespectsChildMaxWidth() {
+    func child(maxWidth: CGFloat) -> ContainerBlock.Child {
+      ContainerBlock.Child(
+        content: TextBlock(
+          widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: maxWidth),
+          heightTrait: .fixed(20),
+          text: NSAttributedString(string: "x"),
+          accessibilityElement: nil
+        ),
+        crossAlignment: .leading,
+        fillsCrossAxis: true
+      )
+    }
+
+    let layout = ContainerBlockLayout(
+      children: [child(maxWidth: 300), child(maxWidth: .infinity)],
+      gaps: [0, 0, 0],
+      layoutDirection: .vertical,
+      layoutMode: .noWrap,
+      axialAlignment: .leading,
+      crossAlignment: .leading,
+      size: CGSize(width: 320, height: 100)
+    )
+
+    // Both match_parent children fill the wrap_content cross size (320), but the max_size:300
+    // child holds its cap instead of stretching.
+    XCTAssertEqual(layout.blockFrames.map(\.width), [300, 320])
+  }
+
+  func test_HorizontalWrapContainer_fillsCrossAxisRespectsChildMaxHeight() {
+    func child(maxHeight: CGFloat) -> ContainerBlock.Child {
+      ContainerBlock.Child(
+        content: TextBlock(
+          widthTrait: .fixed(50),
+          heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: maxHeight),
+          text: NSAttributedString(string: "x"),
+          accessibilityElement: nil
+        ),
+        crossAlignment: .leading,
+        fillsCrossAxis: true
+      )
+    }
+
+    let layout = ContainerBlockLayout(
+      children: [child(maxHeight: 60), child(maxHeight: .infinity)],
+      gaps: [0, 0, 0],
+      layoutDirection: .horizontal,
+      layoutMode: .noWrap,
+      axialAlignment: .leading,
+      crossAlignment: .leading,
+      size: CGSize(width: 320, height: 100)
+    )
+
+    XCTAssertEqual(layout.blockFrames.map(\.height), [60, 100])
+  }
+
+  func test_VerticalContainer_ConstrainedChildWidth_DoesNotShrinkBelowMinWidth() {
+    let layout = ContainerBlockLayout(
+      blocks: [
+        TextBlock(
+          widthTrait: .intrinsic(constrained: true, minSize: 100, maxSize: .infinity),
+          heightTrait: .fixed(20),
+          text: NSAttributedString(string: "x"),
+          accessibilityElement: nil
+        ),
+      ],
+      gaps: [0, 0],
+      layoutDirection: .vertical,
+      size: CGSize(width: 80, height: 100)
+    )
+
+    XCTAssertEqual(layout.blockFrames.map(\.width), [100])
+  }
+
   func test_WidthOfHorizontallyResizableBlockInVerticalContainer_EqualsWidthOfContainer() {
     let layout = ContainerBlockLayout(
       blocks: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .resizable, text: text)],
@@ -1051,6 +1185,57 @@ final class ContainerBlockLayoutTests: XCTestCase {
       ))
     // at first iteration block sizes: [100 - 1, 198 - 2, 396 - 4]
     XCTAssertEqual(blockSizes, [99, 188, 376])
+  }
+
+  func test_WhenNothingToDecrease_ElementsAreCappedByMaxSize() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 120, minSize: 0, maxSize: 80),
+          ConstrainedBlockSize(size: 50, minSize: 0),
+        ],
+        lengthToDecrease: 0
+      ))
+
+    XCTAssertEqual(blockSizes, [80, 50])
+  }
+
+  func test_ElementWithMaxSize_SharesDecreaseFromItsUnconstrainedSize() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 120, minSize: 0, maxSize: 80),
+          ConstrainedBlockSize(size: 180, minSize: 0),
+          ConstrainedBlockSize(size: 100, minSize: 100),
+        ],
+        lengthToDecrease: 160
+      ))
+
+    XCTAssertEqual(blockSizes, [56, 84, 100])
+  }
+
+  func test_WhenMaxSizeBinds_CutOffSizeIsRedistributed() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 0, maxSize: 30),
+          ConstrainedBlockSize(size: 100, minSize: 0),
+        ],
+        lengthToDecrease: 40
+      ))
+
+    XCTAssertEqual(blockSizes, [30, 130])
+  }
+
+  func test_TextBlock_UnconstrainedIntrinsicContentWidth_IgnoresMaxSize() {
+    let block = TextBlock(
+      widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: 50),
+      text: NSAttributedString(string: "some sufficiently long text"),
+      accessibilityElement: nil
+    )
+
+    XCTAssertEqual(block.intrinsicContentWidth, 50)
+    XCTAssertGreaterThan(block.unconstrainedIntrinsicContentWidth, 50)
   }
 
   func test_TwoHorizontallyConstrainedElementsInHorizontalLayout() {

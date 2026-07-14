@@ -674,22 +674,6 @@ final class DivContainerExtensionsTests: XCTestCase {
     )
   }
 
-  func test_OverlapContainer_WithIntrinsicWidth_AndAllItemsAreHorizontallyResizable_FallbackWidth(
-  ) throws {
-    try assertBlocksAreEqual(
-      in: "overlap_wrap_content_width_match_parent_items",
-      "overlap_wrap_content_width_wrap_content_constrained_items"
-    )
-  }
-
-  func test_OverlapContainer_WithIntrinsicHeight_AndAllItemsAreVerticallyResizable_FallbackHeight(
-  ) throws {
-    try assertBlocksAreEqual(
-      in: "overlap_wrap_content_height_match_parent_items",
-      "overlap_wrap_content_height_wrap_content_constrained_items"
-    )
-  }
-
   func test_AxialItemsAlignmentsAreIgnoredInHorizontalContainer() throws {
     try assertBlocksAreEqual(
       in: "horizontal_orientation_axial_alignments",
@@ -702,6 +686,45 @@ final class DivContainerExtensionsTests: XCTestCase {
       in: "vertical_orientation_axial_alignments",
       "vertical_orientation_no_alignments"
     )
+  }
+
+  func test_SizeModifier_forwardsMatchParentMinMaxToWrapContentFallback() {
+    // A wrap_content vertical container whose items are all match_parent width: the modifier
+    // rewrites each match_parent into a constrained wrap_content and must carry over the original
+    // min_size/max_size, so the container wraps to the clamped content size, not the raw one.
+    guard case let .divContainer(container) = divContainer(
+      items: [
+        divContainer(width: .divMatchParentSize(DivMatchParentSize(
+          maxSize: DivSizeUnitValue(value: .value(300))
+        ))),
+        divContainer(width: .divMatchParentSize(DivMatchParentSize())),
+      ],
+      width: .divWrapContentSize(DivWrapContentSize())
+    ) else {
+      XCTFail("expected a container")
+      return
+    }
+
+    let context = DivBlockModelingContext()
+    let modifier = DivContainerSizeModifier(
+      context: context,
+      container: container,
+      orientation: .vertical
+    )
+
+    let transformed = modifier.transformWidth(.divMatchParentSize(DivMatchParentSize(
+      maxSize: DivSizeUnitValue(value: .value(300)),
+      minSize: DivSizeUnitValue(value: .value(120))
+    )))
+
+    guard case let .divWrapContentSize(wrap) = transformed else {
+      XCTFail("expected wrap_content fallback, got \(transformed)")
+      return
+    }
+    let resolver = context.expressionResolver
+    XCTAssertEqual(wrap.resolveConstrained(resolver), true)
+    XCTAssertEqual(wrap.maxSize?.resolveValue(resolver), 300)
+    XCTAssertEqual(wrap.minSize?.resolveValue(resolver), 120)
   }
 
   private func assertBlocksAreEqual(in files: String...) throws {

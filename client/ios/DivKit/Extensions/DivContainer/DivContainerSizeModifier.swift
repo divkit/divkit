@@ -1,9 +1,6 @@
 import LayoutKit
 
 struct DivContainerSizeModifier: DivSizeModifier {
-  private static let fallbackSize: DivSize =
-    .divWrapContentSize(DivWrapContentSize(constrained: .value(true)))
-
   private let shouldOverrideWidth: Bool
   private let shouldOverrideHeight: Bool
 
@@ -71,16 +68,31 @@ struct DivContainerSizeModifier: DivSizeModifier {
     }
   }
 
+  // Convert a match_parent size into a constrained wrap_content, preserving the original
+  // min_size/max_size. Otherwise the wrap_content parent wraps to the child's unconstrained
+  // content size, ignoring the bounds. The child then fills back to the resolved parent size via
+  // fillsCrossAxis (clamped again by its own min/max in ContainerBlockLayout).
+  private static func fallbackSize(
+    minSize: DivSizeUnitValue?,
+    maxSize: DivSizeUnitValue?
+  ) -> DivSize {
+    .divWrapContentSize(DivWrapContentSize(
+      constrained: .value(true),
+      maxSize: maxSize,
+      minSize: minSize
+    ))
+  }
+
   func transformWidth(_ width: DivSize) -> DivSize {
-    if shouldOverrideWidth, case .divMatchParentSize = width {
-      return Self.fallbackSize
+    if shouldOverrideWidth, case let .divMatchParentSize(size) = width {
+      return Self.fallbackSize(minSize: size.minSize, maxSize: size.maxSize)
     }
     return width
   }
 
   func transformHeight(_ height: DivSize) -> DivSize {
-    if shouldOverrideHeight, case .divMatchParentSize = height {
-      return Self.fallbackSize
+    if shouldOverrideHeight, case let .divMatchParentSize(size) = height {
+      return Self.fallbackSize(minSize: size.minSize, maxSize: size.maxSize)
     }
     return height
   }

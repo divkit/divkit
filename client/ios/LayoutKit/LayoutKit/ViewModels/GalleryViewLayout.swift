@@ -211,10 +211,10 @@ extension GalleryViewModel {
     let paddings = (gaps.first ?? 0) + (gaps.last ?? 0)
 
     let blocks = items.map(\.content)
-    let widths = blocks.map {
-      $0.isHorizontallyResizable
-        ? max((size?.width ?? 0) - paddings, 0)
-        : $0.widthOfHorizontallyNonResizableBlock
+    let widths = blocks.map { block in
+      block.isHorizontallyResizable
+        ? clamp(max((size?.width ?? 0) - paddings, 0), min: block.minWidth, max: block.maxWidth)
+        : block.widthOfHorizontallyNonResizableBlock
     }
     let crossInsets = self.crossInsets(forSize: size)
     let crossSpacing = metrics.crossSpacing
@@ -233,7 +233,7 @@ extension GalleryViewModel {
     return zip3(items, widths, gaps.dropFirst()).map { item, width, gap in
       let block = item.content
       let height = block.isVerticallyResizable
-        ? maxItemHeight
+        ? clamp(maxItemHeight, min: block.minHeight, max: block.maxHeight)
         : block.heightOfVerticallyNonResizableBlock(forWidth: width)
       let minY = crossInsets.leading + (maxItemHeight + crossSpacing) * CGFloat(currentColumnIndex)
       let maxY = minY + maxItemHeight
@@ -275,10 +275,10 @@ extension GalleryViewModel {
     return zip(items, gaps.dropFirst()).map { item, gap in
       let block = item.content
       let width = block.isHorizontallyResizable
-        ? maxItemWidth
+        ? clamp(maxItemWidth, min: block.minWidth, max: block.maxWidth)
         : block.widthOfHorizontallyNonResizableBlock
       let height = block.isVerticallyResizable
-        ? max((size?.height ?? 0) - paddings, 0)
+        ? clamp(max((size?.height ?? 0) - paddings, 0), min: block.minHeight, max: block.maxHeight)
         : block.heightOfVerticallyNonResizableBlock(forWidth: width)
       let minX = crossInsets.leading + (maxItemWidth + crossSpacing) * CGFloat(currentColumnIndex)
       let maxX = minX + maxItemWidth

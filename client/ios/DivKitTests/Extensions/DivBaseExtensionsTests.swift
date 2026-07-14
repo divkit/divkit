@@ -38,6 +38,7 @@ final class DivBaseExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: DecoratingBlock(
           child: textBlock(
+            widthTrait: .weighted(.default, minSize: -40),
             text: "Hello!",
             path: .root + 0 + "text"
           ),
@@ -54,6 +55,56 @@ final class DivBaseExtensionsTests: XCTestCase {
     )
 
     assertEqual(block, expectedBlock)
+  }
+
+  func test_MatchParentWithMaxSizeAndPaddings_honorsPaddingInMaxWidth() {
+    let block = makeBlock(
+      divText(
+        paddings: DivEdgeInsets(left: .value(8), right: .value(8)),
+        text: "x",
+        width: .divMatchParentSize(
+          DivMatchParentSize(maxSize: DivSizeUnitValue(value: .value(150)))
+        )
+      )
+    )
+
+    // Element max must include the paddings (134 content + 16 = 150), not the trimmed content max.
+    XCTAssertEqual(block.maxWidth, 150)
+    XCTAssertEqual(
+      block.size(forResizableBlockSize: CGSize(width: 360, height: 100)).width,
+      150
+    )
+  }
+
+  func test_MatchParentWithMax_wrapsSameAsFixed() {
+    let paddings = DivEdgeInsets(left: .value(8), right: .value(8))
+    let text = "Max width = 150"
+
+    let matchParentBlock = makeBlock(
+      divText(
+        fontSize: 16,
+        paddings: paddings,
+        text: text,
+        width: .divMatchParentSize(
+          DivMatchParentSize(maxSize: DivSizeUnitValue(value: .value(150)))
+        )
+      )
+    )
+    let fixedBlock = makeBlock(
+      divText(
+        fontSize: 16,
+        paddings: paddings,
+        text: text,
+        width: .divFixedSize(DivFixedSize(value: .value(150)))
+      )
+    )
+
+    let available = CGSize(width: 360, height: 1000)
+    let matchParentHeight = matchParentBlock.size(forResizableBlockSize: available).height
+    let fixedHeight = fixedBlock.size(forResizableBlockSize: available).height
+
+    // match_parent(max:150) must wrap the same as fixed(150): the text gets the same content width.
+    XCTAssertEqual(matchParentHeight, fixedHeight)
   }
 
   func test_WithAccessibility() {

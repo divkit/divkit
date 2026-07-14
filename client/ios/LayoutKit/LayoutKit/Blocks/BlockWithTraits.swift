@@ -24,7 +24,7 @@ extension BlockWithWidthTrait {
   }
 
   public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = widthTrait else {
+    guard case let .weighted(value, _, _) = widthTrait else {
       assertionFailure("cannot get weightOfHorizontallyResizableBlock for non resizable block")
       return .default
     }
@@ -33,10 +33,21 @@ extension BlockWithWidthTrait {
 
   public var minWidth: CGFloat {
     switch widthTrait {
-    case .fixed, .weighted:
+    case .fixed:
       0
-    case let .intrinsic(_, minSize, _):
+    case let .intrinsic(_, minSize, _),
+         let .weighted(_, minSize, _):
       minSize
+    }
+  }
+
+  public var maxWidth: CGFloat {
+    switch widthTrait {
+    case .fixed:
+      .infinity
+    case let .intrinsic(_, _, maxSize),
+         let .weighted(_, _, maxSize):
+      maxSize
     }
   }
 }
@@ -55,7 +66,7 @@ extension BlockWithHeightTrait {
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
-    guard case let .weighted(value) = heightTrait else {
+    guard case let .weighted(value, _, _) = heightTrait else {
       assertionFailure("cannot get weightOfVerticallyResizableBlock for non resizable block")
       return .default
     }
@@ -66,10 +77,19 @@ extension BlockWithHeightTrait {
     switch heightTrait {
     case let .fixed(size):
       size
-    case .weighted:
-      0
-    case let .intrinsic(_, minSize, _):
+    case let .intrinsic(_, minSize, _),
+         let .weighted(_, minSize, _):
       minSize
+    }
+  }
+
+  public var maxHeight: CGFloat {
+    switch heightTrait {
+    case .fixed:
+      .infinity
+    case let .intrinsic(_, _, maxSize),
+         let .weighted(_, _, maxSize):
+      maxSize
     }
   }
 }

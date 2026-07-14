@@ -2,7 +2,8 @@
   "description": "Overlap container with aspect height and items with match_parent height with constraints",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "templates": {
     "test_container": {

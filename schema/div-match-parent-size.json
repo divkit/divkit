@@ -16,6 +16,8 @@
       "$ref": "div-size-unit-value.json",
       "$description": "translations.json#/div_size_min",
       "platforms": [
+        "android",
+        "ios",
         "web"
       ]
     },
@@ -23,6 +25,8 @@
       "$ref": "div-size-unit-value.json",
       "$description": "translations.json#/div_size_max",
       "platforms": [
+        "android",
+        "ios",
         "web"
       ]
     }

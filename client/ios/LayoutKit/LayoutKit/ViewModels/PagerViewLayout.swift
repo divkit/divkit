@@ -250,7 +250,7 @@ extension GalleryViewModel {
     return zip3(items, pageWidths, gaps.dropFirst()).map { item, width, gap in
       let block = item.content
       let height = block.isVerticallyResizable ?
-        maxElementHeight :
+        clamp(maxElementHeight, min: block.minHeight, max: block.maxHeight) :
         block.heightOfVerticallyNonResizableBlock(forWidth: width)
       let frame = CGRect(
         x: x,
@@ -288,7 +288,7 @@ extension GalleryViewModel {
     return zip3(items, heights, gaps.dropFirst()).map { item, height, gap in
       let block = item.content
       let width = block.isHorizontallyResizable ?
-        maxWidth :
+        clamp(maxWidth, min: block.minWidth, max: block.maxWidth) :
         block.widthOfHorizontallyNonResizableBlock
 
       let frame = CGRect(

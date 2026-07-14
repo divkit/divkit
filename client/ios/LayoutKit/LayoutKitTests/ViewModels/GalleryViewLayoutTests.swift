@@ -40,6 +40,50 @@ struct GalleryViewLayoutTests {
   }
 
   @Test
+  func whenHorizontalDirection_clampsResizableItemHeightToItsConstraints() {
+    func item(minHeight: CGFloat, maxHeight: CGFloat) -> Block {
+      TextBlock(
+        widthTrait: .fixed(90),
+        heightTrait: .weighted(.default, minSize: minHeight, maxSize: maxHeight),
+        text: NSAttributedString(string: "x"),
+        accessibilityElement: nil
+      )
+    }
+    let metrics = GalleryViewMetrics(
+      axialInsetMode: .fixed(values: SideInsets(leading: 0, trailing: 0)),
+      crossInsetMode: .fixed(values: SideInsets(leading: 0, trailing: 0)),
+      spacings: [0, 0],
+      crossSpacing: 0
+    )
+    let model = GalleryViewModel(
+      items: [
+        GalleryViewModel.Item(
+          crossAlignment: .leading,
+          content: item(minHeight: 0, maxHeight: .infinity)
+        ),
+        GalleryViewModel.Item(
+          crossAlignment: .leading,
+          content: item(minHeight: 110, maxHeight: .infinity)
+        ),
+        GalleryViewModel.Item(
+          crossAlignment: .leading,
+          content: item(minHeight: 0, maxHeight: 60)
+        ),
+      ],
+      layoutDirection: .leftToRight,
+      metrics: metrics,
+      scrollMode: .default,
+      path: UIElementPath("model"),
+      direction: .horizontal,
+      scrollAlignment: nil
+    )
+    let layout = GalleryViewLayout(model: model, boundsSize: CGSize(width: 300, height: 100))
+
+    // match_parent items fill the 100pt cross size, each clamped to its own min/max.
+    #expect(layout.blockFrames.map(\.height) == [100, 110, 60])
+  }
+
+  @Test
   func whenHasVerticalDirection_producesSummaryHeightAndBlockMaximumWidthContentSizePlusCrossInsets(
   ) {
     let layout = GalleryViewLayout(model: Blocks.verticalCenterModel)

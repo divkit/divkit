@@ -10,10 +10,9 @@ public final class GradientBlock: BlockWithTraits {
     switch widthTrait {
     case let .fixed(value):
       value
-    case let .intrinsic(_, minSize, _):
+    case let .intrinsic(_, minSize, _),
+         let .weighted(_, minSize, _):
       minSize
-    case .weighted:
-      0
     }
   }
 
@@ -35,10 +34,9 @@ public final class GradientBlock: BlockWithTraits {
     switch heightTrait {
     case let .fixed(value):
       value
-    case let .intrinsic(_, minSize, _):
+    case let .intrinsic(_, minSize, _),
+         let .weighted(_, minSize, _):
       minSize
-    case .weighted:
-      0
     }
   }
 

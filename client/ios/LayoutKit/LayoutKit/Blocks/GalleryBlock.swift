@@ -23,8 +23,8 @@ public final class GalleryBlock: BlockWithTraits {
     case let .intrinsic(_, minSize, maxSize):
       let width = contentSize.width
       return clamp(width, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
   }
 
@@ -55,8 +55,8 @@ public final class GalleryBlock: BlockWithTraits {
     case let .intrinsic(_, minSize, maxSize):
       let height = model.intrinsicSize(width: width).height
       return clamp(height, min: minSize, max: maxSize)
-    case .weighted:
-      return 0
+    case let .weighted(_, minSize, _):
+      return minSize
     }
   }
 

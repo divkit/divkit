@@ -13,7 +13,13 @@ extension DivSize {
       let weight = LayoutTrait.Weight(
         rawValue: CGFloat(size.resolveWeight(expressionResolver) ?? 1)
       )!
-      return .weighted(weight)
+      let minSize = size.minSize?.resolveValue(expressionResolver)
+      let maxSize = size.maxSize?.resolveValue(expressionResolver)
+      return .weighted(
+        weight,
+        minSize: minSize.flatMap { CGFloat($0) } ?? 0,
+        maxSize: maxSize.flatMap { CGFloat($0) } ?? .infinity
+      )
     case let .divWrapContentSize(wrapContent):
       let constrained = wrapContent.resolveConstrained(expressionResolver) ?? false
       let minSize = wrapContent.minSize?.resolveValue(expressionResolver)

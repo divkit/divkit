@@ -77,17 +77,29 @@ struct WrapLayoutGroups {
     for child in children {
       guard !child.isResizable(for: layoutDirection.opposite) else { continue }
       if child.isResizable(for: layoutDirection) {
-        startNewLine()
-        var childSize = child.content.size(forResizableBlockSize: size)
-        if let start = separatorSize.start {
-          childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
-            start[keyPath: keyPath]
+        let resizableSize = child.content.size(forResizableBlockSize: size)
+        if resizableSize[keyPath: keyPath] < size[keyPath: keyPath] {
+          // A match_parent item bounded by max_size (smaller than the line) does not fill the
+          // line, so it packs onto the current line like a fixed-size item, keeping its clamped
+          // size. This matches Android, where such items share a line instead of each taking one.
+          if offset + resizableSize[keyPath: keyPath] + separatorOffset > size[keyPath: keyPath] {
+            startNewLine()
+          }
+          addChild(child: child, size: resizableSize)
+        } else {
+          // The item fills or overflows the line, so it gets its own line.
+          startNewLine()
+          var childSize = resizableSize
+          if let start = separatorSize.start {
+            childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
+              start[keyPath: keyPath]
+          }
+          if let end = separatorSize.end {
+            childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
+              end[keyPath: keyPath]
+          }
+          addChild(child: child, size: childSize)
         }
-        if let end = separatorSize.end {
-          childSize[keyPath: keyPath] = childSize[keyPath: keyPath] -
-            end[keyPath: keyPath]
-        }
-        addChild(child: child, size: childSize)
       } else {
         let childSize = child.content.sizeFor(
           widthOfHorizontallyResizableBlock: .zero,

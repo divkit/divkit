@@ -179,7 +179,7 @@ extension LayoutTrait: CustomDebugStringConvertible {
     switch self {
     case .intrinsic:
       "I"
-    case let .weighted(value):
+    case let .weighted(value, _, _):
       "R(\(value.rawValue))"
     case let .fixed(value):
       "\(value)"

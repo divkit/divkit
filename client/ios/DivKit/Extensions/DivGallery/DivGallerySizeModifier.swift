@@ -4,9 +4,6 @@ struct DivGallerySizeModifier: DivSizeModifier {
   private static let wrapContentSize: DivSize =
     .divWrapContentSize(DivWrapContentSize(constrained: .value(true)))
 
-  private static let matchParentSize: DivSize =
-    .divMatchParentSize(DivMatchParentSize())
-
   private let shouldOverrideMatchParentWidth: Bool
   private let shouldOverrideMatchParentHeight: Bool
 
@@ -46,7 +43,7 @@ struct DivGallerySizeModifier: DivSizeModifier {
         return Self.wrapContentSize
       }
       if size.weight != nil {
-        return Self.matchParentSize
+        return .divMatchParentSize(DivMatchParentSize(maxSize: size.maxSize, minSize: size.minSize))
       }
     }
     return width
@@ -58,7 +55,7 @@ struct DivGallerySizeModifier: DivSizeModifier {
         return Self.wrapContentSize
       }
       if size.weight != nil {
-        return Self.matchParentSize
+        return .divMatchParentSize(DivMatchParentSize(maxSize: size.maxSize, minSize: size.minSize))
       }
     }
     return height

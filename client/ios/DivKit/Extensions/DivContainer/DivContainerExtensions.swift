@@ -56,12 +56,24 @@ extension DivContainer: DivBlockModeling {
       vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
 
+    // A match_parent child of a wrap_content overlap is rewritten to constrained wrap_content by
+    // DivContainerSizeModifier (so the container can wrap to its content). Mark those axes as
+    // "fills" so LayeredBlock stretches the child back to the resolved container size. These
+    // conditions mirror DivContainerSizeModifier's overlap override exactly.
+    let items = nonNilItems
+    let widthAxisConverted = getTransformedWidth(context).isIntrinsic
+      && items.allHorizontallyMatchParent
+    let heightAxisConverted = getTransformedHeight(context).isIntrinsic && aspect == nil
+      && items.allVerticallyMatchParent
+
     let children = makeChildren(
       context: context,
       mappedBy: { div, block, context in
         LayeredBlock.Child(
           content: block,
-          alignment: div.value.resolveAlignment(context, defaultAlignment: defaultAlignment)
+          alignment: div.value.resolveAlignment(context, defaultAlignment: defaultAlignment),
+          fillsWidth: widthAxisConverted && div.isHorizontallyMatchParent,
+          fillsHeight: heightAxisConverted && div.isVerticallyMatchParent
         )
       }
     )

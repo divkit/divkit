@@ -2,7 +2,8 @@
   "description": "Vertical container with items with match_parent height in order: min, max, no",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "templates": {
     "test_container": {

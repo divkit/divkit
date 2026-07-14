@@ -2,7 +2,8 @@
   "description": "Horizontal pager with fixed height and pages with match_parent height with constraints.",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "templates": {
     "block": {
