@@ -855,6 +855,7 @@
 
         if (prevVisibility !== nextVisibility) {
             if (isVisibilityInited && (visibility === 'visible' || nextVisibility === 'visible')) {
+                visibility = nextVisibility;
                 onVisibilityChange(nextVisibility);
             } else {
                 visibility = nextVisibility;
@@ -879,8 +880,6 @@
     });
 
     async function onVisibilityChange(nextVisibility: Visibility) {
-        visibility = nextVisibility;
-
         const direction = nextVisibility === 'visible' ? 'in' : 'out';
         const transition = direction === 'in' ? componentContext.json.transition_in : componentContext.json.transition_out;
 
@@ -1188,7 +1187,8 @@
         }
     }
 
-    $: if (currentNode && isVisible) {
+    $: if (componentContext && currentNode && isVisible) {
+        // componentContext because it should work when the component is reused
         runVisibilityActions();
     } else {
         visAction?.destroy();
