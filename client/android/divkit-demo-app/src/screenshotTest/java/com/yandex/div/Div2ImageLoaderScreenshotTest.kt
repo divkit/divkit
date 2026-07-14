@@ -17,7 +17,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class Div2ImageLoaderScreenshotTest(private val case: String) {
+class Div2ImageLoaderScreenshotTest(private val case: String, escapedCase: String) {
 
     private val activityRule = ActivityParamsTestRule(
         activityClass = DivScreenshotActivity::class.java,
@@ -56,7 +56,7 @@ class Div2ImageLoaderScreenshotTest(private val case: String) {
         private val context: Context = ApplicationProvider.getApplicationContext()
 
         @JvmStatic
-        @Parameterized.Parameters(name = "{0}")
-        fun cases() = AssetEnumerator(context).enumerate(TEST_CASES_PATH)
+        @Parameterized.Parameters(name = "{1}")
+        fun cases() = AssetEnumerator(context).enumerate(TEST_CASES_PATH).withEscapedParameter()
     }
 }
