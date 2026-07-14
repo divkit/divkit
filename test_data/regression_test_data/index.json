@@ -2713,13 +2713,24 @@
       "title": "Lottie gallery with expressions",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "lottie"
       ],
       "file": "animations/lottie/lottie_gallery_with_expressions.json",
       "case_id": 466
+    },
+    {
+      "title": "Lottie extension with is_enabled toggle",
+      "platforms": [
+        "web"
+      ],
+      "tags": [
+        "lottie"
+      ],
+      "file": "animations/lottie/is_enabled.json"
     },
     {
       "title": "States default state",

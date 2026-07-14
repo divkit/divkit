@@ -28,7 +28,7 @@
 
 <script lang="ts">
     import { afterUpdate, getContext, onDestroy, setContext, tick } from 'svelte';
-    import { get, writable } from 'svelte/store';
+    import { derived, get, writable, type Readable } from 'svelte/store';
 
     import css from './Outer.module.css';
 
@@ -36,7 +36,7 @@
     import type { Mods, Style } from '../../types/general';
     import type { DivActionableData } from '../../types/actionable';
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivExtension } from '../../../typings/common';
+    import type { BooleanInt, DivExtension } from '../../../typings/common';
     import type { Visibility } from '../../types/base';
     import type { Action, DivBase } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
@@ -112,6 +112,10 @@
     let currentNode: HTMLElement;
     let attrs: Record<string, string> | undefined;
     let extensions: DivExtension[] | null = null;
+    let extensionStore: Readable<{
+        isEnabled?: BooleanInt;
+    }[]>;
+    let prevExtensionsVal: MaybeMissing<Extension>[] | undefined = undefined;
 
     let prevChilds: string[] = [];
 
@@ -194,7 +198,6 @@
     let hasCustomFocus = false;
     let captureFocusOnAction = true;
 
-    let prevExtensionsVal: MaybeMissing<Extension>[] | undefined = undefined;
     let prevTriggersUnsubscribe: (() => void) | undefined = undefined;
 
     let registred: {
@@ -933,6 +936,25 @@
     $: if (componentContext.json && currentNode && !isDeepEqual(componentContext.json.extensions, prevExtensionsVal)) {
         let exts = prevExtensionsVal = componentContext.json.extensions;
 
+        let list: Readable<{
+            isEnabled?: BooleanInt;
+        }>[] = [];
+        if (Array.isArray(exts)) {
+            exts.forEach(ext => {
+                list.push(componentContext.getDerivedFromVars({
+                    isEnabled: ext.is_enabled
+                }));
+            });
+        }
+
+        // Create a new array every time so it is not equal to the previous one
+        extensionStore = derived(list, val => [...val]);
+    }
+
+    $: {
+        const isEnabledList = $extensionStore;
+        let exts = prevExtensionsVal;
+
         tick().then(() => {
             if (exts !== prevExtensionsVal || !currentNode) {
                 return;
@@ -940,11 +962,14 @@
 
             unmountExtensions();
 
-            if (Array.isArray(componentContext.json.extensions)) {
+            if (Array.isArray(prevExtensionsVal)) {
                 const ctx = rootCtx.getExtensionContext(componentContext);
-                extensions = componentContext.json.extensions.map(it => {
+                extensions = prevExtensionsVal.map((it, index) => {
                     const id = it.id;
                     if (!id) {
+                        return;
+                    }
+                    if (isEnabledList[index].isEnabled === false || isEnabledList[index].isEnabled === 0) {
                         return;
                     }
 

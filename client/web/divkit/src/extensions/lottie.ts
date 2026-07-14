@@ -322,6 +322,10 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                 this.wrapper.parentNode?.removeChild(this.wrapper);
                 this.wrapper = undefined;
             }
+            const children: HTMLElement[] = Array.from(node.children).filter(filterHTMLElements);
+            children.forEach(element => {
+                element.style.display = '';
+            });
             node.removeAttribute('data-lottie');
 
             this.unsubscribe?.();

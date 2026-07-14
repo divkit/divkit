@@ -1,0 +1,146 @@
+{
+  "templates": {
+    "lottie_grid": {
+      "type": "grid",
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "column_count": 2
+    },
+    "lottie_gif": {
+      "type": "gif",
+      "aspect": {
+        "ratio": 0.8
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center"
+    },
+    "card_title": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 14,
+      "paddings": {
+        "top": 8
+      },
+      "font_weight": "medium",
+      "line_height": 18
+    },
+    "lottie_card": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "fixed",
+        "value": 250
+      },
+      "margins": {
+        "left": 4,
+        "right": 4,
+        "bottom": 4,
+        "top": 4
+      },
+      "paddings": {
+        "top": 4,
+        "right": 2,
+        "left": 2
+      },
+      "border": {
+        "corner_radius": 32,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "orientation": "vertical",
+      "items": [
+        {
+          "type": "card_title",
+          "$text": "lottie_image_text"
+        },
+        {
+          "type": "lottie_gif",
+          "$id": "image_id",
+          "scale": "fit",
+          "extensions": [
+            {
+              "id": "lottie",
+              "is_enabled": "@{toggled}",
+              "$params": "lottie_params"
+            }
+          ],
+          "gif_url": "https://i.gifer.com/VhdJ.gif"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "root",
+    "variables": [
+      {
+        "type": "boolean",
+        "name": "toggled",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "content_alignment_horizontal": "center",
+          "items": [
+            {
+              "type": "lottie_card",
+              "image_id": "DivGif 1",
+              "lottie_image_text": "DivGif 1",
+              "lottie_params": {
+                "lottie_url": "https://div-storage.s3.yandex.net/test/lottie/DivGif3.json",
+                "repeat_count": 3,
+                "repeat_mode": "reverse"
+              }
+            },
+            {
+              "type": "text",
+              "text": "Toggle @{toggled ? 'off' : 'on'}",
+              "text_alignment_horizontal": "center",
+              "font_size": 32,
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#eee"
+                }
+              ],
+              "margins": {
+                "top": 10,
+                "bottom": 10,
+                "left": 10,
+                "right": 10
+              },
+              "paddings": {
+                "top": 10,
+                "bottom": 10
+              },
+              "border": {
+                "corner_radius": 10
+              },
+              "action": {
+                "log_id": "toggle",
+                "url": "div-action://set_variable?name=toggled&value=@{!toggled}"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

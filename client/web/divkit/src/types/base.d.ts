@@ -117,6 +117,7 @@ export type Transformation = RotationTransformation | TranslationTransformation;
 
 export interface Extension {
     id: string;
+    is_enabled?: BooleanInt;
     params?: object;
 }
 

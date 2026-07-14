@@ -15,7 +15,9 @@
       "$ref": "common.json#/boolean_int",
       "default_value": "true",
       "$description": "translations.json#/div_extension_is_enabled",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     },
     "params": {
       "type": "object",
