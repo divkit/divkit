@@ -121,8 +121,8 @@ internal class DivInputView @JvmOverloads constructor(
             (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)
         ) {
             val imeAction = imeOptions and EditorInfo.IME_MASK_ACTION
-            editorActionListener?.onEditorAction(this, imeAction, event)?.let {
-                return it
+            if (editorActionListener?.onEditorAction(this, imeAction, event) == true) {
+                return true
             }
         }
         return super.onKeyDown(keyCode, event)
@@ -138,8 +138,8 @@ internal class DivInputView @JvmOverloads constructor(
                     event.action == KeyEvent.ACTION_DOWN
                 ) {
                     val imeAction = imeOptions and EditorInfo.IME_MASK_ACTION
-                    editorActionListener?.onEditorAction(this@DivInputView, imeAction, event)?.let {
-                        return it
+                    if (editorActionListener?.onEditorAction(this@DivInputView, imeAction, event) == true) {
+                        return true
                     }
                 }
 
@@ -150,8 +150,8 @@ internal class DivInputView @JvmOverloads constructor(
             override fun commitText(text: CharSequence?, newCursorPosition: Int): Boolean {
                 if (text == "\n") {
                     val imeAction = imeOptions and EditorInfo.IME_MASK_ACTION
-                    editorActionListener?.onEditorAction(this@DivInputView, imeAction, null)?.let{
-                        return it
+                    if (editorActionListener?.onEditorAction(this@DivInputView, imeAction, null) == true) {
+                        return true
                     }
                 }
                 return super.commitText(text, newCursorPosition)

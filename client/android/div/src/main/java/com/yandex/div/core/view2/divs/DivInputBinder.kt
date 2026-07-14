@@ -263,19 +263,27 @@ internal class DivInputBinder @Inject constructor(
     ) {
         val callback = { _: Any ->
             val enterKeyType = div.enterKeyType.evaluate(resolver)
-            this.imeOptions += getImeAction(enterKeyType)
+            this.imeOptions = (imeOptions and EditorInfo.IME_MASK_ACTION.inv()) or getImeAction(enterKeyType)
 
             val actions = div.enterKeyActions
             if (!actions.isNullOrEmpty()) {
                 this.setOnEditorActionListener { _, actionId, _ ->
-                    if ((actionId and EditorInfo.IME_MASK_ACTION) != 0) {
+                    val isSpecificAction = (actionId and EditorInfo.IME_MASK_ACTION) != 0
+                            && (actionId and EditorInfo.IME_MASK_ACTION) != EditorInfo.IME_ACTION_UNSPECIFIED
+                    if (isSpecificAction) {
                         actionPerformer.performBulkActions(bindingContext, this, actions, DivActionReason.ENTER)
                     }
-
-                    false
+                    isSpecificAction
                 }
             } else {
-                this.setOnEditorActionListener(null)
+                if (enterKeyType == DivInput.EnterKeyType.DEFAULT) {
+                    this.setOnEditorActionListener(null)
+                } else {
+                    this.setOnEditorActionListener { _, actionId, _ ->
+                        (actionId and EditorInfo.IME_MASK_ACTION) != 0
+                            && (actionId and EditorInfo.IME_MASK_ACTION) != EditorInfo.IME_ACTION_UNSPECIFIED
+                    }
+                }
             }
         }
         addSubscription(div.enterKeyType.observeAndGet(resolver, callback))
