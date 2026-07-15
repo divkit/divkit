@@ -163,7 +163,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -184,7 +185,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -196,6 +198,7 @@
             "type": "set_cursor_position",
             "id": "inner_input",
             "position": {
+              "type": "absolute",
               "start": 0,
               "end": 0
             }
@@ -210,7 +213,8 @@
       ],
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

@@ -210,6 +210,7 @@
             "type": "set_cursor_position",
             "id": "nonexistent_input",
             "position": {
+              "type": "absolute",
               "start": 0,
               "end": 0
             }

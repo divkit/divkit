@@ -54,6 +54,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     parentContext?: ComponentContext;
     id: string;
     animators?: Record<string, MaybeMissing<Animator>>;
+    runningAnimators?: Map<string, AnimatorInstance>;
     states?: Record<string, StateSetter[]>;
     pagers?: Map<string | undefined, PagerData | null>;
     pagerListeners?: Map<string | undefined, PagerListener[]>;

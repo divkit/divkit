@@ -244,7 +244,7 @@
 
     let timersController: TimersController | null = null;
 
-    const animators: Map<string, AnimatorInstance> = new Map();
+    const allRunningAnimators: Set<AnimatorInstance> = new Set();
 
     let tooltipCounter = 0;
     let tooltips: {
@@ -1232,7 +1232,8 @@
     function findComponentContextWithInfo<K extends keyof InfoGetter>(
         scope: ComponentContext,
         id: string | undefined,
-        infoName: K
+        infoName: K,
+        isScopeFound: boolean
     ): ComponentContext | undefined {
         if (!id) {
             return;
@@ -1255,13 +1256,46 @@
         if (found.size === 1) {
             return [...found][0];
         } else if (found.size > 1) {
-            scope.logError(wrapError(new Error(`Element with id '${id}' is ambiguous`), {
+            scope.logError(wrapError(new Error(`Element with id '${id}' is ambiguous${isScopeFound ? ' in scope' : ''}`), {
                 additional: {
                     count: found.size
                 }
             }));
         } else {
-            scope.logError(wrapError(new Error(`Element with id '${id}' not found`)));
+            scope.logError(wrapError(new Error(`Element with id '${id}' not found${isScopeFound ? ' in scope' : ''}`)));
+        }
+    }
+
+    function findAnimator(
+        scope: ComponentContext,
+        animatorId: string,
+        isScopeFound: boolean
+    ): ComponentContext | undefined {
+        const found = new Set<ComponentContext>();
+
+        const walk = (context: ComponentContext) => {
+            if (context.children) {
+                for (const child of context.children) {
+                    walk(child);
+                }
+            }
+            const animator = context.getAnimator(animatorId);
+            if (animator) {
+                found.add(context);
+            }
+        };
+        walk(scope);
+
+        if (found.size === 1) {
+            return [...found][0];
+        } else if (found.size > 1) {
+            scope.logError(wrapError(new Error(`Animator with id '${animatorId}' is ambiguous${isScopeFound ? ' in scope' : ''}`), {
+                additional: {
+                    count: found.size
+                }
+            }));
+        } else {
+            scope.logError(wrapError(new Error(`Animator with id '${animatorId}' not found${isScopeFound ? ' in scope' : ''}`)));
         }
     }
 
@@ -1276,9 +1310,12 @@
 
         const isNewLogic = actionTyped?.type === 'focus_element' ||
             actionTyped?.type === 'clear_focus' ||
-            actionTyped?.type === 'set_cursor_position';
+            actionTyped?.type === 'set_cursor_position' ||
+            actionTyped?.type === 'animator_start' ||
+            actionTyped?.type === 'animator_stop';
 
         let scopeContext = rootComponentContext;
+        let isScopeFound = false;
 
         if (scopeId) {
             const set = componentContextMap.get(scopeId);
@@ -1304,6 +1341,7 @@
                 if (first) {
                     scopeContext = first;
                     componentContext = first;
+                    isScopeFound = true;
                 }
             } else {
                 // eslint-disable-next-line no-lonely-if
@@ -1373,7 +1411,7 @@
                     copyToClipboard(log, actionTyped);
                     break;
                 case 'focus_element': {
-                    const target = findComponentContextWithInfo(scopeContext, actionTyped.element_id, 'focus');
+                    const target = findComponentContextWithInfo(scopeContext, actionTyped.element_id, 'focus', isScopeFound);
                     if (target) {
                         const info = target.getViewInfo('focus');
                         if (info) {
@@ -1397,16 +1435,16 @@
                     break;
                 }
                 case 'animator_start': {
-                    const animatorDef = actionTyped.animator_id &&
-                        componentContext?.getAnimator(actionTyped.animator_id);
+                    const animatorId = actionTyped.animator_id;
+                    if (!animatorId) {
+                        log(wrapError(new Error('Incorrect animator_start action')));
+                        return;
+                    }
 
-                    if (!animatorDef) {
-                        log(wrapError(new Error('Missing animator'), {
-                            additional: {
-                                animator_id: actionTyped.animator_id
-                            }
-                        }));
+                    const targetContext = findAnimator(scopeContext, animatorId, isScopeFound);
+                    const animatorDef = targetContext?.getAnimator(animatorId);
 
+                    if (!targetContext || !animatorDef) {
                         return;
                     }
 
@@ -1420,9 +1458,7 @@
                         end_value: end_value_typed
                     } = actionTyped;
 
-                    const evalledDef = componentContext ?
-                        componentContext.getJsonWithVars(animatorDef) :
-                        getJsonWithVars(logError, animatorDef);
+                    const evalledDef = targetContext.getJsonWithVars(animatorDef);
 
                     const props = {
                         ...evalledDef,
@@ -1439,36 +1475,45 @@
 
                     const instance = animatorDef.variable_name &&
                         (
-                            componentContext?.getVariable(animatorDef.variable_name) ||
+                            targetContext.getVariable(animatorDef.variable_name) ||
                             variables.get(animatorDef.variable_name)
                         );
                     if (!instance) {
                         return;
                     }
 
-                    const prevAnimator = animators.get(animatorDef.id as string);
+                    const runningAnimators = targetContext.runningAnimators || new Map();
+                    targetContext.runningAnimators ||= runningAnimators;
+
+                    const prevAnimator = runningAnimators.get(animatorDef.id as string);
                     if (prevAnimator) {
                         prevAnimator.stop();
                     }
 
                     const animator = createAnimator(props, instance, () => {
-                        animators.delete(animatorDef.id as string);
+                        runningAnimators.delete(animatorDef.id as string);
+                        if (animator) {
+                            allRunningAnimators.delete(animator);
+                        }
                     }, (actions, opts) => {
-                        const fn = componentContext?.execAnyActions || execAnyActions;
-
-                        return fn(actions, opts);
+                        return targetContext.execAnyActions(actions, opts);
                     });
                     if (animator) {
-                        animators.set(animatorDef.id as string, animator);
+                        runningAnimators.set(animatorDef.id as string, animator);
+                        allRunningAnimators.add(animator);
                     }
 
                     break;
                 }
                 case 'animator_stop': {
-                    const animator = animators.get(actionTyped.animator_id as string);
-                    if (animator) {
+                    const animatorId = actionTyped.animator_id as string;
+                    const targetContext = findAnimator(scopeContext, animatorId, isScopeFound);
+                    const runningAnimators = targetContext?.runningAnimators;
+                    const animator = runningAnimators?.get(animatorId);
+                    if (runningAnimators && animator) {
                         animator.stop();
-                        animators.delete(actionTyped.animator_id as string);
+                        runningAnimators.delete(animatorId);
+                        allRunningAnimators.delete(animator);
                     }
 
                     break;
@@ -1545,7 +1590,7 @@
                     const start = actionTyped.position?.start;
                     const end = actionTyped.position?.end ?? start;
                     if (typeof start === 'number' && typeof end === 'number' && actionTyped.position?.type === 'absolute') {
-                        const target = findComponentContextWithInfo(scopeContext, actionTyped.id, 'setCursorPosition');
+                        const target = findComponentContextWithInfo(scopeContext, actionTyped.id, 'setCursorPosition', isScopeFound);
                         if (target) {
                             const info = target.getViewInfo('setCursorPosition');
                             if (info) {
@@ -2244,7 +2289,7 @@
                 return variable;
             },
             getAnimator(name) {
-                return ctx.animators?.[name] || ctx.parent?.getAnimator(name) || undefined;
+                return ctx.animators?.[name] || undefined;
             },
             registerState(stateId, setState) {
                 const stateCtx = getStateContext(ctx.parent);
@@ -2863,7 +2908,7 @@
             window.removeEventListener('pointerdown', onWindowPointerDown);
         }
 
-        for (const [_id, instance] of animators) {
+        for (const instance of allRunningAnimators) {
             instance.stop();
         }
 

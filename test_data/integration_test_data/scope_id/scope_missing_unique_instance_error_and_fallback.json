@@ -106,6 +106,7 @@
             "type": "set_cursor_position",
             "id": "inner_input",
             "position": {
+              "type": "absolute",
               "start": 0,
               "end": 0
             }
@@ -165,7 +166,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
