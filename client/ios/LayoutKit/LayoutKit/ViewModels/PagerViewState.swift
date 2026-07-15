@@ -79,18 +79,21 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
 
 extension PagerViewState {
   public func synchronized(with model: GalleryViewModel) -> PagerViewState {
-    guard !isInfiniteScrollable else { return self }
+    let pageCount = model.itemsCountWithoutInfinite
 
-    let clampedCurrentPage = clamp(
-      Int(currentPage),
-      min: 0,
-      max: max(0, model.itemsCountWithoutInfinite - 1)
-    )
+    if isInfiniteScrollable, numberOfPages == pageCount {
+      return self
+    }
+
+    let currentPageValue = isInfiniteScrollable
+      ? currentPage
+      : CGFloat(clamp(Int(currentPage), min: 0, max: max(0, pageCount - 1)))
+
     return PagerViewState(
-      numberOfPages: model.itemsCountWithoutInfinite,
-      currentPage: clampedCurrentPage,
+      numberOfPages: pageCount,
+      currentPageValue: currentPageValue,
       animated: animated,
-      isInfiniteScrollable: false,
+      isInfiniteScrollable: isInfiniteScrollable,
       navigationDirection: navigationDirection
     )
   }

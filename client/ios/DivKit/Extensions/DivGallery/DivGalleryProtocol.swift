@@ -57,12 +57,15 @@ extension DivGalleryProtocol {
       )
     }
 
-    let itemsCount = children.count
+    let existingChildren = infiniteScroll
+      ? children.filter { !$0.content.isEmpty }
+      : children
+    let itemsCount = existingChildren.count
     let bufferSize = layoutMode.map { min($0.bufferSize(itemsCount: itemsCount), itemsCount) } ?? 1
 
-    if infiniteScroll {
-      let leadingBuffer = children[..<bufferSize]
-      let trailingBuffer = children[(children.count - bufferSize)...]
+    if infiniteScroll, itemsCount > 0 {
+      let leadingBuffer = existingChildren[..<bufferSize]
+      let trailingBuffer = existingChildren[(existingChildren.count - bufferSize)...]
       children = trailingBuffer + children + leadingBuffer
     }
 

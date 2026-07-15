@@ -496,6 +496,8 @@
 		8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTabsExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B262865C01C0036EF4C /* DivGridExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGridExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B272865C01C0036EF4C /* DivGalleryExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGalleryExtensionsTests.swift; sourceTree = "<group>"; };
+		D967000101010001DEADBEEF /* DivPagerExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivPagerExtensionsTests.swift; sourceTree = "<group>"; };
+		D967000101010002DEADBEEF /* DivPagerExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D967000101010001DEADBEEF /* DivPagerExtensionsTests.swift */; };
 		8C7B1B282865C01C0036EF4C /* DivTextExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTextExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B292865C01C0036EF4C /* DivContainerExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivContainerExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B2A2865C01C0036EF4C /* DivGifImageExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGifImageExtensionsTests.swift; sourceTree = "<group>"; };
@@ -1169,6 +1171,7 @@
 				8C7B1B2C2865C01C0036EF4C /* DivDataExtensionsTests.swift */,
 				8C7B1B2D2865C01C0036EF4C /* DivDataPatchExtensionsTests.swift */,
 				8C7B1B272865C01C0036EF4C /* DivGalleryExtensionsTests.swift */,
+				D967000101010001DEADBEEF /* DivPagerExtensionsTests.swift */,
 				8C7B1B2A2865C01C0036EF4C /* DivGifImageExtensionsTests.swift */,
 				8C7B1B262865C01C0036EF4C /* DivGridExtensionsTests.swift */,
 				8C7B1B2B2865C01C0036EF4C /* DivImageExtensionsTests.swift */,
@@ -1836,6 +1839,7 @@
 				8C23F41329DDB3810069F3F7 /* EntityWithArray.swift in Sources */,
 				8C23F42829DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift in Sources */,
 				8C7B1BF52865C01C0036EF4C /* DivGalleryExtensionsTests.swift in Sources */,
+				D967000101010002DEADBEEF /* DivPagerExtensionsTests.swift in Sources */,
 				8C7B1BFF2865C01C0036EF4C /* DivActionIntentTests.swift in Sources */,
 				8CBE33012BD699CC00CFFDF5 /* DivVariablesStorageTests.swift in Sources */,
 				983406132E85C3A4004B1AA3 /* DivTemplatesTests.swift in Sources */,

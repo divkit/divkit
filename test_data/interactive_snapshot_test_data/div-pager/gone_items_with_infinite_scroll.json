@@ -1,0 +1,183 @@
+{
+  "description": "Pager with infinite_scroll and items whose visibility toggles between visible/gone via a set_variable action. Indicator dot count must track the number of visible items live, and infinite wrap-around must keep working across both toggles and navigation.",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "text_block": {
+        "type": "text",
+        "font_size": 20,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "alignment_horizontal": "center",
+        "text_color": "#1ABC9C",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "match_parent"
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#34495E"
+          }
+        ],
+        "border": {
+          "corner_radius": 8
+        }
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "hide_odd",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+              "type": "fixed",
+              "value": 300
+            },
+            "items": [
+              {
+                "type": "indicator",
+                "pager_id": "test_pager",
+                "active_item_color": "#000000",
+                "active_item_size": 1.5,
+                "height": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "margins": {
+                  "top": 10,
+                  "bottom": 10
+                },
+                "space_between_centers": 10,
+                "inactive_item_color": "#D0D1D9",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 3
+                  },
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "type": "pager",
+                "id": "test_pager",
+                "infinite_scroll": true,
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 120
+                },
+                "item_spacing": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "layout_mode": {
+                  "type": "fixed",
+                  "neighbour_page_width": {
+                    "type": "fixed",
+                    "value": 16
+                  }
+                },
+                "items": [
+                  { "type": "text_block", "text": "0" },
+                  { "type": "text_block", "text": "1", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
+                  { "type": "text_block", "text": "2" },
+                  { "type": "text_block", "text": "3", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
+                  { "type": "text_block", "text": "4" },
+                  { "type": "text_block", "text": "5", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
+                  { "type": "text_block", "text": "6" },
+                  { "type": "text_block", "text": "7", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
+                  { "type": "text_block", "text": "8" },
+                  { "type": "text_block", "text": "9", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
+                  { "type": "text_block", "text": "10" }
+                ]
+              },
+              {
+                "type": "text",
+                "text": "hide_odd: @{hide_odd}",
+                "font_size": 14,
+                "text_color": "#000000",
+                "margins": {
+                  "top": 8
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=hide_odd&value=@{!hide_odd}",
+          "log_id": "hide_odd_items"
+        }
+      ],
+      "expected_screenshot": "step1.png",
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_next_item?id=test_pager",
+          "log_id": "next"
+        }
+      ],
+      "expected_screenshot": "step2.png",
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_previous_item?id=test_pager",
+          "log_id": "prev_wrap"
+        },
+        {
+          "url": "div-action://set_previous_item?id=test_pager",
+          "log_id": "prev_to_last"
+        }
+      ],
+      "expected_screenshot": "step3.png",
+      "delay": 500
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=hide_odd&value=@{!hide_odd}",
+          "log_id": "show_odd_items"
+        }
+      ],
+      "expected_screenshot": "step4.png",
+      "delay": 500
+    }
+  ]
+}

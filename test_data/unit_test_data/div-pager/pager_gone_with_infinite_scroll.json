@@ -1,0 +1,25 @@
+{
+  "type": "pager",
+  "id": "test_pager",
+  "infinite_scroll": true,
+  "layout_mode": {
+    "type": "fixed",
+    "neighbour_page_width": {
+      "type": "fixed",
+      "value": 16
+    }
+  },
+  "items": [
+    { "type": "text", "text": "0" },
+    { "type": "text", "text": "1", "visibility": "gone" },
+    { "type": "text", "text": "2" },
+    { "type": "text", "text": "3", "visibility": "gone" },
+    { "type": "text", "text": "4" },
+    { "type": "text", "text": "5", "visibility": "gone" },
+    { "type": "text", "text": "6" },
+    { "type": "text", "text": "7", "visibility": "gone" },
+    { "type": "text", "text": "8" },
+    { "type": "text", "text": "9", "visibility": "gone" },
+    { "type": "text", "text": "10" }
+  ]
+}
