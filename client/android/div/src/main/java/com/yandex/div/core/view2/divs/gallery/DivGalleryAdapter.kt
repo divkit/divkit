@@ -41,4 +41,37 @@ internal class DivGalleryAdapter(
         val item = visibleItems[position]
         return internalIds[item] ?: (lastItemId++).also { internalIds[item] = it }
     }
+
+    override fun notifyRawItemRemoved(position: Int) {
+        notifyItemRemoved(position)
+        if (columnCount == 1) {
+            notifyEdgeDecorationUpdateOnRemove(position)
+        }
+    }
+
+    override fun notifyRawItemInserted(position: Int) {
+        notifyItemInserted(position)
+        if (columnCount == 1) {
+            notifyEdgeDecorationUpdateOnInsert(position)
+        }
+    }
+
+    /**
+     * [PaddingItemDecoration] applies different offsets to the first and last items in a
+     * single-column gallery. When an edge item is inserted or removed, the adjacent item must
+     * be rebound so its decoration offsets are recalculated.
+     */
+    private fun notifyEdgeDecorationUpdateOnRemove(removedPosition: Int) {
+        when {
+            removedPosition == 0 && itemCount > 0 -> notifyRawItemChanged(0)
+            removedPosition == itemCount -> notifyRawItemChanged(removedPosition - 1)
+        }
+    }
+
+    private fun notifyEdgeDecorationUpdateOnInsert(insertedPosition: Int) {
+        when {
+            insertedPosition == 0 && itemCount > 1 -> notifyRawItemChanged(1)
+            insertedPosition == itemCount - 1 && insertedPosition > 0 -> notifyRawItemChanged(insertedPosition - 1)
+        }
+    }
 }
