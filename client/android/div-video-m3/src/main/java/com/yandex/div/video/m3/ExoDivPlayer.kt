@@ -210,7 +210,7 @@ internal class ExoDivPlayer(
     override fun setSource(sourceVariants: List<DivVideoSource>, config: DivPlayerPlaybackConfig) {
         setConfig(config)
         src = sourceVariants
-        if (src.isNotEmpty()) {
+        if (src.isEmpty()) {
             observers.forEach { it.onFatal(SourceError) }
         }
         applyMediaSource()
