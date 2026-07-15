@@ -20,6 +20,7 @@ import com.yandex.divkit.regression.databinding.ScenarioActivityBinding
 import com.yandex.divkit.regression.di.provideScenarioViewCreator
 import com.yandex.divkit.regression.di.provideScenariosRepository
 import com.yandex.divkit.regression.utils.shortMessage
+import kotlinx.coroutines.launch
 
 private const val EXTRA_POSITION = "${BuildConfig.LIBRARY_PACKAGE_NAME}.extra_position"
 
@@ -53,16 +54,56 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         binding.title.setMovementMethod(ScrollingMovementMethod())
-        position = intent.getIntExtra(EXTRA_POSITION, -1)
         metadataBottomSheet = MetadataBottomSheet()
-        if (position >= 0) {
-            lifecycleScope.launchWhenCreated {
-                _scenario = repository.loadScenarioByPosition(position)
-                bindScenario(_scenario)
-                itemCount = repository.itemCount()
-                invalidateOptionsMenu()
-            }
+        handleLaunchIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleLaunchIntent(intent)
+    }
+
+    private fun handleLaunchIntent(intent: Intent) {
+        position = intent.getIntExtra(EXTRA_POSITION, INVALID_POSITION)
+        val deepLinkQuery = intent.data?.let { PlaygroundDeepLink.parseTest(it) }
+        when {
+            deepLinkQuery != null -> loadScenarioFromDeepLink(deepLinkQuery)
+            position >= 0 -> loadScenarioByPosition(position)
+            else -> finish()
         }
+    }
+
+    private fun loadScenarioFromDeepLink(query: PlaygroundDeepLink.TestQuery) {
+        lifecycleScope.launch {
+            val scenario = when (query) {
+                is PlaygroundDeepLink.TestQuery.ByCaseId ->
+                    repository.findScenarioByCaseId(query.caseId)
+                is PlaygroundDeepLink.TestQuery.ByTitle ->
+                    repository.findScenarioByTitle(query.title)
+            }
+            if (scenario == null) {
+                shortMessage(this@ScenarioActivity, R.string.scenario_not_found)
+                finish()
+                return@launch
+            }
+            showScenario(scenario)
+        }
+    }
+
+    private fun loadScenarioByPosition(position: Int) {
+        lifecycleScope.launch {
+            _scenario = repository.loadScenarioByPosition(position)
+            showScenario(_scenario)
+        }
+    }
+
+    private suspend fun showScenario(scenario: Scenario) {
+        _scenario = scenario
+        position = scenario.position
+        bindScenario(scenario)
+        itemCount = repository.itemCount()
+        invalidateOptionsMenu()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -127,6 +168,7 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
     }
 
     private fun bindScenario(scenario: Scenario) {
+        binding.singleContainer.removeAllViews()
         binding.title.text = scenario.title
         binding.metadataButton.setOnClickListener {
             metadataBottomSheet.showNow(supportFragmentManager, MetadataBottomSheet.TAG)

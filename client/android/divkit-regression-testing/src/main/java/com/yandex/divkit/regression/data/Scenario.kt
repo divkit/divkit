@@ -1,6 +1,7 @@
 package com.yandex.divkit.regression.data
 
 data class Scenario(
+    var case_id: Int? = null,
     var title: String = "",
     var tags: List<String> = emptyList(),
     var steps: List<String> = emptyList(),

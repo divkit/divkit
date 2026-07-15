@@ -8,6 +8,14 @@
 
         <activity
             android:name=".ScenarioActivity"
-            android:theme="@style/RegressionTheme" />
+            android:exported="true"
+            android:theme="@style/RegressionTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="playground" android:host="test" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

@@ -13,6 +13,7 @@
     <string name="screen_record_disabled" translatable="false">Screen recording is enabled</string>
     <string name="screen_record_failed" translatable="false">Screen recording error</string>
     <string name="loading_scenario" translatable="false">Loading scenario...</string>
+    <string name="scenario_not_found" translatable="false">Scenario not found</string>
     <string name="record_screen" translatable="false">Record screen</string>
     <string name="scenario_name">Scenario name..</string>
 </resources>

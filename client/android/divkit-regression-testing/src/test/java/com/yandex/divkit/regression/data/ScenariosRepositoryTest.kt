@@ -51,4 +51,31 @@ class ScenariosRepositoryTest {
         val count = underTest.itemCount()
         Assert.assertEquals(3, count)
     }
+
+    @Test
+    fun `find scenario by case id`() = runTest(testDispatcher) {
+        dataSource.addScenario(Scenario(title = "Simple animation", case_id = 42))
+        dataSource.addScenario(Scenario(title = "Variable test", case_id = 100))
+
+        val scenario = underTest.findScenarioByCaseId(100)
+        Assert.assertEquals("Variable test", scenario?.title)
+        Assert.assertNull(underTest.findScenarioByCaseId(999))
+    }
+
+    @Test
+    fun `find scenario by title case insensitive`() = runTest(testDispatcher) {
+        dataSource.addScenario(Scenario(title = "Variable test", case_id = 100))
+
+        Assert.assertEquals(100, underTest.findScenarioByTitle("VARIABLE TEST")?.case_id)
+        Assert.assertNull(underTest.findScenarioByTitle("Unknown"))
+    }
+
+    @Test
+    fun `find scenario excludes ios-only tests`() = runTest(testDispatcher) {
+        dataSource.addScenario(Scenario(title = "ios only", case_id = 1, platforms = listOf(Platforms.ios)))
+        dataSource.addScenario(Scenario(title = "android", case_id = 2, platforms = listOf(Platforms.android)))
+
+        Assert.assertNull(underTest.findScenarioByCaseId(1))
+        Assert.assertEquals("android", underTest.findScenarioByCaseId(2)?.title)
+    }
 }

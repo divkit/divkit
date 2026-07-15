@@ -25,6 +25,16 @@ class ScenariosRepository @Inject constructor(
         cache?.size ?: loadScenariosInternal().size
     }
 
+    suspend fun findScenarioByCaseId(caseId: Int): Scenario? = withContext(ioDispatcher) {
+        loadScenariosInternal().firstOrNull { it.case_id == caseId }
+    }
+
+    suspend fun findScenarioByTitle(title: String): Scenario? = withContext(ioDispatcher) {
+        loadScenariosInternal().firstOrNull {
+            it.title.equals(title, ignoreCase = true)
+        }
+    }
+
     private fun loadScenariosInternal(): List<Scenario> {
         return dataSource.loadScenarios()
             .filter {
