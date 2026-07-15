@@ -1,3 +1,12 @@
+## 32.59.0 (July 20, 2026)
+
+* Added support for the `is_enabled` property in the `extensions` list.
+* Added support of scoped search for animators in `animator_start` and `animator_stop` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
+* Fixed an issue with the `infinite_scroll` `pager` with the `hidden` components inside it.
+* Fixed an issue with the `lottie` extension that occurred when remounting.
+* Fixed an issue with the `visibility_action` run on component reuse (for example, on visibility change).
+
+
 ## 32.58.0 (July 13, 2026)
 
 * Added support of scoped search for elements with given `id` in `focus_element` and `set_cursor_position` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
