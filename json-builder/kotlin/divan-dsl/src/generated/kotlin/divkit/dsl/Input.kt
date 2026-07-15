@@ -60,6 +60,7 @@ data class Input internal constructor(
             fontWeightValue = additive.fontWeightValue ?: properties.fontWeightValue,
             functions = additive.functions ?: properties.functions,
             height = additive.height ?: properties.height,
+            hideSuggestionsBar = additive.hideSuggestionsBar ?: properties.hideSuggestionsBar,
             highlightColor = additive.highlightColor ?: properties.highlightColor,
             hintColor = additive.hintColor ?: properties.hintColor,
             hintText = additive.hintText ?: properties.hintText,
@@ -200,6 +201,11 @@ data class Input internal constructor(
          * Default value: `{"type": "wrap_content"}`.
          */
         val height: Property<Size>?,
+        /**
+         * Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
+         * Default value: `false`.
+         */
+        val hideSuggestionsBar: Property<Boolean>?,
         /**
          * Text highlight color. If the value isn't set, the color set in the client will be used instead.
          */
@@ -385,6 +391,7 @@ data class Input internal constructor(
             result.tryPutProperty("font_weight_value", fontWeightValue)
             result.tryPutProperty("functions", functions)
             result.tryPutProperty("height", height)
+            result.tryPutProperty("hide_suggestions_bar", hideSuggestionsBar)
             result.tryPutProperty("highlight_color", highlightColor)
             result.tryPutProperty("hint_color", hintColor)
             result.tryPutProperty("hint_text", hintText)
@@ -514,6 +521,7 @@ data class Input internal constructor(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -578,6 +586,7 @@ fun DivScope.input(
     fontWeightValue: Int? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hideSuggestionsBar: Boolean? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -640,6 +649,7 @@ fun DivScope.input(
         fontWeightValue = valueOrNull(fontWeightValue),
         functions = valueOrNull(functions),
         height = valueOrNull(height),
+        hideSuggestionsBar = valueOrNull(hideSuggestionsBar),
         highlightColor = valueOrNull(highlightColor),
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
@@ -704,6 +714,7 @@ fun DivScope.input(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -768,6 +779,7 @@ fun DivScope.inputProps(
     fontWeightValue: Int? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hideSuggestionsBar: Boolean? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -829,6 +841,7 @@ fun DivScope.inputProps(
     fontWeightValue = valueOrNull(fontWeightValue),
     functions = valueOrNull(functions),
     height = valueOrNull(height),
+    hideSuggestionsBar = valueOrNull(hideSuggestionsBar),
     highlightColor = valueOrNull(highlightColor),
     hintColor = valueOrNull(hintColor),
     hintText = valueOrNull(hintText),
@@ -892,6 +905,7 @@ fun DivScope.inputProps(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -956,6 +970,7 @@ fun TemplateScope.inputRefs(
     fontWeightValue: ReferenceProperty<Int>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hideSuggestionsBar: ReferenceProperty<Boolean>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -1017,6 +1032,7 @@ fun TemplateScope.inputRefs(
     fontWeightValue = fontWeightValue,
     functions = functions,
     height = height,
+    hideSuggestionsBar = hideSuggestionsBar,
     highlightColor = highlightColor,
     hintColor = hintColor,
     hintText = hintText,
@@ -1080,6 +1096,7 @@ fun TemplateScope.inputRefs(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -1144,6 +1161,7 @@ fun Input.override(
     fontWeightValue: Int? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hideSuggestionsBar: Boolean? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -1206,6 +1224,7 @@ fun Input.override(
         fontWeightValue = valueOrNull(fontWeightValue) ?: properties.fontWeightValue,
         functions = valueOrNull(functions) ?: properties.functions,
         height = valueOrNull(height) ?: properties.height,
+        hideSuggestionsBar = valueOrNull(hideSuggestionsBar) ?: properties.hideSuggestionsBar,
         highlightColor = valueOrNull(highlightColor) ?: properties.highlightColor,
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
         hintText = valueOrNull(hintText) ?: properties.hintText,
@@ -1270,6 +1289,7 @@ fun Input.override(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -1334,6 +1354,7 @@ fun Input.defer(
     fontWeightValue: ReferenceProperty<Int>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hideSuggestionsBar: ReferenceProperty<Boolean>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -1396,6 +1417,7 @@ fun Input.defer(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
+        hideSuggestionsBar = hideSuggestionsBar ?: properties.hideSuggestionsBar,
         highlightColor = highlightColor ?: properties.highlightColor,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
@@ -1460,6 +1482,7 @@ fun Input.defer(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -1524,6 +1547,7 @@ fun Input.modify(
     fontWeightValue: Property<Int>? = null,
     functions: Property<List<Function>>? = null,
     height: Property<Size>? = null,
+    hideSuggestionsBar: Property<Boolean>? = null,
     highlightColor: Property<Color>? = null,
     hintColor: Property<Color>? = null,
     hintText: Property<String>? = null,
@@ -1586,6 +1610,7 @@ fun Input.modify(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         functions = functions ?: properties.functions,
         height = height ?: properties.height,
+        hideSuggestionsBar = hideSuggestionsBar ?: properties.hideSuggestionsBar,
         highlightColor = highlightColor ?: properties.highlightColor,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
@@ -1639,6 +1664,7 @@ fun Input.modify(
  * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -1671,6 +1697,7 @@ fun Input.evaluate(
     fontVariationSettings: ExpressionProperty<Map<String, Any>>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
     fontWeightValue: ExpressionProperty<Int>? = null,
+    hideSuggestionsBar: ExpressionProperty<Boolean>? = null,
     highlightColor: ExpressionProperty<Color>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
@@ -1712,6 +1739,7 @@ fun Input.evaluate(
         fontWeightValue = fontWeightValue ?: properties.fontWeightValue,
         functions = properties.functions,
         height = properties.height,
+        hideSuggestionsBar = hideSuggestionsBar ?: properties.hideSuggestionsBar,
         highlightColor = highlightColor ?: properties.highlightColor,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
@@ -1776,6 +1804,7 @@ fun Input.evaluate(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -1840,6 +1869,7 @@ fun Component<Input>.override(
     fontWeightValue: Int? = null,
     functions: List<Function>? = null,
     height: Size? = null,
+    hideSuggestionsBar: Boolean? = null,
     highlightColor: Color? = null,
     hintColor: Color? = null,
     hintText: String? = null,
@@ -1903,6 +1933,7 @@ fun Component<Input>.override(
         fontWeightValue = valueOrNull(fontWeightValue),
         functions = valueOrNull(functions),
         height = valueOrNull(height),
+        hideSuggestionsBar = valueOrNull(hideSuggestionsBar),
         highlightColor = valueOrNull(highlightColor),
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
@@ -1967,6 +1998,7 @@ fun Component<Input>.override(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -2031,6 +2063,7 @@ fun Component<Input>.defer(
     fontWeightValue: ReferenceProperty<Int>? = null,
     functions: ReferenceProperty<List<Function>>? = null,
     height: ReferenceProperty<Size>? = null,
+    hideSuggestionsBar: ReferenceProperty<Boolean>? = null,
     highlightColor: ReferenceProperty<Color>? = null,
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
@@ -2094,6 +2127,7 @@ fun Component<Input>.defer(
         fontWeightValue = fontWeightValue,
         functions = functions,
         height = height,
+        hideSuggestionsBar = hideSuggestionsBar,
         highlightColor = highlightColor,
         hintColor = hintColor,
         hintText = hintText,
@@ -2147,6 +2181,7 @@ fun Component<Input>.defer(
  * @param fontVariationSettings List of TrueType/OpenType font features. The object is constructed from pairs of axis tag and style values. The axis tag must contain four ASCII characters.
  * @param fontWeight Style.
  * @param fontWeightValue Style. Numeric value.
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -2179,6 +2214,7 @@ fun Component<Input>.evaluate(
     fontVariationSettings: ExpressionProperty<Map<String, Any>>? = null,
     fontWeight: ExpressionProperty<FontWeight>? = null,
     fontWeightValue: ExpressionProperty<Int>? = null,
+    hideSuggestionsBar: ExpressionProperty<Boolean>? = null,
     highlightColor: ExpressionProperty<Color>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
@@ -2221,6 +2257,7 @@ fun Component<Input>.evaluate(
         fontWeightValue = fontWeightValue,
         functions = null,
         height = null,
+        hideSuggestionsBar = hideSuggestionsBar,
         highlightColor = highlightColor,
         hintColor = hintColor,
         hintText = hintText,
@@ -2285,6 +2322,7 @@ fun Component<Input>.evaluate(
  * @param fontWeightValue Style. Numeric value.
  * @param functions User functions.
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout).
+ * @param hideSuggestionsBar Hides or shows the suggestions bar above the virtual keyboard. On platforms where the system doesn't support hiding the suggestions bar, the default system behavior is used.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
@@ -2349,6 +2387,7 @@ fun Component<Input>.modify(
     fontWeightValue: Property<Int>? = null,
     functions: Property<List<Function>>? = null,
     height: Property<Size>? = null,
+    hideSuggestionsBar: Property<Boolean>? = null,
     highlightColor: Property<Color>? = null,
     hintColor: Property<Color>? = null,
     hintText: Property<String>? = null,
@@ -2412,6 +2451,7 @@ fun Component<Input>.modify(
         fontWeightValue = fontWeightValue,
         functions = functions,
         height = height,
+        hideSuggestionsBar = hideSuggestionsBar,
         highlightColor = highlightColor,
         hintColor = hintColor,
         hintText = hintText,
