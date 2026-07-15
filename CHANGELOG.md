@@ -1,3 +1,25 @@
+## 32.59.0
+
+# Android Client:
+* Fix DivInput with keyboard_type=search: pressing the Search IME button no longer moves focus to the next input field.
+* Fixed continuous backspace in `div-input` with mask.
+
+# iOS Client:
+* Added `min_size` and `max_size` support for `match_parent` size.
+* Fix cursor jumping in multiline text input.
+* Fix fast taps on div with `action_animation`.
+* Fix pager infinite scroll with gone items.
+* Fixed a crash when entering emoji in a `div-input` with a mask configured.
+* Fixed a possible data race when creating a tooltip.
+
+# Web Client:
+* Added support for the `is_enabled` property in the `extensions` list.
+* Added support of scoped search for animators in `animator_start` and `animator_stop` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
+* Fixed an issue with the `infinite_scroll` `pager` with the `hidden` components inside it.
+* Fixed an issue with the `lottie` extension that occurred when remounting.
+* Fixed an issue with the `visibility_action` run on component reuse (for example, on visibility change).
+
+
 ## 32.58.0
 
 # Android Client:
