@@ -713,8 +713,14 @@ extension TextInputBlockView {
     text: String
   ) -> Bool {
     if maskedViewModel != nil {
-      let lowerBound = range.lowerBound.utf16Offset(in: self.currentText)
-      let upperBound = range.upperBound.utf16Offset(in: self.currentText)
+      let lowerBound = self.currentText.distance(
+        from: self.currentText.startIndex,
+        to: range.lowerBound
+      )
+      let upperBound = self.currentText.distance(
+        from: self.currentText.startIndex,
+        to: range.upperBound
+      )
       let offsetRange = lowerBound..<upperBound
       if text == "" {
         if range.isEmpty {

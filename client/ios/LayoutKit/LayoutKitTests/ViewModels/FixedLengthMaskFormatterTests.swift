@@ -83,6 +83,20 @@ final class FixedLengthMaskFormatterTests: XCTestCase {
     )
   }
 
+  func test_emojiIsSkippedByMask() {
+    let formatter = makeFormatter(alwaysVisible: false)
+    // Emoji "😀" takes 2 UTF-16 code units but is 1 character.
+    // It should not match \d pattern and be skipped; only "1" should remain.
+    formatter.formatted(rawText: "😀1")
+      .checkInputData(text: "+7 (1", rawText: "1")
+    // Multiple emojis mixed with digits
+    formatter.formatted(rawText: "😀5😀0😀3")
+      .checkInputData(text: "+7 (503) ", rawText: "503")
+    // Pure emoji string should produce no digit input
+    formatter.formatted(rawText: "😀😀😀")
+      .checkInputData(text: "+7 (", rawText: "")
+  }
+
   func test_cursorPositionAfterInsertWithAlwaysVisiblePlaceholders() {
     let formatter = makeFormatter(alwaysVisible: true)
     let validator = MaskValidator(formatter: formatter)

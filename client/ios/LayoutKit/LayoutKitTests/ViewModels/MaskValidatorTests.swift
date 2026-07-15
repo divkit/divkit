@@ -110,6 +110,43 @@ final class MaskValidatorTests: XCTestCase {
     )
   }
 
+  func test_addEmojiIsIgnored() {
+    // Using a real FixedLengthMaskFormatter to verify emoji handling does not crash
+    // and emoji is properly ignored by the \d pattern.
+    let formatter = FixedLengthMaskFormatter(
+      pattern: "+7 (###) ###-##-##",
+      alwaysVisible: false,
+      patternElements: [PatternElement(
+        key: "#",
+        regex: try! NSRegularExpression(pattern: "\\d"),
+        placeholder: "_"
+      )]
+    )
+    let validator = MaskValidator(formatter: formatter)
+
+    // Insert emoji into an empty masked input at position 0 — should not crash.
+    // addSymbols returns the pre-formatted rawText (emoji concatenated), then
+    // formatted() filters out non-matching characters.
+    let emptyData = validator.formatted(rawText: "")
+    let (rawAfterEmoji, _) = validator.addSymbols(
+      at: emptyData.text.rangeOfCharsIn(0..<0),
+      data: emptyData,
+      string: "😀"
+    )
+    // After formatting, emoji is filtered out — formatted rawText is empty.
+    XCTAssertEqual(validator.formatted(rawText: rawAfterEmoji).rawText, "")
+
+    // Insert emoji into a text that already has "503"
+    let data503 = validator.formatted(rawText: "503")
+    let (rawAfterEmojiIn503, _) = validator.addSymbols(
+      at: data503.text.rangeOfCharsIn(6..<6),
+      data: data503,
+      string: "😀"
+    )
+    // After formatting, emoji is filtered out — digits "503" remain.
+    XCTAssertEqual(validator.formatted(rawText: rawAfterEmojiIn503).rawText, "503")
+  }
+
   func test_cursorAfterAddSymbols() {
     let validator = makeMaskValidator()
     let inputData = validator.formatted(rawText: "")

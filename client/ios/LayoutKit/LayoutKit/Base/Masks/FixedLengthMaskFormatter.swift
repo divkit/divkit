@@ -39,12 +39,22 @@ public final class FixedLengthMaskFormatter: MaskFormatter {
       if let decodingElement = decoding[element] {
         let regexp = decodingElement.regexp
         let placeholder = decodingElement.placeHolder
-        while stringIndex != rawText.endIndex,
-              regexp.numberOfMatches(in: String(rawText[stringIndex]), range: NSRange(0..<1)) == 0 {
+        while stringIndex != rawText.endIndex {
+          let charString = String(rawText[stringIndex])
+          if regexp.numberOfMatches(
+            in: charString,
+            range: NSRange(charString.startIndex..., in: charString)
+          ) != 0 {
+            break
+          }
           stringIndex = rawText.index(after: stringIndex)
         }
         guard stringIndex != rawText.endIndex else { break }
-        if regexp.numberOfMatches(in: String(rawText[stringIndex]), range: NSRange(0..<1)) != 0 {
+        let matchCharString = String(rawText[stringIndex])
+        if regexp.numberOfMatches(
+          in: matchCharString,
+          range: NSRange(matchCharString.startIndex..., in: matchCharString)
+        ) != 0 {
           text.append(rawText[stringIndex])
           let textString = String(text)
           rawData
