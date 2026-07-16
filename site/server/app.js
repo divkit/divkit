@@ -24,7 +24,7 @@ connectMongo().then(() => {
 const app = new Koa();
 const router = new Router();
 
-const MAX_DATA_LEN = 50000;
+const MAX_DATA_LEN = 250000;
 
 class DataViolationError extends Error {
     constructor(...args) {
