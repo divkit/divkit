@@ -186,6 +186,7 @@
     };
     let playbackToggle = true;
     let playbackInput: HTMLInputElement;
+    let playbackPointerDown = false;
     let videoElem: HTMLVideoElement;
     let convertTo = '';
     let originalSize = 0;
@@ -451,9 +452,33 @@
         playbackInfo.current = value;
 
         if (lottieItem) {
-            lottieItem[playbackToggle ? 'goToAndPlay' : 'goToAndStop'](value * lottieItem.frameRate, true);
+            lottieItem[playbackToggle && !playbackPointerDown ? 'goToAndPlay' : 'goToAndStop'](value * lottieItem.frameRate, true);
         } else if (videoElem) {
             videoElem.currentTime = value;
+        }
+    }
+
+    function onPlaybackPointerDown(): void {
+        playbackPointerDown = true;
+
+        if (playbackToggle) {
+            if (lottieItem) {
+                lottieItem.pause();
+            } else if (videoElem) {
+                videoElem.pause();
+            }
+        }
+    }
+
+    function onPointerUp(): void {
+        playbackPointerDown = false;
+
+        if (playbackToggle) {
+            if (lottieItem) {
+                lottieItem.play();
+            } else if (videoElem) {
+                videoElem.play();
+            }
         }
     }
 
@@ -552,6 +577,8 @@
     on:dragenter={onWindowDragEnter}
     on:dragleave={onWindowDragLeave}
     on:drop={onWindowDrop}
+    on:pointerup={onPointerUp}
+    on:pointercancel={onPointerUp}
 />
 
 {#if isShown && target && subtype}
@@ -636,6 +663,7 @@
                             max={playbackInfo.duration}
                             step="0.01"
                             on:input={onPlaybackInput}
+                            on:pointerdown={onPlaybackPointerDown}
                         />
 
                         <Button2
@@ -1025,6 +1053,36 @@
         margin: 0;
         accent-color: var(--accent-purple);
         border-radius: 4px;
+        background: none;
+    }
+
+    .file2-dialog__progress::-moz-range-track {
+        width: 100%;
+        height: 8px;
+        background: var(--background-primary);
+        border-radius: 4px;
+    }
+
+    .file2-dialog__progress::-moz-range-progress {
+        width: 100%;
+        height: 8px;
+        background: var(--accent-purple);
+        border-radius: 4px;
+        transition: background-color .15s ease-in-out;
+    }
+
+    .file2-dialog__progress::-moz-range-thumb {
+        height: 16px;
+        width: 16px;
+        background: var(--accent-purple);
+        border: none;
+        border-radius: 50%;
+        transition: background-color .15s ease-in-out;
+    }
+
+    .file2-dialog__progress:hover::-moz-range-progress,
+    .file2-dialog__progress:hover::-moz-range-thumb {
+        background: var(--accent-purple-hover);
     }
 
     .file2-dialog__progress:focus-visible {
