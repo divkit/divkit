@@ -58,7 +58,14 @@
             android:name=".div.Div2ScenarioActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar.Demo">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="playground" android:host="json" />
+            </intent-filter>
         </activity>
 
         <activity

@@ -1,6 +1,7 @@
 package com.yandex.divkit.demo.div
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
@@ -53,6 +54,7 @@ import com.yandex.divkit.demo.utils.loadText
 import com.yandex.divkit.demo.utils.longToast
 import com.yandex.divkit.demo.utils.showToast
 import com.yandex.divkit.regression.MetadataBottomSheet
+import com.yandex.divkit.regression.PlaygroundDeepLink
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -100,8 +102,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             }
         }
 
-        json = intent.getStringExtra(JSON)
-        url = intent.getStringExtra(URL)
+        applyLaunchSource(intent)
 
         val transitionScheduler = Div2Activity.DivParentTransitionScheduler(binding.singleContainer)
         val divConfiguration = divConfiguration(this)
@@ -198,6 +199,21 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             this
         )
         initDiv()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        applyLaunchSource(intent)
+        if (::editorPresenter.isInitialized) {
+            initDiv()
+        }
+    }
+
+    private fun applyLaunchSource(intent: Intent) {
+        json = intent.getStringExtra(JSON)
+        url = intent.getStringExtra(URL)
+            ?: intent.data?.let { PlaygroundDeepLink.parseJson(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
