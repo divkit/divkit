@@ -1212,7 +1212,8 @@
         }
     }
 
-    $: if (componentContext && currentNode && isVisible) {
+    $: componentPath = componentContext.path.join('.');
+    $: if (componentPath && currentNode && isVisible) {
         // componentContext because it should work when the component is reused
         runVisibilityActions();
     } else {
