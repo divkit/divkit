@@ -1,7 +1,8 @@
 {
   "description": "Pager with infinite_scroll and items whose visibility toggles between visible/gone via a set_variable action. Indicator dot count must track the number of visible items live, and infinite wrap-around must keep working across both toggles and navigation.",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "templates": {
