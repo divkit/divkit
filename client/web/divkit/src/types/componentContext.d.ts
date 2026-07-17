@@ -35,6 +35,25 @@ export interface InfoGetter {
     node: () => HTMLElement;
     focus: () => void;
     setCursorPosition: (start: number, end: number) => void;
+    video: {
+        start(): void;
+        pause(): void;
+    };
+    scrollable: {
+        setCurrentItem(item: number, animated: boolean): void;
+        setPreviousItem(step: number, overflow: Overflow, animated: boolean): void;
+        setNextItem(step: number, overflow: Overflow, animated: boolean): void;
+        scrollToStart?: (animated: boolean) => void;
+        scrollToEnd?: (animated: boolean) => void;
+        scrollToPosition?: (step: number, animated: boolean) => void;
+        scrollCombined?: (opts: {
+            step?: number;
+            offset?: number;
+            overflow?: Overflow;
+            animated?: boolean;
+        }) => void;
+        scrollToItemId?: (itemId: string, animated: boolean) => void;
+    };
 }
 
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {

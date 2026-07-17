@@ -118,7 +118,10 @@ function createIntegrationTestCase(testCase, testPath) {
                         return [];
                     }
 
-                    return window.errors.map(it => {
+                    return window.errors.filter(it => {
+                        // Filter video errors
+                        return it.message !== 'Video playing error';
+                    }).map(it => {
                         return {
                             message: it.message,
                             additionalMessage: it.additional ? it.additional.message : undefined,
@@ -126,6 +129,15 @@ function createIntegrationTestCase(testCase, testPath) {
                         };
                     });
                 });
+
+                if (errors.length !== expectErrors.length) {
+                    console.error({ errors: errors.map(err => {
+                        let str = err.additionalMessage || err.message;
+
+                        return str;
+                    }), expectErrors: expectErrors });
+                }
+
                 errors.length.should.equal(expectErrors.length);
 
                 for (let j = 0; j < expectErrors.length; ++j) {

@@ -10,7 +10,6 @@
     import type { DivTabsData, TabsTitleAnimationType } from '../../types/tabs';
     import type { Action, Overflow } from '../../../typings/common';
     import type { EdgeInsets } from '../../types/edgeInserts';
-    import type { SwitchElements } from '../../types/switch-elements';
     import type { TabItem } from '../../types/tabs';
     import type { MaybeMissing } from '../../expressions/json';
     import type { DivBaseData } from '../../types/base';
@@ -60,7 +59,6 @@
 
     const instId = rootCtx.genId('tabs');
 
-    let prevId: string | undefined;
     let hasError = false;
     let childStore = writable<ChildInfo[]>([]);
     let childLayoutParams: LayoutParams = {};
@@ -731,14 +729,10 @@
     }
 
     $: if (componentContext.json) {
-        if (prevId) {
-            rootCtx.unregisterInstance(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('scrollable');
 
         if (componentContext.id && !hasError && !componentContext.fakeElement) {
-            prevId = componentContext.id;
-            rootCtx.registerInstance<SwitchElements>(prevId, {
+            componentContext.attachViewInfo('scrollable', {
                 setCurrentItem(item: number, animated: boolean) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
@@ -816,10 +810,7 @@
             componentContext?.destroy();
         });
 
-        if (prevId) {
-            rootCtx.unregisterInstance(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('scrollable');
     });
 </script>
 

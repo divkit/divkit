@@ -9,7 +9,6 @@
     import type { Align, LayoutParams } from '../../types/layoutParams';
     import type { DivGalleryData } from '../../types/gallery';
     import type { DivBaseData } from '../../types/base';
-    import type { SwitchElements } from '../../types/switch-elements';
     import type { Orientation } from '../../types/orientation';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Style } from '../../types/general';
@@ -65,7 +64,6 @@
     const leftClass = rootCtx.getCustomization('galleryLeftClass');
     const rightClass = rootCtx.getCustomization('galleryRightClass');
 
-    let prevId: string | undefined;
     let columns = 1;
     let orientation: Orientation = 'horizontal';
     let align: Align | undefined = 'start';
@@ -594,14 +592,10 @@
     }
 
     $: if (componentContext.json) {
-        if (prevId) {
-            rootCtx.unregisterInstance(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('scrollable');
 
         if (componentContext.id && !componentContext.fakeElement) {
-            prevId = componentContext.id;
-            rootCtx.registerInstance<SwitchElements>(prevId, {
+            componentContext.attachViewInfo('scrollable', {
                 setCurrentItem(item: number, animated: boolean) {
                     const galleryElements = getItems();
                     if (item < 0 || item > galleryElements.length - 1) {
@@ -706,10 +700,7 @@
             context.destroy();
         });
 
-        if (prevId && !componentContext.fakeElement) {
-            rootCtx.unregisterInstance(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('scrollable');
     });
 </script>
 

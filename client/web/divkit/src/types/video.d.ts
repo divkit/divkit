@@ -22,8 +22,3 @@ export interface DivVideoData extends DivBaseData {
     scale?: VideoScale;
     playback_speed?: number;
 }
-
-export interface VideoElements {
-    start(): void;
-    pause(): void;
-}

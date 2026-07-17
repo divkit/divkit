@@ -5,7 +5,7 @@
     import css from './Video.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivVideoData, VideoElements } from '../../types/video';
+    import type { DivVideoData } from '../../types/video';
     import type { ComponentContext } from '../../types/componentContext';
     import type { VideoPlayerInstance, VideoPlayerProviderClient, VideoPlayerProviderData, VideoPlayerProviderServer, VideoSource } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
@@ -28,7 +28,6 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const videoPlayerProvider = rootCtx.videoPlayerProvider;
 
-    let prevId: string | undefined;
     let isSelfVariableSet = false;
     let videoElem: HTMLVideoElement;
     let videoParentElem: HTMLElement;
@@ -225,16 +224,12 @@
     }
 
     $: if (componentContext.json) {
-        if (prevId) {
-            rootCtx.unregisterInstance(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('video');
 
         if (componentContext.id && !componentContext.fakeElement) {
-            prevId = componentContext.id;
-            rootCtx.registerInstance<VideoElements>(prevId, {
+            componentContext.attachViewInfo('video', {
+                start,
                 pause,
-                start
             });
         }
     }
@@ -302,10 +297,7 @@
     });
 
     onDestroy(() => {
-        if (prevId) {
-            rootCtx.unregisterInstance(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('video');
 
         if (elapsedVariableUnsubscriber) {
             elapsedVariableUnsubscriber();

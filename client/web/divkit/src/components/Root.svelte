@@ -60,9 +60,7 @@
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
-    import type { SwitchElements } from '../types/switch-elements';
     import type { TintMode } from '../types/image';
-    import type { VideoElements } from '../types/video';
     import type { ComponentContext, InfoGetter, StateSetter } from '../types/componentContext';
     import type { Store, StoreAllTypes, StoreScope, StoreTypes } from '../../typings/store';
     import Unknown from './utilities/Unknown.svelte';
@@ -778,22 +776,22 @@
     }
 
     function callScrollTo(
-        componentContext: ComponentContext | undefined,
-        actionTyped: MaybeMissing<ActionScrollTo>
+        scopeContext: ComponentContext,
+        actionTyped: MaybeMissing<ActionScrollTo>,
+        isScopeFound: boolean
     ): void {
-        const log = (componentContext?.logError || logError);
-
-        const instance = actionTyped.id && getInstance<SwitchElements>(actionTyped.id);
-        if (!instance) {
-            log(wrapError(new Error('Missing component for "scroll_to" action'), {
-                additional: {
-                    id: actionTyped.id
-                }
-            }));
+        const target = findComponentContextWithInfo(scopeContext, actionTyped.id, 'scrollable', isScopeFound);
+        if (!target) {
             return;
         }
+
+        const info = target.getViewInfo('scrollable');
+        if (!info) {
+            return;
+        }
+
         if (actionTyped.animated !== undefined && typeof actionTyped.animated !== 'boolean') {
-            log(wrapError(new Error('Missing properties for "scroll_to" action'), {
+            scopeContext.logError(wrapError(new Error('Missing properties for "scroll_to" action'), {
                 additional: {
                     id: actionTyped.id
                 }
@@ -803,32 +801,32 @@
         switch (actionTyped.destination?.type) {
             case 'index': {
                 if (typeof actionTyped.destination.value === 'number') {
-                    instance.setCurrentItem(actionTyped.destination.value, actionTyped.animated ?? true);
+                    info.setCurrentItem(actionTyped.destination.value, actionTyped.animated ?? true);
                 }
                 break;
             }
             case 'offset': {
                 if (typeof actionTyped.destination.value === 'number') {
-                    instance.scrollToPosition?.(actionTyped.destination.value, actionTyped.animated ?? true);
+                    info.scrollToPosition?.(actionTyped.destination.value, actionTyped.animated ?? true);
                 }
                 break;
             }
             case 'start': {
-                instance.scrollToStart?.(actionTyped.animated ?? true);
+                info.scrollToStart?.(actionTyped.animated ?? true);
                 break;
             }
             case 'end': {
-                instance.scrollToEnd?.(actionTyped.animated ?? true);
+                info.scrollToEnd?.(actionTyped.animated ?? true);
                 break;
             }
             case 'item_id': {
                 if (actionTyped.destination.value && typeof actionTyped.destination.value === 'string') {
-                    instance.scrollToItemId?.(actionTyped.destination.value, actionTyped.animated ?? true);
+                    info.scrollToItemId?.(actionTyped.destination.value, actionTyped.animated ?? true);
                 }
                 break;
             }
             default: {
-                log(wrapError(new Error('Unknown destination for "scroll_to" action'), {
+                scopeContext.logError(wrapError(new Error('Unknown destination for "scroll_to" action'), {
                     additional: {
                         id: actionTyped.id,
                         destination: actionTyped.destination?.type
@@ -839,34 +837,34 @@
     }
 
     function callScrollBy(
-        componentContext: ComponentContext | undefined,
-        actionTyped: MaybeMissing<ActionScrollBy>
+        scopeContext: ComponentContext,
+        actionTyped: MaybeMissing<ActionScrollBy>,
+        isScopeFound: boolean
     ): void {
-        const log = (componentContext?.logError || logError);
-
-        const instance = actionTyped.id && getInstance<SwitchElements>(actionTyped.id);
-        if (!instance) {
-            log(wrapError(new Error('Missing component for "scroll_by" action'), {
-                additional: {
-                    id: actionTyped.id
-                }
-            }));
+        const target = findComponentContextWithInfo(scopeContext, actionTyped.id, 'scrollable', isScopeFound);
+        if (!target) {
             return;
         }
+
+        const info = target.getViewInfo('scrollable');
+        if (!info) {
+            return;
+        }
+
         if (
             typeof actionTyped.item_count !== 'number' && actionTyped.item_count !== undefined ||
             typeof actionTyped.offset !== 'number' && actionTyped.offset !== undefined ||
             actionTyped.overflow !== undefined && actionTyped.overflow !== 'clamp' && actionTyped.overflow !== 'ring' ||
             actionTyped.animated !== undefined && typeof actionTyped.animated !== 'boolean'
         ) {
-            log(wrapError(new Error('Missing properties for "scroll_by" action'), {
+            scopeContext.logError(wrapError(new Error('Missing properties for "scroll_by" action'), {
                 additional: {
                     id: actionTyped.id
                 }
             }));
             return;
         }
-        instance.scrollCombined?.({
+        info.scrollCombined?.({
             step: actionTyped.item_count,
             offset: actionTyped.offset,
             overflow: actionTyped.overflow,
@@ -875,6 +873,8 @@
     }
 
     function switchElementAction(
+        scopeContext: ComponentContext,
+        isScopeFound: boolean,
         type: 'set_current_item' | 'set_previous_item' | 'set_next_item' | 'scroll_to_start' |
             'scroll_to_end' | 'scroll_backward' | 'scroll_forward' | 'scroll_to_position' |
             'scroll_to_item_id',
@@ -920,89 +920,54 @@
 
         const isAnimated = animated === null || animated !== '0' && animated !== 'false';
 
-        const instance = getInstance<SwitchElements>(id);
-        if (!instance) {
+        const target = findComponentContextWithInfo(scopeContext, id, 'scrollable', isScopeFound);
+        if (!target) {
+            return;
+        }
+
+        const info = target.getViewInfo('scrollable');
+        if (!info) {
             return;
         }
 
         switch (type) {
             case 'set_current_item':
-                instance.setCurrentItem(itemVal, isAnimated);
+                info.setCurrentItem(itemVal, isAnimated);
                 return;
             case 'set_previous_item':
-                instance.setPreviousItem(stepVal, overflow as Overflow, isAnimated);
+                info.setPreviousItem(stepVal, overflow as Overflow, isAnimated);
                 return;
             case 'set_next_item':
-                instance.setNextItem(stepVal, overflow as Overflow, isAnimated);
+                info.setNextItem(stepVal, overflow as Overflow, isAnimated);
                 return;
             case 'scroll_to_start':
-                instance.scrollToStart?.(isAnimated);
+                info.scrollToStart?.(isAnimated);
                 return;
             case 'scroll_to_end':
-                instance.scrollToEnd?.(isAnimated);
+                info.scrollToEnd?.(isAnimated);
                 return;
             case 'scroll_backward':
-                instance.scrollCombined?.({
+                info.scrollCombined?.({
                     offset: -stepVal,
                     overflow: overflow as Overflow,
                     animated: isAnimated
                 });
                 return;
             case 'scroll_forward':
-                instance.scrollCombined?.({
+                info.scrollCombined?.({
                     offset: stepVal,
                     overflow: overflow as Overflow,
                     animated: isAnimated
                 });
                 return;
             case 'scroll_to_position':
-                instance.scrollToPosition?.(stepVal, isAnimated);
+                info.scrollToPosition?.(stepVal, isAnimated);
                 return;
             case 'scroll_to_item_id':
                 if (itemId && typeof itemId === 'string') {
-                    instance.scrollToItemId?.(itemId, isAnimated);
+                    info.scrollToItemId?.(itemId, isAnimated);
                 }
                 return;
-        }
-    }
-
-    function callVideoAction(
-        id: string | null | undefined,
-        action: string | null | undefined,
-        componentContext?: ComponentContext
-    ): void {
-        const log = (componentContext?.logError || logError);
-
-        if (id) {
-            const instance = getInstance<VideoElements>(id);
-
-            if (instance) {
-                if (action === 'start') {
-                    instance.start();
-                } else if (action === 'pause') {
-                    instance.pause();
-                } else {
-                    log(wrapError(new Error('Unknown video action'), {
-                        additional: {
-                            id,
-                            action
-                        }
-                    }));
-                }
-            } else {
-                log(wrapError(new Error('Video component is not found'), {
-                    additional: {
-                        id,
-                        action
-                    }
-                }));
-            }
-        } else {
-            log(wrapError(new Error('Missing id in video action'), {
-                additional: {
-                    action
-                }
-            }));
         }
     }
 
@@ -1231,7 +1196,7 @@
 
     function findComponentContextWithInfo<K extends keyof InfoGetter>(
         scope: ComponentContext,
-        id: string | undefined,
+        id: string | null | undefined,
         infoName: K,
         isScopeFound: boolean
     ): ComponentContext | undefined {
@@ -1304,15 +1269,37 @@
         origAction: MaybeMissing<Action | VisibilityAction | DisappearAction>,
         componentContext?: ComponentContext
     ): Promise<void> {
+        if (!filterEnabledActions(action)) {
+            return;
+        }
+
         const scopeId = action.scope_id;
         const log = (componentContext?.logError || logError);
         const actionTyped = action.typed;
+        const typedType = actionTyped?.type;
 
-        const isNewLogic = actionTyped?.type === 'focus_element' ||
-            actionTyped?.type === 'clear_focus' ||
-            actionTyped?.type === 'set_cursor_position' ||
-            actionTyped?.type === 'animator_start' ||
-            actionTyped?.type === 'animator_stop';
+        const actionUrl = action.url ? String(action.url) : '';
+        const urlType = actionUrl.startsWith('div-action://') ? /^div-action:\/\/(.+)($|\?)/.exec(actionUrl)?.[0] : '';
+
+        const isNewLogic =
+            typedType === 'focus_element' ||
+            typedType === 'clear_focus' ||
+            typedType === 'set_cursor_position' ||
+            typedType === 'animator_start' ||
+            typedType === 'animator_stop' ||
+            typedType === 'video' ||
+            urlType === 'video' ||
+            typedType === 'scroll_to' ||
+            typedType === 'scroll_by' ||
+            urlType === 'set_current_item' ||
+            urlType === 'set_previous_item' ||
+            urlType === 'set_next_item' ||
+            urlType === 'scroll_to_start' ||
+            urlType === 'scroll_to_end' ||
+            urlType === 'scroll_backward' ||
+            urlType === 'scroll_forward' ||
+            urlType === 'scroll_to_position' ||
+            urlType === 'scroll_to_item_id';
 
         let scopeContext = rootComponentContext;
         let isScopeFound = false;
@@ -1357,12 +1344,6 @@
                 }
             }
         }
-
-        if (!filterEnabledActions(action)) {
-            return;
-        }
-
-        const actionUrl = action.url ? String(action.url) : '';
 
         if (actionTyped) {
             switch (actionTyped.type) {
@@ -1544,7 +1525,13 @@
                     break;
                 }
                 case 'video': {
-                    callVideoAction(actionTyped.id, actionTyped.action, componentContext);
+                    const target = findComponentContextWithInfo(scopeContext, actionTyped.id, 'video', isScopeFound);
+                    if (target) {
+                        const info = target.getViewInfo('video');
+                        if (info && (actionTyped.action === 'start' || actionTyped.action === 'pause')) {
+                            info[actionTyped.action]();
+                        }
+                    }
                     break;
                 }
                 case 'set_stored_value': {
@@ -1567,11 +1554,11 @@
                     break;
                 }
                 case 'scroll_to': {
-                    callScrollTo(componentContext, actionTyped);
+                    callScrollTo(scopeContext, actionTyped, isScopeFound);
                     break;
                 }
                 case 'scroll_by': {
-                    callScrollBy(componentContext, actionTyped);
+                    callScrollBy(scopeContext, actionTyped, isScopeFound);
                     break;
                 }
                 case 'update_structure': {
@@ -1636,13 +1623,19 @@
                     case 'scroll_forward':
                     case 'scroll_to_position':
                     case 'scroll_to_item_id':
-                        switchElementAction(parts[1], params.get('id'), {
-                            item: params.get('item'),
-                            step: params.get('step'),
-                            overflow: params.get('overflow'),
-                            animated: params.get('animated'),
-                            itemId: params.get('item_id')
-                        });
+                        switchElementAction(
+                            scopeContext,
+                            isScopeFound,
+                            parts[1],
+                            params.get('id'),
+                            {
+                                item: params.get('item'),
+                                step: params.get('step'),
+                                overflow: params.get('overflow'),
+                                animated: params.get('animated'),
+                                itemId: params.get('item_id')
+                            }
+                        );
                         break;
                     case 'set_variable':
                         const name = params.get('name');
@@ -1682,9 +1675,17 @@
                             }));
                         }
                         break;
-                    case 'video':
-                        callVideoAction(params.get('id'), params.get('action'), componentContext);
+                    case 'video': {
+                        const target = findComponentContextWithInfo(scopeContext, params.get('id'), 'video', isScopeFound);
+                        const action = params.get('action');
+                        if (target) {
+                            const info = target.getViewInfo('video');
+                            if (info && (action === 'start' || action === 'pause')) {
+                                info[action]();
+                            }
+                        }
                         break;
+                    }
                     case 'download':
                         callDownloadAction(params.get('url'), origAction.download_callbacks, componentContext);
                         break;

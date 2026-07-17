@@ -52,7 +52,6 @@
     import type { DivPagerData } from '../../types/pager';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Orientation } from '../../types/orientation';
-    import type { SwitchElements } from '../../types/switch-elements';
     import type { ComponentContext, ComponentKey, PagerRegisterData } from '../../types/componentContext';
     import type { MaybeMissing } from '../../expressions/json';
     import type { Size } from '../../types/sizes';
@@ -92,8 +91,6 @@
     const rightClass = rootCtx.getCustomization('pagerRightClass');
 
     const isDesktop = rootCtx.isDesktop;
-
-    let prevId: string | undefined;
 
     let pagerItemsWrapper: HTMLElement;
     let mounted = false;
@@ -618,18 +615,14 @@
         registerData?.destroy();
         registerData = undefined;
 
-        if (prevId) {
-            rootCtx.unregisterInstance(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('scrollable');
 
         if (!componentContext.fakeElement) {
             registerData = componentContext.registerPager(componentContext.id || undefined);
         }
 
         if (componentContext.id && !componentContext.fakeElement) {
-            prevId = componentContext.id;
-            rootCtx.registerInstance<SwitchElements>(prevId, {
+            componentContext.attachViewInfo('scrollable', {
                 setCurrentItem(item: number, animated: boolean) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
@@ -677,7 +670,7 @@
                         }));
                     }
                 },
-            }, 'warn');
+            });
         }
     }
 
@@ -905,10 +898,7 @@
             context.destroy();
         });
 
-        if (prevId) {
-            rootCtx.unregisterInstance(prevId);
-            prevId = undefined;
-        }
+        componentContext.detachViewInfo('scrollable');
 
         registerData?.destroy();
         registerData = undefined;
