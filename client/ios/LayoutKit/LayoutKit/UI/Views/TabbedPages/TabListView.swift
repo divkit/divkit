@@ -32,7 +32,6 @@ final class TabListView: UIView {
   private let collectionViewLayout = TabsCollectionViewFlowLayout()
 
   private var selectedItemBackground: UIView!
-  private var setInitialModel = false
 
   private var dataSource: TabListViewDataSource! {
     didSet {
@@ -178,11 +177,6 @@ final class TabListView: UIView {
     animationInfo = nil
   }
 
-  func setInitialModel(_ model: TabTitlesViewModel) {
-    guard !setInitialModel else { return }
-    self.model = model
-    setInitialModel = true
-  }
 }
 
 extension CGPoint {

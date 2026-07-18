@@ -81,9 +81,8 @@ public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
     )
 
     tabListView.overscrollDelegate = overscrollDelegate
-    tabListView.setInitialModel(
-      tabDataSource.modelForItemSelection(state.selectedPageIndex)
-    )
+    let currentSelection = tabListView.model?.selection ?? state.selectedPageIndex
+    tabListView.model = tabDataSource.modelForItemSelection(currentSelection)
 
     selectionWireframe = wireframe
     tabContentsView.configure(
