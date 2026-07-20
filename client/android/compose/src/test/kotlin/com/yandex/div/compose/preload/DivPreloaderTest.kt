@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.PreloadMode
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
@@ -39,10 +40,14 @@ class DivPreloaderTest {
     private val imageLoads = mutableListOf<Uri>()
 
     private val imagePreloader = object : ImagePreloader {
-        override suspend fun preloadImages(div: Div, resolver: ExpressionResolver) {
-            if (div is Div.Image) {
-                imageLoads.add(div.value.imageUrl.evaluate(resolver))
-            }
+        override suspend fun preloadImages(
+            div: Div,
+            resolver: ExpressionResolver,
+            downloadAll: Boolean,
+        ) {
+            if (div !is Div.Image) return
+            if (!downloadAll && !div.value.preloadRequired.evaluate(resolver)) return
+            imageLoads.add(div.value.imageUrl.evaluate(resolver))
         }
     }
 
@@ -100,6 +105,123 @@ class DivPreloaderTest {
         )
         preloader.preload(data)
         assertEquals(listOf(listOf(videoUri)), videoUrls)
+    }
+
+    @Test
+    fun `does not preload video when preloadRequired is false`() = runTest {
+        val data = data(
+            content = video(
+                preloadRequired = constant(false),
+                videoSources = listOf(
+                    videoSource(url = constant("https://example.com/v.mp4".toUri()))
+                ),
+            )
+        )
+        preloader.preload(data)
+        assertEquals(emptyList(), videoUrls)
+    }
+
+    @Test
+    fun `preload with activeStateOnly preloads video when preloadRequired is false`() = runTest {
+        val videoUri = "https://example.com/v.mp4".toUri()
+        val data = data(
+            content = video(
+                preloadRequired = constant(false),
+                videoSources = listOf(videoSource(url = constant(videoUri))),
+            )
+        )
+        preloader.preload(data, PreloadMode.ACTIVE_STATE_ONLY)
+        assertEquals(listOf(listOf(videoUri)), videoUrls)
+    }
+
+    @Test
+    fun `preload with activeStateOnly loads images when preloadRequired is false`() = runTest {
+        val imageUrl = "https://example.com/img.jpg".toUri()
+        preloader.preload(
+            data(
+                content = image(
+                    imageUrl = constant(imageUrl),
+                    preloadRequired = constant(false),
+                )
+            ),
+            PreloadMode.ACTIVE_STATE_ONLY,
+        )
+        assertEquals(listOf(imageUrl), imageLoads)
+    }
+
+    @Test
+    fun `preload does not load images when preloadRequired is false`() = runTest {
+        preloader.preload(
+            data(
+                content = image(
+                    imageUrl = constant("https://example.com/img.jpg".toUri()),
+                    preloadRequired = constant(false),
+                )
+            )
+        )
+        assertEquals(emptyList(), imageLoads)
+    }
+
+    @Test
+    fun `preload with activeStateOnly visits only first root state`() = runTest {
+        val image1Url = "https://example.com/state0.jpg".toUri()
+        val image2Url = "https://example.com/state1.jpg".toUri()
+        preloader.preload(
+            data(
+                states = listOf(
+                    DivData.State(
+                        stateId = 0,
+                        div = image(
+                            imageUrl = constant(image1Url),
+                            preloadRequired = constant(false),
+                        )
+                    ),
+                    DivData.State(
+                        stateId = 1,
+                        div = image(
+                            imageUrl = constant(image2Url),
+                            preloadRequired = constant(false),
+                        )
+                    ),
+                )
+            ),
+            PreloadMode.ACTIVE_STATE_ONLY,
+        )
+        assertEquals(listOf(image1Url), imageLoads)
+    }
+
+    @Test
+    fun `preload with activeStateOnly visits only active div-state variant`() = runTest {
+        val image1Url = "https://example.com/s1.jpg".toUri()
+        val image2Url = "https://example.com/s2.jpg".toUri()
+        preloader.preload(
+            data(
+                content = Div.State(
+                    state(
+                        id = "id",
+                        defaultStateId = constant("s1"),
+                        states = listOf(
+                            DivState.State(
+                                stateId = "s1",
+                                div = image(
+                                    imageUrl = constant(image1Url),
+                                    preloadRequired = constant(false),
+                                )
+                            ),
+                            DivState.State(
+                                stateId = "s2",
+                                div = image(
+                                    imageUrl = constant(image2Url),
+                                    preloadRequired = constant(false),
+                                )
+                            ),
+                        )
+                    )
+                )
+            ),
+            PreloadMode.ACTIVE_STATE_ONLY,
+        )
+        assertEquals(listOf(image1Url), imageLoads)
     }
 
     @Test

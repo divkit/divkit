@@ -1,12 +1,25 @@
 package com.yandex.div.compose
 
+import android.graphics.Bitmap
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import coil3.ComponentRegistry
+import coil3.asImage
+import coil3.request.SuccessResult
 import com.yandex.div.compose.host.CheckVisibilityCallback
+import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.data.DivModelInternalApi
+import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.data
+import com.yandex.div.test.data.image
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -14,11 +27,27 @@ import org.robolectric.shadows.ShadowLooper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(DivModelInternalApi::class, ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class DivViewHostTest {
 
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
+
+    private val capturedUrls = mutableSetOf<String>()
+    private val testScope = CoroutineScope(UnconfinedTestDispatcher())
+
+    private val imageLoaderConfiguration = object : ImageLoaderConfiguration {
+        override fun applyComponents(builder: ComponentRegistry.Builder) {
+            builder.add { chain ->
+                capturedUrls.add(chain.request.data.toString())
+                SuccessResult(
+                    image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888).asImage(),
+                    request = chain.request,
+                )
+            }
+        }
+    }
 
     @Test
     fun `onVisibleBoundsChanged invokes registered callback`() {
@@ -124,7 +153,121 @@ class DivViewHostTest {
         assertEquals(1, invokeCount)
     }
 
+    @Test
+    fun `setContent with DivData loads images without preloadRequired`() {
+        val imageUrl = "https://example.com/preload.jpg"
+        val host = createHostWithImageCapture()
+        host.setContent(
+            data = data(
+                content = image(
+                    imageUrl = constant(imageUrl.toUri()),
+                    preloadRequired = constant(false),
+                )
+            ),
+            preloadMode = PreloadMode.ACTIVE_STATE_ONLY,
+        )
+        composeRule.waitForIdle()
+        assertEquals(setOf(imageUrl), capturedUrls)
+    }
+
+    @Test
+    fun `setContent with new DivData reloads images`() {
+        val firstUrl = "https://example.com/first.jpg"
+        val secondUrl = "https://example.com/second.jpg"
+        val host = createHostWithImageCapture()
+
+        host.setContent(
+            data = data(
+                content = image(
+                    imageUrl = constant(firstUrl.toUri()),
+                    preloadRequired = constant(false),
+                )
+            ),
+            preloadMode = PreloadMode.ACTIVE_STATE_ONLY,
+        )
+        composeRule.waitForIdle()
+        assertEquals(setOf(firstUrl), capturedUrls)
+
+        capturedUrls.clear()
+        host.setContent(
+            data = data(
+                content = image(
+                    imageUrl = constant(secondUrl.toUri()),
+                    preloadRequired = constant(false),
+                )
+            ),
+            preloadMode = PreloadMode.ACTIVE_STATE_ONLY,
+        )
+        composeRule.waitForIdle()
+        assertEquals(setOf(secondUrl), capturedUrls)
+    }
+
+    @Test
+    fun `setContent with DivData preloads when content wraps DivView`() {
+        val imageUrl = "https://example.com/wrapped.jpg"
+        val data = data(
+            content = image(
+                imageUrl = constant(imageUrl.toUri()),
+                preloadRequired = constant(false),
+            )
+        )
+        val host = createHostWithImageCapture()
+        host.setContent(data, preloadMode = PreloadMode.ACTIVE_STATE_ONLY) {
+            DivView(data = data)
+        }
+        composeRule.waitForIdle()
+        assertEquals(setOf(imageUrl), capturedUrls)
+    }
+
+    @Test
+    fun `setContent with DISABLED preloadMode does not start resource preload`() {
+        val imageUrl = "https://example.com/skip-preload.jpg"
+        val host = createHostWithImageCapture()
+        host.setContent(
+            data = data(
+                content = image(
+                    imageUrl = constant(imageUrl.toUri()),
+                    preloadRequired = constant(false),
+                )
+            ),
+            preloadMode = PreloadMode.DISABLED,
+        ) { }
+        composeRule.waitForIdle()
+        assertEquals(emptySet(), capturedUrls)
+    }
+
+    @Test
+    fun `setContent does not preload by default`() {
+        val imageUrl = "https://example.com/default-no-preload.jpg"
+        val host = createHostWithImageCapture()
+        host.setContent(
+            data(
+                content = image(
+                    imageUrl = constant(imageUrl.toUri()),
+                    preloadRequired = constant(false),
+                )
+            )
+        ) { }
+        composeRule.waitForIdle()
+        assertEquals(emptySet(), capturedUrls)
+    }
+
     private fun createHost(): DivViewHost = DivViewHost(createDivContext())
+
+    private fun createHostWithImageCapture(): DivViewHost {
+        val activity = Robolectric.buildActivity(ComponentActivity::class.java).setup().get()
+        val divContext = DivContext(
+            baseContext = activity,
+            configuration = DivComposeConfiguration(
+                reporter = TestReporter(),
+                imageLoaderConfiguration = imageLoaderConfiguration,
+            ),
+            debugConfiguration = DivDebugConfiguration(coroutineScope = testScope),
+        )
+        val host = DivViewHost(divContext)
+        activity.setContentView(host.composeView)
+        return host
+    }
 
     private fun createDivContext(): DivContext {
         return DivContext(

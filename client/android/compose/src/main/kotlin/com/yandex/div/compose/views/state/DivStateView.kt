@@ -11,6 +11,7 @@ import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.state.LocalDivStatePath
+import com.yandex.div.compose.state.findState
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.variables.mutableStateFromStringVariable
 import com.yandex.div.compose.views.DivBlockView
@@ -89,14 +90,12 @@ private fun DivState.rememberActiveState(
 
 @Composable
 private fun DivState.resolveState(activeStateId: String?): DivState.State? {
-    val resolvedState = activeStateId?.let { id -> states.find { it.stateId == id } }
-    if (resolvedState == null && activeStateId != null) {
+    val matched = activeStateId?.let { id -> states.find { it.stateId == id } }
+    if (matched == null && activeStateId != null) {
         reportError("State with id '$activeStateId' not found")
     }
-    return resolvedState
-        ?: states.firstOrNull()
-        ?: run {
-            reportError("DivState has no states")
-            null
-        }
+    return findState(activeStateId) ?: run {
+        reportError("DivState has no states")
+        null
+    }
 }

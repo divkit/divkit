@@ -19,6 +19,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 import javax.inject.Named
+import kotlinx.coroutines.CoroutineScope
 
 @DivContextScope
 @Component(
@@ -30,6 +31,7 @@ import javax.inject.Named
 internal interface DivContextComponent {
 
     val baseContext: Context
+    val coroutineScope: CoroutineScope
     val customViewFactories: Map<String, DivCustomViewFactory>
     val debugFeatures: DivDebugFeatures
     val extensionHandlers: Map<String, DivExtensionHandler>

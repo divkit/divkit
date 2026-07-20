@@ -20,27 +20,30 @@ internal class CoilImagePreloader @Inject constructor(
     override suspend fun preloadImages(
         div: Div,
         resolver: ExpressionResolver,
+        downloadAll: Boolean,
     ): Unit = coroutineScope {
         div.value().background?.forEach { background ->
-            if (background is DivBackground.Image && background.value.preloadRequired.evaluate(resolver)) {
+            if (background is DivBackground.Image &&
+                (downloadAll || background.value.preloadRequired.evaluate(resolver))
+            ) {
                 launch { loadImage(background.value.imageUrl.evaluate(resolver).toString()) }
             }
         }
         when (div) {
             is Div.Text -> {
                 div.value.images?.forEach { image ->
-                    if (image.preloadRequired.evaluate(resolver)) {
+                    if (downloadAll || image.preloadRequired.evaluate(resolver)) {
                         launch { loadImage(image.url.evaluate(resolver).toString()) }
                     }
                 }
             }
             is Div.Image -> {
-                if (div.value.preloadRequired.evaluate(resolver)) {
+                if (downloadAll || div.value.preloadRequired.evaluate(resolver)) {
                     launch { loadImage(div.value.imageUrl.evaluate(resolver).toString()) }
                 }
             }
             is Div.GifImage -> {
-                if (div.value.preloadRequired.evaluate(resolver)) {
+                if (downloadAll || div.value.preloadRequired.evaluate(resolver)) {
                     launch { loadImage(div.value.gifUrl.evaluate(resolver).toString()) }
                 }
             }

@@ -55,8 +55,13 @@ class DivContext private constructor(
      *
      * Can be called before showing [DivView] to warm up the cache.
      * Cancel the calling coroutine to stop preloading early.
+     *
+     * @param preloadMode how to preload resources for [data]. Defaults to [PreloadMode.REQUIRED_ONLY].
      */
-    suspend fun preload(data: DivData) = component.preloader.preload(data)
+    suspend fun preload(
+        data: DivData,
+        preloadMode: PreloadMode = PreloadMode.REQUIRED_ONLY,
+    ) = component.preloader.preload(data, preloadMode)
 
     /**
      * Removes [DivView] context associated with the given [com.yandex.div2.DivData].

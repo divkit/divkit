@@ -7,5 +7,6 @@ internal interface ImagePreloader {
     suspend fun preloadImages(
         div: Div,
         resolver: ExpressionResolver,
+        downloadAll: Boolean = false,
     )
 }

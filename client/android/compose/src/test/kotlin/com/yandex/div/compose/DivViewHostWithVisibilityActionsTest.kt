@@ -219,9 +219,7 @@ class DivViewHostWithVisibilityActionsTest {
             debugConfiguration = debugConfiguration,
         )
         host = DivViewHost(divContext)
-        host.setContent {
-            DivView(data = data(content))
-        }
+        host.setContent(data(content))
 
         activity.setContentView(
             FrameLayout(activity).apply {

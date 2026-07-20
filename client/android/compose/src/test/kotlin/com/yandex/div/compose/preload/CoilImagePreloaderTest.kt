@@ -74,6 +74,17 @@ class CoilImagePreloaderTest {
     }
 
     @Test
+    fun `preloads Div Image when downloadAll ignores preloadRequired`() = runTest {
+        val imageUrl = "https://example.com/img.jpg"
+        preloader.preloadImages(
+            preloadedImage(imageUrl, preloadRequired = false),
+            resolver,
+            downloadAll = true,
+        )
+        assertEquals(imageUrl, capturedUrls.single())
+    }
+
+    @Test
     fun `preloads Div GifImage content when preloadRequired is true`() = runTest {
         val imageUrl = "https://example.com/img.jpg"
         preloader.preloadImages(
@@ -96,6 +107,20 @@ class CoilImagePreloaderTest {
             resolver
         )
         assertEquals(emptySet(), capturedUrls)
+    }
+
+    @Test
+    fun `preloads Div GifImage when downloadAll ignores preloadRequired`() = runTest {
+        val imageUrl = "https://example.com/img.jpg"
+        preloader.preloadImages(
+            gifImage(
+                constant(imageUrl.toUri()),
+                preloadRequired = constant(false)
+            ),
+            resolver,
+            downloadAll = true,
+        )
+        assertEquals(imageUrl, capturedUrls.single())
     }
 
     @Test

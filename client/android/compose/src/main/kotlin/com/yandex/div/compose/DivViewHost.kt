@@ -8,18 +8,27 @@ import androidx.compose.ui.platform.ComposeView
 import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.core.annotations.ExperimentalApi
+import com.yandex.div2.DivData
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * [androidx.compose.ui.platform.ComposeView] host for [DivView].
  *
  * Use [setContent] on this host — not on [composeView] — so that
- * visibility actions work correctly. If [composeView] is inside a scrolling parent
+ * visibility actions work correctly and resources start loading.
+ * If [composeView] is inside a scrolling parent
  * ([androidx.core.widget.NestedScrollView], [android.widget.ScrollView], etc.),
  * call [onVisibleBoundsChanged] when the scroll position changes.
  *
  * ```
  * val host = DivViewHost(divContext)
- * host.setContent { DivView(data) }
+ * host.setContent(data)
+ *
+ * // or wrap DivView:
+ * host.setContent(data) {
+ *     Box { DivView(data) }
+ * }
  *
  * nestedScrollView.setOnScrollChangeListener { _, _, _, _, _ ->
  *     host.onVisibleBoundsChanged()
@@ -38,6 +47,8 @@ class DivViewHost(
 
     private var layoutListener: View.OnLayoutChangeListener? = null
 
+    private var preloadJob: Job? = null
+
     private val attachListener = object : View.OnAttachStateChangeListener {
         override fun onViewAttachedToWindow(v: View) = addOnLayoutChangeListener()
         override fun onViewDetachedFromWindow(v: View) = removeOnLayoutChangeListener()
@@ -51,11 +62,26 @@ class DivViewHost(
      * Sets Compose content for this host.
      *
      * Do not call [ComposeView.setContent] on [composeView] directly — visibility actions
-     * require content to be set through this method.
+     * and resource preloading require content to be set through this host.
+     *
+     * @param preloadMode how to preload resources for [data]. Defaults to [PreloadMode.DISABLED].
      */
-    fun setContent(content: @Composable () -> Unit) = composeView.setContent {
-        CompositionLocalProvider(LocalDivViewHost provides this) {
-            content()
+    fun setContent(
+        data: DivData,
+        preloadMode: PreloadMode = PreloadMode.DISABLED,
+        content: @Composable () -> Unit = { DivView(data) },
+    ) {
+        preloadJob?.cancel()
+        preloadJob = null
+        if (preloadMode != PreloadMode.DISABLED) {
+            preloadJob = divContext.component.coroutineScope.launch {
+                divContext.component.preloader.preload(data, preloadMode)
+            }
+        }
+        composeView.setContent {
+            CompositionLocalProvider(LocalDivViewHost provides this) {
+                content()
+            }
         }
     }
 
