@@ -1,0 +1,123 @@
+{
+  "description": "focus_element targets an input that a preceding set_variable reveals in the same action batch (gone -> visible + focus)",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "focus_revealed_element",
+      "variables": [
+        {
+          "name": "visible",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "iv",
+          "type": "string",
+          "value": ""
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text",
+                "text": "reveal + focus input",
+                "text_alignment_horizontal": "center",
+                "height": {
+                  "type": "fixed",
+                  "value": 48
+                },
+                "paddings": {
+                  "top": 12
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#B2DFDB"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "visibility": "@{visible ? 'visible' : 'gone'}",
+                "paddings": {
+                  "left": 16,
+                  "right": 16,
+                  "top": 12
+                },
+                "items": [
+                  {
+                    "type": "input",
+                    "id": "phone_input",
+                    "text_variable": "iv",
+                    "hint_text": "revealed and focused",
+                    "font_size": 18,
+                    "height": {
+                      "type": "fixed",
+                      "value": 44
+                    },
+                    "paddings": {
+                      "left": 12,
+                      "right": 12
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#E8F5E9"
+                      }
+                    ],
+                    "border": {
+                      "corner_radius": 8,
+                      "stroke": {
+                        "color": "#B0BEC5",
+                        "width": 1
+                      }
+                    },
+                    "focus": {
+                      "border": {
+                        "corner_radius": 8,
+                        "stroke": {
+                          "color": "#1E88E5",
+                          "width": 2
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "reveal",
+          "url": "div-action://set_variable?name=visible&value=true"
+        },
+        {
+          "log_id": "focus",
+          "typed": {
+            "type": "focus_element",
+            "element_id": "phone_input"
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

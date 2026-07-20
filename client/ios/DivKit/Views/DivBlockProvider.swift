@@ -152,6 +152,8 @@ final class DivBlockProvider {
         )
       }
       accessibilityElementsStorage = context.accessibilityElementsStorage
+      // idToPath is now repopulated for this card by makeBlock above.
+      divKitComponents.applyPendingActions(cardId: cardId)
       debugParams.processMeasurements((cardId: cardId, measurements: measurements))
       for error in context.errorsStorage.errors {
         divKitComponents.reporter.reportError(cardId: cardId, error: error)

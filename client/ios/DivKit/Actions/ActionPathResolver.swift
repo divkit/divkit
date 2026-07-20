@@ -1,5 +1,11 @@
 import LayoutKit
 
+enum PathResolution {
+  case resolved(UIElementPath)
+  case notFound
+  case ambiguous
+}
+
 struct ActionPathResolver {
   private let reporter: DivReporter
   private let idToPath: IdToPath
@@ -9,34 +15,93 @@ struct ActionPathResolver {
     self.idToPath = idToPath
   }
 
-  func resolve(
+  func resolvePath(
     id: String,
-    context: DivActionHandlingContext,
-    perform: (UIElementPath) -> Void
-  ) {
-    let componentPaths = idToPath[context.cardId.path + id]
-    let paths = context.scopePath
+    cardId: DivCardID,
+    scopePath: UIElementPath?
+  ) -> PathResolution {
+    let componentPaths = idToPath[cardId.path + id]
+    let paths = scopePath
       .map { scope in componentPaths.filter { $0.starts(with: scope) } } ?? componentPaths
 
     switch paths.count {
     case 0:
-      let suffix = context.scopePath == nil ? "" : " in scope"
-      reportError("Element with id '\(id)' not found\(suffix)", context: context)
+      return .notFound
     case 1:
-      perform(paths[0])
+      return .resolved(paths[0])
     default:
-      let suffix = context.scopePath == nil ? "" : " in scope"
-      reportError("Element with id '\(id)' is ambiguous\(suffix)", context: context)
+      return .ambiguous
     }
+  }
+
+  /// Resolves `id` and performs the action. If the element is not modeled yet
+  /// (e.g. it lives in a `gone` subtree that a preceding action in the same batch
+  /// is revealing), the action is parked and retried after the next re-model — see
+  /// `DivActionHandler.applyPendingActions`. Ambiguity is reported immediately.
+  func resolve(
+    id: String,
+    context: DivActionHandlingContext,
+    perform: @escaping (UIElementPath) -> Void
+  ) {
+    switch resolvePath(id: id, cardId: context.cardId, scopePath: context.scopePath) {
+    case let .resolved(path):
+      perform(path)
+    case .notFound:
+      context.actionHandler.enqueuePendingAction(
+        id: id,
+        scopePath: context.scopePath,
+        cardId: context.cardId,
+        sourcePath: context.sourcePath,
+        apply: perform
+      )
+    case .ambiguous:
+      reportAmbiguous(
+        id: id,
+        cardId: context.cardId,
+        scopePath: context.scopePath,
+        sourcePath: context.sourcePath
+      )
+    }
+  }
+
+  func reportNotFound(
+    id: String,
+    cardId: DivCardID,
+    scopePath: UIElementPath?,
+    sourcePath: UIElementPath
+  ) {
+    reportError(
+      "Element with id '\(id)' not found\(scopeSuffix(scopePath))",
+      cardId: cardId,
+      sourcePath: sourcePath
+    )
+  }
+
+  func reportAmbiguous(
+    id: String,
+    cardId: DivCardID,
+    scopePath: UIElementPath?,
+    sourcePath: UIElementPath
+  ) {
+    reportError(
+      "Element with id '\(id)' is ambiguous\(scopeSuffix(scopePath))",
+      cardId: cardId,
+      sourcePath: sourcePath
+    )
+  }
+
+  private func scopeSuffix(_ scopePath: UIElementPath?) -> String {
+    scopePath == nil ? "" : " in scope"
   }
 
   private func reportError(
     _ message: String,
-    context: DivActionHandlingContext
+    cardId: DivCardID,
+    sourcePath: UIElementPath
   ) {
     reporter.reportError(
-      cardId: context.cardId,
-      error: DivUnknownError(message: message, path: context.sourcePath)
+      cardId: cardId,
+      error: DivUnknownError(message: message, path: sourcePath)
     )
   }
 }

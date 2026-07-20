@@ -64,6 +64,73 @@ struct FocusElementActionHandlerTests {
     #expect(!layout.blockStateStorage.isFocused(path: layout.secondInputPath))
   }
 
+  @Test
+  func focusElement_whenTargetNotModeledYet_defersFocusUntilRemodel() {
+    let blockStateStorage = DivBlockStateStorage()
+    let idToPath = IdToPath()
+    let inputPath = cardId.path + "container" + "0" + "input"
+    let reporter = MockReporter()
+    var updateReasons: [DivCardUpdateReason] = []
+    let handler = DivActionHandler(
+      blockStateStorage: blockStateStorage,
+      idToPath: idToPath,
+      reporter: reporter,
+      updateCard: { updateReasons.append($0) }
+    )
+
+    // The input lives in a `gone` subtree, so it is not in `idToPath` yet.
+    handler.handle(
+      divAction(
+        logId: "action_id",
+        typed: .divActionFocusElement(DivActionFocusElement(elementId: .value("input")))
+      ),
+      path: cardId.path + "button",
+      source: .tap,
+      sender: nil
+    )
+
+    // Nothing focused yet, no error reported, but a re-model was scheduled.
+    #expect(reporter.lastError == nil)
+    #expect(!blockStateStorage.isFocused(path: inputPath))
+    #expect(!updateReasons.isEmpty)
+
+    // The re-model reveals the element and repopulates `idToPath`.
+    idToPath.add(inputPath, forId: cardId.path + "input")
+    handler.applyPendingActions(cardId: cardId)
+
+    #expect(reporter.lastError == nil)
+    #expect(blockStateStorage.isFocused(path: inputPath))
+  }
+
+  @Test
+  func focusElement_whenTargetNeverAppears_reportsNotFoundOnDrain() {
+    let blockStateStorage = DivBlockStateStorage()
+    let idToPath = IdToPath()
+    let reporter = MockReporter()
+    let handler = DivActionHandler(
+      blockStateStorage: blockStateStorage,
+      idToPath: idToPath,
+      reporter: reporter
+    )
+
+    handler.handle(
+      divAction(
+        logId: "action_id",
+        typed: .divActionFocusElement(DivActionFocusElement(elementId: .value("input")))
+      ),
+      path: cardId.path + "button",
+      source: .tap,
+      sender: nil
+    )
+
+    // Deferred: the error is not reported immediately.
+    #expect(reporter.lastError == nil)
+
+    // The element is still absent after the re-model, so the deferred error surfaces.
+    handler.applyPendingActions(cardId: cardId)
+    #expect(reporter.lastError != nil)
+  }
+
   private func makeScopedFocusLayout() -> ScopedFocusLayout {
     let blockStateStorage = DivBlockStateStorage()
     let idToPath = IdToPath()

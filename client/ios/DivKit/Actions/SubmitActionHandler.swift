@@ -28,7 +28,7 @@ final class SubmitActionHandler {
     pathResolver.resolve(
       id: containerId,
       context: context
-    ) { containerPath in
+    ) { [self] containerPath in
       submit(
         action: action,
         url: url,

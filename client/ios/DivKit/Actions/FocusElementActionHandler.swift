@@ -18,12 +18,10 @@ final class FocusElementActionHandler {
       context.updateCard(.state(previousCard))
     }
 
+    let state = TextInputViewState(pendingSelection: .textEnd)
     pathResolver.resolve(id: elementId, context: context) { path in
       context.blockStateStorage.setFocused(isFocused: true, path: path)
-      context.blockStateStorage.setPendingState(
-        path,
-        state: TextInputViewState(pendingSelection: .textEnd)
-      )
+      context.blockStateStorage.setPendingState(path, state: state)
       context.updateCard(.state(cardId))
     }
   }

@@ -9,6 +9,7 @@ extension DivActionHandler {
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     flags: DivFlagsInfo = .default,
     idToPath: IdToPath = IdToPath(),
+    pendingActions: PendingActionsStorage = PendingActionsStorage(),
     patchProvider: DivPatchProvider = MockPatchProvider(),
     submitter: DivSubmitter = MockSubmitter(),
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
@@ -37,6 +38,7 @@ extension DivActionHandler {
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter,
       idToPath: idToPath,
+      pendingActions: pendingActions,
       animatorController: DivAnimatorController(),
       flags: flags
     )

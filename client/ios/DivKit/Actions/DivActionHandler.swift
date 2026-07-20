@@ -26,6 +26,8 @@ public final class DivActionHandler {
   private let updateCard: UpdateCardAction
   private let reporter: DivReporter
   private let idToPath: IdToPath
+  private let pendingActions: PendingActionsStorage
+  private let actionPathResolver: ActionPathResolver
   private let flags: DivFlagsInfo
 
   private let animatorActionHandler: AnimatorActionHandler
@@ -82,6 +84,7 @@ public final class DivActionHandler {
       persistentValuesStorage: persistentValuesStorage,
       reporter: reporter ?? DefaultDivReporter(),
       idToPath: IdToPath(),
+      pendingActions: PendingActionsStorage(),
       animatorController: DivAnimatorController(),
       flags: .default
     )
@@ -105,6 +108,7 @@ public final class DivActionHandler {
     persistentValuesStorage: DivPersistentValuesStorage,
     reporter: DivReporter,
     idToPath: IdToPath,
+    pendingActions: PendingActionsStorage,
     animatorController: DivAnimatorController,
     flags: DivFlagsInfo
   ) {
@@ -119,9 +123,11 @@ public final class DivActionHandler {
     self.updateCard = updateCard
     self.reporter = reporter
     self.idToPath = idToPath
+    self.pendingActions = pendingActions
     self.flags = flags
 
     let actionPathResolver = ActionPathResolver(reporter: reporter, idToPath: idToPath)
+    self.actionPathResolver = actionPathResolver
 
     animatorActionHandler = AnimatorActionHandler(
       animatorController: animatorController,
@@ -318,6 +324,60 @@ public final class DivActionHandler {
       trackVisibility(info.logId, cardId)
     } else if source == .disappear {
       trackDisappear(info.logId, cardId)
+    }
+  }
+
+  /// Parks an action whose target element is not modeled yet and schedules a
+  /// card re-model so it gets a chance to be resolved. The pending action is
+  /// re-attempted from `applyPendingActions(cardId:)` once the element appears.
+  func enqueuePendingAction(
+    id: String,
+    scopePath: UIElementPath?,
+    cardId: DivCardID,
+    sourcePath: UIElementPath,
+    apply: @escaping (UIElementPath) -> Void
+  ) {
+    pendingActions.enqueue(
+      PendingActionsStorage.PendingAction(
+        id: id,
+        scopePath: scopePath,
+        cardId: cardId,
+        sourcePath: sourcePath,
+        apply: apply
+      )
+    )
+    // Guarantee a re-model tick that will apply this action. In the reveal+focus
+    // case this coalesces with the variable update scheduled by the preceding
+    // action, so no extra re-model happens.
+    updateCard(.state(cardId))
+  }
+
+  /// Re-attempts the actions parked for `cardId`. Must be called after a
+  /// successful re-model, when `IdToPath` has been repopulated.
+  func applyPendingActions(cardId: DivCardID) {
+    for action in pendingActions.take(cardId: cardId) {
+      switch actionPathResolver.resolvePath(
+        id: action.id,
+        cardId: cardId,
+        scopePath: action.scopePath
+      ) {
+      case let .resolved(path):
+        action.apply(path)
+      case .notFound:
+        actionPathResolver.reportNotFound(
+          id: action.id,
+          cardId: cardId,
+          scopePath: action.scopePath,
+          sourcePath: action.sourcePath
+        )
+      case .ambiguous:
+        actionPathResolver.reportAmbiguous(
+          id: action.id,
+          cardId: cardId,
+          scopePath: action.scopePath,
+          sourcePath: action.sourcePath
+        )
+      }
     }
   }
 

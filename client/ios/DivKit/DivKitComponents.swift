@@ -41,6 +41,7 @@ public final class DivKitComponents {
   private let animatorController = DivAnimatorController()
   private let disposePool = AutodisposePool()
   private let idToPath = IdToPath()
+  private let pendingActions = PendingActionsStorage()
   private let functionsStorage: DivFunctionsStorage
   private let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
   private let layoutProviderHandler: DivLayoutProviderHandler
@@ -175,6 +176,7 @@ public final class DivKitComponents {
       persistentValuesStorage: persistentValuesStorageInternal,
       reporter: reporter,
       idToPath: idToPath,
+      pendingActions: pendingActions,
       animatorController: animatorController,
       flags: flagsInfo
     )
@@ -229,6 +231,7 @@ public final class DivKitComponents {
     timerStorage.reset()
     tooltipManager.reset()
     idToPath.reset()
+    pendingActions.reset()
     animatorController.reset()
     debugErrorCollectors = [:]
   }
@@ -243,6 +246,7 @@ public final class DivKitComponents {
     visibilityCounter.reset(cardId: cardId)
     timerStorage.reset(cardId: cardId)
     idToPath.reset(cardId: cardId)
+    pendingActions.reset(cardId: cardId)
     animatorController.reset(cardId: cardId)
     debugErrorCollectors[cardId] = nil
   }
@@ -414,6 +418,10 @@ public final class DivKitComponents {
 
   func resetIdToPath(cardId: DivCardID) {
     idToPath.reset(cardId: cardId)
+  }
+
+  func applyPendingActions(cardId: DivCardID) {
+    actionHandler.applyPendingActions(cardId: cardId)
   }
 
   private func debugErrorCollector(
