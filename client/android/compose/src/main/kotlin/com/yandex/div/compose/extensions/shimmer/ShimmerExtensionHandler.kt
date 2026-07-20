@@ -2,16 +2,18 @@ package com.yandex.div.compose.extensions.shimmer
 
 import android.os.SystemClock
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.MotionDurationScale
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -27,6 +29,7 @@ import com.yandex.div.compose.utils.toPx
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.internal.extensions.ShimmerExtensionParams
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div2.DivCornersRadius
 import org.json.JSONObject
 import kotlin.math.abs
 import kotlin.math.cos
@@ -84,56 +87,60 @@ class ShimmerExtensionHandler : DivExtensionHandler {
             }
         }
 
-        // TODO: replace with drawWithCache
-        return drawBehind {
-            drawShimmer(config, phaseState.floatValue)
+        return drawWithCache {
+            val drawingConfig = config.toDrawingConfig(size, phaseState.floatValue)
+            onDrawBehind {
+                drawShimmer(drawingConfig)
+            }
         }
     }
 }
 
-private fun DrawScope.drawShimmer(config: ShimmerConfig, phase: Float) {
-    if (config.colorStops.size < 2) {
-        return
+private fun ShimmerConfig.toDrawingConfig(size: Size, phase: Float): ShimmerDrawingConfig? {
+    if (colorStops.size < 2) {
+        return null
     }
 
     val width = size.width
     val height = size.height
     if (width <= 0f || height <= 0f) {
-        return
+        return null
     }
 
-    val normalizedAngle = (config.angle.toInt() % 360 + 360) % 360
-    val isVerticalGradient = normalizedAngle in 45 until 135 || normalizedAngle in 225 until 315
-    val baseEndX = if (isVerticalGradient) 0f else width
-    val baseEndY = if (isVerticalGradient) height else 0f
+    val normalizedAngle = (angle.toInt() % 360 + 360) % 360
 
-    val tanAngle = abs(tan(Math.toRadians(config.angle)).toFloat())
+    val tanAngle = abs(tan(Math.toRadians(angle)).toFloat())
     val translateHeight = height + tanAngle * width
     val translateWidth = width + tanAngle * height
 
-    var rotate = config.angle
+    var rotate = angle
+    val isVertical: Boolean
     val dx: Float
     val dy: Float
     when (normalizedAngle) {
         in 45 until 135 -> {
             rotate -= 90
+            isVertical = true
             dx = 0f
             dy = offsetSymmetric(-translateHeight, phase)
         }
 
         in 225 until 315 -> {
             rotate -= 270
+            isVertical = true
             dx = 0f
             dy = offsetSymmetric(translateHeight, phase)
         }
 
         in 135 until 225 -> {
             rotate -= 180
+            isVertical = false
             dx = offsetSymmetric(translateWidth, phase)
             dy = 0f
         }
 
         else -> {
+            isVertical = false
             dx = offsetSymmetric(-translateWidth, phase)
             dy = 0f
         }
@@ -153,48 +160,70 @@ private fun DrawScope.drawShimmer(config: ShimmerConfig, phase: Float) {
         return Offset(rx, ry)
     }
 
-    val brush = Brush.linearGradient(
-        colorStops = config.colorStops.toTypedArray(),
-        start = transform(0f, 0f),
-        end = transform(baseEndX, baseEndY),
-        tileMode = TileMode.Clamp,
+    return ShimmerDrawingConfig(
+        brush = Brush.linearGradient(
+            colorStops = colorStops.toTypedArray(),
+            start = transform(0f, 0f),
+            end = transform(
+                x = if (isVertical) 0f else width,
+                y = if (isVertical) height else 0f
+            ),
+            tileMode = TileMode.Clamp
+        ),
+        path = if (cornerRadii == null) {
+            null
+        } else {
+            Path().apply {
+                addRoundRect(
+                    RoundRect(
+                        left = 0f,
+                        top = 0f,
+                        right = size.width,
+                        bottom = size.height,
+                        topLeftCornerRadius = cornerRadii.topLeft,
+                        topRightCornerRadius = cornerRadii.topRight,
+                        bottomRightCornerRadius = cornerRadii.bottomRight,
+                        bottomLeftCornerRadius = cornerRadii.bottomLeft
+                    )
+                )
+            }
+        }
     )
+}
 
-    val cornerRadius = config.cornerRadius
-    if (cornerRadius == null) {
-        drawRect(brush)
+private fun DrawScope.drawShimmer(config: ShimmerDrawingConfig?) {
+    if (config == null) {
         return
     }
 
-    val path = Path().apply {
-        addRoundRect(
-            RoundRect(
-                left = 0f,
-                top = 0f,
-                right = width,
-                bottom = height,
-                topLeftCornerRadius = cornerRadius.topLeft,
-                topRightCornerRadius = cornerRadius.topRight,
-                bottomRightCornerRadius = cornerRadius.bottomRight,
-                bottomLeftCornerRadius = cornerRadius.bottomLeft,
-            )
-        )
+    val path = config.path
+    if (path == null) {
+        drawRect(config.brush)
+    } else {
+        drawPath(path, config.brush)
     }
-    drawPath(path, brush)
 }
 
-private class ShimmerConfig(
-    val colorStops: List<Pair<Float, Color>>,
-    val angle: Double,
-    val durationMillis: Long,
-    val cornerRadius: ShimmerCornerRadius?,
-)
-
-private data class ShimmerCornerRadius(
+@Immutable
+private data class CornerRadii(
     val topLeft: CornerRadius,
     val topRight: CornerRadius,
     val bottomLeft: CornerRadius,
-    val bottomRight: CornerRadius,
+    val bottomRight: CornerRadius
+)
+
+@Immutable
+private data class ShimmerConfig(
+    val colorStops: List<Pair<Float, Color>>,
+    val angle: Double,
+    val durationMillis: Long,
+    val cornerRadii: CornerRadii?
+)
+
+@Immutable
+private data class ShimmerDrawingConfig(
+    val brush: Brush,
+    val path: Path?
 )
 
 @Composable
@@ -207,23 +236,23 @@ private fun Expression<Long>?.observedCornerRadius(): CornerRadius {
 }
 
 @Composable
+private fun DivCornersRadius.observedValue(): CornerRadii {
+    return CornerRadii(
+        topLeft = topLeft.observedCornerRadius(),
+        topRight = topRight.observedCornerRadius(),
+        bottomLeft = bottomLeft.observedCornerRadius(),
+        bottomRight = bottomRight.observedCornerRadius()
+    )
+}
+
+@Composable
 private fun ShimmerExtensionParams.observedConfig(): ShimmerConfig {
     val colors = colors.observedValue()
     val locations = locations.observedValue()
     val angle = angle.observedValue()
     val duration = duration.observedValue()
-
-    val cornerRadius = if (cornerRadius == null) {
-        null
-    } else {
-        val topLeft = cornerRadius?.topLeft.observedCornerRadius()
-        val topRight = cornerRadius?.topRight.observedCornerRadius()
-        val bottomLeft = cornerRadius?.bottomLeft.observedCornerRadius()
-        val bottomRight = cornerRadius?.bottomRight.observedCornerRadius()
-        ShimmerCornerRadius(topLeft, topRight, bottomLeft, bottomRight)
-    }
-
-    return remember(colors, locations, angle, duration, cornerRadius) {
+    val cornerRadii = cornerRadius?.observedValue()
+    return remember(colors, locations, angle, duration, cornerRadii) {
         val stopsCount = minOf(colors.size, locations.size)
         val colorStops = List(stopsCount) { i ->
             locations[i].toFloat().coerceIn(0f, 1f) to Color(colors[i])
@@ -232,7 +261,7 @@ private fun ShimmerExtensionParams.observedConfig(): ShimmerConfig {
             colorStops = colorStops,
             angle = angle,
             durationMillis = (duration * 1000).roundToLong(),
-            cornerRadius = cornerRadius,
+            cornerRadii = cornerRadii
         )
     }
 }
