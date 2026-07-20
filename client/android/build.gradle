@@ -80,13 +80,6 @@ allprojects {
 }
 
 subprojects {
-    tasks.withType(Test).configureEach {
-        // Do not use parallel forks, because profit from parallel execution is eaten by Robolectric initialization in every test process
-        maxParallelForks = 1
-        maxHeapSize = "4g"
-        failOnNoDiscoveredTests = false
-    }
-
     configurations.configureEach {
         exclude group: "com.intellij", module: "annotations"
         exclude group: "io.appmetrica.analytics", module: "analytics-local-socket"

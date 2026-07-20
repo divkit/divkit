@@ -3,7 +3,6 @@ plugins {
 }
 
 apply(from = "../div-library.gradle")
-apply(from = "../div-tests.gradle")
 apply(from = "../publish-android.gradle")
 
 android {
