@@ -64,6 +64,8 @@ internal class CurrencyInputMask(
     }
 
     override fun applyChangeFrom(newValue: String, position: Int?) {
+        if (newValue == value) return
+
         val diff = TextDiff.build(value, newValue.withNbsp)
 
         val decimalSeparator = decimalFormatSymbols.decimalSeparator
