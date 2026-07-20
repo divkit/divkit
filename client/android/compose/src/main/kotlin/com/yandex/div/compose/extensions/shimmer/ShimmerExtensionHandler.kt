@@ -17,10 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.compose.utils.toPx
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.internal.extensions.ShimmerExtensionParams
 import com.yandex.div.json.expressions.Expression
@@ -81,6 +84,7 @@ class ShimmerExtensionHandler : DivExtensionHandler {
             }
         }
 
+        // TODO: replace with drawWithCache
         return drawBehind {
             drawShimmer(config, phaseState.floatValue)
         }
@@ -195,11 +199,11 @@ private data class ShimmerCornerRadius(
 
 @Composable
 private fun Expression<Long>?.observedCornerRadius(): CornerRadius {
-    return this?.observedValue(
-        transform = { value ->
-            value.toFloat().let { CornerRadius(x = it, y = it) }
-        }
-    ) ?: CornerRadius.Zero
+    return if (this == null) {
+        CornerRadius.Zero
+    } else {
+        observedIntValue().dp.toPx().let { CornerRadius(x = it, y = it) }
+    }
 }
 
 @Composable
