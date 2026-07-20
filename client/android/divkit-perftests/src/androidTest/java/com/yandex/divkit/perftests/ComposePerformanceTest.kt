@@ -26,6 +26,8 @@ class ComposePerformanceTest : BasePerformanceTest() {
         importantMetrics = [
             "DivCompose.Render.Composition.Cold",
             "DivCompose.Render.Composition.Warm",
+            "DivCompose.Render.Effects.Cold",
+            "DivCompose.Render.Effects.Warm",
             "DivCompose.Render.Total.Cold",
             "DivCompose.Render.Total.Warm",
         ]
@@ -39,6 +41,8 @@ class ComposePerformanceTest : BasePerformanceTest() {
         importantMetrics = [
             "DivCompose.Render.Composition.Cold",
             "DivCompose.Render.Composition.Warm",
+            "DivCompose.Render.Effects.Cold",
+            "DivCompose.Render.Effects.Warm",
             "DivCompose.Render.Total.Cold",
             "DivCompose.Render.Total.Warm",
         ]

@@ -23,7 +23,9 @@ internal class DivViewHistogramReporter @Inject constructor(
     private val configuration: DivHistogramConfiguration
 ) {
     private var compositionStartedTime: TimeMark? = null
+    private var compositionFinishedTime: TimeMark? = null
     private var compositionDuration: Duration? = null
+    private var effectsDuration: Duration? = null
     private var totalDuration: Duration? = null
     private var state = "Cold"
     private var counter by mutableIntStateOf(0)
@@ -39,11 +41,12 @@ internal class DivViewHistogramReporter @Inject constructor(
         key(counter) {
             onCompositionStarted()
             content()
+            onCompositionFinished()
         }
 
         val view = LocalView.current
         DisposableEffect(counter) {
-            onCompositionFinished()
+            onEffectsApplied()
 
             var listener: ViewTreeObserver.OnDrawListener? = null
             listener = ViewTreeObserver.OnDrawListener {
@@ -72,8 +75,15 @@ internal class DivViewHistogramReporter @Inject constructor(
     }
 
     private fun onCompositionFinished() {
+        compositionFinishedTime = now()
         if (compositionDuration == null) {
             compositionDuration = compositionStartedTime?.elapsedNow()
+        }
+    }
+
+    private fun onEffectsApplied() {
+        if (effectsDuration == null) {
+            effectsDuration = compositionFinishedTime?.elapsedNow()
         }
     }
 
@@ -81,6 +91,7 @@ internal class DivViewHistogramReporter @Inject constructor(
         if (totalDuration == null) {
             totalDuration = compositionStartedTime?.elapsedNow()
             report(name = "DivCompose.Render.Composition", duration = compositionDuration)
+            report(name = "DivCompose.Render.Effects", duration = effectsDuration)
             report(name = "DivCompose.Render.Total", duration = totalDuration)
             state = "Warm"
         }
@@ -88,7 +99,9 @@ internal class DivViewHistogramReporter @Inject constructor(
 
     private fun reset() {
         compositionStartedTime = null
+        compositionFinishedTime = null
         compositionDuration = null
+        effectsDuration = null
         totalDuration = null
     }
 
