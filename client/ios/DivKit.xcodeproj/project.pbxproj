@@ -581,134 +581,21 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		8C5894BD2F34C03300AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Assert.swift,
-				BlockModelingUtils.swift,
-				DivBuilders.swift,
-				FakeImageHolder.swift,
-				MockDivBlockModelingContext.swift,
-				MockReporter.swift,
-				MockURLResourceRequester.swift,
-			);
-			target = 9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */;
-		};
-		8C5894CB2F34C0ED00AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				InputExtensionHandlersTests.swift,
-				LottieExtensionHandlerTests.swift,
-				ShimmerImagePreviewStyleTests.swift,
-				ShimmerStyleTester.swift,
-				ShineExtensionParamsTests.swift,
-			);
-			target = 52DED04629F7346900D64519 /* DivKitExtensionsTests */;
-		};
-		8C5894D12F34C65300AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AppLaunchUITests.swift,
-				TextInputMultilineUITests.swift,
-				TooltipsUITests.swift,
-			);
-			target = 986F57962CD68E8400990A2A /* DivKitUITests */;
-		};
-		8C5895342F34C77200AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Blocks/AspectRatioConstrainedSizeTests.swift,
-				Blocks/BlockErrorExtensions.swift,
-				"Blocks/BlockTests+Layout.swift",
-				Blocks/BlockTestsModels.swift,
-				Blocks/BlockTooltipTests.swift,
-				Blocks/BlockWithFixedWrapContent.swift,
-				Blocks/ContainerBlockLayoutTests.swift,
-				Blocks/ContainerBlockTests.swift,
-				Blocks/GalleryBlockTests.swift,
-				Blocks/GenericViewBlockTests.swift,
-				Blocks/GridBlockTests.swift,
-				Blocks/ImageBaseBlockStateTests.swift,
-				Blocks/ImageBaseBlockStateUpdateTests.swift,
-				Blocks/ImageBaseBlockTests.swift,
-				Blocks/LayeredBlockLayoutTests.swift,
-				Blocks/LayeredBlockTests.swift,
-				Blocks/PagerBlockTests.swift,
-				Blocks/ResizableBlockMeasureTests.swift,
-				Blocks/SwitchableContainerBlockTests.swift,
-				Blocks/TabsBlockTests.swift,
-				Blocks/TextInputBlockTests.swift,
-				Blocks/WrapperBlockTests.swift,
-				Blocks/WrapContentParentWithMatchParentChildrenTests.swift,
-				Tooltips/TooltipStatesStoreTests.swift,
-				UI/Base/GenericCollectionLayoutTests.swift,
-				UI/Base/ScrollableContentPagerTests.swift,
-				"UI/Blocks/Array+UIViewRenderableTests.swift",
-				UI/Blocks/DecoratingViewActionAnimationFreezeTests.swift,
-				"UI/Blocks/UIViewRenderable+AccessibilityTests.swift",
-				UI/Views/GradientStopsPremultipliedTests.swift,
-				UI/Views/TabbedPages/TabListSelectionDataSourceImplTests.swift,
-				UI/Views/TabbedPages/TabTitleDelimiterImageLoaderTests.swift,
-				UI/Views/TextSelectionTests.swift,
-				UIElementPathTests.swift,
-				Utils.swift,
-				ViewModels/CurrencyMaskFormatterTests.swift,
-				ViewModels/FixedLengthMaskFormatterTests.swift,
-				ViewModels/GalleryViewLayoutTests.swift,
-				ViewModels/GalleryViewMetricsTests.swift,
-				ViewModels/GalleryViewModelTests.swift,
-				ViewModels/GalleryViewStateTests.swift,
-				ViewModels/InfiniteScrollTests.swift,
-				ViewModels/MaskValidatorTests.swift,
-				ViewModels/PageIndicatorStateTests.swift,
-				ViewModels/PagerViewLayoutTests.swift,
-				ViewModels/PhoneMaskFormatterTests.swift,
-				ViewModels/ScrollHandlerTests.swift,
-				ViewModels/TabbedPages/TabContentsViewModelTests.swift,
-				ViewModels/TabbedPages/TabInterimItemExtensionsTests.swift,
-				ViewModels/VisibilityActionPerformer/VisibilityActionPerformersTests.swift,
-			);
-			target = 8CF329232875D534003F799A /* LayoutKitTests */;
-		};
-		8C5895492F34C89900AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				AnchorBlockTests.swift,
-				DecoratingBlockTests.swift,
-				LayoutKitSnapshotTest.swift,
-				ReferenceSet.swift,
-				SnapshotTestKit/Diff.swift,
-				SnapshotTestKit/Snapshot.swift,
-				SnapshotTestKit/SnapshotTestKit.swift,
-				SwitchableContainerSnapshotTest.swift,
-				TooltipFactorySnapshotTests.swift,
-				YSFontProvider.swift,
-			);
-			target = 8C6E40B028AAA47B0038E107 /* LayoutKitSnapshotTests */;
-		};
 		8C5A449F2F34CA3E00287316 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				AppDelegate.swift,
-				Assets.xcassets,
-				"Fonts/RobotoFlex-Regular.ttf",
-				"Fonts/YSText-Bold.ttf",
-				"Fonts/YSText-Light.ttf",
-				"Fonts/YSText-Medium.ttf",
-				"Fonts/YSText-Regular.ttf",
-				Main.storyboard,
-				ViewController.swift,
+				Info.plist,
 			);
 			target = 8C9284F6288ADEEA00BEA1FA /* SnapshotTestsHostApp */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		8C5894B02F34BE4300AFF80D /* DivKitTestsSupport */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8C5894BD2F34C03300AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DivKitTestsSupport; sourceTree = "<group>"; };
-		8C5894C52F34C0D200AFF80D /* DivKitExtensionsTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8C5894CB2F34C0ED00AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DivKitExtensionsTests; sourceTree = "<group>"; };
-		8C5894CE2F34C63A00AFF80D /* DivKitUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8C5894D12F34C65300AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DivKitUITests; sourceTree = "<group>"; };
-		8C5895072F34C72500AFF80D /* LayoutKitTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8C5895342F34C77200AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); name = LayoutKitTests; path = LayoutKit/LayoutKitTests; sourceTree = "<group>"; };
-		8C58953F2F34C87A00AFF80D /* LayoutKitSnapshotTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8C5895492F34C89900AFF80D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = LayoutKitSnapshotTests; sourceTree = "<group>"; };
+		8C5894B02F34BE4300AFF80D /* DivKitTestsSupport */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DivKitTestsSupport; sourceTree = "<group>"; };
+		8C5894C52F34C0D200AFF80D /* DivKitExtensionsTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DivKitExtensionsTests; sourceTree = "<group>"; };
+		8C5894CE2F34C63A00AFF80D /* DivKitUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DivKitUITests; sourceTree = "<group>"; };
+		8C5895072F34C72500AFF80D /* LayoutKitTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = LayoutKitTests; path = LayoutKit/LayoutKitTests; sourceTree = "<group>"; };
+		8C58953F2F34C87A00AFF80D /* LayoutKitSnapshotTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LayoutKitSnapshotTests; sourceTree = "<group>"; };
 		8C5A449C2F34CA0600287316 /* SnapshotTestsHostApp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8C5A449F2F34CA3E00287316 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SnapshotTestsHostApp; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
@@ -1335,6 +1222,9 @@
 			dependencies = (
 				9FE7D3112CF752F000BAF071 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				8C5894C52F34C0D200AFF80D /* DivKitExtensionsTests */,
+			);
 			name = DivKitExtensionsTests;
 			packageProductDependencies = (
 				52DED04E29F7349000D64519 /* DivKit */,
@@ -1409,6 +1299,9 @@
 				8C6E40C328AAA5360038E107 /* PBXTargetDependency */,
 				8C81DF9B28AE4B9A009B17D2 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				8C58953F2F34C87A00AFF80D /* LayoutKitSnapshotTests */,
+			);
 			name = LayoutKitSnapshotTests;
 			packageProductDependencies = (
 				8C6E40C428AAA62F0038E107 /* LayoutKit */,
@@ -1478,6 +1371,9 @@
 			dependencies = (
 				8C81DF9D28AE51CE009B17D2 /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				8C5A449C2F34CA0600287316 /* SnapshotTestsHostApp */,
+			);
 			name = SnapshotTestsHostApp;
 			packageProductDependencies = (
 			);
@@ -1498,6 +1394,9 @@
 			dependencies = (
 				8CF3296E2875D645003F799A /* PBXTargetDependency */,
 				0CECADBA2EA10D7B00B3E60A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				8C5895072F34C72500AFF80D /* LayoutKitTests */,
 			);
 			name = LayoutKitTests;
 			packageProductDependencies = (
@@ -1520,6 +1419,9 @@
 			dependencies = (
 				986F579E2CD68E8400990A2A /* PBXTargetDependency */,
 			);
+			fileSystemSynchronizedGroups = (
+				8C5894CE2F34C63A00AFF80D /* DivKitUITests */,
+			);
 			name = DivKitUITests;
 			productName = "DivKit PlaygroundUITests";
 			productReference = 986F57972CD68E8400990A2A /* DivKitUITests.xctest */;
@@ -1536,6 +1438,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8C5894B02F34BE4300AFF80D /* DivKitTestsSupport */,
 			);
 			name = DivKitTestsSupport;
 			packageProductDependencies = (

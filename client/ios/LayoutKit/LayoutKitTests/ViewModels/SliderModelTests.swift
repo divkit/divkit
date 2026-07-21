@@ -97,6 +97,8 @@ private func makeSliderModel(minValue: Int, maxValue: Int) -> SliderModel {
     marksConfiguration: marksConfig,
     ranges: [],
     layoutDirection: .leftToRight,
-    isEnabled: true
+    isEnabled: true,
+    pressStartActions: [],
+    pressEndActions: []
   )
 }
