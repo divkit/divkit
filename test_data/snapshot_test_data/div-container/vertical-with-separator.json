@@ -61,13 +61,17 @@
               "color": "#000",
               "shape": {
                 "type": "rounded_rectangle",
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 5
+                },
                 "item_height": {
                   "type": "fixed",
-                  "value": 2
+                  "value": 10
                 },
                 "item_width": {
                   "type": "fixed",
-                  "value": 50
+                  "value": 100
                 }
               }
             }

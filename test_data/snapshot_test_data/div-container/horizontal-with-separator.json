@@ -35,17 +35,7 @@
             {
               "type": "item",
               "text": "Item 0",
-              "visibility": "gone",
-              "disappear_actions": [
-                {
-                  "log_id": "item0_disappear"
-                }
-              ],
-              "visibility_actions": [
-                {
-                  "log_id": "item0_visibility"
-                }
-              ]
+              "visibility": "gone"
             },
             {
               "type": "item",
@@ -75,12 +65,8 @@
               "type": "shape_drawable",
               "color": "#000",
               "shape": {
-                "type": "rounded_rectangle",
-                "item_height": {
-                  "type": "fixed",
-                  "value": 10
-                },
-                "item_width": {
+                "type": "circle",
+                "radius": {
                   "type": "fixed",
                   "value": 10
                 }
