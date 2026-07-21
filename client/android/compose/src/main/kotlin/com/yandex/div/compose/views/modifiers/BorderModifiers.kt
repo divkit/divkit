@@ -5,7 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
@@ -21,13 +21,12 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.observeRoundedCornerShape
 import com.yandex.div.compose.utils.observedDpValue
+import com.yandex.div.compose.utils.observedRoundedCornerShape
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivShadow
-import com.yandex.div2.DivStroke
 import com.yandex.div2.DivStrokeStyle
 
 @Composable
@@ -39,7 +38,13 @@ internal fun Modifier.borderClip(data: DivBorder): Modifier {
 @Composable
 internal fun Modifier.borderStroke(data: DivBorder): Modifier {
     val stroke = data.stroke ?: return this
-    return borderStrokeWithShape(stroke, data.toShape())
+    val shape = data.toShape()
+    val color = stroke.color.observedColorValue()
+    val width = stroke.width.observedDpValue(stroke.unit)
+    return when (stroke.style) {
+        is DivStrokeStyle.Solid -> border(BorderStroke(width, color), shape)
+        is DivStrokeStyle.Dashed -> dashedBorder(color, width, shape)
+    }
 }
 
 @Composable
@@ -51,43 +56,31 @@ internal fun Modifier.borderShadow(data: DivBorder, contentAlpha: Float): Modifi
 
 @Composable
 private fun DivBorder.toShape(): Shape {
-    return observeRoundedCornerShape(
-        cornerRadius = cornerRadius,
-        cornersRadius = cornersRadius,
-        defaultShape = RectangleShape,
-    )
+    return observedRoundedCornerShape(cornerRadius, cornersRadius) ?: RectangleShape
 }
 
 @Composable
-private fun Modifier.borderStrokeWithShape(stroke: DivStroke, shape: Shape): Modifier {
-    val color = stroke.color.observedColorValue()
-    val width = stroke.width.observedDpValue(stroke.unit)
-    return when (stroke.style) {
-        is DivStrokeStyle.Solid -> border(BorderStroke(width, color), shape)
-        is DivStrokeStyle.Dashed -> drawBehindDashedBorder(color, width, shape)
-    }
-}
-
-@Composable
-private fun Modifier.drawBehindDashedBorder(
+private fun Modifier.dashedBorder(
     color: Color,
     width: Dp,
     shape: Shape
 ): Modifier {
     val density = LocalDensity.current
-    val widthPx = width.toPx()
     val dashWidth = 6.dp.toPx()
     val gapWidth = 2.dp.toPx()
-    return drawBehind {
+    val stroke = Stroke(
+        width = width.toPx(),
+        pathEffect = PathEffect.dashPathEffect(floatArrayOf(dashWidth, gapWidth), 0f)
+    )
+    return drawWithCache {
         val outline = shape.createOutline(size, layoutDirection, density)
-        drawOutline(
-            outline = outline,
-            color = color,
-            style = Stroke(
-                width = widthPx,
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(dashWidth, gapWidth), 0f)
+        onDrawBehind {
+            drawOutline(
+                outline = outline,
+                color = color,
+                style = stroke
             )
-        )
+        }
     }
 }
 

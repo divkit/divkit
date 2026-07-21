@@ -9,11 +9,10 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivCornersRadius
 
 @Composable
-internal fun observeRoundedCornerShape(
+internal fun observedRoundedCornerShape(
     cornerRadius: Expression<Long>?,
-    cornersRadius: DivCornersRadius?,
-    defaultShape: Shape,
-): Shape {
+    cornersRadius: DivCornersRadius?
+): Shape? {
     val singleRadius = cornerRadius?.observedValue()?.toDp()
     return when {
         cornersRadius != null -> {
@@ -26,6 +25,6 @@ internal fun observeRoundedCornerShape(
             )
         }
         singleRadius != null -> RoundedCornerShape(singleRadius)
-        else -> defaultShape
+        else -> null
     }
 }
