@@ -16,7 +16,9 @@
       "default_value": "true",
       "$description": "translations.json#/div_extension_is_enabled",
       "platforms": [
-        "web"
+        "web",
+        "ios",
+        "android"
       ]
     },
     "params": {

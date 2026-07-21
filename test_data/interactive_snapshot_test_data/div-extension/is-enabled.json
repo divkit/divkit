@@ -1,0 +1,86 @@
+{
+  "description": "Extension is_enabled controls whether the extension is applied to the element. Step 0: is_enabled=false, the markdown extension is not applied and the raw text is shown. Step 1: is_enabled becomes true, the markdown extension is applied and the text is formatted.",
+  "platforms": [
+    "ios",
+    "android"
+  ],
+  "unsupported_platforms": {
+    "web": "The markdown library is not part of the DivKit library"
+  },
+  "div_data": {
+    "card": {
+      "log_id": "extension_is_enabled",
+      "variables": [
+        {
+          "name": "md_on",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "paddings": {
+              "top": 16,
+              "bottom": 16,
+              "left": 16,
+              "right": 16
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "is_enabled = @{md_on}",
+                "font_size": 16,
+                "font_weight": "bold",
+                "paddings": {
+                  "bottom": 8
+                }
+              },
+              {
+                "type": "text",
+                "text": "# Header\n**Bold text** and *italic*",
+                "font_size": 15,
+                "paddings": {
+                  "top": 10,
+                  "bottom": 10,
+                  "left": 12,
+                  "right": 12
+                },
+                "extensions": [
+                  {
+                    "id": "markdown",
+                    "is_enabled": "@{md_on}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "log_id": "enable_extension",
+          "typed": {
+            "type": "set_variable",
+            "variable_name": "md_on",
+            "value": {
+              "type": "boolean",
+              "value": true
+            }
+          }
+        }
+      ],
+      "expected_screenshot": "step1.png"
+    }
+  ]
+}

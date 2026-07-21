@@ -4,9 +4,11 @@ import android.view.View
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.json.expressions.isConstant
 import com.yandex.div2.DivBase
 import javax.inject.Inject
 
@@ -32,7 +34,7 @@ internal class DivExtensionController @Inject constructor(
     }
 
     fun beforeBindView(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
-        if (!hasExtensions(div)) {
+        if (!hasEnabledExtensions(div, resolver)) {
             return
         }
         extensionHandlers.forEach { handler ->
@@ -46,10 +48,34 @@ internal class DivExtensionController @Inject constructor(
         if (!hasExtensions(div)) {
             return
         }
+        observeIsEnabled(divView, resolver, view, div)
+        applyExtensions(divView, resolver, view, div)
+    }
+
+    private fun observeIsEnabled(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
+        val subscriber = view.expressionSubscriber
+        div.extensions?.forEach { extension ->
+            if (extension.isEnabled.isConstant()) {
+                return@forEach
+            }
+            subscriber.addSubscription(
+                extension.isEnabled.observe(resolver) {
+                    applyExtensions(divView, resolver, view, div)
+                }
+            )
+        }
+    }
+
+    private fun applyExtensions(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
+        val enabled = hasEnabledExtensions(div, resolver)
         extensionHandlers.forEach { handler ->
             if (handler.matches(div)) {
                 executeOnMainThreadBlocking {
-                    handler.bindView(divView, resolver, view, div)
+                    if (enabled) {
+                        handler.bindView(divView, resolver, view, div)
+                    } else {
+                        handler.unbindView(divView, resolver, view, div)
+                    }
                 }
             }
         }
@@ -69,7 +95,7 @@ internal class DivExtensionController @Inject constructor(
     }
 
     fun loadMedia(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
-        if (!hasExtensions(div)) return
+        if (!hasEnabledExtensions(div, resolver)) return
         extensionHandlers.forEach { handler ->
             if (handler.matches(div)) {
                 handler.loadMedia(divView, resolver, view, div)
@@ -88,5 +114,12 @@ internal class DivExtensionController @Inject constructor(
 
     private fun hasExtensions(div: DivBase): Boolean {
         return !div.extensions.isNullOrEmpty() && extensionHandlers.isNotEmpty()
+    }
+
+    private fun hasEnabledExtensions(div: DivBase, resolver: ExpressionResolver): Boolean {
+        if (extensionHandlers.isEmpty()) {
+            return false
+        }
+        return div.extensions?.any { it.isEnabled.evaluate(resolver) } ?: false
     }
 }

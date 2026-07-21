@@ -6,20 +6,28 @@ import VGSL
 
 public final class DivExtension: @unchecked Sendable {
   public let id: String
+  public let isEnabled: Expression<Bool> // default value: true
   public let params: [String: Any]?
+
+  public func resolveIsEnabled(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(isEnabled) ?? true
+  }
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
       id: try dictionary.getField("id", context: context),
+      isEnabled: try dictionary.getOptionalExpressionField("is_enabled", context: context),
       params: try dictionary.getOptionalField("params", context: context)
     )
   }
 
   init(
     id: String,
+    isEnabled: Expression<Bool>? = nil,
     params: [String: Any]? = nil
   ) {
     self.id = id
+    self.isEnabled = isEnabled ?? .value(true)
     self.params = params
   }
 }
@@ -29,7 +37,8 @@ public final class DivExtension: @unchecked Sendable {
 extension DivExtension: Equatable {
   public static func ==(lhs: DivExtension, rhs: DivExtension) -> Bool {
     guard
-      lhs.id == rhs.id
+      lhs.id == rhs.id,
+      lhs.isEnabled == rhs.isEnabled
     else {
       return false
     }
@@ -43,6 +52,7 @@ extension DivExtension: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["id"] = id
+    result["is_enabled"] = isEnabled.toValidSerializationValue()
     result["params"] = params
     return result
   }

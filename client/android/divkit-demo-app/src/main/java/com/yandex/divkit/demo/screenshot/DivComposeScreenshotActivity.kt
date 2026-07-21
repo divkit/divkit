@@ -71,6 +71,11 @@ class DivComposeScreenshotActivity : ComponentActivity() {
                 fontSourceProvider = ComposeFontSourceProvider(),
                 playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(this)),
                 imageLoaderConfiguration = imageLoaderConfiguration,
+                extensionHandlers = mapOf(
+                    // Compose has no markdown extension; this stand-in makes the shared
+                    // markdown is_enabled case visible on Compose (red when applied).
+                    "markdown" to TestSolidBackgroundComposeExtensionHandler(),
+                ),
             ),
         )
 

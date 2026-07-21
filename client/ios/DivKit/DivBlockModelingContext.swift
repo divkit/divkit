@@ -181,6 +181,9 @@ public struct DivBlockModelingContext {
 
   public func getExtensionHandlers(for div: DivBase) -> [DivExtensionHandler] {
     (div.extensions ?? []).compactMap {
+      guard $0.resolveIsEnabled(expressionResolver) else {
+        return nil
+      }
       let id = $0.id
       if !extensionHandlers.keys.contains(id) {
         addError(message: "No DivExtensionHandler for: \(id)")
