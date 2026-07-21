@@ -16,6 +16,9 @@
         ],
         "web": {
           "version_added": "32.29.0"
+        },
+        "ios": {
+          "version_added": "32.59.0"
         }
       }
     }

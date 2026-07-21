@@ -152,6 +152,15 @@
           "version_added": "30.33.0"
         }
       }
+    },
+    {
+      "id": "ext_is_enabled",
+      "name": "<code>is_enabled</code> property in extensions",
+      "compat": {
+        "web": {
+          "version_added": "30.59.0"
+        }
+      }
     }
   ]
 }
