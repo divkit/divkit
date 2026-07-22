@@ -490,5 +490,6 @@ internal class DivBaseBinder @Inject constructor(
     private fun View.applyFocusableState(div: DivBase) {
         if (div is DivInput || div is DivSwitch) return
         isFocusable = div.focus != null
+        isFocusableInTouchMode = div.focus != null
     }
 }

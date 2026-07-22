@@ -118,7 +118,11 @@ internal class DivActionBinder @Inject constructor(
 
         bindHoverActions(context, target, hoverStartActions, hoverEndActions)
 
-        target.attachTouchListeners(animatedTouchListener, pressTouchListener)
+        target.attachTouchListeners(
+            animatedTouchListener,
+            pressTouchListener,
+            FocusClickSynthesizer.create(target),
+        )
     }
 
     private fun bindTapActions(
@@ -159,8 +163,9 @@ internal class DivActionBinder @Inject constructor(
         prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
             target.setTapListener(divGestureListener) {
                 logger.logClick(divView, resolver, target, menuAction)
-                divActionBeaconSender.sendTapActionBeacon(menuAction, resolver)
+                // Move focus as early as possible cause actions processing may move it elsewhere.
                 it.captureFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
+                divActionBeaconSender.sendTapActionBeacon(menuAction, resolver)
                 overflowMenuWrapper.onMenuClickListener.onClick(target)
             }
         }
@@ -212,8 +217,9 @@ internal class DivActionBinder @Inject constructor(
         prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
             target.setOnLongClickListener {
                 val uuid = UUID.randomUUID().toString()
-                divActionBeaconSender.sendTapActionBeacon(menuAction, resolver)
+                // Move focus as early as possible cause actions processing may move it elsewhere.
                 it.captureFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
+                divActionBeaconSender.sendTapActionBeacon(menuAction, resolver)
                 overflowMenuWrapper.onMenuClickListener.onClick(target)
                 actions.forEach { action ->
                     logger.logLongClick(divView, resolver, target, action, uuid)
@@ -270,9 +276,10 @@ internal class DivActionBinder @Inject constructor(
 
         prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
             divGestureListener.onDoubleTapListener = {
+                // Move focus as early as possible cause actions processing may move it elsewhere.
+                target.captureFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
                 logger.logDoubleClick(divView, resolver, target, menuAction)
                 divActionBeaconSender.sendTapActionBeacon(menuAction, resolver)
-                target.captureFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
                 overflowMenuWrapper.onMenuClickListener.onClick(target)
             }
         }

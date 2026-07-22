@@ -62,4 +62,13 @@ class FocusActionsTest {
             assert { blurOnBottomHandled() }
         }
     }
+
+    @Test
+    fun focusAndClickActionsHandledOnSameTap() {
+        divFocus {
+            activityRule.buildFocusActionsContainer()
+            clickOnFocusButton()
+            assert { focusButtonShowsFocusedAndClicked() }
+        }
+    }
 }

@@ -27,6 +27,11 @@ internal class DivFocusSteps : DivTestAssetSteps() {
         buildContainer(MATCH_PARENT, MATCH_PARENT)
     }
 
+    fun ActivityTestRule<DummyActivity>.buildFocusActionsContainer() {
+        testAsset = "ui_test_data/focus/focus_actions.json"
+        buildContainer(MATCH_PARENT, MATCH_PARENT)
+    }
+
     fun clickOnTopInput(): Unit = step("Click on top input") {
         clickOnView(topInputMatcher)
     }
@@ -41,6 +46,10 @@ internal class DivFocusSteps : DivTestAssetSteps() {
 
     fun clickOnBottomInput(): Unit = step("Click on bottom input") {
         clickOnView(bottomInputMatcher)
+    }
+
+    fun clickOnFocusButton(): Unit = step("Click on focus_button") {
+        onView(focusButtonMatcher).perform(click())
     }
 
     fun assert(f: DivFocusAssertions.() -> Unit) = f(DivFocusAssertions())
@@ -68,6 +77,13 @@ internal class DivFocusAssertions {
     fun blurOnBottomHandled(): Unit = step("Check blur action on bottom input") {
         checkActionHandled(bottomInputMatcher, blurActionHandledMatcher)
     }
+
+    fun focusButtonShowsFocusedAndClicked(): Unit = step(
+        "Text on button should change to \"focused: true / clicked: true\""
+    ) {
+        onView(allOf(focusButtonMatcher, withText("focused: true / clicked: true")))
+            .checkIsDisplayed()
+    }
 }
 
 private fun clickOnView(matcher: Matcher<View>) = onView(matcher).perform(click())
@@ -75,6 +91,7 @@ private fun clickOnView(matcher: Matcher<View>) = onView(matcher).perform(click(
 private val topInputMatcher = getPositionMatcher("top_input")
 private val middleInputMatcher = getPositionMatcher("middle_input")
 private val bottomInputMatcher = getPositionMatcher("bottom_input")
+private val focusButtonMatcher = getPositionMatcher("focus_button")
 
 private fun getPositionMatcher(tag: String) = withTagValue(equalTo(tag))
 

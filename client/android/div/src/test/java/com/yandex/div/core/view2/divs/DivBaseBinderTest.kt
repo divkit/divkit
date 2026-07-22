@@ -10,6 +10,7 @@ import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivFocus
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTransitionTrigger
 import com.yandex.div2.DivVisibility
@@ -119,14 +120,34 @@ class DivBaseBinderTest {
         verify(view).clearAnimation()
     }
 
+    @Test
+    fun `set isFocusableInTouchMode true when div has focus block`() {
+        val div = createDiv(focus = DivFocus())
+
+        baseBinder.bindView(context, view, div, null, path)
+
+        assert(view.isFocusableInTouchMode)
+    }
+
+    @Test
+    fun `set isFocusableInTouchMode false when div has no focus block`() {
+        val div = createDiv(focus = null)
+
+        baseBinder.bindView(context, view, div, null, path)
+
+        assert(!view.isFocusableInTouchMode)
+    }
+
     private fun createDiv(
         paddings: DivEdgeInsets? = null,
         visibility: DivVisibility = DivVisibility.VISIBLE,
-        transitionTriggers: List<DivTransitionTrigger>? = null
+        transitionTriggers: List<DivTransitionTrigger>? = null,
+        focus: DivFocus? = null
     ) = Div.Text(DivText(
         text = "text".asExpression(),
         paddings = paddings,
         visibility = visibility.asExpression(),
         transitionTriggers = transitionTriggers,
+        focus = focus,
     ))
 }

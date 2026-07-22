@@ -1,0 +1,106 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "font_size": 24,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000",
+      "focused_text_color": "#FFFFFF",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 6
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "margins": {
+        "left": 8,
+        "right": 8
+      },
+      "focus": {
+        "background": [
+          {
+            "type": "solid",
+            "color": "#ff7f50"
+          }
+        ]
+      }
+    }
+  },
+  "card": {
+    "log_id": "focus_actions",
+    "variables": [
+      {
+        "name": "focused",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "name": "clicked",
+        "type": "boolean",
+        "value": false
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "id": "container",
+          "paddings": {
+            "left": 8,
+            "right": 8,
+            "top": 4,
+            "bottom": 4
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_vertical": "center",
+          "content_alignment_horizontal": "center",
+          "border": {
+            "corner_radius": 24
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "button",
+              "id": "focus_button",
+              "text": "focused: @{focused} / clicked: @{clicked}",
+              "focus": {
+                "on_focus": [
+                  {
+                    "log_id": "focus",
+                    "url": "div-action://set_variable?name=focused&value=true"
+                  }
+                ]
+              },
+              "actions": [
+                {
+                  "log_id": "click",
+                  "url": "div-action://set_variable?name=clicked&value=true"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
