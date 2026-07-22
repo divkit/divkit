@@ -32,7 +32,6 @@ import com.yandex.div.core.view2.text.SelectableLinkMovementMethod
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.core.getItemResolver
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
 import com.yandex.div.internal.graphics.Colormap
@@ -612,39 +611,35 @@ internal class DivTextBinder @Inject constructor(
         addSubscription(newDiv.lineHeight?.observe(resolver, callback))
 
         newDiv.ranges?.forEach { range -> subscribeToRange(range, resolver, callback) }
-        bindRangeBuilder(newDiv.rangeBuilder, resolver, path, callback)
+        bindRangeBuilder(newDiv.rangeBuilder, resolver, callback)
 
         newDiv.images?.forEach { image -> subscribeToImage(image, resolver, callback) }
-        bindImageBuilder(newDiv.imageBuilder, resolver, path, callback)
+        bindImageBuilder(newDiv.imageBuilder, resolver, callback)
     }
 
     private fun ExpressionSubscriber.bindRangeBuilder(
         rangeBuilder: DivText.RangeBuilder?,
         resolver: ExpressionResolver,
-        path: DivStatePath,
         callback: (Any) -> Unit,
     ) {
         rangeBuilder ?: return
         addSubscription(rangeBuilder.data.observe(resolver, callback))
-        val itemResolver = rangeBuilder.getItemResolver(resolver, path)
         rangeBuilder.prototypes.forEach { prototype ->
-            addSubscription(prototype.selector.observe(itemResolver, callback))
-            subscribeToRange(prototype.range, itemResolver, callback)
+            addSubscription(prototype.selector.observe(resolver, callback))
+            subscribeToRange(prototype.range, resolver, callback)
         }
     }
 
     private fun ExpressionSubscriber.bindImageBuilder(
         imageBuilder: DivText.ImageBuilder?,
         resolver: ExpressionResolver,
-        path: DivStatePath,
         callback: (Any) -> Unit,
     ) {
         imageBuilder ?: return
         addSubscription(imageBuilder.data.observe(resolver, callback))
-        val itemResolver = imageBuilder.getItemResolver(resolver, path)
         imageBuilder.prototypes.forEach { prototype ->
-            addSubscription(prototype.selector.observe(itemResolver, callback))
-            subscribeToImage(prototype.image, itemResolver, callback)
+            addSubscription(prototype.selector.observe(resolver, callback))
+            subscribeToImage(prototype.image, resolver, callback)
         }
     }
 
@@ -841,10 +836,10 @@ internal class DivTextBinder @Inject constructor(
         addSubscription(ellipsis.text.observe(resolver, callback))
 
         ellipsis.ranges?.forEach { range -> subscribeToRange(range, resolver, callback) }
-        bindRangeBuilder(ellipsis.rangeBuilder, resolver, path, callback)
+        bindRangeBuilder(ellipsis.rangeBuilder, resolver, callback)
 
         ellipsis.images?.forEach { image -> subscribeToImage(image, resolver, callback) }
-        bindImageBuilder(ellipsis.imageBuilder, resolver, path, callback)
+        bindImageBuilder(ellipsis.imageBuilder, resolver, callback)
     }
 
     private fun EllipsizedTextView.applyRichEllipsis(

@@ -7,7 +7,6 @@ import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -57,27 +56,11 @@ private fun DivCollectionItemBuilder.buildItem(
     resolver: ExpressionResolver,
     path: DivStatePath,
 ): DivItemBuilderResult? {
-    val (newResolver, childPath) = getItemResolverAndPath(data, index, resolver, path) ?: return null
+    val (newResolver, childPath) = getItemResolverAndPath(dataElementName, data, index, resolver, path, "")
+        ?: return null
     val prototype = prototypes.find { it.selector.evaluate(newResolver) } ?: return null
     return prototype.div.copy(prototype.id?.evaluate(newResolver)).toItemBuilderResult(newResolver, childPath)
 }
-
-internal fun DivCollectionItemBuilder.getItemResolver(
-    resolver: ExpressionResolver,
-    path: DivStatePath,
-): ExpressionResolver {
-    data.evaluate(resolver).forEach<Any> { i, obj ->
-        getItemResolverAndPath(obj, i, resolver, path)?.let { (childResolver, _) -> return childResolver }
-    }
-    return resolver
-}
-
-private fun DivCollectionItemBuilder.getItemResolverAndPath(
-    dataElement: Any,
-    index: Int,
-    resolver: ExpressionResolver,
-    path: DivStatePath,
-) = getItemResolverAndPath(dataElementName, dataElement, index, resolver, path, "")
 
 internal fun getItemResolver(
     dataElementName: String,

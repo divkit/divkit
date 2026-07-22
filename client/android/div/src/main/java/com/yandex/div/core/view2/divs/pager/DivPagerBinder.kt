@@ -324,7 +324,7 @@ internal class DivPagerBinder @Inject constructor(
 
     private fun DivPagerView.bindItemBuilder(context: BindingContext, div: DivPager, path: DivStatePath) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver, path) {
+        bindItemBuilder(builder, context.expressionResolver) {
             (viewPager.adapter as DivPagerAdapter?)?.let { adapter ->
                 adapter.setItems(builder.build(context.expressionResolver, path))
                 pagerOnItemsCountChange?.onItemsUpdated()

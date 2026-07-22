@@ -17,7 +17,6 @@ import androidx.core.graphics.withSave
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.allSightActions
@@ -36,7 +35,6 @@ import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.core.DivItemBuilderResult
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.core.getItemResolver
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -370,14 +368,11 @@ internal val View.bindingContext: BindingContext? get() = asDivHolderView?.bindi
 internal fun bindItemBuilder(
     builder: DivCollectionItemBuilder,
     resolver: ExpressionResolver,
-    path: DivStatePath,
     callback: (Any) -> Unit,
 ) {
     builder.data.observe(resolver, callback)
-
-    val itemResolver = builder.getItemResolver(resolver, path)
     builder.prototypes.forEach {
-        it.selector.observe(itemResolver, callback)
+        it.selector.observe(resolver, callback)
     }
 }
 

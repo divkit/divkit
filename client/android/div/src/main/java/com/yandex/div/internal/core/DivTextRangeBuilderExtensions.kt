@@ -1,7 +1,6 @@
 package com.yandex.div.internal.core
 
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.internal.util.forEach
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivText
@@ -30,24 +29,7 @@ private fun DivText.RangeBuilder.buildItem(
     resolver: ExpressionResolver,
     path: DivStatePath,
 ): DivTextRangeResult? {
-    val newResolver = getItemResolver(data, index, resolver, path) ?: return null
+    val newResolver = getItemResolver(dataElementName, data, index, resolver, path, "range:") ?: return null
     val prototype = prototypes.find { it.selector.evaluate(newResolver) } ?: return null
     return DivTextRangeResult(prototype.range.copy(), newResolver)
 }
-
-internal fun DivText.RangeBuilder.getItemResolver(
-    resolver: ExpressionResolver,
-    path: DivStatePath,
-): ExpressionResolver {
-    data.evaluate(resolver).forEach<Any> { index, element ->
-        getItemResolver(element, index, resolver, path)?.let { return it }
-    }
-    return resolver
-}
-
-private fun DivText.RangeBuilder.getItemResolver(
-    dataElement: Any,
-    index: Int,
-    resolver: ExpressionResolver,
-    path: DivStatePath,
-) = getItemResolver(dataElementName, dataElement, index, resolver, path, "range:")

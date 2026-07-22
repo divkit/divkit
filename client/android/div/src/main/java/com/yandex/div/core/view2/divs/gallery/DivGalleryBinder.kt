@@ -205,7 +205,7 @@ internal class DivGalleryBinder @Inject constructor(
 
     private fun DivRecyclerView.bindItemBuilder(context: BindingContext, div: DivGallery, path: DivStatePath) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver, path) {
+        bindItemBuilder(builder, context.expressionResolver) {
             (adapter as DivGalleryAdapter?)?.setItems(builder.build(context.expressionResolver, path))
         }
     }
