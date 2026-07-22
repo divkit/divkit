@@ -911,6 +911,9 @@ extension TextInputBlockView: UIPickerViewDataSource {
 
   func pickerView(_: UIPickerView, didSelectRow row: Int, inComponent _: Int) {
     textValue.value = selectionItems?[row].value ?? ""
+    if multiLineInput.inputView != nil {
+      multiLineInput.resignFirstResponder()
+    }
   }
 }
 
