@@ -10,6 +10,8 @@ import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
 class EntityWithPropertyWithDefaultValue internal constructor(
+    @JsonIgnore val colorAarrggbb: Property<Color>?,
+    @JsonIgnore val colorRrggbb: Property<Color>?,
     @JsonIgnore val int: Property<Int>?,
     @JsonIgnore val nested: Property<Nested>?,
     @JsonIgnore val url: Property<URI>?,
@@ -20,6 +22,8 @@ class EntityWithPropertyWithDefaultValue internal constructor(
     @JsonAnyGetter
     internal fun properties(): Map<String, Any> {
         return propertyMapOf(
+            "color_aarrggbb" to colorAarrggbb,
+            "color_rrggbb" to colorRrggbb,
             "int" to int,
             "nested" to nested,
             "url" to url,
@@ -45,6 +49,8 @@ class EntityWithPropertyWithDefaultValue internal constructor(
 
 fun <T> TemplateContext<T>.entityWithPropertyWithDefaultValue(): LiteralProperty<EntityWithPropertyWithDefaultValue> {
     return value(EntityWithPropertyWithDefaultValue(
+        colorAarrggbb = null,
+        colorRrggbb = null,
         int = null,
         nested = null,
         url = null,
@@ -52,11 +58,15 @@ fun <T> TemplateContext<T>.entityWithPropertyWithDefaultValue(): LiteralProperty
 }
 
 fun <T> TemplateContext<T>.entityWithPropertyWithDefaultValue(
+    colorAarrggbb: Property<Color>? = null,
+    colorRrggbb: Property<Color>? = null,
     int: Property<Int>? = null,
     nested: Property<EntityWithPropertyWithDefaultValue.Nested>? = null,
     url: Property<URI>? = null,
 ): LiteralProperty<EntityWithPropertyWithDefaultValue> {
     return value(EntityWithPropertyWithDefaultValue(
+        colorAarrggbb = colorAarrggbb,
+        colorRrggbb = colorRrggbb,
         int = int,
         nested = nested,
         url = url,
@@ -64,11 +74,15 @@ fun <T> TemplateContext<T>.entityWithPropertyWithDefaultValue(
 }
 
 fun <T> TemplateContext<T>.entityWithPropertyWithDefaultValue(
+    colorAarrggbb: Color? = null,
+    colorRrggbb: Color? = null,
     int: Int? = null,
     nested: EntityWithPropertyWithDefaultValue.Nested? = null,
     url: URI? = null,
 ): LiteralProperty<EntityWithPropertyWithDefaultValue> {
     return value(EntityWithPropertyWithDefaultValue(
+        colorAarrggbb = optionalValue(colorAarrggbb),
+        colorRrggbb = optionalValue(colorRrggbb),
         int = optionalValue(int),
         nested = optionalValue(nested),
         url = optionalValue(url),
@@ -109,6 +123,8 @@ fun <T> TemplateContext<T>.nested(
 
 fun CardContext.entityWithPropertyWithDefaultValue(): EntityWithPropertyWithDefaultValue {
     return EntityWithPropertyWithDefaultValue(
+        colorAarrggbb = null,
+        colorRrggbb = null,
         int = null,
         nested = null,
         url = null,
@@ -116,11 +132,15 @@ fun CardContext.entityWithPropertyWithDefaultValue(): EntityWithPropertyWithDefa
 }
 
 fun CardContext.entityWithPropertyWithDefaultValue(
+    colorAarrggbb: ValueProperty<Color>? = null,
+    colorRrggbb: ValueProperty<Color>? = null,
     int: ValueProperty<Int>? = null,
     nested: ValueProperty<EntityWithPropertyWithDefaultValue.Nested>? = null,
     url: ValueProperty<URI>? = null,
 ): EntityWithPropertyWithDefaultValue {
     return EntityWithPropertyWithDefaultValue(
+        colorAarrggbb = colorAarrggbb,
+        colorRrggbb = colorRrggbb,
         int = int,
         nested = nested,
         url = url,
@@ -128,11 +148,15 @@ fun CardContext.entityWithPropertyWithDefaultValue(
 }
 
 fun CardContext.entityWithPropertyWithDefaultValue(
+    colorAarrggbb: Color? = null,
+    colorRrggbb: Color? = null,
     int: Int? = null,
     nested: EntityWithPropertyWithDefaultValue.Nested? = null,
     url: URI? = null,
 ): EntityWithPropertyWithDefaultValue {
     return EntityWithPropertyWithDefaultValue(
+        colorAarrggbb = optionalValue(colorAarrggbb),
+        colorRrggbb = optionalValue(colorRrggbb),
         int = optionalValue(int),
         nested = optionalValue(nested),
         url = optionalValue(url),

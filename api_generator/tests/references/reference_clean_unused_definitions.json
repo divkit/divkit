@@ -551,6 +551,22 @@
             "type": "string",
             "format": "uri"
           },
+          "color_rrggbb": {
+            "default_value": "#ff0000",
+            "$resolved_refs": [
+              "common.json#/color"
+            ],
+            "type": "string",
+            "format": "color"
+          },
+          "color_aarrggbb": {
+            "default_value": "#80ff0000",
+            "$resolved_refs": [
+              "common.json#/color"
+            ],
+            "type": "string",
+            "format": "color"
+          },
           "nested": {
             "$resolved_refs": [
               "#/definitions/nested"

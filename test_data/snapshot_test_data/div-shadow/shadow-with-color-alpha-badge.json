@@ -1,0 +1,251 @@
+{
+    "description": "Pill badge with a color-embedded alpha shadow (#2F000000, alpha 1, blur 6, offset 4/1) over gradient backgrounds",
+    "platforms": [
+        "android",
+        "ios"
+    ],
+    "unsupported_platforms": {
+        "web": "Test agents render the shadow slightly differently (minor pixel diff)"
+    },
+    "templates": {},
+    "card": {
+        "log_id": "card",
+        "states": [
+            {
+                "div": {
+                    "type": "container",
+                    "background": [
+                        {
+                            "type": "solid",
+                            "color": "#ffffffff"
+                        }
+                    ],
+                    "border": {
+                        "corner_radius": "@{PilulaCornerRad}"
+                    },
+                    "clip_to_bounds": true,
+                    "width": {
+                        "type": "fixed",
+                        "value": 95
+                    },
+                    "height": {
+                        "type": "fixed",
+                        "value": 40
+                    },
+                    "items": [
+                        {
+                            "type": "container",
+                            "background": [
+                                {
+                                    "type": "gradient",
+                                    "angle": 270,
+                                    "color_map": [
+                                        {
+                                            "color": "#35CEFD",
+                                            "position": 0
+                                        },
+                                        {
+                                            "color": "#F042C4",
+                                            "position": 0.63
+                                        },
+                                        {
+                                            "color": "#BE00D3",
+                                            "position": 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "gradient",
+                                    "angle": 230,
+                                    "color_map": [
+                                        {
+                                            "color": "#CC2C9AFE",
+                                            "position": 0
+                                        },
+                                        {
+                                            "color": "#00FFFFFF",
+                                            "position": 0.4
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "gradient",
+                                    "angle": 270,
+                                    "color_map": [
+                                        {
+                                            "color": "#33FFFFFF",
+                                            "position": 0
+                                        },
+                                        {
+                                            "color": "#00FFFFFF",
+                                            "position": 0.7
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "solid",
+                                    "color": "#330094FF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": "@{PilulaCornerRad}"
+                            },
+                            "height": {
+                                "type": "match_parent"
+                            },
+                            "items": [
+                                {
+                                    "type": "text",
+                                    "text": " "
+                                }
+                            ],
+                            "width": {
+                                "type": "match_parent"
+                            }
+                        },
+                        {
+                            "type": "container",
+                            "content_alignment_vertical": "center",
+                            "height": {
+                                "type": "fixed",
+                                "value": "@{CardHeight - 2*MainPadding}"
+                            },
+                            "item_spacing": 8,
+                            "items": [
+                                {
+                                    "type": "container",
+                                    "background": [
+                                        {
+                                            "type": "gradient",
+                                            "angle": 270,
+                                            "color_map": [
+                                                {
+                                                    "color": "#66DEFF",
+                                                    "position": 0
+                                                },
+                                                {
+                                                    "color": "#E335C6",
+                                                    "position": 1
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "type": "radial_gradient",
+                                            "center_x": {
+                                                "type": "relative",
+                                                "value": 0.5
+                                            },
+                                            "center_y": {
+                                                "type": "relative",
+                                                "value": 0.55
+                                            },
+                                            "color_map": [
+                                                {
+                                                    "color": "#0FFF",
+                                                    "position": 0.64
+                                                },
+                                                {
+                                                    "color": "#FFFF",
+                                                    "position": 0.9
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "border": {
+                                        "corner_radius": "@{PilulaCornerRad}",
+                                        "has_shadow": true,
+                                        "shadow": {
+                                            "alpha": 1,
+                                            "blur": 6,
+                                            "color": "#2F000000",
+                                            "offset": {
+                                                "x": {
+                                                    "value": 4
+                                                },
+                                                "y": {
+                                                    "value": 1
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "content_alignment_horizontal": "center",
+                                    "content_alignment_vertical": "center",
+                                    "height": {
+                                        "type": "fixed",
+                                        "value": "@{PilulaHeight}"
+                                    },
+                                    "items": [
+                                        {
+                                            "type": "image",
+                                            "height": {
+                                                "type": "fixed",
+                                                "value": 20
+                                            },
+                                            "image_url": "https://yastatic.net/s3/home/divkit/star.png",
+                                            "width": {
+                                                "type": "fixed",
+                                                "value": 20
+                                            }
+                                        }
+                                    ],
+                                    "width": {
+                                        "type": "fixed",
+                                        "value": "@{PilulaHeight}"
+                                    }
+                                },
+                                {
+                                    "type": "text",
+                                    "font_size": 12,
+                                    "font_weight": "medium",
+                                    "line_height": 18,
+                                    "text": "Опыт",
+                                    "text_color": "#FFF"
+                                }
+                            ],
+                            "orientation": "horizontal",
+                            "width": {
+                                "type": "fixed",
+                                "value": "@{CardWidth - 2*MainPadding}"
+                            }
+                        }
+                    ],
+                    "orientation": "overlap",
+                    "paddings": {
+                        "bottom": "@{MainPadding}",
+                        "end": "@{MainPadding}",
+                        "start": "@{MainPadding}",
+                        "top": "@{MainPadding}"
+                    }
+                },
+                "state_id": 0
+            }
+        ],
+        "variables": [
+            {
+                "type": "integer",
+                "name": "CardHeight",
+                "value": 40
+            },
+            {
+                "type": "integer",
+                "name": "CardWidth",
+                "value": 95
+            },
+            {
+                "type": "integer",
+                "name": "PilulaHeight",
+                "value": "@{CardHeight - 6}"
+            },
+            {
+                "type": "integer",
+                "name": "PilulaCornerRad",
+                "value": "@{PilulaHeight / 2 +3}"
+            },
+            {
+                "type": "integer",
+                "name": "MainPadding",
+                "value": 3
+            }
+        ]
+    }
+}

@@ -1206,7 +1206,18 @@ class KotlinPropertyType(PropertyType):
         elif isinstance(self, Double):
             return wrap(str(default_value) if '.' in str(default_value) else f'{default_value}.0')
         elif isinstance(self, Color):
-            return wrap(f'{default_value.replace("#", "0x")}.toInt()')
+            color_value = default_value[1::].upper()
+            if len(color_value) == 3:
+                color_argb_hex = 'FF' + ''.join(c + c for c in color_value)
+            elif len(color_value) == 4:
+                color_argb_hex = ''.join(c + c for c in color_value)
+            elif len(color_value) == 6:
+                color_argb_hex = f'FF{color_value}'
+            elif len(color_value) == 8:
+                color_argb_hex = color_value
+            else:
+                raise ValueError(f'Invalid color default value: {default_value}')
+            return wrap(f'0x{color_argb_hex}.toInt()')
         elif isinstance(self, String):
             escaping = default_value.replace("\"", "\\\"")
             return wrap(f'"{escaping}"')

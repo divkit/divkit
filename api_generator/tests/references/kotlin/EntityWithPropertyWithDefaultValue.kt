@@ -14,6 +14,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithPropertyWithDefaultValue(
+    @JvmField val colorAarrggbb: Expression<Int> = COLOR_AARRGGBB_DEFAULT_VALUE, // default value: #80ff0000
+    @JvmField val colorRrggbb: Expression<Int> = COLOR_RRGGBB_DEFAULT_VALUE, // default value: #ff0000
     @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
     @JvmField val nested: Nested? = null,
     @JvmField val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
@@ -27,6 +29,8 @@ class EntityWithPropertyWithDefaultValue(
         }
         val hash = 
             this::class.hashCode() +
+            colorAarrggbb.hashCode() +
+            colorRrggbb.hashCode() +
             int.hashCode() +
             (nested?.hash() ?: 0) +
             url.hashCode()
@@ -36,16 +40,22 @@ class EntityWithPropertyWithDefaultValue(
 
     fun equals(other: EntityWithPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
-        return int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
+        return colorAarrggbb.evaluate(resolver) == other.colorAarrggbb.evaluate(otherResolver) &&
+            colorRrggbb.evaluate(resolver) == other.colorRrggbb.evaluate(otherResolver) &&
+            int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
             (nested?.equals(other.nested, resolver, otherResolver) ?: (other.nested == null)) &&
             url.evaluate(resolver) == other.url.evaluate(otherResolver)
     }
 
     fun copy(
+        colorAarrggbb: Expression<Int> = this.colorAarrggbb,
+        colorRrggbb: Expression<Int> = this.colorRrggbb,
         int: Expression<Long> = this.int,
         nested: Nested? = this.nested,
         url: Expression<Uri> = this.url,
     ) = EntityWithPropertyWithDefaultValue(
+        colorAarrggbb = colorAarrggbb,
+        colorRrggbb = colorRrggbb,
         int = int,
         nested = nested,
         url = url,
@@ -53,6 +63,8 @@ class EntityWithPropertyWithDefaultValue(
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
+        json.writeExpression(key = "color_aarrggbb", value = colorAarrggbb, converter = COLOR_INT_TO_STRING)
+        json.writeExpression(key = "color_rrggbb", value = colorRrggbb, converter = COLOR_INT_TO_STRING)
         json.writeExpression(key = "int", value = int)
         json.write(key = "nested", value = nested)
         json.write(key = "type", value = TYPE)
@@ -63,6 +75,8 @@ class EntityWithPropertyWithDefaultValue(
     companion object {
         const val TYPE = "entity_with_property_with_default_value"
 
+        private val COLOR_AARRGGBB_DEFAULT_VALUE = Expression.constant(0x80FF0000.toInt())
+        private val COLOR_RRGGBB_DEFAULT_VALUE = Expression.constant(0xFFFF0000.toInt())
         private val INT_DEFAULT_VALUE = Expression.constant(0L)
         private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
 
@@ -71,6 +85,8 @@ class EntityWithPropertyWithDefaultValue(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithPropertyWithDefaultValue {
             val logger = env.logger
             return EntityWithPropertyWithDefaultValue(
+                colorAarrggbb = JsonParser.readOptionalExpression(json, "color_aarrggbb", STRING_TO_COLOR_INT, logger, env, COLOR_AARRGGBB_DEFAULT_VALUE, TYPE_HELPER_COLOR) ?: COLOR_AARRGGBB_DEFAULT_VALUE,
+                colorRrggbb = JsonParser.readOptionalExpression(json, "color_rrggbb", STRING_TO_COLOR_INT, logger, env, COLOR_RRGGBB_DEFAULT_VALUE, TYPE_HELPER_COLOR) ?: COLOR_RRGGBB_DEFAULT_VALUE,
                 int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
                 nested = JsonParser.readOptional(json, "nested", Nested.CREATOR, logger, env),
                 url = JsonParser.readOptionalExpression(json, "url", ANY_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE

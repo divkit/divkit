@@ -39,6 +39,8 @@ data class WithPropertyWithDefaultValue internal constructor(
 
     operator fun plus(additive: Properties): WithPropertyWithDefaultValue = WithPropertyWithDefaultValue(
         Properties(
+            colorAarrggbb = additive.colorAarrggbb ?: properties.colorAarrggbb,
+            colorRrggbb = additive.colorRrggbb ?: properties.colorRrggbb,
             int = additive.int ?: properties.int,
             nested = additive.nested ?: properties.nested,
             url = additive.url ?: properties.url,
@@ -47,6 +49,14 @@ data class WithPropertyWithDefaultValue internal constructor(
 
     @ExposedCopyVisibility
     data class Properties internal constructor(
+        /**
+         * Default value: `#80ff0000`.
+         */
+        val colorAarrggbb: Property<Color>?,
+        /**
+         * Default value: `#ff0000`.
+         */
+        val colorRrggbb: Property<Color>?,
         /**
          * Default value: `0`.
          */
@@ -63,6 +73,8 @@ data class WithPropertyWithDefaultValue internal constructor(
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
+            result.tryPutProperty("color_aarrggbb", colorAarrggbb)
+            result.tryPutProperty("color_rrggbb", colorRrggbb)
             result.tryPutProperty("int", int)
             result.tryPutProperty("nested", nested)
             result.tryPutProperty("url", url)
@@ -125,11 +137,15 @@ data class WithPropertyWithDefaultValue internal constructor(
 @Generated
 fun DivScope.withPropertyWithDefaultValue(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: Color? = null,
+    colorRrggbb: Color? = null,
     int: Int? = null,
     nested: WithPropertyWithDefaultValue.Nested? = null,
     url: Url? = null,
 ): WithPropertyWithDefaultValue = WithPropertyWithDefaultValue(
     WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = valueOrNull(colorAarrggbb),
+        colorRrggbb = valueOrNull(colorRrggbb),
         int = valueOrNull(int),
         nested = valueOrNull(nested),
         url = valueOrNull(url),
@@ -142,10 +158,14 @@ fun DivScope.withPropertyWithDefaultValue(
 @Generated
 fun DivScope.withPropertyWithDefaultValueProps(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: Color? = null,
+    colorRrggbb: Color? = null,
     int: Int? = null,
     nested: WithPropertyWithDefaultValue.Nested? = null,
     url: Url? = null,
 ) = WithPropertyWithDefaultValue.Properties(
+    colorAarrggbb = valueOrNull(colorAarrggbb),
+    colorRrggbb = valueOrNull(colorRrggbb),
     int = valueOrNull(int),
     nested = valueOrNull(nested),
     url = valueOrNull(url),
@@ -157,10 +177,14 @@ fun DivScope.withPropertyWithDefaultValueProps(
 @Generated
 fun TemplateScope.withPropertyWithDefaultValueRefs(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: ReferenceProperty<Color>? = null,
+    colorRrggbb: ReferenceProperty<Color>? = null,
     int: ReferenceProperty<Int>? = null,
     nested: ReferenceProperty<WithPropertyWithDefaultValue.Nested>? = null,
     url: ReferenceProperty<Url>? = null,
 ) = WithPropertyWithDefaultValue.Properties(
+    colorAarrggbb = colorAarrggbb,
+    colorRrggbb = colorRrggbb,
     int = int,
     nested = nested,
     url = url,
@@ -172,11 +196,15 @@ fun TemplateScope.withPropertyWithDefaultValueRefs(
 @Generated
 fun WithPropertyWithDefaultValue.override(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: Color? = null,
+    colorRrggbb: Color? = null,
     int: Int? = null,
     nested: WithPropertyWithDefaultValue.Nested? = null,
     url: Url? = null,
 ): WithPropertyWithDefaultValue = WithPropertyWithDefaultValue(
     WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = valueOrNull(colorAarrggbb) ?: properties.colorAarrggbb,
+        colorRrggbb = valueOrNull(colorRrggbb) ?: properties.colorRrggbb,
         int = valueOrNull(int) ?: properties.int,
         nested = valueOrNull(nested) ?: properties.nested,
         url = valueOrNull(url) ?: properties.url,
@@ -189,11 +217,15 @@ fun WithPropertyWithDefaultValue.override(
 @Generated
 fun WithPropertyWithDefaultValue.defer(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: ReferenceProperty<Color>? = null,
+    colorRrggbb: ReferenceProperty<Color>? = null,
     int: ReferenceProperty<Int>? = null,
     nested: ReferenceProperty<WithPropertyWithDefaultValue.Nested>? = null,
     url: ReferenceProperty<Url>? = null,
 ): WithPropertyWithDefaultValue = WithPropertyWithDefaultValue(
     WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = colorAarrggbb ?: properties.colorAarrggbb,
+        colorRrggbb = colorRrggbb ?: properties.colorRrggbb,
         int = int ?: properties.int,
         nested = nested ?: properties.nested,
         url = url ?: properties.url,
@@ -206,11 +238,15 @@ fun WithPropertyWithDefaultValue.defer(
 @Generated
 fun WithPropertyWithDefaultValue.modify(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: Property<Color>? = null,
+    colorRrggbb: Property<Color>? = null,
     int: Property<Int>? = null,
     nested: Property<WithPropertyWithDefaultValue.Nested>? = null,
     url: Property<Url>? = null,
 ): WithPropertyWithDefaultValue = WithPropertyWithDefaultValue(
     WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = colorAarrggbb ?: properties.colorAarrggbb,
+        colorRrggbb = colorRrggbb ?: properties.colorRrggbb,
         int = int ?: properties.int,
         nested = nested ?: properties.nested,
         url = url ?: properties.url,
@@ -220,10 +256,14 @@ fun WithPropertyWithDefaultValue.modify(
 @Generated
 fun WithPropertyWithDefaultValue.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: ExpressionProperty<Color>? = null,
+    colorRrggbb: ExpressionProperty<Color>? = null,
     int: ExpressionProperty<Int>? = null,
     url: ExpressionProperty<Url>? = null,
 ): WithPropertyWithDefaultValue = WithPropertyWithDefaultValue(
     WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = colorAarrggbb ?: properties.colorAarrggbb,
+        colorRrggbb = colorRrggbb ?: properties.colorRrggbb,
         int = int ?: properties.int,
         nested = properties.nested,
         url = url ?: properties.url,
@@ -236,12 +276,16 @@ fun WithPropertyWithDefaultValue.evaluate(
 @Generated
 fun Component<WithPropertyWithDefaultValue>.override(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: Color? = null,
+    colorRrggbb: Color? = null,
     int: Int? = null,
     nested: WithPropertyWithDefaultValue.Nested? = null,
     url: Url? = null,
 ): Component<WithPropertyWithDefaultValue> = Component(
     template = template,
     properties = WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = valueOrNull(colorAarrggbb),
+        colorRrggbb = valueOrNull(colorRrggbb),
         int = valueOrNull(int),
         nested = valueOrNull(nested),
         url = valueOrNull(url),
@@ -254,12 +298,16 @@ fun Component<WithPropertyWithDefaultValue>.override(
 @Generated
 fun Component<WithPropertyWithDefaultValue>.defer(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: ReferenceProperty<Color>? = null,
+    colorRrggbb: ReferenceProperty<Color>? = null,
     int: ReferenceProperty<Int>? = null,
     nested: ReferenceProperty<WithPropertyWithDefaultValue.Nested>? = null,
     url: ReferenceProperty<Url>? = null,
 ): Component<WithPropertyWithDefaultValue> = Component(
     template = template,
     properties = WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = colorAarrggbb,
+        colorRrggbb = colorRrggbb,
         int = int,
         nested = nested,
         url = url,
@@ -269,11 +317,15 @@ fun Component<WithPropertyWithDefaultValue>.defer(
 @Generated
 fun Component<WithPropertyWithDefaultValue>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: ExpressionProperty<Color>? = null,
+    colorRrggbb: ExpressionProperty<Color>? = null,
     int: ExpressionProperty<Int>? = null,
     url: ExpressionProperty<Url>? = null,
 ): Component<WithPropertyWithDefaultValue> = Component(
     template = template,
     properties = WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = colorAarrggbb,
+        colorRrggbb = colorRrggbb,
         int = int,
         nested = null,
         url = url,
@@ -286,12 +338,16 @@ fun Component<WithPropertyWithDefaultValue>.evaluate(
 @Generated
 fun Component<WithPropertyWithDefaultValue>.modify(
     `use named arguments`: Guard = Guard.instance,
+    colorAarrggbb: Property<Color>? = null,
+    colorRrggbb: Property<Color>? = null,
     int: Property<Int>? = null,
     nested: Property<WithPropertyWithDefaultValue.Nested>? = null,
     url: Property<Url>? = null,
 ): Component<WithPropertyWithDefaultValue> = Component(
     template = template,
     properties = WithPropertyWithDefaultValue.Properties(
+        colorAarrggbb = colorAarrggbb,
+        colorRrggbb = colorRrggbb,
         int = int,
         nested = nested,
         url = url,

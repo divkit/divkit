@@ -102,7 +102,7 @@ private fun Modifier.shadow(
         shape = shape,
         shadow = Shadow(
             radius = radius,
-            color = color.copy(alpha = alpha),
+            color = color.copy(alpha = color.alpha * alpha),
             offset = DpOffset(offsetX, offsetY),
         )
     )

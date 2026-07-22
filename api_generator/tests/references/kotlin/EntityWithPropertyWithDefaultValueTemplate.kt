@@ -14,6 +14,8 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 class EntityWithPropertyWithDefaultValueTemplate(
+    @JvmField val colorAarrggbb: Field<Expression<Int>>,
+    @JvmField val colorRrggbb: Field<Expression<Int>>,
     @JvmField val int: Field<Expression<Long>>,
     @JvmField val nested: Field<NestedTemplate>,
     @JvmField val url: Field<Expression<Uri>>,
@@ -25,6 +27,8 @@ class EntityWithPropertyWithDefaultValueTemplate(
         topLevel: Boolean = false,
         json: JSONObject
     ) : this(
+        colorAarrggbb = JsonTemplateParser.readOptionalFieldWithExpression(json, "color_aarrggbb", topLevel, parent?.colorAarrggbb, STRING_TO_COLOR_INT, env.logger, env, TYPE_HELPER_COLOR),
+        colorRrggbb = JsonTemplateParser.readOptionalFieldWithExpression(json, "color_rrggbb", topLevel, parent?.colorRrggbb, STRING_TO_COLOR_INT, env.logger, env, TYPE_HELPER_COLOR),
         int = JsonTemplateParser.readOptionalFieldWithExpression(json, "int", topLevel, parent?.int, NUMBER_TO_INT, INT_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_INT),
         nested = JsonTemplateParser.readOptionalField(json, "nested", topLevel, parent?.nested, NestedTemplate.CREATOR, env.logger, env),
         url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_URI)
@@ -32,6 +36,8 @@ class EntityWithPropertyWithDefaultValueTemplate(
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue {
         return EntityWithPropertyWithDefaultValue(
+            colorAarrggbb = this.colorAarrggbb.resolveOptional(env = env, key = "color_aarrggbb", data = data, reader = COLOR_AARRGGBB_READER) ?: COLOR_AARRGGBB_DEFAULT_VALUE,
+            colorRrggbb = this.colorRrggbb.resolveOptional(env = env, key = "color_rrggbb", data = data, reader = COLOR_RRGGBB_READER) ?: COLOR_RRGGBB_DEFAULT_VALUE,
             int = this.int.resolveOptional(env = env, key = "int", data = data, reader = INT_READER) ?: INT_DEFAULT_VALUE,
             nested = this.nested.resolveOptionalTemplate(env = env, key = "nested", data = data, reader = NESTED_READER),
             url = this.url.resolveOptional(env = env, key = "url", data = data, reader = URL_READER) ?: URL_DEFAULT_VALUE
@@ -40,6 +46,8 @@ class EntityWithPropertyWithDefaultValueTemplate(
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
+        json.writeFieldWithExpression(key = "color_aarrggbb", field = colorAarrggbb, converter = COLOR_INT_TO_STRING)
+        json.writeFieldWithExpression(key = "color_rrggbb", field = colorRrggbb, converter = COLOR_INT_TO_STRING)
         json.writeFieldWithExpression(key = "int", field = int)
         json.writeField(key = "nested", field = nested)
         json.write(key = "type", value = TYPE)
@@ -50,6 +58,8 @@ class EntityWithPropertyWithDefaultValueTemplate(
     companion object {
         const val TYPE = "entity_with_property_with_default_value"
 
+        private val COLOR_AARRGGBB_DEFAULT_VALUE = Expression.constant(0x80FF0000.toInt())
+        private val COLOR_RRGGBB_DEFAULT_VALUE = Expression.constant(0xFFFF0000.toInt())
         private val INT_DEFAULT_VALUE = Expression.constant(0L)
         private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
 
@@ -58,6 +68,8 @@ class EntityWithPropertyWithDefaultValueTemplate(
         private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
         private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
 
+        val COLOR_AARRGGBB_READER: Reader<Expression<Int>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_COLOR_INT, env.logger, env, COLOR_AARRGGBB_DEFAULT_VALUE, TYPE_HELPER_COLOR) ?: COLOR_AARRGGBB_DEFAULT_VALUE }
+        val COLOR_RRGGBB_READER: Reader<Expression<Int>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_COLOR_INT, env.logger, env, COLOR_RRGGBB_DEFAULT_VALUE, TYPE_HELPER_COLOR) ?: COLOR_RRGGBB_DEFAULT_VALUE }
         val INT_READER: Reader<Expression<Long>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
         val NESTED_READER: Reader<EntityWithPropertyWithDefaultValue.Nested?> = { key, json, env -> JsonParser.readOptional(json, key, EntityWithPropertyWithDefaultValue.Nested.CREATOR, env.logger, env) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }

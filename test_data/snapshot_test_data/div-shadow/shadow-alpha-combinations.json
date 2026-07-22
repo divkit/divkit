@@ -1,0 +1,248 @@
+{
+    "description": "Shadow opacity is colorAlpha * shadow.alpha * view.alpha. Six tiles isolate and combine the three multipliers; the last tile omits shadow.color to check the default (#000000) resolves to opaque. The 'FF · 1.0 · 0.5' tile (view.alpha 0.5) exposes DIVKIT-9782 on Android: its shadow draws over the semi-transparent view instead of behind it, so the current Android reference for that tile is a known-wrong render (fixed on the DIVKIT-9782 branch).",
+    "platforms": [
+        "android",
+        "ios",
+        "web"
+    ],
+    "templates": {},
+    "card": {
+        "log_id": "card",
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "item_spacing": 24,
+                    "content_alignment_horizontal": "center",
+                    "background": [
+                        {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                        }
+                    ],
+                    "paddings": {
+                        "left": 24,
+                        "right": 24,
+                        "top": 24,
+                        "bottom": 24
+                    },
+                    "items": [
+                        {
+                            "type": "text",
+                            "text": "colorAlpha · shadow.alpha · view.alpha",
+                            "font_size": 11,
+                            "font_weight": "medium",
+                            "text_alignment_horizontal": "center"
+                        },
+                        {
+                            "type": "container",
+                            "orientation": "horizontal",
+                            "item_spacing": 24,
+                            "content_alignment_horizontal": "center",
+                            "items": [
+                                {
+                                    "type": "container",
+                                    "orientation": "vertical",
+                                    "item_spacing": 6,
+                                    "content_alignment_horizontal": "center",
+                                    "items": [
+                                        {
+                                            "type": "container",
+                                            "width": { "type": "fixed", "value": 80 },
+                                            "height": { "type": "fixed", "value": 80 },
+                                            "background": [ { "type": "solid", "color": "#4A90E2" } ],
+                                            "border": {
+                                                "corner_radius": 12,
+                                                "has_shadow": true,
+                                                "shadow": {
+                                                    "color": "#FF000000",
+                                                    "alpha": 1,
+                                                    "blur": 6,
+                                                    "offset": { "x": { "value": 0 }, "y": { "value": 6 } }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "FF · 1.0 · 1.0",
+                                            "font_size": 10,
+                                            "text_alignment_horizontal": "center"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "container",
+                                    "orientation": "vertical",
+                                    "item_spacing": 6,
+                                    "content_alignment_horizontal": "center",
+                                    "items": [
+                                        {
+                                            "type": "container",
+                                            "width": { "type": "fixed", "value": 80 },
+                                            "height": { "type": "fixed", "value": 80 },
+                                            "background": [ { "type": "solid", "color": "#4A90E2" } ],
+                                            "border": {
+                                                "corner_radius": 12,
+                                                "has_shadow": true,
+                                                "shadow": {
+                                                    "color": "#80000000",
+                                                    "alpha": 1,
+                                                    "blur": 6,
+                                                    "offset": { "x": { "value": 0 }, "y": { "value": 6 } }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "80 · 1.0 · 1.0",
+                                            "font_size": 10,
+                                            "text_alignment_horizontal": "center"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "container",
+                            "orientation": "horizontal",
+                            "item_spacing": 24,
+                            "content_alignment_horizontal": "center",
+                            "items": [
+                                {
+                                    "type": "container",
+                                    "orientation": "vertical",
+                                    "item_spacing": 6,
+                                    "content_alignment_horizontal": "center",
+                                    "items": [
+                                        {
+                                            "type": "container",
+                                            "width": { "type": "fixed", "value": 80 },
+                                            "height": { "type": "fixed", "value": 80 },
+                                            "background": [ { "type": "solid", "color": "#4A90E2" } ],
+                                            "border": {
+                                                "corner_radius": 12,
+                                                "has_shadow": true,
+                                                "shadow": {
+                                                    "color": "#FF000000",
+                                                    "alpha": 0.5,
+                                                    "blur": 6,
+                                                    "offset": { "x": { "value": 0 }, "y": { "value": 6 } }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "FF · 0.5 · 1.0",
+                                            "font_size": 10,
+                                            "text_alignment_horizontal": "center"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "container",
+                                    "orientation": "vertical",
+                                    "item_spacing": 6,
+                                    "content_alignment_horizontal": "center",
+                                    "items": [
+                                        {
+                                            "type": "container",
+                                            "width": { "type": "fixed", "value": 80 },
+                                            "height": { "type": "fixed", "value": 80 },
+                                            "background": [ { "type": "solid", "color": "#4A90E2" } ],
+                                            "border": {
+                                                "corner_radius": 12,
+                                                "has_shadow": true,
+                                                "shadow": {
+                                                    "color": "#80000000",
+                                                    "alpha": 0.5,
+                                                    "blur": 6,
+                                                    "offset": { "x": { "value": 0 }, "y": { "value": 6 } }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "80 · 0.5 · 1.0",
+                                            "font_size": 10,
+                                            "text_alignment_horizontal": "center"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "container",
+                            "orientation": "horizontal",
+                            "item_spacing": 24,
+                            "content_alignment_horizontal": "center",
+                            "items": [
+                                {
+                                    "type": "container",
+                                    "orientation": "vertical",
+                                    "item_spacing": 6,
+                                    "content_alignment_horizontal": "center",
+                                    "items": [
+                                        {
+                                            "type": "container",
+                                            "alpha": 0.5,
+                                            "width": { "type": "fixed", "value": 80 },
+                                            "height": { "type": "fixed", "value": 80 },
+                                            "background": [ { "type": "solid", "color": "#4A90E2" } ],
+                                            "border": {
+                                                "corner_radius": 12,
+                                                "has_shadow": true,
+                                                "shadow": {
+                                                    "color": "#FF000000",
+                                                    "alpha": 1,
+                                                    "blur": 6,
+                                                    "offset": { "x": { "value": 0 }, "y": { "value": 6 } }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "FF · 1.0 · 0.5",
+                                            "font_size": 10,
+                                            "text_alignment_horizontal": "center"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "container",
+                                    "orientation": "vertical",
+                                    "item_spacing": 6,
+                                    "content_alignment_horizontal": "center",
+                                    "items": [
+                                        {
+                                            "type": "container",
+                                            "width": { "type": "fixed", "value": 80 },
+                                            "height": { "type": "fixed", "value": 80 },
+                                            "background": [ { "type": "solid", "color": "#4A90E2" } ],
+                                            "border": {
+                                                "corner_radius": 12,
+                                                "has_shadow": true,
+                                                "shadow": {
+                                                    "alpha": 1,
+                                                    "blur": 6,
+                                                    "offset": { "x": { "value": 0 }, "y": { "value": 6 } }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "text",
+                                            "text": "default · 1.0 · 1.0",
+                                            "font_size": 10,
+                                            "text_alignment_horizontal": "center"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

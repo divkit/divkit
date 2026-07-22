@@ -46,6 +46,14 @@
     "url": {
       "$ref": "#/definitions/url_prop"
     },
+    "color_rrggbb": {
+      "$ref": "common.json#/color",
+      "default_value": "#ff0000"
+    },
+    "color_aarrggbb": {
+      "$ref": "common.json#/color",
+      "default_value": "#80ff0000"
+    },
     "nested": {
       "$ref": "#/definitions/nested"
     }

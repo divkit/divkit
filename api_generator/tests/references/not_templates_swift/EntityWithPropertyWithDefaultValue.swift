@@ -48,9 +48,19 @@ public final class EntityWithPropertyWithDefaultValue: Sendable {
   }
 
   public static let type: String = "entity_with_property_with_default_value"
+  public let colorAarrggbb: Expression<Color> // default value: #80ff0000
+  public let colorRrggbb: Expression<Color> // default value: #ff0000
   public let int: Expression<Int> // constraint: number >= 0; default value: 0
   public let nested: Nested?
   public let url: Expression<URL> // valid schemes: [https]; default value: https://yandex.ru
+
+  public func resolveColorAarrggbb(_ resolver: ExpressionResolver) -> Color {
+    resolver.resolveColor(colorAarrggbb) ?? Color.colorWithARGBHexCode(0x80FF0000)
+  }
+
+  public func resolveColorRrggbb(_ resolver: ExpressionResolver) -> Color {
+    resolver.resolveColor(colorRrggbb) ?? Color.colorWithARGBHexCode(0xFFFF0000)
+  }
 
   public func resolveInt(_ resolver: ExpressionResolver) -> Int {
     resolver.resolveNumeric(int) ?? 0
@@ -68,6 +78,8 @@ public final class EntityWithPropertyWithDefaultValue: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
+      colorAarrggbb: try dictionary.getOptionalExpressionField("color_aarrggbb", transform: Color.color(withHexString:), context: context),
+      colorRrggbb: try dictionary.getOptionalExpressionField("color_rrggbb", transform: Color.color(withHexString:), context: context),
       int: try dictionary.getOptionalExpressionField("int", validator: Self.intValidator, context: context),
       nested: try dictionary.getOptionalField("nested", transform: { (dict: [String: Any]) in try EntityWithPropertyWithDefaultValue.Nested(dictionary: dict, context: context) }),
       url: try dictionary.getOptionalExpressionField("url", transform: URL.makeFromNonEncodedString, validator: Self.urlValidator, context: context)
@@ -75,10 +87,14 @@ public final class EntityWithPropertyWithDefaultValue: Sendable {
   }
 
   init(
+    colorAarrggbb: Expression<Color>? = nil,
+    colorRrggbb: Expression<Color>? = nil,
     int: Expression<Int>? = nil,
     nested: Nested? = nil,
     url: Expression<URL>? = nil
   ) {
+    self.colorAarrggbb = colorAarrggbb ?? .value(Color.colorWithARGBHexCode(0x80FF0000))
+    self.colorRrggbb = colorRrggbb ?? .value(Color.colorWithARGBHexCode(0xFFFF0000))
     self.int = int ?? .value(0)
     self.nested = nested
     self.url = url ?? .value(URL(string: "https://yandex.ru")!)
@@ -89,7 +105,13 @@ public final class EntityWithPropertyWithDefaultValue: Sendable {
 extension EntityWithPropertyWithDefaultValue: Equatable {
   public static func ==(lhs: EntityWithPropertyWithDefaultValue, rhs: EntityWithPropertyWithDefaultValue) -> Bool {
     guard
-      lhs.int == rhs.int,
+      lhs.colorAarrggbb == rhs.colorAarrggbb,
+      lhs.colorRrggbb == rhs.colorRrggbb,
+      lhs.int == rhs.int
+    else {
+      return false
+    }
+    guard
       lhs.nested == rhs.nested,
       lhs.url == rhs.url
     else {
@@ -105,6 +127,8 @@ extension EntityWithPropertyWithDefaultValue: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
+    result["color_aarrggbb"] = colorAarrggbb.toValidSerializationValue()
+    result["color_rrggbb"] = colorRrggbb.toValidSerializationValue()
     result["int"] = int.toValidSerializationValue()
     result["nested"] = nested?.toDictionary()
     result["url"] = url.toValidSerializationValue()

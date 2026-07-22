@@ -8,6 +8,8 @@ export class EntityWithPropertyWithDefaultValue<T extends EntityWithPropertyWith
     readonly _props?: Exact<EntityWithPropertyWithDefaultValueProps, T>;
 
     readonly type = 'entity_with_property_with_default_value';
+    color_aarrggbb?: Type<string | DivExpression>;
+    color_rrggbb?: Type<string | DivExpression>;
     int?: Type<number | DivExpression>;
     /**
      * non_optional is used to suppress auto-generation of default value for object with all-optional
@@ -17,6 +19,8 @@ export class EntityWithPropertyWithDefaultValue<T extends EntityWithPropertyWith
     url?: Type<string | DivExpression>;
 
     constructor(props?: Exact<EntityWithPropertyWithDefaultValueProps, T>) {
+        this.color_aarrggbb = props?.color_aarrggbb;
+        this.color_rrggbb = props?.color_rrggbb;
         this.int = props?.int;
         this.nested = props?.nested;
         this.url = props?.url;
@@ -24,6 +28,8 @@ export class EntityWithPropertyWithDefaultValue<T extends EntityWithPropertyWith
 }
 
 export interface EntityWithPropertyWithDefaultValueProps {
+    color_aarrggbb?: Type<string | DivExpression>;
+    color_rrggbb?: Type<string | DivExpression>;
     int?: Type<number | DivExpression>;
     /**
      * non_optional is used to suppress auto-generation of default value for object with all-optional

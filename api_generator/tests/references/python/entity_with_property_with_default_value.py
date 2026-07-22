@@ -11,6 +11,8 @@ class EntityWithPropertyWithDefaultValue(BaseDiv):
     def __init__(
         self, *,
         type: str = 'entity_with_property_with_default_value',
+        color_aarrggbb: typing.Optional[typing.Union[Expr, str]] = None,
+        color_rrggbb: typing.Optional[typing.Union[Expr, str]] = None,
         int: typing.Optional[typing.Union[Expr, int]] = None,
         nested: typing.Optional[EntityWithPropertyWithDefaultValueNested] = None,
         url: typing.Optional[typing.Union[Expr, str]] = None,
@@ -18,6 +20,8 @@ class EntityWithPropertyWithDefaultValue(BaseDiv):
     ):
         super().__init__(
             type=type,
+            color_aarrggbb=color_aarrggbb,
+            color_rrggbb=color_rrggbb,
             int=int,
             nested=nested,
             url=url,
@@ -25,6 +29,12 @@ class EntityWithPropertyWithDefaultValue(BaseDiv):
         )
 
     type: str = Field(default='entity_with_property_with_default_value')
+    color_aarrggbb: typing.Optional[typing.Union[Expr, str]] = Field(
+        format="color"
+    )
+    color_rrggbb: typing.Optional[typing.Union[Expr, str]] = Field(
+        format="color"
+    )
     int: typing.Optional[typing.Union[Expr, int]] = Field(
     )
     nested: typing.Optional[EntityWithPropertyWithDefaultValueNested] = Field(
