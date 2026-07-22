@@ -1,7 +1,7 @@
 package com.yandex.div.compose.views.grid
 
 import androidx.compose.runtime.Composable
-import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div2.DivBase
 
 internal data class Cell(
@@ -14,8 +14,8 @@ internal data class Cell(
 
 @Composable
 internal fun DivBase.toCell(freeAtRow: IntArray, columnCount: Int): Cell {
-    val columnSpan = (columnSpan?.observedValue()?.toInt() ?: DEFAULT_SPAN).coerceAtLeast(DEFAULT_SPAN)
-    val rowSpan = (rowSpan?.observedValue()?.toInt() ?: DEFAULT_SPAN).coerceAtLeast(DEFAULT_SPAN)
+    val columnSpan = (columnSpan.observedIntValue(DEFAULT_SPAN)).coerceAtLeast(DEFAULT_SPAN)
+    val rowSpan = (rowSpan.observedIntValue(DEFAULT_SPAN)).coerceAtLeast(DEFAULT_SPAN)
     val startColumn = freeAtRow.indexOfMin()
     val effectiveSpan = columnSpan.coerceAtMost(columnCount - startColumn)
     val rowAtColumn = freeAtRow[startColumn]

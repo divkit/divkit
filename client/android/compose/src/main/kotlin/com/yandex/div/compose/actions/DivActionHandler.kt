@@ -48,6 +48,10 @@ internal class DivActionHandler @Inject constructor(
     }
 
     fun handle(context: DivActionHandlingContext, action: DivAction, source: DivActionSource) {
+        if (action.scopeId != null) {
+            reporter.reportError("div-action.scope_id not supported")
+        }
+
         actionMenuHolder.showIfNeeded(action, expressionResolver = context.expressionResolver)
         handle(
             context = context,
@@ -63,6 +67,10 @@ internal class DivActionHandler @Inject constructor(
     }
 
     fun handle(context: DivActionHandlingContext, action: DivSightAction) {
+        if (action.scopeId != null) {
+            reporter.reportError("div-action.scope_id not supported")
+        }
+
         handle(
             context = context,
             action = DivActionBase(

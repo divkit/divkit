@@ -2,7 +2,6 @@ package com.yandex.div.compose.views.modifiers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedIntValue

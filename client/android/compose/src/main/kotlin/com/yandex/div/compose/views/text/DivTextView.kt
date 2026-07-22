@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.text
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -16,6 +17,7 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
@@ -26,6 +28,8 @@ internal fun DivTextView(
     modifier: Modifier,
     data: DivText
 ) {
+    checkUnsupportedFeatures(data)
+
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
     Box(
@@ -50,7 +54,7 @@ private fun BasicText(
     val text = data.text.observedValue()
     val fontSize = data.fontSize.observedIntValue()
     val hyphens = if (SOFT_HYPHEN in text) Hyphens.Auto else Hyphens.None
-    val maxLines = data.maxLines?.observedIntValue()?.coerceAtLeast(1) ?: Int.MAX_VALUE
+    val maxLines = data.maxLines.observedIntValue(Int.MAX_VALUE).coerceAtLeast(1)
     val overflow = if (data.maxLines != null) {
         data.truncate.observedValue().toTextOverflow()
     } else {
@@ -82,33 +86,36 @@ private fun buildAnnotatedText(
     data: DivText,
     baseFontSize: Int,
 ): AnnotatedString? {
-    val gradientBrush = data.observedTextGradient()
-    val ranges = data.ranges ?: emptyList()
+    val gradientBrush = data.textGradient?.observedValue()
+    val ranges = data.ranges.orEmpty()
     if (gradientBrush == null && ranges.isEmpty()) {
         return null
     }
 
+    val length = text.length
     val builder = AnnotatedString.Builder(text)
     if (gradientBrush != null) {
-        builder.addStyle(SpanStyle(brush = gradientBrush), 0, text.length)
+        builder.addStyle(SpanStyle(brush = gradientBrush), 0, length)
     }
 
     val baseTextColorAlpha = textStyle.color.alpha
     for (range in ranges) {
-        val start = range.start.observedIntValue()
-        val end = range.end?.observedIntValue() ?: text.length
-        val safeStart = start.coerceIn(0, text.length)
-        val safeEnd = end.coerceIn(safeStart, text.length)
-        if (safeStart >= safeEnd) continue
-
-        val spanStyle = range.observeSpanStyle(baseFontSize, baseTextColorAlpha)
-        builder.addStyle(spanStyle, safeStart, safeEnd)
+        checkUnsupportedFeatures(range)
+        val start = range.start.observedIntValue().coerceIn(0, length)
+        val end = range.end.observedIntValue(length).coerceIn(start, length)
+        if (start >= end) {
+            continue
+        }
+        builder.addStyle(
+            style = range.observeSpanStyle(baseFontSize, baseTextColorAlpha),
+            start = start,
+            end = end
+        )
     }
 
     return builder.toAnnotatedString()
 }
 
-@Composable
 private fun DivText.Truncate.toTextOverflow(): TextOverflow {
     return when (this) {
         DivText.Truncate.NONE -> TextOverflow.Clip
@@ -119,11 +126,38 @@ private fun DivText.Truncate.toTextOverflow(): TextOverflow {
 }
 
 @Composable
-private fun DivText.observedTextGradient(): Brush? {
-    val textGradient = textGradient ?: return null
-    return when (textGradient) {
-        is DivTextGradient.Linear -> textGradient.value.observeLinearGradient()
-        is DivTextGradient.Radial -> textGradient.value.observeRadialGradient()
+private fun DivTextGradient.observedValue(): Brush? {
+    return when (this) {
+        is DivTextGradient.Linear -> value.observeLinearGradient()
+        is DivTextGradient.Radial -> value.observeRadialGradient()
+    }
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+private fun checkUnsupportedFeatures(data: DivText) {
+    if (!data.images.isNullOrEmpty()) {
+        reportError("div-text.images not supported")
+    }
+
+    if (data.rangeBuilder != null) {
+        reportError("div-text.range_builder not supported")
+    }
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+private fun checkUnsupportedFeatures(range: DivText.Range) {
+    if (range.background != null) {
+        reportError("div-text.range.background not supported")
+    }
+
+    if (range.alignmentVertical != null) {
+        reportError("div-text.range.alignment_vertical not supported")
+    }
+
+    if (range.topOffset != null) {
+        reportError("div-text.range.top_offset not supported")
     }
 }
 

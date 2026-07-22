@@ -13,6 +13,7 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.unit.Constraints
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.combineAlignment
@@ -31,7 +32,7 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
     val items = data.items.orEmpty().filter {
         it.value().visibility.observedValue() != DivVisibility.GONE
     }
-    val columnCount = data.columnCount.observedValue().toInt().coerceAtLeast(DEFAULT_COLUMN_COUNT)
+    val columnCount = data.columnCount.observedIntValue().coerceAtLeast(DEFAULT_COLUMN_COUNT)
     val (columnTracks, rowTracks) = items.computeTracks(
         columnCount = columnCount,
         widthWrapContent = data.width.isWrapContent,
@@ -53,8 +54,8 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
         ) {
             items.forEach { item ->
                 val base = item.value()
-                val columnSpan = base.columnSpan?.observedValue()?.toInt() ?: DEFAULT_SPAN
-                val rowSpan = base.rowSpan?.observedValue()?.toInt() ?: DEFAULT_SPAN
+                val columnSpan = base.columnSpan.observedIntValue(DEFAULT_SPAN)
+                val rowSpan = base.rowSpan.observedIntValue(DEFAULT_SPAN)
                 DivBlockView(
                     data = item,
                     modifier = Modifier

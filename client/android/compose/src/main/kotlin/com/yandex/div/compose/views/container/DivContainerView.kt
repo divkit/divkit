@@ -4,47 +4,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.wrap.ContainerWrapHorizontalView
 import com.yandex.div.compose.views.container.wrap.ContainerWrapVerticalView
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContainer.LayoutMode
+import com.yandex.div2.DivContainer.Orientation
 
 @Composable
 internal fun DivContainerView(
     modifier: Modifier,
     data: DivContainer
 ) {
-    val orientation = data.orientation.observedValue()
-    val clipToBounds = data.clipToBounds.observedValue()
-    val layoutMode = data.layoutMode.observedValue()
+    if (data.itemBuilder != null) {
+        reportError("div-container.item_builder not supported")
+    }
 
-    val modifier = if (clipToBounds) modifier.clipToBounds() else modifier
+    val modifier = if (data.clipToBounds.observedValue()) {
+        modifier.clipToBounds()
+    } else {
+        modifier
+    }
 
-    when (orientation) {
-        DivContainer.Orientation.HORIZONTAL -> when (layoutMode) {
-            DivContainer.LayoutMode.WRAP -> ContainerWrapHorizontalView(
-                modifier = modifier,
-                data = data,
-            )
-            else -> ContainerHorizontalView(
-                modifier = modifier,
-                data = data,
-            )
+    when (data.orientation.observedValue()) {
+        Orientation.HORIZONTAL -> when (data.layoutMode.observedValue()) {
+            LayoutMode.WRAP -> ContainerWrapHorizontalView(modifier, data)
+            LayoutMode.NO_WRAP -> ContainerHorizontalView(modifier, data)
         }
 
-        DivContainer.Orientation.VERTICAL -> when (layoutMode) {
-            DivContainer.LayoutMode.WRAP -> ContainerWrapVerticalView(
-                modifier = modifier,
-                data = data,
-            )
-            else -> ContainerVerticalView(
-                modifier = modifier,
-                data = data,
-            )
+        Orientation.VERTICAL -> when (data.layoutMode.observedValue()) {
+            LayoutMode.WRAP -> ContainerWrapVerticalView(modifier, data)
+            LayoutMode.NO_WRAP -> ContainerVerticalView(modifier, data)
         }
 
-        DivContainer.Orientation.OVERLAP -> ContainerOverlapView(
-            modifier = modifier,
-            data = data,
-        )
+        Orientation.OVERLAP -> ContainerOverlapView(modifier, data)
     }
 }

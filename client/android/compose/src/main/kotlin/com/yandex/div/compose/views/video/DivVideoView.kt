@@ -16,6 +16,7 @@ import coil3.ImageLoader
 import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.decodePreview
@@ -125,8 +126,8 @@ private fun Div2VideoSource.observedPlayerSource(): DivVideoSource {
         mimeType = mimeType.observedValue(),
         resolution = resolution?.let {
             DivVideoResolution(
-                width = it.width.observedValue().toInt(),
-                height = it.height.observedValue().toInt(),
+                width = it.width.observedIntValue(),
+                height = it.height.observedIntValue(),
             )
         },
         bitrate = bitrate?.observedValue(),

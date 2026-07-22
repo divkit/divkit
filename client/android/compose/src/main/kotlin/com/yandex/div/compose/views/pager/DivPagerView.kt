@@ -10,12 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.rememberAndStoreState
 import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
 import com.yandex.div.compose.views.modifiers.onMeasureConstraints
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivVisibility
@@ -25,6 +27,10 @@ internal fun DivPagerView(
     modifier: Modifier,
     data: DivPager,
 ) {
+    if (data.itemBuilder != null) {
+        reportError("div-pager.item_builder not supported")
+    }
+
     val items = data.items.orEmpty().filter {
         it.value().visibility.observedValue() != DivVisibility.GONE
     }
@@ -51,7 +57,7 @@ private fun PagerView(
     val crossAxisBounded = remember { mutableStateOf(true) }
 
     val isHorizontal = data.orientation.observedValue() == DivPager.Orientation.HORIZONTAL
-    val defaultItem = data.defaultItem.observedValue().toInt().coerceIn(0, items.size - 1)
+    val defaultItem = data.defaultItem.observedIntValue().coerceIn(0, items.size - 1)
     val stateStorage = LocalDivViewContext.current.pagerStateStorage
 
     stateStorage.rememberAndStoreState(

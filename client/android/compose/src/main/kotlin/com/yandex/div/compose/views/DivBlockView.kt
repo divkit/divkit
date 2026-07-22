@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.actions.observedActions
@@ -26,6 +27,7 @@ import com.yandex.div.compose.views.tabs.DivTabsView
 import com.yandex.div.compose.views.text.DivTextView
 import com.yandex.div.compose.views.video.DivVideoView
 import com.yandex.div2.Div
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVisibility
 
@@ -37,6 +39,7 @@ internal fun DivBlockView(
 ) {
     val divBase = data.value()
     WithLocalComponent(divBase) {
+        checkUnsupportedFeatures(divBase)
         if (divBase.visibility.observedValue() == DivVisibility.GONE) {
             return@WithLocalComponent
         }
@@ -120,5 +123,24 @@ private fun BaseView(
         is Div.Tabs -> DivTabsView(modifier, data.value)
         is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
         is Div.Video -> DivVideoView(modifier.applyPaddings(data), data.value)
+    }
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+private fun checkUnsupportedFeatures(data: DivBase) {
+    if (!data.animators.isNullOrEmpty()) {
+        reportError("div-base.animators not supported")
+    }
+
+    if (data.layoutProvider != null) {
+        reportError("div-base.layout_provider not supported")
+    }
+
+    if (data.transitionChange != null ||
+        data.transitionIn != null ||
+        data.transitionOut != null
+    ) {
+        reportError("div-base.transitions not supported")
     }
 }
