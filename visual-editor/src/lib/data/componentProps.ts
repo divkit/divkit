@@ -637,6 +637,11 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true,
             enablePerTheme: true
         }, {
+            name: 'props.preload_required',
+            prop: 'preload_required',
+            type: 'boolean',
+            enableSources: true
+        }, {
             name: 'props.high_priority_preview_show',
             prop: 'high_priority_preview_show',
             type: 'boolean',

@@ -19,7 +19,7 @@
 
     function onChange() {
         dispatch('change', {
-            value: value,
+            value: val,
             prop
         });
     }
