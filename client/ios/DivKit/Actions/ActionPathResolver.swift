@@ -18,9 +18,10 @@ struct ActionPathResolver {
   func resolvePath(
     id: String,
     cardId: DivCardID,
-    scopePath: UIElementPath?
+    scopePath: UIElementPath?,
+    divTypes: Set<String>? = nil
   ) -> PathResolution {
-    let componentPaths = idToPath[cardId.path + id]
+    let componentPaths = idToPath.paths(forId: cardId.path + id, divTypes: divTypes)
     let paths = scopePath
       .map { scope in componentPaths.filter { $0.starts(with: scope) } } ?? componentPaths
 
@@ -38,17 +39,28 @@ struct ActionPathResolver {
   /// (e.g. it lives in a `gone` subtree that a preceding action in the same batch
   /// is revealing), the action is parked and retried after the next re-model — see
   /// `DivActionHandler.applyPendingActions`. Ambiguity is reported immediately.
+  ///
+  /// `divTypes` restricts the lookup to elements of the given div types, so an
+  /// action targeting a specific element kind (e.g. video) is not confused by
+  /// other elements sharing the same `id`.
   func resolve(
     id: String,
+    divTypes: Set<String>? = nil,
     context: DivActionHandlingContext,
     perform: @escaping (UIElementPath) -> Void
   ) {
-    switch resolvePath(id: id, cardId: context.cardId, scopePath: context.scopePath) {
+    switch resolvePath(
+      id: id,
+      cardId: context.cardId,
+      scopePath: context.scopePath,
+      divTypes: divTypes
+    ) {
     case let .resolved(path):
       perform(path)
     case .notFound:
       context.actionHandler.enqueuePendingAction(
         id: id,
+        divTypes: divTypes,
         scopePath: context.scopePath,
         cardId: context.cardId,
         sourcePath: context.sourcePath,

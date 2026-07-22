@@ -1,0 +1,152 @@
+{
+  "card": {
+    "log_id": "video_action_same_id_as_container",
+    "variables": [
+      {
+        "name": "video_time",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "container",
+              "id": "shared_video_id",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "video",
+                  "id": "shared_video_id",
+                  "video_sources": [
+                    {
+                      "type": "video_source",
+                      "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                      "mime_type": "video/mp4"
+                    }
+                  ],
+                  "autostart": false,
+                  "muted": true,
+                  "repeatable": true,
+                  "elapsed_time_variable": "video_time",
+                  "height": {
+                    "type": "fixed",
+                    "value": 320
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#000000"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Time elapsed: @{video_time}",
+              "margins": {
+                "top": 8,
+                "left": 16
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "content_alignment_horizontal": "center",
+              "margins": {
+                "top": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Play",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "text_color": "#ffffff",
+                  "font_size": 16,
+                  "margins": {
+                    "right": 16
+                  },
+                  "paddings": {
+                    "top": 14,
+                    "bottom": 14,
+                    "left": 24,
+                    "right": 24
+                  },
+                  "border": {
+                    "corner_radius": 8
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#0077ff"
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "log_id": "play_video",
+                      "typed": {
+                        "type": "video",
+                        "id": "shared_video_id",
+                        "action": "start"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": "Pause",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "text_color": "#ffffff",
+                  "font_size": 16,
+                  "paddings": {
+                    "top": 14,
+                    "bottom": 14,
+                    "left": 24,
+                    "right": 24
+                  },
+                  "border": {
+                    "corner_radius": 8
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#666666"
+                    }
+                  ],
+                  "actions": [
+                    {
+                      "log_id": "pause_video",
+                      "typed": {
+                        "type": "video",
+                        "id": "shared_video_id",
+                        "action": "pause"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

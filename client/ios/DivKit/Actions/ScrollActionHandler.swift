@@ -3,6 +3,12 @@ import LayoutKit
 import VGSL
 
 final class ScrollActionHandler {
+  private static let scrollableDivTypes: Set<String> = [
+    DivGallery.type,
+    DivPager.type,
+    DivTabs.type,
+  ]
+
   private let blockStateStorage: DivBlockStateStorage
   private let updateCard: DivActionHandler.UpdateCardAction
   private let pathResolver: ActionPathResolver
@@ -34,7 +40,11 @@ final class ScrollActionHandler {
     let itemCount = action.resolveItemCount(expressionResolver)
     let animated = action.resolveAnimated(expressionResolver)
 
-    pathResolver.resolve(id: id, context: context) { [self] path in
+    pathResolver.resolve(
+      id: id,
+      divTypes: Self.scrollableDivTypes,
+      context: context
+    ) { [self] path in
       if itemCount == 0 {
         let offset = action.resolveOffset(expressionResolver)
         scrollToOffset(
@@ -68,7 +78,11 @@ final class ScrollActionHandler {
 
     let animated = action.resolveAnimated(expressionResolver)
 
-    pathResolver.resolve(id: id, context: context) { [self] path in
+    pathResolver.resolve(
+      id: id,
+      divTypes: Self.scrollableDivTypes,
+      context: context
+    ) { [self] path in
       switch action.destination {
       case let .indexDestination(destination):
         if let index = destination.resolveValue(expressionResolver) {
@@ -109,7 +123,11 @@ final class ScrollActionHandler {
     id: String,
     scrollAction: DivActionIntent.Scroll
   ) {
-    pathResolver.resolve(id: id, context: context) { [self] path in
+    pathResolver.resolve(
+      id: id,
+      divTypes: Self.scrollableDivTypes,
+      context: context
+    ) { [self] path in
       switch scrollAction {
       case let .setCurrentItem(index):
         scrollToItem(

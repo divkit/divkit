@@ -10,6 +10,7 @@ import VGSL
 final class PendingActionsStorage {
   struct PendingAction {
     let id: String
+    let divTypes: Set<String>?
     let scopePath: UIElementPath?
     let cardId: DivCardID
     let sourcePath: UIElementPath

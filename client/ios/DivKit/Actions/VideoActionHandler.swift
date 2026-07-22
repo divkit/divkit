@@ -32,7 +32,7 @@ struct VideoActionHandler {
     action: DivVideoAction,
     context: DivActionHandlingContext
   ) {
-    pathResolver.resolve(id: id, context: context) { path in
+    pathResolver.resolve(id: id, divTypes: [DivVideo.type], context: context) { path in
       context.blockStateStorage.setState(
         path: path,
         state: VideoBlockViewState(state: action == .play ? .playing : .paused)

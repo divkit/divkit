@@ -332,6 +332,7 @@ public final class DivActionHandler {
   /// re-attempted from `applyPendingActions(cardId:)` once the element appears.
   func enqueuePendingAction(
     id: String,
+    divTypes: Set<String>? = nil,
     scopePath: UIElementPath?,
     cardId: DivCardID,
     sourcePath: UIElementPath,
@@ -340,6 +341,7 @@ public final class DivActionHandler {
     pendingActions.enqueue(
       PendingActionsStorage.PendingAction(
         id: id,
+        divTypes: divTypes,
         scopePath: scopePath,
         cardId: cardId,
         sourcePath: sourcePath,
@@ -359,7 +361,8 @@ public final class DivActionHandler {
       switch actionPathResolver.resolvePath(
         id: action.id,
         cardId: cardId,
-        scopePath: action.scopePath
+        scopePath: action.scopePath,
+        divTypes: action.divTypes
       ) {
       case let .resolved(path):
         action.apply(path)

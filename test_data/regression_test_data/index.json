@@ -3219,6 +3219,27 @@
       "file": "video/typed_video_with_controls.json"
     },
     {
+      "title": "Video typed actions when container shares video id",
+      "tags": [
+        "DivVideo",
+        "TypedActions"
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "steps": [
+        "Tap 'Play'",
+        "Tap 'Pause'"
+      ],
+      "expected_results": [
+        "Video starts playing after 'Play' tap even though the wrapping container has the same id, 'Time elapsed' counter increases",
+        "Video pauses after 'Pause' tap, 'Time elapsed' counter stops"
+      ],
+      "file": "video/video_action_same_id_as_container.json"
+    },
+    {
       "title": "Video volume control",
       "case_id": 108,
       "tags": [

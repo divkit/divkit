@@ -12,6 +12,7 @@ extension DivBlockModeling {
     let currentDivId = parentContext.overridenId ?? id
     return parentContext.modifying(
       currentDivId: currentDivId,
+      currentDivType: Self.type,
       pathSuffix: currentDivId ?? Self.type
     )
   }

@@ -21,7 +21,7 @@ struct SetCursorPositionActionHandler {
       pendingSelection: TextInputViewState.Selection(start: start, end: end)
     )
 
-    pathResolver.resolve(id: id, context: context) { path in
+    pathResolver.resolve(id: id, divTypes: [DivInput.type], context: context) { path in
       context.blockStateStorage.setPendingState(path, state: state)
       context.blockStateStorage.setFocused(isFocused: true, path: path)
       context.updateCard(.state(context.cardId))

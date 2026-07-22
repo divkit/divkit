@@ -20,6 +20,8 @@ public struct DivBlockModelingContext {
   public private(set) var path: UIElementPath
   public private(set) var currentDivId: String?
 
+  private(set) var currentDivType: String?
+
   private(set) var viewId: DivViewId
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
@@ -235,6 +237,7 @@ public struct DivBlockModelingContext {
     overridenId: String? = nil,
     cardLogId: String? = nil,
     currentDivId: String? = nil,
+    currentDivType: String? = nil,
     pathSuffix: String? = nil,
     parentDivStatePath: DivStatePath? = nil,
     errorsStorage: DivErrorsStorage? = nil,
@@ -247,6 +250,7 @@ public struct DivBlockModelingContext {
     // This fiels is used for overriding ids in prototype items
     context.overridenId = overridenId
     context.currentDivId = currentDivId
+    context.currentDivType = currentDivType
 
     if let cardLogId {
       context.cardLogId = cardLogId

@@ -166,7 +166,11 @@ extension DivBase {
     )
 
     if let id = context.currentDivId {
-      context.idToPath.add(path, forId: path.cardId.path + id)
+      context.idToPath.add(
+        path,
+        forId: path.cardId.path + id,
+        divType: context.currentDivType
+      )
     }
 
     animators?.forEach { animator in
