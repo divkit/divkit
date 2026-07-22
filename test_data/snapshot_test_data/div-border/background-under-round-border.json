@@ -1,0 +1,109 @@
+{
+  "description": "Opaque border stroke on rounded corners fully covers the clipped background edge: no thin background-colored halo along the outer edge of the stroke. Dashed and semi-transparent strokes let the background reach the outline as before. Also covers the outline-clipping mode (has_shadow with the default elevation shadow) and a corner radius below half the stroke width (the stroke must not draw square corners past the rounded outline).",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "stroked_box": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "margins": {
+        "top": 8,
+        "left": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FF5A3D"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "stroked_box",
+              "border": {
+                "corner_radius": 40,
+                "stroke": {
+                  "color": "#FFFFFF",
+                  "width": 12
+                }
+              }
+            },
+            {
+              "type": "stroked_box",
+              "border": {
+                "corner_radius": 20,
+                "stroke": {
+                  "color": "#0E7A3C",
+                  "width": 10
+                }
+              }
+            },
+            {
+              "type": "stroked_box",
+              "border": {
+                "corner_radius": 20,
+                "stroke": {
+                  "style": {
+                    "type": "dashed"
+                  },
+                  "color": "#0E7A3C",
+                  "width": 8
+                }
+              }
+            },
+            {
+              "type": "stroked_box",
+              "border": {
+                "corner_radius": 40,
+                "stroke": {
+                  "color": "#80FFFFFF",
+                  "width": 12
+                }
+              }
+            },
+            {
+              "type": "stroked_box",
+              "border": {
+                "corner_radius": 20,
+                "has_shadow": true,
+                "stroke": {
+                  "color": "#0E7A3C",
+                  "width": 10
+                }
+              }
+            },
+            {
+              "type": "stroked_box",
+              "border": {
+                "corner_radius": 4,
+                "stroke": {
+                  "color": "#0E7A3C",
+                  "width": 16
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

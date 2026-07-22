@@ -39,6 +39,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
 
+// Keep in sync with STROKE_OFFSET_PERCENTAGE in the Compose client (BorderModifiers.kt).
 private const val STROKE_OFFSET_PERCENTAGE = 0.1f
 
 internal class DivBorderDrawer(
@@ -67,7 +68,9 @@ internal class DivBorderDrawer(
         set(value) {
             if (field == value) return
             field = value
-            invalidateOutline()
+            // The border geometry depends on the clipping mode (see BorderParams.invalidate),
+            // so paths have to be rebuilt as well.
+            invalidateBorder()
             view.invalidate()
         }
 
@@ -124,7 +127,7 @@ internal class DivBorderDrawer(
         if (hasBorder) {
             val borderColor = border?.stroke?.color?.evaluate(resolver)
                 ?: Color.TRANSPARENT
-            borderParams.setPaintParams(strokeWidth, borderColor)
+            borderParams.setPaintParams(borderColor)
             borderParams.isDashed = border?.stroke?.style is DivStrokeStyle.Dashed
         }
 
@@ -168,9 +171,10 @@ internal class DivBorderDrawer(
     }
 
     private fun invalidatePaths() {
-        val radii = cornerRadii?.clone() ?: return
+        val originalRadii = cornerRadii ?: return
+        val radii = originalRadii.clone()
 
-        clipParams.invalidatePath(radii)
+        clipParams.invalidatePath(radii, clipInset())
 
         // Because border rect shifted inside clipping rect we have to reduce corner radius
         // by half the stroke width to reach origin corner radius.
@@ -181,12 +185,34 @@ internal class DivBorderDrawer(
         }
 
         if (hasBorder) {
-            borderParams.invalidate(radii)
+            borderParams.invalidate(radii, originalRadii)
         }
 
         if (hasCustomShadow) {
             shadowParams.invalidateShadow(radii)
         }
+    }
+
+    // ~0.5dp, but at least 1px for thin strokes: the sub-pixel amount by which the stroke
+    // overdraws the outline in outline-clipping mode and by which the clip is inset in
+    // canvas-clipping mode.
+    private val strokeOffset: Float
+        get() = min(0.5.dpToPxF(displayMetrics), max(1f, strokeWidth * STROKE_OFFSET_PERCENTAGE))
+
+    // Under a solid opaque stroke the clip (background and content) is inset so that its
+    // anti-aliased edge is hidden under the fully opaque part of the stroke. If the clip
+    // ended at the outline instead, it would attenuate the background and the stroke at the
+    // same boundary pixels and the background would show through the stroke's outer edge
+    // as a thin halo. A dashed stroke has gaps where the background must reach the outline,
+    // so the inset is not applied.
+    private fun clipInset(): Float {
+        if (!hasBorder || borderParams.isDashed || Color.alpha(borderParams.paint.color) != MAX_ALPHA) {
+            return 0f
+        }
+        // The outer max matters on sub-1x densities where 0.5dp is less than a full pixel:
+        // the inset must cover at least one pixel of the clip's edge. Never inset deeper
+        // than the stroke itself, or the background would peek out at its inner edge.
+        return min(max(1f, strokeOffset), strokeWidth)
     }
 
     private fun invalidateOutline() {
@@ -213,6 +239,12 @@ internal class DivBorderDrawer(
             (!hasShadow && (hasDifferentCornerRadii || hasBorder) || view.isInTransientHierarchy()))
     }
 
+    // Mirrors the conditions under which invalidateOutline enables view.clipToOutline.
+    private fun usesOutlineClipping(): Boolean {
+        return needClipping && !shouldUseCanvasClipping() &&
+            (cornerRadii?.first() ?: DEFAULT_CORNER_RADIUS) != DEFAULT_CORNER_RADIUS
+    }
+
     private fun shouldUseNinePatchShadows(): Boolean {
         return hasCustomShadow || view.isInTransientHierarchy()
     }
@@ -228,7 +260,15 @@ internal class DivBorderDrawer(
         if (!hasBorder) {
             return
         }
-        canvas.drawPath(borderParams.path, borderParams.paint)
+        val trimPath = borderParams.trimPath
+        if (trimPath != null) {
+            canvas.withSave {
+                clipPath(trimPath)
+                drawPath(borderParams.path, borderParams.paint)
+            }
+        } else {
+            canvas.drawPath(borderParams.path, borderParams.paint)
+        }
     }
 
     fun drawShadow(canvas: Canvas) {
@@ -245,12 +285,19 @@ internal class DivBorderDrawer(
         val path = Path()
         private val rect = RectF()
 
-        fun invalidatePath(radii: FloatArray?) {
-            rect.set(0f, 0f, view.width.toFloat(), view.height.toFloat())
+        fun invalidatePath(radii: FloatArray?, inset: Float = 0f) {
+            val safeInset = min(inset, min(view.width, view.height) / 2f)
+            rect.set(safeInset, safeInset, view.width - safeInset, view.height - safeInset)
 
             path.reset()
             if (radii != null) {
-                path.addRoundRect(rect, radii.clone(), Path.Direction.CW)
+                val clipRadii = radii.clone()
+                if (safeInset > 0f) {
+                    for (i in clipRadii.indices) {
+                        clipRadii[i] = max(0f, clipRadii[i] - safeInset)
+                    }
+                }
+                path.addRoundRect(rect, clipRadii, Path.Direction.CW)
                 path.close()
             }
         }
@@ -260,12 +307,12 @@ internal class DivBorderDrawer(
         val paint = Paint()
         val path = Path()
         var isDashed: Boolean = false
-        private val halfDp = 0.5.dpToPxF(displayMetrics)
+        // Trims the stroke to the view outline when the stroke itself cannot reproduce it
+        // (see invalidate). Null in the common case, so drawBorder stays clip-free.
+        var trimPath: Path? = null
+            private set
         private val defaultDashWidth = 6.dpToPxF(displayMetrics)
         private val defaultGapWidth = 2.dpToPxF(displayMetrics)
-
-        private val strokeOffset // magic formula to avoid border artifacts
-            get() = min(halfDp, max(1f, strokeWidth * STROKE_OFFSET_PERCENTAGE))
 
         private val rect = RectF()
 
@@ -274,13 +321,19 @@ internal class DivBorderDrawer(
             paint.isAntiAlias = true
         }
 
-        fun setPaintParams(strokeWidth: Float, borderColor: Int) {
-            paint.strokeWidth = strokeWidth + strokeOffset
+        fun setPaintParams(borderColor: Int) {
             paint.color = borderColor
         }
 
-        fun invalidate(radii: FloatArray) {
-            val halfStrokeWidth = (strokeWidth - strokeOffset) / 2f
+        fun invalidate(radii: FloatArray, originalRadii: FloatArray) {
+            // In outline-clipping mode the clip inset is not applied (the outline defines the
+            // visible shape at the view bounds), so the halo protection works the other way
+            // round: the stroke overdraws slightly past the outline and clipToOutline trims
+            // its outer edge back to fully opaque pixels.
+            val overdraw = if (usesOutlineClipping()) strokeOffset else 0f
+            paint.strokeWidth = strokeWidth + overdraw
+
+            val halfStrokeWidth = (strokeWidth - overdraw) / 2f
             val viewWidth = view.width.toFloat()
             val viewHeight = view.height.toFloat()
             rect.set(halfStrokeWidth, halfStrokeWidth, viewWidth - halfStrokeWidth, viewHeight - halfStrokeWidth)
@@ -288,6 +341,20 @@ internal class DivBorderDrawer(
             path.reset()
             path.addRoundRect(rect, radii, Path.Direction.CW)
             path.close()
+
+            // A corner radius below half the stroke width clamps the border path radius to
+            // zero, and the miter-joined stroke draws a square corner past the rounded
+            // outline. Drawn outside the canvas clip nothing trims it, so in that case the
+            // stroke is clipped to the outline explicitly.
+            trimPath = if (shouldUseCanvasClipping() &&
+                originalRadii.any { it > 0f && it < strokeWidth / 2f }) {
+                Path().apply {
+                    addRoundRect(RectF(0f, 0f, viewWidth, viewHeight), originalRadii, Path.Direction.CW)
+                    close()
+                }
+            } else {
+                null
+            }
 
             paint.pathEffect = if (isDashed) {
                 val perimeter = calculatePerimeter(rect.width(), rect.height(), radii)
@@ -400,6 +467,7 @@ internal class DivBorderDrawer(
         private const val DEFAULT_DY = 0.5f
         private const val DEFAULT_SHADOW_COLOR = Color.BLACK
         private const val DEFAULT_SHADOW_ALPHA = 0.14f
+        private const val MAX_ALPHA = 0xFF
 
         private fun clampCornerRadius(cornerRadius: Float, width: Float, height: Float) : Float {
             if (height <= 0 || width <= 0) {
@@ -425,13 +493,19 @@ internal fun DivStroke?.widthPx(expressionResolver: ExpressionResolver, metrics:
     }
 }
 
+// The border is stroked after the clip is restored, otherwise the anti-aliased clip would
+// attenuate it at the same boundary pixels as the background and the background would show
+// through as a thin halo. In canvas-clipping mode the stroke ends exactly at the outline and
+// the background edge under it is hidden by the clip inset instead (see DivBorderDrawer.clipInset);
+// in outline-clipping mode the stroke overdraws the outline and clipToOutline trims it
+// (see BorderParams.invalidate).
 internal inline fun DivBorderDrawer?.drawClipped(canvas: Canvas, drawCallback: (Canvas) -> Unit) {
     if (this != null) {
         canvas.withSave {
             clipCorners(canvas)
             drawCallback(canvas)
-            drawBorder(canvas)
         }
+        drawBorder(canvas)
     } else {
         drawCallback(canvas)
     }
@@ -455,7 +529,8 @@ internal inline fun DivBorderDrawer?.drawClippedAndTranslated(
         clipCorners(canvas)
         canvas.translate(-x, -y)
         drawCallback(canvas)
-        canvas.translate(x, y)
-        drawBorder(canvas)
+    }
+    canvas.withTranslation(x, y) {
+        drawBorder(this)
     }
 }

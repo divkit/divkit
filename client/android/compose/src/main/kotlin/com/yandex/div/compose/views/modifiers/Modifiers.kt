@@ -36,7 +36,6 @@ internal fun Modifier.apply(
         // to the background.
         .applyIfNotNull(actions) { actions(it) }
         .background(divBase)
-        .applyIfNotNull(divBase.border) { borderStroke(it) }
         .applyIfNotNull(divBase.id) { testTag(it) }
         .accessibility(divBase)
         .tooltipAnchors(divBase.tooltips)
