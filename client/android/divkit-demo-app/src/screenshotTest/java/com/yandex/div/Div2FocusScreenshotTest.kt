@@ -1,7 +1,5 @@
 package com.yandex.div
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
 import com.yandex.divkit.demo.R
@@ -36,16 +34,13 @@ class Div2FocusScreenshotTest(case: String, escapedCase: String) {
 
     companion object {
 
-        private const val TEST_CASES_PATH = "ui_test_data/focus"
-        private const val CASE_PREFIX = "snapshot"
-        private const val CASE_EXTENSION = ".json"
-
-        private val context: Context = ApplicationProvider.getApplicationContext()
-
         @JvmStatic
         @Parameterized.Parameters(name = "{1}")
-        fun cases() = AssetEnumerator(context).enumerate(TEST_CASES_PATH) { filename ->
-            filename.contains(CASE_PREFIX) && filename.endsWith(CASE_EXTENSION)
-        }.withEscapedParameter()
+        fun cases(): List<Array<String>> {
+            return AssetEnumerator()
+                .enumerate("ui_test_data/focus")
+                .filter { filename -> filename.contains("snapshot") }
+                .withEscapedParameter()
+        }
     }
 }

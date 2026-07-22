@@ -1,14 +1,11 @@
 package com.yandex.div
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.rule.baseRule
 import com.yandex.div.steps.interactiveScreenshot
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
-import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,9 +35,6 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
 
     companion object {
         private const val TEST_CASES_PATH = "interactive_snapshot_test_data"
-        private const val CASE_EXTENSION = ".json"
-
-        private val context: Context = ApplicationProvider.getApplicationContext()
 
         /**
          * Transforms "interactive_snapshot_test_data/div-text/smoke.json" into
@@ -52,15 +46,7 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            val filter = { filename: String ->
-                filename.endsWith(CASE_EXTENSION)
-            }
-
-            val testCases = AssetEnumerator(context).enumerate(TEST_CASES_PATH, filter)
-            if (testCases.isEmpty()) {
-                Assert.fail("No testcases found at '$TEST_CASES_PATH'")
-            }
-            return testCases.withEscapedParameter()
+            return AssetEnumerator().enumerate(TEST_CASES_PATH).withEscapedParameter()
         }
     }
 }

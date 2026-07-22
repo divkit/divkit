@@ -1,7 +1,5 @@
 package com.yandex.div
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.rule.baseRule
 import com.yandex.div.steps.imageLoaderScreenshot
 import com.yandex.divkit.demo.R
@@ -53,10 +51,8 @@ class Div2ImageLoaderScreenshotTest(private val case: String, escapedCase: Strin
 
         private const val TEST_CASES_PATH = "ui_test_data/image-loaders"
 
-        private val context: Context = ApplicationProvider.getApplicationContext()
-
         @JvmStatic
         @Parameterized.Parameters(name = "{1}")
-        fun cases() = AssetEnumerator(context).enumerate(TEST_CASES_PATH).withEscapedParameter()
+        fun cases() = AssetEnumerator().enumerate(TEST_CASES_PATH).withEscapedParameter()
     }
 }

@@ -40,14 +40,16 @@ class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<Integrat
 
     companion object {
 
-        private val context: Context get() = ApplicationProvider.getApplicationContext()
+        private val context: Context = ApplicationProvider.getApplicationContext()
 
         @JvmStatic
         @Parameters(name = "{0}")
         fun cases(): List<ParsingResult<IntegrationTestCase>> {
-            return AssetEnumerator(context).enumerate("integration_test_data").flatMap {
-                IntegrationTestCaseParser.parseCases(it, IOUtils.toString(context.assets.open(it)))
-            }
+            return AssetEnumerator()
+                .enumerate("integration_test_data")
+                .flatMap {
+                    IntegrationTestCaseParser.parseCases(it, IOUtils.toString(context.assets.open(it)))
+                }
         }
     }
 }

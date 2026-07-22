@@ -1,7 +1,5 @@
 package com.yandex.div
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
 import com.yandex.div.steps.divInput
@@ -39,16 +37,14 @@ class Div2InputHighlightScreenshotTest(case: String, escapedCase: String) {
     }
 
     companion object {
-        private const val TEST_CASES_PATH = "ui_test_data/input"
-
-        private const val CASE_NAME = "/div_input_highlight.json"
-
-        private val context: Context = ApplicationProvider.getApplicationContext()
 
         @JvmStatic
         @Parameterized.Parameters(name = "{1}")
-        fun cases() = AssetEnumerator(context).enumerate(TEST_CASES_PATH) { filename ->
-            filename.endsWith(CASE_NAME)
-        }.withEscapedParameter()
+        fun cases(): List<Array<String>> {
+            return AssetEnumerator()
+                .enumerate("ui_test_data/input")
+                .filter { filename -> filename.endsWith("/div_input_highlight.json") }
+                .withEscapedParameter()
+        }
     }
 }

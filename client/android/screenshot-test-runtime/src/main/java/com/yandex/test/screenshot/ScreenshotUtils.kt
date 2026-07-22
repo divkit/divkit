@@ -4,11 +4,9 @@ import android.view.View
 import androidx.test.platform.app.InstrumentationRegistry
 import java.io.File
 
-const val DIV_SCREENSHOT_CASE_EXTENSION = ".json"
-
 val String.caseName: String get() {
     return substringAfterLast(File.separator)
-        .substringBeforeLast(DIV_SCREENSHOT_CASE_EXTENSION)
+        .substringBeforeLast(".json")
 }
 
 fun captureScreenshots(
