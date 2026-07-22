@@ -4,10 +4,11 @@ import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.divkit.demo.utils.DownloadList
 
 class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLoader {
 
-    private val targets = TargetList()
+    private val targets = DownloadList<DivImageDownloadCallback>()
 
     override fun hasSvgSupport() = loader.hasSvgSupport()
 
@@ -47,31 +48,6 @@ class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLo
         override fun onError(e: Throwable?) {
             targets.remove(callback)
             callback.onError(e)
-        }
-    }
-
-    private inner class TargetList {
-
-        private val activeTargets = HashSet<DivImageDownloadCallback>()
-
-        val size get() = activeTargets.size
-
-        fun add(target: DivImageDownloadCallback) {
-            synchronized(this) {
-                activeTargets.add(target)
-            }
-        }
-
-        fun remove(target: DivImageDownloadCallback) {
-            synchronized(this) {
-                activeTargets.remove(target)
-            }
-        }
-
-        fun clean() {
-            synchronized(this) {
-                activeTargets.clear()
-            }
         }
     }
 }

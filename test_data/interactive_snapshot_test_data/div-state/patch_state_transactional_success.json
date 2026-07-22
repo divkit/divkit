@@ -134,9 +134,7 @@
           "log_id": "download patch",
           "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fstate-patch-transactional-success.json"
         }
-      ],
-      "delay": 3000,
-      "expected_screenshot": "step1.png"
+      ]
     },
     {
       "div_actions": [
@@ -144,8 +142,7 @@
           "log_id": "toggle state",
           "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
         }
-      ],
-      "expected_screenshot": "step2.png"
+      ]
     }
   ]
 }

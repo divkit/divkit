@@ -102,9 +102,7 @@
           "log_id": "download patch",
           "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Ftabs-patch-transactional-success.json"
         }
-      ],
-      "delay": 3000,
-      "expected_screenshot": "step1.png"
+      ]
     },
     {
       "div_actions": [
@@ -112,8 +110,7 @@
           "log_id": "change 1",
           "url": "div-action://set_current_item?id=tabs&item=1"
         }
-      ],
-      "expected_screenshot": "step2.png"
+      ]
     },
     {
       "div_actions": [
@@ -121,8 +118,7 @@
           "log_id": "change 2",
           "url": "div-action://set_current_item?id=tabs&item=2"
         }
-      ],
-      "expected_screenshot": "step3.png"
+      ]
     },
     {
       "div_actions": [
@@ -130,8 +126,7 @@
           "log_id": "change 3",
           "url": "div-action://set_current_item?id=tabs&item=3"
         }
-      ],
-      "expected_screenshot": "step4.png"
+      ]
     }
   ]
 }

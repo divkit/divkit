@@ -27,7 +27,7 @@ internal class ImageLoaderScreenshotSteps {
         val activity = activityRule.activity
         InstrumentationRegistry.getInstrumentation().runOnMainSync { activity.setDivData(casePath) }
 
-        waitForImages { activity }
+        waitForLoadings { activity }
         captureScreenshots(activity.divView, "$artifactsRelativePath/$loaderName", casePath)
     }
 }

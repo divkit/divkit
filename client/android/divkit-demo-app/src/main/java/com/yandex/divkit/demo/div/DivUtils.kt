@@ -9,8 +9,8 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.core.expression.evaluation.DictEvaluator
 import com.yandex.div.core.experiments.Experiment
+import com.yandex.div.core.expression.evaluation.DictEvaluator
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.evaluable.types.Color
@@ -23,14 +23,12 @@ import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.Expression.Companion.constant
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.markdown.DivMarkdownExtensionHandler
-import com.yandex.div.network.DefaultDivDownloader
 import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.shine.DivShineExtensionHandler
 import com.yandex.div.shine.DivShineLogger
@@ -43,8 +41,6 @@ import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTypedValue
-import com.yandex.div2.StrValue
-import com.yandex.div2.StrVariable
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.font.RobotoFlexTypefaceProvider
@@ -91,7 +87,7 @@ fun divConfiguration(
             flagPreferenceProvider.getExperimentFlag(Experiment.RENDER_EFFECT_ENABLED)
         )
         .tooltipRestrictor { _, _, _, _ -> true }
-        .divDownloader(DefaultDivDownloader(Container.httpClient))
+        .divDownloader(Container.downloader)
         .typefaceProvider(YandexSansDivTypefaceProvider(activity))
         .additionalTypefaceProviders(
             mapOf(

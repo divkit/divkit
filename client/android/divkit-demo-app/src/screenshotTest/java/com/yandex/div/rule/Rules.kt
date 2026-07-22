@@ -5,7 +5,7 @@ package com.yandex.div.rule
 import android.app.Activity
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.Div2ScreenshotTest
-import com.yandex.div.steps.waitForImages
+import com.yandex.div.steps.waitForLoadings
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.idling.waitForIdlingResource
@@ -30,7 +30,7 @@ fun screenshotRule(
     expectedSuite: String = "",
 ): TestRule {
     return screenshotRule(casePath, activityRule, relativePath, expectedSuite) {
-        waitForImages { activityRule.activity as? DivScreenshotActivity }
+        waitForLoadings { activityRule.activity as? DivScreenshotActivity }
     }
 }
 
