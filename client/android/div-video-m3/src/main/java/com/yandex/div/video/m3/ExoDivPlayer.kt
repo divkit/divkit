@@ -217,8 +217,10 @@ internal class ExoDivPlayer(
     }
 
     fun setTargetResolution(width: Int, height: Int) {
-        targetResolutionArea = width * height
+        val newTargetResolutionArea = width * height
+        if (targetResolutionArea == newTargetResolutionArea && currentSource != null) return
 
+        targetResolutionArea = newTargetResolutionArea
         applyMediaSource()
     }
 

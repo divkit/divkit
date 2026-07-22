@@ -166,8 +166,15 @@ internal class DivStateBinder @Inject constructor(
         val reusableIncomingView = newStateDiv?.let {
             divView.currentRebindReusableList?.getUniqueView(newStateDiv)
         }
+        val previousStateId = stateId
 
-        if (stateId != newState.stateId) {
+        // Publish the new state before binding children so nested set_state (e.g. video
+        // fatal/buffering actions) does not re-enter this binder as another state switch and
+        // recreate the child that will spawn a loop.
+        activeStateDiv = newStateDiv
+        currentStatePath = currentPath
+
+        if (previousStateId != newState.stateId) {
             incoming = newStateDiv?.let { getIncomingView(reusableIncomingView, it, resolver) }
 
             val (sceneRoot, parentTransitions) = outgoing?.let {
@@ -258,9 +265,6 @@ internal class DivStateBinder @Inject constructor(
                 viewBinder.get().bind(bindingContext, patchView, patchDiv, currentPath)
             }
         }
-
-        activeStateDiv = newStateDiv
-        currentStatePath = currentPath
 
         if (outgoing != null) {
             runtimeVisitor.createAndAttachRuntimesToState(divView, divState, path, resolver)
