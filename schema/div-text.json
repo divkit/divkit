@@ -321,6 +321,13 @@
             "web"
           ]
         },
+        "baseline_offset": {
+          "type": "number",
+          "$description": "translations.json#/div_text_image_baseline_offset",
+          "platforms": [
+            "web"
+          ]
+        },
         "indexing_direction": {
           "type": "string",
           "enum": [

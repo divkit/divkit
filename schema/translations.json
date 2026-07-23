@@ -2495,6 +2495,10 @@
     "en": "Vertical image alignment within the row.",
     "ru": "Вертикальное выравнивание изображения внутри строки."
   },
+  "div_text_image_baseline_offset": {
+    "en": "Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.",
+    "ru": "Вертикальное смещение базовой линии для картинки. Если параметр задан, то вертикальное выравнивание игнорируется и считается равным baseline."
+  },
   "div_text_image_height": {
     "en": "Image height.",
     "ru": "Высота изображения."

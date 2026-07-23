@@ -73,6 +73,8 @@
             svgFilterId: string;
             preloadRequired: boolean;
             verticalAlign: TextVerticalAlignment | undefined;
+            baselineOffset: string | undefined;
+            top: string | undefined;
             description: string;
             a11yAttrs?: Record<string, unknown>;
         };
@@ -407,6 +409,12 @@
                 let imageHeight = pxToEm(
                     (((item.image.height && item.image.height.value) || 20) * 10) / (textStyles2.font_size || 12)
                 );
+                let baselineOffset = item.image.baseline_offset !== undefined ? pxToEm(
+                    ((item.image.baseline_offset) * 10) / (textStyles2.font_size || 12)
+                ) : undefined;
+                let top = item.image.baseline_offset !== undefined ? pxToEm(
+                    ((-item.image.baseline_offset) * 10) / (textStyles2.font_size || 12)
+                ) : undefined;
                 const wrapperStyle: Style = {
                     'font-size': pxToEm(((Number(textStyles2.font_size) || 12) * 10) / fontSize)
                 };
@@ -437,7 +445,11 @@
                         wrapperStyle,
                         svgFilterId,
                         preloadRequired: Boolean(item.image.preload_required),
-                        verticalAlign: item.image.alignment_vertical,
+                        verticalAlign: item.image.baseline_offset !== undefined ?
+                            'baseline' :
+                            item.image.alignment_vertical,
+                        baselineOffset,
+                        top,
                         description,
                         a11yAttrs
                     }
@@ -573,6 +585,8 @@
                         align: item.image.verticalAlign,
                         crop: customLineHeight !== null
                     })} style={makeStyle({
+                        'vertical-align': customLineHeight && item.image.baselineOffset !== undefined ? 0 : item.image.baselineOffset,
+                        top: customLineHeight && item.image.baselineOffset !== undefined ? item.image.top : undefined,
                         width: item.image.width,
                         height: (customLineHeight && item.image.verticalAlign !== 'baseline') ? customLineHeight + 'em' : undefined
                     })}></span></span>
@@ -608,6 +622,8 @@
                         align: item.image.verticalAlign,
                         crop: customLineHeight !== null
                     })} style={makeStyle({
+                        'vertical-align': customLineHeight && item.image.baselineOffset !== undefined ? 0 : item.image.baselineOffset,
+                        top: customLineHeight && item.image.baselineOffset !== undefined ? item.image.top : undefined,
                         width: item.image.width,
                         height: (customLineHeight && item.image.verticalAlign !== 'baseline') ? customLineHeight + 'em' : undefined
                     })}><img

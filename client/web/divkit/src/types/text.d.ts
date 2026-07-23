@@ -95,6 +95,7 @@ export interface TextImage {
     tint_mode?: TintMode;
     preload_required?: BooleanInt;
     alignment_vertical?: TextVerticalAlignment;
+    baseline_offset?: number;
     indexing_direction?: TextIndexingDirection;
     accessibility?: TextImageAccessibility;
 }
