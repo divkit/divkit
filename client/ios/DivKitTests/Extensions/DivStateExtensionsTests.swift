@@ -168,14 +168,12 @@ final class DivStateExtensionsTests: XCTestCase {
       return textBlock.path
     }
 
-    try assertEqual(
-      getPathForText(index: 0),
-      .root + 0 + "container" + 0 + "test_prototype_id" + "state_item_1" + "text"
-    )
-    try assertEqual(
-      getPathForText(index: 1),
-      .root + 0 + "container" + 1 + "test_prototype_id" + "state_item_1" + "text"
-    )
+    let containerPath = UIElementPath.root + 0 + "container"
+    let expectedPath0 = containerPath + 0 + "test_prototype_id" + "state_item_1" + "text"
+    let expectedPath1 = containerPath + 1 + "test_prototype_id" + "state_item_1" + "text"
+
+    try assertEqual(getPathForText(index: 0), expectedPath0)
+    try assertEqual(getPathForText(index: 1), expectedPath1)
   }
 
   func test_accessibilityID_overridenId() throws {
