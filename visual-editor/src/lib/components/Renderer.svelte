@@ -1297,9 +1297,11 @@
                 onComponent,
                 platform: 'desktop',
                 extensions: new Map<string, DivExtensionClass>([
+                    ...(state.extensions ? state.extensions.entries() : []),
                     ['size_provider', SizeProvider],
                     ['lottie', Lottie],
                 ]),
+                customComponents: state.customComponents,
                 direction,
                 devtoolCreateHierarchy: 'eager',
                 typefaceProvider(fontFamily) {

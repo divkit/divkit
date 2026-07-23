@@ -35,7 +35,13 @@
         }
 
         if (supportedComponents.has(type)) {
-            return $l10n(`components.${type}`);
+            let res = $l10n(`components.${type}`);
+
+            if (type === 'custom') {
+                res += ` (${leaf.props.json.custom_type || 'unknown'})`;
+            }
+
+            return res;
         }
 
         return type;

@@ -1,6 +1,7 @@
 import { mount, unmount } from 'svelte';
 import { get, type Unsubscriber } from 'svelte/store';
-import type { VideoSource } from '@divkitframework/divkit/typings/common';
+import type { DivExtensionClass, VideoSource } from '@divkitframework/divkit/typings/common';
+import type { CustomComponentDescription } from '@divkitframework/divkit/typings/custom';
 import App from './App.svelte';
 import type { Loc } from './lib/utils/stringifyWithLoc';
 import type { TypedRange } from './lib/data/editor';
@@ -177,6 +178,8 @@ export interface DivProEditorOptions {
     value?: string;
     card?: Card;
     theme?: Theme;
+    extensions?: Map<string, DivExtensionClass>;
+    customComponents?: Map<string, CustomComponentDescription>;
     layout?: Layout;
     locale?: Locale;
     api?: DivProEditorApi;
@@ -246,6 +249,9 @@ export const DivProEditor = {
         state.safeAreaEmulationEnabled.set(Boolean(opts.safeAreaEmulation));
         state.valueFilters = opts.valueFilters;
         state.fitViewportOnCreate = opts.fitViewportOnCreate;
+
+        state.extensions = opts.extensions;
+        state.customComponents = opts.customComponents;
 
         if (Array.isArray(json?.card?.variables)) {
             const localPalette = json.card.variables.find((it?: JsonVariable) => it?.type === 'dict' && it.name === 'local_palette');

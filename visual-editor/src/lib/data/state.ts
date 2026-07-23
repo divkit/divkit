@@ -1,8 +1,9 @@
 import { derived, get, writable, type Writable } from 'svelte/store';
-import type { DivJson, VariableTrigger } from '@divkitframework/divkit/typings/common';
+import type { DivExtensionClass, DivJson, VariableTrigger } from '@divkitframework/divkit/typings/common';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import { parseExpression, walkExpression } from '@divkitframework/divkit/client-devtool';
+import type { CustomComponentDescription } from '@divkitframework/divkit/typings/custom';
 import type { PaletteItem } from './palette';
 import { parseVariableValue, type JsonVariable, type Variable } from './customVariables';
 import { type JsonTimer, type Timer } from './timers';
@@ -126,6 +127,9 @@ export class State {
     previewThemeStore = writable<'light' | 'dark'>('light');
     readOnly = writable<boolean>(false);
     themeStore = writable<'light' | 'dark'>('light');
+
+    extensions?: Map<string, DivExtensionClass>;
+    customComponents?: Map<string, CustomComponentDescription>;
 
     divjsonStore = derived(this.tree, root => {
         const {

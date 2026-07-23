@@ -38,10 +38,26 @@ declare global {
     }
 }
 
+class OldCustomCard1 extends HTMLElement {
+    constructor() {
+        super();
+
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.textContent = 'hi, i\'m custom card';
+    }
+}
+
+customElements.define('custom-card', OldCustomCard1);
+
 const editor = window.editor = DivProEditor.init({
     renderTo: document.getElementById('app') as HTMLElement,
     locale: detectLocale(),
     rootConfigurable: true,
+    customComponents: new Map([
+        ['custom_card', {
+            element: 'custom-card'
+        }],
+    ]),
     fileLimits: {
         image: {
             warn: 1000,
@@ -151,6 +167,10 @@ const editor = window.editor = DivProEditor.init({
                                             font_weight: 'medium',
                                             text_color: '#000',
                                             type: 'text'
+                                        },
+                                        {
+                                            type: 'custom',
+                                            custom_type: 'custom_card'
                                         },
                                         {
                                             height: {
