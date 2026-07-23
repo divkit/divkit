@@ -1,7 +1,10 @@
 package com.yandex.div
 
-internal fun List<String>.withEscapedParameter(): List<Array<String>> {
+internal fun List<String>.withEscapedParameter(prefix: String = ""): List<Array<String>> {
     return map { case ->
-        arrayOf(case, case.replace('/', '_').replace(' ', '_'))
+        arrayOf(
+            case,
+            case.removePrefix(prefix).replace('/', '_').replace(' ', '_')
+        )
     }
 }

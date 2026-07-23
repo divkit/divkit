@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.image
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -24,7 +25,7 @@ import com.yandex.div2.DivBase
 internal fun DivImageContent(
     modifier: Modifier,
     data: DivBase,
-    model: Any,
+    imageUrl: Uri,
     contentScale: ContentScale,
     alignment: Alignment,
     placeholderColor: Color,
@@ -33,18 +34,6 @@ internal fun DivImageContent(
     preview: @Composable () -> Any?
 ) {
     val imageStateStorage = LocalDivViewContext.current.component.imageStateStorage
-
-    val imageRequestParams = ImageRequestParams(
-        data = model,
-        transformations = transformations
-    )
-
-    DisposableEffect(imageRequestParams) {
-        onDispose {
-            imageStateStorage.setIsLoaded(data, false)
-        }
-    }
-
     val isImageLoaded = imageStateStorage.isLoaded(data)
     val previewModel = if (isImageLoaded) null else preview()
     val previewRequest = if (previewModel == null) {
@@ -67,13 +56,12 @@ internal fun DivImageContent(
     Box(modifier = backgroundModifier) {
         val imageLoader = divContext.component.imageLoader
         if (!isImageLoaded && previewRequest != null) {
-            val previewPainter = rememberAsyncImagePainter(
-                model = previewRequest,
-                imageLoader = imageLoader,
-            )
             Image(
                 modifier = Modifier.fillMaxSize(),
-                painter = previewPainter,
+                painter = rememberAsyncImagePainter(
+                    model = previewRequest,
+                    imageLoader = imageLoader
+                ),
                 contentDescription = null,
                 contentScale = contentScale,
                 alignment = alignment,
@@ -81,22 +69,37 @@ internal fun DivImageContent(
             )
         }
 
-        val imageRequest = rememberImageRequest(imageRequestParams)
-        val imagePainter = rememberAsyncImagePainter(
-            model = imageRequest,
-            imageLoader = imageLoader,
-            onSuccess = {
-                imageStateStorage.setIsLoaded(data, true)
+        if (imageUrl.isValid()) {
+            val imageRequestParams = ImageRequestParams(
+                data = imageUrl,
+                transformations = transformations
+            )
+            val imagePainter = rememberAsyncImagePainter(
+                model = rememberImageRequest(imageRequestParams),
+                imageLoader = imageLoader,
+                onSuccess = {
+                    imageStateStorage.setIsLoaded(data, true)
+                }
+            )
+            imagePainter.observeNetworkRestoration()
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = imagePainter,
+                contentDescription = null,
+                contentScale = contentScale,
+                alignment = alignment,
+                colorFilter = colorFilter
+            )
+            DisposableEffect(imageRequestParams) {
+                onDispose {
+                    imageStateStorage.setIsLoaded(data, false)
+                }
             }
-        )
-        imagePainter.observeNetworkRestoration()
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            painter = imagePainter,
-            contentDescription = null,
-            contentScale = contentScale,
-            alignment = alignment,
-            colorFilter = colorFilter
-        )
+        }
     }
+}
+
+// TODO: remove when div-image.image_url becomes optional
+private fun Uri.isValid(): Boolean {
+    return toString() != "empty://"
 }

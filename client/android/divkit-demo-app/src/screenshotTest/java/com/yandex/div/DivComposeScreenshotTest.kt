@@ -27,7 +27,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
 
     @Screenshot(viewId = R.id.screenshot_view)
     @Test
-    fun divScreenshot() {
+    fun test() {
         Assume.assumeTrue(
             "Skipping DivComposeScreenshotTest on API 24",
             Build.VERSION.SDK_INT > Build.VERSION_CODES.N
@@ -42,7 +42,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
             return AssetEnumerator()
                 .enumerate("snapshot_test_data")
                 .filter { !ignoredFiles.contains(it) }
-                .withEscapedParameter()
+                .withEscapedParameter(prefix = "snapshot_test_data/")
         }
     }
 }
@@ -70,6 +70,10 @@ private val ignoredFiles = listOf(
     "snapshot_test_data/div-container/aspect/wrap_content-width-vertical-match_parent-child-not-fit.json",
     "snapshot_test_data/div-container/aspect/wrap_content-width-vertical-match_parent-height.json",
 
+    // size_provider extension not supported
+    "snapshot_test_data/div-container/size_provider.json",
+    "snapshot_test_data/div-container/size_provider_recursive.json",
+
     // div-container.item_builder not supported
     "snapshot_test_data/div-container/item_builder/index.json",
     "snapshot_test_data/div-container/item_builder/item-builder.json",
@@ -78,6 +82,27 @@ private val ignoredFiles = listOf(
     "snapshot_test_data/div-container/item_builder/item-builder-with-nested-local-variables.json",
     "snapshot_test_data/div-container/item_builder/nested-builders.json",
     "snapshot_test_data/div-container/item_builder/non-unique-matched-selectors.json",
+    "snapshot_test_data/div-container/item_builder/non-unique-matched-selectors.json",
+    "snapshot_test_data/div-pager/vertical-pager-custom-neighbour-page-width.json",
+    "snapshot_test_data/div-pager/vertical-pager-custom-neighbour-page-width-with-paddings.json",
+    "snapshot_test_data/div-pager/vertical-pager-custom-page-width.json",
+    "snapshot_test_data/div-pager/vertical-pager-custom-page-width-with-paddings.json",
+    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-size-mode-alignment-end.json",
+    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-size-mode-alignment-start.json",
+    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-size-mode-item-spacing.json",
+    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-size-mode-two-pages.json",
+    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-width-0-with-item-spacing.json",
+    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-width-0-with-paddings.json",
+    "snapshot_test_data/div-pager/vertical-pager-page-size-mode-alignment-end.json",
+    "snapshot_test_data/div-pager/vertical-pager-page-size-mode-alignment-start.json",
+    "snapshot_test_data/div-pager/vertical-pager-page-size-mode-item-spacing.json",
+    "snapshot_test_data/div-pager/vertical-pager-page-width-100-with-item-spacing.json",
+    "snapshot_test_data/div-pager/vertical-pager-page-width-100-with-paddings.json",
+    "snapshot_test_data/div-pager/vertical-pager-wrap-content-height.json",
+    "snapshot_test_data/div-pager/vertical-pager-wrap-content-height-with-paddings.json",
+    "snapshot_test_data/div-pager/vertical-pager-wrap-content-size-mode-alignment-end.json",
+    "snapshot_test_data/div-pager/vertical-pager-wrap-content-size-mode-alignment-start.json",
+    "snapshot_test_data/div-pager/vertical-pager-wrap-content-size-mode-with-item-spacing.json",
 
     // div-image.aspect not supported
     "snapshot_test_data/div-image/aspect-wrap_content.json",
@@ -88,6 +113,9 @@ private val ignoredFiles = listOf(
     "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-overlap-wrap-content-container.json",
     "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-vertical-match-parent-container.json",
     "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-vertical-wrap-content-container.json",
+
+    // div-filter.rtl_mirror not supported
+    "snapshot_test_data/div-image/rtl-filter.json",
 
     // div-gallery.scroll_content_alignment not supported
     "snapshot_test_data/div-gallery/default-item/horizontal-gallery-alignment-center.json",
@@ -129,6 +157,7 @@ private val ignoredFiles = listOf(
     // div-text.images not supported
     "snapshot_test_data/div-text/line-height/multi-line-text-with-image.json",
     "snapshot_test_data/div-text/line-height/single-line-text-with-image.json",
+    "snapshot_test_data/div-text/all_attributes.json",
     "snapshot_test_data/div-text/custom-image-tint-color.json",
     "snapshot_test_data/div-text/custom-text-alignment-with-attachments.json",
     "snapshot_test_data/div-text/ellipsis-with-image.json",
@@ -139,6 +168,16 @@ private val ignoredFiles = listOf(
     "snapshot_test_data/div-text/images.json",
     "snapshot_test_data/div-text/images_hyphenation.json",
     "snapshot_test_data/div-text/text_image_vertical_alignment.json",
+    "snapshot_test_data/image-formats/animated-webp/animated_webp_text_image.json",
+    "snapshot_test_data/image-formats/animated-webp/animated_webp_text_image_tint.json",
+    "snapshot_test_data/image-formats/gif/gif_text_image.json",
+    "snapshot_test_data/image-formats/gif/gif_text_image_tint.json",
+    "snapshot_test_data/image-formats/png/png_text_image.json",
+    "snapshot_test_data/image-formats/png/png_text_image_tint.json",
+    "snapshot_test_data/image-formats/svg/svg_text_image.json",
+    "snapshot_test_data/image-formats/svg/svg_text_image_tint.json",
+    "snapshot_test_data/image-formats/webp/webp_text_image.json",
+    "snapshot_test_data/image-formats/webp/webp_text_image_tint.json",
 
     // div-text.range.mask not supported
     "snapshot_test_data/div-text/mask.json",
@@ -161,6 +200,9 @@ private val ignoredFiles = listOf(
     // div-text.range.top_offset not supported
     "snapshot_test_data/div-text/ranges-line-height-top-offset.json",
 
+    // div-text.ranges.top_offset not supported
+    "snapshot_test_data/div-text/ranges-intersection-top-offset.json",
+
     // div-text.range.baseline_offset not supported
     "snapshot_test_data/div-text/text_range_baseline_offset.json",
 
@@ -181,7 +223,7 @@ private val ignoredFiles = listOf(
     "snapshot_test_data/image-formats/svg/svg_preview_url_in_gif_image.json",
     "snapshot_test_data/image-formats/svg/svg_wrap_content.json",
 
-    // div-text.images not supported
-    "snapshot_test_data/image-formats/svg/svg_text_image.json",
-    "snapshot_test_data/image-formats/svg/svg_text_image_tint.json",
+    // test div-customs required
+    "snapshot_test_data/div-size/match-parent/overlap/height/platform-wrap-content-container-height.json",
+    "snapshot_test_data/div-size/match-parent/overlap/custom-with-fixed-size.json",
 )

@@ -7,7 +7,6 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.decodePreview
 import com.yandex.div.compose.images.observedContentScale
 import com.yandex.div.compose.utils.observedAlignment
-import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivGifImage
 
 @Composable
@@ -18,7 +17,7 @@ internal fun DivGifImageView(
     DivImageContent(
         modifier = modifier,
         data = data,
-        model = data.gifUrl.observedValue(),
+        imageUrl = data.gifUrl.observedValue(),
         contentScale = data.scale.observedContentScale(),
         alignment = observedAlignment(
             data.contentAlignmentHorizontal,

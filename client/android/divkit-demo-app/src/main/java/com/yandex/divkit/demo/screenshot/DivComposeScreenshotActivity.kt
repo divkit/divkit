@@ -17,6 +17,7 @@ import coil3.fetch.SourceFetchResult
 import coil3.request.Options
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.images.gifDecoderFactory
@@ -45,38 +46,27 @@ class DivComposeScreenshotActivity : ComponentActivity() {
     private lateinit var data: DivData
 
     val imageLoadingTracker = ComposeImageLoadingTracker()
-
     val composeIdlingTracker = ComposeSnapshotIdlingResource()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         composeIdlingTracker.start()
 
-        val imageLoaderConfiguration = object: ImageLoaderConfiguration {
-            override val eventListener: EventListener
-                get() = imageLoadingTracker
-
-            override fun applyComponents(builder: ComponentRegistry.Builder) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    builder.add(gifDecoderFactory())
-                } else {
-                    builder.add(GifFirstFrameDecoder.Factory())
-                }
-            }
-        }
-
         divContext = DivContext(
             baseContext = this,
             configuration = DivComposeConfiguration(
                 fontSourceProvider = ComposeFontSourceProvider(),
+                imageLoaderConfiguration = TestImageLoaderConfiguration(
+                    eventListener = imageLoadingTracker
+                ),
                 playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(this)),
-                imageLoaderConfiguration = imageLoaderConfiguration,
+                reporter = FailingReporter(),
                 extensionHandlers = mapOf(
                     // Compose has no markdown extension; this stand-in makes the shared
                     // markdown is_enabled case visible on Compose (red when applied).
                     "markdown" to TestSolidBackgroundComposeExtensionHandler(),
                 ),
-            ),
+            )
         )
 
         intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {
@@ -156,5 +146,27 @@ private class GifFirstFrameDecoder(
         private companion object {
             val GIF_HEADER = "GIF8".encodeUtf8()
         }
+    }
+}
+
+private class TestImageLoaderConfiguration(
+    override val eventListener: EventListener
+) : ImageLoaderConfiguration {
+    override fun applyComponents(builder: ComponentRegistry.Builder) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            builder.add(gifDecoderFactory())
+        } else {
+            builder.add(GifFirstFrameDecoder.Factory())
+        }
+    }
+}
+
+private class FailingReporter : DivReporter() {
+    override fun reportError(message: String) {
+        throw RuntimeException(message)
+    }
+
+    override fun reportError(e: Exception) {
+        throw e
     }
 }
