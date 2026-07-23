@@ -623,7 +623,7 @@ extension TextFieldBlock.KeyboardType {
 extension UserInterfaceAction {
   fileprivate func withParameter(name: String, value: String) -> UserInterfaceAction {
     UserInterfaceAction(
-      url: url!.URLByAddingGETParameters([name: value]),
+      url: url!.upsertingQueryParams([name: value]),
       path: path
     )
   }

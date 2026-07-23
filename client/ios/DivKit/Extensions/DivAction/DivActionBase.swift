@@ -75,7 +75,7 @@ extension URL {
     guard scheme == "div-action", host == "set_state" else {
       return self
     }
-    return URLByAddingGETParameters(
+    return upsertingQueryParams(
       ["card_id": cardId].compactMapValues { $0 }
     )
   }
