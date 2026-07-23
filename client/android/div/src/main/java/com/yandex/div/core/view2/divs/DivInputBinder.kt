@@ -160,12 +160,20 @@ internal class DivInputBinder @Inject constructor(
     ) {
         val resolver = bindingContext.expressionResolver
         val nativeBackgroundColor = newDiv.nativeInterface?.color?.evaluate(resolver) ?: Color.TRANSPARENT
-        val background = if (nativeBackgroundColor == Color.TRANSPARENT) {
+        val nativeBackgroundOverlay = if (nativeBackgroundColor == Color.TRANSPARENT) {
             null
         } else {
             nativeBackground?.apply { setTint(nativeBackgroundColor) }
         }
-        baseBinder.bindBackground(bindingContext, this, newDiv, oldDiv, expressionSubscriber, background)
+        baseBinder.bindBackground(
+            bindingContext,
+            this,
+            newDiv,
+            oldDiv,
+            expressionSubscriber,
+            backgroundUnderlay,
+            nativeBackgroundOverlay
+        )
     }
 
     private fun DivInputView.observeBaseTextProperties(div: DivInput, oldDiv: DivInput?, resolver: ExpressionResolver) {

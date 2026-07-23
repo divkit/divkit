@@ -73,7 +73,7 @@ internal class DivBaseBinder @Inject constructor(
         bindAccessibility(div, oldDiv, resolver, subscriber)
         bindAlpha(div, oldDiv, resolver, subscriber)
 
-        bindBackground(bindingContext, div, oldDiv, subscriber)
+        bindBackground(bindingContext, div, oldDiv, subscriber, true, backgroundUnderlay, null)
         bindBorder(bindingContext, div)
         bindPaddings(div, oldDiv, resolver, subscriber)
 
@@ -259,9 +259,10 @@ internal class DivBaseBinder @Inject constructor(
         newDiv: DivBase,
         oldDiv: DivBase?,
         subscriber: ExpressionSubscriber,
-        additionalLayer: Drawable?
+        underlay: Drawable?,
+        overlay: Drawable?,
     ) {
-        target.bindBackground(context, newDiv, oldDiv, subscriber, false, additionalLayer)
+        target.bindBackground(context, newDiv, oldDiv, subscriber, false, underlay, overlay)
         target.bindPaddings(newDiv, oldDiv, context.expressionResolver, subscriber)
     }
 
@@ -271,7 +272,8 @@ internal class DivBaseBinder @Inject constructor(
         oldDiv: DivBase?,
         subscriber: ExpressionSubscriber,
         checkEquality: Boolean = true,
-        additionalLayer: Drawable? = null
+        underlay: Drawable? = null,
+        overlay: Drawable? = null,
     ) {
         val newBackground = newDiv.background ?: emptyList()
         val oldBackground = oldDiv?.background ?: emptyList()
@@ -292,7 +294,8 @@ internal class DivBaseBinder @Inject constructor(
             newFocusBackground,
             oldFocusBackground,
             subscriber,
-            additionalLayer
+            underlay,
+            overlay,
         )
     }
 
