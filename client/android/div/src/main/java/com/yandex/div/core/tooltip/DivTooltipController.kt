@@ -18,6 +18,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.core.os.postDelayed
 import androidx.core.view.children
 import com.yandex.div.R
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
@@ -48,6 +49,7 @@ internal typealias CreatePopupCall = (contentView: View, width: Int, height: Int
 
 private const val CANT_FIND_ON_BACKPRESS_DISPATCHER =
     "Can't find onBackPressedDispatcher to set on back press listener on tooltip."
+
 @Mockable
 @DivScope
 internal class DivTooltipController @VisibleForTesting constructor(
@@ -152,9 +154,50 @@ internal class DivTooltipController @VisibleForTesting constructor(
         return true
     }
 
+    fun handleConfigurationChange(divView: Div2View) {
+        tooltips.toList().forEach { tooltip ->
+            if (tooltip.bindingContext.divView != divView) {
+                return@forEach
+            }
+            if (!tooltip.popupWindow.isShowing) {
+                return@forEach
+            }
+
+            startAnchorPositionTracking(tooltip)
+        }
+    }
+
+    private fun startAnchorPositionTracking(tooltip: TooltipData) {
+        val popup = tooltip.popupWindow
+        val tooltipContainer = popup.contentView as? DivTooltipContainer ?: return
+        val tooltipView = tooltipContainer.tooltipView ?: return
+        val divTooltip = tooltip.divTooltip
+        val divView = tooltip.bindingContext.divView
+        val resolver = tooltip.bindingContext.expressionResolver
+
+        tooltip.stopAnchorTracking()
+        tooltip.anchorTrackingDisposable = TooltipAnchorTracker(
+            tooltip = tooltip,
+            popupWindow = popup,
+            handler = mainThreadHandler,
+            onAnchorPositionChanged = {
+                applyTooltipPopupPosition(
+                    popup = popup,
+                    tooltipContainer = tooltipContainer,
+                    tooltipView = tooltipView,
+                    anchor = tooltip.anchor,
+                    divTooltip = divTooltip,
+                    divView = divView,
+                    resolver = resolver,
+                )
+            },
+        )
+    }
+
     private fun dismissTooltip(tooltip: TooltipData): String? {
         tooltip.apply {
             dismissed = true
+            stopAnchorTracking()
             ticket?.cancel()
             return if (popupWindow.isShowing) {
                 popupWindow.clearAnimation()
@@ -173,6 +216,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
 
     fun clear() {
         tooltips.toList().forEach {
+            it.stopAnchorTracking()
             it.popupWindow.dismiss()
             it.ticket?.cancel()
         }
@@ -235,7 +279,6 @@ internal class DivTooltipController @VisibleForTesting constructor(
             touchTranslator = TouchTranslator(anchor),
             popup = popup,
         )
-        var isSubstrateSystemBars = false
         popup.apply {
             isTouchable = true
             isOutsideTouchable = divTooltip.shouldDismissByOutsideTouch(resolver)
@@ -262,7 +305,6 @@ internal class DivTooltipController @VisibleForTesting constructor(
             if (hasSubstrate && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
                 isAttachedInDecor = true
                 isClippingEnabled = false
-                isSubstrateSystemBars = true
             }
         }
         val onBackPressedCallback = createOnBackPressCallback(divTooltip, div2View, scopeId)
@@ -272,6 +314,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
             bindingContext = context,
             divTooltip = divTooltip,
             popupWindow = popup,
+            anchor = anchor,
             ticket = null,
             onBackPressedCallback = onBackPressedCallback
         )
@@ -282,6 +325,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
             }
         }
         popup.setOnDismissListener {
+            tooltipData.stopAnchorTracking()
             tooltips.remove(tooltipData)
             stopVisibilityTracking(context, divTooltip.div)
             divVisibilityActionTracker.getDivWithWaitingDisappearActions()[tooltipContainer]?.let {
@@ -295,50 +339,16 @@ internal class DivTooltipController @VisibleForTesting constructor(
             if (!hasFailures && !tooltipData.dismissed && anchor.isAttachedToWindow
                     && tooltipRestrictor.canShowTooltip(div2View, anchor, divTooltip, multiple, scopeId)) {
                 tooltipContainer.doOnActualLayout {
-                    val windowFrame = div2View.getWindowFrame()
-                    val location = calcPopupLocation(tooltipView, anchor, divTooltip, resolver)
-                    val tooltipWidth = minOf(tooltipView.width, windowFrame.width())
-                    val tooltipHeight = minOf(tooltipView.height, windowFrame.height())
-
-                    if (tooltipWidth < tooltipView.width) {
-                        errorCollectors.getOrCreate(div2View.dataTag, div2View.divData)
-                                .logWarning(Throwable("Tooltip width > screen size, width was changed"))
-                    }
-                    if (tooltipHeight < tooltipView.height) {
-                        errorCollectors.getOrCreate(div2View.dataTag, div2View.divData)
-                                .logWarning(Throwable("Tooltip height > screen size, height was changed"))
-                    }
-
-                    if (hasSubstrate) {
-                        val windowLocation = if (isSubstrateSystemBars) {
-                            Point(0, 0)
-                        } else {
-                            Point(windowFrame.left, windowFrame.top)
-                        }
-
-                        popup.update(0, 0, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                        tooltipContainer.setTooltipPosition(
-                            x = location.x - windowLocation.x,
-                            y = location.y - windowLocation.y,
-                            width = tooltipWidth,
-                            height = tooltipHeight
-                        )
-
-                        bringToTopView?.let {
-                            val locationArray = IntArray(2)
-                            bringToTopView.getLocationOnScreen(locationArray)
-                            val location = Point(locationArray[0], locationArray[1])
-
-                            tooltipContainer.setBringToTopPosition(
-                                x = location.x - windowLocation.x,
-                                y = location.y - windowLocation.y,
-                                width = it.width,
-                                height = it.height,
-                            )
-                        }
-                    } else {
-                        popup.update(location.x, location.y, tooltipWidth, tooltipHeight)
-                    }
+                    applyTooltipPopupPosition(
+                        popup = popup,
+                        tooltipContainer = tooltipContainer,
+                        tooltipView = tooltipView,
+                        anchor = anchor,
+                        divTooltip = divTooltip,
+                        divView = div2View,
+                        resolver = resolver,
+                        logSizeWarnings = true,
+                    )
                     startVisibilityTracking(context, div, tooltipContainer)
                     tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
                 }
@@ -368,6 +378,67 @@ internal class DivTooltipController @VisibleForTesting constructor(
         tooltips.add(tooltipData)
     }
 
+    private fun applyTooltipPopupPosition(
+        popup: PopupWindow,
+        tooltipContainer: DivTooltipContainer,
+        tooltipView: View,
+        anchor: View,
+        divTooltip: DivTooltip,
+        divView: Div2View,
+        resolver: ExpressionResolver,
+        logSizeWarnings: Boolean = false,
+    ) {
+        val windowFrame = divView.getWindowFrame()
+        val location = calcPopupLocation(tooltipView, anchor, divTooltip, resolver)
+        val tooltipWidth = minOf(tooltipView.width, windowFrame.width())
+        val tooltipHeight = minOf(tooltipView.height, windowFrame.height())
+
+        if (logSizeWarnings) {
+            if (tooltipWidth < tooltipView.width) {
+                errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+                    .logWarning(Throwable("Tooltip width > screen size, width was changed"))
+            }
+            if (tooltipHeight < tooltipView.height) {
+                errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+                    .logWarning(Throwable("Tooltip height > screen size, height was changed"))
+            }
+        }
+
+        val hasSubstrate = divTooltip.substrateDiv != null
+        if (hasSubstrate) {
+            val isSubstrateSystemBars = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
+            val windowLocation = if (isSubstrateSystemBars) {
+                Point(0, 0)
+            } else {
+                Point(windowFrame.left, windowFrame.top)
+            }
+            popup.update(
+                0, 0,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            tooltipContainer.setTooltipPosition(
+                x = location.x - windowLocation.x,
+                y = location.y - windowLocation.y,
+                width = tooltipWidth,
+                height = tooltipHeight
+            )
+            divTooltip.bringToTopId?.let { bringToTopId ->
+                findBringToTopView(bringToTopId, divView)?.let { bringToTopView ->
+                    val locationArray = IntArray(2)
+                    bringToTopView.getLocationOnScreen(locationArray)
+                    tooltipContainer.setBringToTopPosition(
+                        x = locationArray[0] - windowLocation.x,
+                        y = locationArray[1] - windowLocation.y,
+                        width = bringToTopView.width,
+                        height = bringToTopView.height,
+                    )
+                }
+            }
+        } else {
+            popup.update(location.x, location.y, tooltipWidth, tooltipHeight)
+        }
+    }
     private fun createOnBackPressCallback(divTooltip: DivTooltip, divView: Div2View, scopeId: String?) =
         if (accessibilityStateProvider.isAccessibilityEnabled(divView.getContext())) {
             object : OnBackPressedCallback(true) {
@@ -409,10 +480,17 @@ internal class TooltipData(
     val bindingContext: BindingContext,
     val divTooltip: DivTooltip,
     val popupWindow: SafePopupWindow,
+    val anchor: View,
     var ticket: DivPreloader.Ticket? = null,
     val onBackPressedCallback: OnBackPressedCallback?,
     var dismissed: Boolean = false,
-)
+    var anchorTrackingDisposable: Disposable? = null,
+) {
+    fun stopAnchorTracking() {
+        anchorTrackingDisposable?.close()
+        anchorTrackingDisposable = null
+    }
+}
 
 private class PopupWindowTouchListener(
     private val tooltipContainer: DivTooltipContainer,

@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.PopupWindow
 import com.yandex.div.R
 import com.yandex.div.core.DivPreloader
@@ -31,6 +32,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
@@ -69,18 +71,43 @@ class DivTooltipControllerTest {
 
     private val tooltips = mutableListOf<DivTooltip>()
 
+    private val anchorLayoutListeners = mutableListOf<View.OnLayoutChangeListener>()
+    private val anchorPreDrawListeners = mutableListOf<ViewTreeObserver.OnPreDrawListener>()
+    private val tooltipContainerLayoutListeners = mutableListOf<View.OnLayoutChangeListener>()
+
+    private val viewTreeObserver = mock<ViewTreeObserver> {
+        on { isAlive } doReturn true
+        on { addOnPreDrawListener(any()) } doAnswer { inv ->
+            anchorPreDrawListeners.add(inv.arguments[0] as ViewTreeObserver.OnPreDrawListener)
+            null
+        }
+        on { removeOnPreDrawListener(any()) } doAnswer { inv ->
+            anchorPreDrawListeners.remove(inv.arguments[0] as ViewTreeObserver.OnPreDrawListener)
+            null
+        }
+    }
+
     private val anchor = mock<View> {
         on { getTag(R.id.div_tooltips_tag) } doReturn tooltips
         on { resources } doReturn resources
         on { width } doReturn 300
         on { height } doReturn 100
         on { isAttachedToWindow } doReturn true
+        on { viewTreeObserver } doReturn viewTreeObserver
         on {
             getLocationInWindow(any())
         }.doAnswer { inv ->
             val location = inv.arguments[0] as IntArray
             location[0] = 100
             location[1] = 200
+            null
+        }
+        on { addOnLayoutChangeListener(any()) } doAnswer { inv ->
+            anchorLayoutListeners.add(inv.arguments[0] as View.OnLayoutChangeListener)
+            null
+        }
+        on { removeOnLayoutChangeListener(any()) } doAnswer { inv ->
+            anchorLayoutListeners.remove(inv.arguments[0] as View.OnLayoutChangeListener)
             null
         }
     }
@@ -106,9 +133,18 @@ class DivTooltipControllerTest {
 
     private val tooltipWrapper = mock<DivTooltipContainer> {
         on { tooltipView } doReturn tooltipView
+        on { context } doReturn activity
         on { isLayoutRequested } doReturn false
         on { width } doReturn 500
         on { height } doReturn 500
+        on { addOnLayoutChangeListener(any()) } doAnswer { inv ->
+            tooltipContainerLayoutListeners.add(inv.arguments[0] as View.OnLayoutChangeListener)
+            null
+        }
+        on { removeOnLayoutChangeListener(any()) } doAnswer { inv ->
+            tooltipContainerLayoutListeners.remove(inv.arguments[0] as View.OnLayoutChangeListener)
+            null
+        }
     }
 
     private val divTooltipViewBuilder = mock<DivTooltipViewBuilder> {
@@ -141,6 +177,8 @@ class DivTooltipControllerTest {
     private val dismissListener = argumentCaptor<PopupWindow.OnDismissListener>()
     private val popupWindow = mock<SafePopupWindow> {
         on { setOnDismissListener(dismissListener.capture()) } doAnswer { null }
+        on { contentView } doReturn tooltipWrapper
+        on { isShowing } doReturn true
 
         on { dismiss() } doAnswer {
             dismissListener.firstValue.onDismiss()
@@ -296,6 +334,113 @@ class DivTooltipControllerTest {
 
         Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
         verify(popupWindow, never()).showAtLocation(any(), any(), any(), any())
+    }
+
+    @Test
+    fun `handleConfigurationChange starts anchor tracking and applies position`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+        reset(popupWindow)
+        whenever(popupWindow.isShowing).doReturn(true)
+        whenever(popupWindow.contentView).doReturn(tooltipWrapper)
+
+        underTest.handleConfigurationChange(div2View)
+
+        verify(popupWindow, atLeastOnce()).update(any(), any(), any(), any())
+        Assert.assertNotNull(underTest.captureCurrentTooltips().first().anchorTrackingDisposable)
+        Assert.assertTrue(anchorLayoutListeners.isNotEmpty())
+        Assert.assertTrue(anchorPreDrawListeners.isNotEmpty())
+    }
+
+    @Test
+    fun `handleConfigurationChange reapplies position when anchor moves`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+        underTest.handleConfigurationChange(div2View)
+        reset(popupWindow)
+        whenever(popupWindow.isShowing).doReturn(true)
+        whenever(popupWindow.contentView).doReturn(tooltipWrapper)
+
+        whenever(anchor.getLocationInWindow(any())).doAnswer { inv ->
+            val location = inv.arguments[0] as IntArray
+            location[0] = 150
+            location[1] = 250
+            null
+        }
+        anchorLayoutListeners.toList().forEach { listener ->
+            listener.onLayoutChange(anchor, 0, 0, 300, 100, 0, 0, 300, 100)
+        }
+
+        verify(popupWindow).update(any(), any(), any(), any())
+    }
+
+    @Test
+    fun `handleConfigurationChange does not track hidden tooltip`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+        whenever(popupWindow.isShowing).doReturn(false)
+
+        underTest.handleConfigurationChange(div2View)
+
+        Assert.assertNull(underTest.captureCurrentTooltips().first().anchorTrackingDisposable)
+        Assert.assertTrue(anchorLayoutListeners.isEmpty())
+        Assert.assertTrue(anchorPreDrawListeners.isEmpty())
+    }
+
+    @Test
+    fun `handleConfigurationChange does not affect tooltips of other divViews`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+
+        val otherDivView = mock<Div2View>()
+        underTest.handleConfigurationChange(otherDivView)
+
+        Assert.assertNull(underTest.captureCurrentTooltips().first().anchorTrackingDisposable)
+        Assert.assertTrue(anchorLayoutListeners.isEmpty())
+        Assert.assertTrue(anchorPreDrawListeners.isEmpty())
+    }
+
+    @Test
+    fun `handleConfigurationChange replaces previous anchor tracking`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+        underTest.handleConfigurationChange(div2View)
+        val firstDisposable = underTest.captureCurrentTooltips().first().anchorTrackingDisposable
+        Assert.assertNotNull(firstDisposable)
+
+        underTest.handleConfigurationChange(div2View)
+
+        val secondDisposable = underTest.captureCurrentTooltips().first().anchorTrackingDisposable
+        Assert.assertNotNull(secondDisposable)
+        Assert.assertNotSame(firstDisposable, secondDisposable)
+        Assert.assertEquals(1, anchorLayoutListeners.size)
+        Assert.assertEquals(1, anchorPreDrawListeners.size)
+    }
+
+    @Test
+    fun `clear stops anchor tracking`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+        underTest.handleConfigurationChange(div2View)
+        Assert.assertTrue(anchorLayoutListeners.isNotEmpty())
+
+        underTest.clear()
+
+        Assert.assertTrue(anchorLayoutListeners.isEmpty())
+        Assert.assertTrue(anchorPreDrawListeners.isEmpty())
+    }
+
+    @Test
+    fun `hideTooltip stops anchor tracking`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+        underTest.handleConfigurationChange(div2View)
+        Assert.assertTrue(anchorLayoutListeners.isNotEmpty())
+
+        underTest.hideTooltip("tooltip_id")
+
+        Assert.assertTrue(anchorLayoutListeners.isEmpty())
+        Assert.assertTrue(anchorPreDrawListeners.isEmpty())
     }
 
     private fun prepareDiv(duration: Long = 5000, offset: DivPoint? = null) {
