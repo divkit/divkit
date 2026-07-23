@@ -584,6 +584,7 @@ data class Text internal constructor(
             Properties(
                 accessibility = additive.accessibility ?: properties.accessibility,
                 alignmentVertical = additive.alignmentVertical ?: properties.alignmentVertical,
+                baselineOffset = additive.baselineOffset ?: properties.baselineOffset,
                 height = additive.height ?: properties.height,
                 indexingDirection = additive.indexingDirection ?: properties.indexingDirection,
                 preloadRequired = additive.preloadRequired ?: properties.preloadRequired,
@@ -603,6 +604,10 @@ data class Text internal constructor(
              * Default value: `center`.
              */
             val alignmentVertical: Property<TextAlignmentVertical>?,
+            /**
+             * Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.
+             */
+            val baselineOffset: Property<Double>?,
             /**
              * Image height.
              * Default value: `{"type": "fixed","value":20}`.
@@ -648,6 +653,7 @@ data class Text internal constructor(
                 result.putAll(properties)
                 result.tryPutProperty("accessibility", accessibility)
                 result.tryPutProperty("alignment_vertical", alignmentVertical)
+                result.tryPutProperty("baseline_offset", baselineOffset)
                 result.tryPutProperty("height", height)
                 result.tryPutProperty("indexing_direction", indexingDirection)
                 result.tryPutProperty("preload_required", preloadRequired)
@@ -3565,6 +3571,7 @@ fun Text.Ellipsis.asList() = listOf(this)
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
+ * @param baselineOffset Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.
  * @param height Image height.
  * @param indexingDirection Defines the direction in the `start` parameter:
 – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
@@ -3581,6 +3588,7 @@ fun DivScope.textImage(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Text.Image.Accessibility? = null,
     alignmentVertical: TextAlignmentVertical? = null,
+    baselineOffset: Double? = null,
     height: FixedSize? = null,
     indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
@@ -3593,6 +3601,7 @@ fun DivScope.textImage(
     Text.Image.Properties(
         accessibility = valueOrNull(accessibility),
         alignmentVertical = valueOrNull(alignmentVertical),
+        baselineOffset = valueOrNull(baselineOffset),
         height = valueOrNull(height),
         indexingDirection = valueOrNull(indexingDirection),
         preloadRequired = valueOrNull(preloadRequired),
@@ -3606,6 +3615,7 @@ fun DivScope.textImage(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
+ * @param baselineOffset Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.
  * @param height Image height.
  * @param indexingDirection Defines the direction in the `start` parameter:
 – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
@@ -3622,6 +3632,7 @@ fun DivScope.textImageProps(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Text.Image.Accessibility? = null,
     alignmentVertical: TextAlignmentVertical? = null,
+    baselineOffset: Double? = null,
     height: FixedSize? = null,
     indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
@@ -3633,6 +3644,7 @@ fun DivScope.textImageProps(
 ) = Text.Image.Properties(
     accessibility = valueOrNull(accessibility),
     alignmentVertical = valueOrNull(alignmentVertical),
+    baselineOffset = valueOrNull(baselineOffset),
     height = valueOrNull(height),
     indexingDirection = valueOrNull(indexingDirection),
     preloadRequired = valueOrNull(preloadRequired),
@@ -3645,6 +3657,7 @@ fun DivScope.textImageProps(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
+ * @param baselineOffset Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.
  * @param height Image height.
  * @param indexingDirection Defines the direction in the `start` parameter:
 – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
@@ -3661,6 +3674,7 @@ fun TemplateScope.textImageRefs(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
     alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
+    baselineOffset: ReferenceProperty<Double>? = null,
     height: ReferenceProperty<FixedSize>? = null,
     indexingDirection: ReferenceProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
@@ -3672,6 +3686,7 @@ fun TemplateScope.textImageRefs(
 ) = Text.Image.Properties(
     accessibility = accessibility,
     alignmentVertical = alignmentVertical,
+    baselineOffset = baselineOffset,
     height = height,
     indexingDirection = indexingDirection,
     preloadRequired = preloadRequired,
@@ -3684,6 +3699,7 @@ fun TemplateScope.textImageRefs(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
+ * @param baselineOffset Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.
  * @param height Image height.
  * @param indexingDirection Defines the direction in the `start` parameter:
 – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
@@ -3700,6 +3716,7 @@ fun Text.Image.override(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Text.Image.Accessibility? = null,
     alignmentVertical: TextAlignmentVertical? = null,
+    baselineOffset: Double? = null,
     height: FixedSize? = null,
     indexingDirection: Text.Image.IndexingDirection? = null,
     preloadRequired: Boolean? = null,
@@ -3712,6 +3729,7 @@ fun Text.Image.override(
     Text.Image.Properties(
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
         alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
+        baselineOffset = valueOrNull(baselineOffset) ?: properties.baselineOffset,
         height = valueOrNull(height) ?: properties.height,
         indexingDirection = valueOrNull(indexingDirection) ?: properties.indexingDirection,
         preloadRequired = valueOrNull(preloadRequired) ?: properties.preloadRequired,
@@ -3725,6 +3743,7 @@ fun Text.Image.override(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
+ * @param baselineOffset Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.
  * @param height Image height.
  * @param indexingDirection Defines the direction in the `start` parameter:
 – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
@@ -3741,6 +3760,7 @@ fun Text.Image.defer(
     `use named arguments`: Guard = Guard.instance,
     accessibility: ReferenceProperty<Text.Image.Accessibility>? = null,
     alignmentVertical: ReferenceProperty<TextAlignmentVertical>? = null,
+    baselineOffset: ReferenceProperty<Double>? = null,
     height: ReferenceProperty<FixedSize>? = null,
     indexingDirection: ReferenceProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ReferenceProperty<Boolean>? = null,
@@ -3753,6 +3773,7 @@ fun Text.Image.defer(
     Text.Image.Properties(
         accessibility = accessibility ?: properties.accessibility,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        baselineOffset = baselineOffset ?: properties.baselineOffset,
         height = height ?: properties.height,
         indexingDirection = indexingDirection ?: properties.indexingDirection,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
@@ -3766,6 +3787,7 @@ fun Text.Image.defer(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
+ * @param baselineOffset Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.
  * @param height Image height.
  * @param indexingDirection Defines the direction in the `start` parameter:
 – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
@@ -3782,6 +3804,7 @@ fun Text.Image.modify(
     `use named arguments`: Guard = Guard.instance,
     accessibility: Property<Text.Image.Accessibility>? = null,
     alignmentVertical: Property<TextAlignmentVertical>? = null,
+    baselineOffset: Property<Double>? = null,
     height: Property<FixedSize>? = null,
     indexingDirection: Property<Text.Image.IndexingDirection>? = null,
     preloadRequired: Property<Boolean>? = null,
@@ -3794,6 +3817,7 @@ fun Text.Image.modify(
     Text.Image.Properties(
         accessibility = accessibility ?: properties.accessibility,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        baselineOffset = baselineOffset ?: properties.baselineOffset,
         height = height ?: properties.height,
         indexingDirection = indexingDirection ?: properties.indexingDirection,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
@@ -3807,6 +3831,7 @@ fun Text.Image.modify(
 
 /**
  * @param alignmentVertical Vertical image alignment within the row.
+ * @param baselineOffset Vertical baseline offset in a character range. If the parameter is set, the vertical alignment is ignored and is assumed to be baseline.
  * @param indexingDirection Defines the direction in the `start` parameter:
 – `normal` is for regular string indexing ([0, 1, 2, ..., N]). Use it if you need to insert an image by index relative to the beginning of a string.
 – `reversed` is for indexing a string from the end to the beginning ([N, ..., 2, 1, 0]). Use it if you need to insert an image by index relative to the end of a string.
@@ -3820,6 +3845,7 @@ fun Text.Image.modify(
 fun Text.Image.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
+    baselineOffset: ExpressionProperty<Double>? = null,
     indexingDirection: ExpressionProperty<Text.Image.IndexingDirection>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     start: ExpressionProperty<Int>? = null,
@@ -3830,6 +3856,7 @@ fun Text.Image.evaluate(
     Text.Image.Properties(
         accessibility = properties.accessibility,
         alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        baselineOffset = baselineOffset ?: properties.baselineOffset,
         height = properties.height,
         indexingDirection = indexingDirection ?: properties.indexingDirection,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
