@@ -8,6 +8,7 @@
     export let size: 'small' | 'medium' = 'medium';
     export let centerContent = false;
     export let customTooltips = false;
+    export let toggled = false;
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -16,6 +17,7 @@
     class="button2 button2_theme_{theme} button2_size_{size} {cls}"
     class:button2_slim={slim}
     class:button2_center-content={centerContent}
+    class:button2_toggled={toggled}
     disabled={disabled ? true : undefined}
     data-custom-tooltip={customTooltips ? title : ''}
     title={customTooltips ? undefined : title}
@@ -49,6 +51,11 @@
         background: var(--fill-transparent-minus-1);
     }
 
+    .button2_toggled.button2_theme_border-gray {
+        background: var(--fill-accent-3);
+        border-color: var(--fill-accent-4);
+    }
+
     .button2_center-content {
         justify-content: center;
     }
@@ -78,6 +85,10 @@
     .button2_theme_normal:not([disabled]):hover {
         border-color: transparent;
         background-color: var(--fill-transparent-3);
+    }
+
+    .button2_theme_border-gray.button2_toggled:not([disabled]):hover {
+        background-color: var(--fill-accent-4);
     }
 
     .button2:not([disabled]):active {

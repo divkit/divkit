@@ -1,5 +1,7 @@
 <script lang="ts" context="module">
     const DEFAULT_VIEWPORT = '360x640';
+
+    const TWEEN_DURATION = 100;
 </script>
 
 <script lang="ts">
@@ -33,6 +35,10 @@
 
     const startViewport = viewportList.includes(DEFAULT_VIEWPORT) ? DEFAULT_VIEWPORT : viewportList[0];
 
+    $: if (Math.abs(scale.target - fitToWindowScale) > 0.01) {
+        isFitToWindow = false;
+    }
+
     setShowErrors(function showErrors(opts) {
         errorsDialog.show(errorButtonNode, {
             leafId: opts?.leafId
@@ -41,10 +47,12 @@
 
     let viewport = startViewport;
     let scale = new Tween(1, {
-        duration: 100
+        duration: TWEEN_DURATION
     });
     let errorButtonNode: HTMLElement;
     let errorsDialog: ErrorsDialog;
+    let isFitToWindow = state.fitViewportOnCreate;
+    let fitToWindowScale = 1;
 
     let canvas: HTMLElement;
     let wrapper: HTMLElement;
@@ -79,7 +87,16 @@
         showErrors();
     }
 
-    function fitToWindow(): void {
+    function fitToWindowClick(): void {
+        if (isFitToWindow) {
+            isFitToWindow = false;
+        } else {
+            isFitToWindow = true;
+            fitToWindow(TWEEN_DURATION);
+        }
+    }
+
+    function fitToWindow(duration = 0): void {
         const TOP_MARGIN = 4;
         const RIGHT_MARGIN = 16;
         const BOTTOM_MARGIN = 16 + 24;
@@ -99,8 +116,9 @@
             newScale = availWidth / size[0];
         }
         newScale = Math.max(.33, Math.min(5, newScale));
+        fitToWindowScale = newScale;
         scale.set(newScale, {
-            duration: 0
+            duration
         });
     }
 
@@ -120,6 +138,12 @@
         }
     }
 
+    function onResize(): void {
+        if (isFitToWindow) {
+            fitToWindow();
+        }
+    }
+
     onMount(() => {
         if (state.fitViewportOnCreate) {
             fitToWindow();
@@ -131,6 +155,10 @@
         [redoShortcut, () => state.redo()]
     ];
 </script>
+
+<svelte:window
+    on:resize={onResize}
+/>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -145,7 +173,8 @@
         <ViewportControl
             bind:viewport={viewport}
             bind:scale={scale.target}
-            on:fitToWindow={fitToWindow}
+            on:fitToWindow={fitToWindowClick}
+            {isFitToWindow}
         />
 
         <CanvasButton

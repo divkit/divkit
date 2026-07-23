@@ -22,6 +22,7 @@
     export let viewport: string;
     export let scale: number;
     export let disabled = false;
+    export let isFitToWindow = false;
 
     const { l10nString, lang } = getContext<LanguageContext>(LANGUAGE_CTX);
     const {
@@ -293,6 +294,7 @@
                         theme="border-gray"
                         size="small"
                         centerContent
+                        toggled={isFitToWindow}
                         on:click={fitToWindow}
                     >
                         {$l10nString('previewFitToWindow')}
