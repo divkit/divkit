@@ -54,7 +54,8 @@ internal object DivDownloadActionHandler {
         return executeDownload(url.toString(), actualOnSuccess, actualOnFail, view, resolver)
     }
 
-    private fun handleAction(
+    @JvmStatic
+    fun handleAction(
         uri: Uri,
         downloadCallbacks: DivDownloadCallbacks?,
         view: Div2View,

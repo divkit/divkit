@@ -515,6 +515,8 @@ public class DivActionHandler {
         } else if (StoredValuesActionHandler.canHandle(action)) {
             StoredValuesActionHandler.handleAction(uri, view);
             return true;
+        } else if (DivDownloadActionHandler.canHandle(uri, view)) {
+            return DivDownloadActionHandler.handleAction(uri, null, (Div2View) view, resolver);
         }
 
         return false;
