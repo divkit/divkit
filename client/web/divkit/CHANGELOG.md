@@ -1,3 +1,9 @@
+## 32.60.0 (July 27, 2026)
+
+* Added support for the `baseline_offset` property for `image`s within `text`.
+* Added support of scoped search for elements in `video` and `scroll_to` / `scroll_by` actions (and their associated `div-action://` URL actions). When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
+
+
 ## 32.59.0 (July 20, 2026)
 
 * Added support for the `is_enabled` property in the `extensions` list.
