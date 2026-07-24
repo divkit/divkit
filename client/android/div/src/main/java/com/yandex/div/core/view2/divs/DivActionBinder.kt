@@ -178,8 +178,10 @@ internal class DivActionBinder @Inject constructor(
         // Single tap-up triggered with significant delay
         // so we'll use it only when double taps actually specified.
         if (gestureListener.onDoubleTapListener != null) {
+            setOnClickListener(null)  // clear stale click listener to prevent double firing during view reuse
             gestureListener.onSingleTapListener = { listener.onClick(this) }
         } else {
+            gestureListener.onSingleTapListener = null  // clear stale gesture listener to prevent double firing during view reuse
             setOnClickListener(listener)
         }
     }
