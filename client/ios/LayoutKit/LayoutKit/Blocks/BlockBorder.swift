@@ -24,3 +24,9 @@ public struct BlockBorder: Equatable {
     self.width = width
   }
 }
+
+extension BlockBorder {
+  var isSolidOpaque: Bool {
+    style == .solid && color.alpha == 1
+  }
+}

@@ -305,6 +305,12 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
+  private struct BorderLayerConfig: Equatable {
+    let size: CGSize
+    let border: BlockBorder
+    let boundary: BoundaryTrait
+  }
+
   override var isHighlighted: Bool {
     didSet {
       guard oldValue != isHighlighted else {
@@ -368,8 +374,11 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  private var borderLayer: CALayer? {
+  private var borderLayerConfig: BorderLayerConfig?
+
+  private var borderLayer: CAShapeLayer? {
     didSet {
+      guard oldValue !== borderLayer else { return }
       oldValue?.removeFromSuperlayer()
       if let borderLayer {
         borderLayer.zPosition = 1000
@@ -407,6 +416,13 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       : .normal
   }
 
+  private var hostResizeAnimation: CAAnimation? {
+    ["position", "bounds.size", "bounds"]
+      .lazy
+      .compactMap { self.layer.animation(forKey: $0) }
+      .first { $0.duration > 0 }
+  }
+
   init() {
     super.init(frame: .zero)
     isExclusiveTouch = true
@@ -442,31 +458,26 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   override func layoutSubviews() {
     super.layoutSubviews()
 
-    let shouldMakeBorderLayer: Bool
     let boundary = model.boundary.makeInfo(for: bounds.size)
-    shouldMakeBorderLayer = boundary.layer != nil || model.border?.style
-      .shouldMakeBorderLayer == true
-    layer.cornerRadius = boundary.radius
-    layer.maskedCorners = boundary.corners
-    layer.mask = boundary.layer
+    let shouldMakeBorderLayer = boundary.layer != nil ||
+      model.border?.shouldMakeBorderLayer(cornerRadius: boundary.radius) == true
 
-    addCornerRadiusAnimation()
-
-    if let border = model.border {
-      if shouldMakeBorderLayer,
-         let borderLayer = model.boundary.makeBorderLayer(for: bounds.size, border: border) {
-        self.borderLayer = borderLayer
-        layer.borderColor = nil
-        layer.borderWidth = 0
-      } else {
-        borderLayer = nil
-        layer.borderColor = border.color.cgColor
-        layer.borderWidth = border.width
-      }
-    } else {
-      borderLayer = nil
+    if let border = model.border, shouldMakeBorderLayer,
+       updateBorderLayerIfNeeded(for: border) {
+      // Clipping is done by the mask set in updateBorderLayerIfNeeded;
+      // cornerRadius must not clip here.
+      layer.cornerRadius = 0
       layer.borderColor = nil
       layer.borderWidth = 0
+    } else {
+      borderLayerConfig = nil
+      borderLayer = nil
+      layer.cornerRadius = boundary.radius
+      layer.maskedCorners = boundary.corners
+      layer.mask = boundary.layer
+      addCornerRadiusAnimation()
+      layer.borderColor = model.border?.color.cgColor
+      layer.borderWidth = model.border?.width ?? 0
     }
 
     blurView?.frame = bounds
@@ -613,14 +624,62 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     )
   }
 
+  /// Reuses the border layer and its clip mask across layout passes, updating
+  /// them in place only when the size, border or boundary has changed. The
+  /// mask shares the stroke's path: `cornerRadius` clips with a slightly
+  /// different corner geometry and would trim the overflowing stroke to an
+  /// uneven width.
+  private func updateBorderLayerIfNeeded(for border: BlockBorder) -> Bool {
+    let config = BorderLayerConfig(
+      size: bounds.size,
+      border: border,
+      boundary: model.boundary
+    )
+    if config == borderLayerConfig {
+      return borderLayer != nil
+    }
+
+    guard let params = model.boundary.makeBorderLayerParams(
+      for: bounds.size,
+      border: border
+    ), let outlinePath = model.boundary.makeOutlinePath(for: bounds.size) else {
+      borderLayerConfig = nil
+      borderLayer = nil
+      return false
+    }
+
+    borderLayerConfig = config
+
+    let maskLayer = layer.mask as? CAShapeLayer ?? CAShapeLayer()
+    let oldMaskPath = maskLayer.path
+    CATransaction.begin()
+    CATransaction.setDisableActions(true)
+    maskLayer.path = outlinePath
+    CATransaction.commit()
+    if layer.mask !== maskLayer {
+      layer.mask = maskLayer
+    } else {
+      addPathAnimation(to: maskLayer, from: oldMaskPath, to: outlinePath)
+    }
+
+    if let borderLayer {
+      let oldPath = borderLayer.path
+      CATransaction.begin()
+      CATransaction.setDisableActions(true)
+      params.apply(to: borderLayer)
+      CATransaction.commit()
+      addPathAnimation(to: borderLayer, from: oldPath, to: params.path)
+    } else {
+      borderLayer = params.makeLayer()
+    }
+    return true
+  }
+
   /// `cornerRadius` isn't interpolated by UIView block animations
   private func addCornerRadiusAnimation() {
     guard let presentation = layer.presentation(),
           presentation.cornerRadius != layer.cornerRadius,
-          let hostAnimation = ["position", "bounds.size", "bounds"]
-          .lazy
-          .compactMap({ self.layer.animation(forKey: $0) })
-          .first(where: { $0.duration > 0 }) else {
+          let hostAnimation = hostResizeAnimation else {
       return
     }
 
@@ -630,6 +689,26 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     animation.duration = hostAnimation.duration
     animation.timingFunction = hostAnimation.timingFunction
     layer.add(animation, forKey: "cornerRadius")
+  }
+
+  /// `path` of a standalone shape layer isn't interpolated by UIView block
+  /// animations
+  private func addPathAnimation(
+    to shapeLayer: CAShapeLayer,
+    from oldPath: CGPath?,
+    to newPath: CGPath
+  ) {
+    guard let oldPath,
+          let hostAnimation = hostResizeAnimation else {
+      return
+    }
+
+    let animation = CABasicAnimation(keyPath: "path")
+    animation.fromValue = shapeLayer.presentation()?.path ?? oldPath
+    animation.toValue = newPath
+    animation.duration = hostAnimation.duration
+    animation.timingFunction = hostAnimation.timingFunction
+    shapeLayer.add(animation, forKey: "path")
   }
 
   private func configureRecognizers() {
@@ -913,11 +992,13 @@ extension BlurEffect {
   }
 }
 
-extension BlockBorder.Style {
-  fileprivate var shouldMakeBorderLayer: Bool {
-    switch self {
+extension BlockBorder {
+  // An opaque solid stroke on rounded corners is drawn via a border layer to
+  // avoid a background-colored halo (see BoundaryTrait.makeBorderLayerParams).
+  fileprivate func shouldMakeBorderLayer(cornerRadius: CGFloat) -> Bool {
+    switch style {
     case .dashed: true
-    case .solid: false
+    case .solid: isSolidOpaque && cornerRadius > 0
     }
   }
 }

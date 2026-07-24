@@ -3,6 +3,27 @@ import VGSL
 
 typealias BoundaryInfo = (radius: CGFloat, corners: CACornerMask, layer: CALayer?)
 
+struct BorderLayerParams {
+  let path: CGPath
+  let strokeColor: CGColor
+  let lineWidth: CGFloat
+  let lineDashPattern: [NSNumber]?
+
+  func apply(to layer: CAShapeLayer) {
+    layer.path = path
+    layer.strokeColor = strokeColor
+    layer.lineWidth = lineWidth
+    layer.lineDashPattern = lineDashPattern
+  }
+
+  func makeLayer() -> CAShapeLayer {
+    let layer = CAShapeLayer()
+    layer.fillColor = Color.clear.cgColor
+    apply(to: layer)
+    return layer
+  }
+}
+
 extension BoundaryTrait {
   var clipsToBounds: Bool {
     switch self {
@@ -43,19 +64,34 @@ extension BoundaryTrait {
     return layer
   }
 
-  func makeBorderLayer(for size: CGSize, border: BlockBorder) -> CALayer? {
-    guard let path = makeMaskPath(for: size, inset: border.width / 2) else {
+  func makeOutlinePath(for size: CGSize) -> CGPath? {
+    makeMaskPath(for: size, inset: 0)
+  }
+
+  func makeBorderLayerParams(for size: CGSize, border: BlockBorder) -> BorderLayerParams? {
+    // An opaque solid stroke is widened outward past the outline and trimmed
+    // back by the same-path clip mask, so the clip attenuates pure stroke
+    // color at the boundary pixels; otherwise the background would show
+    // through the stroke's anti-aliased outer edge as a thin halo. Dashed
+    // strokes (background must reach the outline in the gaps) and custom
+    // clip paths (an arbitrary CGPath cannot be offset) keep the halo.
+    let outerOverflow: CGFloat = switch self {
+    case .clipCorner where border.isSolidOpaque:
+      min(1, border.width)
+    default:
+      0
+    }
+    guard let path = makeMaskPath(for: size, inset: (border.width - outerOverflow) / 2) else {
       return nil
     }
     let rawPattern = border.style.rawPattern
 
-    let layer = CAShapeLayer()
-    layer.path = path
-    layer.lineDashPattern = rawPattern?.calculateDashPattern(for: getLength(for: size))
-    layer.strokeColor = border.color.cgColor
-    layer.fillColor = Color.clear.cgColor
-    layer.lineWidth = border.width
-    return layer
+    return BorderLayerParams(
+      path: path,
+      strokeColor: border.color.cgColor,
+      lineWidth: border.width + outerOverflow,
+      lineDashPattern: rawPattern?.calculateDashPattern(for: getLength(for: size))
+    )
   }
 
   private func makeMaskPath(for size: CGSize, inset: CGFloat) -> CGPath? {

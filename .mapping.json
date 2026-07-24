@@ -25519,6 +25519,7 @@
   "client/ios/Tests/reference_snapshots/div-background/radial-gradient-positions_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-background/radial-gradient-positions_414@3x.png",
   "client/ios/Tests/reference_snapshots/div-background/radial-positions_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-background/radial-positions_414@3x.png",
   "client/ios/Tests/reference_snapshots/div-background/scale_stretch_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-background/scale_stretch_414@3x.png",
+  "client/ios/Tests/reference_snapshots/div-border/background-under-round-border_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-border/background-under-round-border_414@3x.png",
   "client/ios/Tests/reference_snapshots/div-border/border-stroke-style-with-different-corners_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-border/border-stroke-style-with-different-corners_414@3x.png",
   "client/ios/Tests/reference_snapshots/div-border/border-stroke-style-with-different-width_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-border/border-stroke-style-with-different-width_414@3x.png",
   "client/ios/Tests/reference_snapshots/div-container/alignment-center-with-paddings_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-container/alignment-center-with-paddings_414@3x.png",

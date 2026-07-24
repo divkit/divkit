@@ -1,7 +1,8 @@
 {
   "description": "Opaque border stroke on rounded corners fully covers the clipped background edge: no thin background-colored halo along the outer edge of the stroke. Dashed and semi-transparent strokes let the background reach the outline as before. Also covers the outline-clipping mode (has_shadow with the default elevation shadow) and a corner radius below half the stroke width (the stroke must not draw square corners past the rounded outline).",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "templates": {
     "stroked_box": {
