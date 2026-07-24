@@ -1,3 +1,29 @@
+## 32.60.0
+
+# Android Client:
+* Added support for the `is_enabled` property in extensions. An extension whose `is_enabled` resolves to `false` is not applied to the element.
+* Fix default indicator `active_item_color` being transparent on Android; it is now the opaque default (`#ffdc60`), matching iOS/web/Flutter.
+* Fix shadow rendering when alpha is specified via color value (e.g. `"color": "#2F000000"`).
+* Fixed `max_size` and `constrained` in `wrap_content` size being ignored on the root div of a `tooltip`. Margins of the tooltip root div are now applied as well.
+* Fixed a crash when video `fatal_actions` switched state during playback error handling.
+* Fixed an issue where `gallery` lost `item_spacing` between items when a `gone` item became visible (or the last visible item became `gone`).
+* Fixed an issue where focus states did not switch on touch devices.
+* Fixed an issue where tooltip layout and position broke after a configuration change (for example, orientation change).
+* Fixed background color showing through as a thin halo along the outer edge of an opaque border stroke on rounded corners.
+* Fixed video not loading in `div-video-m3`.
+
+# iOS Client:
+* Added support for the `is_enabled` property in extensions. An extension whose `is_enabled` resolves to `false` is not applied to the element.
+* Fixed `div-select` dropdown menu not closing after selecting an item.
+* Fixed `focus_element` not focusing an element that is revealed (`gone` → `visible`) by a preceding action in the same batch.
+* Fixed an issue where tab header colors were not updated when DivKit variables changed (e.g. theme switching in tabs with variables).
+* Fixed typed actions targeting a specific element kind (`video`, `scroll_by` / `scroll_to`, `set_cursor_position`) failing with an "ambiguous id" error when another element shares the target `id`. Id lookup now takes the element type into account.
+
+# Web Client:
+* Added support for the `baseline_offset` property for `image`s within `text`.
+* Added support of scoped search for elements in `video` and `scroll_to` / `scroll_by` actions (and their associated `div-action://` URL actions). When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
+
+
 ## 32.59.0
 
 # Android Client:
