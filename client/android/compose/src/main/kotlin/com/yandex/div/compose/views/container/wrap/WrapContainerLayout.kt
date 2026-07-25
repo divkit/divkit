@@ -68,15 +68,21 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
 
     FlowRow(
         modifier = containerModifier,
-        horizontalArrangement = horizontalAlignment.toHorizontalArrangement(wrapLayoutState.effectiveItemSpacing),
-        verticalArrangement = verticalAlignment.toVerticalArrangement(wrapLayoutState.effectiveLineSpacing),
+        horizontalArrangement = horizontalAlignment
+            .toHorizontalArrangement(wrapLayoutState.effectiveItemSpacing),
+        verticalArrangement = verticalAlignment
+            .toVerticalArrangement(wrapLayoutState.effectiveLineSpacing),
         overflow = FlowRowOverflow.Visible,
     ) {
         val defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment()
-        visibleItems.forEachIndexed { index, childDiv ->
-            val childModifier = childDiv.observeVerticalChildAlignment()?.let { Modifier.align(it) }
-                ?: Modifier.align(defaultVerticalAlignment)
-            DivBlockView(childDiv, childModifier.trackChildPlacement(childRects, index))
+        visibleItems.forEachIndexed { index, item ->
+            DivBlockView(
+                data = item,
+                modifier = Modifier
+                    .align(item.observeVerticalChildAlignment() ?: defaultVerticalAlignment)
+                    .trackChildPlacement(childRects, index),
+                checkVisibility = false
+            )
         }
     }
 }
@@ -122,10 +128,14 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
         overflow = FlowColumnOverflow.Visible,
     ) {
         val defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment()
-        visibleItems.forEachIndexed { index, childDiv ->
-            val childModifier = childDiv.observeHorizontalChildAlignment()?.let { Modifier.align(it) }
-                ?: Modifier.align(defaultHorizontalAlignment)
-            DivBlockView(childDiv, childModifier.trackChildPlacement(childRects, index))
+        visibleItems.forEachIndexed { index, item ->
+            DivBlockView(
+                data = item,
+                modifier = Modifier
+                    .align(item.observeHorizontalChildAlignment()?: defaultHorizontalAlignment)
+                    .trackChildPlacement(childRects, index),
+                checkVisibility = false
+            )
         }
     }
 }

@@ -35,7 +35,11 @@ internal fun GalleryListView(
     if (isScrollable) {
         val isHorizontal = orientation == DivGallery.Orientation.HORIZONTAL
         BoxWithConstraints(modifier = modifier) {
-            val isScrollAxisBounded = if (isHorizontal) constraints.hasBoundedWidth else constraints.hasBoundedHeight
+            val isScrollAxisBounded = if (isHorizontal) {
+                constraints.hasBoundedWidth
+            } else {
+                constraints.hasBoundedHeight
+            }
             if (isScrollAxisBounded) {
                 ScrollableGalleryView(
                     items = items,
@@ -113,7 +117,7 @@ private fun ScrollableGalleryView(
     ) {
         items(count = items.size) { index ->
             ScrollableChildItem(
-                childDiv = items[index],
+                data = items[index],
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal),
                 isHorizontal = isHorizontal,
                 crossAxisAlignment = crossAlignment,
@@ -139,7 +143,7 @@ private fun NonScrollableGalleryView(
         ) {
             items.forEach {
                 ScrollableChildItem(
-                    childDiv = it,
+                    data = it,
                     modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = true),
                     isHorizontal = true,
                     crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),
@@ -154,7 +158,7 @@ private fun NonScrollableGalleryView(
         ) {
             items.forEach {
                 ScrollableChildItem(
-                    childDiv = it,
+                    data = it,
                     modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = false),
                     isHorizontal = false,
                     crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),

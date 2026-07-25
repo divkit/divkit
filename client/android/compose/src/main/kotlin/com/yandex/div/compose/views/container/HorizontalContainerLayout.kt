@@ -74,27 +74,41 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
 }
 
 @Composable
-private fun RowScope.HorizontalChildItem(childDiv: Div, containerMainSize: DivSize, hasWeightedChildren: Boolean, weightedChildrenMargins: Dp) {
-    val childBase = childDiv.value()
-    val isWeightedChild = childBase.width.isMatchParent && !containerMainSize.isWrapContent
+private fun RowScope.HorizontalChildItem(
+    item: Div,
+    containerMainSize: DivSize,
+    hasWeightedChildren: Boolean,
+    weightedChildrenMargins: Dp
+) {
+    val divBase = item.value()
+    val isWeightedChild = divBase.width.isMatchParent && !containerMainSize.isWrapContent
 
-    var childModifier = makeHorizontalChildModifier(
-        childBase.width,
+    var modifier = makeHorizontalChildModifier(
+        divBase.width,
         containerMainSize,
         hasWeightedChildren,
         weightedChildrenMargins
     )
-    childDiv.observeVerticalChildAlignment()?.let { childModifier = childModifier.align(it) }
+    item.observeVerticalChildAlignment()?.let { modifier = modifier.align(it) }
 
     if (isWeightedChild) {
-        val (startMargin, endMargin) = childBase.margins.observeHorizontalInsets()
-        childBase.margins?.let { childModifier = childModifier.verticalPaddings(it) }
+        val (startMargin, endMargin) = divBase.margins.observeHorizontalInsets()
+        divBase.margins?.let { modifier = modifier.verticalPaddings(it) }
 
         if (startMargin > 0.dp) Spacer(Modifier.width(startMargin))
-        DivBlockView(childDiv, childModifier, applyMargins = false)
+        DivBlockView(
+            data = item,
+            modifier = modifier,
+            applyMargins = false,
+            checkVisibility = false
+        )
         if (endMargin > 0.dp) Spacer(Modifier.width(endMargin))
     } else {
-        DivBlockView(childDiv, childModifier)
+        DivBlockView(
+            data = item,
+            modifier = modifier,
+            checkVisibility = false
+        )
     }
 }
 

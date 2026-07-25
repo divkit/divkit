@@ -31,14 +31,19 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
     )
 
     Box(modifier, contentAlignment = defaultAlignment) {
-        data.visibleItems().forEach { childDiv ->
+        data.visibleItems().forEach { item ->
+            val divBase = item.value()
             val childAlignment = resolveOverlapChildAlignment(
-                childHorizontal = childDiv.value().alignmentHorizontal?.observedValue(),
-                childVertical = childDiv.value().alignmentVertical?.observedValue(),
+                childHorizontal = divBase.alignmentHorizontal?.observedValue(),
+                childVertical = divBase.alignmentVertical?.observedValue(),
                 defaultHorizontal = horizontalAlignment,
                 defaultVertical = verticalAlignment,
             )
-            DivBlockView(childDiv, Modifier.align(childAlignment))
+            DivBlockView(
+                data = item,
+                modifier = Modifier.align(childAlignment),
+                checkVisibility = false
+            )
         }
     }
 }

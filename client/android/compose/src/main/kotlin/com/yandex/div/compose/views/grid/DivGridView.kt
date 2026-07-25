@@ -53,9 +53,9 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
             }
         ) {
             items.forEach { item ->
-                val base = item.value()
-                val columnSpan = base.columnSpan.observedIntValue(DEFAULT_SPAN)
-                val rowSpan = base.rowSpan.observedIntValue(DEFAULT_SPAN)
+                val divBase = item.value()
+                val columnSpan = divBase.columnSpan.observedIntValue(DEFAULT_SPAN)
+                val rowSpan = divBase.rowSpan.observedIntValue(DEFAULT_SPAN)
                 DivBlockView(
                     data = item,
                     modifier = Modifier
@@ -65,8 +65,9 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
                         .gridItem(
                             columnSpan = columnSpan,
                             rowSpan = rowSpan,
-                            alignment = base.toGridItemAlignment(),
-                        )
+                            alignment = divBase.toGridItemAlignment()
+                        ),
+                    checkVisibility = false
                 )
             }
         }

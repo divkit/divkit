@@ -94,7 +94,7 @@ private fun NonScrollableGridView(
                 Column(verticalArrangement = Arrangement.spacedBy(crossSpacing)) {
                     columnItems.forEach { item ->
                         ScrollableChildItem(
-                            childDiv = item,
+                            data = item,
                             modifier = if (isCrossAxisBounded) {
                                 Modifier.weight(1f)
                             } else {
@@ -121,7 +121,7 @@ private fun NonScrollableGridView(
                 Row(horizontalArrangement = Arrangement.spacedBy(crossSpacing)) {
                     rowItems.forEach { item ->
                         ScrollableChildItem(
-                            childDiv = item,
+                            data = item,
                             modifier = if (isCrossAxisBounded) {
                                 Modifier.weight(1f)
                             } else {
@@ -163,7 +163,7 @@ private fun GalleryLazyHorizontalGrid(
     ) {
         items(count = items.size) { index ->
             ScrollableChildItem(
-                childDiv = items[index],
+                data = items[index],
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = true),
                 isHorizontal = true,
                 crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),
@@ -193,7 +193,7 @@ private fun GalleryLazyVerticalGrid(
     ) {
         items(count = items.size) { index ->
             ScrollableChildItem(
-                childDiv = items[index],
+                data = items[index],
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = false),
                 isHorizontal = false,
                 crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),

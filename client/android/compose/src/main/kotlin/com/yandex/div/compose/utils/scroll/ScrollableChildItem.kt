@@ -9,23 +9,25 @@ import com.yandex.div2.Div
 
 @Composable
 internal fun ScrollableChildItem(
-    childDiv: Div,
+    data: Div,
     modifier: Modifier,
     isHorizontal: Boolean,
     crossAxisAlignment: CrossAxisAlignment
 ) {
-    val childBase = childDiv.value()
-
+    val divBase = data.value()
     val childCrossAlignment = if (isHorizontal) {
-        childBase.alignmentVertical?.observedValue()?.toCrossAxisAlignment()
+        divBase.alignmentVertical?.observedValue()?.toCrossAxisAlignment()
     } else {
-        childBase.alignmentHorizontal?.observedValue()?.toCrossAxisAlignment()
+        divBase.alignmentHorizontal?.observedValue()?.toCrossAxisAlignment()
     } ?: crossAxisAlignment
 
     Box(
         modifier = modifier,
         contentAlignment = childCrossAlignment.toBoxAlignment(isHorizontal),
     ) {
-        DivBlockView(childDiv)
+        DivBlockView(
+            data = data,
+            checkVisibility = false
+        )
     }
 }

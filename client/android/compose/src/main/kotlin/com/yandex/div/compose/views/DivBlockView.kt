@@ -36,11 +36,13 @@ internal fun DivBlockView(
     data: Div,
     modifier: Modifier = Modifier,
     applyMargins: Boolean = true,
+    // containers filter the visible items themselves
+    checkVisibility: Boolean = true
 ) {
     val divBase = data.value()
     WithLocalComponent(divBase) {
         checkUnsupportedFeatures(divBase)
-        if (divBase.visibility.observedValue() == DivVisibility.GONE) {
+        if (checkVisibility && divBase.visibility.observedValue() == DivVisibility.GONE) {
             return@WithLocalComponent
         }
         val actions = data.observedActions()
