@@ -30,6 +30,11 @@ import kotlinx.coroutines.launch
  *     Box { DivView(data) }
  * }
  *
+ * // or custom content without DivData:
+ * host.setContent {
+ *     MyComposable()
+ * }
+ *
  * nestedScrollView.setOnScrollChangeListener { _, _, _, _, _ ->
  *     host.onVisibleBoundsChanged()
  * }
@@ -71,18 +76,39 @@ class DivViewHost(
         preloadMode: PreloadMode = PreloadMode.DISABLED,
         content: @Composable () -> Unit = { DivView(data) },
     ) {
-        preloadJob?.cancel()
-        preloadJob = null
+        cancelPreload()
         if (preloadMode != PreloadMode.DISABLED) {
             preloadJob = divContext.component.coroutineScope.launch {
                 divContext.component.preloader.preload(data, preloadMode)
             }
         }
+        setHostContent(content)
+    }
+
+    /**
+     * Sets Compose content for this host without [DivData].
+     *
+     * Use for custom content when the host is only needed for visibility tracking.
+     *
+     * Do not call [ComposeView.setContent] on [composeView] directly — visibility actions
+     * require content to be set through this host.
+     */
+    fun setContent(content: @Composable () -> Unit) {
+        cancelPreload()
+        setHostContent(content)
+    }
+
+    private fun setHostContent(content: @Composable () -> Unit) {
         composeView.setContent {
             CompositionLocalProvider(LocalDivViewHost provides this) {
                 content()
             }
         }
+    }
+
+    private fun cancelPreload() {
+        preloadJob?.cancel()
+        preloadJob = null
     }
 
     fun onVisibleBoundsChanged() {
