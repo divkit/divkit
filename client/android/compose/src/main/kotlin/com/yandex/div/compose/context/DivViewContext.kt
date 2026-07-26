@@ -1,6 +1,6 @@
 package com.yandex.div.compose.context
 
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.dagger.DivLocalComponent
@@ -104,6 +104,6 @@ internal class DivViewContext(
     }
 }
 
-internal val LocalDivViewContext = compositionLocalOf<DivViewContext> {
+internal val LocalDivViewContext = staticCompositionLocalOf<DivViewContext> {
     throw DivException("DivViewContext not provided")
 }

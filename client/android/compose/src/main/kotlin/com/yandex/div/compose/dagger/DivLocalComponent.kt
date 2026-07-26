@@ -2,7 +2,7 @@ package com.yandex.div.compose.dagger
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
@@ -53,7 +53,7 @@ internal fun DivLocalComponent.handleActions(actions: List<DivAction>, source: D
     actionHandler.handle(actionHandlingContext, actions, source)
 }
 
-internal val LocalComponent = compositionLocalOf<DivLocalComponent> {
+internal val LocalComponent = staticCompositionLocalOf<DivLocalComponent> {
     throw DivException("DivLocalComponent not provided")
 }
 
