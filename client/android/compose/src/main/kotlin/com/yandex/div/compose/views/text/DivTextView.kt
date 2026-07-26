@@ -1,6 +1,5 @@
 package com.yandex.div.compose.views.text
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -17,7 +16,6 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
@@ -28,8 +26,6 @@ internal fun DivTextView(
     modifier: Modifier,
     data: DivText
 ) {
-    checkUnsupportedFeatures(data)
-
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
     Box(
@@ -100,7 +96,6 @@ private fun buildAnnotatedText(
 
     val baseTextColorAlpha = textStyle.color.alpha
     for (range in ranges) {
-        checkUnsupportedFeatures(range)
         val start = range.start.observedIntValue().coerceIn(0, length)
         val end = range.end.observedIntValue(length).coerceIn(start, length)
         if (start >= end) {
@@ -130,34 +125,6 @@ private fun DivTextGradient.observedValue(): Brush? {
     return when (this) {
         is DivTextGradient.Linear -> value.observeLinearGradient()
         is DivTextGradient.Radial -> value.observeRadialGradient()
-    }
-}
-
-@SuppressLint("ComposableNaming")
-@Composable
-private fun checkUnsupportedFeatures(data: DivText) {
-    if (!data.images.isNullOrEmpty()) {
-        reportError("div-text.images not supported")
-    }
-
-    if (data.rangeBuilder != null) {
-        reportError("div-text.range_builder not supported")
-    }
-}
-
-@SuppressLint("ComposableNaming")
-@Composable
-private fun checkUnsupportedFeatures(range: DivText.Range) {
-    if (range.background != null) {
-        reportError("div-text.range.background not supported")
-    }
-
-    if (range.alignmentVertical != null) {
-        reportError("div-text.range.alignment_vertical not supported")
-    }
-
-    if (range.topOffset != null) {
-        reportError("div-text.range.top_offset not supported")
     }
 }
 

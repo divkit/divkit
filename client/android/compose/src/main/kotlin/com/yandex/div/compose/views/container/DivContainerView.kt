@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.wrap.ContainerWrapHorizontalView
 import com.yandex.div.compose.views.container.wrap.ContainerWrapVerticalView
 import com.yandex.div2.DivContainer
@@ -16,10 +15,6 @@ internal fun DivContainerView(
     modifier: Modifier,
     data: DivContainer
 ) {
-    if (data.itemBuilder != null) {
-        reportError("div-container.item_builder not supported")
-    }
-
     val modifier = if (data.clipToBounds.observedValue()) {
         modifier.clipToBounds()
     } else {

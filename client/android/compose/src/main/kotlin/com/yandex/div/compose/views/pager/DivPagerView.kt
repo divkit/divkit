@@ -13,11 +13,10 @@ import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.rememberAndStoreState
-import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
-import com.yandex.div.compose.views.modifiers.onMeasureConstraints
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.reportError
+import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
+import com.yandex.div.compose.views.modifiers.onMeasureConstraints
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivVisibility
@@ -27,10 +26,6 @@ internal fun DivPagerView(
     modifier: Modifier,
     data: DivPager,
 ) {
-    if (data.itemBuilder != null) {
-        reportError("div-pager.item_builder not supported")
-    }
-
     val items = data.items.orEmpty().filter {
         it.value().visibility.observedValue() != DivVisibility.GONE
     }

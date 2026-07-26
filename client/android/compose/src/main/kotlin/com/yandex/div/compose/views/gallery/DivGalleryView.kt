@@ -6,7 +6,6 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeIsConstrained
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGallery.Orientation
@@ -17,14 +16,6 @@ internal fun DivGalleryView(
     modifier: Modifier,
     data: DivGallery
 ) {
-    if (data.itemBuilder != null) {
-        reportError("div-gallery.item_builder not supported")
-    }
-
-    if (data.scrollContentAlignment != null) {
-        reportError("div-gallery.scroll_content_alignment not supported")
-    }
-
     val orientation = data.orientation.observedValue()
     val itemSpacing = data.itemSpacing.observedValue().toDp()
     val crossContentAlignment = data.crossContentAlignment.observedValue()
