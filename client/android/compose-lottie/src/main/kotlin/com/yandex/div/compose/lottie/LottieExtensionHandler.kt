@@ -56,7 +56,8 @@ class LottieExtensionHandler(
             isPlaying = params.isPlaying.observedValue(true),
             iterations = params.iterations,
             restartOnPlay = false,
-            reverseOnRepeat = params.repeatMode == LottieRepeatMode.REVERSE
+            reverseOnRepeat = params.repeatMode == LottieRepeatMode.REVERSE,
+            safeMode = params.safeMode
         )
     }
 

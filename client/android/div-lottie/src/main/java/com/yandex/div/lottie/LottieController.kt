@@ -9,7 +9,10 @@ import android.view.View.LAYER_TYPE_HARDWARE
 import android.view.View.LAYER_TYPE_SOFTWARE
 import androidx.annotation.FloatRange
 import androidx.annotation.MainThread
-import com.airbnb.lottie.*
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.LottieDrawable
+import com.airbnb.lottie.RenderMode
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.widget.DivViewDelegate
 import com.yandex.div.core.widget.LoadableImageView
@@ -214,6 +217,10 @@ internal class LottieController(
 
     fun getRepeatCount(): Int {
         return lottieDrawable.repeatCount
+    }
+
+    fun setSafeMode(safeMode: Boolean) {
+        lottieDrawable.setSafeMode(safeMode)
     }
 
     fun isAnimating(): Boolean = lottieDrawable.isAnimating

@@ -9,7 +9,8 @@ data class LottieExtensionParams(
     val isPlaying: Expression<Boolean>?,
     val repeatCount: Int,
     val repeatMode: LottieRepeatMode,
-    val repeats: List<LottieRepeat>
+    val repeats: List<LottieRepeat>,
+    val safeMode: Boolean
 )
 
 @InternalApi

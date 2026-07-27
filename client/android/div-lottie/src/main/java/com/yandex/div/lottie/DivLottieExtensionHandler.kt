@@ -162,6 +162,7 @@ open class DivLottieExtensionHandler(
         } else {
             setupRepeats(repeats, composition)
         }
+        setSafeMode(params.safeMode)
         playbackStateController.overrideRepeatCount(getRepeatCount())
 
         val isPlaying = params.isPlaying

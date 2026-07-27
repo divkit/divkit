@@ -42,7 +42,8 @@ class LottieExtensionParamsParser(
             isPlaying = isPlaying,
             repeatCount = getRepeatCount(json, expressionResolver),
             repeatMode = getRepeatMode(json, expressionResolver),
-            repeats = getRepeats(json, expressionResolver)
+            repeats = getRepeats(json, expressionResolver),
+            safeMode = getSafeMode(json, expressionResolver)
         )
     }
 
@@ -166,5 +167,18 @@ class LottieExtensionParamsParser(
             TYPE_HELPER_INT,
             NUMBER_TO_INT
         )?.evaluate(expressionResolver)?.toInt()
+    }
+
+    private fun getSafeMode(
+        json: JSONObject,
+        expressionResolver: ExpressionResolver
+    ): Boolean {
+        return JsonExpressionParser.readOptionalExpression(
+            parsingEnvironment,
+            json,
+            "safe_mode",
+            TYPE_HELPER_BOOLEAN,
+            ANY_TO_BOOLEAN
+        )?.evaluate(expressionResolver) ?: false
     }
 }

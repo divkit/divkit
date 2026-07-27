@@ -47,6 +47,7 @@ class LottieExtensionParamsParserTest {
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -66,6 +67,7 @@ class LottieExtensionParamsParserTest {
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -93,6 +95,7 @@ class LottieExtensionParamsParserTest {
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -112,6 +115,7 @@ class LottieExtensionParamsParserTest {
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -139,6 +143,7 @@ class LottieExtensionParamsParserTest {
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -157,6 +162,7 @@ class LottieExtensionParamsParserTest {
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -176,6 +182,7 @@ class LottieExtensionParamsParserTest {
                 repeatCount = 4,
                 repeatMode = LottieRepeatMode.REVERSE,
                 repeats = emptyList(),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -197,6 +204,7 @@ class LottieExtensionParamsParserTest {
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -238,6 +246,7 @@ class LottieExtensionParamsParserTest {
                         maxFrame = 321
                     )
                 ),
+                safeMode = false,
             ),
             parser.parse(json, expressionResolver)
         )
@@ -268,6 +277,45 @@ class LottieExtensionParamsParserTest {
                         maxFrame = null
                     )
                 ),
+                safeMode = false,
+            ),
+            parser.parse(json, expressionResolver)
+        )
+    }
+
+    @Test
+    fun `parse() with safe mode as boolean`() {
+        val json = JSONObject()
+            .put("lottie_url", "https://example.com/animation.json")
+            .put("safe_mode", true)
+
+        assertEquals(
+            LottieExtensionParams(
+                data = LottieData.Url("https://example.com/animation.json"),
+                isPlaying = null,
+                repeatCount = 1,
+                repeatMode = LottieRepeatMode.RESTART,
+                repeats = emptyList(),
+                safeMode = true,
+            ),
+            parser.parse(json, expressionResolver)
+        )
+    }
+
+    @Test
+    fun `parse() with safe mode as bool int`() {
+        val json = JSONObject()
+            .put("lottie_url", "https://example.com/animation.json")
+            .put("safe_mode", 1)
+
+        assertEquals(
+            LottieExtensionParams(
+                data = LottieData.Url("https://example.com/animation.json"),
+                isPlaying = null,
+                repeatCount = 1,
+                repeatMode = LottieRepeatMode.RESTART,
+                repeats = emptyList(),
+                safeMode = true,
             ),
             parser.parse(json, expressionResolver)
         )
