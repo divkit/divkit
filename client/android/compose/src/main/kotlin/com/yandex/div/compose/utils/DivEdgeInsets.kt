@@ -13,7 +13,7 @@ import com.yandex.div2.DivSizeUnit
 
 @Composable
 internal fun DivEdgeInsets?.observeInsets(): PaddingValues {
-    val unit = this?.unit?.observedValue() ?: return PaddingValues(0.dp)
+    val unit = this?.unit?.observedValue() ?: return PaddingValues.Zero
 
     val (start, end) = observeHorizontalInsets(unit = unit)
     return PaddingValues(
@@ -26,13 +26,13 @@ internal fun DivEdgeInsets?.observeInsets(): PaddingValues {
 
 @Composable
 internal fun DivEdgeInsets?.observeHorizontalInsets(): Pair<Dp, Dp> {
-    val unit = this?.unit?.observedValue() ?: return Pair(0.dp, 0.dp)
-    return this.observeHorizontalInsets(unit)
+    val unit = this?.unit?.observedValue() ?: return ZeroPair
+    return observeHorizontalInsets(unit)
 }
 
 @Composable
 internal fun DivEdgeInsets?.observeVerticalInsets(): Pair<Dp, Dp> {
-    val unit = this?.unit?.observedValue() ?: return Pair(0.dp, 0.dp)
+    val unit = this?.unit?.observedValue() ?: return ZeroPair
     return Pair(top.observedValue().toDp(unit), bottom.observedValue().toDp(unit))
 }
 
@@ -52,10 +52,13 @@ internal fun DivBase.observeVerticalMarginsSum(): Dp {
 
 @Composable
 private fun DivEdgeInsets?.observeHorizontalInsets(unit: DivSizeUnit): Pair<Dp, Dp> {
-    this ?: return Pair(0.dp, 0.dp)
+    this ?: return ZeroPair
 
     if (start != null || end != null) {
-        return Pair(start?.observedValue()?.toDp(unit) ?: 0.dp, end?.observedValue()?.toDp(unit) ?: 0.dp)
+        return Pair(
+            start?.observedValue()?.toDp(unit) ?: 0.dp,
+            end?.observedValue()?.toDp(unit) ?: 0.dp
+        )
     }
 
     val left = left.observedValue().toDp(unit)
@@ -66,3 +69,5 @@ private fun DivEdgeInsets?.observeHorizontalInsets(unit: DivSizeUnit): Pair<Dp, 
         Pair(left, right)
     }
 }
+
+private val ZeroPair = Pair(0.dp, 0.dp)
