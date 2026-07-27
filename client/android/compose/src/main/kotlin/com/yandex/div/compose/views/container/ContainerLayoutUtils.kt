@@ -36,8 +36,11 @@ internal fun SeparatorVisibility.effectiveItemSpacing(itemSpacing: Long): Long =
     if (hasAnySeparator) 0L else itemSpacing
 
 @Composable
-internal fun DivContainer.visibleItems(): List<Div> =
-    items.orEmpty().filter { it.value().visibility.observedValue() != DivVisibility.GONE }
+internal fun DivContainer.visibleItems(): List<Div> {
+    return items
+        ?.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
+        ?: emptyList()
+}
 
 @Composable
 internal fun Div.observeVerticalChildAlignment(): Alignment.Vertical? =

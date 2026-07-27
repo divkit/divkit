@@ -26,9 +26,9 @@ internal fun DivPagerView(
     modifier: Modifier,
     data: DivPager,
 ) {
-    val items = data.items.orEmpty().filter {
-        it.value().visibility.observedValue() != DivVisibility.GONE
-    }
+    val items = data.items
+        ?.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
+        ?: emptyList()
 
     if (items.isEmpty()) {
         Box(modifier = modifier)
@@ -67,8 +67,16 @@ private fun PagerView(
         modifier = modifier
             .constrainUnboundedMax(isWidth = isHorizontal)
             .onMeasureConstraints { constraints ->
-                viewportSizePx.intValue = if (isHorizontal) constraints.maxWidth else constraints.maxHeight
-                crossAxisBounded.value = if (isHorizontal) constraints.hasBoundedHeight else constraints.hasBoundedWidth
+                viewportSizePx.intValue = if (isHorizontal) {
+                    constraints.maxWidth
+                } else {
+                    constraints.maxHeight
+                }
+                crossAxisBounded.value = if (isHorizontal) {
+                    constraints.hasBoundedHeight
+                } else {
+                    constraints.hasBoundedWidth
+                }
             }
     ) {
         if (viewportSizePx.intValue <= 0) return@Box

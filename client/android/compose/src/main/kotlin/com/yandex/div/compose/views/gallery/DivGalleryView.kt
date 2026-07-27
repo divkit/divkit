@@ -22,9 +22,9 @@ internal fun DivGalleryView(
     val defaultItem = data.defaultItem.observedIntValue()
     val contentPadding = data.paddings.observeInsets()
 
-    val items = data.items.orEmpty().filter {
-        it.value().visibility.observedValue() != DivVisibility.GONE
-    }
+    val items = data.items
+        ?.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
+        ?: emptyList()
 
     val columnCount = data.columnCount.observedIntValue(1)
     if (columnCount > 1) {

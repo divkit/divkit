@@ -29,9 +29,9 @@ import com.yandex.div2.DivVisibility
 @OptIn(ExperimentalGridApi::class)
 @Composable
 internal fun DivGridView(modifier: Modifier, data: DivGrid) {
-    val items = data.items.orEmpty().filter {
-        it.value().visibility.observedValue() != DivVisibility.GONE
-    }
+    val items = data.items
+        ?.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
+        ?: emptyList()
     val columnCount = data.columnCount.observedIntValue().coerceAtLeast(DEFAULT_COLUMN_COUNT)
     val (columnTracks, rowTracks) = items.computeTracks(
         columnCount = columnCount,

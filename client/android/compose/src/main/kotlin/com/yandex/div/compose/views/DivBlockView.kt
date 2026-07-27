@@ -46,7 +46,9 @@ internal fun DivBlockView(
         WithActionMenu(actions) {
             BaseViewWithExtensions(
                 data = data,
-                extensions = divBase.extensions.orEmpty().filter { it.isEnabled.observedValue() },
+                extensions = divBase.extensions
+                    ?.filter { it.isEnabled.observedValue() }
+                    ?: emptyList(),
                 modifier = modifier.apply(
                     data,
                     actions = actions,
