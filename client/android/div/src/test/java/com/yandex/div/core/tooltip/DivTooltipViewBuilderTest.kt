@@ -1,6 +1,7 @@
 package com.yandex.div.core.tooltip
 
 import android.app.Activity
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -94,6 +95,18 @@ class DivTooltipViewBuilderTest {
         val layoutParams = tooltipView?.layoutParams as DivLayoutParams
         assertEquals(WRAP_CONTENT, layoutParams.width)
         assertEquals(WRAP_CONTENT, layoutParams.height)
+    }
+
+    @Test
+    fun `tooltip view gravity is reset to default on preparation`() {
+        boundView.layoutParams = DivLayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+            gravity = Gravity.CENTER
+        }
+
+        val tooltipView = underTest.buildTooltipView(bindingContext, divTooltip).tooltipView
+
+        val layoutParams = tooltipView?.layoutParams as DivLayoutParams
+        assertEquals(DivLayoutParams.DEFAULT_GRAVITY, layoutParams.gravity)
     }
 
     private companion object {

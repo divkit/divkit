@@ -13,6 +13,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.divs.asDivHolderView
 import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
 import com.yandex.div2.Div
 import com.yandex.div2.DivTooltip
 import javax.inject.Inject
@@ -69,9 +70,10 @@ internal class DivTooltipViewBuilder @Inject constructor(
         val divBase = div.value()
         val resolver = context.expressionResolver
         val displayMetrics = this.context.resources.displayMetrics
-        layoutParams = (layoutParams as? DivLayoutParams ?: DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)).apply {
+        layoutParams = ((layoutParams as? DivLayoutParams) ?: DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)).apply {
             width = divBase.width.toLayoutParamsSize(displayMetrics, resolver, this)
             height = divBase.height.toLayoutParamsSize(displayMetrics, resolver, this)
+            gravity = DEFAULT_GRAVITY
         }
         isFocusable = true
     }
