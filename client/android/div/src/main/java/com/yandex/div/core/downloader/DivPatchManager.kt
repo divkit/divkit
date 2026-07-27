@@ -1,38 +1,25 @@
 package com.yandex.div.core.downloader
 
-import android.view.View
+import androidx.collection.ArrayMap
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import javax.inject.Inject
-import javax.inject.Provider
 
 @DivScope
 @Mockable
-internal class DivPatchManager @Inject constructor(
-    private val divPatchCache: DivPatchCache,
-    private val divViewCreator: Provider<Div2Builder>
-)  {
+internal class DivPatchManager @Inject constructor() {
+
+    private val patches = ArrayMap<DivDataTag, DivPatchMap>()
 
     private fun putPatch(tag: DivDataTag, patch: DivPatch): DivPatchMap {
-        return divPatchCache.putPatch(tag, patch)
-    }
-
-    fun buildViewsForId(context: BindingContext, id: String): List<View>? {
-        val patchDivs = divPatchCache.getPatchDivListById(context.divView.dataTag, id) ?: return null
-        return patchDivs.map { divViewCreator.get().buildView(it, context, context.divView.currentRootPath) }
-    }
-
-    fun createViewsForId(context: BindingContext, id: String): Map<Div, View>? {
-        val patched = divPatchCache.getPatchDivListById(context.divView.dataTag, id) ?: return null
-        return patched.associateWith { divViewCreator.get().createView(it, context, context.divView.currentRootPath) }
+        val patchMap = DivPatchMap(patch)
+        patches[tag] = patchMap
+        return patchMap
     }
 
     fun createPatchedDivData(
@@ -58,6 +45,6 @@ internal class DivPatchManager @Inject constructor(
     }
 
     fun removePatch(tag: DivDataTag) {
-        divPatchCache.removePatch(tag)
+        patches.remove(tag)
     }
 }

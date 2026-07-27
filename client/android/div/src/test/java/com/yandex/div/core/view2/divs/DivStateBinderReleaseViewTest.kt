@@ -2,8 +2,6 @@ package com.yandex.div.core.view2.divs
 
 import android.view.View
 import com.yandex.div.core.childrenToFlatList
-import com.yandex.div.core.downloader.DivPatchCache
-import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.findStateLayout
 import com.yandex.div.core.state.DivPathUtils.fromRootDiv
@@ -38,8 +36,6 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     private val stateManager = mock<DivStateManager>()
     private val divVisibilityActionTracker = mock<DivVisibilityActionTracker>()
     private val errorCollectors = mock<ErrorCollectors>()
-    private val divPatchManager = mock<DivPatchManager>()
-    private val divPatchCache = mock<DivPatchCache>()
     private val variableBinder = mock<TwoWayStringVariableBinder>()
 
     private val stateLayout = (viewCreator.create(divOne.div, ExpressionResolver.EMPTY) as DivStateLayout).apply {
@@ -53,8 +49,6 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
         viewBinder = { viewBinder },
         stateManager = stateManager,
         actionPerformer = actionPerformer,
-        divPatchManager = divPatchManager,
-        divPatchCache = divPatchCache,
         divVisibilityActionTracker = divVisibilityActionTracker,
         errorCollectors = errorCollectors,
         variableBinder = variableBinder,

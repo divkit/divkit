@@ -1,7 +1,5 @@
 package com.yandex.div.core.view2.divs
 
-import com.yandex.div.core.downloader.DivPatchCache
-import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.fromRootDiv
@@ -36,8 +34,6 @@ class DivStateBinderTest: DivBinderTest() {
     private val stateManager = mock<DivStateManager>()
     private val divVisibilityActionTracker = mock<DivVisibilityActionTracker>()
     private val errorCollectors = mock<ErrorCollectors>()
-    private val divPatchManager = mock<DivPatchManager>()
-    private val divPatchCache = mock<DivPatchCache>()
     private val variableBinder = mock<TwoWayStringVariableBinder>()
 
     private val div = UnitTestData(STATE_DIR, "state_list.json").div as Div.State
@@ -53,8 +49,6 @@ class DivStateBinderTest: DivBinderTest() {
         viewBinder = { viewBinder },
         stateManager = stateManager,
         actionPerformer = actionPerformer,
-        divPatchManager = divPatchManager,
-        divPatchCache = divPatchCache,
         divVisibilityActionTracker = divVisibilityActionTracker,
         errorCollectors = errorCollectors,
         variableBinder = variableBinder,

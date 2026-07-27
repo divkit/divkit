@@ -10,7 +10,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
@@ -43,7 +42,6 @@ internal class DivPagerBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
-    private val divPatchCache: DivPatchCache,
     private val actionPerformer: DivActionPerformer,
     private val pagerIndicatorConnector: PagerIndicatorConnector,
     private val accessibilityStateProvider: AccessibilityStateProvider,
@@ -56,11 +54,10 @@ internal class DivPagerBinder @Inject constructor(
         if (div === oldDiv) {
             val pager = view.viewPager
             val adapter = pager.adapter as? DivPagerAdapter ?: return
-            if (adapter.applyPatch(view.getRecyclerView(), divPatchCache, context)) {
-                view.pagerOnItemsCountChange?.onItemsUpdated()
-                return
-            }
+            adapter.setItems(div.value.buildItems(context.expressionResolver, path))
+            view.getRecyclerView()?.scrollToPosition(adapter.normalizeItemPosition(view.currentItem))
 
+            view.pagerOnItemsCountChange?.onItemsUpdated()
             view.bindStates(context, divBinder.get())
             pager.doOnNextLayout { pager.requestTransform() }
             return

@@ -1379,7 +1379,6 @@
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivDownloadActionHandler.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivDownloadActionHandler.kt",
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivDownloader.java":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivDownloader.java",
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchApply.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchApply.kt",
-  "client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchCache.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchCache.kt",
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchDownloadCallback.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchDownloadCallback.kt",
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchManager.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchManager.kt",
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchMap.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivPatchMap.kt",

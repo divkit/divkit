@@ -1,10 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.view.View
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.evaluateGravity
@@ -33,7 +30,6 @@ import javax.inject.Provider
 @DivScope
 internal class DivGridBinder @Inject constructor(
     baseBinder: DivBaseBinder,
-    private val divPatchManager: DivPatchManager,
     private val divBinder: Provider<DivBinder>,
     private val divViewCreator: Provider<DivViewCreator>,
 ) : DivViewBinder<Div.Grid, DivGrid, DivGridLayout>(baseBinder) {
@@ -76,19 +72,20 @@ internal class DivGridBinder @Inject constructor(
         oldDiv: DivGrid?,
         path: DivStatePath
     ) {
+        val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
         val items = div.nonNullItems
 
-        tryRebindPlainContainerChildren(
-            bindingContext.divView,
-            items.toDivItemBuilderResult(resolver, path),
-            divViewCreator,
-        )
+        val newItems = items.toDivItemBuilderResult(resolver, path)
+        if (!tryRebindPlainContainerChildren(divView, newItems, divViewCreator)) {
+            val oldItems = oldDiv?.items?.toDivItemBuilderResult(resolver, path) ?: emptyList()
+            replaceWithReuse(divView, divViewCreator, oldItems, newItems)
+        }
 
-        val dispatchedItems = dispatchBinding(bindingContext, items, path)
+        dispatchBinding(bindingContext, items, path)
         trackVisibilityActions(
-            bindingContext.divView,
-            dispatchedItems.toDivItemBuilderResult(resolver, path),
+            divView,
+            newItems,
             oldDiv?.items?.toDivItemBuilderResult(resolver, path),
         )
     }
@@ -111,21 +108,12 @@ internal class DivGridBinder @Inject constructor(
         bindingContext: BindingContext,
         items: List<Div>,
         path: DivStatePath
-    ): List<Div> {
+    ) {
         val divView = bindingContext.divView
         val resolver = bindingContext.expressionResolver
-        var shift = 0
 
-        val patchedItems = items.flatMapIndexed { index, item ->
-            applyPatchToChild(
-                bindingContext,
-                item,
-                index + shift
-            ).also { shift += it.size - 1 }
-        }
-
-        val ids = patchedItems.getIds()
-        patchedItems.forEachIndexed { index, item ->
+        val ids = items.getIds()
+        items.forEachIndexed { index, item ->
             val childView = getChildAt(index)
             val childDiv = item.value()
             val childPath = path.appendDiv(ids[index])
@@ -138,26 +126,6 @@ internal class DivGridBinder @Inject constructor(
                 divView.unbindViewFromDiv(childView)
             }
         }
-        return patchedItems
-    }
-
-    private fun ViewGroup.applyPatchToChild(
-        bindingContext: BindingContext,
-        childDiv: Div,
-        childIndex: Int
-    ): List<Div> {
-        val divView = bindingContext.divView
-        val childId = childDiv.value().id
-        if (childId != null && !divView.complexRebindInProgress) {
-            val patch = divPatchManager.createViewsForId(bindingContext, childId) ?: return listOf(childDiv)
-            removeViewAt(childIndex)
-            var shift = 0
-            patch.forEach { (_, patchView) ->
-                addView(patchView, childIndex + shift++, DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT))
-            }
-            return patch.keys.toList()
-        }
-        return listOf(childDiv)
     }
 
     private fun bindLayoutParams(childView: View, childDiv: DivBase, resolver: ExpressionResolver) {
@@ -189,17 +157,6 @@ internal class DivGridBinder @Inject constructor(
         if (params.rowSpan != rowSpan) {
             params.rowSpan = rowSpan
             requestLayout()
-        }
-    }
-
-    fun setDataWithoutBinding(bindingContext: BindingContext, view: DivGridLayout, div: Div.Grid, path: DivStatePath) {
-        view.div = div
-        val items = div.value.nonNullItems
-        val ids = items.getIds()
-        for (gridIndex in items.indices) {
-            val childView = view.getChildAt(gridIndex)
-            val context = childView.bindingContext ?: bindingContext
-            divBinder.get().setDataWithoutBinding(context, childView, items[gridIndex], path.appendDiv(ids[gridIndex]))
         }
     }
 }

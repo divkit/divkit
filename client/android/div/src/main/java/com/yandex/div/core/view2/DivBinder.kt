@@ -193,44 +193,6 @@ internal class DivBinder @Inject constructor(
     private fun bindLayoutParams(view: View, data: DivBase, resolver: ExpressionResolver) {
         view.applyMargins(data.margins, resolver)
     }
-
-    fun setDataWithoutBinding(context: BindingContext, view: View, div: Div, path: DivStatePath) = when (div) {
-        is Div.Text -> (view as DivLineHeightTextView).setDataWithoutBinding(context, div, path)
-        is Div.Image -> (view as DivImageView).setDataWithoutBinding(context, div, path)
-        is Div.GifImage -> (view as DivGifImageView).setDataWithoutBinding(context, div, path)
-        is Div.Separator -> (view as DivSeparatorView).setDataWithoutBinding(context, div, path)
-        is Div.Container -> setContainerData(context, view, div, path)
-        is Div.Grid -> setGridData(context, view, div, path)
-        is Div.Gallery -> (view as DivRecyclerView).setDataWithoutBinding(context, div, path)
-        is Div.Pager -> (view as DivPagerView).setDataWithoutBinding(context, div, path)
-        is Div.Tabs -> (view as DivTabsLayout).setDataWithoutBinding(context, div, path)
-        is Div.State -> (view as DivStateLayout).setDataWithoutBinding(context, div, path)
-        is Div.Custom -> (view as DivCustomWrapper).setDataWithoutBinding(context, div, path)
-        is Div.Indicator -> (view as DivPagerIndicatorView).setDataWithoutBinding(context, div, path)
-        is Div.Slider -> (view as DivSliderView).setDataWithoutBinding(context, div, path)
-        is Div.Input -> (view as DivInputView).setDataWithoutBinding(context, div, path)
-        is Div.Select -> (view as DivSelectView).setDataWithoutBinding(context, div, path)
-        is Div.Video -> (view as DivVideoView).setDataWithoutBinding(context, div, path)
-        is Div.Switch -> (view as DivSwitchView).setDataWithoutBinding(context, div, path)
-    }
-
-    private fun <T: Div> DivHolderView<T>.setDataWithoutBinding(
-        context: BindingContext,
-        newDiv: T,
-        newPath: DivStatePath,
-    ) {
-        div = newDiv
-        bindingContext = context
-        path = newPath
-    }
-
-    private fun setContainerData(context: BindingContext, view: View, data: Div.Container, path: DivStatePath) {
-        containerBinder.setDataWithoutBinding(context, view as ViewGroup, data, path)
-    }
-
-    private fun setGridData(context: BindingContext, view: View, data: Div.Grid, path: DivStatePath) {
-        gridBinder.setDataWithoutBinding(context, view as DivGridLayout, data, path)
-    }
 }
 
 private fun BindingContext.getChildContext(div: Div, path: DivStatePath): BindingContext {

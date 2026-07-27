@@ -13,8 +13,6 @@ import androidx.transition.TransitionSet
 import androidx.transition.Visibility
 import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.downloader.DivPatchCache
-import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.append
@@ -25,7 +23,6 @@ import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.containsStateInnerTransitions
 import com.yandex.div.core.util.getDefaultState
-import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.util.toAlignmentHorizontal
 import com.yandex.div.core.util.toAlignmentVertical
 import com.yandex.div.core.util.walk
@@ -50,7 +47,6 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
-import com.yandex.div.internal.KLog
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.WRAP_CONTENT_CONSTRAINED
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -71,8 +67,6 @@ internal class DivStateBinder @Inject constructor(
     private val viewBinder: Provider<DivBinder>,
     private val stateManager: DivStateManager,
     private val actionPerformer: DivActionPerformer,
-    private val divPatchManager: DivPatchManager,
-    private val divPatchCache: DivPatchCache,
     private val divVisibilityActionTracker: DivVisibilityActionTracker,
     private val errorCollectors: ErrorCollectors,
     private val variableBinder: TwoWayStringVariableBinder,
@@ -242,27 +236,6 @@ internal class DivStateBinder @Inject constructor(
                 incoming.doOnNextLayout {
                     divVisibilityActionTracker.trackVisibilityActionsOf(divView, resolver, incoming, newStateDiv)
                 }
-            }
-        }
-
-        // applying div patch
-        oldDiv?.value()?.id?.let { childDivId ->
-            val patchView = divPatchManager.buildViewsForId(bindingContext, childDivId)?.let { views ->
-                if (views.size > 1) {
-                    KLog.e(TAG) { "Unable to patch state because there is more than 1 div in the patch" }
-                    null
-                } else {
-                    views.firstOrNull()
-                }
-            }
-            val patchDiv = divPatchCache.getPatchDivListById(divView.dataTag, childDivId)?.firstOrNull()
-            if (patchView != null && patchDiv != null) {
-                releaseAndRemoveChildren(divView)
-                addView(patchView)
-                if (patchDiv.value().hasSightActions) {
-                    divView.bindViewToDiv(patchView, patchDiv)
-                }
-                viewBinder.get().bind(bindingContext, patchView, patchDiv, currentPath)
             }
         }
 
@@ -497,10 +470,6 @@ internal class DivStateBinder @Inject constructor(
             return transition
         }
         return null
-    }
-
-    private companion object {
-        const val TAG = "DivStateBinder"
     }
 }
 

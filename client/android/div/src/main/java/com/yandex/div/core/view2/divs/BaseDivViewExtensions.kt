@@ -20,15 +20,20 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.allSightActions
+import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.evaluateGravity
+import com.yandex.div.core.util.isBranch
+import com.yandex.div.core.util.type
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivGestureListener
+import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.asTouchListener
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.DivViewWrapper
@@ -41,6 +46,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -54,6 +60,7 @@ import com.yandex.div2.DivPivotFixed
 import com.yandex.div2.DivPivotPercentage
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivTransform
+import javax.inject.Provider
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     if (insets == null) {
@@ -438,4 +445,50 @@ internal fun View.performLongClickOnAncestors(): Boolean {
         if (current.parent == null) return false
     } while (!current.performLongClick())
     return true
+}
+
+internal fun ViewGroup.replaceWithReuse(
+    divView: Div2View,
+    divViewCreator: Provider<DivViewCreator>,
+    oldItems: List<DivItemBuilderResult>,
+    newItems: List<DivItemBuilderResult>,
+) {
+    val oldChildren = mutableMapOf<Div, View>()
+    oldItems.zip(children.toList()) { childDiv, child ->
+        oldChildren[childDiv.div] = child
+    }
+
+    removeAllViews()
+
+    val createViewIndices = mutableListOf<Int>()
+
+    newItems.forEachIndexed { index, newChild ->
+        val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
+            if (oldChildDiv.isBranch) {
+                newChild.div.type == oldChildDiv.type
+            } else {
+                oldChildDiv.canBeReused(newChild.div, newChild.expressionResolver)
+            }
+        }
+
+        oldChildren.remove(oldViewIndex)?.let { addView(it) }
+            ?: run { createViewIndices += index }
+    }
+
+    createViewIndices.forEach { index ->
+        val newChild = newItems[index]
+
+        val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
+            oldChildDiv.type == newChild.div.type
+        }
+
+        val childView = oldChildren.remove(oldViewIndex)
+            ?: divViewCreator.get().create(newChild.div, newChild.expressionResolver)
+
+        addView(childView, index)
+    }
+
+    oldChildren.values.forEach {
+        divView.releaseViewVisitor.visitViewTree(it)
+    }
 }

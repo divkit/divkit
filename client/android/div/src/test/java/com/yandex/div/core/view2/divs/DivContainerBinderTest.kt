@@ -23,10 +23,7 @@ private const val TEST_DIR = "$DIV_STATE_DIR/autoanimations"
 @RunWith(RobolectricTestRunner::class)
 class DivContainerBinderTest : DivBinderTest() {
 
-    private val binder = DivContainerBinder(
-        baseBinder, { viewCreator }, mock(),
-        { mock() }, mock()
-    )
+    private val binder = DivContainerBinder(baseBinder, { viewCreator }, { mock() }, mock())
 
     @Test
     fun `url action applied`() {

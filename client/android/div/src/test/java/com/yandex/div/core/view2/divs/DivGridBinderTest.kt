@@ -14,7 +14,6 @@ class DivGridBinderTest : DivBinderTest() {
 
     private val binder = DivGridBinder(
         baseBinder = baseBinder,
-        divPatchManager = mock(),
         divBinder = { mock() },
         divViewCreator = mock(),
     )

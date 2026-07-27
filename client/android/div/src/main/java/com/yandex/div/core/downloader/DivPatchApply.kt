@@ -46,10 +46,6 @@ internal class DivPatchApply(
         return list
     }
 
-    fun applyPatchForDiv(div: Div, resolver: ExpressionResolver): List<Div> {
-        return div.applyPatch(resolver)
-    }
-
     private fun Div.applyPatch(resolver: ExpressionResolver): List<Div> {
         val divId = value().id
         if (divId != null && patch.patches.containsKey(divId)) return applyPatchForSingleDiv()
@@ -171,29 +167,6 @@ internal class DivPatchApply(
         return Div.Tabs(
             div.copy(items = newTabItems)
         )
-    }
-
-    /**
-     * Returns div with patched child if has such, otherwise null.
-     */
-    fun patchDivChild(
-        parentView: View,
-        parentDiv: Div,
-        idToPatch: String,
-        resolver: ExpressionResolver
-    ): Div? {
-        val pathToChild = pathToChildWithId(parentDiv, idToPatch, resolver)
-        val iterator = pathToChild.iterator()
-        if (pathToChild.isEmpty()) return null
-
-        iterator.next()
-
-        // Notify internal recycler about changes if needed.
-        pathToChild.findLast { it is Div.Gallery || it is Div.Pager }?.let {
-            findPatchedRecyclerViewAndNotifyChange(parentView, it, idToPatch)
-        }
-
-        return getPatchedTreeByPath(parentDiv, iterator, resolver)
     }
 
     private fun pathToChildWithId(

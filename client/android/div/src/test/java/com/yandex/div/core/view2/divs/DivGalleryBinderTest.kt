@@ -38,7 +38,6 @@ class DivGalleryBinderTest : DivBinderTest() {
         baseBinder = baseBinder,
         viewCreator = viewCreator,
         divBinder = { divBinder },
-        divPatchCache = mock(),
         recyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT
     )
 

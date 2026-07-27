@@ -542,14 +542,10 @@ class Div2View private constructor(
         newDivData: DivData,
         reporter: PatchEventReporter,
     ): Boolean {
-        val state = newDivData.stateToBind ?: return false
-
         bindOnAttachRunnable?.cancel()
         val oldRootDiv = oldData.state()?.div
         val rootChanges = patch.changes.find { it.id == oldRootDiv?.value()?.id } ?: run {
-            rebind(oldData, reporter)
-            _divData = newDivData
-            div2Component.divBinder.setDataWithoutBinding(bindingContext, getChildAt(0), state.div, currentRootPath)
+            rebind(newDivData, reporter)
             return true
         }
 

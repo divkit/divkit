@@ -14,7 +14,6 @@ import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
-import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.font.DivTypefaceType
 import com.yandex.div.core.images.BitmapSource
@@ -73,8 +72,7 @@ internal class DivTabsBinder @Inject constructor(
     private val div2Logger: Div2Logger,
     private val imageLoader: DivImageLoader,
     private val visibilityActionTracker: DivVisibilityActionTracker,
-    private val divPatchCache: DivPatchCache,
-    @Named(Names.THEMED_CONTEXT) private val context: Context,
+    @param:Named(Names.THEMED_CONTEXT) private val context: Context,
     private val runtimeVisitor: DivRuntimeVisitor,
     private val tabsStateCache: TabsStateCache,
 ) : DivViewBinder<Div.Tabs, DivTabs, DivTabsLayout>(baseBinder) {
@@ -89,15 +87,12 @@ internal class DivTabsBinder @Inject constructor(
     override fun bindView(context: BindingContext, view: DivTabsLayout, div: Div.Tabs, path: DivStatePath) {
         val oldDiv = view.div
         if (oldDiv === div) {
-            view.divTabsAdapter?.applyPatch(context.expressionResolver, div, context.divView)?.let {
-                view.div = it
-                return@bindView
-            }
-        } else {
-            baseBinder.bindView(context, view, div, oldDiv, path)
-            view.bind(context, div.value, oldDiv?.value)
+            view.divTabsAdapter?.setData { div.value.createSimpleTabs(view, context.expressionResolver) }
+            return
         }
 
+        baseBinder.bindView(context, view, div, oldDiv, path)
+        view.bind(context, div.value, oldDiv?.value)
         bindAdapter(path, context, view, oldDiv?.value, div.value, divBinder.get(), view)
     }
 
@@ -132,6 +127,9 @@ internal class DivTabsBinder @Inject constructor(
         })
     }
 
+    private fun DivTabs.createSimpleTabs(view: View, resolver: ExpressionResolver) =
+        items.map { DivSimpleTab(it, view.resources.displayMetrics, resolver) }
+
     private fun bindAdapter(
         path: DivStatePath,
         bindingContext: BindingContext,
@@ -142,7 +140,7 @@ internal class DivTabsBinder @Inject constructor(
         subscriber: ExpressionSubscriber
     ) {
         val resolver = bindingContext.expressionResolver
-        val list = div.items.map { DivSimpleTab(it, view.resources.displayMetrics, resolver) }
+        val list = div.createSimpleTabs(view, resolver)
 
         view.divTabsAdapter?.takeIf { it.isDynamicHeight == div.dynamicHeight.evaluate(resolver) }
             ?.reuse(path, bindingContext, oldDiv, div, list)
@@ -236,7 +234,7 @@ internal class DivTabsBinder @Inject constructor(
         val adapter = DivTabsAdapter(
             viewPool, this, getTabbedCardLayoutIds(), heightCalculatorFactory, isDynamicHeight,
             bindingContext, textStyleProvider, viewCreator, divBinder,
-            eventManager, activeStateTracker, path, divPatchCache
+            eventManager, activeStateTracker, path,
         )
         adapter.setData { list }
         adapter.selectedTab = tabToSelect ?: div.selectedTab.evaluate(bindingContext.expressionResolver).toIntSafely()

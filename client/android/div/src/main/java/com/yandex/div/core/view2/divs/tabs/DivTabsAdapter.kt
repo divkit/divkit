@@ -3,14 +3,11 @@ package com.yandex.div.core.view2.divs.tabs
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-import com.yandex.div.core.downloader.DivPatchApply
-import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
@@ -37,7 +34,6 @@ internal class DivTabsAdapter(
     val divTabsEventManager: DivTabsEventManager,
     val activeStateTracker: DivTabsActiveStateTracker,
     private var path: DivStatePath,
-    private val divPatchCache: DivPatchCache,
 ) : BaseDivTabbedCardUi<DivSimpleTab, ViewGroup, DivAction>(
     viewPool,
     view,
@@ -127,15 +123,6 @@ internal class DivTabsAdapter(
             // ... and a little bit of a magic
             tabView.requestLayout()
         }
-    }
-
-    fun applyPatch(resolver: ExpressionResolver, div: Div.Tabs, divView: Div2View): Div.Tabs? {
-        val patchMap = divPatchCache.getPatch(bindingContext.divView.dataTag) ?: return null
-        val newTabs = DivPatchApply(patchMap) { divView.logError(it) }.applyPatchForDiv(div, resolver)[0] as Div.Tabs
-        val displayMetrics = bindingContext.divView.resources.displayMetrics
-        val list = newTabs.value.items.map { DivSimpleTab(it, displayMetrics, resolver) }
-        setData { list }
-        return newTabs
     }
 }
 

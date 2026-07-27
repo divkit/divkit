@@ -7,15 +7,12 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.hasSightActions
-import com.yandex.div.core.util.isBranch
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.isHorizontal
 import com.yandex.div.core.util.isWrapContainer
@@ -23,7 +20,6 @@ import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.toAlignmentHorizontal
 import com.yandex.div.core.util.toAlignmentVertical
 import com.yandex.div.core.util.toDrawable
-import com.yandex.div.core.util.type
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -35,7 +31,6 @@ import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
-import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
@@ -76,7 +71,6 @@ private const val AXIS_CROSS = "cross"
 internal class DivContainerBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val divViewCreator: Provider<DivViewCreator>,
-    private val divPatchManager: DivPatchManager,
     private val divBinder: Provider<DivBinder>,
     private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<Div.Container, DivContainer, ViewGroup>(baseBinder) {
@@ -162,7 +156,7 @@ internal class DivContainerBinder @Inject constructor(
                 DivComparator.areChildrenReplaceable(oldItems, items, path, path) -> Unit
 
             else -> {
-                replaceWithReuse(divView, oldItems, items)
+                replaceWithReuse(divView, divViewCreator, oldItems, items)
                 oldItems = null
             }
         }
@@ -181,7 +175,7 @@ internal class DivContainerBinder @Inject constructor(
         bindItemBuilder(builder, context.expressionResolver) {
             val newItems = builder.build(context.expressionResolver, path)
             val oldItems = (this as DivCollectionHolder).items ?: emptyList()
-            replaceWithReuse(context.divView, oldItems, newItems)
+            replaceWithReuse(context.divView, divViewCreator, oldItems, newItems)
             applyItems(context, div, div, newItems, oldItems, path, errorCollector)
         }
     }
@@ -208,9 +202,19 @@ internal class DivContainerBinder @Inject constructor(
         oldItems: List<DivItemBuilderResult>?,
         path: DivStatePath,
     ) {
-        val dispatchedItems = dispatchBinding(bindingContext, div, oldDiv, items, path)
-        (this as DivCollectionHolder).items = dispatchedItems
-        trackVisibilityActions(bindingContext.divView, dispatchedItems, oldItems)
+        val ids = items.getItemIds()
+        items.forEachIndexed { index, item ->
+            getChildAt(index).bindChild(
+                bindingContext,
+                item.div,
+                item.expressionResolver,
+                div,
+                oldDiv,
+                path.appendDiv(ids[index])
+            )
+        }
+        (this as DivCollectionHolder).items = items
+        trackVisibilityActions(bindingContext.divView, items, oldItems)
     }
 
     private fun ViewGroup.validateChildren(
@@ -227,47 +231,6 @@ internal class DivContainerBinder @Inject constructor(
                 is DivLinearLayout -> div.checkMainAxisSize(childDivValue, resolver, errorCollector)
             }
         }
-    }
-
-    private fun ViewGroup.dispatchBinding(
-        bindingContext: BindingContext,
-        newDiv: DivContainer,
-        oldDiv: DivContainer?,
-        items: List<DivItemBuilderResult>,
-        path: DivStatePath,
-    ): List<DivItemBuilderResult> {
-        var shift = 0
-        val patchedItems = newDiv.itemBuilder?.let { items } ?: items.flatMapIndexed { index, item ->
-            applyPatchToChild(bindingContext, item.div, index + shift)
-                .map { div -> DivItemBuilderResult(div, item.expressionResolver, item.path) }
-                .also { shift += it.size - 1 }
-        }
-
-        val ids = patchedItems.getItemIds()
-        patchedItems.forEachIndexed { index, item ->
-            getChildAt(index).bindChild(
-                bindingContext,
-                item.div,
-                item.expressionResolver,
-                newDiv,
-                oldDiv,
-                path.appendDiv(ids[index])
-            )
-        }
-        return patchedItems
-    }
-
-    private fun ViewGroup.applyPatchToChild(
-        bindingContext: BindingContext,
-        childDiv: Div,
-        childIndex: Int
-    ): List<Div> {
-        val childId = childDiv.value().id ?: return listOf(childDiv)
-        val patch = divPatchManager.createViewsForId(bindingContext, childId) ?: return listOf(childDiv)
-        removeViewAt(childIndex)
-        var shift = 0
-        patch.forEach { (_, patchView) -> addView(patchView, childIndex + shift++) }
-        return patch.keys.toList()
     }
 
     private fun View.bindChild(
@@ -301,57 +264,6 @@ internal class DivContainerBinder @Inject constructor(
             divView.bindViewToDiv(this, div)
         } else {
             divView.unbindViewFromDiv(this)
-        }
-    }
-
-    private fun ViewGroup.replaceWithReuse(
-        divView: Div2View,
-        oldItems: List<DivItemBuilderResult>,
-        newItems: List<DivItemBuilderResult>,
-    ) {
-        val oldChildren = mutableMapOf<Div, View>()
-        oldItems.zip(children.toList()) { childDiv, child ->
-            oldChildren[childDiv.div] = child
-        }
-
-        removeAllViews()
-
-        val createViewIndices = mutableListOf<Int>()
-
-        newItems.forEachIndexed { index, newChild ->
-            val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
-                if (oldChildDiv.isBranch) {
-                    newChild.div.type == oldChildDiv.type
-                } else {
-                    oldChildDiv.canBeReused(newChild.div, newChild.expressionResolver)
-                }
-            }
-
-            val childView = oldChildren.remove(oldViewIndex)
-
-            if (childView != null) {
-                addView(childView)
-            } else {
-                createViewIndices += index
-            }
-        }
-
-        createViewIndices.forEach { index ->
-            val newChild = newItems[index]
-
-            val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
-                oldChildDiv.type == newChild.div.type
-            }
-
-            val childView = oldChildren
-                .remove(oldViewIndex)
-                ?: divViewCreator.get().create(newChild.div, newChild.expressionResolver)
-
-            addView(childView, index)
-        }
-
-        oldChildren.values.forEach {
-            divView.releaseViewVisitor.visitViewTree(it)
         }
     }
 
@@ -711,22 +623,6 @@ internal class DivContainerBinder @Inject constructor(
         if (this is DivSize.MatchParent) {
             val withId = childDiv.id?.let { " with id='$it'" } ?: ""
             errorCollector.logWarning(Throwable(INCORRECT_CHILD_SIZE_MESSAGE.format(mode, withId, axis)))
-        }
-    }
-
-    fun setDataWithoutBinding(
-        bindingContext: BindingContext,
-        view: ViewGroup,
-        div: Div.Container,
-        path: DivStatePath,
-    ) {
-        @Suppress("UNCHECKED_CAST")
-        (view as DivHolderView<Div.Container>).div = div
-        val binder = divBinder.get()
-        div.value.buildItems(bindingContext.expressionResolver, path).forEachIndexed { index, item ->
-            val childView = view.getChildAt(index)
-            val context = childView.bindingContext ?: bindingContext
-            binder.setDataWithoutBinding(context, childView, item.div, item.path)
         }
     }
 

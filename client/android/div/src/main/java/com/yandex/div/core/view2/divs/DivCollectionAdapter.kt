@@ -2,15 +2,11 @@ package com.yandex.div.core.view2.divs
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
-import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.downloader.DivPatchApply
-import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.DivItemBuilderResult
-import com.yandex.div.internal.core.toDivItemBuilderResult
 
 internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     private val bindingContext: BindingContext,
@@ -40,62 +36,6 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     override fun onViewAttachedToWindow(holder: VH) {
         super.onViewAttachedToWindow(holder)
         holder.updateState()
-    }
-
-    fun applyPatch(
-        recyclerView: RecyclerView?,
-        divPatchCache: DivPatchCache,
-        bindingContext: BindingContext,
-    ): Boolean {
-        val patch = divPatchCache.getPatch(bindingContext.divView.dataTag) ?: return false
-        val divPatchApply = DivPatchApply(patch) {
-            bindingContext.divView.logError(it)
-        }
-
-        val appliedToListPatchIds = mutableSetOf<String>()
-        var index = 0
-
-        while (index < items.size) {
-            val childItem = items[index]
-            val patchId = childItem.div.value().id
-            val patchDivs = patchId?.let {
-                divPatchCache.getPatchDivListById(bindingContext.divView.dataTag, it)
-            }
-
-            if (patchDivs != null) {
-                removeItem(index)
-
-                val patchItems = patchDivs.toDivItemBuilderResult(bindingContext.expressionResolver, path)
-                addItems(index, patchItems)
-
-                index += patchDivs.size - 1
-                appliedToListPatchIds.add(patchId)
-            }
-
-            index++
-        }
-
-        // Apply patch inside items if needed
-        patch.patches.keys.filter { it !in appliedToListPatchIds }.forEach { idToFind ->
-            items.forEachIndexed { i, item ->
-                val childDiv = item.div
-                divPatchApply.patchDivChild(
-                    parentView = recyclerView ?: bindingContext.divView,
-                    childDiv,
-                    idToFind,
-                    bindingContext.expressionResolver
-                )?.let { newDiv ->
-                    setItem(i, DivItemBuilderResult(newDiv, item.expressionResolver, item.path))
-                    return@forEach
-                }
-            }
-        }
-
-        if (appliedToListPatchIds.isEmpty()) return false
-
-        updateIds()
-        subscribeOnElements()
-        return true
     }
 
     open fun setItems(newItems: List<DivItemBuilderResult>) {
@@ -162,7 +102,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
         }
 
         override fun onRemoved(position: Int, count: Int) {
-            for (i in 0 until count) {
+            repeat(count) {
                 removeItem(position)
             }
         }

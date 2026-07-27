@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.GalleryState
@@ -38,7 +37,6 @@ internal class DivGalleryBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
-    private val divPatchCache: DivPatchCache,
     private val recyclerScrollInterceptionAngle: Float,
 ) : DivViewBinder<Div.Gallery, DivGallery, DivRecyclerView>(baseBinder) {
 
@@ -47,7 +45,7 @@ internal class DivGalleryBinder @Inject constructor(
         val oldDiv = view.div
         if (div === oldDiv) {
             val adapter = view.adapter as? DivGalleryAdapter ?: return
-            adapter.applyPatch(view, divPatchCache, context)
+            adapter.setItems(div.value.buildItems(context.expressionResolver, path))
             view.bindStates(context, divBinder.get())
             return
         }
