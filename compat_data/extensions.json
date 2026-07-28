@@ -159,6 +159,12 @@
       "compat": {
         "web": {
           "version_added": "30.59.0"
+        },
+        "android": {
+          "version_added": "30.60.0"
+        },
+        "ios": {
+          "version_added": "30.60.0"
         }
       }
     }

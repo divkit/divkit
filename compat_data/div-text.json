@@ -221,6 +221,15 @@
       }
     },
     {
+      "id": "text_image_baseline_offset",
+      "name": "<code>baseline_offset</code> property for the image of a <code>text</code>",
+      "compat": {
+        "web": {
+          "version_added": "32.60.0"
+        }
+      }
+    },
+    {
       "id": "text_mask",
       "name": "<code>mask</code> property for the range of a <code>text</code>",
       "compat": {
