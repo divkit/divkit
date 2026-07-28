@@ -65,7 +65,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -84,11 +85,15 @@
         {
           "type": "error",
           "value": "Scope with id 'nonexistent_scope' not found"
+        },
+        {
+          "type": "error",
+          "value": "Tooltip with id 'inner_tooltip' is ambiguous"
         }
       ],
       "platforms": [
-        "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -109,7 +114,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

@@ -1138,9 +1138,9 @@
             stateCtx.registerChild(id);
         }
 
-        componentContext.json.tooltips?.forEach(tooltip => {
-            rootCtx.registerTooltip(node, tooltip);
-        });
+        if (componentContext.json.tooltips) {
+            componentContext.attachViewInfo('tooltips', componentContext.json.tooltips);
+        }
 
         if (layoutProviderResizeObserver) {
             layoutProviderResizeObserver.disconnect();
@@ -1255,9 +1255,7 @@
             layoutProviderResizeObserver = undefined;
         }
 
-        componentContext.json.tooltips?.forEach(tooltip => {
-            rootCtx.unregisterTooltip(tooltip);
-        });
+        componentContext.detachViewInfo('tooltips');
 
         prevTriggersUnsubscribe?.();
 

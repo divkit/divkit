@@ -74,7 +74,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -95,10 +96,15 @@
         {
           "type": "error",
           "value": "Scope with id 'nonexistent_scope' not found"
+        },
+        {
+          "type": "error",
+          "value": "Element with id 'form_container' is ambiguous"
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -122,7 +128,8 @@
         }
       ],
       "platforms": [
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]

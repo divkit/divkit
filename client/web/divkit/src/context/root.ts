@@ -1,6 +1,6 @@
 import type { Readable } from 'svelte/store';
 import type { Action, Direction, DisappearAction, DivBase, DivExtension, DivExtensionContext, TemplateContext, TypefaceProvider, VariableTrigger, VideoPlayerProvider, VisibilityAction } from '../../typings/common';
-import type { DivBaseData, Tooltip } from '../types/base';
+import type { DivBaseData } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable } from '../expressions/variable';
 import type { TintMode } from '../types/image';
@@ -43,8 +43,6 @@ export interface RootCtxValue {
     unregisterInstance(id: string): void;
     registerParentOf(id: string, methods: ParentMethods): void;
     unregisterParentOf(id: string): void;
-    registerTooltip(node: HTMLElement, tooltip: MaybeMissing<Tooltip>): void;
-    unregisterTooltip(tooltip: MaybeMissing<Tooltip>): void;
     onTooltipClose(internalId: number): void;
     tooltipRoot: HTMLElement | undefined;
     addSvgFilter(color: string, mode: TintMode): string;

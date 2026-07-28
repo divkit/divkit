@@ -250,9 +250,8 @@
         ownerNode: HTMLElement;
         desc: MaybeMissing<Tooltip>;
         timeoutId: number | null;
-        componentContext: ComponentContext | undefined;
+        componentContext: ComponentContext;
     }[] = [];
-    const shownTooltips = new Set<string>();
     let menu: {
         items: MaybeMissing<ActionMenuItem>[];
         node: HTMLElement;
@@ -662,7 +661,8 @@
     async function callSubmit(
         componentContext: ComponentContext | undefined,
         action: MaybeMissing<ActionSubmit>,
-        origAction: MaybeMissing<ActionSubmit>
+        origAction: MaybeMissing<ActionSubmit>,
+        targetContext: ComponentContext
     ) {
         const log = (componentContext?.logError || logError);
 
@@ -675,22 +675,10 @@
             return;
         }
 
-        const getters = nodeGettersById.get(action.container_id);
-
-        if (getters?.length !== 1) {
-            log(wrapError(new Error('Error resolving container. Found multiple elements that respond to id'), {
-                additional: {
-                    containerId: action.container_id
-                }
-            }));
-            return;
-        }
-
-        const ctx = getters[0].context();
         const vals: Record<string, unknown> = {};
 
-        if (ctx.variables) {
-            for (const [key, variable] of ctx.variables) {
+        if (targetContext.variables) {
+            for (const [key, variable] of targetContext.variables) {
                 const val = variable.getValue();
 
                 if (typeof val === 'bigint') {
@@ -1079,7 +1067,9 @@
     function callShowTooltip(
         id: string | null | undefined,
         multiple: string | boolean | null | undefined,
-        componentContext?: ComponentContext
+        componentContext: ComponentContext | undefined,
+        scopeContext: ComponentContext,
+        isScopeFound: boolean
     ): void {
         const log = (componentContext?.logError || logError);
 
@@ -1087,8 +1077,18 @@
             log(wrapError(new Error('Missing id in show_tooltip action')));
             return;
         }
-        const item = tooltipMap.get(id);
-        if (!item) {
+
+        const targetContexts = findTooltip(scopeContext, id, isScopeFound, false);
+        const targetContext = targetContexts?.[0];
+        if (!targetContext) {
+            return;
+        }
+
+        const tooltipsList = targetContext.getViewInfo('tooltips');
+        const node = targetContext.getViewInfo('node')?.();
+
+        const tooltip = tooltipsList?.find(it => it.id === id);
+        if (!tooltip || !node) {
             log(wrapError(new Error('Tooltip with the provided id is not found'), {
                 additional: {
                     id
@@ -1096,21 +1096,22 @@
             }));
             return;
         }
-        if ((multiple !== 'true' && multiple !== true) && shownTooltips.has(id)) {
+        if ((multiple !== 'true' && multiple !== true) && targetContext.shownTooltips?.has(id)) {
             return;
         }
-        shownTooltips.add(id);
+        targetContext.shownTooltips ||= new Set();
+        targetContext.shownTooltips.add(id);
 
         const info = {
             internalId: ++tooltipCounter,
-            ownerNode: item.onwerNode,
-            desc: item.tooltip,
+            ownerNode: node,
+            desc: tooltip,
             timeoutId: 0,
-            componentContext
+            componentContext: targetContext
         };
         tooltips = [...tooltips, info];
 
-        const duration = item.tooltip.duration ?? 5000;
+        const duration = tooltip.duration ?? 5000;
         if (duration) {
             info.timeoutId = window.setTimeout(() => {
                 info.timeoutId = 0;
@@ -1119,15 +1120,26 @@
         }
     }
 
-    function callHideTooltip(id: string | null | undefined, componentContext?: ComponentContext): void {
+    function callHideTooltip(
+        id: string | null | undefined,
+        componentContext: ComponentContext | undefined,
+        scopeContext: ComponentContext,
+        isScopeFound: boolean
+    ): void {
         const log = (componentContext?.logError || logError);
 
         if (!id) {
             log(wrapError(new Error('Missing id in hide_tooltip action')));
             return;
         }
+
+        const targetContexts = findTooltip(scopeContext, id, isScopeFound, true);
+        if (!targetContexts?.length) {
+            return;
+        }
+
         tooltips = tooltips.filter(it => {
-            const res = it.desc.id !== id;
+            const res = !(it.desc.id === id && targetContexts.includes(it.componentContext));
 
             if (!res && it.timeoutId) {
                 clearTimeout(it.timeoutId);
@@ -1264,6 +1276,44 @@
         }
     }
 
+    function findTooltip(
+        scope: ComponentContext,
+        tooltipId: string,
+        isScopeFound: boolean,
+        multiple: boolean
+    ): ComponentContext[] | undefined {
+        const found = new Set<ComponentContext>();
+
+        const walk = (context: ComponentContext) => {
+            if (context.children) {
+                for (const child of context.children) {
+                    walk(child);
+                }
+            }
+            const tooltips = context.getViewInfo('tooltips');
+            if (tooltips) {
+                for (const tooltip of tooltips) {
+                    if (tooltip.id === tooltipId) {
+                        found.add(context);
+                    }
+                }
+            }
+        };
+        walk(scope);
+
+        if (found.size === 1 || found.size > 1 && multiple) {
+            return [...found];
+        } else if (found.size > 1) {
+            scope.logError(wrapError(new Error(`Tooltip with id '${tooltipId}' is ambiguous${isScopeFound ? ' in scope' : ''}`), {
+                additional: {
+                    count: found.size
+                }
+            }));
+        } else {
+            scope.logError(wrapError(new Error(`Tooltip with id '${tooltipId}' not found${isScopeFound ? ' in scope' : ''}`)));
+        }
+    }
+
     async function execActionInternal(
         action: MaybeMissing<Action | VisibilityAction | DisappearAction>,
         origAction: MaybeMissing<Action | VisibilityAction | DisappearAction>,
@@ -1299,7 +1349,12 @@
             urlType === 'scroll_backward' ||
             urlType === 'scroll_forward' ||
             urlType === 'scroll_to_position' ||
-            urlType === 'scroll_to_item_id';
+            urlType === 'scroll_to_item_id' ||
+            typedType === 'submit' ||
+            typedType === 'show_tooltip' ||
+            typedType === 'hide_tooltip' ||
+            urlType === 'show_tooltip' ||
+            urlType === 'hide_tooltip';
 
         let scopeContext = rootComponentContext;
         let isScopeFound = false;
@@ -1500,11 +1555,11 @@
                     break;
                 }
                 case 'show_tooltip': {
-                    callShowTooltip(actionTyped.id, actionTyped.multiple, componentContext);
+                    callShowTooltip(actionTyped.id, actionTyped.multiple, componentContext, scopeContext, isScopeFound);
                     break;
                 }
                 case 'hide_tooltip': {
-                    callHideTooltip(actionTyped.id, componentContext);
+                    callHideTooltip(actionTyped.id, componentContext, scopeContext, isScopeFound);
                     break;
                 }
                 case 'timer': {
@@ -1550,7 +1605,15 @@
                     break;
                 }
                 case 'submit': {
-                    await callSubmit(componentContext, actionTyped, origAction.typed as MaybeMissing<ActionSubmit>);
+                    const targetContext = findComponentContextWithInfo(scopeContext, actionTyped.container_id, 'node', isScopeFound);
+                    if (targetContext) {
+                        await callSubmit(
+                            componentContext,
+                            actionTyped,
+                            origAction.typed as MaybeMissing<ActionSubmit>,
+                            targetContext
+                        );
+                    }
                     break;
                 }
                 case 'scroll_to': {
@@ -1690,10 +1753,10 @@
                         callDownloadAction(params.get('url'), origAction.download_callbacks, componentContext);
                         break;
                     case 'show_tooltip':
-                        callShowTooltip(params.get('id'), params.get('multiple'), componentContext);
+                        callShowTooltip(params.get('id'), params.get('multiple'), componentContext, scopeContext, isScopeFound);
                         break;
                     case 'hide_tooltip':
-                        callHideTooltip(params.get('id'), componentContext);
+                        callHideTooltip(params.get('id'), componentContext, scopeContext, isScopeFound);
                         break;
                     case 'set_stored_value': {
                         callSetStoredValue(
@@ -1921,10 +1984,6 @@
 
     const instancesMap: Map<string, unknown> = new Map();
     const parentOfMap: Map<string, ParentMethods> = new Map();
-    const tooltipMap: Map<string, {
-        onwerNode: HTMLElement;
-        tooltip: MaybeMissing<Tooltip>;
-    }> = new Map();
     const componentContextMap: Map<string, Set<ComponentContext>> = new Map();
     function registerInstance<T>(id: string, block: T, duplicateErrorLevel: 'error' | 'warn' = 'error') {
         if (instancesMap.has(id)) {
@@ -1962,41 +2021,6 @@
 
     function unregisterParentOf(id: string): void {
         parentOfMap.delete(id);
-    }
-
-    function registerTooltip(onwerNode: HTMLElement, tooltip: MaybeMissing<Tooltip>): void {
-        const id = tooltip.id;
-
-        if (!id) {
-            return;
-        }
-
-        if (tooltipMap.has(id)) {
-            logError(wrapError(new Error('Duplicate tooltip id'), {
-                additional: {
-                    id
-                }
-            }));
-        }
-
-        tooltipMap.set(id, {
-            onwerNode,
-            tooltip
-        });
-    }
-
-    function unregisterTooltip(tooltip: MaybeMissing<Tooltip>): void {
-        const id = tooltip.id;
-
-        if (!id) {
-            return;
-        }
-
-        tooltipMap.delete(id);
-
-        if (tooltips.some(it => it.desc.id === id)) {
-            tooltips = tooltips.filter(it => it.desc.id !== id);
-        }
     }
 
     function awaitVariableChanges(variableName: string): Readable<any> {
@@ -2480,8 +2504,6 @@
         unregisterInstance,
         registerParentOf,
         unregisterParentOf,
-        registerTooltip,
-        unregisterTooltip,
         onTooltipClose,
         tooltipRoot,
         addSvgFilter,

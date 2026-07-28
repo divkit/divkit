@@ -3,7 +3,7 @@ import type { Action, TemplateContext } from '../../typings/common';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
 import type { WrappedError } from '../utils/wrapError';
-import type { Animator, DivBaseData } from './base';
+import type { Animator, DivBaseData, Tooltip } from './base';
 import type { Store } from '../../typings/store';
 import type { evalExpression } from '../expressions/eval';
 import type { Node } from '../expressions/ast';
@@ -54,6 +54,7 @@ export interface InfoGetter {
         }) => void;
         scrollToItemId?: (itemId: string, animated: boolean) => void;
     };
+    tooltips: MaybeMissing<Tooltip>[];
 }
 
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {
@@ -74,6 +75,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     id: string;
     animators?: Record<string, MaybeMissing<Animator>>;
     runningAnimators?: Map<string, AnimatorInstance>;
+    shownTooltips?: Set<string>;
     states?: Record<string, StateSetter[]>;
     pagers?: Map<string | undefined, PagerData | null>;
     pagerListeners?: Map<string | undefined, PagerListener[]>;
