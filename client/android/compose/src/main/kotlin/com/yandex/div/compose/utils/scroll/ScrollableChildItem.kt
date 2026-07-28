@@ -25,9 +25,6 @@ internal fun ScrollableChildItem(
         modifier = modifier,
         contentAlignment = childCrossAlignment.toBoxAlignment(isHorizontal),
     ) {
-        DivBlockView(
-            data = data,
-            checkVisibility = false
-        )
+        DivBlockView(data = data)
     }
 }

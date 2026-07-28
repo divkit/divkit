@@ -33,13 +33,12 @@ import com.yandex.div2.DivVisibility
 internal fun DivBlockView(
     data: Div,
     modifier: Modifier = Modifier,
-    applyMargins: Boolean = true,
-    // containers filter the visible items themselves
-    checkVisibility: Boolean = true
+    applyMargins: Boolean = true
 ) {
     val divBase = data.value()
     WithLocalComponent(divBase) {
-        if (checkVisibility && divBase.visibility.observedValue() == DivVisibility.GONE) {
+        val visibility = divBase.visibility.observedValue()
+        if (visibility == DivVisibility.GONE) {
             return@WithLocalComponent
         }
         val actions = data.observedActions()
@@ -52,7 +51,8 @@ internal fun DivBlockView(
                 modifier = modifier.apply(
                     data,
                     actions = actions,
-                    applyMargins = applyMargins
+                    applyMargins = applyMargins,
+                    visibility = visibility
                 )
             )
         }

@@ -41,8 +41,7 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
             )
             DivBlockView(
                 data = item,
-                modifier = Modifier.align(childAlignment),
-                checkVisibility = false
+                modifier = Modifier.align(childAlignment)
             )
         }
     }

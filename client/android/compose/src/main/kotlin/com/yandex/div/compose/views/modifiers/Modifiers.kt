@@ -16,12 +16,14 @@ import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivVisibility
 
 @Composable
 internal fun Modifier.apply(
     div: Div,
     actions: DivActions?,
-    applyMargins: Boolean
+    applyMargins: Boolean,
+    visibility: DivVisibility
 ): Modifier {
     val divBase = div.value()
     return this
@@ -29,7 +31,7 @@ internal fun Modifier.apply(
         .size(div)
         .visibilityActions(divBase)
         .applyIfNotNull(divBase.transform) { transform(it) }
-        .appearance(divBase)
+        .appearance(divBase, visibility)
         // The actions must be applied AFTER the transformations and the border clipping in order
         // to have correct touch and animation area.
         // The actions must be applied BEFORE the background so that the action animation is applied

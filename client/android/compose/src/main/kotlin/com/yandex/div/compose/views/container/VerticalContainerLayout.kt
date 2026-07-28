@@ -99,15 +99,13 @@ private fun ColumnScope.VerticalChildItem(
         DivBlockView(
             data = item,
             modifier = modifier,
-            applyMargins = false,
-            checkVisibility = false
+            applyMargins = false
         )
         if (bottom > 0.dp) Spacer(Modifier.height(bottom))
     } else {
         DivBlockView(
             data = item,
-            modifier = modifier,
-            checkVisibility = false
+            modifier = modifier
         )
     }
 }

@@ -99,15 +99,13 @@ private fun RowScope.HorizontalChildItem(
         DivBlockView(
             data = item,
             modifier = modifier,
-            applyMargins = false,
-            checkVisibility = false
+            applyMargins = false
         )
         if (endMargin > 0.dp) Spacer(Modifier.width(endMargin))
     } else {
         DivBlockView(
             data = item,
-            modifier = modifier,
-            checkVisibility = false
+            modifier = modifier
         )
     }
 }

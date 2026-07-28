@@ -80,8 +80,7 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
                 data = item,
                 modifier = Modifier
                     .align(item.observeVerticalChildAlignment() ?: defaultVerticalAlignment)
-                    .trackChildPlacement(childRects, index),
-                checkVisibility = false
+                    .trackChildPlacement(childRects, index)
             )
         }
     }
@@ -133,8 +132,7 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
                 data = item,
                 modifier = Modifier
                     .align(item.observeHorizontalChildAlignment()?: defaultHorizontalAlignment)
-                    .trackChildPlacement(childRects, index),
-                checkVisibility = false
+                    .trackChildPlacement(childRects, index)
             )
         }
     }
