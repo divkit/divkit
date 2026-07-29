@@ -4,13 +4,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.state.DivPathUtils.getItemIds
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.internal.core.DivItemBuilderResult
 
 internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     private val bindingContext: BindingContext,
-    private val path: DivStatePath,
     items: List<DivItemBuilderResult>,
 ) : VisibilityAwareAdapter<VH>(items) {
 
@@ -23,14 +21,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = visibleItems[position]
-        val childPath = path.appendDiv(ids[items.indexOf(item)])
-        val resolver = bindingContext.divView.runtimeStore.resolveRuntimeWith(
-            childPath,
-            item.div,
-            item.expressionResolver,
-            bindingContext.expressionResolver
-        )?.expressionResolver ?: item.expressionResolver
-        holder.bind(bindingContext.getFor(resolver), item.div, position, childPath)
+        holder.bind(bindingContext.getFor(item.expressionResolver), item.div, position, item.path)
     }
 
     override fun onViewAttachedToWindow(holder: VH) {

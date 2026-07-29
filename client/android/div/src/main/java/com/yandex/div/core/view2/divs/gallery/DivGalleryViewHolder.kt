@@ -11,11 +11,10 @@ import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 
 internal class DivGalleryViewHolder(
-    parentContext: BindingContext,
     private val rootView: DivViewWrapper,
     private val divBinder: DivBinder,
     viewCreator: DivViewCreator,
-) : DivCollectionViewHolder(rootView, parentContext, divBinder, viewCreator) {
+) : DivCollectionViewHolder(rootView, divBinder, viewCreator) {
 
     override fun bind(bindingContext: BindingContext, div: Div, position: Int, path: DivStatePath) {
         super.bind(bindingContext, div, position, path)

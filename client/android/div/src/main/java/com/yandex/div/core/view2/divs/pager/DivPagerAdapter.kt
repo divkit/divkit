@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs.pager
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
@@ -18,9 +17,8 @@ internal class DivPagerAdapter(
     private val divBinder: DivBinder,
     private val pageTranslations: SparseArray<Float>,
     private val viewCreator: DivViewCreator,
-    path: DivStatePath,
     private val pagerView: DivPagerView,
-) : DivCollectionAdapter<DivPagerViewHolder>(bindingContext, path, items) {
+) : DivCollectionAdapter<DivPagerViewHolder>(bindingContext, items) {
 
     val itemsToShow = object : AbstractList<DivItemBuilderResult>() {
         override val size get() = visibleItems.size + if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM * 2 else 0

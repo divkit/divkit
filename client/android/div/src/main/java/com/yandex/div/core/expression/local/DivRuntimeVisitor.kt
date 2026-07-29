@@ -5,7 +5,6 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.getIds
-import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivPathUtils.statePath
 import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
@@ -34,7 +33,9 @@ internal class DivRuntimeVisitor @Inject constructor(
     ) {
         val rootRuntime = divView.runtimeStore.rootRuntime
         rootRuntime.onAttachedToWindow(divView)
-        visit(rootDiv, divView, rootPath, rootRuntime)
+        val rootDivRuntime = divView.runtimeStore
+            .getOrCreateRuntime(rootPath.fullPath, rootDiv, rootRuntime.expressionResolver)
+        visit(rootDiv, divView, rootPath, rootDivRuntime)
     }
 
     fun createAndAttachRuntimesToState(
@@ -61,54 +62,41 @@ internal class DivRuntimeVisitor @Inject constructor(
         div: Div,
         divView: Div2View,
         path: DivStatePath,
-        parentRuntime: ExpressionsRuntime,
+        runtime: ExpressionsRuntime,
     ) {
         when (div) {
-            is Div.Container ->
-                visitContainer(div, divView, div.value.items, div.value.itemBuilder, path, parentRuntime)
-            is Div.Grid -> visitContainer(div, divView, div.value.items, null, path, parentRuntime)
-            is Div.Gallery ->
-                visitContainer(div, divView, div.value.items, div.value.itemBuilder, path, parentRuntime)
-            is Div.Pager ->
-                visitContainer(div, divView, div.value.items, div.value.itemBuilder, path, parentRuntime)
+            is Div.Container -> visitContainer(divView, div.value.items, div.value.itemBuilder, path, runtime)
+            is Div.Grid -> visitContainer(divView, div.value.items, null, path, runtime)
+            is Div.Gallery -> visitContainer(divView, div.value.items, div.value.itemBuilder, path, runtime)
+            is Div.Pager -> visitContainer(divView, div.value.items, div.value.itemBuilder, path, runtime)
 
-            is Div.State -> visitState(div, divView, path, parentRuntime)
-            is Div.Tabs -> visitTabs(div, divView, path, parentRuntime)
+            is Div.State -> visitState(div, divView, path, runtime)
+            is Div.Tabs -> visitTabs(div, divView, path, runtime)
 
-            is Div.Custom -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.GifImage -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.Image -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.Indicator -> defaultVisit(div, divView, path,parentRuntime)
-            is Div.Input -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.Select -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.Separator -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.Slider -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.Text -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.Video -> defaultVisit(div, divView, path, parentRuntime)
-            is Div.Switch -> defaultVisit(div, divView, path, parentRuntime)
+            is Div.Custom -> defaultVisit(runtime, divView)
+            is Div.GifImage -> defaultVisit(runtime, divView)
+            is Div.Image -> defaultVisit(runtime, divView)
+            is Div.Indicator -> defaultVisit(runtime, divView)
+            is Div.Input -> defaultVisit(runtime, divView)
+            is Div.Select -> defaultVisit(runtime, divView)
+            is Div.Separator -> defaultVisit(runtime, divView)
+            is Div.Slider -> defaultVisit(runtime, divView)
+            is Div.Text -> defaultVisit(runtime, divView)
+            is Div.Video -> defaultVisit(runtime, divView)
+            is Div.Switch -> defaultVisit(runtime, divView)
         }
     }
 
-    private fun defaultVisit(
-        div: Div,
-        divView: Div2View,
-        path: DivStatePath,
-        parentRuntime: ExpressionsRuntime
-    ): ExpressionsRuntime {
-        return divView.runtimeStore.getOrCreateRuntime(path.fullPath, div, parentRuntime.expressionResolver).also {
-            it.onAttachedToWindow(divView)
-        }
-    }
+    private fun defaultVisit(runtime: ExpressionsRuntime, divView: Div2View) = runtime.onAttachedToWindow(divView)
 
     private fun visitContainer(
-        div: Div,
         divView: Div2View,
         items: List<Div>?,
         itemBuilder: DivCollectionItemBuilder?,
         path: DivStatePath,
-        parentRuntime: ExpressionsRuntime,
+        runtime: ExpressionsRuntime,
     ) {
-        val runtime = defaultVisit(div, divView, path, parentRuntime)
+        defaultVisit(runtime, divView)
 
         itemBuilder?.let {
             it.visit(divView, path, runtime)
@@ -117,7 +105,10 @@ internal class DivRuntimeVisitor @Inject constructor(
 
         val ids = items?.getIds() ?: return
         items.forEachIndexed { index, item ->
-            visit(item, divView, path.appendDiv(ids[index]), runtime)
+            val childPath = path.appendDiv(ids[index])
+            val childRuntime = divView.runtimeStore
+                .getOrCreateRuntime(childPath.fullPath, item, runtime.expressionResolver)
+            visit(item, divView, childPath, childRuntime)
         }
     }
 
@@ -126,17 +117,9 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         runtime: ExpressionsRuntime,
     ) {
-        val builtItems = build(runtime.expressionResolver, path)
-        val ids = builtItems.getItemIds()
-        builtItems.forEachIndexed { index, item ->
-            val childPath = path.appendDiv(ids[index])
-            val childRuntime = divView.runtimeStore.resolveRuntimeWith(
-                childPath,
-                item.div,
-                item.expressionResolver,
-                runtime.expressionResolver
-            )
-            visit(item.div, divView, childPath, childRuntime ?: runtime)
+        build(runtime.expressionResolver, path).forEach {
+            val runtime = divView.runtimeStore.getRuntimeWithOrNull(it.expressionResolver) ?: runtime
+            visit(it.div, divView, it.path, runtime)
         }
     }
 
@@ -144,9 +127,9 @@ internal class DivRuntimeVisitor @Inject constructor(
         div: Div.State,
         divView: Div2View,
         path: DivStatePath,
-        parentRuntime: ExpressionsRuntime,
+        runtime: ExpressionsRuntime,
     ) {
-        val runtime = defaultVisit(div, divView, path, parentRuntime)
+        defaultVisit(runtime, divView)
         visitStates(div.value, divView, path, runtime)
     }
 
@@ -168,9 +151,9 @@ internal class DivRuntimeVisitor @Inject constructor(
         div: Div.Tabs,
         divView: Div2View,
         path: DivStatePath,
-        parentRuntime: ExpressionsRuntime,
+        runtime: ExpressionsRuntime,
     ) {
-        val runtime = defaultVisit(div, divView, path, parentRuntime)
+        defaultVisit(runtime, divView)
         visitTabs(div.value, divView, path, runtime)
     }
 
@@ -196,12 +179,12 @@ internal class DivRuntimeVisitor @Inject constructor(
         parentRuntime: ExpressionsRuntime,
         isActive: Boolean,
     ) {
+        val runtime = divView.runtimeStore.getOrCreateRuntime(path.fullPath, div, parentRuntime.expressionResolver)
         if (isActive) {
-            visit(div, divView, path, parentRuntime)
+            visit(div, divView, path, runtime)
             return
         }
 
-        val runtime = divView.runtimeStore.getOrCreateRuntime(path.fullPath, div, parentRuntime.expressionResolver)
         divView.runtimeStore.traverseFrom(runtime, path) {
             it.clearBinding(divView)
         }

@@ -87,7 +87,6 @@ internal class DivPagerBinder @Inject constructor(
             divBinder.get(),
             pageTranslations,
             viewCreator,
-            path,
             this
         )
         viewPager.adapter = adapter

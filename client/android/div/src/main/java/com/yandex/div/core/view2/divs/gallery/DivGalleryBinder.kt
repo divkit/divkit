@@ -57,7 +57,7 @@ internal class DivGalleryBinder @Inject constructor(
     private fun DivRecyclerView.bind(bindingContext: BindingContext, div: DivGallery, path: DivStatePath) {
         val resolver = bindingContext.expressionResolver
         val galleryAdapter =
-            DivGalleryAdapter(div.buildItems(resolver, path), bindingContext, divBinder.get(), viewCreator, path)
+            DivGalleryAdapter(div.buildItems(resolver, path), bindingContext, divBinder.get(), viewCreator)
         val reusableObserver = { _: Any -> updateDecorations(bindingContext, div, galleryAdapter) }
         addSubscription(div.orientation.observe(resolver, reusableObserver))
         addSubscription(div.scrollbar.observe(resolver, reusableObserver))

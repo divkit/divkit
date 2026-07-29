@@ -15,7 +15,6 @@ import com.yandex.div2.Div
 
 internal abstract class DivCollectionViewHolder(
     private val viewWrapper: DivViewWrapper,
-    private val parentContext: BindingContext,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
 ) : RecyclerView.ViewHolder(viewWrapper) {
@@ -43,8 +42,6 @@ internal abstract class DivCollectionViewHolder(
 
         oldDiv = div
         oldPath = path
-
-        divView.runtimeStore.resolveRuntimeWith(path, div, resolver, parentContext.expressionResolver)
 
         divBinder.bind(bindingContext, childView, div, path)
         divView.runtimeStore.showWarningIfNeeded(div.value())

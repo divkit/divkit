@@ -23,7 +23,7 @@ internal class DivPagerViewHolder(
     viewCreator: DivViewCreator,
     private val isHorizontal: () -> Boolean,
     private val crossAxisAlignment: () -> ItemAlignment,
-) : DivCollectionViewHolder(pageLayout, parentContext, divBinder, viewCreator) {
+) : DivCollectionViewHolder(pageLayout, divBinder, viewCreator) {
 
     init {
         itemView.doOnEveryDetach { view ->

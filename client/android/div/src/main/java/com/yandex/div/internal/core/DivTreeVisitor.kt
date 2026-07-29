@@ -6,7 +6,6 @@ import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
-import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -68,7 +67,10 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         val ids = items?.getIds() ?: return result
         items.forEachIndexed { index, div ->
             val childPath = pathOverride?.get(index) ?: path.appendDiv(ids[index])
-            val child = visitCollectionChild(div, resolver, childPath, result)
+            val childResolver = resolver.asImpl?.runtimeStore
+                ?.getOrCreateRuntime(childPath.fullPath, div, resolver)
+                ?.expressionResolver ?: resolver
+            val child = visitCollectionChild(div, childResolver, childPath, result)
             if (returnCondition?.invoke(child) == true) return child
         }
         return result
@@ -79,18 +81,8 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         path: DivStatePath,
         parent: T,
     ): T {
-        val builtItems = build(resolver, path)
-        val ids = builtItems.getItemIds()
-        builtItems.forEachIndexed { index, item ->
-            val childPath = path.appendDiv(ids[index])
-            val childResolver = resolver.runtimeStore.resolveRuntimeWith(
-                childPath,
-                item.div,
-                item.expressionResolver,
-                resolver
-            )?.expressionResolver ?: item.expressionResolver
-
-            val result = visitCollectionChild(item.div, childResolver, childPath, parent)
+        build(resolver, path).forEach {
+            val result = visitCollectionChild(it.div, it.expressionResolver, it.path, parent)
             if (returnCondition?.invoke(result) == true) return result
         }
         return parent

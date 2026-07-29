@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.evaluateGravity
@@ -162,7 +161,7 @@ internal class DivContainerBinder @Inject constructor(
         }
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
         if (shouldBindItemBuilder) bindItemBuilder(context, div, path, errorCollector)
-        applyItems(context, div, oldDiv, items, oldItems, path, errorCollector)
+        applyItems(context, div, oldDiv, items, oldItems, errorCollector)
     }
 
     private fun ViewGroup.bindItemBuilder(
@@ -176,7 +175,7 @@ internal class DivContainerBinder @Inject constructor(
             val newItems = builder.build(context.expressionResolver, path)
             val oldItems = (this as DivCollectionHolder).items ?: emptyList()
             replaceWithReuse(context.divView, divViewCreator, oldItems, newItems)
-            applyItems(context, div, div, newItems, oldItems, path, errorCollector)
+            applyItems(context, div, div, newItems, oldItems, errorCollector)
         }
     }
 
@@ -186,12 +185,11 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         items: List<DivItemBuilderResult>,
         oldItems: List<DivItemBuilderResult>?,
-        path: DivStatePath,
         errorCollector: ErrorCollector,
     ) {
         tryRebindPlainContainerChildren(context.divView, items, divViewCreator)
         validateChildren(div, items, context.expressionResolver, errorCollector)
-        dispatchItems(context, div, oldDiv, items, oldItems, path)
+        dispatchItems(context, div, oldDiv, items, oldItems)
     }
 
     private fun ViewGroup.dispatchItems(
@@ -200,18 +198,9 @@ internal class DivContainerBinder @Inject constructor(
         oldDiv: DivContainer?,
         items: List<DivItemBuilderResult>,
         oldItems: List<DivItemBuilderResult>?,
-        path: DivStatePath,
     ) {
-        val ids = items.getItemIds()
         items.forEachIndexed { index, item ->
-            getChildAt(index).bindChild(
-                bindingContext,
-                item.div,
-                item.expressionResolver,
-                div,
-                oldDiv,
-                path.appendDiv(ids[index])
-            )
+            getChildAt(index).bindChild(bindingContext, item, div, oldDiv)
         }
         (this as DivCollectionHolder).items = items
         trackVisibilityActions(bindingContext.divView, items, oldItems)
@@ -235,19 +224,16 @@ internal class DivContainerBinder @Inject constructor(
 
     private fun View.bindChild(
         parentContext: BindingContext,
-        div: Div,
-        resolver: ExpressionResolver,
+        child: DivItemBuilderResult,
         parentDiv: DivContainer,
         oldParentDiv: DivContainer?,
-        path: DivStatePath,
     ) {
+        val div = child.div
         val oldDiv = (this as? DivHolderView<*>)?.div
 
         val divView = parentContext.divView
-        val childRuntime = divView.runtimeStore
-            .resolveRuntimeWith(path, div, resolver, parentContext.expressionResolver)
 
-        divBinder.get().bind(parentContext.getFor(resolver), this, div, path)
+        divBinder.get().bind(parentContext.getFor(child.expressionResolver), this, div, child.path)
 
         bindChildAlignment(
             parentDiv,
@@ -255,7 +241,7 @@ internal class DivContainerBinder @Inject constructor(
             div.value(),
             oldDiv?.value(),
             parentContext.expressionResolver,
-            childRuntime?.expressionResolver ?: resolver,
+            child.expressionResolver,
             expressionSubscriber,
             divView
         )

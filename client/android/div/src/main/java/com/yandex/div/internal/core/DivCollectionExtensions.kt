@@ -6,6 +6,7 @@ import com.yandex.div.core.expression.variables.ConstantsProvider
 import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
+import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.internal.util.mapIndexedNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -47,8 +48,16 @@ private fun buildItems(
 internal fun DivCollectionItemBuilder.build(
     resolver: ExpressionResolver,
     path: DivStatePath,
-): List<DivItemBuilderResult> =
-    data.evaluate(resolver).mapIndexedNotNull { i, obj -> buildItem(obj, i, resolver, path) }
+): List<DivItemBuilderResult> {
+    val items = data.evaluate(resolver).mapIndexedNotNull { i, obj -> buildItem(obj, i, resolver, path) }
+    return items.zip(items.getItemIds()) { item, id ->
+        val childPath = path.appendDiv(id)
+        val childResolver = resolver.asImpl?.runtimeStore
+            ?.resolveRuntimeWith(childPath, item.div, item.expressionResolver, resolver)
+            ?.expressionResolver ?: item.expressionResolver
+        DivItemBuilderResult(item.div, childResolver, childPath)
+    }
+}
 
 private fun DivCollectionItemBuilder.buildItem(
     data: Any,
@@ -147,31 +156,41 @@ internal fun DivGrid.itemsToDivItemBuilderResult(resolver: ExpressionResolver, p
 val DivPager.nonNullItems: List<Div> get() = items ?: emptyList()
 
 internal fun DivTabs.itemsToDivItemBuilderResult(resolver: ExpressionResolver, path: DivStatePath) =
-    items.map { it.div.toItemBuilderResult(resolver, path) }
+    items.toDivItemBuilderResult(resolver, path) { div }
 
 internal fun DivState.statesToDivItemBuilderResult(
     resolver: ExpressionResolver,
     path: DivStatePath,
 ): List<DivItemBuilderResult> {
     val id = getId()
-    val paths = states.mapNotNull {
-        it.div ?: return@mapNotNull null
+    val paths = states.map {
+        it.div ?: return@map null
         path.append(id, it, it.stateId)
     }
-    return states.mapIndexedNotNull { index, state -> state.div?.toItemBuilderResult(resolver, paths[index]) }
+    return states.mapIndexedNotNull { index, state ->
+        val div = state.div ?: return@mapIndexedNotNull null
+        val statePath = paths[index] ?: return@mapIndexedNotNull null
+        val stateResolver = resolver.asImpl?.runtimeStore
+            ?.getOrCreateRuntime(statePath.fullPath, div, resolver)
+            ?.expressionResolver ?: resolver
+        DivItemBuilderResult(div, stateResolver, statePath)
+    }
 }
 
-internal fun List<Div>.toDivItemBuilderResult(
+internal fun List<Div>.toDivItemBuilderResult(resolver: ExpressionResolver, path: DivStatePath) =
+    toDivItemBuilderResult(resolver, path) { this }
+
+private fun <T> List<T>.toDivItemBuilderResult(
     resolver: ExpressionResolver,
     path: DivStatePath,
+    getDiv: T.() -> Div,
 ): List<DivItemBuilderResult> {
-    val ids = getIds()
-    return mapIndexed { index, div ->
-        val childPath = path.appendDiv(ids[index])
+    return zip(getIds(getDiv)) { item, id ->
+        val childPath = path.appendDiv(id)
         val targetResolver = resolver.asImpl?.runtimeStore
-            ?.getOrCreateRuntime(childPath.fullPath, div, resolver)?.expressionResolver
-            ?: resolver
-        div.toItemBuilderResult(targetResolver, childPath)
+            ?.getOrCreateRuntime(childPath.fullPath, item.getDiv(), resolver)
+            ?.expressionResolver ?: resolver
+        DivItemBuilderResult(item.getDiv(), targetResolver, childPath)
     }
 }
 

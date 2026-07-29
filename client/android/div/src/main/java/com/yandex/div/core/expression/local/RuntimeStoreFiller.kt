@@ -8,7 +8,6 @@ import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
-import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.internal.core.build
@@ -117,10 +116,8 @@ internal class RuntimeStoreFiller(
         store: RuntimeStoreImpl,
         runtime: ExpressionsRuntime,
     ) {
-        val builtItems = build(runtime.expressionResolver, path)
-        val ids = builtItems.getItemIds()
-        builtItems.forEachIndexed { index, item ->
-            visit(item.div, path.appendDiv(ids[index]), store, runtime, item.expressionResolver.asImpl)
+        build(runtime.expressionResolver, path).forEach {
+            visit(it.div, it.path, store, runtime, it.expressionResolver.asImpl)
         }
     }
 
