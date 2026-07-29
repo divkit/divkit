@@ -1,0 +1,193 @@
+{
+  "description": "Overlap wrap_content-sized container with match_parent text. Row 1: match_parent-width text is stretched to the width of the fixed-size sibling. Row 2: match_parent-height text is stretched to the height of the fixed-size sibling. Row 3: a single text with match_parent width and height falls back to its content size. Row 4: a single match_parent text inside a container with wrap_content min_size fills the min_size. The text must be visible in all rows.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "sample_container": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#D0E8FF"
+        }
+      ]
+    },
+    "fixed_base": {
+      "type": "text",
+      "text": "fixed 250x80",
+      "font_size": 14,
+      "text_color": "#000000",
+      "alignment_horizontal": "left",
+      "alignment_vertical": "top",
+      "width": {
+        "type": "fixed",
+        "value": 250
+      },
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#B8E0B8"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "sample_container",
+              "items": [
+                {
+                  "type": "fixed_base"
+                },
+                {
+                  "type": "text",
+                  "text": "match_parent width",
+                  "font_size": 14,
+                  "text_color": "#000000",
+                  "alignment_vertical": "bottom",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFD780"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sample_container",
+              "items": [
+                {
+                  "type": "fixed_base"
+                },
+                {
+                  "type": "text",
+                  "text": "match_parent height",
+                  "font_size": 14,
+                  "text_color": "#000000",
+                  "alignment_horizontal": "right",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFD780"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "sample_container",
+              "items": [
+                {
+                  "type": "text",
+                  "text": "single match_parent text",
+                  "font_size": 14,
+                  "text_color": "#000000",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFD780"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "width": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 250
+                }
+              },
+              "height": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 60
+                }
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#D0E8FF"
+                }
+              ],
+              "items": [
+                {
+                  "type": "text",
+                  "text": "min_size 250x60",
+                  "font_size": 14,
+                  "text_color": "#000000",
+                  "text_alignment_horizontal": "center",
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFD780"
+                    }
+                  ],
+                  "margins": {
+                    "left": 4,
+                    "right": 4,
+                    "top": 10,
+                    "bottom": 10
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

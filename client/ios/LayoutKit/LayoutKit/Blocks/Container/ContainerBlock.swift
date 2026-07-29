@@ -451,7 +451,7 @@ public final class ContainerBlock: BlockWithLayout {
       }
     }
 
-    if case .intrinsic = widthTrait {
+    if case let .intrinsic(_, minSize, _) = widthTrait {
       switch layoutDirection {
       case .horizontal:
         guard children.map(\.content).allHorizontallyNonResizable else {
@@ -460,7 +460,7 @@ public final class ContainerBlock: BlockWithLayout {
           )
         }
       case .vertical:
-        guard children.map(\.content).hasHorizontallyNonResizable else {
+        guard minSize > 0 || children.map(\.content).hasHorizontallyNonResizable else {
           throw BlockError(
             "Container block error: in vertical intrinsic-width container all children have resizable width"
           )

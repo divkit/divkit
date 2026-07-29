@@ -541,6 +541,19 @@ final class BlockTests_Layout: XCTestCase {
     )
   }
 
+  func test_WhenMakingVerticalContainerWithIntrinsicWidthWithMinSize_AndWithAllHorizontallyResizableChildren_ResolvesToMinSize(
+  ) throws {
+    let block = try ContainerBlock(
+      layoutDirection: .vertical,
+      widthTrait: .intrinsic(constrained: false, minSize: 100, maxSize: .infinity),
+      children: [
+        TextBlock(widthTrait: .resizable, text: text),
+      ]
+    )
+
+    XCTAssertEqual(block.intrinsicContentWidth, 100)
+  }
+
   func test_WhenMakingVerticalContainerWithIntrinsicHeight_AndWithVerticallyResizableChildren_Throws(
   ) {
     XCTAssertThrowsError(
