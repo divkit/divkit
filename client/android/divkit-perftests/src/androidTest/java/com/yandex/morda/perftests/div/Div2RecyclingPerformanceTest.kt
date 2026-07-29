@@ -13,7 +13,6 @@ import com.yandex.divkit.perftests.startActivity
 import com.yandex.perftests.runner.PerfTest
 import com.yandex.perftests.runner.PerfTestParameter
 import org.junit.Before
-import org.junit.Test
 
 @PerfTest(
     packageName = PACKAGE_NAME,
@@ -40,7 +39,7 @@ class Div2RecyclingPerformanceTest : BasePerformanceTest() {
             //"Div.Render.Total.Warm", // Generates unstable results at some perf-tests.
         ]
     )
-    @Test
+//    @Test (Ignored flaky test)
     fun feedScroll() {
         utils.run {
             report(tag = "feed_scroll") {
