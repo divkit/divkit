@@ -53,11 +53,11 @@ internal class SafeAreaTopMarginController(
         val topInset = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
         root.getLocationInWindow(rootLocationInWindow)
         val rootTopInWindow = rootLocationInWindow[1]
-        topMarginPx = if (topInset > 0 && rootTopInWindow < topInset) {
-            topInset - rootTopInWindow
-        } else {
-            0
-        }
+        // The margin only ever has to push the overlay out from under the status bar, so it is
+        // bounded by the inset itself. Without the clamp a root scrolled above the window (negative
+        // location) turns the scroll offset into a margin, and a wrap-content host measures itself
+        // as tall as that margin.
+        topMarginPx = (topInset - rootTopInWindow).coerceIn(0, topInset)
         targetView?.tryApplyTopMargin()
     }
 
