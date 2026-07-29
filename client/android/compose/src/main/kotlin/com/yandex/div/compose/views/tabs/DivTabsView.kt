@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
@@ -51,10 +52,11 @@ internal fun DivTabsView(
         initialTabCount = items.size,
     )
 
+    val animated = animationsEnabled
     val externalSelected = data.selectedTab.observedIntValue().coerceIn(0, items.size - 1)
     LaunchedEffect(externalSelected) {
         if (state.currentIndex != externalSelected) {
-            state.selectTab(externalSelected)
+            state.selectTab(externalSelected, animated = animated)
         }
     }
 
@@ -82,7 +84,7 @@ internal fun DivTabsView(
             style = style,
             titleDelimiter = data.tabTitleDelimiter,
             titlePaddings = titlePaddings,
-            onTabSelected = { index -> scope.launch { state.selectTab(index) } },
+            onTabSelected = { index -> scope.launch { state.selectTab(index, animated = animated) } },
         )
 
         if (data.hasSeparator.observedValue()) {

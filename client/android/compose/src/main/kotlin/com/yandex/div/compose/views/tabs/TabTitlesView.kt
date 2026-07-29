@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -212,6 +213,7 @@ private fun ScrollableTitleRow(
 
 @Composable
 private fun CenterTitleRow(listState: LazyListState, selectedIndex: Int) {
+    val animated = animationsEnabled
     LaunchedEffect(selectedIndex) {
         val info = snapshotFlow { listState.layoutInfo }
             .first { it.visibleItemsInfo.isNotEmpty() }
@@ -220,7 +222,11 @@ private fun CenterTitleRow(listState: LazyListState, selectedIndex: Int) {
             ?: info.visibleItemsInfo.first().size
 
         val centeringOffset = (viewport - itemSize) / 2
-        listState.animateScrollToItem(selectedIndex, scrollOffset = -centeringOffset)
+        if (animated) {
+            listState.animateScrollToItem(selectedIndex, scrollOffset = -centeringOffset)
+        } else {
+            listState.scrollToItem(selectedIndex, scrollOffset = -centeringOffset)
+        }
     }
 }
 

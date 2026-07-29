@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import android.view.View
 import com.yandex.div.core.childrenToFlatList
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
@@ -17,6 +18,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
@@ -43,6 +45,9 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     }
     private val rootPath = DivStatePath.fromRootDiv(0, divOne.div)
 
+    private val animationsEnabledController = mock<DivAnimationsEnabledController> {
+        on { isEnabled() } doReturn true
+    }
     private val stateBinder = DivStateBinder(
         baseBinder = baseBinder,
         viewCreator = viewCreator,
@@ -52,7 +57,8 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
         divVisibilityActionTracker = divVisibilityActionTracker,
         errorCollectors = errorCollectors,
         variableBinder = variableBinder,
-        runtimeVisitor = mock()
+        runtimeVisitor = mock(),
+        animationsEnabledController = animationsEnabledController,
     )
 
     @Test

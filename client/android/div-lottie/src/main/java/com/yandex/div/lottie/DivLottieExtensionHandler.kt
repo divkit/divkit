@@ -123,11 +123,13 @@ open class DivLottieExtensionHandler(
                 val playbackState = getOrCreatePlaybackState(divView, div)
                 lottieController.addEndListener(playbackState.animationEndListener)
                 lottieController.bind(
+                    divView = divView,
                     result = result,
                     params = parsedParams,
                     resolver = expressionResolver,
                     description = lottieData.description,
                     playbackStateController = playbackState,
+                    animationsEnabled = { divView.div2Component.animationsEnabledController.isEnabled() },
                 )
             }
         }
@@ -142,11 +144,13 @@ open class DivLottieExtensionHandler(
     }
 
     private fun LottieController.bind(
+        divView: Div2View,
         result: LottieResult<LottieComposition>,
         params: LottieExtensionParams,
         resolver: ExpressionResolver,
         description: String,
         playbackStateController: PlaybackStateController,
+        animationsEnabled: () -> Boolean,
     ) {
         val composition = result.value ?: return logger.fail(
             "Failed to receive LottieComposition for: $description",
@@ -167,14 +171,18 @@ open class DivLottieExtensionHandler(
 
         val isPlaying = params.isPlaying
         val startPlay = isPlaying?.evaluate(resolver) ?: true
-        if (playbackStateController.canPlay() && startPlay) {
+        if (playbackStateController.canPlay() && startPlay && animationsEnabled()) {
             playAnimation()
         } else {
             pauseAnimationAt(progress = if (getRepeatMode() == LottieDrawable.REVERSE) 0f else 1f)
         }
 
         isPlaying?.let { expression ->
-            addSubscription(expression.observe(resolver) { playOrPauseAnimation(it) })
+            addSubscription(expression.observe(resolver) { playOrPauseAnimation(it && animationsEnabled()) })
+        }
+
+        subscribeToAnimationsEnabled(divView) {
+            playOrPauseAnimation((isPlaying?.evaluate(resolver) ?: true) && animationsEnabled())
         }
     }
 
@@ -231,6 +239,7 @@ open class DivLottieExtensionHandler(
         lottieController.clearComposition()
         lottieController.data = null
         lottieController.clearPlaybackEndListeners()
+        lottieController.clearAnimationsEnabledSubscription()
         release()
     }
 }

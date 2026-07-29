@@ -1,6 +1,7 @@
 package com.yandex.div.compose.tooltips
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,6 +10,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
@@ -51,7 +53,8 @@ internal fun TooltipPopup(
         }
     }
 
-    val exitTransition = tooltip.observedExitTransition()
+    val enterTransition = if (animationsEnabled) tooltip.observedEnterTransition() else EnterTransition.None
+    val exitTransition = if (animationsEnabled) tooltip.observedExitTransition() else ExitTransition.None
     val exitTransitionDuration = if (exitTransition == ExitTransition.None) {
         0
     } else {
@@ -90,7 +93,7 @@ internal fun TooltipPopup(
     ) {
         AnimatedVisibility(
             visible = isVisible,
-            enter = tooltip.observedEnterTransition(),
+            enter = enterTransition,
             exit = exitTransition
         ) {
             DivBlockView(data = tooltip.div)

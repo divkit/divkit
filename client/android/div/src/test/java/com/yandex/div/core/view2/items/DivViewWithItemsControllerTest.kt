@@ -25,7 +25,7 @@ internal class DivViewWithItemsControllerTest {
         on { itemCount } doReturn ITEM_COUNT
         on { metrics } doReturn mock()
     }
-    private val underTest = DivViewWithItemsController(divItemsView)
+    private val underTest = DivViewWithItemsController(divItemsView, animationsEnabled = true)
 
     @Test
     fun `create controller when view is found`() {
@@ -56,6 +56,13 @@ internal class DivViewWithItemsControllerTest {
     fun `handle set current item`() {
         underTest.setCurrentItem(3, true)
         verify(divItemsView).setCurrentItem(3, true)
+    }
+
+    @Test
+    fun `set current item without animation when animations disabled`() {
+        val controller = DivViewWithItemsController(divItemsView, animationsEnabled = false)
+        controller.setCurrentItem(3, true)
+        verify(divItemsView).setCurrentItem(3, false)
     }
 
     @Test

@@ -21,6 +21,7 @@ internal class DivAnimatorTypedActionHandler @Inject constructor() : DivActionTy
         return when (action) {
             is DivActionTyped.AnimatorStart -> {
                 if (scopeId == null) return true
+                if (!view.div2Component.animationsEnabledController.isEnabled()) return true
                 val targetView = view.findTargetView<View>(scopeId, DivActionAnimatorStart.TYPE) ?: return true
                 val targetResolver = targetView.bindingContext?.expressionResolver ?: return true
                 view.viewComponent.animatorController.startAnimator(scopeId, targetView, action.value, targetResolver)

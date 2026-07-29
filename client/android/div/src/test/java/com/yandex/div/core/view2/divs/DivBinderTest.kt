@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs
 
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivActionPerformer
+import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
@@ -37,6 +38,7 @@ open class DivBinderTest {
     internal val actionPerformer = mock<DivActionPerformer>()
     private val mockComponent = mock<Div2Component>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {
         on { actionBinder } doReturn actionBinder
+        on { animationsEnabledProvider } doReturn DivAnimationsEnabledProvider.DEFAULT
     }
 
     private val validator = mock<DivValidator> {
@@ -49,6 +51,7 @@ open class DivBinderTest {
     internal val resolver = mock<ExpressionResolverImpl>()
     internal val divView = mock<Div2View> {
         on { div2Component } doReturn mockComponent
+        on { context } doReturn mock()
         on { divTag } doReturn DivDataTag("id")
         on { handleUri(any()) }.thenCallRealMethod()
         on { logId } doReturn "id"

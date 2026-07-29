@@ -24,6 +24,7 @@ const val BACKGROUND_BINDING = "background_binding"
 const val LIMIT_IMAGE_BITMAP_SIZE_ENABLED = "limit_image_bitmap_size_enabled"
 const val VISUAL_ASSERTION_HANDLER = "visual_assertion_handler"
 const val COMPOSE_RENDERER = "compose_renderer"
+const val DISABLE_ANIMATIONS = "disable_animations"
 
 const val NIGHT_MODE = "night_mode"
 const val NIGHT_MODE_NIGHT = "NIGHT"
@@ -64,6 +65,10 @@ internal object SettingsActionHandler {
             LIMIT_IMAGE_BITMAP_SIZE_ENABLED -> Container.preferences.limitImageBitmapSizeEnabled = valueInt.toBooleanOrException()
             VISUAL_ASSERTION_HANDLER -> Container.preferences.visualAssertionHandlerEnabled = valueInt.toBooleanOrException()
             COMPOSE_RENDERER -> Container.preferences.useComposeRenderer = valueInt.toBooleanOrException()
+            DISABLE_ANIMATIONS -> {
+                Container.preferences.disableAnimations = valueInt.toBooleanOrException()
+                Container.animationsEnabledProvider.notifyChanged()
+            }
             else -> return false
         }
 

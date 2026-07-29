@@ -13,7 +13,9 @@ import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.RenderMode
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.DivViewDelegate
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.extensions.lottie.LottieData
@@ -41,6 +43,8 @@ internal class LottieController(
 
     // Div Lottie Extension fields
     var data: LottieData? = null
+
+    private var animationsEnabledSubscription: Disposable? = null
 
     private val onEndListeners = ObserverList<() -> Unit>()
 
@@ -79,6 +83,17 @@ internal class LottieController(
 
     fun clearPlaybackEndListeners() {
         onEndListeners.clear()
+    }
+
+    fun subscribeToAnimationsEnabled(divView: Div2View, onChange: () -> Unit) {
+        animationsEnabledSubscription?.close()
+        animationsEnabledSubscription =
+            divView.div2Component.animationsEnabledController.observe(divView, onChange)
+    }
+
+    fun clearAnimationsEnabledSubscription() {
+        animationsEnabledSubscription?.close()
+        animationsEnabledSubscription = null
     }
 
     override fun onVisibilityChanged(changedView: View, visibility: Int): Boolean {

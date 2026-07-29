@@ -76,6 +76,8 @@ public class DivConfiguration {
     private final ViewPoolProfiler.Reporter mViewPoolReporter;
     @NonNull
     private final DivVariableController mDivVariableController;
+    @NonNull
+    private final DivAnimationsEnabledProvider mAnimationsEnabledProvider;
 
     private final boolean mTapBeaconsEnabled;
     private final boolean mVisibilityBeaconsEnabled;
@@ -137,7 +139,8 @@ public class DivConfiguration {
             boolean pagerChildrenClipEnabled,
             boolean permanentDebugPanelEnabled,
             float recyclerScrollInterceptionAngle,
-            boolean renderEffectEnabled
+            boolean renderEffectEnabled,
+            @NonNull DivAnimationsEnabledProvider animationsEnabledProvider
     ) {
         mImageLoader = imageLoader;
         mActionHandler = actionHandler;
@@ -178,6 +181,7 @@ public class DivConfiguration {
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
         mPagerPageClipEnabled = pagerChildrenClipEnabled;
         mRenderEffectEnabled = renderEffectEnabled;
+        mAnimationsEnabledProvider = animationsEnabledProvider;
     }
 
     @Provides
@@ -412,6 +416,12 @@ public class DivConfiguration {
         return mRecyclerScrollInterceptionAngle;
     }
 
+    @Provides
+    @NonNull
+    public DivAnimationsEnabledProvider getAnimationsEnabledProvider() {
+        return mAnimationsEnabledProvider;
+    }
+
     @NonNull
     public DivVariableController getDivVariableController() {
         return mDivVariableController;
@@ -484,6 +494,8 @@ public class DivConfiguration {
         private boolean mPermanentDebugPanelEnabled = Experiment.PERMANENT_DEBUG_PANEL_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
         private boolean mRenderEffectEnabled = Experiment.RENDER_EFFECT_ENABLED.getDefaultValue();
+        @NonNull
+        private DivAnimationsEnabledProvider mAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT;
 
         public Builder(@NonNull DivImageLoader imageLoader) {
             mImageLoader = imageLoader;
@@ -740,6 +752,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder animationsEnabledProvider(@NonNull DivAnimationsEnabledProvider provider) {
+            mAnimationsEnabledProvider = provider;
+            return this;
+        }
+
+        @NonNull
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
                     mTypefaceProvider == null ? DivTypefaceProvider.DEFAULT : mTypefaceProvider;
@@ -787,7 +805,8 @@ public class DivConfiguration {
                     mPagerPageClipEnabled,
                     mPermanentDebugPanelEnabled,
                     mRecyclerScrollInterceptionAngle,
-                    mRenderEffectEnabled);
+                    mRenderEffectEnabled,
+                    mAnimationsEnabledProvider);
         }
     }
 }

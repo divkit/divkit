@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.view.View
 import androidx.core.animation.doOnCancel
 import androidx.core.animation.doOnEnd
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.animation.DivVariableAnimatorBuilder
 import com.yandex.div.core.dagger.DivViewScope
@@ -16,10 +17,12 @@ import javax.inject.Inject
 
 @DivViewScope
 internal class DivAnimatorController @Inject constructor(
-    private val divView: Div2View
+    private val divView: Div2View,
+    private val animationsEnabledController: DivAnimationsEnabledController,
 ) {
 
     private val runningAnimators = mutableMapOf<Pair<String, String>, Animator>()
+    private var animationsEnabledSubscription: Disposable? = null
 
     fun startAnimator(
         scopeId: String,
@@ -38,7 +41,19 @@ internal class DivAnimatorController @Inject constructor(
         variableAnimator.doOnEnd { runningAnimators.remove(animatorKey) }
         variableAnimator.doOnCancel { runningAnimators.remove(animatorKey) }
         runningAnimators[animatorKey] = variableAnimator
+        subscribeToAnimationsEnabled()
         variableAnimator.start()
+    }
+
+    private fun subscribeToAnimationsEnabled() {
+        if (animationsEnabledSubscription != null) return
+        animationsEnabledSubscription = animationsEnabledController.observe(divView) {
+            if (!animationsEnabledController.isEnabled()) endRunningAnimators()
+        }
+    }
+
+    private fun endRunningAnimators() {
+        ArrayList(runningAnimators.values).forEach { it.end() }
     }
 
     private fun findAnimator(view: View, animatorId: String): DivAnimator? {
@@ -77,5 +92,7 @@ internal class DivAnimatorController @Inject constructor(
             animator.cancel()
         }
         runningAnimators.clear()
+        animationsEnabledSubscription?.close()
+        animationsEnabledSubscription = null
     }
 }

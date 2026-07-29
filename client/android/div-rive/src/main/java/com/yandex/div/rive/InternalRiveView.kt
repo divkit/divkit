@@ -14,6 +14,8 @@ import app.rive.runtime.kotlin.core.Loop
 import app.rive.runtime.kotlin.core.Rive
 import app.rive.runtime.kotlin.renderers.Renderer
 import app.rive.runtime.kotlin.renderers.RiveArtboardRenderer
+import com.yandex.div.core.Disposable
+import com.yandex.div.core.view2.Div2View
 
 /**
  * Wrapper over RiveAnimationView.
@@ -28,6 +30,20 @@ internal class DivRiveContainer @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyle) {
     private var animationInfo: RiveAnimationInfo? = null
     private fun getRiveView() = getChildAt(0) as? InternalRiveView
+
+    var animationsEnabled: () -> Boolean = { true }
+
+    private var animationsEnabledSubscription: Disposable? = null
+
+    fun observeAnimationsEnabled(divView: Div2View) {
+        animationsEnabledSubscription?.close()
+        animationsEnabledSubscription =
+            divView.div2Component.animationsEnabledController.observe(divView) {
+            getRiveView()?.let { view ->
+                if (animationsEnabled()) view.play() else view.pause()
+            }
+        }
+    }
 
     @MainThread
     fun setAnimationBytes(
@@ -45,7 +61,7 @@ internal class DivRiveContainer @JvmOverloads constructor(
         val view = getRiveView() ?: InternalRiveView(context).also {
             addView(it, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
-        view.setAnimationBytes(info.animationBytes, info.fit, info.alignment, info.loop)
+        view.setAnimationBytes(info.animationBytes, info.fit, info.alignment, info.loop, animationsEnabled())
     }
 
     override fun onAttachedToWindow() {
@@ -60,6 +76,8 @@ internal class DivRiveContainer @JvmOverloads constructor(
 
     fun release() {
         animationInfo = null
+        animationsEnabledSubscription?.close()
+        animationsEnabledSubscription = null
         getRiveView()?.let { it.stop(); removeView(it) }
     }
 
@@ -83,13 +101,14 @@ internal class InternalRiveView(context: Context) : RiveAnimationView(context) {
         fit: Fit,
         alignment: Alignment,
         loop: Loop,
+        autoplay: Boolean = true,
     ) {
         setRiveBytes(
             bytes,
             fit = fit,
             alignment = alignment,
             loop = loop,
-            autoplay = true,
+            autoplay = autoplay,
         )
         // handle 'wrap_content' size
         requestLayout()

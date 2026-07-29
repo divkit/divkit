@@ -81,7 +81,10 @@ internal class DivTransitionHandler(
             activeTransitions.clear()
         }
 
-        TransitionManager.beginDelayedTransition(root, transitionSet)
+        val animationsEnabled = divView.div2Component.animationsEnabledController.isEnabled()
+        if (animationsEnabled) {
+            TransitionManager.beginDelayedTransition(root, transitionSet)
+        }
 
         pendingTransitions.forEach { transitionData ->
             transitionData.changes.forEach { change ->
@@ -92,7 +95,9 @@ internal class DivTransitionHandler(
         }
 
         activeTransitions.clear()
-        activeTransitions.addAll(pendingTransitions)
+        if (animationsEnabled) {
+            activeTransitions.addAll(pendingTransitions)
+        }
         pendingTransitions.clear()
     }
 

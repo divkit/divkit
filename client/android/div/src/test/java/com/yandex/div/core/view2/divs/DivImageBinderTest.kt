@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -43,8 +44,11 @@ class DivImageBinderTest : DivBinderTest() {
         on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn mock()
     }
     private val path = DivStatePath.fromState(0)
+    private val animationsEnabledController = mock<DivAnimationsEnabledController> {
+        on { isEnabled() } doReturn true
+    }
     private val binder = DivImageBinder(
-            baseBinder, imageLoader, placeholderLoader, errorCollector
+            baseBinder, imageLoader, placeholderLoader, errorCollector, animationsEnabledController
     )
 
     @Before

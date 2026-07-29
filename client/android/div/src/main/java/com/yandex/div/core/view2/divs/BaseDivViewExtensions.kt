@@ -259,7 +259,9 @@ internal fun View.createAnimatedTouchListener(
 
     return if (animations != null || gestureDetector != null) {
         { v, event ->
-            animations?.invoke(v, event)
+            if (context.divView.div2Component.animationsEnabledController.isEnabled()) {
+                animations?.invoke(v, event)
+            }
             gestureDetector?.onTouchEvent(event) ?: false
         }
     } else {

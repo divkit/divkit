@@ -85,6 +85,7 @@ class DivPreloaderTest {
                 "tag" to extensionHandler,
             ),
             reporter = TestReporter(),
+            animationConfiguration = divContext.component.animationConfiguration,
         ),
         videoPreloader = object : DivVideoPreloader {
             override suspend fun preloadVideo(sources: List<Uri>) {

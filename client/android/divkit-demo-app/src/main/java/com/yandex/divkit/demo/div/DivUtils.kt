@@ -103,6 +103,7 @@ fun divConfiguration(
         })
         .supportHyphenation(true)
         .visualErrorsEnabled(true)
+        .animationsEnabledProvider(Container.animationsEnabledProvider)
         .extension(DivSizeProviderExtensionHandler())
         .extension(createDivSwipeGestureExtensionHandler())
         .extension(createMarkdownExtension(activity))

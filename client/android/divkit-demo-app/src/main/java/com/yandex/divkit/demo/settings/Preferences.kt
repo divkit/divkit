@@ -29,4 +29,6 @@ class Preferences(context: Context) : DivkitDemoPreferences(context) {
     var visualAssertionHandlerEnabled by BooleanPreference(BuildConfig.DEBUG)
 
     var useComposeRenderer by BooleanPreference(false)
+
+    var disableAnimations by BooleanPreference(false)
 }

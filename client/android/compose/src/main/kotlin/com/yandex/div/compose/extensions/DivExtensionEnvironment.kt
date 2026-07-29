@@ -22,7 +22,8 @@ data class DivExtensionEnvironment internal constructor(
     val data: Div,
     val extension: DivExtension,
     val expressionResolver: ExpressionResolver,
-    val reporter: DivReporter
+    val reporter: DivReporter,
+    val animationsEnabled: Boolean,
 ) {
     @Composable
     fun reportError(message: String) {

@@ -18,6 +18,7 @@ import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.compose.video.DivVideoPreloader
+import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.Module
@@ -65,6 +66,9 @@ class DivComposeConfiguration(
 
     @get:Provides
     val reporter: DivReporter = DivReporter(),
+
+    @get:Provides
+    val animationsEnabledProvider: DivAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT,
 
     @get:Provides
     @get:Named(Names.HOST_VARIABLES)

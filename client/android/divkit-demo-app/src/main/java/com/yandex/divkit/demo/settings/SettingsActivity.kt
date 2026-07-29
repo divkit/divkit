@@ -109,6 +109,7 @@ class SettingsActivity : AppCompatActivity() {
         setPreferenceState(BACKGROUND_BINDING, useAsyncBinding)
         setPreferenceState(VISUAL_ASSERTION_HANDLER, Container.preferences.visualAssertionHandlerEnabled)
         setPreferenceState(COMPOSE_RENDERER, Container.preferences.useComposeRenderer)
+        setPreferenceState(DISABLE_ANIMATIONS, Container.preferences.disableAnimations)
     }
 
     private fun setPreferenceState(name: String, flag: Experiment) {

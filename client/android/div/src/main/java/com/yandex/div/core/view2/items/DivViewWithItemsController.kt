@@ -7,10 +7,12 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivSizeUnit
 
 internal class DivViewWithItemsController @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) constructor(
-    private val view: DivViewWithItems
+    private val view: DivViewWithItems,
+    private val animationsEnabled: Boolean,
 ) {
 
-    fun setCurrentItem(index: Int, animated: Boolean) = view.setCurrentItem(index, animated)
+    fun setCurrentItem(index: Int, animated: Boolean) =
+        view.setCurrentItem(index, animated && animationsEnabled)
 
     fun changeCurrentItemByStep(overflow: String?, step: Int, animated: Boolean) {
         if (step == 0) return
@@ -22,12 +24,13 @@ internal class DivViewWithItemsController @VisibleForTesting(otherwise = Visible
     fun scrollByOffset(overflow: String?, offset: Int, animated: Boolean) {
         if (offset == 0) return
         val strategy = createStrategy(offset, overflow)
-        view.scrollTo(strategy.positionAfterScrollBy(offset), animated)
+        view.scrollTo(strategy.positionAfterScrollBy(offset), animated && animationsEnabled)
     }
 
-    fun scrollTo(offset: Int, animated: Boolean) = view.scrollTo(offset, animated, DivSizeUnit.DP)
+    fun scrollTo(offset: Int, animated: Boolean) =
+        view.scrollTo(offset, animated && animationsEnabled, DivSizeUnit.DP)
 
-    fun scrollToEnd(animated: Boolean) = view.scrollToTheEnd(animated)
+    fun scrollToEnd(animated: Boolean) = view.scrollToTheEnd(animated && animationsEnabled)
 
     fun scrollToStart(animated: Boolean) = setCurrentItem(0, animated)
 
@@ -67,7 +70,7 @@ internal class DivViewWithItemsController @VisibleForTesting(otherwise = Visible
             val divView = view as? Div2View ?: return null
             val targetView = divView.findTargetView<DivScrollActionHolder>(id, actionType, scopeId) ?: return null
             val viewWithItems = DivViewWithItems.create(targetView) ?: return null
-            return DivViewWithItemsController(viewWithItems)
+            return DivViewWithItemsController(viewWithItems, divView.div2Component.animationsEnabledController.isEnabled())
         }
     }
 }

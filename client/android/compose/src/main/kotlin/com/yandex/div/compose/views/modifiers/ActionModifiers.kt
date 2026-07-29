@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivActions
+import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
@@ -33,7 +34,8 @@ internal fun Modifier.actions(actions: DivActions): Modifier {
         return this
     }
 
-    return when (val name = actions.animation.name.observedValue()) {
+    val name = if (animationsEnabled) actions.animation.name.observedValue() else DivAnimation.Name.NO_ANIMATION
+    return when (name) {
         DivAnimation.Name.FADE ->
             clickableWithFade(actions)
 

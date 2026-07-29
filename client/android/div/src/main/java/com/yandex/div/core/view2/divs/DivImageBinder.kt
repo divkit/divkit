@@ -15,6 +15,7 @@ import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.bitmap.applyScaleAndFilters
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.evaluateGravity
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.toFilters
 import com.yandex.div.core.util.toImageScale
@@ -49,6 +50,7 @@ internal class DivImageBinder @Inject constructor(
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
     private val errorCollectors: ErrorCollectors,
+    private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<Div.Image, DivImage, DivImageView>(baseBinder) {
 
     override fun DivImageView.bind(bindingContext: BindingContext, div: DivImage, oldDiv: DivImage?) {
@@ -366,7 +368,7 @@ internal class DivImageBinder @Inject constructor(
 
                 override fun onSuccess(bitmap: Bitmap, source: BitmapSource) {
                     applyScaleAndFiltersAndSetBitmap(bindingContext, bitmap, div.scale, div.filters)
-                    applyLoadingFade(div, resolver, source)
+                    applyLoadingFade(div, resolver, source, animationsEnabledController.isEnabled())
                     imageLoaded()
                     applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
                     invalidate()
@@ -374,7 +376,7 @@ internal class DivImageBinder @Inject constructor(
 
                 override fun onSuccess(drawable: Drawable, source: BitmapSource) {
                     setImageDrawable(bindingContext.divView, drawable)
-                    applyLoadingFade(div, resolver, source)
+                    applyLoadingFade(div, resolver, source, animationsEnabledController.isEnabled())
 
                     imageLoaded()
                     invalidate()
@@ -427,12 +429,13 @@ internal class DivImageBinder @Inject constructor(
         div: DivImage,
         resolver: ExpressionResolver,
         bitmapSource: BitmapSource?,
+        animationsEnabled: Boolean,
     ) {
 
         this.animate().cancel()
         val animation = div.appearanceAnimation
         val maxAlpha = div.alpha.evaluate(resolver).toFloat()
-        if (animation == null || bitmapSource == BitmapSource.MEMORY) {
+        if (animation == null || bitmapSource == BitmapSource.MEMORY || !animationsEnabled) {
             alpha = maxAlpha
             return
         }

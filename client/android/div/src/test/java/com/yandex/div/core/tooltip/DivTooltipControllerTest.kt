@@ -13,11 +13,13 @@ import com.yandex.div.R
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -113,6 +115,10 @@ class DivTooltipControllerTest {
     }
 
     private val expressionResolver = mock<ExpressionResolver>()
+    private val div2Component = mock<Div2Component>()
+    private val animationsEnabledController = mock<DivAnimationsEnabledController> {
+        on { isEnabled() } doReturn true
+    }
     private val div2View = mock<Div2View> {
         on { resources } doReturn resources
         on { getWindowVisibleDisplayFrame(any()) } doAnswer { inv ->
@@ -121,6 +127,8 @@ class DivTooltipControllerTest {
         on { getChildAt(0) } doReturn anchor
         on { childCount } doReturn 1
         on { getContext() } doReturn activity
+        on { div2Component } doReturn div2Component
+        on { context } doReturn mock()
     }
     private val bindingContext = BindingContext(div2View, expressionResolver)
 
@@ -187,7 +195,8 @@ class DivTooltipControllerTest {
     }
 
     private val underTest = DivTooltipController(
-        tooltipRestrictor, visibilityActionTracker, divPreloader, errorCollectors, divTooltipViewBuilder, accessibilityStateProvider
+        tooltipRestrictor, visibilityActionTracker, divPreloader, errorCollectors, divTooltipViewBuilder,
+        accessibilityStateProvider, animationsEnabledController
     ) { _, _, _ ->
         popupWindow
     }
@@ -247,6 +256,29 @@ class DivTooltipControllerTest {
 
         underTest.hideTooltip("tooltip_id")
 
+        verify(tooltipShownCallback).onDivTooltipDismissed(div2View, anchor, tooltips[0])
+    }
+
+    @Test
+    fun `tooltip exit animation is cleared when animations disabled between show and hide`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+        whenever(animationsEnabledController.isEnabled()).doReturn(false)
+
+        underTest.hideTooltip("tooltip_id")
+
+        verify(popupWindow).exitTransition = null
+        verify(tooltipShownCallback).onDivTooltipDismissed(div2View, anchor, tooltips[0])
+    }
+
+    @Test
+    fun `tooltip exit animation is kept when animations enabled on hide`() {
+        prepareDiv()
+        underTest.showTooltip("tooltip_id", bindingContext)
+
+        underTest.hideTooltip("tooltip_id")
+
+        verify(popupWindow, never()).exitTransition = null
         verify(tooltipShownCallback).onDivTooltipDismissed(div2View, anchor, tooltips[0])
     }
 

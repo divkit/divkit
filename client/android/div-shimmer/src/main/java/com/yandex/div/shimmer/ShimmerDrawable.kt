@@ -130,8 +130,12 @@ class ShimmerDrawable @JvmOverloads constructor(
         shaderMatrix.setRotate(rotate.toFloat(), drawRect.width() / 2f, drawRect.height() / 2f)
         shaderMatrix.preTranslate(dx, dy)
         shimmerShader.setLocalMatrix(shaderMatrix)
-        if (!isStopped && animationsEnabled()) {
-            start()
+        if (animationsEnabled()) {
+            if (!isStopped) {
+                start()
+            }
+        } else if (valueAnimator.isRunning) {
+            valueAnimator.cancel()
         }
 
         val cornerRadius = config.cornerRadius

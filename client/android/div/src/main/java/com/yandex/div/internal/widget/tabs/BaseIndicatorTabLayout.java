@@ -50,6 +50,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import kotlin.jvm.functions.Function0;
+
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE;
 import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
@@ -104,6 +106,10 @@ import static androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING;
  */
 @SuppressWarnings("checkstyle:all")
 public class BaseIndicatorTabLayout extends HorizontalScrollView {
+
+    @NonNull
+    private Function0<Boolean> mAnimationsEnabledProvider = () -> true;
+
     private static final int INVALID_WIDTH = -1;
     private static final int DEFAULT_HEIGHT = 44; // dps
     private static final int TAB_MIN_WIDTH_MARGIN = 56; //dps
@@ -352,6 +358,10 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
 
     public void setAnimationDuration(long duration) {
         mAnimationDuration = duration;
+    }
+
+    public void setAnimationsEnabledProvider(@NonNull Function0<Boolean> provider) {
+        mAnimationsEnabledProvider = provider;
     }
 
     /**
@@ -999,6 +1009,14 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
 
     private void animateToTab(int newPosition) {
         if (newPosition == Tab.INVALID_POSITION) {
+            return;
+        }
+
+        if (!mAnimationsEnabledProvider.invoke()) {
+            if (mScrollAnimator != null && mScrollAnimator.isRunning()) {
+                mScrollAnimator.cancel();
+            }
+            setScrollPosition(newPosition, 0f, true);
             return;
         }
 

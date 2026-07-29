@@ -9,6 +9,7 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.toDrawable
 import com.yandex.div.core.util.toIntSafely
@@ -44,6 +45,7 @@ internal class DivSliderBinder @Inject constructor(
     private val horizontalInterceptionAngle: Float,
     private val actionPerformer: DivActionPerformer,
     @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
+    private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<Div.Slider, DivSlider, DivSliderView>(baseBinder) {
 
     private var errorCollector: ErrorCollector? = null
@@ -57,6 +59,8 @@ internal class DivSliderBinder @Inject constructor(
         val divView = bindingContext.divView
         val expressionResolver = bindingContext.expressionResolver
         errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+
+        animationsEnabledProvider = { animationsEnabledController.isEnabled() }
 
         interceptionAngle = horizontalInterceptionAngle
 

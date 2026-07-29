@@ -89,7 +89,8 @@ private fun BaseViewWithExtensions(
             data = data,
             extension = extension,
             expressionResolver = expressionResolver,
-            reporter = LocalComponent.current.reporter
+            reporter = LocalComponent.current.reporter,
+            animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState(),
         ),
         content = { modifier ->
             BaseViewWithExtensions(

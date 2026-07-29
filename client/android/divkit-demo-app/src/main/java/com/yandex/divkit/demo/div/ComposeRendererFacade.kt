@@ -16,6 +16,7 @@ import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
+import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import org.json.JSONException
 import org.json.JSONObject
@@ -34,6 +35,7 @@ class ComposeRendererFacade(
             fontSourceProvider = ComposeFontSourceProvider(),
             playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context)),
             variableController = variableController,
+            animationsEnabledProvider = Container.animationsEnabledProvider,
         )
     )
 

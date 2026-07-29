@@ -10,6 +10,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivSlider
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +26,7 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
     val coroutineScope = rememberCoroutineScope()
 
     val modifier = modifier
-        .sliderPointerInput(state, styles, isEnabled, isRtl, coroutineScope)
+        .sliderPointerInput(state, styles, isEnabled, isRtl, coroutineScope, animationsEnabled)
         .drawBehind { drawSlider(state, styles, isRtl = isRtl) }
 
     Layout(
@@ -53,6 +54,7 @@ private fun Modifier.sliderPointerInput(
     isEnabled: Boolean,
     isRtl: Boolean,
     coroutineScope: CoroutineScope,
+    animationsEnabled: Boolean,
 ): Modifier {
     if (!isEnabled)
         return this
@@ -83,7 +85,7 @@ private fun Modifier.sliderPointerInput(
 
             state.isInteracting = true
             try {
-                activeThumb.setValue(valueAt(down.position.x), animated = true, scope = coroutineScope)
+                activeThumb.setValue(valueAt(down.position.x), animated = animationsEnabled, scope = coroutineScope)
                 while (true) {
                     val event = awaitPointerEvent()
                     val change = event.changes.firstOrNull() ?: break

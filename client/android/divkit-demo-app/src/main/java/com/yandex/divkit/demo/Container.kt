@@ -12,6 +12,7 @@ import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.RenderConfiguration
 import com.yandex.div.picasso.PicassoDivImageLoader
 import com.yandex.divkit.demo.div.DemoDivDownloaderWrapper
+import com.yandex.divkit.demo.div.DemoAnimationsEnabledProvider
 import com.yandex.divkit.demo.div.DemoDivImageLoaderWrapper
 import com.yandex.divkit.demo.div.editor.NaiveSSLContext
 import com.yandex.divkit.demo.div.histogram.DemoHistogramConfiguration
@@ -39,6 +40,8 @@ internal object Container {
     val preferences by lazy {
         Preferences(context)
     }
+
+    val animationsEnabledProvider = DemoAnimationsEnabledProvider { !preferences.disableAnimations }
 
     private val httpHeaders by lazy {
         JSONObject(BuildConfig.HTTP_HEADERS).asHostToHeadersMap()

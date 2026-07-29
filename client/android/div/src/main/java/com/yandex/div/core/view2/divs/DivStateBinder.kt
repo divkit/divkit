@@ -23,6 +23,7 @@ import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.containsStateInnerTransitions
 import com.yandex.div.core.util.getDefaultState
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.util.toAlignmentHorizontal
 import com.yandex.div.core.util.toAlignmentVertical
 import com.yandex.div.core.util.walk
@@ -71,6 +72,7 @@ internal class DivStateBinder @Inject constructor(
     private val errorCollectors: ErrorCollectors,
     private val variableBinder: TwoWayStringVariableBinder,
     private val runtimeVisitor: DivRuntimeVisitor,
+    private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<Div.State, DivState, DivStateLayout>(baseBinder) {
 
     /**
@@ -351,6 +353,8 @@ internal class DivStateBinder @Inject constructor(
         divView: Div2View,
         path: DivStatePath,
     ): Transition? {
+        if (!animationsEnabledController.isEnabled()) return null
+
         oldResolver ?: return setupAnimation(incomingState, outgoingState, incoming, outgoing, resolver, null)
 
         return if (divState.allowsTransitionsOnStateChange(resolver)

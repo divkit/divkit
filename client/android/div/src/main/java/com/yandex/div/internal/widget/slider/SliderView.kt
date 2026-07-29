@@ -29,7 +29,6 @@ private const val DEFAULT_MAX_VALUE = 100f
 private const val MIN_POSSIBLE_RANGE = 1f
 private const val UNSET_VALUE = -1
 private const val DEFAULT_ANIMATION_DURATION = 300L
-private const val DEFAULT_ANIMATION_ENABLED = true
 private const val DEFAULT_INTERCEPTION_ANGLE = 45f
 
 open class SliderView @JvmOverloads constructor(
@@ -105,10 +104,7 @@ open class SliderView @JvmOverloads constructor(
      */
     private var animationInterpolator = AccelerateDecelerateInterpolator()
 
-    /**
-     * Animation enabled flag.
-     */
-    var animationEnabled = DEFAULT_ANIMATION_ENABLED
+    var animationsEnabledProvider: () -> Boolean = { true }
 
     /**
      * Value of slider start point.
@@ -185,7 +181,7 @@ open class SliderView @JvmOverloads constructor(
      * @param value should be in range from [minValue] to [maxValue]
      * @param animated change value with animation
      */
-    fun setThumbValue(value: Float, animated: Boolean = animationEnabled) {
+    fun setThumbValue(value: Float, animated: Boolean = true) {
         trySetThumbValue(value, animated, forced = true)
     }
 
@@ -198,12 +194,12 @@ open class SliderView @JvmOverloads constructor(
      */
     private fun trySetThumbValue(
         value: Float,
-        animated: Boolean = animationEnabled,
+        animated: Boolean,
         forced: Boolean,
     ) {
         val newValue = value.inBoarders()
         if (thumbValue == newValue) return
-        if (animated && animationEnabled) {
+        if (animated && animationsEnabledProvider()) {
             if (sliderAnimator == null) {
                 prevThumbValue = thumbValue
             }
@@ -264,7 +260,7 @@ open class SliderView @JvmOverloads constructor(
      * @param value should be in range from [minValue] to [maxValue] or be null
      * @param animated change value with animation
      */
-    fun setThumbSecondaryValue(value: Float?, animated: Boolean = animationEnabled) {
+    fun setThumbSecondaryValue(value: Float?, animated: Boolean = true) {
         trySetThumbSecondaryValue(value, animated, forced = true)
     }
 
@@ -282,7 +278,7 @@ open class SliderView @JvmOverloads constructor(
     ) {
         val newValue = value?.inBoarders()
         if (thumbSecondaryValue == newValue) return
-        if (animated && animationEnabled && thumbSecondaryValue != null && newValue != null) {
+        if (animated && animationsEnabledProvider() && thumbSecondaryValue != null && newValue != null) {
             if (sliderSecondaryAnimator == null) {
                 prevThumbSecondaryValue = thumbSecondaryValue
             }
@@ -526,7 +522,7 @@ open class SliderView @JvmOverloads constructor(
             MotionEvent.ACTION_DOWN -> {
                 touchListener?.onPressStart()
                 thumbOnTouch = getClosestThumb(touchPosition)
-                setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), animationEnabled)
+                setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), true)
                 prevX = ev.x
                 prevY = ev.y
                 return true
@@ -548,7 +544,7 @@ open class SliderView @JvmOverloads constructor(
             }
             MotionEvent.ACTION_UP -> {
                 touchListener?.onPressEnd()
-                setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), animationEnabled)
+                setValueToThumb(thumbOnTouch, getTouchValue(touchPosition), true)
                 return true
             }
             MotionEvent.ACTION_CANCEL -> touchListener?.onPressEnd()

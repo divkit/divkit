@@ -55,6 +55,8 @@ class RiveCustomViewAdapter private constructor(
         path: DivStatePath
     ) {
         if (view is DivRiveContainer) {
+            view.animationsEnabled = { divView.div2Component.animationsEnabledController.isEnabled() }
+            view.observeAnimationsEnabled(divView)
             getLoader(div).setView(view)
         }
     }

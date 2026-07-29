@@ -134,21 +134,34 @@ internal class DivStateLayout @JvmOverloads constructor(
 
             val duration: Float
             val targetTranslation: Float
-            val animatorListener: Animator.AnimatorListener?
+            val dismiss: Boolean
             if (abs(view.translationX) > view.width / 2) {
                 duration = ANIMATION_TIME * abs(view.width - view.translationX) / view.width
                 targetTranslation = sign(view.translationX) * view.width.toFloat()
-                animatorListener = object : AnimatorListenerAdapter() {
+                dismiss = true
+            } else {
+                duration = ANIMATION_TIME * abs(view.translationX) / view.width
+                targetTranslation = 0f
+                dismiss = false
+            }
+
+            view.animate().cancel()
+
+            if (bindingContext?.divView?.div2Component?.animationsEnabledController?.isEnabled() == false) {
+                view.translationX = targetTranslation
+                if (dismiss) swipeOutCallback?.invoke()
+                return
+            }
+
+            val animatorListener = if (dismiss) {
+                object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         swipeOutCallback?.invoke()
                     }
                 }
             } else {
-                duration = ANIMATION_TIME * abs(view.translationX) / view.width
-                targetTranslation = 0f
-                animatorListener = null
+                null
             }
-            view.animate().cancel()
             view.animate()
                 .setDuration(MathUtils.clamp(duration, 0f, ANIMATION_TIME).toLong())
                 .translationX(targetTranslation)

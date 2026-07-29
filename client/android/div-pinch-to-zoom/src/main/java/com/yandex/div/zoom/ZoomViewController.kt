@@ -19,6 +19,8 @@ internal class ZoomViewController(
 
     var state = ZoomState.IDLE
 
+    var animationsEnabled: () -> Boolean = { true }
+
     private val context: Context
         get() = configuration.context
 
@@ -89,7 +91,7 @@ internal class ZoomViewController(
             return
         }
 
-        if (animated) {
+        if (animated && animationsEnabled()) {
             state = ZoomState.EXITING
             ValueAnimator.ofFloat(1.0f, 0.0f).apply {
                 duration = ANIMATION_DURATION

@@ -21,6 +21,7 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
@@ -75,6 +76,7 @@ internal class DivTabsBinder @Inject constructor(
     @param:Named(Names.THEMED_CONTEXT) private val context: Context,
     private val runtimeVisitor: DivRuntimeVisitor,
     private val tabsStateCache: TabsStateCache,
+    private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<Div.Tabs, DivTabs, DivTabsLayout>(baseBinder) {
 
     private var oldDivSelectedTab: Long? = null
@@ -121,6 +123,7 @@ internal class DivTabsBinder @Inject constructor(
         })
         titleLayout.setOnScrollChangedListener { div2Logger.logTabTitlesScroll(bindingContext.divView) }
         titleLayout.setFocusTracker(bindingContext.divView.inputFocusTracker)
+        titleLayout.setAnimationsEnabledProvider { animationsEnabledController.isEnabled() }
 
         addSubscription(div.restrictParentScroll.observeAndGet(resolver) {
             viewPager.onInterceptTouchEventListener = if (it) ParentScrollRestrictor else null

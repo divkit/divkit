@@ -13,3 +13,7 @@ internal val divContext: DivContext
 internal val expressionResolver: ExpressionResolver
     @Composable
     get() = LocalComponent.current.expressionResolver
+
+internal val animationsEnabled: Boolean
+    @Composable
+    get() = divContext.component.animationConfiguration.isEnabled

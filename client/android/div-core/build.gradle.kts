@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    api(libs.kotlin.corountines.core)
     implementation(libs.androidx.core)
 }
 

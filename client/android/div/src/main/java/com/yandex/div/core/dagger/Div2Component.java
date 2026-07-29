@@ -9,6 +9,7 @@ import androidx.annotation.StyleRes;
 import com.yandex.div.core.Div2Logger;
 import com.yandex.div.core.DivActionHandler;
 import com.yandex.div.core.DivActionPerformer;
+import com.yandex.div.core.DivAnimationsEnabledProvider;
 import com.yandex.div.core.DivConfiguration;
 import com.yandex.div.core.DivCreationTracker;
 import com.yandex.div.core.DivCustomContainerChildFactory;
@@ -44,6 +45,7 @@ import com.yandex.div.core.view2.DivViewCreator;
 import com.yandex.div.core.view2.DivVisibilityActionDispatcher;
 import com.yandex.div.core.view2.DivVisibilityActionTracker;
 import com.yandex.div.core.view2.ReleaseManager;
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController;
 import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.core.view2.errors.ErrorCollectors;
 import com.yandex.div.histogram.reporter.HistogramReporter;
@@ -152,6 +154,12 @@ public interface Div2Component {
 
     @NonNull
     DivVariableController getDivVariableController();
+
+    @NonNull
+    DivAnimationsEnabledProvider getAnimationsEnabledProvider();
+
+    @NonNull
+    DivAnimationsEnabledController getAnimationsEnabledController();
 
     @NonNull
     PerformanceDependentSessionProfiler getPerformanceDependentSessionProfiler();

@@ -1,11 +1,7 @@
 package com.yandex.div.shimmer
 
-import android.animation.ValueAnimator
-import android.content.Context
 import android.content.res.Resources
-import android.os.Build
 import android.os.SystemClock
-import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.View
 import com.yandex.div.core.extension.DivExtensionHandler
@@ -65,7 +61,7 @@ open class DivShimmerExtensionHandler(
         val drawable = ShimmerDrawable(
             initialConfig = params.createShimmer(expressionResolver),
             animationStartTime = animationStartTime,
-            animationsEnabled = { divView.context.isAnimationsEnabled() },
+            animationsEnabled = { divView.div2Component.animationsEnabledController.isEnabled() },
         )
         params.observeTo(drawable, expressionResolver)
         imageView.setImage(drawable)
@@ -124,18 +120,6 @@ open class DivShimmerExtensionHandler(
         )
     }
 
-    private fun Context.isAnimationsEnabled(): Boolean {
-        val scale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ValueAnimator.getDurationScale()
-        } else {
-            Settings.Global.getFloat(
-                contentResolver,
-                Settings.Global.ANIMATOR_DURATION_SCALE,
-                1f,
-            )
-        }
-        return scale != 0f
-    }
 }
 
 private fun Long?.dpToPx(metrics: DisplayMetrics): Float {

@@ -114,9 +114,9 @@ class SliderActivity : AppCompatActivity() {
         }
 
         findViewById<SwitchCompat>(R.id.anim_switch).apply {
-            isChecked = slider.animationEnabled
+            isChecked = slider.animationsEnabledProvider()
             setOnCheckedChangeListener { _, isChecked ->
-                slider.animationEnabled = isChecked
+                slider.animationsEnabledProvider = { isChecked }
             }
         }
 

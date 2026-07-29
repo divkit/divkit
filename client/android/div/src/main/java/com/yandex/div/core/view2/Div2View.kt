@@ -29,6 +29,7 @@ import com.yandex.div.core.DivViewConfig
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.ExperimentalApi
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
@@ -114,7 +115,8 @@ class Div2View private constructor(
     private val constructorCallTime: Long,
 ) : FrameContainerLayout(context, attrs, defStyleAttr), DivViewFacade {
 
-    internal val div2Component: Div2Component = context.div2Component
+    @InternalApi
+    val div2Component: Div2Component = context.div2Component
 
     private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled
     private val isComplexRebindEnabled
@@ -1090,6 +1092,10 @@ class Div2View private constructor(
 
     private fun prepareTransition(oldData: DivData?, newData: DivData, oldDiv: Div?, newDiv: Div?): Transition? {
         if (oldDiv === newDiv) {
+            return null
+        }
+
+        if (!div2Component.animationsEnabledController.isEnabled()) {
             return null
         }
 

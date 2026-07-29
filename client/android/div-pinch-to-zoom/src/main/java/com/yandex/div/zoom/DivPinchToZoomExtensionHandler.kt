@@ -27,6 +27,8 @@ class DivPinchToZoomExtensionHandler(
             return
         }
 
+        viewController.animationsEnabled = { divView.div2Component.animationsEnabledController.isEnabled() }
+
         val controller = ZoomTouchController(configuration, viewController)
         val touchListenerObserver = { baseListener: View.OnTouchListener? ->
             val touchListener = ZoomTouchListener(controller, baseListener)

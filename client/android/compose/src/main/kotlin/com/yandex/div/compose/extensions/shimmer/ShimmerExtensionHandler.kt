@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.MotionDurationScale
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -58,13 +57,13 @@ class ShimmerExtensionHandler : DivExtensionHandler {
         val modifier = if (isImageLoaded || params == null) {
             modifier
         } else {
-            modifier.shimmer(params)
+            modifier.shimmer(params, environment.animationsEnabled)
         }
         content(modifier)
     }
 
     @Composable
-    private fun Modifier.shimmer(paramsJson: JSONObject): Modifier {
+    private fun Modifier.shimmer(paramsJson: JSONObject, animationsEnabled: Boolean): Modifier {
         if (animationStartTime == 0L) {
             animationStartTime = SystemClock.uptimeMillis()
         }
@@ -74,7 +73,7 @@ class ShimmerExtensionHandler : DivExtensionHandler {
         val phaseState = remember { mutableFloatStateOf(0f) }
 
         LaunchedEffect(config.durationMillis) {
-            if (coroutineContext[MotionDurationScale]?.scaleFactor == 0f) {
+            if (!animationsEnabled) {
                 return@LaunchedEffect
             }
             val durationMillis = config.durationMillis.coerceAtLeast(1L)

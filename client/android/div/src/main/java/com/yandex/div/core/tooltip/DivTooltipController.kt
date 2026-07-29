@@ -34,6 +34,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.ViewLocator
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
@@ -59,6 +60,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
         private val errorCollectors: ErrorCollectors,
         private val divTooltipViewBuilder: DivTooltipViewBuilder,
         private val accessibilityStateProvider: AccessibilityStateProvider,
+        private val animationsEnabledController: DivAnimationsEnabledController,
         private val createPopup: CreatePopupCall
 ) {
     private val tooltips = mutableListOf<TooltipData>()
@@ -71,7 +73,8 @@ internal class DivTooltipController @VisibleForTesting constructor(
             divPreloader: DivPreloader,
             divTooltipViewBuilder: DivTooltipViewBuilder,
             accessibilityStateProvider: AccessibilityStateProvider,
-            errorCollectors: ErrorCollectors
+            errorCollectors: ErrorCollectors,
+            animationsEnabledController: DivAnimationsEnabledController
     ) : this(
         tooltipRestrictor,
         divVisibilityActionTracker,
@@ -79,6 +82,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
         errorCollectors,
         divTooltipViewBuilder,
         accessibilityStateProvider,
+        animationsEnabledController,
         { c: View, w: Int, h: Int -> DivTooltipWindow(c, w, h) })
 
     fun showTooltip(tooltipId: String, context: BindingContext, multiple: Boolean = false, scopeId: String? = null) {
@@ -120,17 +124,26 @@ internal class DivTooltipController @VisibleForTesting constructor(
         if (substrateView != null && tooltipView != null) {
             substrateView.clearAnimation()
             tooltipView.clearAnimation()
-            animateExit(
-                divTooltip = tooltipData.divTooltip,
-                resolver = tooltipData.bindingContext.expressionResolver,
-                tooltipView = tooltipView,
-                substrateView = substrateView,
-            ) {
+            val onExitEnd = {
                 if (tooltipData.popupWindow.isShowing) {
                     tooltipData.popupWindow.dismiss()
                 }
             }
+            if (animationsEnabledController.isEnabled()) {
+                animateExit(
+                    divTooltip = tooltipData.divTooltip,
+                    resolver = tooltipData.bindingContext.expressionResolver,
+                    tooltipView = tooltipView,
+                    substrateView = substrateView,
+                    onEnd = onExitEnd,
+                )
+            } else {
+                onExitEnd()
+            }
         } else {
+            if (!animationsEnabledController.isEnabled()) {
+                tooltipData.popupWindow.clearAnimation()
+            }
             tooltipData.popupWindow.dismiss()
         }
     }
@@ -298,7 +311,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
                     divTooltip.substrateDiv?.hasAction() == true
                 ) { hideTooltip(divTooltip.id, scopeId) }
             )
-            if (!hasSubstrate) {
+            if (!hasSubstrate && animationsEnabledController.isEnabled()) {
                 setupAnimation(divTooltip, resolver)
             }
 
@@ -356,12 +369,14 @@ internal class DivTooltipController @VisibleForTesting constructor(
                 popup.showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
 
                 tooltipContainer.substrateView?.let { substrateView ->
-                    animateEnter(
-                        divTooltip = divTooltip,
-                        resolver = resolver,
-                        tooltipView = tooltipView,
-                        substrateView = substrateView,
-                    )
+                    if (animationsEnabledController.isEnabled()) {
+                        animateEnter(
+                            divTooltip = divTooltip,
+                            resolver = resolver,
+                            tooltipView = tooltipView,
+                            substrateView = substrateView,
+                        )
+                    }
                 }
                 
                 sendAccessibilityEventUnchecked(TYPE_WINDOW_STATE_CHANGED, tooltipView, accessibilityStateProvider)

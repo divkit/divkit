@@ -12,6 +12,7 @@ internal class ShineImageTransformer(
     onCycleActionPerformer: () -> Unit,
     private val resolver: ExpressionResolver,
     private val logger: DivShineLogger,
+    animationsEnabled: () -> Boolean = { true },
 ) : LoadableImageView.ImageTransformer, ExpressionSubscriber {
 
     private val shineDrawable: ShineDrawable
@@ -24,7 +25,8 @@ internal class ShineImageTransformer(
 
         shineDrawable = ShineDrawable(
             sourceBitmap = null,
-            initialConfig = config
+            initialConfig = config,
+            animationsEnabled = animationsEnabled,
         )
 
         data.observeTo(shineDrawable)

@@ -28,7 +28,8 @@ import kotlin.math.tan
  */
 class ShineDrawable(
     private var sourceBitmap: Bitmap? = null,
-    initialConfig: Config
+    initialConfig: Config,
+    private val animationsEnabled: () -> Boolean = { true },
 ) : Drawable(), Animatable {
     var config: Config = initialConfig
         set(value) {
@@ -70,6 +71,7 @@ class ShineDrawable(
 
     override fun start() {
         if (!config.enabled) return
+        if (!animationsEnabled()) return
         if (valueAnimator.isStarted) return
 
         valueAnimator.start()

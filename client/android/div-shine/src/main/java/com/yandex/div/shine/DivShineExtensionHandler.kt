@@ -72,6 +72,7 @@ class DivShineExtensionHandler @JvmOverloads constructor(
             actionPerformer,
             expressionResolver,
             logger,
+            animationsEnabled = { divView.div2Component.animationsEnabledController.isEnabled() },
         )
 
         val animationController = ShineAnimationController(

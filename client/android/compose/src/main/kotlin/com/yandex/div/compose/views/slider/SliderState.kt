@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.variables.mutableStateFromVariable
 import com.yandex.div2.DivSlider
@@ -105,6 +106,7 @@ private fun rememberThumb(variableName: String?, range: SliderRange): SliderThum
 
 @Composable
 private fun SyncVariableToVisual(thumb: SliderThumb, state: SliderState) {
+    val animated = animationsEnabled
     LaunchedEffect(thumb, thumb.variable.value, state.isInteracting) {
         if (state.isInteracting) return@LaunchedEffect
         val range = state.range
@@ -112,7 +114,11 @@ private fun SyncVariableToVisual(thumb: SliderThumb, state: SliderState) {
         if (thumb.variable.value == visualValue.roundToLong())
             return@LaunchedEffect
         val target = thumb.variable.value.toFloat().coerceIn(range.minValue, range.maxValue)
-        thumb.visual.animateTo(target, SLIDER_ANIMATION_SPEC)
+        if (animated) {
+            thumb.visual.animateTo(target, SLIDER_ANIMATION_SPEC)
+        } else {
+            thumb.visual.snapTo(target)
+        }
     }
 }
 

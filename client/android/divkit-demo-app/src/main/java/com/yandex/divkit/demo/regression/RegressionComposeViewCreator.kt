@@ -13,6 +13,7 @@ import com.yandex.div.compose.lottie.LottieExtensionHandler
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.video.m3.ExoDivPlayerFactory
+import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.ChronometerViewFactory
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
@@ -52,7 +53,8 @@ class RegressionComposeViewCreator(context: Context) {
                 ),
                 fontSourceProvider = ComposeFontSourceProvider(),
                 histogramConfiguration = DemoHistogramConfiguration,
-                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity))
+                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity)),
+                animationsEnabledProvider = Container.animationsEnabledProvider
             )
         )
         val view = ComposeView(divContext).apply {
