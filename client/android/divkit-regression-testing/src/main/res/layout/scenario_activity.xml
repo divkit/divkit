@@ -34,11 +34,10 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.core.widget.NestedScrollView
+        <FrameLayout
             android:id="@+id/single_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:fillViewport="true"
             android:visibility="gone"
             android:background="@android:color/white"
             tools:visibility="visible"
