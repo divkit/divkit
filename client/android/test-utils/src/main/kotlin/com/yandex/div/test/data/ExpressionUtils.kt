@@ -1,8 +1,10 @@
 package com.yandex.div.test.data
 
 import android.net.Uri
+import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.parser.STRING_TO_URI
 import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
+import com.yandex.div.internal.parser.TYPE_HELPER_COLOR
 import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE
 import com.yandex.div.internal.parser.TYPE_HELPER_INT
 import com.yandex.div.internal.parser.TYPE_HELPER_STRING
@@ -44,6 +46,17 @@ fun doubleExpression(expression: String): Expression<Double> {
         validator = { true },
         logger = { fail(it.message) },
         typeHelper = TYPE_HELPER_DOUBLE,
+    )
+}
+
+fun colorExpression(expression: String): Expression<Int> {
+    return Expression.MutableExpression(
+        expressionKey = "test",
+        rawExpression = expression,
+        converter = STRING_TO_COLOR_INT,
+        validator = { true },
+        logger = { fail(it.message) },
+        typeHelper = TYPE_HELPER_COLOR,
     )
 }
 

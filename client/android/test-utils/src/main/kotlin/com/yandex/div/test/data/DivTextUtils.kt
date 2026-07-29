@@ -6,6 +6,7 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivBackground
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivFunction
@@ -20,8 +21,10 @@ import com.yandex.div2.DivVisibilityAction
 fun text(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
+    backgrounds: List<DivBackground>? = null,
     disappearActions: List<DivDisappearAction>? = null,
     doubleTapActions: List<DivAction>? = null,
+    extensions: List<DivExtension>? = null,
     id: String? = null,
     images: List<DivText.Image>? = null,
     longTapActions: List<DivAction>? = null,
@@ -35,8 +38,10 @@ fun text(
     return text(
         accessibility = accessibility,
         action = action,
+        backgrounds = backgrounds,
         disappearActions = disappearActions,
         doubleTapActions = doubleTapActions,
+        extensions = extensions,
         id = id,
         images = images,
         longTapActions = longTapActions,
@@ -53,6 +58,7 @@ fun text(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
     actions: List<DivAction>? = null,
+    backgrounds: List<DivBackground>? = null,
     disappearActions: List<DivDisappearAction>? = null,
     doubleTapActions: List<DivAction>? = null,
     extensions: List<DivExtension>? = null,
@@ -75,6 +81,7 @@ fun text(
             accessibility = accessibility,
             action = action,
             actions = actions,
+            background = backgrounds,
             disappearActions = disappearActions,
             doubletapActions = doubleTapActions,
             extensions = extensions,

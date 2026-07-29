@@ -6,6 +6,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivExtension
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivVariable
@@ -14,6 +15,7 @@ fun container(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
     backgrounds: List<DivBackground>? = null,
+    extensions: List<DivExtension>? = null,
     functions: List<DivFunction>? = null,
     height: DivSize = wrapContent(),
     id: String? = null,
@@ -27,6 +29,7 @@ fun container(
             accessibility = accessibility,
             action = action,
             background = backgrounds,
+            extensions = extensions,
             functions = functions,
             height = height,
             id = id,

@@ -809,6 +809,7 @@
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewAccessibilityTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewAccessibilityTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewHostTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewHostTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewHostWithVisibilityActionsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewHostWithVisibilityActionsTest.kt",
+  "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewRecompositionCountTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewRecompositionCountTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewRecompositionTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewRecompositionTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewWithActionsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewWithActionsTest.kt",
