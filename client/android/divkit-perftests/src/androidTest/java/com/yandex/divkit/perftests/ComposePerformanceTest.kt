@@ -34,7 +34,11 @@ class ComposePerformanceTest : BasePerformanceTest() {
     )
     @Test
     fun recomposition() {
-        runTest(tag = "recomposition", mode = "RECOMPOSITION")
+        runTest(
+            tag = "",
+            fileName = "with_templates.json",
+            mode = Mode.RECOMPOSITION
+        )
     }
 
     @PerfTestParameter(
@@ -49,21 +53,57 @@ class ComposePerformanceTest : BasePerformanceTest() {
     )
     @Test
     fun resetContent() {
-        runTest(tag = "reset_content", mode = "RESET_CONTENT")
+        runTest(
+            tag = "",
+            fileName = "with_templates.json",
+            mode = Mode.RESET_CONTENT
+        )
     }
 
-    private fun runTest(tag: String, mode: String) {
+    @PerfTestParameter(
+        importantMetrics = [
+            "DivCompose.Render.Composition.Cold",
+            "DivCompose.Render.Composition.Warm",
+            "DivCompose.Render.Effects.Cold",
+            "DivCompose.Render.Effects.Warm",
+            "DivCompose.Render.Total.Cold",
+            "DivCompose.Render.Total.Warm",
+        ]
+    )
+    @Test
+    fun services_recomposition() {
+        runTest(
+            tag = "services",
+            fileName = "services.json",
+            mode = Mode.RECOMPOSITION
+        )
+    }
+
+    private fun runTest(
+        tag: String,
+        fileName: String,
+        mode: Mode
+    ) {
         utils.run {
-            report(tag = tag) {
+            val tagSuffix = mode.tagSuffix
+            report(tag = if (tag.isEmpty()) tagSuffix else "${tag}_$tagSuffix") {
                 startActivity(
                     activityClass = "$PACKAGE_NAME.DivComposeBenchmarkActivity",
                     extras = bundleOf(
-                        "asset_name" to "with_templates.json",
-                        "warm_render_mode" to mode
+                        "asset_name" to fileName,
+                        "warm_render_mode" to mode.name
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
             }
         }
     }
+}
+
+private enum class Mode {
+    RECOMPOSITION,
+    RESET_CONTENT;
+
+    val tagSuffix: String
+        get() = name.lowercase()
 }

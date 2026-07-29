@@ -8,9 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.ImageLoader
 import coil3.asImage
 import coil3.request.SuccessResult
-import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.images.ImageRequestFactory
-import com.yandex.div.compose.images.ImageRequestListener
 import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.color
@@ -25,6 +23,7 @@ import com.yandex.div.test.data.text
 import com.yandex.div.test.data.textImage
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -51,7 +50,7 @@ class CoilImagePreloaderTest {
         imageLoader = imageLoader,
         imageRequestFactory = ImageRequestFactory(
             context = context,
-            imageRequestListener = ImageRequestListener(TestReporter()),
+            imageRequestListener = mock(),
         ),
     )
 

@@ -8,10 +8,13 @@ import javax.inject.Inject
 
 @DivContextScope
 internal class ImageRequestListener @Inject constructor(
+    private val configuration: ImageLoaderConfiguration,
     private val reporter: DivReporter
 ) : ImageRequest.Listener {
 
     override fun onError(request: ImageRequest, result: ErrorResult) {
-        reporter.reportError("Failed to load image. ${result.throwable.message}")
+        if (configuration.reportErrors) {
+            reporter.reportError(result.throwable.message ?: "Failed to load image")
+        }
     }
 }

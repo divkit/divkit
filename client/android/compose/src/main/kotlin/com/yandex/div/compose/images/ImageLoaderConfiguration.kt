@@ -23,4 +23,10 @@ interface ImageLoaderConfiguration {
      */
     val eventListener: EventListener
         get() = EventListener.NONE
+
+    /**
+     * Enables or disables image loading errors reporting via [com.yandex.div.compose.DivReporter].
+     */
+    val reportErrors: Boolean
+        get() = true
 }

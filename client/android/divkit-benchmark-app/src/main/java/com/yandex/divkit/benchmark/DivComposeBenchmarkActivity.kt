@@ -15,6 +15,7 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
+import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
@@ -73,12 +74,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
 
         showMessage("Rendering cold DivView...")
 
-        composeView.setContent {
-            DivView(
-                data = data,
-                modifier = Modifier.safeDrawingPadding()
-            )
-        }
+        setContent(data)
 
         waitHistogram("DivCompose.Render.Total.Cold")
 
@@ -91,13 +87,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
 
             WarmRenderMode.RESET_CONTENT -> {
                 showMessage("Rendering warm DivView...")
-
-                composeView.setContent {
-                    DivView(
-                        data = data,
-                        modifier = Modifier.safeDrawingPadding()
-                    )
-                }
+                setContent(data)
             }
         }
 
@@ -127,9 +117,21 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
                     override val componentName = ""
                     override val histogramBridge = this@DivComposeBenchmarkActivity.histogramBridge
                 },
+                imageLoaderConfiguration = object : ImageLoaderConfiguration {
+                    override val reportErrors = false
+                },
                 reporter = FailingReporter
             )
         )
+    }
+
+    private fun setContent(data: DivData) {
+        composeView.setContent {
+            DivView(
+                data = data,
+                modifier = Modifier.safeDrawingPadding()
+            )
+        }
     }
 
     private suspend fun showMessage(message: String) {
