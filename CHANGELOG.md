@@ -1,3 +1,19 @@
+## 32.61.0
+
+# Android Client:
+* Added `safe_mode` parameter to Lottie extension.
+* Fixed an issue where both `first_tap` and `second_tap` logging actions were triggered on a single tap when a view was reused between bindings with and without double-tap actions.
+* Removed NestedScrollView from ScenarioActivity in regression testing.
+
+# iOS Client:
+* Fixed a vertical container with `wrap_content` + `min_size` width not rendering when all of its items have `match_parent` width.
+* Fixed background color showing through as a thin halo along the outer edge of an opaque border stroke on rounded corners.
+* Fixed missing animation when triggering a state transition that adds a new animated view.
+
+# Web Client:
+* Added support of scoped search for elements in `submit` and `show_tooltip` / `hide_tooltip` actions (and their associated div-action:// URL actions). When scope_id is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire Div2View.
+
+
 ## 32.60.0
 
 # Android Client:
