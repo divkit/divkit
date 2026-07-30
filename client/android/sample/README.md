@@ -13,11 +13,9 @@ Artika Font:
 
 # DivKit Android. Quick start.
 ## Connect the library.
-To connect the library to the project, all you have to do is add three dependencies to build.gradle:
+To connect the library to the project, all you have to do is add a dependency to build.gradle:
 ```groovy
-implementation 'com.yandex.div:div-core:3.0.1'
-implementation 'com.yandex.div:div:3.0.1'
-implementation 'com.yandex.div:div-json:3.0.1'
+implementation 'com.yandex.div:div:33.0.0'
 ```
 ## Build an MVP.
 Code-wise, connecting DivKit consists of three parts: initializing DivConfiguration, parsing the JSON file with the layout, and adding DivView to your view hierarchy.

@@ -1118,8 +1118,6 @@
   "client/android/div-histogram/src/test/java/com/yandex/div/histogram/reporter/HistogramReporterTest.kt":"divkit/public/client/android/div-histogram/src/test/java/com/yandex/div/histogram/reporter/HistogramReporterTest.kt",
   "client/android/div-histogram/src/test/java/com/yandex/div/histogram/util/HistogramUtilsTest.kt":"divkit/public/client/android/div-histogram/src/test/java/com/yandex/div/histogram/util/HistogramUtilsTest.kt",
   "client/android/div-histogram/src/test/resources/robolectric.properties":"divkit/public/client/android/div-histogram/src/test/resources/robolectric.properties",
-  "client/android/div-json/build.gradle.kts":"divkit/public/client/android/div-json/build.gradle.kts",
-  "client/android/div-json/proguard-rules.pro":"divkit/public/client/android/div-json/proguard-rules.pro",
   "client/android/div-library.gradle":"divkit/public/client/android/div-library.gradle",
   "client/android/div-lottie/build.gradle.kts":"divkit/public/client/android/div-lottie/build.gradle.kts",
   "client/android/div-lottie/proguard-rules.pro":"divkit/public/client/android/div-lottie/proguard-rules.pro",

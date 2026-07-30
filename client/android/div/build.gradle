@@ -46,7 +46,6 @@ dependencies {
     api project(path: ':div-data')
     api project(path: ':div-evaluable')
     api project(path: ':div-histogram')
-    api project(path: ':div-json')
     api project(path: ':div-states')
     api project(path: ':div-storage')
     api project(path: ':div-svg')
