@@ -63,7 +63,6 @@ class DivSizeProviderExtensionHandler(
             variablesHolder.clear()
             sizes.forEach { divView.setVariable(it.key, it.value.toString()) }
             sizes.clear()
-            true
         }
         divView.setTag(R.id.div_size_provider_clear_variables_listener, clearVariablesListener)
         divView.viewTreeObserver.addOnPreDrawListener(clearVariablesListener)

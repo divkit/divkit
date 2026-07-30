@@ -10,11 +10,13 @@ import android.hardware.HardwareBuffer
 import android.media.ImageReader
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.util.bitmap.BitmapEffectHelper
 import com.yandex.div.core.util.bitmap.blur.BlurUtils.isBlurParamsValid
 
+@InternalApi
 @RequiresApi(Build.VERSION_CODES.S)
-internal class HighApiBitmapEffectHelper : BitmapEffectHelper() {
+class HighApiBitmapEffectHelper : BitmapEffectHelper() {
     private var cachedHardwareRenderer: HardwareRenderer? = null
     private fun getOrCreateHardwareRenderer(): HardwareRenderer {
         return cachedHardwareRenderer ?: HardwareRenderer().also {

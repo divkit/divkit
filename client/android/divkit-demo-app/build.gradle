@@ -84,6 +84,7 @@ android {
 
 dependencies {
     implementation project(path: ':assertion')
+    implementation project(path: ':backdrop-effect')
     implementation project(path: ':coil')
     implementation project(path: ':compose')
     implementation project(path: ':compose-lottie')
