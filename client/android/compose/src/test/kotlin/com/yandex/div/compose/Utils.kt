@@ -5,6 +5,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import com.yandex.div.compose.actions.DivActionHandlingContext
+import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
@@ -34,9 +35,11 @@ internal fun createExpressionResolver(
 
 internal fun mockViewContext(
     stateStorage: DivStateStorage = DivStateStorage(),
+    visibilityActionTracker: VisibilityActionTracker = mock()
 ): DivViewContext {
     return mock<DivViewContext> {
         on { this.stateStorage } doReturn stateStorage
+        on { this.visibilityActionTracker } doReturn visibilityActionTracker
     }
 }
 

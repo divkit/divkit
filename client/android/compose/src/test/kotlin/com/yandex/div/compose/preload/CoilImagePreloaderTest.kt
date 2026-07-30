@@ -198,8 +198,8 @@ class CoilImagePreloaderTest {
         url: String,
         preloadRequired: Boolean = true,
     ) = imageBackground(
-        imageUrl = constant(url.toUri()),
-        preloadRequired = constant(preloadRequired),
+        imageUrl = url,
+        preloadRequired = preloadRequired
     )
 
     private fun preloadedImage(url: String, preloadRequired: Boolean = true) = image(

@@ -34,70 +34,61 @@ internal fun Modifier.actions(actions: DivActions): Modifier {
         return this
     }
 
-    val name = if (animationsEnabled) actions.animation.name.observedValue() else DivAnimation.Name.NO_ANIMATION
-    return when (name) {
+    val localComponent = LocalComponent.current
+    val clickHandler = remember(actions) {
+        ClickHandler(actions, localComponent)
+    }
+
+    val animation = actions.animation
+    val animationName = if (animationsEnabled) {
+        animation.name.observedValue()
+    } else {
+        DivAnimation.Name.NO_ANIMATION
+    }
+    return when (animationName) {
         DivAnimation.Name.FADE ->
-            clickableWithFade(actions)
+            clickableWithFade(clickHandler = clickHandler, animation = animation)
 
         DivAnimation.Name.NATIVE ->
             clickable(
-                actions = actions,
+                clickHandler = clickHandler,
                 indication = ripple(),
                 interactionSource = remember { MutableInteractionSource() }
             )
 
         DivAnimation.Name.NO_ANIMATION ->
-            clickable(actions)
+            clickable(clickHandler)
 
         DivAnimation.Name.SCALE,
         DivAnimation.Name.SET,
         DivAnimation.Name.TRANSLATE -> {
-            reportError("Animation not supported: $name")
-            clickable(actions)
+            reportError("Animation not supported: $animationName")
+            clickable(clickHandler)
         }
     }
 }
 
-private fun DivLocalComponent.createHandler(
-    actions: List<DivAction>,
-    source: DivActionSource
-): (() -> Unit)? {
-    if (actions.isEmpty()) {
-        return null
-    }
-    return { handleActions(actions, source) }
-}
-
-@Composable
 private fun Modifier.clickable(
-    actions: DivActions,
+    clickHandler: ClickHandler,
     indication: Indication? = null,
     interactionSource: MutableInteractionSource? = null
 ): Modifier {
-    val localComponent = LocalComponent.current
     return combinedClickable(
         indication = indication,
         interactionSource = interactionSource,
-        onClick = localComponent.createHandler(
-            actions = actions.tapActions,
-            source = DivActionSource.TAP
-        ) ?: {},
-        onDoubleClick = localComponent.createHandler(
-            actions = actions.doubleTapActions,
-            source = DivActionSource.DOUBLE_TAP
-        ),
-        onLongClick = localComponent.createHandler(
-            actions = actions.longTapActions,
-            source = DivActionSource.LONG_TAP
-        )
+        onClick = clickHandler.onClick,
+        onDoubleClick = clickHandler.onDoubleClick,
+        onLongClick = clickHandler.onLongClick
     )
 }
 
 @Composable
-private fun Modifier.clickableWithFade(actions: DivActions): Modifier {
+private fun Modifier.clickableWithFade(
+    clickHandler: ClickHandler,
+    animation: DivAnimation
+): Modifier {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val animation = actions.animation
     val animatedAlpha by animateFloatAsState(
         targetValue = if (isPressed) animation.endValue.observedFloatValue(1f) else 1f,
         animationSpec = tween(durationMillis = animation.duration.observedIntValue()),
@@ -105,7 +96,34 @@ private fun Modifier.clickableWithFade(actions: DivActions): Modifier {
     )
     return graphicsLayer(alpha = animatedAlpha)
         .clickable(
-            interactionSource = interactionSource,
-            actions = actions
+            clickHandler = clickHandler,
+            interactionSource = interactionSource
         )
+}
+
+private class ClickHandler(
+    private val actions: DivActions,
+    private val localComponent: DivLocalComponent
+) {
+    val onClick: (() -> Unit) = createHandler(
+        actions = actions.tapActions,
+        source = DivActionSource.TAP
+    ) ?: {}
+
+    val onDoubleClick: (() -> Unit)? = createHandler(
+        actions = actions.doubleTapActions,
+        source = DivActionSource.DOUBLE_TAP
+
+    )
+    val onLongClick: (() -> Unit)? = createHandler(
+        actions = actions.longTapActions,
+        source = DivActionSource.LONG_TAP
+    )
+
+    private fun createHandler(actions: List<DivAction>, source: DivActionSource): (() -> Unit)? {
+        if (actions.isEmpty()) {
+            return null
+        }
+        return { localComponent.handleActions(actions, source) }
+    }
 }

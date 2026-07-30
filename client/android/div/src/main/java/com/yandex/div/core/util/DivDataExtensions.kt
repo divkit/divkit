@@ -3,7 +3,6 @@ package com.yandex.div.core.util
 import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchMap
 import com.yandex.div.internal.util.compareWith
-import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
@@ -19,13 +18,9 @@ import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivInput
-import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPoint
-import com.yandex.div2.DivRadialGradient
-import com.yandex.div2.DivRadialGradientCenter
-import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivShadow
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivSize
