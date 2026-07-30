@@ -1,12 +1,16 @@
 {
   "description": "",
   "platforms": [
+    "ios",
     "web"
   ],
   "div_data": {
     "templates": {
-      "item_image": {
-        "type": "image",
+      "item_text": {
+        "type": "text",
+        "font_size": 32,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
         "width": {
           "type": "fixed",
           "value": 200
@@ -18,6 +22,7 @@
       },
       "pager_block": {
         "type": "pager",
+        "id": "pager",
         "layout_mode": {
           "type": "wrap_content"
         },
@@ -26,22 +31,23 @@
         },
         "items": [
           {
-            "type": "item_image",
-            "image_url": "https://yastatic.net/s3/home/divkit/wombat.jpg",
+            "type": "item_text",
+            "text": "Item A",
             "visibility": "@{is_visible ? 'visible' : 'gone'}"
           },
           {
-            "type": "item_image",
-            "image_url": "https://yastatic.net/s3/home/divkit/ducks.jpg"
+            "type": "item_text",
+            "text": "Item B"
           },
           {
-            "type": "item_image",
-            "image_url": "https://yastatic.net/s3/home/divkit/pupduck.jpg"
+            "type": "item_text",
+            "text": "Item C"
           }
         ]
       },
       "indicator_block": {
         "type": "indicator",
+        "pager_id": "pager",
         "active_shape": {
           "type": "rounded_rectangle",
           "background_color": "#21201F",

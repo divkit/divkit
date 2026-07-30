@@ -133,6 +133,9 @@
       "id": "pager_item_count_variable",
       "name": "Pager property <code>item_count_variable</code>",
       "compat": {
+        "ios": {
+          "version_added": "32.62.0"
+        },
         "web": {
           "version_added": "32.55.0"
         }

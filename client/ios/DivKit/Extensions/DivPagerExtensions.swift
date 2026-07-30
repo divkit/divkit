@@ -43,6 +43,13 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
         scrollDirection: scrollDirection
       )
     )
+    if let itemCountVariable {
+      context.variablesStorage.update(
+        path: context.path,
+        name: DivVariableName(rawValue: itemCountVariable),
+        value: .integer(gallery.itemsCountWithoutInfinite)
+      )
+    }
     return try PagerBlock(
       pagerPath: pagerPath,
       alignment: alignment,

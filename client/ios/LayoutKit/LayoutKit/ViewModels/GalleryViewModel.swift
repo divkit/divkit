@@ -76,7 +76,7 @@ public struct GalleryViewModel: Equatable {
 
   let removedItemsIndices: Set<Int>
 
-  var itemsCountWithoutInfinite: Int {
+  public var itemsCountWithoutInfinite: Int {
     items.count - infiniteCorrection * 2
   }
 
