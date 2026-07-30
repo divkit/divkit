@@ -144,10 +144,24 @@
         }
     }
 
+    function onResizeEnd(): void {
+        if (isFitToWindow) {
+            fitToWindow(100);
+        }
+    }
+
     onMount(() => {
         if (state.fitViewportOnCreate) {
             fitToWindow();
         }
+
+        const observer = new ResizeObserver(onResize);
+
+        observer.observe(canvas);
+
+        return () => {
+            observer.disconnect();
+        };
     });
 
     const SHORTCUTS: ShortcutList = [
@@ -174,6 +188,7 @@
             bind:viewport={viewport}
             bind:scale={scale.target}
             on:fitToWindow={fitToWindowClick}
+            on:viewportChange={onResize}
             {isFitToWindow}
         />
 
@@ -233,6 +248,7 @@
             bind:viewport={viewport}
             bind:scale={scale.current}
             theme={$previewThemeStore}
+            on:resizeEnd={onResizeEnd}
         />
     </div>
 </div>

@@ -12,10 +12,15 @@
 
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state } = getContext<AppContext>(APP_CTX);
+    const { readOnly } = state;
     const { palette, previewThemeStore } = state;
     const dispatch = createEventDispatcher();
 
     function selectPalette(id: string): void {
+        if ($readOnly) {
+            return;
+        }
+
         paletteId = id;
         dispatch('change', id);
     }
@@ -57,6 +62,7 @@
                     <button
                         class="palette-selector__item"
                         class:palette-selector__item_selected={paletteId === item.id}
+                        class:palette-selector__item_disabled={$readOnly}
                         on:click={() => selectPalette(item.id)}
                     >
                         <ColorPreview color={item[$previewThemeStore]} mix="palette-selector__preview" />
@@ -121,12 +127,20 @@
         border-radius: 8px;
         background: var(--fill-transparent-minus-1);
         appearance: none;
-        cursor: pointer;
         user-select: none;
         transition: border-color .15s ease-in-out;
     }
 
-    .palette-selector__item:hover {
+    .palette-selector__item:not(.palette-selector__item_disabled) {
+        cursor: pointer;
+    }
+
+    .palette-selector__item_disabled {
+        border-color: transparent;
+        background: var(--fill-transparent-1);
+    }
+
+    .palette-selector__item:not(.palette-selector__item_disabled):hover {
         border-color: var(--fill-transparent-4);
     }
 
@@ -139,7 +153,7 @@
         border-color: var(--accent-purple);
     }
 
-    .palette-selector__item_selected:hover {
+    .palette-selector__item_selected:not(.palette-selector__item_disabled):hover {
         border-color: var(--accent-purple-hover);
     }
 

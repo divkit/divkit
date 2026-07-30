@@ -33860,6 +33860,7 @@
   "visual-editor/src/lib/components/controls/MoveList2.svelte":"divkit/public/visual-editor/src/lib/components/controls/MoveList2.svelte",
   "visual-editor/src/lib/components/controls/RadioSelector.svelte":"divkit/public/visual-editor/src/lib/components/controls/RadioSelector.svelte",
   "visual-editor/src/lib/components/controls/RadioToggler.svelte":"divkit/public/visual-editor/src/lib/components/controls/RadioToggler.svelte",
+  "visual-editor/src/lib/components/controls/Rotation.svelte":"divkit/public/visual-editor/src/lib/components/controls/Rotation.svelte",
   "visual-editor/src/lib/components/controls/Spoiler2.svelte":"divkit/public/visual-editor/src/lib/components/controls/Spoiler2.svelte",
   "visual-editor/src/lib/components/controls/Switcher.svelte":"divkit/public/visual-editor/src/lib/components/controls/Switcher.svelte",
   "visual-editor/src/lib/components/controls/Text.svelte":"divkit/public/visual-editor/src/lib/components/controls/Text.svelte",

@@ -3,7 +3,7 @@
     import { get } from 'svelte/store';
     import { render as divkitRender, SizeProvider, createGlobalVariablesController, createVariable, evalExpression, type DivkitDebugInstance } from '@divkitframework/divkit/client-devtool';
     import type { DivExtensionClass, DivJson } from '@divkitframework/divkit/typings/common';
-    import { getContext, onDestroy, tick } from 'svelte';
+    import { createEventDispatcher, getContext, onDestroy, tick } from 'svelte';
     import type { AnyVariable, GlobalVariablesController } from '@divkitframework/divkit/typings/variables';
     import {
         getLeafDepth,
@@ -47,6 +47,8 @@
     export let viewport: string;
     export let scale = 1;
     export let theme: 'light' | 'dark';
+
+    const dispatch = createEventDispatcher();
 
     const { l10n } = getContext<LanguageContext>(LANGUAGE_CTX);
     const {
@@ -421,7 +423,7 @@
                         ].join(' ');
                     } else if (highlightMode === 'gradient') {
                         const points = rectAngleIntersection(elem.offsetWidth, elem.offsetHeight, highlightGradientAngle / 180 * Math.PI);
-                        gradientAngle = `M ${marginLeft + points.from.x} ${marginTop + points.from.y} L ${marginLeft + points.to.x} ${marginTop + points.to.y}`;
+                        gradientAngle = `M ${(marginLeft + points.from.x) * scale} ${(marginTop + points.from.y) * scale} L ${(marginLeft + points.to.x) * scale} ${(marginTop + points.to.y) * scale}`;
                     }
                 }
 
@@ -1864,6 +1866,8 @@
             document.body.removeEventListener('pointermove', pointermove);
             document.body.removeEventListener('pointerup', pointerup);
             document.body.removeEventListener('pointercancel', pointerup);
+
+            dispatch('resizeEnd');
         };
 
         document.body.addEventListener('pointermove', pointermove);
@@ -3469,10 +3473,10 @@
                                     <svg
                                         class="renderer__highlight-gradient-angle"
                                         xmlns="http://www.w3.org/2000/svg"
-                                        width={highlight.widthNum + highlight.margins.left + highlight.margins.right}
-                                        height={highlight.heightNum + highlight.margins.top + highlight.margins.bottom}
-                                        style:top="{-highlight.margins.top}px"
-                                        style:left="{-highlight.margins.left}px"
+                                        width={(highlight.widthNum + highlight.margins.left + highlight.margins.right) * scale}
+                                        height={(highlight.heightNum + highlight.margins.top + highlight.margins.bottom) * scale}
+                                        style:top="{-highlight.margins.top * scale}px"
+                                        style:left="{-highlight.margins.left * scale}px"
                                     >
                                         <path
                                             d={highlight.gradientAngle}

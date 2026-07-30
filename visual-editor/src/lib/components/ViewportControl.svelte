@@ -105,6 +105,7 @@
         viewport = value;
         isCustomViewport = false;
         clearTimeout(focusTimer);
+        dispatch('viewportChange');
     }
 
     function selectLocale(localeId: string): void {
@@ -382,6 +383,7 @@
 
     .viewport-control__select-button {
         position: relative;
+        min-height: 32px;
         user-select: none;
     }
 
