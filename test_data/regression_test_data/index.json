@@ -4749,6 +4749,25 @@
       "file": "input/input_properties_extension.json"
     },
     {
+      "title": "Toggle suggestions bar visibility on input",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap the input and check that the suggestions bar above the keyboard is visible",
+        "Toggle the switch off, close and reopen the keyboard",
+        "Toggle the switch on, close and reopen the keyboard"
+      ],
+      "expected_results": [
+        "With the switch on, the suggestions bar above the keyboard is shown",
+        "With the switch off, the suggestions bar above the keyboard is hidden"
+      ],
+      "file": "input/input_allow_suggestions_bar.json"
+    },
+    {
       "title": "Input field in gallery that triggers action",
       "platforms": [
         "android",

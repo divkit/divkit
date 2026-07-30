@@ -62,6 +62,24 @@ final class DivInputExtensionsTests: XCTestCase {
 
     assertEqual(block, expectedBlock)
   }
+
+  func test_WithHideSuggestionsBar() {
+    let block = makeBlock(
+      divInput(
+        allowSuggestionsBar: false,
+        textVariable: "input_variable"
+      ),
+      context: context
+    )
+
+    let expectedBlock = makeExpectedBlockBlock(
+      autocorrection: false,
+      spellChecking: false,
+      context: context
+    )
+
+    assertEqual(block, expectedBlock)
+  }
 }
 
 private func makeExpectedBlockBlock(
@@ -69,6 +87,7 @@ private func makeExpectedBlockBlock(
   autocorrection: Bool = true,
   isSecure: Bool = false,
   multilineMode: Bool = true,
+  spellChecking: Bool? = nil,
   context: DivBlockModelingContext
 ) -> StateBlock {
   StateBlock(
@@ -82,7 +101,8 @@ private func makeExpectedBlockBlock(
         path: .root + "0" + "input",
         layoutDirection: .leftToRight,
         autocorrection: autocorrection,
-        isSecure: isSecure
+        isSecure: isSecure,
+        spellChecking: spellChecking
       ),
       accessibilityElement: accessibilityElement ?? accessibility(label: "Hello!")
     ),

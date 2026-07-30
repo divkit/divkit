@@ -1,0 +1,114 @@
+{
+  "card": {
+    "log_id": "input",
+    "variables": [
+      {
+        "name": "input_value",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "allow_suggestions_bar",
+        "type": "boolean",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "input",
+              "allow_suggestions_bar": "@{allow_suggestions_bar}",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 16,
+                "top": 10,
+                "right": 16,
+                "bottom": 10
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_color": "#000000",
+              "hint_text": "Type here",
+              "hint_color": "#888888",
+              "text_variable": "input_value",
+              "line_height": 22
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_vertical": "center",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "switch",
+                  "is_on_variable": "allow_suggestions_bar",
+                  "margins": {
+                    "left": 16,
+                    "right": 16
+                  },
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Allow suggestions bar",
+                  "font_size": 16,
+                  "margins": {
+                    "left": 16,
+                    "right": 16
+                  },
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

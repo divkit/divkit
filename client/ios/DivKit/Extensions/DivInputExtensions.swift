@@ -53,6 +53,7 @@ extension DivInput: DivBlockModeling {
 
     let hintValue = resolveHintText(expressionResolver) ?? ""
     let keyboardType = resolveKeyboardType(expressionResolver)
+    let allowSuggestionsBar = resolveAllowSuggestionsBar(expressionResolver)
     let autocapitalizationType = resolveAutocapitalization(expressionResolver)
 
     let onFocusActions = focus?.onFocus?.uiActions(context: context) ?? []
@@ -68,7 +69,8 @@ extension DivInput: DivBlockModeling {
       blockStateStorage.map { !$0.isInputFocused } ?? true
     }
 
-    let viewState: TextInputViewState? = blockStateStorage.takePendingState(context.path) as? TextInputViewState
+    let viewState: TextInputViewState? = blockStateStorage
+      .takePendingState(context.path) as? TextInputViewState
 
     return TextInputBlock(
       widthTrait: resolveWidthTrait(context),
@@ -100,8 +102,9 @@ extension DivInput: DivBlockModeling {
       isEnabled: resolveIsEnabled(expressionResolver),
       maxLength: resolveMaxLength(expressionResolver),
       shouldClearFocus: shouldClearFocus,
-      autocorrection: keyboardType.autocorrection,
+      autocorrection: allowSuggestionsBar ? keyboardType.autocorrection : false,
       isSecure: keyboardType.isSecure,
+      spellChecking: allowSuggestionsBar ? nil : false,
       viewState: viewState
     )
   }

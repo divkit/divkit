@@ -58,6 +58,7 @@ public final class DivInput: DivBase, @unchecked Sendable {
   public let accessibility: DivAccessibility?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
+  public let allowSuggestionsBar: Expression<Bool> // default value: true
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let animators: [DivAnimator]?
   public let autocapitalization: Expression<Autocapitalization> // default value: auto
@@ -78,7 +79,6 @@ public final class DivInput: DivBase, @unchecked Sendable {
   public let fontWeightValue: Expression<Int>? // constraint: number > 0
   public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
-  public let hideSuggestionsBar: Expression<Bool> // default value: false
   public let highlightColor: Expression<Color>?
   public let hintColor: Expression<Color> // default value: #73000000
   public let hintText: Expression<String>?
@@ -125,6 +125,10 @@ public final class DivInput: DivBase, @unchecked Sendable {
     resolver.resolveEnum(alignmentVertical)
   }
 
+  public func resolveAllowSuggestionsBar(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(allowSuggestionsBar) ?? true
+  }
+
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumeric(alpha) ?? 1.0
   }
@@ -163,10 +167,6 @@ public final class DivInput: DivBase, @unchecked Sendable {
 
   public func resolveFontWeightValue(_ resolver: ExpressionResolver) -> Int? {
     resolver.resolveNumeric(fontWeightValue)
-  }
-
-  public func resolveHideSuggestionsBar(_ resolver: ExpressionResolver) -> Bool {
-    resolver.resolveNumeric(hideSuggestionsBar) ?? false
   }
 
   public func resolveHighlightColor(_ resolver: ExpressionResolver) -> Color? {
@@ -265,6 +265,7 @@ public final class DivInput: DivBase, @unchecked Sendable {
       accessibility: try dictionary.getOptionalField("accessibility", transform: { (dict: [String: Any]) in try DivAccessibility(dictionary: dict, context: context) }),
       alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal", context: context),
       alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical", context: context),
+      allowSuggestionsBar: try dictionary.getOptionalExpressionField("allow_suggestions_bar", context: context),
       alpha: try dictionary.getOptionalExpressionField("alpha", validator: Self.alphaValidator, context: context),
       animators: try dictionary.getOptionalArray("animators", transform: { (dict: [String: Any]) in try? DivAnimator(dictionary: dict, context: context) }),
       autocapitalization: try dictionary.getOptionalExpressionField("autocapitalization", context: context),
@@ -285,7 +286,6 @@ public final class DivInput: DivBase, @unchecked Sendable {
       fontWeightValue: try dictionary.getOptionalExpressionField("font_weight_value", validator: Self.fontWeightValueValidator, context: context),
       functions: try dictionary.getOptionalArray("functions", transform: { (dict: [String: Any]) in try? DivFunction(dictionary: dict, context: context) }),
       height: try dictionary.getOptionalField("height", transform: { (dict: [String: Any]) in try DivSize(dictionary: dict, context: context) }),
-      hideSuggestionsBar: try dictionary.getOptionalExpressionField("hide_suggestions_bar", context: context),
       highlightColor: try dictionary.getOptionalExpressionField("highlight_color", transform: Color.color(withHexString:), context: context),
       hintColor: try dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:), context: context),
       hintText: try dictionary.getOptionalExpressionField("hint_text", context: context),
@@ -330,6 +330,7 @@ public final class DivInput: DivBase, @unchecked Sendable {
     accessibility: DivAccessibility? = nil,
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
+    allowSuggestionsBar: Expression<Bool>? = nil,
     alpha: Expression<Double>? = nil,
     animators: [DivAnimator]? = nil,
     autocapitalization: Expression<Autocapitalization>? = nil,
@@ -350,7 +351,6 @@ public final class DivInput: DivBase, @unchecked Sendable {
     fontWeightValue: Expression<Int>? = nil,
     functions: [DivFunction]? = nil,
     height: DivSize? = nil,
-    hideSuggestionsBar: Expression<Bool>? = nil,
     highlightColor: Expression<Color>? = nil,
     hintColor: Expression<Color>? = nil,
     hintText: Expression<String>? = nil,
@@ -392,6 +392,7 @@ public final class DivInput: DivBase, @unchecked Sendable {
     self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
+    self.allowSuggestionsBar = allowSuggestionsBar ?? .value(true)
     self.alpha = alpha ?? .value(1.0)
     self.animators = animators
     self.autocapitalization = autocapitalization ?? .value(.auto)
@@ -412,7 +413,6 @@ public final class DivInput: DivBase, @unchecked Sendable {
     self.fontWeightValue = fontWeightValue
     self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
-    self.hideSuggestionsBar = hideSuggestionsBar ?? .value(false)
     self.highlightColor = highlightColor
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
     self.hintText = hintText
@@ -465,50 +465,50 @@ extension DivInput: Equatable {
       return false
     }
     guard
+      lhs.allowSuggestionsBar == rhs.allowSuggestionsBar,
       lhs.alpha == rhs.alpha,
-      lhs.animators == rhs.animators,
-      lhs.autocapitalization == rhs.autocapitalization
+      lhs.animators == rhs.animators
     else {
       return false
     }
     guard
+      lhs.autocapitalization == rhs.autocapitalization,
       lhs.background == rhs.background,
-      lhs.border == rhs.border,
-      lhs.columnSpan == rhs.columnSpan
+      lhs.border == rhs.border
     else {
       return false
     }
     guard
+      lhs.columnSpan == rhs.columnSpan,
       lhs.disappearActions == rhs.disappearActions,
-      lhs.enterKeyActions == rhs.enterKeyActions,
-      lhs.enterKeyType == rhs.enterKeyType
+      lhs.enterKeyActions == rhs.enterKeyActions
     else {
       return false
     }
     guard
+      lhs.enterKeyType == rhs.enterKeyType,
       lhs.extensions == rhs.extensions,
-      lhs.filters == rhs.filters,
-      lhs.focus == rhs.focus
+      lhs.filters == rhs.filters
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.fontFamily == rhs.fontFamily,
-      lhs.fontSize == rhs.fontSize,
-      lhs.fontSizeUnit == rhs.fontSizeUnit
+      lhs.fontSize == rhs.fontSize
     else {
       return false
     }
     guard
+      lhs.fontSizeUnit == rhs.fontSizeUnit,
       lhs.fontWeight == rhs.fontWeight,
-      lhs.fontWeightValue == rhs.fontWeightValue,
-      lhs.functions == rhs.functions
+      lhs.fontWeightValue == rhs.fontWeightValue
     else {
       return false
     }
     guard
+      lhs.functions == rhs.functions,
       lhs.height == rhs.height,
-      lhs.hideSuggestionsBar == rhs.hideSuggestionsBar,
       lhs.highlightColor == rhs.highlightColor
     else {
       return false
@@ -610,6 +610,7 @@ extension DivInput: Serializable {
     result["accessibility"] = accessibility?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
+    result["allow_suggestions_bar"] = allowSuggestionsBar.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
     result["animators"] = animators?.map { $0.toDictionary() }
     result["autocapitalization"] = autocapitalization.toValidSerializationValue()
@@ -630,7 +631,6 @@ extension DivInput: Serializable {
     result["font_weight_value"] = fontWeightValue?.toValidSerializationValue()
     result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
-    result["hide_suggestions_bar"] = hideSuggestionsBar.toValidSerializationValue()
     result["highlight_color"] = highlightColor?.toValidSerializationValue()
     result["hint_color"] = hintColor.toValidSerializationValue()
     result["hint_text"] = hintText?.toValidSerializationValue()

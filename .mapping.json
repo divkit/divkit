@@ -32205,6 +32205,7 @@
   "test_data/regression_test_data/input/expression_input_validator.json":"divkit/public/test_data/regression_test_data/input/expression_input_validator.json",
   "test_data/regression_test_data/input/fixed_length_input_mask.json":"divkit/public/test_data/regression_test_data/input/fixed_length_input_mask.json",
   "test_data/regression_test_data/input/fixed_length_phone_input_mask.json":"divkit/public/test_data/regression_test_data/input/fixed_length_phone_input_mask.json",
+  "test_data/regression_test_data/input/input_allow_suggestions_bar.json":"divkit/public/test_data/regression_test_data/input/input_allow_suggestions_bar.json",
   "test_data/regression_test_data/input/input_capture_focus.json":"divkit/public/test_data/regression_test_data/input/input_capture_focus.json",
   "test_data/regression_test_data/input/input_cursor_position.json":"divkit/public/test_data/regression_test_data/input/input_cursor_position.json",
   "test_data/regression_test_data/input/input_focus.json":"divkit/public/test_data/regression_test_data/input/input_focus.json",

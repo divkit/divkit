@@ -87,11 +87,20 @@ public func divGifImage(
 public func divInput(
   accessibility: DivAccessibility? = nil,
   extensions: [DivExtension]? = nil,
+  allowSuggestionsBar: Bool? = nil,
+  allowSuggestionsBarExpression: String? = nil,
   keyboardType: DivInput.KeyboardType? = nil,
   textVariable: String
 ) -> Div {
-  .divInput(DivInput(
+  let allowSuggestionsBarValue: Expression<Bool>? = if let allowSuggestionsBarExpression {
+    expression(allowSuggestionsBarExpression)
+  } else {
+    allowSuggestionsBar.map { .value($0) }
+  }
+
+  return .divInput(DivInput(
     accessibility: accessibility,
+    allowSuggestionsBar: allowSuggestionsBarValue,
     extensions: extensions,
     keyboardType: keyboardType.map { .value($0) },
     textVariable: textVariable

@@ -98,6 +98,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
   public let accessibility: Field<DivAccessibilityTemplate>?
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
+  public let allowSuggestionsBar: Field<Expression<Bool>>? // default value: true
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let animators: Field<[DivAnimatorTemplate]>?
   public let autocapitalization: Field<Expression<Autocapitalization>>? // default value: auto
@@ -118,7 +119,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
   public let fontWeightValue: Field<Expression<Int>>? // constraint: number > 0
   public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
-  public let hideSuggestionsBar: Field<Expression<Bool>>? // default value: false
   public let highlightColor: Field<Expression<Color>>?
   public let hintColor: Field<Expression<Color>>? // default value: #73000000
   public let hintText: Field<Expression<String>>?
@@ -163,6 +163,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       accessibility: dictionary.getOptionalField("accessibility", templateToType: templateToType),
       alignmentHorizontal: dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
+      allowSuggestionsBar: dictionary.getOptionalExpressionField("allow_suggestions_bar"),
       alpha: dictionary.getOptionalExpressionField("alpha"),
       animators: dictionary.getOptionalArray("animators", templateToType: templateToType),
       autocapitalization: dictionary.getOptionalExpressionField("autocapitalization"),
@@ -183,7 +184,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: dictionary.getOptionalExpressionField("font_weight_value"),
       functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
-      hideSuggestionsBar: dictionary.getOptionalExpressionField("hide_suggestions_bar"),
       highlightColor: dictionary.getOptionalExpressionField("highlight_color", transform: Color.color(withHexString:)),
       hintColor: dictionary.getOptionalExpressionField("hint_color", transform: Color.color(withHexString:)),
       hintText: dictionary.getOptionalExpressionField("hint_text"),
@@ -229,6 +229,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     accessibility: Field<DivAccessibilityTemplate>? = nil,
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
+    allowSuggestionsBar: Field<Expression<Bool>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
     animators: Field<[DivAnimatorTemplate]>? = nil,
     autocapitalization: Field<Expression<Autocapitalization>>? = nil,
@@ -249,7 +250,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     fontWeightValue: Field<Expression<Int>>? = nil,
     functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
-    hideSuggestionsBar: Field<Expression<Bool>>? = nil,
     highlightColor: Field<Expression<Color>>? = nil,
     hintColor: Field<Expression<Color>>? = nil,
     hintText: Field<Expression<String>>? = nil,
@@ -292,6 +292,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     self.accessibility = accessibility
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
+    self.allowSuggestionsBar = allowSuggestionsBar
     self.alpha = alpha
     self.animators = animators
     self.autocapitalization = autocapitalization
@@ -312,7 +313,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     self.fontWeightValue = fontWeightValue
     self.functions = functions
     self.height = height
-    self.hideSuggestionsBar = hideSuggestionsBar
     self.highlightColor = highlightColor
     self.hintColor = hintColor
     self.hintText = hintText
@@ -356,6 +356,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     let accessibilityValue = { parent?.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let alignmentHorizontalValue = { parent?.alignmentHorizontal?.resolveOptionalValue(context: context) ?? .noValue }()
     let alignmentVerticalValue = { parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
+    let allowSuggestionsBarValue = { parent?.allowSuggestionsBar?.resolveOptionalValue(context: context) ?? .noValue }()
     let alphaValue = { parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue }()
     let animatorsValue = { parent?.animators?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let autocapitalizationValue = { parent?.autocapitalization?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -376,7 +377,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     let fontWeightValueValue = { parent?.fontWeightValue?.resolveOptionalValue(context: context, validator: ResolvedValue.fontWeightValueValidator) ?? .noValue }()
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let hideSuggestionsBarValue = { parent?.hideSuggestionsBar?.resolveOptionalValue(context: context) ?? .noValue }()
     let highlightColorValue = { parent?.highlightColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
     let hintColorValue = { parent?.hintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
     let hintTextValue = { parent?.hintText?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -418,6 +418,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
+      allowSuggestionsBarValue.errorsOrWarnings?.map { .nestedObjectError(field: "allow_suggestions_bar", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
@@ -438,7 +439,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
-      hideSuggestionsBarValue.errorsOrWarnings?.map { .nestedObjectError(field: "hide_suggestions_bar", error: $0) },
       highlightColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "highlight_color", error: $0) },
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
@@ -489,6 +489,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       accessibility: { accessibilityValue.value }(),
       alignmentHorizontal: { alignmentHorizontalValue.value }(),
       alignmentVertical: { alignmentVerticalValue.value }(),
+      allowSuggestionsBar: { allowSuggestionsBarValue.value }(),
       alpha: { alphaValue.value }(),
       animators: { animatorsValue.value }(),
       autocapitalization: { autocapitalizationValue.value }(),
@@ -509,7 +510,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: { fontWeightValueValue.value }(),
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
-      hideSuggestionsBar: { hideSuggestionsBarValue.value }(),
       highlightColor: { highlightColorValue.value }(),
       hintColor: { hintColorValue.value }(),
       hintText: { hintTextValue.value }(),
@@ -558,6 +558,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     var accessibilityValue: DeserializationResult<DivAccessibility> = .noValue
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = { parent?.alignmentHorizontal?.value() ?? .noValue }()
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = { parent?.alignmentVertical?.value() ?? .noValue }()
+    var allowSuggestionsBarValue: DeserializationResult<Expression<Bool>> = { parent?.allowSuggestionsBar?.value() ?? .noValue }()
     var alphaValue: DeserializationResult<Expression<Double>> = { parent?.alpha?.value() ?? .noValue }()
     var animatorsValue: DeserializationResult<[DivAnimator]> = .noValue
     var autocapitalizationValue: DeserializationResult<Expression<DivInput.Autocapitalization>> = { parent?.autocapitalization?.value() ?? .noValue }()
@@ -578,7 +579,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
     var fontWeightValueValue: DeserializationResult<Expression<Int>> = { parent?.fontWeightValue?.value() ?? .noValue }()
     var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
-    var hideSuggestionsBarValue: DeserializationResult<Expression<Bool>> = { parent?.hideSuggestionsBar?.value() ?? .noValue }()
     var highlightColorValue: DeserializationResult<Expression<Color>> = { parent?.highlightColor?.value() ?? .noValue }()
     var hintColorValue: DeserializationResult<Expression<Color>> = { parent?.hintColor?.value() ?? .noValue }()
     var hintTextValue: DeserializationResult<Expression<String>> = { parent?.hintText?.value() ?? .noValue }()
@@ -634,6 +634,11 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
         _ = {
           if key == "alignment_vertical" {
            alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
+          }
+        }()
+        _ = {
+          if key == "allow_suggestions_bar" {
+           allowSuggestionsBarValue = deserialize(__dictValue).merged(with: allowSuggestionsBarValue)
           }
         }()
         _ = {
@@ -734,11 +739,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
         _ = {
           if key == "height" {
            heightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self).merged(with: heightValue)
-          }
-        }()
-        _ = {
-          if key == "hide_suggestions_bar" {
-           hideSuggestionsBarValue = deserialize(__dictValue).merged(with: hideSuggestionsBarValue)
           }
         }()
         _ = {
@@ -942,6 +942,11 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
+         if key == parent?.allowSuggestionsBar?.link {
+           allowSuggestionsBarValue = allowSuggestionsBarValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.alpha?.link {
            alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
           }
@@ -1039,11 +1044,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
         _ = {
          if key == parent?.height?.link {
            heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeTemplate.self) })
-          }
-        }()
-        _ = {
-         if key == parent?.hideSuggestionsBar?.link {
-           hideSuggestionsBarValue = hideSuggestionsBarValue.merged(with: { deserialize(__dictValue) })
           }
         }()
         _ = {
@@ -1268,6 +1268,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
+      allowSuggestionsBarValue.errorsOrWarnings?.map { .nestedObjectError(field: "allow_suggestions_bar", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
       animatorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "animators", error: $0) },
       autocapitalizationValue.errorsOrWarnings?.map { .nestedObjectError(field: "autocapitalization", error: $0) },
@@ -1288,7 +1289,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValueValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight_value", error: $0) },
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
-      hideSuggestionsBarValue.errorsOrWarnings?.map { .nestedObjectError(field: "hide_suggestions_bar", error: $0) },
       highlightColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "highlight_color", error: $0) },
       hintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_color", error: $0) },
       hintTextValue.errorsOrWarnings?.map { .nestedObjectError(field: "hint_text", error: $0) },
@@ -1339,6 +1339,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       accessibility: { accessibilityValue.value }(),
       alignmentHorizontal: { alignmentHorizontalValue.value }(),
       alignmentVertical: { alignmentVerticalValue.value }(),
+      allowSuggestionsBar: { allowSuggestionsBarValue.value }(),
       alpha: { alphaValue.value }(),
       animators: { animatorsValue.value }(),
       autocapitalization: { autocapitalizationValue.value }(),
@@ -1359,7 +1360,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: { fontWeightValueValue.value }(),
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
-      hideSuggestionsBar: { hideSuggestionsBarValue.value }(),
       highlightColor: { highlightColorValue.value }(),
       hintColor: { hintColorValue.value }(),
       hintText: { hintTextValue.value }(),
@@ -1413,6 +1413,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       accessibility: accessibility ?? mergedParent.accessibility,
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
+      allowSuggestionsBar: allowSuggestionsBar ?? mergedParent.allowSuggestionsBar,
       alpha: alpha ?? mergedParent.alpha,
       animators: animators ?? mergedParent.animators,
       autocapitalization: autocapitalization ?? mergedParent.autocapitalization,
@@ -1433,7 +1434,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: fontWeightValue ?? mergedParent.fontWeightValue,
       functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
-      hideSuggestionsBar: hideSuggestionsBar ?? mergedParent.hideSuggestionsBar,
       highlightColor: highlightColor ?? mergedParent.highlightColor,
       hintColor: hintColor ?? mergedParent.hintColor,
       hintText: hintText ?? mergedParent.hintText,
@@ -1482,6 +1482,7 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       accessibility: merged.accessibility?.tryResolveParent(templates: templates),
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
+      allowSuggestionsBar: merged.allowSuggestionsBar,
       alpha: merged.alpha,
       animators: merged.animators?.tryResolveParent(templates: templates),
       autocapitalization: merged.autocapitalization,
@@ -1502,7 +1503,6 @@ public final class DivInputTemplate: TemplateValue, @unchecked Sendable {
       fontWeightValue: merged.fontWeightValue,
       functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
-      hideSuggestionsBar: merged.hideSuggestionsBar,
       highlightColor: merged.highlightColor,
       hintColor: merged.hintColor,
       hintText: merged.hintText,
