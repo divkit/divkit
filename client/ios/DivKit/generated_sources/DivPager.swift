@@ -37,6 +37,7 @@ public final class DivPager: DivBase, Sendable {
   public let id: String?
   public let infiniteScroll: Expression<Bool> // default value: false
   public let itemBuilder: DivCollectionItemBuilder?
+  public let itemCountVariable: String?
   public let itemSpacing: DivFixedSize // default value: DivFixedSize(value: .value(0))
   public let items: [Div]?
   public let layoutMode: DivPagerLayoutMode
@@ -151,6 +152,7 @@ public final class DivPager: DivBase, Sendable {
       id: try dictionary.getOptionalField("id", context: context),
       infiniteScroll: try dictionary.getOptionalExpressionField("infinite_scroll", context: context),
       itemBuilder: try dictionary.getOptionalField("item_builder", transform: { (dict: [String: Any]) in try DivCollectionItemBuilder(dictionary: dict, context: context) }),
+      itemCountVariable: try dictionary.getOptionalField("item_count_variable", context: context),
       itemSpacing: try dictionary.getOptionalField("item_spacing", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) }),
       items: try dictionary.getOptionalArray("items", transform: { (dict: [String: Any]) in try? Div(dictionary: dict, context: context) }),
       layoutMode: try dictionary.getField("layout_mode", transform: { (dict: [String: Any]) in try DivPagerLayoutMode(dictionary: dict, context: context) }, context: context),
@@ -199,6 +201,7 @@ public final class DivPager: DivBase, Sendable {
     id: String?,
     infiniteScroll: Expression<Bool>?,
     itemBuilder: DivCollectionItemBuilder?,
+    itemCountVariable: String?,
     itemSpacing: DivFixedSize?,
     items: [Div]?,
     layoutMode: DivPagerLayoutMode,
@@ -244,6 +247,7 @@ public final class DivPager: DivBase, Sendable {
     self.id = id
     self.infiniteScroll = infiniteScroll ?? .value(false)
     self.itemBuilder = itemBuilder
+    self.itemCountVariable = itemCountVariable
     self.itemSpacing = itemSpacing ?? DivFixedSize(value: .value(0))
     self.items = items
     self.layoutMode = layoutMode
@@ -319,62 +323,63 @@ extension DivPager: Equatable {
       return false
     }
     guard
+      lhs.itemCountVariable == rhs.itemCountVariable,
       lhs.itemSpacing == rhs.itemSpacing,
-      lhs.items == rhs.items,
-      lhs.layoutMode == rhs.layoutMode
+      lhs.items == rhs.items
     else {
       return false
     }
     guard
+      lhs.layoutMode == rhs.layoutMode,
       lhs.layoutProvider == rhs.layoutProvider,
-      lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.pageTransformation == rhs.pageTransformation,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.pageTransformation == rhs.pageTransformation
     else {
       return false
     }
     guard
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.scrollAxisAlignment == rhs.scrollAxisAlignment
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.scrollAxisAlignment == rhs.scrollAxisAlignment,
       lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transformations == rhs.transformations,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -408,6 +413,7 @@ extension DivPager: Serializable {
     result["id"] = id
     result["infinite_scroll"] = infiniteScroll.toValidSerializationValue()
     result["item_builder"] = itemBuilder?.toDictionary()
+    result["item_count_variable"] = itemCountVariable
     result["item_spacing"] = itemSpacing.toDictionary()
     result["items"] = items?.map { $0.toDictionary() }
     result["layout_mode"] = layoutMode.toDictionary()

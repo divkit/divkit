@@ -29,6 +29,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
   public let id: Field<String>?
   public let infiniteScroll: Field<Expression<Bool>>? // default value: false
   public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
+  public let itemCountVariable: Field<String>?
   public let itemSpacing: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(0))
   public let items: Field<[DivTemplate]>?
   public let layoutMode: Field<DivPagerLayoutModeTemplate>?
@@ -77,6 +78,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       id: dictionary.getOptionalField("id"),
       infiniteScroll: dictionary.getOptionalExpressionField("infinite_scroll"),
       itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
+      itemCountVariable: dictionary.getOptionalField("item_count_variable"),
       itemSpacing: dictionary.getOptionalField("item_spacing", templateToType: templateToType),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
       layoutMode: dictionary.getOptionalField("layout_mode", templateToType: templateToType),
@@ -126,6 +128,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     id: Field<String>? = nil,
     infiniteScroll: Field<Expression<Bool>>? = nil,
     itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
+    itemCountVariable: Field<String>? = nil,
     itemSpacing: Field<DivFixedSizeTemplate>? = nil,
     items: Field<[DivTemplate]>? = nil,
     layoutMode: Field<DivPagerLayoutModeTemplate>? = nil,
@@ -172,6 +175,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     self.id = id
     self.infiniteScroll = infiniteScroll
     self.itemBuilder = itemBuilder
+    self.itemCountVariable = itemCountVariable
     self.itemSpacing = itemSpacing
     self.items = items
     self.layoutMode = layoutMode
@@ -219,6 +223,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
     let infiniteScrollValue = { parent?.infiniteScroll?.resolveOptionalValue(context: context) ?? .noValue }()
     let itemBuilderValue = { parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
+    let itemCountVariableValue = { parent?.itemCountVariable?.resolveOptionalValue(context: context) ?? .noValue }()
     let itemSpacingValue = { parent?.itemSpacing?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let itemsValue = { parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let layoutModeValue = { parent?.layoutMode?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -264,6 +269,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       infiniteScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "infinite_scroll", error: $0) },
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
+      itemCountVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_count_variable", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
@@ -318,6 +324,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       id: { idValue.value }(),
       infiniteScroll: { infiniteScrollValue.value }(),
       itemBuilder: { itemBuilderValue.value }(),
+      itemCountVariable: { itemCountVariableValue.value }(),
       itemSpacing: { itemSpacingValue.value }(),
       items: { itemsValue.value }(),
       layoutMode: { layoutModeNonNil }(),
@@ -370,6 +377,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
     var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
     var infiniteScrollValue: DeserializationResult<Expression<Bool>> = { parent?.infiniteScroll?.value() ?? .noValue }()
     var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
+    var itemCountVariableValue: DeserializationResult<String> = { parent?.itemCountVariable?.value() ?? .noValue }()
     var itemSpacingValue: DeserializationResult<DivFixedSize> = .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
     var layoutModeValue: DeserializationResult<DivPagerLayoutMode> = .noValue
@@ -489,6 +497,11 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
         _ = {
           if key == "item_builder" {
            itemBuilderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCollectionItemBuilderTemplate.self).merged(with: itemBuilderValue)
+          }
+        }()
+        _ = {
+          if key == "item_count_variable" {
+           itemCountVariableValue = deserialize(__dictValue).merged(with: itemCountVariableValue)
           }
         }()
         _ = {
@@ -712,6 +725,11 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.itemCountVariable?.link {
+           itemCountVariableValue = itemCountVariableValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.itemSpacing?.link {
            itemSpacingValue = itemSpacingValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
           }
@@ -893,6 +911,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       infiniteScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "infinite_scroll", error: $0) },
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
+      itemCountVariableValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_count_variable", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
       layoutModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "layout_mode", error: $0) },
@@ -947,6 +966,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       id: { idValue.value }(),
       infiniteScroll: { infiniteScrollValue.value }(),
       itemBuilder: { itemBuilderValue.value }(),
+      itemCountVariable: { itemCountVariableValue.value }(),
       itemSpacing: { itemSpacingValue.value }(),
       items: { itemsValue.value }(),
       layoutMode: { layoutModeNonNil }(),
@@ -1004,6 +1024,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       id: id ?? mergedParent.id,
       infiniteScroll: infiniteScroll ?? mergedParent.infiniteScroll,
       itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
+      itemCountVariable: itemCountVariable ?? mergedParent.itemCountVariable,
       itemSpacing: itemSpacing ?? mergedParent.itemSpacing,
       items: items ?? mergedParent.items,
       layoutMode: layoutMode ?? mergedParent.layoutMode,
@@ -1056,6 +1077,7 @@ public final class DivPagerTemplate: TemplateValue, Sendable {
       id: merged.id,
       infiniteScroll: merged.infiniteScroll,
       itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
+      itemCountVariable: merged.itemCountVariable,
       itemSpacing: merged.itemSpacing?.tryResolveParent(templates: templates),
       items: merged.items?.tryResolveParent(templates: templates),
       layoutMode: try merged.layoutMode?.resolveParent(templates: templates),

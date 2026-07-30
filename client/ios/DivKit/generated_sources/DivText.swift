@@ -95,6 +95,7 @@ public final class DivText: DivBase, @unchecked Sendable {
 
     public let accessibility: Accessibility?
     public let alignmentVertical: Expression<DivTextAlignmentVertical> // default value: center
+    public let baselineOffset: Expression<Double>?
     public let height: DivFixedSize // default value: DivFixedSize(value: .value(20))
     public let indexingDirection: Expression<IndexingDirection> // default value: normal
     public let preloadRequired: Expression<Bool> // default value: false
@@ -106,6 +107,10 @@ public final class DivText: DivBase, @unchecked Sendable {
 
     public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivTextAlignmentVertical {
       resolver.resolveEnum(alignmentVertical) ?? DivTextAlignmentVertical.center
+    }
+
+    public func resolveBaselineOffset(_ resolver: ExpressionResolver) -> Double? {
+      resolver.resolveNumeric(baselineOffset)
     }
 
     public func resolveIndexingDirection(_ resolver: ExpressionResolver) -> IndexingDirection {
@@ -139,6 +144,7 @@ public final class DivText: DivBase, @unchecked Sendable {
       self.init(
         accessibility: try dictionary.getOptionalField("accessibility", transform: { (dict: [String: Any]) in try DivText.Image.Accessibility(dictionary: dict, context: context) }),
         alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical", context: context),
+        baselineOffset: try dictionary.getOptionalExpressionField("baseline_offset", context: context),
         height: try dictionary.getOptionalField("height", transform: { (dict: [String: Any]) in try DivFixedSize(dictionary: dict, context: context) }),
         indexingDirection: try dictionary.getOptionalExpressionField("indexing_direction", context: context),
         preloadRequired: try dictionary.getOptionalExpressionField("preload_required", context: context),
@@ -153,6 +159,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     init(
       accessibility: Accessibility? = nil,
       alignmentVertical: Expression<DivTextAlignmentVertical>? = nil,
+      baselineOffset: Expression<Double>? = nil,
       height: DivFixedSize? = nil,
       indexingDirection: Expression<IndexingDirection>? = nil,
       preloadRequired: Expression<Bool>? = nil,
@@ -164,6 +171,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     ) {
       self.accessibility = accessibility
       self.alignmentVertical = alignmentVertical ?? .value(.center)
+      self.baselineOffset = baselineOffset
       self.height = height ?? DivFixedSize(value: .value(20))
       self.indexingDirection = indexingDirection ?? .value(.normal)
       self.preloadRequired = preloadRequired ?? .value(false)
@@ -1305,25 +1313,26 @@ extension DivText.Image: Equatable {
     guard
       lhs.accessibility == rhs.accessibility,
       lhs.alignmentVertical == rhs.alignmentVertical,
-      lhs.height == rhs.height
+      lhs.baselineOffset == rhs.baselineOffset
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.indexingDirection == rhs.indexingDirection,
-      lhs.preloadRequired == rhs.preloadRequired,
-      lhs.start == rhs.start
+      lhs.preloadRequired == rhs.preloadRequired
     else {
       return false
     }
     guard
+      lhs.start == rhs.start,
       lhs.tintColor == rhs.tintColor,
-      lhs.tintMode == rhs.tintMode,
-      lhs.url == rhs.url
+      lhs.tintMode == rhs.tintMode
     else {
       return false
     }
     guard
+      lhs.url == rhs.url,
       lhs.width == rhs.width
     else {
       return false
@@ -1391,6 +1400,7 @@ extension DivText.Image: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["accessibility"] = accessibility?.toDictionary()
     result["alignment_vertical"] = alignmentVertical.toValidSerializationValue()
+    result["baseline_offset"] = baselineOffset?.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["indexing_direction"] = indexingDirection.toValidSerializationValue()
     result["preload_required"] = preloadRequired.toValidSerializationValue()

@@ -10,6 +10,7 @@ public enum DivActionScrollDestinationTemplate: TemplateValue, Sendable {
   case indexDestinationTemplate(IndexDestinationTemplate)
   case startDestinationTemplate(StartDestinationTemplate)
   case endDestinationTemplate(EndDestinationTemplate)
+  case itemIdDestinationTemplate(ItemIdDestinationTemplate)
 
   public var value: Any {
     switch self {
@@ -20,6 +21,8 @@ public enum DivActionScrollDestinationTemplate: TemplateValue, Sendable {
     case let .startDestinationTemplate(value):
       return value
     case let .endDestinationTemplate(value):
+      return value
+    case let .itemIdDestinationTemplate(value):
       return value
     }
   }
@@ -34,6 +37,8 @@ public enum DivActionScrollDestinationTemplate: TemplateValue, Sendable {
       return .startDestinationTemplate(try value.resolveParent(templates: templates))
     case let .endDestinationTemplate(value):
       return .endDestinationTemplate(try value.resolveParent(templates: templates))
+    case let .itemIdDestinationTemplate(value):
+      return .itemIdDestinationTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -92,6 +97,17 @@ public enum DivActionScrollDestinationTemplate: TemplateValue, Sendable {
           }
         } else { return nil }
       }()
+      result = result ?? {
+        if case let .itemIdDestinationTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.itemIdDestination(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.itemIdDestination(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
       return result
     }()
   }
@@ -139,6 +155,15 @@ public enum DivActionScrollDestinationTemplate: TemplateValue, Sendable {
       case .noValue: return .noValue
       }
     } else { return nil } }()
+    result = result ?? { if type == ItemIdDestination.type {
+      let result = { ItemIdDestinationTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+      switch result {
+      case let .success(value): return .success(.itemIdDestination(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.itemIdDestination(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    } else { return nil } }()
     return result ?? .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }()
   }
@@ -157,6 +182,8 @@ extension DivActionScrollDestinationTemplate {
       self = .startDestinationTemplate(try StartDestinationTemplate(dictionary: dictionary, templateToType: templateToType))
     case EndDestinationTemplate.type:
       self = .endDestinationTemplate(try EndDestinationTemplate(dictionary: dictionary, templateToType: templateToType))
+    case ItemIdDestinationTemplate.type:
+      self = .itemIdDestinationTemplate(try ItemIdDestinationTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.requiredFieldIsMissing(field: "type")
     }

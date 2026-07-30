@@ -50,6 +50,7 @@ public final class DivGallery: DivBase, Sendable {
   public let functions: [DivFunction]?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String?
+  public let infiniteScroll: Expression<Bool> // default value: false
   public let itemBuilder: DivCollectionItemBuilder?
   public let itemSpacing: Expression<Int> // constraint: number >= 0; default value: 8
   public let items: [Div]?
@@ -112,6 +113,10 @@ public final class DivGallery: DivBase, Sendable {
 
   public func resolveDefaultItem(_ resolver: ExpressionResolver) -> Int {
     resolver.resolveNumeric(defaultItem) ?? 0
+  }
+
+  public func resolveInfiniteScroll(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(infiniteScroll) ?? false
   }
 
   public func resolveItemSpacing(_ resolver: ExpressionResolver) -> Int {
@@ -195,6 +200,7 @@ public final class DivGallery: DivBase, Sendable {
       functions: try dictionary.getOptionalArray("functions", transform: { (dict: [String: Any]) in try? DivFunction(dictionary: dict, context: context) }),
       height: try dictionary.getOptionalField("height", transform: { (dict: [String: Any]) in try DivSize(dictionary: dict, context: context) }),
       id: try dictionary.getOptionalField("id", context: context),
+      infiniteScroll: try dictionary.getOptionalExpressionField("infinite_scroll", context: context),
       itemBuilder: try dictionary.getOptionalField("item_builder", transform: { (dict: [String: Any]) in try DivCollectionItemBuilder(dictionary: dict, context: context) }),
       itemSpacing: try dictionary.getOptionalExpressionField("item_spacing", validator: Self.itemSpacingValidator, context: context),
       items: try dictionary.getOptionalArray("items", transform: { (dict: [String: Any]) in try? Div(dictionary: dict, context: context) }),
@@ -245,6 +251,7 @@ public final class DivGallery: DivBase, Sendable {
     functions: [DivFunction]?,
     height: DivSize?,
     id: String?,
+    infiniteScroll: Expression<Bool>?,
     itemBuilder: DivCollectionItemBuilder?,
     itemSpacing: Expression<Int>?,
     items: [Div]?,
@@ -292,6 +299,7 @@ public final class DivGallery: DivBase, Sendable {
     self.functions = functions
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
+    self.infiniteScroll = infiniteScroll ?? .value(false)
     self.itemBuilder = itemBuilder
     self.itemSpacing = itemSpacing ?? .value(8)
     self.items = items
@@ -369,68 +377,69 @@ extension DivGallery: Equatable {
     }
     guard
       lhs.id == rhs.id,
-      lhs.itemBuilder == rhs.itemBuilder,
-      lhs.itemSpacing == rhs.itemSpacing
+      lhs.infiniteScroll == rhs.infiniteScroll,
+      lhs.itemBuilder == rhs.itemBuilder
     else {
       return false
     }
     guard
+      lhs.itemSpacing == rhs.itemSpacing,
       lhs.items == rhs.items,
-      lhs.layoutProvider == rhs.layoutProvider,
-      lhs.margins == rhs.margins
+      lhs.layoutProvider == rhs.layoutProvider
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.restrictParentScroll == rhs.restrictParentScroll,
       lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.scrollContentAlignment == rhs.scrollContentAlignment
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.scrollContentAlignment == rhs.scrollContentAlignment,
       lhs.scrollMode == rhs.scrollMode,
-      lhs.scrollbar == rhs.scrollbar,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.scrollbar == rhs.scrollbar
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transformations == rhs.transformations
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transformations == rhs.transformations,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables
+      lhs.variableTriggers == rhs.variableTriggers
     else {
       return false
     }
     guard
+      lhs.variables == rhs.variables,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -464,6 +473,7 @@ extension DivGallery: Serializable {
     result["functions"] = functions?.map { $0.toDictionary() }
     result["height"] = height.toDictionary()
     result["id"] = id
+    result["infinite_scroll"] = infiniteScroll.toValidSerializationValue()
     result["item_builder"] = itemBuilder?.toDictionary()
     result["item_spacing"] = itemSpacing.toValidSerializationValue()
     result["items"] = items?.map { $0.toDictionary() }

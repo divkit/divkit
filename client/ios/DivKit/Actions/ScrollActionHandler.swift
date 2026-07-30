@@ -114,6 +114,8 @@ final class ScrollActionHandler {
           path: path,
           animated: animated
         )
+      case .itemIdDestination:
+        DivKitLogger.error("Scroll action destination not supported: item_id")
       }
     }
   }

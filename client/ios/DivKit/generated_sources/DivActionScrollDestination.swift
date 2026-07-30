@@ -10,6 +10,7 @@ public enum DivActionScrollDestination: Sendable {
   case indexDestination(IndexDestination)
   case startDestination(StartDestination)
   case endDestination(EndDestination)
+  case itemIdDestination(ItemIdDestination)
 
   public var value: Serializable {
     switch self {
@@ -20,6 +21,8 @@ public enum DivActionScrollDestination: Sendable {
     case let .startDestination(value):
       return value
     case let .endDestination(value):
+      return value
+    case let .itemIdDestination(value):
       return value
     }
   }
@@ -38,6 +41,8 @@ extension DivActionScrollDestination {
       self = .startDestination(try StartDestination(dictionary: dictionary, context: context))
     case EndDestination.type:
       self = .endDestination(try EndDestination(dictionary: dictionary, context: context))
+    case ItemIdDestination.type:
+      self = .itemIdDestination(try ItemIdDestination(dictionary: dictionary, context: context))
     default:
       throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
@@ -55,6 +60,8 @@ extension DivActionScrollDestination: Equatable {
     case let (.startDestination(l), .startDestination(r)):
       return l == r
     case let (.endDestination(l), .endDestination(r)):
+      return l == r
+    case let (.itemIdDestination(l), .itemIdDestination(r)):
       return l == r
     default:
       return false

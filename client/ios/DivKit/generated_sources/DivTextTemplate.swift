@@ -545,6 +545,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
 
     public let accessibility: Field<AccessibilityTemplate>?
     public let alignmentVertical: Field<Expression<DivTextAlignmentVertical>>? // default value: center
+    public let baselineOffset: Field<Expression<Double>>?
     public let height: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(20))
     public let indexingDirection: Field<Expression<IndexingDirection>>? // default value: normal
     public let preloadRequired: Field<Expression<Bool>>? // default value: false
@@ -558,6 +559,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       self.init(
         accessibility: dictionary.getOptionalField("accessibility", templateToType: templateToType),
         alignmentVertical: dictionary.getOptionalExpressionField("alignment_vertical"),
+        baselineOffset: dictionary.getOptionalExpressionField("baseline_offset"),
         height: dictionary.getOptionalField("height", templateToType: templateToType),
         indexingDirection: dictionary.getOptionalExpressionField("indexing_direction"),
         preloadRequired: dictionary.getOptionalExpressionField("preload_required"),
@@ -572,6 +574,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     init(
       accessibility: Field<AccessibilityTemplate>? = nil,
       alignmentVertical: Field<Expression<DivTextAlignmentVertical>>? = nil,
+      baselineOffset: Field<Expression<Double>>? = nil,
       height: Field<DivFixedSizeTemplate>? = nil,
       indexingDirection: Field<Expression<IndexingDirection>>? = nil,
       preloadRequired: Field<Expression<Bool>>? = nil,
@@ -583,6 +586,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     ) {
       self.accessibility = accessibility
       self.alignmentVertical = alignmentVertical
+      self.baselineOffset = baselineOffset
       self.height = height
       self.indexingDirection = indexingDirection
       self.preloadRequired = preloadRequired
@@ -596,6 +600,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     private static func resolveOnlyLinks(context: TemplatesContext, parent: ImageTemplate?) -> DeserializationResult<DivText.Image> {
       let accessibilityValue = { parent?.accessibility?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let alignmentVerticalValue = { parent?.alignmentVertical?.resolveOptionalValue(context: context) ?? .noValue }()
+      let baselineOffsetValue = { parent?.baselineOffset?.resolveOptionalValue(context: context) ?? .noValue }()
       let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
       let indexingDirectionValue = { parent?.indexingDirection?.resolveOptionalValue(context: context) ?? .noValue }()
       let preloadRequiredValue = { parent?.preloadRequired?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -607,6 +612,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       var errors = mergeErrors(
         accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
         alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
+        baselineOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "baseline_offset", error: $0) },
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
         indexingDirectionValue.errorsOrWarnings?.map { .nestedObjectError(field: "indexing_direction", error: $0) },
         preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
@@ -631,6 +637,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       let result = DivText.Image(
         accessibility: { accessibilityValue.value }(),
         alignmentVertical: { alignmentVerticalValue.value }(),
+        baselineOffset: { baselineOffsetValue.value }(),
         height: { heightValue.value }(),
         indexingDirection: { indexingDirectionValue.value }(),
         preloadRequired: { preloadRequiredValue.value }(),
@@ -649,6 +656,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       }
       var accessibilityValue: DeserializationResult<DivText.Image.Accessibility> = .noValue
       var alignmentVerticalValue: DeserializationResult<Expression<DivTextAlignmentVertical>> = { parent?.alignmentVertical?.value() ?? .noValue }()
+      var baselineOffsetValue: DeserializationResult<Expression<Double>> = { parent?.baselineOffset?.value() ?? .noValue }()
       var heightValue: DeserializationResult<DivFixedSize> = .noValue
       var indexingDirectionValue: DeserializationResult<Expression<DivText.Image.IndexingDirection>> = { parent?.indexingDirection?.value() ?? .noValue }()
       var preloadRequiredValue: DeserializationResult<Expression<Bool>> = { parent?.preloadRequired?.value() ?? .noValue }()
@@ -670,6 +678,11 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
           _ = {
             if key == "alignment_vertical" {
              alignmentVerticalValue = deserialize(__dictValue).merged(with: alignmentVerticalValue)
+            }
+          }()
+          _ = {
+            if key == "baseline_offset" {
+             baselineOffsetValue = deserialize(__dictValue).merged(with: baselineOffsetValue)
             }
           }()
           _ = {
@@ -723,6 +736,11 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
             }
           }()
           _ = {
+           if key == parent?.baselineOffset?.link {
+             baselineOffsetValue = baselineOffsetValue.merged(with: { deserialize(__dictValue) })
+            }
+          }()
+          _ = {
            if key == parent?.height?.link {
              heightValue = heightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
             }
@@ -772,6 +790,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       var errors = mergeErrors(
         accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
         alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
+        baselineOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "baseline_offset", error: $0) },
         heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
         indexingDirectionValue.errorsOrWarnings?.map { .nestedObjectError(field: "indexing_direction", error: $0) },
         preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
@@ -796,6 +815,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       let result = DivText.Image(
         accessibility: { accessibilityValue.value }(),
         alignmentVertical: { alignmentVerticalValue.value }(),
+        baselineOffset: { baselineOffsetValue.value }(),
         height: { heightValue.value }(),
         indexingDirection: { indexingDirectionValue.value }(),
         preloadRequired: { preloadRequiredValue.value }(),
@@ -818,6 +838,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       return ImageTemplate(
         accessibility: merged.accessibility?.tryResolveParent(templates: templates),
         alignmentVertical: merged.alignmentVertical,
+        baselineOffset: merged.baselineOffset,
         height: merged.height?.tryResolveParent(templates: templates),
         indexingDirection: merged.indexingDirection,
         preloadRequired: merged.preloadRequired,

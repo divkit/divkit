@@ -34,6 +34,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
   public let functions: Field<[DivFunctionTemplate]>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>?
+  public let infiniteScroll: Field<Expression<Bool>>? // default value: false
   public let itemBuilder: Field<DivCollectionItemBuilderTemplate>?
   public let itemSpacing: Field<Expression<Int>>? // constraint: number >= 0; default value: 8
   public let items: Field<[DivTemplate]>?
@@ -84,6 +85,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       functions: dictionary.getOptionalArray("functions", templateToType: templateToType),
       height: dictionary.getOptionalField("height", templateToType: templateToType),
       id: dictionary.getOptionalField("id"),
+      infiniteScroll: dictionary.getOptionalExpressionField("infinite_scroll"),
       itemBuilder: dictionary.getOptionalField("item_builder", templateToType: templateToType),
       itemSpacing: dictionary.getOptionalExpressionField("item_spacing"),
       items: dictionary.getOptionalArray("items", templateToType: templateToType),
@@ -135,6 +137,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     functions: Field<[DivFunctionTemplate]>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
+    infiniteScroll: Field<Expression<Bool>>? = nil,
     itemBuilder: Field<DivCollectionItemBuilderTemplate>? = nil,
     itemSpacing: Field<Expression<Int>>? = nil,
     items: Field<[DivTemplate]>? = nil,
@@ -183,6 +186,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     self.functions = functions
     self.height = height
     self.id = id
+    self.infiniteScroll = infiniteScroll
     self.itemBuilder = itemBuilder
     self.itemSpacing = itemSpacing
     self.items = items
@@ -232,6 +236,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
+    let infiniteScrollValue = { parent?.infiniteScroll?.resolveOptionalValue(context: context) ?? .noValue }()
     let itemBuilderValue = { parent?.itemBuilder?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let itemSpacingValue = { parent?.itemSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.itemSpacingValidator) ?? .noValue }()
     let itemsValue = { parent?.items?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -279,6 +284,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      infiniteScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "infinite_scroll", error: $0) },
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
@@ -327,6 +333,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
       id: { idValue.value }(),
+      infiniteScroll: { infiniteScrollValue.value }(),
       itemBuilder: { itemBuilderValue.value }(),
       itemSpacing: { itemSpacingValue.value }(),
       items: { itemsValue.value }(),
@@ -381,6 +388,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
     var functionsValue: DeserializationResult<[DivFunction]> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = { parent?.id?.value() ?? .noValue }()
+    var infiniteScrollValue: DeserializationResult<Expression<Bool>> = { parent?.infiniteScroll?.value() ?? .noValue }()
     var itemBuilderValue: DeserializationResult<DivCollectionItemBuilder> = .noValue
     var itemSpacingValue: DeserializationResult<Expression<Int>> = { parent?.itemSpacing?.value() ?? .noValue }()
     var itemsValue: DeserializationResult<[Div]> = .noValue
@@ -506,6 +514,11 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
         _ = {
           if key == "id" {
            idValue = deserialize(__dictValue).merged(with: idValue)
+          }
+        }()
+        _ = {
+          if key == "infinite_scroll" {
+           infiniteScrollValue = deserialize(__dictValue).merged(with: infiniteScrollValue)
           }
         }()
         _ = {
@@ -739,6 +752,11 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
+         if key == parent?.infiniteScroll?.link {
+           infiniteScrollValue = infiniteScrollValue.merged(with: { deserialize(__dictValue) })
+          }
+        }()
+        _ = {
          if key == parent?.itemBuilder?.link {
            itemBuilderValue = itemBuilderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCollectionItemBuilderTemplate.self) })
           }
@@ -923,6 +941,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       functionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "functions", error: $0) },
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      infiniteScrollValue.errorsOrWarnings?.map { .nestedObjectError(field: "infinite_scroll", error: $0) },
       itemBuilderValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_builder", error: $0) },
       itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_spacing", error: $0) },
       itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) },
@@ -971,6 +990,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       functions: { functionsValue.value }(),
       height: { heightValue.value }(),
       id: { idValue.value }(),
+      infiniteScroll: { infiniteScrollValue.value }(),
       itemBuilder: { itemBuilderValue.value }(),
       itemSpacing: { itemSpacingValue.value }(),
       items: { itemsValue.value }(),
@@ -1030,6 +1050,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       functions: functions ?? mergedParent.functions,
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
+      infiniteScroll: infiniteScroll ?? mergedParent.infiniteScroll,
       itemBuilder: itemBuilder ?? mergedParent.itemBuilder,
       itemSpacing: itemSpacing ?? mergedParent.itemSpacing,
       items: items ?? mergedParent.items,
@@ -1084,6 +1105,7 @@ public final class DivGalleryTemplate: TemplateValue, Sendable {
       functions: merged.functions?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
+      infiniteScroll: merged.infiniteScroll,
       itemBuilder: merged.itemBuilder?.tryResolveParent(templates: templates),
       itemSpacing: merged.itemSpacing,
       items: merged.items?.tryResolveParent(templates: templates),
