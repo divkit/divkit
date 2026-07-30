@@ -231,7 +231,6 @@ internal fun View.applyDivActions(
         actions
     }
     actionBinder.bindDivActions(
-        context,
         this,
         tapActions,
         longTapActions,
@@ -242,24 +241,27 @@ internal fun View.applyDivActions(
         pressEndActions,
         actionAnimation,
         captureFocusOnAction,
+        context.expressionResolver,
+        context.divView,
     )
 }
 
 internal fun View.createAnimatedTouchListener(
-    context: BindingContext,
     divAnimation: DivAnimation?,
-    divGestureListener: DivGestureListener?
+    divGestureListener: DivGestureListener?,
+    resolver: ExpressionResolver,
+    divView: Div2View,
 ): ((View, MotionEvent) -> Boolean)? {
-    val animations = divAnimation?.asTouchListener(context.expressionResolver, this)
+    val animations = divAnimation?.asTouchListener(resolver, this)
 
     // Avoid creating GestureDetector if unnecessary cause it's expensive.
     val gestureDetector = divGestureListener
         ?.takeUnless { it.onSingleTapListener == null && it.onDoubleTapListener == null }
-        ?.let { GestureDetector(context.divView.context, divGestureListener, Handler(Looper.getMainLooper())) }
+        ?.let { GestureDetector(divView.context, divGestureListener, Handler(Looper.getMainLooper())) }
 
     return if (animations != null || gestureDetector != null) {
         { v, event ->
-            if (context.divView.div2Component.animationsEnabledController.isEnabled()) {
+            if (divView.div2Component.animationsEnabledController.isEnabled()) {
                 animations?.invoke(v, event)
             }
             gestureDetector?.onTouchEvent(event) ?: false

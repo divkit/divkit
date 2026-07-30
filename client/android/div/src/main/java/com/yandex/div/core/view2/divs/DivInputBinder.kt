@@ -91,11 +91,11 @@ internal class DivInputBinder @Inject constructor(
         observeHighlightColor(div, expressionResolver)
         observeKeyboardTypeAndCapitalization(div, expressionResolver)
 
-        observeEnterTypeAndActions(div, bindingContext, expressionResolver)
+        observeEnterTypeAndActions(div, expressionResolver, bindingContext.divView)
         observeSelectAllOnFocus(div, expressionResolver)
         observeIsEnabled(div, expressionResolver)
 
-        observeText(div, bindingContext, path)
+        observeText(div, bindingContext)
 
         focusTracker = bindingContext.divView.inputFocusTracker
         focusTracker?.requestFocusIfNeeded(this)
@@ -266,8 +266,8 @@ internal class DivInputBinder @Inject constructor(
 
     private fun DivInputView.observeEnterTypeAndActions(
         div: DivInput,
-        bindingContext: BindingContext,
-        resolver: ExpressionResolver
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         val callback = { _: Any ->
             val enterKeyType = div.enterKeyType.evaluate(resolver)
@@ -279,7 +279,7 @@ internal class DivInputBinder @Inject constructor(
                     val isSpecificAction = (actionId and EditorInfo.IME_MASK_ACTION) != 0
                             && (actionId and EditorInfo.IME_MASK_ACTION) != EditorInfo.IME_ACTION_UNSPECIFIED
                     if (isSpecificAction) {
-                        actionPerformer.performBulkActions(bindingContext, this, actions, DivActionReason.ENTER)
+                        actionPerformer.performBulkActions(this, actions, resolver, divView, DivActionReason.ENTER)
                     }
                     isSpecificAction
                 }
@@ -323,13 +323,13 @@ internal class DivInputBinder @Inject constructor(
     private fun DivInputView.observeText(
         div: DivInput,
         bindingContext: BindingContext,
-        path: DivStatePath,
     ) {
+        val resolver = bindingContext.expressionResolver
         val divView = bindingContext.divView
         removeAfterTextChangeListener()
 
         var inputMask: BaseInputMask? = null
-        observeMask(div, bindingContext.expressionResolver, divView) {
+        observeMask(div, resolver, divView) {
             inputMask = it
             inputMask?.let { mask ->
                 setText(mask.value)
@@ -359,9 +359,9 @@ internal class DivInputBinder @Inject constructor(
         }
 
         val callbacks = createCallbacks(bindingContext, inputMask, inputFilters, secondaryVariable)
-        addSubscription(variableBinder.bindVariable(bindingContext, primaryVariable, callbacks, path))
+        addSubscription(variableBinder.bindVariable(primaryVariable, resolver, divView, callbacks))
 
-        observeValidators(div, bindingContext.expressionResolver, divView)
+        observeValidators(div, resolver, divView)
     }
 
     private fun DivInputView.createCallbacks(

@@ -24,7 +24,6 @@ import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
@@ -48,31 +47,25 @@ internal class DivVideoBinder @Inject constructor(
     private val playerFactory: DivPlayerFactory,
 ) : DivViewBinder<Div.Video, DivVideo, DivVideoView>(baseBinder) {
 
-    override fun DivVideoView.bind(
-        bindingContext: BindingContext,
-        div: DivVideo,
-        oldDiv: DivVideo?,
-        path: DivStatePath
-    ) {
+    override fun DivVideoView.bind(bindingContext: BindingContext, div: DivVideo, oldDiv: DivVideo?) {
         this.path = path
-        applyVideo(bindingContext, div, path)
+        applyVideo(div, bindingContext.expressionResolver, bindingContext.divView)
         bindAspectRatio(div.aspect, oldDiv?.aspect, bindingContext.expressionResolver)
     }
 
-    fun loadVideo(view: DivVideoView, bindingContext: BindingContext, div: DivVideo, path: DivStatePath) =
-        view.applyVideo(bindingContext, div, path)
+    fun loadVideo(view: DivVideoView, div: DivVideo, resolver: ExpressionResolver, divView: Div2View) =
+        view.applyVideo(div, resolver, divView)
 
     private fun DivVideoView.applyVideo(
-        bindingContext: BindingContext,
         div: DivVideo,
-        path: DivStatePath,
-    ) = bindingContext.divView.runMainThreadAction {
-        val resolver = bindingContext.expressionResolver
+        resolver: ExpressionResolver,
+        divView: Div2View,
+    ) = divView.runMainThreadAction {
         val source = div.createSource(resolver)
         val config = div.createConfig(resolver)
 
         if (source.isEmpty() && div.playerSettingsPayload == null) {
-            bindingContext.divView.logSourceError(div)
+            divView.logSourceError(div)
         }
 
         val currentPlayerView = getPlayerView()
@@ -100,7 +93,7 @@ internal class DivVideoBinder @Inject constructor(
                         is ImageRepresentation.PictureDrawable -> setImageDrawable(it.value)
                         is ImageRepresentation.Bitmap -> setImageBitmap(it.value)
                         is ImageRepresentation.Error -> {
-                            bindingContext.divView.logWarning(it.value)
+                            divView.logWarning(it.value)
                             return@let
                         }
                     }
@@ -111,15 +104,15 @@ internal class DivVideoBinder @Inject constructor(
         }
 
         val player = playerFactory.makePlayer(source, config).apply {
-            addObserver(createObserver(bindingContext, div, previewImageView))
+            addObserver(createObserver(div, resolver, divView, previewImageView))
             playerView.attach(this)
         }
 
-        observeElapsedTime(div, bindingContext, player, path)
+        observeElapsedTime(div, resolver, divView, player)
         observeMuted(div, resolver, player)
         observePlaybackSpeed(div, resolver, player)
         observeScale(div, resolver, playerView, previewImageView)
-        observeSource(div, resolver, player, bindingContext.divView)
+        observeSource(div, resolver, player, divView)
 
         if (currentPreviewView == null && currentPlayerView == null) {
             removeAllViews()
@@ -130,12 +123,11 @@ internal class DivVideoBinder @Inject constructor(
     }
 
     private fun createObserver(
-        bindingContext: BindingContext,
         div: DivVideo,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         previewImageView: View
     ): DivPlayer.Observer {
-        val divView = bindingContext.divView
-        val resolver = bindingContext.expressionResolver
         return object : DivPlayer.Observer {
             override fun onPlay() {
                 actionPerformer.performActions(divView, resolver, div.resumeActions, DivActionReason.VIDEO)
@@ -170,9 +162,9 @@ internal class DivVideoBinder @Inject constructor(
 
     private fun DivVideoView.observeElapsedTime(
         div: DivVideo,
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         player: DivPlayer,
-        path: DivStatePath,
     ) {
         val elapsedTimeVariable = div.elapsedTimeVariable ?: return
 
@@ -193,7 +185,7 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        addVideoSubscription(variableBinder.bindVariable(bindingContext, elapsedTimeVariable, callbacks, path))
+        addVideoSubscription(variableBinder.bindVariable(elapsedTimeVariable, resolver, divView, callbacks))
     }
 
     private fun DivVideoView.observeMuted(

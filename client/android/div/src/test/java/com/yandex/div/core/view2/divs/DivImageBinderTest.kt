@@ -62,7 +62,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, divImage, path)
 
-        assertActionApplied(bindingContext, view, Expected.ACTION_URI)
+        assertActionApplied(view, Expected.ACTION_URI, resolver, divView)
     }
 
     @Test
@@ -71,7 +71,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, divImage, path)
 
-        assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
+        assertActionApplied(view, Expected.STATE_ACTION_URI, resolver, divView)
     }
 
     @Test

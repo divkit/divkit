@@ -16,7 +16,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED
 import com.yandex.div.core.experiments.Experiment.LONGTAP_ACTIONS_PASS_TO_CHILD_ENABLED
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivGestureListener
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.internal.KAssert
@@ -43,7 +43,6 @@ internal class DivActionBinder @Inject constructor(
     private val passToParentLongClickListener: (View) -> Boolean = View::performLongClickOnAncestors
 
     fun bindDivActions(
-        context: BindingContext,
         target: View,
         actions: List<DivAction>?,
         longTapActions: List<DivAction>?,
@@ -54,11 +53,11 @@ internal class DivActionBinder @Inject constructor(
         pressEndActions: List<DivAction>?,
         actionAnimation: DivAnimation,
         captureFocusOnAction: Expression<Boolean>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
-        val resolver = context.expressionResolver
         val onApply = {
             applyDivActions(
-                context = context,
                 target = target,
                 actions = actions.orEmpty(),
                 doubleTapActions = doubleTapActions.orEmpty(),
@@ -69,6 +68,8 @@ internal class DivActionBinder @Inject constructor(
                 pressEndActions = pressEndActions.orEmpty(),
                 actionAnimation = actionAnimation,
                 captureFocusOnAction = captureFocusOnAction,
+                resolver = resolver,
+                divView = divView,
             )
         }
         with(target) {
@@ -81,7 +82,6 @@ internal class DivActionBinder @Inject constructor(
     }
 
     private fun applyDivActions(
-        context: BindingContext,
         target: View,
         actions: List<DivAction>,
         longTapActions: List<DivAction>,
@@ -92,31 +92,35 @@ internal class DivActionBinder @Inject constructor(
         pressEndActions: List<DivAction>,
         actionAnimation: DivAnimation,
         captureFocusOnAction: Expression<Boolean>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         val divGestureListener = DivGestureListener(
             awaitLongClick = longTapActions.isNotEmpty() || target.parentIsLongClickable()
         )
-        bindLongTapActions(context, target, longTapActions, actions.isEmpty(), captureFocusOnAction)
-        bindDoubleTapActions(context, target, divGestureListener, doubleTapActions, captureFocusOnAction)
+        bindLongTapActions(target, longTapActions, actions.isEmpty(), captureFocusOnAction, resolver, divView)
+        bindDoubleTapActions(target, divGestureListener, doubleTapActions, captureFocusOnAction, resolver, divView)
         // Order is urgent: tap actions depend on double tap actions
         bindTapActions(
-            context,
             target,
             divGestureListener,
             actions,
+            resolver,
+            divView,
             shouldIgnoreActionMenuItems,
             captureFocusOnAction,
             hasNonSingleTapActions = longTapActions.isNotEmpty() || doubleTapActions.isNotEmpty(),
         )
 
         val animatedTouchListener = target.createAnimatedTouchListener(
-            context,
             actionAnimation.takeUnless { allIsNullOrEmpty(actions, longTapActions, doubleTapActions) },
-            divGestureListener
+            divGestureListener,
+            resolver,
+            divView,
         )
-        val pressTouchListener = createPressTouchListener(context, target, pressStartActions, pressEndActions)
+        val pressTouchListener = createPressTouchListener(target, pressStartActions, pressEndActions, resolver, divView)
 
-        bindHoverActions(context, target, hoverStartActions, hoverEndActions)
+        bindHoverActions(target, hoverStartActions, hoverEndActions, resolver, divView)
 
         target.attachTouchListeners(
             animatedTouchListener,
@@ -126,17 +130,15 @@ internal class DivActionBinder @Inject constructor(
     }
 
     private fun bindTapActions(
-        context: BindingContext,
         target: View,
         divGestureListener: DivGestureListener,
         actions: List<DivAction>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         shouldIgnoreActionMenuItems: Boolean,
         captureFocusOnAction: Expression<Boolean>,
         hasNonSingleTapActions: Boolean,
     ) {
-        val divView = context.divView
-        val resolver = context.expressionResolver
-
         if (actions.isEmpty()) {
             if (hasNonSingleTapActions) {
                 target.setTapListener(divGestureListener) {
@@ -155,12 +157,12 @@ internal class DivActionBinder @Inject constructor(
         } ?: run {
             target.setTapListener(divGestureListener) {
                 it.captureFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
-                actionPerformer.performBulkActions(context, target, actions)
+                actionPerformer.performBulkActions(target, actions, resolver, divView)
             }
             return
         }
 
-        prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
+        prepareMenu(target, menuAction, resolver, divView) { overflowMenuWrapper ->
             target.setTapListener(divGestureListener) {
                 logger.logClick(divView, resolver, target, menuAction)
                 // Move focus as early as possible cause actions processing may move it elsewhere.
@@ -187,19 +189,17 @@ internal class DivActionBinder @Inject constructor(
     }
 
     private fun bindLongTapActions(
-        context: BindingContext,
         target: View,
         actions: List<DivAction>,
         noClickAction: Boolean,
         captureFocusOnAction: Expression<Boolean>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         if (actions.isEmpty()) {
             clearLongClickListener(target, longtapActionsPassToChild, noClickAction)
             return
         }
-
-        val divView = context.divView
-        val resolver = context.expressionResolver
 
         if (longtapActionsPassToChild) {
             target.setPenetratingLongClickable()
@@ -210,13 +210,13 @@ internal class DivActionBinder @Inject constructor(
         } ?: run {
             target.setOnLongClickListener {
                 it.captureFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
-                actionPerformer.performBulkActions(context, target, actions, DivActionReason.LONG_CLICK)
+                actionPerformer.performBulkActions(target, actions, resolver, divView, DivActionReason.LONG_CLICK)
                 return@setOnLongClickListener true
             }
             return
         }
 
-        prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
+        prepareMenu(target, menuAction, resolver, divView) { overflowMenuWrapper ->
             target.setOnLongClickListener {
                 val uuid = UUID.randomUUID().toString()
                 // Move focus as early as possible cause actions processing may move it elsewhere.
@@ -253,30 +253,29 @@ internal class DivActionBinder @Inject constructor(
     }
 
     private fun bindDoubleTapActions(
-        context: BindingContext,
         target: View,
         divGestureListener: DivGestureListener,
         actions: List<DivAction>,
         captureFocusOnAction: Expression<Boolean>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         if (actions.isEmpty()) {
             divGestureListener.onDoubleTapListener = null
             return
         }
 
-        val divView = context.divView
-        val resolver = context.expressionResolver
         val menuAction = actions.firstOrNull { action ->
             !action.menuItems.isNullOrEmpty() && !shouldIgnoreActionMenuItems
         } ?: run {
             divGestureListener.onDoubleTapListener = {
                 target.captureFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
-                actionPerformer.performBulkActions(context, target, actions, DivActionReason.DOUBLE_CLICK)
+                actionPerformer.performBulkActions(target, actions, resolver, divView, DivActionReason.DOUBLE_CLICK)
             }
             return
         }
 
-        prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
+        prepareMenu(target, menuAction, resolver, divView) { overflowMenuWrapper ->
             divGestureListener.onDoubleTapListener = {
                 // Move focus as early as possible cause actions processing may move it elsewhere.
                 target.captureFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
@@ -288,10 +287,11 @@ internal class DivActionBinder @Inject constructor(
     }
 
     private fun bindHoverActions(
-        context: BindingContext,
         target: View,
         startActions: List<DivAction>,
-        endActions: List<DivAction>
+        endActions: List<DivAction>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         if (startActions.isEmpty() && endActions.isEmpty()) {
             target.setOnHoverListener(null)
@@ -301,31 +301,34 @@ internal class DivActionBinder @Inject constructor(
         target.setOnHoverListener { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_HOVER_ENTER ->
-                    actionPerformer.performBulkActions(context, target, startActions, DivActionReason.HOVER)
+                    actionPerformer.performBulkActions(target, startActions, resolver, divView, DivActionReason.HOVER)
 
                 MotionEvent.ACTION_HOVER_EXIT ->
-                    actionPerformer.performBulkActions(context, target, endActions, DivActionReason.UNHOVER)
+                    actionPerformer.performBulkActions(target, endActions, resolver, divView, DivActionReason.UNHOVER)
             }
             false
         }
     }
 
     private fun createPressTouchListener(
-        context: BindingContext,
         target: View,
         pressStartActions: List<DivAction>,
-        pressEndActions: List<DivAction>
+        pressEndActions: List<DivAction>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ): ((View, MotionEvent) -> Boolean)? {
         if (pressStartActions.isEmpty() && pressEndActions.isEmpty()) return null
 
         return { _, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    actionPerformer.performBulkActions(context, target, pressStartActions, DivActionReason.PRESS)
+                    actionPerformer
+                        .performBulkActions(target, pressStartActions, resolver, divView, DivActionReason.PRESS)
                     true
                 }
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    actionPerformer.performBulkActions(context, target, pressEndActions, DivActionReason.RELEASE)
+                    actionPerformer
+                        .performBulkActions(target, pressEndActions, resolver, divView, DivActionReason.RELEASE)
                     true
                 }
                 else -> false
@@ -348,17 +351,21 @@ internal class DivActionBinder @Inject constructor(
         }
     }
 
-    internal fun handleTapClick(context: BindingContext, target: View, actions: List<DivAction>) {
-        val resolver = context.expressionResolver
+    internal fun handleTapClick(
+        target: View,
+        actions: List<DivAction>,
+        resolver: ExpressionResolver,
+        divView: Div2View
+    ) {
         val menuAction = actions.firstOrNull { action ->
             action.isEnabled.evaluate(resolver) && !action.menuItems.isNullOrEmpty()
         } ?: run {
-            actionPerformer.performBulkActions(context, target, actions)
+            actionPerformer.performBulkActions(target, actions, resolver, divView)
             return
         }
 
-        prepareMenu(target, context, menuAction) { overflowMenuWrapper ->
-            logger.logClick(context.divView, resolver, target, menuAction)
+        prepareMenu(target, menuAction, resolver, divView) { overflowMenuWrapper ->
+            logger.logClick(divView, resolver, target, menuAction)
             divActionBeaconSender.sendTapActionBeacon(menuAction, resolver)
             overflowMenuWrapper.onMenuClickListener.onClick(target)
         }
@@ -366,8 +373,9 @@ internal class DivActionBinder @Inject constructor(
 
     private inline fun prepareMenu(
         target: View,
-        context: BindingContext,
         action: DivAction,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         onPrepared: (OverflowMenuWrapper) -> Unit
     ) {
         val menuItems = action.menuItems ?: run {
@@ -375,9 +383,8 @@ internal class DivActionBinder @Inject constructor(
             return
         }
 
-        val divView = context.divView
         val overflowMenuWrapper = OverflowMenuWrapper(target.context, target, divView)
-            .listener(MenuWrapperListener(context, menuItems))
+            .listener(MenuWrapperListener(menuItems, resolver, divView))
             .overflowGravity(Gravity.RIGHT or Gravity.TOP)
 
         divView.clearSubscriptions()
@@ -386,13 +393,12 @@ internal class DivActionBinder @Inject constructor(
     }
 
     private inner class MenuWrapperListener(
-        private val context: BindingContext,
-        private val items: List<DivAction.MenuItem>
+        private val items: List<DivAction.MenuItem>,
+        private val expressionResolver: ExpressionResolver,
+        private val divView: Div2View,
     ) : OverflowMenuWrapper.Listener.Simple() {
 
         override fun onMenuCreated(popupMenu: PopupMenu) {
-            val divView = context.divView
-            val expressionResolver = context.expressionResolver
             val menu = popupMenu.menu
             for (itemData in items) {
                 val itemPosition = menu.size

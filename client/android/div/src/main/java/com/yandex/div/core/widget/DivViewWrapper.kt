@@ -4,14 +4,14 @@ import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup.LayoutParams
 import androidx.core.view.isEmpty
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.internal.widget.TransientViewMixin
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 
 /**
@@ -33,7 +33,7 @@ internal open class DivViewWrapper @JvmOverloads constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             defaultFocusHighlightEnabled = false
         }
-        importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+        importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO
     }
 
     override fun addView(child: View?, index: Int, params: LayoutParams?) {
@@ -49,7 +49,7 @@ internal open class DivViewWrapper @JvmOverloads constructor(
 
     override fun getDivBorderDrawer(): DivBorderDrawer? = (child as? DivBorderSupports)?.getDivBorderDrawer()
 
-    override fun setBorder(bindingContext: BindingContext, border: DivBorder?, view: View) {
-        (child as? DivBorderSupports)?.setBorder(bindingContext, border, view)
+    override fun setBorder(border: DivBorder?, view: View, resolver: ExpressionResolver, divView: Div2View) {
+        (child as? DivBorderSupports)?.setBorder(border, view, resolver, divView)
     }
 }

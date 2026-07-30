@@ -5,11 +5,11 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.asImpl
-import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.core.VariableMutationHandler
+import com.yandex.div.json.expressions.ExpressionResolver
 import javax.inject.Inject
 
 @DivScope
@@ -56,14 +56,13 @@ internal abstract class TwoWayVariableBinder<T>(private val errorCollectors: Err
     }
 
     fun bindVariable(
-        bindingContext: BindingContext,
         variableName: String,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         callbacks: Callbacks<T>,
-        path: DivStatePath,
     ): Disposable {
-        val divView = bindingContext.divView
         val data = divView.divData ?: return Disposable.NULL
-        val resolver = bindingContext.expressionResolver.asImpl ?: return Disposable.NULL
+        val resolver = resolver.asImpl ?: return Disposable.NULL
 
         var pendingValue: T? = null
         val tag = divView.dataTag
@@ -71,12 +70,7 @@ internal abstract class TwoWayVariableBinder<T>(private val errorCollectors: Err
         callbacks.setViewStateChangeListener { value ->
             if (pendingValue == value) return@setViewStateChangeListener
             pendingValue = value
-            VariableMutationHandler.setVariable(
-                divView,
-                variableName,
-                value.toStringValue(),
-                bindingContext.expressionResolver
-            )
+            VariableMutationHandler.setVariable(divView, variableName, value.toStringValue(), resolver)
         }
 
         return resolver.variableController.subscribeToVariableChange(

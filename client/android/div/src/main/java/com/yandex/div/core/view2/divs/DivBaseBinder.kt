@@ -246,7 +246,13 @@ internal class DivBaseBinder @Inject constructor(
         context: BindingContext,
         newDiv: DivBase,
     ) {
-        divFocusBinder.bindDivBorder(this, context, newDiv.focus?.border, newDiv.border)
+        divFocusBinder.bindDivBorder(
+            this,
+            newDiv.focus?.border,
+            newDiv.border,
+            context.expressionResolver,
+            context.divView
+        )
     }
 
     //endregion
@@ -355,9 +361,7 @@ internal class DivBaseBinder @Inject constructor(
         context: BindingContext,
         onFocus: List<DivAction>?,
         onBlur: List<DivAction>?
-    ) {
-        divFocusBinder.bindDivFocusActions(this, context, onFocus, onBlur)
-    }
+    ) = divFocusBinder.bindDivFocusActions(this, onFocus, onBlur, context.expressionResolver, context.divView)
 
     //endregion
 

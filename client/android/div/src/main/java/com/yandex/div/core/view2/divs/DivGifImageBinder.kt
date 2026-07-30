@@ -233,10 +233,11 @@ internal class DivGifImageBinder @Inject constructor(
 
     fun loadGifImage(
         view: DivGifImageView,
-        bindingContext: BindingContext,
         div: DivGifImage,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         errorCollector: ErrorCollector,
-    ) = view.applyGifImage(bindingContext.divView, bindingContext.expressionResolver, div, errorCollector)
+    ) = view.applyGifImage(divView, resolver, div, errorCollector)
 
     @RequiresApi(Build.VERSION_CODES.P)
     class LoadDrawableOnPostPTask(

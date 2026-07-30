@@ -33,7 +33,7 @@ class DivContainerBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, div, rootPath())
 
-        assertActionApplied(bindingContext, view, Expected.ACTION_URI)
+        assertActionApplied(view, Expected.ACTION_URI, resolver, divView)
     }
 
     @Test
@@ -44,7 +44,7 @@ class DivContainerBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, div, rootPath())
 
-        assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
+        assertActionApplied(view, Expected.STATE_ACTION_URI, resolver, divView)
     }
 
     @Test

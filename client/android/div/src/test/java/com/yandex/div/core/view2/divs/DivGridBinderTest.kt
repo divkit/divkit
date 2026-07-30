@@ -24,7 +24,7 @@ class DivGridBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, divGrid, DivStatePath.parse("0"))
 
-        assertActionApplied(bindingContext, view, Expected.ACTION_URI)
+        assertActionApplied(view, Expected.ACTION_URI, resolver, divView)
     }
 
     @Test
@@ -33,7 +33,7 @@ class DivGridBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, divGrid, DivStatePath.parse("0"))
 
-        assertActionApplied(bindingContext, view, Expected.STATE_ACTION_URI)
+        assertActionApplied(view, Expected.STATE_ACTION_URI, resolver, divView)
     }
 
     private fun createTestData(filename: String): Pair<Div.Grid, DivGridLayout> {

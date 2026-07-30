@@ -2,7 +2,6 @@ package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionResolverImpl
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div2.DivData
@@ -60,8 +59,7 @@ class TwoWayVariableBinderTest {
     }
 
     init {
-        val bindingContext = BindingContext(divView, expressionResolver)
-        TwoWayStringVariableBinder(mock()).bindVariable(bindingContext, VARIABLE_NAME, callbacks, mock())
+        TwoWayStringVariableBinder(mock()).bindVariable(VARIABLE_NAME, expressionResolver, divView, callbacks)
     }
 
     @Test

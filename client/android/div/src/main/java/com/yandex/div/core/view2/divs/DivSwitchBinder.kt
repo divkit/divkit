@@ -4,6 +4,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayBooleanVariableBinder
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -29,7 +30,7 @@ internal class DivSwitchBinder @Inject constructor(
         bindIsEnabled(div, oldDiv, bindingContext.expressionResolver)
         bindOnColor(div, oldDiv, bindingContext.expressionResolver)
 
-        observeVariable(div, bindingContext, path)
+        observeVariable(div, bindingContext.expressionResolver, bindingContext.divView)
     }
 
     private fun DivSwitchView.bindIsEnabled(div: DivSwitch, oldDiv: DivSwitch?, resolver: ExpressionResolver) {
@@ -68,8 +69,8 @@ internal class DivSwitchBinder @Inject constructor(
 
     private fun DivSwitchView.observeVariable(
         div: DivSwitch,
-        bindingContext: BindingContext,
-        path: DivStatePath,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         val callbacks = object : TwoWayBooleanVariableBinder.Callbacks {
             override fun onVariableChanged(value: Boolean?) {
@@ -83,7 +84,7 @@ internal class DivSwitchBinder @Inject constructor(
             }
         }
 
-        val subscription = variableBinder.bindVariable(bindingContext, div.isOnVariable, callbacks, path)
+        val subscription = variableBinder.bindVariable(div.isOnVariable, resolver, divView, callbacks)
         addSubscription(subscription)
     }
 }

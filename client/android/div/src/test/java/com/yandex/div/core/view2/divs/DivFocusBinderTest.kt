@@ -4,7 +4,6 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.view.View
 import com.yandex.div.core.DivActionPerformer
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.json.expressions.Expression
@@ -58,7 +57,6 @@ class DivFocusBinderTest {
     }
     private val divView = mock<Div2View>()
     private val resolver = mock<ExpressionResolver>()
-    private val context = BindingContext(divView, resolver)
     private val defaultBorder = DivBorder(hasShadow = Expression.constant(true))
     private val focusActions = listOf(action(url = "focus"))
     private val blurActions = listOf(action(url = "blur"))
@@ -225,7 +223,7 @@ class DivFocusBinderTest {
 
         onFocusChange(true)
 
-        verify(view, never()).setBorder(any(), any(), eq(view))
+        verify(view, never()).setBorder(any(), eq(view), any(), any())
     }
 
     @Test
@@ -237,7 +235,7 @@ class DivFocusBinderTest {
 
         onFocusChange(false)
 
-        verify(view, never()).setBorder(any(), any(), eq(view))
+        verify(view, never()).setBorder(any(), eq(view), any(), any())
     }
 
     @Test
@@ -273,7 +271,7 @@ class DivFocusBinderTest {
     fun `not handle blur actions on focus`() {
         bindActions(focusActions, blurActions)
         onFocusChange(true)
-        verify(actionPerformer, never()).performBulkActions(any(), any(), eq(blurActions), any())
+        verify(actionPerformer, never()).performBulkActions(any(), eq(blurActions), any(), any(), any())
     }
 
     @Test
@@ -298,7 +296,7 @@ class DivFocusBinderTest {
 
         onFocusChange(true)
 
-        verify(actionPerformer, never()).performBulkActions(any(), any(), any(), any())
+        verify(actionPerformer, never()).performBulkActions(any(), any(), any(), any(), any())
     }
 
     @Test
@@ -309,7 +307,7 @@ class DivFocusBinderTest {
 
         onFocusChange(false)
 
-        verify(actionPerformer, never()).performBulkActions(any(), any(), any(), any())
+        verify(actionPerformer, never()).performBulkActions(any(), any(), any(), any(), any())
     }
 
     @Test
@@ -367,7 +365,7 @@ class DivFocusBinderTest {
         focusedBorder: DivBorder? = null,
         blurredBorder: DivBorder = defaultBorder,
         viewToBind: View = view
-    ) = underTest.bindDivBorder(viewToBind, context, focusedBorder, blurredBorder)
+    ) = underTest.bindDivBorder(viewToBind, focusedBorder, blurredBorder, resolver, divView)
 
     private fun setViewNotFocused() = whenever(view.isFocused).thenReturn(false)
 
@@ -381,14 +379,14 @@ class DivFocusBinderTest {
     private fun bindActions(
         onFocus: List<DivAction>? = focusActions,
         onBlur: List<DivAction>? = blurActions
-    ) = underTest.bindDivFocusActions(view, context, onFocus, onBlur)
+    ) = underTest.bindDivFocusActions(view, onFocus, onBlur, resolver, divView)
 
     private fun onFocusChange(hasFocus: Boolean) = focusListener?.onFocusChange(view, hasFocus)
 
     private fun verifyBorderSet(
         border: DivBorder = defaultBorder,
         mode: VerificationMode = times(1)
-    ) = verify(view, mode).setBorder(any(), eq(border), eq(view))
+    ) = verify(view, mode).setBorder(eq(border), eq(view), any(), any())
 
     private fun verifyNoElevation() = verifyElevation(0f)
 
@@ -397,5 +395,5 @@ class DivFocusBinderTest {
     }
 
     private fun verifyActionsHandled(actions: List<DivAction>, mode: VerificationMode = times(1)) =
-        verify(actionPerformer, mode).performBulkActions(any(), any(), eq(actions), any())
+        verify(actionPerformer, mode).performBulkActions(any(), eq(actions), any(), any(), any())
 }

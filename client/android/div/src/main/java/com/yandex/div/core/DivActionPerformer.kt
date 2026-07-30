@@ -4,7 +4,6 @@ import android.view.View
 import androidx.annotation.StringDef
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.DivActionBeaconSender
 import com.yandex.div.internal.Assert
@@ -21,26 +20,26 @@ internal class DivActionPerformer @Inject constructor(
 ) {
 
     fun performBulkActions(
-        context: BindingContext,
         target: View,
         actions: List<DivAction>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         @LogType actionLogType: String = DivActionReason.CLICK
     ) {
-        context.divView.bulkActions {
+        divView.bulkActions {
             val uuid = UUID.randomUUID().toString()
-            actions.forEach { performActionWithLogging(context, target, it, actionLogType, uuid) }
+            actions.forEach { performActionWithLogging(target, it, resolver, divView, actionLogType, uuid) }
         }
     }
 
     private fun performActionWithLogging(
-        context: BindingContext,
         target: View,
         action: DivAction,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         @LogType actionLogType: String,
         uuid: String,
     ) {
-        val divView = context.divView
-        val resolver = context.expressionResolver
         if (!action.isEnabled.evaluate(resolver)) return
 
         when(actionLogType) {

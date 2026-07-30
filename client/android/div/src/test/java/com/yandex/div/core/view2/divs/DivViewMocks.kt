@@ -39,7 +39,7 @@ internal fun divView(
 
     val actionBinder = mock<DivActionBinder> {
         on { bindDivActions(any(), any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
-            anyOrNull(), any(), any()) }.thenCallRealMethod()
+            anyOrNull(), any(), any(), any()) }.thenCallRealMethod()
     }
 
     val component = mock<Div2Component>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {

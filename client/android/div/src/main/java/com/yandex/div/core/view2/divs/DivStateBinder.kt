@@ -135,7 +135,7 @@ internal class DivStateBinder @Inject constructor(
 
         val resolver = context.expressionResolver
         fixAlignment(div, oldDiv, resolver)
-        observeStateIdVariable(div, context, path)
+        observeStateIdVariable(div, resolver, context.divView, path)
         bindClipChildren(div.clipToBounds, oldDiv?.clipToBounds, resolver)
         swipeOutCallback = newState.swipeOutActions?.let {
             { actionPerformer.performSwipeOutActions(context.divView, resolver, this, it) }
@@ -306,27 +306,28 @@ internal class DivStateBinder @Inject constructor(
 
     private fun DivStateLayout.observeStateIdVariable(
         div: DivState,
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         divStatePath: DivStatePath,
     ) {
         val stateIdVariable = div.stateIdVariable ?: return
 
         val subscription = variableBinder.bindVariable(
-            bindingContext,
             stateIdVariable,
+            resolver,
+            divView,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
                 override fun onVariableChanged(value: String?) {
                     if (value == null || stateId == null || value == stateId) return
                     val state = div.states.find { it.stateId == value }
                     val newDivStatePath = divStatePath.append(div.getId(), state, value)
-                    bindingContext.divView.switchToState(newDivStatePath, true)
+                    divView.switchToState(newDivStatePath, true)
                 }
 
                 override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
-                    stateManager.bindVariable(bindingContext.divView.dataTag.id, divStatePath, valueUpdater)
+                    stateManager.bindVariable(divView.dataTag.id, divStatePath, valueUpdater)
                 }
             },
-            path = divStatePath
         )
         addSubscription(subscription)
     }

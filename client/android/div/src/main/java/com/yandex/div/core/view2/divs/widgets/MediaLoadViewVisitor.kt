@@ -32,7 +32,7 @@ internal class MediaLoadViewVisitor @Inject constructor(
         val div = view.div?.value ?: return
         val divView = bindingContext.divView
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        imageBinder.loadImage(view, bindingContext, div, errorCollector)
+        imageBinder.loadImage(view, div, bindingContext.expressionResolver, divView, errorCollector)
         extensionController.loadMedia(divView, bindingContext.expressionResolver, view, div)
     }
 
@@ -41,15 +41,14 @@ internal class MediaLoadViewVisitor @Inject constructor(
         val div = view.div?.value ?: return
         val divView = bindingContext.divView
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        gifImageBinder.loadGifImage(view, bindingContext, div, errorCollector)
+        gifImageBinder.loadGifImage(view, div, bindingContext.expressionResolver, divView, errorCollector)
         extensionController.loadMedia(divView, bindingContext.expressionResolver, view, div)
     }
 
     override fun visit(view: DivVideoView) {
         val bindingContext = view.bindingContext ?: return
         val div = view.div?.value ?: return
-        val path = view.path ?: return
-        videoBinder.loadVideo(view, bindingContext, div, path)
+        videoBinder.loadVideo(view, div, bindingContext.expressionResolver, bindingContext.divView)
         extensionController.loadMedia(bindingContext.divView, bindingContext.expressionResolver, view, div)
     }
 

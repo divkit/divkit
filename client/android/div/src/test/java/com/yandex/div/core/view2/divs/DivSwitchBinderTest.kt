@@ -37,7 +37,7 @@ class DivSwitchBinderTest : DivBinderTest() {
         val (divSwitch, view) = createDivAndView(SWITCH_WITH_ON_COLOR)
         underTest.bindView(bindingContext, view, divSwitch, path)
 
-        verify(variableBinder).bindVariable(any(), eq(divSwitch.value.isOnVariable), any(), any())
+        verify(variableBinder).bindVariable(eq(divSwitch.value.isOnVariable), any(), any(), any())
         verifyNoMoreInteractions(variableBinder)
     }
 
@@ -45,7 +45,7 @@ class DivSwitchBinderTest : DivBinderTest() {
     fun `update isChecked after variable changed`() {
         val (divSwitch, view) = createDivAndView(SWITCH_WITH_ON_COLOR)
         underTest.bindView(bindingContext, view, divSwitch, path)
-        verify(variableBinder).bindVariable(any(), any(), captor.capture(), any())
+        verify(variableBinder).bindVariable(any(), any(), any(), captor.capture())
 
         val checked = true
         view.assertCheckedApplied(checked) {
@@ -62,7 +62,7 @@ class DivSwitchBinderTest : DivBinderTest() {
         val viewStateChangeListener = mock<(Boolean) -> Unit>()
 
         underTest.bindView(bindingContext, view, divSwitch, path)
-        verify(variableBinder).bindVariable(any(), any(), captor.capture(), any())
+        verify(variableBinder).bindVariable(any(), any(), any(), captor.capture())
 
         val checked = true
 

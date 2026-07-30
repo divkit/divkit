@@ -33,7 +33,7 @@ open class DivBinderTest {
 
     internal val actionBinder = mock<DivActionBinder> {
         on { bindDivActions(any(), any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(),
-            anyOrNull(), any(), any()) }.thenCallRealMethod()
+            anyOrNull(), any(), any(), any()) }.thenCallRealMethod()
     }
     internal val actionPerformer = mock<DivActionPerformer>()
     private val mockComponent = mock<Div2Component>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {
