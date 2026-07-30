@@ -265,7 +265,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
             }
         }
 
-        val compositeLogId = compositeLogIdOf(scope, action.logId.evaluate(resolver))
+        val compositeLogId = compositeLogIdOf(scope, action.logId?.evaluate(resolver))
         // We are using the original instance of compositeLogId that was placed in 'trackedActionIds' previously
         // so that it can pass reference equality check in handler message queue
         val originalLogId = trackedTokens.getLogId(compositeLogId)
@@ -290,7 +290,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         trackedTokens: DivVisibilityTokenHolder
     ) {
         val logIds = actions.associateTo(HashMap(actions.size, 1f)) { action ->
-            val compositeLogId = compositeLogIdOf(scope, action.logId.evaluate(resolver))
+            val compositeLogId = compositeLogIdOf(scope, action.logId?.evaluate(resolver))
             KLog.i(TAG) { "startTracking: id=$compositeLogId" }
             return@associateTo compositeLogId to action
         }.let { Collections.synchronizedMap(it) }

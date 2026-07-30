@@ -7,7 +7,7 @@ import com.yandex.div2.DivVisibilityAction
 
 fun visibilityAction(
     delayMs: Long = 800,
-    id: String = "test",
+    id: String? = null,
     isEnabled: Boolean = true,
     limit: Int = 1,
     percentage: Int = 50,
@@ -16,7 +16,7 @@ fun visibilityAction(
 ): DivVisibilityAction {
     return DivVisibilityAction(
         isEnabled = constant(isEnabled),
-        logId = constant(id),
+        logId = id?.let { constant(it) },
         logLimit = constant(limit.toLong()),
         typed = typed,
         url = url?.let { constant(it.toUri()) },
@@ -27,7 +27,7 @@ fun visibilityAction(
 
 fun disappearAction(
     delayMs: Long = 800,
-    id: String = "test",
+    id: String? = null,
     isEnabled: Boolean = true,
     limit: Int = 1,
     percentage: Int = 0,
@@ -37,7 +37,7 @@ fun disappearAction(
     return DivDisappearAction(
         disappearDuration = constant(delayMs),
         isEnabled = constant(isEnabled),
-        logId = constant(id),
+        logId = id?.let { constant(it) },
         logLimit = constant(limit.toLong()),
         typed = typed,
         url = url?.let { constant(it.toUri()) },

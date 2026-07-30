@@ -8,7 +8,7 @@ public final class DivDisappearAction: DivSightAction, @unchecked Sendable {
   public let disappearDuration: Expression<Int> // constraint: number >= 0; default value: 800
   public let downloadCallbacks: DivDownloadCallbacks?
   public let isEnabled: Expression<Bool> // default value: true
-  public let logId: Expression<String>
+  public let logId: Expression<String>?
   public let logLimit: Expression<Int> // constraint: number >= 0; default value: 1
   public let payload: [String: Any]?
   public let referer: Expression<URL>?
@@ -63,7 +63,7 @@ public final class DivDisappearAction: DivSightAction, @unchecked Sendable {
       disappearDuration: try dictionary.getOptionalExpressionField("disappear_duration", validator: Self.disappearDurationValidator, context: context),
       downloadCallbacks: try dictionary.getOptionalField("download_callbacks", transform: { (dict: [String: Any]) in try DivDownloadCallbacks(dictionary: dict, context: context) }),
       isEnabled: try dictionary.getOptionalExpressionField("is_enabled", context: context),
-      logId: try dictionary.getExpressionField("log_id", context: context),
+      logId: try dictionary.getOptionalExpressionField("log_id", context: context),
       logLimit: try dictionary.getOptionalExpressionField("log_limit", validator: Self.logLimitValidator, context: context),
       payload: try dictionary.getOptionalField("payload", context: context),
       referer: try dictionary.getOptionalExpressionField("referer", transform: URL.makeFromNonEncodedString, context: context),
@@ -78,7 +78,7 @@ public final class DivDisappearAction: DivSightAction, @unchecked Sendable {
     disappearDuration: Expression<Int>? = nil,
     downloadCallbacks: DivDownloadCallbacks? = nil,
     isEnabled: Expression<Bool>? = nil,
-    logId: Expression<String>,
+    logId: Expression<String>? = nil,
     logLimit: Expression<Int>? = nil,
     payload: [String: Any]? = nil,
     referer: Expression<URL>? = nil,
@@ -143,7 +143,7 @@ extension DivDisappearAction: Serializable {
     result["disappear_duration"] = disappearDuration.toValidSerializationValue()
     result["download_callbacks"] = downloadCallbacks?.toDictionary()
     result["is_enabled"] = isEnabled.toValidSerializationValue()
-    result["log_id"] = logId.toValidSerializationValue()
+    result["log_id"] = logId?.toValidSerializationValue()
     result["log_limit"] = logLimit.toValidSerializationValue()
     result["payload"] = payload
     result["referer"] = referer?.toValidSerializationValue()

@@ -108,7 +108,7 @@ internal class DivActionHandler @Inject constructor(
             externalActionHandler.handle(
                 context = context,
                 action = DivActionData(
-                    id = action.logId.evaluate(expressionResolver),
+                    id = action.logId?.evaluate(expressionResolver),
                     payload = action.payload,
                     source = action.source,
                     url = url
@@ -142,7 +142,7 @@ internal class DivActionHandler @Inject constructor(
                 externalActionHandler.handleCustomAction(
                     context = context,
                     action = DivCustomActionData(
-                        id = baseAction.logId.evaluate(context.expressionResolver),
+                        id = baseAction.logId?.evaluate(context.expressionResolver),
                         payload = baseAction.payload,
                         source = baseAction.source
                     )
@@ -221,7 +221,7 @@ internal class DivActionHandler @Inject constructor(
 
 private class DivActionBase(
     val isEnabled: Expression<Boolean>,
-    val logId: Expression<String>,
+    val logId: Expression<String>?,
     val payload: JSONObject?,
     val source: DivActionSource,
     val typed: DivActionTyped?,

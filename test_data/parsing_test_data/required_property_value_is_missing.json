@@ -1,5 +1,5 @@
 {
-  "description": "Object with missing required property (div-action.log_id) is ignored",
+  "description": "Object with missing required property (div-div_trigger.condition) is ignored",
   "platforms": [
     "android",
     "ios"
@@ -9,16 +9,20 @@
   },
   "card": {
     "log_id": "test",
+    "variable_triggers": [
+      {
+        "actions": [
+          {
+            "url": "action://invalid_trigger"
+          }
+        ]
+      }
+    ],
     "states": [
       {
         "state_id": 0,
         "div": {
-          "type": "separator",
-          "actions": [
-            {
-              "url": "https://some.url"
-            }
-          ]
+          "type": "separator"
         }
       }
     ]
@@ -27,12 +31,12 @@
     "error_count": 1,
     "card": {
       "log_id": "test",
+      "variable_triggers": [],
       "states": [
         {
           "state_id": 0,
           "div": {
-            "type": "separator",
-            "actions": []
+            "type": "separator"
           }
         }
       ]

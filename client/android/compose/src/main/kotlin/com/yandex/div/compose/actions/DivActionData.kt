@@ -9,7 +9,7 @@ import org.json.JSONObject
  */
 @ExperimentalApi
 data class DivActionData internal constructor(
-    val id: String,
+    val id: String?,
     val payload: JSONObject?,
     val source: DivActionSource,
     val url: Uri?

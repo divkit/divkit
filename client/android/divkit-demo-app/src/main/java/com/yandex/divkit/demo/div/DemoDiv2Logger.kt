@@ -42,28 +42,28 @@ class DemoDiv2Logger(
     }
 
     override fun logClick(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction) {
-        val actionLogId = action.logId.evaluate(resolver)
+        val actionLogId = action.logId?.evaluate(resolver)
         log {
             "logClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
     override fun logLongClick(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction) {
-        val actionLogId = action.logId.evaluate(resolver)
+        val actionLogId = action.logId?.evaluate(resolver)
         log {
             "logLongClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
     override fun logDoubleClick(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction) {
-        val actionLogId = action.logId.evaluate(resolver)
+        val actionLogId = action.logId?.evaluate(resolver)
         log {
             "logDoubleClick(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }
 
     override fun logFocusChanged(divView: Div2View, resolver: ExpressionResolver, view: View, action: DivAction, haveFocus: Boolean) {
-        val actionLogId = action.logId.evaluate(resolver)
+        val actionLogId = action.logId?.evaluate(resolver)
         log {
             "logFocusChanged(cardId = ${divView.logId}, id = $actionLogId, haveFocus = $haveFocus)"
         }
@@ -76,7 +76,7 @@ class DemoDiv2Logger(
         action: DivAction,
         isHovered: Boolean
     ) {
-        val actionLogId = action.logId.evaluate(resolver)
+        val actionLogId = action.logId?.evaluate(resolver)
         log {
             "logHoverChanged(cardId = ${divView.logId}, id = $actionLogId, isHovered = $isHovered)"
         }
@@ -89,7 +89,7 @@ class DemoDiv2Logger(
         action: DivAction,
         isPressed: Boolean
     ) {
-        val actionLogId = action.logId.evaluate(resolver)
+        val actionLogId = action.logId?.evaluate(resolver)
         log {
             "logPressChanged(cardId = ${divView.logId}, id = $actionLogId, isPressed = $isPressed)"
         }
@@ -144,7 +144,7 @@ class DemoDiv2Logger(
         view: View,
         action: DivVisibilityAction,
     ) {
-        val actionLogId = action.logId.evaluate(resolver)
+        val actionLogId = action.logId?.evaluate(resolver)
         log {
             "logViewShown(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(resolver)}), referer = ${action.referer?.evaluate(resolver)})"
         }
@@ -159,14 +159,14 @@ class DemoDiv2Logger(
         view: View,
         action: DivDisappearAction,
     ) {
-        val actionLogId = action.logId.evaluate(resolver)
+        val actionLogId = action.logId?.evaluate(resolver)
         log {
             "logViewDisappeared(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(resolver)}), referer = ${action.referer?.evaluate(resolver)})"
         }
     }
 
     override fun logTrigger(divView: Div2View, action: DivAction) {
-        val actionLogId = action.logId.evaluate(divView.expressionResolver)
+        val actionLogId = action.logId?.evaluate(divView.expressionResolver)
         log {
             "logTrigger(cardId = ${divView.logId}, id = $actionLogId)"
         }
@@ -212,7 +212,7 @@ class DemoDiv2Logger(
         action: DivAction
     ) {
         log {
-            val actionLogId = action.logId.evaluate(divView.expressionResolver)
+            val actionLogId = action.logId?.evaluate(divView.expressionResolver)
             "logImeEnter(cardId = ${divView.logId}, id = $actionLogId)"
         }
     }

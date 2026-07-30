@@ -190,7 +190,7 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivActionTemplate?) -> DeserializationResult<DivAction> {
     let downloadCallbacksValue = { parent?.downloadCallbacks?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let isEnabledValue = { parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue }()
-    let logIdValue = { parent?.logId?.resolveValue(context: context) ?? .noValue }()
+    let logIdValue = { parent?.logId?.resolveOptionalValue(context: context) ?? .noValue }()
     let logUrlValue = { parent?.logUrl?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let menuItemsValue = { parent?.menuItems?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let payloadValue = { parent?.payload?.resolveOptionalValue(context: context) ?? .noValue }()
@@ -198,7 +198,7 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
     let scopeIdValue = { parent?.scopeId?.resolveOptionalValue(context: context) ?? .noValue }()
     let typedValue = { parent?.typed?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(field: "download_callbacks", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
@@ -210,18 +210,10 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
       typedValue.errorsOrWarnings?.map { .nestedObjectError(field: "typed", error: $0) },
       urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) }
     )
-    if case .noValue = logIdValue {
-      errors.append(.requiredFieldIsMissing(field: "log_id"))
-    }
-    guard
-      let logIdNonNil = logIdValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivAction(
       downloadCallbacks: { downloadCallbacksValue.value }(),
       isEnabled: { isEnabledValue.value }(),
-      logId: { logIdNonNil }(),
+      logId: { logIdValue.value }(),
       logUrl: { logUrlValue.value }(),
       menuItems: { menuItemsValue.value }(),
       payload: { payloadValue.value }(),
@@ -359,7 +351,7 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
       _ = { menuItemsValue = menuItemsValue.merged(with: { parent.menuItems?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { typedValue = typedValue.merged(with: { parent.typed?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(field: "download_callbacks", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
@@ -371,18 +363,10 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
       typedValue.errorsOrWarnings?.map { .nestedObjectError(field: "typed", error: $0) },
       urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) }
     )
-    if case .noValue = logIdValue {
-      errors.append(.requiredFieldIsMissing(field: "log_id"))
-    }
-    guard
-      let logIdNonNil = logIdValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivAction(
       downloadCallbacks: { downloadCallbacksValue.value }(),
       isEnabled: { isEnabledValue.value }(),
-      logId: { logIdNonNil }(),
+      logId: { logIdValue.value }(),
       logUrl: { logUrlValue.value }(),
       menuItems: { menuItemsValue.value }(),
       payload: { payloadValue.value }(),

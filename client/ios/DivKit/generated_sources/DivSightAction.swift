@@ -7,7 +7,7 @@ import VGSL
 public protocol DivSightAction {
   var downloadCallbacks: DivDownloadCallbacks? { get }
   var isEnabled: Expression<Bool> { get } // default value: true
-  var logId: Expression<String> { get }
+  var logId: Expression<String>? { get }
   var logLimit: Expression<Int> { get } // constraint: number >= 0; default value: 1
   var payload: [String: Any]? { get }
   var referer: Expression<URL>? { get }

@@ -62,7 +62,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivVisibilityActionTemplate?) -> DeserializationResult<DivVisibilityAction> {
     let downloadCallbacksValue = { parent?.downloadCallbacks?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let isEnabledValue = { parent?.isEnabled?.resolveOptionalValue(context: context) ?? .noValue }()
-    let logIdValue = { parent?.logId?.resolveValue(context: context) ?? .noValue }()
+    let logIdValue = { parent?.logId?.resolveOptionalValue(context: context) ?? .noValue }()
     let logLimitValue = { parent?.logLimit?.resolveOptionalValue(context: context, validator: ResolvedValue.logLimitValidator) ?? .noValue }()
     let payloadValue = { parent?.payload?.resolveOptionalValue(context: context) ?? .noValue }()
     let refererValue = { parent?.referer?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
@@ -71,7 +71,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
     let urlValue = { parent?.url?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let visibilityDurationValue = { parent?.visibilityDuration?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityDurationValidator) ?? .noValue }()
     let visibilityPercentageValue = { parent?.visibilityPercentage?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityPercentageValidator) ?? .noValue }()
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(field: "download_callbacks", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
@@ -84,18 +84,10 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
       visibilityDurationValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_duration", error: $0) },
       visibilityPercentageValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_percentage", error: $0) }
     )
-    if case .noValue = logIdValue {
-      errors.append(.requiredFieldIsMissing(field: "log_id"))
-    }
-    guard
-      let logIdNonNil = logIdValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivVisibilityAction(
       downloadCallbacks: { downloadCallbacksValue.value }(),
       isEnabled: { isEnabledValue.value }(),
-      logId: { logIdNonNil }(),
+      logId: { logIdValue.value }(),
       logLimit: { logLimitValue.value }(),
       payload: { payloadValue.value }(),
       referer: { refererValue.value }(),
@@ -244,7 +236,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
       _ = { downloadCallbacksValue = downloadCallbacksValue.merged(with: { parent.downloadCallbacks?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { typedValue = typedValue.merged(with: { parent.typed?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(field: "download_callbacks", error: $0) },
       isEnabledValue.errorsOrWarnings?.map { .nestedObjectError(field: "is_enabled", error: $0) },
       logIdValue.errorsOrWarnings?.map { .nestedObjectError(field: "log_id", error: $0) },
@@ -257,18 +249,10 @@ public final class DivVisibilityActionTemplate: TemplateValue, @unchecked Sendab
       visibilityDurationValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_duration", error: $0) },
       visibilityPercentageValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_percentage", error: $0) }
     )
-    if case .noValue = logIdValue {
-      errors.append(.requiredFieldIsMissing(field: "log_id"))
-    }
-    guard
-      let logIdNonNil = logIdValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivVisibilityAction(
       downloadCallbacks: { downloadCallbacksValue.value }(),
       isEnabled: { isEnabledValue.value }(),
-      logId: { logIdNonNil }(),
+      logId: { logIdValue.value }(),
       logLimit: { logLimitValue.value }(),
       payload: { payloadValue.value }(),
       referer: { refererValue.value }(),

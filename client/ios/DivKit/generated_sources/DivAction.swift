@@ -35,7 +35,7 @@ public final class DivAction: @unchecked Sendable {
 
   public let downloadCallbacks: DivDownloadCallbacks?
   public let isEnabled: Expression<Bool> // default value: true
-  public let logId: Expression<String>
+  public let logId: Expression<String>?
   public let logUrl: Expression<URL>?
   public let menuItems: [MenuItem]?
   public let payload: [String: Any]?
@@ -72,7 +72,7 @@ public final class DivAction: @unchecked Sendable {
     self.init(
       downloadCallbacks: try dictionary.getOptionalField("download_callbacks", transform: { (dict: [String: Any]) in try DivDownloadCallbacks(dictionary: dict, context: context) }),
       isEnabled: try dictionary.getOptionalExpressionField("is_enabled", context: context),
-      logId: try dictionary.getExpressionField("log_id", context: context),
+      logId: try dictionary.getOptionalExpressionField("log_id", context: context),
       logUrl: try dictionary.getOptionalExpressionField("log_url", transform: URL.makeFromNonEncodedString, context: context),
       menuItems: try dictionary.getOptionalArray("menu_items", transform: { (dict: [String: Any]) in try? DivAction.MenuItem(dictionary: dict, context: context) }),
       payload: try dictionary.getOptionalField("payload", context: context),
@@ -86,7 +86,7 @@ public final class DivAction: @unchecked Sendable {
   init(
     downloadCallbacks: DivDownloadCallbacks? = nil,
     isEnabled: Expression<Bool>? = nil,
-    logId: Expression<String>,
+    logId: Expression<String>? = nil,
     logUrl: Expression<URL>? = nil,
     menuItems: [MenuItem]? = nil,
     payload: [String: Any]? = nil,
@@ -144,7 +144,7 @@ extension DivAction: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["download_callbacks"] = downloadCallbacks?.toDictionary()
     result["is_enabled"] = isEnabled.toValidSerializationValue()
-    result["log_id"] = logId.toValidSerializationValue()
+    result["log_id"] = logId?.toValidSerializationValue()
     result["log_url"] = logUrl?.toValidSerializationValue()
     result["menu_items"] = menuItems?.map { $0.toDictionary() }
     result["payload"] = payload

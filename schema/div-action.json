@@ -60,10 +60,7 @@
           },
           "code_generation_disabled_swift": true
         }
-      },
-      "required": [
-        "log_id"
-      ]
+      }
     }
   ]
 }

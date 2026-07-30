@@ -20,7 +20,7 @@ import com.yandex.div2.DivTypedValue
 import org.json.JSONObject
 
 fun action(
-    id: String = "test",
+    id: String? = null,
     isEnabled: Boolean = true,
     menuItems: List<DivAction.MenuItem>? = null,
     payload: JSONObject? = null,
@@ -29,7 +29,7 @@ fun action(
 ): DivAction {
     return DivAction(
         isEnabled = constant(isEnabled),
-        logId = constant(id),
+        logId = id?.let { constant(it) },
         menuItems = menuItems,
         payload = payload,
         typed = typed,

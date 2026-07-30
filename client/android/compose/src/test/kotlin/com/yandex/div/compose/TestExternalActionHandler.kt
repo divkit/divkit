@@ -53,7 +53,7 @@ class TestExternalActionHandler : DivExternalActionHandler {
 }
 
 fun actionData(
-    id: String = "test",
+    id: String? = null,
     payload: JSONObject? = null,
     source: DivActionSource = DivActionSource.TAP,
     url: String? = null

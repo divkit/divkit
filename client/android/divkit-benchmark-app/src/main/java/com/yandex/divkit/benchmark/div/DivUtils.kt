@@ -27,18 +27,13 @@ import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivData
 import com.yandex.divkit.benchmark.Container
 import com.yandex.divkit.benchmark.R
-import com.yandex.divkit.regression.ScenarioLogDelegate
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import org.json.JSONObject
 
-fun divConfiguration(
-    activity: Activity,
-    logDelegate: ScenarioLogDelegate = ScenarioLogDelegate.Stub
-): DivConfiguration.Builder {
+fun divConfiguration(activity: Activity): DivConfiguration.Builder {
     return DivConfiguration.Builder(Container.imageLoader)
         .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity))
-        .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
         .enableAccessibility(true)
         .enableLongtapActionsPassingToChild()

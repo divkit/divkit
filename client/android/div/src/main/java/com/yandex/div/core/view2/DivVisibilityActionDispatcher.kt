@@ -39,7 +39,7 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
     }
 
     fun dispatchAction(scope: Div2View, resolver: ExpressionResolver, view: View, action: DivSightAction) {
-        val compositeLogId = compositeLogIdOf(scope, action.logId.evaluate(resolver))
+        val compositeLogId = compositeLogIdOf(scope, action.logId?.evaluate(resolver))
         val counter = countersFor(action).getOrPut(compositeLogId) { 0 }
         KLog.i(TAG) { "visibility action dispatched: id=$compositeLogId, counter=$counter" }
 

@@ -6,7 +6,7 @@ import VGSL
 
 public func divAction(
   isEnabled: Bool = true,
-  logId: String = "test",
+  logId: String? = nil,
   payload: [String: Any]? = nil,
   scopeId: String? = nil,
   typed: DivActionTyped? = nil,
@@ -22,7 +22,7 @@ public func divAction(
   }
   return DivAction(
     isEnabled: .value(isEnabled),
-    logId: .value(logId),
+    logId: logId.map { .value($0) },
     payload: payload,
     scopeId: scopeId.map { .value($0) },
     typed: typed,
