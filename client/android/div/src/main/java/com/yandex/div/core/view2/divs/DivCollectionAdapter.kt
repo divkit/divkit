@@ -5,11 +5,11 @@ import androidx.recyclerview.widget.ListUpdateCallback
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.state.DivPathUtils.getItemIds
 import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 
 internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     private val bindingContext: BindingContext,
-    items: List<DivItemBuilderResult>,
+    items: List<DivBlock>,
 ) : VisibilityAwareAdapter<VH>(items) {
 
     private var ids = items.getItemIds()
@@ -29,7 +29,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
         holder.updateState()
     }
 
-    open fun setItems(newItems: List<DivItemBuilderResult>) {
+    open fun setItems(newItems: List<DivBlock>) {
         val diffUtilCallback = DiffUtilCallback(items, newItems)
         val updateCallback = UpdateCallBack(newItems)
         DiffUtil.calculateDiff(diffUtilCallback).dispatchUpdatesTo(updateCallback)
@@ -42,8 +42,8 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     }
 
     private class DiffUtilCallback(
-        private val oldItems: List<DivItemBuilderResult>,
-        private val newItems: List<DivItemBuilderResult>,
+        private val oldItems: List<DivBlock>,
+        private val newItems: List<DivBlock>,
     ) : DiffUtil.Callback() {
 
         override fun getOldListSize() = oldItems.size
@@ -67,7 +67,7 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
             areContentsTheSame(oldItems.getOrNull(oldItemPosition), newItems.getOrNull(newItemPosition))
 
-        private fun areContentsTheSame(oldItem: DivItemBuilderResult?, newItem: DivItemBuilderResult?): Boolean {
+        private fun areContentsTheSame(oldItem: DivBlock?, newItem: DivBlock?): Boolean {
             if (oldItem == null || newItem == null) {
                 return oldItem == newItem
             }
@@ -80,12 +80,12 @@ internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
             }
         }
 
-        private fun DivItemBuilderResult.suppressMissingVariableException(suppress: Boolean) {
+        private fun DivBlock.suppressMissingVariableException(suppress: Boolean) {
             expressionResolver.asImpl?.suppressMissingVariableException = suppress
         }
     }
 
-    private inner class UpdateCallBack(private val newItems: List<DivItemBuilderResult>) : ListUpdateCallback {
+    private inner class UpdateCallBack(private val newItems: List<DivBlock>) : ListUpdateCallback {
 
         override fun onInserted(position: Int, count: Int) {
             val newItemPosition = if (position + count > newItems.size) newItems.size - count else position

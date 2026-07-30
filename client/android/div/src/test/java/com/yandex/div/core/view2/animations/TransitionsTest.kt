@@ -2,7 +2,7 @@ package com.yandex.div.core.view2.animations
 
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.data.DivParsingEnvironment
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -84,7 +84,7 @@ class TransitionsTest {
         assertNull(result)
     }
 
-    private val textWithId: DivItemBuilderResult
+    private val textWithId: DivBlock
         get() = parse("""{"type":"text","text":"x","id":"child"}""").item()
 
     private fun changeBounds(durationMs: Long): DivChangeTransition {
@@ -93,7 +93,7 @@ class TransitionsTest {
             .value().transitionChange!!
     }
 
-    private fun Div.item() = DivItemBuilderResult(this, ExpressionResolver.EMPTY, DivStatePath.fromState(0))
+    private fun Div.item() = DivBlock(this, ExpressionResolver.EMPTY, DivStatePath.fromState(0))
 
     private fun parse(json: String): Div {
         val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)

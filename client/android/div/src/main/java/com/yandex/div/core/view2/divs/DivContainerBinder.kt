@@ -36,7 +36,7 @@ import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.wraplayout.WrapDirection
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
@@ -183,8 +183,8 @@ internal class DivContainerBinder @Inject constructor(
         context: BindingContext,
         div: DivContainer,
         oldDiv: DivContainer?,
-        items: List<DivItemBuilderResult>,
-        oldItems: List<DivItemBuilderResult>?,
+        items: List<DivBlock>,
+        oldItems: List<DivBlock>?,
         errorCollector: ErrorCollector,
     ) {
         tryRebindPlainContainerChildren(context.divView, items, divViewCreator)
@@ -196,8 +196,8 @@ internal class DivContainerBinder @Inject constructor(
         bindingContext: BindingContext,
         div: DivContainer,
         oldDiv: DivContainer?,
-        items: List<DivItemBuilderResult>,
-        oldItems: List<DivItemBuilderResult>?,
+        items: List<DivBlock>,
+        oldItems: List<DivBlock>?,
     ) {
         items.forEachIndexed { index, item ->
             getChildAt(index).bindChild(bindingContext, item, div, oldDiv)
@@ -208,7 +208,7 @@ internal class DivContainerBinder @Inject constructor(
 
     private fun ViewGroup.validateChildren(
         div: DivContainer,
-        items: List<DivItemBuilderResult>,
+        items: List<DivBlock>,
         resolver: ExpressionResolver,
         errorCollector: ErrorCollector
     ) {
@@ -224,7 +224,7 @@ internal class DivContainerBinder @Inject constructor(
 
     private fun View.bindChild(
         parentContext: BindingContext,
-        child: DivItemBuilderResult,
+        child: DivBlock,
         parentDiv: DivContainer,
         oldParentDiv: DivContainer?,
     ) {

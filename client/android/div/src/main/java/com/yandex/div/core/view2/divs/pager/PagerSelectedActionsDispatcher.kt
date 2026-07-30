@@ -7,7 +7,7 @@ import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivPager
 
 private const val TAG = "Ya:PagerSelectedActionsTracker"
@@ -17,7 +17,7 @@ private const val TAG = "Ya:PagerSelectedActionsTracker"
  */
 internal class PagerSelectedActionsDispatcher(
     private val divView: Div2View,
-    private val items: List<DivItemBuilderResult>,
+    private val items: List<DivBlock>,
     private val actionPerformer: DivActionPerformer
 ) {
 
@@ -68,7 +68,7 @@ internal class PagerSelectedActionsDispatcher(
         }
     }
 
-    private fun dispatchSelectedActions(item: DivItemBuilderResult) {
+    private fun dispatchSelectedActions(item: DivBlock) {
         item.div.value().selectedActions?.let { actions ->
             divView.bulkActions {
                 actionPerformer.performActions(

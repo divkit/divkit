@@ -24,7 +24,7 @@ import com.yandex.div.core.view2.items.DivScrollActionHolder
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeExactSpec
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div2.Div
@@ -115,7 +115,7 @@ internal class DivRecyclerView @JvmOverloads constructor(
         return items.any { it.div.isMatchParent(size) }
     }
 
-    private fun getItemsIfNeeded(spec: Int): List<DivItemBuilderResult>? {
+    private fun getItemsIfNeeded(spec: Int): List<DivBlock>? {
         if (!isUnspecified(spec)) return null
         val adapter = adapter as? DivGalleryAdapter ?: return null
 

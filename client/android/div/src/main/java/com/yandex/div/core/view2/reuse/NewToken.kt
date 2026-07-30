@@ -1,16 +1,16 @@
 package com.yandex.div.core.view2.reuse
 
 import com.yandex.div.core.util.getDefaultState
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.itemsToDivItemBuilderResult
+import com.yandex.div.internal.core.itemsToDivBlocks
 import com.yandex.div.internal.core.nonNullItems
-import com.yandex.div.internal.core.toDivItemBuilderResult
-import com.yandex.div.internal.core.toItemBuilderResult
+import com.yandex.div.internal.core.toBlock
+import com.yandex.div.internal.core.toBlocks
 import com.yandex.div2.Div
 
 internal class NewToken(
-    item: DivItemBuilderResult,
+    item: DivBlock,
     childIndex: Int,
     var lastExistingParent: ExistingToken?,
 ) : Token(item, childIndex) {
@@ -30,19 +30,19 @@ internal class NewToken(
             is Div.Video -> listOf()
             is Div.Switch -> listOf()
             is Div.Container -> div.value.buildItems(resolver, path).itemsToNewTokenList()
-            is Div.Custom -> div.value.nonNullItems.toDivItemBuilderResult(resolver, path).itemsToNewTokenList()
-            is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver, path).itemsToNewTokenList()
+            is Div.Custom -> div.value.nonNullItems.toBlocks(resolver, path).itemsToNewTokenList()
+            is Div.Grid -> div.value.itemsToDivBlocks(resolver, path).itemsToNewTokenList()
             is Div.Gallery -> div.value.buildItems(resolver, path).itemsToNewTokenList()
             is Div.Pager -> div.value.buildItems(resolver, path).itemsToNewTokenList()
-            is Div.Tabs -> div.value.itemsToDivItemBuilderResult(resolver, path).itemsToNewTokenList()
+            is Div.Tabs -> div.value.itemsToDivBlocks(resolver, path).itemsToNewTokenList()
             is Div.State -> {
                 val stateToBindDiv = div.value.getDefaultState(resolver)?.div ?: return listOf()
-                listOf(stateToBindDiv.toItemBuilderResult(resolver, path)).itemsToNewTokenList()
+                listOf(stateToBindDiv.toBlock(resolver, path)).itemsToNewTokenList()
             }
         }
     }
 
-    private fun List<DivItemBuilderResult>.itemsToNewTokenList(): List<NewToken> {
+    private fun List<DivBlock>.itemsToNewTokenList(): List<NewToken> {
         val tokens = mutableListOf<NewToken>()
         forEachIndexed { index, item ->
             val token = NewToken(

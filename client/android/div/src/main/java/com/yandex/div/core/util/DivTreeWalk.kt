@@ -1,15 +1,15 @@
 package com.yandex.div.core.util
 
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.itemsToDivItemBuilderResult
-import com.yandex.div.internal.core.statesToDivItemBuilderResult
-import com.yandex.div.internal.core.toItemBuilderResult
+import com.yandex.div.internal.core.itemsToDivBlocks
+import com.yandex.div.internal.core.statesToDivBlocks
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 
-private typealias Converter<T> = (DivItemBuilderResult) -> T
+private typealias Converter<T> = (DivBlock) -> T
 
 /**
  * Gets a sequence for visiting this [Div] and all its children.
@@ -79,7 +79,7 @@ internal class DivTreeWalk<T> private constructor(
     ) : AbstractIterator<T>() {
 
         private val stack = ArrayDeque<Node>().apply {
-            addLast(node(root.toItemBuilderResult(resolver, path)))
+            addLast(node(root.toBlock(resolver, path)))
         }
 
         override fun computeNext() {
@@ -93,7 +93,7 @@ internal class DivTreeWalk<T> private constructor(
                 ?: computeNext()
         }
 
-        private fun nextItem(): DivItemBuilderResult? {
+        private fun nextItem(): DivBlock? {
             val node = stack.lastOrNull() ?: return null
             val item = node.step()
             return if (item == null) {
@@ -107,7 +107,7 @@ internal class DivTreeWalk<T> private constructor(
             }
         }
 
-        private fun node(item: DivItemBuilderResult): Node {
+        private fun node(item: DivBlock): Node {
             return if (item.div.isBranch) {
                 BranchNode(item, onEnter, onLeave)
             } else {
@@ -118,18 +118,18 @@ internal class DivTreeWalk<T> private constructor(
 
     private interface Node {
 
-        val item: DivItemBuilderResult
+        val item: DivBlock
 
-        fun step(): DivItemBuilderResult?
+        fun step(): DivBlock?
     }
 
     private class LeafNode(
-        override val item: DivItemBuilderResult,
+        override val item: DivBlock,
     ) : Node {
 
         private var visited = false
 
-        override fun step(): DivItemBuilderResult? {
+        override fun step(): DivBlock? {
             if (visited) {
                 return null
             }
@@ -140,16 +140,16 @@ internal class DivTreeWalk<T> private constructor(
     }
 
     private class BranchNode(
-        override val item: DivItemBuilderResult,
+        override val item: DivBlock,
         private val onEnter: ((Div) -> Boolean)?,
         private val onLeave: ((Div) -> Unit)?
     ) : Node {
 
         private var rootVisited = false
-        private var children: List<DivItemBuilderResult>? = null
+        private var children: List<DivBlock>? = null
         private var childIndex = 0
 
-        override fun step(): DivItemBuilderResult? {
+        override fun step(): DivBlock? {
             if (!rootVisited) {
                 if (onEnter?.invoke(item.div) == false) {
                     return null
@@ -174,7 +174,7 @@ internal class DivTreeWalk<T> private constructor(
     }
 }
 
-private fun Div.getItems(resolver: ExpressionResolver, path: DivStatePath): List<DivItemBuilderResult> {
+private fun Div.getItems(resolver: ExpressionResolver, path: DivStatePath): List<DivBlock> {
     return when (this) {
         is Div.Text -> emptyList()
         is Div.Image -> emptyList()
@@ -188,10 +188,10 @@ private fun Div.getItems(resolver: ExpressionResolver, path: DivStatePath): List
         is Div.Video -> emptyList()
         is Div.Switch -> emptyList()
         is Div.Container -> value.buildItems(resolver, path)
-        is Div.Grid -> value.itemsToDivItemBuilderResult(resolver, path)
+        is Div.Grid -> value.itemsToDivBlocks(resolver, path)
         is Div.Gallery -> value.buildItems(resolver, path)
         is Div.Pager -> value.buildItems(resolver, path)
-        is Div.Tabs -> value.itemsToDivItemBuilderResult(resolver, path)
-        is Div.State -> value.statesToDivItemBuilderResult(resolver, path)
+        is Div.Tabs -> value.itemsToDivBlocks(resolver, path)
+        is Div.State -> value.statesToDivBlocks(resolver, path)
     }
 }

@@ -4,7 +4,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 
-data class DivItemBuilderResult(
+data class DivBlock(
     val div: Div,
     val expressionResolver: ExpressionResolver,
     val path: DivStatePath,

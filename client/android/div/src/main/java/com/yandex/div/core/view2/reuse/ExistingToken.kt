@@ -9,12 +9,12 @@ import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.itemsToDivItemBuilderResult
+import com.yandex.div.internal.core.itemsToDivBlocks
 import com.yandex.div.internal.core.nonNullItems
-import com.yandex.div.internal.core.toDivItemBuilderResult
-import com.yandex.div.internal.core.toItemBuilderResult
+import com.yandex.div.internal.core.toBlock
+import com.yandex.div.internal.core.toBlocks
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -24,7 +24,7 @@ import com.yandex.div2.DivGrid
 import com.yandex.div2.DivPager
 
 internal class ExistingToken(
-    item: DivItemBuilderResult,
+    item: DivBlock,
     childIndex: Int,
     val view: View,
     val parentToken: ExistingToken?,
@@ -71,7 +71,7 @@ internal class ExistingToken(
         val customView = ((view as? DivCustomWrapper)?.customView as? ViewGroup) ?: return emptyList()
         nonNullItems.forEachIndexed { index, item ->
             val token = ExistingToken(
-                item = item.toItemBuilderResult(resolver, path),
+                item = item.toBlock(resolver, path),
                 view = customView.getChildAt(index) ?: return emptyList(),
                 childIndex = index,
                 parentToken = parentToken ?: this@ExistingToken,
@@ -85,7 +85,7 @@ internal class ExistingToken(
         resolver: ExpressionResolver,
         parentToken: ExistingToken?,
         path: DivStatePath,
-    ): List<ExistingToken> = simpleItemsToExistingTokenList(itemsToDivItemBuilderResult(resolver, path), parentToken)
+    ): List<ExistingToken> = simpleItemsToExistingTokenList(itemsToDivBlocks(resolver, path), parentToken)
 
     private fun stateToExistingTokenList(
         resolver: ExpressionResolver,
@@ -93,7 +93,7 @@ internal class ExistingToken(
         path: DivStatePath,
     ): List<ExistingToken> {
         val stateDiv = (view as? DivStateLayout)?.activeStateDiv ?: return emptyList()
-        return simpleItemsToExistingTokenList(listOf(stateDiv).toDivItemBuilderResult(resolver, path), parentToken)
+        return simpleItemsToExistingTokenList(listOf(stateDiv).toBlocks(resolver, path), parentToken)
     }
 
     private fun DivPager.itemsToExistingTokenList(
@@ -149,7 +149,7 @@ internal class ExistingToken(
     }
 
     private fun simpleItemsToExistingTokenList(
-        items: List<DivItemBuilderResult>,
+        items: List<DivBlock>,
         parentToken: ExistingToken?
     ): List<ExistingToken> {
         val tokens = mutableListOf<ExistingToken>()

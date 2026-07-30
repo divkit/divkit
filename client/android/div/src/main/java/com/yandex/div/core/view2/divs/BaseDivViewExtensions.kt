@@ -38,7 +38,7 @@ import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.Log
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
@@ -294,8 +294,8 @@ private fun traverseViewHierarchy(view: View, action: (View) -> Boolean) {
 @MainThread
 internal fun ViewGroup.trackVisibilityActions(
     divView: Div2View,
-    newItems: List<DivItemBuilderResult>,
-    oldItems: List<DivItemBuilderResult>?,
+    newItems: List<DivBlock>,
+    oldItems: List<DivBlock>?,
 ) {
     val visibilityActionTracker = divView.div2Component.visibilityActionTracker
     if (!oldItems.isNullOrEmpty()) {
@@ -452,8 +452,8 @@ internal fun View.performLongClickOnAncestors(): Boolean {
 internal fun ViewGroup.replaceWithReuse(
     divView: Div2View,
     divViewCreator: Provider<DivViewCreator>,
-    oldItems: List<DivItemBuilderResult>,
-    newItems: List<DivItemBuilderResult>,
+    oldItems: List<DivBlock>,
+    newItems: List<DivBlock>,
 ) {
     val oldChildren = mutableMapOf<Div, View>()
     oldItems.zip(children.toList()) { childDiv, child ->

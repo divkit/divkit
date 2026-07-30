@@ -7,7 +7,7 @@ import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -149,7 +149,7 @@ internal object DivPathUtils {
         getDiv: (T) -> Div? = { it as Div? },
     ): Div? = firstNotNullOfOrNull { getDiv(it)?.findByPath(divId, resolver, path) }
 
-    private fun Iterable<DivItemBuilderResult>.findRecursively(divId: String, path: DivStatePath): Div? =
+    private fun Iterable<DivBlock>.findRecursively(divId: String, path: DivStatePath): Div? =
         firstNotNullOfOrNull { (div, resolver) -> div.findByPath(divId, resolver, path) }
 
     internal fun DivState.getId(errorCallback: (() -> Unit)? = null): String = divId ?: id ?: run {
@@ -159,7 +159,7 @@ internal object DivPathUtils {
 
     fun List<Div>.getIds() = getIds({ this })
 
-    fun List<DivItemBuilderResult>.getItemIds() = getIds({ div }, { expressionResolver.asImpl })
+    fun List<DivBlock>.getItemIds() = getIds({ div }, { expressionResolver.asImpl })
 
     fun <T> List<T>.getIds(div: T.() -> Div, resolver: T.() -> ExpressionResolverImpl? = { null }): List<String> {
         val idsCount = mutableMapOf<String, Int>()

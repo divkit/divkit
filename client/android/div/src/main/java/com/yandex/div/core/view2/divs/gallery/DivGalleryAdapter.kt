@@ -6,11 +6,11 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import java.util.WeakHashMap
 
 internal class DivGalleryAdapter(
-    items: List<DivItemBuilderResult>,
+    items: List<DivBlock>,
     private val bindingContext: BindingContext,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
@@ -20,7 +20,7 @@ internal class DivGalleryAdapter(
     var columnCount = 1
     var crossSpacing = 0f
 
-    private val internalIds = WeakHashMap<DivItemBuilderResult, Long>()
+    private val internalIds = WeakHashMap<DivBlock, Long>()
     private var lastItemId = 0L
 
     init {

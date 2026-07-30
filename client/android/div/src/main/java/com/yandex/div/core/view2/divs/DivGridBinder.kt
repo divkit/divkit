@@ -15,7 +15,7 @@ import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.core.nonNullItems
-import com.yandex.div.internal.core.toDivItemBuilderResult
+import com.yandex.div.internal.core.toBlocks
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -76,9 +76,9 @@ internal class DivGridBinder @Inject constructor(
         val resolver = bindingContext.expressionResolver
         val items = div.nonNullItems
 
-        val newItems = items.toDivItemBuilderResult(resolver, path)
+        val newItems = items.toBlocks(resolver, path)
         if (!tryRebindPlainContainerChildren(divView, newItems, divViewCreator)) {
-            val oldItems = oldDiv?.items?.toDivItemBuilderResult(resolver, path) ?: emptyList()
+            val oldItems = oldDiv?.items?.toBlocks(resolver, path) ?: emptyList()
             replaceWithReuse(divView, divViewCreator, oldItems, newItems)
         }
 
@@ -86,7 +86,7 @@ internal class DivGridBinder @Inject constructor(
         trackVisibilityActions(
             divView,
             newItems,
-            oldDiv?.items?.toDivItemBuilderResult(resolver, path),
+            oldDiv?.items?.toBlocks(resolver, path),
         )
     }
 

@@ -5,7 +5,7 @@ import com.yandex.div.core.DivRequestExecutor
 import com.yandex.div.core.util.ContainerFinder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.evaluable.MissingVariableException
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.variables.name
 import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -48,7 +48,7 @@ class DivActionTypedSubmitHandler @Inject constructor(
         return true
     }
 
-    private fun createBody(container: DivItemBuilderResult, view: Div2View): String {
+    private fun createBody(container: DivBlock, view: Div2View): String {
         val variables = container.div.value().variables
         if (variables.isNullOrEmpty()) return ""
 

@@ -13,7 +13,7 @@ import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivGallery
@@ -28,7 +28,7 @@ internal interface DivGalleryItemHelper {
 
     val isHorizontal get() = getLayoutManagerOrientation() == RecyclerView.HORIZONTAL
 
-    fun getItemDiv(position: Int): DivItemBuilderResult? =
+    fun getItemDiv(position: Int): DivBlock? =
         (view.adapter as? DivGalleryAdapter)?.visibleItems?.getOrNull(position)
 
     fun toLayoutManager(): RecyclerView.LayoutManager

@@ -9,12 +9,12 @@ import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivPager
 
 internal class DivPagerPageChangeCallback(
     private val divPager: DivPager,
-    private val items: List<DivItemBuilderResult>,
+    private val items: List<DivBlock>,
     private val bindingContext: BindingContext,
     private val recyclerView: RecyclerView,
     private val pagerView: DivPagerView,

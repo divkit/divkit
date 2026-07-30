@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -39,7 +39,7 @@ class VisibilityAwareAdapterTest {
     }
 
     private class TestAdapter(
-        items: List<DivItemBuilderResult>,
+        items: List<DivBlock>,
     ) : VisibilityAwareAdapter<RecyclerView.ViewHolder>(items) {
 
         val notifications = mutableListOf<Notification>()
@@ -199,7 +199,7 @@ class VisibilityAwareAdapterTest {
     private fun item(visibility: DivVisibility) = item(Expression.constant(visibility))
 
     private fun item(expression: Expression<DivVisibility>) =
-        DivItemBuilderResult(Div.Container(DivContainer(visibility = expression)), resolver, path)
+        DivBlock(Div.Container(DivContainer(visibility = expression)), resolver, path)
 
     /**
      * Mutable visibility expression used to drive `subscribeOnElements` callbacks in tests.

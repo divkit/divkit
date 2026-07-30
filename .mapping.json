@@ -931,7 +931,7 @@
   "client/android/div-data/src/main/java/com/yandex/div/data/VariableMutationException.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/data/VariableMutationException.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivUntypedAction.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivUntypedAction.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/actions/UpdateStructureHelper.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/actions/UpdateStructureHelper.kt",
-  "client/android/div-data/src/main/java/com/yandex/div/internal/core/DivItemBuilderResult.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/core/DivItemBuilderResult.kt",
+  "client/android/div-data/src/main/java/com/yandex/div/internal/core/DivBlock.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/core/DivBlock.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/data/PropertyDelegate.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/data/PropertyDelegate.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/data/PropertyVariableExecutor.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/data/PropertyVariableExecutor.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/expressions/DivExpressionParser.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/expressions/DivExpressionParser.kt",

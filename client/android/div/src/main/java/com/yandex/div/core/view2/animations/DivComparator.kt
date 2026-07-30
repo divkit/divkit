@@ -3,9 +3,9 @@ package com.yandex.div.core.view2.animations
 import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.isWrapContainer
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.buildItems
-import com.yandex.div.internal.core.itemsToDivItemBuilderResult
+import com.yandex.div.internal.core.itemsToDivBlocks
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -97,8 +97,8 @@ internal object DivComparator {
     }
 
     fun areChildrenReplaceable(
-        oldChildren: List<DivItemBuilderResult>,
-        newChildren: List<DivItemBuilderResult>,
+        oldChildren: List<DivBlock>,
+        newChildren: List<DivBlock>,
         oldPath: DivStatePath,
         newPath: DivStatePath,
         reporter: DivComparatorReporter? = null,
@@ -122,10 +122,10 @@ internal object DivComparator {
         div: Div,
         resolver: ExpressionResolver,
         path: DivStatePath,
-    ): List<DivItemBuilderResult> {
+    ): List<DivBlock> {
         return when (div) {
             is Div.Container -> div.value.buildItems(resolver, path)
-            is Div.Grid -> div.value.itemsToDivItemBuilderResult(resolver, path)
+            is Div.Grid -> div.value.itemsToDivBlocks(resolver, path)
             is Div.Image -> emptyList()
             is Div.GifImage -> emptyList()
             is Div.Text -> emptyList()

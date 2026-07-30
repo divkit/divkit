@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.reuse.util
 import android.view.ViewGroup
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewCreator
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.Div
 import javax.inject.Provider
 
@@ -19,7 +19,7 @@ internal fun ViewGroup.tryRebindRecycleContainerChildren(
 
 internal fun ViewGroup.tryRebindPlainContainerChildren(
     divView: Div2View,
-    items: List<DivItemBuilderResult>,
+    items: List<DivBlock>,
     divViewCreator: Provider<DivViewCreator>
 ): Boolean {
     val reusableList = divView.currentRebindReusableList ?: return false

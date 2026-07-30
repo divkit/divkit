@@ -4,7 +4,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import androidx.transition.TransitionSet
 import androidx.transition.Visibility
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivChangeTransition
 
@@ -43,7 +43,7 @@ internal fun Transition.enumerateTargetIds(): List<Int> {
     return targetIds.toList()
 }
 
-internal inline fun DivItemBuilderResult.toTransitionData(
+internal inline fun DivBlock.toTransitionData(
     isIncoming: Boolean,
     inheritedChange: DivChangeTransition? = null,
     allowsTransitions: (DivBase) -> Boolean,

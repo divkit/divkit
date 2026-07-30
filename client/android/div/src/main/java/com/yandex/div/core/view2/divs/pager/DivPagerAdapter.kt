@@ -8,11 +8,11 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivPager
 
 internal class DivPagerAdapter(
-    items: List<DivItemBuilderResult>,
+    items: List<DivBlock>,
     private val bindingContext: BindingContext,
     private val divBinder: DivBinder,
     private val pageTranslations: SparseArray<Float>,
@@ -20,10 +20,10 @@ internal class DivPagerAdapter(
     private val pagerView: DivPagerView,
 ) : DivCollectionAdapter<DivPagerViewHolder>(bindingContext, items) {
 
-    val itemsToShow = object : AbstractList<DivItemBuilderResult>() {
+    val itemsToShow = object : AbstractList<DivBlock>() {
         override val size get() = visibleItems.size + if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM * 2 else 0
 
-        override fun get(index: Int): DivItemBuilderResult {
+        override fun get(index: Int): DivBlock {
             if (!infiniteScrollEnabled) return visibleItems[index]
 
             return visibleItems[realItemPosition(index)]
@@ -88,7 +88,7 @@ internal class DivPagerAdapter(
         }
     }
 
-    override fun setItems(newItems: List<DivItemBuilderResult>) {
+    override fun setItems(newItems: List<DivBlock>) {
         val oldSize = items.size
         removedItems = 0
         val oldCurrentItem = currentItem

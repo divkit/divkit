@@ -1,10 +1,10 @@
 package com.yandex.div.core.view2.reuse
 
 import com.yandex.div.core.util.type
-import com.yandex.div.internal.core.DivItemBuilderResult
+import com.yandex.div.internal.core.DivBlock
 
 internal abstract class Token(
-    val item: DivItemBuilderResult,
+    val item: DivBlock,
     val childIndex: Int,
 ) {
     val divHash: Int = item.div.propertiesHash()

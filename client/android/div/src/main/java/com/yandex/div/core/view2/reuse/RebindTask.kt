@@ -9,7 +9,7 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.reuse.util.combineTokens
-import com.yandex.div.internal.core.toItemBuilderResult
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
@@ -105,7 +105,7 @@ internal class RebindTaskImpl(
             return false
         }
         val existingToken = ExistingToken(
-            item = existingItem.toItemBuilderResult(oldResolver, path),
+            item = existingItem.toBlock(oldResolver, path),
             view = rootView,
             childIndex = 0,
             parentToken = null,
@@ -115,7 +115,7 @@ internal class RebindTaskImpl(
             return false
         }
         val newToken = NewToken(
-            item = newItem.toItemBuilderResult(newResolver, path),
+            item = newItem.toBlock(newResolver, path),
             childIndex = 0,
             lastExistingParent = null,
         )
