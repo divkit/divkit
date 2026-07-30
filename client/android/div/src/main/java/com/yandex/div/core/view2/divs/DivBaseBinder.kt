@@ -313,9 +313,7 @@ internal class DivBaseBinder @Inject constructor(
         val viewIdProvider = divView.viewComponent.viewIdProvider
         bindNextFocusId(newDiv.focus?.nextFocusIds?.forward, oldDiv?.focus?.nextFocusIds?.forward, resolver, subscriber) { id ->
             nextFocusForwardId = viewIdProvider.getViewId(id)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-                accessibilityTraversalBefore = viewIdProvider.getViewId(id)
-            }
+            accessibilityTraversalBefore = viewIdProvider.getViewId(id)
         }
         bindNextFocusId(newDiv.focus?.nextFocusIds?.left, oldDiv?.focus?.nextFocusIds?.left, resolver, subscriber) { id ->
             nextFocusLeftId = viewIdProvider.getViewId(id)

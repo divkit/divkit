@@ -2,7 +2,7 @@
 agp = "8.12.3"
 android-lint = "31.12.3"  # agp + "23.0.0"
 android-compileSdk = "36"
-android-minSdk = "21"
+android-minSdk = "23"
 android-targetSdk = "36"
 androidsvg = "1.4"
 coil = "3.1.0"

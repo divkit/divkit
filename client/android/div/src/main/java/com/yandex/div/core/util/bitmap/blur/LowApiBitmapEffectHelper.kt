@@ -4,7 +4,6 @@ package com.yandex.div.core.util.bitmap.blur
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Build
 import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
@@ -18,18 +17,15 @@ internal class LowApiBitmapEffectHelper(
     private val context: Context,
 ) : BitmapEffectHelper() {
     private var cachedRenderScript: RenderScript? = null
+
     private fun getOrCreateRenderScript(): RenderScript {
         return cachedRenderScript ?: run {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                RenderScript.create(context)
-            } else {
-                RenderScript.createMultiContext(
-                    context,
-                    RenderScript.ContextType.NORMAL,
-                    RenderScript.CREATE_FLAG_NONE,
-                    context.applicationInfo.targetSdkVersion,
-                )
-            }
+            RenderScript.createMultiContext(
+                context,
+                RenderScript.ContextType.NORMAL,
+                RenderScript.CREATE_FLAG_NONE,
+                context.applicationInfo.targetSdkVersion,
+            )
         }.also {
             cachedRenderScript = it
         }

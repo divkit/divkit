@@ -124,9 +124,6 @@ internal class LottieController(
             autoPlay = false
             wasAnimatingWhenDetached = false
         }
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            onVisibilityChanged(gifImageView, gifImageView.visibility)
-        }
     }
 
     override fun onDetachedFromWindow() {

@@ -315,7 +315,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
                 setupAnimation(divTooltip, resolver)
             }
 
-            if (hasSubstrate && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (hasSubstrate) {
                 isAttachedInDecor = true
                 isClippingEnabled = false
             }
@@ -421,20 +421,14 @@ internal class DivTooltipController @VisibleForTesting constructor(
 
         val hasSubstrate = divTooltip.substrateDiv != null
         if (hasSubstrate) {
-            val isSubstrateSystemBars = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
-            val windowLocation = if (isSubstrateSystemBars) {
-                Point(0, 0)
-            } else {
-                Point(windowFrame.left, windowFrame.top)
-            }
             popup.update(
                 0, 0,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
             tooltipContainer.setTooltipPosition(
-                x = location.x - windowLocation.x,
-                y = location.y - windowLocation.y,
+                x = location.x,
+                y = location.y,
                 width = tooltipWidth,
                 height = tooltipHeight
             )
@@ -443,8 +437,8 @@ internal class DivTooltipController @VisibleForTesting constructor(
                     val locationArray = IntArray(2)
                     bringToTopView.getLocationOnScreen(locationArray)
                     tooltipContainer.setBringToTopPosition(
-                        x = locationArray[0] - windowLocation.x,
-                        y = locationArray[1] - windowLocation.y,
+                        x = locationArray[0],
+                        y = locationArray[1],
                         width = bringToTopView.width,
                         height = bringToTopView.height,
                     )

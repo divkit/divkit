@@ -1,13 +1,11 @@
 package com.yandex.div.internal.widget
 
 import android.content.Context
-import android.os.Build
 import android.text.Layout
 import android.text.SpannableStringBuilder
 import android.text.StaticLayout
 import android.text.TextUtils.TruncateAt
 import android.util.AttributeSet
-import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.R
 import com.yandex.div.internal.view.DrawingPassOverrideStrategy
@@ -282,7 +280,6 @@ open class EllipsizedTextView @JvmOverloads constructor(
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     private fun layoutTextWithHyphenation(text: CharSequence, textWidth: Int = Int.MAX_VALUE): Layout {
         val builder = StaticLayout.Builder.obtain(text, 0, text.length, paint, textWidth)
         return builder

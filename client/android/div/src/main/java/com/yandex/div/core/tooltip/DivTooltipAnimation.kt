@@ -3,7 +3,6 @@ package com.yandex.div.core.tooltip
 import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
-import android.os.Build
 import android.transition.Fade
 import android.transition.Transition
 import android.transition.TransitionSet
@@ -16,7 +15,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationSet
 import android.view.animation.ScaleAnimation
 import android.widget.PopupWindow
-import androidx.annotation.RequiresApi
 import com.yandex.div.core.animation.SpringInterpolator
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.view2.divs.dpToPxF
@@ -82,35 +80,22 @@ internal fun animateExit(
 }
 
 internal fun PopupWindow.setupAnimation(divTooltip: DivTooltip, resolver: ExpressionResolver) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val animationIn = divTooltip.animationIn
-        enterTransition = if (animationIn != null) {
-            animationIn.toTransition(divTooltip.position.evaluate(resolver), true, resolver)
-        } else {
-            defaultTransition(divTooltip, resolver)
-        }
-
-        val animationOut = divTooltip.animationOut
-        exitTransition = if (animationOut != null) {
-            animationOut.toTransition(divTooltip.position.evaluate(resolver), false, resolver)
-        } else {
-            defaultTransition(divTooltip, resolver)
-        }
+    val animationIn = divTooltip.animationIn
+    enterTransition = if (animationIn != null) {
+        animationIn.toTransition(divTooltip.position.evaluate(resolver), true, resolver)
     } else {
-        animationStyle = android.R.style.Animation_Dialog
+        defaultTransition(divTooltip, resolver)
+    }
+
+    val animationOut = divTooltip.animationOut
+    exitTransition = if (animationOut != null) {
+        animationOut.toTransition(divTooltip.position.evaluate(resolver), false, resolver)
+    } else {
+        defaultTransition(divTooltip, resolver)
     }
 }
 
 internal fun PopupWindow.clearAnimation() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        removeTransition()
-    } else {
-        animationStyle = 0
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.M)
-private fun PopupWindow.removeTransition() {
     enterTransition = null
     exitTransition = null
 }

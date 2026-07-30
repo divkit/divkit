@@ -2,7 +2,6 @@ package com.yandex.div.internal.widget
 
 import android.content.Context
 import android.graphics.Rect
-import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -48,7 +47,7 @@ open class FrameContainerLayout @JvmOverloads constructor(
     override var aspectRatio by aspectRatioProperty()
 
     override fun setForegroundGravity(gravity: Int) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || foregroundGravity == gravity) return
+        if (foregroundGravity == gravity) return
         super.setForegroundGravity(gravity)
         if (foregroundGravity == Gravity.FILL && foreground != null) {
             foreground.getPadding(foregroundPadding)
@@ -195,7 +194,6 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
         var widthSize = maxWidth + horizontalPadding
         widthSize = widthSize.coerceAtLeast(suggestedMinimumWidth)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return widthSize
         return foreground?.let { widthSize.coerceAtLeast(it.minimumWidth) } ?: widthSize
     }
 
@@ -210,7 +208,6 @@ open class FrameContainerLayout @JvmOverloads constructor(
 
         var heightSize = maxHeight + verticalPadding
         heightSize = heightSize.coerceAtLeast(suggestedMinimumHeight)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return heightSize
         return foreground?.let { heightSize.coerceAtLeast(it.minimumHeight) } ?: heightSize
     }
 

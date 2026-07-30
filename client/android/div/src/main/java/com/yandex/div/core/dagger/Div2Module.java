@@ -89,9 +89,6 @@ abstract public class Div2Module {
     @DivScope
     @NonNull
     public static RenderScript provideRenderScript(@NonNull @Named(Names.CONTEXT) Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return RenderScript.create(context);
-        }
         return RenderScript.createMultiContext(context, RenderScript.ContextType.NORMAL,
                 RenderScript.CREATE_FLAG_NONE, context.getApplicationInfo().targetSdkVersion);
     }

@@ -8,10 +8,6 @@ apply(from = "../publish-android.gradle")
 
 android {
     namespace = "com.yandex.div.compose.lottie"
-
-    defaultConfig {
-        minSdk = 23
-    }
 }
 
 dependencies {

@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2
 
-import android.os.Build
 import android.view.View
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
@@ -86,8 +85,9 @@ internal class DivAccessibilityBinder @Inject constructor(
 
         val className = type.toClassName
         val heading = type == AccessibilityType.HEADER
-        val autoClassName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) view.accessibilityClassName else null
-        if ((className.isEmpty() || className == autoClassName) && !heading) return null
+        if ((className.isEmpty() || className == view.accessibilityClassName) && !heading) {
+            return null
+        }
         return ExtensiveAccessibilityDelegate(
                 className = className,
                 isHeading = heading,

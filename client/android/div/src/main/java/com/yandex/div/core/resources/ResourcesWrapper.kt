@@ -44,13 +44,11 @@ internal open class ResourcesWrapper(
         return resources.getColor(id)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     @Throws(NotFoundException::class)
     override fun getColor(id: Int, theme: Theme?): Int {
         return resources.getColor(id, theme)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
     @Throws(NotFoundException::class)
     override fun getColorStateList(id: Int, theme: Theme?): ColorStateList {
         return resources.getColorStateList(id, theme)
