@@ -8,7 +8,6 @@ import com.yandex.div.core.path
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.UnitTestData
@@ -47,7 +46,6 @@ class DivJoinedStateSwitcherTest {
         bindOnAttachRunnable?.onAttach()
     }
     private val resolver = div2View.expressionResolver
-    private val bindingContext = BindingContext(div2View, resolver)
 
     private val stateSwitcher = DivJoinedStateSwitcher(div2View, viewBinder)
 
@@ -57,7 +55,7 @@ class DivJoinedStateSwitcherTest {
         val notActiveState = "0/state_container/second/second_state/hidden".path
         val div = rootDiv.findDivState(notActiveState.parentState(), resolver)!!
 
-        stateSwitcher.switchStates(bindingContext, divDataState, listOf(notActiveState))
+        stateSwitcher.switchStates(divDataState, resolver, listOf(notActiveState))
 
         verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
     }
@@ -67,7 +65,7 @@ class DivJoinedStateSwitcherTest {
         val activeState = "0/state_container/first/container_item_one/two".path
         val div = rootDiv.findDivState(activeState, resolver)!!
 
-        stateSwitcher.switchStates(bindingContext, divDataState, listOf(activeState))
+        stateSwitcher.switchStates(divDataState, resolver, listOf(activeState))
 
         verify(viewBinder).bind(any(), any(), eq(div), pathCaptor.capture())
         Assert.assertEquals(activeState.parentState().statesString, pathCaptor.firstValue.statesString)
@@ -78,7 +76,7 @@ class DivJoinedStateSwitcherTest {
         val activeState = "0/state_container/first/container_item_two/two".path
         val div = rootDiv.findDivState(activeState, resolver)!!
 
-        stateSwitcher.switchStates(bindingContext, divDataState, listOf(activeState))
+        stateSwitcher.switchStates(divDataState, resolver, listOf(activeState))
 
         verify(viewBinder).bind(any(), any(), eq(div), pathCaptor.capture())
         Assert.assertEquals(activeState.parentState().statesString, pathCaptor.firstValue.statesString)
@@ -92,7 +90,7 @@ class DivJoinedStateSwitcherTest {
         val commonPath = DivStatePath.lowestCommonAncestor(firstPath, secondPath)!!
         val div = rootDiv.findDivState(commonPath, resolver)!!
 
-        stateSwitcher.switchStates(bindingContext, divDataState, paths)
+        stateSwitcher.switchStates(divDataState, resolver, paths)
 
         verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
     }
@@ -106,7 +104,7 @@ class DivJoinedStateSwitcherTest {
         val commonPath = paths.reduce { acc, path -> DivStatePath.lowestCommonAncestor(acc, path)!! }
         val div = rootDiv.findDivState(commonPath, resolver)!!
 
-        stateSwitcher.switchStates(bindingContext, divDataState, paths)
+        stateSwitcher.switchStates(divDataState, resolver, paths)
 
         verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
     }
@@ -118,7 +116,7 @@ class DivJoinedStateSwitcherTest {
         val paths = listOf(firstPath, secondPath)
         val commonPath = DivStatePath.fromState(divDataState)
 
-        stateSwitcher.switchStates(bindingContext, divDataState, paths)
+        stateSwitcher.switchStates(divDataState, resolver, paths)
 
         verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(commonPath))
     }

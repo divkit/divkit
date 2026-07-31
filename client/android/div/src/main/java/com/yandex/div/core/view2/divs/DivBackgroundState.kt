@@ -15,7 +15,6 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.bitmap.BitmapFilter
 import com.yandex.div.core.util.bitmap.applyScaleAndFilters
 import com.yandex.div.core.util.isLayoutRtl
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
@@ -51,9 +50,9 @@ internal sealed class DivBackgroundState {
     ): DivBackgroundState() {
 
         fun getDivImageBackground(
-            context: BindingContext,
             target: View,
             imageLoader: DivImageLoader,
+            divView: Div2View,
         ): Drawable {
             val scaleDrawable = ScalingDrawable()
             scaleDrawable.alpha = (alpha * 255).toInt()
@@ -66,7 +65,6 @@ internal sealed class DivBackgroundState {
             scaleDrawable.additionalScale = density
 
             val url = imageUrl.toString()
-            val divView = context.divView
             val loadReference = imageLoader.loadImage(
                 url,
                 object : DivIdLoggingImageDownloadCallback(divView) {
@@ -146,9 +144,9 @@ internal sealed class DivBackgroundState {
     ): DivBackgroundState() {
 
         fun getNinePatchDrawable(
-            divView: Div2View,
             target: View,
-            imageLoader: DivImageLoader
+            imageLoader: DivImageLoader,
+            divView: Div2View,
         ): Drawable {
             val ninePatchDrawable = NinePatchDrawable()
 
@@ -174,12 +172,12 @@ internal sealed class DivBackgroundState {
     }
 
     fun toDrawable(
-        context: BindingContext,
         target: View,
         imageLoader: DivImageLoader,
+        divView: Div2View,
     ): Drawable = when (this) {
-        is Image -> getDivImageBackground(context, target, imageLoader)
-        is NinePatch -> getNinePatchDrawable(context.divView, target, imageLoader)
+        is Image -> getDivImageBackground(target, imageLoader, divView)
+        is NinePatch -> getNinePatchDrawable(target, imageLoader, divView)
         is Solid -> ColorDrawable(color)
         is LinearGradient -> LinearGradientDrawable(angle.toFloat(), colormap)
         is RadialGradient -> RadialGradientDrawable(radius, centerX, centerY, colormap.colors, colormap.positions)

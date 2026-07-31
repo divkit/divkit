@@ -79,7 +79,7 @@ internal class DivInputBinder @Inject constructor(
         textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
         accessibilityEnabled = accessibilityStateProvider.isAccessibilityEnabled(context)
 
-        observeBackground(bindingContext, div, oldDiv, expressionResolver)
+        observeBackground(div, oldDiv, expressionResolver, bindingContext.divView)
 
         observeBaseTextProperties(div, oldDiv, expressionResolver)
         observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
@@ -131,16 +131,16 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.observeBackground(
-        bindingContext: BindingContext,
         newDiv: DivInput,
         oldDiv: DivInput?,
-        resolver: ExpressionResolver
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         if (newDiv.nativeInterface.equalsToConstant(oldDiv?.nativeInterface)) {
             return
         }
 
-        applyNativeBackgroundColor(bindingContext, newDiv, oldDiv)
+        applyNativeBackgroundColor(newDiv, oldDiv, resolver, divView)
 
         if (newDiv.nativeInterface.isConstant()) {
             return
@@ -148,17 +148,17 @@ internal class DivInputBinder @Inject constructor(
 
         addSubscription(
             newDiv.nativeInterface?.color?.observeAndGet(resolver) {
-                applyNativeBackgroundColor(bindingContext, newDiv, oldDiv)
+                applyNativeBackgroundColor(newDiv, oldDiv, resolver, divView)
             }
         )
     }
 
     private fun DivInputView.applyNativeBackgroundColor(
-        bindingContext: BindingContext,
         newDiv: DivInput,
-        oldDiv: DivInput?
+        oldDiv: DivInput?,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
-        val resolver = bindingContext.expressionResolver
         val nativeBackgroundColor = newDiv.nativeInterface?.color?.evaluate(resolver) ?: Color.TRANSPARENT
         val nativeBackgroundOverlay = if (nativeBackgroundColor == Color.TRANSPARENT) {
             null
@@ -166,10 +166,11 @@ internal class DivInputBinder @Inject constructor(
             nativeBackground?.apply { setTint(nativeBackgroundColor) }
         }
         baseBinder.bindBackground(
-            bindingContext,
             this,
             newDiv,
             oldDiv,
+            resolver,
+            divView,
             expressionSubscriber,
             backgroundUnderlay,
             nativeBackgroundOverlay

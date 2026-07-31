@@ -7,6 +7,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import javax.inject.Inject
 
@@ -22,15 +23,13 @@ internal class Div2Builder @Inject constructor(
 ) {
 
     fun buildView(data: Div, context: BindingContext, path: DivStatePath): View {
-        return createView(data, context, path).also {
+        return createView(data, context.expressionResolver, path, context.divView).also {
             viewBinder.bind(context, it, data, path)
         }
     }
 
-    fun createView(data: Div, context: BindingContext, path: DivStatePath): View {
-        val resolver = context.expressionResolver
-
-        runtimeVisitor.createAndAttachRuntimes(data, path, context.divView)
+    fun createView(data: Div, resolver: ExpressionResolver, path: DivStatePath, divView: Div2View): View {
+        runtimeVisitor.createAndAttachRuntimes(data, path, divView)
         val view = viewCreator.create(data, resolver).apply {
             layoutParams = DivLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         }

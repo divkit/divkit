@@ -128,11 +128,11 @@ internal class DivPagerBinder @Inject constructor(
         )
 
         changePageCallbackForLogger = DivPagerPageChangeCallback(
-            bindingContext = bindingContext,
             divPager = div,
             recyclerView = recyclerView,
             items = adapter.itemsToShow,
             pagerView = this,
+            divView = divView,
         )
 
         divView.currentState?.let { state ->

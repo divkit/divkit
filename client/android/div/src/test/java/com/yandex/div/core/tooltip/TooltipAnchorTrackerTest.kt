@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewTreeObserver
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.util.SafePopupWindow
-import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivText
@@ -77,7 +75,6 @@ class TooltipAnchorTrackerTest {
     private val tooltipData = TooltipData(
         id = "tooltip_id",
         scopeId = null,
-        bindingContext = BindingContext(mock<Div2View>(), ExpressionResolver.EMPTY),
         divTooltip = DivTooltip(
             div = Div.Text(DivText(text = "tooltip".asExpression())),
             id = "tooltip_id",
@@ -85,6 +82,8 @@ class TooltipAnchorTrackerTest {
         ),
         popupWindow = popupWindow,
         anchor = anchor,
+        expressionResolver = ExpressionResolver.EMPTY,
+        divView = mock(),
         onBackPressedCallback = null,
     )
 

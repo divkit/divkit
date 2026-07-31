@@ -7,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.hasSightActions
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivPager
@@ -15,13 +15,12 @@ import com.yandex.div2.DivPager
 internal class DivPagerPageChangeCallback(
     private val divPager: DivPager,
     private val items: List<DivBlock>,
-    private val bindingContext: BindingContext,
     private val recyclerView: RecyclerView,
     private val pagerView: DivPagerView,
+    private val divView: Div2View,
 ) : ViewPager2.OnPageChangeCallback() {
     private var prevPosition = RecyclerView.NO_POSITION
 
-    private val divView = bindingContext.divView
     private val minimumSignificantDx = divView.config.logCardScrollSignificantThreshold
     private var totalDelta = 0
 
@@ -98,7 +97,7 @@ internal class DivPagerPageChangeCallback(
 
             val item = items[childPosition]
             divView.div2Component.visibilityActionTracker
-                .startTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), child, item.div)
+                .startTrackingViewsHierarchy(child, item.div, item.expressionResolver, divView)
         }
     }
 }

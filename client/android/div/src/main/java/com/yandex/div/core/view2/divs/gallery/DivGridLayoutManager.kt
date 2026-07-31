@@ -6,14 +6,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isLayoutRtl
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivSize
 
 internal class DivGridLayoutManager(
-    override val bindingContext: BindingContext,
     override val view: DivRecyclerView,
+    override val divView: Div2View,
     @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL,
     override val crossContentAlignment: DivGallery.ContentAlignment,
     columnCount: Int,

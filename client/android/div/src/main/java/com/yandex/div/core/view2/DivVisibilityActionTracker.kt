@@ -14,9 +14,9 @@ import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.doOnHierarchyLayout
 import com.yandex.div.core.view2.divs.bindingContext
-import com.yandex.div.internal.util.duration
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.util.duration
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivDisappearAction
@@ -132,14 +132,14 @@ internal class DivVisibilityActionTracker @Inject constructor(
     }
 
     fun trackDetachedView(
-        context: BindingContext,
         view: View,
-        div: Div
+        div: Div,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         val actions = div.value().disappearActions ?: return
-        val resolver = context.expressionResolver
         trackVisibilityActions(
-            context.divView,
+            divView,
             resolver,
             view,
             div,
@@ -148,45 +148,55 @@ internal class DivVisibilityActionTracker @Inject constructor(
         )
     }
 
-    fun startTrackingViewsHierarchy(context: BindingContext, root: View, rootDiv: Div?) {
-        trackViewsHierarchy(context, root, rootDiv) { currentView, currentDiv ->
+    fun startTrackingViewsHierarchy(
+        root: View,
+        rootDiv: Div?,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+    ) {
+        trackViewsHierarchy(root, rootDiv, divView) { currentView, currentDiv ->
             val isViewFullyVisible = viewVisibilityCalculator.isViewFullyVisible(currentView)
             if (isViewFullyVisible && previousVisibilityIsFull[currentView] == true) {
                 false
             } else {
                 previousVisibilityIsFull[currentView] = isViewFullyVisible
                 currentDiv?.let {
-                    val ctx = currentView.bindingContext ?: context
-                    trackVisibilityActionsOf(context.divView, ctx.expressionResolver, currentView, it)
+                    val childResolver = currentView.bindingContext?.expressionResolver ?: resolver
+                    trackVisibilityActionsOf(divView, childResolver, currentView, it)
                 }
                 true
             }
         }
     }
 
-    fun cancelTrackingViewsHierarchy(context: BindingContext, root: View, div: Div?) {
-        trackViewsHierarchy(context, root, div) { currentView, currentDiv ->
+    fun cancelTrackingViewsHierarchy(
+        root: View,
+        div: Div?,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+    ) {
+        trackViewsHierarchy(root, div, divView) { currentView, currentDiv ->
             previousVisibilityIsFull.remove(currentView)
             currentDiv?.let {
-                val ctx = currentView.bindingContext ?: context
-                trackVisibilityActionsOf(context.divView, ctx.expressionResolver, null, it)
+                val childResolver = currentView.bindingContext?.expressionResolver ?: resolver
+                trackVisibilityActionsOf(divView, childResolver, null, it)
             }
             true
         }
     }
 
     private fun trackViewsHierarchy(
-        context: BindingContext,
         view: View,
         div: Div?,
+        divView: Div2View,
         trackAction: (View, Div?) -> Boolean
     ) {
         if (!trackAction(view, div) || view !is ViewGroup) {
             return
         }
         view.children.forEach {
-            val childDiv = context.divView.takeBindingDiv(it)
-            trackViewsHierarchy(context, it, childDiv, trackAction)
+            val childDiv = divView.takeBindingDiv(it)
+            trackViewsHierarchy(it, childDiv, divView, trackAction)
         }
     }
 

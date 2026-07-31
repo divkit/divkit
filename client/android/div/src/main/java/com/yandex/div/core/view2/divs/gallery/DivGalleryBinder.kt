@@ -11,6 +11,7 @@ import com.yandex.div.core.state.UpdateStateScrollListener
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
@@ -58,7 +59,7 @@ internal class DivGalleryBinder @Inject constructor(
         val resolver = bindingContext.expressionResolver
         val galleryAdapter =
             DivGalleryAdapter(div.buildItems(resolver, path), bindingContext, divBinder.get(), viewCreator)
-        val reusableObserver = { _: Any -> updateDecorations(bindingContext, div, galleryAdapter) }
+        val reusableObserver = { _: Any -> updateDecorations(div, galleryAdapter, resolver, bindingContext.divView) }
         addSubscription(div.orientation.observe(resolver, reusableObserver))
         addSubscription(div.scrollbar.observe(resolver, reusableObserver))
         addSubscription(div.scrollMode.observe(resolver, reusableObserver))
@@ -73,18 +74,18 @@ internal class DivGalleryBinder @Inject constructor(
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         adapter = galleryAdapter
-        bindItemBuilder(bindingContext, div, path)
+        bindItemBuilder(div, resolver, path)
         resetAnimatorAndRestoreOnLayout()
-        updateDecorations(bindingContext, div, galleryAdapter)
+        updateDecorations(div, galleryAdapter, resolver, bindingContext.divView)
     }
 
     private fun DivRecyclerView.updateDecorations(
-        context: BindingContext,
         div: DivGallery,
-        adapter: DivGalleryAdapter
+        adapter: DivGalleryAdapter,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         val metrics = resources.displayMetrics
-        val resolver = context.expressionResolver
         val divOrientation = div.orientation.evaluate(resolver)
         val orientation = if (divOrientation == DivGallery.Orientation.HORIZONTAL) {
             RecyclerView.HORIZONTAL
@@ -135,11 +136,11 @@ internal class DivGalleryBinder @Inject constructor(
         // DivGalleryItemHelper type with DivGridLayoutManager, resulting in
         // casting DivLinearLayoutManager to DivGridLayoutManager exception.
         val itemHelper: DivGalleryItemHelper = if (columnCount == 1) {
-            DivLinearLayoutManager(context, this, orientation, crossContentAlignment)
+            DivLinearLayoutManager(this, divView, orientation, crossContentAlignment)
         } else {
             DivGridLayoutManager(
-                context,
                 this,
+                divView,
                 orientation,
                 crossContentAlignment,
                 columnCount,
@@ -151,7 +152,7 @@ internal class DivGalleryBinder @Inject constructor(
 
         scrollInterceptionAngle = recyclerScrollInterceptionAngle
         clearOnScrollListeners()
-        context.divView.currentState?.let { state ->
+        divView.currentState?.let { state ->
             val itemCount = adapter.itemCount.takeIf { it > 1 } ?: return@let
             val id = div.id ?: div.hashCode().toString()
             val (position, offset) = state.getPositionAndOffset(id)
@@ -159,7 +160,7 @@ internal class DivGalleryBinder @Inject constructor(
             itemHelper.instantScrollToPosition(position.coerceAtMost(itemCount - 1), offset)
             addOnScrollListener(UpdateStateScrollListener(id, state, itemHelper))
         }
-        addOnScrollListener(DivGalleryScrollListener(context, this, itemHelper, div))
+        addOnScrollListener(DivGalleryScrollListener(this, itemHelper, div, resolver, divView))
         onInterceptTouchEventListener =
             if (div.restrictParentScroll.evaluate(resolver)) ParentScrollRestrictor else null
     }
@@ -201,10 +202,10 @@ internal class DivGalleryBinder @Inject constructor(
         }
     }
 
-    private fun DivRecyclerView.bindItemBuilder(context: BindingContext, div: DivGallery, path: DivStatePath) {
+    private fun DivRecyclerView.bindItemBuilder(div: DivGallery, resolver: ExpressionResolver, path: DivStatePath) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver) {
-            (adapter as DivGalleryAdapter?)?.setItems(builder.build(context.expressionResolver, path))
+        bindItemBuilder(builder, resolver) {
+            (adapter as DivGalleryAdapter?)?.setItems(builder.build(resolver, path))
         }
     }
 }

@@ -21,13 +21,13 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.util.expressionSubscriber
-import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.applyMargins
 import com.yandex.div.core.view2.divs.applyPaddings
@@ -216,9 +216,17 @@ internal class DivTabsBinder @Inject constructor(
         list: List<DivSimpleTab>,
         tabToSelect: Int? = null,
     ) {
-        val eventManager =
-            DivTabsEventManager(bindingContext, actionPerformer, div2Logger, visibilityActionTracker, this, div)
-        val isDynamicHeight = div.dynamicHeight.evaluate(bindingContext.expressionResolver)
+        val resolver = bindingContext.expressionResolver
+        val eventManager = DivTabsEventManager(
+            actionPerformer,
+            div2Logger,
+            visibilityActionTracker,
+            this,
+            resolver,
+            bindingContext.divView,
+            div
+        )
+        val isDynamicHeight = div.dynamicHeight.evaluate(resolver)
         val heightCalculatorFactory = if (isDynamicHeight) {
             HeightCalculatorFactory(::DynamicCardHeightCalculator)
         } else {
@@ -240,7 +248,7 @@ internal class DivTabsBinder @Inject constructor(
             eventManager, activeStateTracker, path,
         )
         adapter.setData { list }
-        adapter.selectedTab = tabToSelect ?: div.selectedTab.evaluate(bindingContext.expressionResolver).toIntSafely()
+        adapter.selectedTab = tabToSelect ?: div.selectedTab.evaluate(resolver).toIntSafely()
         divTabsAdapter = adapter
     }
 

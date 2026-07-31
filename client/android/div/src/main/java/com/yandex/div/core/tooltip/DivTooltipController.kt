@@ -132,7 +132,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
             if (animationsEnabledController.isEnabled()) {
                 animateExit(
                     divTooltip = tooltipData.divTooltip,
-                    resolver = tooltipData.bindingContext.expressionResolver,
+                    resolver = tooltipData.expressionResolver,
                     tooltipView = tooltipView,
                     substrateView = substrateView,
                     onEnd = onExitEnd,
@@ -150,7 +150,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
 
     fun cancelTooltips(divView: Div2View) {
         tooltips.toList().forEach { tooltip ->
-            if (tooltip.bindingContext.divView != divView) return@forEach
+            if (tooltip.divView != divView) return@forEach
             dismissTooltip(tooltip)?.let {
                 tooltips.remove(tooltip)
             }
@@ -169,7 +169,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
 
     fun handleConfigurationChange(divView: Div2View) {
         tooltips.toList().forEach { tooltip ->
-            if (tooltip.bindingContext.divView != divView) {
+            if (tooltip.divView != divView) {
                 return@forEach
             }
             if (!tooltip.popupWindow.isShowing) {
@@ -185,8 +185,8 @@ internal class DivTooltipController @VisibleForTesting constructor(
         val tooltipContainer = popup.contentView as? DivTooltipContainer ?: return
         val tooltipView = tooltipContainer.tooltipView ?: return
         val divTooltip = tooltip.divTooltip
-        val divView = tooltip.bindingContext.divView
-        val resolver = tooltip.bindingContext.expressionResolver
+        val divView = tooltip.divView
+        val resolver = tooltip.expressionResolver
 
         tooltip.stopAnchorTracking()
         tooltip.anchorTrackingDisposable = TooltipAnchorTracker(
@@ -217,7 +217,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
                 popupWindow.dismiss()
                 null
             } else {
-                stopVisibilityTracking(tooltip.bindingContext, tooltip.divTooltip.div)
+                stopVisibilityTracking(tooltip.divTooltip.div, tooltip.expressionResolver, tooltip.divView)
                 tooltip.id
             }
         }
@@ -306,9 +306,10 @@ internal class DivTooltipController @VisibleForTesting constructor(
                     isModal,
                     isOutsideTouchable,
                     divTooltip.tapOutsideActions,
-                    context,
                     touchTranslationCoordinator,
-                    divTooltip.substrateDiv?.hasAction() == true
+                    divTooltip.substrateDiv?.hasAction() == true,
+                    resolver,
+                    div2View,
                 ) { hideTooltip(divTooltip.id, scopeId) }
             )
             if (!hasSubstrate && animationsEnabledController.isEnabled()) {
@@ -324,8 +325,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
         val tooltipData = TooltipData(
             id = divTooltip.id,
             scopeId = scopeId,
-            bindingContext = context,
             divTooltip = divTooltip,
+            expressionResolver = resolver,
+            divView = div2View,
             popupWindow = popup,
             anchor = anchor,
             ticket = null,
@@ -340,9 +342,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
         popup.setOnDismissListener {
             tooltipData.stopAnchorTracking()
             tooltips.remove(tooltipData)
-            stopVisibilityTracking(context, divTooltip.div)
+            stopVisibilityTracking(divTooltip.div, resolver, div2View)
             divVisibilityActionTracker.getDivWithWaitingDisappearActions()[tooltipContainer]?.let {
-                divVisibilityActionTracker.trackDetachedView(context, tooltipContainer, it)
+                divVisibilityActionTracker.trackDetachedView(tooltipContainer, it, resolver, div2View)
             }
             tooltipRestrictor.tooltipShownCallback?.onDivTooltipDismissed(div2View, anchor, divTooltip)
             popup.removeBackPressedCallback(tooltipData, accessibilityStateProvider)
@@ -362,7 +364,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
                         resolver = resolver,
                         logSizeWarnings = true,
                     )
-                    startVisibilityTracking(context, div, tooltipContainer)
+                    startVisibilityTracking(div, resolver, tooltipContainer, div2View)
                     tooltipRestrictor.tooltipShownCallback?.onDivTooltipShown(div2View, anchor, divTooltip)
                 }
 
@@ -466,18 +468,13 @@ internal class DivTooltipController @VisibleForTesting constructor(
             null
         }
 
-    private fun startVisibilityTracking(context: BindingContext, div: Div, tooltipView: View) {
-        stopVisibilityTracking(context, div)
-        divVisibilityActionTracker.trackVisibilityActionsOf(
-            context.divView,
-            context.expressionResolver,
-            tooltipView,
-            div
-        )
+    private fun startVisibilityTracking(div: Div, resolver: ExpressionResolver, tooltipView: View, divView: Div2View) {
+        stopVisibilityTracking(div, resolver, divView)
+        divVisibilityActionTracker.trackVisibilityActionsOf(divView, resolver, tooltipView, div)
     }
 
-    private fun stopVisibilityTracking(context: BindingContext, div: Div) {
-        divVisibilityActionTracker.trackVisibilityActionsOf(context.divView, context.expressionResolver, null, div)
+    private fun stopVisibilityTracking(div: Div, resolver: ExpressionResolver, divView: Div2View) {
+        divVisibilityActionTracker.trackVisibilityActionsOf(divView, resolver, null, div)
     }
 
     fun captureCurrentTooltips(): Collection<TooltipData> = tooltips
@@ -486,8 +483,9 @@ internal class DivTooltipController @VisibleForTesting constructor(
 internal class TooltipData(
     val id: String,
     val scopeId: String?,
-    val bindingContext: BindingContext,
     val divTooltip: DivTooltip,
+    val expressionResolver: ExpressionResolver,
+    val divView: Div2View,
     val popupWindow: SafePopupWindow,
     val anchor: View,
     var ticket: DivPreloader.Ticket? = null,
@@ -506,9 +504,10 @@ private class PopupWindowTouchListener(
     private val isModal: Boolean,
     private val shouldDismissByOutsideTouch: Boolean,
     private val tapOutsideActions: List<DivAction>?,
-    private val bindingContext: BindingContext,
     private val touchTranslationCoordinator: TouchTranslationCoordinator,
     private val handleSubstrateClick: Boolean,
+    private val resolver: ExpressionResolver,
+    private val divView: Div2View,
     private val onTouchOutside: () -> Unit,
 ) : View.OnTouchListener {
 
@@ -527,8 +526,6 @@ private class PopupWindowTouchListener(
             else -> {
                 if (event.action == MotionEvent.ACTION_UP) {
                     tapOutsideActions?.let { actions ->
-                        val resolver = bindingContext.expressionResolver
-                        val divView = bindingContext.divView
                         actions.filter { it.isEnabled.evaluate(resolver) }.forEach { action ->
                             divView.div2Component.actionHandler.handleActionWithReason(
                                 action,

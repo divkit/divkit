@@ -64,7 +64,7 @@ internal class BulkActionHandler @Inject constructor(private val divView: Div2Vi
         if (isEmpty()) return
 
         try {
-            viewComponent.stateSwitcher.switchStates(bindingContext, newState, pendingPaths.immutableCopy())
+            viewComponent.stateSwitcher.switchStates(newState, expressionResolver, pendingPaths.immutableCopy())
         } catch (e: StateConflictException) {
             logError(e)
             resetToInitialState()

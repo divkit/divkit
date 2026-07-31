@@ -3,20 +3,21 @@ package com.yandex.div.core.view2.divs.gallery
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.ScrollDirection
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.bindingContext
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivGallery
 import kotlin.math.abs
 
 internal class DivGalleryScrollListener(
-    private val bindingContext: BindingContext,
     private val recycler: DivRecyclerView,
     private val galleryItemHelper: DivGalleryItemHelper,
     private val galleryDiv: DivGallery,
+    private val resolver: ExpressionResolver,
+    private val divView: Div2View,
 ) : RecyclerView.OnScrollListener() {
 
-    private val divView = bindingContext.divView
     private val minimumSignificantDx = divView.config.logCardScrollSignificantThreshold
 
     private var totalDelta = 0
@@ -32,7 +33,7 @@ internal class DivGalleryScrollListener(
         if (newState == RecyclerView.SCROLL_STATE_IDLE) {
             divView.div2Component.div2Logger.logGalleryCompleteScroll(
                 divView,
-                bindingContext.expressionResolver,
+                resolver,
                 galleryDiv,
                 galleryItemHelper.firstVisibleItemPosition(),
                 galleryItemHelper.lastVisibleItemPosition(),
@@ -69,17 +70,19 @@ internal class DivGalleryScrollListener(
 
             val div = (recycler.adapter as DivGalleryAdapter).visibleItems[position].div
 
+            val childResolver = child.bindingContext?.expressionResolver ?: resolver
             visibilityActionTracker.startTrackingViewsHierarchy(
-                context = child.bindingContext ?: bindingContext,
                 root = child,
                 rootDiv = div,
+                resolver = childResolver,
+                divView = divView,
             )
         }
 
         // Find and track recycled views containing DisappearActions that are waiting for disappear
         with(visibilityActionTracker) {
             getDivWithWaitingDisappearActions().filter { it.key !in recycler.children }.forEach { (view, div) ->
-                trackDetachedView(bindingContext, view, div)
+                trackDetachedView(view, div, resolver, divView)
             }
         }
     }

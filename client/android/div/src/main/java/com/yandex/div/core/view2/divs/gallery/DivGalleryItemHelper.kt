@@ -10,7 +10,7 @@ import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
 import com.yandex.div.core.util.isLayoutRtl
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.core.DivBlock
@@ -20,8 +20,8 @@ import com.yandex.div2.DivGallery
 
 @Suppress("FunctionName")
 internal interface DivGalleryItemHelper {
-    val bindingContext: BindingContext
     val view: DivRecyclerView
+    val divView: Div2View
     val crossContentAlignment: DivGallery.ContentAlignment
 
     val childrenToRelayout: MutableSet<View>
@@ -226,16 +226,16 @@ internal interface DivGalleryItemHelper {
         val container = (child as? ViewGroup) ?: return
         val itemView = container.children.firstOrNull() ?: return
 
-        val divView = bindingContext.divView
         if (clear) {
             val div = divView.takeBindingDiv(itemView) ?: return
             val itemContext = (itemView as? DivHolderView<*>)?.bindingContext ?: return
-            divView.div2Component.visibilityActionTracker.cancelTrackingViewsHierarchy(itemContext, itemView, div)
+            divView.div2Component.visibilityActionTracker
+                .cancelTrackingViewsHierarchy(itemView, div, itemContext.expressionResolver, itemContext.divView)
             divView.unbindViewFromDiv(itemView)
         } else {
             val item = getItemDiv(position) ?: return
             divView.div2Component.visibilityActionTracker
-                .startTrackingViewsHierarchy(bindingContext.getFor(item.expressionResolver), itemView, item.div)
+                .startTrackingViewsHierarchy(itemView, item.div, item.expressionResolver, divView)
             divView.bindViewToDiv(itemView, item.div)
         }
     }

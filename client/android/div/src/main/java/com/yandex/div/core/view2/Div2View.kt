@@ -1073,7 +1073,7 @@ class Div2View private constructor(
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
         val path = DivStatePath.fromState(newState)
-        val view = divBuilder.createView(newState.div, bindingContext, path)
+        val view = divBuilder.createView(newState.div, expressionResolver, path, this)
         if (bindOnAttachEnabled) {
             bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
                 suppressExpressionErrors {

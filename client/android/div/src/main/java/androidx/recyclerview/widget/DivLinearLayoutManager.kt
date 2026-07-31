@@ -2,14 +2,14 @@ package androidx.recyclerview.widget
 
 import android.view.View
 import com.yandex.div.core.util.isLayoutRtl
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div2.DivGallery.ContentAlignment
 
 internal class DivLinearLayoutManager(
-    override val bindingContext: BindingContext,
     override val view: DivRecyclerView,
+    override val divView: Div2View,
     @RecyclerView.Orientation orientation: Int,
     override val crossContentAlignment: ContentAlignment,
 ) : LinearLayoutManager(view.context, orientation, false), DivGalleryItemHelper {

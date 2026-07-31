@@ -44,10 +44,7 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         divStatePath: DivStatePath,
         divView: Div2View,
         expressionResolver: ExpressionResolver
-    ): View {
-        return divView.div2Component.div2Builder
-            .createView(div, divView.bindingContext.getFor(expressionResolver), divStatePath)
-    }
+    ) = divView.div2Component.div2Builder.createView(div, expressionResolver, divStatePath, divView)
 
     @AnyThread
     @JvmOverloads

@@ -64,10 +64,11 @@ internal class DivPagerAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
         val view = DivPagerPageLayout(bindingContext.divView.context) { isHorizontal }
         return DivPagerViewHolder(
-            bindingContext,
             view,
             divBinder,
             viewCreator,
+            bindingContext.expressionResolver,
+            bindingContext.divView,
             { isHorizontal },
             { crossAxisAlignment },
         )

@@ -4,6 +4,7 @@ import android.view.Gravity
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.doOnEveryDetach
 import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionViewHolder
@@ -17,10 +18,11 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivPager.ItemAlignment
 
 internal class DivPagerViewHolder(
-    private val parentContext: BindingContext,
     private val pageLayout: DivPagerPageLayout,
     divBinder: DivBinder,
     viewCreator: DivViewCreator,
+    private val parentResolver: ExpressionResolver,
+    private val divView: Div2View,
     private val isHorizontal: () -> Boolean,
     private val crossAxisAlignment: () -> ItemAlignment,
 ) : DivCollectionViewHolder(pageLayout, divBinder, viewCreator) {
@@ -28,8 +30,8 @@ internal class DivPagerViewHolder(
     init {
         itemView.doOnEveryDetach { view ->
             val div = oldDiv ?: return@doOnEveryDetach
-            parentContext.divView.div2Component.visibilityActionTracker
-                .startTrackingViewsHierarchy(parentContext, view, div)
+            divView.div2Component.visibilityActionTracker
+                .startTrackingViewsHierarchy(view, div, parentResolver, divView)
         }
     }
 

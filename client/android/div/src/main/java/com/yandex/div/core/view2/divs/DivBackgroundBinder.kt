@@ -20,7 +20,6 @@ import com.yandex.div.core.util.toFilters
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.toRadialGradientDrawableCenter
 import com.yandex.div.core.util.toRadialGradientDrawableRadius
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.graphics.checkIsNotEmpty
@@ -36,29 +35,30 @@ internal class DivBackgroundBinder @Inject constructor(
 ) {
 
     fun bindBackground(
-        context: BindingContext,
         view: View,
         newDefaultBackgroundList: List<DivBackground>,
         oldDefaultBackgroundList: List<DivBackground>,
         newFocusedBackgroundList: List<DivBackground>,
         oldFocusedBackgroundList: List<DivBackground>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         subscriber: ExpressionSubscriber,
         underlay: Drawable? = null,
         overlay: Drawable? = null,
     ) {
         if (newFocusedBackgroundList.isEmpty()) {
             bindDefaultBackground(
-                context,
                 view,
                 underlay,
                 overlay,
                 newDefaultBackgroundList,
                 oldDefaultBackgroundList,
+                resolver,
+                divView,
                 subscriber
             )
         } else {
             bindFocusBackground(
-                context,
                 view,
                 underlay,
                 overlay,
@@ -66,18 +66,21 @@ internal class DivBackgroundBinder @Inject constructor(
                 oldDefaultBackgroundList,
                 newFocusedBackgroundList,
                 oldFocusedBackgroundList,
+                resolver,
+                divView,
                 subscriber
             )
         }
     }
 
     private fun bindDefaultBackground(
-        context: BindingContext,
         view: View,
         underlay: Drawable?,
         overlay: Drawable?,
         newBackground: List<DivBackground>,
         oldBackground: List<DivBackground>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         subscriber: ExpressionSubscriber
     ) {
         val oldUnderlay = view.boundBackgroundUnderlay
@@ -89,29 +92,29 @@ internal class DivBackgroundBinder @Inject constructor(
             return
         }
 
-        view.applyDefaultBackground(context, underlay, overlay, newBackground)
+        view.applyDefaultBackground(underlay, overlay, newBackground, resolver, divView)
 
         if (newBackground.all { it.isConstant() }) {
             return
         }
 
         val callback = { _: Any ->
-            view.applyDefaultBackground(context, underlay, overlay, newBackground)
+            view.applyDefaultBackground(underlay, overlay, newBackground, resolver, divView)
         }
-        addBackgroundSubscriptions(newBackground, context.expressionResolver, subscriber, callback)
+        addBackgroundSubscriptions(newBackground, resolver, subscriber, callback)
     }
 
     private fun View.applyDefaultBackground(
-        context: BindingContext,
         underlay: Drawable?,
         overlay: Drawable?,
-        defaultBackgroundList: List<DivBackground>
+        defaultBackgroundList: List<DivBackground>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         val metrics = resources.displayMetrics
-        val resolver = context.expressionResolver
 
         val newDefaultDivBackground = defaultBackgroundList.map {
-            it.toBackgroundState(context.divView, metrics, resolver)
+            it.toBackgroundState(divView, metrics, resolver)
         }
 
         val oldDefaultDivBackground = this.defaultBackgroundList
@@ -123,7 +126,7 @@ internal class DivBackgroundBinder @Inject constructor(
             || (oldOverlay != overlay)
 
         if (backgroundChanged) {
-            updateBackground(newDefaultDivBackground.toDrawable(context, this, underlay, overlay))
+            updateBackground(newDefaultDivBackground.toDrawable(this, underlay, overlay, divView))
 
             this.defaultBackgroundList = newDefaultDivBackground
             this.focusedBackgroundList = null
@@ -133,7 +136,6 @@ internal class DivBackgroundBinder @Inject constructor(
     }
 
     private fun bindFocusBackground(
-        context: BindingContext,
         view: View,
         underlay: Drawable?,
         overlay: Drawable?,
@@ -141,6 +143,8 @@ internal class DivBackgroundBinder @Inject constructor(
         oldBackground: List<DivBackground>,
         newFocusedBackground: List<DivBackground>,
         oldFocusedBackground: List<DivBackground>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         subscriber: ExpressionSubscriber
     ) {
         val oldUnderlay = view.boundBackgroundUnderlay
@@ -153,30 +157,28 @@ internal class DivBackgroundBinder @Inject constructor(
             return
         }
 
-        view.applyFocusedBackground(context, underlay, overlay, newBackground, newFocusedBackground)
+        view.applyFocusedBackground(underlay, overlay, newBackground, newFocusedBackground, resolver, divView)
 
         if (newBackground.all { it.isConstant() } && newFocusedBackground.all { it.isConstant() }) {
             return
         }
 
         val callback = { _: Any ->
-            view.applyFocusedBackground(context, underlay, overlay, newBackground, newFocusedBackground)
+            view.applyFocusedBackground(underlay, overlay, newBackground, newFocusedBackground, resolver, divView)
         }
-        val resolver = context.expressionResolver
         addBackgroundSubscriptions(newBackground, resolver, subscriber, callback)
         addBackgroundSubscriptions(newFocusedBackground, resolver, subscriber, callback)
     }
 
     private fun View.applyFocusedBackground(
-        context: BindingContext,
         underlay: Drawable?,
         overlay: Drawable?,
         defaultBackgroundList: List<DivBackground>,
-        focusedBackgroundList: List<DivBackground>
+        focusedBackgroundList: List<DivBackground>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         val metrics = resources.displayMetrics
-        val divView = context.divView
-        val resolver = context.expressionResolver
 
         val newDefaultDivBackground = defaultBackgroundList.map { it.toBackgroundState(divView, metrics, resolver) }
         val newFocusedDivBackground = focusedBackgroundList.map { it.toBackgroundState(divView, metrics, resolver) }
@@ -196,13 +198,13 @@ internal class DivBackgroundBinder @Inject constructor(
 
             stateList.addState(
                 intArrayOf(android.R.attr.state_focused),
-                newFocusedDivBackground.toDrawable(context, this, underlay, overlay)
+                newFocusedDivBackground.toDrawable(this, underlay, overlay, divView)
             )
 
             if (defaultBackgroundList.isNotEmpty() || underlay != null || overlay != null) {
                 stateList.addState(
                     StateSet.WILD_CARD,
-                    newDefaultDivBackground.toDrawable(context, this, underlay, overlay))
+                    newDefaultDivBackground.toDrawable(this, underlay, overlay, divView))
             }
 
             updateBackground(stateList)
@@ -248,10 +250,10 @@ internal class DivBackgroundBinder @Inject constructor(
     }
 
     private fun List<DivBackgroundState>?.toDrawable(
-        context: BindingContext,
         view: View,
         underlay: Drawable?,
         overlay: Drawable?,
+        divView: Div2View,
     ): Drawable? {
         if (this == null && underlay == null && overlay == null) {
             return null
@@ -260,7 +262,7 @@ internal class DivBackgroundBinder @Inject constructor(
         val layers = mutableListOf<Drawable>()
         underlay?.let { layers.add(it) }
         this?.let { backgroundStates ->
-            layers.addAll(backgroundStates.map { it.toDrawable(context, view, imageLoader) })
+            layers.addAll(backgroundStates.map { it.toDrawable(view, imageLoader, divView) })
         }
         overlay?.let { layers.add(it) }
 
