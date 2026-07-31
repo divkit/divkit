@@ -5,16 +5,12 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.os.Build
-import android.util.Log
 import android.view.View
 import androidx.annotation.MainThread
 import java.util.Properties
 import java.util.concurrent.atomic.AtomicBoolean
 
 object ScreenshotCaptor {
-
-    private const val TAG = "ScreenshotCapture"
-
     private val propertiesSaved = AtomicBoolean(false)
 
     /**
@@ -31,13 +27,18 @@ object ScreenshotCaptor {
             saveDeviceProperties(view.context)
         }
 
-        takeViewRender(view, outputFile = ScreenshotType.ViewRender.asFile(suiteName, name))
-        takeViewPixelCopy(view, outputFile = ScreenshotType.ViewPixelCopy.asFile(suiteName, name))
-
-        return listOf(
-            ScreenshotType.ViewRender.relativeScreenshotPath(suiteName, name),
-            ScreenshotType.ViewPixelCopy.relativeScreenshotPath(suiteName, name)
-        )
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            ViewRasterizer
+                .rasterize(view)
+                .save(ScreenshotType.ViewRender.asFile(suiteName, name))
+            return listOf(ScreenshotType.ViewRender.relativeScreenshotPath(suiteName, name))
+        } else {
+            val window = view.context.asActivity().window
+            ViewRasterizer
+                .pixelCopy(window, view)
+                .save(ScreenshotType.ViewPixelCopy.asFile(suiteName, name))
+            return listOf(ScreenshotType.ViewPixelCopy.relativeScreenshotPath(suiteName, name))
+        }
     }
 
     private fun saveDeviceProperties(context: Context) {
@@ -53,23 +54,6 @@ object ScreenshotCaptor {
         propertiesWriter.use {
             properties.store(it, null)
         }
-    }
-
-    private fun takeViewRender(view: View, outputFile: TestFile) {
-        val bitmap = ViewRasterizer.rasterize(view)
-        Log.i(TAG, "saving view render to ${outputFile.path}")
-
-        bitmap.save(outputFile)
-    }
-
-    private fun takeViewPixelCopy(view: View, outputFile: TestFile) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
-
-        val window = view.context.asActivity().window
-        val pixelCopy = ViewRasterizer.pixelCopy(window, view)
-        Log.i(TAG, "saving view pixel copy to ${outputFile.path}")
-
-        pixelCopy.save(outputFile)
     }
 
     private fun Context.asActivity(): Activity {

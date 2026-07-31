@@ -19,6 +19,7 @@ import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
+import androidx.core.graphics.createBitmap
 
 internal object ViewRasterizer {
 
@@ -53,7 +54,7 @@ internal object ViewRasterizer {
     fun rasterize(view: View): Bitmap {
         if (!view.isRenderable) return emptyViewBitmap()
 
-        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(view.width, view.height)
         val canvas = Canvas(bitmap)
         view.draw(canvas)
         return bitmap
@@ -67,7 +68,7 @@ internal object ViewRasterizer {
             val elevationInset = -view.elevation.toInt()
             inset(elevationInset, elevationInset)
         }
-        val bitmap = Bitmap.createBitmap(viewRect.width(), viewRect.height(), Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(viewRect.width(), viewRect.height())
         val handler = Handler(backgroundLooper)
 
         return runBlocking(handler.asCoroutineDispatcher()) {
@@ -84,7 +85,7 @@ internal object ViewRasterizer {
     }
 
     private fun emptyViewBitmap(): Bitmap {
-        val bitmap = Bitmap.createBitmap(EMPTY_VIEW_WIDTH, EMPTY_VIEW_HEIGHT, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(EMPTY_VIEW_WIDTH, EMPTY_VIEW_HEIGHT)
         val canvas = Canvas(bitmap)
         emptyViewTextLayout.draw(canvas)
         return bitmap
