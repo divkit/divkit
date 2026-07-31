@@ -12,6 +12,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.toPx
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivCircleShape
@@ -72,7 +73,11 @@ internal class SliderStyles(
     private var cachedRtl: Boolean? = null
     private var cachedRangeBounds: List<SliderRangeBounds> = emptyList()
 
-    fun rangeBounds(trackLength: Float, trackStart: Float, isRtl: Boolean): List<SliderRangeBounds> {
+    fun rangeBounds(
+        trackLength: Float,
+        trackStart: Float,
+        isRtl: Boolean
+    ): List<SliderRangeBounds> {
         if (trackLength == cachedTrackLength && trackStart == cachedTrackStart && cachedRtl == isRtl) {
             return cachedRangeBounds
         }
@@ -127,12 +132,20 @@ internal class SliderVisualRange(
 )
 
 @Composable
-internal fun DivSlider.observeSliderStyles(range: SliderRange, hasSecondary: Boolean): SliderStyles {
-    val activeTrack = trackActiveStyle.observeDrawable()
-    val inactiveTrack = trackInactiveStyle.observeDrawable()
+internal fun DivSlider.observeSliderStyles(
+    range: SliderRange,
+    hasSecondary: Boolean
+): SliderStyles? {
+    val activeTrack = trackActiveStyle.observeDrawable() ?: return null
+    val inactiveTrack = trackInactiveStyle.observeDrawable() ?: return null
+    val thumb = thumbStyle.observeDrawable() ?: return null
     return SliderStyles(
-        thumb = thumbStyle.observeDrawable(),
-        secondaryThumb = if (hasSecondary) (thumbSecondaryStyle ?: thumbStyle).observeDrawable() else null,
+        thumb = thumb,
+        secondaryThumb = if (hasSecondary) {
+            (thumbSecondaryStyle ?: thumbStyle).observeDrawable()
+        } else {
+            null
+        },
         activeTrack = activeTrack,
         inactiveTrack = inactiveTrack,
         activeTickMark = tickMarkActiveStyle?.observeDrawable(),
@@ -170,32 +183,47 @@ private fun DivSlider.Range.observeRange(
 }
 
 @Composable
-private fun DivDrawable.observeDrawable(): SliderDrawable {
-    val shapeDrawable = (this as DivDrawable.Shape).value
-    return when (val shape = shapeDrawable.shape) {
-        is DivShape.RoundedRectangle -> shape.value.observeDrawable(shapeDrawable)
-        is DivShape.Circle -> shape.value.observeDrawable(shapeDrawable)
+private fun DivDrawable.observeDrawable(): SliderDrawable? {
+    when (val drawable = this) {
+        is DivDrawable.Shape -> {
+            val shapeDrawable = drawable.value
+            return when (val shape = shapeDrawable.shape) {
+                is DivShape.RoundedRectangle -> shape.value.observeDrawable(shapeDrawable)
+                is DivShape.Circle -> shape.value.observeDrawable(shapeDrawable)
+            }
+        }
     }
 }
 
 @Composable
-private fun DivRoundedRectangleShape.observeDrawable(drawable: DivShapeDrawable): SliderDrawable {
+private fun DivRoundedRectangleShape.observeDrawable(drawable: DivShapeDrawable): SliderDrawable? {
+    val color = (backgroundColor ?: drawable.color)?.observedColorValue()
+    if (color == null) {
+        reportError("Drawable color not defined")
+        return null
+    }
     return SliderDrawable(
         width = itemWidth.observedValue().toPx(),
         height = itemHeight.observedValue().toPx(),
-        color = (backgroundColor ?: drawable.color).observedColorValue(),
+        color = color,
         radius = cornerRadius.observedValue().toPx(),
         stroke = (stroke ?: drawable.stroke)?.observeStroke()
     )
 }
 
 @Composable
-private fun DivCircleShape.observeDrawable(drawable: DivShapeDrawable): SliderDrawable {
+private fun DivCircleShape.observeDrawable(drawable: DivShapeDrawable): SliderDrawable? {
+    val color = (backgroundColor ?: drawable.color)?.observedColorValue()
+    if (color == null) {
+        reportError("Drawable color not defined")
+        return null
+    }
+
     val radius = radius.observedValue().toPx()
     return SliderDrawable(
         width = radius * 2f,
         height = radius * 2f,
-        color = (backgroundColor ?: drawable.color).observedColorValue(),
+        color = color,
         radius = radius,
         stroke = (stroke ?: drawable.stroke)?.observeStroke()
     )
@@ -207,7 +235,13 @@ private fun DivStroke.observeStroke(): SliderStroke {
         color = color.observedColorValue(),
         width = width.observedPxValue(unit),
         pathEffect = when (style) {
-            is DivStrokeStyle.Dashed -> PathEffect.dashPathEffect(floatArrayOf(6.dp.toPx(), 2.dp.toPx()))
+            is DivStrokeStyle.Dashed -> PathEffect.dashPathEffect(
+                floatArrayOf(
+                    6.dp.toPx(),
+                    2.dp.toPx()
+                )
+            )
+
             is DivStrokeStyle.Solid -> null
         }
     )
@@ -221,7 +255,8 @@ private fun DivSlider.TextStyle.observeTextStyle(): SliderTextStyle {
         ?: Typeface.NORMAL
     return SliderTextStyle(
         fontSize = size,
-        letterSpacing = letterSpacing.observedFloatValue() / fontSize.observedValue().coerceAtLeast(1L),
+        letterSpacing = letterSpacing.observedFloatValue() / fontSize.observedValue()
+            .coerceAtLeast(1L),
         typeface = Typeface.create(fontFamily?.observedValue(), weight),
         offsetX = offset?.x?.observedPxValue() ?: 0f,
         offsetY = offset?.y?.observedPxValue() ?: 0f,
@@ -233,5 +268,6 @@ private fun DivFontWeight.toTypefaceWeight(): Int = when (this) {
     DivFontWeight.LIGHT,
     DivFontWeight.REGULAR,
     DivFontWeight.MEDIUM -> Typeface.NORMAL
+
     DivFontWeight.BOLD -> Typeface.BOLD
 }

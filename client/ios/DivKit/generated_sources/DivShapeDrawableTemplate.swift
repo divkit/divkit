@@ -33,7 +33,7 @@ public final class DivShapeDrawableTemplate: TemplateValue, Sendable {
   }
 
   private static func resolveOnlyLinks(context: TemplatesContext, parent: DivShapeDrawableTemplate?) -> DeserializationResult<DivShapeDrawable> {
-    let colorValue = { parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
+    let colorValue = { parent?.color?.resolveOptionalValue(context: context, transform: Color.color(withHexString:)) ?? .noValue }()
     let shapeValue = { parent?.shape?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let strokeValue = { parent?.stroke?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     var errors = mergeErrors(
@@ -41,20 +41,16 @@ public final class DivShapeDrawableTemplate: TemplateValue, Sendable {
       shapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "shape", error: $0) },
       strokeValue.errorsOrWarnings?.map { .nestedObjectError(field: "stroke", error: $0) }
     )
-    if case .noValue = colorValue {
-      errors.append(.requiredFieldIsMissing(field: "color"))
-    }
     if case .noValue = shapeValue {
       errors.append(.requiredFieldIsMissing(field: "shape"))
     }
     guard
-      let colorNonNil = colorValue.value,
       let shapeNonNil = shapeValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivShapeDrawable(
-      color: { colorNonNil }(),
+      color: { colorValue.value }(),
       shape: { shapeNonNil }(),
       stroke: { strokeValue.value }()
     )
@@ -114,20 +110,16 @@ public final class DivShapeDrawableTemplate: TemplateValue, Sendable {
       shapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "shape", error: $0) },
       strokeValue.errorsOrWarnings?.map { .nestedObjectError(field: "stroke", error: $0) }
     )
-    if case .noValue = colorValue {
-      errors.append(.requiredFieldIsMissing(field: "color"))
-    }
     if case .noValue = shapeValue {
       errors.append(.requiredFieldIsMissing(field: "shape"))
     }
     guard
-      let colorNonNil = colorValue.value,
       let shapeNonNil = shapeValue.value
     else {
       return .failure(NonEmptyArray(errors)!)
     }
     let result = DivShapeDrawable(
-      color: { colorNonNil }(),
+      color: { colorValue.value }(),
       shape: { shapeNonNil }(),
       stroke: { strokeValue.value }()
     )

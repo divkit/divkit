@@ -159,7 +159,7 @@ internal fun ExpressionSubscriber.observeDrawable(
 
         is DivDrawable.Shape -> {
             val shapeDrawable = drawable.value
-            addSubscription(shapeDrawable.color.observe(resolver, callback))
+            addSubscription(shapeDrawable.color?.observe(resolver, callback))
             observeShape(shapeDrawable.shape, resolver, callback)
             observeStroke(shapeDrawable.stroke, resolver, callback)
         }

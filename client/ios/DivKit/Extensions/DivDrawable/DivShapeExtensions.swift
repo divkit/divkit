@@ -12,6 +12,7 @@ extension DivShapeDrawable {
     let separatorBlock: Block
     let height: CGFloat
     let cornerRadius: CGFloat
+    let backgroundColor: Color?
 
     switch shape {
     case let .divRoundedRectangleShape(roundedRectangle):
@@ -35,6 +36,7 @@ extension DivShapeDrawable {
           .cornerRadius
           .resolveValue(expressionResolver) ?? 0
       )
+      backgroundColor = roundedRectangle.resolveBackgroundColor(expressionResolver)
 
     case let .divCircleShape(circle):
       cornerRadius = CGFloat(
@@ -43,19 +45,22 @@ extension DivShapeDrawable {
       let sideSize = cornerRadius * 2
       separatorBlock = SeparatorBlock(size: sideSize)
       height = sideSize
+      backgroundColor = circle.resolveBackgroundColor(expressionResolver)
     }
 
-    let blockBorder = stroke.flatMap { BlockBorder(
-      color: $0.resolveColor(expressionResolver) ?? .black,
-      width: CGFloat($0.resolveWidth(expressionResolver)) / 2
-    ) }
+    let blockBorder = stroke.flatMap {
+      BlockBorder(
+        color: $0.resolveColor(expressionResolver) ?? .black,
+        width: CGFloat($0.resolveWidth(expressionResolver)) / 2
+      )
+    }
 
     return separatorBlock
       .addingVerticalGaps(height / 2 - 0.5)
       .addingDecorations(
         boundary: .clipCorner(radius: cornerRadius, corners: corners),
         border: blockBorder,
-        backgroundColor: resolveColor(expressionResolver)
+        backgroundColor: backgroundColor ?? resolveColor(expressionResolver)
       )
   }
 

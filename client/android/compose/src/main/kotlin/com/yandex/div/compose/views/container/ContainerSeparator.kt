@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDrawable
@@ -23,11 +24,16 @@ internal fun ContainerSeparator(
 ) {
     when (val style = separator.style) {
         is DivDrawable.Shape -> {
-            val color = style.value.color.observedColorValue()
+            val fallbackColor = style.value.color?.observedColorValue()
             val modifier = modifier.padding(separator.margins)
             when (val shape = style.value.shape) {
                 is DivShape.RoundedRectangle -> {
                     val rect = shape.value
+                    val color = rect.backgroundColor?.observedColorValue() ?: fallbackColor
+                    if (color == null) {
+                        reportError("Separator color not defined")
+                        return
+                    }
                     Spacer(
                         modifier = modifier
                             .width(rect.itemWidth.observedValue())
@@ -40,9 +46,15 @@ internal fun ContainerSeparator(
                 }
 
                 is DivShape.Circle -> {
+                    val circle = shape.value
+                    val color = circle.backgroundColor?.observedColorValue() ?: fallbackColor
+                    if (color == null) {
+                        reportError("Separator color not defined")
+                        return
+                    }
                     Spacer(
                         modifier = modifier
-                            .size(shape.value.radius.observedValue() * 2)
+                            .size(circle.radius.observedValue() * 2)
                             .background(color, CircleShape)
                     )
                 }

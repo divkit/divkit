@@ -6,7 +6,7 @@ import VGSL
 
 public final class DivShapeDrawable: Sendable {
   public static let type: String = "shape_drawable"
-  public let color: Expression<Color>
+  public let color: Expression<Color>?
   public let shape: DivShape
   public let stroke: DivStroke?
 
@@ -16,14 +16,14 @@ public final class DivShapeDrawable: Sendable {
 
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
-      color: try dictionary.getExpressionField("color", transform: Color.color(withHexString:), context: context),
+      color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:), context: context),
       shape: try dictionary.getField("shape", transform: { (dict: [String: Any]) in try DivShape(dictionary: dict, context: context) }, context: context),
       stroke: try dictionary.getOptionalField("stroke", transform: { (dict: [String: Any]) in try DivStroke(dictionary: dict, context: context) })
     )
   }
 
   init(
-    color: Expression<Color>,
+    color: Expression<Color>? = nil,
     shape: DivShape,
     stroke: DivStroke? = nil
   ) {
@@ -53,7 +53,7 @@ extension DivShapeDrawable: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
-    result["color"] = color.toValidSerializationValue()
+    result["color"] = color?.toValidSerializationValue()
     result["shape"] = shape.toDictionary()
     result["stroke"] = stroke?.toDictionary()
     return result

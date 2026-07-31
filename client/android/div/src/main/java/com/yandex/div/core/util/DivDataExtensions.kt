@@ -226,7 +226,7 @@ internal fun DivDrawable?.isConstant(): Boolean {
         null -> true
 
         is DivDrawable.Shape -> {
-            value.color.isConstant()
+            value.color.isConstantOrNull()
                 && value.shape.isConstant()
                 && value.stroke.isConstant()
         }

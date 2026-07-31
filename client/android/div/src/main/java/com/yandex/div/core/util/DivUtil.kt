@@ -360,29 +360,33 @@ internal fun DivShapeDrawable.toDrawable(
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
 ): Drawable? {
-    return when (val shape = this.shape) {
+    return when (val shape = shape) {
         is DivShape.RoundedRectangle -> {
+            val rectangle = shape.value
+            val color = (rectangle.backgroundColor ?: color)?.evaluate(resolver) ?: return null
             RoundedRectDrawable(
                 RoundedRectDrawable.Params(
-                    width = shape.value.itemWidth.toPxF(metrics, resolver),
-                    height = shape.value.itemHeight.toPxF(metrics, resolver),
-                    color = (shape.value.backgroundColor ?: color).evaluate(resolver),
-                    radius = shape.value.cornerRadius.toPxF(metrics, resolver),
-                    strokeColor = (shape.value.stroke ?: stroke)?.color?.evaluate(resolver),
-                    strokeWidth = (shape.value.stroke ?: stroke)?.getWidthPxF(metrics, resolver)
+                    width = rectangle.itemWidth.toPxF(metrics, resolver),
+                    height = rectangle.itemHeight.toPxF(metrics, resolver),
+                    color = color,
+                    radius = rectangle.cornerRadius.toPxF(metrics, resolver),
+                    strokeColor = (rectangle.stroke ?: stroke)?.color?.evaluate(resolver),
+                    strokeWidth = (rectangle.stroke ?: stroke)?.getWidthPxF(metrics, resolver)
                 )
             )
         }
-        is DivShape.Circle ->
+        is DivShape.Circle -> {
+            val circle = shape.value
+            val color = (circle.backgroundColor ?: color)?.evaluate(resolver) ?: return null
             CircleDrawable(
                 CircleDrawable.Params(
-                    radius = shape.value.radius.toPxF(metrics, resolver),
-                    color = (shape.value.backgroundColor ?: color).evaluate(resolver),
-                    strokeColor = (shape.value.stroke ?: stroke)?.color?.evaluate(resolver),
-                    strokeWidth = (shape.value.stroke ?: stroke)?.getWidthPxF(metrics, resolver)
+                    radius = circle.radius.toPxF(metrics, resolver),
+                    color = color,
+                    strokeColor = (circle.stroke ?: stroke)?.color?.evaluate(resolver),
+                    strokeWidth = (circle.stroke ?: stroke)?.getWidthPxF(metrics, resolver)
                 )
             )
-        else -> null
+        }
     }
 }
 

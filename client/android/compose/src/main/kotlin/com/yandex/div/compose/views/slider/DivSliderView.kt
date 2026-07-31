@@ -20,7 +20,12 @@ import kotlin.math.roundToLong
 @Composable
 internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
     val state = data.rememberSliderState()
-    val styles = data.observeSliderStyles(state.range, hasSecondary = state.secondary != null)
+
+    val styles = data.observeSliderStyles(
+        range = state.range,
+        hasSecondary = state.secondary != null
+    ) ?: return
+
     val isEnabled = data.isEnabled.observedValue()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val coroutineScope = rememberCoroutineScope()
@@ -35,12 +40,14 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
             val width = if (constraints.hasFixedWidth) {
                 constraints.maxWidth
             } else {
-                styles.desiredWidth.roundToInt().coerceIn(constraints.minWidth, constraints.maxWidth)
+                styles.desiredWidth.roundToInt()
+                    .coerceIn(constraints.minWidth, constraints.maxWidth)
             }
             val height = if (constraints.hasFixedHeight) {
                 constraints.maxHeight
             } else {
-                styles.desiredHeight.roundToInt().coerceIn(constraints.minHeight, constraints.maxHeight)
+                styles.desiredHeight.roundToInt()
+                    .coerceIn(constraints.minHeight, constraints.maxHeight)
             }
 
             layout(width, height) {}
@@ -85,12 +92,20 @@ private fun Modifier.sliderPointerInput(
 
             state.isInteracting = true
             try {
-                activeThumb.setValue(valueAt(down.position.x), animated = animationsEnabled, scope = coroutineScope)
+                activeThumb.setValue(
+                    valueAt(down.position.x),
+                    animated = animationsEnabled,
+                    scope = coroutineScope
+                )
                 while (true) {
                     val event = awaitPointerEvent()
                     val change = event.changes.firstOrNull() ?: break
                     if (!change.pressed) break
-                    activeThumb.setValue(valueAt(change.position.x), animated = false, scope = coroutineScope)
+                    activeThumb.setValue(
+                        valueAt(change.position.x),
+                        animated = false,
+                        scope = coroutineScope
+                    )
                     change.consume()
                 }
             } finally {

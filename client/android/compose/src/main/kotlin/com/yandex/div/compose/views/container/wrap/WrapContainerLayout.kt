@@ -122,8 +122,10 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
 
     FlowColumn(
         modifier = containerModifier,
-        verticalArrangement = verticalAlignment.toVerticalArrangement(wrapLayoutState.effectiveItemSpacing),
-        horizontalArrangement = horizontalAlignment.toHorizontalArrangement(wrapLayoutState.effectiveLineSpacing),
+        verticalArrangement = verticalAlignment
+            .toVerticalArrangement(wrapLayoutState.effectiveItemSpacing),
+        horizontalArrangement = horizontalAlignment.
+        toHorizontalArrangement(wrapLayoutState.effectiveLineSpacing),
         overflow = FlowColumnOverflow.Visible,
     ) {
         val defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment()
@@ -155,8 +157,8 @@ private class WrapLayoutState(
 private fun resolveWrapLayoutState(data: DivContainer, isHorizontal: Boolean): WrapLayoutState {
     val itemSeparatorVisibility = data.separator.resolveSeparatorVisibility()
     val lineSeparatorVisibility = data.lineSeparator.resolveSeparatorVisibility()
-    val itemSeparatorDrawInfo = data.separator.resolveDrawInfo()
-    val lineSeparatorDrawInfo = data.lineSeparator.resolveDrawInfo()
+    val itemSeparatorDrawInfo = data.separator?.resolveDrawInfo()
+    val lineSeparatorDrawInfo = data.lineSeparator?.resolveDrawInfo()
 
     val effectiveItemSpacing = when {
         itemSeparatorVisibility.showBetween && itemSeparatorDrawInfo != null ->

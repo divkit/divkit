@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.container.wrap
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -12,12 +13,15 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.mirrorHorizontallyIfRtl
+import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.container.SeparatorVisibility
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivShape
 
+@Immutable
 internal data class SeparatorDrawInfo(
     val color: Color,
     val shapeWidthDp: Dp,
@@ -40,50 +44,61 @@ internal fun SeparatorDrawInfo.crossAxisTotalDp(isHorizontal: Boolean): Dp =
     if (isHorizontal) totalHeightDp else totalWidthDp
 
 @Composable
-internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
-    val sep = this ?: return null
-    val style = sep.style as? DivDrawable.Shape ?: return null
-    val shapeDrawable = style.value
-    val color = shapeDrawable.color.observedColorValue()
-    val margins = sep.margins
+internal fun DivContainer.Separator.resolveDrawInfo(): SeparatorDrawInfo? {
+    when (val style = style) {
+        is DivDrawable.Shape -> {
+            val shapeDrawable = style.value
+            val fallbackColor = shapeDrawable.color?.observedColorValue()
 
-    val marginStartDp = margins?.run { (start ?: left).observedValue().toDp() } ?: 0.dp
-    val marginEndDp = margins?.run { (end ?: right).observedValue().toDp() } ?: 0.dp
-    val marginTopDp = margins?.top.observedValue(0L).toDp()
-    val marginBottomDp = margins?.bottom.observedValue(0L).toDp()
+            val marginStartDp = margins?.run { (start ?: left).observedValue().toDp() } ?: 0.dp
+            val marginEndDp = margins?.run { (end ?: right).observedValue().toDp() } ?: 0.dp
+            val marginTopDp = margins?.top.observedValue(0L).toDp()
+            val marginBottomDp = margins?.bottom.observedValue(0L).toDp()
 
-    return when (val shape = shapeDrawable.shape) {
-        is DivShape.RoundedRectangle -> {
-            val rect = shape.value
-            SeparatorDrawInfo(
-                color = color,
-                shapeWidthDp = rect.itemWidth.value.observedValue().toDp(),
-                shapeHeightDp = rect.itemHeight.value.observedValue().toDp(),
-                cornerRadiusDp = rect.cornerRadius.value.observedValue().toDp(),
-                marginStartDp = marginStartDp,
-                marginEndDp = marginEndDp,
-                marginTopDp = marginTopDp,
-                marginBottomDp = marginBottomDp,
-                isCircle = false,
-            )
+            return when (val shape = shapeDrawable.shape) {
+                is DivShape.RoundedRectangle -> {
+                    val rect = shape.value
+                    val color = rect.backgroundColor?.observedColorValue() ?: fallbackColor
+                    if (color == null) {
+                        reportError("Separator color not defined")
+                        return null
+                    }
+                    SeparatorDrawInfo(
+                        color = color,
+                        shapeWidthDp = rect.itemWidth.observedValue(),
+                        shapeHeightDp = rect.itemHeight.observedValue(),
+                        cornerRadiusDp = rect.cornerRadius.observedValue(),
+                        marginStartDp = marginStartDp,
+                        marginEndDp = marginEndDp,
+                        marginTopDp = marginTopDp,
+                        marginBottomDp = marginBottomDp,
+                        isCircle = false,
+                    )
+                }
+
+                is DivShape.Circle -> {
+                    val circle = shape.value
+                    val radius = circle.radius.observedValue()
+                    val diameter = radius * 2
+                    val color = circle.backgroundColor?.observedColorValue() ?: fallbackColor
+                    if (color == null) {
+                        reportError("Separator color not defined")
+                        return null
+                    }
+                    SeparatorDrawInfo(
+                        color = color,
+                        shapeWidthDp = diameter,
+                        shapeHeightDp = diameter,
+                        cornerRadiusDp = radius,
+                        marginStartDp = marginStartDp,
+                        marginEndDp = marginEndDp,
+                        marginTopDp = marginTopDp,
+                        marginBottomDp = marginBottomDp,
+                        isCircle = true,
+                    )
+                }
+            }
         }
-
-        is DivShape.Circle -> {
-            val radius = shape.value.radius.value.observedValue().toDp()
-            val diameter = radius * 2
-            SeparatorDrawInfo(
-                color = color,
-                shapeWidthDp = diameter,
-                shapeHeightDp = diameter,
-                cornerRadiusDp = radius,
-                marginStartDp = marginStartDp,
-                marginEndDp = marginEndDp,
-                marginTopDp = marginTopDp,
-                marginBottomDp = marginBottomDp,
-                isCircle = true,
-            )
-        }
-
     }
 }
 
@@ -206,7 +221,7 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
                     drawItemSeparatorH(
                         sepInfo,
                         separatorRight = rect.right + sepInfo.totalWidthDp.toPx() +
-                            (edgeSepPadEndPx - sepInfo.totalWidthDp.toPx()) / 2,
+                                (edgeSepPadEndPx - sepInfo.totalWidthDp.toPx()) / 2,
                         lineTop = lineTop,
                         lineBottom = lineBottom,
                     )
@@ -219,7 +234,7 @@ internal fun DrawScope.drawHorizontalWrapSeparators(
             drawLineSeparatorH(
                 lineSepInfo,
                 separatorBottom = lineBottom + edgeLineSepPadBottomPx -
-                    (edgeLineSepPadBottomPx - lineSepInfo.totalHeightDp.toPx()) / 2,
+                        (edgeLineSepPadBottomPx - lineSepInfo.totalHeightDp.toPx()) / 2,
                 contentLeft = -edgeSepPadStartPx,
                 contentRight = size.width + edgeSepPadEndPx,
             )
@@ -303,7 +318,7 @@ internal fun DrawScope.drawVerticalWrapSeparators(
                     drawItemSeparatorV(
                         sepInfo,
                         separatorBottom = rect.bottom + sepInfo.totalHeightDp.toPx() +
-                            (edgeSepPadEndPx - sepInfo.totalHeightDp.toPx()) / 2,
+                                (edgeSepPadEndPx - sepInfo.totalHeightDp.toPx()) / 2,
                         lineLeft = lineLeft,
                         lineRight = lineRight,
                     )
@@ -316,7 +331,7 @@ internal fun DrawScope.drawVerticalWrapSeparators(
             drawLineSeparatorV(
                 lineSepInfo,
                 separatorRight = lineRight + edgeLineSepPadEndPx -
-                    (edgeLineSepPadEndPx - lineSepInfo.totalWidthDp.toPx()) / 2,
+                        (edgeLineSepPadEndPx - lineSepInfo.totalWidthDp.toPx()) / 2,
                 contentTop = -edgeSepPadStartPx,
                 contentBottom = size.height + edgeSepPadEndPx,
             )
@@ -328,8 +343,16 @@ private fun DrawScope.mirrorXIfRtl(childRects: List<Rect>, isRtl: Boolean): List
     if (!isRtl) return childRects
     val width = size.width
     return childRects.map { rect ->
-        if (rect == Rect.Zero) rect
-        else Rect(left = width - rect.right, top = rect.top, right = width - rect.left, bottom = rect.bottom)
+        if (rect == Rect.Zero) {
+            rect
+        } else {
+            Rect(
+                left = width - rect.right,
+                right = width - rect.left,
+                top = rect.top,
+                bottom = rect.bottom
+            )
+        }
     }
 }
 

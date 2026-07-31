@@ -30,7 +30,6 @@
   ],
   "required": [
     "type",
-    "shape",
-    "color"
+    "shape"
   ]
 }
