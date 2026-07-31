@@ -19,10 +19,7 @@ internal fun Modifier.appearance(
     } else {
         0f
     }
-    // The stroke must be applied before the border clip so that the anti-aliased clip doesn't
-    // attenuate it at the outline where it has to cover the clipped background edge.
     return applyIfNotNull(data.border) { borderShadow(it, alpha) }
         .applyIf(alpha < 1f) { alpha(alpha) }
-        .applyIfNotNull(data.border) { borderStroke(it) }
-        .applyIfNotNull(data.border) { borderClip(it) }
+        .applyIfNotNull(data.border) { borderStrokeAndClip(it) }
 }

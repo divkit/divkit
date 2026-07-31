@@ -37,26 +37,35 @@ import com.yandex.div2.DivStrokeStyle
 import kotlin.math.max
 import kotlin.math.min
 
+// The stroke is applied first (outer) and the clip second (inner): the stroke is drawn over
+// the content, outside the border clip layer, with its outer edge exactly on the clip outline.
+// A stroke drawn inside the clip would be attenuated by the anti-aliased clip and the
+// background would show through its outer edge as a thin halo; the background edge under the
+// stroke is hidden by the clip inset instead (see StrokeInsetShape).
 @Composable
-internal fun Modifier.borderClip(data: DivBorder): Modifier {
+internal fun Modifier.borderStrokeAndClip(data: DivBorder): Modifier {
     val shape = data.toShape()
-    if (shape == RectangleShape) return this
-    // Under a solid opaque stroke the clip (background and content) is inset so that its
-    // anti-aliased edge is hidden under the fully opaque part of the stroke. If the clip
-    // ended at the outline instead, it would attenuate the background and the stroke at the
-    // same boundary pixels and the background would show through the stroke's outer edge
-    // as a thin halo. A dashed stroke has gaps where the background must reach the outline,
-    // so the inset is not applied.
-    val stroke = data.stroke ?: return clip(shape)
+    val stroke = data.stroke
+        ?: return if (shape == RectangleShape) this else clip(shape)
+
     val color = stroke.color.observedColorValue()
     val width = stroke.width.observedDpValue(stroke.unit)
-    val isSolid = stroke.style !is DivStrokeStyle.Dashed
-    val clipShape = if (isSolid && color.alpha == 1f && width > 0.dp) {
+    val isDashed = stroke.style is DivStrokeStyle.Dashed
+
+    val withStroke = when (stroke.style) {
+        is DivStrokeStyle.Solid -> border(BorderStroke(width, color), shape)
+        is DivStrokeStyle.Dashed -> dashedBorder(color, width, shape)
+    }
+    if (shape == RectangleShape) {
+        return withStroke
+    }
+
+    val clipShape = if (!isDashed && color.alpha == 1f && width > 0.dp) {
         StrokeInsetShape(shape, width)
     } else {
         shape
     }
-    return clip(clipShape)
+    return withStroke.clip(clipShape)
 }
 
 private data class StrokeInsetShape(
@@ -92,22 +101,6 @@ private data class StrokeInsetShape(
             }
             is Outline.Generic -> outline
         }
-    }
-}
-
-// The stroke is drawn over the content, outside the border clip layer, with its outer edge
-// exactly on the clip outline. A stroke drawn inside the clip would be attenuated by the
-// anti-aliased clip; the background edge under the stroke is hidden by the clip inset
-// instead (see StrokeInsetShape).
-@Composable
-internal fun Modifier.borderStroke(data: DivBorder): Modifier {
-    val stroke = data.stroke ?: return this
-    val shape = data.toShape()
-    val color = stroke.color.observedColorValue()
-    val width = stroke.width.observedDpValue(stroke.unit)
-    return when (stroke.style) {
-        is DivStrokeStyle.Solid -> border(BorderStroke(width, color), shape)
-        is DivStrokeStyle.Dashed -> dashedBorder(color, width, shape)
     }
 }
 
