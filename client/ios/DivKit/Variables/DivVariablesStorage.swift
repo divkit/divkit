@@ -563,7 +563,7 @@ private func parseCollectionVar<T>(_ val: String) -> T? {
 }
 
 extension Collection<DivVariable> {
-  public func extractDivVariableValues(
+  func extractDivVariableValues(
     _ resolver: ExpressionResolver? = nil
   ) -> DivVariables {
     var variables = DivVariables()
