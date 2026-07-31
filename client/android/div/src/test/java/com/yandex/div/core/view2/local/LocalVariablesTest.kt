@@ -13,13 +13,12 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.textString
 import com.yandex.div.test.data.action
 import com.yandex.div2.Div
-import com.yandex.div2.DivBase
+import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
@@ -37,10 +36,7 @@ class LocalVariablesTest {
         lifecycleOwner = null,
         configuration = DivConfiguration.Builder(mock()).build()
     )
-    private val divBase = mock<DivBase>()
-    private val div = mock<Div> {
-        on { value() } doReturn divBase
-    }
+    private val div = Div.Container(mock<DivContainer>())
     private val div2View = Div2View(div2Context)
 
     private val state get() = div2View.getChildAt(0) as DivStateLayout

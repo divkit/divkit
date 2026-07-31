@@ -51,7 +51,7 @@ class TriggersControllerTest {
 
     private val condition = mock<Expression.MutableExpression<*, Boolean>> {
         on { getVariablesName(any()) } doReturn listOf("varA")
-        on { evaluate(any()) } doReturn true
+        onGeneric { evaluate(any()) } doReturn true
         on { observe(any(), any()) } doReturn Disposable.NULL
     }
     private val actionsA = listOf(mock<DivAction>())

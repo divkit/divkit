@@ -4,6 +4,7 @@ detekt = "1.23.8"
 jackson = "2.16.0"
 jsonAssert = "1.5.3"
 junit = "5.14.2"
+jvm-toolchain = "17"
 
 [libraries]
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }

@@ -176,7 +176,7 @@ class DivTextRangeBuilderTest {
     }
 
     private fun selectorForIndex(index: Int): Expression<Boolean> = mock {
-        on { evaluate(any()) } doAnswer {
+        onGeneric { evaluate(any()) } doAnswer {
             when (it.arguments[0]) {
                 firstResolver -> index == 0
                 secondResolver -> index == 1

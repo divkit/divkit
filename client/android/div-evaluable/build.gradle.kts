@@ -5,9 +5,8 @@ plugins {
 
 apply(from = "../publish-java.gradle")
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+kotlin {
+    jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
 }
 
 val buildDir = layout.buildDirectory

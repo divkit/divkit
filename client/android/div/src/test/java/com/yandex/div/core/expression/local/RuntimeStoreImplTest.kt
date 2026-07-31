@@ -6,7 +6,7 @@ import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
-import com.yandex.div2.DivBase
+import com.yandex.div2.DivContainer
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.any
@@ -34,10 +34,8 @@ class RuntimeStoreImplTest {
         putRuntime(rootRuntime, "", null)
     }
 
-    private val divBase = mock<DivBase>()
-    private val div = mock<Div> {
-        on { value() } doReturn divBase
-    }
+    private val divBase = mock<DivContainer>()
+    private val div = Div.Container(divBase)
     private val path = DivStatePath(0, path = listOf("0", "div1"))
 
     @Test

@@ -20,7 +20,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 internal class DivViewWithItemsControllerTest {
 
-    private val divItemsView = mock<DivViewWithItems> {
+    private val divItemsView = mock<DivViewWithItems.Gallery> {
         on { getNearestItem(any()) } doReturn NEAREST_ITEM
         on { itemCount } doReturn ITEM_COUNT
         on { metrics } doReturn mock()

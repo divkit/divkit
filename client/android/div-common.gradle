@@ -1,13 +1,12 @@
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-allopen"
 
+kotlin {
+    jvmToolchain(libs.versions.jvm.toolchain.get().toInteger())
+}
+
 android {
     compileSdk = libs.versions.android.compileSdk.get().toInteger()
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInteger()

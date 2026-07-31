@@ -1,5 +1,4 @@
 import com.yandex.div.gradle.FileExtensions
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -72,9 +71,8 @@ allprojects {
                         "-Xno-source-debug-extension",
                 )
             }
-            languageVersion = KotlinVersion.KOTLIN_1_8
-            apiVersion = KotlinVersion.KOTLIN_1_8
-            jvmTarget = JvmTarget.JVM_1_8
+            languageVersion = KotlinVersion.KOTLIN_2_2
+            apiVersion = KotlinVersion.KOTLIN_2_2
         }
     }
 }

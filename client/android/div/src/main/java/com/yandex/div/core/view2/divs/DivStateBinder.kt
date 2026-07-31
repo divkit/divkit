@@ -452,7 +452,7 @@ internal class DivStateBinder @Inject constructor(
                 }
             }
 
-            if (animationOut != null && outResolver != null) {
+            if (animationOut != null && outgoing != null && outResolver != null) {
                 val animationsOut = if (animationOut.name.evaluate(outResolver) != DivAnimation.Name.SET) {
                     listOf(animationOut)
                 } else {

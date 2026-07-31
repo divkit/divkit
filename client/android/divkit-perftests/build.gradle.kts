@@ -5,6 +5,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
+kotlin {
+    jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
+}
+
 android {
     namespace = "com.yandex.divkit.perftests"
 

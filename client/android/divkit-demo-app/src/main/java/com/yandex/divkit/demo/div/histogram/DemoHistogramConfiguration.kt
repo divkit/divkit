@@ -114,7 +114,7 @@ class LoggingHistogramBridge : HistogramBridge {
 
         fun toJSONObject(): JSONObject {
             return JSONObject().apply {
-                put("histogram_type", histogramCallType.toLowerCase())
+                put("histogram_type", histogramCallType.lowercase())
                 put("value", value)
             }
         }

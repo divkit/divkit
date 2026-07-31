@@ -455,7 +455,7 @@ class RuntimeStoreFillerTest {
 
     private fun selectorForIndex(index: Int): Expression<Boolean> {
         return mock<Expression<Boolean>> {
-            on { evaluate(any()) } doAnswer {
+            onGeneric { evaluate(any()) } doAnswer {
                 when (it.arguments[0]) {
                     firstBuilderResolver -> index == 0
                     secondBuilderResolver -> index == 1

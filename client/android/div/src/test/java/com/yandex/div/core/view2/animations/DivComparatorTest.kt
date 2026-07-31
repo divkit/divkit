@@ -8,6 +8,7 @@ import com.yandex.div.test.data.container
 import com.yandex.div2.Div
 import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivCustom
+import com.yandex.div2.DivFadeTransition
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGrid
 import com.yandex.div2.DivImage
@@ -22,12 +23,11 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DivComparatorTest {
-    private val transitionMock = mock<DivAppearanceTransition>()
+    private val transition: DivAppearanceTransition = DivAppearanceTransition.Fade(DivFadeTransition())
     private val resolver = mockExpressionResolver()
     private val path = DivStatePath.fromState(0)
 
@@ -69,8 +69,8 @@ class DivComparatorTest {
 
     @Test
     fun `divs that has transitions and different ids are not replaceable`() {
-        val div1 = divText(id = "01", text = "Text 01", transitionIn = transitionMock)
-        val div2 = divText(id = "02", text = "Text 02", transitionIn = transitionMock)
+        val div1 = divText(id = "01", text = "Text 01", transitionIn = transition)
+        val div2 = divText(id = "02", text = "Text 02", transitionIn = transition)
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
     }
@@ -125,8 +125,8 @@ class DivComparatorTest {
 
     @Test
     fun `containers which children has transitions and different ids are not replaceable`() {
-        val div1 = container(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transitionMock)))
-        val div2 = container(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transitionMock)))
+        val div1 = container(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transition)))
+        val div2 = container(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transition)))
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
     }
@@ -173,8 +173,8 @@ class DivComparatorTest {
 
     @Test
     fun `grids which children has transitions and different ids are not replaceable`() {
-        val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transitionMock)))
-        val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transitionMock)))
+        val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transition)))
+        val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transition)))
 
         assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
     }

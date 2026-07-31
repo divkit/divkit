@@ -325,7 +325,7 @@ class ExpressionResolverImplTest {
 
         assertEquals(2000, expression.evaluate(underTest))
 
-        val expressionWithConverter = mutableExpressionWithConverter<Int, String>(
+        val expressionWithConverter = mutableExpressionWithConverter<Long, String>(
             rawExpression = "@{timer}",
             typeHelper = TYPE_HELPER_STRING,
             converter = { it.toString() }

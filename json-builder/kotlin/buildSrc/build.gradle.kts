@@ -7,7 +7,7 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
 }
 
 dependencies {
