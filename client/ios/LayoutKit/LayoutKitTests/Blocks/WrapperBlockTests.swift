@@ -32,6 +32,25 @@ final class WrapperBlockTests: XCTestCase {
     )
   }
 
+  func test_DecoratingBlock_WithPaddingsLargerThanFixedWidth_DoesNotExpand() {
+    let child = TextBlock(
+      widthTrait: .fixed(-40),
+      heightTrait: .fixed(28),
+      text: NSAttributedString(string: "TEST"),
+      accessibilityElement: nil
+    )
+    let decorated = child.addingEdgeInsets(
+      EdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+    )
+
+    XCTAssertEqual(decorated.intrinsicContentWidth, 0)
+    XCTAssertEqual(decorated.minWidth, 0)
+    XCTAssertEqual(
+      decorated.size(forResizableBlockSize: CGSize(width: 414, height: 68)).width,
+      0
+    )
+  }
+
   func test_whenChildHasReuseId_hasSameReuseId() throws {
     let reuseId = "testReuseId"
     let childBlock = GalleryBlockTestModels.base.addingDecorations(

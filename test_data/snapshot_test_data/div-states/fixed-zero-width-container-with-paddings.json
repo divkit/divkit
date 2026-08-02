@@ -1,0 +1,57 @@
+{
+  "description": "A fixed zero-width container with paddings inside div-state must not expose its content",
+  "platforms": [
+    "ios"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "state",
+          "id": "root",
+          "states": [
+            {
+              "state_id": "hidden",
+              "div": {
+                "type": "container",
+                "orientation": "horizontal",
+                "alignment_horizontal": "center",
+                "width": {
+                  "type": "fixed",
+                  "value": 0
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 68
+                },
+                "paddings": {
+                  "top": 20,
+                  "right": 20,
+                  "bottom": 20,
+                  "left": 20
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "TEST",
+                    "width": {
+                      "type": "fixed",
+                      "value": 69
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 32
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
