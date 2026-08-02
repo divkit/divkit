@@ -19,6 +19,23 @@ final class LayeredBlockLayoutTests: XCTestCase {
     XCTAssertEqual(blockFrames.first?.height, testSize.height)
   }
 
+  func test_WhenFixedWidthChildPaddingsExceedWidth_FrameKeepsFixedWidth() {
+    let child = TextBlock(
+      widthTrait: .fixed(-40),
+      heightTrait: .fixed(28),
+      text: NSAttributedString(string: "TEST"),
+      accessibilityElement: nil
+    ).addingEdgeInsets(
+      EdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+    )
+    let block = LayeredBlock(children: [child])
+
+    let blockFrames = block.makeChildrenFrames(size: testSize)
+
+    XCTAssertEqual(blockFrames.first?.width, 0)
+    XCTAssertEqual(blockFrames.first?.height, 68)
+  }
+
   func test_WhenChildFillsHeight_StretchesToContainerHeightClampedByMax() {
     // A match_parent-height overlap child is modeled as constrained wrap_content + fillsHeight: it
     // stretches to the container height, but a max_size cap keeps it from growing past its bound.
