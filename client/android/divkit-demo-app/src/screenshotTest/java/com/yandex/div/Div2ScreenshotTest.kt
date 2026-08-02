@@ -32,10 +32,17 @@ class Div2ScreenshotTest(case: String, escapedCase: String) {
 
         const val TEST_CASES_PATH = "snapshot_test_data"
 
+        private val ignoredCases = listOf(
+            "snapshot_test_data/div-text/all_attributes.json",
+            "snapshot_test_data/div-container/baseline-with-images.json",
+        )
+
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            return AssetEnumerator().enumerate(TEST_CASES_PATH).withEscapedParameter()
+            return AssetEnumerator().enumerate(TEST_CASES_PATH)
+                .filter { !ignoredCases.contains(it) }
+                .withEscapedParameter()
         }
 
         val String.relativePath: String

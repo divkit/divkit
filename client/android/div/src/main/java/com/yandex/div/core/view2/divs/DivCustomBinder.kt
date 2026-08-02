@@ -12,6 +12,7 @@ import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.internal.core.nonNullItems
@@ -35,6 +36,15 @@ internal class DivCustomBinder @Inject constructor(
         val resolver = context.expressionResolver
 
         if (oldDiv === div) {
+            view.bindStates(context, divBinder.get())
+            return
+        }
+
+        if (oldDiv != null && divView.complexRebindInProgress &&
+            DivComparator.areValuesReplaceable(oldDiv.value(), div.value(),
+                view.bindingContext?.expressionResolver ?: resolver,
+                resolver)
+        ) {
             view.bindStates(context, divBinder.get())
             return
         }
