@@ -170,7 +170,7 @@ However, some rare features require more modern browsers, for example, `aspect` 
 
 Node.js
 ```
-Node.js >= 10.4
+Node.js >= 14
 ```
 
 ### API: render

@@ -53,12 +53,12 @@
       "require": "./dist/server.js",
       "import": "./dist/esm/server.mjs"
     },
-    "./dist/": "./dist/",
-    "./typings/": "./typings/",
-    "./client/": "./client/",
-    "./client-hydratable/": "./client-hydratable/",
-    "./client-devtool/": "./client-devtool/",
-    "./server/": "./server/"
+    "./dist/*": "./dist/*",
+    "./typings/*": "./typings/*",
+    "./client/*": "./client/*",
+    "./client-hydratable/*": "./client-hydratable/*",
+    "./client-devtool/*": "./client-devtool/*",
+    "./server/*": "./server/*"
   },
   "scripts": {
     "test:unit": "vitest",
