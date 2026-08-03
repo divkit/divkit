@@ -22458,6 +22458,7 @@
   "test_data/parsing_test_data/templates/reference_chain_two_hop_nested_in_body_transitive.json":"divkit/public/test_data/parsing_test_data/templates/reference_chain_two_hop_nested_in_body_transitive.json",
   "test_data/parsing_test_data/templates/reference_chain_two_hop_via_usage.json":"divkit/public/test_data/parsing_test_data/templates/reference_chain_two_hop_via_usage.json",
   "test_data/parsing_test_data/templates/reference_chain_two_hop_via_usage_transitive.json":"divkit/public/test_data/parsing_test_data/templates/reference_chain_two_hop_via_usage_transitive.json",
+  "test_data/parsing_test_data/templates/reference_deep_bypasses_usage_literal.json":"divkit/public/test_data/parsing_test_data/templates/reference_deep_bypasses_usage_literal.json",
   "test_data/parsing_test_data/templates/reference_definition_on_leaf_template.json":"divkit/public/test_data/parsing_test_data/templates/reference_definition_on_leaf_template.json",
   "test_data/parsing_test_data/templates/reference_definition_on_usage_inside_body.json":"divkit/public/test_data/parsing_test_data/templates/reference_definition_on_usage_inside_body.json",
   "test_data/parsing_test_data/templates/reference_in_nested_object.json":"divkit/public/test_data/parsing_test_data/templates/reference_in_nested_object.json",

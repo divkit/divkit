@@ -1,8 +1,5 @@
 {
   "description": "The template definition declares both a literal value and a reference definition for the same field. Checks that the literal in use has a higher priority than the template field.",
-  "platforms": [
-    "web"
-  ],
   "templates": {
     "conflicted": {
       "type": "text",
