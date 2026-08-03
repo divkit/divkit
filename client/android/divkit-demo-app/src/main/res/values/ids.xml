@@ -1,4 +1,3 @@
 <resources>
     <item name="gallery_feed" type="id" />
-    <item name="screenshot_view" type="id"/>
 </resources>

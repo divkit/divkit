@@ -7,13 +7,13 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.customview.widget.ViewDragHelper;
-import androidx.viewpager.widget.ViewPager;
+import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.internal.util.NestedHorizontalScrollCompanion;
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener;
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost;
-
 import java.util.Set;
 
+@InternalApi
 public class ScrollableViewPager extends RtlViewPager implements OnInterceptTouchEventListenerHost {
 
     private final NestedHorizontalScrollCompanion mNestedScrollCompanion = new NestedHorizontalScrollCompanion(this);

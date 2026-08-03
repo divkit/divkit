@@ -40,13 +40,7 @@ public class NestedHorizontalScrollCompanion {
      * ViewPager requires special handling because it doesn't dispatch overscroll.
      */
     public NestedHorizontalScrollCompanion(@NonNull ViewPager target) {
-        this((View) target, getScaledTouchSlop(target));
-    }
-
-    @VisibleForTesting
-    NestedHorizontalScrollCompanion(@NonNull ViewPager target, float slop) {
-        this((View) target, slop);
-        target.addOnPageChangeListener(new NestedScrollPageChangeListener(target));
+        this(target, getScaledTouchSlop(target));
     }
 
     /**

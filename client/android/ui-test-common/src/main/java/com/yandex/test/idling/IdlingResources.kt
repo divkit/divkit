@@ -2,7 +2,6 @@ package com.yandex.test.idling
 
 import android.util.Log
 import android.view.View
-import androidx.annotation.IdRes
 import androidx.test.espresso.Espresso.onIdle
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
@@ -11,10 +10,10 @@ import java.io.Closeable
 
 private const val TAG = "IdlingResources"
 
-fun waitForView(@IdRes id: Int): View {
-    val idlingResource = ViewIdlingResource(id)
+fun waitForView(tag: String): View {
+    val idlingResource = ViewIdlingResource(tag)
     waitForIdlingResource(idlingResource)
-    return idlingResource.view ?: throw IllegalStateException("view with id=%id missed unexpectedly")
+    return idlingResource.view ?: throw IllegalStateException("View with tag=$tag is missing")
 }
 
 fun waitForIdlingResource(res: IdlingResource) = res.register().use { onIdle() }

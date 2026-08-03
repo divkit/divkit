@@ -1,7 +1,6 @@
 package com.yandex.div
 
 import com.yandex.div.rule.screenshotRule
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
@@ -24,9 +23,9 @@ class Div2ScreenshotTest(case: String, escapedCase: String) {
     @JvmField
     val rule = screenshotRule(case, activityRule, case.relativePath)
 
-    @Screenshot(viewId = R.id.screenshot_view)
+    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    fun divScreenshot() = Unit
+    fun test() = Unit
 
     companion object {
 

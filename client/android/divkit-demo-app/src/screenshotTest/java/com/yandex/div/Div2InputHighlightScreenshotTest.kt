@@ -3,7 +3,6 @@ package com.yandex.div
 import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
 import com.yandex.div.steps.divInput
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
@@ -24,13 +23,19 @@ class Div2InputHighlightScreenshotTest(case: String, escapedCase: String) {
     val rule = screenshotRule(case, activityRule)
 
     @Test
-    @Screenshot(viewId = R.id.screenshot_view, name = "highlight_color_initial")
+    @Screenshot(
+        viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG,
+        name = "highlight_color_initial"
+    )
     fun divScreenshotInitialColor() {
         divFocus { clickOnTopInput() }
     }
 
     @Test
-    @Screenshot(viewId = R.id.screenshot_view, name = "highlight_color_changed")
+    @Screenshot(
+        viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG,
+        name = "highlight_color_changed"
+    )
     fun divScreenshotChangedColor() {
         divInput { clickOnActionButton() }
         divFocus { clickOnTopInput() }

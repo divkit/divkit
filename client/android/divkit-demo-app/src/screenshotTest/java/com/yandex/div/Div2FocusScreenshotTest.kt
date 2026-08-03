@@ -2,7 +2,6 @@ package com.yandex.div
 
 import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
@@ -22,12 +21,18 @@ class Div2FocusScreenshotTest(case: String, escapedCase: String) {
     @get:Rule
     val rule = screenshotRule(case, activityRule)
 
+    @Screenshot(
+        viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG,
+        relativePath = "not_focused"
+    )
     @Test
-    @Screenshot(viewId = R.id.screenshot_view, relativePath = "not_focused")
     fun divScreenshotNotFocused() = Unit
 
+    @Screenshot(
+        viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG,
+        relativePath = "focused"
+    )
     @Test
-    @Screenshot(viewId = R.id.screenshot_view, relativePath = "focused")
     fun divScreenshotFocused() {
         divFocus { clickOnTopInput() }
     }

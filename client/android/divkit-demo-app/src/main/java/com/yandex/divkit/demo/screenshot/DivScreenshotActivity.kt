@@ -1,7 +1,6 @@
 package com.yandex.divkit.demo.screenshot
 
 import android.graphics.drawable.Animatable
-import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
@@ -14,7 +13,6 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.divkit.demo.Container
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.settings.Preferences
 
@@ -83,7 +81,7 @@ class DivScreenshotActivity : AppCompatActivity() {
         val matchParentHeight = getChildAt(0)?.layoutParams?.height == LayoutParams.MATCH_PARENT
         val divViewHeight = if (matchParentHeight) LayoutParams.MATCH_PARENT else LayoutParams.WRAP_CONTENT
         layoutParams?.height = divViewHeight
-        id = R.id.screenshot_view
+        tag = SCREENSHOT_VIEW_TAG
         removeAutofocusForOldApis()
         hideCursor()
         requestLayout()
@@ -119,6 +117,8 @@ class DivScreenshotActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_DIV_ASSET_NAME = "DivScreenshotActivity.EXTRA_DIV_ASSET_NAME"
         const val EXTRA_DIV_IMAGE_LOADER_NAME = "DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME"
+
+        const val SCREENSHOT_VIEW_TAG = "screenshot_view"
 
         const val IMAGE_LOADER_PICASSO = "picasso"
         const val IMAGE_LOADER_GLIDE = "glide"

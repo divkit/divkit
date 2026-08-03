@@ -83,7 +83,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
 
         val configuration = ScreenshotTestConfiguration.from(json)
         val view = ComposeView(divContext).apply {
-            id = R.id.screenshot_view
+            tag = SCREENSHOT_VIEW_TAG
             configuration.applyTo(this)
             setContent {
                 DivView(data = data)
@@ -111,6 +111,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
 
     companion object {
         const val EXTRA_DIV_ASSET_NAME = "DivComposeScreenshotActivity.EXTRA_DIV_ASSET_NAME"
+        const val SCREENSHOT_VIEW_TAG = "screenshot_view"
     }
 }
 

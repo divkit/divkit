@@ -4,10 +4,10 @@ import android.view.View
 import com.yandex.test.util.getCurrentActivity
 import java.lang.ref.WeakReference
 
-class ViewIdlingResource(private val viewId: Int) : SimpleIdlingResource() {
+class ViewIdlingResource(private val viewTag: String) : SimpleIdlingResource() {
 
     internal val view: View?
-        get() = activityWeakRef.get()?.findViewById(viewId)
+        get() = activityWeakRef.get()?.window?.decorView?.findViewWithTag(viewTag)
 
     private val activityWeakRef
         get() = WeakReference(getCurrentActivity())

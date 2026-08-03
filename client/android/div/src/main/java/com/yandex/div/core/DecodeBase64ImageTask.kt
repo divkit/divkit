@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.PictureDrawable
 import android.util.Base64
-import androidx.annotation.WorkerThread
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.svg.SvgDecoder
@@ -15,7 +14,6 @@ internal class DecodeBase64ImageTask(
     private val onDecoded: (ImageRepresentation) -> Unit
 ) : Runnable {
 
-    @WorkerThread
     override fun run() {
         val base64string = extractFromDataUrl(rawBase64string)
 

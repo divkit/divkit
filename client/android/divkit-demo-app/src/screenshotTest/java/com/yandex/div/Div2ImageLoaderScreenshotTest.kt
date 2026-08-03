@@ -2,7 +2,6 @@ package com.yandex.div
 
 import com.yandex.div.rule.baseRule
 import com.yandex.div.steps.imageLoaderScreenshot
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity.Companion.IMAGE_LOADER_COIL
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity.Companion.IMAGE_LOADER_GLIDE
@@ -25,20 +24,20 @@ class Div2ImageLoaderScreenshotTest(private val case: String, escapedCase: Strin
     @get:Rule
     val rule = baseRule(case, activityRule)
 
+    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    @Screenshot(viewId = R.id.screenshot_view)
     fun divScreenshotPicasso() {
         launchActivityWith(IMAGE_LOADER_PICASSO)
     }
 
+    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    @Screenshot(viewId = R.id.screenshot_view)
     fun divScreenshotGlide() {
         launchActivityWith(IMAGE_LOADER_GLIDE)
     }
 
+    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    @Screenshot(viewId = R.id.screenshot_view)
     fun divScreenshotCoil() {
         launchActivityWith(IMAGE_LOADER_COIL)
     }

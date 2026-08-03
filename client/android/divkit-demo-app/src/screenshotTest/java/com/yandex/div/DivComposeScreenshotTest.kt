@@ -3,7 +3,6 @@ package com.yandex.div
 import android.os.Build
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.composeScreenshotRule
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
@@ -25,7 +24,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
     @get:Rule
     val rule = composeScreenshotRule(case, activityRule, case.relativePath)
 
-    @Screenshot(viewId = R.id.screenshot_view)
+    @Screenshot(viewTag = DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun test() {
         Assume.assumeTrue(

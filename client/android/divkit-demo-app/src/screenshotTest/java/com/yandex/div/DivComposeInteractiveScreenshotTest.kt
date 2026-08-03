@@ -1,9 +1,8 @@
 package com.yandex.div
 
 import android.os.Build
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import com.yandex.div.rule.baseRule
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.test.idling.waitForIdlingResource
@@ -39,8 +38,8 @@ class DivComposeInteractiveScreenshotTest(
     @get:Rule
     val rule = baseRule(fileName, composeRule)
 
+    @Screenshot(viewTag = DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    @Screenshot(viewId = R.id.screenshot_view)
     fun test() {
         assumeTrue(
             "Skipping test on API 24",
@@ -66,7 +65,8 @@ class DivComposeInteractiveScreenshotTest(
             waitForIdle()
 
             captureScreenshots(
-                view = activity.findViewById(R.id.screenshot_view),
+                view = activity.window.decorView
+                    .findViewWithTag(DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG),
                 artifactsRelativePath = artifactsPath,
                 casePath = fileName,
                 stepId = id,

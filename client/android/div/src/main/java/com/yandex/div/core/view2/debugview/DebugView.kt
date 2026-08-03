@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.debugview
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.text.SpannableString
@@ -296,6 +297,7 @@ private class DetailsViewHolder(
         isVisible = false
     }
 
+    @SuppressLint("SetTextI18n")
     private val hotReloadHostTitle = AppCompatTextView(context).apply {
         setTextColor(Color.LTGRAY)
         textSize = 12f

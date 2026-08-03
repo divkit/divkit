@@ -2,7 +2,6 @@ package com.yandex.div
 
 import com.yandex.div.rule.baseRule
 import com.yandex.div.steps.interactiveScreenshot
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
@@ -25,7 +24,7 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
     @JvmField
     val rule = baseRule(case, activityRule)
 
-    @Screenshot(viewId = R.id.screenshot_view)
+    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun divScreenshot() {
         interactiveScreenshot {

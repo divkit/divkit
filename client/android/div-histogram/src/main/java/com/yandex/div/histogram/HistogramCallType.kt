@@ -9,6 +9,7 @@ import androidx.annotation.StringDef
         HistogramCallType.CALL_TYPE_WARM,
     ]
 )
+@Retention(AnnotationRetention.SOURCE)
 annotation class HistogramCallType {
 
     companion object {

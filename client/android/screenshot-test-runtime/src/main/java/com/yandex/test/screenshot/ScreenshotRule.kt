@@ -26,7 +26,7 @@ class ScreenshotRule(
             override fun evaluate() {
                 base.evaluate()
 
-                val view = waitForView(screenshot.viewId)
+                val view = waitForView(screenshot.viewTag)
                 beforeScreenshotTakenAction?.invoke()
 
                 captureScreenshots(view, suiteName, casePath, screenshot.name, expectedSuite = expectedSuite)

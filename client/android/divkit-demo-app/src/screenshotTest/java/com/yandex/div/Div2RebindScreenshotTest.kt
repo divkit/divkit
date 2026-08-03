@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.screenshotRule
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
@@ -27,7 +26,7 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
     @JvmField
     val rule = screenshotRule(case, activityRule, case.relativePath, expectedSuite)
 
-    @Screenshot(viewId = R.id.screenshot_view)
+    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun divScreenshot() {
         Assume.assumeTrue(
@@ -42,6 +41,7 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
     companion object {
 
         private val expectedSuite = Div2ScreenshotTest::class.qualifiedName ?: ""
+
         private val ignoredCases = listOf(
             "snapshot_test_data/div-container/item_builder/item-builder-with-local-variables.json",
             "snapshot_test_data/div-container/item_builder/item-builder-with-nested-local-variables.json",
