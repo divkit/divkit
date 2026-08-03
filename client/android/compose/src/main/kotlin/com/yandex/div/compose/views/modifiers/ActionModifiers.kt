@@ -94,11 +94,12 @@ private fun Modifier.clickableWithFade(
         animationSpec = tween(durationMillis = animation.duration.observedIntValue()),
         label = "alphaAnimation"
     )
-    return graphicsLayer(alpha = animatedAlpha)
-        .clickable(
-            clickHandler = clickHandler,
-            interactionSource = interactionSource
-        )
+    return graphicsLayer {
+        alpha = animatedAlpha
+    }.clickable(
+        clickHandler = clickHandler,
+        interactionSource = interactionSource
+    )
 }
 
 private class ClickHandler(

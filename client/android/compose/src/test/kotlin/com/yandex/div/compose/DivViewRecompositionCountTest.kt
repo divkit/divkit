@@ -5,11 +5,14 @@ import androidx.compose.runtime.NonSkippableComposable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.test.data.action
 import com.yandex.div.test.data.color
 import com.yandex.div.test.data.colorExpression
 import com.yandex.div.test.data.container
@@ -217,6 +220,30 @@ class DivViewRecompositionCountTest {
             "container" to 2,
             "item" to 1
         )
+    }
+
+    @Test
+    fun `element with action with animation is recomposed once on touch input`() {
+        setContent(
+            text(
+                action = action(id = "button"),
+                extensions = compositionCounter("button"),
+                text = "Button"
+            )
+        )
+
+        assertCompositions("button" to 1)
+
+        val button = rule.onNodeWithText("Button")
+        button.performTouchInput { down(position = center) }
+        rule.waitForIdle()
+
+        assertCompositions("button" to 2)
+
+        button.performTouchInput { up() }
+        rule.waitForIdle()
+
+        assertCompositions("button" to 3)
     }
 
     private fun setContent(content: Div) {

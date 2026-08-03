@@ -29,17 +29,15 @@ private fun Modifier.background(background: DivBackground): Modifier {
         is DivBackground.Image ->
             return imageBackground(background.value)
 
-        is DivBackground.LinearGradient -> {
+        is DivBackground.LinearGradient ->
             background.value.observeLinearGradient()?.let {
                 return background(it)
             }
-        }
 
-        is DivBackground.RadialGradient -> {
+        is DivBackground.RadialGradient ->
             background.value.observeRadialGradient()?.let {
                 return background(it)
             }
-        }
 
         is DivBackground.NinePatch ->
             reportError("Background not supported: ${DivNinePatchBackground.TYPE}")

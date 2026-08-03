@@ -6,9 +6,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.gradient.RadialGradientBrush.Center
+import com.yandex.div.compose.utils.gradient.RadialGradientBrush.Radius
 import com.yandex.div.compose.utils.observedPxValue
+import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toColor
+import com.yandex.div.compose.utils.toPx
 import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivRadialGradient
@@ -17,26 +22,28 @@ import com.yandex.div2.DivRadialGradientRadius
 
 @Composable
 internal fun DivLinearGradient.observeLinearGradient(): Brush? {
-    val angle = angle.observedValue().toFloat()
     val points = colorMap?.map { it.position.observedFloatValue() to it.color.observedColorValue() }
-    val colorMap = resolveColorMap(points, colors) ?: return null
-    return LinearGradientBrush(angle, colorMap.colors, colorMap.positions)
+    val colorMap = observedColorMap(points, colors) ?: return null
+    return LinearGradientBrush(
+        angle = angle.observedIntValue(),
+        colorMap = colorMap
+    )
 }
 
 @Composable
 internal fun DivRadialGradient.observeRadialGradient(): Brush? {
     val points = colorMap?.map { it.position.observedFloatValue() to it.color.observedColorValue() }
-    val colorMap = resolveColorMap(points, colors) ?: return null
-    val centerX = centerX.observeCenter()
-    val centerY = centerY.observeCenter()
-    val radius = radius.observeRadius()
-    return RadialGradientBrush(centerX, centerY, radius, colorMap.colors, colorMap.positions)
+    val colorMap = observedColorMap(points, colors) ?: return null
+    return RadialGradientBrush(
+        centerX = centerX.observeCenter(),
+        centerY = centerY.observeCenter(),
+        radius = radius.observeRadius(),
+        colorMap = colorMap
+    )
 }
 
-private class ColorMap(val colors: IntArray, val positions: FloatArray?)
-
 @Composable
-private fun resolveColorMap(
+private fun observedColorMap(
     points: List<Pair<Float, Color>>?,
     fallbackColors: ExpressionList<Int>?,
 ): ColorMap? {
@@ -47,7 +54,10 @@ private fun resolveColorMap(
             positions = FloatArray(sorted.size) { sorted[it].first },
         )
     }
-    val colors = fallbackColors.observeGradientColors() ?: return null
+
+    val colors = fallbackColors?.observedValue()
+        ?.map { it.toColor() }
+        ?: return null
     return ColorMap(
         colors = IntArray(colors.size) { colors[it].toArgb() },
         positions = null,
@@ -55,31 +65,23 @@ private fun resolveColorMap(
 }
 
 @Composable
-private fun ExpressionList<Int>?.observeGradientColors(): List<Color>? {
-    val expressionColors = this ?: return null
-    return expressionColors.observedValue().map { it.toColor() }
-}
-
-@Composable
-private fun DivRadialGradientCenter.observeCenter(): RadialGradientBrush.Center {
+private fun DivRadialGradientCenter.observeCenter(): Center {
     return when (this) {
         is DivRadialGradientCenter.Fixed ->
-            RadialGradientBrush.Center.Fixed(
-                value.value.observedPxValue(value.unit)
-            )
+            Center.Fixed(value.value.observedPxValue(value.unit))
+
         is DivRadialGradientCenter.Relative ->
-            RadialGradientBrush.Center.Relative(value.value.observedFloatValue())
+            Center.Relative(value.value.observedFloatValue())
     }
 }
 
 @Composable
-private fun DivRadialGradientRadius.observeRadius(): RadialGradientBrush.Radius {
+private fun DivRadialGradientRadius.observeRadius(): Radius {
     return when (this) {
         is DivRadialGradientRadius.FixedSize ->
-            RadialGradientBrush.Radius.Fixed(
-                value.value.observedPxValue(value.unit)
-            )
+            Radius.Fixed(value.observedValue().toPx())
+
         is DivRadialGradientRadius.Relative ->
-            RadialGradientBrush.Radius.Relative(value.value.observedValue())
+            Radius.Relative(value.value.observedValue())
     }
 }

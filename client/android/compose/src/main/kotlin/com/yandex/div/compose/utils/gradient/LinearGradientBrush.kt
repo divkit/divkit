@@ -2,16 +2,17 @@ package com.yandex.div.compose.utils.gradient
 
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ShaderBrush
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
-internal class LinearGradientBrush(
-    private val angle: Float,
-    private val colors: IntArray,
-    private val positions: FloatArray?,
+@Immutable
+internal data class LinearGradientBrush(
+    private val angle: Int,
+    private val colorMap: ColorMap
 ) : ShaderBrush() {
 
     override fun createShader(size: Size): Shader {
@@ -29,7 +30,9 @@ internal class LinearGradientBrush(
             halfHeight + heightDelta,
             halfWidth + widthDelta,
             halfHeight - heightDelta,
-            colors, positions, Shader.TileMode.CLAMP,
+            colorMap.colors,
+            colorMap.positions,
+            Shader.TileMode.CLAMP
         )
     }
 

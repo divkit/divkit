@@ -26,6 +26,8 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.disappearAction
 import com.yandex.div.test.data.fixedPivot
 import com.yandex.div.test.data.insets
+import com.yandex.div.test.data.linearGradientBackground
+import com.yandex.div.test.data.radialGradientBackground
 import com.yandex.div.test.data.solidBackground
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.visibilityAction
@@ -148,6 +150,32 @@ class ModifierEqualityTest {
             container(
                 backgrounds = listOf(
                     solidBackground(color = color(0xFFAABBCC))
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `linear gradient background`() {
+        assertModifiersEqual(
+            container(
+                backgrounds = listOf(
+                    linearGradientBackground(
+                        colors = listOf(color(0xFFAABBCC), color(0xFFBBCCDD))
+                    )
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `radial gradient background`() {
+        assertModifiersEqual(
+            container(
+                backgrounds = listOf(
+                    radialGradientBackground(
+                        colors = listOf(color(0xFFAABBCC), color(0xFFBBCCDD))
+                    )
                 )
             )
         )
