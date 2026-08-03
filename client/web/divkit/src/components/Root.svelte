@@ -1837,7 +1837,7 @@
                     } else if (schema === 'div-action') {
                         await execActionInternal(action, actions[i], opts.componentContext);
                         await tick();
-                    } else if (action.log_id) {
+                    } else {
                         execCustomAction(action as Action & { url: string }, opts.componentContext);
                         await tick();
                     }
@@ -1860,9 +1860,7 @@
             }
         }
         actions.forEach(action => {
-            if (action.log_id) {
-                logStat(opts.logType || 'click', action as Action);
-            }
+            logStat(opts.logType || 'click', action as Action);
         });
     }
 
