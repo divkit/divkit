@@ -1,6 +1,5 @@
 package com.yandex.div.storage.analytics
 
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.templates.TemplatesContainer
 import com.yandex.div.storage.util.CardErrorTransformer
@@ -8,7 +7,6 @@ import com.yandex.div.storage.util.LazyProvider
 import org.json.JSONObject
 import javax.inject.Provider
 
-@Mockable
 internal class CardErrorLoggerFactory(
         externalErrorTransformer: Provider<out CardErrorTransformer>?,
         private val templateContainer: TemplatesContainer,

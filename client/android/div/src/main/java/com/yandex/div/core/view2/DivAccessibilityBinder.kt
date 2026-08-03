@@ -4,7 +4,6 @@ import android.view.View
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
@@ -34,7 +33,6 @@ import javax.inject.Inject
  * Contains logic for applying [DivAccessibility]-related properties.
  */
 @DivScope
-@Mockable
 internal class DivAccessibilityBinder @Inject constructor(
     @ExperimentFlag(ACCESSIBILITY_ENABLED) val enabled: Boolean,
     private val accessibilityStateProvider: AccessibilityStateProvider,

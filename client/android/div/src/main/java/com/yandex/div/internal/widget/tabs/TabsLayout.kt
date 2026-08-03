@@ -9,10 +9,8 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.ViewCompat
 import com.yandex.div.R
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.tabs.DivTabsAdapter
 
-@Mockable
 @Suppress("LeakingThis")
 internal open class TabsLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null

@@ -4,10 +4,8 @@ import android.graphics.Rect
 import android.view.View
 import androidx.annotation.IntRange
 import androidx.annotation.MainThread
-import com.yandex.div.core.annotations.Mockable
 import javax.inject.Inject
 
-@Mockable
 internal class ViewVisibilityCalculator @Inject constructor() {
 
     private val visibleRect = Rect()

@@ -1,5 +1,4 @@
 apply plugin: "kotlin-android"
-apply plugin: "kotlin-allopen"
 
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInteger())
@@ -32,8 +31,4 @@ android {
 tasks.register('sourceJar', Jar) {
     from android.sourceSets.main.java.srcDirs
     archiveClassifier = "sources"
-}
-
-allOpen {
-    annotation("com.yandex.div.core.annotations.Mockable")
 }

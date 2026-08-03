@@ -17,12 +17,10 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.R
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.internal.widget.SuperLineHeightEditText
 import com.yandex.div2.Div
 
-@Mockable
 internal class DivInputView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

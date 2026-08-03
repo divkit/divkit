@@ -12,7 +12,6 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yandex.div.R
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.asDivHolderView
@@ -35,7 +34,6 @@ import kotlin.math.abs
 import kotlin.math.atan
 import kotlin.math.ceil
 
-@Mockable
 internal class DivRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

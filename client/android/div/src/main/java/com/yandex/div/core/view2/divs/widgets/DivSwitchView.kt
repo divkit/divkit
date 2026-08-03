@@ -2,11 +2,9 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.widget.SwitchView
 import com.yandex.div2.Div
 
-@Mockable
 internal class DivSwitchView(context: Context) : SwitchView(context),
     DivHolderView<Div.Switch> by DivHolderViewMixin() {
 

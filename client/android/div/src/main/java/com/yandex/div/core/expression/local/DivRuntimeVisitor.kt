@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression.local
 
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivPathUtils.append
@@ -20,7 +19,6 @@ import com.yandex.div2.DivTabs
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class DivRuntimeVisitor @Inject constructor(
     private val stateManager: DivStateManager,
     private val tabsCache: TabsStateCache,

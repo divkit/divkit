@@ -2,7 +2,6 @@ package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionPerformer
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.view2.Div2View
@@ -14,7 +13,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
 import java.util.WeakHashMap
 
-@Mockable
 internal class TriggersController(
     private val expressionResolver: ExpressionResolverImpl,
     private val errorCollector: ErrorCollector,

@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.view.View
 import androidx.core.view.children
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.view2.Div2View
@@ -14,7 +13,6 @@ import com.yandex.div.internal.view.DivImageView
 import javax.inject.Inject
 
 @DivViewScope
-@Mockable
 internal class MediaLoadViewVisitor @Inject constructor(
     private val imageBinder: DivImageBinder,
     private val gifImageBinder: DivGifImageBinder,

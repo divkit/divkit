@@ -2,13 +2,11 @@ package com.yandex.div.core.view2.state
 
 import androidx.core.view.doOnPreDraw
 import androidx.transition.Transition
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.enumerateTargetIds
 import javax.inject.Inject
 
-@Mockable
 @DivViewScope
 internal class DivStateTransitionHolder @Inject constructor(
     private val div2View: Div2View

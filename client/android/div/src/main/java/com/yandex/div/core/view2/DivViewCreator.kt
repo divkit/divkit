@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.util.isWrapContainer
@@ -41,7 +40,6 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @DivScope
-@Mockable
 internal class DivViewCreator @Inject constructor(
     @Named(Names.THEMED_CONTEXT) private val context: Context,
     private val viewPool: ViewPool,

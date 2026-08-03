@@ -4,13 +4,11 @@ import androidx.annotation.AnyThread
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivErrorsReporter
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
 
 typealias ErrorObserver = (errors: List<Throwable>, warnings: List<Throwable>) -> Unit
 
-@Mockable
 @AnyThread
 internal class ErrorCollector(
     internal val divData: DivData?,

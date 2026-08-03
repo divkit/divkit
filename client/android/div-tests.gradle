@@ -18,7 +18,6 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.kotlin.corountines.test
     testImplementation libs.kotlin.test
-    testImplementation libs.mockito.core
     testImplementation libs.mockito.kotlin
     testImplementation libs.robolectric
 }

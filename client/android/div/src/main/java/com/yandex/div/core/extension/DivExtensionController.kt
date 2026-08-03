@@ -2,7 +2,6 @@ package com.yandex.div.core.extension
 
 import android.view.View
 import com.yandex.div.core.DivPreloader
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
@@ -13,7 +12,6 @@ import com.yandex.div2.DivBase
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class DivExtensionController @Inject constructor(
     private val extensionHandlers: List<DivExtensionHandler>,
 ) {

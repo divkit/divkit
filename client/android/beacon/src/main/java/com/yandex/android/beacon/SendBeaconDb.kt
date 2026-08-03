@@ -11,16 +11,13 @@ import android.provider.BaseColumns
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import com.yandex.android.beacon.BeaconItem.Persistent
-import com.yandex.android.beacon.SendBeaconDb.Factory
 import com.yandex.android.util.deserializeMap
 import com.yandex.android.util.serialize
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.Assert
 import org.json.JSONException
 import org.json.JSONObject
 
-@Mockable
-internal class SendBeaconDb constructor(
+internal open class SendBeaconDb(
     context: Context,
     databaseName: String
 ) : SQLiteOpenHelper(context, databaseName, null, DATABASE_VERSION) {
@@ -40,16 +37,14 @@ internal class SendBeaconDb constructor(
     }
 
     @WorkerThread
-    fun allItems(): List<Persistent> {
+    open fun allItems(): List<Persistent> {
         val result = mutableListOf<Persistent>()
         val db = readableDatabase
         var cursor: Cursor? = null
         try {
             cursor = db.query(TABLE_ITEMS, QUERY_COLUMNS, null, null, null, null, null, null)
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    result.add(beaconItemFromCursor(cursor))
-                }
+            while (cursor.moveToNext()) {
+                result.add(beaconItemFromCursor(cursor))
             }
         } finally {
             cursor?.close()
@@ -59,7 +54,12 @@ internal class SendBeaconDb constructor(
     }
 
     @WorkerThread
-    fun add(url: Uri, headers: Map<String, String>, addTimestamp: Long, payload: JSONObject?): Persistent {
+    open fun add(
+        url: Uri,
+        headers: Map<String, String>,
+        addTimestamp: Long,
+        payload: JSONObject?
+    ): Persistent {
         val contentValues = ContentValues(3).apply {
             put(COLUMN_URL, url.toString())
             put(COLUMN_HEADERS, headers.serialize())
@@ -74,7 +74,7 @@ internal class SendBeaconDb constructor(
     }
 
     @WorkerThread
-    fun remove(item: Persistent?): Boolean {
+    open fun remove(item: Persistent?): Boolean {
         if (item == null) return false
 
         val database = writableDatabase
@@ -95,7 +95,6 @@ internal class SendBeaconDb constructor(
     }
 
     fun interface Factory {
-
         fun create(context: Context, databaseName: String): SendBeaconDb
     }
 

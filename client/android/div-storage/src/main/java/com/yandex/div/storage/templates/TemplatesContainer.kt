@@ -1,7 +1,6 @@
 package com.yandex.div.storage.templates
 
 import androidx.annotation.WorkerThread
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.util.forEach
@@ -28,7 +27,6 @@ private typealias TemplateHash = String
 private typealias TemplateId = String
 private typealias GroupId = String
 
-@Mockable
 internal class TemplatesContainer(
         private val divStorage: DivStorage,
         private val errorLogger: ParsingErrorLogger,

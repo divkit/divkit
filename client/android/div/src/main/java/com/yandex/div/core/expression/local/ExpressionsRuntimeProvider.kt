@@ -1,7 +1,6 @@
 package com.yandex.div.core.expression.local
 
 import com.yandex.div.core.DivActionPerformer
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
@@ -30,7 +29,6 @@ import com.yandex.div2.DivVariable
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class ExpressionsRuntimeProvider @Inject constructor(
     private val divVariableController: DivVariableController,
     private val actionPerformer: DivActionPerformer,

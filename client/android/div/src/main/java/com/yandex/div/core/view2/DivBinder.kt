@@ -2,7 +2,6 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import android.view.ViewGroup
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.extension.DivExtensionController
@@ -49,7 +48,6 @@ import com.yandex.div2.DivBase
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class DivBinder @Inject constructor(
     private val validator: DivValidator,
     private val textBinder: DivTextBinder,

@@ -1,7 +1,6 @@
 package com.yandex.div.histogram.reporter
 
 import androidx.annotation.AnyThread
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramFilter
 
@@ -9,7 +8,6 @@ import com.yandex.div.histogram.HistogramFilter
  * Reporter of Div histograms.
  */
 @AnyThread
-@Mockable
 class HistogramReporter(
     private val histogramReporterDelegate: HistogramReporterDelegate
 ) {

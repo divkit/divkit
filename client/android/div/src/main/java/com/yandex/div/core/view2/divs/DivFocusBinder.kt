@@ -4,7 +4,6 @@ import android.view.View
 import com.yandex.div.R
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivActionPerformer
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
@@ -17,7 +16,6 @@ import com.yandex.div2.DivBorder
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class DivFocusBinder @Inject constructor(private val actionPerformer: DivActionPerformer) {
 
     fun bindDivBorder(

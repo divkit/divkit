@@ -1,9 +1,7 @@
 package com.yandex.div.internal.variables
 
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.data.Variable
 
-@Mockable
 interface VariableSource {
     fun getMutableVariable(name: String): Variable?
 

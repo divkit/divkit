@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.core.view.children
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivPathUtils.fromRootDiv
 import com.yandex.div.core.state.DivStatePath
@@ -20,7 +19,6 @@ import javax.inject.Inject
 import javax.inject.Provider
 import kotlin.sequences.forEach
 
-@Mockable
 @DivScope
 internal class DivTooltipViewBuilder @Inject constructor(
     private val div2Builder: Provider<Div2Builder>,

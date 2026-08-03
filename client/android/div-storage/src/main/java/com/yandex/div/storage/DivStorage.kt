@@ -1,7 +1,6 @@
 package com.yandex.div.storage
 
 import androidx.annotation.AnyThread
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.storage.database.ExecutionResult
 import com.yandex.div.storage.database.Migration
 import com.yandex.div.storage.database.StorageException
@@ -62,7 +61,6 @@ internal interface DivStorage {
             internal val groupId: String,
     )
 
-    @Mockable
     data class LoadDataResult<T>(
             val restoredData: List<T>,
             val errors: List<StorageException> = emptyList()

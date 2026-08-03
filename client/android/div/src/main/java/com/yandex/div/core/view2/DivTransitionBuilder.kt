@@ -7,7 +7,6 @@ import androidx.transition.ChangeBounds
 import androidx.transition.Transition
 import androidx.transition.TransitionSet
 import androidx.transition.Visibility
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.util.androidInterpolator
@@ -25,7 +24,6 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @DivViewScope
-@Mockable
 internal class DivTransitionBuilder @Inject constructor(
     @param:Named(Names.CONTEXT) private val context: Context,
     private val viewIdProvider: DivViewIdProvider

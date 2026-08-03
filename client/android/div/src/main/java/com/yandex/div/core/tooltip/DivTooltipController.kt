@@ -23,7 +23,6 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.actions.logActionError
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
@@ -51,7 +50,6 @@ internal typealias CreatePopupCall = (contentView: View, width: Int, height: Int
 private const val CANT_FIND_ON_BACKPRESS_DISPATCHER =
     "Can't find onBackPressedDispatcher to set on back press listener on tooltip."
 
-@Mockable
 @DivScope
 internal class DivTooltipController @VisibleForTesting constructor(
         private val tooltipRestrictor: DivTooltipRestrictor,

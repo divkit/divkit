@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.allopen)
 }
 
 apply(from = "../publish-java.gradle")
@@ -53,10 +52,6 @@ tasks.register<Jar>("replJar") {
         attributes("Main-Class" to "com.yandex.div.evaluable.repl.EvaluableRepl")
     }
     archiveClassifier.set("repl")
-}
-
-allOpen {
-    annotation("com.yandex.div.evaluable.internal.Mockable")
 }
 
 dependencies {

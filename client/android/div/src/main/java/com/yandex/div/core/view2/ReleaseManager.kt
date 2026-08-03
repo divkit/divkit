@@ -6,7 +6,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.yandex.div.core.Div2Context
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.RuntimeStoreProvider
 import com.yandex.div.internal.Log
@@ -17,7 +16,6 @@ import javax.inject.Inject
  * The class responsible for releasing divs when the corresponding LifecycleOwner is destroyed.
  */
 @DivScope
-@Mockable
 internal class ReleaseManager @Inject constructor(
     private val runtimeStoreProvider: RuntimeStoreProvider,
 ) {

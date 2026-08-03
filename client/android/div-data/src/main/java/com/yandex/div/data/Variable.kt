@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.annotation.MainThread
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.internal.data.PropertyDelegate
 import com.yandex.div.internal.util.ParsingValueUtils.parseAsBoolean
@@ -20,7 +19,6 @@ import com.yandex.div2.DivEvaluableType
 import org.json.JSONArray
 import org.json.JSONObject
 
-@Mockable
 sealed class Variable {
     abstract val name: String
     protected val observers = ObserverList<(Variable) -> Unit>()
@@ -280,11 +278,11 @@ sealed class Variable {
         }
     }
 
-    fun addObserver(observer: (Variable) -> Unit): Unit = synchronized(this) {
+    open fun addObserver(observer: (Variable) -> Unit): Unit = synchronized(this) {
         observers.addObserver(observer)
     }
 
-    fun removeObserver(observer: (Variable) -> Unit): Unit = synchronized(this) {
+    open fun removeObserver(observer: (Variable) -> Unit): Unit = synchronized(this) {
         observers.removeObserver(observer)
     }
 

@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2
 
 import com.yandex.div.core.DivPreloader
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.DivImagePriority
@@ -12,7 +11,6 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
 import javax.inject.Inject
 
-@Mockable
 @DivScope
 class DivImagePreloader @Inject constructor(
     private val imageLoader: DivImageLoader

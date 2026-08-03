@@ -1,7 +1,6 @@
 package com.yandex.div.internal.viewpool.optimization
 
 import android.content.Context
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names.APP_CONTEXT
 import com.yandex.div.internal.KLog
@@ -18,7 +17,6 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @DivScope
-@Mockable
 class ViewPreCreationProfileRepository @Inject constructor(
     @param:Named(APP_CONTEXT) private val context: Context,
     private val defaultProfile: ViewPreCreationProfile

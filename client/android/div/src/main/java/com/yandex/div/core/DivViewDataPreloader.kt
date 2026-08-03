@@ -3,7 +3,6 @@ package com.yandex.div.core
 import android.net.Uri
 import com.yandex.div.core.DivPreloader.Callback
 import com.yandex.div.core.DivPreloader.Companion.NO_CALLBACK
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.preload.CompositeResult
@@ -14,7 +13,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 
-@Mockable
 internal class DivViewDataPreloader internal constructor(
     private val imagePreloader: DivImagePreloader?,
     private val customContainerViewAdapter: DivCustomContainerViewAdapter,

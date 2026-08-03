@@ -3,7 +3,6 @@ package com.yandex.div.core
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
 import android.net.Uri
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivCachedImage
@@ -30,7 +29,6 @@ import com.yandex.div2.DivBackground
 import com.yandex.div2.DivData
 import java.util.concurrent.atomic.AtomicBoolean
 
-@Mockable
 class DivPreloader internal constructor(
     private val imagePreloader: DivImagePreloader?,
     private val customContainerViewAdapter: DivCustomContainerViewAdapter,

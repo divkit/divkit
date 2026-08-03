@@ -1,14 +1,12 @@
 package com.yandex.div.storage.histogram
 
 import androidx.annotation.AnyThread
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import java.util.concurrent.CopyOnWriteArraySet
 
-@Mockable
 internal class HistogramRecorder(
         histogramReporterDelegate: HistogramReporterDelegate,
         private val histogramNameProvider: HistogramNameProvider?,

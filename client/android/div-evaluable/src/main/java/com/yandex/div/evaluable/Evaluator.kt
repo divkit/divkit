@@ -1,12 +1,10 @@
 package com.yandex.div.evaluable
 
-import com.yandex.div.evaluable.internal.Mockable
 import com.yandex.div.evaluable.internal.Token
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
 import kotlin.math.abs
 
-@Mockable
 class Evaluator(val evaluationContext: EvaluationContext) {
 
     @Throws(EvaluableException::class)

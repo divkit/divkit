@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteStatement
 import androidx.annotation.VisibleForTesting
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.Assert
 import com.yandex.div.storage.database.DatabaseOpenHelper.CreateCallback
 import com.yandex.div.storage.database.DatabaseOpenHelper.UpgradeCallback
@@ -16,7 +15,6 @@ import java.io.IOException
  * Impl for [DatabaseOpenHelper] for android framework
  * [SQLiteDatabase].
  */
-@Mockable
 internal class AndroidDatabaseOpenHelper(
     context: Context,
     name: String,

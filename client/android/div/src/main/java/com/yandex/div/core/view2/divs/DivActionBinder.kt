@@ -11,7 +11,6 @@ import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivActionPerformer
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED
@@ -31,7 +30,6 @@ import java.util.UUID
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class DivActionBinder @Inject constructor(
     private val actionPerformer: DivActionPerformer,
     private val logger: Div2Logger,

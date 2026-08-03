@@ -1,7 +1,6 @@
 package com.yandex.div.storage.analytics
 
 import androidx.annotation.VisibleForTesting
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
@@ -12,7 +11,6 @@ import com.yandex.div.storage.util.CardErrorTransformer
 /**
  * Consumes some of template related errors to fill them with actual reason and sends back to logger.
  */
-@Mockable
 internal class TemplateCardErrorTransformer(
         private val templateContainer: TemplatesContainer,
         private val internalLogger: ParsingErrorLogger,

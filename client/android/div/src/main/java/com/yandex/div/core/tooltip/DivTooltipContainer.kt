@@ -8,7 +8,6 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.FrameContainerLayout
@@ -17,7 +16,6 @@ import com.yandex.div.internal.widget.TransientViewMixin
 import androidx.core.view.isNotEmpty
 import androidx.core.view.isEmpty
 
-@Mockable
 internal class DivTooltipContainer @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

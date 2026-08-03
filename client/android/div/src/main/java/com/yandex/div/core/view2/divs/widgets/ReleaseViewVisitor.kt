@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs.widgets
 import android.view.View
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.DivCustomContainerViewAdapter
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.releasableList
@@ -14,7 +13,6 @@ import com.yandex.div2.DivBase
 import javax.inject.Inject
 
 @DivViewScope
-@Mockable
 internal class ReleaseViewVisitor @Inject constructor(
     private val divView: Div2View,
     private val divCustomContainerViewAdapter: DivCustomContainerViewAdapter,

@@ -2,7 +2,6 @@ package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
@@ -18,7 +17,6 @@ import java.util.Collections
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Provider
 
-@Mockable
 internal class VariableControllerImpl(
     private val viewProvider: Provider<Div2View?>,
     private val delegate: VariableController? = null,

@@ -1,6 +1,5 @@
 package com.yandex.div.storage.templates
 
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.TemplateParsingEnvironment
 import com.yandex.div.data.DivParsingEnvironment
@@ -13,7 +12,6 @@ import org.json.JSONObject
  * Proxy that wraps [DivData.invoke] and [DivParsingEnvironment.parseTemplatesWithResult]
  * to measure and report histograms.
  */
-@Mockable
 internal class DivParsingHistogramProxy internal constructor(
         initReporter: () -> DivParsingHistogramReporter
 ) {

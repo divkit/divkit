@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabaseLockedException
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
 import androidx.core.database.getBlobOrNull
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.storage.DivDataRepository.ActionOnError
@@ -55,7 +54,6 @@ import java.nio.charset.StandardCharsets
 
 private const val DB_NAME = "div-storage.db"
 
-@Mockable
 internal class DivStorageImpl(
     context: Context,
     openHelperProvider: DatabaseOpenHelperProvider,

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.annotation.AnyThread
 import androidx.core.os.postDelayed
 import androidx.core.view.children
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.SynchronizedWeakHashMap
 import com.yandex.div.core.util.allAppearActions
@@ -27,7 +26,6 @@ import java.util.WeakHashMap
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class DivVisibilityActionTracker @Inject constructor(
     private val viewVisibilityCalculator: ViewVisibilityCalculator,
     private val visibilityActionDispatcher: DivVisibilityActionDispatcher

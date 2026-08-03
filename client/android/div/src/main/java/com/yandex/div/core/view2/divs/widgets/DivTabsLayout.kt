@@ -5,13 +5,11 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.isVisible
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.items.DivScrollActionHolder
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div2.Div
 
-@Mockable
 internal class DivTabsLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : TabsLayout(context, attrs),

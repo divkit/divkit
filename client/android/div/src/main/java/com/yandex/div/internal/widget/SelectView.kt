@@ -14,7 +14,6 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.core.graphics.drawable.toDrawable
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.clearFocusOnClick
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.reuse.InputFocusTracker
@@ -89,7 +88,6 @@ internal open class SelectView(context: Context) : EllipsizedTextView(context) {
 
     override fun getAccessibilityClassName() = "android.widget.Spinner"
 
-    @Mockable
     private class PopupWindow @JvmOverloads constructor(
         private val context: Context,
         attrs: AttributeSet? = null,

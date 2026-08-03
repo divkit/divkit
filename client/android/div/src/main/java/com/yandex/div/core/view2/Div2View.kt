@@ -30,7 +30,6 @@ import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.downloader.DivDataChangedObserver
@@ -107,7 +106,6 @@ import java.util.WeakHashMap
  * Main entry point for building Div2s
  */
 @SuppressLint("ViewConstructor")
-@Mockable
 class Div2View private constructor(
     internal val context: Div2Context,
     attrs: AttributeSet? = null,

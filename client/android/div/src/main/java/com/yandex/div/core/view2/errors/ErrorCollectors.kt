@@ -3,13 +3,11 @@ package com.yandex.div.core.view2.errors
 import androidx.annotation.AnyThread
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivErrorsReporter
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div2.DivData
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class ErrorCollectors @Inject constructor(
     private val errorsReporter: DivErrorsReporter,
 ) {

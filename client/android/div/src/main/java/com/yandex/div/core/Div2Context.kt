@@ -14,7 +14,6 @@ import androidx.lifecycle.LifecycleOwner
 import com.yandex.div.DivDataTag
 import com.yandex.div.R
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.expression.variables.GlobalVariableController
@@ -45,7 +44,6 @@ import kotlin.jvm.internal.DefaultConstructorMarker
  *     }
  * </pre>
  */
-@Mockable
 class Div2Context @MainThread private constructor(
     private val baseContext: ContextThemeWrapper,
     internal val div2Component: Div2Component,

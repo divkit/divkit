@@ -1,7 +1,6 @@
 package com.yandex.div.core.expression
 
 import com.yandex.div.DivDataTag
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.local.RuntimeStore
@@ -24,7 +23,6 @@ import javax.inject.Inject
  * Holds state of variables for each div view.
  */
 @DivScope
-@Mockable
 internal class RuntimeStoreProvider @Inject constructor(
     private val runtimeProvider: ExpressionsRuntimeProvider,
     private val errorCollectors: ErrorCollectors,

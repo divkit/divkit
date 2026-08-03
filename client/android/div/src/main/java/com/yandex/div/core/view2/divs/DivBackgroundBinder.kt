@@ -9,7 +9,6 @@ import android.util.StateSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.yandex.div.R
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.equalsToConstant
@@ -29,7 +28,6 @@ import com.yandex.div2.DivBackground
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class DivBackgroundBinder @Inject constructor(
     private val imageLoader: DivImageLoader
 ) {

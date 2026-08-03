@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs
 
 import com.yandex.android.beacon.SendBeaconManager
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.SWIPE_OUT_BEACONS_ENABLED
@@ -16,7 +15,6 @@ import com.yandex.yatagan.Lazy
 import javax.inject.Inject
 
 @DivScope
-@Mockable
 internal class DivActionBeaconSender @Inject constructor(
     private val sendBeaconManagerLazy: Lazy<SendBeaconManager?>,
     @ExperimentFlag(TAP_BEACONS_ENABLED) private val isTapBeaconsEnabled: Boolean,

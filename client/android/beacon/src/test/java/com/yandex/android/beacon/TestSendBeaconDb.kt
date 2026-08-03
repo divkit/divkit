@@ -13,7 +13,12 @@ internal class TestSendBeaconDb(context: Context) : SendBeaconDb(context, DB_NAM
         return ArrayList(items)
     }
 
-    override fun add(url: Uri, headers: Map<String, String>, addTimestamp: Long, payload: JSONObject?): Persistent {
+    override fun add(
+        url: Uri,
+        headers: Map<String, String>,
+        addTimestamp: Long,
+        payload: JSONObject?
+    ): Persistent {
         val item = Persistent(url, headers, payload, addTimestamp, 0)
         items.add(item)
         return item

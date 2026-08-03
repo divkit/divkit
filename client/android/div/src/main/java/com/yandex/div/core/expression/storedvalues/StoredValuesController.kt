@@ -1,6 +1,5 @@
 package com.yandex.div.core.expression.storedvalues
 
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.StoredValue
@@ -14,7 +13,6 @@ import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.yatagan.Lazy
 import javax.inject.Inject
 
-@Mockable
 @DivScope
 internal class StoredValuesController @Inject constructor(
     storageComponent: Lazy<DivStorageComponent>

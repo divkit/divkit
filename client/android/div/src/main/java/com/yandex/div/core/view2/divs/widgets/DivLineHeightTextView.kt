@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.withTranslation
 import com.yandex.div.R
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.util.text.DivBackgroundSpan
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.view2.spannable.ParticlesTicker
@@ -17,7 +16,6 @@ import com.yandex.div.internal.widget.TextViewWithAccessibleSpans
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 
-@Mockable
 internal class DivLineHeightTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

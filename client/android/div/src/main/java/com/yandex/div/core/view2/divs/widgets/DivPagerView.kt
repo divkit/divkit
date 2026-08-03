@@ -16,7 +16,6 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
 import com.yandex.div.core.view2.divs.performClickOnAncestors
@@ -28,7 +27,6 @@ import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div2.Div
 
-@Mockable
 internal class DivPagerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

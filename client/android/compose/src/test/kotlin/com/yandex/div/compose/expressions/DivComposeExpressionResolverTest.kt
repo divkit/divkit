@@ -7,9 +7,9 @@ import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.test.data.expression
 import org.junit.runner.RunWith
-import org.mockito.Mockito.mock
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import kotlin.test.Test
 import kotlin.test.assertEquals
