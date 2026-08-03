@@ -31,6 +31,7 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import okhttp3.OkHttpClient
 import kotlin.math.max
+import kotlin.time.ExperimentalTime
 
 class CoilDivImageLoader private constructor(
     private val context: Context,
@@ -71,7 +72,7 @@ class CoilDivImageLoader private constructor(
         max(it.widthPixels, it.heightPixels)
     }
 
-    @OptIn(ExperimentalCoilApi::class)
+    @OptIn(ExperimentalCoilApi::class, ExperimentalTime::class)
     private val imageLoader = ImageLoader.Builder(context)
         .components {
             add(
