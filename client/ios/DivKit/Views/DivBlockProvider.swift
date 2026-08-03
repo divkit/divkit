@@ -6,11 +6,11 @@ import VGSL
 
 @MainActor
 final class DivBlockProvider {
-  private(set) var id: DivViewId!
+  private(set) var id: DivViewId
 
   private(set) var cardSize: DivViewSize? {
     didSet {
-      if let cardSize, let id {
+      if let cardSize {
         onCardSizeChanged(id.cardId, cardSize)
       }
     }
@@ -61,9 +61,11 @@ final class DivBlockProvider {
   }
 
   init(
+    id: DivViewId,
     divKitComponents: DivKitComponents,
     onCardSizeChanged: @escaping (DivCardID, DivViewSize) -> Void
   ) {
+    self.id = id
     self.divKitComponents = divKitComponents
     self.onCardSizeChanged = onCardSizeChanged
 

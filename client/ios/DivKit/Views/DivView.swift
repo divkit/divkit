@@ -262,8 +262,7 @@ public final class DivView: VisibleBoundsTrackingView {
   }
 
   private func update(block: Block) {
-    let renderingDelegate: RenderingDelegate? = if blockProvider?.id != nil,
-                                                   let divCardId = blockProvider?.cardId {
+    let renderingDelegate: RenderingDelegate? = if let divCardId = blockProvider?.cardId {
       divKitComponents.renderingDelegate(for: divCardId)
     } else {
       nil

@@ -121,24 +121,27 @@ public final class DivViewPreloader {
     changeEvents.addObserver(onCardSizeChanged)
   }
 
-  func blockProvider(for cardId: DivCardID) -> DivBlockProvider {
-    if let blockProvider = blockProviders[cardId] {
-      return blockProvider
-    } else {
-      let blockProvider = DivBlockProvider(divKitComponents: divKitComponents) { [weak self] in
-        self?.changeEventsPipe.send(DivViewSizeChange(cardId: $0, estimatedSize: $1))
-      }
-      blockProviders[cardId] = blockProvider
-      return blockProvider
-    }
-  }
-
   public func reset(cardId: DivCardID) {
     blockProviders.removeValue(forKey: cardId)
   }
 
   public func resetAll() {
     blockProviders.removeAll()
+  }
+
+  func blockProvider(for cardId: DivCardID) -> DivBlockProvider {
+    if let blockProvider = blockProviders[cardId] {
+      return blockProvider
+    } else {
+      let blockProvider = DivBlockProvider(
+        id: DivViewId(cardId: cardId, additionalId: nil),
+        divKitComponents: divKitComponents
+      ) { [weak self] in
+        self?.changeEventsPipe.send(DivViewSizeChange(cardId: $0, estimatedSize: $1))
+      }
+      blockProviders[cardId] = blockProvider
+      return blockProvider
+    }
   }
 }
 #endif
