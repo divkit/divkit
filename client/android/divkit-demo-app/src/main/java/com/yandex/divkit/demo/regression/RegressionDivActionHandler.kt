@@ -9,14 +9,14 @@ import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.div.DemoDivActionHandler
 import com.yandex.divkit.demo.div.parseToDiv2
 import com.yandex.divkit.demo.screenshot.DivAssetReader
-import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.setDataByConfig
 import java.util.UUID
 
 class RegressionDivActionHandler(
-    uriHandlerDivkit: DivkitDemoUriHandler,
+    uriHandler: DemoUriHandler,
     private val divAssetReader: DivAssetReader
-) : DemoDivActionHandler(uriHandlerDivkit) {
+) : DemoDivActionHandler(uriHandler) {
     override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
         val url = action.url?.evaluate(resolver)
             ?: return super.handleAction(action, view, resolver)

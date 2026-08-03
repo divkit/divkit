@@ -46,7 +46,7 @@ import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.font.RobotoFlexTypefaceProvider
 import com.yandex.divkit.demo.font.YandexSansCondensedTypefaceProvider
-import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.showToast
@@ -62,7 +62,7 @@ fun divConfiguration(
     val reporter = MetricaUtils.getReporter(activity)
     val flagPreferenceProvider = Container.flagPreferenceProvider
     return DivConfiguration.Builder(Container.imageLoader)
-        .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
+        .actionHandler(DemoDivActionHandler(Container.uriHandler))
         .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
@@ -152,7 +152,7 @@ fun divContext(
     return Div2Context(baseContext, configuration, themeId = R.style.Div_Theme_Demo, lifecycleOwner)
 }
 
-open class DemoDivActionHandler(private val uriHandler: DivkitDemoUriHandler) : DivActionHandler() {
+open class DemoDivActionHandler(private val uriHandler: DemoUriHandler) : DivActionHandler() {
     override fun handleActionUrl(uri: Uri?, view: DivViewFacade): Boolean {
         if (super.handleActionUrl(uri, view)) {
             return true
@@ -298,11 +298,5 @@ internal fun ParsingEnvironment.createDivDataWithHistograms(data: JSONObject, co
 internal fun DivParsingEnvironment.parseTemplatesWithHistograms(templates: JSONObject, componentName: String? = null) {
     Container.parsingHistogramReporter.measureTemplatesParsing(templates, componentName) {
         parseTemplates(templates)
-    }
-}
-
-internal fun String.toJSONObjectWithHistograms(componentName: String? = null): JSONObject {
-    return Container.parsingHistogramReporter.measureJsonParsing(componentName) {
-        JSONObject(this)
     }
 }

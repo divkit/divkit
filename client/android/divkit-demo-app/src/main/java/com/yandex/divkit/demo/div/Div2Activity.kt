@@ -42,7 +42,7 @@ import com.yandex.divkit.demo.div.editor.DEMO_ACTIVITY_COMPONENT_NAME
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
-import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.QRCaptureActivity
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.setDataByConfig
@@ -70,7 +70,6 @@ class Div2Activity : AppCompatActivity() {
     private val globalVariableController = DemoGlobalVariablesController()
 
     private lateinit var binding: ActivityDiv2Binding
-    private lateinit var div: Div2View
 
     private lateinit var div2Adapter: DivEditorAdapter
     private lateinit var qrScanContract: ScanContract
@@ -156,7 +155,7 @@ class Div2Activity : AppCompatActivity() {
     }
 
     private inner class Div2ActionHandler(
-        uriHandler: DivkitDemoUriHandler
+        uriHandler: DemoUriHandler
     ) : DemoDivActionHandler(uriHandler) {
 
         override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {

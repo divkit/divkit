@@ -13,7 +13,7 @@ import com.yandex.divkit.demo.div.Div2Activity
 import com.yandex.divkit.demo.div.DivActivity
 import com.yandex.divkit.demo.settings.SettingsActionHandler
 import com.yandex.divkit.demo.settings.SettingsActivity
-import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.regression.RegressionActivity
 
 private const val AUTHORITY_OPEN_SCREEN = "open_screen"
@@ -28,7 +28,7 @@ private const val ACTIVITY_SETTINGS = "settings"
 private const val PARAM_ACTIVITY = "activity"
 
 class UIDiv2ActionHandler(
-    uriHandler: DivkitDemoUriHandler,
+    uriHandler: DemoUriHandler,
     private val context: Context
 ) : DemoDivActionHandler(uriHandler) {
 

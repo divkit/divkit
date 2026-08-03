@@ -4,7 +4,6 @@ import groovy.json.JsonOutput
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    id 'kotlin-parcelize'
 }
 
 apply from: "${project.projectDir}/../div-common.gradle"
@@ -48,11 +47,11 @@ android {
         }
 
         debug {
-            java.srcDirs = ['src/public/java']
+            kotlin.srcDirs += 'src/public/java'
         }
 
         release {
-            java.srcDirs = ['src/public/java']
+            kotlin.srcDirs += 'src/public/java'
         }
     }
 

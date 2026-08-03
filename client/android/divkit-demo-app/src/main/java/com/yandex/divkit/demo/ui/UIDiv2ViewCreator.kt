@@ -15,7 +15,7 @@ import com.yandex.divkit.demo.div.divConfiguration
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.screenshot.Div2ViewFactory
 import com.yandex.divkit.demo.screenshot.DivAssetReader
-import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.regression.Div2ViewCreator
 import com.yandex.divkit.regression.ScenarioLogDelegate
 import org.json.JSONObject
@@ -24,7 +24,8 @@ import java.util.concurrent.Executors
 class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
 
     private val assetReader = DivAssetReader(context)
-    private val uriHandler = DivkitDemoUriHandler(context)
+    private val uriHandler = DemoUriHandler(context)
+
     private val divStateStorage = DivStateDatabase(
         context,
         "regression-div-states",

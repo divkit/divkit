@@ -47,7 +47,7 @@ import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.font.RobotoFlexTypefaceProvider
 import com.yandex.divkit.demo.font.YandexSansCondensedTypefaceProvider
-import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.loadText
@@ -71,7 +71,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     private lateinit var div2Adapter: DivEditorAdapter
     private lateinit var divContext: Div2Context
     private lateinit var divEditorUi: DivEditorUi
-    private val actionHandler = DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = this@Div2ScenarioActivity })
+    private val actionHandler = DemoDivActionHandler(Container.uriHandler)
     private val globalVariableController = DemoGlobalVariablesController()
     private val preferences by lazy { getSharedPreferences("div2", Context.MODE_PRIVATE) }
     private var json: String? = null
@@ -452,7 +452,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     }
 
     private inner class TransitionActionHandler(
-        uriHandler: DivkitDemoUriHandler
+        uriHandler: DemoUriHandler
     ) : DemoDivActionHandler(uriHandler) {
 
         override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {

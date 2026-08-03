@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.screenshotTestPlugin)
-    id 'kotlin-parcelize'
 }
 
 apply from: "${project.projectDir}/../div-common.gradle"
@@ -60,20 +59,12 @@ android {
             assets.srcDirs += "../../../test_data/"
         }
 
-        debug {
-            java.srcDirs = ['src/public/java']
-        }
-
-        release {
-            java.srcDirs = ['src/public/java']
-        }
-
         test {
             resources.srcDirs += 'src/main/assets' // needed to access assets in unit tests.
         }
 
         androidTest {
-            java.srcDirs += 'src/screenshotTest/java'
+            kotlin.srcDirs += 'src/screenshotTest/java'
         }
     }
 

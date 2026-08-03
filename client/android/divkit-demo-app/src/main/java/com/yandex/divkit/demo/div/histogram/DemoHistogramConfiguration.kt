@@ -1,12 +1,10 @@
 package com.yandex.divkit.demo.div.histogram
 
-import androidx.annotation.VisibleForTesting
 import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.RenderConfiguration
 import com.yandex.div.internal.KLog
-import com.yandex.divkit.demo.perf.PerfMetricReporter
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
@@ -30,7 +28,9 @@ class LoggingHistogramBridge : HistogramBridge {
     fun getLastSavedHistogram(name: String): TimeHistogram? {
         return if (lastSavedHistograms.containsKey(name)) {
             lastSavedHistograms[name]
-        } else null
+        } else {
+            null
+        }
     }
 
     override fun recordBooleanHistogram(name: String, sample: Boolean) {
@@ -59,9 +59,6 @@ class LoggingHistogramBridge : HistogramBridge {
         bucketCount: Int
     ) {
         recordHistogram(name, sample.toLong())
-        dispatcher?.dispatch(name)
-        if (sample <= 0) return
-        PerfMetricReporter.reportCountMetric(name, sample.toLong())
     }
 
     override fun recordTimeHistogram(
@@ -73,9 +70,6 @@ class LoggingHistogramBridge : HistogramBridge {
         bucketCount: Int
     ) {
         recordHistogram(name, duration)
-        dispatcher?.dispatch(name)
-        if (duration <= 0) return
-        PerfMetricReporter.reportTimeMetric(name, unit, duration)
     }
 
     override fun recordSparseSlowlyHistogram(name: String, sample: Int) {
@@ -97,12 +91,6 @@ class LoggingHistogramBridge : HistogramBridge {
         KLog.d(TAG) { "$name: $sample" }
     }
 
-    companion object {
-        @Volatile
-        @VisibleForTesting
-        var dispatcher: HistogramDispatcher? = null
-    }
-
     class TimeHistogram(
         val name: String,
         @HistogramCallType val histogramCallType: String,
@@ -119,8 +107,4 @@ class LoggingHistogramBridge : HistogramBridge {
             }
         }
     }
-}
-
-fun interface HistogramDispatcher {
-    fun dispatch(histogramName: String)
 }

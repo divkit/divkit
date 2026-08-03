@@ -22,7 +22,7 @@ import com.yandex.divkit.demo.regression.RegressionDiv2ViewCreator
 import com.yandex.divkit.demo.regression.RegressionSwitchingViewCreator
 import com.yandex.divkit.demo.settings.FlagPreferenceProvider
 import com.yandex.divkit.demo.settings.Preferences
-import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.connectivityManager
 import com.yandex.divkit.regression.di.`Yatagan$RegressionComponent`
 import okhttp3.OkHttpClient
@@ -95,7 +95,7 @@ internal object Container {
 
     var imageLoaderOverride: DemoDivImageLoaderWrapper? = null
 
-    val uriHandler by lazy { DivkitDemoUriHandler(context) }
+    val uriHandler by lazy { DemoUriHandler(context) }
 
     val flagPreferenceProvider by lazy { FlagPreferenceProvider(context) }
 
