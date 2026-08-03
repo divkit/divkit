@@ -115,7 +115,7 @@ extension DivData {
       let contextWarnings = parsingContext.warnings
 
       switch divDataResult {
-      case .success(let value), .partialSuccess(let value, _):
+      case let .success(value), let .partialSuccess(value, _):
         if let warnings = NonEmptyArray(contextErrors + contextWarnings) {
           return .partialSuccess(value, warnings: warnings)
         }
@@ -134,6 +134,14 @@ extension DivData {
 }
 
 extension DivData {
+  /// Extracts initial values of variables declared in `DivData`.
+  ///
+  /// Expressions in variable values are not resolved.
+  @_spi(Deprecated)
+  public func extractDivVariableValues() -> DivVariables {
+    variables?.extractDivVariableValues() ?? [:]
+  }
+
   public func flatMap<T>(_ transform: (Div) -> T) -> [T] {
     var result: [T] = []
     func traverse(div: Div) {
