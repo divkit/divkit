@@ -7,21 +7,27 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.Div
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
-import com.yandex.div2.DivSize
 import com.yandex.div2.DivVisibility
 
 @Composable
-internal fun DivContainer.Separator?.resolveSeparatorVisibility() = SeparatorVisibility(
-    showAtStart = this?.showAtStart?.observedValue() == true,
-    showBetween = this?.showBetween?.observedValue() == true,
-    showAtEnd = this?.showAtEnd?.observedValue() == true,
-)
+internal fun DivContainer.Separator?.resolveSeparatorVisibility(): SeparatorVisibility {
+    val separator = this ?: return SeparatorVisibility.None
+    val showAtStart = separator.showAtStart.observedValue()
+    val showBetween = separator.showBetween.observedValue()
+    val showAtEnd = separator.showAtEnd.observedValue()
+    if (!showAtStart && !showBetween && !showAtEnd) {
+        return SeparatorVisibility.None
+    }
+    return SeparatorVisibility(
+        showAtStart = showAtStart,
+        showBetween = showBetween,
+        showAtEnd = showAtEnd,
+    )
+}
 
 internal data class SeparatorVisibility(
     val showAtStart: Boolean,
@@ -30,6 +36,14 @@ internal data class SeparatorVisibility(
 ) {
     val hasAnySeparator: Boolean
         get() = showAtStart || showBetween || showAtEnd
+
+    companion object {
+        val None = SeparatorVisibility(
+            showAtStart = false,
+            showBetween = false,
+            showAtEnd = false,
+        )
+    }
 }
 
 internal fun SeparatorVisibility.effectiveItemSpacing(itemSpacing: Long): Long =
@@ -50,23 +64,10 @@ internal fun Div.observeVerticalChildAlignment(): Alignment.Vertical? =
 internal fun Div.observeHorizontalChildAlignment(): Alignment.Horizontal? =
     value().alignmentHorizontal?.observedValue()?.toHorizontalAlignment()
 
-@Composable
-internal fun resolveWeightedChildrenMargins(
-    items: List<Div>,
-    childMainSize: (DivBase) -> DivSize,
-    childMainAxisMargins: @Composable (DivBase) -> Dp,
-): Dp {
-    var total = 0.dp
-    for (item in items) {
-        val childBase = item.value()
-        if (childMainSize(childBase).isMatchParent) {
-            total += childMainAxisMargins(childBase)
-        }
-    }
-    return total
-}
-
-internal fun Modifier.reduceMaxConstraint(reductionAmount: Dp, isWidth: Boolean): Modifier {
+internal fun Modifier.reduceMaxConstraint(
+    reductionAmount: Dp,
+    isWidth: Boolean,
+): Modifier {
     if (reductionAmount <= 0.dp) return this
     return layout { measurable, constraints ->
         val reductionPx = reductionAmount.roundToPx()

@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import com.yandex.div.compose.utils.observeInsets
@@ -20,20 +21,25 @@ internal fun Modifier.adaptiveContainerPadding(
     horizontalAlignment: DivContentAlignmentHorizontal,
     verticalAlignment: DivContentAlignmentVertical,
 ): Modifier {
-    val insets = (insets ?: DivEdgeInsets()).observeInsets()
+    if (insets == null) return this
+    val resolvedInsets = insets.observeInsets()
 
     return layout { measurable, constraints ->
         val paddings = ResolvedPadding(
-            startPx = insets.calculateStartPadding(layoutDirection).roundToPx(),
-            topPx = insets.calculateTopPadding().roundToPx(),
-            endPx = insets.calculateEndPadding(layoutDirection).roundToPx(),
-            bottomPx = insets.calculateBottomPadding().roundToPx(),
+            startPx = resolvedInsets.calculateStartPadding(layoutDirection).roundToPx(),
+            topPx = resolvedInsets.calculateTopPadding().roundToPx(),
+            endPx = resolvedInsets.calculateEndPadding(layoutDirection).roundToPx(),
+            bottomPx = resolvedInsets.calculateBottomPadding().roundToPx(),
         )
         val initialConstraints = constraints.shrinkBy(paddings.horizontal, paddings.vertical)
         val initialPlaceable = measurable.measure(initialConstraints)
 
         val adaptedPadding = paddings.adaptForOverflow(
-            constraints, initialPlaceable, horizontalAlignment, verticalAlignment,
+            constraints,
+            initialPlaceable,
+            horizontalAlignment,
+            verticalAlignment,
+            layoutDirection,
         )
 
         val placeable = if (adaptedPadding != paddings) {
@@ -53,7 +59,7 @@ internal fun Modifier.adaptiveContainerPadding(
             constraints.constrainHeight(placeable.height + adaptedPadding.vertical)
         }
 
-        val overflowX = placeable.horizontalOverflowCompensation(horizontalAlignment)
+        val overflowX = placeable.horizontalOverflowCompensation(horizontalAlignment, layoutDirection)
         val overflowY = placeable.verticalOverflowCompensation(verticalAlignment)
 
         layout(width, height) {
@@ -78,7 +84,8 @@ private data class ResolvedPadding(
         constraints: Constraints,
         placeable: Placeable,
         horizontalAlignment: DivContentAlignmentHorizontal,
-        verticalAlignment: DivContentAlignmentVertical
+        verticalAlignment: DivContentAlignmentVertical,
+        layoutDirection: LayoutDirection,
     ): ResolvedPadding {
         val shrunkConstraints = constraints.shrinkBy(horizontal, vertical)
         val hasHorizontalOverflow = constraints.hasBoundedWidth &&
@@ -89,7 +96,11 @@ private data class ResolvedPadding(
         if (!hasHorizontalOverflow && !hasVerticalOverflow) return this
 
         val (adaptedStart, adaptedEnd) = if (hasHorizontalOverflow) {
-            adaptPaddingForOverflow(horizontalAlignment.overflowBehavior, startPx, endPx)
+            adaptPaddingForOverflow(
+                horizontalAlignment.overflowBehavior(layoutDirection),
+                startPx,
+                endPx,
+            )
         } else {
             startPx to endPx
         }
@@ -109,16 +120,26 @@ private enum class OverflowBehavior {
     REMOVE_BOTH,
 }
 
-private val DivContentAlignmentHorizontal.overflowBehavior: OverflowBehavior
-    get() = when (this) {
-        DivContentAlignmentHorizontal.RIGHT,
-        DivContentAlignmentHorizontal.END -> OverflowBehavior.KEEP_END
-        DivContentAlignmentHorizontal.CENTER,
-        DivContentAlignmentHorizontal.SPACE_AROUND,
-        DivContentAlignmentHorizontal.SPACE_BETWEEN,
-        DivContentAlignmentHorizontal.SPACE_EVENLY -> OverflowBehavior.REMOVE_BOTH
-        else -> OverflowBehavior.KEEP_START
+private fun DivContentAlignmentHorizontal.overflowBehavior(
+    layoutDirection: LayoutDirection,
+): OverflowBehavior = when (this) {
+    DivContentAlignmentHorizontal.LEFT -> if (layoutDirection == LayoutDirection.Ltr) {
+        OverflowBehavior.KEEP_START
+    } else {
+        OverflowBehavior.KEEP_END
     }
+    DivContentAlignmentHorizontal.RIGHT -> if (layoutDirection == LayoutDirection.Ltr) {
+        OverflowBehavior.KEEP_END
+    } else {
+        OverflowBehavior.KEEP_START
+    }
+    DivContentAlignmentHorizontal.START -> OverflowBehavior.KEEP_START
+    DivContentAlignmentHorizontal.END -> OverflowBehavior.KEEP_END
+    DivContentAlignmentHorizontal.CENTER,
+    DivContentAlignmentHorizontal.SPACE_AROUND,
+    DivContentAlignmentHorizontal.SPACE_BETWEEN,
+    DivContentAlignmentHorizontal.SPACE_EVENLY -> OverflowBehavior.REMOVE_BOTH
+}
 
 private val DivContentAlignmentVertical.overflowBehavior: OverflowBehavior
     get() = when (this) {
@@ -140,16 +161,15 @@ private fun adaptPaddingForOverflow(
     OverflowBehavior.REMOVE_BOTH -> 0 to 0
 }
 
-private fun Placeable.horizontalOverflowCompensation(alignment: DivContentAlignmentHorizontal): Int {
+private fun Placeable.horizontalOverflowCompensation(
+    alignment: DivContentAlignmentHorizontal,
+    layoutDirection: LayoutDirection,
+): Int {
     val offset = (measuredWidth - width).coerceAtLeast(0) / 2
-    return when (alignment) {
-        DivContentAlignmentHorizontal.RIGHT,
-        DivContentAlignmentHorizontal.END -> -offset
-        DivContentAlignmentHorizontal.CENTER,
-        DivContentAlignmentHorizontal.SPACE_AROUND,
-        DivContentAlignmentHorizontal.SPACE_BETWEEN,
-        DivContentAlignmentHorizontal.SPACE_EVENLY -> 0
-        else -> offset
+    return when (alignment.overflowBehavior(layoutDirection)) {
+        OverflowBehavior.KEEP_START -> offset
+        OverflowBehavior.KEEP_END -> -offset
+        OverflowBehavior.REMOVE_BOTH -> 0
     }
 }
 

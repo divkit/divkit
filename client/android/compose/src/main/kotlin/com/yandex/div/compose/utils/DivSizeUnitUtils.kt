@@ -8,6 +8,11 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivSizeUnit
 
 @Composable
+internal fun Expression<Long>.observedDpValue(): Dp {
+    return observedValue().toDp()
+}
+
+@Composable
 @JvmName("observedDpValueDouble")
 internal fun Expression<Double>.observedDpValue(unit: Expression<DivSizeUnit>): Dp {
     return observedFloatValue().toDp(unit.observedValue())

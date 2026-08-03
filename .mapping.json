@@ -776,6 +776,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/container/VerticalContainerLayout.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/container/VerticalContainerLayout.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/container/wrap/WrapContainerLayout.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/container/wrap/WrapContainerLayout.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/container/wrap/WrapSeparatorDrawing.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/container/wrap/WrapSeparatorDrawing.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/container/wrap/WrapSeparatorGeometry.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/container/wrap/WrapSeparatorGeometry.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/DivGalleryView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/DivGalleryView.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryAlignment.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryAlignment.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryGridView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryGridView.kt",

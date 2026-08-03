@@ -35,23 +35,30 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     val separatorVisibility = separator.resolveSeparatorVisibility()
     val visibleItems = data.visibleItems()
 
-    val hasWeightedChildren = !data.height.isWrapContent &&
-        visibleItems.any { it.value().height.isMatchParent }
-    val weightedChildrenMargins = resolveWeightedChildrenMargins(
-        items = visibleItems,
-        childMainSize = { it.height },
-        childMainAxisMargins = { it.observeVerticalMarginsSum() },
-    )
+    val supportsMainAxisWeight = !data.height.isWrapContent
+    val isCrossAxisWrapContent = data.width is DivSize.WrapContent
+    var hasWeightedChildren = false
+    var weightedChildrenMargins = 0.dp
+    var needsCrossAxisIntrinsicSize = false
+    var index = 0
+    while (index < visibleItems.size) {
+        val child = visibleItems[index].value()
+        if (supportsMainAxisWeight && child.height.isMatchParent) {
+            hasWeightedChildren = true
+            weightedChildrenMargins += child.observeVerticalMarginsSum()
+        }
+        if (isCrossAxisWrapContent && child.width is DivSize.MatchParent) {
+            needsCrossAxisIntrinsicSize = true
+        }
+        index++
+    }
 
-    val needsCrossAxisIntrinsicSize = data.width is DivSize.WrapContent
-        && visibleItems.any { it.value().width is DivSize.MatchParent }
-
-    val modifier = modifier
+    val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
         .applyIf(needsCrossAxisIntrinsicSize) { width(IntrinsicSize.Max) }
 
     Column(
-        modifier = modifier,
+        modifier = containerModifier,
         verticalArrangement = verticalAlignment.toVerticalArrangement(
             separatorVisibility.effectiveItemSpacing(itemSpacing),
         ),
