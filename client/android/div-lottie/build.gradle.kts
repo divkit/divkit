@@ -20,8 +20,6 @@ dependencies {
     implementation(libs.kotlin.corountines.core)
     implementation(libs.kotlin.corountines.android)
     implementation(libs.lottie) {
-        exclude(group = "com.squareup.okio", module = "okio")
         exclude(group = "androidx.fragment", module = "fragment")
     }
-    implementation(libs.okio)
 }
