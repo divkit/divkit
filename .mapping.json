@@ -1956,6 +1956,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/animations/TransitionsTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/TransitionsTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/animations/TranslationYClipBoundsTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/TranslationYClipBoundsTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/animations/ViewComparatorTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/ViewComparatorTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/animations/ViewCopiesTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/ViewCopiesTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/Assertions.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/Assertions.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/BaseDivViewExtensionsClickTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/BaseDivViewExtensionsClickTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivActionBinderSetTapListenerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivActionBinderSetTapListenerTest.kt",

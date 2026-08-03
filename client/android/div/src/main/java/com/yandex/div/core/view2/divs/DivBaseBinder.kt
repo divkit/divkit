@@ -19,6 +19,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
+import com.yandex.div.core.view2.animations.suppressOverlayVisibilityRestore
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
@@ -447,6 +448,12 @@ internal class DivBaseBinder @Inject constructor(
 
             transition?.addTarget(this)
         }
+
+        // If this view is currently being shown via an overlay copy (appearance/disappearance
+        // state transition), suppress the automatic visibility restore that would fire when
+        // that transition ends. Without this, the end-listener in View.replace would
+        // unconditionally set visibility = VISIBLE and undo the change we are about to apply.
+        suppressOverlayVisibilityRestore()
 
         if (transition != null) {
             divTransitionHandler.putTransition(
