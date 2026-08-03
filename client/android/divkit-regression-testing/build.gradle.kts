@@ -37,7 +37,6 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.fragment)
-    implementation(libs.androidx.lifecycle.common.java8)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.material)
     implementation(libs.androidx.recyclerview)
