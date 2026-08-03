@@ -6,6 +6,10 @@ repositories {
     mavenCentral()
 }
 
+kotlin {
+    jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
+}
+
 dependencies {
     implementation(gradleApi())
     implementation(libs.kotlin.reflect)

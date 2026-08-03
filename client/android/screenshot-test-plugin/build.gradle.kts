@@ -6,6 +6,10 @@ plugins {
 group = "com.yandex.test"
 version = "1.0.0"
 
+kotlin {
+    jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
+}
+
 dependencies {
     implementation(libs.androidx.annotations)
     implementation(libs.agp.gradleApi)
