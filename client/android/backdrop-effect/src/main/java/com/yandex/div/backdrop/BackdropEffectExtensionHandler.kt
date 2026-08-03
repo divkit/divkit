@@ -46,8 +46,10 @@ import org.json.JSONException
  * ]
  * ```
  * All `params` are optional:
- * - `backdrop_id` — tag of the ancestor [ViewGroup][android.view.ViewGroup] to capture as the backdrop; when omitted the
- *   nearest ancestor [Div2View] is used.
+ * - `backdrop_id` — tag of the ancestor [ViewGroup][android.view.ViewGroup] to capture as the backdrop; when omitted
+ *   the nearest ancestor [Div2View] is used. The tag is looked up on the ancestors of the element up to
+ *   the enclosing [Div2View], then anywhere inside that [Div2View]; a tag set above the card is out
+ *   of scope.
  * - `blur` — `radius` (`dp`, default `0`).
  * - `refraction` — `height` and `strength` (`dp`, default `0`) and `chromatic_aberration`
  *   (default `false`).
@@ -81,8 +83,19 @@ import org.json.JSONException
  * again whenever that content invalidates. Apply it sparingly — prefer small, mostly static
  * elements and avoid attaching it to frequently redrawing or scrolling content, or to many elements
  * at once.
+ *
+ * **Invalidation.** The captured content is reused until a layout pass or a scroll on the decorated
+ * view or the backdrop marks it stale. Redraws of the backdrop are not tracked, so content that
+ * changes in place — a view invalidated by its own state, a `SurfaceView`, an externally driven
+ * animation — keeps showing a stale capture; supply a [BackdropWatcher] to report those changes.
+ *
+ * @param backdropWatcher reports backdrop changes the handler cannot detect on its own. Shared by
+ *   every element handled by this instance and consulted on each frame, so it must be cheap.
+ *   Defaults to never invalidating.
  */
-class BackdropEffectExtensionHandler : DivExtensionHandler {
+class BackdropEffectExtensionHandler(
+    private val backdropWatcher: BackdropWatcher = DefaultBackdropWatcher()
+) : DivExtensionHandler {
 
     override fun matches(div: DivBase): Boolean {
         return div.backdropEffectExtension != null
@@ -103,7 +116,11 @@ class BackdropEffectExtensionHandler : DivExtensionHandler {
             null -> DivViewBackdropViewProvider(view)
             else -> TaggedBackdropViewProvider(view, backdropId)
         }
-        val backdropEffectDrawable = BackdropEffectDrawable(view, backdropViewProvider)
+        val backdropEffectDrawable = BackdropEffectDrawable(
+            view,
+            backdropViewProvider,
+            backdropWatcher
+        )
         val density = view.resources.displayMetrics.density
 
         backdropEffectDrawable.setBlurEffect(

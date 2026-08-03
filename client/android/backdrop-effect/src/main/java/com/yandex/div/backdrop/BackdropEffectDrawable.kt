@@ -10,6 +10,9 @@ import android.os.Build
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
+import android.view.ViewTreeObserver.OnDrawListener
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.view.ViewTreeObserver.OnScrollChangedListener
 import androidx.core.view.isVisible
 import com.yandex.div.backdrop.graphics.CanvasBackdropLayer
 import com.yandex.div.backdrop.graphics.PlainHighlightLayer
@@ -21,6 +24,7 @@ import com.yandex.div.internal.view.onPreDrawListener
 internal class BackdropEffectDrawable(
     private val view: View,
     private val backdropViewProvider: BackdropViewProvider,
+    private val backdropWatcher: BackdropWatcher,
 ) : Drawable(), Disposable {
 
     val density: Float
@@ -32,15 +36,46 @@ internal class BackdropEffectDrawable(
         RenderNodeBackdropLayer(view)
     }
 
+    private var isBackdropValid = false
+    private var isBackdropCaptured = false
+
     private val backdropOnPreDrawListener = onPreDrawListener {
-        val backdropView = backdropViewProvider.backdropView
-        if (view.isVisible && backdropView != null) {
+        if (isBackdropCaptured) {
+            return@onPreDrawListener
+        }
+
+        val backdropView = backdropViewProvider.backdropView ?: return@onPreDrawListener
+        isBackdropValid = !backdropWatcher.isBackdropInvalidated(backdropView) && isBackdropValid
+
+        if (isBackdropValid) {
+            isBackdropValid = false
+            return@onPreDrawListener
+        }
+
+        if (view.isVisible) {
             view.visibility = INVISIBLE
             try {
                 backdropLayer.capture(backdropView)
             } finally {
                 view.visibility = VISIBLE
+                isBackdropValid = true
+                isBackdropCaptured = true
             }
+        }
+    }
+
+    private val viewUpdateListener = object : OnGlobalLayoutListener, OnScrollChangedListener, OnDrawListener {
+
+        override fun onGlobalLayout() {
+            isBackdropValid = false
+        }
+
+        override fun onScrollChanged() {
+            isBackdropValid = false
+        }
+
+        override fun onDraw() {
+            isBackdropCaptured = false
         }
     }
 
@@ -114,12 +149,32 @@ internal class BackdropEffectDrawable(
 
     fun attachToViews() {
         val backdropView = backdropViewProvider.backdropView
-        backdropView?.viewTreeObserver?.addOnPreDrawListener(backdropOnPreDrawListener)
+        backdropView?.viewTreeObserver?.apply {
+            addOnPreDrawListener(backdropOnPreDrawListener)
+            addOnGlobalLayoutListener(viewUpdateListener)
+            addOnScrollChangedListener(viewUpdateListener)
+            addOnDrawListener(viewUpdateListener)
+        }
+        view.viewTreeObserver.apply {
+            addOnGlobalLayoutListener(viewUpdateListener)
+            addOnScrollChangedListener(viewUpdateListener)
+            addOnDrawListener(viewUpdateListener)
+        }
     }
 
     fun detachFromViews() {
         val backdropView = backdropViewProvider.backdropView
-        backdropView?.viewTreeObserver?.removeOnPreDrawListener(backdropOnPreDrawListener)
+        backdropView?.viewTreeObserver?.apply {
+            removeOnPreDrawListener(backdropOnPreDrawListener)
+            removeOnGlobalLayoutListener(viewUpdateListener)
+            removeOnScrollChangedListener(viewUpdateListener)
+            removeOnDrawListener(viewUpdateListener)
+        }
+        view.viewTreeObserver.apply {
+            removeOnGlobalLayoutListener(viewUpdateListener)
+            removeOnScrollChangedListener(viewUpdateListener)
+            removeOnDrawListener(viewUpdateListener)
+        }
         backdropLayer.recycle()
     }
 

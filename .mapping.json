@@ -568,6 +568,7 @@
   "client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/BackdropEffectDrawable.kt":"divkit/public/client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/BackdropEffectDrawable.kt",
   "client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/BackdropEffectExtensionHandler.kt":"divkit/public/client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/BackdropEffectExtensionHandler.kt",
   "client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/BackdropViewProvider.kt":"divkit/public/client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/BackdropViewProvider.kt",
+  "client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/BackdropWatcher.kt":"divkit/public/client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/BackdropWatcher.kt",
   "client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/graphics/BackdropLayer.kt":"divkit/public/client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/graphics/BackdropLayer.kt",
   "client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/graphics/CanvasBackdropLayer.kt":"divkit/public/client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/graphics/CanvasBackdropLayer.kt",
   "client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/graphics/ColorFilters.kt":"divkit/public/client/android/backdrop-effect/src/main/java/com/yandex/div/backdrop/graphics/ColorFilters.kt",
