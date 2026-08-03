@@ -48,7 +48,6 @@ include ':div-size-provider'
 include ':div-states'
 include ':div-storage'
 include ':div-svg'
-include ':div-video'
 include ':div-video-m3'
 include ':divkit-demo-app'
 include ':divkit-perftests'
@@ -63,7 +62,6 @@ include ':screenshot-test-runtime'
 include ':test-utils'
 include ':ui-test-common'
 include ':utils'
-include ':video-custom'
 
 def internalSettings = file("settings.internal.gradle")
 if (internalSettings.exists()) {

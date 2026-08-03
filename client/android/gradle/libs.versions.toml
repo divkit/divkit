@@ -6,7 +6,6 @@ android-minSdk = "23"
 android-targetSdk = "36"
 androidsvg = "1.4"
 coil = "3.4.0"
-exoplayer = "2.18.4"
 festReflect = "1.4.1"
 glide = "5.0.7"
 googleTestingPlatform = "0.0.9-alpha04"
@@ -127,8 +126,6 @@ coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 coil-network-cachecontrol = { module = "io.coil-kt.coil3:coil-network-cache-control", version.ref = "coil" }
 coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
-
-exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoplayer" }
 
 fest-reflect = { module = "org.easytesting:fest-reflect", version.ref = "festReflect" }
 
