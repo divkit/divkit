@@ -100,7 +100,6 @@ dependencies {
     // ============================================================ \\
 
     androidTestUtil libs.androidx.test.services
-    androidTestImplementation libs.hamcrest.library
     androidTestImplementation libs.androidx.lifecycle.viewmodel
     androidTestImplementation libs.androidx.viewpager2
 }

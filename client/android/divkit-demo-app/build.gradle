@@ -129,7 +129,6 @@ dependencies {
     androidTestImplementation libs.androidx.compose.ui.test.junit4
     androidTestImplementation libs.androidx.lifecycle.viewmodel
     androidTestImplementation libs.androidx.viewpager2
-    androidTestImplementation libs.hamcrest.library
 }
 
 screenshotTests {
