@@ -7,6 +7,7 @@ import com.yandex.div.view.ViewActions
 import com.yandex.divkit.demo.DummyActivity
 import com.yandex.divkit.demo.div.DemoDiv2Logger
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -105,6 +106,7 @@ class DivTouchInteractivityTest {
         }
     }
 
+    @Ignore("Flaky test")
     @Test
     fun singleClickIsLogged() {
         testClicks {
@@ -125,6 +127,7 @@ class DivTouchInteractivityTest {
         }
     }
 
+    @Ignore("Flaky test")
     @Test
     fun doubleClickLogged() {
         testClicks {

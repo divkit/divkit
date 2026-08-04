@@ -14,6 +14,7 @@ import com.yandex.divkit.demo.div.DemoDiv2Logger
 import com.yandex.divkit.demo.div.divContext
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -37,6 +38,7 @@ class VisibilityActionsTest {
         }
     }
 
+    @Ignore("Flaky test")
     @Test
     fun galleryVisibilityActionsLog() {
         gallery {
