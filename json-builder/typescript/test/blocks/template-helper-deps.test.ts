@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { DivContainer, DivText, template, templatesDepsMap } from '../../src';
 
 describe('template deps', () => {

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`templateHelper should create TemplateBlock with parameters 1`] = `
+exports[`templateHelper > should create TemplateBlock with parameters 1`] = `
 {
   "type": "template1",
   "vText1": "test",
@@ -12,7 +12,7 @@ exports[`templateHelper should create TemplateBlock with parameters 1`] = `
 }
 `;
 
-exports[`templateHelper should create TemplateBlock with parameters 2`] = `
+exports[`templateHelper > should create TemplateBlock with parameters 2`] = `
 {
   "type": "template2",
   "action1": {
@@ -23,7 +23,7 @@ exports[`templateHelper should create TemplateBlock with parameters 2`] = `
 }
 `;
 
-exports[`templateHelper should create TemplateBlock with parameters 3`] = `
+exports[`templateHelper > should create TemplateBlock with parameters 3`] = `
 {
   "type": "template3",
   "img": "img",
@@ -32,7 +32,7 @@ exports[`templateHelper should create TemplateBlock with parameters 3`] = `
 }
 `;
 
-exports[`templateHelper should create TemplateBlock with parameters 4`] = `
+exports[`templateHelper > should create TemplateBlock with parameters 4`] = `
 {
   "type": "template4",
   "img": "img",

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DivAction tests should create block with action 1`] = `
+exports[`DivAction tests > should create block with action 1`] = `
 {
   "type": "text",
   "action": {
@@ -11,7 +11,7 @@ exports[`DivAction tests should create block with action 1`] = `
 }
 `;
 
-exports[`DivAction tests should create block with action with menu items 1`] = `
+exports[`DivAction tests > should create block with action with menu items 1`] = `
 {
   "type": "text",
   "action": {
@@ -32,7 +32,7 @@ exports[`DivAction tests should create block with action with menu items 1`] = `
 }
 `;
 
-exports[`DivAction tests should create block with action with payload 1`] = `
+exports[`DivAction tests > should create block with action with payload 1`] = `
 {
   "type": "text",
   "action": {
@@ -46,7 +46,7 @@ exports[`DivAction tests should create block with action with payload 1`] = `
 }
 `;
 
-exports[`DivAction tests should create block with actions 1`] = `
+exports[`DivAction tests > should create block with actions 1`] = `
 {
   "type": "text",
   "actions": [
@@ -63,7 +63,7 @@ exports[`DivAction tests should create block with actions 1`] = `
 }
 `;
 
-exports[`DivAction tests should create card with templatesd action properties 1`] = `
+exports[`DivAction tests > should create card with templatesd action properties 1`] = `
 {
   "templates": {
     "card": {

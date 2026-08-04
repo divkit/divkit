@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DivTooltip tests should create block with tooltip 1`] = `
+exports[`DivTooltip tests > should create block with tooltip 1`] = `
 {
   "type": "image",
   "height": {

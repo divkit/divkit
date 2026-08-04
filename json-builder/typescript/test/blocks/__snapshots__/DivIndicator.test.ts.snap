@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DivIndicator tests should create card with templates 1`] = `
+exports[`DivIndicator tests > should create card with templates 1`] = `
 {
   "templates": {
     "div": {
@@ -31,7 +31,7 @@ exports[`DivIndicator tests should create card with templates 1`] = `
 }
 `;
 
-exports[`DivIndicator tests should create simple block 1`] = `
+exports[`DivIndicator tests > should create simple block 1`] = `
 {
   "type": "indicator",
   "active_item_color": "#fff",

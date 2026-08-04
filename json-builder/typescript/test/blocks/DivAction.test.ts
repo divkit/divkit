@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { divCard, DivText, IDivData, reference, rewriteRefs, templateHelper } from '../../src';
 
 describe('DivAction tests', (): void => {
@@ -78,13 +79,14 @@ describe('DivAction tests', (): void => {
                 },
             }),
         };
+        const helper = templateHelper(templates);
 
         const divData: IDivData = {
             log_id: 'id',
             states: [
                 {
                     state_id: 1,
-                    div: templateHelper(templates).card({
+                    div: helper.card({
                         action_url: 'https://some.url',
                     }),
                 },

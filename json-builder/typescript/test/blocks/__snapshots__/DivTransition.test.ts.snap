@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DivTransitions tests should create block with change transitions 1`] = `
+exports[`DivTransitions tests > should create block with change transitions 1`] = `
 {
   "type": "state",
   "div_id": "id",
@@ -57,7 +57,7 @@ exports[`DivTransitions tests should create block with change transitions 1`] = 
 }
 `;
 
-exports[`DivTransitions tests should create block with in/out transitions 1`] = `
+exports[`DivTransitions tests > should create block with in/out transitions 1`] = `
 {
   "type": "text",
   "id": "id",

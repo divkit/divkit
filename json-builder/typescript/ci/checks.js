@@ -1,5 +1,6 @@
 const {
     Graph
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 } = require('@yandex-int/tkit');
 
 const useSelectivity = !process.argv.includes('--skipSelectivity') && !process.env.SKIP_SELECTIVITY;
@@ -60,7 +61,7 @@ const steps = {
         }
     ],
     'ts-jsonbuilder:test:unit': [
-        'npx jest',
+        'npx vitest',
         {
             files: prepareSelectivity([
                 `${projectPrefix}/**/*.ts`,

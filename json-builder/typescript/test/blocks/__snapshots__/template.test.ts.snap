@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Div templates test should create card with template which has more than one base template block 1`] = `
+exports[`Div templates test > should create card with template which has more than one base template block 1`] = `
 {
   "templates": {
     "card": {
@@ -44,7 +44,7 @@ exports[`Div templates test should create card with template which has more than
 }
 `;
 
-exports[`Div templates test should create nested template and card with new property 1`] = `
+exports[`Div templates test > should create nested template and card with new property 1`] = `
 {
   "templates": {
     "district2": {
@@ -101,7 +101,7 @@ exports[`Div templates test should create nested template and card with new prop
 }
 `;
 
-exports[`Div templates test should create simple template 1`] = `
+exports[`Div templates test > should create simple template 1`] = `
 {
   "title_text": {
     "type": "text",
@@ -110,7 +110,7 @@ exports[`Div templates test should create simple template 1`] = `
 }
 `;
 
-exports[`Div templates test should create template with title menu and footer 1`] = `
+exports[`Div templates test > should create template with title menu and footer 1`] = `
 {
   "templates": {
     "title_text": {

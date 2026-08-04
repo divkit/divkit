@@ -1,8 +1,6 @@
 import { ITemplates } from './template';
 import { SafeDivExpression } from './safe-expression';
 
-export type NonEmptyArray<T> = T[];
-
 export type Exact<TBase, TExt extends TBase> = TExt extends unknown ? Exactly<TBase, TExt> : never;
 
 type Exactly<TBase, TExt extends TBase> = {
@@ -51,11 +49,11 @@ export function copyTemplates<T extends ITemplates>(templates: T): T {
     };
 
     const clone = (node: unknown, path: string[]): void => {
-        let parentPointer: object = copy;
+        let parentPointer: Record<string, unknown> = copy;
 
         path = [...path];
         while (path.length > 1) {
-            parentPointer = parentPointer[path.shift() as string];
+            parentPointer = parentPointer[path.shift() as string] as Record<string, unknown>;
         }
 
         const cur = path[0];

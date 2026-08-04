@@ -77,7 +77,7 @@ def _type_script_type_name(property_type: PropertyType, supports_expressions: bo
         array_type_name = _type_script_type_name(item_type, supports_expressions)
         if supports_expressions and not isinstance(item_type, Array):
             array_type_name += ' | DivExpression'
-        return f'NonEmptyArray<{array_type_name}>'
+        return f'({array_type_name})[]'
     elif isinstance(property_type, Object):
         if property_type.object is None:
             raise ValueError(f'Invalid {property_type}')

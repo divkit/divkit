@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { DivContainer, DivText, rewriteNames, template } from '../../src';
 
 describe('Rewrite templates', () => {

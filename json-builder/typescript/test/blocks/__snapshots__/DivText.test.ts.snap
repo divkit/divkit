@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DivText tests should create block with ellipsis 1`] = `
+exports[`DivText tests > should create block with ellipsis 1`] = `
 {
   "type": "text",
   "ellipsis": {
@@ -20,7 +20,7 @@ exports[`DivText tests should create block with ellipsis 1`] = `
 }
 `;
 
-exports[`DivText tests should create block with expressions 1`] = `
+exports[`DivText tests > should create block with expressions 1`] = `
 {
   "type": "text",
   "font_size": "@{font_size_var}",
@@ -32,7 +32,7 @@ exports[`DivText tests should create block with expressions 1`] = `
 }
 `;
 
-exports[`DivText tests should create block with ranges 1`] = `
+exports[`DivText tests > should create block with ranges 1`] = `
 {
   "type": "text",
   "ranges": [
@@ -46,7 +46,7 @@ exports[`DivText tests should create block with ranges 1`] = `
 }
 `;
 
-exports[`DivText tests should create simple block 1`] = `
+exports[`DivText tests > should create simple block 1`] = `
 {
   "type": "text",
   "font_size": 18,

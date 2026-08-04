@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import { TemplateBlock } from '../blocks';
-import { Exact, IntBoolean, NonEmptyArray } from '../helper';
+import { Exact, IntBoolean } from '../helper';
 import { Type } from '../template';
 
 export class EntityWithPropertyWithDefaultValue<T extends EntityWithPropertyWithDefaultValueProps = EntityWithPropertyWithDefaultValueProps> {

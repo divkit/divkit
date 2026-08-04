@@ -8,14 +8,15 @@ function rewriteRefsTemplate(template: unknown): void {
         const obj = stack.pop();
 
         if (obj && typeof obj === 'object') {
-            for (const key in obj) {
-                const objChild = obj[key];
+            const castedObj = obj as Record<string, unknown>;
+            for (const key in castedObj) {
+                const objChild = castedObj[key];
                 if (objChild && typeof objChild === 'object') {
                     if (objChild instanceof TemplatePropertyReference) {
-                        obj[key] = undefined;
+                        castedObj[key] = undefined;
 
                         if (objChild.templatePropertyName !== key) {
-                            obj['$' + key] = objChild.templatePropertyName;
+                            castedObj['$' + key] = objChild.templatePropertyName;
                         }
                     } else {
                         stack.push(objChild);

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { DivGradientBackground, DivText } from '../../src';
 
 describe('compat tests', (): void => {

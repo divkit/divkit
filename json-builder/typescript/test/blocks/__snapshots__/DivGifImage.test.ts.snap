@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DivGifImage tests should create card with templates 1`] = `
+exports[`DivGifImage tests > should create card with templates 1`] = `
 {
   "templates": {
     "gif": {
@@ -31,7 +31,7 @@ exports[`DivGifImage tests should create card with templates 1`] = `
 }
 `;
 
-exports[`DivGifImage tests should create simple block 1`] = `
+exports[`DivGifImage tests > should create simple block 1`] = `
 {
   "type": "gif",
   "border": {

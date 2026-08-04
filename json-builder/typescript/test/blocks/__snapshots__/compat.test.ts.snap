@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`compat tests block with DivGradientBackground 1`] = `
+exports[`compat tests > block with DivGradientBackground 1`] = `
 {
   "type": "text",
   "background": [

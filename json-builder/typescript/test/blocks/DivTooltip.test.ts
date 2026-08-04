@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { DivImage, DivText, fixed } from '../../src';
 
 describe('DivTooltip tests', (): void => {

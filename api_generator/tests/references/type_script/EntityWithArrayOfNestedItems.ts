@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import { TemplateBlock } from '../blocks';
-import { Exact, IntBoolean, NonEmptyArray } from '../helper';
+import { Exact, IntBoolean } from '../helper';
 import { Type } from '../template';
 
 import {
@@ -12,7 +12,7 @@ export class EntityWithArrayOfNestedItems<T extends EntityWithArrayOfNestedItems
     readonly _props?: Exact<EntityWithArrayOfNestedItemsProps, T>;
 
     readonly type = 'entity_with_array_of_nested_items';
-    items: Type<NonEmptyArray<IEntityWithArrayOfNestedItemsItem>>;
+    items: Type<(IEntityWithArrayOfNestedItemsItem)[]>;
 
     constructor(props: Exact<EntityWithArrayOfNestedItemsProps, T>) {
         this.items = props.items;
@@ -20,7 +20,7 @@ export class EntityWithArrayOfNestedItems<T extends EntityWithArrayOfNestedItems
 }
 
 export interface EntityWithArrayOfNestedItemsProps {
-    items: Type<NonEmptyArray<IEntityWithArrayOfNestedItemsItem>>;
+    items: Type<(IEntityWithArrayOfNestedItemsItem)[]>;
 }
 
 export interface IEntityWithArrayOfNestedItemsItem {

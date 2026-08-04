@@ -82,21 +82,6 @@ In the result `JSON.stringify(divCard(...))` will return JSON below:
 }
 ```
 
-## Typesafe templates with compile-time validation
-
-You can use `templateHelper` helper function to achieve compile time template parameters validation. Type safety works only when you enable [strictNullChecks](https://www.typescriptlang.org/docs/handbook/compiler-options.html) in tsconfig.json
-
-```typescript
-const block = template('header', {
-    title: 'Some Title'
-});
-
-// using templateHelper for checking template parameters at compile-time
-const safeBlock = tHelper.header({
-    title: 'Some Title'
-});
-```
-
 ## Validity guarantees
 
 While developing cards you need to make sure that:

@@ -1,7 +1,7 @@
 // Generated code. Do not modify.
 
 import { TemplateBlock } from '../blocks';
-import { Exact, IntBoolean, NonEmptyArray } from '../helper';
+import { Exact, IntBoolean } from '../helper';
 import { Type } from '../template';
 
 import {
@@ -15,7 +15,7 @@ export class EntityWithArray<T extends EntityWithArrayProps = EntityWithArrayPro
     /**
      * Platforms: android, ios, web, flutter
      */
-    array: Type<NonEmptyArray<Entity>>;
+    array: Type<(Entity)[]>;
 
     constructor(props: Exact<EntityWithArrayProps, T>) {
         this.array = props.array;
@@ -26,5 +26,5 @@ export interface EntityWithArrayProps {
     /**
      * Platforms: android, ios, web, flutter
      */
-    array: Type<NonEmptyArray<Entity>>;
+    array: Type<(Entity)[]>;
 }

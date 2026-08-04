@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { expression } from '../../src';
 
 describe('div expression', () => {

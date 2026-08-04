@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DivCard tests should create Market card 1`] = `
+exports[`DivCard tests > should create Market card 1`] = `
 {
   "templates": {
     "title_text": {
@@ -174,7 +174,7 @@ exports[`DivCard tests should create Market card 1`] = `
 }
 `;
 
-exports[`DivCard tests should create POI card 1`] = `
+exports[`DivCard tests > should create POI card 1`] = `
 {
   "templates": {
     "footer": {
@@ -609,7 +609,7 @@ exports[`DivCard tests should create POI card 1`] = `
 }
 `;
 
-exports[`DivCard tests should create Znatoki card 1`] = `
+exports[`DivCard tests > should create Znatoki card 1`] = `
 {
   "templates": {
     "znatoki_question": {
@@ -789,7 +789,7 @@ exports[`DivCard tests should create Znatoki card 1`] = `
 }
 `;
 
-exports[`DivCard tests should escape unsafe chars 1`] = `
+exports[`DivCard tests > should escape unsafe chars 1`] = `
 {
   "templates": {},
   "card": {

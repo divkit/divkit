@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { describe, it, expect } from 'vitest';
 import {
     DivContainer,
     DivText,
@@ -60,8 +62,12 @@ describe('template helper version', () => {
 
         templates = rewriteTemplateVersions(templates).templates;
 
-        expect(templates.template2.items?.[0].type).toEqual(`template3/${getTemplateHash(templates.template3)}`);
-        expect(templates.template3.items?.[0].type).toEqual(`template4/${getTemplateHash(templates.template4)}`);
+        expect((templates.template2.items as any)?.[0].type).toEqual(
+            `template3/${getTemplateHash(templates.template3)}`,
+        );
+        expect((templates.template3.items as any)?.[0].type).toEqual(
+            `template4/${getTemplateHash(templates.template4)}`,
+        );
     });
 
     it('should work with common templates', () => {

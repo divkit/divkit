@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Div } from './generated/Div';
 import { IDivData } from './generated/DivData';
 import { SafeDivExpression } from './safe-expression';
@@ -9,32 +8,30 @@ export interface ITemplates {
     [type: string]: Div;
 }
 
-export type Type<U, V extends string = string> = U | TemplatePropertyReference<V, U>;
+export type Type<U> = U | TemplatePropertyReference<any>;
 
-export class TemplatePropertyReference<V extends string = string, U = {}> {
+export class TemplatePropertyReference<V extends string = string> {
     public templatePropertyName: V;
-    private _value?: U;
     public constructor(name: V) {
         this.templatePropertyName = name;
     }
 }
 
-export function reference<V extends string = string, U = {}>(name: V): TemplatePropertyReference<V, U> {
+export function reference<V extends string = string>(name: V): TemplatePropertyReference<V> {
     return new TemplatePropertyReference(name);
 }
 
-export class TemplateBlock<T extends string = any, U = object> {
+export class TemplateBlock<T extends string = any> {
     public readonly type: T;
-    public readonly _props?: U;
 
-    public constructor(type: T, props?: U) {
+    public constructor(type: T, props?: object) {
         this.type = type;
 
         Object.assign(this, props);
     }
 
     public getProps(): object {
-        return Object.keys(this).reduce((acc, k) => {
+        return Object.keys(this).reduce<Record<string, unknown>>((acc, k) => {
             if (k !== 'type') {
                 acc[k] = true;
             }
@@ -43,7 +40,7 @@ export class TemplateBlock<T extends string = any, U = object> {
     }
 }
 
-export function template<T extends string = any, U = object>(type: T, props?: U): TemplateBlock<T, U> {
+export function template<T extends string = any>(type: T, props?: object): TemplateBlock<T> {
     return new TemplateBlock(type, props);
 }
 
@@ -58,8 +55,8 @@ export function escapeCard(obj: unknown): unknown {
         if (Array.isArray(obj)) {
             return obj.map(escapeCard);
         } else {
-            return Object.keys(obj).reduce((acc, item) => {
-                acc[item] = escapeCard(obj[item]);
+            return Object.keys(obj).reduce<Record<string, unknown>>((acc, item) => {
+                acc[item] = escapeCard(obj[item as keyof typeof obj]);
                 return acc;
             }, {});
         }

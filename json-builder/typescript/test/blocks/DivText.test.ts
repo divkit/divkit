@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { DivText, expression, fixed } from '../../src';
 
 describe('DivText tests', (): void => {

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { DivCustom } from '../../src';
 
 describe('DivCustom tests', (): void => {

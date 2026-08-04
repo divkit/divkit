@@ -31,6 +31,7 @@ export function rewriteNames<T extends ITemplates>(
         ({ name, template, depsResolved }) => {
             treeWalkDFS(template, (node) => {
                 if (node instanceof TemplateBlock) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     (node as any).type = depsResolved[node.type];
                 }
             });

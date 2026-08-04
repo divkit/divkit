@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { divCard, DivContainer, DivImage, DivText, fixed, IDivData, reference, rewriteRefs, template } from '../../src';
 
 describe('Div templates test', (): void => {

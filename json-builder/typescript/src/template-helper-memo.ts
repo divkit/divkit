@@ -25,6 +25,7 @@ export function thelperWithMemo<T extends ITemplates>(options?: {
             const templateRenamed = options?.customName ? options.customName(templateName) : templateName;
             used.add(templateName);
 
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return (props: any) => ({ ...props, type: templateRenamed });
         },
     };

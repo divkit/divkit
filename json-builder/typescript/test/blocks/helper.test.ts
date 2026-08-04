@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { DivContainer, DivText, copyTemplates, reference, template } from '../../src';
 import { expression } from '../../src';
 
@@ -29,6 +30,7 @@ describe('helper functions', () => {
             template1: new DivText({
                 border: {
                     // todo remove after true/false would be in schema
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     has_shadow: true as any,
                 },
                 text: 'test string',

@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import {
     divCard,
     DivContainer,
@@ -97,7 +98,7 @@ describe('DivCard tests', (): void => {
                     bottom: 14,
                 },
                 background: [
-                    new DivImage({
+                    new DivImageBackground({
                         content_alignment_vertical: 'top',
                         image_url: reference('background_url'),
                     }),

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -18,7 +19,6 @@ const content = [
     `//${registryHostname}/:always-auth=false`,
 ].join('\n');
 
-// eslint-disable-next-line no-console
 console.log(`Writing npm auth token for ${username} (${email}) at ${registryHostname} to ${filename}`);
 
 fs.writeFileSync(filename, content);

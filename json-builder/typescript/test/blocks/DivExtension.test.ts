@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { DivText } from '../../src';
 
 describe('DivExtension tests', (): void => {

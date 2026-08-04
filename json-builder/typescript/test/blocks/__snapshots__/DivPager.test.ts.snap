@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DivPager tests should create card with templates 1`] = `
+exports[`DivPager tests > should create card with templates 1`] = `
 {
   "templates": {
     "div": {
@@ -41,7 +41,7 @@ exports[`DivPager tests should create card with templates 1`] = `
 }
 `;
 
-exports[`DivPager tests should create simple block 1`] = `
+exports[`DivPager tests > should create simple block 1`] = `
 {
   "type": "pager",
   "item_spacing": {

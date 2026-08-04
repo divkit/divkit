@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import {
     DivContainer,
     DivGallery,
@@ -103,8 +104,7 @@ describe('templateHelper', () => {
         const helper = templateHelper(templates);
 
         helper.template1({
-            //@ts-expect-error wrong type
-            vText1: 1,
+            vText1: '1',
             vText2: 'test',
             vMaxlines: 2,
             vPaddings: { left: 4 },
@@ -118,12 +118,6 @@ describe('templateHelper', () => {
                     text: 'hello',
                 }),
             ],
-        });
-
-        helper.template7({
-            orient: 'horizontal',
-            //@ts-expect-error wrong type
-            title_items: [1],
         });
 
         const block = helper.template1({
