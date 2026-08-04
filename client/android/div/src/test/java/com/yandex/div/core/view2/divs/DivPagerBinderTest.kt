@@ -6,15 +6,18 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
 import com.yandex.div.core.view2.divs.pager.DivPagerBinder
 import com.yandex.div.core.view2.divs.pager.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.data.Variable
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
+import com.yandex.div2.DivVisibility
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Assert
 import org.junit.Before
@@ -142,12 +145,85 @@ class DivPagerBinderTest: DivBinderTest() {
         verify(divView).unbindViewFromDiv(divPagerView)
     }
 
+    @Test
+    fun `item count variable is initialized with non gone item count`() {
+        val itemCountVariable = itemCountVariable()
+        val div = divWithItemCountVariable()
+        val view = divPagerViewWithLayout(div)
+
+        underTest.bindView(bindingContext, view, div, rootPath())
+
+        Assert.assertEquals(3L, itemCountVariable.getValue())
+    }
+
+    @Test
+    fun `item count variable is updated when item visibility changes`() {
+        val itemCountVariable = itemCountVariable()
+        val div = divWithItemCountVariable()
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(bindingContext, view, div, rootPath())
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+        val firstItem = adapter.items.first()
+
+        adapter.setItem(0, firstItem, DivVisibility.GONE)
+        Assert.assertEquals(2L, itemCountVariable.getValue())
+
+        adapter.setItem(0, firstItem, DivVisibility.VISIBLE)
+        Assert.assertEquals(3L, itemCountVariable.getValue())
+    }
+
+    @Test
+    fun `item count variable is updated when adapter items change`() {
+        val itemCountVariable = itemCountVariable()
+        val div = divWithItemCountVariable()
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(bindingContext, view, div, rootPath())
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+
+        adapter.setItems(adapter.items.dropLast(1))
+
+        Assert.assertEquals(2L, itemCountVariable.getValue())
+    }
+
+    @Test
+    fun `item count variable ignores infinite scroll duplicates`() {
+        val itemCountVariable = itemCountVariable()
+        val div = divWithItemCountVariable("pager_gone_with_infinite_scroll.json")
+        val view = divPagerViewWithLayout(div)
+
+        underTest.bindView(bindingContext, view, div, rootPath())
+
+        Assert.assertEquals(6L, itemCountVariable.getValue())
+    }
+
+    @Test
+    fun `pager without item count variable does not mutate variable`() {
+        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+
+        verify(resolver, never()).getVariable(ITEM_COUNT_VARIABLE)
+    }
+
     private fun div() = UnitTestData(PAGER_DIR, "pager_default_item.json").div as Div.Pager
 
+    private fun divWithItemCountVariable(fileName: String = "pager_default_item.json"): Div.Pager {
+        val pagerJson = (UnitTestData(PAGER_DIR, fileName).div as Div.Pager).writeToJSON()
+        pagerJson.put("item_count_variable", ITEM_COUNT_VARIABLE)
+        return Div.Pager(DivPager(DivParsingEnvironment(ParsingErrorLogger.ASSERT), pagerJson))
+    }
+
+    private fun itemCountVariable() = Variable.IntegerVariable(ITEM_COUNT_VARIABLE, 0L).also {
+        whenever(resolver.getVariable(ITEM_COUNT_VARIABLE)).thenReturn(it)
+    }
+
     private fun divPagerView(div: Div) = viewCreator.create(div, ExpressionResolver.EMPTY) as DivPagerView
+
+    private fun divPagerViewWithLayout(div: Div) = divPagerView(div).apply {
+        layoutParams = defaultLayoutParams()
+    }
 
     private companion object {
         private const val PAGER_DIR = "div-pager"
         private const val DEFAULT_ITEM = 1
+        private const val ITEM_COUNT_VARIABLE = "count"
     }
 }

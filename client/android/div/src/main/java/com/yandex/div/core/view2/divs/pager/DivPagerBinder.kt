@@ -28,6 +28,7 @@ import com.yandex.div.core.view2.divs.pager.DivPagerAdapter.Companion.OFFSET_TO_
 import com.yandex.div.core.view2.divs.toPxF
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -57,7 +58,7 @@ internal class DivPagerBinder @Inject constructor(
             adapter.setItems(div.value.buildItems(context.expressionResolver, path))
             view.getRecyclerView()?.scrollToPosition(adapter.normalizeItemPosition(view.currentItem))
 
-            view.pagerOnItemsCountChange?.onItemsUpdated()
+            view.notifyItemsUpdated(context, div.value, adapter)
             view.bindStates(context, divBinder.get())
             pager.doOnNextLayout { pager.requestTransform() }
             return
@@ -90,8 +91,9 @@ internal class DivPagerBinder @Inject constructor(
             this
         )
         viewPager.adapter = adapter
+        bindItemsCountObserver(bindingContext, div, adapter)
         bindInfiniteScroll(div, resolver)
-        pagerOnItemsCountChange?.onItemsUpdated()
+        notifyItemsUpdated(bindingContext, div, adapter)
         clipToPage = divView.div2Component.isPagerPageClipEnabled
 
         orientation =
@@ -152,6 +154,38 @@ internal class DivPagerBinder @Inject constructor(
         if (a11yEnabled) {
             enableAccessibility()
         }
+    }
+
+    private fun DivPagerView.bindItemsCountObserver(
+        context: BindingContext,
+        div: DivPager,
+        adapter: DivPagerAdapter,
+    ) {
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                notifyItemsUpdated(context, div, adapter)
+            }
+
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                notifyItemsUpdated(context, div, adapter)
+            }
+        })
+    }
+
+    private fun DivPagerView.notifyItemsUpdated(
+        context: BindingContext,
+        div: DivPager,
+        adapter: DivPagerAdapter,
+    ) {
+        div.itemCountVariable?.let {
+            VariableMutationHandler.setVariable(
+                context.divView,
+                it,
+                adapter.visibleItems.size.toString(),
+                context.expressionResolver,
+            )
+        }
+        pagerOnItemsCountChange?.onItemsUpdated()
     }
 
     private fun DivPagerView.bindInfiniteScroll(div: DivPager, resolver: ExpressionResolver) {
@@ -323,7 +357,7 @@ internal class DivPagerBinder @Inject constructor(
         bindItemBuilder(builder, context.expressionResolver) {
             (viewPager.adapter as DivPagerAdapter?)?.let { adapter ->
                 adapter.setItems(builder.build(context.expressionResolver, path))
-                pagerOnItemsCountChange?.onItemsUpdated()
+                notifyItemsUpdated(context, div, adapter)
                 getRecyclerView()?.scrollToPosition(adapter.normalizeItemPosition(currentItem))
                 viewPager.doOnNextLayout { viewPager.requestTransform() }
             }
