@@ -2,6 +2,7 @@
 
 package divkit.dsl.expression
 
+import divkit.dsl.Color
 import divkit.dsl.Url
 
 /**
@@ -83,7 +84,7 @@ fun String.colorVariable(): Var<String> = Var(this)
 /**
  * Corresponds to 'integer' divkit data type.
  */
-internal data class Integer(val value: Number) : Value<Long> {
+internal data class IntegerValue(val value: Number) : Value<Long> {
     override fun build(): String {
         val intValue = value.toInt()
         return if (intValue.shouldWrapInBrackets()) {
@@ -96,13 +97,13 @@ internal data class Integer(val value: Number) : Value<Long> {
     private fun Int.shouldWrapInBrackets() = this < 0
 }
 
-fun Int.integer(): Expression<Long> = Integer(this)
-fun Long.integer(): Expression<Long> = Integer(this)
+fun Int.integer(): Expression<Long> = IntegerValue(this)
+fun Long.integer(): Expression<Long> = IntegerValue(this)
 
 /**
  * Corresponds to 'number' divkit data type.
  */
-internal data class Num(val value: Number) : Value<Double> {
+internal data class NumberValue(val value: Number) : Value<Double> {
     override fun build(): String {
         val doubleValue = value.toDouble()
         return if (doubleValue.shouldWrapInBrackets()) {
@@ -122,30 +123,42 @@ internal data class Num(val value: Number) : Value<Double> {
     private fun Double.shouldWrapInBrackets() = this < 0.0
 }
 
-fun Int.number(): Expression<Double> = Num(this)
-fun Long.number(): Expression<Double> = Num(this)
-fun Double.number(): Expression<Double> = Num(this)
-fun Float.number(): Expression<Double> = Num(this)
+fun Int.number(): Expression<Double> = NumberValue(this)
+fun Long.number(): Expression<Double> = NumberValue(this)
+fun Double.number(): Expression<Double> = NumberValue(this)
+fun Float.number(): Expression<Double> = NumberValue(this)
 
 /**
  * Corresponds to 'string' divkit data type.
  */
-internal data class Str(val value: String) : Value<String> {
+internal data class StringValue(val value: String) : Value<String> {
     override fun build() = "'${value.shieldedString()}'"
 }
 
 private fun String.shieldedString(): String = this.replace("'", "\\'")
 
-fun String.string(): Expression<String> = Str(this)
+fun String.string(): Expression<String> = StringValue(this)
 
 /**
  * Corresponds to 'boolean' divkit data type
  */
-internal data class Bool(val value: Boolean) : Value<Boolean> {
+internal data class BooleanValue(val value: Boolean) : Value<Boolean> {
     override fun build(): String = if (value) "true" else "false"
 }
 
-fun Boolean.boolean(): Expression<Boolean> = Bool(this)
+fun Boolean.boolean(): Expression<Boolean> = BooleanValue(this)
+
+internal data class ColorValue(val value: Color) : Value<Color> {
+    override fun build(): String = value.value
+}
+
+fun Color.color(): Expression<Color> = ColorValue(this)
+
+internal data class UrlValue(val value: Url) : Value<Url> {
+    override fun build(): String = value.value
+}
+
+fun Url.url(): Expression<Url> = UrlValue(this)
 
 class FunctionExpression<OUTPUT_TYPE>(
     private val functionName: String,

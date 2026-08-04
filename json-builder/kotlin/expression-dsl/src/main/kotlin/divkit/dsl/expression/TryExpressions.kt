@@ -2,6 +2,9 @@
 
 package divkit.dsl.expression
 
+import divkit.dsl.Color
+import divkit.dsl.Url
+
 //region Integer
 @JvmName("tryExpressionIntExpLong")
 infix fun Int.tryExpression(onFail: Expression<Long>): Expression<Long> =
@@ -88,4 +91,40 @@ infix fun Boolean.tryExpression(onFail: Expression<Boolean>): Expression<Boolean
 @JvmName("tryExpressionBooleanBoolean")
 infix fun Boolean.tryExpression(onFail: Boolean): Expression<Boolean> =
     TryExpression(this.boolean(), onFail.boolean())
+//endregion
+
+//region Color
+@JvmName("tryExpressionExpColorExpColor")
+infix fun Expression<Color>.tryExpression(onFail: Expression<Color>): Expression<Color> =
+    TryExpression(this, onFail)
+
+@JvmName("tryExpressionExpColorColor")
+infix fun Expression<Color>.tryExpression(onFail: Color): Expression<Color> =
+    TryExpression(this, onFail.color())
+
+@JvmName("tryExpressionColorExpColor")
+infix fun Color.tryExpression(onFail: Expression<Color>): Expression<Color> =
+    TryExpression(this.color(), onFail)
+
+@JvmName("tryExpressionColorColor")
+infix fun Color.tryExpression(onFail: Color): Expression<Color> =
+    TryExpression(this.color(), onFail.color())
+//endregion
+
+//region Url
+@JvmName("tryExpressionExpUrlExpUrl")
+infix fun Expression<Url>.tryExpression(onFail: Expression<Url>): Expression<Url> =
+    TryExpression(this, onFail)
+
+@JvmName("tryExpressionExpUrlUrl")
+infix fun Expression<Url>.tryExpression(onFail: Url): Expression<Url> =
+    TryExpression(this, onFail.url())
+
+@JvmName("tryExpressionUrlExpUrl")
+infix fun Url.tryExpression(onFail: Expression<Url>): Expression<Url> =
+    TryExpression(this.url(), onFail)
+
+@JvmName("tryExpressionUrlUrl")
+infix fun Url.tryExpression(onFail: Url): Expression<Url> =
+    TryExpression(this.url(), onFail.url())
 //endregion
