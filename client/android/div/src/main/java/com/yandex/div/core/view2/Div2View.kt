@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.annotation.AnyThread
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.doOnAttach
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.transition.Scene
 import androidx.transition.Transition
@@ -214,6 +215,15 @@ class Div2View private constructor(
         }
         bindingContext = BindingContext(this, expressionResolver)
         div2Component.stateManager.collectStateVariables(tag, data, expressionResolver)
+        dataTag = tag
+    }
+
+    private fun resetRuntimeStoreAndTag() {
+        runtimeStore.clearBindings(this)
+        oldRuntimeStore = runtimeStore
+        runtimeStore = RuntimeStore.EMPTY
+        bindingContext = BindingContext(this, ExpressionResolver.EMPTY)
+        dataTag = DivDataTag.INVALID
     }
 
     private fun tryAttachVariableTriggers(data: DivData?) {
@@ -327,25 +337,21 @@ class Div2View private constructor(
 
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
         bindingDispatcher.runOnBindingThread(onComplete, onError) {
-            setDataInternal(data, oldDivData ?: divData, DivDataTag(tag.id))
+            setDataInternal(data, oldDivData ?: divData, tag)
         }
     }
 
-    fun setData(
-        data: DivData?,
-        tag: DivDataTag,
-    ): Boolean = setDataInternal(data, divData, DivDataTag(tag.id))
+    fun setData(data: DivData?, tag: DivDataTag): Boolean = setDataInternal(data, divData, tag)
 
-    fun setData(
-        data: DivData?,
-        oldDivData: DivData?,
-        tag: DivDataTag,
-    ): Boolean = setDataInternal(data, oldDivData ?: divData, DivDataTag(tag.id))
+    fun setData(data: DivData?, oldDivData: DivData?, tag: DivDataTag): Boolean =
+        setDataInternal(data, oldDivData ?: divData, tag)
 
     private fun setDataInternal(
         data: DivData?,
         oldDivData: DivData?,
         tag: DivDataTag,
+        paths: List<DivStatePath>? = null,
+        temporary: Boolean = true,
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
         val reporter = bindingReporterProvider.get(oldDivData, data)
 
@@ -367,32 +373,22 @@ class Div2View private constructor(
         val oldData = divData ?: oldDivData
         updateRuntimeStore(data, tag)
         layoutProviderBinder.release(oldData)
-        dataTag = tag
+        val isDataReplaceable = DivComparator
+            .isDivDataReplaceable(oldData, data, stateId, oldExpressionResolver, expressionResolver, reporter)
 
         div2Component.divViewDataPreloader.preload(data, expressionResolver)
+        paths?.forEach { div2Component.stateManager.updateStates(divTag.id, it, temporary) }
 
-        val isDataReplaceable = DivComparator.isDivDataReplaceable(
-            oldData,
-            data,
-            stateId,
-            oldExpressionResolver,
-            expressionResolver,
-            reporter
+        val withStates = paths != null
+        val result = applyBindingStrategy(
+            newData = data,
+            oldData = oldData,
+            isReplaceable = isDataReplaceable,
+            reporter = reporter,
+            complexReporter = reporter,
+            forceUpdate = !withStates && data.allowsTransitionsOnDataChange(expressionResolver),
+            returnTrueOnRebind = withStates,
         )
-
-        val result = when {
-            oldData == null || data.allowsTransitionsOnDataChange(expressionResolver) ->
-                updateNow(data, tag, reporter)
-
-            isDataReplaceable -> {
-                rebind(data, reporter)
-                false
-            }
-            isComplexRebindEnabled && getChildAt(0) is ViewGroup && complexRebind(data, oldData, reporter) ->
-                false
-
-            else -> updateNow(data, tag, reporter)
-        }
 
         div2Component.divBinder.attachIndicators(this)
 
@@ -411,7 +407,7 @@ class Div2View private constructor(
     ) {
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
         bindingDispatcher.runOnBindingThread(onComplete, onError) {
-            setDataWithStatesInternal(data, tag, paths, temporary)
+            setDataInternal(data, divData, tag, paths, temporary)
         }
     }
 
@@ -420,65 +416,7 @@ class Div2View private constructor(
         tag: DivDataTag,
         paths: List<DivStatePath>,
         temporary: Boolean
-    ): Boolean = setDataWithStatesInternal(data, tag, paths, temporary)
-
-    private fun setDataWithStatesInternal(
-        data: DivData?,
-        tag: DivDataTag,
-        paths: List<DivStatePath>,
-        temporary: Boolean
-    ): Boolean = bindingDispatcher.withLock(fallback = false) {
-        val reporter = bindingReporterProvider.get(divData, data)
-
-        if (data == null) {
-            reporter.onBindingFatalNoData()
-            return false
-        } else if (divData === data) {
-            reporter.onBindingFatalSameData()
-            loadMedia()
-            return false
-        }
-        mediaWasReleased = false
-        notifyBindStarted()
-        bindOnAttachRunnable?.cancel()
-
-        histogramReporter.onRenderStarted()
-
-        val oldData = divData
-        updateRuntimeStore(data, tag)
-        layoutProviderBinder.release(oldData)
-        val isDataReplaceable = DivComparator.isDivDataReplaceable(
-            oldData,
-            data,
-            stateId,
-            oldExpressionResolver,
-            expressionResolver,
-            reporter
-        )
-        dataTag = tag
-
-        div2Component.divViewDataPreloader.preload(data, expressionResolver)
-        paths.forEach { path ->
-            div2Component.stateManager.updateStates(divTag.id, path, temporary)
-        }
-        val result = when {
-            oldData == null -> updateNow(data, tag, reporter)
-
-            isDataReplaceable -> {
-                rebind(data, reporter)
-                true
-            }
-            isComplexRebindEnabled && getChildAt(0) is ViewGroup && complexRebind(data, oldData, reporter) ->
-                true
-
-            else -> updateNow(data, tag, reporter)
-        }
-
-        div2Component.divBinder.attachIndicators(this)
-        sendCreationHistograms()
-        notifyBindEnded()
-        return result
-    }
+    ): Boolean = setDataInternal(data, divData, tag, paths, temporary)
 
     private fun notifyBindStarted() {
         if (inMiddleOfBind) {
@@ -564,27 +502,39 @@ class Div2View private constructor(
 
         val bindingReporter = bindingReporterProvider.get(newDivData, oldData)
         val isDataReplaceable = DivComparator.areDivsReplaceable(
-            oldRootDiv,
-            newRootDiv,
-            expressionResolver,
-            expressionResolver,
-            currentRootPath,
-            currentRootPath,
+            oldRootDiv, newRootDiv,
+            expressionResolver, expressionResolver,
+            currentRootPath, currentRootPath,
             bindingReporter,
         )
-        return when {
-            isDataReplaceable -> {
-                rebind(newDivData, reporter)
-                true
-            }
-            isComplexRebindEnabled && getChildAt(0) is ViewGroup &&
-                complexRebind(newDivData, oldData, bindingReporter) -> true
+        return applyBindingStrategy(newDivData, oldData, isDataReplaceable, reporter, bindingReporter)
+    }
 
-            else -> updateNow(newDivData, dataTag, reporter)
+    private fun applyBindingStrategy(
+        newData: DivData,
+        oldData: DivData?,
+        isReplaceable: Boolean,
+        reporter: SimpleRebindReporter,
+        complexReporter: ComplexRebindReporter,
+        forceUpdate: Boolean = false,
+        returnTrueOnRebind: Boolean = true,
+    ): Boolean {
+        return when {
+            forceUpdate -> updateNow(newData, reporter)
+
+            isReplaceable -> {
+                rebind(newData, reporter)
+                returnTrueOnRebind
+            }
+            getChildAt(0) !is ViewGroup || oldData == null -> updateNow(newData, reporter)
+
+            isComplexRebindEnabled && complexRebind(newData, oldData, complexReporter) -> returnTrueOnRebind
+
+            else -> updateNow(newData, reporter)
         }
     }
 
-    private fun updateNow(data: DivData, tag: DivDataTag, reporter: ForceRebindReporter): Boolean {
+    private fun updateNow(data: DivData, reporter: ForceRebindReporter): Boolean {
         val oldData = divData
         if (oldData == null) {
             histogramReporter.onBindingStarted()
@@ -594,7 +544,6 @@ class Div2View private constructor(
 
         cleanup(removeChildren = false)
 
-        dataTag = tag
         _divData = data
 
         val result = switchToDivData(oldData, data, reporter)
@@ -812,8 +761,11 @@ class Div2View private constructor(
         }
         viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
         layoutProviderBinder.release(divData)
-        _divData = null
-        dataTag = DivDataTag.INVALID
+
+        if (removeChildren) {
+            _divData = null
+            resetRuntimeStoreAndTag()
+        }
     }
 
     private fun stopLoadAndSubscriptions() {
@@ -1346,9 +1298,9 @@ class Div2View private constructor(
 
     private fun rebind(newData: DivData, reporter: SimpleRebindReporter) {
         try {
-            if (childCount == 0) {
+            if (isEmpty()) {
                 reporter.onSimpleRebindNoChild()
-                updateNow(newData, dataTag, reporter)
+                updateNow(newData, reporter)
                 return
             }
             val state = newData.stateToBind ?: let {
@@ -1370,7 +1322,7 @@ class Div2View private constructor(
             }
         } catch (error: Exception) {
             reporter.onSimpleRebindException(error)
-            updateNow(newData, dataTag, reporter)
+            updateNow(newData, reporter)
             KAssert.fail(error)
         }
     }
