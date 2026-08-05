@@ -11,7 +11,7 @@ fun Type.resolveKotlinType(): String {
         Type.COLOR -> "String"
         Type.DATETIME -> "Long"
         Type.ARRAY -> "List<*>"
-        Type.URL -> "String"
+        Type.URL -> "Url"
         Type.DICT -> "Map<*, *>"
     }
 }
@@ -33,7 +33,7 @@ fun Type.resolveKotlinBasicType(): String {
         Type.COLOR -> "String"
         Type.DATETIME -> "Int"
         Type.ARRAY -> "List"
-        Type.URL -> "String"
+        Type.URL -> "Url"
         Type.DICT -> "Map"
     }
 }

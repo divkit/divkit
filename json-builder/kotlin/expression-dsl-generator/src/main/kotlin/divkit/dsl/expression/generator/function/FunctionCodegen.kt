@@ -45,6 +45,8 @@ class FunctionCodegen {
         writer.appendLine()
         writer.appendLine("package $packageName")
         writer.appendLine()
+        writer.appendLine("import divkit.dsl.Url")
+        writer.appendLine()
     }
 
     private fun writeExtensionFunction(

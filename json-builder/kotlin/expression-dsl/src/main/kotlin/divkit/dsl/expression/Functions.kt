@@ -4,6 +4,8 @@
 
 package divkit.dsl.expression
 
+import divkit.dsl.Url
+
 /**
  * Returns a string value from array.
  *
@@ -221,11 +223,33 @@ fun getArrayOptColor(
 fun getArrayUrl(
     param0: Expression<out List<*>>,
     param1: Expression<Long>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getArrayUrl",
         param0,
         param1,
+    )
+
+/**
+ * Returns an optional url value from array.
+ *
+ * @param param0 Array.
+ * @param param1 Index at array.
+ * @param param2 Fallback value if value by index not exists or it's is not a url.
+ * @return function expression
+ */
+
+@JvmName("getArrayOptUrlListIntUrl")
+fun getArrayOptUrl(
+    param0: Expression<out List<*>>,
+    param1: Expression<Long>,
+    param2: Expression<Url>,
+): Expression<Url> =
+    FunctionExpression(
+        "getArrayOptUrl",
+        param0,
+        param1,
+        param2,
     )
 
 /**
@@ -242,7 +266,7 @@ fun getArrayOptUrl(
     param0: Expression<out List<*>>,
     param1: Expression<Long>,
     param2: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getArrayOptUrl",
         param0,
@@ -467,11 +491,33 @@ fun getOptColorFromArray(
 fun getUrlFromArray(
     param0: Expression<out List<*>>,
     param1: Expression<Long>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getUrlFromArray",
         param0,
         param1,
+    )
+
+/**
+ * Returns an optional url value from array.
+ *
+ * @param param0 Array.
+ * @param param1 Index at array.
+ * @param param2 Fallback value if value by index not exists or it's is not a url.
+ * @return function expression
+ */
+
+@JvmName("getOptUrlFromArrayListIntUrl")
+fun getOptUrlFromArray(
+    param0: Expression<out List<*>>,
+    param1: Expression<Long>,
+    param2: Expression<Url>,
+): Expression<Url> =
+    FunctionExpression(
+        "getOptUrlFromArray",
+        param0,
+        param1,
+        param2,
     )
 
 /**
@@ -488,7 +534,7 @@ fun getOptUrlFromArray(
     param0: Expression<out List<*>>,
     param1: Expression<Long>,
     param2: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getOptUrlFromArray",
         param0,
@@ -804,6 +850,25 @@ fun argb(
     )
 
 /**
+ * Blends two colors by alpha channel. Returns color.
+ *
+ * @param param0 Background color.
+ * @param param1 Foreground color.
+ * @return function expression
+ */
+
+@JvmName("alphaBlendStringString")
+fun alphaBlend(
+    param0: Expression<String>,
+    param1: Expression<String>,
+): Expression<String> =
+    FunctionExpression(
+        "alphaBlend",
+        param0,
+        param1,
+    )
+
+/**
  * Creates color from values of red, green, blue values. Sets alpha value as 1.0. Returns color value of color in hex format '#FFAABBCC'.
  *
  * @param param0 Number value of red in range 0.0 to 1.0.
@@ -932,7 +997,7 @@ fun getDictColor(
 fun getDictUrl(
     param0: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getDictUrl",
         param0,
@@ -1058,12 +1123,34 @@ fun getDictOptColor(
  * @return function expression
  */
 
+@JvmName("getDictOptUrlUrlMapString")
+fun getDictOptUrl(
+    param0: Expression<Url>,
+    param1: Expression<out Map<*, *>>,
+    vararg varargs: Expression<String>,
+): Expression<Url> =
+    FunctionExpression(
+        "getDictOptUrl",
+        param0,
+        param1,
+        *varargs,
+    )
+
+/**
+ * Returns an optional url property from dictionary.
+ *
+ * @param param0 Fallback value if property does not exist or a property value is not an url.
+ * @param param1 Dictionary.
+ * @param varargs Path in dictionary.
+ * @return function expression
+ */
+
 @JvmName("getDictOptUrlStringMapString")
 fun getDictOptUrl(
     param0: Expression<String>,
     param1: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getDictOptUrl",
         param0,
@@ -1178,7 +1265,7 @@ fun getColorFromDict(
 fun getUrlFromDict(
     param0: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getUrlFromDict",
         param0,
@@ -1342,12 +1429,34 @@ fun getOptColorFromDict(
  * @return function expression
  */
 
+@JvmName("getOptUrlFromDictUrlMapString")
+fun getOptUrlFromDict(
+    param0: Expression<Url>,
+    param1: Expression<out Map<*, *>>,
+    vararg varargs: Expression<String>,
+): Expression<Url> =
+    FunctionExpression(
+        "getOptUrlFromDict",
+        param0,
+        param1,
+        *varargs,
+    )
+
+/**
+ * Returns an optional url property from dictionary.
+ *
+ * @param param0 Fallback value if property does not exist or a property value is not an url.
+ * @param param1 Dictionary.
+ * @param varargs Path in dictionary.
+ * @return function expression
+ */
+
 @JvmName("getOptUrlFromDictStringMapString")
 fun getOptUrlFromDict(
     param0: Expression<String>,
     param1: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getOptUrlFromDict",
         param0,
@@ -2487,7 +2596,7 @@ fun Expression<String>.toColor(@Suppress("UNUSED_PARAMETER", "LocalVariableName"
 @JvmName("toUrlString")
 fun toUrl(
     param0: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "toUrl",
         param0,
@@ -2568,11 +2677,30 @@ fun getStringValue(
  * @return function expression
  */
 
+@JvmName("getUrlValueStringUrl")
+fun getUrlValue(
+    param0: Expression<String>,
+    param1: Expression<Url>,
+): Expression<Url> =
+    FunctionExpression(
+        "getUrlValue",
+        param0,
+        param1,
+    )
+
+/**
+ * Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Variable name.
+ * @param param1 Fallback value.
+ * @return function expression
+ */
+
 @JvmName("getUrlValueStringString")
 fun getUrlValue(
     param0: Expression<String>,
     param1: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getUrlValue",
         param0,
@@ -2637,6 +2765,28 @@ fun getStoredIntegerValue(
     )
 
 /**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @param param2 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredIntegerValueStringStringInt")
+fun getStoredIntegerValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+    param2: Expression<Long>,
+): Expression<Long> =
+    FunctionExpression(
+        "getStoredIntegerValue",
+        param0,
+        param1,
+        param2,
+    )
+
+/**
  * Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.
  *
  * @param param0 Stored value name.
@@ -2653,6 +2803,28 @@ fun getStoredNumberValue(
         "getStoredNumberValue",
         param0,
         param1,
+    )
+
+/**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @param param2 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredNumberValueStringStringDouble")
+fun getStoredNumberValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+    param2: Expression<Double>,
+): Expression<Double> =
+    FunctionExpression(
+        "getStoredNumberValue",
+        param0,
+        param1,
+        param2,
     )
 
 /**
@@ -2675,6 +2847,69 @@ fun getStoredStringValue(
     )
 
 /**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @param param2 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredStringValueStringStringString")
+fun getStoredStringValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+    param2: Expression<String>,
+): Expression<String> =
+    FunctionExpression(
+        "getStoredStringValue",
+        param0,
+        param1,
+        param2,
+    )
+
+/**
+ * Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredUrlValueStringUrl")
+fun getStoredUrlValue(
+    param0: Expression<String>,
+    param1: Expression<Url>,
+): Expression<Url> =
+    FunctionExpression(
+        "getStoredUrlValue",
+        param0,
+        param1,
+    )
+
+/**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @param param2 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredUrlValueStringStringUrl")
+fun getStoredUrlValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+    param2: Expression<Url>,
+): Expression<Url> =
+    FunctionExpression(
+        "getStoredUrlValue",
+        param0,
+        param1,
+        param2,
+    )
+
+/**
  * Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.
  *
  * @param param0 Stored value name.
@@ -2686,11 +2921,33 @@ fun getStoredStringValue(
 fun getStoredUrlValue(
     param0: Expression<String>,
     param1: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getStoredUrlValue",
         param0,
         param1,
+    )
+
+/**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @param param2 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredUrlValueStringStringString")
+fun getStoredUrlValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+    param2: Expression<String>,
+): Expression<Url> =
+    FunctionExpression(
+        "getStoredUrlValue",
+        param0,
+        param1,
+        param2,
     )
 
 /**
@@ -2713,6 +2970,28 @@ fun getStoredColorValue(
     )
 
 /**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @param param2 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredColorValueStringStringString")
+fun getStoredColorValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+    param2: Expression<String>,
+): Expression<String> =
+    FunctionExpression(
+        "getStoredColorValue",
+        param0,
+        param1,
+        param2,
+    )
+
+/**
  * Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.
  *
  * @param param0 Stored value name.
@@ -2729,6 +3008,28 @@ fun getStoredBooleanValue(
         "getStoredBooleanValue",
         param0,
         param1,
+    )
+
+/**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @param param2 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredBooleanValueStringStringBoolean")
+fun getStoredBooleanValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+    param2: Expression<Boolean>,
+): Expression<Boolean> =
+    FunctionExpression(
+        "getStoredBooleanValue",
+        param0,
+        param1,
+        param2,
     )
 
 /**
@@ -2758,6 +3059,25 @@ fun getStoredArrayValue(
 fun Expression<String>.getStoredArrayValue(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getStoredArrayValue(this)
 
 /**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the exception will be thrown.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @return function expression
+ */
+
+@JvmName("getStoredArrayValueStringString")
+fun getStoredArrayValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+): Expression<List<*>> =
+    FunctionExpression(
+        "getStoredArrayValue",
+        param0,
+        param1,
+    )
+
+/**
  * Returns the stored value by its name. If the value doesn't exist or has incorrect type, the exception will be thrown.
  *
  * @param param0 Stored value name.
@@ -2782,6 +3102,25 @@ fun getStoredDictValue(
 
 @JvmName("extension_getStoredDictValueString")
 fun Expression<String>.getStoredDictValue(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getStoredDictValue(this)
+
+/**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the exception will be thrown.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @return function expression
+ */
+
+@JvmName("getStoredDictValueStringString")
+fun getStoredDictValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+): Expression<Map<*, *>> =
+    FunctionExpression(
+        "getStoredDictValue",
+        param0,
+        param1,
+    )
 
 /**
  * Gets the length of string argument. Returns integer value.
@@ -3322,6 +3661,22 @@ fun toString(
     )
 
 /**
+ * Returns a string representation of given value.
+ *
+ * @param param0 Url value.
+ * @return function expression
+ */
+
+@JvmName("toStringUrl")
+fun toString(
+    param0: Expression<Url>,
+): Expression<String> =
+    FunctionExpression(
+        "toString",
+        param0,
+    )
+
+/**
  * Returns value of the `π`: ratio of the circumference of a circle to its diameter
  *
  * @return function expression
@@ -3732,7 +4087,7 @@ fun getString(
 fun getUrl(
     param0: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Url> =
     FunctionExpression(
         "getUrl",
         param0,
@@ -4368,4 +4723,3 @@ fun formatDateAsUTCWithLocale(
         param1,
         param2,
     )
-
