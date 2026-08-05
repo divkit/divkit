@@ -454,7 +454,8 @@
                         <button
                             class="background2-dialog__palette-toggle"
                             class:background2-dialog__palette-toggle_toggled={togglePalette}
-                            title={$l10nString('palette')}
+                            aria-label={$l10nString('palette')}
+                            data-custom-tooltip={$l10nString('palette')}
                             on:click={onPaletteToggle}
                         >
                             <div class="background2-dialog__palette-icon"></div>
@@ -487,7 +488,8 @@
                                         <div
                                             class="background2-dialog__gradient-point background2-dialog__gradient-point_ghost"
                                             style:left="{gradientColorPosition * 100}%"
-                                            title={$l10nString('add_color')}
+                                            aria-label={$l10nString('add_color')}
+                                            data-custom-tooltip={$l10nString('add_color')}
                                         ></div>
                                     {/if}
 
@@ -497,7 +499,8 @@
                                             class="background2-dialog__gradient-point"
                                             class:background2-dialog__gradient-point_selected={index === selectedColorIndex}
                                             style:left="{item.position * 100}%"
-                                            title="{Math.round(item.position * 100)}%"
+                                            aria-label="{Math.round(item.position * 100)}%"
+                                            data-custom-tooltip="{Math.round(item.position * 100)}%"
                                             on:pointerdown={event => onGradientColorPointerDown(event, index)}
                                         >
                                             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -509,7 +512,8 @@
                                                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                                                 <div
                                                     class="background2-dialog__gradient-point-delete"
-                                                    title={$l10nString('delete')}
+                                                    aria-label={$l10nString('delete')}
+                                                    data-custom-tooltip={$l10nString('delete')}
                                                     on:pointerdown|stopPropagation
                                                     on:click={() => deleteGradientColorStop(index)}
                                                 ></div>
@@ -739,7 +743,6 @@
                                     iconDark: stretchIconDark
                                 }]}
                                 theme="secondary"
-                                customTooltips={false}
                                 bind:value={value.scale}
                                 disabled={readOnly}
                             />

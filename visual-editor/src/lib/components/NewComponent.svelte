@@ -69,7 +69,8 @@
                     draggable="true"
                     on:dragstart={event => onDragStart(event, item.type)}
                     on:click={() => onClick(item.type)}
-                    title={item.description ? item.description[$lang] : ''}
+                    aria-label={item.description ? item.description[$lang] : ''}
+                    data-custom-tooltip={item.description ? item.description[$lang] : ''}
                 >
                     <div
                         class="new-component__icon"
@@ -101,7 +102,8 @@
                     draggable="true"
                     on:dragstart={event => onDragStart(event, item.type)}
                     on:click={() => onClick(item.type)}
-                    title={item.description ? item.description[$lang] : ''}
+                    aria-label={item.description ? item.description[$lang] : ''}
+                    data-custom-tooltip={item.description ? item.description[$lang] : ''}
                 >
                     <div
                         class="new-component__icon"
@@ -134,7 +136,8 @@
                         draggable="true"
                         on:dragstart={event => onDragStart(event, item)}
                         on:click={() => onClick(item)}
-                        title={item}
+                        aria-label={item}
+                        data-custom-tooltip={item}
                     >
                         <div
                             class="new-component__icon"

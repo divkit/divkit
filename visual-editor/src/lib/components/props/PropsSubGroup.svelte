@@ -65,7 +65,8 @@
 
     <li
         class="props-group__item"
-        title="{item.name}: {item.description?.ru}"
+        aria-label="{item.name}: {item.description?.ru}"
+        data-custom-tooltip="{item.name}: {item.description?.ru}"
         class:props-group__filled={filled}
         class:props-group__deprecated={deprecated && item.type !== 'group' && item.type !== 'list'}
     >
@@ -82,7 +83,8 @@
                             {#if warn}
                                 <span
                                     class="props-group__warning"
-                                    title={warn}
+                                    aria-label={warn}
+                                    data-custom-tooltip={warn}
                                 ></span>
                             {/if}
                         {/if}
@@ -90,7 +92,11 @@
                     </div>
                     <ul class="props-group__content">
                         {#if item.options}
-                            <li class="props-group__item" title="{item.name}: {item.description?.ru}">
+                            <li
+                                class="props-group__item"
+                                aria-label="{item.name}: {item.description?.ru}"
+                                data-custom-tooltip="{item.name}: {item.description?.ru}"
+                            >
                                 <label for={id} class="props-group__name">
                                     type
                                 </label>
@@ -123,7 +129,8 @@
 
                                 <li
                                     class="props-group__item"
-                                    title="{key}"
+                                    aria-label="{key}"
+                                    data-custom-tooltip="{key}"
                                 >
                                     <div
                                         {...{
@@ -189,7 +196,8 @@
                             {#if warn}
                                 <span
                                     class="props-group__warning"
-                                    title={warn}
+                                    aria-label={warn}
+                                    data-custom-tooltip={warn}
                                 ></span>
                             {/if}
                         {/if}
@@ -199,7 +207,11 @@
                     <ul class="props-group__content">
                         {#if item.list}
                             {#each item.list as item2, index}
-                                <li class="props-group__item" title="{item2.name}: {item2.description?.ru}">
+                                <li
+                                    class="props-group__item"
+                                    aria-label="{item2.name}: {item2.description?.ru}"
+                                    data-custom-tooltip="{item2.name}: {item2.description?.ru}"
+                                >
                                     <div class="props-group__span-cell">
                                         <Spoiler2
                                             theme="straight-small"
@@ -252,7 +264,8 @@
                     {#if warn}
                         <span
                             class="props-group__warning"
-                            title={warn}
+                            aria-label={warn}
+                            data-custom-tooltip={warn}
                         ></span>
                     {/if}
                 {/if}

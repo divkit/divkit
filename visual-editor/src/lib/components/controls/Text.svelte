@@ -11,7 +11,7 @@
 
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
-    import type { VideoSource } from '@divkitframework/divkit/typings/common';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common.d.ts';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
     import { formatFileSize } from '../../utils/formatFileSize';
@@ -210,9 +210,8 @@
     class:text_button={hasButton}
     class:text_disabled={disabled}
     class:text_error={Boolean(error || subtypeError || requiredError || filterError)}
-    title={error}
-    aria-label={title}
-    data-custom-tooltip={title}
+    aria-label={error || title}
+    data-custom-tooltip={error || title}
     style:--inline-size-width="{totalInlineButtonsWidth}px"
 >
     {#if type === 'text'}

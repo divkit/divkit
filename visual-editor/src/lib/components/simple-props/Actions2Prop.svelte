@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
-    import type { Action } from '@divkitframework/divkit/typings/common';
+    import type { Action } from '@divkitframework/divkit/typings/common.d.ts';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import type { Actions2Property } from '../../data/componentProps';
     import MoveList2 from '../controls/MoveList2.svelte';

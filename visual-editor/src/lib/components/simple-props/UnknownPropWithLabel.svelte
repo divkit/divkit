@@ -218,8 +218,8 @@
         <div class="unknown-prop__theme-row">
             <div
                 class="unknown-prop__theme-image"
-                title={$l10nString('lightTheme')}
                 aria-label={$l10nString('lightTheme')}
+                data-custom-tooltip={$l10nString('lightTheme')}
                 role="img"
                 style:background-image="url({encodeBackground(lightThemeIcon)})"
             ></div>
@@ -236,8 +236,8 @@
         <div class="unknown-prop__theme-row">
             <div
                 class="unknown-prop__theme-image"
-                title={$l10nString('darkTheme')}
                 aria-label={$l10nString('darkTheme')}
+                data-custom-tooltip={$l10nString('darkTheme')}
                 role="img"
                 style:background-image="url({encodeBackground(darkThemeIcon)})"
             ></div>

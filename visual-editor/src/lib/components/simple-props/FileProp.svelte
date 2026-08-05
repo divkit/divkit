@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher, getContext } from 'svelte';
-    import type { VideoSource } from '@divkitframework/divkit/typings/common';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common.d.ts';
     import type { FileProperty } from '../../data/componentProps';
     import Text from '../controls/Text.svelte';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';

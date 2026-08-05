@@ -1,35 +1,32 @@
 <script lang="ts">
+    import { afterUpdate } from 'svelte';
     import { fly } from 'svelte/transition';
 
     export let owner: HTMLElement | null;
 
     let prevOwner: HTMLElement | null = null;
     let text = '';
-    let align: 'left' | 'center' = 'center';
-    let bbox: DOMRect | undefined;
-    let appBbox: DOMRect | undefined;
-    let wrapper: HTMLElement;
+    let counter = 0;
+    let key: string;
+    let prevOwners = new Set<HTMLElement>();
+    let popover: HTMLElement | null = null;
     $: {
-        let defaultAlign = 'center';
-        bbox = owner?.getBoundingClientRect();
-        if (bbox && bbox.left < 50) {
-            defaultAlign = 'left';
-        }
         text = owner?.getAttribute('data-custom-tooltip') || '';
-        align = (owner?.getAttribute('data-custom-tooltop-align') || defaultAlign) as 'left' | 'center';
-        appBbox = wrapper?.parentElement?.getBoundingClientRect();
     }
-    let scrollX = 0;
-    let scrollY = 0;
 
     $: {
         if (prevOwner) {
             prevOwner.removeEventListener('click', onClick);
             prevOwner.removeEventListener('pointerdown', onClick);
+            prevOwners.add(prevOwner);
         }
         if (owner) {
+            ++counter;
+            prevOwners.delete(owner);
             owner.addEventListener('click', onClick);
             owner.addEventListener('pointerdown', onClick);
+            key = `custom-tooltip-${counter}`;
+            owner.style.anchorName = `--${key}`;
             prevOwner = owner;
         }
     }
@@ -37,42 +34,53 @@
     function onClick(): void {
         text = '';
     }
+
+    function onOutroEnd(): void {
+        for (const node of prevOwners) {
+            node.style.anchorName = '';
+        }
+        prevOwners.clear();
+    }
+
+    afterUpdate(() => {
+        if (popover) {
+            popover.showPopover();
+        }
+    });
 </script>
 
-<svelte:window bind:scrollX={scrollX} bind:scrollY={scrollY} />
-
-<div bind:this={wrapper}>
-    {#key owner}
-        {#if text && bbox}
-            <div
-                class="custom-tooltip custom-tooltip_align_{align}"
-                style:top="{bbox.bottom + scrollY - (appBbox?.top || 0)}px"
-                style:left="{bbox.left + scrollX + (align === 'center' ? bbox.width / 2 : 0) - (appBbox?.left || 0)}px"
-                transition:fly|global={{ y: 10, duration: 200 }}
-            >
-                {text}
-            </div>
-        {/if}
-    {/key}
-</div>
+{#key key}
+    {#if text}
+        <div
+            bind:this={popover}
+            id={key}
+            popover="auto"
+            class="custom-tooltip"
+            transition:fly|global={{ y: 10, duration: 200 }}
+            on:outroend={onOutroEnd}
+            style:position-anchor="--{key}"
+        >
+            {text}
+        </div>
+    {/if}
+{/key}
 
 <style>
     .custom-tooltip {
-        position: absolute;
+        position: fixed;
         z-index: 10;
-        margin-top: 12px;
+        top: anchor(bottom, -100%);
+        justify-self: anchor-center;
+        margin: 12px 0 0;
         padding: 8px 12px;
         font-size: 14px;
         line-height: 20px;
         color: var(--text-primary);
         border-radius: 8px;
+        border: none;
         background: var(--background-tertiary);
         filter: drop-shadow(0px 1px 8px rgba(0, 0, 0, 0.14));
-        transform: translateX(-50%);
-    }
-
-    .custom-tooltip_align_left {
-        transform: none;
+        overflow: visible;
     }
 
     .custom-tooltip::before {
@@ -85,9 +93,5 @@
         background: var(--background-tertiary);
         transform: rotate(45deg);
         content: '';
-    }
-
-    .custom-tooltip_align_left::before {
-        left: 8px;
     }
 </style>

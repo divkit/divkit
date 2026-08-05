@@ -1,4 +1,4 @@
-import type { Action } from '@divkitframework/divkit/typings/common';
+import type { Action } from '@divkitframework/divkit/typings/common.d.ts';
 
 export interface JsonTimer {
     id: string;

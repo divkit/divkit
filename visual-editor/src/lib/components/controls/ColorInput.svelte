@@ -136,7 +136,8 @@
             disabled={readOnly}
             bind:value={firstVal}
             on:input={rebuildVal}
-            title={$l10nString('background.solid_first_title')}
+            aria-label={$l10nString('background.solid_first_title')}
+            data-custom-tooltip={$l10nString('background.solid_first_title')}
         >
 
         <div class="color-input__separator"></div>
@@ -154,7 +155,8 @@
                 disabled={readOnly}
                 bind:value={secondVal}
                 on:input={rebuildVal}
-                title={$l10nString('background.solid_second_title')}
+                aria-label={$l10nString('background.solid_second_title')}
+                data-custom-tooltip={$l10nString('background.solid_second_title')}
             >
 
             <div class="color-input__symbol">

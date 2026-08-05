@@ -1,4 +1,4 @@
-import type { Action, TypedAction } from '@divkitframework/divkit/typings/common';
+import type { Action, TypedAction } from '@divkitframework/divkit/typings/common.d.ts';
 import type { ActionArg, ActionDesc } from '../../lib';
 import type { DivAction } from '../../types/divjson';
 import { decline } from '../utils/decline';

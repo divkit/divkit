@@ -305,7 +305,6 @@
                         theme="border-gray"
                         slim
                         title={$l10nString('previewResetZoom')}
-                        customTooltips
                         on:click={resetZoom}
                     >
                         <div

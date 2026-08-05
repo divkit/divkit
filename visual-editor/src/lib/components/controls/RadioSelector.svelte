@@ -17,7 +17,6 @@
     export let theme: 'normal' | 'secondary' | 'tertiary';
     export let defaultValue = '';
     export let disabled = false;
-    export let customTooltips = true;
     export let iconSize: 'contain' | '20' = 'contain';
 
     const { state } = getContext<AppContext>(APP_CTX);
@@ -46,9 +45,7 @@
                 value={option.value}
                 bind:group={internalValue}
                 aria-label={option.text}
-                title={customTooltips ? undefined : option.text}
-                data-custom-tooltip={customTooltips ? option.text : undefined}
-                data-custom-tooltop-align={option.tooltipAlign || 'center'}
+                data-custom-tooltip={option.text}
                 {disabled}
                 on:change={onChange}
             >

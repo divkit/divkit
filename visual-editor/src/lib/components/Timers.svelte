@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getContext } from 'svelte';
     import { slide } from 'svelte/transition';
-    import type { Action } from '@divkitframework/divkit/typings/common';
+    import type { Action } from '@divkitframework/divkit/typings/common.d.ts';
     import { LANGUAGE_CTX, type LanguageContext } from '../ctx/languageContext';
     import PanelTitle from './PanelTitle.svelte';
     import Spoiler2 from './controls/Spoiler2.svelte';
@@ -128,7 +128,11 @@
                     class="timers__title"
                     class:timers__title_empty={!timer.id}
                 >
-                    <span class="timers__id" title={timer.id}>
+                    <span
+                        class="timers__id"
+                        aria-label={timer.id}
+                        data-custom-tooltip={timer.id}
+                    >
                         {timer.id || $l10nString('timersEmptyId')}
                     </span>
                 </div>

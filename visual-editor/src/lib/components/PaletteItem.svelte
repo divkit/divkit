@@ -104,7 +104,8 @@
     class="palette-item"
     class:palette-item_readonly={$readOnly}
     class:palette-item_error={$errors.get(value.id)}
-    title={$errors.get(value.id)}
+    aria-label={$errors.get(value.id)}
+    data-custom-tooltip={$errors.get(value.id)}
     bind:this={elem}
 >
     <input
@@ -138,7 +139,8 @@
         bind:value={hexVal}
         on:input={rebuildVal}
         disabled={$readOnly}
-        title={$l10nString('background.solid_first_title')}
+        aria-label={$l10nString('background.solid_first_title')}
+        data-custom-tooltip={$l10nString('background.solid_first_title')}
     >
 
     <div class="palette-item__separator"></div>
@@ -155,7 +157,8 @@
         max="100"
         bind:value={opacityVal}
         on:input={rebuildVal}
-        title={$l10nString('background.solid_second_title')}
+        aria-label={$l10nString('background.solid_second_title')}
+        data-custom-tooltip={$l10nString('background.solid_second_title')}
     >
 
     <div class="palette-item__symbol">

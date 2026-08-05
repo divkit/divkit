@@ -33,7 +33,11 @@
 
 <div class="radio-prop">
     {#each filteredOptions as option}
-        <label class="radio-prop__item" title={$l10nString(option.name)}>
+        <label
+            class="radio-prop__item"
+            aria-label={$l10nString(option.name)}
+            data-custom-tooltip={$l10nString(option.name)}
+        >
             <input
                 type="radio"
                 name={item.prop}

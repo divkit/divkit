@@ -84,7 +84,8 @@
                     class="link2-dialog__cleanup"
                     class:link2-dialog__cleanup_visible={Boolean(value)}
                     on:click={cleanup}
-                    title={$l10nString('delete')}
+                    aria-label={$l10nString('delete')}
+                    data-custom-tooltip={$l10nString('delete')}
                 >
                     <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                     {@html trashIcon}

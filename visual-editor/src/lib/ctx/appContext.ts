@@ -1,4 +1,4 @@
-import type { Action, VideoSource } from '@divkitframework/divkit/typings/common';
+import type { Action, VideoSource } from '@divkitframework/divkit/typings/common.d.ts';
 import type { CardLocale, EditorInstance, EditorOptions, FileDialogShowProps, FileLimits, FontFaceDesc, GetTranslationKey, GetTranslationSuggest, ImageConversion } from '../../lib';
 import type { State } from '../data/state';
 import type { TreeLeaf } from './tree';

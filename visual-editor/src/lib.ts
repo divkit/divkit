@@ -1,7 +1,7 @@
 import { mount, unmount } from 'svelte';
 import { get, type Unsubscriber } from 'svelte/store';
-import type { DivExtensionClass, VideoSource } from '@divkitframework/divkit/typings/common';
-import type { CustomComponentDescription } from '@divkitframework/divkit/typings/custom';
+import type { DivExtensionClass, VideoSource } from '@divkitframework/divkit/typings/common.d.ts';
+import type { CustomComponentDescription } from '@divkitframework/divkit/typings/custom.d.ts';
 import App from './App.svelte';
 import type { Loc } from './lib/utils/stringifyWithLoc';
 import type { TypedRange } from './lib/data/editor';

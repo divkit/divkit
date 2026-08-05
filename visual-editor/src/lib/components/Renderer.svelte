@@ -2,9 +2,9 @@
     /* eslint-disable max-len */
     import { get } from 'svelte/store';
     import { render as divkitRender, SizeProvider, createGlobalVariablesController, createVariable, evalExpression, type DivkitDebugInstance } from '@divkitframework/divkit/client-devtool';
-    import type { DivExtensionClass, DivJson } from '@divkitframework/divkit/typings/common';
+    import type { DivExtensionClass, DivJson } from '@divkitframework/divkit/typings/common.d.ts';
     import { createEventDispatcher, getContext, onDestroy, tick } from 'svelte';
-    import type { AnyVariable, GlobalVariablesController } from '@divkitframework/divkit/typings/variables';
+    import type { AnyVariable, GlobalVariablesController } from '@divkitframework/divkit/typings/variables.d.ts';
     import {
         getLeafDepth,
         getDepth,

@@ -47,7 +47,6 @@
             }]}
             theme="normal"
             iconSize="20"
-            customTooltips={false}
         />
     </div>
 

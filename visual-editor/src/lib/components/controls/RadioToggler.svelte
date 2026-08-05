@@ -4,7 +4,6 @@
     export let options: {
         text: string;
         value: string;
-        tooltipAlign?: 'left' | 'center';
     }[];
     export let value: string | undefined;
     export let name: string;

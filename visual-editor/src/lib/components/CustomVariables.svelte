@@ -153,11 +153,19 @@
                     class="custom-variables__title"
                     class:custom-variables__title_empty={!variable.name}
                 >
-                    <span class="custom-variables__name" title={variable.name}>
+                    <span
+                        class="custom-variables__name"
+                        aria-label={variable.name}
+                        data-custom-tooltip={variable.name}
+                    >
                         {variable.name || $l10nString('customVariablesEmptyName')}
                     </span>
 
-                    <span class="custom-variables__value" title={strVal}>
+                    <span
+                        class="custom-variables__value"
+                        aria-label={strVal}
+                        data-custom-tooltip={strVal}
+                    >
                         {strVal}
                     </span>
                 </div>

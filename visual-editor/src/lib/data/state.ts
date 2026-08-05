@@ -1,9 +1,9 @@
 import { derived, get, writable, type Writable } from 'svelte/store';
-import type { DivExtensionClass, DivJson, VariableTrigger } from '@divkitframework/divkit/typings/common';
+import type { DivExtensionClass, DivJson, VariableTrigger } from '@divkitframework/divkit/typings/common.d.ts';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import { parseExpression, walkExpression } from '@divkitframework/divkit/client-devtool';
-import type { CustomComponentDescription } from '@divkitframework/divkit/typings/custom';
+import type { CustomComponentDescription } from '@divkitframework/divkit/typings/custom.d.ts';
 import type { PaletteItem } from './palette';
 import { parseVariableValue, type JsonVariable, type Variable } from './customVariables';
 import { type JsonTimer, type Timer } from './timers';

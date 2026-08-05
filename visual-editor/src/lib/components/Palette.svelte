@@ -74,8 +74,7 @@
             options={[{
                 text: $l10n('lightTheme'),
                 value: 'light',
-                icon: lightThemeIcon,
-                tooltipAlign: 'left'
+                icon: lightThemeIcon
             }, {
                 text: $l10n('darkTheme'),
                 value: 'dark',

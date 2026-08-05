@@ -7,7 +7,6 @@
     export let theme: 'border' | 'border-gray' | 'normal' = 'border';
     export let size: 'small' | 'medium' = 'medium';
     export let centerContent = false;
-    export let customTooltips = false;
     export let toggled = false;
 </script>
 
@@ -19,8 +18,7 @@
     class:button2_center-content={centerContent}
     class:button2_toggled={toggled}
     disabled={disabled ? true : undefined}
-    data-custom-tooltip={customTooltips ? title : ''}
-    title={customTooltips ? undefined : title}
+    data-custom-tooltip={title}
     aria-label={title}
     on:click
 >

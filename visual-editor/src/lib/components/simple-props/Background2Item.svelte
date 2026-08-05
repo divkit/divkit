@@ -157,7 +157,8 @@
     class:background2-item_readonly={$readOnly}
     class:background2-item_error={Boolean(error)}
     bind:this={elem}
-    title={error}
+    aria-label={error}
+    data-custom-tooltip={error}
 >
     <button
         class="background2-item__preview"
@@ -206,7 +207,8 @@
                 bind:value={firstVal}
                 on:input={rebuildVal}
                 disabled={$readOnly}
-                title={$l10nString(`background.${value.type}_first_title`)}
+                aria-label={$l10nString(`background.${value.type}_first_title`)}
+                data-custom-tooltip={$l10nString(`background.${value.type}_first_title`)}
             >
         {:else}
             <button
@@ -237,7 +239,8 @@
             on:input={rebuildVal}
             on:focus={onSecondValFocus}
             on:blur={onSecondValBlur}
-            title={$l10nString(`background.${value.type}_second_title`)}
+            aria-label={$l10nString(`background.${value.type}_second_title`)}
+            data-custom-tooltip={$l10nString(`background.${value.type}_second_title`)}
         >
 
         <div class="background2-item__symbol">

@@ -83,7 +83,6 @@
                 value: 'right',
                 icon: iconRight
             }].filter(Truthy)}
-            customTooltips={false}
             bind:value={value}
             on:change={onChange}
         />

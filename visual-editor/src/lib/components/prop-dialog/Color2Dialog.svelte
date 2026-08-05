@@ -84,7 +84,8 @@
                         <button
                             class="color2-dialog__palette-toggle"
                             class:color2-dialog__palette-toggle_toggled={togglePalette}
-                            title={$l10nString('palette')}
+                            aria-label={$l10nString('palette')}
+                            data-custom-tooltip={$l10nString('palette')}
                             on:click={onPaletteToggle}
                         >
                             <div class="color2-dialog__palette-icon"></div>

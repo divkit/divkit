@@ -19,7 +19,7 @@
         ActionScrollBy,
         ActionScrollTo,
         ActionUpdateStructure
-    } from '@divkitframework/divkit/typings/common';
+    } from '@divkitframework/divkit/typings/common.d.ts';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { parseAction } from '../../data/actions';
     import { APP_CTX, type AppContext } from '../../ctx/appContext';
@@ -142,7 +142,8 @@
     class="actions2-item"
     class:actions2-item_readonly={$readOnly}
     class:actions2-item_error={hasError}
-    title={text}
+    aria-label={text}
+    data-custom-tooltip={text}
     bind:this={elem}
     on:click={onClick}
 >

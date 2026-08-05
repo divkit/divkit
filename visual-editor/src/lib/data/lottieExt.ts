@@ -1,4 +1,4 @@
-import type { DivExtension, DivExtensionContext, WrappedError } from '@divkitframework/divkit/typings/common';
+import type { DivExtension, DivExtensionContext, WrappedError } from '@divkitframework/divkit/typings/common.js';
 import type { AnimationItem, AnimationDirection } from 'lottie-web';
 
 interface Params {
@@ -225,7 +225,7 @@ export class Lottie implements DivExtension {
             context.logError(err);
         };
 
-        this.unsubscribe = context.derviedExpression(this.params.lottie_url).subscribe(url => {
+        this.unsubscribe = context.derviedExpression(this.params.lottie_url).subscribe((url: string | undefined) => {
             Promise.all([
                 import('./lottieApi'),
                 this.loadData(url)

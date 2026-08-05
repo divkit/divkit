@@ -5,7 +5,7 @@
 <script lang="ts">
     import { createEventDispatcher, getContext, onMount, tick } from 'svelte';
     import { fade, fly } from 'svelte/transition';
-    import type { Action } from '@divkitframework/divkit/typings/common';
+    import type { Action } from '@divkitframework/divkit/typings/common.d.ts';
     import { makeStyle } from '../utils/makeStyle';
     import { multilineSubmit, redo, undo } from '../utils/keybinder/shortcuts';
     import { htmlFilter } from '../utils/htmlFilter';
@@ -1049,7 +1049,8 @@
         <div class="inplace-editor__toolbar-inner" bind:this={toolbarElem}>
             <div
                 class="inplace-editor__button2 inplace-editor__button2_text"
-                title={$l10nString('props.font_size')}
+                aria-label={$l10nString('props.font_size')}
+                data-custom-tooltip={$l10nString('props.font_size')}
                 contenteditable={disabled ? undefined : 'true'}
                 autocapitalize="off"
                 spellcheck="false"
@@ -1063,14 +1064,16 @@
             </div>
             <button
                 class="inplace-editor__button2 inplace-editor__button2_color"
-                title={$l10nString('props.text_color')}
+                aria-label={$l10nString('props.text_color')}
+                data-custom-tooltip={$l10nString('props.text_color')}
                 on:click|preventDefault={onTextColor}
             >
                 <ColorPreview {color} mix="inplace-editor__color-preview" />
             </button>
             <button
                 class="inplace-editor__button2 inplace-editor__button2_color"
-                title={$l10nString('props.text_alignment_horizontal')}
+                aria-label={$l10nString('props.text_alignment_horizontal')}
+                data-custom-tooltip={$l10nString('props.text_alignment_horizontal')}
                 bind:this={textAlignButton}
                 on:click|preventDefault={onTextAlign}
             >
@@ -1080,7 +1083,8 @@
                 <div class="inplace-editor__select-icon inplace-editor__select-icon_weight"></div>
                 <select
                     class="inplace-editor__select"
-                    title={$l10nString('props.font_weight')}
+                    aria-label={$l10nString('props.font_weight')}
+                    data-custom-tooltip={$l10nString('props.font_weight')}
                     {disabled}
                     bind:value={weight}
                     on:change={onWeightChange}
@@ -1095,7 +1099,8 @@
             <button
                 class="inplace-editor__button2"
                 class:inplace-editor__button2_toggled={underline}
-                title={$l10nString('props.underline')}
+                aria-label={$l10nString('props.underline')}
+                data-custom-tooltip={$l10nString('props.underline')}
                 on:click|preventDefault={onUnderline}
             >
                 <div class="inplace-editor__select-icon inplace-editor__select-icon_underline"></div>
@@ -1103,7 +1108,8 @@
             <button
                 class="inplace-editor__button2"
                 class:inplace-editor__button2_toggled={strike}
-                title={$l10nString('props.strike')}
+                aria-label={$l10nString('props.strike')}
+                data-custom-tooltip={$l10nString('props.strike')}
                 on:click|preventDefault={onStrike}
             >
                 <div class="inplace-editor__select-icon inplace-editor__select-icon_strike"></div>
@@ -1113,7 +1119,8 @@
 
             <button
                 class="inplace-editor__button2"
-                title={$l10nString('props.actions')}
+                aria-label={$l10nString('props.actions')}
+                data-custom-tooltip={$l10nString('props.actions')}
                 bind:this={actionsButton}
                 on:click|preventDefault={onActions}
             >
@@ -1123,7 +1130,8 @@
                 class="inplace-editor__button2"
                 class:inplace-editor__button2_disabled={textDisabled}
                 disabled={textDisabled}
-                title={$l10nString('image')}
+                aria-label={$l10nString('image')}
+                data-custom-tooltip={$l10nString('image')}
                 on:click|preventDefault={onAddImage}
             >
                 <div class="inplace-editor__select-icon inplace-editor__select-icon_image"></div>
@@ -1164,7 +1172,8 @@
 
                 <button
                     class="inplace-editor__disabled-alert-close"
-                    title={$l10nString('close')}
+                    aria-label={$l10nString('close')}
+                    data-custom-tooltip={$l10nString('close')}
                     on:click={() => showTextDisabledAlert = false}
                 >
                 </button>

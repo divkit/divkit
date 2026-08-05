@@ -14,7 +14,7 @@
     import { slide } from 'svelte/transition';
 
     import type { AnimationItem } from 'lottie-web';
-    import type { VideoSource } from '@divkitframework/divkit/typings/common';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common.d.ts';
     import type { FileDialogCallback, FileDialogShowProps, FileDialogValue } from '../../../lib';
     import Text from '../controls/Text.svelte';
     import ContextDialog from './ContextDialog.svelte';
@@ -691,7 +691,8 @@
                         {#if value.url && hasDelete && !disabled}
                             <button
                                 class="file2-dialog__text-inline-button file2-dialog__cleanup"
-                                title={$l10nString('delete')}
+                                aria-label={$l10nString('delete')}
+                                data-custom-tooltip={$l10nString('delete')}
                                 on:click={onCleanup}
                             >
                                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -702,7 +703,8 @@
                         {#if generateFromVideo && hasRequestVideoFrame || generateFromLottie}
                             <button
                                 class="file2-dialog__text-inline-button file2-dialog__generate"
-                                title={generateFromVideo ? $l10nString('file.generate_from_video') : $l10nString('file.generate_from_lottie')}
+                                aria-label={generateFromVideo ? $l10nString('file.generate_from_video') : $l10nString('file.generate_from_lottie')}
+                                data-custom-tooltip={generateFromVideo ? $l10nString('file.generate_from_video') : $l10nString('file.generate_from_lottie')}
                                 on:click={generatePreview}
                             >
                                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->

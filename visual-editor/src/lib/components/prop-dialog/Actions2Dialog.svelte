@@ -24,7 +24,7 @@
 
 <script lang="ts">
     import { getContext } from 'svelte';
-    import type { Action, TypedAction } from '@divkitframework/divkit/typings/common';
+    import type { Action, TypedAction } from '@divkitframework/divkit/typings/common.d.ts';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import Select from '../Select.svelte';
     import Text from '../controls/Text.svelte';

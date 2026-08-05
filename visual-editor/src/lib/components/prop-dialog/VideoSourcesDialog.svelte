@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from 'svelte';
-    import type { VideoSource } from '@divkitframework/divkit/typings/common';
+    import type { VideoSource } from '@divkitframework/divkit/typings/common.d.ts';
     import type { ComponentProperty, SiblingComponentProperty } from '../../data/componentProps';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import Text from '../controls/Text.svelte';
