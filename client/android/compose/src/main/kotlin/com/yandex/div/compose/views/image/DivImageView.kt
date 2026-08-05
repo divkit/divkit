@@ -24,7 +24,7 @@ internal fun DivImageView(
     DivImageContent(
         modifier = modifier,
         data = data,
-        imageUrl = data.imageUrl.observedValue(),
+        imageUrl = data.imageUrl?.observedValue(),
         contentScale = data.scale.observedContentScale(),
         alignment = observedAlignment(
             data.contentAlignmentHorizontal,

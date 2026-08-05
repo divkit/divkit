@@ -107,7 +107,7 @@ internal fun Div.canBeReused(other: Div, resolver: ExpressionResolver): Boolean 
     val otherDiv = other.value()
 
     if (div is DivImage && otherDiv is DivImage) {
-        return div.imageUrl.evaluate(resolver) == otherDiv.imageUrl.evaluate(resolver)
+        return div.imageUrl?.evaluate(resolver) == otherDiv.imageUrl?.evaluate(resolver)
     }
     return div.background === otherDiv.background
 }

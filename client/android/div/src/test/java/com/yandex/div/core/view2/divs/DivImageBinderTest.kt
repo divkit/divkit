@@ -83,7 +83,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -101,7 +101,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -113,7 +113,7 @@ class DivImageBinderTest : DivBinderTest() {
         binder.bindView(bindingContext, view, divImage, path)
         reset(placeholderLoader)
 
-        whenImageLoaded(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val (_, nextDivImage) = createTestDiv("with_action.json")
         binder.bindView(bindingContext, view, nextDivImage, path)
@@ -134,7 +134,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         verify(placeholderLoader, times(2)).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -152,7 +152,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -164,14 +164,14 @@ class DivImageBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, divImage, path)
 
-        whenImageLoaded(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val nextDivImage = createTestDiv()
         binder.bindView(bindingContext, view, nextDivImage, path)
 
         verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(nextDivImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(nextDivImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -186,7 +186,7 @@ class DivImageBinderTest : DivBinderTest() {
         verify(placeholderLoader)
             .applyPlaceholder(any(), any(), anyOrNull(), any(), synchronous = eq(true), any(), any())
 
-        whenImageLoaded(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val nextDivImage = createTestDiv(
             imageUrl = "https://foo.bar/bar.png",
@@ -207,7 +207,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, divImage, path)
 
-        whenImageLoaded(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val spyView = spy(view)
 
@@ -224,7 +224,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, divImage, path)
 
-        whenImageLoaded(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val spyView = spy(view)
 
@@ -241,7 +241,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         binder.bindView(bindingContext, view, divImage, path)
         Assert.assertNull(view.colorFilter)
-        whenImageLoaded(divImage.value.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
         Assert.assertNotNull(view.colorFilter)
 
         // with the same image url

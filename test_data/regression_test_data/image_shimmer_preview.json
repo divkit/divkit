@@ -35,7 +35,6 @@
             },
             {
               "type": "image",
-              "image_url": "empty://",
               "width": {
                 "type": "fixed",
                 "value": 250
@@ -63,7 +62,6 @@
             },
             {
               "type": "gif",
-              "gif_url": "empty://",
               "width": {
                 "type": "fixed",
                 "value": 250

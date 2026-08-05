@@ -14,7 +14,6 @@
         "state_id": 0,
         "div": {
           "type": "image",
-          "image_url": "empty://",
           "placeholder_color": "#f00",
           "width": {
             "type": "fixed",

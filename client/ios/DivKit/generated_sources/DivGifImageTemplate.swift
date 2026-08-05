@@ -249,7 +249,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
     let extensionsValue = { parent?.extensions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let focusValue = { parent?.focus?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let functionsValue = { parent?.functions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    let gifUrlValue = { parent?.gifUrl?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
+    let gifUrlValue = { parent?.gifUrl?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let heightValue = { parent?.height?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let hoverEndActionsValue = { parent?.hoverEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let hoverStartActionsValue = { parent?.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -281,7 +281,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
     let visibilityActionValue = { parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let visibilityActionsValue = { parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let widthValue = { parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
       actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "action_animation", error: $0) },
@@ -335,14 +335,6 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = gifUrlValue {
-      errors.append(.requiredFieldIsMissing(field: "gif_url"))
-    }
-    guard
-      let gifUrlNonNil = gifUrlValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivGifImage(
       accessibility: { accessibilityValue.value }(),
       action: { actionValue.value }(),
@@ -364,7 +356,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       extensions: { extensionsValue.value }(),
       focus: { focusValue.value }(),
       functions: { functionsValue.value }(),
-      gifUrl: { gifUrlNonNil }(),
+      gifUrl: { gifUrlValue.value }(),
       height: { heightValue.value }(),
       hoverEndActions: { hoverEndActionsValue.value }(),
       hoverStartActions: { hoverStartActionsValue.value }(),
@@ -1019,7 +1011,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       _ = { visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
       actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "action_animation", error: $0) },
@@ -1073,14 +1065,6 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = gifUrlValue {
-      errors.append(.requiredFieldIsMissing(field: "gif_url"))
-    }
-    guard
-      let gifUrlNonNil = gifUrlValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivGifImage(
       accessibility: { accessibilityValue.value }(),
       action: { actionValue.value }(),
@@ -1102,7 +1086,7 @@ public final class DivGifImageTemplate: TemplateValue, Sendable {
       extensions: { extensionsValue.value }(),
       focus: { focusValue.value }(),
       functions: { functionsValue.value }(),
-      gifUrl: { gifUrlNonNil }(),
+      gifUrl: { gifUrlValue.value }(),
       height: { heightValue.value }(),
       hoverEndActions: { hoverEndActionsValue.value }(),
       hoverStartActions: { hoverStartActionsValue.value }(),

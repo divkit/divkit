@@ -31,7 +31,6 @@
             },
             {
               "type": "gif",
-              "gif_url": "empty://",
               "preview_url": "divkit-asset://test-images/local-chess-animated.webp",
               "scale": "no_scale",
               "width": {

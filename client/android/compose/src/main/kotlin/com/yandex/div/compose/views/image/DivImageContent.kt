@@ -25,7 +25,7 @@ import com.yandex.div2.DivBase
 internal fun DivImageContent(
     modifier: Modifier,
     data: DivBase,
-    imageUrl: Uri,
+    imageUrl: Uri?,
     contentScale: ContentScale,
     alignment: Alignment,
     placeholderColor: Color,
@@ -69,7 +69,7 @@ internal fun DivImageContent(
             )
         }
 
-        if (imageUrl.isValid()) {
+        if (imageUrl?.isValid() == true) {
             val imageRequestParams = ImageRequestParams(
                 data = imageUrl,
                 transformations = transformations
@@ -99,7 +99,6 @@ internal fun DivImageContent(
     }
 }
 
-// TODO: remove when div-image.image_url becomes optional
 private fun Uri.isValid(): Boolean {
     return toString() != "empty://"
 }

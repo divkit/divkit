@@ -311,22 +311,21 @@ internal class DivImageBinder @Inject constructor(
         divView: Div2View,
         errorCollector: ErrorCollector
     ) {
-        val imageUrlChanged = !newDiv.imageUrl.equalsToConstant(oldDiv?.imageUrl)
+        val newImageUrl = newDiv.imageUrl
+        val imageUrlChanged = !newImageUrl.equalsToConstant(oldDiv?.imageUrl)
         val placeholdersChanged = !(newDiv.preview.equalsToConstant(oldDiv?.preview)
                 && newDiv.placeholderColor.equalsToConstant(oldDiv?.placeholderColor))
         val placeholdersAreConstant = newDiv.preview.isConstantOrNull() &&
                 newDiv.placeholderColor.isConstant()
 
         val needPlaceholdersUpdate = !isImageLoaded && placeholdersChanged
-
         if (needPlaceholdersUpdate && !placeholdersAreConstant) {
             observePlaceholders(newDiv, resolver, divView, errorCollector)
         }
 
-        val needObserveImageUrl = imageUrlChanged && !newDiv.imageUrl.isConstantOrNull()
-        if (needObserveImageUrl) {
+        if (imageUrlChanged && newImageUrl != null && !newImageUrl.isConstant()) {
             addSubscription(
-                newDiv.imageUrl.observe(resolver) {
+                newImageUrl.observe(resolver) {
                     applyImage(newDiv, resolver, divView, errorCollector)
                 }
             )
@@ -350,7 +349,7 @@ internal class DivImageBinder @Inject constructor(
         divView: Div2View,
         errorCollector: ErrorCollector
     ): Boolean {
-        val imageUrl = div.imageUrl.evaluate(resolver)
+        val imageUrl = div.imageUrl?.evaluate(resolver)
         if (imageUrl == this.imageUrl) {
             return false
         }
@@ -366,6 +365,10 @@ internal class DivImageBinder @Inject constructor(
         applyPlaceholders(div, resolver, divView, isHighPriorityShowPreview, errorCollector)
 
         this.imageUrl = imageUrl
+        if (imageUrl == null) {
+            return true
+        }
+
         val reference = imageLoader.loadImage(
             imageUrl.toString(),
             object : DivIdLoggingImageDownloadCallback(divView) {

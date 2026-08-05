@@ -35,7 +35,6 @@
     "web"
   ],
   "required": [
-    "gif_url",
     "type"
   ]
 }

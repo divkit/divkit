@@ -68,7 +68,6 @@
     }
   ],
   "required": [
-    "image_url",
     "type"
   ]
 }

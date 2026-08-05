@@ -1,6 +1,7 @@
 package com.yandex.div.compose.preload
 
 import android.net.Uri
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
 import com.yandex.div.compose.DivComposeConfiguration
@@ -34,10 +35,9 @@ import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
 class DivPreloaderTest {
-
     private val extensionIds = mutableListOf<String>()
     private val videoUrls = mutableListOf<List<Uri>>()
-    private val imageLoads = mutableListOf<Uri>()
+    private val imageLoads = mutableListOf<String>()
 
     private val imagePreloader = object : ImagePreloader {
         override suspend fun preloadImages(
@@ -45,18 +45,26 @@ class DivPreloaderTest {
             resolver: ExpressionResolver,
             downloadAll: Boolean,
         ) {
-            if (div !is Div.Image) return
-            if (!downloadAll && !div.value.preloadRequired.evaluate(resolver)) return
-            imageLoads.add(div.value.imageUrl.evaluate(resolver))
+            when (div) {
+                is Div.Image -> {
+                    if (downloadAll || div.value.preloadRequired.evaluate(resolver)) {
+                        div.value.imageUrl?.let {
+                            imageLoads.add(it.evaluate(resolver).toString())
+                        }
+                    }
+                }
+
+                else -> return
+            }
         }
     }
 
     private val extensionHandler = object : DivExtensionHandler {
-        @androidx.compose.runtime.Composable
+        @Composable
         override fun Content(
             modifier: Modifier,
             environment: DivExtensionEnvironment,
-            content: @androidx.compose.runtime.Composable (Modifier) -> Unit
+            content: @Composable (Modifier) -> Unit
         ) = Unit
 
         override suspend fun preload(environment: DivExtensionEnvironment) {
@@ -137,16 +145,17 @@ class DivPreloaderTest {
 
     @Test
     fun `preload with activeStateOnly loads images when preloadRequired is false`() = runTest {
-        val imageUrl = "https://example.com/img.jpg".toUri()
+        val imageUrl = "https://example.com/img.jpg"
         preloader.preload(
             data(
                 content = image(
-                    imageUrl = constant(imageUrl),
-                    preloadRequired = constant(false),
+                    imageUrl = imageUrl,
+                    preloadRequired = false
                 )
             ),
             PreloadMode.ACTIVE_STATE_ONLY,
         )
+
         assertEquals(listOf(imageUrl), imageLoads)
     }
 
@@ -155,8 +164,8 @@ class DivPreloaderTest {
         preloader.preload(
             data(
                 content = image(
-                    imageUrl = constant("https://example.com/img.jpg".toUri()),
-                    preloadRequired = constant(false),
+                    imageUrl = "https://example.com/img.jpg",
+                    preloadRequired = false
                 )
             )
         )
@@ -165,36 +174,37 @@ class DivPreloaderTest {
 
     @Test
     fun `preload with activeStateOnly visits only first root state`() = runTest {
-        val image1Url = "https://example.com/state0.jpg".toUri()
-        val image2Url = "https://example.com/state1.jpg".toUri()
+        val image1Url = "https://example.com/state0.jpg"
+        val image2Url = "https://example.com/state1.jpg"
         preloader.preload(
             data(
                 states = listOf(
                     DivData.State(
                         stateId = 0,
                         div = image(
-                            imageUrl = constant(image1Url),
-                            preloadRequired = constant(false),
+                            imageUrl = image1Url,
+                            preloadRequired = false
                         )
                     ),
                     DivData.State(
                         stateId = 1,
                         div = image(
-                            imageUrl = constant(image2Url),
-                            preloadRequired = constant(false),
+                            imageUrl = image2Url,
+                            preloadRequired = false
                         )
                     ),
                 )
             ),
             PreloadMode.ACTIVE_STATE_ONLY,
         )
+
         assertEquals(listOf(image1Url), imageLoads)
     }
 
     @Test
     fun `preload with activeStateOnly visits only active div-state variant`() = runTest {
-        val image1Url = "https://example.com/s1.jpg".toUri()
-        val image2Url = "https://example.com/s2.jpg".toUri()
+        val image1Url = "https://example.com/s1.jpg"
+        val image2Url = "https://example.com/s2.jpg"
         preloader.preload(
             data(
                 content = Div.State(
@@ -205,15 +215,15 @@ class DivPreloaderTest {
                             DivState.State(
                                 stateId = "s1",
                                 div = image(
-                                    imageUrl = constant(image1Url),
-                                    preloadRequired = constant(false),
+                                    imageUrl = image1Url,
+                                    preloadRequired = false
                                 )
                             ),
                             DivState.State(
                                 stateId = "s2",
                                 div = image(
-                                    imageUrl = constant(image2Url),
-                                    preloadRequired = constant(false),
+                                    imageUrl = image2Url,
+                                    preloadRequired = false
                                 )
                             ),
                         )
@@ -222,6 +232,7 @@ class DivPreloaderTest {
             ),
             PreloadMode.ACTIVE_STATE_ONLY,
         )
+
         assertEquals(listOf(image1Url), imageLoads)
     }
 
@@ -274,8 +285,8 @@ class DivPreloaderTest {
     fun `passes expression resolver to image preloader`() = runTest {
         val data = data(
             content = image(
-                imageUrl = constant("https://example.com/img.jpg".toUri()),
-                preloadRequired = constant(true),
+                imageUrl = "https://example.com/img.jpg",
+                preloadRequired = true
             )
         )
         preloader.preload(data)
@@ -284,19 +295,20 @@ class DivPreloaderTest {
 
     @Test
     fun `resolves image url from local variable in container`() = runTest {
-        val localUrl = "https://example.com/local.jpg".toUri()
+        val localUrl = "https://example.com/local.jpg"
         val data = data(
             content = container(
-                variables = listOf(variable("img_url", localUrl.toString())),
+                variables = listOf(variable("img_url", localUrl)),
                 items = listOf(
                     image(
                         imageUrl = uriExpression("@{img_url}"),
-                        preloadRequired = constant(true),
+                        preloadRequired = true
                     )
                 ),
             )
         )
         preloader.preload(data)
+
         assertEquals(localUrl, imageLoads.single())
     }
 }

@@ -37,7 +37,6 @@
     import { prepareBase64 } from '../../utils/prepareBase64';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import Outer from '../utilities/Outer.svelte';
-    import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
 
     export let componentContext: ComponentContext<DivImageData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -51,7 +50,6 @@
     let isEmpty = false;
     let placeholderColor = DEFAULT_PLACEHOLDER_COLOR;
 
-    let hasError = false;
     let imageUrl: string | undefined;
     let backgroundImage = '';
     // Exactly "none", "scale-down" would not match android
@@ -114,7 +112,7 @@
     $: {
         const isGif = componentContext.json.type === 'gif';
         let img = isGif ? $jsonGifUrl : $jsonImageUrl;
-        isEmpty = img === EMPTY_IMAGE;
+        isEmpty = img === EMPTY_IMAGE || !img;
         if (isEmpty) {
             img = FALLBACK_IMAGE;
         }
@@ -133,15 +131,6 @@
 
     $: {
         highPriorityPreview = correctBooleanInt($jsonHighPriorityPreviewShow, highPriorityPreview);
-    }
-
-    $: {
-        if (!imageUrl) {
-            hasError = true;
-            componentContext.logError(wrapError(new Error(`Missing "${componentContext.json.type === 'gif' ? 'gif_url' : 'image_url'}" for "${componentContext.json.type}"`)));
-        } else {
-            hasError = false;
-        }
     }
 
     $: isWidthContent = $jsonWidth?.type === 'wrap_content';
@@ -293,45 +282,39 @@
     });
 </script>
 
-{#if !hasError}
-    <Outer
-        cls={genClassName('image', css, mods)}
-        {componentContext}
-        {layoutParams}
-        customDescription={true}
-        style={{
-            'aspect-ratio': aspectRatio
-        }}
-        let:widthMin
-        let:widthMax
-        let:heightMin
-        let:heightMax
-        heightByAspect={aspectRatio !== undefined}
-    >
-        <!-- Safari does not redraw images when changing the svg filter, a complete reconstruction of the DOM is required -->
-        {#key svgFilterId}
-            <img
-                bind:this={img}
-                class={css.image__image}
-                src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                loading={($jsonPreloadRequired || highPrority) ? 'eager' : 'lazy'}
-                decoding={highPrority ? 'sync' : 'async'}
-                style={makeStyle({
-                    ...style,
-                    'min-width': isWidthContent ? widthMin : undefined,
-                    'max-width': isWidthContent ? widthMax : undefined,
-                    'min-height': isHeightContent ? heightMin : undefined,
-                    'max-height': isHeightContent ? heightMax : undefined
-                })}
-                {alt}
-                aria-hidden={alt ? null : 'true'}
-                on:load={onLoad}
-                on:error={onError}
-            >
-        {/key}
-    </Outer>
-{:else if process.env.DEVTOOL}
-    <DevtoolHolder
-        {componentContext}
-    />
-{/if}
+<Outer
+    cls={genClassName('image', css, mods)}
+    {componentContext}
+    {layoutParams}
+    customDescription={true}
+    style={{
+        'aspect-ratio': aspectRatio
+    }}
+    let:widthMin
+    let:widthMax
+    let:heightMin
+    let:heightMax
+    heightByAspect={aspectRatio !== undefined}
+>
+    <!-- Safari does not redraw images when changing the svg filter, a complete reconstruction of the DOM is required -->
+    {#key svgFilterId}
+        <img
+            bind:this={img}
+            class={css.image__image}
+            src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
+            loading={($jsonPreloadRequired || highPrority) ? 'eager' : 'lazy'}
+            decoding={highPrority ? 'sync' : 'async'}
+            style={makeStyle({
+                ...style,
+                'min-width': isWidthContent ? widthMin : undefined,
+                'max-width': isWidthContent ? widthMax : undefined,
+                'min-height': isHeightContent ? heightMin : undefined,
+                'max-height': isHeightContent ? heightMax : undefined
+            })}
+            {alt}
+            aria-hidden={alt ? null : 'true'}
+            on:load={onLoad}
+            on:error={onError}
+        >
+    {/key}
+</Outer>

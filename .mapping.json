@@ -1715,7 +1715,6 @@
   "client/android/div/src/main/java/com/yandex/div/core/view2/reuse/RebindTask.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/reuse/RebindTask.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/reuse/ReusableTokenList.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/reuse/ReusableTokenList.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/reuse/Token.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/reuse/Token.kt",
-  "client/android/div/src/main/java/com/yandex/div/core/view2/reuse/util/RebindLogUtils.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/reuse/util/RebindLogUtils.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/reuse/util/RebindTokenUtils.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/reuse/util/RebindTokenUtils.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/reuse/util/RebindUtils.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/reuse/util/RebindUtils.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/spannable/BaselineShiftSpan.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/spannable/BaselineShiftSpan.kt",

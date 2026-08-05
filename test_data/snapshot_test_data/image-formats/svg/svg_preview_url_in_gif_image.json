@@ -30,7 +30,6 @@
             },
             {
               "type": "gif",
-              "gif_url": "empty://",
               "preview_url": "https://yastatic.net/s3/home/divkit/svg-test-image.svg",
               "scale": "no_scale",
               "width": {

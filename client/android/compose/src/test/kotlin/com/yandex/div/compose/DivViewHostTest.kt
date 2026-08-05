@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
-import androidx.core.net.toUri
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.ComponentRegistry
@@ -14,7 +13,6 @@ import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.data.DivModelInternalApi
-import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.image
 import kotlinx.coroutines.CoroutineScope
@@ -156,17 +154,17 @@ class DivViewHostTest {
     @Test
     fun `setContent with DivData loads images without preloadRequired`() {
         val imageUrl = "https://example.com/preload.jpg"
-        val host = createHostWithImageCapture()
-        host.setContent(
+        createHostWithImageCapture().setContent(
             data = data(
                 content = image(
-                    imageUrl = constant(imageUrl.toUri()),
-                    preloadRequired = constant(false),
+                    imageUrl = imageUrl,
+                    preloadRequired = false
                 )
             ),
             preloadMode = PreloadMode.ACTIVE_STATE_ONLY,
         )
         composeRule.waitForIdle()
+
         assertEquals(setOf(imageUrl), capturedUrls)
     }
 
@@ -179,26 +177,29 @@ class DivViewHostTest {
         host.setContent(
             data = data(
                 content = image(
-                    imageUrl = constant(firstUrl.toUri()),
-                    preloadRequired = constant(false),
+                    imageUrl = firstUrl,
+                    preloadRequired = false
                 )
             ),
             preloadMode = PreloadMode.ACTIVE_STATE_ONLY,
         )
         composeRule.waitForIdle()
+
         assertEquals(setOf(firstUrl), capturedUrls)
 
         capturedUrls.clear()
+
         host.setContent(
             data = data(
                 content = image(
-                    imageUrl = constant(secondUrl.toUri()),
-                    preloadRequired = constant(false),
+                    imageUrl = secondUrl,
+                    preloadRequired = false
                 )
             ),
             preloadMode = PreloadMode.ACTIVE_STATE_ONLY,
         )
         composeRule.waitForIdle()
+
         assertEquals(setOf(secondUrl), capturedUrls)
     }
 
@@ -207,48 +208,50 @@ class DivViewHostTest {
         val imageUrl = "https://example.com/wrapped.jpg"
         val data = data(
             content = image(
-                imageUrl = constant(imageUrl.toUri()),
-                preloadRequired = constant(false),
+                imageUrl = imageUrl,
+                preloadRequired = false
             )
         )
-        val host = createHostWithImageCapture()
-        host.setContent(data, preloadMode = PreloadMode.ACTIVE_STATE_ONLY) {
+
+        createHostWithImageCapture().setContent(
+            data = data,
+            preloadMode = PreloadMode.ACTIVE_STATE_ONLY
+        ) {
             DivView(data = data)
         }
         composeRule.waitForIdle()
+
         assertEquals(setOf(imageUrl), capturedUrls)
     }
 
     @Test
     fun `setContent with DISABLED preloadMode does not start resource preload`() {
-        val imageUrl = "https://example.com/skip-preload.jpg"
-        val host = createHostWithImageCapture()
-        host.setContent(
+        createHostWithImageCapture().setContent(
             data = data(
                 content = image(
-                    imageUrl = constant(imageUrl.toUri()),
-                    preloadRequired = constant(false),
+                    imageUrl = "https://example.com/skip-preload.jpg",
+                    preloadRequired = false
                 )
             ),
             preloadMode = PreloadMode.DISABLED,
         ) { }
         composeRule.waitForIdle()
+
         assertEquals(emptySet(), capturedUrls)
     }
 
     @Test
     fun `setContent does not preload by default`() {
-        val imageUrl = "https://example.com/default-no-preload.jpg"
-        val host = createHostWithImageCapture()
-        host.setContent(
+        createHostWithImageCapture().setContent(
             data(
                 content = image(
-                    imageUrl = constant(imageUrl.toUri()),
-                    preloadRequired = constant(false),
+                    imageUrl = "https://example.com/default-no-preload.jpg",
+                    preloadRequired = false
                 )
             )
         ) { }
         composeRule.waitForIdle()
+
         assertEquals(emptySet(), capturedUrls)
     }
 

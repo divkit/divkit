@@ -1,5 +1,6 @@
 package com.yandex.div.compose.preload
 
+import android.net.Uri
 import coil3.ImageLoader
 import com.yandex.div.compose.dagger.DivContextScope
 import com.yandex.div.compose.images.ImageRequestFactory
@@ -26,32 +27,39 @@ internal class CoilImagePreloader @Inject constructor(
             if (background is DivBackground.Image &&
                 (downloadAll || background.value.preloadRequired.evaluate(resolver))
             ) {
-                launch { loadImage(background.value.imageUrl.evaluate(resolver).toString()) }
+                launch { loadImage(background.value.imageUrl.evaluate(resolver)) }
             }
         }
         when (div) {
             is Div.Text -> {
                 div.value.images?.forEach { image ->
                     if (downloadAll || image.preloadRequired.evaluate(resolver)) {
-                        launch { loadImage(image.url.evaluate(resolver).toString()) }
+                        launch { loadImage(image.url.evaluate(resolver)) }
                     }
                 }
             }
+
             is Div.Image -> {
                 if (downloadAll || div.value.preloadRequired.evaluate(resolver)) {
-                    launch { loadImage(div.value.imageUrl.evaluate(resolver).toString()) }
+                    launch { loadImage(div.value.imageUrl?.evaluate(resolver)) }
                 }
             }
+
             is Div.GifImage -> {
                 if (downloadAll || div.value.preloadRequired.evaluate(resolver)) {
-                    launch { loadImage(div.value.gifUrl.evaluate(resolver).toString()) }
+                    launch { loadImage(div.value.gifUrl?.evaluate(resolver)) }
                 }
             }
+
             else -> Unit
         }
     }
 
-    private suspend fun loadImage(url: String) {
+    private suspend fun loadImage(url: Uri?) {
+        if (url == null) {
+            return
+        }
+
         val params = ImageRequestParams(data = url, transformations = emptyList())
         val request = imageRequestFactory.build(params)
         imageLoader.execute(request)

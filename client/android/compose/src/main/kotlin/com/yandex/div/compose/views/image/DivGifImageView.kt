@@ -17,7 +17,7 @@ internal fun DivGifImageView(
     DivImageContent(
         modifier = modifier,
         data = data,
-        imageUrl = data.gifUrl.observedValue(),
+        imageUrl = data.gifUrl?.observedValue(),
         contentScale = data.scale.observedContentScale(),
         alignment = observedAlignment(
             data.contentAlignmentHorizontal,

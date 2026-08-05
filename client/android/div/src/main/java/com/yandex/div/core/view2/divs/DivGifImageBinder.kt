@@ -74,11 +74,17 @@ internal class DivGifImageBinder @Inject constructor(
             div.contentAlignmentHorizontal,
             div.contentAlignmentVertical
         )
-        addSubscription(
-            div.gifUrl.observeAndGet(expressionResolver) {
-                applyGifImage(divView, expressionResolver, div, errorCollector)
-            }
-        )
+
+        val url = div.gifUrl
+        if (url == null) {
+            applyPlaceholders(divView, expressionResolver, div, errorCollector)
+        } else {
+            addSubscription(
+                url.observeAndGet(expressionResolver) {
+                    applyGifImage(divView, expressionResolver, div, errorCollector)
+                }
+            )
+        }
     }
 
     private fun DivGifImageView.observeContentAlignment(
@@ -107,7 +113,7 @@ internal class DivGifImageBinder @Inject constructor(
         div: DivGifImage,
         errorCollector: ErrorCollector
     ) {
-        val newGifUrl = div.gifUrl.evaluate(resolver)
+        val newGifUrl = div.gifUrl?.evaluate(resolver)
         if (newGifUrl == gifUrl) {
             return
         }
@@ -118,6 +124,9 @@ internal class DivGifImageBinder @Inject constructor(
         applyPlaceholders(divView, resolver, div, errorCollector)
 
         gifUrl = newGifUrl
+        if (newGifUrl == null) {
+            return
+        }
 
         // we don't reuse this because not all clients has bytes cache
         val reference = imageLoader.loadAnimatedImage(

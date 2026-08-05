@@ -33,7 +33,7 @@ public final class DivImage: DivBase, Sendable {
   public let hoverEndActions: [DivAction]?
   public let hoverStartActions: [DivAction]?
   public let id: String?
-  public let imageUrl: Expression<URL>
+  public let imageUrl: Expression<URL>?
   public let layoutProvider: DivLayoutProvider?
   public let longtapActions: [DivAction]?
   public let margins: DivEdgeInsets?
@@ -176,7 +176,7 @@ public final class DivImage: DivBase, Sendable {
       hoverEndActions: try dictionary.getOptionalArray("hover_end_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       hoverStartActions: try dictionary.getOptionalArray("hover_start_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       id: try dictionary.getOptionalField("id", context: context),
-      imageUrl: try dictionary.getExpressionField("image_url", transform: URL.makeFromNonEncodedString, context: context),
+      imageUrl: try dictionary.getOptionalExpressionField("image_url", transform: URL.makeFromNonEncodedString, context: context),
       layoutProvider: try dictionary.getOptionalField("layout_provider", transform: { (dict: [String: Any]) in try DivLayoutProvider(dictionary: dict, context: context) }),
       longtapActions: try dictionary.getOptionalArray("longtap_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       margins: try dictionary.getOptionalField("margins", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
@@ -236,7 +236,7 @@ public final class DivImage: DivBase, Sendable {
     hoverEndActions: [DivAction]? = nil,
     hoverStartActions: [DivAction]? = nil,
     id: String? = nil,
-    imageUrl: Expression<URL>,
+    imageUrl: Expression<URL>? = nil,
     layoutProvider: DivLayoutProvider? = nil,
     longtapActions: [DivAction]? = nil,
     margins: DivEdgeInsets? = nil,
@@ -497,7 +497,7 @@ extension DivImage: Serializable {
     result["hover_end_actions"] = hoverEndActions?.map { $0.toDictionary() }
     result["hover_start_actions"] = hoverStartActions?.map { $0.toDictionary() }
     result["id"] = id
-    result["image_url"] = imageUrl.toValidSerializationValue()
+    result["image_url"] = imageUrl?.toValidSerializationValue()
     result["layout_provider"] = layoutProvider?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins?.toDictionary()

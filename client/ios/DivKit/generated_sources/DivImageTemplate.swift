@@ -272,7 +272,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
     let hoverEndActionsValue = { parent?.hoverEndActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let hoverStartActionsValue = { parent?.hoverStartActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let idValue = { parent?.id?.resolveOptionalValue(context: context) ?? .noValue }()
-    let imageUrlValue = { parent?.imageUrl?.resolveValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
+    let imageUrlValue = { parent?.imageUrl?.resolveOptionalValue(context: context, transform: URL.makeFromNonEncodedString) ?? .noValue }()
     let layoutProviderValue = { parent?.layoutProvider?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let longtapActionsValue = { parent?.longtapActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let marginsValue = { parent?.margins?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -301,7 +301,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
     let visibilityActionValue = { parent?.visibilityAction?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let visibilityActionsValue = { parent?.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let widthValue = { parent?.width?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
       actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "action_animation", error: $0) },
@@ -359,14 +359,6 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = imageUrlValue {
-      errors.append(.requiredFieldIsMissing(field: "image_url"))
-    }
-    guard
-      let imageUrlNonNil = imageUrlValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivImage(
       accessibility: { accessibilityValue.value }(),
       action: { actionValue.value }(),
@@ -395,7 +387,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       hoverEndActions: { hoverEndActionsValue.value }(),
       hoverStartActions: { hoverStartActionsValue.value }(),
       id: { idValue.value }(),
-      imageUrl: { imageUrlNonNil }(),
+      imageUrl: { imageUrlValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
       longtapActions: { longtapActionsValue.value }(),
       margins: { marginsValue.value }(),
@@ -1093,7 +1085,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       _ = { visibilityActionsValue = visibilityActionsValue.merged(with: { parent.visibilityActions?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
       _ = { widthValue = widthValue.merged(with: { parent.width?.resolveOptionalValue(context: context, useOnlyLinks: true) }) }()
     }
-    var errors = mergeErrors(
+    let errors = mergeErrors(
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
       actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "action_animation", error: $0) },
@@ -1151,14 +1143,6 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
       widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
-    if case .noValue = imageUrlValue {
-      errors.append(.requiredFieldIsMissing(field: "image_url"))
-    }
-    guard
-      let imageUrlNonNil = imageUrlValue.value
-    else {
-      return .failure(NonEmptyArray(errors)!)
-    }
     let result = DivImage(
       accessibility: { accessibilityValue.value }(),
       action: { actionValue.value }(),
@@ -1187,7 +1171,7 @@ public final class DivImageTemplate: TemplateValue, Sendable {
       hoverEndActions: { hoverEndActionsValue.value }(),
       hoverStartActions: { hoverStartActionsValue.value }(),
       id: { idValue.value }(),
-      imageUrl: { imageUrlNonNil }(),
+      imageUrl: { imageUrlValue.value }(),
       layoutProvider: { layoutProviderValue.value }(),
       longtapActions: { longtapActionsValue.value }(),
       margins: { marginsValue.value }(),

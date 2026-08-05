@@ -81,7 +81,6 @@
                 },
                 {
                   "type": "image_case",
-                  "image_url": "empty://",
                   "preview": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4WAoAAAACAAAA/wAA/wAAQU5JTQYAAAAAAAAAAABBTk1GRAAAAAAAAAAAAP8AAP8AAOgDAAJWUDhMKwAAAC//wD8ADzD/8z//8x94QNC2bcKftEFs+yP6/wYLqJp7oArmHvj+v+P+vwMAQU5NRkQAAAAAAAAAAAD/AAD/AADoAwAAVlA4TCsAAAAv/8A/AA8w//M///MfeEDQtm3Mn3RAbPsj+v8GC6iae6AK5h74/r/j/r8DAA=="
                 }
               ]
@@ -110,7 +109,6 @@
                 },
                 {
                   "type": "gif_image_case",
-                  "gif_url": "empty://",
                   "preview": "data:image/webp;base64,UklGRrwAAABXRUJQVlA4WAoAAAACAAAA/wAA/wAAQU5JTQYAAAAAAAAAAABBTk1GRAAAAAAAAAAAAP8AAP8AAOgDAAJWUDhMKwAAAC//wD8ADzD/8z//8x94QNC2bcKftEFs+yP6/wYLqJp7oArmHvj+v+P+vwMAQU5NRkQAAAAAAAAAAAD/AAD/AADoAwAAVlA4TCsAAAAv/8A/AA8w//M///MfeEDQtm3Mn3RAbPsj+v8GC6iae6AK5h74/r/j/r8DAA=="
                 }
               ]
@@ -125,7 +123,6 @@
                 },
                 {
                   "type": "gif_image_case",
-                  "gif_url": "empty://",
                   "preview_url": "https://yastatic.net/s3/home/divkit/animated-chess.webp"
                 }
               ]

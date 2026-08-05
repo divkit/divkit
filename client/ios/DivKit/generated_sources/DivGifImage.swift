@@ -26,7 +26,7 @@ public final class DivGifImage: DivBase, Sendable {
   public let extensions: [DivExtension]?
   public let focus: DivFocus?
   public let functions: [DivFunction]?
-  public let gifUrl: Expression<URL>
+  public let gifUrl: Expression<URL>?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let hoverEndActions: [DivAction]?
   public let hoverStartActions: [DivAction]?
@@ -157,7 +157,7 @@ public final class DivGifImage: DivBase, Sendable {
       extensions: try dictionary.getOptionalArray("extensions", transform: { (dict: [String: Any]) in try? DivExtension(dictionary: dict, context: context) }),
       focus: try dictionary.getOptionalField("focus", transform: { (dict: [String: Any]) in try DivFocus(dictionary: dict, context: context) }),
       functions: try dictionary.getOptionalArray("functions", transform: { (dict: [String: Any]) in try? DivFunction(dictionary: dict, context: context) }),
-      gifUrl: try dictionary.getExpressionField("gif_url", transform: URL.makeFromNonEncodedString, context: context),
+      gifUrl: try dictionary.getOptionalExpressionField("gif_url", transform: URL.makeFromNonEncodedString, context: context),
       height: try dictionary.getOptionalField("height", transform: { (dict: [String: Any]) in try DivSize(dictionary: dict, context: context) }),
       hoverEndActions: try dictionary.getOptionalArray("hover_end_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
       hoverStartActions: try dictionary.getOptionalArray("hover_start_actions", transform: { (dict: [String: Any]) in try? DivAction(dictionary: dict, context: context) }),
@@ -213,7 +213,7 @@ public final class DivGifImage: DivBase, Sendable {
     extensions: [DivExtension]? = nil,
     focus: DivFocus? = nil,
     functions: [DivFunction]? = nil,
-    gifUrl: Expression<URL>,
+    gifUrl: Expression<URL>? = nil,
     height: DivSize? = nil,
     hoverEndActions: [DivAction]? = nil,
     hoverStartActions: [DivAction]? = nil,
@@ -458,7 +458,7 @@ extension DivGifImage: Serializable {
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["functions"] = functions?.map { $0.toDictionary() }
-    result["gif_url"] = gifUrl.toValidSerializationValue()
+    result["gif_url"] = gifUrl?.toValidSerializationValue()
     result["height"] = height.toDictionary()
     result["hover_end_actions"] = hoverEndActions?.map { $0.toDictionary() }
     result["hover_start_actions"] = hoverStartActions?.map { $0.toDictionary() }

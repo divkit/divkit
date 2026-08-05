@@ -10,10 +10,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.test.data.accessibility
-import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.image
@@ -388,7 +386,7 @@ class DivViewAccessibilityTest {
         setContent(
             image(
                 id = tag,
-                imageUrl = constant("https://example.com/image.png".toUri()),
+                imageUrl = "https://example.com/image.png",
                 accessibility = accessibility(type = Type.AUTO)
             )
         )

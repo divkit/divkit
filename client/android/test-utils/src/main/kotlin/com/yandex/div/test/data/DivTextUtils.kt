@@ -1,6 +1,6 @@
 package com.yandex.div.test.data
 
-import android.net.Uri
+import androidx.core.net.toUri
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -117,11 +117,11 @@ fun text(
 }
 
 fun textImage(
-    url: Expression<Uri>,
-    start: Expression<Long> = constant(0L),
-    preloadRequired: Expression<Boolean> = constant(false),
+    url: String,
+    start: Int = 0,
+    preloadRequired: Boolean = false,
 ) = DivText.Image(
-    url = url,
-    start = start,
-    preloadRequired = preloadRequired,
+    preloadRequired = constant(preloadRequired),
+    start = constant(start.toLong()),
+    url = constant(url.toUri())
 )

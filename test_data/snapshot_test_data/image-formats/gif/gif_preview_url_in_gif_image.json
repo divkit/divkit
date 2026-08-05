@@ -29,7 +29,6 @@
             },
             {
               "type": "gif",
-              "gif_url": "empty://",
               "preview_url": "https://yastatic.net/s3/home/divkit/gif_chess.gif",
               "scale": "no_scale",
               "width": {
