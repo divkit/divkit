@@ -9,7 +9,7 @@ internal class BackdropEffect(
     val backdropId: String? = null,
     val blur: Blur? = null,
     val refraction: Refraction? = null,
-    val highlight: Highlight? = null,
+    val rimHighlight: RimHighlight? = null,
     val colorAdjustment: ColorAdjustment? = null,
 ) {
 
@@ -22,7 +22,7 @@ internal class BackdropEffect(
                 backdropId = json.optionalString("backdrop_id"),
                 blur = json.optObject("blur") { Blur.deserialize(it) },
                 refraction = json.optObject("refraction") { Refraction.deserialize(it) },
-                highlight = json.optObject("highlight") { Highlight.deserialize(it) },
+                rimHighlight = json.optObject("rim_highlight") { RimHighlight.deserialize(it) },
                 colorAdjustment = json.optObject("color_adjustment") { ColorAdjustment.deserialize(it) },
             )
         }

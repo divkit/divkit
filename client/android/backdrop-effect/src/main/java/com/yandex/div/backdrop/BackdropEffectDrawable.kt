@@ -15,8 +15,8 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.ViewTreeObserver.OnScrollChangedListener
 import androidx.core.view.isVisible
 import com.yandex.div.backdrop.graphics.CanvasBackdropLayer
-import com.yandex.div.backdrop.graphics.PlainHighlightLayer
-import com.yandex.div.backdrop.graphics.ReflectionHighlightLayer
+import com.yandex.div.backdrop.graphics.PlainRimHighlightLayer
+import com.yandex.div.backdrop.graphics.ReflectionRimHighlightLayer
 import com.yandex.div.backdrop.graphics.RenderNodeBackdropLayer
 import com.yandex.div.core.Disposable
 import com.yandex.div.internal.view.onPreDrawListener
@@ -79,23 +79,23 @@ internal class BackdropEffectDrawable(
         }
     }
 
-    private val highlightLayer = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        PlainHighlightLayer()
+    private val rimHighlightLayer = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        PlainRimHighlightLayer()
     } else {
-        ReflectionHighlightLayer()
+        ReflectionRimHighlightLayer()
     }
 
     private val backdropPaint = Paint()
 
     fun setCornerRadius(radius: Float) {
         backdropLayer.setCornerRadius(radius)
-        highlightLayer.setCornerRadius(radius)
+        rimHighlightLayer.setCornerRadius(radius)
         invalidateSelf()
     }
 
     fun setCornerRadii(topLeft: Float, topRight: Float, bottomRight: Float, bottomLeft: Float) {
         backdropLayer.setCornerRadii(topLeft, topRight, bottomRight, bottomLeft)
-        highlightLayer.setCornerRadii(topLeft, topRight, bottomRight, bottomLeft)
+        rimHighlightLayer.setCornerRadii(topLeft, topRight, bottomRight, bottomLeft)
         invalidateSelf()
     }
 
@@ -114,24 +114,24 @@ internal class BackdropEffectDrawable(
         invalidateSelf()
     }
 
-    fun setHighlightEffect(rimWidth: Float, alpha: Float, color: Int, angle: Float, falloff: Float) {
-        highlightLayer.setHighlightEffect(rimWidth, alpha, color, angle, falloff)
+    fun setRimHighlightEffect(width: Float, alpha: Float, color: Int, angle: Float, falloff: Float) {
+        rimHighlightLayer.setRimHighlightEffect(width, alpha, color, angle, falloff)
         invalidateSelf()
     }
 
-    fun setHighlightEffect(rimWidth: Float, alpha: Float, intensity: Float, angle: Float) {
-        highlightLayer.setHighlightEffect(rimWidth, alpha, intensity, angle)
+    fun setRimHighlightEffect(width: Float, alpha: Float, intensity: Float, angle: Float) {
+        rimHighlightLayer.setRimHighlightEffect(width, alpha, intensity, angle)
         invalidateSelf()
     }
 
     override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
-        highlightLayer.setSize(bounds.width().toFloat(), bounds.height().toFloat())
+        rimHighlightLayer.setSize(bounds.width().toFloat(), bounds.height().toFloat())
     }
 
     override fun draw(canvas: Canvas) {
         backdropLayer.draw(canvas, backdropPaint)
-        highlightLayer.draw(canvas, backdropPaint)
+        rimHighlightLayer.draw(canvas, backdropPaint)
     }
 
     @Deprecated("Deprecated in Java")

@@ -16,7 +16,7 @@ import kotlin.math.ceil
 import kotlin.math.min
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-internal class ReflectionHighlightLayer : HighlightLayer() {
+internal class ReflectionRimHighlightLayer : RimHighlightLayer() {
 
     private var width: Float = 0.0f
     private var height: Float = 0.0f
@@ -24,7 +24,7 @@ internal class ReflectionHighlightLayer : HighlightLayer() {
     @ColorInt
     private var highlightColor: Int = Color.WHITE
     private var highlightAlpha: Int = 255
-    private var highlightRimWidth: Float = 0.0f
+    private var highlightWidth: Float = 0.0f
     private var highlightBlurRadius: Float = 0.0f
     private var highlightAngle: Float = 0.0f
     private var highlightFalloff: Float = 0.0f
@@ -74,16 +74,16 @@ internal class ReflectionHighlightLayer : HighlightLayer() {
         invalidated = true
     }
 
-    override fun setHighlightEffect(rimWidth: Float, alpha: Float, color: Int, angle: Float, falloff: Float) {
-        if (rimWidth <= 0.0f) {
+    override fun setRimHighlightEffect(width: Float, alpha: Float, color: Int, angle: Float, falloff: Float) {
+        if (width <= 0.0f) {
             resetHighlightEffect()
             return
         }
 
         highlightColor = color
         highlightAlpha = alphaByte(alpha)
-        highlightRimWidth = rimWidth
-        highlightBlurRadius = rimWidth / 2.0f
+        highlightWidth = width
+        highlightBlurRadius = width / 2.0f
         highlightAngle = angle
         highlightFalloff = falloff
         useAmbientHighlight = false
@@ -91,16 +91,16 @@ internal class ReflectionHighlightLayer : HighlightLayer() {
         invalidated = true
     }
 
-    override fun setHighlightEffect(rimWidth: Float, alpha: Float, intensity: Float, angle: Float) {
-        if (rimWidth <= 0.0f) {
+    override fun setRimHighlightEffect(width: Float, alpha: Float, intensity: Float, angle: Float) {
+        if (width <= 0.0f) {
             resetHighlightEffect()
             return
         }
 
         highlightColor = ColorUtils.setAlphaComponent(Color.WHITE, alphaByte(intensity))
         highlightAlpha = alphaByte(alpha)
-        highlightRimWidth = rimWidth
-        highlightBlurRadius = rimWidth / 2.0f
+        highlightWidth = width
+        highlightBlurRadius = width / 2.0f
         highlightAngle = angle
         highlightFalloff = 0.0f
         useAmbientHighlight = true
@@ -111,7 +111,7 @@ internal class ReflectionHighlightLayer : HighlightLayer() {
     private fun resetHighlightEffect() {
         highlightColor = Color.WHITE
         highlightAlpha = 255
-        highlightRimWidth = 0.0f
+        highlightWidth = 0.0f
         highlightBlurRadius = 0.0f
         highlightAngle = 0.0f
         highlightFalloff = 0.0f
@@ -128,16 +128,16 @@ internal class ReflectionHighlightLayer : HighlightLayer() {
     }
 
     override fun draw(canvas: Canvas, paint: Paint) {
-        if (width <= 0.0f || height <= 0.0f || highlightRimWidth <= 0.0f) return
+        if (width <= 0.0f || height <= 0.0f || highlightWidth <= 0.0f) return
 
-        val maxRimWidth = min(width, height) / 2.0f
+        val maxWidth = min(width, height) / 2.0f
 
         if (invalidated) {
             highlightOutline.rewind()
             highlightOutline.addRoundRect(0.0f, 0.0f, width, height, outlineCornerRadii, Path.Direction.CW)
 
             highlightPaint.color = highlightColor
-            highlightPaint.strokeWidth = ceil(min(highlightRimWidth, maxRimWidth)) * 2.0f
+            highlightPaint.strokeWidth = ceil(min(highlightWidth, maxWidth)) * 2.0f
             highlightPaint.maskFilter = if (highlightBlurRadius > 0.0f) {
                 BlurMaskFilter(highlightBlurRadius, BlurMaskFilter.Blur.NORMAL)
             } else {

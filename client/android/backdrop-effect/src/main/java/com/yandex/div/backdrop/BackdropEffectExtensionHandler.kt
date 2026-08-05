@@ -1,9 +1,9 @@
 package com.yandex.div.backdrop
 
 import android.view.View
-import com.yandex.div.backdrop.model.AmbientHighlight
+import com.yandex.div.backdrop.model.AmbientRimHighlight
 import com.yandex.div.backdrop.model.BackdropEffect
-import com.yandex.div.backdrop.model.SpecularHighlight
+import com.yandex.div.backdrop.model.SpecularRimHighlight
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.backgroundUnderlay
@@ -16,7 +16,7 @@ import com.yandex.divkit.backdrop.R
 import org.json.JSONException
 
 /**
- * [DivExtensionHandler] that applies a backdrop effect (blur, refraction, highlight and color
+ * [DivExtensionHandler] that applies a backdrop effect (blur, refraction, rim highlight and color
  * adjustment) to a view, using the content rendered behind it as the source.
  *
  * Register it in `DivConfiguration` via `extension(BackdropEffectExtensionHandler())` and enable it
@@ -34,7 +34,7 @@ import org.json.JSONException
  *         "height": 12,
  *         "strength": 24
  *       },
- *       "highlight": {
+ *       "rim_highlight": {
  *         "type": "specular",
  *         "angle": 45
  *       },
@@ -53,23 +53,23 @@ import org.json.JSONException
  * - `blur` — `radius` (`dp`, default `0`).
  * - `refraction` — `height` and `strength` (`dp`, default `0`) and `chromatic_aberration`
  *   (default `false`).
- * - `highlight` — a rim highlight discriminated by `type`:
- *     - `"specular"` — `rim_width` (`dp`, default `0.5`), `alpha` (`0..1`, default `1`),
+ * - `rim_highlight` — a rim highlight discriminated by `type`:
+ *     - `"specular"` — `width` (`dp`, default `0.5`), `alpha` (`0..1`, default `1`),
  *       `color` (default `#80FFFFFF`), `angle` (degrees, default `45`), `falloff` (default `1`).
- *     - `"ambient"` — `rim_width` (`dp`, default `0.5`), `alpha` (`0..1`, default `1`),
+ *     - `"ambient"` — `width` (`dp`, default `0.5`), `alpha` (`0..1`, default `1`),
  *       `intensity` (`0..1`, default `0.4`), `angle` (degrees, default `45`).
  * - `color_adjustment` — `brightness` (default `0`), `contrast` (default `1`) and `saturation`
  *   (default `1`) applied to the backdrop.
  *
  * Values documented as `dp` (`blur.radius`, `refraction.height`, `refraction.strength`,
- * `highlight.rim_width`) are scaled by the display density. Corner radii are taken from the
+ * `rim_highlight.width`) are scaled by the display density. Corner radii are taken from the
  * element's own `border` and kept in sync with its expressions.
  *
  * The effect is drawn beneath the view's own background: the handler installs a
  * [Drawable][android.graphics.drawable.Drawable] as the view's background *underlay* in
  * [beforeBindView] (before `DivBackgroundBinder` builds the background).
  *
- * **Android version restrictions.** Refraction, color adjustment and the directional highlight
+ * **Android version restrictions.** Refraction, color adjustment and the directional rim highlight
  * shading rely on [RenderEffect][android.graphics.RenderEffect] /
  * [RuntimeShader][android.graphics.RuntimeShader] and are only available on Android 13 (API 33,
  * [TIRAMISU][android.os.Build.VERSION_CODES.TIRAMISU]) and above. On older versions `blur` is
@@ -133,24 +133,24 @@ class BackdropEffectExtensionHandler(
             chromaticAberration = backdropEffect.refraction?.chromaticAberration ?: false
         )
 
-        val highlight = backdropEffect.highlight
-        if (highlight is SpecularHighlight) {
-            backdropEffectDrawable.setHighlightEffect(
-                rimWidth = highlight.rimWidth.toFloat() * density,
-                alpha = highlight.alpha.toFloat(),
-                color = highlight.color,
-                angle = highlight.angle.toFloat(),
-                falloff = highlight.falloff.toFloat(),
+        val rimHighlight = backdropEffect.rimHighlight
+        if (rimHighlight is SpecularRimHighlight) {
+            backdropEffectDrawable.setRimHighlightEffect(
+                width = rimHighlight.width.toFloat() * density,
+                alpha = rimHighlight.alpha.toFloat(),
+                color = rimHighlight.color,
+                angle = rimHighlight.angle.toFloat(),
+                falloff = rimHighlight.falloff.toFloat(),
             )
-        } else if (highlight is AmbientHighlight) {
-            backdropEffectDrawable.setHighlightEffect(
-                rimWidth = highlight.rimWidth.toFloat() * density,
-                alpha = highlight.alpha.toFloat(),
-                intensity = highlight.intensity.toFloat(),
-                angle = highlight.angle.toFloat(),
+        } else if (rimHighlight is AmbientRimHighlight) {
+            backdropEffectDrawable.setRimHighlightEffect(
+                width = rimHighlight.width.toFloat() * density,
+                alpha = rimHighlight.alpha.toFloat(),
+                intensity = rimHighlight.intensity.toFloat(),
+                angle = rimHighlight.angle.toFloat(),
             )
         } else {
-            backdropEffectDrawable.setHighlightEffect(rimWidth = 0.0f, alpha = 1.0f, intensity = 0.0f, angle = 0.0f)
+            backdropEffectDrawable.setRimHighlightEffect(width = 0.0f, alpha = 1.0f, intensity = 0.0f, angle = 0.0f)
         }
 
         backdropEffectDrawable.setColorAdjustment(
