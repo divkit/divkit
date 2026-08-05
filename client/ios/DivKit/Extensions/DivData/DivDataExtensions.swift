@@ -134,14 +134,6 @@ extension DivData {
 }
 
 extension DivData {
-  /// Extracts initial values of variables declared in `DivData`.
-  ///
-  /// Expressions in variable values are not resolved.
-  @_spi(Deprecated)
-  public func extractDivVariableValues() -> DivVariables {
-    variables?.extractDivVariableValues() ?? [:]
-  }
-
   public func flatMap<T>(_ transform: (Div) -> T) -> [T] {
     var result: [T] = []
     func traverse(div: Div) {

@@ -1,4 +1,4 @@
-@testable import DivKit
+@testable @_spi(Legacy) import DivKit
 import enum DivKit.Expression
 import VGSL
 import XCTest
