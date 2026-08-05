@@ -11,6 +11,7 @@ import com.yandex.div.compose.font.DivFontFamilyCache
 import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.images.ImageRequestFactory
 import com.yandex.div.compose.images.ImageRequestListener
+import com.yandex.div.compose.images.ImagePreviewDecoder
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.animation.AnimationConfiguration
@@ -39,6 +40,7 @@ internal interface DivContextComponent {
     val fontSourceProvider: DivFontSourceProvider
     val fontFamilyCache: DivFontFamilyCache
     val imageLoader: ImageLoader
+    val imagePreviewDecoder: ImagePreviewDecoder
     val imageRequestFactory: ImageRequestFactory
     val imageRequestListener: ImageRequestListener
     val playerFactory: DivVideoPlayerFactory

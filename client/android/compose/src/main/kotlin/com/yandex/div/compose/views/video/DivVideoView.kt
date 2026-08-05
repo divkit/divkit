@@ -19,7 +19,6 @@ import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
-import com.yandex.div.compose.images.decodePreview
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.variables.mutableStateFromIntegerVariable
@@ -63,11 +62,11 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
         player.Content(config = config, modifier = Modifier.fillMaxSize())
 
         if (!player.isReady.collectAsState().value) {
-            data.preview?.let {
+            data.preview?.observedValue(transform = component.imagePreviewDecoder::decodePreview)?.let { preview ->
                 VideoPreviewImage(
                     imageLoader = component.imageLoader,
                     scale = config.scale,
-                    preview = it.observedValue(transform = ::decodePreview)
+                    preview = preview
                 )
             }
         }

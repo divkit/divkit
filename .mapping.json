@@ -871,6 +871,7 @@
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/expressions/ExpressionUtilsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/expressions/ExpressionUtilsTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/font/DivFontFamilyCacheTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/font/DivFontFamilyCacheTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImageNetworkRestorationTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImageNetworkRestorationTest.kt",
+  "client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImagePreviewDecoderTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImagePreviewDecoderTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/internal/NetworkRestorationControllerTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/internal/NetworkRestorationControllerTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/pager/DivPagerStateStorageTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/pager/DivPagerStateStorageTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/pager/DivPagerStateTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/pager/DivPagerStateTest.kt",
