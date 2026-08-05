@@ -32,13 +32,14 @@ export function getObjectProperty(obj: object, name: string): unknown {
     }
 }
 
-export function setObjectProperty(obj: object, name: string, value: unknown): void {
+export function setObjectProperty(obj: object, name: string, value: unknown, mergeWith?: object): void {
     const parts = name.split(/\.|\[([^\]]+)]/g);
     const trail: {
         obj: Record<string, unknown>;
         prop: string;
     }[] = [];
     let curObj = obj as Record<string, unknown>;
+    let curMergeWith = mergeWith as Record<string, unknown> | undefined;
 
     const clean = () => {
         for (let i = trail.length - 1; i >= 0; --i) {
@@ -77,6 +78,15 @@ export function setObjectProperty(obj: object, name: string, value: unknown): vo
             if (i === 0 && curObj[key] !== undefined) {
                 curObj[key] = copyValue(curObj[key]);
             }
+            if (curMergeWith) {
+                const mergeVal = curMergeWith[parts[i] as string];
+                if (mergeVal && typeof mergeVal === 'object' && !Array.isArray(mergeVal)) {
+                    Object.assign(curObj[key] as object, copyValue(mergeVal));
+                    curMergeWith = mergeVal as Record<string, unknown>;
+                } else {
+                    curMergeWith = undefined;
+                }
+            }
             trail.push({
                 obj: curObj,
                 prop: parts[i]
@@ -102,6 +112,15 @@ export function setObjectProperty(obj: object, name: string, value: unknown): vo
                     break;
                 } else {
                     curObj[key] = curObj[key] || {};
+                    if (curMergeWith) {
+                        const mergeVal = curMergeWith[parts[i] as string];
+                        if (mergeVal && typeof mergeVal === 'object' && !Array.isArray(mergeVal)) {
+                            Object.assign(curObj[key] as object, copyValue(mergeVal));
+                            curMergeWith = mergeVal as Record<string, unknown>;
+                        } else {
+                            curMergeWith = undefined;
+                        }
+                    }
                     trail.push({
                         obj: curObj,
                         prop: parts[i]

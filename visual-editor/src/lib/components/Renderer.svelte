@@ -1990,7 +1990,7 @@
 
         const maxX = (parentBbox ?
             parentBbox.right - containerBbox.left - startPosX :
-            size[0] - startPosX
+            ((size[0] - ($safeAreaEmulationEnabled ? (safeAreaEmulation?.right?.value || 0) : 0)) * scale) - startPosX
         ) / scale;
         // eslint-disable-next-line no-nested-ternary
         const maxY = isGridChild ?
@@ -1998,7 +1998,7 @@
             (
                 parentBbox ?
                     parentBbox.bottom - containerBbox.top - startPosY :
-                    size[1] - startPosY
+                    ((size[1] - ($safeAreaEmulationEnabled ? (safeAreaEmulation?.bottom?.value || 0) : 0)) * scale) - startPosY
             ) / scale;
 
         let targetX = startPosX + startBbox.width;
@@ -2016,11 +2016,11 @@
         simpleElements.forEach(elem => {
             const bbox = elem.getBoundingClientRect();
             snapX.push({
-                val: bbox.right - containerBbox.left,
+                val: (bbox.right - containerBbox.left) / scale,
                 type: 'end',
             });
             snapY.push({
-                val: bbox.bottom - containerBbox.top,
+                val: (bbox.bottom - containerBbox.top) / scale,
                 type: 'end'
             });
         });
@@ -2054,8 +2054,8 @@
             angle -= rotationRad;
             const rotatedDx = d * Math.cos(angle);
             const rotatedDy = d * Math.sin(angle);
-            targetX = rotatedDx + startBbox.width;
-            targetY = rotatedDy + startBbox.height;
+            targetX = (rotatedDx + startBbox.width) / scale;
+            targetY = (rotatedDy + startBbox.height) / scale;
 
             targetX = Math.max(0, Math.min(maxX, targetX));
             targetY = Math.max(0, Math.min(maxY, targetY));
@@ -2067,8 +2067,8 @@
                 targetX = targetY = Math.min(targetX, targetY);
             }
 
-            targetX += startPosX;
-            targetY += startPosY;
+            targetX += startPosX / scale;
+            targetY += startPosY / scale;
 
             const attachmentsX: SnapOffset[] = [{
                 val: targetX,
@@ -2117,11 +2117,11 @@
                 snapLineY = null;
             }
 
-            const calcedWidth = (snappedTargetX && snapXOffset !== undefined && (snappedTargetX.val - snapXOffset) || targetX) - startPosX;
-            const calcedHeight = (snappedTargetY && snapYOffset !== undefined && (snappedTargetY.val - snapYOffset) || targetY) - startPosY;
+            const calcedWidth = (snappedTargetX && snapXOffset !== undefined && (snappedTargetX.val - snapXOffset) || targetX) - startPosX / scale;
+            const calcedHeight = (snappedTargetY && snapYOffset !== undefined && (snappedTargetY.val - snapYOffset) || targetY) - startPosY / scale;
             if (isXResize) {
                 if (!gridProps || !gridPosition || calcedWidth <= gridMaxItemWidth) {
-                    targetWidth = calcedWidth / scale;
+                    targetWidth = calcedWidth;
                     targetWidth = Math.max(0, Math.min(maxX, targetWidth));
                     gridReachMaxWidth = false;
                 } else {
@@ -2146,7 +2146,7 @@
             }
             if (isYResize) {
                 if (!gridProps || !gridPosition || calcedHeight <= gridMaxItemHeight) {
-                    targetHeight = calcedHeight / scale;
+                    targetHeight = calcedHeight;
                     targetHeight = Math.max(0, Math.min(maxY, targetHeight));
                     gridReachMaxHeight = false;
                 } else {

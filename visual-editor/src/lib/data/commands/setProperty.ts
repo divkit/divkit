@@ -51,7 +51,7 @@ export class SetPropertyCommand extends BaseCommand {
                 throw new Error('Missing leaf ' + change.leafId);
             }
 
-            setObjectProperty(leaf.props.json, change.property, change.oldValue);
+            setObjectProperty(leaf.props.json, change.property, change.oldValue, leaf.props.processedJson);
 
             // redraw components with errors
             if (leaf === get(state.selectedLeaf)) {
@@ -68,7 +68,7 @@ export class SetPropertyCommand extends BaseCommand {
                 throw new Error('Missing leaf ' + change.leafId);
             }
 
-            setObjectProperty(leaf.props.json, change.property, change.newValue);
+            setObjectProperty(leaf.props.json, change.property, change.newValue, leaf.props.processedJson);
 
             // redraw components with errors
             if (leaf === get(state.selectedLeaf)) {

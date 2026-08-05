@@ -85,5 +85,64 @@ describe('objectProperty', () => {
             setObjectProperty(obj, 'title', undefined);
             expect(obj).toEqual({ });
         });
+
+        test('empty string value is deleted, not preserved', () => {
+            const obj = { title: 'start' };
+            setObjectProperty(obj, 'title', '');
+            expect(obj).toEqual({});
+        });
+
+        test('empty string value in nested path is deleted', () => {
+            const obj: Record<string, unknown> = {};
+            setObjectProperty(obj, 'a.b', '');
+            expect(obj).toEqual({});
+        });
+    });
+
+    describe('setObjectProperty mergeWith', () => {
+        test('merges sibling keys into intermediate node', () => {
+            const obj = {};
+            setObjectProperty(obj, 'a.b', 1, { a: { c: 2 } });
+            expect(obj).toEqual({ a: { b: 1, c: 2 } });
+        });
+
+        test('merges into existing intermediate node', () => {
+            const obj = { a: { b: 1 } };
+            setObjectProperty(obj, 'a.b', 2, { a: { c: 3 } });
+            expect(obj).toEqual({ a: { b: 2, c: 3 } });
+        });
+
+        test('does not merge when mergeWith path does not match', () => {
+            const obj = {};
+            setObjectProperty(obj, 'a.b', 1, { x: { c: 2 } });
+            expect(obj).toEqual({ a: { b: 1 } });
+        });
+
+        test('merges deeply nested sibling keys', () => {
+            const obj = {};
+            setObjectProperty(obj, 'a.b.c', 1, { a: { b: { d: 2 } } });
+            expect(obj).toEqual({ a: { b: { c: 1, d: 2 } } });
+        });
+
+        test('does not override set value with merge', () => {
+            const obj = {};
+            setObjectProperty(obj, 'a.b', 1, { a: { b: 99, c: 2 } });
+            expect(obj).toEqual({ a: { b: 1, c: 2 } });
+        });
+
+        test('mergeWith object is not mutated (shallow path)', () => {
+            const mergeWith = { a: { c: 2 } };
+            const obj: Record<string, unknown> = {};
+            setObjectProperty(obj, 'a.b', 1, mergeWith);
+            expect(mergeWith).toEqual({ a: { c: 2 } });
+        });
+
+        test('mergeWith object is not mutated (deep path)', () => {
+            const mergeWith = { a: { b: { d: 2 } } };
+            const obj: Record<string, unknown> = {};
+            setObjectProperty(obj, 'a.b.c', 1, mergeWith);
+            expect(obj).toEqual({ a: { b: { c: 1, d: 2 } } });
+            expect(mergeWith).toEqual({ a: { b: { d: 2 } } });
+        });
     });
 });
