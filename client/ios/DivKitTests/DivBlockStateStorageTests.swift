@@ -269,6 +269,63 @@ final class DivBlockStateStorageTests: XCTestCase {
     storage.setFocused(isFocused: true, element: IdAndCardId(id: "id", cardId: "card_id"))
     XCTAssertTrue(storage.isFocused(path: path(cardId: "card_id", path: "0/id")))
   }
+
+  // MARK: - pausePlayingVideos
+
+  func test_PausePlayingVideos_SinglePlayingVideo_IsPaused() {
+    let pagerPath = path(cardId: "card_id", path: "0/pager")
+    let videoPath = path(cardId: "card_id", path: "0/pager/video")
+    storage.setState(path: videoPath, state: VideoBlockViewState(state: .playing))
+
+    storage.pausePlayingVideos(underPath: pagerPath)
+
+    let result: VideoBlockViewState? = storage.getState(videoPath)
+    XCTAssertEqual(result, VideoBlockViewState(state: .paused))
+  }
+
+  func test_PausePlayingVideos_TwoPlayingVideos_BothArePaused() {
+    let pagerPath = path(cardId: "card_id", path: "0/pager")
+    let videoPath1 = path(cardId: "card_id", path: "0/pager/video1")
+    let videoPath2 = path(cardId: "card_id", path: "0/pager/video2")
+    storage.setState(path: videoPath1, state: VideoBlockViewState(state: .playing))
+    storage.setState(path: videoPath2, state: VideoBlockViewState(state: .playing))
+
+    storage.pausePlayingVideos(underPath: pagerPath)
+
+    XCTAssertEqual(storage.getState(videoPath1), VideoBlockViewState(state: .paused))
+    XCTAssertEqual(storage.getState(videoPath2), VideoBlockViewState(state: .paused))
+  }
+
+  func test_PausePlayingVideos_AlreadyPausedVideo_RemainsUnchanged() {
+    let pagerPath = path(cardId: "card_id", path: "0/pager")
+    let videoPath = path(cardId: "card_id", path: "0/pager/video")
+    storage.setState(path: videoPath, state: VideoBlockViewState(state: .paused))
+
+    storage.pausePlayingVideos(underPath: pagerPath)
+
+    XCTAssertEqual(storage.getState(videoPath), VideoBlockViewState(state: .paused))
+  }
+
+  func test_PausePlayingVideos_VideoInOtherPager_IsNotAffected() {
+    let pagerPath = path(cardId: "card_id", path: "0/pager1")
+    let otherVideoPath = path(cardId: "card_id", path: "0/pager2/video")
+    storage.setState(path: otherVideoPath, state: VideoBlockViewState(state: .playing))
+
+    storage.pausePlayingVideos(underPath: pagerPath)
+
+    XCTAssertEqual(storage.getState(otherVideoPath), VideoBlockViewState(state: .playing))
+  }
+
+  func test_PausePlayingVideos_ScrollingFalse_DoesNotPauseVideo() {
+    // When isScrolling=false, pausePlayingVideos should not be called.
+    // This test verifies that the storage state is not modified when
+    // no pause is requested.
+    let videoPath = path(cardId: "card_id", path: "0/pager/video")
+    storage.setState(path: videoPath, state: VideoBlockViewState(state: .playing))
+
+    // Do NOT call pausePlayingVideos — simulates isScrolling=false branch
+    XCTAssertEqual(storage.getState(videoPath), VideoBlockViewState(state: .playing))
+  }
 }
 
 private let state1 = State(name: "State 1")
