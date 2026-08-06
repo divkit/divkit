@@ -4,6 +4,7 @@ import android.net.Uri
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.mockExpressionResolver
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.test.data.container
 import com.yandex.div2.Div
 import com.yandex.div2.DivAppearanceTransition
@@ -33,182 +34,192 @@ class DivComparatorTest {
 
     @Test
     fun `divs of the same type are replaceable`() {
-        val div1 = divText(text = "Text 01")
-        val div2 = divText(text = "Text 02")
+        val div1 = divText(text = "Text 01").toBlock(resolver, path)
+        val div2 = divText(text = "Text 02").toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `the same instance of div is replaceable`() {
-        val div = divText(text = "Text")
+        val div = divText(text = "Text").toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div, div, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div, div))
     }
 
     @Test
     fun `nulls are replaceable`() {
-        assertTrue(DivComparator.areDivsReplaceable(null as Div?, null as Div?, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(null, null))
     }
 
     @Test
     fun `divs with different type are not replaceable`() {
-        val div1 = divText(text = "Text 01")
-        val div2 = divImage(imageUrl = "https://image")
+        val div1 = divText(text = "Text 01").toBlock(resolver, path)
+        val div2 = divImage(imageUrl = "https://image").toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `divs with different ids are replaceable`() {
-        val div1 = divText(id = "01", text = "Text 01")
-        val div2 = divText(id = "02", text = "Text 02")
+        val div1 = divText(id = "01", text = "Text 01").toBlock(resolver, path)
+        val div2 = divText(id = "02", text = "Text 02").toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `divs that has transitions and different ids are not replaceable`() {
-        val div1 = divText(id = "01", text = "Text 01", transitionIn = transition)
-        val div2 = divText(id = "02", text = "Text 02", transitionIn = transition)
+        val div1 = divText(id = "01", text = "Text 01", transitionIn = transition).toBlock(resolver, path)
+        val div2 = divText(id = "02", text = "Text 02", transitionIn = transition).toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `div customs with different type are not replaceable`() {
-        val div1 = divCustom(type = "type_a")
-        val div2 = divCustom(type = "type_b")
+        val div1 = divCustom(type = "type_a").toBlock(resolver, path)
+        val div2 = divCustom(type = "type_b").toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `containers with similar hierarchy are replaceable`() {
-        val div1 = container(items = listOf(divText(text = "Text 01")))
-        val div2 = container(items = listOf(divText(text = "Text 02")))
+        val div1 = container(items = listOf(divText(text = "Text 01"))).toBlock(resolver, path)
+        val div2 = container(items = listOf(divText(text = "Text 02"))).toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `containers with different child count are not replaceable`() {
         val div1 = container(items = listOf(divText(text = "Text 01"), divImage(imageUrl = "https://image")))
-        val div2 = container(items = listOf(divText(text = "Text 02")))
+            .toBlock(resolver, path)
+        val div2 = container(items = listOf(divText(text = "Text 02"))).toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `containers with different child types are not replaceable`() {
-        val div1 = container(items = listOf(divImage(imageUrl = "https://image")))
-        val div2 = container(items = listOf(divText(text = "Text")))
+        val div1 = container(items = listOf(divImage(imageUrl = "https://image"))).toBlock(resolver, path)
+        val div2 = container(items = listOf(divText(text = "Text"))).toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `containers with different child order are not replaceable`() {
         val div1 = container(items = listOf(divImage(imageUrl = "https://image"), divText(text = "Text 01")))
+            .toBlock(resolver, path)
         val div2 = container(items = listOf(divText(text = "Text 02"), divImage(imageUrl = "https://image")))
+            .toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `containers with different child ids are replaceable`() {
-        val div1 = container(items = listOf(divText(id = "01", text = "Text 01")))
-        val div2 = container(items = listOf(divText(id = "02", text = "Text 02")))
+        val div1 = container(items = listOf(divText(id = "01", text = "Text 01"))).toBlock(resolver, path)
+        val div2 = container(items = listOf(divText(id = "02", text = "Text 02"))).toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `containers which children has transitions and different ids are not replaceable`() {
         val div1 = container(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transition)))
+            .toBlock(resolver, path)
         val div2 = container(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transition)))
+            .toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `grids with similar hierarchy are replaceable`() {
-        val div1 = divGrid(items = listOf(divText(text = "Text 01")))
-        val div2 = divGrid(items = listOf(divText(text = "Text 02")))
+        val div1 = divGrid(items = listOf(divText(text = "Text 01"))).toBlock(resolver, path)
+        val div2 = divGrid(items = listOf(divText(text = "Text 02"))).toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `grids with different child count are not replaceable`() {
         val div1 = divGrid(items = listOf(divText(text = "Text 01"), divImage(imageUrl = "https://image")))
-        val div2 = divGrid(items = listOf(divText(text = "Text 02")))
+            .toBlock(resolver, path)
+        val div2 = divGrid(items = listOf(divText(text = "Text 02"))).toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `grids with different child types are not replaceable`() {
-        val div1 = divGrid(items = listOf(divImage(imageUrl = "https://image")))
-        val div2 = divGrid(items = listOf(divText(text = "Text")))
+        val div1 = divGrid(items = listOf(divImage(imageUrl = "https://image"))).toBlock(resolver, path)
+        val div2 = divGrid(items = listOf(divText(text = "Text"))).toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `grids with different child order are not replaceable`() {
         val div1 = divGrid(items = listOf(divImage(imageUrl = "https://image"), divText(text = "Text 01")))
+            .toBlock(resolver, path)
         val div2 = divGrid(items = listOf(divText(text = "Text 02"), divImage(imageUrl = "https://image")))
+            .toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `grids with different child ids are replaceable`() {
-        val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01")))
-        val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02")))
+        val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01"))).toBlock(resolver, path)
+        val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02"))).toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `grids which children has transitions and different ids are not replaceable`() {
         val div1 = divGrid(items = listOf(divText(id = "01", text = "Text 01", transitionIn = transition)))
+            .toBlock(resolver, path)
         val div2 = divGrid(items = listOf(divText(id = "02", text = "Text 02", transitionIn = transition)))
+            .toBlock(resolver, path)
 
-        assertFalse(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertFalse(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `galleries with hierarchy differences are replaceable`() {
-        val div1 = divGallery(items = listOf(divImage(imageUrl = "https://image")))
-        val div2 = divGallery(items = listOf(divText(text = "Text")))
+        val div1 = divGallery(items = listOf(divImage(imageUrl = "https://image"))).toBlock(resolver, path)
+        val div2 = divGallery(items = listOf(divText(text = "Text"))).toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `pagers with hierarchy differences are replaceable`() {
-        val div1 = divPager(items = listOf(divImage(imageUrl = "https://image")))
-        val div2 = divPager(items = listOf(divText(text = "Text")))
+        val div1 = divPager(items = listOf(divImage(imageUrl = "https://image"))).toBlock(resolver, path)
+        val div2 = divPager(items = listOf(divText(text = "Text"))).toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `tabs with hierarchy differences are replaceable`() {
-        val div1 = divTabs(items = listOf(divImage(imageUrl = "https://image")))
-        val div2 = divTabs(items = listOf(divText(text = "Text")))
+        val div1 = divTabs(items = listOf(divImage(imageUrl = "https://image"))).toBlock(resolver, path)
+        val div2 = divTabs(items = listOf(divText(text = "Text"))).toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     @Test
     fun `states with hierarchy differences are replaceable`() {
-        val div1 = divState(items = listOf(divImage(imageUrl = "https://image")))
-        val div2 = divState(items = listOf(divText(text = "Text")))
+        val div1 = divState(items = listOf(divImage(imageUrl = "https://image"))).toBlock(resolver, path)
+        val div2 = divState(items = listOf(divText(text = "Text"))).toBlock(resolver, path)
 
-        assertTrue(DivComparator.areDivsReplaceable(div1, div2, resolver, resolver, path, path))
+        assertTrue(DivComparator.areDivsReplaceable(div1, div2))
     }
 
     private fun divText(

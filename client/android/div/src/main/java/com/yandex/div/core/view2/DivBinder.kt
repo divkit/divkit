@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.extension.DivExtensionController
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.DivContainerBinder
 import com.yandex.div.core.view2.divs.DivCustomBinder
 import com.yandex.div.core.view2.divs.DivGifImageBinder
@@ -41,10 +40,8 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.view.DivImageView
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
-import com.yandex.div2.DivBase
 import javax.inject.Inject
 
 @DivScope
@@ -71,47 +68,44 @@ internal class DivBinder @Inject constructor(
     private val switchBinder: DivSwitchBinder
 ) {
 
-    fun bind(parentContext: BindingContext, view: View, div: Div, path: DivStatePath) = suppressExpressionErrors {
-        val context = parentContext.getChildContext(div, path)
-        val divView = context.divView
-        val resolver = context.expressionResolver
-        divView.currentRebindReusableList?.pop(div)?.let {
+    fun bind(view: View, divBlock: DivBlock, divView: Div2View) = suppressExpressionErrors {
+        divView.currentRebindReusableList?.pop(divBlock.div)?.let {
             return@suppressExpressionErrors
         }
 
-        if (!validator.validate(div, resolver)) {
-            bindLayoutParams(view, div.value(), resolver)
+        if (!validator.validate(divBlock.div, divBlock.expressionResolver)) {
+            bindLayoutParams(view, divBlock)
             return
         }
 
-        extensionController.beforeBindView(divView, resolver, view, div.value())
+        extensionController.beforeBindView(view, divBlock, divView)
 
-        if (div !is Div.Custom) {
-            (view as DivHolderView<*>).div?.let { extensionController.unbindView(divView, resolver, view, it.value()) }
+        if (divBlock !is DivBlock.Custom) {
+            (view as DivHolderView<*>).divBlock?.let { extensionController.unbindView(view, it, divView) }
         }
 
-        return when (div) {
-            is Div.Text -> bindText(context, view, div, path)
-            is Div.Image -> bindImage(context, view, div, path)
-            is Div.GifImage -> bindGifImage(context, view, div, path)
-            is Div.Separator -> bindSeparator(context, view, div, path)
-            is Div.Container -> bindContainer(context, view, div, path)
-            is Div.Grid -> bindGrid(context, view, div, path)
-            is Div.Gallery -> bindGallery(context, view, div, path)
-            is Div.Pager -> bindPager(context, view, div, path)
-            is Div.Tabs -> bindTabs(context, view, div, path)
-            is Div.State -> bindState(context, view, div, path)
-            is Div.Custom -> bindCustom(context, view, div, path)
-            is Div.Indicator -> bindIndicator(context, view, div, path)
-            is Div.Slider -> bindSlider(context, view, div, path)
-            is Div.Input -> bindInput(context, view, div, path)
-            is Div.Select -> bindSelect(context, view, div, path)
-            is Div.Video -> bindVideo(context, view, div, path)
-            is Div.Switch -> bindSwitch(context, view, div, path)
+        return when (divBlock) {
+            is DivBlock.Text -> bindText(view, divBlock, divView)
+            is DivBlock.Image -> bindImage(view, divBlock, divView)
+            is DivBlock.GifImage -> bindGifImage(view, divBlock, divView)
+            is DivBlock.Separator -> bindSeparator(view, divBlock, divView)
+            is DivBlock.Container -> bindContainer(view, divBlock, divView)
+            is DivBlock.Grid -> bindGrid(view, divBlock, divView)
+            is DivBlock.Gallery -> bindGallery(view, divBlock, divView)
+            is DivBlock.Pager -> bindPager(view, divBlock, divView)
+            is DivBlock.Tabs -> bindTabs(view, divBlock, divView)
+            is DivBlock.State -> bindState(view, divBlock, divView)
+            is DivBlock.Custom -> bindCustom(view, divBlock, divView)
+            is DivBlock.Indicator -> bindIndicator(view, divBlock, divView)
+            is DivBlock.Slider -> bindSlider(view, divBlock, divView)
+            is DivBlock.Input -> bindInput(view, divBlock, divView)
+            is DivBlock.Select -> bindSelect(view, divBlock, divView)
+            is DivBlock.Video -> bindVideo(view, divBlock, divView)
+            is DivBlock.Switch -> bindSwitch(view, divBlock, divView)
         }.also {
             // extensionController bound new CustomView in DivCustomBinder after replacing in parent
-            if (div !is Div.Custom) {
-                extensionController.bindView(divView, resolver, view, div.value())
+            if (divBlock !is DivBlock.Custom) {
+                extensionController.bindView(view, divBlock, divView)
             }
         }
     }
@@ -120,80 +114,75 @@ internal class DivBinder @Inject constructor(
         pagerIndicatorConnector.attach()
     }
 
-    private fun bindText(context: BindingContext, view: View, data: Div.Text, path: DivStatePath) {
-        textBinder.bindView(context, view as DivLineHeightTextView, data, path)
+    private fun bindText(view: View, divBlock: DivBlock.Text, divView: Div2View) {
+        textBinder.bindView(view as DivLineHeightTextView, divBlock, divView)
     }
 
-    private fun bindImage(context: BindingContext, view: View, data: Div.Image, path: DivStatePath) {
-        imageBinder.bindView(context, view as DivImageView, data, path)
+    private fun bindImage(view: View, divBlock: DivBlock.Image, divView: Div2View) {
+        imageBinder.bindView(view as DivImageView, divBlock, divView)
     }
 
-    private fun bindGifImage(context: BindingContext, view: View, data: Div.GifImage, path: DivStatePath) {
-        gifImageBinder.bindView(context, view as DivGifImageView, data, path)
+    private fun bindGifImage(view: View, divBlock: DivBlock.GifImage, divView: Div2View) {
+        gifImageBinder.bindView(view as DivGifImageView, divBlock, divView)
     }
 
-    private fun bindSeparator(context: BindingContext, view: View, data: Div.Separator, path: DivStatePath) {
-        separatorBinder.bindView(context, view as DivSeparatorView, data, path)
+    private fun bindSeparator(view: View, divBlock: DivBlock.Separator, divView: Div2View) {
+        separatorBinder.bindView(view as DivSeparatorView, divBlock, divView)
     }
 
-    private fun bindContainer(context: BindingContext, view: View, data: Div.Container, path: DivStatePath) {
-        containerBinder.bindView(context, view as ViewGroup, data, path)
+    private fun bindContainer(view: View, divBlock: DivBlock.Container, divView: Div2View) {
+        containerBinder.bindView(view as ViewGroup, divBlock, divView)
     }
 
-    private fun bindGrid(context: BindingContext, view: View, data: Div.Grid, path: DivStatePath) {
-        gridBinder.bindView(context, view as DivGridLayout, data, path)
+    private fun bindGrid(view: View, divBlock: DivBlock.Grid, divView: Div2View) {
+        gridBinder.bindView(view as DivGridLayout, divBlock, divView)
     }
 
-    private fun bindGallery(context: BindingContext, view: View, data: Div.Gallery, path: DivStatePath) {
-        galleryBinder.bindView(context, view as DivRecyclerView, data, path)
+    private fun bindGallery(view: View, divBlock: DivBlock.Gallery, divView: Div2View) {
+        galleryBinder.bindView(view as DivRecyclerView, divBlock, divView)
     }
 
-    private fun bindPager(context: BindingContext, view: View, data: Div.Pager, path: DivStatePath) {
-        pagerBinder.bindView(context, view as DivPagerView, data, path)
+    private fun bindPager(view: View, divBlock: DivBlock.Pager, divView: Div2View) {
+        pagerBinder.bindView(view as DivPagerView, divBlock, divView)
     }
 
-    private fun bindTabs(context: BindingContext, view: View, data: Div.Tabs, path: DivStatePath) {
-        tabsBinder.bindView(context, view as DivTabsLayout, data, path)
+    private fun bindTabs(view: View, divBlock: DivBlock.Tabs, divView: Div2View) {
+        tabsBinder.bindView(view as DivTabsLayout, divBlock, divView)
     }
 
-    private fun bindState(context: BindingContext, view: View, data: Div.State, path: DivStatePath) {
-        stateBinder.bindView(context, view as DivStateLayout, data, path)
+    private fun bindState(view: View, divBlock: DivBlock.State, divView: Div2View) {
+        stateBinder.bindView(view as DivStateLayout, divBlock, divView)
     }
 
-    private fun bindCustom(context: BindingContext, view: View, data: Div.Custom, path: DivStatePath) {
-        customBinder.bindView(context, view as DivCustomWrapper, data, path)
+    private fun bindCustom(view: View, divBlock: DivBlock.Custom, divView: Div2View) {
+        customBinder.bindView(view as DivCustomWrapper, divBlock, divView)
     }
 
-    private fun bindIndicator(context: BindingContext, view: View, data: Div.Indicator, path: DivStatePath) {
-        indicatorBinder.bindView(context, view as DivPagerIndicatorView, data, path)
+    private fun bindIndicator(view: View, divBlock: DivBlock.Indicator, divView: Div2View) {
+        indicatorBinder.bindView(view as DivPagerIndicatorView, divBlock, divView)
     }
 
-    private fun bindSlider(context: BindingContext, view: View, data: Div.Slider, path: DivStatePath) {
-        sliderBinder.bindView(context, view as DivSliderView, data, path)
+    private fun bindSlider(view: View, divBlock: DivBlock.Slider, divView: Div2View) {
+        sliderBinder.bindView(view as DivSliderView, divBlock, divView)
     }
 
-    private fun bindInput(context: BindingContext, view: View, data: Div.Input, path: DivStatePath) {
-        inputBinder.bindView(context, view as DivInputView, data, path)
+    private fun bindInput(view: View, divBlock: DivBlock.Input, divView: Div2View) {
+        inputBinder.bindView(view as DivInputView, divBlock, divView)
     }
 
-    private fun bindSelect(context: BindingContext, view: View, data: Div.Select, path: DivStatePath) {
-        selectBinder.bindView(context, view as DivSelectView, data, path)
+    private fun bindSelect(view: View, divBlock: DivBlock.Select, divView: Div2View) {
+        selectBinder.bindView(view as DivSelectView, divBlock, divView)
     }
 
-    private fun bindVideo(context: BindingContext, view: View, data: Div.Video, path: DivStatePath) {
-        videoBinder.bindView(context, view as DivVideoView, data, path)
+    private fun bindVideo(view: View, divBlock: DivBlock.Video, divView: Div2View) {
+        videoBinder.bindView(view as DivVideoView, divBlock, divView)
     }
 
-    private fun bindSwitch(context: BindingContext, view: View, data: Div.Switch, path: DivStatePath) {
-        switchBinder.bindView(context, view as DivSwitchView, data, path)
+    private fun bindSwitch(view: View, divBlock: DivBlock.Switch, divView: Div2View) {
+        switchBinder.bindView(view as DivSwitchView, divBlock, divView)
     }
 
-    private fun bindLayoutParams(view: View, data: DivBase, resolver: ExpressionResolver) {
-        view.applyMargins(data.margins, resolver)
+    private fun bindLayoutParams(view: View, divBlock: DivBlock) {
+        view.applyMargins(divBlock.div.value().margins, divBlock.expressionResolver)
     }
-}
-
-private fun BindingContext.getChildContext(div: Div, path: DivStatePath): BindingContext {
-    val runtime = divView.runtimeStore.getOrCreateRuntime(path.fullPath, div, expressionResolver)
-    return getFor(runtime.expressionResolver)
 }

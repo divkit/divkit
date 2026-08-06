@@ -51,6 +51,7 @@ import com.yandex.div.internal.spannable.NoUnderlineSpan
 import com.yandex.div.internal.spannable.TextColorSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
 import com.yandex.div.internal.util.makeIf
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivLineStyle
@@ -80,7 +81,7 @@ internal class SpannedTextBuilder @Inject constructor(
         return buildText(
             textView,
             divText,
-            divText.text.evaluate(resolver),
+            divText.text,
             null,
             null,
             null,
@@ -101,7 +102,7 @@ internal class SpannedTextBuilder @Inject constructor(
         return buildText(
             textView,
             divText,
-            divText.text.evaluate(resolver),
+            divText.text,
             divText.buildRanges(resolver, path),
             divText.buildImages(resolver, path),
             null,
@@ -123,7 +124,7 @@ internal class SpannedTextBuilder @Inject constructor(
         return buildText(
             textView,
             divText,
-            ellipsis.text.evaluate(resolver),
+            ellipsis.text,
             ellipsis.buildRanges(resolver, path),
             ellipsis.buildImages(resolver, path),
             ellipsis.actions,
@@ -137,7 +138,7 @@ internal class SpannedTextBuilder @Inject constructor(
     private fun buildText(
         textView: TextView,
         divText: DivText,
-        text: String,
+        text: Expression<String>,
         ranges: List<DivTextRangeResult>?,
         images: List<DivTextImageResult>?,
         actions: List<DivAction>?,
@@ -149,6 +150,7 @@ internal class SpannedTextBuilder @Inject constructor(
         val context = textView.context
 
         // We use zero-width space for empty text to make sure line height span will be applied properly.
+        val text = text.evaluate(resolver)
         val spannedText = SpannableStringBuilder(text.ifEmpty { ZWSP })
         val textData = createTextData(context, divText, text, resolver)
         val textLength = textData.textLength

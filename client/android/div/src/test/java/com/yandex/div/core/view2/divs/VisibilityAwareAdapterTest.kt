@@ -199,7 +199,7 @@ class VisibilityAwareAdapterTest {
     private fun item(visibility: DivVisibility) = item(Expression.constant(visibility))
 
     private fun item(expression: Expression<DivVisibility>) =
-        DivBlock(Div.Container(DivContainer(visibility = expression)), resolver, path)
+        DivBlock.create(Div.Container(DivContainer(visibility = expression)), resolver, path)
 
     /**
      * Mutable visibility expression used to drive `subscribeOnElements` callbacks in tests.

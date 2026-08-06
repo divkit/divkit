@@ -1,37 +1,31 @@
 package com.yandex.div.core.view2
 
 import android.view.View
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
-import com.yandex.div2.Div
-import com.yandex.div2.DivBase
+import com.yandex.div.internal.core.DivBlock
 
 /**
  * Interface for binding div views
- * @param <TData> - Div data class
- * @param <TDataValue> - DivBase class corresponding to TData
+ * @param <TBlock> - DivBlock subclass
  * @param <TView> - binding view
  */
-internal abstract class DivViewBinder<TData : Div, TDataValue : DivBase, TView : View>(
+internal abstract class DivViewBinder<TBlock : DivBlock, TView : View>(
     private val baseBinder: DivBaseBinder
 ) {
 
     @Suppress("UNCHECKED_CAST")
-    open fun bindView(context: BindingContext, view: TView, div: TData, path: DivStatePath) {
-        val oldDiv = (view as DivHolderView<TData>).div
-        if (div === oldDiv) return
+    open fun bindView(view: TView, divBlock: TBlock, divView: Div2View) {
+        val oldDivBlock = (view as DivHolderView<TBlock>).divBlock
+        if (divBlock.div === oldDivBlock?.div) return
 
-        baseBinder.bindView(context, view, div, oldDiv, path)
-        view.bind(context, div.value() as TDataValue, oldDiv?.value() as TDataValue?, path)
+        baseBinder.bindView(view, divBlock, oldDivBlock, divView)
+        view.bind(divBlock, oldDivBlock, divView)
     }
 
-    protected open fun TView.bind(bindingContext: BindingContext, div: TDataValue, oldDiv: TDataValue?) = Unit
-
     protected open fun TView.bind(
-        bindingContext: BindingContext,
-        div: TDataValue,
-        oldDiv: TDataValue?,
-        path: DivStatePath,
-    ) = bind(bindingContext, div, oldDiv)
+        divBlock: TBlock,
+        oldDivBlock: TBlock?,
+        divView: Div2View
+    ) = Unit
 }

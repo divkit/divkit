@@ -25,13 +25,12 @@ import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.util.ImageRepresentation
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.runMainThreadAction
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoScale
 import java.util.concurrent.ExecutorService
@@ -45,16 +44,19 @@ internal class DivVideoBinder @Inject constructor(
     private val actionPerformer: DivActionPerformer,
     private val executorService: ExecutorService,
     private val playerFactory: DivPlayerFactory,
-) : DivViewBinder<Div.Video, DivVideo, DivVideoView>(baseBinder) {
+) : DivViewBinder<DivBlock.Video, DivVideoView>(baseBinder) {
 
-    override fun DivVideoView.bind(bindingContext: BindingContext, div: DivVideo, oldDiv: DivVideo?) {
-        this.path = path
-        applyVideo(div, bindingContext.expressionResolver, bindingContext.divView)
-        bindAspectRatio(div.aspect, oldDiv?.aspect, bindingContext.expressionResolver)
+    override fun DivVideoView.bind(
+        divBlock: DivBlock.Video,
+        oldDivBlock: DivBlock.Video?,
+        divView: Div2View,
+    ) {
+        applyVideo(divBlock.divValue, divBlock.expressionResolver, divView)
+        bindAspectRatio(divBlock.divValue.aspect, oldDivBlock?.divValue?.aspect, divBlock.expressionResolver)
     }
 
-    fun loadVideo(view: DivVideoView, div: DivVideo, resolver: ExpressionResolver, divView: Div2View) =
-        view.applyVideo(div, resolver, divView)
+    fun loadVideo(view: DivVideoView, divBlock: DivBlock.Video, divView: Div2View) =
+        view.applyVideo(divBlock.divValue, divBlock.expressionResolver, divView)
 
     private fun DivVideoView.applyVideo(
         div: DivVideo,

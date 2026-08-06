@@ -2,61 +2,52 @@ package com.yandex.div.core.view2.divs
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
-import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.reuse.util.tryRebindRecycleContainerChildren
 import com.yandex.div.core.widget.DivViewWrapper
-import com.yandex.div2.Div
+import com.yandex.div.internal.core.DivBlock
 
 internal abstract class DivCollectionViewHolder(
     private val viewWrapper: DivViewWrapper,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
+    private val divView: Div2View,
 ) : RecyclerView.ViewHolder(viewWrapper) {
 
-    protected var oldDiv: Div? = null
-    private var oldPath: DivStatePath? = null
+    protected var oldDivBlock: DivBlock? = null
 
-    open fun bind(bindingContext: BindingContext, div: Div, position: Int, path: DivStatePath) {
-        val divView = bindingContext.divView
-        val resolver = bindingContext.expressionResolver
-
-        if (viewWrapper.tryRebindRecycleContainerChildren(divView, div)) {
-            oldDiv = div
-            oldPath = path
+    open fun bind(divBlock: DivBlock, position: Int) {
+        if (viewWrapper.tryRebindRecycleContainerChildren(divView, divBlock.div)) {
+            oldDivBlock = divBlock
             return
         }
 
         val childView = viewWrapper.child
-            ?.takeIf { oldDiv != null && oldPath != null }
+            ?.takeIf { oldDivBlock != null }
             ?.takeIf { child ->
-                (child as? DivHolderView<*>)?.bindingContext?.expressionResolver?.let {
-                    DivComparator.areDivsReplaceable(oldDiv, div, it, resolver, oldPath, path)
-                } == true
-            } ?: createChildView(bindingContext, div).also { viewWrapper.addView(it) }
+                child.divBlock?.let { DivComparator.areDivsReplaceable(oldDivBlock, it) } == true
+            } ?: createChildView(divBlock, divView).also { viewWrapper.addView(it) }
 
-        oldDiv = div
-        oldPath = path
+        oldDivBlock = divBlock
 
-        divBinder.bind(bindingContext, childView, div, path)
-        divView.runtimeStore.showWarningIfNeeded(div.value())
+        divBinder.bind(childView, divBlock, divView)
+        divView.runtimeStore.showWarningIfNeeded(divBlock.div.value())
     }
 
-    private fun createChildView(bindingContext: BindingContext, div: Div): View {
-        oldDiv?.let { logReuseError() }
+    private fun createChildView(divBlock: DivBlock, divView: Div2View): View {
+        oldDivBlock?.let { logReuseError() }
 
-        viewWrapper.releaseAndRemoveChildren(bindingContext.divView)
-        return viewCreator.create(div, bindingContext.expressionResolver)
+        viewWrapper.releaseAndRemoveChildren(divView)
+        return viewCreator.create(divBlock.div, divBlock.expressionResolver)
     }
 
     fun updateState() {
         val child = viewWrapper.child ?: return
-        child.bindingContext?.let { child.bindStates(it, divBinder) }
+        child.bindStates(divBinder, divView)
     }
 
     protected abstract fun logReuseError()

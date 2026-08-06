@@ -23,16 +23,16 @@ import com.yandex.div.core.view2.divs.performLongClickOnAncestors
 import com.yandex.div.core.view2.items.DivScrollActionHolder
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.core.widget.ViewPager2Wrapper
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
-import com.yandex.div2.Div
 
 internal class DivPagerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ViewPager2Wrapper(context, attrs, defStyleAttr),
-    DivHolderView<Div.Pager> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.Pager> by DivHolderViewMixin(),
     OnInterceptTouchEventListenerHost,
     DivScrollActionHolder {
 

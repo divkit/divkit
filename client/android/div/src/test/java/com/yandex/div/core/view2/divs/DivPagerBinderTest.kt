@@ -12,12 +12,13 @@ import com.yandex.div.core.view2.divs.pager.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.nonNullItems
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
-import com.yandex.div2.DivVisibility
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Assert
 import org.junit.Before
@@ -48,6 +49,7 @@ class DivPagerBinderTest: DivBinderTest() {
     )
 
     private val div = div()
+    private val divBlock = div.toBlock(resolver, rootPath()) as DivBlock.Pager
     private val divPagerView = divPagerView(div).apply {
         layoutParams = defaultLayoutParams()
     }
@@ -59,24 +61,24 @@ class DivPagerBinderTest: DivBinderTest() {
 
     @Test
     fun `set default item`() {
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM, divPagerView.currentItem)
     }
 
     @Test
     fun `keep selected item on rebind`() {
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         divPagerView.currentItem = DEFAULT_ITEM + 1
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM + 1, divPagerView.viewPager.currentItem)
     }
 
     @Test
     fun `set default item when has current state without current page index`() {
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM, divPagerView.currentItem)
     }
@@ -85,14 +87,14 @@ class DivPagerBinderTest: DivBinderTest() {
     fun `restore previously selected page`() {
         whenever(divViewState.getBlockState<PagerState>(any())).thenReturn(PagerState(DEFAULT_ITEM + 1))
 
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM + 1, divPagerView.currentItem)
     }
 
     @Test
     fun `do not log page change when selected page for the first time`() {
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
 
@@ -107,7 +109,7 @@ class DivPagerBinderTest: DivBinderTest() {
 
     @Test
     fun `log page change when selected next page`() {
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
@@ -128,16 +130,17 @@ class DivPagerBinderTest: DivBinderTest() {
             .getJSONObject(DEFAULT_ITEM)
             .put("visibility_action", DivVisibilityAction(logId = "test".asExpression()).writeToJSON())
         val divPager = Div.Pager(DivPager(DivParsingEnvironment(ParsingErrorLogger.ASSERT), pagerJson))
-        underTest.bindView(bindingContext, divPagerView, divPager, rootPath())
+            .toBlock(resolver, rootPath()) as DivBlock.Pager
+        underTest.bindView(divPagerView, divPager, divView)
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
 
-        verify(divView).bindViewToDiv(divPagerView, divPager.value.nonNullItems[DEFAULT_ITEM])
+        verify(divView).bindViewToDiv(divPagerView, divPager.divValue.nonNullItems[DEFAULT_ITEM])
     }
 
     @Test
     fun `unbind view from div on previously selected page`() {
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
@@ -151,7 +154,7 @@ class DivPagerBinderTest: DivBinderTest() {
         val div = divWithItemCountVariable()
         val view = divPagerViewWithLayout(div)
 
-        underTest.bindView(bindingContext, view, div, rootPath())
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
 
         Assert.assertEquals(3L, itemCountVariable.getValue())
     }
@@ -161,14 +164,14 @@ class DivPagerBinderTest: DivBinderTest() {
         val itemCountVariable = itemCountVariable()
         val div = divWithItemCountVariable()
         val view = divPagerViewWithLayout(div)
-        underTest.bindView(bindingContext, view, div, rootPath())
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
         val adapter = view.viewPager.adapter as DivPagerAdapter
         val firstItem = adapter.items.first()
 
-        adapter.setItem(0, firstItem, DivVisibility.GONE)
+        adapter.removeItem(0)
         Assert.assertEquals(2L, itemCountVariable.getValue())
 
-        adapter.setItem(0, firstItem, DivVisibility.VISIBLE)
+        adapter.addItems(0, listOf(firstItem))
         Assert.assertEquals(3L, itemCountVariable.getValue())
     }
 
@@ -177,7 +180,7 @@ class DivPagerBinderTest: DivBinderTest() {
         val itemCountVariable = itemCountVariable()
         val div = divWithItemCountVariable()
         val view = divPagerViewWithLayout(div)
-        underTest.bindView(bindingContext, view, div, rootPath())
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
         val adapter = view.viewPager.adapter as DivPagerAdapter
 
         adapter.setItems(adapter.items.dropLast(1))
@@ -191,14 +194,14 @@ class DivPagerBinderTest: DivBinderTest() {
         val div = divWithItemCountVariable("pager_gone_with_infinite_scroll.json")
         val view = divPagerViewWithLayout(div)
 
-        underTest.bindView(bindingContext, view, div, rootPath())
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
 
         Assert.assertEquals(6L, itemCountVariable.getValue())
     }
 
     @Test
     fun `pager without item count variable does not mutate variable`() {
-        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+        underTest.bindView(divPagerView, divBlock, divView)
 
         verify(resolver, never()).getVariable(ITEM_COUNT_VARIABLE)
     }

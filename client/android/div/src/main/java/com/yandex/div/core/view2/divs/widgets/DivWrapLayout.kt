@@ -6,10 +6,10 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.widget.wraplayout.WrapContainerLayout
-import com.yandex.div2.Div
+import com.yandex.div.internal.core.DivBlock
 
 internal class DivWrapLayout(context: Context) : WrapContainerLayout(context),
-    DivHolderView<Div.Container> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.Container> by DivHolderViewMixin(),
     DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
 

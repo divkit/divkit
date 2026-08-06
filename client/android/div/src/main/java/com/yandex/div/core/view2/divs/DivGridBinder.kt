@@ -2,28 +2,24 @@ package com.yandex.div.core.view2.divs
 
 import android.view.View
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.state.DivPathUtils.getIds
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.core.nonNullItems
-import com.yandex.div.internal.core.toBlocks
+import com.yandex.div.internal.core.itemsToDivBlocks
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivGrid
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -32,18 +28,28 @@ internal class DivGridBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val divBinder: Provider<DivBinder>,
     private val divViewCreator: Provider<DivViewCreator>,
-) : DivViewBinder<Div.Grid, DivGrid, DivGridLayout>(baseBinder) {
+) : DivViewBinder<DivBlock.Grid, DivGridLayout>(baseBinder) {
 
-    override fun bindView(context: BindingContext, view: DivGridLayout, div: Div.Grid, path: DivStatePath) {
-        super.bindView(context, view, div, path)
-        view.bindItems(context, div.value, view.div?.value, path)
+    override fun bindView(view: DivGridLayout, divBlock: DivBlock.Grid, divView: Div2View) {
+        val oldDivBlock = view.divBlock
+        if (oldDivBlock?.div === divBlock.div) {
+            view.bindItems(divBlock, oldDivBlock, divView)
+            return
+        }
+        super.bindView(view, divBlock, divView)
+        view.bindItems(divBlock, oldDivBlock, divView)
     }
 
-    override fun DivGridLayout.bind(bindingContext: BindingContext, div: DivGrid, oldDiv: DivGrid?) {
-        releaseViewVisitor = bindingContext.divView.releaseViewVisitor
+    override fun DivGridLayout.bind(
+        divBlock: DivBlock.Grid,
+        oldDivBlock: DivBlock.Grid?,
+        divView: Div2View,
+    ) {
+        releaseViewVisitor = divView.releaseViewVisitor
 
+        val div = divBlock.divValue
+        val expressionResolver = divBlock.expressionResolver
         applyDivActions(
-            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -54,40 +60,33 @@ internal class DivGridBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.captureFocusOnAction,
+            expressionResolver,
+            divView,
         )
 
         addSubscription(
-            div.columnCount.observeAndGet(bindingContext.expressionResolver) { columnCount = it.toIntSafely() }
+            div.columnCount.observeAndGet(expressionResolver) { columnCount = it.toIntSafely() }
         )
         observeContentAlignment(
             div.contentAlignmentHorizontal,
             div.contentAlignmentVertical,
-            bindingContext.expressionResolver
+            expressionResolver
         )
     }
 
     private fun DivGridLayout.bindItems(
-        bindingContext: BindingContext,
-        div: DivGrid,
-        oldDiv: DivGrid?,
-        path: DivStatePath
+        divBlock: DivBlock.Grid,
+        oldDivBlock: DivBlock.Grid?,
+        divView: Div2View,
     ) {
-        val divView = bindingContext.divView
-        val resolver = bindingContext.expressionResolver
-        val items = div.nonNullItems
-
-        val newItems = items.toBlocks(resolver, path)
+        val newItems = divBlock.itemsToDivBlocks()
+        val oldItems = oldDivBlock?.itemsToDivBlocks() ?: emptyList()
         if (!tryRebindPlainContainerChildren(divView, newItems, divViewCreator)) {
-            val oldItems = oldDiv?.items?.toBlocks(resolver, path) ?: emptyList()
             replaceWithReuse(divView, divViewCreator, oldItems, newItems)
         }
 
-        dispatchBinding(bindingContext, items, path)
-        trackVisibilityActions(
-            divView,
-            newItems,
-            oldDiv?.items?.toBlocks(resolver, path),
-        )
+        dispatchBinding(newItems, divView)
+        trackVisibilityActions(divView, newItems, oldItems)
     }
 
     private fun DivGridLayout.observeContentAlignment(
@@ -104,24 +103,15 @@ internal class DivGridBinder @Inject constructor(
         addSubscription(verticalAlignment.observe(resolver, callback))
     }
 
-    private fun DivGridLayout.dispatchBinding(
-        bindingContext: BindingContext,
-        items: List<Div>,
-        path: DivStatePath
-    ) {
-        val divView = bindingContext.divView
-        val resolver = bindingContext.expressionResolver
-
-        val ids = items.getIds()
+    private fun DivGridLayout.dispatchBinding(items: List<DivBlock>, divView: Div2View) {
         items.forEachIndexed { index, item ->
             val childView = getChildAt(index)
-            val childDiv = item.value()
-            val childPath = path.appendDiv(ids[index])
+            val childDiv = item.div
 
-            divBinder.get().bind(bindingContext, childView, item, childPath)
-            bindLayoutParams(childView, childDiv, resolver)
-            if (childDiv.hasSightActions) {
-                divView.bindViewToDiv(childView, item)
+            divBinder.get().bind(childView, item, divView)
+            bindLayoutParams(childView, childDiv.value(), item.expressionResolver)
+            if (childDiv.value().hasSightActions) {
+                divView.bindViewToDiv(childView, childDiv)
             } else {
                 divView.unbindViewFromDiv(childView)
             }

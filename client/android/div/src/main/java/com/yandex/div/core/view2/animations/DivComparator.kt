@@ -1,80 +1,58 @@
 package com.yandex.div.core.view2.animations
 
-import com.yandex.div.core.state.DivPathUtils.fromState
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.isWrapContainer
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.itemsToDivBlocks
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom
-import com.yandex.div2.DivData
 
 internal object DivComparator {
 
     fun isDivDataReplaceable(
-        old: DivData?,
-        new: DivData,
-        stateId: Long,
-        oldResolver: ExpressionResolver,
-        newResolver: ExpressionResolver,
+        oldBlock: DivBlock?,
+        newBlock: DivBlock?,
         reporter: DivComparatorReporter? = null,
     ): Boolean {
-        if (old == null) {
+        if (oldBlock == null) {
             reporter?.onComparisonNoOldData()
             return false
         }
-        val oldState = old.states.find { it.stateId == stateId }
-        val newState = new.states.find { it.stateId == stateId }
-
-        if (oldState == null || newState == null) {
+        if (newBlock == null) {
             reporter?.onComparisonNoState()
             return false
         }
-
-        return areDivsReplaceable(
-            oldState.div, newState.div,
-            oldResolver, newResolver,
-            DivStatePath.fromState(oldState), DivStatePath.fromState(newState),
-            reporter,
-        ).also {
+        return areDivsReplaceable(oldBlock, newBlock, reporter).also {
             if (it) reporter?.onComparisonSuccess()
         }
     }
 
     fun areDivsReplaceable(
-        old: Div?, new: Div?,
-        oldResolver: ExpressionResolver, newResolver: ExpressionResolver,
-        oldPath: DivStatePath?, newPath: DivStatePath,
+        old: DivBlock?,
+        new: DivBlock?,
         reporter: DivComparatorReporter? = null,
     ): Boolean {
-        if (old?.javaClass != new?.javaClass) {
+        if (old?.div?.javaClass != new?.div?.javaClass) {
             reporter?.onComparisonDifferentClasses()
             return false
         }
-        if (old == null || new == null || old === new || oldPath == null) {
+        if (old == null || new == null || old === new) {
             return true
         }
-        return areValuesReplaceable(old.value(), new.value(), oldResolver, newResolver, reporter) &&
-            areChildrenReplaceable(
-                extractChildren(old, oldResolver, oldPath),
-                extractChildren(new, newResolver, newPath),
-                oldPath,
-                newPath,
-                reporter,
-            )
+        return areValuesReplaceable(old, new, reporter) &&
+            areChildrenReplaceable(extractChildren(old), extractChildren(new), reporter)
     }
 
     fun areValuesReplaceable(
-        old: DivBase,
-        new: DivBase,
-        oldResolver: ExpressionResolver,
-        newResolver: ExpressionResolver,
+        oldBlock: DivBlock,
+        newBlock: DivBlock,
         reporter: DivComparatorReporter? = null,
     ): Boolean {
+        val old = oldBlock.div.value()
+        val new = newBlock.div.value()
+
         if (old.id != null && new.id != null && old.id != new.id && (old.hasTransitions() || new.hasTransitions())) {
             reporter?.onComparisonDifferentIdsWithTransition()
             return false
@@ -84,11 +62,11 @@ internal object DivComparator {
             return false
         }
         if (old is DivContainer && new is DivContainer) {
-            if (old.isOverlap(oldResolver) != new.isOverlap(newResolver)) {
+            if (old.isOverlap(oldBlock.expressionResolver) != new.isOverlap(newBlock.expressionResolver)) {
                 reporter?.onComparisonDifferentOverlap()
                 return false
             }
-            if (old.isWrapContainer(oldResolver) != new.isWrapContainer(newResolver)) {
+            if (old.isWrapContainer(oldBlock.expressionResolver) != new.isWrapContainer(newBlock.expressionResolver)) {
                 reporter?.onComparisonDifferentWrap()
                 return false
             }
@@ -99,8 +77,6 @@ internal object DivComparator {
     fun areChildrenReplaceable(
         oldChildren: List<DivBlock>,
         newChildren: List<DivBlock>,
-        oldPath: DivStatePath,
-        newPath: DivStatePath,
         reporter: DivComparatorReporter? = null,
     ): Boolean {
         if (oldChildren.size != newChildren.size) {
@@ -109,38 +85,29 @@ internal object DivComparator {
         }
 
         return oldChildren.zip(newChildren).all {
-            areDivsReplaceable(
-                it.first.div, it.second.div,
-                it.first.expressionResolver, it.second.expressionResolver,
-                oldPath, newPath,
-                reporter,
-            )
+            areDivsReplaceable(it.first, it.second, reporter)
         }
     }
 
-    private fun extractChildren(
-        div: Div,
-        resolver: ExpressionResolver,
-        path: DivStatePath,
-    ): List<DivBlock> {
-        return when (div) {
-            is Div.Container -> div.value.buildItems(resolver, path)
-            is Div.Grid -> div.value.itemsToDivBlocks(resolver, path)
-            is Div.Image -> emptyList()
-            is Div.GifImage -> emptyList()
-            is Div.Text -> emptyList()
-            is Div.Separator -> emptyList()
-            is Div.Gallery -> emptyList()
-            is Div.Pager -> emptyList()
-            is Div.Tabs -> emptyList()
-            is Div.State -> emptyList()
-            is Div.Custom -> emptyList()
-            is Div.Input -> emptyList()
-            is Div.Select -> emptyList()
-            is Div.Indicator -> emptyList()
-            is Div.Slider -> emptyList()
-            is Div.Video -> emptyList()
-            is Div.Switch -> emptyList()
+    private fun extractChildren(divBlock: DivBlock): List<DivBlock> {
+        return when (divBlock) {
+            is DivBlock.Container -> divBlock.buildItems()
+            is DivBlock.Grid -> divBlock.itemsToDivBlocks()
+            is DivBlock.Image -> emptyList()
+            is DivBlock.GifImage -> emptyList()
+            is DivBlock.Text -> emptyList()
+            is DivBlock.Separator -> emptyList()
+            is DivBlock.Gallery -> emptyList()
+            is DivBlock.Pager -> emptyList()
+            is DivBlock.Tabs -> emptyList()
+            is DivBlock.State -> emptyList()
+            is DivBlock.Custom -> emptyList()
+            is DivBlock.Input -> emptyList()
+            is DivBlock.Select -> emptyList()
+            is DivBlock.Indicator -> emptyList()
+            is DivBlock.Slider -> emptyList()
+            is DivBlock.Video -> emptyList()
+            is DivBlock.Switch -> emptyList()
         }
     }
 

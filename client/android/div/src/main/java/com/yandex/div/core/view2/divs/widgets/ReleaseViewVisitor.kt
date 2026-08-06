@@ -8,8 +8,7 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.releasableList
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.Releasable
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivBase
+import com.yandex.div.internal.core.DivBlock
 import javax.inject.Inject
 
 @DivViewScope
@@ -19,8 +18,7 @@ internal class ReleaseViewVisitor @Inject constructor(
     private val divExtensionController: DivExtensionController,
 ) : DivViewVisitor() {
 
-    override fun defaultVisit(view: DivHolderView<*>) =
-        releaseInternal(view as View, view.div?.value(), view.bindingContext?.expressionResolver)
+    override fun defaultVisit(view: DivHolderView<*>) = releaseInternal(view as View, view.divBlock)
 
     override fun visit(view: DivPagerView) {
         super.visit(view)
@@ -33,21 +31,18 @@ internal class ReleaseViewVisitor @Inject constructor(
     }
 
     override fun visit(view: DivCustomWrapper) {
-        val divCustom = view.div ?: return
-        val resolver = view.bindingContext?.expressionResolver ?: return
+        val divBlock = view.divBlock ?: return
         release(view)
         view.customView?.let {
-            divExtensionController.unbindView(divView, resolver, it, divCustom.value)
-            divCustomContainerViewAdapter.release(it, divCustom.value)
+            divExtensionController.unbindView(it, divBlock, divView)
+            divCustomContainerViewAdapter.release(it, divBlock.divValue)
         }
     }
 
     override fun visit(view: View) = release(view)
 
-    private fun releaseInternal(view: View, div: DivBase?, resolver: ExpressionResolver?) {
-        if (div != null && resolver != null) {
-            divExtensionController.unbindView(divView, resolver, view, div)
-        }
+    private fun releaseInternal(view: View, divBlock: DivBlock?) {
+        divBlock?.let { divExtensionController.unbindView(view, it, divView) }
         release(view)
     }
 

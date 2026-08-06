@@ -6,7 +6,8 @@ import com.yandex.div.core.state.DivPathUtils.tryFindStateDivAndLayout
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
-import com.yandex.div.core.view2.divs.bindingContext
+import com.yandex.div.core.view2.divs.divBlock
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import javax.inject.Inject
@@ -40,10 +41,10 @@ internal class DivJoinedStateSwitcher @Inject constructor(
             }
         }
 
-        val bindingContext = view.bindingContext ?: divView.bindingContext
-        divBinder.bind(bindingContext, view, div, path.parentState())
+        val divBlock = view.divBlock ?: DivBlock.create(div, resolver, path.parentState())
+        divBinder.bind(view, divBlock, divView)
 
-        divBinder.attachIndicators(bindingContext.divView)
+        divBinder.attachIndicators(divView)
     }
 
     private fun findCommonPath(pathList: List<DivStatePath>, rootPath: DivStatePath): DivStatePath {

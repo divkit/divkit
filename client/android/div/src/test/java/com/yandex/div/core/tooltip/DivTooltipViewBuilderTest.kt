@@ -26,7 +26,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import javax.inject.Provider
 
 /**
  * Tests for [DivTooltipViewBuilder].
@@ -59,7 +58,7 @@ class DivTooltipViewBuilderTest {
     }
 
     private val div2Builder = mock<Div2Builder> {
-        on { buildView(any(), any(), any()) } doReturn boundView
+        on { buildView(any(), any(), any(), any()) } doReturn boundView
     }
 
     private val div2View = mock<Div2View> {
@@ -67,7 +66,7 @@ class DivTooltipViewBuilderTest {
     }
     private val bindingContext = BindingContext(div2View, mock<ExpressionResolver>())
 
-    private val underTest = DivTooltipViewBuilder(Provider { div2Builder })
+    private val underTest = DivTooltipViewBuilder { div2Builder }
 
     @Test
     fun `size constraints applied on binding survive tooltip view preparation`() {

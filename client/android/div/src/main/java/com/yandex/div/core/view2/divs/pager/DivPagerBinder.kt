@@ -16,7 +16,7 @@ import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
@@ -28,11 +28,11 @@ import com.yandex.div.core.view2.divs.pager.DivPagerAdapter.Companion.OFFSET_TO_
 import com.yandex.div.core.view2.divs.toPxF
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
 import javax.inject.Inject
@@ -46,54 +46,48 @@ internal class DivPagerBinder @Inject constructor(
     private val actionPerformer: DivActionPerformer,
     private val pagerIndicatorConnector: PagerIndicatorConnector,
     private val accessibilityStateProvider: AccessibilityStateProvider,
-) : DivViewBinder<Div.Pager, DivPager, DivPagerView>(baseBinder) {
+) : DivViewBinder<DivBlock.Pager, DivPagerView>(baseBinder) {
 
-    override fun bindView(context: BindingContext, view: DivPagerView, div: Div.Pager, path: DivStatePath) {
-        pagerIndicatorConnector.submitPager(view, div.value)
+    override fun bindView(view: DivPagerView, divBlock: DivBlock.Pager, divView: Div2View) {
+        pagerIndicatorConnector.submitPager(view, divBlock.divValue)
 
-        val oldDiv = view.div
-        if (div === oldDiv) {
+        val oldDivBlock = view.divBlock
+        if (divBlock.div === oldDivBlock?.div) {
             val pager = view.viewPager
             val adapter = pager.adapter as? DivPagerAdapter ?: return
-            adapter.setItems(div.value.buildItems(context.expressionResolver, path))
+            adapter.setItems(divBlock.buildItems())
             view.getRecyclerView()?.scrollToPosition(adapter.normalizeItemPosition(view.currentItem))
 
-            view.notifyItemsUpdated(context, div.value, adapter)
-            view.bindStates(context, divBinder.get())
+            view.notifyItemsUpdated(divBlock.divValue, divBlock.expressionResolver, divView, adapter)
+            view.bindStates(divBinder.get(), divView)
             pager.doOnNextLayout { pager.requestTransform() }
             return
         }
 
-        oldDiv?.let {
+        oldDivBlock?.let {
             view.changePageCallbackForOffScreenPages = null
             view.viewPager.removeItemDecorations()
             view.pageTransformer = null
         }
 
-        baseBinder.bindView(context, view, div, oldDiv, path)
-        view.bind(context, div.value, path)
+        baseBinder.bindView(view, divBlock, oldDivBlock, divView)
+        view.bind(divBlock, divView)
     }
 
-    private fun DivPagerView.bind(bindingContext: BindingContext, div: DivPager, path: DivStatePath) {
+    private fun DivPagerView.bind(divBlock: DivBlock.Pager, divView: Div2View) {
         val recyclerView = getRecyclerView() ?: return
 
-        val divView = bindingContext.divView
-        val resolver = bindingContext.expressionResolver
+        val div = divBlock.divValue
+        val resolver = divBlock.expressionResolver
         val pageTranslations = SparseArray<Float>()
         val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(context)
         setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
-        val adapter = DivPagerAdapter(
-            div.buildItems(resolver, path),
-            bindingContext,
-            divBinder.get(),
-            pageTranslations,
-            viewCreator,
-            this
-        )
+        val adapter =
+            DivPagerAdapter(divBlock.buildItems(), divView, divBinder.get(), pageTranslations, viewCreator, this)
         viewPager.adapter = adapter
-        bindItemsCountObserver(bindingContext, div, adapter)
+        bindItemsCountObserver(div, resolver, divView, adapter)
         bindInfiniteScroll(div, resolver)
-        notifyItemsUpdated(bindingContext, div, adapter)
+        notifyItemsUpdated(div, resolver, divView, adapter)
         clipToPage = divView.div2Component.isPagerPageClipEnabled
 
         orientation =
@@ -150,40 +144,37 @@ internal class DivPagerBinder @Inject constructor(
             onInterceptTouchEventListener = if (it) ParentScrollRestrictor else null
         })
 
-        bindItemBuilder(bindingContext, div, path)
+        bindItemBuilder(div, resolver, divBlock.path, divView)
         if (a11yEnabled) {
             enableAccessibility()
         }
     }
 
     private fun DivPagerView.bindItemsCountObserver(
-        context: BindingContext,
         div: DivPager,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         adapter: DivPagerAdapter,
     ) {
         adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                notifyItemsUpdated(context, div, adapter)
+                notifyItemsUpdated(div, resolver, divView, adapter)
             }
 
             override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                notifyItemsUpdated(context, div, adapter)
+                notifyItemsUpdated(div, resolver, divView, adapter)
             }
         })
     }
 
     private fun DivPagerView.notifyItemsUpdated(
-        context: BindingContext,
         div: DivPager,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         adapter: DivPagerAdapter,
     ) {
         div.itemCountVariable?.let {
-            VariableMutationHandler.setVariable(
-                context.divView,
-                it,
-                adapter.visibleItems.size.toString(),
-                context.expressionResolver,
-            )
+            VariableMutationHandler.setVariable(divView, it, adapter.visibleItems.size.toString(), resolver)
         }
         pagerOnItemsCountChange?.onItemsUpdated()
     }
@@ -352,12 +343,17 @@ internal class DivPagerBinder @Inject constructor(
         }
     }
 
-    private fun DivPagerView.bindItemBuilder(context: BindingContext, div: DivPager, path: DivStatePath) {
+    private fun DivPagerView.bindItemBuilder(
+        div: DivPager,
+        resolver: ExpressionResolver,
+        path: DivStatePath,
+        divView: Div2View,
+    ) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver) {
+        bindItemBuilder(builder, resolver) {
             (viewPager.adapter as DivPagerAdapter?)?.let { adapter ->
-                adapter.setItems(builder.build(context.expressionResolver, path))
-                notifyItemsUpdated(context, div, adapter)
+                adapter.setItems(builder.build(resolver, path))
+                notifyItemsUpdated(div, resolver, divView, adapter)
                 getRecyclerView()?.scrollToPosition(adapter.normalizeItemPosition(currentItem))
                 viewPager.doOnNextLayout { viewPager.requestTransform() }
             }

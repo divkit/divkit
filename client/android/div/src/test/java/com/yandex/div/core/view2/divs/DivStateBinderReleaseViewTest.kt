@@ -12,6 +12,8 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import org.junit.Assert
@@ -63,25 +65,25 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
 
     @Test
     fun `initial bind do not call release`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
+        stateBinder.bindView(stateLayout, divOne.asDivState.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         verify(visitor, never()).release(any())
     }
 
     @Test
     fun `rebind do call release on old views`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
+        stateBinder.bindView(stateLayout, divOne.asDivState.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         val allChildren = stateLayout.childrenToFlatList()
 
-        stateBinder.bindView(bindingContext, stateLayout, divTwo.asDivState, rootPath)
+        stateBinder.bindView(stateLayout, divTwo.asDivState.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         verifyAllChildrenReleased(allChildren)
     }
 
     @Test
     fun `change state release old views`() {
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
+        stateBinder.bindView(stateLayout, divOne.asDivState.toBlock(resolver, rootPath) as DivBlock.State, divView)
         whenever(stateManager.getState(divOne.asDivState.value, divView, resolver, path = "0/state_container"))
             .thenReturn("second")
         val stateToBeSwitched: DivStateLayout = stateLayout
@@ -89,7 +91,7 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
             ?: throw AssertionError("failed to find state")
         val allChildren: List<View> = stateToBeSwitched.childrenToFlatList()
 
-        stateBinder.bindView(bindingContext, stateLayout, divOne.asDivState, rootPath)
+        stateBinder.bindView(stateLayout, divOne.asDivState.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         verifyAllChildrenReleased(allChildren)
     }

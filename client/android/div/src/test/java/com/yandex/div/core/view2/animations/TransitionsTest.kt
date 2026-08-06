@@ -93,7 +93,7 @@ class TransitionsTest {
             .value().transitionChange!!
     }
 
-    private fun Div.item() = DivBlock(this, ExpressionResolver.EMPTY, DivStatePath.fromState(0))
+    private fun Div.item() = DivBlock.create(this, ExpressionResolver.EMPTY, DivStatePath.fromState(0))
 
     private fun parse(json: String): Div {
         val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)

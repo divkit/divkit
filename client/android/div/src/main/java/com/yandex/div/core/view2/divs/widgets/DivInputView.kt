@@ -18,15 +18,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.R
 import com.yandex.div.core.view2.reuse.InputFocusTracker
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.SuperLineHeightEditText
-import com.yandex.div2.Div
 
 internal class DivInputView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.divInputStyle
 ) : SuperLineHeightEditText(context, attrs, defStyleAttr),
-    DivHolderView<Div.Input> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.Input> by DivHolderViewMixin(),
     DivAnimator {
 
     @get:DrawableRes

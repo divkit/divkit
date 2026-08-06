@@ -21,7 +21,6 @@ import com.yandex.div.core.util.toColormap
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.toRadialGradientDrawableCenter
 import com.yandex.div.core.util.toRadialGradientDrawableRadius
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
@@ -31,6 +30,7 @@ import com.yandex.div.core.view2.spannable.SpannedTextBuilder
 import com.yandex.div.core.view2.text.SelectableLinkMovementMethod
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
@@ -43,7 +43,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivLineStyle
@@ -68,18 +67,19 @@ internal class DivTextBinder @Inject constructor(
     private val typefaceResolver: DivTypefaceResolver,
     private val spannedTextBuilder: SpannedTextBuilder,
     @ExperimentFlag(HYPHENATION_SUPPORT_ENABLED) private val isHyphenationEnabled: Boolean
-) : DivViewBinder<Div.Text, DivText, DivLineHeightTextView>(baseBinder) {
+) : DivViewBinder<DivBlock.Text, DivLineHeightTextView>(baseBinder) {
 
     override fun DivLineHeightTextView.bind(
-        bindingContext: BindingContext,
-        div: DivText,
-        oldDiv: DivText?,
-        path: DivStatePath,
+        divBlock: DivBlock.Text,
+        oldDivBlock: DivBlock.Text?,
+        divView: Div2View,
     ) {
-        configureView(bindingContext, this)
+        configureView(divView, this)
 
+        val div = divBlock.divValue
+        val oldDiv = oldDivBlock?.divValue
+        val expressionResolver = divBlock.expressionResolver
         applyDivActions(
-            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -90,10 +90,10 @@ internal class DivTextBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.captureFocusOnAction,
+            expressionResolver,
+            divView,
         )
 
-        val expressionResolver = bindingContext.expressionResolver
-        val divView = bindingContext.divView
         bindTypeface(div, oldDiv, expressionResolver)
         bindTextAlignment(div, oldDiv, expressionResolver)
         bindFontSize(div, oldDiv, expressionResolver)
@@ -103,8 +103,8 @@ internal class DivTextBinder @Inject constructor(
         bindUnderline(div, oldDiv, expressionResolver)
         bindStrikethrough(div, oldDiv, expressionResolver)
         bindMaxLines(div, oldDiv, expressionResolver, divView)
-        bindText(div, oldDiv, expressionResolver, path, divView)
-        bindEllipsis(div, oldDiv, expressionResolver, path, divView)
+        bindText(div, oldDiv, expressionResolver, divBlock.path, divView)
+        bindEllipsis(div, oldDiv, expressionResolver, divBlock.path, divView)
         bindEllipsize(div, oldDiv, expressionResolver)
         bindTextGradient(divView, div, oldDiv, expressionResolver)
         bindTextShadow(div, oldDiv, expressionResolver)
@@ -113,8 +113,8 @@ internal class DivTextBinder @Inject constructor(
         updateFocusableState(div)
     }
 
-    private fun configureView(bindingContext: BindingContext, view: DivLineHeightTextView) {
-        view.drawingPassOverrideStrategy = bindingContext.divView.viewComponent.drawingPassOverrideStrategy
+    private fun configureView(divView: Div2View, view: DivLineHeightTextView) {
+        view.drawingPassOverrideStrategy = divView.viewComponent.drawingPassOverrideStrategy
     }
 
     //region Text Alignment

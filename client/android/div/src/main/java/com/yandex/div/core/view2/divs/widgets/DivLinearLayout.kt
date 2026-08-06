@@ -7,14 +7,14 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.widget.LinearContainerLayout
-import com.yandex.div2.Div
+import com.yandex.div.internal.core.DivBlock
 
 internal class DivLinearLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearContainerLayout(context, attrs, defStyleAttr),
-    DivHolderView<Div.Container> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.Container> by DivHolderViewMixin(),
     DivCollectionHolder by DivCollectionHolderMixin(),
     DivAnimator {
 

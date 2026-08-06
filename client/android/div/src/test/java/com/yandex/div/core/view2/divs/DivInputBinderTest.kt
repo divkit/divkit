@@ -10,6 +10,8 @@ import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -58,7 +60,7 @@ class DivInputBinderTest : DivBinderTest() {
     @Test
     fun `enter_key_type search without enter_key_actions - listener returns true for search action`() {
         val (div, view) = createDivAndView(INPUT_SEARCH_NO_ACTIONS)
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
 
         val consumed = view.invokeEditorAction(EditorInfo.IME_ACTION_SEARCH)
 
@@ -68,7 +70,7 @@ class DivInputBinderTest : DivBinderTest() {
     @Test
     fun `enter_key_type search without enter_key_actions - focus does not move to next field`() {
         val (div, view) = createDivAndView(INPUT_SEARCH_NO_ACTIONS)
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
 
         // IME_ACTION_SEARCH should be consumed (returns true), preventing focus traversal
         val consumed = view.invokeEditorAction(EditorInfo.IME_ACTION_SEARCH)
@@ -79,7 +81,7 @@ class DivInputBinderTest : DivBinderTest() {
     @Test
     fun `enter_key_type done without enter_key_actions - listener returns true for done action`() {
         val (div, view) = createDivAndView(INPUT_DONE_NO_ACTIONS)
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
 
         val consumed = view.invokeEditorAction(EditorInfo.IME_ACTION_DONE)
 
@@ -89,7 +91,7 @@ class DivInputBinderTest : DivBinderTest() {
     @Test
     fun `enter_key_type go without enter_key_actions - listener returns true for go action`() {
         val (div, view) = createDivAndView(INPUT_GO_NO_ACTIONS)
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
 
         val consumed = view.invokeEditorAction(EditorInfo.IME_ACTION_GO)
 
@@ -99,7 +101,7 @@ class DivInputBinderTest : DivBinderTest() {
     @Test
     fun `enter_key_type send without enter_key_actions - listener returns true for send action`() {
         val (div, view) = createDivAndView(INPUT_SEND_NO_ACTIONS)
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
 
         val consumed = view.invokeEditorAction(EditorInfo.IME_ACTION_SEND)
 
@@ -109,7 +111,7 @@ class DivInputBinderTest : DivBinderTest() {
     @Test
     fun `enter_key_type default - imeOptions set to unspecified`() {
         val (div, view) = createDivAndView(INPUT_DEFAULT_NO_ACTIONS)
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
 
         // For DEFAULT, imeOptions should use IME_ACTION_UNSPECIFIED to allow standard traversal
         val imeAction = view.imeOptions and EditorInfo.IME_MASK_ACTION
@@ -122,11 +124,11 @@ class DivInputBinderTest : DivBinderTest() {
     @Test
     fun `rebind with different enter_key_type - imeOptions correctly replaced not accumulated`() {
         val (divSearch, viewSearch) = createDivAndView(INPUT_SEARCH_NO_ACTIONS)
-        underTest.bindView(bindingContext, viewSearch, divSearch, path)
+        underTest.bindView(viewSearch, divSearch, divView)
 
         // Rebind with "done" type using the same view to simulate rebind
         val (divDone, _) = createDivAndView(INPUT_DONE_NO_ACTIONS)
-        underTest.bindView(bindingContext, viewSearch, divDone, path)
+        underTest.bindView(viewSearch, divDone, divView)
 
         val imeOptionsAfterRebind = viewSearch.imeOptions and EditorInfo.IME_MASK_ACTION
         assertTrue(
@@ -142,7 +144,7 @@ class DivInputBinderTest : DivBinderTest() {
     @Test
     fun `enter_key_type search with enter_key_actions - listener returns true`() {
         val (div, view) = createDivAndView(INPUT_SEARCH_WITH_ACTIONS)
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
 
         val consumed = view.invokeEditorAction(EditorInfo.IME_ACTION_SEARCH)
 
@@ -156,10 +158,10 @@ class DivInputBinderTest : DivBinderTest() {
         return listener.onEditorAction(this, actionId, null)
     }
 
-    private fun createDivAndView(jsonString: String): Pair<Div.Input, DivInputView> {
+    private fun createDivAndView(jsonString: String): Pair<DivBlock.Input, DivInputView> {
         val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)
-        val div = Div(environment, JSONObject(jsonString)) as Div.Input
-        val view = spy(viewCreator.create(div, ExpressionResolver.EMPTY) as DivInputView).apply {
+        val div = Div(environment, JSONObject(jsonString)).toBlock(resolver, path) as DivBlock.Input
+        val view = spy(viewCreator.create(div.div, ExpressionResolver.EMPTY) as DivInputView).apply {
             layoutParams = defaultLayoutParams()
         }
         return div to view

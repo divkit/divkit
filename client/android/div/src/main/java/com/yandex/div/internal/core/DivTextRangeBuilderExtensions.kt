@@ -10,17 +10,23 @@ internal data class DivTextRangeResult(
     val resolver: ExpressionResolver,
 )
 
-internal fun DivText.buildRanges(resolver: ExpressionResolver, path: DivStatePath): List<DivTextRangeResult>? {
-    rangeBuilder?.let { return it.build(resolver, path) }
+internal fun DivText.buildRanges(resolver: ExpressionResolver, path: DivStatePath) =
+    buildRanges(rangeBuilder, ranges, resolver, path)
+
+internal fun DivText.Ellipsis.buildRanges(resolver: ExpressionResolver, path: DivStatePath) =
+    buildRanges(rangeBuilder, ranges, resolver, path)
+
+private fun buildRanges(
+    builder: DivText.RangeBuilder?,
+    ranges: List<DivText.Range>?,
+    resolver: ExpressionResolver,
+    path: DivStatePath
+): List<DivTextRangeResult>? {
+    builder?.let { return it.build(resolver, path) }
     return ranges?.map { DivTextRangeResult(it, resolver) }
 }
 
-internal fun DivText.Ellipsis.buildRanges(resolver: ExpressionResolver, path: DivStatePath): List<DivTextRangeResult>? {
-    rangeBuilder?.let { return it.build(resolver, path) }
-    return ranges?.map { DivTextRangeResult(it, resolver) }
-}
-
-internal fun DivText.RangeBuilder.build(resolver: ExpressionResolver, path: DivStatePath): List<DivTextRangeResult> =
+private fun DivText.RangeBuilder.build(resolver: ExpressionResolver, path: DivStatePath): List<DivTextRangeResult> =
     data.evaluate(resolver).mapIndexedNotNull { index, element -> buildItem(element, index, resolver, path) }
 
 private fun DivText.RangeBuilder.buildItem(

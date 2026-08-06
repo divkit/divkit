@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs.pager
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
@@ -13,12 +13,12 @@ import com.yandex.div2.DivPager
 
 internal class DivPagerAdapter(
     items: List<DivBlock>,
-    private val bindingContext: BindingContext,
+    private val divView: Div2View,
     private val divBinder: DivBinder,
     private val pageTranslations: SparseArray<Float>,
     private val viewCreator: DivViewCreator,
     private val pagerView: DivPagerView,
-) : DivCollectionAdapter<DivPagerViewHolder>(bindingContext, items) {
+) : DivCollectionAdapter<DivPagerViewHolder>(items) {
 
     val itemsToShow = object : AbstractList<DivBlock>() {
         override val size get() = visibleItems.size + if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM * 2 else 0
@@ -62,13 +62,12 @@ internal class DivPagerAdapter(
     fun getRealPosition(rawPosition: Int) = rawPosition - offsetToRealItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
-        val view = DivPagerPageLayout(bindingContext.divView.context) { isHorizontal }
+        val view = DivPagerPageLayout(divView.context) { isHorizontal }
         return DivPagerViewHolder(
             view,
             divBinder,
             viewCreator,
-            bindingContext.expressionResolver,
-            bindingContext.divView,
+            divView,
             { isHorizontal },
             { crossAxisAlignment },
         )

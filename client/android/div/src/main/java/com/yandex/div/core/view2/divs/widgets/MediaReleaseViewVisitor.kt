@@ -4,6 +4,7 @@ import android.view.View
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.binding.BindingDispatcher
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.view.DivImageView
 import javax.inject.Inject
 
@@ -11,6 +12,7 @@ import javax.inject.Inject
 internal class MediaReleaseViewVisitor @Inject constructor(
     private val bindingDispatcher: BindingDispatcher,
     private val extensionController: DivExtensionController,
+    private val divView: Div2View,
 ) : DivViewVisitor() {
 
     override fun visit(view: DivVideoView) {
@@ -35,13 +37,7 @@ internal class MediaReleaseViewVisitor @Inject constructor(
     }
 
     override fun defaultVisit(view: DivHolderView<*>) {
-        val bindingContext = view.bindingContext ?: return
-        val div = view.div ?: return
-        extensionController.releaseMedia(
-            bindingContext.divView,
-            bindingContext.expressionResolver,
-            view as View,
-            div.value()
-        )
+        val divBlock = view.divBlock ?: return
+        extensionController.releaseMedia(view as View, divBlock, divView)
     }
 }

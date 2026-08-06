@@ -1,50 +1,44 @@
 package com.yandex.div.core.view2.divs.pager
 
 import android.view.Gravity
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.doOnEveryDetach
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionViewHolder
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.DivLayoutParams
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivPager.ItemAlignment
 
 internal class DivPagerViewHolder(
     private val pageLayout: DivPagerPageLayout,
     divBinder: DivBinder,
     viewCreator: DivViewCreator,
-    private val parentResolver: ExpressionResolver,
     private val divView: Div2View,
     private val isHorizontal: () -> Boolean,
     private val crossAxisAlignment: () -> ItemAlignment,
-) : DivCollectionViewHolder(pageLayout, divBinder, viewCreator) {
+) : DivCollectionViewHolder(pageLayout, divBinder, viewCreator, divView) {
 
     init {
         itemView.doOnEveryDetach { view ->
-            val div = oldDiv ?: return@doOnEveryDetach
+            val divBlock = oldDivBlock ?: return@doOnEveryDetach
             divView.div2Component.visibilityActionTracker
-                .startTrackingViewsHierarchy(view, div, parentResolver, divView)
+                .startTrackingViewsHierarchy(view, divBlock.div, divBlock.expressionResolver, divView)
         }
     }
 
-    override fun bind(bindingContext: BindingContext, div: Div, position: Int, path: DivStatePath) {
-        super.bind(bindingContext, div, position, path)
-
-        (pageLayout.child?.layoutParams as? DivLayoutParams)
-            ?.setCrossAxisAlignment(div.value(), bindingContext.expressionResolver)
+    override fun bind(divBlock: DivBlock, position: Int) {
+        super.bind(divBlock, position)
+        (pageLayout.child?.layoutParams as? DivLayoutParams)?.setCrossAxisAlignment(divBlock)
     }
 
-    private fun DivLayoutParams.setCrossAxisAlignment(div: DivBase, resolver: ExpressionResolver) {
+    private fun DivLayoutParams.setCrossAxisAlignment(divBlock: DivBlock) {
+        val div = divBlock.div.value()
         val childAlignment = if (isHorizontal()) div.alignmentVertical else div.alignmentHorizontal
-        val alignment = childAlignment?.evaluate(resolver) ?: crossAxisAlignment()
+        val alignment = childAlignment?.evaluate(divBlock.expressionResolver) ?: crossAxisAlignment()
 
         gravity = if (isHorizontal()) {
             when (alignment) {

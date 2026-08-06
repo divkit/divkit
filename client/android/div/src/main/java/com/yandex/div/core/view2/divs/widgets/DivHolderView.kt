@@ -1,39 +1,29 @@
 package com.yandex.div.core.view2.divs.widgets
 
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.internal.widget.TransientViewMixin
-import com.yandex.div2.Div
 
-internal interface DivHolderView<T: Div> : DivBorderSupports,
+internal interface DivHolderView<T : DivBlock> : DivBorderSupports,
     TransientView,
     ExpressionSubscriber {
 
-    var div: T?
-    var bindingContext: BindingContext?
-    var path: DivStatePath?
+    var divBlock: T?
 
     override fun release() {
         super.release()
-        div = null
-        bindingContext = null
-        path = null
+        divBlock = null
         releaseBorderDrawer()
     }
 }
 
-internal class DivHolderViewMixin<T: Div> : DivHolderView<T>,
+internal class DivHolderViewMixin<T : DivBlock> : DivHolderView<T>,
     DivBorderSupports by DivBorderSupportsMixin(),
     TransientView by TransientViewMixin() {
 
-    override var div: T? = null
-
-    override var bindingContext: BindingContext? = null
-
-    override var path: DivStatePath? = null
+    override var divBlock: T? = null
 
     override val subscriptions = mutableListOf<Disposable>()
 }

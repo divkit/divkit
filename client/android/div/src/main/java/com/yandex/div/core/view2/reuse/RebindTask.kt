@@ -7,7 +7,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.animations.DivComparator
-import com.yandex.div.core.view2.divs.bindingContext
+import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.core.view2.reuse.util.combineTokens
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -201,12 +201,7 @@ internal class RebindTaskImpl(
 
             if (id != null && existingIdToken != null
                 && existingIdToken.div.javaClass == newToken.div.javaClass
-                && DivComparator.areValuesReplaceable(
-                    existingIdToken.div.value(),
-                    newToken.div.value(),
-                    oldResolver,
-                    newResolver
-                )
+                && DivComparator.areValuesReplaceable(existingIdToken.item, newToken.item)
             ) {
                 aloneIds.remove(id)
                 val combinedToken = combineTokens(existingIdToken, newToken)
@@ -240,15 +235,15 @@ internal class RebindTaskImpl(
         bindingPoints.forEach {
             if (bindingPoints.contains(it.parentToken)) return@forEach
 
-            val bindingContext = it.view.bindingContext ?: div2View.bindingContext
-            divBinder.bind(bindingContext, it.view, it.item.div, path)
+            val divBlock = it.view.divBlock ?: return@forEach
+            divBinder.bind(it.view, divBlock, div2View)
         }
 
         idsToBind.forEach {
             if (bindingPoints.contains(it.parentToken)) return@forEach
 
-            val bindingContext = it.view.bindingContext ?: div2View.bindingContext
-            divBinder.bind(bindingContext, it.view, it.item.div, path)
+            val divBlock = it.view.divBlock ?: return@forEach
+            divBinder.bind(it.view, divBlock, div2View)
         }
 
         clear()

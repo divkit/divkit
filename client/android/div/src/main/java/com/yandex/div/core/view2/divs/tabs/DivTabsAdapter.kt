@@ -3,23 +3,21 @@ package com.yandex.div.core.view2.divs.tabs
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
-import com.yandex.div.core.state.DivPathUtils.getIds
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toLayoutParamsSize
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
 import com.yandex.div.internal.widget.tabs.HeightCalculatorFactory
 import com.yandex.div.internal.widget.tabs.TabTextStyleProvider
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivSize
-import com.yandex.div2.DivTabs
 
 internal class DivTabsAdapter(
     viewPool: ViewPool,
@@ -27,13 +25,13 @@ internal class DivTabsAdapter(
     tabbedCardConfig: TabbedCardConfig,
     heightCalculatorFactory: HeightCalculatorFactory,
     val isDynamicHeight: Boolean,
-    var bindingContext: BindingContext,
+    var resolver: ExpressionResolver,
+    var divView: Div2View,
     textStyleProvider: TabTextStyleProvider,
     private val viewCreator: DivViewCreator,
     private val divBinder: DivBinder,
     val divTabsEventManager: DivTabsEventManager,
     val activeStateTracker: DivTabsActiveStateTracker,
-    private var path: DivStatePath,
 ) : BaseDivTabbedCardUi<DivSimpleTab, ViewGroup, DivAction>(
     viewPool,
     view,
@@ -46,17 +44,8 @@ internal class DivTabsAdapter(
 ) {
 
     private val tabModels = mutableMapOf<ViewGroup, TabModel>()
-    private val childStates = mutableMapOf<String, DivStatePath>()
-    private var childIds: List<String> = emptyList()
 
-    val tabDivs get() = tabModels.map { it.value.div }
-
-    var statePath
-        get() = path
-        set(value) {
-            path = value
-            childStates.clear()
-        }
+    val tabDivs get() = tabModels.map { it.value.divBlock.div }
 
     var selectedTab = NO_POS
         get() = mPager.currentItem
@@ -67,22 +56,15 @@ internal class DivTabsAdapter(
         }
 
     fun setData(data: Input<DivSimpleTab>) {
-        // Need to update childIds before set data to use right ids while setting.
-        childIds = data.tabs.getIds({ item.div })
-        super.setData(data, bindingContext.expressionResolver, view.expressionSubscriber)
+        super.setData(data, resolver, view.expressionSubscriber)
         tabModels.clear()
     }
 
-    override fun bindTabData(
-        tabView: ViewGroup,
-        tab: DivSimpleTab,
-        tabNumber: Int
-    ): ViewGroup {
-        tabView.releaseAndRemoveChildren(bindingContext.divView)
+    override fun bindTabData(tabView: ViewGroup, tab: DivSimpleTab): ViewGroup {
+        tabView.releaseAndRemoveChildren(divView)
 
-        val itemDiv = tab.item.div
-        val itemView = createItemView(tab, tabNumber)
-        tabModels[tabView] = TabModel(tabNumber, itemDiv, itemView)
+        val itemView = createItemView(tab)
+        tabModels[tabView] = TabModel(tab.item, itemView)
         tabView.addView(itemView)
 
         return tabView
@@ -90,36 +72,32 @@ internal class DivTabsAdapter(
 
     override fun unbindTabData(tabView: ViewGroup) {
         tabModels.remove(tabView)
-        tabView.releaseAndRemoveChildren(bindingContext.divView)
+        tabView.releaseAndRemoveChildren(divView)
     }
 
-    override fun fillMeasuringTab(tabView: ViewGroup, tab: DivSimpleTab, tabNumber: Int) {
-        tabView.releaseAndRemoveChildren(bindingContext.divView)
-        val itemView = createItemView(tab, tabNumber)
+    override fun fillMeasuringTab(tabView: ViewGroup, tab: DivSimpleTab) {
+        tabView.releaseAndRemoveChildren(divView)
+        val itemView = createItemView(tab)
         tabView.addView(itemView)
     }
 
-    private fun createItemView(tab: DivSimpleTab, tabNumber: Int): View {
-        val div = tab.item.div
-        val itemView = viewCreator.create(div, tab.resolver).apply {
+    private fun createItemView(tab: DivSimpleTab): View {
+        val item = tab.item
+        val itemView = viewCreator.create(item.div, item.expressionResolver).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
 
-        val childPath = getChildPath(tabNumber)
-        divBinder.bind(bindingContext, itemView, div, childPath)
+        divBinder.bind(itemView, item, divView)
 
         return itemView
     }
 
-    private fun getChildPath(index: Int) = childStates.getOrPut(childIds[index]) { path.appendDiv(childIds[index]) }
-
     fun notifyStateChanged() {
         tabModels.forEach { (tabView, tabModel) ->
-            val childPath = getChildPath(tabModel.index)
-            divBinder.bind(bindingContext, tabModel.view, tabModel.div, childPath)
+            divBinder.bind(tabModel.view, tabModel.divBlock, divView)
             // ... and a little bit of a magic
             tabView.requestLayout()
         }
@@ -127,38 +105,27 @@ internal class DivTabsAdapter(
 }
 
 internal class DivSimpleTab(
-    private val item: DivTabs.Item,
+    private val title: Expression<String>,
+    private val titleClickAction: DivAction?,
+    val item: DivBlock,
     private val displayMetrics: DisplayMetrics,
-    val resolver: ExpressionResolver
-) : BaseDivTabbedCardUi.Input.SimpleTab<DivTabs.Item, DivAction> {
+    val parentResolver: ExpressionResolver
+) : BaseDivTabbedCardUi.Input.TabBase<DivAction> {
 
-    override fun getTitle(): String {
-        return item.title.evaluate(resolver)
-    }
+    override fun getTitle() = title.evaluate(parentResolver)
 
-    override fun getActionable(): DivAction? {
-        return item.titleClickAction
-    }
+    override fun getActionable() = titleClickAction
 
     override fun getTabHeight(): Int? {
-        val height = item.div.value().height
-        return if (height is DivSize.Fixed) {
-            height.toLayoutParamsSize(displayMetrics, resolver)
-        } else {
-            null
-        }
+        val height = item.div.value().height as? DivSize.Fixed ?: return null
+        return height.toLayoutParamsSize(displayMetrics, item.expressionResolver)
     }
 
     override fun getTabHeightLayoutParam() =
-        item.div.value().height.toLayoutParamsSize(displayMetrics, resolver)
-
-    override fun getItem(): DivTabs.Item {
-        return item
-    }
+        item.div.value().height.toLayoutParamsSize(displayMetrics, item.expressionResolver)
 }
 
 private class TabModel(
-    val index: Int,
-    val div: Div,
+    val divBlock: DivBlock,
     val view: View
 )

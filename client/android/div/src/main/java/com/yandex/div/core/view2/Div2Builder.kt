@@ -5,6 +5,7 @@ import android.view.ViewGroup.LayoutParams
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -20,10 +21,14 @@ internal class Div2Builder @Inject constructor(
     private val runtimeVisitor: DivRuntimeVisitor,
 ) {
 
-    fun buildView(data: Div, context: BindingContext, path: DivStatePath): View {
-        return createView(data, context.expressionResolver, path, context.divView).also {
-            viewBinder.bind(context, it, data, path)
+    fun buildView(divBlock: DivBlock, divView: Div2View): View {
+        return createView(divBlock.div, divBlock.expressionResolver, divBlock.path, divView).also {
+            viewBinder.bind(it, divBlock, divView)
         }
+    }
+
+    fun buildView(div: Div, expressionResolver: ExpressionResolver, path: DivStatePath, divView: Div2View): View {
+        return buildView(DivBlock.create(div, expressionResolver, path), divView)
     }
 
     fun createView(data: Div, resolver: ExpressionResolver, path: DivStatePath, divView: Div2View): View {

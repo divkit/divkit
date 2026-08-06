@@ -23,6 +23,18 @@ import com.yandex.div2.DivTabs
 internal const val INDEX_VARIABLE_NAME = "index"
 
 @InternalApi
+fun DivBlock.Container.buildItems(): List<DivBlock> =
+    buildItems(divValue.items, divValue.itemBuilder, expressionResolver, path)
+
+@InternalApi
+fun DivBlock.Gallery.buildItems(): List<DivBlock> =
+    buildItems(divValue.items, divValue.itemBuilder, expressionResolver, path)
+
+@InternalApi
+fun DivBlock.Pager.buildItems(): List<DivBlock> =
+    buildItems(divValue.items, divValue.itemBuilder, expressionResolver, path)
+
+@InternalApi
 fun DivContainer.buildItems(resolver: ExpressionResolver, path: DivStatePath): List<DivBlock> =
     buildItems(items, itemBuilder, resolver, path)
 
@@ -153,10 +165,16 @@ val DivGrid.nonNullItems: List<Div> get() = items ?: emptyList()
 internal fun DivGrid.itemsToDivBlocks(resolver: ExpressionResolver, path: DivStatePath) =
     nonNullItems.toBlocks(resolver, path)
 
+internal fun DivBlock.Grid.itemsToDivBlocks() = divValue.nonNullItems.toBlocks(expressionResolver, path)
+
 val DivPager.nonNullItems: List<Div> get() = items ?: emptyList()
 
 internal fun DivTabs.itemsToDivBlocks(resolver: ExpressionResolver, path: DivStatePath) =
     items.toBlocks(resolver, path) { div }
+
+internal fun DivBlock.Tabs.itemsToDivBlocks() = divValue.items.toBlocks(expressionResolver, path) { div }
+
+internal fun DivBlock.State.statesToDivBlocks() = divValue.statesToDivBlocks(expressionResolver, path)
 
 internal fun DivState.statesToDivBlocks(
     resolver: ExpressionResolver,
@@ -176,6 +194,9 @@ internal fun DivState.statesToDivBlocks(
         div.toBlock(stateResolver, statePath)
     }
 }
+
+internal fun DivBlock.Custom.itemsToDivBlocks() =
+    divValue.items?.toBlocks(expressionResolver, path) ?: emptyList()
 
 internal fun List<Div>.toBlocks(resolver: ExpressionResolver, path: DivStatePath) =
     toBlocks(resolver, path) { this }
@@ -197,4 +218,4 @@ private fun <T> List<T>.toBlocks(
 internal fun Div.toBlock(
     resolver: ExpressionResolver,
     path: DivStatePath,
-) = DivBlock(this, resolver, path)
+) = DivBlock.create(this, resolver, path)

@@ -11,6 +11,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.UnitTestData
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivData
 import org.junit.Assert
 import org.junit.Test
@@ -33,7 +34,7 @@ class DivJoinedStateSwitcherTest {
 
     private val activity = Robolectric.buildActivity(Activity::class.java).setup().get()
     private val viewBinder = mock<DivBinder>()
-    private val pathCaptor = argumentCaptor<DivStatePath>()
+    private val blockCaptor = argumentCaptor<DivBlock>()
     private val div2Context = Div2Context(
         baseContext = activity,
         configuration = DivConfiguration.Builder(mock()).build()
@@ -57,7 +58,9 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, resolver, listOf(notActiveState))
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
+        verify(viewBinder).bind(any(), blockCaptor.capture(), eq(div2View))
+        Assert.assertEquals(div, blockCaptor.firstValue.div)
+        Assert.assertEquals(rootStatePath, blockCaptor.firstValue.path)
     }
 
     @Test
@@ -67,8 +70,9 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, resolver, listOf(activeState))
 
-        verify(viewBinder).bind(any(), any(), eq(div), pathCaptor.capture())
-        Assert.assertEquals(activeState.parentState().statesString, pathCaptor.firstValue.statesString)
+        verify(viewBinder).bind(any(), blockCaptor.capture(), eq(div2View))
+        Assert.assertEquals(div, blockCaptor.firstValue.div)
+        Assert.assertEquals(activeState.parentState().statesString, blockCaptor.firstValue.path.statesString)
     }
 
     @Test
@@ -78,8 +82,9 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, resolver, listOf(activeState))
 
-        verify(viewBinder).bind(any(), any(), eq(div), pathCaptor.capture())
-        Assert.assertEquals(activeState.parentState().statesString, pathCaptor.firstValue.statesString)
+        verify(viewBinder).bind(any(), blockCaptor.capture(), eq(div2View))
+        Assert.assertEquals(div, blockCaptor.firstValue.div)
+        Assert.assertEquals(activeState.parentState().statesString, blockCaptor.firstValue.path.statesString)
     }
 
     @Test
@@ -92,7 +97,9 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, resolver, paths)
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
+        verify(viewBinder).bind(any(), blockCaptor.capture(), eq(div2View))
+        Assert.assertEquals(div, blockCaptor.firstValue.div)
+        Assert.assertEquals(rootStatePath, blockCaptor.firstValue.path)
     }
 
     @Test
@@ -106,7 +113,9 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, resolver, paths)
 
-        verify(viewBinder).bind(any(), any(), eq(div), eq(rootStatePath))
+        verify(viewBinder).bind(any(), blockCaptor.capture(), eq(div2View))
+        Assert.assertEquals(div, blockCaptor.firstValue.div)
+        Assert.assertEquals(rootStatePath, blockCaptor.firstValue.path)
     }
 
     @Test
@@ -118,6 +127,8 @@ class DivJoinedStateSwitcherTest {
 
         stateSwitcher.switchStates(divDataState, resolver, paths)
 
-        verify(viewBinder).bind(any(), any(), eq(rootDiv), eq(commonPath))
+        verify(viewBinder).bind(any(), blockCaptor.capture(), eq(div2View))
+        Assert.assertEquals(rootDiv, blockCaptor.firstValue.div)
+        Assert.assertEquals(commonPath, blockCaptor.firstValue.path)
     }
 }

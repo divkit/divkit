@@ -9,15 +9,15 @@ import com.yandex.div.core.extension.DivExtensionView
 import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.FrameContainerLayout
-import com.yandex.div2.Div
 
 internal class DivVideoView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.divImageStyle
 ) : FrameContainerLayout(context, attrs, defStyleAttr),
-    DivHolderView<Div.Video> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.Video> by DivHolderViewMixin(),
     DivExtensionView,
     Releasable,
     MediaReleasable {

@@ -13,11 +13,14 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.animations.DIV_STATE_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
+import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.internal.core.DivBlock
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -38,7 +41,12 @@ class Div2ViewReleaseChildrenTest {
         baseContext = activity,
         configuration = DivConfiguration.Builder(mock()).build()
     )
-    private val viewBinder = mock<DivBinder>()
+    private val viewBinder = mock<DivBinder> {
+        on { bind(any(), any(), any()) } doAnswer {
+            @Suppress("UNCHECKED_CAST")
+            (it.arguments[0] as DivHolderView<DivBlock>).divBlock = it.arguments[1] as DivBlock
+        }
+    }
     private val divExtensionController = DivExtensionController(emptyList())
     private val releaseViewVisitor = spy(ReleaseViewVisitor(mock(), DivCustomContainerViewAdapter.STUB, divExtensionController))
     private val component: TestComponent = TestComponent(

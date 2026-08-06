@@ -2,16 +2,14 @@ package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayBooleanVariableBinder
-import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSwitchView
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
-import com.yandex.div2.Div
 import com.yandex.div2.DivSwitch
 import javax.inject.Inject
 
@@ -19,18 +17,19 @@ import javax.inject.Inject
 internal class DivSwitchBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val variableBinder: TwoWayBooleanVariableBinder
-) : DivViewBinder<Div.Switch, DivSwitch, DivSwitchView>(baseBinder) {
+) : DivViewBinder<DivBlock.Switch, DivSwitchView>(baseBinder) {
 
     override fun DivSwitchView.bind(
-        bindingContext: BindingContext,
-        div: DivSwitch,
-        oldDiv: DivSwitch?,
-        path: DivStatePath
+        divBlock: DivBlock.Switch,
+        oldDivBlock: DivBlock.Switch?,
+        divView: Div2View,
     ) {
-        bindIsEnabled(div, oldDiv, bindingContext.expressionResolver)
-        bindOnColor(div, oldDiv, bindingContext.expressionResolver)
+        val div = divBlock.divValue
+        val expressionResolver = divBlock.expressionResolver
+        bindIsEnabled(div, oldDivBlock?.divValue, expressionResolver)
+        bindOnColor(div, oldDivBlock?.divValue, expressionResolver)
 
-        observeVariable(div, bindingContext.expressionResolver, bindingContext.divView)
+        observeVariable(div, expressionResolver, divView)
     }
 
     private fun DivSwitchView.bindIsEnabled(div: DivSwitch, oldDiv: DivSwitch?, resolver: ExpressionResolver) {

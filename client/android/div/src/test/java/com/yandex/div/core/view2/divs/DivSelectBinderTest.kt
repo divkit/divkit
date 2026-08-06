@@ -7,10 +7,11 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.internal.util.textString
 import com.yandex.div.internal.widget.SelectView
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivSelect
 import org.junit.Assert
 import org.junit.Test
@@ -46,15 +47,16 @@ class DivSelectBinderTest : DivBinderTest() {
     )
 
     private val path = DivStatePath(0)
-    private val div = UnitTestData(SELECT_DIR, "with_options.json").div as Div.Select
-    private val divSelect = div.value
-    private val view = (viewCreator.create(div, ExpressionResolver.EMPTY) as DivSelectView).apply {
+    private val div = UnitTestData(SELECT_DIR, "with_options.json").div
+        .toBlock(resolver, path) as DivBlock.Select
+    private val divSelect = div.divValue
+    private val view = (viewCreator.create(div.div, ExpressionResolver.EMPTY) as DivSelectView).apply {
         layoutParams = defaultLayoutParams()
     }
 
     @Test
     fun `bind value_variable`() {
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
 
         verify(variableBinder).bindVariable(eq(divSelect.valueVariable), any(), any(), any())
         verifyNoMoreInteractions(variableBinder)
@@ -62,7 +64,7 @@ class DivSelectBinderTest : DivBinderTest() {
 
     @Test
     fun `update text after variable changed`() {
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
         verify(variableBinder).bindVariable(any(), any(), any(), captor.capture())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
@@ -79,7 +81,7 @@ class DivSelectBinderTest : DivBinderTest() {
     fun `update text and variable after option selected`() {
         val viewStateChangeListener = mock<(String) -> Unit>()
 
-        underTest.bindView(bindingContext, view, div, path)
+        underTest.bindView(view, div, divView)
         verify(variableBinder).bindVariable(any(), any(), any(), captor.capture())
 
         val (optionText, optionValue) = divSelect.options.evaluateLastOption()
@@ -100,8 +102,8 @@ class DivSelectBinderTest : DivBinderTest() {
     private fun List<DivSelect.Option>.evaluateLastOption(): Pair<String, String> {
         val option = last()
 
-        val optionValue = option.value.evaluate(bindingContext.expressionResolver)
-        val optionText = option.text?.evaluate(bindingContext.expressionResolver) ?: optionValue
+        val optionValue = option.value.evaluate(resolver)
+        val optionText = option.text?.evaluate(resolver) ?: optionValue
 
         return optionText to optionValue
     }

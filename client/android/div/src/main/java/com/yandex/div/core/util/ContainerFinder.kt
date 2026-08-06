@@ -1,12 +1,8 @@
 package com.yandex.div.core.util
 
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.DivTreeVisitor
-import com.yandex.div.internal.core.toBlock
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 
 internal class ContainerFinder(private val id: String) : DivTreeVisitor<Unit>() {
 
@@ -33,9 +29,9 @@ internal class ContainerFinder(private val id: String) : DivTreeVisitor<Unit>() 
         return containers.first()
     }
 
-    override fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath) {
-        if (data.value().id == id) {
-            containers.add(data.toBlock(resolver, path))
+    override fun defaultVisit(divBlock: DivBlock) {
+        if (divBlock.div.value().id == id) {
+            containers.add(divBlock)
         }
     }
 }

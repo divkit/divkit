@@ -9,7 +9,6 @@ import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.DivImageLoader
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivValidator
@@ -59,7 +58,6 @@ open class DivBinderTest {
         on { oldExpressionResolver } doReturn oldExpressionResolver
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
     }
-    internal val bindingContext = BindingContext(divView, resolver)
     private val divExtensionController = DivExtensionController(emptyList())
 
     internal val visitor: ReleaseViewVisitor = spy(

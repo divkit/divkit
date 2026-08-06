@@ -10,14 +10,13 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
-import com.yandex.div.core.view2.divs.asDivHolderView
+import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
 import com.yandex.div2.Div
 import com.yandex.div2.DivTooltip
 import javax.inject.Inject
 import javax.inject.Provider
-import kotlin.sequences.forEach
 
 @DivScope
 internal class DivTooltipViewBuilder @Inject constructor(
@@ -53,18 +52,15 @@ internal class DivTooltipViewBuilder @Inject constructor(
     private fun prepareBringToTopView(
         context: BindingContext,
         bringToTopView: View,
-    ) = bringToTopView.asDivHolderView?.div?.let { div ->
-        prepareView(context, div).apply { makeNonInteractive() }
+    ) = bringToTopView.divBlock?.let { divBlock ->
+        prepareView(context, divBlock.div).apply { makeNonInteractive() }
     }
 
     private fun prepareView(
         context: BindingContext,
         div: Div,
-    ) = div2Builder.get().buildView(
-        data = div,
-        context = context,
-        path = DivStatePath.fromRootDiv(0, div),
-    ).apply {
+    ) = div2Builder.get()
+        .buildView(div, context.expressionResolver, DivStatePath.fromRootDiv(0, div), context.divView).apply {
         val divBase = div.value()
         val resolver = context.expressionResolver
         val displayMetrics = this.context.resources.displayMetrics

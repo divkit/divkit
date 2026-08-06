@@ -18,11 +18,10 @@ import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.font.DivTypefaceType
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivImageLoader
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
@@ -39,7 +38,9 @@ import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.core.itemsToDivBlocks
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
@@ -53,7 +54,6 @@ import com.yandex.div.internal.widget.tabs.TabTitlesLayoutView
 import com.yandex.div.internal.widget.tabs.TabView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSize
@@ -77,7 +77,7 @@ internal class DivTabsBinder @Inject constructor(
     private val runtimeVisitor: DivRuntimeVisitor,
     private val tabsStateCache: TabsStateCache,
     private val animationsEnabledController: DivAnimationsEnabledController,
-) : DivViewBinder<Div.Tabs, DivTabs, DivTabsLayout>(baseBinder) {
+) : DivViewBinder<DivBlock.Tabs, DivTabsLayout>(baseBinder) {
 
     private var oldDivSelectedTab: Long? = null
 
@@ -86,23 +86,27 @@ internal class DivTabsBinder @Inject constructor(
         viewPool.register(TAG_TAB_ITEM, { TabItemLayout(context) }, 2)
     }
 
-    override fun bindView(context: BindingContext, view: DivTabsLayout, div: Div.Tabs, path: DivStatePath) {
-        val oldDiv = view.div
-        if (oldDiv === div) {
-            view.divTabsAdapter?.setData { div.value.createSimpleTabs(view, context.expressionResolver) }
+    override fun bindView(view: DivTabsLayout, divBlock: DivBlock.Tabs, divView: Div2View) {
+        val oldDivBlock = view.divBlock
+        if (oldDivBlock?.div === divBlock.div) {
+            view.divTabsAdapter?.setData { divBlock.createSimpleTabs(view) }
             return
         }
 
-        baseBinder.bindView(context, view, div, oldDiv, path)
-        view.bind(context, div.value, oldDiv?.value)
-        bindAdapter(path, context, view, oldDiv?.value, div.value, divBinder.get(), view)
+        baseBinder.bindView(view, divBlock, oldDivBlock, divView)
+        view.bind(divBlock, oldDivBlock, divView)
+        bindAdapter(view, divBlock, divView, oldDivBlock?.divValue, divBinder.get(), view)
     }
 
-    override fun DivTabsLayout.bind(bindingContext: BindingContext, div: DivTabs, oldDiv: DivTabs?) {
-        val resolver = bindingContext.expressionResolver
-
+    override fun DivTabsLayout.bind(
+        divBlock: DivBlock.Tabs,
+        oldDivBlock: DivBlock.Tabs?,
+        divView: Div2View
+    ) {
         clipToPadding = false
 
+        val div = divBlock.divValue
+        val resolver = divBlock.expressionResolver
         val applyPaddings = { _: Any? ->
             titleLayout.applyPaddings(div.titlePaddings, resolver)
         }
@@ -114,15 +118,15 @@ internal class DivTabsBinder @Inject constructor(
 
         titleLayout.observeHeight(div, resolver)
         observeStyle(resolver, div.tabTitleStyle)
-        observeDividerStyle(resolver, div.tabTitleDelimiter, bindingContext)
+        observeDividerStyle(resolver, div.tabTitleDelimiter, divView)
         pagerLayout.clipToPadding = false
         div.separatorPaddings.observe(resolver, this) { divider.applyMargins(div.separatorPaddings, resolver) }
         addSubscription(div.separatorColor.observeAndGet(resolver) { divider.setBackgroundColor(it) })
         addSubscription(div.hasSeparator.observeAndGet(resolver) {
             divider.visibility = if (it) View.VISIBLE else View.GONE
         })
-        titleLayout.setOnScrollChangedListener { div2Logger.logTabTitlesScroll(bindingContext.divView) }
-        titleLayout.setFocusTracker(bindingContext.divView.inputFocusTracker)
+        titleLayout.setOnScrollChangedListener { div2Logger.logTabTitlesScroll(divView) }
+        titleLayout.setFocusTracker(divView.inputFocusTracker)
         titleLayout.setAnimationsEnabledProvider { animationsEnabledController.isEnabled() }
 
         addSubscription(div.restrictParentScroll.observeAndGet(resolver) {
@@ -130,24 +134,27 @@ internal class DivTabsBinder @Inject constructor(
         })
     }
 
-    private fun DivTabs.createSimpleTabs(view: View, resolver: ExpressionResolver) =
-        items.map { DivSimpleTab(it, view.resources.displayMetrics, resolver) }
+    private fun DivBlock.Tabs.createSimpleTabs(view: View): List<DivSimpleTab> {
+        return divValue.items.zip(itemsToDivBlocks()) { item, tabBlock ->
+            DivSimpleTab(item.title, item.titleClickAction, tabBlock, view.resources.displayMetrics, expressionResolver)
+        }
+    }
 
     private fun bindAdapter(
-        path: DivStatePath,
-        bindingContext: BindingContext,
         view: DivTabsLayout,
+        divBlock: DivBlock.Tabs,
+        divView: Div2View,
         oldDiv: DivTabs?,
-        div: DivTabs,
         divBinder: DivBinder,
         subscriber: ExpressionSubscriber
     ) {
-        val resolver = bindingContext.expressionResolver
-        val list = div.createSimpleTabs(view, resolver)
+        val div = divBlock.divValue
+        val resolver = divBlock.expressionResolver
+        val list = divBlock.createSimpleTabs(view)
 
         view.divTabsAdapter?.takeIf { it.isDynamicHeight == div.dynamicHeight.evaluate(resolver) }
-            ?.reuse(path, bindingContext, oldDiv, div, list)
-            ?: view.setupNewAdapter(bindingContext, div, divBinder, path, list)
+            ?.reuse(divBlock, divView, oldDiv, list)
+            ?: view.setupNewAdapter(divBlock, divView, divBinder, list)
 
         div.items.observeFixedHeightChange(resolver, subscriber) {
             view.divTabsAdapter?.notifyStateChanged()
@@ -163,12 +170,11 @@ internal class DivTabsBinder @Inject constructor(
                 return@observe
             }
 
-            view.setupNewAdapter(bindingContext, div, divBinder, path, list, view.divTabsAdapter?.selectedTab)
+            view.setupNewAdapter(divBlock,divView, divBinder, list, view.divTabsAdapter?.selectedTab)
         })
 
         subscriber.addSubscription(div.selectedTab.observe(resolver, selectTab))
 
-        val divView = bindingContext.divView
         val isDataTagTheSame = divView.prevDataTag == DivDataTag.INVALID
             || divView.dataTag == divView.prevDataTag
 
@@ -190,17 +196,16 @@ internal class DivTabsBinder @Inject constructor(
     }
 
     private fun DivTabsAdapter.reuse(
-        path: DivStatePath,
-        context: BindingContext,
+        divBlock: DivBlock.Tabs,
+        divView: Div2View,
         oldDiv: DivTabs?,
-        div: DivTabs,
         list: List<DivSimpleTab>,
     ) {
-        bindingContext = context
-        statePath = path
-        divTabsEventManager.div = div
-        activeStateTracker.div = div
-        if (oldDiv === div) {
+        this.resolver = divBlock.expressionResolver
+        this.divView = divView
+        divTabsEventManager.divBlock = divBlock
+        activeStateTracker.divBlock = divBlock
+        if (oldDiv === divBlock.divValue) {
             // rebind tabs only
             notifyStateChanged()
         } else {
@@ -209,24 +214,21 @@ internal class DivTabsBinder @Inject constructor(
     }
 
     private fun DivTabsLayout.setupNewAdapter(
-        bindingContext: BindingContext,
-        div: DivTabs,
+        divBlock: DivBlock.Tabs,
+        divView: Div2View,
         divBinder: DivBinder,
-        path: DivStatePath,
         list: List<DivSimpleTab>,
         tabToSelect: Int? = null,
     ) {
-        val resolver = bindingContext.expressionResolver
         val eventManager = DivTabsEventManager(
+            divBlock,
             actionPerformer,
             div2Logger,
             visibilityActionTracker,
             this,
-            resolver,
-            bindingContext.divView,
-            div
+            divView,
         )
-        val isDynamicHeight = div.dynamicHeight.evaluate(resolver)
+        val isDynamicHeight = divBlock.divValue.dynamicHeight.evaluate(divBlock.expressionResolver)
         val heightCalculatorFactory = if (isDynamicHeight) {
             HeightCalculatorFactory(::DynamicCardHeightCalculator)
         } else {
@@ -240,15 +242,16 @@ internal class DivTabsBinder @Inject constructor(
                 eventManager.onPageDisplayed(currentTab)
             }
         }
-        val activeStateTracker = DivTabsActiveStateTracker(
-            bindingContext, path, div2Logger, tabsStateCache, runtimeVisitor, div)
+        val activeStateTracker =
+            DivTabsActiveStateTracker(divBlock, divView, div2Logger, tabsStateCache, runtimeVisitor)
         val adapter = DivTabsAdapter(
             viewPool, this, getTabbedCardLayoutIds(), heightCalculatorFactory, isDynamicHeight,
-            bindingContext, textStyleProvider, viewCreator, divBinder,
-            eventManager, activeStateTracker, path,
+            divBlock.expressionResolver, divView, textStyleProvider, viewCreator, divBinder,
+            eventManager, activeStateTracker,
         )
         adapter.setData { list }
-        adapter.selectedTab = tabToSelect ?: div.selectedTab.evaluate(resolver).toIntSafely()
+        adapter.selectedTab =
+            tabToSelect ?: divBlock.divValue.selectedTab.evaluate(divBlock.expressionResolver).toIntSafely()
         divTabsAdapter = adapter
     }
 
@@ -323,11 +326,11 @@ internal class DivTabsBinder @Inject constructor(
     private fun DivTabsLayout.observeDividerStyle(
         resolver: ExpressionResolver,
         style: DivTabs.TabTitleDelimiter?,
-        bindingContext: BindingContext,
+        divView: Div2View,
     ) {
         style ?: return
-        titleLayout.applyDelimiterStyle(resolver, style, bindingContext)
-        val callback = { _: Any? -> titleLayout.applyDelimiterStyle(resolver, style, bindingContext) }
+        titleLayout.applyDelimiterStyle(resolver, style, divView)
+        val callback = { _: Any? -> titleLayout.applyDelimiterStyle(resolver, style, divView) }
 
         style.width.value.observe(resolver, callback)
         style.width.unit.observe(resolver, callback)
@@ -339,7 +342,7 @@ internal class DivTabsBinder @Inject constructor(
     private fun TabTitlesLayoutView<*>.applyDelimiterStyle(
         resolver: ExpressionResolver,
         style: DivTabs.TabTitleDelimiter,
-        bindingContext: BindingContext,
+        divView: Div2View,
     ) {
         val metrics = resources.displayMetrics
         val evaluatedWidth = style.width.let { width ->
@@ -351,7 +354,7 @@ internal class DivTabsBinder @Inject constructor(
 
         val reference = imageLoader.loadImage(
             style.imageUrl.evaluate(resolver).toString(),
-            object : DivIdLoggingImageDownloadCallback(bindingContext.divView) {
+            object : DivIdLoggingImageDownloadCallback(divView) {
 
                 override fun onSuccess(bitmap: Bitmap, source: BitmapSource) =
                     setTabDelimiter(bitmap, evaluatedWidth, evaluatedHeight)
@@ -366,7 +369,7 @@ internal class DivTabsBinder @Inject constructor(
             }
         )
 
-        bindingContext.divView.addLoadReference(reference, this)
+        divView.addLoadReference(reference, this)
     }
 
     private fun DivTabs.TabTitleStyle.getCornerRadii(

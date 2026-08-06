@@ -96,11 +96,9 @@ internal object DivPathUtils {
             }
         }
 
-        val divByPath = viewByPath?.div
-            ?: state.div.findDivState(path, resolver) as? Div.State
-            ?: return null // Ignore if no such state
-
-        return Pair(viewByPath, divByPath)
+        val divByPath = viewByPath?.divBlock?.div ?: state.div.findDivState(path, resolver)
+        val divState = divByPath as? Div.State ?: return null // Ignore if no such state
+        return Pair(viewByPath, divState)
     }
 
     /**
@@ -150,7 +148,7 @@ internal object DivPathUtils {
     ): Div? = firstNotNullOfOrNull { getDiv(it)?.findByPath(divId, resolver, path) }
 
     private fun Iterable<DivBlock>.findRecursively(divId: String, path: DivStatePath): Div? =
-        firstNotNullOfOrNull { (div, resolver) -> div.findByPath(divId, resolver, path) }
+        firstNotNullOfOrNull { it.div.findByPath(divId, it.expressionResolver, path) }
 
     internal fun DivState.getId(errorCallback: (() -> Unit)? = null): String = divId ?: id ?: run {
         errorCallback?.invoke()

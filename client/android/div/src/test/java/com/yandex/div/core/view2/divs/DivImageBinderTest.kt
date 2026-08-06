@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.divs
 
-import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -12,7 +11,10 @@ import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.DivPlaceholderLoader
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -60,7 +62,7 @@ class DivImageBinderTest : DivBinderTest() {
     fun `url action applied`() {
         val (view, divImage) = createTestDiv("with_action.json")
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
         assertActionApplied(view, Expected.ACTION_URI, resolver, divView)
     }
@@ -69,7 +71,7 @@ class DivImageBinderTest : DivBinderTest() {
     fun `state action applied`() {
         val (view, divImage) = createTestDiv("with_set_state_action.json")
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
         assertActionApplied(view, Expected.STATE_ACTION_URI, resolver, divView)
     }
@@ -79,11 +81,11 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
         verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -93,15 +95,15 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
         val nextDivImage = createTestDiv(preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, nextDivImage, path)
+        binder.bindView(view, nextDivImage, divView)
 
         verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -110,13 +112,13 @@ class DivImageBinderTest : DivBinderTest() {
     fun `do not bind image when imageUrl did not change and image was loaded`() {
         val (view, divImage) = createTestDiv("with_action.json")
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
         reset(placeholderLoader)
 
-        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val (_, nextDivImage) = createTestDiv("with_action.json")
-        binder.bindView(bindingContext, view, nextDivImage, path)
+        binder.bindView(view, nextDivImage, divView)
         verifyNoMoreInteractions(placeholderLoader)
         verifyNoMoreInteractions(imageLoader)
     }
@@ -126,15 +128,15 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(imageUrl = "empty://", preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
         val nextDivImage = createTestDiv(imageUrl = "empty://", preview = PREVIEW_B, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, nextDivImage, path)
+        binder.bindView(view, nextDivImage, divView)
 
         verify(placeholderLoader, times(2)).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -144,15 +146,15 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(imageUrl = "empty://", preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
         val nextDivImage = createTestDiv(imageUrl = "empty://", preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, nextDivImage, path)
+        binder.bindView(view, nextDivImage, divView)
 
         verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -162,16 +164,16 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
-        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val nextDivImage = createTestDiv()
-        binder.bindView(bindingContext, view, nextDivImage, path)
+        binder.bindView(view, nextDivImage, divView)
 
         verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(
-            eq(nextDivImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
+            eq(nextDivImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()),
             any<DivImageDownloadCallback>()
         )
     }
@@ -181,12 +183,12 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
         verify(placeholderLoader)
             .applyPlaceholder(any(), any(), anyOrNull(), any(), synchronous = eq(true), any(), any())
 
-        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val nextDivImage = createTestDiv(
             imageUrl = "https://foo.bar/bar.png",
@@ -194,7 +196,7 @@ class DivImageBinderTest : DivBinderTest() {
             highPriorityPreviewShow = true
         )
 
-        binder.bindView(bindingContext, view, nextDivImage, path)
+        binder.bindView(view, nextDivImage, divView)
 
         verify(placeholderLoader)
             .applyPlaceholder(any(), any(), eq(PREVIEW), any(), synchronous = eq(false), any(), any())
@@ -205,14 +207,14 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
-        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val spyView = spy(view)
 
         val nextDivImage = createTestDiv(imageUrl = "https://foo.bar/bar.png", highPriorityPreviewShow = true)
-        binder.bindView(bindingContext, spyView, nextDivImage, path)
+        binder.bindView(spyView, nextDivImage, divView)
 
         verify(spyView).resetImageLoaded()
     }
@@ -222,14 +224,14 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(highPriorityPreviewShow = true)
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
 
-        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
 
         val spyView = spy(view)
 
         val nextDivImage = createTestDiv(highPriorityPreviewShow = true)
-        binder.bindView(bindingContext, spyView, nextDivImage, path)
+        binder.bindView(spyView, nextDivImage, divView)
 
         verify(spyView, never()).resetImageLoaded()
     }
@@ -239,19 +241,19 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(tintColor = "#ffffff")
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
         Assert.assertNull(view.colorFilter)
-        whenImageLoaded(divImage.value.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
+        whenImageLoaded(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
         Assert.assertNotNull(view.colorFilter)
 
         // with the same image url
         val nextDivImage = createTestDiv(tintColor = "#ffffff")
-        binder.bindView(bindingContext, view, nextDivImage, path)
+        binder.bindView(view, nextDivImage, divView)
         Assert.assertNotNull(view.colorFilter)
 
         // with another image url
         val anotherDivImage = createTestDiv(imageUrl = "https://another_image.png", tintColor = "#ffffff")
-        binder.bindView(bindingContext, view, anotherDivImage, path)
+        binder.bindView(view, anotherDivImage, divView)
         Assert.assertNull(view.colorFilter)
     }
 
@@ -260,7 +262,7 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(preview = PREVIEW, tintColor = "#ffffff")
 
-        binder.bindView(bindingContext, view, divImage, path)
+        binder.bindView(view, divImage, divView)
         Assert.assertNull(view.colorFilter)
         whenPreviewLoaded()
         Assert.assertNotNull(view.colorFilter)
@@ -283,9 +285,9 @@ class DivImageBinderTest : DivBinderTest() {
         previewSetCallbackCaptor.firstValue.invoke(ImageRepresentation.Bitmap(bitmap))
     }
 
-    private fun createTestDiv(fileName: String): Pair<DivImageView, Div.Image> {
-        val div = UnitTestData(IMAGE_DIR, fileName).div as Div.Image
-        val view = viewCreator.create(div, ExpressionResolver.EMPTY) as DivImageView
+    private fun createTestDiv(fileName: String): Pair<DivImageView, DivBlock.Image> {
+        val div = UnitTestData(IMAGE_DIR, fileName).div.toBlock(resolver, path) as DivBlock.Image
+        val view = viewCreator.create(div.div, ExpressionResolver.EMPTY) as DivImageView
         view.layoutParams = defaultLayoutParams()
         return view to div
     }
@@ -295,13 +297,13 @@ class DivImageBinderTest : DivBinderTest() {
         preview: String? = null,
         highPriorityPreviewShow: Boolean = false,
         tintColor: String? = null
-    ): Div.Image {
+    ): DivBlock.Image {
         return Div.Image(DivImage(
             imageUrl = Uri.parse(imageUrl).asExpression(),
             preview = preview?.asExpression(),
             highPriorityPreviewShow = highPriorityPreviewShow.asExpression(),
             tintColor = tintColor?.let { Color.parseColor(it).asExpression() }
-        ))
+        )).toBlock(resolver, path) as DivBlock.Image
     }
 
     companion object {

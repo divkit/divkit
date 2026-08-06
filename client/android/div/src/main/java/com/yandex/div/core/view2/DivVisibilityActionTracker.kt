@@ -12,7 +12,7 @@ import com.yandex.div.core.util.SynchronizedWeakHashMap
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.doOnHierarchyLayout
-import com.yandex.div.core.view2.divs.bindingContext
+import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.util.duration
@@ -159,7 +159,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
             } else {
                 previousVisibilityIsFull[currentView] = isViewFullyVisible
                 currentDiv?.let {
-                    val childResolver = currentView.bindingContext?.expressionResolver ?: resolver
+                    val childResolver = currentView.divBlock?.expressionResolver ?: resolver
                     trackVisibilityActionsOf(divView, childResolver, currentView, it)
                 }
                 true
@@ -176,7 +176,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         trackViewsHierarchy(root, div, divView) { currentView, currentDiv ->
             previousVisibilityIsFull.remove(currentView)
             currentDiv?.let {
-                val childResolver = currentView.bindingContext?.expressionResolver ?: resolver
+                val childResolver = currentView.divBlock?.expressionResolver ?: resolver
                 trackVisibilityActionsOf(divView, childResolver, null, it)
             }
             true

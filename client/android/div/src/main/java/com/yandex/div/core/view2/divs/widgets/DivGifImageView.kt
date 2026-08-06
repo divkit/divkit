@@ -7,14 +7,14 @@ import android.util.AttributeSet
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.widget.DivExtendableView
 import com.yandex.div.core.widget.LoadableImageView
-import com.yandex.div2.Div
+import com.yandex.div.internal.core.DivBlock
 
 internal open class DivGifImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LoadableImageView(context, attrs, defStyleAttr),
-    DivHolderView<Div.GifImage> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.GifImage> by DivHolderViewMixin(),
     DivExtendableView,
     MediaReleasable {
 

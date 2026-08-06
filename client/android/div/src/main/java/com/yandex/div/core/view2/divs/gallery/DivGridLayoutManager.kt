@@ -51,7 +51,7 @@ internal class DivGridLayoutManager(
 
         val position = _getPosition(child)
         if (position == RecyclerView.NO_POSITION) return
-        val item = getItemDiv(position) ?: return
+        val item = getItemDivBlock(position) ?: return
 
         val div = item.div.value()
 

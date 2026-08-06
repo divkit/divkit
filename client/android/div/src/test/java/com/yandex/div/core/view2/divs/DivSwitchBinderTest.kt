@@ -5,6 +5,8 @@ import com.yandex.div.core.expression.variables.TwoWayVariableBinder
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.widgets.DivSwitchView
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -31,20 +33,19 @@ class DivSwitchBinderTest : DivBinderTest() {
     private val underTest = DivSwitchBinder(baseBinder, variableBinder)
     private val path = DivStatePath(0)
 
-
     @Test
     fun `bind is_on_variable`() {
         val (divSwitch, view) = createDivAndView(SWITCH_WITH_ON_COLOR)
-        underTest.bindView(bindingContext, view, divSwitch, path)
+        underTest.bindView(view, divSwitch, divView)
 
-        verify(variableBinder).bindVariable(eq(divSwitch.value.isOnVariable), any(), any(), any())
+        verify(variableBinder).bindVariable(eq(divSwitch.divValue.isOnVariable), any(), any(), any())
         verifyNoMoreInteractions(variableBinder)
     }
 
     @Test
     fun `update isChecked after variable changed`() {
         val (divSwitch, view) = createDivAndView(SWITCH_WITH_ON_COLOR)
-        underTest.bindView(bindingContext, view, divSwitch, path)
+        underTest.bindView(view, divSwitch, divView)
         verify(variableBinder).bindVariable(any(), any(), any(), captor.capture())
 
         val checked = true
@@ -61,7 +62,7 @@ class DivSwitchBinderTest : DivBinderTest() {
         val (divSwitch, view) = createDivAndView(SWITCH_WITH_ON_COLOR)
         val viewStateChangeListener = mock<(Boolean) -> Unit>()
 
-        underTest.bindView(bindingContext, view, divSwitch, path)
+        underTest.bindView(view, divSwitch, divView)
         verify(variableBinder).bindVariable(any(), any(), any(), captor.capture())
 
         val checked = true
@@ -82,7 +83,7 @@ class DivSwitchBinderTest : DivBinderTest() {
     @Test
     fun `on_color bound if provided`() {
         val (divSwitch, view) = createDivAndView(SWITCH_WITH_ON_COLOR)
-        underTest.bindView(bindingContext, view, divSwitch, path)
+        underTest.bindView(view, divSwitch, divView)
         Assert.assertNotNull(view.colorOn)
         Assert.assertNotNull(view.thumbTintList)
         Assert.assertNotNull(view.trackTintList)
@@ -91,7 +92,7 @@ class DivSwitchBinderTest : DivBinderTest() {
     @Test
     fun `on_color not bound if not provided`() {
         val (divSwitch, view) = createDivAndView(SWITCH_WITHOUT_ON_COLOR)
-        underTest.bindView(bindingContext, view, divSwitch, path)
+        underTest.bindView(view, divSwitch, divView)
         Assert.assertNull(view.colorOn)
         Assert.assertNotNull(view.thumbTintList)
         Assert.assertNotNull(view.trackTintList)
@@ -103,10 +104,10 @@ class DivSwitchBinderTest : DivBinderTest() {
         Assert.assertEquals(expectedValue, isChecked)
     }
 
-    private fun createDivAndView(jsonString: String): Pair<Div.Switch, DivSwitchView> {
+    private fun createDivAndView(jsonString: String): Pair<DivBlock.Switch, DivSwitchView> {
         val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)
-        val div = Div(environment, JSONObject(jsonString)) as Div.Switch
-        val view = (viewCreator.create(div, ExpressionResolver.EMPTY) as DivSwitchView).apply {
+        val div = Div(environment, JSONObject(jsonString)).toBlock(resolver, path) as DivBlock.Switch
+        val view = (viewCreator.create(div.div, ExpressionResolver.EMPTY) as DivSwitchView).apply {
             layoutParams = defaultLayoutParams()
         }
         return div to view

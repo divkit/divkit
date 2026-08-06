@@ -7,13 +7,13 @@ import android.view.View
 import androidx.core.view.isVisible
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.items.DivScrollActionHolder
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.tabs.TabsLayout
-import com.yandex.div2.Div
 
 internal class DivTabsLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : TabsLayout(context, attrs),
-    DivHolderView<Div.Tabs> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.Tabs> by DivHolderViewMixin(),
     DivScrollActionHolder {
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

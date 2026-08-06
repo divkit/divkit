@@ -10,17 +10,23 @@ internal data class DivTextImageResult(
     val resolver: ExpressionResolver,
 )
 
-internal fun DivText.buildImages(resolver: ExpressionResolver, path: DivStatePath): List<DivTextImageResult>? {
-    imageBuilder?.let { return it.build(resolver, path) }
-    return images?.map { DivTextImageResult(it, resolver) }
+internal fun DivText.buildImages(resolver: ExpressionResolver, path: DivStatePath) =
+    buildImages(imageBuilder, images, resolver, path)
+
+internal fun DivText.Ellipsis.buildImages(resolver: ExpressionResolver, path: DivStatePath) =
+    buildImages(imageBuilder, images, resolver, path)
+
+private fun buildImages(
+    builder: DivText.ImageBuilder?,
+    ranges: List<DivText.Image>?,
+    resolver: ExpressionResolver,
+    path: DivStatePath
+): List<DivTextImageResult>? {
+    builder?.let { return it.build(resolver, path) }
+    return ranges?.map { DivTextImageResult(it, resolver) }
 }
 
-internal fun DivText.Ellipsis.buildImages(resolver: ExpressionResolver, path: DivStatePath): List<DivTextImageResult>? {
-    imageBuilder?.let { return it.build(resolver, path) }
-    return images?.map { DivTextImageResult(it, resolver) }
-}
-
-internal fun DivText.ImageBuilder.build(resolver: ExpressionResolver, path: DivStatePath): List<DivTextImageResult> =
+private fun DivText.ImageBuilder.build(resolver: ExpressionResolver, path: DivStatePath): List<DivTextImageResult> =
     data.evaluate(resolver).mapIndexedNotNull { index, element -> buildItem(element, index, resolver, path) }
 
 private fun DivText.ImageBuilder.buildItem(

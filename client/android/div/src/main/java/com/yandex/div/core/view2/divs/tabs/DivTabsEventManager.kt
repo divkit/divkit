@@ -7,19 +7,17 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
-import com.yandex.div2.DivTabs
 
 internal class DivTabsEventManager(
+    var divBlock: DivBlock.Tabs,
     private val actionPerformer: DivActionPerformer,
     private val div2Logger: Div2Logger,
     private val visibilityActionTracker: DivVisibilityActionTracker,
     private val tabLayout: DivTabsLayout,
-    private val resolver: ExpressionResolver,
     private val divView: Div2View,
-    var div: DivTabs
 ) : ViewPager.OnPageChangeListener,
     BaseDivTabbedCardUi.ActiveTabClickListener<DivAction> {
 
@@ -41,13 +39,15 @@ internal class DivTabsEventManager(
         // we are using ViewPager instance itself to compute visibility.
         // This assumption is safe as long as we display only one page in ViewPager.
         if (currentPagePosition != NO_POSITION) {
-            val previousTab = div.items[currentPagePosition]
-            visibilityActionTracker.cancelTrackingViewsHierarchy(tabLayout, previousTab.div, resolver, divView)
+            val previousTab = divBlock.divValue.items[currentPagePosition]
+            visibilityActionTracker.
+            cancelTrackingViewsHierarchy(tabLayout, previousTab.div, divBlock.expressionResolver, divView)
             divView.unbindViewFromDiv(tabLayout)
         }
 
-        val selectedTab = div.items[position]
-        visibilityActionTracker.startTrackingViewsHierarchy(tabLayout, selectedTab.div, resolver, divView)
+        val selectedTab = divBlock.divValue.items[position]
+        visibilityActionTracker
+            .startTrackingViewsHierarchy(tabLayout, selectedTab.div, divBlock.expressionResolver, divView)
         divView.bindViewToDiv(tabLayout, selectedTab.div)
 
         currentPagePosition = position
@@ -58,7 +58,7 @@ internal class DivTabsEventManager(
             // TODO(MORDAANDROID-90): handle case with menuItems != null
             KLog.w(TAG) { "non-null menuItems ignored in title click action" }
         }
-        actionPerformer.performTabTitleClick(divView, resolver, action, tabPosition)
+        actionPerformer.performTabTitleClick(divView, divBlock.expressionResolver, action, tabPosition)
     }
 
     private companion object {

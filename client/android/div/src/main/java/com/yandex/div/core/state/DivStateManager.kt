@@ -8,10 +8,10 @@ import com.yandex.div.core.state.DivPathUtils.statePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.state.DivStateCache
-import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivState
 import java.lang.ref.WeakReference
@@ -125,12 +125,12 @@ private class StateVariableCollector(
 
     fun collectStateVariables(data: DivData, resolver: ExpressionResolver) = visit(data, resolver)
 
-    override fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath) = Unit
+    override fun defaultVisit(divBlock: DivBlock) = Unit
 
-    override fun visit(data: Div.State, resolver: ExpressionResolver, path: DivStatePath) {
-        val variableName = data.value.stateIdVariable ?: return
-        val variable = resolver.getVariable(variableName) ?: return
-        variables.getOrPut(path.statePath) { StateVariableHolder(variable) }
-        super.visit(data, resolver, path)
+    override fun visitState(block: DivBlock.State) {
+        val variableName = block.divValue.stateIdVariable ?: return
+        val variable = block.expressionResolver.getVariable(variableName) ?: return
+        variables.getOrPut(block.path.statePath) { StateVariableHolder(variable) }
+        super.visitState(block)
     }
 }

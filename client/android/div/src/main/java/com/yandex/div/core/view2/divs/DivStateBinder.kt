@@ -23,17 +23,16 @@ import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.containsStateInnerTransitions
 import com.yandex.div.core.util.getDefaultState
-import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.util.toAlignmentHorizontal
 import com.yandex.div.core.util.toAlignmentVertical
 import com.yandex.div.core.util.walk
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.DivTransition
 import com.yandex.div.core.view2.animations.Fade
@@ -48,6 +47,7 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.WRAP_CONTENT_CONSTRAINED
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -73,24 +73,14 @@ internal class DivStateBinder @Inject constructor(
     private val variableBinder: TwoWayStringVariableBinder,
     private val runtimeVisitor: DivRuntimeVisitor,
     private val animationsEnabledController: DivAnimationsEnabledController,
-) : DivViewBinder<Div.State, DivState, DivStateLayout>(baseBinder) {
+) : DivViewBinder<DivBlock.State, DivStateLayout>(baseBinder) {
 
-    /**
-     * For example, to bind state to path 0/content/expanded/comments/expanded/comment_03/collapsed you should have:
-     * @param context includes Div2View and ExpressionResolver for current Div.
-     * @param view layout with path 0/content/expanded/comments/expanded/comment_03/{any_state_here}.
-     * @param div [DivState], corresponding to path 0/content/expanded/comments/expanded/comment_03,
-     * Exact stateId will be set via [DivStateManager], and this class will
-     * handle receiving corresponding to the state [Div] by itself.
-     * @param path path 0/content/expanded/comments/expanded, so to previous [DivStateLayout].
-     */
-    override fun bindView(context: BindingContext, view: DivStateLayout, div: Div.State, path: DivStatePath) {
-        val divValue = div.value
-        val oldDivState = view.div
-        val oldResolver = view.bindingContext?.expressionResolver
+    override fun bindView(view: DivStateLayout, divBlock: DivBlock.State, divView: Div2View) {
+        val divValue = divBlock.divValue
+        val oldDivBlock = view.divBlock
 
-        val divView = context.divView
-        val resolver = context.expressionResolver
+        val resolver = divBlock.expressionResolver
+        val path = divBlock.path
         val id = divValue.getId {
             errorCollectors.getOrCreate(divView.dataTag, divView.divData)
                 .logError(missingValue("id", path.toString()))
@@ -103,24 +93,24 @@ internal class DivStateBinder @Inject constructor(
             ?: divValue.getDefaultState(resolver)
         if (oldState == null || newState == null) return
 
-        val oldDiv = view.activeStateDiv
-        if (oldDivState !== div) {
-            baseBinder.bindView(context, view, div, oldDiv, path)
-            view.bind(context, divValue, oldDivState?.value, newState, path)
+        val oldDivStateBlock = view.activeStateDivBlock
+        if (oldDivBlock?.div !== divBlock.div) {
+            baseBinder.bindView(view, divBlock, oldDivBlock, divView)
+            view.bind(divBlock, oldDivBlock?.divValue, newState, divView)
         }
 
-        view.bindState(context, divValue, oldDivState?.value, newState, oldState, oldDiv, path, oldResolver, id)
+        view.bindState(divValue, oldDivBlock?.divValue, newState, oldState, oldDivStateBlock, path, resolver, id, divView)
     }
 
     private fun DivStateLayout.bind(
-        context: BindingContext,
-        div: DivState,
+        divBlock: DivBlock.State,
         oldDiv: DivState?,
         newState: DivState.State,
-        path: DivStatePath,
+        divView: Div2View,
     ) {
+        val div = divBlock.divValue
+        val resolver = divBlock.expressionResolver
         applyDivActions(
-            context,
             div.action,
             div.actions,
             div.longtapActions,
@@ -131,31 +121,31 @@ internal class DivStateBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.captureFocusOnAction,
+            resolver,
+            divView,
         )
 
-        val resolver = context.expressionResolver
         fixAlignment(div, oldDiv, resolver)
-        observeStateIdVariable(div, resolver, context.divView, path)
+        observeStateIdVariable(divBlock, divView)
         bindClipChildren(div.clipToBounds, oldDiv?.clipToBounds, resolver)
         swipeOutCallback = newState.swipeOutActions?.let {
-            { actionPerformer.performSwipeOutActions(context.divView, resolver, this, it) }
+            { actionPerformer.performSwipeOutActions(divView, resolver, this, it) }
         }
     }
 
     private fun DivStateLayout.bindState(
-        bindingContext: BindingContext,
         divState: DivState, oldDivState: DivState?,
         newState: DivState.State, oldState: DivState.State,
-        oldDiv: Div?,
+        oldDivStateBlock: DivBlock?,
         path: DivStatePath,
-        oldResolver: ExpressionResolver?,
+        resolver: ExpressionResolver,
         id: String,
+        divView: Div2View,
     ) {
-        val divView = bindingContext.divView
-        val resolver = bindingContext.expressionResolver
         val newStateDiv = newState.div
         val newStateDivValue = newStateDiv?.value()
         val currentPath = path.append(id, newState, newState.stateId)
+        val newStateDivBlock = newStateDiv?.let { DivBlock.create(it, resolver, currentPath) }
 
         val outgoing = if (isNotEmpty()) getChildAt(0) else null
         val incoming: View?
@@ -167,7 +157,7 @@ internal class DivStateBinder @Inject constructor(
         // Publish the new state before binding children so nested set_state (e.g. video
         // fatal/buffering actions) does not re-enter this binder as another state switch and
         // recreate the child that will spawn a loop.
-        activeStateDiv = newStateDiv
+        activeStateDivBlock = newStateDivBlock
         currentStatePath = currentPath
 
         if (previousStateId != newState.stateId) {
@@ -183,7 +173,7 @@ internal class DivStateBinder @Inject constructor(
                 divState,
                 newState, oldState,
                 incoming, outgoing,
-                resolver, oldResolver,
+                resolver, oldDivStateBlock?.expressionResolver,
                 parentTransitions,
                 divView,
                 path,
@@ -195,25 +185,23 @@ internal class DivStateBinder @Inject constructor(
             releaseAndRemoveChildren(divView)
             incoming?.let {
                 addView(incoming)
-                newStateDiv?.let { viewBinder.get().bind(bindingContext, incoming, it, currentPath) }
+                newStateDivBlock?.let { viewBinder.get().bind(incoming, it, divView) }
             }
             if (outgoing != null) {
                 divView.divTransitionHandler.runTransitions(root = sceneRoot, endTransitions = false)
             }
         } else if (newStateDivValue != null) {
-            val areDivsReplaceable = outgoing != null && oldResolver != null &&
-                DivComparator.areDivsReplaceable(
-                    oldDiv, newStateDiv,
-                    oldResolver, resolver,
-                    path.append(id, oldState, oldState.stateId), currentPath,
-                )
+            val areDivsReplaceable = outgoing != null &&
+                DivComparator.areDivsReplaceable(oldDivStateBlock, newStateDivBlock)
             incoming =
                 if (areDivsReplaceable) outgoing else getIncomingView(reusableIncomingView, newStateDiv, resolver)
             if (!areDivsReplaceable) {
                 releaseAndRemoveChildren(divView)
                 addView(incoming)
             }
-            incoming?.let { viewBinder.get().bind(bindingContext, it, newStateDiv, currentPath) }
+            if (incoming != null && newStateDivBlock!= null) {
+                viewBinder.get().bind(incoming, newStateDivBlock, divView)
+            }
         } else {
             releaseAndRemoveChildren(divView)
             incoming = null
@@ -225,10 +213,10 @@ internal class DivStateBinder @Inject constructor(
             // Sometimes we receive same state and do not want to untrack visibility actions
             if (oldDivState != divState || newState != oldState) {
                 divView.unbindViewFromDiv(outgoing)
-                if (oldDiv != null && oldResolver != null) {
+                oldDivStateBlock?.let {
                     // We pass null instead of outgoing view to mark previous state as invisible
-                    divVisibilityActionTracker.trackVisibilityActionsOf(divView, oldResolver, null, oldDiv)
-                    untrackRecursively(outgoing, divView, oldResolver)
+                    divVisibilityActionTracker.trackVisibilityActionsOf(divView, it.expressionResolver, null, it.div)
+                    untrackRecursively(outgoing, divView, it.expressionResolver)
                 }
             }
         }
@@ -257,12 +245,10 @@ internal class DivStateBinder @Inject constructor(
         val hasFixedHeight = childHasFixedHeight || (lp.height != WRAP_CONTENT && lp.height != WRAP_CONTENT_CONSTRAINED)
         if (hasFixedWidth && hasFixedHeight) return this to childItems
 
-        val divHolder = asDivHolderView ?: return this to childItems
-        val div = divHolder.div ?: return this to childItems
-        val id = div.value().id ?: return this to childItems
-        val resolver = divHolder.bindingContext?.expressionResolver ?: return this to childItems
+        val divBlock = divBlock ?: return this to childItems
+        val id = divBlock.div.value().id ?: return this to childItems
 
-        val item = sequenceOf(TransitionData(id, changeTransition, resolver))
+        val item = sequenceOf(TransitionData(id, changeTransition, divBlock.expressionResolver))
         val items = childItems?.let { item + it } ?: item
 
         val parent = parent as? ViewGroup ?: return this to items
@@ -293,39 +279,40 @@ internal class DivStateBinder @Inject constructor(
     private fun View.extractParentContentAlignmentVertical(
         resolver: ExpressionResolver
     ): DivContentAlignmentVertical? {
-        val div = (parent as? DivHolderView<*>)?.div as? Div.Container ?: return null
+        val divBlock = (parent as? DivHolderView<*>)?.divBlock ?: return null
+        val div = divBlock.div as? Div.Container ?: return null
         return div.value.contentAlignmentVertical.evaluate(resolver)
     }
 
     private fun View.extractParentContentAlignmentHorizontal(
         resolver: ExpressionResolver
     ): DivContentAlignmentHorizontal? {
-        val div = (parent as? DivHolderView<*>)?.div as? Div.Container ?: return null
+        val divBlock = (parent as? DivHolderView<*>)?.divBlock ?: return null
+        val div = divBlock.div as? Div.Container ?: return null
         return div.value.contentAlignmentHorizontal.evaluate(resolver)
     }
 
     private fun DivStateLayout.observeStateIdVariable(
-        div: DivState,
-        resolver: ExpressionResolver,
+        divBlock: DivBlock.State,
         divView: Div2View,
-        divStatePath: DivStatePath,
     ) {
+        val div = divBlock.divValue
         val stateIdVariable = div.stateIdVariable ?: return
 
         val subscription = variableBinder.bindVariable(
             stateIdVariable,
-            resolver,
+            divBlock.expressionResolver,
             divView,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
                 override fun onVariableChanged(value: String?) {
                     if (value == null || stateId == null || value == stateId) return
                     val state = div.states.find { it.stateId == value }
-                    val newDivStatePath = divStatePath.append(div.getId(), state, value)
+                    val newDivStatePath = divBlock.path.append(div.getId(), state, value)
                     divView.switchToState(newDivStatePath, true)
                 }
 
                 override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
-                    stateManager.bindVariable(divView.dataTag.id, divStatePath, valueUpdater)
+                    stateManager.bindVariable(divView.dataTag.id, divBlock.path, valueUpdater)
                 }
             },
         )

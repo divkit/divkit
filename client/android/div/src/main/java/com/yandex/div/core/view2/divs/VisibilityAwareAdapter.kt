@@ -60,27 +60,6 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         }
     }
 
-    fun setItem(
-        position: Int,
-        item: DivBlock,
-        visibility: DivVisibility = item.visibility
-    ) {
-        val reservesSpace = visibility != DivVisibility.GONE
-        val wasReservingSpace = itemReservesSpaceList[position]
-
-        itemList[position] = item
-        itemReservesSpaceList[position] = reservesSpace
-        if (reservesSpace || wasReservingSpace) {
-            isVisibleItemListValid = false
-        }
-
-        when {
-            wasReservingSpace && !reservesSpace -> notifyVisibleItemRemoved(position)
-            !wasReservingSpace && reservesSpace -> notifyVisibleItemInserted(position)
-            wasReservingSpace && reservesSpace -> notifyVisibleItemChanged(position)
-        }
-    }
-
     fun removeItem(position: Int) {
         itemList.removeAt(position)
         val wasReservingSpace = itemReservesSpaceList.removeAt(position)
@@ -131,8 +110,6 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     private fun notifyVisibleItemRemoved(position: Int) = notifyRawItemRemoved(visiblePositionOf(position))
 
     private fun notifyVisibleItemInserted(position: Int) = notifyRawItemInserted(visiblePositionOf(position))
-
-    private fun notifyVisibleItemChanged(position: Int) = notifyRawItemChanged(visiblePositionOf(position))
 
     protected open fun notifyRawItemRemoved(position: Int) = notifyItemRemoved(position)
 

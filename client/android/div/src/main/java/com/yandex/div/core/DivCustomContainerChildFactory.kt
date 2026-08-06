@@ -6,6 +6,7 @@ import com.yandex.div.core.expression.local.ChildPathUnitCache
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -30,8 +31,7 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         expressionResolver: ExpressionResolver = divView.expressionResolver
     ): View {
 
-        return divView.div2Component.div2Builder
-            .buildView(div, divView.bindingContext.getFor(expressionResolver), divStatePath)
+        return divView.div2Component.div2Builder.buildView(div, expressionResolver, divStatePath, divView)
     }
 
     /**
@@ -69,12 +69,9 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         divView: Div2View,
         expressionResolver: ExpressionResolver,
     ) {
-        divView.div2Component.divBinder.bind(
-            divView.bindingContext.getFor(expressionResolver),
-            childView,
-            div,
-            divStatePath.appendDiv(div.value().getChildPathUnit(childIndex))
-        )
+        val childPath = divStatePath.appendDiv(div.value().getChildPathUnit(childIndex))
+        val divBlock = DivBlock.create(div, expressionResolver, childPath)
+        divView.div2Component.divBinder.bind(childView, divBlock, divView)
         divView.runtimeStore.showWarningIfNeeded(div.value())
     }
 

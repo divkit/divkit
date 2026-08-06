@@ -14,7 +14,7 @@ import com.yandex.div.core.view2.divs.widgets.DivHolderViewMixin
 import com.yandex.div.core.view2.divs.widgets.MediaReleasable
 import com.yandex.div.core.view2.divs.widgets.drawBorderClipped
 import com.yandex.div.core.widget.LoadableImageView
-import com.yandex.div2.Div
+import com.yandex.div.internal.core.DivBlock
 
 private typealias OnTouchListenerChangeObserver = (View.OnTouchListener?) -> Unit
 
@@ -24,7 +24,7 @@ open class DivImageView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = R.attr.divImageStyle
 ) : LoadableImageView(context, attrs, defStyleAttr),
-    DivHolderView<Div.Image> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.Image> by DivHolderViewMixin(),
     DivExtensionView,
     MediaReleasable {
 

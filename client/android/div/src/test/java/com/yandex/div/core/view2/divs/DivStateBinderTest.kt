@@ -10,6 +10,8 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import org.junit.Assert.assertEquals
@@ -18,6 +20,7 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.check
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
@@ -39,11 +42,12 @@ class DivStateBinderTest: DivBinderTest() {
     private val variableBinder = mock<TwoWayStringVariableBinder>()
 
     private val div = UnitTestData(STATE_DIR, "state_list.json").div as Div.State
-    private val divState = div.value
+    private val rootPath = DivStatePath.fromRootDiv(0, div)
+    private val divBlock = div.toBlock(resolver, rootPath) as DivBlock.State
+    private val divState = divBlock.divValue
     private val stateLayout = (viewCreator.create(div, ExpressionResolver.EMPTY) as DivStateLayout).apply {
         layoutParams = defaultLayoutParams()
     }
-    private val rootPath = DivStatePath.fromRootDiv(0, div)
 
     private val animationsEnabledController = mock<DivAnimationsEnabledController> {
         on { isEnabled() } doReturn true
@@ -63,7 +67,7 @@ class DivStateBinderTest: DivBinderTest() {
 
     @Test
     fun `first state path applied when no defaultStateId`() {
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         assertEquals(pathToState("first"), stateLayout.currentStatePath)
     }
@@ -73,8 +77,9 @@ class DivStateBinderTest: DivBinderTest() {
         val div = UnitTestData(STATE_DIR,"default_state.json").div as Div.State
         val stateLayout = viewCreator.create(div, ExpressionResolver.EMPTY) as DivStateLayout
         stateLayout.layoutParams = defaultLayoutParams()
+        val divBlock = div.toBlock(resolver, rootPath) as DivBlock.State
 
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         assertEquals(pathToState("default"), stateLayout.currentStatePath)
     }
@@ -82,7 +87,7 @@ class DivStateBinderTest: DivBinderTest() {
     @Test
     fun `selected state path applied`() {
         switchToState("second")
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         assertEquals(pathToState("second"), stateLayout.currentStatePath)
     }
@@ -90,14 +95,14 @@ class DivStateBinderTest: DivBinderTest() {
     @Test
     fun `empty state path applied`() {
         switchToState("empty")
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         assertEquals(pathToState("empty"), stateLayout.currentStatePath)
     }
 
     @Test
     fun `default state bound`() {
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         val expectedStateDiv = divState.states[0].div!!
         assertStateBound(pathToState("first"), expectedStateDiv)
@@ -106,7 +111,7 @@ class DivStateBinderTest: DivBinderTest() {
     @Test
     fun `selected state bound`() {
         switchToState("second")
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         val expectedStateDiv = divState.states[1].div!!
         assertStateBound(pathToState("second"), expectedStateDiv)
@@ -117,17 +122,17 @@ class DivStateBinderTest: DivBinderTest() {
         clearInvocations(viewCreator)
 
         switchToState("empty")
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         assertStateNotBound(pathToState("empty"))
     }
 
     @Test
     fun `the same state rebound`() {
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
         clearInvocations(viewCreator, viewBinder)
 
-        stateBinder.bindView(bindingContext, stateLayout, div,  rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         val expectedStateDiv = divState.states[0].div!!
         assertStateRebound(pathToState("first"), expectedStateDiv)
@@ -135,11 +140,11 @@ class DivStateBinderTest: DivBinderTest() {
 
     @Test
     fun `new state bound`() {
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
         clearInvocations(viewCreator, viewBinder)
 
         switchToState("second")
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         val expectedStateDiv = divState.states[1].div!!
         assertStateBound(pathToState("second"), expectedStateDiv)
@@ -149,9 +154,9 @@ class DivStateBinderTest: DivBinderTest() {
     fun `rebind adds swipes`() {
         val oldData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "old_state_no_swipe_actions.json").asDivState
         val newData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "old_state.json").asDivState
-        stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath)
+        stateBinder.bindView(stateLayout, oldData.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
-        stateBinder.bindView(bindingContext, stateLayout, newData, rootPath)
+        stateBinder.bindView(stateLayout, newData.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         assertNotNull(stateLayout.swipeOutCallback)
     }
@@ -160,10 +165,10 @@ class DivStateBinderTest: DivBinderTest() {
     fun `rebind removes old view tracking`() {
         val oldData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "old_state.json").asDivState
         val newData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "new_state_incompatible.json").asDivState
-        stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath)
+        stateBinder.bindView(stateLayout, oldData.toBlock(resolver, rootPath) as DivBlock.State, divView)
         val child = stateLayout.getChildAt(0)
 
-        stateBinder.bindView(bindingContext, stateLayout, newData, rootPath)
+        stateBinder.bindView(stateLayout, newData.toBlock(resolver, rootPath) as DivBlock.State, divView)
         val inOrder = inOrder(divView)
 
         inOrder.verify(divView).unbindViewFromDiv(child)
@@ -174,10 +179,10 @@ class DivStateBinderTest: DivBinderTest() {
     fun `rebind to empty state clears everything`() {
         val oldData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "old_state.json").asDivState
         val newData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "new_state_empty_state.json").asDivState
-        stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath)
+        stateBinder.bindView(stateLayout, oldData.toBlock(resolver, rootPath) as DivBlock.State, divView)
         val child = stateLayout.getChildAt(0)
 
-        stateBinder.bindView(bindingContext, stateLayout, newData, rootPath)
+        stateBinder.bindView(stateLayout, newData.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         assertNull(stateLayout.swipeOutCallback)
         assertEquals(0, stateLayout.childCount)
@@ -187,8 +192,8 @@ class DivStateBinderTest: DivBinderTest() {
     @Test
     fun `rebind from same state do not untrack visibility actions`() {
         val oldData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "new_state_empty_state.json").asDivState
-        stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath)
-        stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath)
+        stateBinder.bindView(stateLayout, oldData.toBlock(resolver, rootPath) as DivBlock.State, divView)
+        stateBinder.bindView(stateLayout, oldData.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         verify(divVisibilityActionTracker, never()).trackVisibilityActionsOf(
             scope = any(),
@@ -202,9 +207,9 @@ class DivStateBinderTest: DivBinderTest() {
 
     @Test
     fun `selecting state causes untracking`() {
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
         switchToState("second")
-        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        stateBinder.bindView(stateLayout, divBlock, divView)
 
         verify(divVisibilityActionTracker, times(1)).trackVisibilityActionsOf(
             scope = any(),
@@ -220,8 +225,8 @@ class DivStateBinderTest: DivBinderTest() {
     fun `rebind from different state untrack visibility actions`() {
         val oldData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "old_state.json").asDivState
         val newData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "new_state_empty_state.json").asDivState
-        stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath)
-        stateBinder.bindView(bindingContext, stateLayout, newData, rootPath)
+        stateBinder.bindView(stateLayout, oldData.toBlock(resolver, rootPath) as DivBlock.State, divView)
+        stateBinder.bindView(stateLayout, newData.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         verify(divVisibilityActionTracker, times(1)).trackVisibilityActionsOf(
             scope = any(),
@@ -237,9 +242,9 @@ class DivStateBinderTest: DivBinderTest() {
     fun `rebind from empty state inits everything`() {
         val oldData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "new_state_empty_state.json").asDivState
         val newData = UnitTestData(STATE_DIR_AUTOANIMATIONS, "new_state_incompatible.json").asDivState
-        stateBinder.bindView(bindingContext, stateLayout, oldData, rootPath)
+        stateBinder.bindView(stateLayout, oldData.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
-        stateBinder.bindView(bindingContext, stateLayout, newData, rootPath)
+        stateBinder.bindView(stateLayout, newData.toBlock(resolver, rootPath) as DivBlock.State, divView)
 
         assertNotNull(stateLayout.swipeOutCallback)
         assertEquals(1, stateLayout.childCount)
@@ -256,17 +261,23 @@ class DivStateBinderTest: DivBinderTest() {
 
     private fun assertStateNotBound(path: DivStatePath) {
         verify(viewCreator, never()).create(any(), any())
-        verify(viewBinder, never()).bind(any(), any(), any(), eq(path))
+        verify(viewBinder, never()).bind(any(), any(), any())
     }
 
     private fun assertStateBound(path: DivStatePath, div: Div) {
         verify(viewCreator).create(eq(div), any())
-        verify(viewBinder).bind(eq(bindingContext), any(), eq(div), eq(path))
+        verify(viewBinder).bind(any(), check {
+            assertEquals(div, it.div)
+            assertEquals(path, it.path)
+        }, eq(divView))
     }
 
     private fun assertStateRebound(path: DivStatePath, div: Div) {
         verify(viewCreator, never()).create(eq(div), any())
-        verify(viewBinder).bind(eq(bindingContext), any(), eq(div), eq(path))
+        verify(viewBinder).bind(any(), check {
+            assertEquals(div, it.div)
+            assertEquals(path, it.path)
+        }, eq(divView))
     }
 
     private val UnitTestData.asDivState get() = div as Div.State

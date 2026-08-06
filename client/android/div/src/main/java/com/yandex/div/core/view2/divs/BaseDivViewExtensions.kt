@@ -24,7 +24,6 @@ import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.isBranch
 import com.yandex.div.core.util.type
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivGestureListener
@@ -212,7 +211,6 @@ private fun View.applyBaselineAlignment(baselineAligned: Boolean) {
 }
 
 internal fun View.applyDivActions(
-    context: BindingContext,
     action: DivAction?,
     actions: List<DivAction>?,
     longTapActions: List<DivAction>?,
@@ -223,8 +221,10 @@ internal fun View.applyDivActions(
     pressEndActions: List<DivAction>?,
     actionAnimation: DivAnimation,
     captureFocusOnAction: Expression<Boolean>,
+    resolver: ExpressionResolver,
+    divView: Div2View,
 ) {
-    val actionBinder = context.divView.div2Component.actionBinder
+    val actionBinder = divView.div2Component.actionBinder
     val tapActions = if (actions.isNullOrEmpty()) {
         action?.let { listOf(it) }
     } else {
@@ -241,8 +241,8 @@ internal fun View.applyDivActions(
         pressEndActions,
         actionAnimation,
         captureFocusOnAction,
-        context.expressionResolver,
-        context.divView,
+        resolver,
+        divView,
     )
 }
 
@@ -274,12 +274,11 @@ internal fun View.createAnimatedTouchListener(
 /**
  * Binds all descendants of [this] which are [DivStateLayout]s corresponding to DivStates in [div]
  */
-internal fun View.bindStates(bindingContext: BindingContext, binder: DivBinder) {
+internal fun View.bindStates(binder: DivBinder, divView: Div2View) {
     traverseViewHierarchy(this) { currentView ->
         if (currentView !is DivStateLayout) return@traverseViewHierarchy true
-        val div = currentView.div ?: return@traverseViewHierarchy false
-        val path = currentView.currentStatePath ?: return@traverseViewHierarchy false
-        binder.bind(bindingContext, currentView, div, path.parentState())
+        val divBlock = currentView.divBlock ?: return@traverseViewHierarchy false
+        binder.bind(currentView, divBlock, divView)
         false
     }
 }
@@ -374,7 +373,7 @@ internal val View.asDivHolderView: DivHolderView<*>? get() {
     return divViewWrapper.child as? DivHolderView<*>
 }
 
-internal val View.bindingContext: BindingContext? get() = asDivHolderView?.bindingContext
+internal val View.divBlock: DivBlock? get() = asDivHolderView?.divBlock
 
 internal fun bindItemBuilder(
     builder: DivCollectionItemBuilder,

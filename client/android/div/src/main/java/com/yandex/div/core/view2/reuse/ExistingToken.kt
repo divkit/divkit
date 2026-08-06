@@ -14,7 +14,6 @@ import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.core.itemsToDivBlocks
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.core.toBlock
-import com.yandex.div.internal.core.toBlocks
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -50,7 +49,7 @@ internal class ExistingToken(
             is Div.Gallery -> div.value.itemsToExistingTokenList(resolver, parentToken, path)
             is Div.Pager -> div.value.itemsToExistingTokenList(resolver, parentToken, path)
             is Div.Tabs -> throw RebindTask.UnsupportedElementException(div::class.java) // Not supported yet. Only full rebind
-            is Div.State -> stateToExistingTokenList(resolver, parentToken, path)
+            is Div.State -> stateToExistingTokenList(parentToken)
         }
     }
 
@@ -87,13 +86,9 @@ internal class ExistingToken(
         path: DivStatePath,
     ): List<ExistingToken> = simpleItemsToExistingTokenList(itemsToDivBlocks(resolver, path), parentToken)
 
-    private fun stateToExistingTokenList(
-        resolver: ExpressionResolver,
-        parentToken: ExistingToken?,
-        path: DivStatePath,
-    ): List<ExistingToken> {
-        val stateDiv = (view as? DivStateLayout)?.activeStateDiv ?: return emptyList()
-        return simpleItemsToExistingTokenList(listOf(stateDiv).toBlocks(resolver, path), parentToken)
+    private fun stateToExistingTokenList(parentToken: ExistingToken?): List<ExistingToken> {
+        val stateDivBlock = (view as? DivStateLayout)?.activeStateDivBlock ?: return emptyList()
+        return simpleItemsToExistingTokenList(listOf(stateDivBlock), parentToken)
     }
 
     private fun DivPager.itemsToExistingTokenList(

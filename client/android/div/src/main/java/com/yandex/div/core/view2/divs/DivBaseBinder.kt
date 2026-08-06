@@ -7,14 +7,12 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.Visibility
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeEdgeInsets
 import com.yandex.div.core.util.observeTransform
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
@@ -23,6 +21,7 @@ import com.yandex.div.core.view2.animations.suppressOverlayVisibilityRestore
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.util.compareWith
 import com.yandex.div.json.expressions.Expression
@@ -30,7 +29,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
-import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivInput
@@ -46,28 +44,29 @@ internal class DivBaseBinder @Inject constructor(
     private val divAccessibilityBinder: DivAccessibilityBinder,
     private val layoutParamsBinder: DivLayoutParamsBinder,
 ) {
-    fun bindView(context: BindingContext, view: View, div: Div, oldDiv: Div?, path: DivStatePath) {
+
+    fun bindView(view: View, divBlock: DivBlock, oldDivBlock: DivBlock?, divView: Div2View) {
         @Suppress("UNCHECKED_CAST")
-        (view as DivHolderView<Div>).let {
+        (view as DivHolderView<DivBlock>).let {
             it.closeAllSubscription()
-            it.div = div
-            it.bindingContext = context
-            it.path = path
+            it.divBlock = divBlock
         }
-        view.bind(context, div.value(), oldDiv?.value())
+        view.bind(divBlock, oldDivBlock, divView)
     }
 
-    private fun View.bind(bindingContext: BindingContext, div: DivBase, oldDiv: DivBase?) {
-        val resolver = bindingContext.expressionResolver
-        val divView = bindingContext.divView
+    private fun View.bind(divBlock: DivBlock, oldDivBlock: DivBlock?, divView: Div2View) {
         val subscriber = expressionSubscriber
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             defaultFocusHighlightEnabled = false
         }
 
+        val div = divBlock.div.value()
+        val oldDiv = oldDivBlock?.div?.value()
+        val resolver = divBlock.expressionResolver
+
         bindId(divView, div, oldDiv)
-        bindLayoutParams(bindingContext, div, oldDiv, subscriber)
+        bindLayoutParams(div, oldDiv, resolver, divView, subscriber)
         bindMargins(div, oldDiv, resolver, subscriber)
         bindAlignment(div, oldDiv, resolver, subscriber)
         divView.viewComponent.layoutProviderBinder.bind(this, div.layoutProvider, oldDiv?.layoutProvider, resolver)
@@ -75,11 +74,11 @@ internal class DivBaseBinder @Inject constructor(
         bindAlpha(div, oldDiv, resolver, subscriber)
 
         bindBackground(div, oldDiv, resolver, divView, subscriber, true, backgroundUnderlay, null)
-        bindBorder(bindingContext, div)
+        bindBorder(div, resolver, divView)
         bindPaddings(div, oldDiv, resolver, subscriber)
 
         bindNextFocus(divView, div, oldDiv, resolver, subscriber)
-        bindFocusActions(bindingContext, div.focus?.onFocus, div.focus?.onBlur)
+        bindFocusActions(div.focus?.onFocus, div.focus?.onBlur, resolver, divView)
         bindVisibility(divView, div, oldDiv, resolver, subscriber)
         bindTransform(div, oldDiv, resolver, subscriber)
 
@@ -114,12 +113,13 @@ internal class DivBaseBinder @Inject constructor(
     //region Layout Params
 
     private fun View.bindLayoutParams(
-        bindingContext: BindingContext,
         newDiv: DivBase,
         oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         subscriber: ExpressionSubscriber
     ) {
-        layoutParamsBinder.bindLayoutParams(bindingContext, this, newDiv, oldDiv, subscriber)
+        layoutParamsBinder.bindLayoutParams(this, newDiv, oldDiv, resolver, divView, subscriber)
     }
 
     private fun View.bindMargins(
@@ -244,15 +244,16 @@ internal class DivBaseBinder @Inject constructor(
     //region Border
 
     private fun View.bindBorder(
-        context: BindingContext,
         newDiv: DivBase,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         divFocusBinder.bindDivBorder(
             this,
             newDiv.focus?.border,
             newDiv.border,
-            context.expressionResolver,
-            context.divView
+            resolver,
+            divView
         )
     }
 
@@ -362,10 +363,11 @@ internal class DivBaseBinder @Inject constructor(
     }
 
     private fun View.bindFocusActions(
-        context: BindingContext,
         onFocus: List<DivAction>?,
-        onBlur: List<DivAction>?
-    ) = divFocusBinder.bindDivFocusActions(this, onFocus, onBlur, context.expressionResolver, context.divView)
+        onBlur: List<DivAction>?,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+    ) = divFocusBinder.bindDivFocusActions(this, onFocus, onBlur, resolver, divView)
 
     //endregion
 

@@ -19,45 +19,35 @@ internal class MediaLoadViewVisitor @Inject constructor(
     private val videoBinder: DivVideoBinder,
     private val errorCollectors: ErrorCollectors,
     private val extensionController: DivExtensionController,
+    private val divView: Div2View,
 ) : DivViewVisitor() {
 
-    fun loadMedia(divView: Div2View) {
+    fun loadMedia() {
         divView.children.forEach { visitViewTree(it) }
     }
 
     override fun visit(view: DivImageView) {
-        val bindingContext = view.bindingContext ?: return
-        val div = view.div?.value ?: return
-        val divView = bindingContext.divView
+        val divBlock = view.divBlock ?: return
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        imageBinder.loadImage(view, div, bindingContext.expressionResolver, divView, errorCollector)
-        extensionController.loadMedia(divView, bindingContext.expressionResolver, view, div)
+        imageBinder.loadImage(view, divBlock, divView, errorCollector)
+        extensionController.loadMedia(view, divBlock, divView)
     }
 
     override fun visit(view: DivGifImageView) {
-        val bindingContext = view.bindingContext ?: return
-        val div = view.div?.value ?: return
-        val divView = bindingContext.divView
+        val divBlock = view.divBlock ?: return
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        gifImageBinder.loadGifImage(view, div, bindingContext.expressionResolver, divView, errorCollector)
-        extensionController.loadMedia(divView, bindingContext.expressionResolver, view, div)
+        gifImageBinder.loadGifImage(view, divBlock, divView, errorCollector)
+        extensionController.loadMedia(view, divBlock, divView)
     }
 
     override fun visit(view: DivVideoView) {
-        val bindingContext = view.bindingContext ?: return
-        val div = view.div?.value ?: return
-        videoBinder.loadVideo(view, div, bindingContext.expressionResolver, bindingContext.divView)
-        extensionController.loadMedia(bindingContext.divView, bindingContext.expressionResolver, view, div)
+        val divBlock = view.divBlock ?: return
+        videoBinder.loadVideo(view, divBlock, divView)
+        extensionController.loadMedia(view, divBlock, divView)
     }
 
     override fun defaultVisit(view: DivHolderView<*>) {
-        val bindingContext = view.bindingContext ?: return
-        val div = view.div ?: return
-        extensionController.loadMedia(
-            bindingContext.divView,
-            bindingContext.expressionResolver,
-            view as View,
-            div.value()
-        )
+        val divBlock = view.divBlock ?: return
+        extensionController.loadMedia(view as View, divBlock, divView)
     }
 }

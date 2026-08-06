@@ -2,7 +2,7 @@ package com.yandex.div.core.view2.divs.gallery
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
@@ -11,10 +11,10 @@ import java.util.WeakHashMap
 
 internal class DivGalleryAdapter(
     items: List<DivBlock>,
-    private val bindingContext: BindingContext,
+    private val divView: Div2View,
     private val divBinder: DivBinder,
     private val viewCreator: DivViewCreator,
-) : DivCollectionAdapter<DivGalleryViewHolder>(bindingContext, items) {
+) : DivCollectionAdapter<DivGalleryViewHolder>(items) {
 
     var orientation = RecyclerView.HORIZONTAL
     var columnCount = 1
@@ -28,11 +28,11 @@ internal class DivGalleryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryViewHolder {
-        val view = DivGalleryItemLayout(bindingContext.divView.context)
+        val view = DivGalleryItemLayout(divView.context)
         view.orientation = { orientation }
         view.columnCount = { columnCount }
         view.crossSpacing = { crossSpacing }
-        return DivGalleryViewHolder(view, divBinder, viewCreator)
+        return DivGalleryViewHolder(view, divBinder, viewCreator, divView)
     }
 
     override fun getItemId(position: Int): Long {

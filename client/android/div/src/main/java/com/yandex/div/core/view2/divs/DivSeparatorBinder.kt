@@ -3,24 +3,28 @@ package com.yandex.div.core.view2.divs
 import android.view.Gravity
 import com.yandex.div.R
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstantOrNull
-import com.yandex.div2.Div
 import com.yandex.div2.DivSeparator
 import javax.inject.Inject
 
 @DivScope
 internal class DivSeparatorBinder @Inject constructor(
     baseBinder: DivBaseBinder
-) : DivViewBinder<Div.Separator, DivSeparator, DivSeparatorView>(baseBinder) {
+) : DivViewBinder<DivBlock.Separator, DivSeparatorView>(baseBinder) {
 
-    override fun DivSeparatorView.bind(bindingContext: BindingContext, div: DivSeparator, oldDiv: DivSeparator?) {
+    override fun DivSeparatorView.bind(
+        divBlock: DivBlock.Separator,
+        oldDivBlock: DivBlock.Separator?,
+        divView: Div2View,
+    ) {
+        val div = divBlock.divValue
         applyDivActions(
-            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -31,9 +35,11 @@ internal class DivSeparatorBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.captureFocusOnAction,
+            divBlock.expressionResolver,
+            divView,
         )
 
-        bindStyle(div.delimiterStyle, oldDiv?.delimiterStyle, bindingContext.expressionResolver)
+        bindStyle(div.delimiterStyle, oldDivBlock?.divValue?.delimiterStyle, divBlock.expressionResolver)
 
         setDividerHeightResource(R.dimen.div_separator_delimiter_height)
         dividerGravity = Gravity.CENTER

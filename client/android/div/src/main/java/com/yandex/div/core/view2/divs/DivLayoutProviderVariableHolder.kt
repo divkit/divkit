@@ -1,12 +1,11 @@
 package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivFixedSize
@@ -27,8 +26,8 @@ internal class DivLayoutProviderVariableHolder : DivTreeVisitor<Unit>(), Express
         visit(data, resolver)
     }
 
-    override fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath) =
-        data.value().observeSize(resolver)
+    override fun defaultVisit(divBlock: DivBlock) =
+        divBlock.div.value().observeSize(divBlock.expressionResolver)
 
     private fun DivBase.observeSize(resolver: ExpressionResolver) {
         width.observe(resolver)

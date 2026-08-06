@@ -21,6 +21,7 @@ import com.yandex.div.core.view2.DivImagePreloader
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.Log
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.DivTreeVisitor
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -98,29 +99,29 @@ class DivPreloader internal constructor(
         }
 
         fun preload(div: Div, resolver: ExpressionResolver, path: DivStatePath): Ticket {
-            visit(div, resolver, path)
+            visit(DivBlock.create(div, resolver, path))
             return ticket
         }
 
-        override fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath) {
-            imagePreloader?.preloadImage(data, resolver, preloadFilter, downloadCallback)
+        override fun defaultVisit(divBlock: DivBlock) {
+            imagePreloader?.preloadImage(divBlock.div, divBlock.expressionResolver, preloadFilter, downloadCallback)
                 ?.forEach { ticket.addImageReference(it) }
-            extensionController.preprocessExtensions(data.value(), resolver, downloadCallback)
+            extensionController.preprocessExtensions(divBlock, downloadCallback)
         }
 
-        override fun visit(data: Div.Custom, resolver: ExpressionResolver, path: DivStatePath) {
-            customContainerViewAdapter.preload(data.value, callback).also { ticket.addReference(it) }
-            super.visit(data, resolver, path)
+        override fun visitCustom(block: DivBlock.Custom) {
+            customContainerViewAdapter.preload(block.divValue, callback).also { ticket.addReference(it) }
+            super.visitCustom(block)
         }
 
-        override fun visit(data: Div.Video, resolver: ExpressionResolver, path: DivStatePath) {
-            defaultVisit(data, resolver, path)
-            val shouldPreloadContent = preloadFilter.shouldPreloadContent(data, resolver)
+        override fun visitVideo(block: DivBlock.Video) {
+            defaultVisit(block)
+            val shouldPreloadContent = preloadFilter.shouldPreloadContent(block.div, block.expressionResolver)
             if (shouldPreloadContent) {
                 val preloading = downloadCallback.registerPreloading("video")
                 val sources = mutableListOf<Uri>()
-                data.value.videoSources?.forEach {
-                    sources.add(it.url.evaluate(resolver))
+                block.divValue.videoSources?.forEach {
+                    sources.add(it.url.evaluate(block.expressionResolver))
                 }
                 videoPreloader.preloadVideo(sources, callback = { results: List<PreloadResult> ->
                     preloading.onCompleted(CompositeResult(results))

@@ -4,7 +4,6 @@ import static com.yandex.div.core.util.ViewsKt.isLayoutRtl;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.LayoutDirection;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import androidx.collection.ArrayMap;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.internal.Assert;
 import com.yandex.div.internal.Log;
@@ -39,6 +39,7 @@ import java.util.Set;
  * @param <TAB_DATA> data source for a tab; it must provide tab's title and whatever other data
  * @param <TAB_VIEW> stateful object that wraps actual view; can be just a plain View
  */
+@InternalApi
 public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.Input.TabBase<ACTION>, TAB_VIEW, ACTION> {
 
     private static final String TAG = "BaseDivTabbedCardUi";
@@ -106,7 +107,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
             } else {
                 child = mViewPool.obtain(mTabItemTag);
                 TAB_DATA tabData = mCurrentData.getTabs().get(position);
-                binding = new Binding(child, tabData, position);
+                binding = new Binding(child, tabData);
                 mBindingByPosition.put(position, binding);
             }
             container.addView(child);
@@ -306,11 +307,11 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
     }
 
     @NonNull
-    protected abstract TAB_VIEW bindTabData(@NonNull ViewGroup tabView, @NonNull TAB_DATA tab, int tabNumber);
+    protected abstract TAB_VIEW bindTabData(@NonNull ViewGroup tabView, @NonNull TAB_DATA tab);
 
     protected abstract void unbindTabData(@NonNull TAB_VIEW tabView);
 
-    protected abstract void fillMeasuringTab(@NonNull ViewGroup view, @NonNull TAB_DATA tab, final int tabNumber);
+    protected abstract void fillMeasuringTab(@NonNull ViewGroup view, @NonNull TAB_DATA tab);
 
     protected void recycleMeasuringTabChildren(@NonNull ViewGroup view) {
     }
@@ -373,7 +374,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         Binding binding = mBindingByPosition.get(tabIndex);
         if (binding == null) {
             tabView = mViewPool.obtain(mTabItemTag);
-            binding = new Binding(tabView, tab, tabIndex);
+            binding = new Binding(tabView, tab);
             mBindingByPosition.put(tabIndex, binding);
         } else {
             tabView = binding.mContainer;
@@ -432,14 +433,6 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
             @Nullable
             Integer getTabHeight();
             Integer getTabHeightLayoutParam();
-        }
-
-        /**
-         * A possible implementation of the tab concept: a plain list of items.
-         */
-        interface SimpleTab<ITM, ACTION> extends TabBase<ACTION> {
-            @NonNull
-            ITM getItem();
         }
     }
 
@@ -613,22 +606,20 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         private final ViewGroup mContainer;
         @NonNull
         private final TAB_DATA mData;
-        private final int mPosition;
 
         @Nullable
         private TAB_VIEW mView;
 
-        private Binding(@NonNull ViewGroup container, @NonNull TAB_DATA data, int position) {
+        private Binding(@NonNull ViewGroup container, @NonNull TAB_DATA data) {
             mContainer = container;
             mData = data;
-            mPosition = position;
         }
 
         void bind() {
             if (mView != null) {
                 return;
             }
-            mView = bindTabData(mContainer, mData, mPosition);
+            mView = bindTabData(mContainer, mData);
         }
 
         void unbind() {

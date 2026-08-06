@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.widgets.DivHolderView
+import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivAlignmentHorizontal
@@ -28,7 +28,7 @@ internal interface DivGalleryItemHelper {
 
     val isHorizontal get() = getLayoutManagerOrientation() == RecyclerView.HORIZONTAL
 
-    fun getItemDiv(position: Int): DivBlock? =
+    fun getItemDivBlock(position: Int): DivBlock? =
         (view.adapter as? DivGalleryAdapter)?.visibleItems?.getOrNull(position)
 
     fun toLayoutManager(): RecyclerView.LayoutManager
@@ -71,7 +71,7 @@ internal interface DivGalleryItemHelper {
         }
 
         val childItem = (child.getTag(R.id.div_gallery_item_index) as Int?)?.let {
-            getItemDiv(it)
+            getItemDivBlock(it)
         } ?: return finishLayoutDecoratedWithMargins(child, left, top, right, bottom, isRelayoutingChildren)
 
         val childDiv = childItem.div.value()
@@ -227,13 +227,12 @@ internal interface DivGalleryItemHelper {
         val itemView = container.children.firstOrNull() ?: return
 
         if (clear) {
-            val div = divView.takeBindingDiv(itemView) ?: return
-            val itemContext = (itemView as? DivHolderView<*>)?.bindingContext ?: return
+            val divBlock = itemView.divBlock ?: return
             divView.div2Component.visibilityActionTracker
-                .cancelTrackingViewsHierarchy(itemView, div, itemContext.expressionResolver, itemContext.divView)
+                .cancelTrackingViewsHierarchy(itemView, divBlock.div, divBlock.expressionResolver, divView)
             divView.unbindViewFromDiv(itemView)
         } else {
-            val item = getItemDiv(position) ?: return
+            val item = getItemDivBlock(position) ?: return
             divView.div2Component.visibilityActionTracker
                 .startTrackingViewsHierarchy(itemView, item.div, item.expressionResolver, divView)
             divView.bindViewToDiv(itemView, item.div)

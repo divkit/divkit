@@ -3,16 +3,14 @@ package com.yandex.div.core.view2.divs
 import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
-import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivSelect
 import javax.inject.Inject
 
@@ -22,24 +20,22 @@ internal class DivSelectBinder @Inject constructor(
     private val typefaceResolver: DivTypefaceResolver,
     private val variableBinder: TwoWayStringVariableBinder,
     private val errorCollectors: ErrorCollectors
-) : DivViewBinder<Div.Select, DivSelect, DivSelectView>(baseBinder) {
+) : DivViewBinder<DivBlock.Select, DivSelectView>(baseBinder) {
 
     override fun DivSelectView.bind(
-        bindingContext: BindingContext,
-        div: DivSelect,
-        oldDiv: DivSelect?,
-        path: DivStatePath
+        divBlock: DivBlock.Select,
+        oldDivBlock: DivBlock.Select?,
+        divView: Div2View,
     ) {
-        val divView = bindingContext.divView
-        val expressionResolver = bindingContext.expressionResolver
-
         textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
         focusTracker = divView.inputFocusTracker
 
+        val div = divBlock.divValue
+        val expressionResolver = divBlock.expressionResolver
         applyOptions(div, expressionResolver, divView)
         observeVariable(div, expressionResolver, divView)
 
-        observeBaseTextProperties(div, oldDiv, expressionResolver)
+        observeBaseTextProperties(div, oldDivBlock?.divValue, expressionResolver)
 
         observeHintText(div, expressionResolver)
         observeHintColor(div, expressionResolver)

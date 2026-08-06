@@ -4,7 +4,7 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.bindingContext
+import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivGallery
@@ -70,7 +70,7 @@ internal class DivGalleryScrollListener(
 
             val div = (recycler.adapter as DivGalleryAdapter).visibleItems[position].div
 
-            val childResolver = child.bindingContext?.expressionResolver ?: resolver
+            val childResolver = child.divBlock?.expressionResolver ?: resolver
             visibilityActionTracker.startTrackingViewsHierarchy(
                 root = child,
                 rootDiv = div,

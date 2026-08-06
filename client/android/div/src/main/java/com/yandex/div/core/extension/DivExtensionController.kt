@@ -5,6 +5,7 @@ import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.isConstant
@@ -17,107 +18,106 @@ internal class DivExtensionController @Inject constructor(
 ) {
 
     fun preprocessExtensions(
-        div: DivBase,
-        resolver: ExpressionResolver,
+        divBlock: DivBlock,
         downloadCallback: DivPreloader.DownloadCallback,
     ) {
-        if (!hasExtensions(div)) {
+        if (!hasExtensions(divBlock)) {
             return
         }
-        extensionHandlers.forEach { handler ->
-            if (handler.matches(div)) {
-                handler.preprocess(div, resolver, downloadCallback)
-            }
+        onExtensionHandlers(divBlock) { div, resolver ->
+            preprocess(div, resolver, downloadCallback)
         }
     }
 
-    fun beforeBindView(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
-        if (!hasEnabledExtensions(div, resolver)) {
+    fun beforeBindView(view: View, divBlock: DivBlock, divView: Div2View) {
+        if (!hasEnabledExtensions(divBlock)) {
             return
         }
-        extensionHandlers.forEach { handler ->
-            if (handler.matches(div)) {
-                handler.beforeBindView(divView, resolver, view, div)
-            }
+        onExtensionHandlers(divBlock) { div, resolver ->
+            beforeBindView(divView, resolver, view, div)
         }
     }
 
-    fun bindView(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
-        if (!hasExtensions(div)) {
+    fun bindView(view: View, divBlock: DivBlock, divView: Div2View) {
+        if (!hasExtensions(divBlock)) {
             return
         }
-        observeIsEnabled(divView, resolver, view, div)
-        applyExtensions(divView, resolver, view, div)
+        observeIsEnabled(view, divBlock, divView)
+        applyExtensions(view, divBlock, divView)
     }
 
-    private fun observeIsEnabled(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
+    private fun observeIsEnabled(view: View, divBlock: DivBlock, divView: Div2View) {
         val subscriber = view.expressionSubscriber
-        div.extensions?.forEach { extension ->
+        divBlock.div.value().extensions?.forEach { extension ->
             if (extension.isEnabled.isConstant()) {
                 return@forEach
             }
             subscriber.addSubscription(
-                extension.isEnabled.observe(resolver) {
-                    applyExtensions(divView, resolver, view, div)
+                extension.isEnabled.observe(divBlock.expressionResolver) {
+                    applyExtensions(view, divBlock, divView)
                 }
             )
         }
     }
 
-    private fun applyExtensions(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
-        val enabled = hasEnabledExtensions(div, resolver)
-        extensionHandlers.forEach { handler ->
-            if (handler.matches(div)) {
-                executeOnMainThreadBlocking {
-                    if (enabled) {
-                        handler.bindView(divView, resolver, view, div)
-                    } else {
-                        handler.unbindView(divView, resolver, view, div)
-                    }
+    private fun applyExtensions(view: View, divBlock: DivBlock, divView: Div2View) {
+        val enabled = hasEnabledExtensions(divBlock)
+        onExtensionHandlers(divBlock) { div, resolver ->
+            executeOnMainThreadBlocking {
+                if (enabled) {
+                    bindView(divView, resolver, view, div)
+                } else {
+                    unbindView(divView, resolver, view, div)
                 }
             }
         }
     }
 
-    fun unbindView(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
-        if (!hasExtensions(div)) {
+    fun unbindView(view: View, divBlock: DivBlock, divView: Div2View) {
+        if (!hasExtensions(divBlock)) {
             return
         }
-        extensionHandlers.forEach { handler ->
-            if (handler.matches(div)) {
-                executeOnMainThreadBlocking {
-                    handler.unbindView(divView, resolver, view, div)
-                }
+        onExtensionHandlers(divBlock) { div, resolver ->
+            executeOnMainThreadBlocking {
+                unbindView(divView, resolver, view, div)
             }
         }
     }
 
-    fun loadMedia(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
-        if (!hasEnabledExtensions(div, resolver)) return
-        extensionHandlers.forEach { handler ->
-            if (handler.matches(div)) {
-                handler.loadMedia(divView, resolver, view, div)
-            }
+    fun loadMedia(view: View, divBlock: DivBlock, divView: Div2View) {
+        if (!hasEnabledExtensions(divBlock)) return
+        onExtensionHandlers(divBlock) { div, resolver ->
+            loadMedia(divView, resolver, view, div)
         }
     }
 
-    fun releaseMedia(divView: Div2View, resolver: ExpressionResolver, view: View, div: DivBase) {
-        if (!hasExtensions(div)) return
-        extensionHandlers.forEach { handler ->
-            if (handler.matches(div)) {
-                handler.releaseMedia(divView, resolver, view, div)
-            }
+    fun releaseMedia(view: View, divBlock: DivBlock, divView: Div2View) {
+        if (!hasExtensions(divBlock)) return
+        onExtensionHandlers(divBlock) { div, resolver ->
+            releaseMedia(divView, resolver, view, div)
         }
     }
 
-    private fun hasExtensions(div: DivBase): Boolean {
-        return !div.extensions.isNullOrEmpty() && extensionHandlers.isNotEmpty()
+    private fun hasExtensions(divBlock: DivBlock): Boolean {
+        return !divBlock.div.value().extensions.isNullOrEmpty() && extensionHandlers.isNotEmpty()
     }
 
-    private fun hasEnabledExtensions(div: DivBase, resolver: ExpressionResolver): Boolean {
+    private fun hasEnabledExtensions(divBlock: DivBlock): Boolean {
         if (extensionHandlers.isEmpty()) {
             return false
         }
-        return div.extensions?.any { it.isEnabled.evaluate(resolver) } ?: false
+        return divBlock.div.value().extensions?.any { it.isEnabled.evaluate(divBlock.expressionResolver) } ?: false
+    }
+
+    private fun onExtensionHandlers(
+        divBlock: DivBlock,
+        action: DivExtensionHandler.(DivBase, ExpressionResolver) -> Unit
+    ) {
+        val div = divBlock.div.value()
+        extensionHandlers.forEach { handler ->
+            if (handler.matches(div)) {
+                handler.action(div, divBlock.expressionResolver)
+            }
+        }
     }
 }

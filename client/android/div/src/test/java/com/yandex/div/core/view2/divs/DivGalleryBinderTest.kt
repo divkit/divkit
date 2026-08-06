@@ -8,6 +8,8 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
@@ -42,6 +44,7 @@ class DivGalleryBinderTest : DivBinderTest() {
     )
 
     private val div = div()
+    private val divBlock = div.toBlock(resolver, rootPath()) as DivBlock.Gallery
     private val recyclerView = divRecyclerView(div).apply {
         layoutParams = defaultLayoutParams()
     }
@@ -53,24 +56,24 @@ class DivGalleryBinderTest : DivBinderTest() {
 
     @Test
     fun `scroll to default item`() {
-        underTest.bindView(bindingContext, recyclerView, div, rootPath())
+        underTest.bindView(recyclerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM, recyclerView.layoutManager.shadow().position)
     }
 
     @Test
     fun `keep scroll position on rebind`() {
-        underTest.bindView(bindingContext, recyclerView, div, rootPath())
+        underTest.bindView(recyclerView, divBlock, divView)
 
         (recyclerView.layoutManager as? DivLinearLayoutManager)!!.instantScrollToPosition(DEFAULT_ITEM + 1, 0)
-        underTest.bindView(bindingContext, recyclerView, div, rootPath())
+        underTest.bindView(recyclerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM + 1, recyclerView.layoutManager.shadow().position)
     }
 
     @Test
     fun `set default item when has current state without visible item index`() {
-        underTest.bindView(bindingContext, recyclerView, div, rootPath())
+        underTest.bindView(recyclerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM, recyclerView.layoutManager.shadow().position)
     }
@@ -79,7 +82,7 @@ class DivGalleryBinderTest : DivBinderTest() {
     fun `restore previous position`() {
         whenever(divViewState.getBlockState<GalleryState>(any())).thenReturn(GalleryState(DEFAULT_ITEM + 1, 0))
 
-        underTest.bindView(bindingContext, recyclerView, div, rootPath())
+        underTest.bindView(recyclerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM + 1, recyclerView.layoutManager.shadow().position)
     }
@@ -89,8 +92,9 @@ class DivGalleryBinderTest : DivBinderTest() {
         val galleryJson = div.writeToJSON()
         galleryJson.remove("default_item")
         val divGallery = Div.Gallery(DivGallery(DivParsingEnvironment(ParsingErrorLogger.ASSERT), galleryJson))
+            .toBlock(resolver, rootPath()) as DivBlock.Gallery
 
-        underTest.bindView(bindingContext, recyclerView, divGallery, rootPath())
+        underTest.bindView(recyclerView, divGallery, divView)
 
         Assert.assertEquals(0, recyclerView.layoutManager.shadow().position)
         verify(recyclerView, never()).scrollToPosition(any())

@@ -9,15 +9,15 @@ import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.marginTop
 import com.yandex.div.core.view2.divs.drawShadow
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.FrameContainerLayout
-import com.yandex.div2.Div
 
 internal class DivCustomWrapper @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameContainerLayout(context, attrs, defStyleAttr),
-    DivHolderView<Div.Custom> by DivHolderViewMixin() {
+    DivHolderView<DivBlock.Custom> by DivHolderViewMixin() {
 
     val customView get() = if (isNotEmpty()) get(0) else null
 

@@ -8,24 +8,22 @@ import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
-import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.util.observeDrawable
 import com.yandex.div.core.util.toDrawable
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.getTypeface
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.slider.SliderTextStyle
 import com.yandex.div.internal.widget.slider.SliderView
 import com.yandex.div.internal.widget.slider.shapes.TextDrawable
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivSizeUnit
@@ -46,18 +44,17 @@ internal class DivSliderBinder @Inject constructor(
     private val actionPerformer: DivActionPerformer,
     @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
     private val animationsEnabledController: DivAnimationsEnabledController,
-) : DivViewBinder<Div.Slider, DivSlider, DivSliderView>(baseBinder) {
+) : DivViewBinder<DivBlock.Slider, DivSliderView>(baseBinder) {
 
     private var errorCollector: ErrorCollector? = null
 
     override fun DivSliderView.bind(
-        bindingContext: BindingContext,
-        div: DivSlider,
-        oldDiv: DivSlider?,
-        path: DivStatePath
+        divBlock: DivBlock.Slider,
+        oldDivBlock: DivBlock.Slider?,
+        divView: Div2View,
     ) {
-        val divView = bindingContext.divView
-        val expressionResolver = bindingContext.expressionResolver
+        val div = divBlock.divValue
+        val expressionResolver = divBlock.expressionResolver
         errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         animationsEnabledProvider = { animationsEnabledController.isEnabled() }

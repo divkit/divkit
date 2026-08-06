@@ -14,13 +14,13 @@ import com.yandex.div.core.expression.evaluation.JSONObjectEvaluator;
 import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
 import com.yandex.div.core.state.DivStatePath;
 import com.yandex.div.core.state.PathFormatException;
-import com.yandex.div.core.view2.BindingContext;
 import com.yandex.div.core.view2.Div2View;
 import com.yandex.div.core.view2.ViewLocator;
 import com.yandex.div.core.view2.divs.widgets.DivHolderView;
 import com.yandex.div.core.view2.items.DivItemChangeActionHandler;
 import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
+import com.yandex.div.internal.core.DivBlock;
 import com.yandex.div.internal.core.VariableMutationHandler;
 import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.expressions.Expression;
@@ -533,8 +533,8 @@ public class DivActionHandler {
         View targetView = ViewLocator.findSingleViewWithTag((Div2View) view, scopeId);
         if (!(targetView instanceof DivHolderView)) return resolver;
 
-        BindingContext bindingContext = ((DivHolderView<?>) targetView).getBindingContext();
-        return bindingContext != null ? bindingContext.getExpressionResolver() : resolver;
+        DivBlock divBlock = ((DivHolderView<?>) targetView).getDivBlock();
+        return divBlock != null ? divBlock.getExpressionResolver() : resolver;
     }
 
     private boolean tryHandleCustomTypedAction(

@@ -59,12 +59,12 @@ internal class DivAnimatorController @Inject constructor(
     private fun findAnimator(view: View, animatorId: String): DivAnimator? {
         return when (view) {
             is DivHolderView<*> -> {
-                findAnimator(view.div?.value()?.animators, animatorId)
+                findAnimator(view.divBlock?.div?.value()?.animators, animatorId)
                     ?: (view.parent as? View)?.let { findAnimator(it, animatorId) }
             }
             is Div2View -> {
                 divView.logWarning(RuntimeException("Unable to find animator with id '$animatorId'"))
-                return null
+                null
             }
             else -> (view.parent as? View)?.let { findAnimator(it, animatorId) }
         }

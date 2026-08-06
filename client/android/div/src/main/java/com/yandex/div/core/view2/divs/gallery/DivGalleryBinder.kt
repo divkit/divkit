@@ -10,7 +10,6 @@ import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
@@ -23,11 +22,11 @@ import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.build
 import com.yandex.div.internal.core.buildItems
 import com.yandex.div.internal.widget.PaddingItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import javax.inject.Inject
 import javax.inject.Provider
@@ -39,27 +38,27 @@ internal class DivGalleryBinder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
     private val recyclerScrollInterceptionAngle: Float,
-) : DivViewBinder<Div.Gallery, DivGallery, DivRecyclerView>(baseBinder) {
+) : DivViewBinder<DivBlock.Gallery, DivRecyclerView>(baseBinder) {
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun bindView(context: BindingContext, view: DivRecyclerView, div: Div.Gallery, path: DivStatePath) {
-        val oldDiv = view.div
-        if (div === oldDiv) {
+    override fun bindView(view: DivRecyclerView, divBlock: DivBlock.Gallery, divView: Div2View) {
+        val oldDivBlock = view.divBlock
+        if (divBlock.div === oldDivBlock?.div) {
             val adapter = view.adapter as? DivGalleryAdapter ?: return
-            adapter.setItems(div.value.buildItems(context.expressionResolver, path))
-            view.bindStates(context, divBinder.get())
+            adapter.setItems(divBlock.buildItems())
+            view.bindStates(divBinder.get(), divView)
             return
         }
 
-        baseBinder.bindView(context, view, div, oldDiv, path)
-        view.bind(context, div.value, path)
+        baseBinder.bindView(view, divBlock, oldDivBlock, divView)
+        view.bind(divBlock, divView)
     }
 
-    private fun DivRecyclerView.bind(bindingContext: BindingContext, div: DivGallery, path: DivStatePath) {
-        val resolver = bindingContext.expressionResolver
-        val galleryAdapter =
-            DivGalleryAdapter(div.buildItems(resolver, path), bindingContext, divBinder.get(), viewCreator)
-        val reusableObserver = { _: Any -> updateDecorations(div, galleryAdapter, resolver, bindingContext.divView) }
+    private fun DivRecyclerView.bind(divBlock: DivBlock.Gallery, divView: Div2View) {
+        val div = divBlock.divValue
+        val resolver = divBlock.expressionResolver
+        val galleryAdapter = DivGalleryAdapter(divBlock.buildItems(), divView, divBinder.get(), viewCreator)
+        val reusableObserver = { _: Any -> updateDecorations(div, galleryAdapter, resolver, divView) }
         addSubscription(div.orientation.observe(resolver, reusableObserver))
         addSubscription(div.scrollbar.observe(resolver, reusableObserver))
         addSubscription(div.scrollMode.observe(resolver, reusableObserver))
@@ -69,14 +68,14 @@ internal class DivGalleryBinder @Inject constructor(
         addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
         div.columnCount?.let { addSubscription(it.observe(resolver, reusableObserver)) }
 
-        setRecycledViewPool(ReleasingViewPool(bindingContext.divView.releaseViewVisitor))
+        setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
         setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         adapter = galleryAdapter
-        bindItemBuilder(div, resolver, path)
+        bindItemBuilder(div, resolver, divBlock.path)
         resetAnimatorAndRestoreOnLayout()
-        updateDecorations(div, galleryAdapter, resolver, bindingContext.divView)
+        updateDecorations(div, galleryAdapter, resolver, divView)
     }
 
     private fun DivRecyclerView.updateDecorations(

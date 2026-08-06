@@ -8,7 +8,7 @@ import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.observeSize
 import com.yandex.div.core.util.toLayoutParamsSize
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.KAssert
@@ -35,14 +35,15 @@ internal class DivLayoutParamsBinder @Inject constructor(
 ) {
 
     fun bindLayoutParams(
-        context: BindingContext,
         target: View,
         newDiv: DivBase,
         oldDiv: DivBase?,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         subscriber: ExpressionSubscriber,
     ) {
-        val errorCollector = errorCollectors.getOrCreate(context.divView.dataTag, context.divView.divData)
-        target.bindLayoutParams(newDiv, oldDiv, context.expressionResolver, subscriber, errorCollector)
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+        target.bindLayoutParams(newDiv, oldDiv, resolver, subscriber, errorCollector)
     }
 
     private fun View.bindLayoutParams(

@@ -15,7 +15,6 @@ import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.actions.closeKeyboard
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.evaluateGravity
@@ -33,17 +32,16 @@ import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.util.validator.ExpressionValidator
 import com.yandex.div.core.util.validator.RegexValidator
 import com.yandex.div.core.util.validator.ValidatorItemData
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivCurrencyInputMask
@@ -67,19 +65,21 @@ internal class DivInputBinder @Inject constructor(
     private val actionPerformer: DivActionPerformer,
     private val accessibilityStateProvider: AccessibilityStateProvider,
     private val errorCollectors: ErrorCollectors
-) : DivViewBinder<Div.Input, DivInput, DivInputView>(baseBinder) {
+) : DivViewBinder<DivBlock.Input, DivInputView>(baseBinder) {
 
     override fun DivInputView.bind(
-        bindingContext: BindingContext,
-        div: DivInput,
-        oldDiv: DivInput?,
-        path: DivStatePath
+        divBlock: DivBlock.Input,
+        oldDivBlock: DivBlock.Input?,
+        divView: Div2View,
     ) {
-        val expressionResolver = bindingContext.expressionResolver
+        val div = divBlock.divValue
+        val oldDiv = oldDivBlock?.divValue
+        val expressionResolver = divBlock.expressionResolver
+
         textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
         accessibilityEnabled = accessibilityStateProvider.isAccessibilityEnabled(context)
 
-        observeBackground(div, oldDiv, expressionResolver, bindingContext.divView)
+        observeBackground(div, oldDiv, expressionResolver, divView)
 
         observeBaseTextProperties(div, oldDiv, expressionResolver)
         observeTextAlignment(div.textAlignmentHorizontal, div.textAlignmentVertical, expressionResolver)
@@ -91,13 +91,13 @@ internal class DivInputBinder @Inject constructor(
         observeHighlightColor(div, expressionResolver)
         observeKeyboardTypeAndCapitalization(div, expressionResolver)
 
-        observeEnterTypeAndActions(div, expressionResolver, bindingContext.divView)
+        observeEnterTypeAndActions(div, expressionResolver, divView)
         observeSelectAllOnFocus(div, expressionResolver)
         observeIsEnabled(div, expressionResolver)
 
-        observeText(div, bindingContext)
+        observeText(div, expressionResolver, divView)
 
-        focusTracker = bindingContext.divView.inputFocusTracker
+        focusTracker = divView.inputFocusTracker
         focusTracker?.requestFocusIfNeeded(this)
     }
 
@@ -323,10 +323,9 @@ internal class DivInputBinder @Inject constructor(
 
     private fun DivInputView.observeText(
         div: DivInput,
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
-        val resolver = bindingContext.expressionResolver
-        val divView = bindingContext.divView
         removeAfterTextChangeListener()
 
         var inputMask: BaseInputMask? = null
@@ -339,7 +338,7 @@ internal class DivInputBinder @Inject constructor(
         }
 
         var inputFilters: InputFiltersHolder? = null
-        observeFilters(div, bindingContext) { filters ->
+        observeFilters(div, resolver, divView) { filters ->
             inputFilters = filters
             inputFilters?.let {
                 it.currentValue = editableText?.toString() ?: ""
@@ -359,14 +358,14 @@ internal class DivInputBinder @Inject constructor(
             primaryVariable = div.textVariable
         }
 
-        val callbacks = createCallbacks(bindingContext, inputMask, inputFilters, secondaryVariable)
+        val callbacks = createCallbacks(resolver, inputMask, inputFilters, secondaryVariable)
         addSubscription(variableBinder.bindVariable(primaryVariable, resolver, divView, callbacks))
 
         observeValidators(div, resolver, divView)
     }
 
     private fun DivInputView.createCallbacks(
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
         inputMask: BaseInputMask?,
         filters: InputFiltersHolder?,
         secondaryVariable: String?,
@@ -437,7 +436,7 @@ internal class DivInputBinder @Inject constructor(
         }
 
         private fun setSecondVariable(value: String) {
-            secondaryVariable?.let { bindingContext.expressionResolver.getVariable(it)?.set(value) }
+            secondaryVariable?.let { resolver.getVariable(it)?.set(value) }
         }
     }
 
@@ -692,7 +691,8 @@ internal class DivInputBinder @Inject constructor(
 
     private fun DivInputView.observeFilters(
         div: DivInput,
-        bindingContext: BindingContext,
+        resolver: ExpressionResolver,
+        divView: Div2View,
         onFiltersUpdate: (InputFiltersHolder?) -> Unit
     ) {
         div.mask?.let { return }
@@ -700,7 +700,6 @@ internal class DivInputBinder @Inject constructor(
         val divFilters = div.filters
         if (divFilters.isNullOrEmpty()) return
 
-        val resolver = bindingContext.expressionResolver
         val updateFiltersData = { _: Any ->
             val filters = divFilters.mapNotNull {
                 when (it) {
@@ -708,7 +707,7 @@ internal class DivInputBinder @Inject constructor(
                         try {
                             RegexInputFilter(it.value.pattern.evaluate(resolver))
                         } catch (e: PatternSyntaxException) {
-                            errorCollectors.getOrCreate(bindingContext.divView.dataTag, bindingContext.divView.divData)
+                            errorCollectors.getOrCreate(divView.dataTag, divView.divData)
                                 .logError(IllegalArgumentException("Invalid regex pattern '${e.pattern}'.", e))
                             null
                         }

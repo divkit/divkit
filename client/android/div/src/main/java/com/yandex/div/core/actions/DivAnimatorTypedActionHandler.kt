@@ -2,7 +2,7 @@ package com.yandex.div.core.actions
 
 import android.view.View
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.divs.bindingContext
+import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionTyped
@@ -23,7 +23,7 @@ internal class DivAnimatorTypedActionHandler @Inject constructor() : DivActionTy
                 if (scopeId == null) return true
                 if (!view.div2Component.animationsEnabledController.isEnabled()) return true
                 val targetView = view.findTargetView<View>(scopeId, DivActionAnimatorStart.TYPE) ?: return true
-                val targetResolver = targetView.bindingContext?.expressionResolver ?: return true
+                val targetResolver = targetView.divBlock?.expressionResolver ?: return true
                 view.viewComponent.animatorController.startAnimator(scopeId, targetView, action.value, targetResolver)
                 true
             }

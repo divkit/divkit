@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yandex.div.R
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
-import com.yandex.div.core.view2.divs.asDivHolderView
+import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.gallery.DivGallerySnapHelper
@@ -39,7 +39,7 @@ internal class DivRecyclerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : BackHandlingRecyclerView(ContextThemeWrapper(context, R.style.Div_Gallery), attrs, defStyleAttr),
-    DivHolderView<Div.Gallery> by DivHolderViewMixin(),
+    DivHolderView<DivBlock.Gallery> by DivHolderViewMixin(),
     OnInterceptTouchEventListenerHost,
     DivScrollActionHolder {
 
@@ -96,8 +96,8 @@ internal class DivRecyclerView @JvmOverloads constructor(
             heightMeasureSpec =
                 getMaxSizeSpec(orientation == HORIZONTAL, heightSpec, paddingTop + paddingBottom) { measuredHeight }
             children.forEach {
-                val div = it.asDivHolderView?.div ?: return@forEach
-                if (!div.isMatchParent { if (orientation == HORIZONTAL) height else width }) return@forEach
+                val divBlock = it.divBlock ?: return@forEach
+                if (!divBlock.div.isMatchParent { if (orientation == HORIZONTAL) height else width }) return@forEach
                 it.measure(widthMeasureSpec, heightMeasureSpec)
             }
         }

@@ -19,7 +19,6 @@ import com.yandex.div.core.util.isConstant
 import com.yandex.div.core.util.toFilters
 import com.yandex.div.core.util.toImageScale
 import com.yandex.div.core.util.toPorterDuffMode
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
@@ -28,6 +27,7 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.core.widget.LoadableImageView
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
@@ -35,7 +35,6 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBlendMode
@@ -51,11 +50,17 @@ internal class DivImageBinder @Inject constructor(
     private val placeholderLoader: DivPlaceholderLoader,
     private val errorCollectors: ErrorCollectors,
     private val animationsEnabledController: DivAnimationsEnabledController,
-) : DivViewBinder<Div.Image, DivImage, DivImageView>(baseBinder) {
+) : DivViewBinder<DivBlock.Image, DivImageView>(baseBinder) {
 
-    override fun DivImageView.bind(bindingContext: BindingContext, div: DivImage, oldDiv: DivImage?) {
+    override fun DivImageView.bind(
+        divBlock: DivBlock.Image,
+        oldDivBlock: DivBlock.Image?,
+        divView: Div2View,
+    ) {
+        val div = divBlock.divValue
+        val oldDiv = oldDivBlock?.divValue
+        val expressionResolver = divBlock.expressionResolver
         applyDivActions(
-            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -66,10 +71,10 @@ internal class DivImageBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.captureFocusOnAction,
+            expressionResolver,
+            divView,
         )
 
-        val divView = bindingContext.divView
-        val expressionResolver = bindingContext.expressionResolver
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
@@ -509,11 +514,10 @@ internal class DivImageBinder @Inject constructor(
 
     fun loadImage(
         view: DivImageView,
-        div: DivImage,
-        resolver: ExpressionResolver,
+        divBlock: DivBlock.Image,
         divView: Div2View,
         errorCollector: ErrorCollector,
-    ) = view.applyImage(div, resolver, divView, errorCollector)
+    ) = view.applyImage(divBlock.divValue, divBlock.expressionResolver, divView, errorCollector)
 
     private fun DivImageView.setImageDrawable(divView: Div2View, drawable: Drawable?) {
         divView.runMainThreadAction {

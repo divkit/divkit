@@ -16,7 +16,6 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.toImageScale
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
@@ -25,10 +24,10 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivGifImage
@@ -43,15 +42,18 @@ internal class DivGifImageBinder @Inject constructor(
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
     private val errorCollectors: ErrorCollectors,
-) : DivViewBinder<Div.GifImage, DivGifImage, DivGifImageView>(baseBinder) {
+) : DivViewBinder<DivBlock.GifImage, DivGifImageView>(baseBinder) {
 
-    override fun DivGifImageView.bind(bindingContext: BindingContext, div: DivGifImage, oldDiv: DivGifImage?) {
-        val divView = bindingContext.divView
-        val expressionResolver = bindingContext.expressionResolver
+    override fun DivGifImageView.bind(
+        divBlock: DivBlock.GifImage,
+        oldDivBlock: DivBlock.GifImage?,
+        divView: Div2View,
+    ) {
+        val div = divBlock.divValue
+        val expressionResolver = divBlock.expressionResolver
         val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         applyDivActions(
-            bindingContext,
             div.action,
             div.actions,
             div.longtapActions,
@@ -62,9 +64,11 @@ internal class DivGifImageBinder @Inject constructor(
             div.pressEndActions,
             div.actionAnimation,
             div.captureFocusOnAction,
+            expressionResolver,
+            divView,
         )
 
-        bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
+        bindAspectRatio(div.aspect, oldDivBlock?.divValue?.aspect, expressionResolver)
 
         addSubscription(
             div.scale.observeAndGet(expressionResolver) { scale -> imageScale = scale.toImageScale() }
@@ -242,11 +246,10 @@ internal class DivGifImageBinder @Inject constructor(
 
     fun loadGifImage(
         view: DivGifImageView,
-        div: DivGifImage,
-        resolver: ExpressionResolver,
+        divBlock: DivBlock.GifImage,
         divView: Div2View,
         errorCollector: ErrorCollector,
-    ) = view.applyGifImage(divView, resolver, div, errorCollector)
+    ) = view.applyGifImage(divView, divBlock.expressionResolver, divBlock.divValue, errorCollector)
 
     @RequiresApi(Build.VERSION_CODES.P)
     class LoadDrawableOnPostPTask(

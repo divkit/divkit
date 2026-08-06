@@ -16,9 +16,10 @@ import androidx.core.math.MathUtils
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.drawShadow
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.FrameContainerLayout
-import com.yandex.div2.Div
 import kotlin.math.abs
 import kotlin.math.sign
 
@@ -29,7 +30,7 @@ internal class DivStateLayout @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : FrameContainerLayout(context, attrs, defStyleAttr),
-    DivHolderView<Div.State> by DivHolderViewMixin() {
+    DivHolderView<DivBlock.State> by DivHolderViewMixin() {
 
     var currentStatePath: DivStatePath? = null
     val stateId: String?
@@ -37,7 +38,8 @@ internal class DivStateLayout @JvmOverloads constructor(
     private val swipeListener = SwipeListener()
     private val gestureDetector = GestureDetectorCompat(context, swipeListener, Handler(Looper.getMainLooper()))
     var swipeOutCallback: (() -> Unit)? = null
-    internal var activeStateDiv: Div? = null
+    internal var activeStateDivBlock: DivBlock? = null
+    private var divView: Div2View? = null
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         if (swipeOutCallback == null) {
@@ -147,7 +149,7 @@ internal class DivStateLayout @JvmOverloads constructor(
 
             view.animate().cancel()
 
-            if (bindingContext?.divView?.div2Component?.animationsEnabledController?.isEnabled() == false) {
+            if (divView?.div2Component?.animationsEnabledController?.isEnabled() == false) {
                 view.translationX = targetTranslation
                 if (dismiss) swipeOutCallback?.invoke()
                 return
