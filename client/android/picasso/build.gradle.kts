@@ -3,7 +3,6 @@ plugins {
 }
 
 apply(from = "../div-library.gradle")
-apply(from = "../publish-android.gradle")
 
 android {
     namespace = "com.yandex.divkit.picasso"
