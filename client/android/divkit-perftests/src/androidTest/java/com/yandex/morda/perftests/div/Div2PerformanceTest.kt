@@ -136,4 +136,38 @@ class Div2PerformanceTest : BasePerformanceTest() {
             )
         }
     }
+
+    @PerfTestParameter(
+        importantMetrics = [
+            "Div.Binding.Cold",
+            "Div.Binding.Warm",
+            "Div.Parsing.Total.Cold",
+            "Div.Parsing.Total.Warm",
+            "Div.Render.Total.Cold",
+            "Div.Render.Total.Warm",
+        ]
+    )
+    @Test
+    fun services() {
+        utils.run {
+            report(tag = "services") {
+                startActivity(
+                    activityClass = DIV_BENCHMARK_ACTIVITY,
+                    extras = divBenchmarkActivityExtras(
+                        assetName = "services.json"
+                    ),
+                    waitCondition = Until.findObject(By.textContains("Finished"))
+                )
+            }
+
+            waitAllMetrics(
+                "Div.Binding.Cold",
+                "Div.Binding.Warm",
+                "Div.Parsing.Total.Cold",
+                "Div.Parsing.Total.Warm",
+                "Div.Render.Total.Cold",
+                "Div.Render.Total.Warm",
+            )
+        }
+    }
 }
