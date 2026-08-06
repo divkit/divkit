@@ -7,7 +7,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">@color/colorControlNormal</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:buttonStyle">@style/Widget.AppTheme.Button</item>
         <item name="android:buttonBarButtonStyle">@style/Widget.AppTheme.Button.Bar</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/Widget.AppTheme.Button.Bar</item>

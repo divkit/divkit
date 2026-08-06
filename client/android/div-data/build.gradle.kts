@@ -25,7 +25,6 @@ dependencies {
     testImplementation(project(":test-utils"))
 
     testImplementation(libs.json)
-    testImplementation(libs.kotlin.reflect)
 }
 
 schemas {

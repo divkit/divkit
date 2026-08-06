@@ -97,12 +97,10 @@ dependencies {
     implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
 
-    implementation libs.androidx.browser
-    implementation libs.androidx.constraintlayout
     implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.compose.foundation
     implementation libs.androidx.compose.ui
-    implementation libs.androidx.preference
+    implementation libs.androidx.constraintlayout
     implementation libs.androidx.test.uiautomator
     implementation libs.androidx.work
 
@@ -111,7 +109,6 @@ dependencies {
     }
 
     implementation libs.javax
-    implementation libs.kotlin.reflect
     implementation libs.markwon
     implementation libs.nvWebsocket
     implementation libs.okhttp

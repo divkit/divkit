@@ -12,5 +12,4 @@ kotlin {
 
 dependencies {
     implementation(gradleApi())
-    implementation(libs.kotlin.reflect)
 }
