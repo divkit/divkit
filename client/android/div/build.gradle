@@ -21,6 +21,12 @@ android {
         buildConfig = true
     }
 
+    buildTypes {
+        release {
+            consumerProguardFiles 'proguard-rules.pro'
+        }
+    }
+
     defaultConfig {
         buildConfigField "String", "EXPRESSION_API_PATH", JsonOutput.toJson(expressionApiDir)
         buildConfigField "String", "DIV2_JSON_PATH", JsonOutput.toJson(crossplatformProjectDir)

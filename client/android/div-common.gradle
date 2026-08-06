@@ -16,16 +16,6 @@ android {
 
         vectorDrawables.useSupportLibrary = true
     }
-
-    buildTypes {
-        debug {
-            minifyEnabled false
-        }
-        release {
-            minifyEnabled false
-            consumerProguardFiles 'proguard-rules.pro'
-        }
-    }
 }
 
 tasks.register('sourceJar', Jar) {

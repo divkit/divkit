@@ -45,9 +45,6 @@ android {
     }
 
     buildTypes {
-        debug {
-            minifyEnabled false
-        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
@@ -144,15 +141,10 @@ screenshotTests {
 }
 
 android.applicationVariants.configureEach { variant ->
-
     variant.outputs.configureEach {
-        boolean isPerf = variant.baseName.contains("perf")
-
-        if (!isPerf) {
-            outputFileName = divkitVersion.buildNumber != 0 ?
-                    "${project.base.archivesName.get()}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
-                    "${project.base.archivesName.get()}-v${versionName}-${variant.baseName}.apk"
-        }
+        outputFileName = divkitVersion.buildNumber != 0 ?
+                "${project.base.archivesName.get()}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
+                "${project.base.archivesName.get()}-v${versionName}-${variant.baseName}.apk"
     }
 }
 
