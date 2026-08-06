@@ -11,6 +11,7 @@ android {
 dependencies {
     implementation(project(":div"))
     implementation(project(":div-core"))
+    implementation(project(":div-svg"))
     implementation(project(":utils"))
 
     implementation(libs.androidx.lifecycle.runtime)

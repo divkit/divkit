@@ -13,6 +13,7 @@ android {
 dependencies {
     implementation(project(":div"))
     implementation(project(":div-core"))
+    implementation(project(":div-svg"))
 
     implementation(libs.glide.core) {
         exclude(group = "androidx.fragment", module = "fragment")

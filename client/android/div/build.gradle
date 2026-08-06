@@ -44,6 +44,7 @@ unMock {
 
 dependencies {
     implementation project(path: ':assertion')
+    implementation project(path: ':div-svg')
     implementation project(path: ':logging')
     implementation project(path: ':utils')
 
@@ -54,7 +55,6 @@ dependencies {
     api project(path: ':div-histogram')
     api project(path: ':div-states')
     api project(path: ':div-storage')
-    api project(path: ':div-svg')
 
     implementation libs.yatagan.api.compiled
     ksp libs.yatagan.processor.ksp
