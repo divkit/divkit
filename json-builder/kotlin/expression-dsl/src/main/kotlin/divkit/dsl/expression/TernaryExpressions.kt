@@ -2,6 +2,9 @@
 
 package divkit.dsl.expression
 
+import divkit.dsl.Color
+import divkit.dsl.Url
+
 //region Integer
 fun Expression<Boolean>.ifElse(onMatch: Expression<Long>, onMismatch: Int): Expression<Long> =
     ifElse(onMatch, onMismatch.integer())
@@ -62,6 +65,30 @@ fun Expression<Boolean>.ifElse(onMatch: Boolean, onMismatch: Expression<Boolean>
 
 fun Expression<Boolean>.ifElse(onMatch: Boolean, onMismatch: Boolean): Expression<Boolean> =
     ifElse(onMatch.boolean(), onMismatch.boolean())
+//endregion
+
+
+//region Color
+fun Expression<Boolean>.ifElse(onMatch: Expression<Color>, onMismatch: Color): Expression<Color> =
+    ifElse(onMatch, onMismatch.color())
+
+fun Expression<Boolean>.ifElse(onMatch: Color, onMismatch: Expression<Color>): Expression<Color> =
+    ifElse(onMatch.color(), onMismatch)
+
+fun Expression<Boolean>.ifElse(onMatch: Color, onMismatch: Color): Expression<Color> =
+    ifElse(onMatch.color(), onMismatch.color())
+//endregion
+
+
+//region Url
+fun Expression<Boolean>.ifElse(onMatch: Expression<Url>, onMismatch: Url): Expression<Url> =
+    ifElse(onMatch, onMismatch.url())
+
+fun Expression<Boolean>.ifElse(onMatch: Url, onMismatch: Expression<Url>): Expression<Url> =
+    ifElse(onMatch.url(), onMismatch)
+
+fun Expression<Boolean>.ifElse(onMatch: Url, onMismatch: Url): Expression<Url> =
+    ifElse(onMatch.url(), onMismatch.url())
 //endregion
 
 //region Cross types

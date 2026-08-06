@@ -2,6 +2,9 @@
 
 package divkit.dsl.expression
 
+import divkit.dsl.Color
+import divkit.dsl.Url
+
 //region Generic operations
 infix fun <T> Expression<T>.equalTo(other: Expression<T>): Expression<Boolean> {
     return CompareExpression(this, other, CompareExpression.CompareOperation.EQUAL)
@@ -69,6 +72,16 @@ infix fun Boolean.equalTo(other: Expression<Boolean>): Expression<Boolean> {
     return CompareExpression(this.boolean(), other, CompareExpression.CompareOperation.EQUAL)
 }
 
+@JvmName("equalToColorExpColor")
+infix fun Color.equalTo(other: Expression<Color>): Expression<Boolean> {
+    return CompareExpression(this.color(), other, CompareExpression.CompareOperation.EQUAL)
+}
+
+@JvmName("equalToUrlExpUrl")
+infix fun Url.equalTo(other: Expression<Url>): Expression<Boolean> {
+    return CompareExpression(this.url(), other, CompareExpression.CompareOperation.EQUAL)
+}
+
 @JvmName("equalToExpLongInt")
 infix fun Expression<Long>.equalTo(other: Int): Expression<Boolean> {
     return CompareExpression(this, other.integer(), CompareExpression.CompareOperation.EQUAL)
@@ -107,6 +120,16 @@ infix fun Expression<String>.equalTo(other: String): Expression<Boolean> {
 @JvmName("equalToExpBooleanBoolean")
 infix fun Expression<Boolean>.equalTo(other: Boolean): Expression<Boolean> {
     return CompareExpression(this, other.boolean(), CompareExpression.CompareOperation.EQUAL)
+}
+
+@JvmName("equalToExpColorColor")
+infix fun Expression<Color>.equalTo(other: Color): Expression<Boolean> {
+    return CompareExpression(this, other.color(), CompareExpression.CompareOperation.EQUAL)
+}
+
+@JvmName("equalToExpUrlUrl")
+infix fun Expression<Url>.equalTo(other: Url): Expression<Boolean> {
+    return CompareExpression(this, other.url(), CompareExpression.CompareOperation.EQUAL)
 }
 //endregion
 
@@ -151,6 +174,16 @@ infix fun Boolean.notEqualTo(other: Expression<Boolean>): Expression<Boolean> {
     return CompareExpression(this.boolean(), other, CompareExpression.CompareOperation.NOT_EQUAL)
 }
 
+@JvmName("notEqualToColorExpColor")
+infix fun Color.notEqualTo(other: Expression<Color>): Expression<Boolean> {
+    return CompareExpression(this.color(), other, CompareExpression.CompareOperation.NOT_EQUAL)
+}
+
+@JvmName("notEqualToUrlExpUrl")
+infix fun Url.notEqualTo(other: Expression<Url>): Expression<Boolean> {
+    return CompareExpression(this.url(), other, CompareExpression.CompareOperation.NOT_EQUAL)
+}
+
 @JvmName("notEqualToExpLongInt")
 infix fun Expression<Long>.notEqualTo(other: Int): Expression<Boolean> {
     return CompareExpression(this, other.integer(), CompareExpression.CompareOperation.NOT_EQUAL)
@@ -189,6 +222,16 @@ infix fun Expression<String>.notEqualTo(other: String): Expression<Boolean> {
 @JvmName("notEqualToExpBooleanBoolean")
 infix fun Expression<Boolean>.notEqualTo(other: Boolean): Expression<Boolean> {
     return CompareExpression(this, other.boolean(), CompareExpression.CompareOperation.NOT_EQUAL)
+}
+
+@JvmName("notEqualToExpColorColor")
+infix fun Expression<Color>.notEqualTo(other: Color): Expression<Boolean> {
+    return CompareExpression(this, other.color(), CompareExpression.CompareOperation.NOT_EQUAL)
+}
+
+@JvmName("notEqualToExpUrlUrl")
+infix fun Expression<Url>.notEqualTo(other: Url): Expression<Boolean> {
+    return CompareExpression(this, other.url(), CompareExpression.CompareOperation.NOT_EQUAL)
 }
 //endregion
 

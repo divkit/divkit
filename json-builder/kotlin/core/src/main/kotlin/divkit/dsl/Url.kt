@@ -16,3 +16,5 @@ value class Url internal constructor(
 }
 
 fun url(url: String): Url = Url(url)
+
+fun String.asUrl(): Url = Url(this)

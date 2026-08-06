@@ -20,3 +20,5 @@ value class Color internal constructor(
 }
 
 fun color(argb: String): Color = Color(argb)
+
+fun String.asColor(): Color = Color(this)
