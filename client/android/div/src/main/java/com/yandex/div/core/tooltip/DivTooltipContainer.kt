@@ -6,6 +6,8 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.core.view.isEmpty
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.yandex.div.core.view2.divs.drawShadow
@@ -13,8 +15,6 @@ import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.internal.widget.TransientViewMixin
-import androidx.core.view.isNotEmpty
-import androidx.core.view.isEmpty
 
 internal class DivTooltipContainer @JvmOverloads constructor(
     context: Context,
@@ -73,13 +73,14 @@ internal class DivTooltipContainer @JvmOverloads constructor(
     }
 
     fun setTooltipPosition(x: Int, y: Int, width: Int, height: Int) =
-        setChildPosition(tooltipView, x, y, width, height)
+        tooltipView?.setChildPosition(x, y, width, height)
 
-    fun setBringToTopPosition(x: Int, y: Int, width: Int, height: Int) =
-        setChildPosition(bringToTopView, x, y, width, height)
+    fun setBringToTopPosition(x: Int, y: Int) {
+        bringToTopView?.let { it.setChildPosition(x, y, it.width, it.height) }
+    }
 
-    private fun setChildPosition(child: View?, x: Int, y: Int, width: Int, height: Int) =
-        child?.updateLayoutParams<DivLayoutParams> {
+    private fun View.setChildPosition(x: Int, y: Int, width: Int, height: Int) =
+        updateLayoutParams<DivLayoutParams> {
             leftMargin = x
             topMargin = y
             this.width = width
