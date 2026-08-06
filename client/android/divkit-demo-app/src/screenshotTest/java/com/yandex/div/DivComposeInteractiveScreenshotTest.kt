@@ -1,6 +1,5 @@
 package com.yandex.div
 
-import android.os.Build
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import com.yandex.div.rule.baseRule
 import com.yandex.divkit.demo.screenshot.DivAssetReader
@@ -9,7 +8,6 @@ import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.screenshot.Screenshot
 import com.yandex.test.screenshot.captureScreenshots
 import com.yandex.test.util.Report.step
-import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -41,11 +39,6 @@ class DivComposeInteractiveScreenshotTest(
     @Screenshot(viewTag = DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun test() {
-        assumeTrue(
-            "Skipping test on API 24",
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.N
-        )
-
         val json = DivAssetReader(activity).read(fileName)
         val testData = InteractiveScreenshotTestData.parse(json)
 

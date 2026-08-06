@@ -1,13 +1,11 @@
 package com.yandex.div
 
-import android.os.Build
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
-import org.junit.Assume
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,11 +26,7 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    fun divScreenshot() {
-        Assume.assumeTrue(
-            "Skipping Div2RebindScreenshotTest on API 24",
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.N
-        )
+    fun test() {
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
             activityRule.activity.setDivData(case)
         }

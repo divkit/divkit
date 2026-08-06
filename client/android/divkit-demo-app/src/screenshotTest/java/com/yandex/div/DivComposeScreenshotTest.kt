@@ -1,12 +1,10 @@
 package com.yandex.div
 
-import android.os.Build
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.composeScreenshotRule
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
-import org.junit.Assume
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -26,12 +24,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
 
     @Screenshot(viewTag = DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    fun test() {
-        Assume.assumeTrue(
-            "Skipping DivComposeScreenshotTest on API 24",
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.N
-        )
-    }
+    fun test() = Unit
 
     companion object {
 
