@@ -7,6 +7,9 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.net.toUri
 import com.yandex.div.DivDataTag
 import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
+import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
+import com.yandex.div.compose.lottie.LottieExtensionHandler
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -36,6 +39,11 @@ class ComposeRendererFacade(
             playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context)),
             variableController = variableController,
             animationsEnabledProvider = Container.animationsEnabledProvider,
+            extensionHandlers = mapOf(
+                "lottie" to LottieExtensionHandler(),
+                "shimmer" to ShimmerExtensionHandler(),
+                "pinch-to-zoom" to PinchToZoomExtensionHandler(),
+            ),
         )
     )
 

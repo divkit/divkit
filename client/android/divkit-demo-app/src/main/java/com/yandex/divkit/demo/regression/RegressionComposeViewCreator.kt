@@ -10,6 +10,7 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.lottie.LottieExtensionHandler
+import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.video.m3.ExoDivPlayerFactory
@@ -49,7 +50,8 @@ class RegressionComposeViewCreator(context: Context) {
                 ),
                 extensionHandlers = mapOf(
                     "lottie" to LottieExtensionHandler(),
-                    "shimmer" to ShimmerExtensionHandler()
+                    "shimmer" to ShimmerExtensionHandler(),
+                    "pinch-to-zoom" to PinchToZoomExtensionHandler(),
                 ),
                 fontSourceProvider = ComposeFontSourceProvider(),
                 histogramConfiguration = DemoHistogramConfiguration,
