@@ -11,8 +11,8 @@ import com.yandex.div2.DivFilter
 import com.yandex.div2.DivFilterRtlMirror
 
 @Composable
-internal fun List<DivFilter>?.resolveTransformations(): List<Transformation> {
-    if (this == null) {
+internal fun List<DivFilter>?.observedTransformations(): List<Transformation> {
+    if (this.isNullOrEmpty()) {
         return emptyList()
     }
 

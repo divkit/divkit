@@ -5,6 +5,7 @@ import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivBackground
+import com.yandex.div2.DivFilter
 import com.yandex.div2.DivImageBackground
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivRadialGradient
@@ -12,10 +13,12 @@ import com.yandex.div2.DivSolidBackground
 
 fun imageBackground(
     imageUrl: String,
+    filters: List<DivFilter>? = null,
     preloadRequired: Boolean = false
 ): DivBackground.Image {
     return DivBackground.Image(
         value = DivImageBackground(
+            filters = filters,
             imageUrl = constant(imageUrl.toUri()),
             preloadRequired = constant(preloadRequired)
         )

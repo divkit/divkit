@@ -17,7 +17,7 @@ import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.observedContentScale
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.observedAlignment
-import com.yandex.div.compose.views.image.resolveTransformations
+import com.yandex.div.compose.views.image.observedTransformations
 import com.yandex.div2.DivImageBackground
 import kotlin.math.roundToInt
 
@@ -33,7 +33,7 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
 
     val imageRequestParams = ImageRequestParams(
         data = data.imageUrl.observedValue(),
-        transformations = data.filters.resolveTransformations()
+        transformations = data.filters.observedTransformations()
     )
     val painter = rememberAsyncImagePainter(
         model = rememberImageRequest(imageRequestParams),

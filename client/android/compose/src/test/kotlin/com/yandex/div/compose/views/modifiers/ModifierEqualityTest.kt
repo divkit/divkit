@@ -12,6 +12,7 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivComposeConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.context.LocalDivViewContext
@@ -19,12 +20,14 @@ import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.test.data.accessibility
 import com.yandex.div.test.data.action
+import com.yandex.div.test.data.blurFilter
 import com.yandex.div.test.data.color
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.disappearAction
 import com.yandex.div.test.data.fixedPivot
+import com.yandex.div.test.data.imageBackground
 import com.yandex.div.test.data.insets
 import com.yandex.div.test.data.linearGradientBackground
 import com.yandex.div.test.data.radialGradientBackground
@@ -50,6 +53,7 @@ class ModifierEqualityTest {
     val composeRule = createComposeRule()
 
     private val configuration = DivComposeConfiguration(
+        imageLoaderConfiguration = TestImageLoaderConfiguration(),
         reporter = TestReporter()
     )
 
@@ -150,6 +154,20 @@ class ModifierEqualityTest {
             container(
                 backgrounds = listOf(
                     solidBackground(color = color(0xFFAABBCC))
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `image background`() {
+        assertModifiersEqual(
+            container(
+                backgrounds = listOf(
+                    imageBackground(
+                        filters = listOf(blurFilter(radius = 12)),
+                        imageUrl = "test://"
+                    )
                 )
             )
         )

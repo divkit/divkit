@@ -1,16 +1,11 @@
 package com.yandex.div.compose
 
-import android.graphics.Bitmap
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import coil3.ComponentRegistry
-import coil3.asImage
-import coil3.request.SuccessResult
 import com.yandex.div.compose.host.CheckVisibilityCallback
-import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.test.data.data
@@ -32,20 +27,11 @@ class DivViewHostTest {
     @get:Rule
     val composeRule = createAndroidComposeRule<ComponentActivity>()
 
-    private val capturedUrls = mutableSetOf<String>()
     private val testScope = CoroutineScope(UnconfinedTestDispatcher())
+    private val imageLoaderConfiguration = TestImageLoaderConfiguration()
 
-    private val imageLoaderConfiguration = object : ImageLoaderConfiguration {
-        override fun applyComponents(builder: ComponentRegistry.Builder) {
-            builder.add { chain ->
-                capturedUrls.add(chain.request.data.toString())
-                SuccessResult(
-                    image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888).asImage(),
-                    request = chain.request,
-                )
-            }
-        }
-    }
+    private val capturedUrls: MutableSet<String>
+        get() = imageLoaderConfiguration.capturedUrls
 
     @Test
     fun `onVisibleBoundsChanged invokes registered callback`() {

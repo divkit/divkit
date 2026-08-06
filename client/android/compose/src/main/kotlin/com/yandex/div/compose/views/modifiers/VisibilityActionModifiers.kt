@@ -23,6 +23,10 @@ internal fun Modifier.visibilityActions(data: DivBase): Modifier {
 
 @Composable
 private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modifier {
+    if (actions.isEmpty()) {
+        return this
+    }
+
     val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
     val actionHandlingContext = LocalComponent.current.actionHandlingContext
     var modifier = this

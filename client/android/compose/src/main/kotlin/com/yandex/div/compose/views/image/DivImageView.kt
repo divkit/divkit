@@ -32,7 +32,7 @@ internal fun DivImageView(
             data.contentAlignmentVertical
         ),
         placeholderColor = data.placeholderColor.observedColorValue(),
-        transformations = data.filters.resolveTransformations(),
+        transformations = data.filters.observedTransformations(),
         colorFilter = colorFilter,
         preview = { data.preview?.observedValue(transform = previewDecoder::decodePreview) }
     )
