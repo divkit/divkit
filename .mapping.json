@@ -15815,6 +15815,7 @@
   "client/ios/LayoutKit/LayoutKitTests/UI/Base/ScrollableContentPagerTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Base/ScrollableContentPagerTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/Array+UIViewRenderableTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/Array+UIViewRenderableTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewActionAnimationFreezeTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewActionAnimationFreezeTests.swift",
+  "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/SliderViewAccessibilityTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/SliderViewAccessibilityTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/UIViewRenderable+AccessibilityTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/UIViewRenderable+AccessibilityTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Views/GradientStopsPremultipliedTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Views/GradientStopsPremultipliedTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Views/TabbedPages/TabListSelectionDataSourceImplTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Views/TabbedPages/TabListSelectionDataSourceImplTests.swift",
