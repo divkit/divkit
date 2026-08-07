@@ -8,6 +8,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.evaluable.EvaluableException
+import com.yandex.div.json.ParsingException
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
@@ -46,7 +47,16 @@ internal class TriggersController(
                 return@forEach
             }
 
-            findErrors(expression.getVariablesName(expressionResolver))?.let {
+            val variableNames = try {
+                expression.getVariablesName(expressionResolver)
+            } catch (e: ParsingException) {
+                errorCollector.logError(
+                    IllegalStateException("Invalid condition: '${trigger.condition}'", e)
+                )
+                return@forEach
+            }
+
+            findErrors(variableNames)?.let {
                 errorCollector.logError(
                     IllegalStateException("Invalid condition: '${trigger.condition}'", it)
                 )

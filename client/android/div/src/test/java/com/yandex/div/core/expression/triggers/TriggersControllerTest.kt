@@ -8,6 +8,7 @@ import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.json.ParsingException
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
@@ -95,6 +96,22 @@ class TriggersControllerTest {
         underTest.ensureTriggersSynced(triggersA)
 
         verifyNoInteractions(actionPerformer)
+    }
+
+    @Test
+    fun `invalid trigger ignored when condition variables cannot be resolved`() {
+        val parsingException = mock<ParsingException>()
+        val invalidCondition = mock<Expression.MutableExpression<*, Boolean>> {
+            on { getVariablesName(any()) } doAnswer { throw parsingException }
+        }
+        val invalidTrigger = DivTrigger(actionsA, invalidCondition)
+
+        underTest.onAttachedToWindow(view)
+        underTest.ensureTriggersSynced(listOf(invalidTrigger, divTriggerB))
+
+        verify(errorCollector).logError(any())
+        verifyActionTriggered(actionsA, times = 0)
+        verifyActionTriggered(actionsB)
     }
 
     @Test
