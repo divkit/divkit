@@ -32,7 +32,9 @@ open class DivViewController: UIViewController {
     jsonPublisher
       .filter { !$0.isEmpty }
       .sink { [weak self] value in
-        self?.divView = self?.createDivView()
+        if self?.divView == nil {
+          self?.divView = self?.createDivView()
+        }
         self?.setData(value)
       }
       .store(in: &cancellables)
