@@ -7,16 +7,14 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.yandex.div.core.asExpression
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.DivLayoutParams
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnitValue
 import com.yandex.div2.DivText
-import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivWrapContentSize
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -44,11 +42,15 @@ class DivTooltipViewBuilderTest {
         )
     )
 
-    private val divTooltip = DivTooltip(
-        div = div,
-        id = "tooltip_id",
-        position = DivTooltip.Position.BOTTOM.asExpression(),
-    )
+    private val div2View = mock<Div2View> {
+        on { getContext() } doReturn activity
+    }
+
+    val tooltipBlock = DivBlock.create(div, mock(), mock())
+    private val tooltipData = mock<TooltipData> {
+        on { tooltipBlock } doReturn tooltipBlock
+        on { divView } doReturn div2View
+    }
 
     private val boundView = View(activity).apply {
         layoutParams = DivLayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
@@ -58,19 +60,14 @@ class DivTooltipViewBuilderTest {
     }
 
     private val div2Builder = mock<Div2Builder> {
-        on { buildView(any(), any(), any(), any()) } doReturn boundView
+        on { buildView(any(), any()) } doReturn boundView
     }
-
-    private val div2View = mock<Div2View> {
-        on { getContext() } doReturn activity
-    }
-    private val bindingContext = BindingContext(div2View, mock<ExpressionResolver>())
 
     private val underTest = DivTooltipViewBuilder { div2Builder }
 
     @Test
     fun `size constraints applied on binding survive tooltip view preparation`() {
-        val tooltipView = underTest.buildTooltipView(bindingContext, divTooltip).tooltipView
+        val tooltipView = underTest.buildTooltipView(tooltipData).tooltipView
 
         val layoutParams = tooltipView?.layoutParams as DivLayoutParams
         assertEquals(MAX_WIDTH, layoutParams.maxWidth)
@@ -79,7 +76,7 @@ class DivTooltipViewBuilderTest {
 
     @Test
     fun `tooltip view size is set from div size`() {
-        val tooltipView = underTest.buildTooltipView(bindingContext, divTooltip).tooltipView
+        val tooltipView = underTest.buildTooltipView(tooltipData).tooltipView
 
         assertEquals(WRAP_CONTENT, tooltipView?.layoutParams?.width)
         assertEquals(WRAP_CONTENT, tooltipView?.layoutParams?.height)
@@ -89,7 +86,7 @@ class DivTooltipViewBuilderTest {
     fun `tooltip view without div layout params gets them on preparation`() {
         boundView.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
 
-        val tooltipView = underTest.buildTooltipView(bindingContext, divTooltip).tooltipView
+        val tooltipView = underTest.buildTooltipView(tooltipData).tooltipView
 
         val layoutParams = tooltipView?.layoutParams as DivLayoutParams
         assertEquals(WRAP_CONTENT, layoutParams.width)
@@ -102,7 +99,7 @@ class DivTooltipViewBuilderTest {
             gravity = Gravity.CENTER
         }
 
-        val tooltipView = underTest.buildTooltipView(bindingContext, divTooltip).tooltipView
+        val tooltipView = underTest.buildTooltipView(tooltipData).tooltipView
 
         val layoutParams = tooltipView?.layoutParams as DivLayoutParams
         assertEquals(DivLayoutParams.DEFAULT_GRAVITY, layoutParams.gravity)

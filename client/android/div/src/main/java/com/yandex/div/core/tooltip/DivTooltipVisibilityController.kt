@@ -1,13 +1,14 @@
 package com.yandex.div.core.tooltip
 
 import android.view.Gravity
+import android.view.View
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.util.doOnActualLayout
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
-import com.yandex.div2.Div
+import com.yandex.div.internal.core.DivBlock
 import javax.inject.Inject
 
 @DivScope
@@ -19,7 +20,7 @@ internal class DivTooltipVisibilityController @Inject constructor(
     fun showTooltip(tooltipData: TooltipData, onShown: () -> Unit) {
         tooltipData.tooltipContainer?.doOnActualLayout {
             onShown()
-            startVisibilityTracking(tooltipData)
+            tooltipData.startVisibilityTracking()
         }
         tryShowTooltip(tooltipData)
     }
@@ -30,9 +31,8 @@ internal class DivTooltipVisibilityController @Inject constructor(
         val tooltipView = tooltipContainer.tooltipView ?: return
 
         if (animationsEnabledController.isEnabled()) {
-            val resolver = data.bindingContext.expressionResolver
-            tooltipContainer.substrateView?.let { animateEnter(data.divTooltip, resolver, tooltipView, it) }
-                ?: popupWindow.setupAnimation(data.divTooltip, resolver)
+            tooltipContainer.substrateView?.let { animateEnter(data.divTooltip, data.anchorResolver, tooltipView, it) }
+                ?: popupWindow.setupAnimation(data.divTooltip, data.anchorResolver)
         }
 
         popupWindow.showAtLocation(data.anchor, Gravity.NO_GRAVITY, 0, 0)
@@ -59,7 +59,7 @@ internal class DivTooltipVisibilityController @Inject constructor(
             return
         }
 
-        animateExit(data.divTooltip, data.bindingContext.expressionResolver, tooltipView, substrateView) {
+        animateExit(data.divTooltip, data.anchorResolver, tooltipView, substrateView) {
             dismissPopup(popupWindow)
         }
     }
@@ -83,35 +83,41 @@ internal class DivTooltipVisibilityController @Inject constructor(
             popup.dismiss()
             null
         } else {
-            stopVisibilityTracking(bindingContext, divTooltip.div)
+            stopVisibilityTracking()
             this
         }
     }
 
     fun onDismiss(data: TooltipData) {
-        stopVisibilityTracking(data.bindingContext, data.divTooltip.div)
+        data.stopVisibilityTracking()
         val tooltipContainer = data.tooltipContainer ?: return
-        val div = divVisibilityActionTracker.getDivWithWaitingDisappearActions()[tooltipContainer] ?: return
-        divVisibilityActionTracker.trackDetachedView(
-            tooltipContainer,
-            div,
-            data.bindingContext.expressionResolver,
-            data.bindingContext.divView
-        )
+        val tooltipView = tooltipContainer.tooltipView ?: return
+
+        val div = divVisibilityActionTracker.getDivWithWaitingDisappearActions()[tooltipView] ?: return
+        divVisibilityActionTracker
+            .trackDetachedView(tooltipView, div, data.tooltipBlock.expressionResolver, data.divView)
+
+        val substrateView = tooltipContainer.substrateView ?: return
+        val substrateDiv = divVisibilityActionTracker.getDivWithWaitingDisappearActions()[substrateView] ?: return
+        val substrateResolver = data.substrateBlock?.expressionResolver ?: return
+        divVisibilityActionTracker.trackDetachedView(substrateView, substrateDiv, substrateResolver, data.divView)
     }
 
-    private fun startVisibilityTracking(tooltipData: TooltipData) {
-        val context = tooltipData.bindingContext
-        val div = tooltipData.divTooltip.div
-        stopVisibilityTracking(context, div)
-        divVisibilityActionTracker.trackVisibilityActionsOf(
-            context.divView,
-            context.expressionResolver,
-            tooltipData.tooltipContainer,
-            div,
-        )
+    private fun TooltipData.startVisibilityTracking() {
+        stopVisibilityTracking()
+        val tooltipContainer = tooltipContainer ?: return
+        tooltipBlock.startVisibilityTracking(tooltipContainer.tooltipView, divView)
+        substrateBlock?.startVisibilityTracking(tooltipContainer.substrateView, divView)
     }
 
-    private fun stopVisibilityTracking(context: BindingContext, div: Div) =
-        divVisibilityActionTracker.trackVisibilityActionsOf(context.divView, context.expressionResolver, null, div)
+    private fun DivBlock.startVisibilityTracking(view: View?, divView: Div2View) =
+        divVisibilityActionTracker.trackVisibilityActionsOf(divView, expressionResolver, view, div)
+
+    private fun TooltipData.stopVisibilityTracking() {
+        tooltipBlock.stopVisibilityTracking(divView)
+        substrateBlock?.stopVisibilityTracking(divView)
+    }
+
+    private fun DivBlock.stopVisibilityTracking(divView: Div2View) =
+        divVisibilityActionTracker.trackVisibilityActionsOf(divView, expressionResolver, null, div)
 }

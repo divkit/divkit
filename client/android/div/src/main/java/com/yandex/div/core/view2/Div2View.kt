@@ -217,7 +217,6 @@ class Div2View private constructor(
         if (oldRuntimeStore != runtimeStore) {
             oldRuntimeStore?.clearBindings(this)
         }
-        bindingContext = BindingContext(this, expressionResolver)
         div2Component.stateManager.collectStateVariables(tag, data, expressionResolver)
         dataTag = tag
     }
@@ -226,7 +225,6 @@ class Div2View private constructor(
         runtimeStore.clearBindings(this)
         oldRuntimeStore = runtimeStore
         runtimeStore = RuntimeStore.EMPTY
-        bindingContext = BindingContext(this, ExpressionResolver.EMPTY)
         dataTag = DivDataTag.INVALID
     }
 
@@ -280,7 +278,6 @@ class Div2View private constructor(
 
     private val bindingReporterProvider = BindingEventReporterProvider(this)
     private val patchReporterProvider = PatchEventReporterProvider(this)
-    internal var bindingContext: BindingContext = BindingContext(this, ExpressionResolver.EMPTY)
 
     internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()
         .divView(this)
@@ -1213,7 +1210,7 @@ class Div2View private constructor(
 
     override fun showTooltip(tooltipId: String, multiple: Boolean, scopeId: String?) {
         bindingDispatcher.withLock {
-            tooltipController.showTooltip(tooltipId, bindingContext, multiple, scopeId)
+            tooltipController.showTooltip(tooltipId, this, multiple, scopeId)
         }
     }
 

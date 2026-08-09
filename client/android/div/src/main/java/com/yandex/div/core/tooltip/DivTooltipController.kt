@@ -13,9 +13,10 @@ import com.yandex.div.core.actions.logActionError
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isActuallyLaidOut
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewLocator
+import com.yandex.div.core.view2.divs.divBlock
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div2.DivActionShowTooltip
 import com.yandex.div2.DivTooltip
 import javax.inject.Inject
@@ -31,21 +32,21 @@ internal class DivTooltipController @Inject constructor(
     private val tooltips = mutableListOf<TooltipData>()
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
-    fun showTooltip(tooltipId: String, context: BindingContext, multiple: Boolean = false, scopeId: String? = null) {
-        ViewLocator.findSingleViewWithTag(context.divView, tooltipId, scopeId) { tooltipId, _ ->
+    fun showTooltip(tooltipId: String, divView: Div2View, multiple: Boolean = false, scopeId: String? = null) {
+        ViewLocator.findSingleViewWithTag(divView, tooltipId, scopeId) { tooltipId, _ ->
             findChildWithTooltip(tooltipId)?.let { Result.success(it) }
                 ?: Result.failure(IllegalStateException("Unable to find view for tooltip '$tooltipId'"))
         }.onSuccess { (divTooltip, anchor) ->
-            showTooltip(context, divTooltip, anchor, multiple, scopeId)
+            showTooltip(divTooltip, anchor, divView, multiple, scopeId)
         }.onFailure {
-            context.divView.logActionError(DivActionShowTooltip.TYPE, it)
+            divView.logActionError(DivActionShowTooltip.TYPE, it)
         }
     }
 
     private fun showTooltip(
-        context: BindingContext,
         divTooltip: DivTooltip,
         anchor: View,
+        divView: Div2View,
         multiple: Boolean,
         scopeId: String?
     ) {
@@ -54,7 +55,7 @@ internal class DivTooltipController @Inject constructor(
             return
         }
         anchor.doOnActualLayout {
-            tryShowTooltip(anchor, divTooltip, context, multiple, scopeId)
+            tryShowTooltip(anchor, divTooltip, divView, multiple, scopeId)
         }
         if (!anchor.isActuallyLaidOut && !anchor.isLayoutRequested) {
             anchor.requestLayout()
@@ -64,30 +65,32 @@ internal class DivTooltipController @Inject constructor(
     private fun tryShowTooltip(
         anchor: View,
         divTooltip: DivTooltip,
-        context: BindingContext,
+        divView: Div2View,
         multiple: Boolean,
         scopeId: String?,
     ) {
-        if (!tooltipRestrictor.canShowTooltip(context.divView, anchor, divTooltip, multiple, scopeId)) return
-        tooltips += createTooltipDataAndTryShow(anchor, divTooltip, context, multiple, scopeId)
+        val anchorBlock = anchor.divBlock ?: return
+        if (!tooltipRestrictor.canShowTooltip(divView, anchor, divTooltip, multiple, scopeId)) return
+        tooltips += createTooltipDataAndTryShow(anchor, divTooltip, anchorBlock, divView, multiple, scopeId)
     }
 
     private fun createTooltipDataAndTryShow(
         anchor: View,
         divTooltip: DivTooltip,
-        context: BindingContext,
+        anchorBlock: DivBlock,
+        divView: Div2View,
         multiple: Boolean,
         scopeId: String?,
     ): TooltipData {
-        val data = TooltipData(divTooltip.id, scopeId, context, divTooltip, anchor)
+        val data = TooltipData(divTooltip.id, scopeId, divTooltip, anchor, anchorBlock, divView)
 
         viewController.createPopupWindow(data, { visibilityController.hideTooltip(data) }) {
             tooltips.remove(data)
             visibilityController.onDismiss(data)
-            tooltipRestrictor.tooltipShownCallback?.onDivTooltipDismissed(context.divView, anchor, divTooltip)
+            tooltipRestrictor.tooltipShownCallback?.onDivTooltipDismissed(divView, anchor, divTooltip)
         }
 
-        data.ticket = divPreloader.preload(divTooltip.div, context.expressionResolver) { hasFailures ->
+        data.ticket = divPreloader.preload(divTooltip.div, data.tooltipBlock.expressionResolver) { hasFailures ->
             if (canShowTooltip(data, hasFailures, multiple)) {
                 visibilityController.showTooltip(data) { onPopupShown(data) }
             } else {
@@ -107,7 +110,7 @@ internal class DivTooltipController @Inject constructor(
             tooltipData.dismissed -> false
             !tooltipData.anchor.isAttachedToWindow -> false
             else -> tooltipRestrictor.canShowTooltip(
-                tooltipData.bindingContext.divView,
+                tooltipData.divView,
                 tooltipData.anchor,
                 tooltipData.divTooltip,
                 multiple,
@@ -119,9 +122,9 @@ internal class DivTooltipController @Inject constructor(
     private fun onPopupShown(tooltipData: TooltipData) {
         viewController.onPopupShown(tooltipData)
         tooltipRestrictor.tooltipShownCallback
-            ?.onDivTooltipShown(tooltipData.bindingContext.divView, tooltipData.anchor, tooltipData.divTooltip)
+            ?.onDivTooltipShown(tooltipData.divView, tooltipData.anchor, tooltipData.divTooltip)
 
-        val duration = tooltipData.divTooltip.duration.evaluate(tooltipData.bindingContext.expressionResolver)
+        val duration = tooltipData.divTooltip.duration.evaluate(tooltipData.anchorResolver)
         if (duration == 0L) return
 
         mainThreadHandler.postDelayed(duration) { visibilityController.hideTooltip(tooltipData) }
@@ -134,7 +137,7 @@ internal class DivTooltipController @Inject constructor(
 
     fun cancelTooltips(divView: Div2View) {
         tooltips.toList().forEach { tooltip ->
-            if (tooltip.bindingContext.divView != divView) return@forEach
+            if (tooltip.divView != divView) return@forEach
             visibilityController.dismissTooltip(tooltip)?.let {
                 tooltips.remove(it)
             }

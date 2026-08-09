@@ -4,14 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.ViewTreeObserver
-import com.yandex.div.core.asExpression
 import com.yandex.div.core.util.SafePopupWindow
-import com.yandex.div.core.view2.BindingContext
-import com.yandex.div.core.view2.Div2View
-import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.Div
-import com.yandex.div2.DivText
-import com.yandex.div2.DivTooltip
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,9 +18,6 @@ import org.robolectric.shadows.ShadowLooper
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 
-/**
- * Tests for [TooltipAnchorTracker].
- */
 @RunWith(RobolectricTestRunner::class)
 class TooltipAnchorTrackerTest {
 
@@ -74,30 +64,16 @@ class TooltipAnchorTrackerTest {
         on { isShowing } doReturn true
     }
 
-    private val tooltipData = TooltipData(
-        id = "tooltip_id",
-        scopeId = null,
-        bindingContext = BindingContext(mock<Div2View>(), ExpressionResolver.EMPTY),
-        divTooltip = DivTooltip(
-            div = Div.Text(DivText(text = "tooltip".asExpression())),
-            id = "tooltip_id",
-            position = DivTooltip.Position.RIGHT.asExpression(),
-        ),
-        anchor = anchor,
-    ).apply {
-        this.popupWindow = popupWindow
+    private val tooltipData = mock<TooltipData> {
+        on { anchor } doReturn anchor
+        on { popupWindow } doReturn popupWindow
     }
 
     private val handler = Handler(Looper.getMainLooper())
     private val positionChangedCount = AtomicInteger(0)
     private val onAnchorPositionChanged = { positionChangedCount.incrementAndGet(); Unit }
 
-    private val underTest = TooltipAnchorTracker(
-        tooltip = tooltipData,
-        popupWindow = popupWindow,
-        handler = handler,
-        onAnchorPositionChanged = onAnchorPositionChanged,
-    )
+    private val underTest = TooltipAnchorTracker(tooltipData, handler, onAnchorPositionChanged)
 
     @Test
     fun `notifies on initial position`() {
@@ -136,7 +112,7 @@ class TooltipAnchorTrackerTest {
     @Test
     fun `does not notify when tooltip is dismissed`() {
         positionChangedCount.set(0)
-        tooltipData.dismissed = true
+        whenever(tooltipData.dismissed).doReturn(true)
 
         locationX.set(150)
         notifyLayoutChanged()

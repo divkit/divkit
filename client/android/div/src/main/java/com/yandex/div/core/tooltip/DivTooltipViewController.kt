@@ -58,35 +58,38 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
         onTouchOutside: () -> Unit,
         onDismiss: () -> Unit,
     ) {
-        val resolver = data.bindingContext.expressionResolver
         val divTooltip = data.divTooltip
-        val hasSubstrate = divTooltip.substrateDiv != null
-        val bringToTopView = divTooltip.bringToTopId?.let { data.bindingContext.divView.findBringToTopView(it) }
+        val hasSubstrate = data.substrateBlock != null
+        val bringToTopView = divTooltip.bringToTopId?.let { data.divView.findBringToTopView(it) }
 
         val displayMetrics = data.anchor.resources.displayMetrics
         val width = if (hasSubstrate) {
             ViewGroup.LayoutParams.MATCH_PARENT
         } else {
-            divTooltip.div.value().width.toLayoutParamsSize(displayMetrics, resolver)
+            with (data.tooltipBlock) {
+                div.value().width.toLayoutParamsSize(displayMetrics, expressionResolver)
+            }
         }
         val height = if (hasSubstrate) {
             ViewGroup.LayoutParams.MATCH_PARENT
         } else {
-            divTooltip.div.value().height.toLayoutParamsSize(displayMetrics, resolver)
+            with (data.tooltipBlock) {
+                div.value().height.toLayoutParamsSize(displayMetrics, expressionResolver)
+            }
         }
 
-        val tooltipContainer =
-            divTooltipViewBuilder.buildTooltipView(data.bindingContext, divTooltip, bringToTopView, width, height)
+        val tooltipContainer = divTooltipViewBuilder.buildTooltipView(data, bringToTopView, width, height)
         val isModal = divTooltip.mode is DivTooltipMode.Modal
         val popup = createPopup(tooltipContainer, width, height)
         val touchTranslationCoordinator = TouchTranslationCoordinator(TouchTranslator(data.anchor), popup)
-        val isOutsideTouchable = divTooltip.closeByTapOutside.evaluate(resolver)
+        val isOutsideTouchable = divTooltip.closeByTapOutside.evaluate(data.anchorResolver)
         val touchListener = PopupWindowTouchListener(
             tooltipContainer,
             isModal,
             isOutsideTouchable,
             divTooltip.tapOutsideActions,
-            data.bindingContext,
+            data.anchorResolver,
+            data.divView,
             touchTranslationCoordinator,
             divTooltip.substrateDiv?.hasAction() == true,
             onTouchOutside,
@@ -139,18 +142,13 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
         data: TooltipData,
         logSizeWarnings: Boolean = true,
     ) {
-        val divView = data.bindingContext.divView
+        val divView = data.divView
         val popupWindow = data.popupWindow ?: return
         val tooltipContainer = popupWindow.contentView as? DivTooltipContainer ?: return
         val tooltipView = tooltipContainer.tooltipView ?: return
 
         val windowFrame = divView.getWindowFrame()
-        val location = calcPopupLocation(
-            tooltipView,
-            data.anchor,
-            data.divTooltip,
-            data.bindingContext.expressionResolver
-        )
+        val location = calcPopupLocation(tooltipView, data.anchor, data.divTooltip, data.anchorResolver)
         val tooltipWidth = minOf(tooltipView.width, windowFrame.width())
         val tooltipHeight = minOf(tooltipView.height, windowFrame.height())
 
@@ -178,12 +176,12 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
             height = tooltipHeight,
         )
 
-        tooltipContainer.locateBringToTopView(data, divView)
+        tooltipContainer.locateBringToTopView(data)
     }
 
-    private fun DivTooltipContainer.locateBringToTopView(data: TooltipData, divView: Div2View) {
+    private fun DivTooltipContainer.locateBringToTopView(data: TooltipData) {
         val bringToTopId = data.divTooltip.bringToTopId ?: return
-        val bringToTopView = divView.findBringToTopView(bringToTopId) ?: return
+        val bringToTopView = data.divView.findBringToTopView(bringToTopId) ?: return
         val locationArray = IntArray(2)
         bringToTopView.getLocationOnScreen(locationArray)
         setBringToTopPosition(locationArray[0], locationArray[1])
@@ -202,7 +200,7 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
     }
 
     fun createOnBackPressCallback(data: TooltipData, onBackPressed: () -> Unit): OnBackPressedCallback? {
-        val divView = data.bindingContext.divView
+        val divView = data.divView
         if (!accessibilityStateProvider.isAccessibilityEnabled(divView.getContext())) return null
 
         val callback = object : OnBackPressedCallback(true) {
@@ -217,7 +215,7 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
     }
 
     fun startAnchorPositionTracking(tooltip: TooltipData, divView: Div2View, handler: Handler) {
-        if (tooltip.bindingContext.divView != divView) return
+        if (tooltip.divView != divView) return
         val popup = tooltip.popupWindow ?: return
         if (!popup.isShowing) return
 
@@ -225,7 +223,7 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
         tooltipContainer.tooltipView ?: return
 
         tooltip.stopAnchorTracking()
-        tooltip.anchorTrackingDisposable = TooltipAnchorTracker(tooltip, popup, handler) {
+        tooltip.anchorTrackingDisposable = TooltipAnchorTracker(tooltip, handler) {
             locatePopupWindow(tooltip, logSizeWarnings = false)
         }
     }

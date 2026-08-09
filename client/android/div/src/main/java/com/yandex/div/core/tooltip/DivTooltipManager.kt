@@ -15,10 +15,7 @@ class DivTooltipManager @Inject internal constructor(
      */
     fun captureShownTooltips(): List<TooltipMetadata> {
         return tooltipController.captureCurrentTooltips().map {
-            TooltipMetadata(
-                id = it.id,
-                initiator = it.bindingContext.divView,
-            )
+            TooltipMetadata(id = it.id, initiator = it.divView)
         }
     }
 

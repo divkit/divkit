@@ -3,7 +3,6 @@ package com.yandex.div.core.tooltip
 import android.app.Activity
 import android.view.MotionEvent
 import android.view.View
-import com.yandex.div.core.view2.BindingContext
 
 /**
  * Passes motions from one window to another one that is related to binding context.

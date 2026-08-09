@@ -7,9 +7,14 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.SafePopupWindow
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
+import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTooltip
@@ -36,19 +41,24 @@ class DivTooltipControllerTest {
 
     private val div = Div.Text(DivText(text = "test1".asExpression()))
     private val tooltips = mutableListOf<DivTooltip>()
-    private val anchor = mock<View> {
+    private val anchorBlock = DivBlock.Text(mock<Div.Text>(), ExpressionResolver.EMPTY, DivStatePath.fromState(0))
+    private val anchor = mock<DivLineHeightTextView> {
         on { getTag(R.id.div_tooltips_tag) } doReturn tooltips
         on { isAttachedToWindow } doReturn true
         on { isLayoutRequested } doReturn false
         on { width } doReturn 300
         on { height } doReturn 100
+        on { divBlock } doReturn anchorBlock
     }
 
+    private val runtimeStore = mock<RuntimeStore> {
+        on { getOrCreateRuntime(any(), any(), any()) } doReturn ExpressionsRuntime(mock())
+    }
     private val div2View = mock<Div2View> {
         on { getChildAt(0) } doReturn anchor
         on { childCount } doReturn 1
+        on { runtimeStore } doReturn runtimeStore
     }
-    private val bindingContext = BindingContext(div2View, mock())
 
     private val tooltipShownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
     private val tooltipRestrictor = mock<DivTooltipRestrictor> {
@@ -414,7 +424,7 @@ class DivTooltipControllerTest {
         completePreload: Boolean = true,
     ) {
         tooltips.add(createDivTooltip(duration = duration))
-        underTest.showTooltip(id, bindingContext, multiple, scopeId)
+        underTest.showTooltip(id, div2View, multiple, scopeId)
         if (completePreload && preloadCallbackCaptor.allValues.isNotEmpty()) {
             preloadCallbackCaptor.lastValue.finish(false)
         }
@@ -442,12 +452,13 @@ class DivTooltipControllerTest {
         return anchorA to anchorB
     }
 
-    private fun mockAnchor(tooltipList: MutableList<DivTooltip>): View = mock {
+    private fun mockAnchor(tooltipList: MutableList<DivTooltip>): DivLineHeightTextView = mock {
         on { getTag(R.id.div_tooltips_tag) } doReturn tooltipList
         on { isAttachedToWindow } doReturn true
         on { isLayoutRequested } doReturn false
         on { width } doReturn 300
         on { height } doReturn 100
+        on { divBlock } doReturn anchorBlock
     }
 
     private fun mockScope(scopeId: String, child: View): ViewGroup = mock {

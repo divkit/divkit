@@ -30,8 +30,8 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
         divView: Div2View,
         expressionResolver: ExpressionResolver = divView.expressionResolver
     ): View {
-
-        return divView.div2Component.div2Builder.buildView(div, expressionResolver, divStatePath, divView)
+        val block = DivBlock.create(div, expressionResolver, divStatePath)
+        return divView.div2Component.div2Builder.buildView(block, divView)
     }
 
     /**

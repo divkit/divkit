@@ -13,14 +13,17 @@ import android.widget.PopupWindow
 import androidx.activity.OnBackPressedCallback
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.tooltip.DivTooltipViewController.Companion.calcPopupLocation
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivText
@@ -60,6 +63,9 @@ class DivTooltipViewControllerTest {
     }
 
     private val div = Div.Text(DivText(text = "test1".asExpression()))
+    private val runtimeStore = mock<RuntimeStore> {
+        on { getOrCreateRuntime(any(), any(), any()) } doReturn ExpressionsRuntime(mock())
+    }
     private val div2View = mock<Div2View> {
         on { resources } doReturn resources
         on { getContext() } doReturn mock()
@@ -67,9 +73,8 @@ class DivTooltipViewControllerTest {
             (inv.arguments[0] as Rect).set(0, 0, div2ViewWidth, div2ViewHeight)
         }
         on { childCount } doReturn 0
+        on { runtimeStore } doReturn runtimeStore
     }
-    private val bindingContext = BindingContext(div2View, ExpressionResolver.EMPTY)
-
     private val layoutListenerCaptor = argumentCaptor<View.OnLayoutChangeListener>()
     private val preDrawListenerCaptor = argumentCaptor<ViewTreeObserver.OnPreDrawListener>()
     private val viewTreeObserver = mock<ViewTreeObserver> {
@@ -104,7 +109,7 @@ class DivTooltipViewControllerTest {
     }
 
     private val divTooltipViewBuilder = mock<DivTooltipViewBuilder> {
-        on { buildTooltipView(any(), any(), anyOrNull(), any(), any()) } doReturn tooltipWrapper
+        on { buildTooltipView(any(), anyOrNull(), any(), any()) } doReturn tooltipWrapper
     }
 
     private val errorCollector = mock<ErrorCollector>()
@@ -222,7 +227,6 @@ class DivTooltipViewControllerTest {
         verify(popupWindow).isAttachedInDecor = true
         verify(popupWindow).isClippingEnabled = false
         verify(divTooltipViewBuilder).buildTooltipView(
-            any(),
             any(),
             anyOrNull(),
             eq(ViewGroup.LayoutParams.MATCH_PARENT),
@@ -389,7 +393,6 @@ class DivTooltipViewControllerTest {
     ) = TooltipData(
         id = "tooltip_id",
         scopeId = null,
-        bindingContext = bindingContext,
         divTooltip = DivTooltip(
             div = div,
             id = "tooltip_id",
@@ -399,6 +402,8 @@ class DivTooltipViewControllerTest {
             mode = mode,
         ),
         anchor = anchor,
+        anchorBlock = DivBlock.create(mock<Div.Text>(), ExpressionResolver.EMPTY, DivStatePath.fromState(0)),
+        divView = div2View,
     ).apply {
         if (withPopup) {
             popupWindow = this@DivTooltipViewControllerTest.popupWindow

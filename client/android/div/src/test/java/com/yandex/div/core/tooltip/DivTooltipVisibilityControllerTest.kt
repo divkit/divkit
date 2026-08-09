@@ -6,11 +6,15 @@ import android.view.Gravity
 import android.view.View
 import android.view.animation.Animation
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.expression.ExpressionResolverImpl
+import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.SafePopupWindow
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivText
@@ -39,9 +43,13 @@ class DivTooltipVisibilityControllerTest {
     }
 
     private val div = Div.Text(DivText(text = "test1".asExpression()))
-    private val expressionResolver = ExpressionResolver.EMPTY
-    private val div2View = mock<Div2View>()
-    private val bindingContext = BindingContext(div2View, expressionResolver)
+    private val expressionResolver = mock<ExpressionResolverImpl>()
+    private val runtimeStore = mock<RuntimeStore> {
+        on { getOrCreateRuntime(any(), any(), any()) } doReturn ExpressionsRuntime(expressionResolver)
+    }
+    private val div2View = mock<Div2View> {
+        on { runtimeStore } doReturn runtimeStore
+    }
 
     private val anchor = mock<View>()
     private val animationCaptor = argumentCaptor<Animation>()
@@ -71,17 +79,26 @@ class DivTooltipVisibilityControllerTest {
     private val animationsEnabledController = mock<DivAnimationsEnabledController> {
         on { isEnabled() } doReturn true
     }
+    private val data: TooltipData
 
     private val underTest = DivTooltipVisibilityController(
         visibilityActionTracker,
         animationsEnabledController,
     )
 
+    init {
+        val id = "tooltip_id"
+        val tooltip = DivTooltip(div = div, id = id, position = DivTooltip.Position.RIGHT.asExpression())
+        val anchorBlock = DivBlock.create(Div.Text(mock()), ExpressionResolver.EMPTY, DivStatePath.fromState(0))
+        data = TooltipData(id, null, tooltip, anchor, anchorBlock, div2View)
+        data.popupWindow = popupWindow
+    }
+
     @Test
     fun `tooltip is shown`() {
         val onShown = mock<() -> Unit>()
 
-        underTest.showTooltip(tooltipData(), onShown)
+        underTest.showTooltip(data, onShown)
 
         verify(popupWindow).showAtLocation(anchor, Gravity.NO_GRAVITY, 0, 0)
         verify(onShown).invoke()
@@ -89,7 +106,7 @@ class DivTooltipVisibilityControllerTest {
 
     @Test
     fun `visibility tracking is started on show`() {
-        underTest.showTooltip(tooltipData()) {}
+        showTooltip()
 
         verify(visibilityActionTracker).trackVisibilityActionsOf(
             scope = eq(div2View),
@@ -103,7 +120,7 @@ class DivTooltipVisibilityControllerTest {
 
     @Test
     fun `showTooltip setups popup animation when animations enabled and no substrate`() {
-        underTest.showTooltip(tooltipData()) {}
+        showTooltip()
 
         verify(popupWindow).enterTransition = any()
         verify(popupWindow).exitTransition = any()
@@ -113,7 +130,7 @@ class DivTooltipVisibilityControllerTest {
     fun `showTooltip does not setup popup animation when animations disabled`() {
         whenever(animationsEnabledController.isEnabled()).doReturn(false)
 
-        underTest.showTooltip(tooltipData()) {}
+        showTooltip()
 
         verify(popupWindow, never()).enterTransition = any()
         verify(popupWindow, never()).exitTransition = any()
@@ -121,8 +138,6 @@ class DivTooltipVisibilityControllerTest {
 
     @Test
     fun `dismissTooltip dismisses showing popup`() {
-        val data = tooltipData()
-
         underTest.dismissTooltip(data)
 
         Assert.assertTrue(data.dismissed)
@@ -132,7 +147,6 @@ class DivTooltipVisibilityControllerTest {
     @Test
     fun `dismissTooltip stops visibility tracking when popup is not showing`() {
         whenever(popupWindow.isShowing).doReturn(false)
-        val data = tooltipData()
 
         underTest.dismissTooltip(data)
 
@@ -143,8 +157,7 @@ class DivTooltipVisibilityControllerTest {
 
     @Test
     fun `visibility tracking is stopped on dismiss`() {
-        val data = tooltipData()
-        underTest.showTooltip(data) {}
+        showTooltip()
         reset(visibilityActionTracker)
 
         underTest.onDismiss(data)
@@ -154,14 +167,13 @@ class DivTooltipVisibilityControllerTest {
 
     @Test
     fun `onDismiss tracks detached view with waiting disappear actions`() {
-        val data = tooltipData()
         whenever(visibilityActionTracker.getDivWithWaitingDisappearActions())
-            .doReturn(mapOf(tooltipContainer to div))
+            .doReturn(mapOf(tooltipView to div))
 
         underTest.onDismiss(data)
 
         verify(visibilityActionTracker).trackDetachedView(
-            tooltipContainer,
+            tooltipView,
             div,
             expressionResolver,
             div2View,
@@ -170,8 +182,7 @@ class DivTooltipVisibilityControllerTest {
 
     @Test
     fun `tooltip exit animation is cleared when animations disabled between show and hide`() {
-        val data = tooltipData()
-        underTest.showTooltip(data) {}
+        showTooltip()
         whenever(animationsEnabledController.isEnabled()).doReturn(false)
 
         underTest.hideTooltip(data)
@@ -182,8 +193,7 @@ class DivTooltipVisibilityControllerTest {
 
     @Test
     fun `tooltip exit animation is kept when animations enabled on hide`() {
-        val data = tooltipData()
-        underTest.showTooltip(data) {}
+        showTooltip()
 
         underTest.hideTooltip(data)
 
@@ -195,7 +205,6 @@ class DivTooltipVisibilityControllerTest {
     fun `hideTooltip with substrate dismisses immediately when animations disabled`() {
         whenever(tooltipContainer.substrateView).doReturn(substrateView)
         whenever(animationsEnabledController.isEnabled()).doReturn(false)
-        val data = tooltipData()
 
         underTest.hideTooltip(data)
 
@@ -208,7 +217,6 @@ class DivTooltipVisibilityControllerTest {
     @Test
     fun `hideTooltip with substrate runs exit animation when animations enabled`() {
         whenever(tooltipContainer.substrateView).doReturn(substrateView)
-        val data = tooltipData()
 
         underTest.hideTooltip(data)
 
@@ -225,24 +233,14 @@ class DivTooltipVisibilityControllerTest {
     fun `showTooltip with substrate runs enter animation when animations enabled`() {
         whenever(tooltipContainer.substrateView).doReturn(substrateView)
 
-        underTest.showTooltip(tooltipData()) {}
+        showTooltip()
 
         verify(tooltipView).startAnimation(any())
         verify(substrateView).startAnimation(any())
         verify(popupWindow, never()).enterTransition = any()
     }
 
-    private fun tooltipData(): TooltipData {
-        val id = "tooltip_id"
-        val tooltip = DivTooltip(
-            div = div,
-            id = id,
-            position = DivTooltip.Position.RIGHT.asExpression(),
-        )
-        val data = TooltipData(id, null, bindingContext, tooltip, anchor)
-        data.popupWindow = popupWindow
-        return data
-    }
+    private fun showTooltip() = underTest.showTooltip(data) {}
 
     private fun Animation.getAnimationListener(): Animation.AnimationListener? {
         val field = Animation::class.java.getDeclaredField("mListener")

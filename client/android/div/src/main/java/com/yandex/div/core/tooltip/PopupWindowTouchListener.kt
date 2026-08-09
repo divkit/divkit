@@ -4,7 +4,8 @@ import android.graphics.Rect
 import android.view.MotionEvent
 import android.view.View
 import com.yandex.div.core.DivActionHandler
-import com.yandex.div.core.view2.BindingContext
+import com.yandex.div.core.view2.Div2View
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 
 internal class PopupWindowTouchListener(
@@ -12,7 +13,8 @@ internal class PopupWindowTouchListener(
     private val isModal: Boolean,
     private val shouldDismissByOutsideTouch: Boolean,
     private val tapOutsideActions: List<DivAction>?,
-    private val bindingContext: BindingContext,
+    private val expressionResolver: ExpressionResolver,
+    private val divView: Div2View,
     private val touchTranslationCoordinator: TouchTranslationCoordinator,
     private val handleSubstrateClick: Boolean,
     private val onTouchOutside: () -> Unit,
@@ -33,15 +35,11 @@ internal class PopupWindowTouchListener(
 
         if (event.action != MotionEvent.ACTION_UP) return isModal
 
-        tapOutsideActions?.let { actions ->
-            actions.filter { it.isEnabled.evaluate(bindingContext.expressionResolver) }.forEach { action ->
-                bindingContext.divView.div2Component.actionHandler.handleActionWithReason(
-                    action,
-                    bindingContext.divView,
-                    bindingContext.expressionResolver,
-                    DivActionHandler.DivActionReason.CLICK
-                )
-            }
+        tapOutsideActions?.filter {
+            it.isEnabled.evaluate(expressionResolver)
+        }?.forEach { action ->
+            divView.div2Component.actionHandler
+                .handleActionWithReason(action, divView, expressionResolver, DivActionHandler.DivActionReason.CLICK)
         }
 
         if (shouldDismissByOutsideTouch) {

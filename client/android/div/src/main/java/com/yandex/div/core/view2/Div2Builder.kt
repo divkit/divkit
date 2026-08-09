@@ -27,10 +27,6 @@ internal class Div2Builder @Inject constructor(
         }
     }
 
-    fun buildView(div: Div, expressionResolver: ExpressionResolver, path: DivStatePath, divView: Div2View): View {
-        return buildView(DivBlock.create(div, expressionResolver, path), divView)
-    }
-
     fun createView(data: Div, resolver: ExpressionResolver, path: DivStatePath, divView: Div2View): View {
         runtimeVisitor.createAndAttachRuntimes(data, path, divView)
         val view = viewCreator.create(data, resolver).apply {

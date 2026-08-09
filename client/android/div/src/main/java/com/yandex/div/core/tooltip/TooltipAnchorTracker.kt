@@ -2,7 +2,6 @@ package com.yandex.div.core.tooltip
 
 import android.os.Handler
 import android.view.View
-import android.widget.PopupWindow
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.Disposable
 import com.yandex.div.internal.view.onPreDrawListener
@@ -16,7 +15,6 @@ internal const val ANCHOR_TRACKING_DURATION_MS = 1_000L
  */
 internal class TooltipAnchorTracker(
     private val tooltip: TooltipData,
-    private val popupWindow: PopupWindow,
     private val handler: Handler,
     private val onAnchorPositionChanged: () -> Unit,
 ) : Disposable {
@@ -48,13 +46,12 @@ internal class TooltipAnchorTracker(
     }
 
     private fun updateIfNeeded() {
-        if (closed || tooltip.dismissed || !popupWindow.isShowing) return
+        if (closed || tooltip.dismissed || tooltip.popupWindow?.isShowing != true) return
         anchor.getLocationInWindow(location)
         val width = anchor.width
         val height = anchor.height
         if (location[0] == lastX && location[1] == lastY &&
-            width == lastWidth && height == lastHeight
-        ) {
+            width == lastWidth && height == lastHeight) {
             return
         }
         lastX = location[0]

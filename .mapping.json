@@ -1520,7 +1520,6 @@
   "client/android/div/src/main/java/com/yandex/div/core/util/validator/RegexValidator.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/util/validator/RegexValidator.kt",
   "client/android/div/src/main/java/com/yandex/div/core/util/validator/ValidatorItemData.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/util/validator/ValidatorItemData.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/AccessibilityListDelegate.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/AccessibilityListDelegate.kt",
-  "client/android/div/src/main/java/com/yandex/div/core/view2/BindingContext.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/BindingContext.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/BulkActionHandler.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/BulkActionHandler.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/CompositeLogId.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/CompositeLogId.kt",
   "client/android/div/src/main/java/com/yandex/div/core/view2/Div2Builder.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/view2/Div2Builder.kt",

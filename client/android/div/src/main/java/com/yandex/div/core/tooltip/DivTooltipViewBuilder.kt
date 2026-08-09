@@ -5,16 +5,15 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.state.DivPathUtils.fromRootDiv
-import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.toLayoutParamsSize
-import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.Div2Builder
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.divBlock
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
-import com.yandex.div2.Div
-import com.yandex.div2.DivTooltip
+import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivBase
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -24,49 +23,44 @@ internal class DivTooltipViewBuilder @Inject constructor(
 ) {
 
     fun buildTooltipView(
-        context: BindingContext,
-        divTooltip: DivTooltip,
+        tooltipData: TooltipData,
         bringToTopView: View? = null,
         width: Int = WRAP_CONTENT,
         height: Int = WRAP_CONTENT,
-    ) = DivTooltipContainer(context.divView.getContext()).apply {
-        val substrateView = divTooltip.substrateDiv?.let { substrateDiv ->
-            prepareView(context, substrateDiv)
-        }
-        
-        val preparedBringToTopView =  bringToTopView?.let { bringToTopView ->
-            prepareBringToTopView(context, bringToTopView)
-        }
-        
-        val tooltipView = prepareView(context, divTooltip.div)
-        
-        setViews(
+    ): DivTooltipContainer {
+        val divView = tooltipData.divView
+        val tooltipContainer = DivTooltipContainer(divView.getContext())
+
+        val substrateView = tooltipData.substrateBlock?.let { prepareView(it, divView) }
+        val preparedBringToTopView = bringToTopView?.let { prepareBringToTopView(it, divView) }
+        val tooltipView = prepareView(tooltipData.tooltipBlock, divView)
+
+        tooltipContainer.setViews(
             substrate = substrateView,
             bringToTop = preparedBringToTopView,
             tooltip = tooltipView
         )
 
-        layoutParams = ViewGroup.LayoutParams(width, height)
+        tooltipContainer.layoutParams = ViewGroup.LayoutParams(width, height)
+        return tooltipContainer
     }
 
-    private fun prepareBringToTopView(
-        context: BindingContext,
-        bringToTopView: View,
-    ) = bringToTopView.divBlock?.let { divBlock ->
-        prepareView(context, divBlock.div).apply { makeNonInteractive() }
+    private fun prepareBringToTopView(bringToTopView: View, divView: Div2View): View? {
+        val divBlock = bringToTopView.divBlock ?: return null
+        return prepareView(divBlock, divView)
+            .apply { makeNonInteractive() }
     }
 
-    private fun prepareView(
-        context: BindingContext,
-        div: Div,
-    ) = div2Builder.get()
-        .buildView(div, context.expressionResolver, DivStatePath.fromRootDiv(0, div), context.divView).apply {
-        val divBase = div.value()
-        val resolver = context.expressionResolver
-        val displayMetrics = this.context.resources.displayMetrics
+    private fun prepareView(divBlock: DivBlock, divView: Div2View): View {
+        return div2Builder.get().buildView(divBlock, divView)
+            .apply { prepare(divBlock.div.value(), divBlock.expressionResolver) }
+    }
+
+    private fun View.prepare(div: DivBase, resolver: ExpressionResolver) {
+        val displayMetrics = context.resources.displayMetrics
         layoutParams = ((layoutParams as? DivLayoutParams) ?: DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)).apply {
-            width = divBase.width.toLayoutParamsSize(displayMetrics, resolver, this)
-            height = divBase.height.toLayoutParamsSize(displayMetrics, resolver, this)
+            width = div.width.toLayoutParamsSize(displayMetrics, resolver, this)
+            height = div.height.toLayoutParamsSize(displayMetrics, resolver, this)
             gravity = DEFAULT_GRAVITY
         }
         isFocusable = true
