@@ -208,6 +208,7 @@ export interface DivProEditorOptions {
     fitViewportOnCreate?: boolean;
     viewportList?: string[];
     imageConversion?: ImageConversion;
+    minClickableSize?: number;
 }
 
 export interface EditorError {
@@ -252,6 +253,8 @@ export const DivProEditor = {
 
         state.extensions = opts.extensions;
         state.customComponents = opts.customComponents;
+
+        state.minClickableSize = opts.minClickableSize;
 
         if (Array.isArray(json?.card?.variables)) {
             const localPalette = json.card.variables.find((it?: JsonVariable) => it?.type === 'dict' && it.name === 'local_palette');

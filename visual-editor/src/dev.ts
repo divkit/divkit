@@ -88,6 +88,7 @@ const editor = window.editor = DivProEditor.init({
             // avif: true
         }
     },
+    minClickableSize: 44,
     customFontFaces: [{
         value: 'monospace',
         text: {

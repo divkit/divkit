@@ -13,7 +13,7 @@
     } from '../data/structure';
     import { formatSize } from '../utils/formatSize';
     import '@divkitframework/divkit/dist/client.css';
-    import { treeLeafContains, findLeaf } from '../utils/tree';
+    import { treeLeafContains, findLeaf, walk } from '../utils/tree';
     import { bestSnap, type Snap } from '../utils/snap';
     import { deleteComponent, moveComponentUp, moveComponentDown, moveComponentLeft, moveComponentRight, bigMoveComponentUp, bigMoveComponentDown, bigMoveComponentRight, bigMoveComponentLeft, resizeComponentUp, resizeComponentDown, resizeComponentLeft, resizeComponentRight, bigResizeComponentUp, bigResizeComponentDown, bigResizeComponentRight, bigResizeComponentLeft, copy as copyShortcut, paste as pasteShortcut, cancel } from '../utils/keybinder/shortcuts';
     import { Lottie } from '../data/lottieExt';
@@ -774,12 +774,13 @@
         origJson?: any;
         devapi?: object;
     }) {
+        const leafId = origJson.__leafId;
         let shouldUpdate = type === 'mount' || type === 'destroy';
-        if ((type === 'update' || type === 'mount') && origJson.__leafId) {
-            mountedAndUpdatedLeafs.add(origJson.__leafId);
+        if ((type === 'update' || type === 'mount') && leafId) {
+            mountedAndUpdatedLeafs.add(leafId);
         }
 
-        if ((type === 'mount' || type === 'update') && origJson.__leafId) {
+        if ((type === 'mount' || type === 'update') && leafId) {
             if (node && (json?.type === 'gif' || json?.type === 'image')) {
                 const img = node.querySelector<HTMLImageElement>('img');
 
@@ -795,14 +796,14 @@
                 }
             }
 
-            const leaf = findLeaf($tree, origJson.__leafId);
+            const leaf = findLeaf($tree, leafId);
 
             if (leaf) {
                 leaf.props.processedJson = json;
                 leaf.props.evalledJson = evalJson(json);
 
                 // If a component was moved in the tree
-                const isSelected = $selectedLeaf && $selectedLeaf.id === origJson.__leafId;
+                const isSelected = $selectedLeaf && $selectedLeaf.id === leafId;
 
                 if (node) {
                     leaf.props.node = node;
@@ -816,7 +817,7 @@
                     });
 
                     const prevLeafId = components.get(node)?.json.__leafId;
-                    if (prevLeafId !== origJson.__leafId) {
+                    if (prevLeafId !== leafId) {
                         shouldUpdate = true;
                     }
 
@@ -1367,6 +1368,31 @@
 
                 for (const leafId of mountedAndUpdatedLeafs) {
                     delete resultErrors[leafId];
+                }
+
+                const minClickableSize = state.minClickableSize;
+                if (minClickableSize) {
+                    walk(get(state.tree), leaf => {
+                        const leafId = leaf.id;
+                        const node = leaf.props?.node;
+                        if (node && (node.tagName === 'A' || node.tagName === 'BUTTON')) {
+                            // eslint-disable-next-line max-depth
+                            if (node.offsetWidth < minClickableSize || node.offsetHeight < minClickableSize) {
+                                let list = newRendererErrors[leafId] || [];
+                                const message = 'Clickable area too small';
+                                list = list.filter(item => item.message !== message);
+                                list.push({
+                                    message,
+                                    stack: [],
+                                    level: 'warn',
+                                    args: {
+                                        leafId
+                                    }
+                                });
+                                newRendererErrors[leafId] = list;
+                            }
+                        }
+                    });
                 }
 
                 resultErrors = {

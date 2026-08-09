@@ -186,6 +186,8 @@ export class State {
 
     isGlobalCheckRequired = false;
 
+    minClickableSize: number | undefined = undefined;
+
     constructor({
         locale,
         fileLimits,
