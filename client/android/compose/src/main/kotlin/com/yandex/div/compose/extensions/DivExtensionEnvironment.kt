@@ -15,6 +15,7 @@ import com.yandex.div2.DivExtension
  *
  * @see DivExtensionHandler
  */
+@ConsistentCopyVisibility
 @ExperimentalApi
 @Stable
 @SuppressLint("ComposableNaming")

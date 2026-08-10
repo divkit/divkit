@@ -15,6 +15,7 @@ import com.yandex.div2.DivCustom
  * expressions inside the custom element and helpers for rendering `items`
  * declared on the `div-custom`.
  */
+@ConsistentCopyVisibility
 @ExperimentalApi
 @Stable
 data class DivCustomEnvironment internal constructor(

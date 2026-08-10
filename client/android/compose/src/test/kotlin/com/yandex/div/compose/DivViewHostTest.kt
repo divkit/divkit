@@ -7,7 +7,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.internal.DivDebugConfiguration
-import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.image
 import kotlinx.coroutines.CoroutineScope
@@ -20,7 +19,7 @@ import org.robolectric.shadows.ShadowLooper
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(DivModelInternalApi::class, ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class DivViewHostTest {
 

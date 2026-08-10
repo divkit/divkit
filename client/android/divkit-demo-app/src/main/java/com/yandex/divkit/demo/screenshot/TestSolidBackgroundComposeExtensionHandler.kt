@@ -6,9 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
-import com.yandex.div.core.annotations.ExperimentalApi
 
-@OptIn(ExperimentalApi::class)
 class TestSolidBackgroundComposeExtensionHandler : DivExtensionHandler {
 
     @Composable

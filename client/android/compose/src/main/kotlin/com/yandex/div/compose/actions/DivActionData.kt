@@ -7,6 +7,7 @@ import org.json.JSONObject
 /**
  * Data associated with a DivKit action.
  */
+@ConsistentCopyVisibility
 @ExperimentalApi
 data class DivActionData internal constructor(
     val id: String?,

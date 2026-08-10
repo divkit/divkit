@@ -22,14 +22,11 @@ import com.yandex.div.compose.DivView
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.images.gifDecoderFactory
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
-import com.yandex.div.core.annotations.ExperimentalApi
-import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import okio.ByteString.Companion.encodeUtf8
 import org.json.JSONObject
@@ -39,7 +36,6 @@ import org.json.JSONObject
 adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity \
 -e DivComposeScreenshotActivity.EXTRA_DIV_ASSET_NAME snapshot_test_data/div-text/all_attributes.json
  */
-@OptIn(InternalApi::class, ExperimentalApi::class)
 class DivComposeScreenshotActivity : ComponentActivity() {
 
     private lateinit var divContext: DivContext

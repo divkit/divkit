@@ -19,7 +19,9 @@ import com.yandex.divkit.benchmark.div.parseTemplatesWithHistograms
 import com.yandex.divkit.benchmark.div.toJSONObjectWithHistograms
 import com.yandex.divkit.benchmark.utils.JsonAssetReader
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,7 +29,9 @@ import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.UUID
+import kotlin.time.Duration.Companion.seconds
 
+@OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 internal class Div2StateBenchmark(
     private val divContext: Div2Context,
     private val viewController: Div2BenchmarkViewController
@@ -58,7 +62,7 @@ internal class Div2StateBenchmark(
         viewController.showMessage("Warming up…")
         divContext.warmUp()
         Container.parsingHistogramReporter
-        delay(1_000L)
+        delay(1.seconds)
     }
 
     private suspend fun pass(assetName: String, statePaths: List<String>) {
@@ -140,7 +144,7 @@ internal class Div2StateBenchmark(
             benchmarkMetrics[METRIC_VIEW_LAYOUT] = metrics.layout
             benchmarkMetrics[METRIC_VIEW_DRAW] = metrics.draw
         }
-        delay(2_000L)
+        delay(2.seconds)
     }
 
     private suspend fun switchState(divView: Div2View, statePaths: List<String>) {
@@ -154,7 +158,7 @@ internal class Div2StateBenchmark(
             benchmarkMetrics[METRIC_VIEW_LAYOUT] = frameMetrics.layout
             benchmarkMetrics[METRIC_VIEW_DRAW] = frameMetrics.draw
         }
-        delay(2_000L)
+        delay(2.seconds)
     }
 
     private fun reportMetrics() {

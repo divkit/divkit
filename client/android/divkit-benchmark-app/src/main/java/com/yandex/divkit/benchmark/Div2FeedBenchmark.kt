@@ -12,7 +12,9 @@ import com.yandex.div2.DivTemplate
 import com.yandex.divkit.benchmark.div.createDivDataWithHistograms
 import com.yandex.divkit.benchmark.div.parseTemplatesWithHistograms
 import com.yandex.divkit.benchmark.utils.JsonAssetReader
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.awaitFrame
@@ -21,7 +23,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import kotlin.time.Duration.Companion.seconds
 
+@OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 internal class Div2FeedBenchmark(
     private val divContext: Div2Context,
     private val viewController: Div2FeedBenchmarkViewController
@@ -63,7 +67,7 @@ internal class Div2FeedBenchmark(
         viewController.showMessage("Warming up…")
         divContext.warmUp()
         Container.parsingHistogramReporter
-        delay(1_000L)
+        delay(1.seconds)
     }
 
     private suspend fun readJsonFiles(assetNames: Array<String>): List<JSONObject> {
@@ -114,7 +118,7 @@ internal class Div2FeedBenchmark(
     private suspend fun displayFeed(feedAdapter: Div2FeedAdapter) {
         viewController.showFeed(feedAdapter)
         awaitFrame()
-        delay(1_000L)
+        delay(1.seconds)
     }
 
     private suspend fun scrollFeed() {
@@ -122,7 +126,7 @@ internal class Div2FeedBenchmark(
             viewController.scrollFeed(SCROLL_SPEED_DP)
             awaitFrame()
         }
-        delay(1_000L)
+        delay(1.seconds)
     }
 
     private fun finish() {

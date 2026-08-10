@@ -6,6 +6,7 @@ import org.json.JSONObject
 /**
  * Data associated with a custom  DivKit action (action with `"type": "custom"`).
  */
+@ConsistentCopyVisibility
 @ExperimentalApi
 data class DivCustomActionData internal constructor(
     val id: String?,

@@ -11,7 +11,9 @@ import com.yandex.div.storage.DivDataRepository
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawDataAndMetadata
 import com.yandex.divkit.benchmark.utils.JsonAssetReader
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
@@ -19,6 +21,7 @@ import org.json.JSONObject
 
 private const val CARD_ID = "card_id"
 
+@OptIn(DelicateCoroutinesApi::class, ExperimentalCoroutinesApi::class)
 internal class DivStorageBenchmark(
     divContext: Div2Context,
     private val activity: Activity,

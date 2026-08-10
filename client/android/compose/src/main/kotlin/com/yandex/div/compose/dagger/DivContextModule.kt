@@ -16,7 +16,6 @@ import com.yandex.div.compose.preload.CoilImagePreloader
 import com.yandex.div.compose.preload.ImagePreloader
 import com.yandex.div.compose.utils.SystemTimeProvider
 import com.yandex.div.compose.utils.TimeProvider
-import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.internal.storedvalues.StoredValuesRepository
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.DivStorageComponent
@@ -52,7 +51,6 @@ internal interface DivContextModule {
                 ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         }
 
-        @OptIn(InternalApi::class)
         @DivContextScope
         @Provides
         fun provideImageLoader(

@@ -1,7 +1,6 @@
 package com.yandex.div.lottie
 
 import android.view.View
-import androidx.core.view.ViewCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -11,7 +10,7 @@ internal fun View.launchOnAttachedToWindow(
     action: suspend CoroutineScope.() -> Unit
 ) {
     val listener = ScopedOnAttachStateChangeListener(action, view = this)
-    if (ViewCompat.isAttachedToWindow(this)) {
+    if (isAttachedToWindow) {
         listener.performActionInScope()
     }
     addOnAttachStateChangeListener(listener)

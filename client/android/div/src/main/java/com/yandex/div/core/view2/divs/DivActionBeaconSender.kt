@@ -17,9 +17,12 @@ import javax.inject.Inject
 @DivScope
 internal class DivActionBeaconSender @Inject constructor(
     private val sendBeaconManagerLazy: Lazy<SendBeaconManager?>,
-    @ExperimentFlag(TAP_BEACONS_ENABLED) private val isTapBeaconsEnabled: Boolean,
-    @ExperimentFlag(VISIBILITY_BEACONS_ENABLED) private val isVisibilityBeaconsEnabled: Boolean,
-    @ExperimentFlag(SWIPE_OUT_BEACONS_ENABLED) private val isSwipeOutBeaconsEnabled: Boolean,
+    @param:ExperimentFlag(TAP_BEACONS_ENABLED)
+    private val isTapBeaconsEnabled: Boolean,
+    @param:ExperimentFlag(VISIBILITY_BEACONS_ENABLED)
+    private val isVisibilityBeaconsEnabled: Boolean,
+    @param:ExperimentFlag(SWIPE_OUT_BEACONS_ENABLED)
+    private val isSwipeOutBeaconsEnabled: Boolean,
 ) {
 
     fun sendTapActionBeacon(action: DivAction, resolver: ExpressionResolver) {

@@ -8,7 +8,6 @@ import coil3.ImageLoader
 import coil3.asImage
 import coil3.request.SuccessResult
 import com.yandex.div.compose.images.ImageRequestFactory
-import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.color
 import com.yandex.div.test.data.container
@@ -25,7 +24,6 @@ import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(DivModelInternalApi::class)
 @RunWith(AndroidJUnit4::class)
 class CoilImagePreloaderTest {
 
