@@ -53,7 +53,7 @@
           "items": [
             {
               "type": "text",
-              "text": "This test case demonstrates the next_focus_ids feature.\n\nEach button has two states:\n- Inactive (orange focused background): default state.\n- Active (blue focused background, bold text): toggled by tapping the button.\n\nEach button defines next_focus_ids for directional navigation (UP, DOWN, LEFT, RIGHT keys move focus to the specified button).\n\nFORWARD (Tab key or D-pad center/forward) cycles through buttons. The FORWARD target changes depending on the button state:\n- Left inactive → Right; Left active → Down\n- Right inactive → Up; Right active → Left\n- Up inactive → Down; Up active → Right\n- Down inactive → Left; Down active → Up\n\nTap a button to toggle it between inactive and active. This changes which button FORWARD navigation targets next.",
+              "text": "Button is inactive - background is red.\n\nButton is active - background is blue.\n\nFORWARD - enumeration Left - Right - Up - Down (if button is active, it changes the directions).\nUP, DOWN, LEFT, RIGHT - set button.",
               "text_color": "#000000",
               "margins": {
                 "top": 8,

@@ -100,11 +100,8 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     }
 
     childView?.frame = bounds
-    if frame != .zero, isFirstChildLayout {
+    if frame != .zero {
       isFirstChildLayout = false
-      // The appearance animation may have been requested before the first layout pass
-      // (bounds were zero at that time). Trigger it now that layout has settled.
-      addWithAnimation()
     }
   }
 

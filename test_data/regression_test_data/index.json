@@ -872,16 +872,12 @@
         "android"
       ],
       "steps": [
-        "Tap the 'Left' button to activate it",
-        "Using Tab key or D-pad, press FORWARD to navigate to the next focused element",
-        "Tap the 'Left' button again to deactivate it",
-        "Using Tab key or D-pad, press FORWARD again and observe that the navigation target has changed"
+        "Tap the buttons",
+        "Tap the buttons again"
       ],
       "expected_results": [
-        "The 'Left' button becomes active: its text becomes bold and focused background turns blue",
-        "Focus moves to the 'Down' button (FORWARD target for 'Left' in active state is 'down')",
-        "The 'Left' button returns to inactive state: text weight returns to normal and focused background turns orange",
-        "Focus moves to the 'Right' button (FORWARD target for 'Left' in inactive state is 'right'). This demonstrates that tapping a button changes which button FORWARD navigation targets next (via next_focus_ids.forward)"
+        "The text on the buttons becomes bold",
+        "The bold text style is removed"
       ],
       "file": "focus.json",
       "case_id": 444

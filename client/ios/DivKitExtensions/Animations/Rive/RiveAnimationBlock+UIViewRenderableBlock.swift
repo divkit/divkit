@@ -19,7 +19,7 @@ extension RiveAnimationBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     if let animationView = view as? AnimationBlockView,
-       animationView.animationHolder != animationHolder {
+       animationView.animationHolder !== animationHolder {
       animationView.animatableView = animatableView.value
       animationView.animationHolder = animationHolder
     }

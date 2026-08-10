@@ -11,28 +11,12 @@ import androidx.core.graphics.createBitmap
 import androidx.core.view.children
 import androidx.core.view.doOnDetach
 import androidx.transition.R
-import com.yandex.div.R as DivR
 import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.view.DivImageView
-
-/**
- * Marks a view so that the appearance/disappearance overlay transition will not restore
- * [View.VISIBLE] when the transition ends. Call this when an intentional visibility change
- * (e.g. a user-triggered visibility_change action) is applied to a view that is currently
- * being animated by an overlay-based state transition. Without this guard the
- * [View.replace] end-listener would unconditionally restore the view to [View.VISIBLE] even
- * after the caller has explicitly hidden it.
- */
-@MainThread
-internal fun View.suppressOverlayVisibilityRestore() {
-    if (getTag(R.id.save_overlay_view) != null) {
-        setTag(DivR.id.div_transition_visibility_overridden, true)
-    }
-}
 
 @MainThread
 internal fun createOrGetVisualCopy(
@@ -130,11 +114,7 @@ private fun View.replace(viewCopy: View, transition: Transition, sceneRoot: View
 
         override fun onTransitionEnd(transition: Transition) {
             setTag(R.id.save_overlay_view, null)
-            val visibilityOverridden = getTag(DivR.id.div_transition_visibility_overridden) as? Boolean ?: false
-            setTag(DivR.id.div_transition_visibility_overridden, null)
-            if (!visibilityOverridden) {
-                visibility = View.VISIBLE
-            }
+            visibility = View.VISIBLE
             overlay.remove(viewCopy)
             transition.removeListener(this)
         }

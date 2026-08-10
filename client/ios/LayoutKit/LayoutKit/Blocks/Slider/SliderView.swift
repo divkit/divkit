@@ -202,27 +202,7 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
 
     isUserInteractionEnabled = sliderModel.isEnabled
 
-    isAccessibilityElement = true
-    accessibilityTraits = .adjustable
-
     setNeedsLayout()
-  }
-
-  override var accessibilityValue: String? {
-    get { String(sliderModel.firstThumb.value.value) }
-    set { super.accessibilityValue = newValue }
-  }
-
-  override func accessibilityIncrement() {
-    let step = Int(sliderModel.stepSize)
-    let newValue = sliderModel.firstThumb.value.value + step
-    setFirstThumbProgress(CGFloat(min(newValue, sliderModel.maxValue)))
-  }
-
-  override func accessibilityDecrement() {
-    let step = Int(sliderModel.stepSize)
-    let newValue = sliderModel.firstThumb.value.value - step
-    setFirstThumbProgress(CGFloat(max(newValue, sliderModel.minValue)))
   }
 
   private func setFirstThumbProgress(_ value: CGFloat) {

@@ -300,9 +300,6 @@ public final class DivView: VisibleBoundsTrackingView {
 extension DivView: ElementStateObserver {
   public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.elementStateChanged(state, forPath: path)
-    if let galleryState = state as? GalleryViewState, galleryState.isScrolling {
-      divKitComponents.blockStateStorage.pausePlayingVideos(underPath: path)
-    }
     blockProvider?.update(withStates: divKitComponents.blockStateStorage.states)
   }
 

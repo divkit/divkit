@@ -262,20 +262,6 @@ public final class DivBlockStateStorage {
   private func removeFocus(from element: IdAndCardId) -> FocusedElement {
     isFocusedInternal(checkedElement: FocusedElement.idFocused(element)) ? .none : focusedElement
   }
-
-  public func pausePlayingVideos(underPath path: UIElementPath) {
-    let playingVideoPaths = states.compactMap { videoPath, videoState -> UIElementPath? in
-      guard let videoBlockState = videoState as? VideoBlockViewState,
-            videoBlockState.state == .playing,
-            videoPath.starts(with: path) else {
-        return nil
-      }
-      return videoPath
-    }
-    for videoPath in playingVideoPaths {
-      setState(path: videoPath, state: VideoBlockViewState(state: .paused))
-    }
-  }
 }
 
 extension DivBlockStateStorage: ElementStateObserver {
