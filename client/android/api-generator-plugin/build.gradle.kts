@@ -7,8 +7,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(gradleApi())
-    compileOnly(libs.agp.gradleApi)
+    implementation(libs.agp.gradle)
 }
 
 gradlePlugin {

@@ -99,17 +99,10 @@ dependencies {
     androidTestImplementation libs.androidx.viewpager2
 }
 
-android.applicationVariants.configureEach { variant ->
-
-    variant.outputs.configureEach {
-        boolean isPerf = variant.baseName.contains("perf")
-
-        if (!isPerf) {
-            outputFileName = divkitVersion.buildNumber != 0 ?
-                    "${project.base.archivesName.get()}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
-                    "${project.base.archivesName.get()}-v${versionName}-${variant.baseName}.apk"
-        }
-    }
+base {
+    archivesName = divkitVersion.buildNumber != 0 ?
+            "${project.name}-v${divkitVersion.baseVersionName}-b${divkitVersion.buildNumber}" :
+            "${project.name}-v${divkitVersion.baseVersionName}"
 }
 
 FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {

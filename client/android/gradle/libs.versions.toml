@@ -1,6 +1,6 @@
 [versions]
-agp = "8.12.3"
-android-lint = "31.12.3"  # agp + "23.0.0"
+agp = "9.1.1"
+android-lint = "32.1.1"  # agp + "23.0.0"
 android-compileSdk = "36"
 android-minSdk = "23"
 android-targetSdk = "36"
@@ -30,7 +30,7 @@ protobuf = "4.35.1"
 rive = "10.3.1"
 robolectric = "4.16.1"
 stetho = "1.6.0"
-unmock = "0.9.0"
+unmock = "0.11.0"
 webp-imageio = "0.1.6"
 yatagan = "1.6.2"
 
@@ -57,7 +57,6 @@ androidx-work = "2.11.2"
 
 [libraries]
 agp-gradle = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-agp-gradleApi = { module = "com.android.tools.build:gradle-api", version.ref = "agp" }
 
 android-lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "android-lint" }
 android-lint = { module = "com.android.tools.lint:lint", version.ref = "android-lint" }
@@ -130,6 +129,8 @@ google-testing-platform-proto = { module = "com.google.testing.platform:core-pro
 
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
+hamcrest = { module = "org.hamcrest:hamcrest", version = "2.2" }
+
 javax = { module = "javax.inject:javax.inject", version.ref = "javax" }
 json = { module = "org.json:json", version.ref = "json" }
 junit = { module = "junit:junit", version.ref = "junit" }
@@ -138,8 +139,7 @@ kotlin-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-c
 kotlin-corountines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
 kotlin-corountines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 kotlin-corountines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 
@@ -182,7 +182,6 @@ android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.
 android-library = { id = "com.android.library", version.ref = "agp" }
 apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.22.0" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }

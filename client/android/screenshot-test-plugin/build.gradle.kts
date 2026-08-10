@@ -11,14 +11,10 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.androidx.annotations)
-    implementation(libs.agp.gradleApi)
     implementation(libs.agp.gradle)
     implementation(libs.gson)
-    implementation(libs.protobuf)
-    implementation(libs.webp.imageio)
-
     implementation(libs.google.testing.platform.proto)
+    implementation(libs.webp.imageio)
 }
 
 gradlePlugin {

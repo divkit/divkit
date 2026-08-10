@@ -19,8 +19,6 @@ open class ScreenshotTestPluginExtension @Inject constructor(
         .convention("screenshots")
     val referencesDir: Property<String> = objects.property(String::class.java)
         .convention("src/androidTest/resources/screenshots")
-    val screenshotDir: Property<String> = objects.property(String::class.java)
-        .convention("outputs/connected_android_test_additional_output/debugAndroidTest/connected")
     val collectedDir: Provider<String> = hostDir.map { "$it/collected" }
     val comparisonDir: Provider<String> = hostDir.map { "$it/comparison" }
 

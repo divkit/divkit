@@ -18,8 +18,8 @@ buildscript {
         classpath libs.agp.gradle
         classpath libs.appmetrica.plugin
         classpath libs.nexusPublishPlugin
-        classpath libs.kotlin.gradle.plugin
         classpath libs.kotlin.binaryCompatibilityValidator
+        classpath libs.protobuf
         classpath libs.unmock.plugin
     }
 }
@@ -28,7 +28,6 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
 }

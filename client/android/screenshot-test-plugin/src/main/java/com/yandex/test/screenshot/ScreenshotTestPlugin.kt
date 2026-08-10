@@ -7,11 +7,9 @@ import com.yandex.test.util.android
 import com.yandex.test.util.androidComponents
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import kotlin.io.path.Path
 
 class ScreenshotTestPlugin : Plugin<Project> {
 
-    @Suppress("UnstableApiUsage")
     override fun apply(project: Project) {
         val extension = project.extensions.create(
             ScreenshotTestPluginExtension.NAME,
@@ -21,24 +19,12 @@ class ScreenshotTestPlugin : Plugin<Project> {
         val validateTestResultsTask = ValidateTestResultsTask.register(project)
 
         project.androidComponents.onVariants { variant: Variant ->
-            val compareTask = CompareScreenshotsTask.register(project, variant, extension)
+            CompareScreenshotsTask.register(project, variant, extension)
 
-            project.androidComponents.finalizeDsl {
-                project.tasks.matching {
-                    it.name == variant.computeTaskName("connected", "androidTest")
-                }.configureEach { task ->
-                    val additionalOutputs = task.outputs.files.single {
-                        val path = it.toPath()
-                        path.contains(Path("connected_android_test_additional_output"))
-                    }
-                    compareTask.configure {
-                        it.screenshotDir.set(additionalOutputs)
-                    }
-                    task.finalizedBy(
-                        compareTask,
-                        validateTestResultsTask,
-                    )
-                }
+            project.tasks.matching {
+                it.name == variant.computeTaskName("connected", "androidTest")
+            }.configureEach { task ->
+                task.finalizedBy(validateTestResultsTask)
             }
         }
 

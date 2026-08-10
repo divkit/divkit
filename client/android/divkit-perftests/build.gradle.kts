@@ -2,7 +2,6 @@ import com.yandex.div.gradle.ifExists
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
 }
 
 kotlin {

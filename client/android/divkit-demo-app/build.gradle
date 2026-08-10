@@ -9,7 +9,6 @@ plugins {
 
 apply from: "${project.projectDir}/../div-common.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
-apply from: "ui-tests.gradle"
 
 repositories {
     maven { url 'https://repo.gradle.org/gradle/libs-releases' }
@@ -123,6 +122,7 @@ dependencies {
     androidTestImplementation libs.androidx.compose.ui.test.junit4
     androidTestImplementation libs.androidx.lifecycle.viewmodel
     androidTestImplementation libs.androidx.viewpager2
+    androidTestImplementation libs.hamcrest
 }
 
 screenshotTests {
@@ -132,17 +132,12 @@ screenshotTests {
     strictComparison = providers.gradleProperty("screenshot-strict-comparison").isPresent()
     testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
     referencesDir = "src/screenshotTest/screenshots"
-    providers.gradleProperty("screenshot-dir").orNull?.with { dir ->
-        screenshotDir = dir
-    }
 }
 
-android.applicationVariants.configureEach { variant ->
-    variant.outputs.configureEach {
-        outputFileName = divkitVersion.buildNumber != 0 ?
-                "${project.base.archivesName.get()}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
-                "${project.base.archivesName.get()}-v${versionName}-${variant.baseName}.apk"
-    }
+base {
+    archivesName = divkitVersion.buildNumber != 0 ?
+            "${project.name}-v${divkitVersion.baseVersionName}-b${divkitVersion.buildNumber}" :
+            "${project.name}-v${divkitVersion.baseVersionName}"
 }
 
 FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {

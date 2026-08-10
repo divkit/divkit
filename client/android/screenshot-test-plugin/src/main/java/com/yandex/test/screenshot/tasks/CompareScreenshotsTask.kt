@@ -1,6 +1,7 @@
 package com.yandex.test.screenshot.tasks
 
 import com.android.build.api.variant.Variant
+import com.android.builder.core.BuilderConstants
 import com.yandex.test.screenshot.ScreenshotTestPluginExtension
 import com.yandex.test.util.FileOutput
 import com.yandex.test.util.Logger
@@ -304,6 +305,21 @@ abstract class CompareScreenshotsTask : DefaultTask() {
 
         private const val TAG = "CompareScreenshotsTask"
 
+        /**
+         * Location of the additional test output of `connected<Variant>AndroidTest`, relative to the
+         * build directory. Mirrors what AGP composes for
+         * `InternalArtifactType.CONNECTED_ANDROID_TEST_ADDITIONAL_OUTPUT`: an `OUTPUTS` artifact
+         * named after the [BuilderConstants.CONNECTED] device provider, under the android test
+         * component directory.
+         *
+         * It cannot be read from the connected test task itself: AGP wires the corresponding output
+         * property from its own configuration action, which runs after the actions this plugin is
+         * able to register, so the property is still unset by then.
+         */
+        private fun additionalTestOutputDir(variant: Variant) =
+            "outputs/connected_android_test_additional_output/" +
+                "${variant.name}AndroidTest/${BuilderConstants.CONNECTED}"
+
         @Suppress("UnstableApiUsage")
         fun register(
             project: Project,
@@ -317,7 +333,9 @@ abstract class CompareScreenshotsTask : DefaultTask() {
                 it.referencesDir.set(project.file(extension.referencesDir))
                 it.comparableCategories.set(extension.comparableCategories)
                 it.strictComparison.set(extension.strictComparison)
-                it.screenshotDir.set(project.layout.buildDirectory.dir(extension.screenshotDir))
+                it.screenshotDir.set(
+                    project.layout.buildDirectory.dir(additionalTestOutputDir(variant))
+                )
                 it.reportDir.set(project.reportDir)
                 it.comparisonDir.set(project.reportDir.map { it.dir(extension.comparisonDir.get()) })
                 it.collectedDir.set(project.reportDir.map { it.dir(extension.collectedDir.get()) })

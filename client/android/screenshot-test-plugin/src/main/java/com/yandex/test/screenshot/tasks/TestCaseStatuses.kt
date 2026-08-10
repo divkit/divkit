@@ -2,7 +2,6 @@ package com.yandex.test.screenshot.tasks
 
 import java.io.File
 
-
 class TestCaseStatuses(testCaseReferencesDir: File) {
     private val caseResolver = TestCaseResolver(testCaseReferencesDir)
     private val testCases = hashMapOf<String, Boolean>()
