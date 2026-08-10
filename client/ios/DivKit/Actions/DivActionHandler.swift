@@ -10,7 +10,7 @@ public final class DivActionHandler {
   typealias PerformTimerAction = (
     _ cardId: DivCardID,
     _ timerId: String,
-    _ action: DivTimerAction
+    _ action: DivActionTimer.Action
   ) -> Void
 
   typealias UpdateCardAction = (DivCardUpdateReason) -> Void

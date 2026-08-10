@@ -19,23 +19,18 @@ struct VideoActionHandler {
       return
     }
 
-    let videoAction: DivVideoAction = switch command {
-    case .start: .play
-    case .pause: .pause
-    }
-
-    handle(id: id, action: videoAction, context: context)
+    handle(id: id, action: command, context: context)
   }
 
   func handle(
     id: String,
-    action: DivVideoAction,
+    action: DivActionVideo.Action,
     context: DivActionHandlingContext
   ) {
     pathResolver.resolve(id: id, divTypes: [DivVideo.type], context: context) { path in
       context.blockStateStorage.setState(
         path: path,
-        state: VideoBlockViewState(state: action == .play ? .playing : .paused)
+        state: VideoBlockViewState(state: action == .start ? .playing : .paused)
       )
       context.updateCard(.state(context.cardId))
     }

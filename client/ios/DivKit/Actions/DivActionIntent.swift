@@ -1,25 +1,23 @@
 import Foundation
 import VGSL
 
-
-
 enum DivActionIntent: Hashable {
-  enum Scroll: Hashable {
-    case setCurrentItem(index: Int)
-    case setNextItem(step: Int, overflow: OverflowMode)
-    case setPreviousItem(step: Int, overflow: OverflowMode)
-    case scroll(mode: ScrollMode)
-  }
-
   case showTooltip(id: String, multiple: Bool)
   case hideTooltip(id: String)
   case download(patchUrl: URL)
   case setState(divStatePath: DivStatePath, lifetime: DivStateLifetime)
   case setVariable(name: String, value: String)
   case scrollAction(id: String, Scroll)
-  case timer(id: String, action: DivTimerAction)
-  case video(id: String, action: DivVideoAction)
+  case timer(id: String, action: DivActionTimer.Action)
+  case video(id: String, action: DivActionVideo.Action)
   case setStoredValue(DivStoredValue, DivStoredValueScope)
+
+  enum Scroll: Hashable {
+    case setCurrentItem(index: Int)
+    case setNextItem(step: Int, overflow: OverflowMode)
+    case setPreviousItem(step: Int, overflow: OverflowMode)
+    case scroll(mode: ScrollMode)
+  }
 
   static let scheme = "div-action"
 
@@ -149,42 +147,26 @@ extension URL {
     return (name: name, value: value)
   }
 
-  fileprivate var timerAction: DivTimerAction? {
-    guard let action = queryParamValue(forName: "action") else {
+  fileprivate var timerAction: DivActionTimer.Action? {
+    guard let value = queryParamValue(forName: "action") else {
       return nil
     }
-    switch action {
-    case "start":
-      return .start
-    case "stop":
-      return .stop
-    case "pause":
-      return .pause
-    case "resume":
-      return .resume
-    case "cancel":
-      return .cancel
-    case "reset":
-      return .reset
-    default:
-      DivKitLogger.error("Unknown action '\(action)' for timer.")
+    guard let action = DivActionTimer.Action(rawValue: value) else {
+      DivKitLogger.error("Unknown action '\(value)' for timer.")
       return nil
     }
+    return action
   }
 
-  fileprivate var videoAction: DivVideoAction? {
-    guard let action = queryParamValue(forName: "action") else {
+  fileprivate var videoAction: DivActionVideo.Action? {
+    guard let value = queryParamValue(forName: "action") else {
       return nil
     }
-    switch action {
-    case "start":
-      return .play
-    case "pause":
-      return .pause
-    default:
-      DivKitLogger.error("Unknown action '\(action)' for video.")
+    guard let action = DivActionVideo.Action(rawValue: value) else {
+      DivKitLogger.error("Unknown action '\(value)' for video.")
       return nil
     }
+    return action
   }
 
   fileprivate var overflow: OverflowMode {

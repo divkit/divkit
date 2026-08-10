@@ -48,7 +48,7 @@ final class DivTimerStorage {
     }
   }
 
-  func perform(_ cardId: DivCardID, _ timerId: String, _ action: DivTimerAction) {
+  func perform(_ cardId: DivCardID, _ timerId: String, _ action: DivActionTimer.Action) {
     switch action {
     case .start:
       start(cardId: cardId, timerId: timerId)

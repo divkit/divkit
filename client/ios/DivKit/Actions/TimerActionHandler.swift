@@ -19,29 +19,10 @@ final class TimerActionHandler {
       return
     }
 
-    handle(cardId: context.cardId, timerId: id, action: command.toDivTimerAction())
+    handle(cardId: context.cardId, timerId: id, action: command)
   }
 
-  func handle(cardId: DivCardID, timerId: String, action: DivTimerAction) {
+  func handle(cardId: DivCardID, timerId: String, action: DivActionTimer.Action) {
     performer(cardId, timerId, action)
-  }
-}
-
-extension DivActionTimer.Action {
-  func toDivTimerAction() -> DivTimerAction {
-    switch self {
-    case .start:
-      .start
-    case .stop:
-      .stop
-    case .pause:
-      .pause
-    case .resume:
-      .resume
-    case .cancel:
-      .cancel
-    case .reset:
-      .reset
-    }
   }
 }
