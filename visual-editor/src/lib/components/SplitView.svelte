@@ -1,5 +1,11 @@
+<script lang="ts" context="module">
+    export interface State {
+        width: number[];
+    }
+</script>
+
 <script lang="ts">
-    import type { Component } from 'svelte';
+    import { onMount, type Component, createEventDispatcher } from 'svelte';
 
     export let components: {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,7 +18,11 @@
 
     export let orientation: 'horizontal' | 'vertical' = 'horizontal';
 
+    export let storedState: State | undefined = undefined;
+
     const MIN_SIZE = 300;
+
+    const dispatch = createEventDispatcher();
 
     let parts: HTMLElement[] = [];
 
@@ -58,6 +68,12 @@
             window.removeEventListener('pointermove', pointermove);
             window.removeEventListener('pointerup', pointerup);
             window.removeEventListener('pointercancel', pointerup);
+
+            const width = parts.map(it => it[orientation === 'horizontal' ? 'offsetWidth' : 'offsetHeight']);
+
+            dispatch('stateChange', {
+                width,
+            });
         };
 
         window.addEventListener('pointermove', pointermove);
@@ -70,6 +86,17 @@
             part.style.flexBasis = '';
         });
     }
+
+    onMount(() => {
+        if (storedState && Array.isArray(storedState.width)) {
+            parts.forEach((part, index) => {
+                const value = storedState.width[index];
+                if (typeof value === 'number') {
+                    part.style.flexBasis = `${value}px`;
+                }
+            });
+        }
+    });
 </script>
 
 <div class="split-view" class:split-view_vertical={orientation === 'vertical'}>

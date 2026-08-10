@@ -141,6 +141,7 @@ export interface DivProEditorApi {
     getTranslationSuggest?: GetTranslationSuggest;
     getTranslationKey?: GetTranslationKey;
     fileDialog?: FileDialogApi;
+    onStoredStateChange?: (value: string) => void;
 }
 
 export interface Source {
@@ -209,6 +210,7 @@ export interface DivProEditorOptions {
     viewportList?: string[];
     imageConversion?: ImageConversion;
     minClickableSize?: number;
+    storedState?: string;
 }
 
 export interface EditorError {
@@ -318,6 +320,8 @@ export const DivProEditor = {
                 perThemeProps: opts.perThemeProps,
                 imageConversion: opts.imageConversion,
                 viewportList,
+                storedState: opts.storedState,
+                onStoredStateChange: opts.api?.onStoredStateChange,
                 uploadFile: opts.api?.uploadFile,
                 editorFabric: opts.api?.editorFabric,
                 getTranslationKey: opts.api?.getTranslationKey,

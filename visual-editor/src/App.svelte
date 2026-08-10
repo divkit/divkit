@@ -1,7 +1,7 @@
 <script lang="ts">
     import { setContext } from 'svelte';
     import { get } from 'svelte/store';
-    import SplitView from './lib/components/SplitView.svelte';
+    import SplitView, { type State as SplitViewState } from './lib/components/SplitView.svelte';
     import type { LanguageContext } from './lib/ctx/languageContext';
     import { LANGUAGE_CTX } from './lib/ctx/languageContext';
     import ContextMenu from './lib/components/ContextMenu.svelte';
@@ -72,6 +72,9 @@
         '768x1024'
     ];
 
+    export let storedState: string | undefined = undefined;
+    export let onStoredStateChange: ((storedState: string) => void) | undefined = undefined;
+
     export let uploadFile: (file: File) => Promise<string> = loadFileAsBase64;
 
     export let editorFabric: (opts: EditorOptions) => EditorInstance = editorFabricInternal;
@@ -110,6 +113,15 @@
         },
     };
 
+    let splitViewStoredState: SplitViewState | undefined;
+    if (storedState) {
+        try {
+            splitViewStoredState = JSON.parse(storedState).splitView;
+        } catch {
+            // to nothing
+        }
+    }
+
     let showErrors: ShowErrors = () => {};
 
     let contextMenu: ContextMenuApi = {
@@ -117,6 +129,7 @@
         hide() {},
     };
 
+    let splitView: SplitView;
     let inplaceEditor: InplaceEditorDialog;
     let actions2Dialog: Actions2Dialog;
     let background2Dialog: Background2Dialog;
@@ -374,6 +387,12 @@
             currentTooltipOwner = null;
         }
     }
+
+    function onSplitViewStateChange(event: CustomEvent<SplitViewState>): void {
+        onStoredStateChange?.(JSON.stringify({
+            splitView: event.detail
+        }));
+    }
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -386,7 +405,12 @@
     on:keydown={onGlobalKeydown}
 >
     <main class="main">
-        <SplitView {components} />
+        <SplitView
+            bind:this={splitView}
+            {components}
+            storedState={splitViewStoredState}
+            on:stateChange={onSplitViewStateChange}
+        />
     </main>
 
     <ContextMenu />

@@ -4,11 +4,20 @@ import { convertDictToPalette, convertPaletteToDict } from './lib/utils/convertP
 import langAuto from './auto/lang.json';
 import { addTemplatesSuffix, removeTemplatesSuffix } from './lib/utils/renameTemplates';
 
+const STORED_STATE_KEY = 'divpro-editor-state';
+
 const themeQuery = matchMedia('(prefers-color-scheme: dark)');
 
 themeQuery.addListener(() => {
     editor.setTheme(themeQuery.matches ? 'dark' : 'light');
 });
+
+let storedState;
+try {
+    storedState = localStorage.getItem(STORED_STATE_KEY) || undefined;
+} catch {
+    // do nothing
+}
 
 const AVAIL_LOCALES: Locale[] = ['ru', 'en'];
 const detectLocale = (): Locale => {
@@ -495,6 +504,7 @@ const editor = window.editor = DivProEditor.init({
         }
     }],
     // readOnly: true,
+    storedState,
     api: {
         getTranslationKey(key) {
             return new Promise(resolve => {
@@ -530,7 +540,14 @@ const editor = window.editor = DivProEditor.init({
                     }));
                 }, Math.random() * 500);
             });
-        }
+        },
+        onStoredStateChange(value) {
+            try {
+                localStorage.setItem(STORED_STATE_KEY, value);
+            } catch {
+                // do nothing
+            }
+        },
     }
 });
 
