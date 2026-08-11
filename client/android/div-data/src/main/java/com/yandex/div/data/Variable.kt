@@ -166,7 +166,7 @@ sealed class Variable {
         internal var value: JSONObject = defaultValue
             set(value) {
                 synchronized(this) {
-                    if (field == value) {
+                    if (field.isStructurallyEqualTo(value)) {
                         return
                     }
                     field = value
@@ -189,7 +189,7 @@ sealed class Variable {
         internal var value: JSONArray = defaultValue
             set(value) {
                 synchronized(this) {
-                    if (field == value) {
+                    if (field.isStructurallyEqualTo(value)) {
                         return
                     }
                     field = value
@@ -378,5 +378,46 @@ sealed class Variable {
         }
 
         return serializable.writeToJSON()
+    }
+}
+
+/**
+ * Android JSON containers use reference equality. Variable values are commonly reparsed between
+ * document updates, so equal JSON must be compared recursively to avoid false change callbacks.
+ */
+private fun JSONObject.isStructurallyEqualTo(other: JSONObject): Boolean {
+    if (this === other) return true
+    if (length() != other.length()) return false
+
+    val keys = keys()
+    while (keys.hasNext()) {
+        val key = keys.next()
+        if (!other.has(key) || !get(key).isJsonValueEqualTo(other.get(key))) {
+            return false
+        }
+    }
+    return true
+}
+
+private fun JSONArray.isStructurallyEqualTo(other: JSONArray): Boolean {
+    if (this === other) return true
+    if (length() != other.length()) return false
+
+    for (index in 0 until length()) {
+        if (!get(index).isJsonValueEqualTo(other.get(index))) {
+            return false
+        }
+    }
+    return true
+}
+
+private fun Any?.isJsonValueEqualTo(other: Any?): Boolean {
+    if (this === other) return true
+    if (this == null || other == null) return false
+
+    return when {
+        this is JSONObject && other is JSONObject -> isStructurallyEqualTo(other)
+        this is JSONArray && other is JSONArray -> isStructurallyEqualTo(other)
+        else -> this == other
     }
 }
