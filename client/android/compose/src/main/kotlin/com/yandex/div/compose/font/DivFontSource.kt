@@ -10,7 +10,7 @@ import androidx.annotation.FontRes
 sealed class DivFontSource {
 
     /** Font is stored as an Android font resource. Supports variation settings. */
-    data class Resource(@param:FontRes val resId: Int) : DivFontSource()
+    data class Resource(@FontRes val resId: Int) : DivFontSource()
 
     /** Font is stored as an app asset. Supports variation settings. */
     data class Asset(val path: String) : DivFontSource()

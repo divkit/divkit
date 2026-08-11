@@ -56,6 +56,7 @@ allprojects {
         compilerOptions {
             freeCompilerArgs.addAll(
                     "-Xjvm-default=all",
+                    "-Xannotation-default-target=param-property",
                     "-opt-in=com.yandex.div.data.DivModelInternalApi",
                     "-opt-in=com.yandex.div.core.annotations.InternalApi",
                     "-opt-in=com.yandex.div.core.annotations.ExperimentalApi",

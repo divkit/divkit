@@ -10,7 +10,7 @@ import javax.inject.Provider
 import kotlin.math.roundToInt
 
 internal class VerticalAlignmentSpan(
-    @param:Px private val fontSize: Int,
+    @Px private val fontSize: Int,
     private val alignment: TextVerticalAlignment,
     private val layoutProvider: Provider<Layout>
 ) : MetricAffectingSpan() {

@@ -11,12 +11,12 @@ import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.internal.KAssert
 
 internal class PaddingItemDecoration @JvmOverloads constructor(
-    @param:Px @field:Px private val paddingLeft: Int = 0,
-    @param:Px @field:Px private val midItemPadding: Int = 0,
-    @param:Px @field:Px private val crossItemPadding: Int = 0,
-    @param:Px @field:Px private val paddingRight: Int = 0,
-    @param:Px @field:Px private val paddingTop: Int = 0,
-    @param:Px @field:Px private val paddingBottom: Int = 0,
+    @Px private val paddingLeft: Int = 0,
+    @Px private val midItemPadding: Int = 0,
+    @Px private val crossItemPadding: Int = 0,
+    @Px private val paddingRight: Int = 0,
+    @Px private val paddingTop: Int = 0,
+    @Px private val paddingBottom: Int = 0,
     private val orientation: Int = RecyclerView.HORIZONTAL
 ) : RecyclerView.ItemDecoration() {
 

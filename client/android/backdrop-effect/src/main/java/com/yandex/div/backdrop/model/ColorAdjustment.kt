@@ -5,9 +5,9 @@ import org.json.JSONException
 import org.json.JSONObject
 
 internal class ColorAdjustment(
-    @param:FloatRange(from = 0.0) val brightness: Double = DEFAULT_BRIGHTNESS,
-    @param:FloatRange(from = 0.0) val contrast: Double = DEFAULT_CONTRAST,
-    @param:FloatRange(from = 0.0) val saturation: Double = DEFAULT_SATURATION,
+    @FloatRange(from = 0.0) val brightness: Double = DEFAULT_BRIGHTNESS,
+    @FloatRange(from = 0.0) val contrast: Double = DEFAULT_CONTRAST,
+    @FloatRange(from = 0.0) val saturation: Double = DEFAULT_SATURATION,
 ) {
 
     companion object {

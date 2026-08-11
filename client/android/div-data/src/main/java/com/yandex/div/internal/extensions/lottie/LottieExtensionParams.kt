@@ -26,9 +26,7 @@ sealed class LottieData {
     }
 
     data class RawRes(
-        @get:androidx.annotation.RawRes
-        @param:androidx.annotation.RawRes
-        val id: Int,
+        @androidx.annotation.RawRes val id: Int,
         val url: String
     ) : LottieData() {
         override val description = url

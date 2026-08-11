@@ -30,11 +30,11 @@ internal sealed interface RimHighlight {
 }
 
 internal class SpecularRimHighlight(
-    @param:FloatRange(from = 0.0) override val width: Double = RimHighlight.DEFAULT_WIDTH,
-    @param:FloatRange(from = 0.0, to = 1.0) override val alpha: Double = RimHighlight.DEFAULT_ALPHA,
-    @param:ColorInt val color: Int = DEFAULT_COLOR,
+    @FloatRange(from = 0.0) override val width: Double = RimHighlight.DEFAULT_WIDTH,
+    @FloatRange(from = 0.0, to = 1.0) override val alpha: Double = RimHighlight.DEFAULT_ALPHA,
+    @ColorInt val color: Int = DEFAULT_COLOR,
     val angle: Double = DEFAULT_ANGLE,
-    @param:FloatRange(from = 0.0) val falloff: Double = DEFAULT_FALLOFF,
+    @FloatRange(from = 0.0) val falloff: Double = DEFAULT_FALLOFF,
 ) : RimHighlight {
 
     companion object {
@@ -60,9 +60,9 @@ internal class SpecularRimHighlight(
 }
 
 internal class AmbientRimHighlight(
-    @param:FloatRange(from = 0.0) override val width: Double = RimHighlight.DEFAULT_WIDTH,
-    @param:FloatRange(from = 0.0, to = 1.0) override val alpha: Double = RimHighlight.DEFAULT_ALPHA,
-    @param:FloatRange(from = 0.0, to = 1.0) val intensity: Double = DEFAULT_INTENSITY,
+    @FloatRange(from = 0.0) override val width: Double = RimHighlight.DEFAULT_WIDTH,
+    @FloatRange(from = 0.0, to = 1.0) override val alpha: Double = RimHighlight.DEFAULT_ALPHA,
+    @FloatRange(from = 0.0, to = 1.0) val intensity: Double = DEFAULT_INTENSITY,
     val angle: Double = DEFAULT_ANGLE,
 ) : RimHighlight {
 

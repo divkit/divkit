@@ -14,9 +14,9 @@ import kotlin.math.roundToInt
 
 internal class ImageSpan(
     image: Drawable?,
-    @param:Px private val width: Int,
-    @param:Px private val height: Int,
-    @param:Px private val lineHeight: Int = 0,
+    @Px private val width: Int,
+    @Px private val height: Int,
+    @Px private val lineHeight: Int = 0,
     private val alignment: TextVerticalAlignment,
     internal val accessibility: Accessibility?
 ) : PositionAwareReplacementSpan() {

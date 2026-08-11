@@ -5,8 +5,8 @@ import org.json.JSONException
 import org.json.JSONObject
 
 internal class Refraction(
-    @param:FloatRange(from = 0.0) val strength: Double = DEFAULT_STRENGTH,
-    @param:FloatRange(from = 0.0) val height: Double = DEFAULT_HEIGHT,
+    @FloatRange(from = 0.0) val strength: Double = DEFAULT_STRENGTH,
+    @FloatRange(from = 0.0) val height: Double = DEFAULT_HEIGHT,
     val chromaticAberration: Boolean = DEFAULT_CHROMATIC_ABERRATION,
 ) {
 

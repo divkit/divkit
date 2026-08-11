@@ -5,7 +5,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 internal class Blur(
-    @param:FloatRange(from = 0.0) val radius: Double = DEFAULT_RADIUS,
+    @FloatRange(from = 0.0) val radius: Double = DEFAULT_RADIUS,
 ) {
 
     companion object {
