@@ -19,7 +19,6 @@ import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.compose.video.DivVideoPreloader
 import com.yandex.div.core.DivAnimationsEnabledProvider
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
@@ -32,7 +31,7 @@ import javax.inject.Named
  *
  * Example usage:
  *
- *    val configuration = DivComposeConfiguration(
+ *    val configuration = DivConfiguration(
  *        reporter = MyReporter()
  *    )
  *    val divContext = DivContext(baseContext = activity, configuration = configuration)
@@ -41,8 +40,7 @@ import javax.inject.Named
  *    }
  */
 @Module
-@ExperimentalApi
-class DivComposeConfiguration(
+class DivConfiguration(
     @get:Provides
     val actionHandler: DivExternalActionHandler = defaultActionHandler,
 

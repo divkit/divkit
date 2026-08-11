@@ -45,7 +45,7 @@ class DivViewRecompositionCountTest {
 
     private val compositionCounterExtensionHandler = CompositionCounterExtensionHandler()
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         extensionHandlers = mapOf("composition_counter" to compositionCounterExtensionHandler),
         reporter = TestReporter(),
         variableController = variableController

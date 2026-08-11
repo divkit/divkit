@@ -1,11 +1,8 @@
 package com.yandex.div.compose.lottie
 
-import com.yandex.div.core.annotations.ExperimentalApi
-
 /**
  * Network cache for Lottie compositions
  */
-@ExperimentalApi
 interface LottieNetworkCache {
 
     /**

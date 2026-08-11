@@ -2,7 +2,7 @@ package com.yandex.div.compose.dagger
 
 import android.content.Context
 import coil3.ImageLoader
-import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.context.DivViewContextFactory
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.custom.DivCustomViewFactory
@@ -26,7 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 @DivContextScope
 @Component(
     modules = [
-        DivComposeConfiguration::class,
+        DivConfiguration::class,
         DivContextModule::class
     ]
 )
@@ -58,7 +58,7 @@ internal interface DivContextComponent {
     interface Builder {
         fun build(
             @BindsInstance baseContext: Context,
-            @BindsInstance configuration: DivComposeConfiguration,
+            @BindsInstance configuration: DivConfiguration,
             @BindsInstance debugConfiguration: DivDebugConfiguration
         ): DivContextComponent
     }

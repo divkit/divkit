@@ -2,7 +2,6 @@ package com.yandex.div.compose.video
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.core.annotations.ExperimentalApi
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
  * Implementations are free to render either via [androidx.compose.ui.viewinterop.AndroidView]
  * interop (for existing `View`-based players such as media3) or natively in Compose.
  */
-@ExperimentalApi
 interface DivVideoPlayer {
 
     /**

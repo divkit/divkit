@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.net.toUri
-import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.PreloadMode
 import com.yandex.div.compose.TestReporter
@@ -74,7 +74,7 @@ class DivPreloaderTest {
 
     private val divContext = DivContext(
         baseContext = RuntimeEnvironment.getApplication(),
-        configuration = DivComposeConfiguration(
+        configuration = DivConfiguration(
             extensionHandlers = mapOf(
                 "lottie" to extensionHandler,
                 "other" to extensionHandler,

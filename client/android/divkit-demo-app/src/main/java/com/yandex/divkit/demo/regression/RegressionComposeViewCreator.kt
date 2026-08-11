@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.View
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
-import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
@@ -35,7 +35,7 @@ class RegressionComposeViewCreator(context: Context) {
         val divData = mutableStateOf(parseDivData(templatesJson, cardJson))
         val divContext = DivContext(
             baseContext = activity,
-            configuration = DivComposeConfiguration(
+            configuration = DivConfiguration(
                 actionHandler = RegressionComposeActionHandler(assetReader, divData),
                 customViewFactories = mapOf(
                     "old_custom_card_1" to CustomTextViewFactory(text = "Hi! I'm old card!"),

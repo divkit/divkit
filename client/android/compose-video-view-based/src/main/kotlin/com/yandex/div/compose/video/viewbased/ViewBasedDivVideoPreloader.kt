@@ -2,7 +2,6 @@ package com.yandex.div.compose.video.viewbased
 
 import android.net.Uri
 import com.yandex.div.compose.video.DivVideoPreloader
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.player.DivPlayerPreloader
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -13,14 +12,13 @@ import kotlin.coroutines.resume
  * Usage:
  * ```
  * val factory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(context))
- * val configuration = DivComposeConfiguration(
+ * val configuration = DivConfiguration(
  *     playerFactory = factory,
  *     videoPreloader = factory.makePreloader(),
  *     ...
  * )
  * ```
  */
-@ExperimentalApi
 class ViewBasedDivVideoPreloader(
     private val delegate: DivPlayerPreloader,
 ) : DivVideoPreloader {

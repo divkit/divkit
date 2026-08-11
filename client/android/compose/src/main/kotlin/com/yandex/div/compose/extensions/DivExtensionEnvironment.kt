@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivExtension
@@ -16,7 +15,6 @@ import com.yandex.div2.DivExtension
  * @see DivExtensionHandler
  */
 @ConsistentCopyVisibility
-@ExperimentalApi
 @Stable
 @SuppressLint("ComposableNaming")
 data class DivExtensionEnvironment internal constructor(

@@ -3,7 +3,6 @@ package com.yandex.div.compose.custom
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivCustom
 
@@ -16,7 +15,6 @@ import com.yandex.div2.DivCustom
  * declared on the `div-custom`.
  */
 @ConsistentCopyVisibility
-@ExperimentalApi
 @Stable
 data class DivCustomEnvironment internal constructor(
     val data: DivCustom,

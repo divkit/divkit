@@ -246,7 +246,7 @@ class DivViewHostTest {
         val activity = Robolectric.buildActivity(ComponentActivity::class.java).setup().get()
         val divContext = DivContext(
             baseContext = activity,
-            configuration = DivComposeConfiguration(
+            configuration = DivConfiguration(
                 reporter = TestReporter(),
                 imageLoaderConfiguration = imageLoaderConfiguration,
             ),
@@ -260,7 +260,7 @@ class DivViewHostTest {
     private fun createDivContext(): DivContext {
         return DivContext(
             baseContext = ApplicationProvider.getApplicationContext(),
-            configuration = DivComposeConfiguration(reporter = TestReporter()),
+            configuration = DivConfiguration(reporter = TestReporter()),
             debugConfiguration = DivDebugConfiguration(),
         )
     }

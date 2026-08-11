@@ -16,13 +16,11 @@ import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div2.Div
 
 /**
  * A [DivExtensionHandler] that adds pinch-to-zoom gesture support to `image` elements.
  */
-@ExperimentalApi
 class PinchToZoomExtensionHandler(
     private val configuration: PinchToZoomConfiguration = PinchToZoomConfiguration()
 ) : DivExtensionHandler {

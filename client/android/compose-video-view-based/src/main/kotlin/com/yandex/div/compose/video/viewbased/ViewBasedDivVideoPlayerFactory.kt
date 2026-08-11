@@ -2,7 +2,6 @@ package com.yandex.div.compose.video.viewbased
 
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerFactory
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.player.DivPlayerFactory
 
 /**
@@ -16,13 +15,12 @@ import com.yandex.div.core.player.DivPlayerFactory
  *
  * Usage:
  * ```
- * val configuration = DivComposeConfiguration(
+ * val configuration = DivConfiguration(
  *     playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(context)),
  *     ...
  * )
  * ```
  */
-@ExperimentalApi
 class ViewBasedDivVideoPlayerFactory(
     private val delegateFactory: DivPlayerFactory,
 ) : DivVideoPlayerFactory {

@@ -59,7 +59,7 @@ class DivViewWithTooltipsTest {
             ComposeView(
                 context = DivContext(
                     baseContext = activity,
-                    configuration = DivComposeConfiguration(
+                    configuration = DivConfiguration(
                         reporter = TestReporter()
                     )
                 )

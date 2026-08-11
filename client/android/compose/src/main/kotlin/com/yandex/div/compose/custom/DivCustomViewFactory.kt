@@ -3,19 +3,17 @@ package com.yandex.div.compose.custom
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.core.annotations.ExperimentalApi
 
 /**
  * Factory for composing `div-custom` elements.
  *
- * Implement this interface and pass it to [com.yandex.div.compose.DivComposeConfiguration]
+ * Implement this interface and pass it to [com.yandex.div.compose.DivConfiguration]
  * to provide custom component rendering.
  *
  * For wrapping classic Android [View], extend [DivCustomAndroidViewFactory] instead.
  *
- * @see com.yandex.div.compose.DivComposeConfiguration
+ * @see com.yandex.div.compose.DivConfiguration
  */
-@ExperimentalApi
 interface DivCustomViewFactory {
 
     /**

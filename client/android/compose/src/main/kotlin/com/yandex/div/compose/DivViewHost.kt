@@ -7,7 +7,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.host.LocalDivViewHost
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div2.DivData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -40,7 +39,6 @@ import kotlinx.coroutines.launch
  * }
  * ```
  */
-@ExperimentalApi
 class DivViewHost(
     internal val divContext: DivContext,
     attrs: AttributeSet? = null,

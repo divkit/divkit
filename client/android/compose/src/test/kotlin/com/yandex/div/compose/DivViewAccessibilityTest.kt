@@ -29,7 +29,7 @@ class DivViewAccessibilityTest {
     @get:Rule
     val rule = createComposeRule()
 
-    private val configuration = DivComposeConfiguration(reporter = TestReporter())
+    private val configuration = DivConfiguration(reporter = TestReporter())
     private val tag = "tag"
 
     @Test

@@ -15,7 +15,7 @@ import coil3.decode.Decoder
 import coil3.decode.ImageSource
 import coil3.fetch.SourceFetchResult
 import coil3.request.Options
-import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
@@ -50,7 +50,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
 
         divContext = DivContext(
             baseContext = this,
-            configuration = DivComposeConfiguration(
+            configuration = DivConfiguration(
                 fontSourceProvider = ComposeFontSourceProvider(),
                 imageLoaderConfiguration = TestImageLoaderConfiguration(
                     eventListener = imageLoadingTracker

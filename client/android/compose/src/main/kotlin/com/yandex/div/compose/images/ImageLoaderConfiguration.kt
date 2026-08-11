@@ -2,14 +2,12 @@ package com.yandex.div.compose.images
 
 import coil3.ComponentRegistry
 import coil3.EventListener
-import com.yandex.div.core.annotations.ExperimentalApi
 
 /**
  * Customizes DivKit's Coil [coil3.ImageLoader].
  *
- * @see com.yandex.div.compose.DivComposeConfiguration
+ * @see com.yandex.div.compose.DivConfiguration
  */
-@ExperimentalApi
 interface ImageLoaderConfiguration {
 
     /**

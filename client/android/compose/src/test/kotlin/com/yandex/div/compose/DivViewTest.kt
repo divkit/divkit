@@ -31,7 +31,7 @@ class DivViewTest {
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         reporter = reporter,
         variableController = variableController
     )

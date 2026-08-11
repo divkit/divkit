@@ -1,7 +1,6 @@
 package com.yandex.div.compose.video
 
 import android.net.Uri
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div2.DivVideoScale
 import org.json.JSONObject
 
@@ -11,7 +10,6 @@ import org.json.JSONObject
  * Fed into the player on every composition; the player observes changes between
  * subsequent values and reacts (e.g. starts a new source, mutes, changes speed).
  */
-@ExperimentalApi
 data class DivVideoPlayerConfig(
     val sources: List<DivVideoSource> = emptyList(),
     val autoplay: Boolean = false,
@@ -25,7 +23,6 @@ data class DivVideoPlayerConfig(
 /**
  * Single source variant passed to a [DivVideoPlayer].
  */
-@ExperimentalApi
 data class DivVideoSource(
     val url: Uri,
     val mimeType: String = "",
@@ -36,7 +33,6 @@ data class DivVideoSource(
 /**
  * Optional resolution metadata for a [DivVideoSource].
  */
-@ExperimentalApi
 data class DivVideoResolution(
     val width: Int,
     val height: Int,

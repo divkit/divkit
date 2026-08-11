@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.yandex.div.core.annotations.ExperimentalApi
 
 /**
  * Abstract [DivCustomViewFactory] that wraps a classic Android [View]
@@ -14,7 +13,6 @@ import com.yandex.div.core.annotations.ExperimentalApi
  * Subclasses provide [createView] / [bindView] callbacks and optionally override [release]
  * to clean up resources when the view leaves the composition.
  */
-@ExperimentalApi
 abstract class DivCustomAndroidViewFactory : DivCustomViewFactory {
 
     abstract fun createView(environment: DivCustomEnvironment): View

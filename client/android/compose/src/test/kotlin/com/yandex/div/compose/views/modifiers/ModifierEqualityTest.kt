@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
@@ -52,7 +52,7 @@ class ModifierEqualityTest {
     @get:Rule
     val composeRule = createComposeRule()
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         imageLoaderConfiguration = TestImageLoaderConfiguration(),
         reporter = TestReporter()
     )

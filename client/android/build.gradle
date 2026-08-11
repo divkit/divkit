@@ -95,9 +95,6 @@ subprojects {
 apiValidation {
     ignoredProjects += [
         "api-generator-test",
-        "compose",
-        "compose-lottie",
-        "compose-video-view-based",
         "divkit-benchmark-app",
         "divkit-demo-app",
         "divkit-perftests",

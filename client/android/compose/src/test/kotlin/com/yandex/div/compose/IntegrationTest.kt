@@ -35,7 +35,7 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         val variableController = DivVariableController()
         val divContext = DivContext(
             baseContext = getApplicationContext(),
-            configuration = DivComposeConfiguration(
+            configuration = DivConfiguration(
                 reporter = Reporter(testCase.logger),
                 variableController = variableController
             )

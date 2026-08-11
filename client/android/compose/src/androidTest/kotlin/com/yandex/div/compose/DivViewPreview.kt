@@ -22,7 +22,7 @@ import com.yandex.div2.DivEdgeInsets
 fun DivViewPreview() {
     val divContext = DivContext(
         baseContext = LocalContext.current,
-        configuration = DivComposeConfiguration()
+        configuration = DivConfiguration()
     )
     CompositionLocalProvider(LocalContext provides divContext) {
         DivView(data = testData)

@@ -25,7 +25,6 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.utils.toPx
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.internal.extensions.ShimmerExtensionParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivCornersRadius
@@ -40,7 +39,6 @@ import kotlin.math.tan
  * A [DivExtensionHandler] that draws an animated placeholder for an `image` or `gif` elements
  * until its content is loaded.
  */
-@ExperimentalApi
 class ShimmerExtensionHandler : DivExtensionHandler {
     // used to synchronize animations across multiple elements
     private var animationStartTime: Long = 0L

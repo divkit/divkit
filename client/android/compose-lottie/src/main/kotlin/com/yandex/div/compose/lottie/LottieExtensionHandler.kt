@@ -12,7 +12,6 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.images.asImageBase
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.internal.extensions.lottie.LottieData
 import com.yandex.div.internal.extensions.lottie.LottieExtensionParams
 import com.yandex.div.internal.extensions.lottie.LottieExtensionParamsParser
@@ -23,7 +22,6 @@ import org.json.JSONObject
  * [DivExtensionHandler] that allows to use Lottie animations inside
  * [com.yandex.div.compose.DivView]s.
  */
-@ExperimentalApi
 class LottieExtensionHandler(
     private val assetMapper: (String) -> String? = { null },
     private val rawResMapper: (String) -> Int? = { null },

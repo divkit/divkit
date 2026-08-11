@@ -47,7 +47,7 @@ class DivViewWithVisibilityActionsTest {
         declare(counter, visibility, viewHeight)
     }
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         reporter = TestReporter(),
         variableController = variableController
     )

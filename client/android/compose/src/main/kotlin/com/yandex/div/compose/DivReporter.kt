@@ -1,6 +1,5 @@
 package com.yandex.div.compose
 
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.internal.Log
 
 /**
@@ -8,9 +7,8 @@ import com.yandex.div.internal.Log
  *
  * Override the methods to provide custom logging.
  *
- * @see DivComposeConfiguration
+ * @see DivConfiguration
  */
-@ExperimentalApi
 open class DivReporter {
 
     open fun reportError(message: String) {

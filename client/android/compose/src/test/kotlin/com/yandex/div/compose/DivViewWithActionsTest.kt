@@ -33,7 +33,7 @@ class DivViewWithActionsTest {
     private val actionHandler = TestExternalActionHandler()
     private val reporter = TestReporter()
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         actionHandler = actionHandler,
         reporter = reporter
     )

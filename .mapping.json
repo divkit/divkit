@@ -633,7 +633,7 @@
   "client/android/compose/build.gradle.kts":"divkit/public/client/android/compose/build.gradle.kts",
   "client/android/compose/src/androidTest/kotlin/com/yandex/div/compose/DivViewPreview.kt":"divkit/public/client/android/compose/src/androidTest/kotlin/com/yandex/div/compose/DivViewPreview.kt",
   "client/android/compose/src/main/AndroidManifest.xml":"divkit/public/client/android/compose/src/main/AndroidManifest.xml",
-  "client/android/compose/src/main/kotlin/com/yandex/div/compose/DivComposeConfiguration.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/DivComposeConfiguration.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/DivConfiguration.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/DivConfiguration.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/DivContext.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/DivContext.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/DivException.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/DivException.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/DivReporter.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/DivReporter.kt",

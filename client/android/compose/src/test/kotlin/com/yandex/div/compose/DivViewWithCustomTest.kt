@@ -26,7 +26,7 @@ class DivViewWithCustomTest {
 
     private val reporter = TestReporter()
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         customViewFactories = mapOf("custom_text" to CustomTextViewFactory()),
         reporter = reporter
     )

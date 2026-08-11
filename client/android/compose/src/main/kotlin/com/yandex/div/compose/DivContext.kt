@@ -8,7 +8,6 @@ import com.yandex.div.compose.dagger.DivContextComponent
 import com.yandex.div.compose.dagger.`Yatagan$DivContextComponent`
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div2.DivData
 
@@ -17,31 +16,30 @@ import com.yandex.div2.DivData
  *
  * Example usage:
  *
- *    val configuration = DivComposeConfiguration()
+ *    val configuration = DivConfiguration()
  *    val divContext = DivContext(activity, configuration)
  */
-@ExperimentalApi
 class DivContext private constructor(
     internal val component: DivContextComponent
 ) : ContextWrapper(component.baseContext) {
 
     /**
-     * Creates a [DivContext] with provided [DivComposeConfiguration].
+     * Creates a [DivContext] with provided [DivConfiguration].
      */
     constructor(
         baseContext: Context,
-        configuration: DivComposeConfiguration
+        configuration: DivConfiguration
     ) : this(createComponent(baseContext, configuration, DivDebugConfiguration()))
 
     /**
-     * Creates a [DivContext] with provided [DivComposeConfiguration] and [DivDebugConfiguration].
+     * Creates a [DivContext] with provided [DivConfiguration] and [DivDebugConfiguration].
      *
      * Do not use this constructor in production environment.
      */
     @InternalApi
     constructor(
         baseContext: Context,
-        configuration: DivComposeConfiguration,
+        configuration: DivConfiguration,
         debugConfiguration: DivDebugConfiguration
     ) : this(createComponent(baseContext, configuration, debugConfiguration))
 
@@ -76,7 +74,7 @@ class DivContext private constructor(
 
 private fun createComponent(
     baseContext: Context,
-    configuration: DivComposeConfiguration,
+    configuration: DivConfiguration,
     debugConfiguration: DivDebugConfiguration
 ): DivContextComponent {
     return `Yatagan$DivContextComponent`.builder().build(

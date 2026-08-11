@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.lifecycleScope
-import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
@@ -111,7 +111,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
     private fun createDivContext(): DivContext {
         return DivContext(
             baseContext = this,
-            configuration = DivComposeConfiguration(
+            configuration = DivConfiguration(
                 histogramConfiguration = object : DivHistogramConfiguration {
                     override val isEnabled = true
                     override val componentName = ""

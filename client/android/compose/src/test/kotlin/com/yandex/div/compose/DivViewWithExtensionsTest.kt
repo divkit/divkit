@@ -33,7 +33,7 @@ class DivViewWithExtensionsTest {
 
     private val reporter = TestReporter()
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         extensionHandlers = mapOf("wrapper" to WrapperExtensionHandler()),
         reporter = reporter
     )

@@ -1,15 +1,12 @@
 package com.yandex.div.compose.actions
 
-import com.yandex.div.core.annotations.ExperimentalApi
-
 /**
  * Handler for actions that DivKit does not handle internally.
  *
  * Implement this interface to handle application-specific actions.
  *
- * @see com.yandex.div.compose.DivComposeConfiguration
+ * @see com.yandex.div.compose.DivConfiguration
  */
-@ExperimentalApi
 interface DivExternalActionHandler {
 
     /**

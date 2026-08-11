@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.net.toUri
 import com.yandex.div.DivDataTag
-import com.yandex.div.compose.DivComposeConfiguration
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
 import com.yandex.div.compose.lottie.LottieExtensionHandler
@@ -34,7 +34,7 @@ class ComposeRendererFacade(
 
     private val divContext = ComposeDivContext(
         baseContext = container.context,
-        configuration = DivComposeConfiguration(
+        configuration = DivConfiguration(
             fontSourceProvider = ComposeFontSourceProvider(),
             playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context)),
             variableController = variableController,

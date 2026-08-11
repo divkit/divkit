@@ -12,7 +12,6 @@ import com.yandex.div.compose.tooltips.TooltipsHost
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.DivBlockView
-import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div2.DivData
 
 /**
@@ -22,7 +21,7 @@ import com.yandex.div2.DivData
  * The simplest way to achieve this is to use [DivContext] as the context for
  * [androidx.compose.ui.platform.ComposeView]:
  *
- *    val configuration = DivComposeConfiguration()
+ *    val configuration = DivConfiguration()
  *    val divContext = configuration.createContext(baseContext = activity)
  *    ComposeView(divContext).setContent {
  *        DivView(data = data)
@@ -31,7 +30,6 @@ import com.yandex.div2.DivData
  * @param data the [DivData] describing the layout to render.
  * @param modifier the [Modifier] to be applied to the root layout.
  */
-@ExperimentalApi
 @Composable
 fun DivView(
     data: DivData,

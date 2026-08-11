@@ -40,7 +40,7 @@ class DivViewWithTimersTest {
         declare(elapsedTime)
     }
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         reporter = TestReporter(),
         variableController = variableController
     )

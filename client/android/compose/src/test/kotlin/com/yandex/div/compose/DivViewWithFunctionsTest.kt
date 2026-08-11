@@ -26,7 +26,7 @@ class DivViewWithFunctionsTest {
 
     private val variableController = DivVariableController()
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         reporter = TestReporter(),
         variableController = variableController
     )

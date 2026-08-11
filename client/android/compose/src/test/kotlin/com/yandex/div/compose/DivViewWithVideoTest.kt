@@ -47,7 +47,7 @@ class DivViewWithVideoTest {
     private val playerFactory = FakeDivVideoPlayerFactory()
     private val externalActionHandler = RecordingExternalActionHandler()
 
-    private val configuration = DivComposeConfiguration(
+    private val configuration = DivConfiguration(
         actionHandler = externalActionHandler,
         playerFactory = playerFactory,
         reporter = reporter,
