@@ -2,10 +2,13 @@ package com.yandex.div.core.view2.logging.patch
 
 import androidx.annotation.StringDef
 
-@StringDef(value = [
-    PatchResult.SUCCESS,
-    PatchResult.FAIL_NO_STATE,
-])
+@StringDef(
+    value = [
+        PatchResult.SUCCESS,
+        PatchResult.FAIL_NO_STATE,
+    ]
+)
+@Retention(AnnotationRetention.SOURCE)
 annotation class PatchResult {
     companion object {
         const val SUCCESS = "Div patched successfully"

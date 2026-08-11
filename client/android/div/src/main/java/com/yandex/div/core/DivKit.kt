@@ -67,6 +67,7 @@ class DivKit @VisibleForTesting internal constructor(
             RESET_STORED_DIV_DATA,
         ]
     )
+    @Retention(AnnotationRetention.SOURCE)
     annotation class ResetFlag
 
     companion object {

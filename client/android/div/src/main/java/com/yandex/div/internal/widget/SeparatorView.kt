@@ -8,10 +8,8 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
-import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.annotation.IntDef
-import androidx.core.content.ContextCompat
 import com.yandex.div.internal.Assert
 
 internal open class SeparatorView @JvmOverloads constructor(
@@ -65,11 +63,8 @@ internal open class SeparatorView @JvmOverloads constructor(
         get() = Color.alpha(dividerPaint.color) > 0
 
     @IntDef(Gravity.START, Gravity.CENTER, Gravity.END)
+    @Retention(AnnotationRetention.SOURCE)
     annotation class DividerGravity
-
-    fun setDividerColorResource(@ColorRes resId: Int) {
-        dividerColor = ContextCompat.getColor(context, resId)
-    }
 
     fun setDividerHeightResource(@DimenRes resId: Int) {
         dividerThickness = resources.getDimensionPixelSize(resId)
