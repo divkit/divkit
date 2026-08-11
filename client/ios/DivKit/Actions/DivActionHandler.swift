@@ -4,9 +4,6 @@ import Serialization
 import VGSL
 
 public final class DivActionHandler {
-  public typealias ShowTooltipAction = (TooltipInfo) -> Void
-  public typealias TrackVisibility = (_ logId: String, _ cardId: DivCardID) -> Void
-
   typealias PerformTimerAction = (
     _ cardId: DivCardID,
     _ timerId: String,
@@ -17,8 +14,6 @@ public final class DivActionHandler {
 
   private let customActionHandler: DivCustomActionHandling?
   private let urlHandler: DivUrlHandler
-  private let trackVisibility: TrackVisibility
-  private let trackDisappear: TrackVisibility
   private let variablesStorage: DivVariablesStorage
   private let functionsStorage: DivFunctionsStorage?
   private let persistentValuesStorage: DivPersistentValuesStorage
@@ -58,10 +53,7 @@ public final class DivActionHandler {
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
     functionsStorage: DivFunctionsStorage? = nil,
     updateCard: @escaping (DivCardUpdateReason) -> Void,
-    showTooltip: ShowTooltipAction? = nil,
     tooltipActionPerformer: TooltipActionPerformer? = nil,
-    trackVisibility: @escaping TrackVisibility = { _, _ in },
-    trackDisappear: @escaping TrackVisibility = { _, _ in },
     urlHandler: DivUrlHandler,
     persistentValuesStorage: DivPersistentValuesStorage = DivPersistentValuesStorage(),
     reporter: DivReporter? = nil
@@ -74,10 +66,7 @@ public final class DivActionHandler {
       variablesStorage: variablesStorage,
       functionsStorage: functionsStorage,
       updateCard: updateCard,
-      showTooltip: showTooltip,
       tooltipActionPerformer: tooltipActionPerformer,
-      trackVisibility: trackVisibility,
-      trackDisappear: trackDisappear,
       performTimerAction: { _, _, _ in },
       customActionHandler: nil,
       urlHandler: urlHandler,
@@ -98,10 +87,7 @@ public final class DivActionHandler {
     variablesStorage: DivVariablesStorage,
     functionsStorage: DivFunctionsStorage?,
     updateCard: @escaping UpdateCardAction,
-    showTooltip: ShowTooltipAction?,
     tooltipActionPerformer: TooltipActionPerformer?,
-    trackVisibility: @escaping TrackVisibility,
-    trackDisappear: @escaping TrackVisibility,
     performTimerAction: @escaping PerformTimerAction,
     customActionHandler: DivCustomActionHandling?,
     urlHandler: DivUrlHandler,
@@ -114,8 +100,6 @@ public final class DivActionHandler {
   ) {
     self.customActionHandler = customActionHandler
     self.urlHandler = urlHandler
-    self.trackVisibility = trackVisibility
-    self.trackDisappear = trackDisappear
     self.variablesStorage = variablesStorage
     self.functionsStorage = functionsStorage
     self.persistentValuesStorage = persistentValuesStorage
@@ -160,7 +144,6 @@ public final class DivActionHandler {
     timerActionHandler = TimerActionHandler(performer: performTimerAction)
     tooltipActionHandler = TooltipActionHandler(
       performer: tooltipActionPerformer,
-      showTooltip: showTooltip,
       reporter: reporter
     )
   }
@@ -319,12 +302,6 @@ public final class DivActionHandler {
     }
 
     reporter.reportAction(context: context)
-
-    if source == .visibility {
-      trackVisibility(info.logId, cardId)
-    } else if source == .disappear {
-      trackDisappear(info.logId, cardId)
-    }
   }
 
   /// Parks an action whose target element is not modeled yet and schedules a

@@ -2,16 +2,13 @@ import LayoutKit
 
 final class TooltipActionHandler {
   private let performer: TooltipActionPerformer?
-  private let showTooltipAction: DivActionHandler.ShowTooltipAction?
   private let reporter: DivReporter
 
   init(
     performer: TooltipActionPerformer?,
-    showTooltip: DivActionHandler.ShowTooltipAction?,
     reporter: DivReporter
   ) {
     self.performer = performer
-    self.showTooltipAction = showTooltip
     self.reporter = reporter
   }
 
@@ -45,17 +42,11 @@ final class TooltipActionHandler {
   }
 
   func showTooltip(_ info: TooltipInfo) {
-    if let showTooltipAction {
-      showTooltipAction(info)
-    } else {
-      performer?.showTooltip(info: info)
-    }
+    performer?.showTooltip(info: info)
   }
 
   func hideTooltip(_ identity: TooltipIdentity) {
-    if showTooltipAction == nil {
-      performer?.hideTooltip(identity: identity)
-    }
+    performer?.hideTooltip(identity: identity)
   }
 
   private func makeTooltipInfo(

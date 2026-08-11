@@ -79,17 +79,12 @@ public final class DivKitComponents {
   /// data retrieval.
   ///   - reporter: An optional `DivReporter` object that allows you to learn about actions and
   /// errors that occur in the layout.
-  ///   - showTooltip: Deprecated. This parameter is deprecated, use ``tooltipManager`` instead.
   ///   - stateManagement: An optional ``DivStateManagement`` object responsible for managing card
   /// states.
   ///   - submitter: An optional ``DivSubmitter`` object responsible for submitting data from
   /// container.
   ///   - tooltipManager: An optional `TooltipManager` object that manages the processing and
   /// display of tooltips.
-  ///   - trackVisibility: A closure that tracks the visibility of elements. Deprecated. Use
-  /// ``reporter`` instead.
-  ///   - trackDisappear: A closure that tracks the disappearance of elements. Deprecated. Use
-  /// ``reporter`` instead.
   ///   - playerFactory: An optional `PlayerFactory` object responsible for creating custom video
   /// players.
   ///   - urlHandler: An optional ``DivUrlHandler`` object that allows you to implement custom
@@ -110,12 +105,9 @@ public final class DivKitComponents {
     requestPerformer: URLRequestPerforming? = nil,
     reporter: DivReporter? = nil,
     resourcesPreloader: DivDataResourcesPreloader? = nil,
-    showTooltip: DivActionHandler.ShowTooltipAction? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     submitter: DivSubmitter? = nil,
     tooltipManager: TooltipManager? = nil,
-    trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
-    trackDisappear: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     playerFactory: PlayerFactory? = nil,
     urlHandler: DivUrlHandler = DivUrlHandlerDelegate { _ in },
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
@@ -166,10 +158,7 @@ public final class DivKitComponents {
       variablesStorage: variablesStorage,
       functionsStorage: functionsStorage,
       updateCard: updateCard,
-      showTooltip: showTooltip,
       tooltipActionPerformer: self.tooltipManager,
-      trackVisibility: trackVisibility,
-      trackDisappear: trackDisappear,
       performTimerAction: { weakTimerStorage?.perform($0, $1, $2) },
       customActionHandler: customActionHandler,
       urlHandler: urlHandler,

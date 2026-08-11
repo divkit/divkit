@@ -114,10 +114,11 @@ struct TooltipActionHandlerTests {
     idToPath.add(duplicateScopePathB, forId: cardId.path + "duplicate")
 
     let reporter = MockReporter()
+    let tooltipActionPerformer = MockTooltipActionPerformer(onShowTooltip: onShowTooltip)
     let handler = DivActionHandler(
       idToPath: idToPath,
       reporter: reporter,
-      showTooltip: onShowTooltip
+      tooltipActionPerformer: tooltipActionPerformer
     )
 
     return ScopedTooltipLayout(
@@ -127,6 +128,20 @@ struct TooltipActionHandlerTests {
       secondScopePath: secondScopePath
     )
   }
+}
+
+private final class MockTooltipActionPerformer: TooltipActionPerformer {
+  private let onShowTooltip: (TooltipInfo) -> Void
+
+  init(onShowTooltip: @escaping (TooltipInfo) -> Void) {
+    self.onShowTooltip = onShowTooltip
+  }
+
+  func showTooltip(info: TooltipInfo) {
+    onShowTooltip(info)
+  }
+
+  func hideTooltip(identity _: TooltipIdentity) {}
 }
 
 private let cardId = DivBlockModelingContext.testCardId

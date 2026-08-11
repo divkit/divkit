@@ -8,9 +8,11 @@ import UIKit
 /// DivKit.
 ///
 /// Conforming to this protocol allows your class to perform actions related to tooltips. It
-/// introduces two methods to control the display of tooltips:
-/// - `showTooltip(info:)`: Use this method to show a tooltip with the provided `TooltipInfo`.
-/// - `hideTooltip(info:)`: Use this method to hide the tooltip described by `TooltipInfo`.
+/// introduces methods to control the display of tooltips:
+/// - Synchronous `showTooltip(info:)`: Use this method to request showing a tooltip.
+/// - Asynchronous `showTooltip(info:)`: Use this method to show a tooltip and report whether it was
+/// displayed.
+/// - `hideTooltip(identity:)`: Use this method to hide the tooltip described by `TooltipIdentity`.
 public protocol TooltipActionPerformer {
   /// Shows a tooltip with the provided `TooltipInfo`.
   ///
@@ -28,7 +30,8 @@ public protocol TooltipActionPerformer {
   /// - Parameter info: The `TooltipInfo` containing the necessary information to display the
   /// tooltip.
   /// - Returns: `true` if the tooltip was shown, `false` otherwise.
-  func showTooltipAsync(info: TooltipInfo) async -> Bool
+  @MainActor
+  func showTooltip(info: TooltipInfo) async -> Bool
 
   /// Hides the tooltip described by the given `TooltipInfo`.
   ///
@@ -37,8 +40,10 @@ public protocol TooltipActionPerformer {
 }
 
 extension TooltipActionPerformer {
-  public func showTooltipAsync(info: TooltipInfo) async -> Bool {
-    showTooltip(info: info)
+  @MainActor
+  public func showTooltip(info: TooltipInfo) async -> Bool {
+    let showTooltipSync: (TooltipInfo) -> Void = showTooltip(info:)
+    showTooltipSync(info)
     return true
   }
 }
@@ -234,7 +239,8 @@ public class DefaultTooltipManager: TooltipManager {
     }
   }
 
-  public func showTooltipAsync(info: TooltipInfo) async -> Bool {
+  @MainActor
+  public func showTooltip(info: TooltipInfo) async -> Bool {
     guard stateStore.tryReserve(info.identity) else { return false }
 
     guard let anchorView = findAnchorView(for: info),
@@ -432,7 +438,8 @@ public final class DefaultTooltipManager: TooltipManager {
   public init() {}
 
   public func showTooltip(info _: TooltipInfo) {}
-  public func showTooltipAsync(info _: TooltipInfo) async -> Bool { false }
+  @MainActor
+  public func showTooltip(info _: TooltipInfo) async -> Bool { false }
   public func hideTooltip(identity _: TooltipIdentity) {}
 }
 #endif
