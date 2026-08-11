@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs.gallery
 
 import android.annotation.SuppressLint
+import androidx.core.view.doOnNextLayout
 import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.dagger.DivScope
@@ -73,7 +74,7 @@ internal class DivGalleryBinder @Inject constructor(
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         adapter = galleryAdapter
-        bindItemBuilder(div, resolver, divBlock.path)
+        bindItemBuilder(div, resolver, divBlock.path, divView)
         resetAnimatorAndRestoreOnLayout()
         updateDecorations(div, galleryAdapter, resolver, divView)
     }
@@ -201,10 +202,31 @@ internal class DivGalleryBinder @Inject constructor(
         }
     }
 
-    private fun DivRecyclerView.bindItemBuilder(div: DivGallery, resolver: ExpressionResolver, path: DivStatePath) {
+    private fun DivRecyclerView.bindItemBuilder(
+        div: DivGallery,
+        resolver: ExpressionResolver,
+        path: DivStatePath,
+        divView: Div2View,
+    ) {
         val builder = div.itemBuilder ?: return
         bindItemBuilder(builder, resolver) {
-            (adapter as DivGalleryAdapter?)?.setItems(builder.build(resolver, path))
+            val adapter = adapter as? DivGalleryAdapter ?: return@bindItemBuilder
+            val id = div.id ?: div.hashCode().toString()
+            val hasState = divView.currentState?.getPositionAndOffset(id) != null
+
+            adapter.setItems(builder.build(resolver, path))
+            if (hasState) return@bindItemBuilder
+
+            resetAnimatorAndRestoreOnLayout()
+
+            val itemCount = adapter.itemCount.takeIf { it > 1 } ?: return@bindItemBuilder
+            val itemHelper = layoutManager as? DivGalleryItemHelper ?: return@bindItemBuilder
+            val (position, offset) = getPositionAndOffset(div, resolver, adapter.orientation)
+            val targetPosition = position.coerceAtMost(itemCount - 1)
+            doOnNextLayout {
+                itemHelper.trySnapToPosition(targetPosition, offset)
+            }
+            scrollToPosition(targetPosition)
         }
     }
 }
