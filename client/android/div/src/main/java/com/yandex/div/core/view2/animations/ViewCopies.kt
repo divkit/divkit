@@ -17,6 +17,7 @@ import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.view.DivImageView
+import com.yandex.div.R as DivR
 
 @MainThread
 internal fun createOrGetVisualCopy(
@@ -92,6 +93,12 @@ private fun View.invalidatePosition(sceneRoot: ViewGroup, endPosition: IntArray)
     offsetTopAndBottom(endPosition[1] - position[1])
 }
 
+internal fun View.suppressOverlayVisibilityRestore() {
+    if (getTag(R.id.save_overlay_view) != null) {
+        setTag(DivR.id.div_transition_visibility_overridden, true)
+    }
+}
+
 private fun View.replace(viewCopy: View, transition: Transition, sceneRoot: ViewGroup) {
     val overlay = sceneRoot.overlay
     visibility = View.INVISIBLE
@@ -114,7 +121,11 @@ private fun View.replace(viewCopy: View, transition: Transition, sceneRoot: View
 
         override fun onTransitionEnd(transition: Transition) {
             setTag(R.id.save_overlay_view, null)
-            visibility = View.VISIBLE
+            val visibilityOverridden = getTag(DivR.id.div_transition_visibility_overridden) as? Boolean ?: false
+            setTag(DivR.id.div_transition_visibility_overridden, null)
+            if (!visibilityOverridden) {
+                visibility = View.VISIBLE
+            }
             overlay.remove(viewCopy)
             transition.removeListener(this)
         }

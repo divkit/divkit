@@ -17,6 +17,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
+import com.yandex.div.core.view2.animations.suppressOverlayVisibilityRestore
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
@@ -451,6 +452,9 @@ internal class DivBaseBinder @Inject constructor(
         }
 
         if (transition != null) {
+            if (newVisibility != View.VISIBLE) {
+                suppressOverlayVisibilityRestore()
+            }
             divTransitionHandler.putTransition(
                 transition,
                 this,
