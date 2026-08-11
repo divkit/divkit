@@ -10,8 +10,7 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivSize
 
-@Deprecated("For internal usage")
-class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber {
+internal class DivSizeProviderVariablesHolder : DivVisitor<Unit>(), ExpressionSubscriber {
 
     private val changedVariables = mutableListOf<String>()
 

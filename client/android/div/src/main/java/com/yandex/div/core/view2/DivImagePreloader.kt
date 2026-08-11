@@ -90,19 +90,4 @@ class DivImagePreloader @Inject constructor(
             }
         }
     }
-
-    @Deprecated("Not used in DivKit")
-    interface Ticket {
-        fun cancel()
-    }
-
-    @Deprecated("Not used in DivKit")
-    fun interface Callback {
-        fun finish(hasErrors: Boolean)
-    }
-
-    @Deprecated("Not used in DivKit")
-    fun Callback.toPreloadCallback(): DivPreloader.Callback {
-        return DivPreloader.Callback { hasErrors -> this@toPreloadCallback.finish(hasErrors) }
-    }
 }
