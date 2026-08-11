@@ -1735,6 +1735,10 @@
     "en": "Page width.",
     "ru": "Ширина страницы."
   },
+  "div_pager_multi_page_scroll": {
+    "en": "Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.",
+    "ru": "Включает или отключает возможность пролистать больше одной страницы пейджера за один свайп. Не влияет на программный скролл."
+  },
   "div_pager_next_page_alpha": {
     "en": "Minimum transparency of the next page, within the range [0, 1], when scrolling through the pager. The following page is always the page with a larger ordinal number in the `items` list, regardless of the scrolling direction.",
     "ru": "Минимальная прозрачность следующей страницы в диапазоне [0, 1] при листании пейджера. Следующая страница — всегда страница с большим порядковым номером в списке `items`, независимо от направления листания."
