@@ -4761,7 +4761,8 @@
         "With the switch on, the suggestions bar above the keyboard is shown",
         "With the switch off, the suggestions bar above the keyboard is hidden"
       ],
-      "file": "input/input_allow_suggestions_bar.json"
+      "file": "input/input_allow_suggestions_bar.json",
+      "case_id": 527
     },
     {
       "title": "Input field in gallery that triggers action",
