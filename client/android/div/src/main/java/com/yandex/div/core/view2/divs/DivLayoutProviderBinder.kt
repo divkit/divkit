@@ -163,6 +163,25 @@ internal class DivLayoutProviderBinder @Inject constructor(
         clearVariablesListener = null
     }
 
+    fun onConfigurationChanged() {
+        val data = divView.divData ?: return
+        val providers = layoutProvidersForDivData[data] ?: return
+        if (providers.isEmpty()) return
+
+        val resolver = divView.expressionResolver
+        providers.forEach { provider ->
+            provider.widthVariableName?.takeIf { it.isNotEmpty() }?.let { varName ->
+                VariableMutationHandler.setVariable(divView, varName, "0", resolver)
+            }
+            provider.heightVariableName?.takeIf { it.isNotEmpty() }?.let { varName ->
+                VariableMutationHandler.setVariable(divView, varName, "0", resolver)
+            }
+        }
+
+        measuredSizes.clear()
+        variableHolders[data]?.clear()
+    }
+
     fun release(divData: DivData?) {
         variableHolders[divData]?.release()
     }

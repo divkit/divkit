@@ -1163,6 +1163,7 @@ class Div2View private constructor(
     private fun handleConfigurationChange() {
         dismissPendingOverflowMenus()
         div2Component.tooltipController.handleConfigurationChange(this)
+        layoutProviderBinder.onConfigurationChanged()
     }
 
     override fun dismissPendingOverflowMenus(): Unit = bindingDispatcher.withLock {

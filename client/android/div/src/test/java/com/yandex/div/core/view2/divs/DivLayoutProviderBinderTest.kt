@@ -193,6 +193,44 @@ class DivLayoutProviderBinderTest {
         verify(viewTreeObserver, never()).addOnPreDrawListener(any())
     }
 
+    @Test
+    fun `variables reset to zero on configuration changed`() {
+        heightVariable.set(EXPECTED_HEIGHT)
+        widthVariable.set(EXPECTED_WIDTH)
+
+        bind()
+        underTest.onConfigurationChanged()
+
+        Assert.assertEquals(0L, heightVariable.getValue())
+        Assert.assertEquals(0L, widthVariable.getValue())
+    }
+
+    @Test
+    fun `variables not reset when no layout provider registered`() {
+        heightVariable.set(EXPECTED_HEIGHT)
+        widthVariable.set(EXPECTED_WIDTH)
+
+        // No bind() call, so no layout providers are registered
+        underTest.onConfigurationChanged()
+
+        Assert.assertEquals(EXPECTED_HEIGHT, heightVariable.getValue())
+        Assert.assertEquals(EXPECTED_WIDTH, widthVariable.getValue())
+    }
+
+    @Test
+    fun `after configuration change variables are correctly updated on next layout`() {
+        bind()
+        layout()
+
+        // Simulate orientation change: variables should be reset
+        underTest.onConfigurationChanged()
+        Assert.assertEquals(0L, widthVariable.getValue())
+
+        // After new layout, variable should update with new size
+        layout(onlyWidth = true)
+        Assert.assertEquals(EXPECTED_WIDTH, widthVariable.getValue())
+    }
+
     private fun bind() = underTest.bind(view, layoutProvider, null, resolver)
 
     private fun layout(onlyWidth: Boolean = false, onlyHeight: Boolean = false) {
