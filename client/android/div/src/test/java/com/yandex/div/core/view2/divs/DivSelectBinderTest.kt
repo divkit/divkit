@@ -6,7 +6,6 @@ import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.internal.util.textString
@@ -34,16 +33,12 @@ class DivSelectBinderTest : DivBinderTest() {
     private val variableBinder = mock<TwoWayStringVariableBinder> {
         on { bindVariable(any(), any(), any(), any()) } doReturn mock()
     }
-    private val errorCollectors = mock<ErrorCollectors> {
-        on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn mock()
-    }
     private val captor = argumentCaptor<TwoWayVariableBinder.Callbacks<String>>()
 
     private val underTest = DivSelectBinder(
         baseBinder = baseBinder,
         typefaceResolver = divTypefaceResolver,
         variableBinder = variableBinder,
-        errorCollectors = errorCollectors
     )
 
     private val path = DivStatePath(0)

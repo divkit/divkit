@@ -13,11 +13,9 @@ import androidx.transition.TransitionSet
 import androidx.transition.Visibility
 import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.getId
-import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.clearTreeAnimations
@@ -45,7 +43,6 @@ import com.yandex.div.core.view2.animations.toTransitionData
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.DivLayoutParams
@@ -66,12 +63,9 @@ internal class DivStateBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val viewCreator: DivViewCreator,
     private val viewBinder: Provider<DivBinder>,
-    private val stateManager: DivStateManager,
     private val actionPerformer: DivActionPerformer,
     private val divVisibilityActionTracker: DivVisibilityActionTracker,
-    private val errorCollectors: ErrorCollectors,
     private val variableBinder: TwoWayStringVariableBinder,
-    private val runtimeVisitor: DivRuntimeVisitor,
     private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<DivBlock.State, DivStateLayout>(baseBinder) {
 
@@ -82,13 +76,12 @@ internal class DivStateBinder @Inject constructor(
         val resolver = divBlock.expressionResolver
         val path = divBlock.path
         val id = divValue.getId {
-            errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-                .logError(missingValue("id", path.toString()))
+            divView.logError(missingValue("id", path.toString()))
         }
         val oldState = divValue.states.find { it.stateId == view.stateId }
             ?: divValue.getDefaultState(resolver)
         val statePath = "${path.statesString}/$id"
-        val currentStateId = stateManager.getState(divValue, divView, resolver, statePath)
+        val currentStateId = divView.dataComponent.stateManager.getState(divValue, resolver, statePath)
         val newState = divValue.states.find { it.stateId == currentStateId }
             ?: divValue.getDefaultState(resolver)
         if (oldState == null || newState == null) return
@@ -230,7 +223,7 @@ internal class DivStateBinder @Inject constructor(
         }
 
         if (outgoing != null) {
-            runtimeVisitor.createAndAttachRuntimesToState(divView, divState, path, resolver)
+            divView.dataComponent.runtimeVisitor.createAndAttachRuntimesToState(divView, divState, path, resolver)
         }
     }
 
@@ -312,7 +305,7 @@ internal class DivStateBinder @Inject constructor(
                 }
 
                 override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
-                    stateManager.bindVariable(divView.dataTag.id, divBlock.path, valueUpdater)
+                    divView.dataComponent.stateManager.bindVariable(divBlock.path, valueUpdater)
                 }
             },
         )

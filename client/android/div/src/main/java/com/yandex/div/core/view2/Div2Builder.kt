@@ -3,7 +3,6 @@ package com.yandex.div.core.view2
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.DivLayoutParams
@@ -18,7 +17,6 @@ import javax.inject.Inject
 internal class Div2Builder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val viewBinder: DivBinder,
-    private val runtimeVisitor: DivRuntimeVisitor,
 ) {
 
     fun buildView(divBlock: DivBlock, divView: Div2View): View {
@@ -28,7 +26,7 @@ internal class Div2Builder @Inject constructor(
     }
 
     fun createView(data: Div, resolver: ExpressionResolver, path: DivStatePath, divView: Div2View): View {
-        runtimeVisitor.createAndAttachRuntimes(data, path, divView)
+        divView.dataComponent.runtimeVisitor.createAndAttachRuntimes(data, path, divView)
         val view = viewCreator.create(data, resolver).apply {
             layoutParams = DivLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         }

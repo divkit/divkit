@@ -5,7 +5,6 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewTreeObserver
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.core.VariableMutationHandler
@@ -45,9 +44,6 @@ private const val BOTTOM = 320
 ])
 class DivLayoutProviderBinderTest {
 
-    private val errorCollectors = mock<ErrorCollectors> {
-        on { getOrCreate(any(), any()) } doReturn mock()
-    }
     private var onPreDrawListener: ViewTreeObserver.OnPreDrawListener? = null
     private val onPreDrawListenerCaptor = argumentCaptor<ViewTreeObserver.OnPreDrawListener>()
     private val viewTreeObserver = mock<ViewTreeObserver> {
@@ -62,7 +58,7 @@ class DivLayoutProviderBinderTest {
         on { dataTag } doReturn mock()
         on { expressionResolver } doReturn mock()
     }
-    private val underTest = DivLayoutProviderBinder(errorCollectors, divView)
+    private val underTest = DivLayoutProviderBinder()
     private val layoutProvider = DivLayoutProvider(HEIGHT_VARIABLE_NAME, WIDTH_VARIABLE_NAME)
     private val resolver = mock<ExpressionResolver>()
     private val metrics = DisplayMetrics().apply { density = 1f }
@@ -113,7 +109,7 @@ class DivLayoutProviderBinderTest {
     @Test
     fun `update height variable when width is not provided`() {
         val layoutProvider = DivLayoutProvider(HEIGHT_VARIABLE_NAME, null)
-        underTest.bind(view, layoutProvider, null, resolver)
+        underTest.bind(view, layoutProvider, null, resolver, divView)
 
         layout()
 
@@ -124,7 +120,7 @@ class DivLayoutProviderBinderTest {
     @Test
     fun `update width variable when height is not provided`() {
         val layoutProvider = DivLayoutProvider(null, WIDTH_VARIABLE_NAME)
-        underTest.bind(view, layoutProvider, null, resolver)
+        underTest.bind(view, layoutProvider, null, resolver, divView)
 
         layout()
 
@@ -135,8 +131,8 @@ class DivLayoutProviderBinderTest {
     @Test
     fun `update variables after reattach`() {
         bind()
-        underTest.onAttach()
-        underTest.onDetach()
+        underTest.onAttach(divView)
+        underTest.onDetach(divView)
 
         layout()
 
@@ -149,7 +145,7 @@ class DivLayoutProviderBinderTest {
         whenever(divView.isAttachedToWindow).doReturn(true)
         bind()
 
-        underTest.onDetach()
+        underTest.onDetach(divView)
 
         verify(viewTreeObserver).removeOnPreDrawListener(eq(onPreDrawListener))
     }
@@ -157,9 +153,9 @@ class DivLayoutProviderBinderTest {
     @Test
     fun `remove onPreDrawListener on detach after attach`() {
         bind()
-        underTest.onAttach()
+        underTest.onAttach(divView)
 
-        underTest.onDetach()
+        underTest.onDetach(divView)
 
         verify(viewTreeObserver).removeOnPreDrawListener(eq(onPreDrawListener))
     }
@@ -167,36 +163,36 @@ class DivLayoutProviderBinderTest {
     @Test
     fun `remove onPreDrawListener on detach after reattach`() {
         bind()
-        underTest.onAttach()
-        underTest.onDetach()
+        underTest.onAttach(divView)
+        underTest.onDetach(divView)
         onPreDrawListener = null
-        underTest.onAttach()
+        underTest.onAttach(divView)
 
-        underTest.onDetach()
+        underTest.onDetach(divView)
 
         verify(viewTreeObserver).removeOnPreDrawListener(eq(onPreDrawListener))
     }
 
     @Test
     fun `not listen to predraw when no has providers`() {
-        underTest.onAttach()
+        underTest.onAttach(divView)
         verify(viewTreeObserver, never()).addOnPreDrawListener(any())
     }
 
     @Test
     fun `not listen to predraw when has no providers on rebind`() {
         bind()
-        underTest.bind(view, null, layoutProvider, resolver)
+        underTest.bind(view, null, layoutProvider, resolver, divView)
 
-        underTest.onAttach()
+        underTest.onAttach(divView)
 
         verify(viewTreeObserver, never()).addOnPreDrawListener(any())
     }
 
-    private fun bind() = underTest.bind(view, layoutProvider, null, resolver)
+    private fun bind() = underTest.bind(view, layoutProvider, null, resolver, divView)
 
     private fun layout(onlyWidth: Boolean = false, onlyHeight: Boolean = false) {
-        underTest.onAttach()
+        underTest.onAttach(divView)
         layoutChangeListener.lastValue.onLayoutChange(
             view,
             if (onlyHeight) 0 else LEFT,

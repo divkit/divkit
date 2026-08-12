@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.divs
 
-import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.fromRootDiv
@@ -8,8 +7,8 @@ import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -22,9 +21,9 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.check
 import org.mockito.kotlin.clearInvocations
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
@@ -38,7 +37,6 @@ class DivStateBinderTest: DivBinderTest() {
     private val viewBinder = mock<DivBinder>()
     private val stateManager = mock<DivStateManager>()
     private val divVisibilityActionTracker = mock<DivVisibilityActionTracker>()
-    private val errorCollectors = mock<ErrorCollectors>()
     private val variableBinder = mock<TwoWayStringVariableBinder>()
 
     private val div = UnitTestData(STATE_DIR, "state_list.json").div as Div.State
@@ -56,14 +54,16 @@ class DivStateBinderTest: DivBinderTest() {
         baseBinder = baseBinder,
         viewCreator = viewCreator,
         viewBinder = { viewBinder },
-        stateManager = stateManager,
         actionPerformer = actionPerformer,
         divVisibilityActionTracker = divVisibilityActionTracker,
-        errorCollectors = errorCollectors,
         variableBinder = variableBinder,
-        runtimeVisitor = mock(),
         animationsEnabledController = animationsEnabledController,
     )
+
+    init {
+        whenever { dataComponent.stateManager } doReturn stateManager
+        whenever { dataComponent.runtimeVisitor } doReturn mock()
+    }
 
     @Test
     fun `first state path applied when no defaultStateId`() {
@@ -124,7 +124,7 @@ class DivStateBinderTest: DivBinderTest() {
         switchToState("empty")
         stateBinder.bindView(stateLayout, divBlock, divView)
 
-        assertStateNotBound(pathToState("empty"))
+        assertStateNotBound()
     }
 
     @Test
@@ -252,14 +252,14 @@ class DivStateBinderTest: DivBinderTest() {
     }
 
     private fun switchToState(stateId: String) {
-        whenever(stateManager.getState(div.value, divView, resolver, path = "0/state_container")).thenReturn(stateId)
+        whenever(stateManager.getState(div.value, resolver, path = "0/state_container")).thenReturn(stateId)
     }
 
     private fun pathToState(stateId: String): DivStatePath {
         return rootPath.append(divId = "state_container", state = null, stateIdFallback = stateId)
     }
 
-    private fun assertStateNotBound(path: DivStatePath) {
+    private fun assertStateNotBound() {
         verify(viewCreator, never()).create(any(), any())
         verify(viewBinder, never()).bind(any(), any(), any())
     }

@@ -14,11 +14,9 @@ import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
-import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.font.DivTypefaceType
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivImageLoader
-import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
@@ -74,8 +72,6 @@ internal class DivTabsBinder @Inject constructor(
     private val imageLoader: DivImageLoader,
     private val visibilityActionTracker: DivVisibilityActionTracker,
     @param:Named(Names.THEMED_CONTEXT) private val context: Context,
-    private val runtimeVisitor: DivRuntimeVisitor,
-    private val tabsStateCache: TabsStateCache,
     private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<DivBlock.Tabs, DivTabsLayout>(baseBinder) {
 
@@ -242,8 +238,7 @@ internal class DivTabsBinder @Inject constructor(
                 eventManager.onPageDisplayed(currentTab)
             }
         }
-        val activeStateTracker =
-            DivTabsActiveStateTracker(divBlock, divView, div2Logger, tabsStateCache, runtimeVisitor)
+        val activeStateTracker = DivTabsActiveStateTracker(divBlock, divView, div2Logger)
         val adapter = DivTabsAdapter(
             viewPool, this, getTabbedCardLayoutIds(), heightCalculatorFactory, isDynamicHeight,
             divBlock.expressionResolver, divView, textStyleProvider, viewCreator, divBinder,

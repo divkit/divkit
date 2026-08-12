@@ -21,7 +21,6 @@ import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivBlock
@@ -41,7 +40,6 @@ internal class DivGifImageBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
-    private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivBlock.GifImage, DivGifImageView>(baseBinder) {
 
     override fun DivGifImageView.bind(
@@ -51,7 +49,7 @@ internal class DivGifImageBinder @Inject constructor(
     ) {
         val div = divBlock.divValue
         val expressionResolver = divBlock.expressionResolver
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+        val errorCollector = divView.errorCollector
 
         applyDivActions(
             div.action,
@@ -244,12 +242,8 @@ internal class DivGifImageBinder @Inject constructor(
         loadPreviewReference = reference
     }
 
-    fun loadGifImage(
-        view: DivGifImageView,
-        divBlock: DivBlock.GifImage,
-        divView: Div2View,
-        errorCollector: ErrorCollector,
-    ) = view.applyGifImage(divView, divBlock.expressionResolver, divBlock.divValue, errorCollector)
+    fun loadGifImage(view: DivGifImageView, divBlock: DivBlock.GifImage, divView: Div2View) =
+        view.applyGifImage(divView, divBlock.expressionResolver, divBlock.divValue, divView.errorCollector)
 
     @RequiresApi(Build.VERSION_CODES.P)
     class LoadDrawableOnPostPTask(

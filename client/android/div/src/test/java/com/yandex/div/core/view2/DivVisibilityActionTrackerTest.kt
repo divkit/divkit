@@ -3,8 +3,8 @@ package com.yandex.div.core.view2
 import android.view.View
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.dagger.DivDataComponent
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivDisappearAction
@@ -39,9 +39,13 @@ class DivVisibilityActionTrackerTest {
         on { dispatchVisibleViewsChanged(visibleDivsChangedCaptor.capture()) } doAnswer { }
     }
 
+    private val dataComponent = mock<DivDataComponent> {
+        on { visibilityActionDispatcher } doReturn visibilityActionDispatcher
+    }
     private val scope = mock<Div2View> {
         on { logId } doReturn "div"
         on { dataTag } doReturn DivDataTag("test")
+        on { dataComponent } doReturn dataComponent
     }
 
     private val view1 = mockView()
@@ -72,10 +76,7 @@ class DivVisibilityActionTrackerTest {
     private val div4 = text(text = "test4", visibilityActions = actionsWithThreeDifferentDelays)
     private val div5 = text(text = "test5", visibilityActions = listOf(action1), disappearActions = listOf(disappearAction1))
 
-    private val visibilityActionTracker = DivVisibilityActionTracker(
-        viewVisibilityCalculator,
-        visibilityActionDispatcher
-    )
+    private val visibilityActionTracker = DivVisibilityActionTracker(viewVisibilityCalculator)
 
     @Test
     fun `visibility action is not dispatched for invisible view`() {

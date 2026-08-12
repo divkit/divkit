@@ -1,6 +1,6 @@
 package com.yandex.div.core.expression.local
 
-import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.DivDataScope
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.getIds
@@ -18,7 +18,7 @@ import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import javax.inject.Inject
 
-@DivScope
+@DivDataScope
 internal class DivRuntimeVisitor @Inject constructor(
     private val stateManager: DivStateManager,
     private val tabsCache: TabsStateCache,
@@ -137,7 +137,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         runtime: ExpressionsRuntime,
     ) {
-        val activeStateId = stateManager.getState(div, divView, runtime.expressionResolver, path.statePath)
+        val activeStateId = stateManager.getState(div, runtime.expressionResolver, path.statePath)
         div.states.forEach {
             val childDiv = it.div ?: return@forEach
             val childPath = path.append(path.lastDivId, it, it.stateId)
@@ -161,7 +161,7 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         runtime: ExpressionsRuntime,
     ) {
-        val activeTab = tabsCache.getSelectedTab(divView.divTag.id, path.fullPath)
+        val activeTab = tabsCache.getSelectedTab(path.fullPath)
             ?: div.selectedTab.evaluate(runtime.expressionResolver).toIntSafely()
 
         val ids = div.items.getIds({ this.div })

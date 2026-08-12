@@ -137,18 +137,7 @@ class Div2Context @MainThread private constructor(
     }
 
     fun reset(@ResetFlag flags: Int = RESET_ALL, tags: List<DivDataTag> = emptyList()) {
-        if (flags and RESET_EXPRESSION_RUNTIMES != 0) {
-            div2Component.runtimeStoreProvider.reset(tags)
-        }
-        if (flags and RESET_ERROR_COLLECTORS != 0) {
-            div2Component.errorCollectors.reset(tags)
-        }
-        if (flags and RESET_SELECTED_STATES != 0) {
-            div2Component.stateManager.reset(tags)
-        }
-        if (flags and RESET_VISIBILITY_COUNTERS != 0) {
-            div2Component.visibilityActionDispatcher.reset(tags)
-        }
+        div2Component.dataComponentStore.reset(flags, tags)
         if (flags and RESET_BITMAP_EFFECT_CACHE != 0) {
             div2Component.bitmapEffectHelper.release()
         }
@@ -187,7 +176,8 @@ class Div2Context @MainThread private constructor(
      * This is preferred resolver for [DivData] that includes expressions instead of [ExpressionResolver.EMPTY].
      */
     fun getExpressionResolver(divData: DivData, tag: DivDataTag): ExpressionResolver {
-        val runtimeStore = div2Component.runtimeStoreProvider.getOrCreate(tag, divData, null)
+        val component = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
+        val runtimeStore = component.runtimeStoreProvider.getOrCreate(divData, null)
         return runtimeStore.rootRuntime.expressionResolver
     }
 
@@ -211,7 +201,7 @@ class Div2Context @MainThread private constructor(
         const val RESET_VISIBILITY_COUNTERS = 1 shl 3
         const val RESET_BITMAP_EFFECT_CACHE = 1 shl 4
 
-        private const val RESET_ALL = RESET_EXPRESSION_RUNTIMES and
+        internal const val RESET_ALL = RESET_EXPRESSION_RUNTIMES and
             RESET_ERROR_COLLECTORS and
             RESET_SELECTED_STATES and
             RESET_VISIBILITY_COUNTERS and

@@ -1,7 +1,7 @@
 package com.yandex.div.core.expression
 
-import com.yandex.div.DivDataTag
-import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.DivDataScope
+import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
@@ -15,54 +15,35 @@ import com.yandex.div.internal.variables.name
 import com.yandex.div.internal.variables.parseGet
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
-import java.util.Collections
-import java.util.WeakHashMap
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Holds state of variables for each div view.
  */
-@DivScope
+@DivDataScope
 internal class RuntimeStoreProvider @Inject constructor(
+    @param:Named(Names.DATA_TAG) private val dataTag: String,
     private val runtimeProvider: ExpressionsRuntimeProvider,
     private val errorCollectors: ErrorCollectors,
 ) {
 
-    private val runtimeStores = Collections.synchronizedMap(mutableMapOf<String, RuntimeStoreImpl>())
-    private val divDataTags = WeakHashMap<Div2View, MutableSet<String>>()
+    private var store: RuntimeStoreImpl? = null
 
-    internal fun getOrCreate(tag: DivDataTag, data: DivData, div2View: Div2View?): RuntimeStore {
-        divDataTags.getOrPut(div2View, ::mutableSetOf).add(tag.id)
+    internal fun getOrCreate(data: DivData, div2View: Div2View?): RuntimeStore {
+        val errorCollector = errorCollectors.getOrCreate(data)
+        val newStore = store?.also {
+            ensureVariablesSynced(it.rootRuntime, data, errorCollector)
+            it.rootRuntime.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
+        } ?: RuntimeStoreImpl(data, dataTag, runtimeProvider, errorCollector)
 
-        val errorCollector = errorCollectors.getOrCreate(tag, data)
-        runtimeStores[tag.id]?.let { store ->
-            div2View?.let { store.attachView(it) }
-            ensureVariablesSynced(store.rootRuntime, data, errorCollector)
-            store.rootRuntime.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
-            return store
-        }
-
-        return RuntimeStoreImpl(data, tag, runtimeProvider, errorCollector).also { store ->
-            runtimeStores[tag.id] = store
-            div2View?.let { store.attachView(it) }
-        }
+        div2View?.let { newStore.attachView(it) }
+        store = newStore
+        return newStore
     }
 
-    fun reset(tags: List<DivDataTag>) {
-        if (tags.isEmpty()) {
-            runtimeStores.clear()
-        } else {
-            tags.forEach { tag ->
-                runtimeStores.remove(tag.id)
-            }
-        }
-    }
-
-    internal fun cleanupRuntime(view: Div2View) {
-        divDataTags[view]?.forEach { tag ->
-            runtimeStores[tag]?.cleanupRuntimes(view)
-        }
-        divDataTags.remove(view)
+    fun reset() {
+        store = null
     }
 
     private fun ensureVariablesSynced(

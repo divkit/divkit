@@ -43,6 +43,7 @@ class DivVisibilityActionDispatcherTest {
     }
 
     private val dispatcher = DivVisibilityActionDispatcher(
+        dataTag = "test",
         logger = logger,
         visibilityListeners = listOf(),
         divActionHandler = contextActionHandler,
@@ -76,7 +77,7 @@ class DivVisibilityActionDispatcherTest {
         repeat(4) {
             dispatcher.dispatchAction(divView, resolver, mock(), action)
         }
-        dispatcher.reset(emptyList())
+        dispatcher.reset()
         dispatcher.dispatchAction(divView, resolver, mock(), action)
 
         verify(contextActionHandler, times(3)).handleAction(eq(action) as DivSightAction, eq(divView), eq(resolver))

@@ -29,7 +29,6 @@ import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.reuse.util.tryRebindPlainContainerChildren
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.ShowSeparatorsMode
@@ -67,7 +66,6 @@ internal class DivContainerBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val divViewCreator: Provider<DivViewCreator>,
     private val divBinder: Provider<DivBinder>,
-    private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivBlock.Container, ViewGroup>(baseBinder) {
 
     private val tempRect = Rect()
@@ -115,10 +113,12 @@ internal class DivContainerBinder @Inject constructor(
             divView,
         )
 
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
         bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
         bindClipChildren(div.clipToBounds, oldDiv?.clipToBounds, resolver)
 
+        if (this is DivFrameLayout) return
+
+        val errorCollector = divView.errorCollector
         when (this) {
             is DivLinearLayout -> bindProperties(div, oldDiv, resolver, errorCollector)
             is DivWrapLayout -> bindProperties(div, oldDiv, resolver, errorCollector)
@@ -152,22 +152,17 @@ internal class DivContainerBinder @Inject constructor(
                 oldItems = null
             }
         }
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        if (shouldBindItemBuilder) bindItemBuilder(divBlock, divView, errorCollector)
-        applyItems(divBlock, oldDivBlock, items, oldItems, divView, errorCollector)
+        if (shouldBindItemBuilder) bindItemBuilder(divBlock, divView)
+        applyItems(divBlock, oldDivBlock, items, oldItems, divView)
     }
 
-    private fun ViewGroup.bindItemBuilder(
-        divBlock: DivBlock.Container,
-        divView: Div2View,
-        errorCollector: ErrorCollector,
-    ) {
+    private fun ViewGroup.bindItemBuilder(divBlock: DivBlock.Container, divView: Div2View) {
         val builder = divBlock.divValue.itemBuilder ?: return
         bindItemBuilder(builder, divBlock.expressionResolver) {
             val newItems = builder.build(divBlock.expressionResolver, divBlock.path)
             val oldItems = (this as DivCollectionHolder).items ?: emptyList()
             replaceWithReuse(divView, divViewCreator, oldItems, newItems)
-            applyItems(divBlock, divBlock, newItems, oldItems, divView, errorCollector)
+            applyItems(divBlock, divBlock, newItems, oldItems, divView)
         }
     }
 
@@ -177,10 +172,9 @@ internal class DivContainerBinder @Inject constructor(
         items: List<DivBlock>,
         oldItems: List<DivBlock>?,
         divView: Div2View,
-        errorCollector: ErrorCollector,
     ) {
         tryRebindPlainContainerChildren(divView, items, divViewCreator)
-        validateChildren(parent, items, errorCollector)
+        validateChildren(parent, items, divView.errorCollector)
         dispatchItems(parent, oldParent, items, oldItems, divView)
     }
 

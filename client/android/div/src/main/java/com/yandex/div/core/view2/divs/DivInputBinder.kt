@@ -13,6 +13,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.actions.closeKeyboard
+import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.util.AccessibilityStateProvider
@@ -37,7 +38,6 @@ import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.Expression
@@ -64,7 +64,6 @@ internal class DivInputBinder @Inject constructor(
     private val variableBinder: TwoWayStringVariableBinder,
     private val actionPerformer: DivActionPerformer,
     private val accessibilityStateProvider: AccessibilityStateProvider,
-    private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivBlock.Input, DivInputView>(baseBinder) {
 
     override fun DivInputView.bind(
@@ -446,9 +445,6 @@ internal class DivInputBinder @Inject constructor(
         divView: Div2View
     ) {
         val validators: MutableList<ValidatorItemData> = mutableListOf()
-
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-
         val revalidateExpressionValidator = { index: Int  ->
             validators[index].validate(text.toString(), this, divView, resolver)
         }
@@ -466,8 +462,7 @@ internal class DivInputBinder @Inject constructor(
 
             if (divValidators != null) {
                 divValidators.forEach { divInputValidator ->
-                    val validatorItemData = divInputValidator
-                        .toValidatorDataItem(resolver, errorCollector)
+                    val validatorItemData = divInputValidator.toValidatorDataItem(resolver, divView.errorCollector)
 
                     if (validatorItemData != null) {
                         validators += validatorItemData
@@ -561,7 +556,6 @@ internal class DivInputBinder @Inject constructor(
     ) {
         val exception = IllegalArgumentException("Can't find label with id '$labelId'")
 
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
         val viewIdProvider = divView.viewComponent.viewIdProvider
 
         view.doOnLayout {
@@ -573,10 +567,10 @@ internal class DivInputBinder @Inject constructor(
                 if (label != null) {
                     label.labelFor = if (isValid) View.NO_ID else view.id
                 } else {
-                    errorCollector.logError(exception)
+                    divView.logError(exception)
                 }
             } else {
-                errorCollector.logError(exception)
+                divView.logError(exception)
             }
         }
     }
@@ -588,14 +582,10 @@ internal class DivInputBinder @Inject constructor(
         onMaskUpdate: (BaseInputMask?) -> Unit
     ) {
         var inputMask: BaseInputMask? = null
-
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-
         val defaultKeyListener = keyListener
-
         val catchCommonMaskException = { exception: Exception, other: () -> Unit ->
             when (exception) {
-                is PatternSyntaxException -> errorCollector.logError(
+                is PatternSyntaxException -> divView.logError(
                     IllegalArgumentException("Invalid regex pattern '${exception.pattern}'.")
                 )
                 else -> other()
@@ -637,7 +627,7 @@ internal class DivInputBinder @Inject constructor(
                                 if (finalLanguageTag != evaluatedLocaleTag) {
                                     val exception = IllegalArgumentException("Original locale tag '$evaluatedLocaleTag' is not equals to final one '$finalLanguageTag'")
 
-                                    errorCollector.logWarning(exception)
+                                    divView.logWarning(exception)
                                 }
                             }
                     } else {
@@ -707,7 +697,7 @@ internal class DivInputBinder @Inject constructor(
                         try {
                             RegexInputFilter(it.value.pattern.evaluate(resolver))
                         } catch (e: PatternSyntaxException) {
-                            errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+                            divView.errorCollector
                                 .logError(IllegalArgumentException("Invalid regex pattern '${e.pattern}'.", e))
                             null
                         }

@@ -62,7 +62,7 @@ internal class DivGalleryScrollListener(
 
     private fun trackViews() {
         val visibilityActionTracker = divView.div2Component.visibilityActionTracker
-        visibilityActionTracker.updateVisibleViews(recycler.children.toList())
+        visibilityActionTracker.updateVisibleViews(recycler.children.toList(), divView)
 
         recycler.children.forEach { child ->
             val position = recycler.getChildAdapterPosition(child)

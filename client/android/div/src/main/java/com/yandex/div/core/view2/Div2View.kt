@@ -142,7 +142,6 @@ class Div2View private constructor(
     private var oldRuntimeStore: RuntimeStore? = null
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldRuntimeStore.resolver
-    private val layoutProviderBinder get() = viewComponent.layoutProviderBinder
     internal var runtimeStore: RuntimeStore = RuntimeStore.EMPTY
     internal var inMiddleOfBind = false
 
@@ -212,12 +211,13 @@ class Div2View private constructor(
 
     private fun updateRuntimeStore(data: DivData, tag: DivDataTag) {
         oldRuntimeStore = runtimeStore
-        runtimeStore = div2Component.runtimeStoreProvider.getOrCreate(tag, data, this)
+        dataComponent = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
+        runtimeStore = dataComponent.runtimeStoreProvider.getOrCreate(data, this)
         runtimeStore.updateSubscriptions()
         if (oldRuntimeStore != runtimeStore) {
             oldRuntimeStore?.clearBindings(this)
         }
-        div2Component.stateManager.collectStateVariables(tag, data, expressionResolver)
+        dataComponent.stateManager.collectStateVariables(data, expressionResolver)
         dataTag = tag
     }
 
@@ -225,6 +225,7 @@ class Div2View private constructor(
         runtimeStore.clearBindings(this)
         oldRuntimeStore = runtimeStore
         runtimeStore = RuntimeStore.EMPTY
+        dataComponent = div2Component.dataComponentStore.getOrPut("", div2Component)
         dataTag = DivDataTag.INVALID
     }
 
@@ -234,14 +235,14 @@ class Div2View private constructor(
         }
 
         val state = data?.state() ?: return
-        viewComponent.runtimeVisitor.createAndAttachRuntimes(state.div, DivStatePath.fromState(state), this)
+        dataComponent.runtimeVisitor.createAndAttachRuntimes(state.div, DivStatePath.fromState(state), this)
     }
 
     private fun updateTimers() {
         val data = divData ?: return
 
-        val newDivTimerEventDispatcher = div2Component.divTimersControllerProvider
-            .getOrCreate(dataTag, data, expressionResolver)
+        val newDivTimerEventDispatcher =
+            dataComponent.timerEventDispatcherProvider.getOrCreate(data, expressionResolver)
 
         if (divTimerEventDispatcher != newDivTimerEventDispatcher) {
             divTimerEventDispatcher?.onDetach(this)
@@ -278,6 +279,7 @@ class Div2View private constructor(
 
     private val bindingReporterProvider = BindingEventReporterProvider(this)
     private val patchReporterProvider = PatchEventReporterProvider(this)
+    internal var dataComponent = div2Component.dataComponentStore.getOrPut("", div2Component)
 
     internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()
         .divView(this)
@@ -371,12 +373,12 @@ class Div2View private constructor(
 
         val oldData = divData ?: oldDivData
         updateRuntimeStore(data, tag)
-        layoutProviderBinder.release(oldData)
+        dataComponent.layoutProviderBinder.release()
         val newDivBlock = data.getRootDivBlock()
         val isDataReplaceable = DivComparator.isDivDataReplaceable(rootDivBlock, newDivBlock, reporter)
 
         div2Component.divViewDataPreloader.preload(data, expressionResolver)
-        paths?.forEach { div2Component.stateManager.updateStates(divTag.id, it, temporary) }
+        paths?.forEach { dataComponent.stateManager.updateStates(it, temporary) }
 
         val withStates = paths != null
         val result = applyBindingStrategy(
@@ -678,7 +680,7 @@ class Div2View private constructor(
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
         divTimerEventDispatcher?.onAttach(this)
-        layoutProviderBinder.onAttach()
+        dataComponent.layoutProviderBinder.onAttach(this)
         viewComponent.errorMonitor.onAttach()
     }
 
@@ -688,7 +690,7 @@ class Div2View private constructor(
         divTimerEventDispatcher?.onDetach(this)
         viewComponent.animatorController.onDetachedFromWindow()
         runtimeStore.onDetachedFromWindow(this)
-        layoutProviderBinder.onDetach()
+        dataComponent.layoutProviderBinder.onDetach(this)
         viewComponent.errorMonitor.onDetach()
     }
 
@@ -705,7 +707,8 @@ class Div2View private constructor(
         newDataTag: DivDataTag? = null
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
         val tag = newDataTag ?: DivDataTag(UUID.randomUUID().toString())
-        val newRuntimeStore = div2Component.runtimeStoreProvider.getOrCreate(tag, newData, this)
+        val newRuntimeStore = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
+            .runtimeStoreProvider.getOrCreate(newData, this)
         val canBeReplaced = DivComparator.isDivDataReplaceable(
             rootDivBlock ?: (divData ?: oldData)?.getRootDivBlock() ?: return@withLock false,
             newData.getRootDivBlock(newRuntimeStore),
@@ -720,12 +723,9 @@ class Div2View private constructor(
         return canBeReplaced
     }
 
-    fun logError(throwable: Throwable) {
-        viewComponent
-            .errorCollectors
-            .getOrCreate(dataTag, divData)
-            .logError(throwable)
-    }
+    internal val errorCollector get() = dataComponent.errorCollectors.getOrCreate(divData)
+
+    fun logError(throwable: Throwable) = errorCollector.logError(throwable)
 
     fun loadMedia(): Unit = bindingDispatcher.runWithinBindingContext {
         if (mediaWasReleased) {
@@ -755,8 +755,8 @@ class Div2View private constructor(
         if (removeChildren) {
             releaseAndRemoveChildren(this) // Removes children
         }
-        viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
-        layoutProviderBinder.release(divData)
+        errorCollector.cleanRuntimeWarningsAndErrors()
+        dataComponent.layoutProviderBinder.release()
 
         if (removeChildren) {
             _divData = null
@@ -825,16 +825,14 @@ class Div2View private constructor(
             viewComponent.bulkActionHandler.switchMultipleStates(state, pathList, temporary)
         } else {
             pathList.forEach { path ->
-                div2Component.stateManager.updateStates(divTag.id, path, temporary)
+                dataComponent.stateManager.updateStates(path, temporary)
             }
             switchToState(firstPath.topLevelStateId)
         }
     }
 
-    fun isInState(statePath: DivStatePath): Boolean {
-        val stateCache = div2Component.temporaryDivStateCache
-        return stateCache.getState(dataTag.id, statePath.pathToLastState.toString()) == statePath.lastStateId
-    }
+    fun isInState(statePath: DivStatePath): Boolean =
+        dataComponent.stateManager.getState(statePath.pathToLastState.toString()) == statePath.lastStateId
 
     /**
      * Observers called when DivData changed. Now it used when patch applied.
@@ -871,7 +869,7 @@ class Div2View private constructor(
     override fun resetToInitialState(): Unit = bindingDispatcher.withLock {
         val viewState = currentState
         viewState?.reset()
-        div2Component.temporaryDivStateCache.resetCard(divTag.id)
+        dataComponent.stateManager.reset()
 
         switchToInitialState()
     }
@@ -994,7 +992,7 @@ class Div2View private constructor(
         temporary: Boolean,
     ): View {
         val rootView = view.getChildAt(0)
-        div2Component.stateManager.updateState(dataTag, stateId, temporary)
+        dataComponent.stateManager.updateState(stateId, temporary)
         div2Component.divBinder.attachIndicators(this)
         return rootView
     }
@@ -1004,7 +1002,7 @@ class Div2View private constructor(
         isUpdateTemporary: Boolean = true,
         divBlock: DivBlock,
     ): View {
-        div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
+        dataComponent.stateManager.updateState(stateId, isUpdateTemporary)
         return divBuilder.buildView(divBlock, this).also {
             div2Component.divBinder.attachIndicators(this)
         }
@@ -1015,7 +1013,7 @@ class Div2View private constructor(
         divBlock: DivBlock,
         isUpdateTemporary: Boolean = true
     ): View {
-        div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
+        dataComponent.stateManager.updateState(stateId, isUpdateTemporary)
         val view = divBuilder.createView(divBlock.div, divBlock.expressionResolver, divBlock.path, this)
         if (bindOnAttachEnabled) {
             bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
@@ -1182,7 +1180,7 @@ class Div2View private constructor(
 
     override fun getCurrentState(): DivViewState? {
         val data = divData ?: return null
-        val currentState = div2Component.stateManager.getState(dataTag)
+        val currentState = dataComponent.stateManager.state
         return if (data.states.any { it.stateId == currentState?.currentDivStateId }) {
             currentState
         } else {
@@ -1307,9 +1305,9 @@ class Div2View private constructor(
 
             runMainThreadAction {
                 histogramReporter.onRebindingStarted()
-                viewComponent.errorCollectors.getOrNull(dataTag, divData)?.cleanRuntimeWarningsAndErrors()
+                errorCollector.cleanRuntimeWarningsAndErrors()
                 _divData = newData
-                div2Component.stateManager.updateState(dataTag, state.stateId, true)
+                dataComponent.stateManager.updateState(state.stateId, true)
                 div2Component.divBinder.bind(getChildAt(0), newDivBlock, this)
                 requestLayout()
                 tryAttachVariableTriggers(newData)
@@ -1351,7 +1349,7 @@ class Div2View private constructor(
             this.rebindTask = it
         }
 
-        div2Component.stateManager.updateState(dataTag, stateToBind.stateId, false)
+        dataComponent.stateManager.updateState(stateToBind.stateId, false)
         val result = task.prepareAndRebind(
             oldData,
             newData,

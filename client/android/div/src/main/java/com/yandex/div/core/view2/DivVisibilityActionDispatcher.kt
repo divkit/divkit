@@ -1,11 +1,11 @@
 package com.yandex.div.core.view2
 
 import android.view.View
-import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivVisibilityChangeListener
-import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.DivDataScope
+import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.view2.divs.DivActionBeaconSender
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.util.arrayMap
@@ -16,9 +16,11 @@ import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivVisibilityAction
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Named
 
-@DivScope
+@DivDataScope
 internal class DivVisibilityActionDispatcher @Inject constructor(
+    @param:Named(Names.DATA_TAG) private val dataTag: String,
     private val logger: Div2Logger,
     private val visibilityListeners: List<DivVisibilityChangeListener>,
     private val divActionHandler: DivActionHandler,
@@ -37,7 +39,7 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
     }
 
     fun dispatchAction(scope: Div2View, resolver: ExpressionResolver, view: View, action: DivSightAction) {
-        val compositeLogId = compositeLogIdOf(scope, action.logId?.evaluate(resolver))
+        val compositeLogId = CompositeLogId(dataTag, scope.logId, action.logId?.evaluate(resolver) ?: "")
         val counter = countersFor(action).getOrPut(compositeLogId) { 0 }
         KLog.i(TAG) { "visibility action dispatched: id=$compositeLogId, counter=$counter" }
 
@@ -102,20 +104,9 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
         }
     }
 
-    fun reset(tags: List<DivDataTag>) {
-        if (tags.isEmpty()) {
-            appearLogCounters.clear()
-            disappearLogCounters.clear()
-        } else {
-            tags.forEach { tag ->
-                appearLogCounters.keys.removeAll { compositeLogId ->
-                    compositeLogId.dataTag == tag.id
-                }
-                disappearLogCounters.keys.removeAll { compositeLogId ->
-                    compositeLogId.dataTag == tag.id
-                }
-            }
-        }
+    fun reset() {
+        appearLogCounters.clear()
+        disappearLogCounters.clear()
     }
 
     private companion object {

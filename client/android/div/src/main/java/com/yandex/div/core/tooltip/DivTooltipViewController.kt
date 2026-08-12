@@ -13,13 +13,13 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.findViewTreeOnBackPressedDispatcherOwner
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.children
+import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.toPx
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -35,7 +35,6 @@ private const val CANT_FIND_ON_BACKPRESS_DISPATCHER =
 
 @DivScope
 internal class DivTooltipViewController @VisibleForTesting constructor(
-    private val errorCollectors: ErrorCollectors,
     private val divTooltipViewBuilder: DivTooltipViewBuilder,
     private val accessibilityStateProvider: AccessibilityStateProvider,
     private val createPopup: CreatePopupCall,
@@ -44,10 +43,8 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
     @Inject
     constructor(
         divTooltipViewBuilder: DivTooltipViewBuilder,
-        errorCollectors: ErrorCollectors,
         accessibilityStateProvider: AccessibilityStateProvider,
     ) : this(
-        errorCollectors,
         divTooltipViewBuilder,
         accessibilityStateProvider,
         { c: View, w: Int, h: Int -> DivTooltipWindow(c, w, h) },
@@ -154,12 +151,10 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
 
         if (logSizeWarnings) {
             if (tooltipWidth < tooltipView.width) {
-                errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-                    .logWarning(Throwable("Tooltip width > screen size, width was changed"))
+                divView.logWarning(Throwable("Tooltip width > screen size, width was changed"))
             }
             if (tooltipHeight < tooltipView.height) {
-                errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-                    .logWarning(Throwable("Tooltip height > screen size, height was changed"))
+                divView.logWarning(Throwable("Tooltip height > screen size, height was changed"))
             }
         }
 

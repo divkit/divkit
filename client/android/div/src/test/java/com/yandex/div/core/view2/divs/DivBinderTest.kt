@@ -6,6 +6,7 @@ import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
+import com.yandex.div.core.dagger.DivDataComponent
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.DivImageLoader
@@ -15,13 +16,17 @@ import com.yandex.div.core.view2.DivValidator
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivViewIdProvider
 import com.yandex.div.core.view2.animations.DivTransitionHandler
+import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.viewpool.PseudoViewPool
 import com.yandex.div.internal.viewpool.ViewPreCreationProfile
 import com.yandex.div.json.expressions.ExpressionResolver
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
@@ -48,6 +53,12 @@ open class DivBinderTest {
     internal val context = RuntimeEnvironment.application
     private val oldExpressionResolver = mock<ExpressionResolver>()
     internal val resolver = mock<ExpressionResolverImpl>()
+    private val errorCollectors = mock<ErrorCollectors> {
+        on { getOrCreate(anyOrNull()) } doReturn mock()
+    }
+    internal val dataComponent = mock<DivDataComponent> {
+        on { errorCollectors } doReturn errorCollectors
+    }
     internal val divView = mock<Div2View> {
         on { div2Component } doReturn mockComponent
         on { context } doReturn mock()
@@ -57,6 +68,8 @@ open class DivBinderTest {
         on { config } doReturn mock()
         on { oldExpressionResolver } doReturn oldExpressionResolver
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
+        on { dataComponent } doReturn dataComponent
+        on { errorCollector } doReturn mock()
     }
     private val divExtensionController = DivExtensionController(emptyList())
 
@@ -84,5 +97,11 @@ open class DivBinderTest {
     }
 
     internal val viewCreator = spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), mock()))
-    internal val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
+    internal val baseBinder = mock<DivBaseBinder> {
+        on { bindView(any(), any(), anyOrNull(), any()) } doAnswer {
+            (it.arguments[0] as? DivHolderView<DivBlock>)?.let { view ->
+                view.divBlock = it.arguments[1] as? DivBlock
+            }
+        }
+    }
 }

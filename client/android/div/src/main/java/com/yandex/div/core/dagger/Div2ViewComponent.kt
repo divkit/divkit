@@ -1,6 +1,5 @@
 package com.yandex.div.core.dagger
 
-import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.binding.BindingDispatcher
 import com.yandex.div.core.view2.BulkActionHandler
@@ -9,11 +8,9 @@ import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewIdProvider
 import com.yandex.div.core.view2.ViewBindingProvider
 import com.yandex.div.core.view2.animations.DivAnimatorController
-import com.yandex.div.core.view2.divs.DivLayoutProviderBinder
 import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor
 import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.errors.ErrorVisualMonitor
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.view2.state.DivStateSwitcher
@@ -43,13 +40,10 @@ internal interface Div2ViewComponent {
 
     val errorMonitor: ErrorVisualMonitor
     val bindingProvider: ViewBindingProvider
-    val errorCollectors: ErrorCollectors
     val inputFocusTracker: InputFocusTracker
     val animatorController: DivAnimatorController
     val divTooltipController: DivTooltipController
-    val runtimeVisitor: DivRuntimeVisitor
     val drawingPassOverrideStrategy: DrawingPassOverrideStrategy
-    val layoutProviderBinder: DivLayoutProviderBinder
     val bindingDispatcher: BindingDispatcher
     val bulkActionHandler: BulkActionHandler
 

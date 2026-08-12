@@ -4,28 +4,23 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewTreeObserver
 import com.yandex.div.R
-import com.yandex.div.core.dagger.DivViewScope
+import com.yandex.div.core.dagger.DivDataScope
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.view.onPreDrawListener
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.DivData
 import com.yandex.div2.DivLayoutProvider
 import javax.inject.Inject
 
 private typealias MeasuredSizes = MutableMap<String, Int>
 
-@DivViewScope
-internal class DivLayoutProviderBinder @Inject constructor(
-    private val errorCollectors: ErrorCollectors,
-    private val divView: Div2View,
-) {
+@DivDataScope
+internal class DivLayoutProviderBinder @Inject constructor() {
 
     private val measuredSizes = mutableMapOf<ExpressionResolver, MeasuredSizes>()
-    private val variableHolders = mutableMapOf<DivData, DivLayoutProviderVariableHolder>()
-    private val layoutProvidersForDivData = mutableMapOf<DivData, MutableSet<DivLayoutProvider>>()
+    private var variableHolder: DivLayoutProviderVariableHolder? = null
+    private val layoutProviders = mutableSetOf<DivLayoutProvider>()
     private var clearVariablesListener: ViewTreeObserver.OnPreDrawListener? = null
 
     fun bind(
@@ -33,6 +28,7 @@ internal class DivLayoutProviderBinder @Inject constructor(
         newLayoutProvider: DivLayoutProvider?,
         oldLayoutProvider: DivLayoutProvider?,
         resolver: ExpressionResolver,
+        divView: Div2View,
     ) {
         newLayoutProvider ?: return view.clearLayoutProviderVariablesIfNeeded(oldLayoutProvider)
 
@@ -42,31 +38,34 @@ internal class DivLayoutProviderBinder @Inject constructor(
         }
 
         view.clearLayoutProviderVariablesIfNeeded(oldLayoutProvider)
-        view.bindLayoutProvider(newLayoutProvider, resolver)
+        view.bindLayoutProvider(newLayoutProvider, resolver, divView)
     }
 
     private fun View.clearLayoutProviderVariablesIfNeeded(oldLayoutProvider: DivLayoutProvider?) {
         oldLayoutProvider ?: return
-        layoutProvidersForDivData[divView.divData]?.remove(oldLayoutProvider)
+        layoutProviders.remove(oldLayoutProvider)
         removeOnLayoutChangeListener(getTag(R.id.div_layout_provider_listener_id) as? View.OnLayoutChangeListener)
     }
 
-    private fun View.bindLayoutProvider(layoutProvider: DivLayoutProvider, resolver: ExpressionResolver) {
+    private fun View.bindLayoutProvider(
+        layoutProvider: DivLayoutProvider,
+        resolver: ExpressionResolver,
+        divView: Div2View
+    ) {
         val data = divView.divData ?: return
 
         val widthVariable = layoutProvider.widthVariableName
         val heightVariable = layoutProvider.heightVariableName
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, data)
+        val errorCollector = divView.errorCollector
 
         if (widthVariable.isNullOrEmpty() && heightVariable.isNullOrEmpty()) {
             errorCollector.logError(Throwable("Neither width_variable_name nor height_variable_name found."))
             return
         }
 
-        layoutProvidersForDivData.getOrPut(data) { mutableSetOf() }
-            .add(layoutProvider)
+        layoutProviders.add(layoutProvider)
 
-        val variableHolder = variableHolders.getOrPut(data) { DivLayoutProviderVariableHolder() }
+        val variableHolder = variableHolder ?: DivLayoutProviderVariableHolder().also { variableHolder = it }
         variableHolder.observeDivDataIfNeeded(data, divView.expressionResolver)
 
         val listener =
@@ -75,10 +74,7 @@ internal class DivLayoutProviderBinder @Inject constructor(
                     resources.displayMetrics,
                     widthVariable,
                     variableHolder,
-                    left,
-                    right,
-                    oldLeft,
-                    oldRight,
+                    left, right, oldLeft, oldRight,
                     resolver,
                     errorCollector,
                 )
@@ -86,10 +82,7 @@ internal class DivLayoutProviderBinder @Inject constructor(
                     resources.displayMetrics,
                     heightVariable,
                     variableHolder,
-                    top,
-                    bottom,
-                    oldTop,
-                    oldBottom,
+                    top, bottom, oldTop, oldBottom,
                     resolver,
                     errorCollector,
                 )
@@ -102,7 +95,7 @@ internal class DivLayoutProviderBinder @Inject constructor(
         setTag(R.id.div_layout_provider_listener_id, listener)
 
         if (divView.isAttachedToWindow) {
-            addClearVariablesListener()
+            addClearVariablesListener(divView)
         }
     }
 
@@ -135,36 +128,35 @@ internal class DivLayoutProviderBinder @Inject constructor(
         sizes[variableName] = size.pxToDp(metrics)
     }
 
-    private fun addClearVariablesListener() {
+    private fun addClearVariablesListener(divView: Div2View) {
         if (clearVariablesListener != null) return
 
         val listener = onPreDrawListener {
-            variableHolders[divView.divData]?.clear()
+            variableHolder = null
             measuredSizes.forEach { (resolver, sizes) ->
                 sizes.forEach {
                     VariableMutationHandler.setVariable(divView, it.name, it.value.toString(), resolver)
                 }
             }
             measuredSizes.clear()
-            true
         }
 
         clearVariablesListener = listener
         divView.viewTreeObserver.addOnPreDrawListener(listener)
     }
 
-    fun onAttach() {
-        if (layoutProvidersForDivData[divView.divData].isNullOrEmpty()) return
-        addClearVariablesListener()
+    fun onAttach(divView: Div2View) {
+        if (layoutProviders.isEmpty()) return
+        addClearVariablesListener(divView)
     }
 
-    fun onDetach() {
+    fun onDetach(divView: Div2View) {
         divView.viewTreeObserver.removeOnPreDrawListener(clearVariablesListener)
         clearVariablesListener = null
     }
 
-    fun release(divData: DivData?) {
-        variableHolders[divData]?.release()
+    fun release() {
+        variableHolder?.release()
     }
 }
 

@@ -8,7 +8,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.divs.widgets.DivInputView
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.toBlock
@@ -42,9 +41,6 @@ class DivInputBinderTest : DivBinderTest() {
     private val accessibilityStateProvider = mock<AccessibilityStateProvider> {
         on { isAccessibilityEnabled(any()) } doReturn false
     }
-    private val errorCollectors = mock<ErrorCollectors> {
-        on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn mock()
-    }
 
     private val underTest = DivInputBinder(
         baseBinder = baseBinder,
@@ -52,7 +48,6 @@ class DivInputBinderTest : DivBinderTest() {
         variableBinder = variableBinder,
         actionPerformer = actionPerformer,
         accessibilityStateProvider = accessibilityStateProvider,
-        errorCollectors = errorCollectors
     )
 
     private val path = DivStatePath(0)

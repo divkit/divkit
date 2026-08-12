@@ -16,8 +16,6 @@ import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
-import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.getTypeface
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.slider.SliderTextStyle
@@ -39,14 +37,11 @@ internal class DivSliderBinder @Inject constructor(
     private val logger: Div2Logger,
     private val typefaceResolver: DivTypefaceResolver,
     private val variableBinder: TwoWayIntegerVariableBinder,
-    private val errorCollectors: ErrorCollectors,
     private val horizontalInterceptionAngle: Float,
     private val actionPerformer: DivActionPerformer,
-    @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
+    @param:ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
     private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<DivBlock.Slider, DivSliderView>(baseBinder) {
-
-    private var errorCollector: ErrorCollector? = null
 
     override fun DivSliderView.bind(
         divBlock: DivBlock.Slider,
@@ -55,7 +50,6 @@ internal class DivSliderBinder @Inject constructor(
     ) {
         val div = divBlock.divValue
         val expressionResolver = divBlock.expressionResolver
-        errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         animationsEnabledProvider = { animationsEnabledController.isEnabled() }
 
@@ -64,13 +58,13 @@ internal class DivSliderBinder @Inject constructor(
         addSubscription(
             div.minValue.observeAndGet(expressionResolver) {
                 minValue = it.toFloat()
-                checkSliderTicks()
+                checkSliderTicks(divView)
             }
         )
         addSubscription(
             div.maxValue.observeAndGet(expressionResolver) {
                 maxValue = it.toFloat()
-                checkSliderTicks()
+                checkSliderTicks(divView)
             }
         )
 
@@ -83,7 +77,7 @@ internal class DivSliderBinder @Inject constructor(
         setupSecondaryThumb(div, expressionResolver, divView)
 
         setupTrack(div, expressionResolver)
-        setupTickMarks(div, expressionResolver)
+        setupTickMarks(div, expressionResolver, divView)
 
         setupRanges(div, expressionResolver)
 
@@ -264,37 +258,58 @@ internal class DivSliderBinder @Inject constructor(
         inactiveTrackDrawable = trackStyle.toDrawable(resources.displayMetrics, resolver)
     }
 
-    private fun DivSliderView.setupTickMarks(div: DivSlider, resolver: ExpressionResolver) {
-        observeTickMarkActiveStyle(resolver, div.tickMarkActiveStyle)
-        observeTickMarkInactiveStyle(resolver, div.tickMarkInactiveStyle)
+    private fun DivSliderView.setupTickMarks(
+        div: DivSlider,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+    ) {
+        observeTickMarkActiveStyle(resolver, div.tickMarkActiveStyle, divView)
+        observeTickMarkInactiveStyle(resolver, div.tickMarkInactiveStyle, divView)
     }
 
-    private fun DivSliderView.observeTickMarkActiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
-        applyTickMarkActiveStyle(resolver, tickMarkStyle)
+    private fun DivSliderView.observeTickMarkActiveStyle(
+        resolver: ExpressionResolver,
+        tickMarkStyle: DivDrawable?,
+        divView: Div2View,
+    ) {
+        applyTickMarkActiveStyle(resolver, tickMarkStyle, divView)
         observeDrawable(tickMarkStyle, resolver) {
-            applyTickMarkActiveStyle(resolver, tickMarkStyle)
+            applyTickMarkActiveStyle(resolver, tickMarkStyle, divView)
         }
     }
 
-    private fun DivSliderView.applyTickMarkActiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
+    private fun DivSliderView.applyTickMarkActiveStyle(
+        resolver: ExpressionResolver,
+        tickMarkStyle: DivDrawable?,
+        divView: Div2View,
+    ) {
         activeTickMarkDrawable = tickMarkStyle?.toDrawable(resources.displayMetrics, resolver)
-        checkSliderTicks()
+        checkSliderTicks(divView)
     }
 
-    private fun DivSliderView.observeTickMarkInactiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
-        applyTickMarkInactiveStyle(resolver, tickMarkStyle)
+    private fun DivSliderView.observeTickMarkInactiveStyle(
+        resolver: ExpressionResolver,
+        tickMarkStyle: DivDrawable?,
+        divView: Div2View,
+    ) {
+        applyTickMarkInactiveStyle(resolver, tickMarkStyle, divView)
         observeDrawable(tickMarkStyle, resolver) {
-            applyTickMarkInactiveStyle(resolver, tickMarkStyle)
+            applyTickMarkInactiveStyle(resolver, tickMarkStyle, divView)
         }
     }
 
-    private fun DivSliderView.applyTickMarkInactiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
+    private fun DivSliderView.applyTickMarkInactiveStyle(
+        resolver: ExpressionResolver,
+        tickMarkStyle: DivDrawable?,
+        divView: Div2View,
+    ) {
         inactiveTickMarkDrawable = tickMarkStyle?.toDrawable(resources.displayMetrics, resolver)
-        checkSliderTicks()
+        checkSliderTicks(divView)
     }
 
-    private fun DivSliderView.checkSliderTicks() {
-        if (!visualErrorsEnabled || errorCollector == null) return
+    private fun DivSliderView.checkSliderTicks(divView: Div2View) {
+        if (!visualErrorsEnabled) return
+        val errorCollector = divView.errorCollector
         doOnPreDraw {
             if (activeTickMarkDrawable != null || inactiveTickMarkDrawable != null) {
                 val ticksNumber = maxValue - minValue
@@ -302,8 +317,8 @@ internal class DivSliderBinder @Inject constructor(
                 val inactiveTicksWidth = inactiveTickMarkDrawable?.intrinsicWidth ?: 0
                 val tickWidth = max(activeTicksWidth, inactiveTicksWidth)
 
-                if (tickWidth * ticksNumber > width && errorCollector != null) {
-                    val warnings = errorCollector!!.getWarnings()
+                if (tickWidth * ticksNumber > width) {
+                    val warnings = errorCollector.getWarnings()
                     var warningLogged = false
                     for (warning in warnings.iterator()) {
                         if (warning.message == SLIDER_TICKS_OVERLAP_WARNING) {
@@ -311,7 +326,7 @@ internal class DivSliderBinder @Inject constructor(
                         }
                     }
                     if (!warningLogged) {
-                        errorCollector?.logWarning(Throwable(SLIDER_TICKS_OVERLAP_WARNING))
+                        errorCollector.logWarning(Throwable(SLIDER_TICKS_OVERLAP_WARNING))
                     }
                 }
             }

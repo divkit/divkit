@@ -59,16 +59,12 @@ internal object StoredValuesActionHandler {
         lifetime: Long,
         view: Div2View
     ) {
-        val errorCollector = view.viewComponent.errorCollectors.getOrCreate(
-            view.divTag,
-            view.divData
-        )
         view.div2Component.storedValuesController.setStoredValue(
             value,
             lifetime,
             scope.toStoredValueScope(),
             view.divTag.id,
-            errorCollector
+            view.errorCollector,
         )
     }
 

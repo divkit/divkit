@@ -28,7 +28,6 @@ import javax.inject.Inject
 @DivScope
 internal class DivVisibilityActionTracker @Inject constructor(
     private val viewVisibilityCalculator: ViewVisibilityCalculator,
-    private val visibilityActionDispatcher: DivVisibilityActionDispatcher
 ) {
 
     private val handler = Handler(Looper.getMainLooper())
@@ -60,15 +59,16 @@ internal class DivVisibilityActionTracker @Inject constructor(
     private val appearedForDisappearActions = WeakHashMap<View, MutableSet<DivDisappearAction>>()
 
     private var hasPostedUpdateVisibilityTask = false
-    private val updateVisibilityTask = Runnable {
-        visibilityActionDispatcher.dispatchVisibleViewsChanged(visibleActions)
+
+    private fun updateVisibilityTask(divView: Div2View) = Runnable {
+        divView.dataComponent.visibilityActionDispatcher.dispatchVisibleViewsChanged(visibleActions)
         hasPostedUpdateVisibilityTask = false
     }
 
     fun getDivWithWaitingDisappearActions() = divWithWaitingDisappearActions.createMap()
 
     @AnyThread
-    fun updateVisibleViews(viewList: List<View>) {
+    fun updateVisibleViews(viewList: List<View>, divView: Div2View) {
         val visibleIterator = visibleActions.iterator()
         while (visibleIterator.hasNext()) {
             if (visibleIterator.next().key !in viewList) visibleIterator.remove()
@@ -76,7 +76,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
 
         if (!hasPostedUpdateVisibilityTask) {
             hasPostedUpdateVisibilityTask = true
-            handler.post(updateVisibilityTask)
+            handler.post(updateVisibilityTask(divView))
         }
     }
 
@@ -208,7 +208,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
     ) = scope.runMainThreadAction {
         val visibilityPercentage = view.let {
             val result = viewVisibilityCalculator.calculateVisibilityPercentage(view)
-            updateVisibility(view, div, result)
+            updateVisibility(view, div, result, scope)
             result
         }
 
@@ -316,7 +316,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
                 }
             }
             if (scope.logId == originalDataLogId) {
-                visibilityActionDispatcher.dispatchActions(scope, resolver, view, logIds.values.toTypedArray())
+                scope.dataComponent.visibilityActionDispatcher
+                    .dispatchActions(scope, resolver, view, logIds.values.toTypedArray())
             }
         }
     }
@@ -341,7 +342,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         }
     }
 
-    private fun updateVisibility(view: View, div: Div, visibilityPercentage: Int) {
+    private fun updateVisibility(view: View, div: Div, visibilityPercentage: Int, divView: Div2View) {
         val visible = visibilityPercentage > 0
         if (visible) {
             visibleActions[view] = div
@@ -351,7 +352,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
 
         if (!hasPostedUpdateVisibilityTask) {
             hasPostedUpdateVisibilityTask = true
-            handler.post(updateVisibilityTask)
+            handler.post(updateVisibilityTask(divView))
         }
     }
 

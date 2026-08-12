@@ -2,8 +2,6 @@ package com.yandex.div.core.view2.divs.tabs
 
 import androidx.viewpager.widget.ViewPager
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.expression.local.DivRuntimeVisitor
-import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
@@ -13,8 +11,6 @@ internal class DivTabsActiveStateTracker(
     var divBlock: DivBlock.Tabs,
     private val divView: Div2View,
     private val div2Logger: Div2Logger,
-    private val tabsStateCache: TabsStateCache,
-    private val runtimeVisitor: DivRuntimeVisitor,
 ) : ViewPager.OnPageChangeListener,
     BaseDivTabbedCardUi.ActiveTabClickListener<DivAction> {
 
@@ -22,8 +18,8 @@ internal class DivTabsActiveStateTracker(
 
     override fun onPageSelected(position: Int) {
         div2Logger.logTabPageChanged(divView, position)
-        tabsStateCache.putSelectedTab(divView.dataTag.id, divBlock.path.fullPath, position)
-        runtimeVisitor
+        divView.dataComponent.tabsStateCache.putSelectedTab(divBlock.path.fullPath, position)
+        divView.dataComponent.runtimeVisitor
             .createAndAttachRuntimesToTabs(divView, divBlock.divValue, divBlock.path, divBlock.expressionResolver)
     }
 

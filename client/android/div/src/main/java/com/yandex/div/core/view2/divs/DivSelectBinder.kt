@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.widget.TextView
+import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.view2.Div2View
@@ -8,7 +9,6 @@ import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivSelect
@@ -19,7 +19,6 @@ internal class DivSelectBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
     private val variableBinder: TwoWayStringVariableBinder,
-    private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivBlock.Select, DivSelectView>(baseBinder) {
 
     override fun DivSelectView.bind(
@@ -76,8 +75,6 @@ internal class DivSelectBinder @Inject constructor(
         resolver: ExpressionResolver,
         divView: Div2View,
     ) {
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-
         val subscription = variableBinder.bindVariable(
             div.valueVariable,
             resolver,
@@ -90,14 +87,16 @@ internal class DivSelectBinder @Inject constructor(
                         .iterator()
 
                     text = if (!matchingOptionsSequence.hasNext()) {
-                        errorCollector.logWarning(Throwable("No option found with value = \"$value\""))
+                        divView.logWarning(Throwable("No option found with value = \"$value\""))
 
                         ""
                     } else {
                         val option = matchingOptionsSequence.next()
 
                         if (matchingOptionsSequence.hasNext()) {
-                            errorCollector.logWarning(Throwable("Multiple options found with value = \"$value\", selecting first one"))
+                            divView.logWarning(
+                                Throwable("Multiple options found with value = \"$value\", selecting first one")
+                            )
                         }
 
                         option.let { it.text ?: it.value }.evaluate(resolver)

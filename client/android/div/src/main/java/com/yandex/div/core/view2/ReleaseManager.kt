@@ -7,7 +7,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.RuntimeStoreProvider
 import com.yandex.div.internal.Log
 import java.util.WeakHashMap
 import javax.inject.Inject
@@ -16,9 +15,7 @@ import javax.inject.Inject
  * The class responsible for releasing divs when the corresponding LifecycleOwner is destroyed.
  */
 @DivScope
-internal class ReleaseManager @Inject constructor(
-    private val runtimeStoreProvider: RuntimeStoreProvider,
-) {
+internal class ReleaseManager @Inject constructor() {
 
     private val divToRelease = hashMapOf<LifecycleOwner, WeakHashMap<Div2View, Any>>()
     private val monitor = Any()
@@ -29,7 +26,7 @@ internal class ReleaseManager @Inject constructor(
                 Lifecycle.Event.ON_DESTROY -> {
                     divToRelease.remove(source)?.keys?.forEach {
                         it.cleanup()
-                        runtimeStoreProvider.cleanupRuntime(it)
+                        it.runtimeStore.cleanupRuntimes(it)
                     }
                 }
                 else -> Unit

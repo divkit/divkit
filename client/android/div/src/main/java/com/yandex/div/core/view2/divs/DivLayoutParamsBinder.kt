@@ -10,7 +10,6 @@ import com.yandex.div.core.util.observeSize
 import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.DivLayoutParams
@@ -30,9 +29,7 @@ private const val WIDTH = "width"
 private const val HEIGHT = "height"
 
 @DivScope
-internal class DivLayoutParamsBinder @Inject constructor(
-    private val errorCollectors: ErrorCollectors,
-) {
+internal class DivLayoutParamsBinder @Inject constructor() {
 
     fun bindLayoutParams(
         target: View,
@@ -42,8 +39,7 @@ internal class DivLayoutParamsBinder @Inject constructor(
         divView: Div2View,
         subscriber: ExpressionSubscriber,
     ) {
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        target.bindLayoutParams(newDiv, oldDiv, resolver, subscriber, errorCollector)
+        target.bindLayoutParams(newDiv, oldDiv, resolver, subscriber, divView.errorCollector)
     }
 
     private fun View.bindLayoutParams(

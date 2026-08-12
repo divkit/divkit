@@ -85,8 +85,8 @@ class Div2ViewTest {
             withAnimations = false
         )
 
-        assertEquals("first", div2View.div2Component.temporaryDivStateCache.getState(tag.id, "0/state_container"))
-        assertEquals("second", div2View.div2Component.temporaryDivStateCache.getState(tag.id, "0/state_list"))
+        assertEquals("first", div2View.dataComponent.stateManager.getState("0/state_container"))
+        assertEquals("second", div2View.dataComponent.stateManager.getState("0/state_list"))
     }
 
     @Test

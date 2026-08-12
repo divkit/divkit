@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 @DivViewScope
 internal class ErrorVisualMonitor @Inject constructor(
-    errorCollectors: ErrorCollectors,
     private val divView: Div2View,
     @param:ExperimentFlag(VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
     @param:ExperimentFlag(PERMANENT_DEBUG_PANEL_ENABLED) private val showPermanently: Boolean,
@@ -31,7 +30,6 @@ internal class ErrorVisualMonitor @Inject constructor(
         }
 
     private val debugViewModelProvider = DebugViewModelProvider(
-        errorCollectors = errorCollectors,
         div2View = divView,
         visualErrorsEnabled = visualErrorsEnabled,
         alwaysShowDebugView = showPermanently,

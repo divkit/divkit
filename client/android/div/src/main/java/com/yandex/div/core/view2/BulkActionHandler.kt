@@ -41,7 +41,7 @@ internal class BulkActionHandler @Inject constructor(private val divView: Div2Vi
         isPendingStateTemporary = isPendingStateTemporary && temporary
         pendingPaths += paths
         paths.forEach { path: DivStatePath ->
-            divView.div2Component.stateManager.updateStates(divView.divTag.id, path, temporary)
+            divView.dataComponent.stateManager.updateStates(path, temporary)
         }
 
         if (bulkModeDepth == 0) {

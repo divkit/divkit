@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.divs
 
-import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import android.view.View
 import com.yandex.div.core.childrenToFlatList
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
@@ -10,8 +9,8 @@ import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -39,7 +38,6 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     private val viewBinder = mock<DivBinder>()
     private val stateManager = mock<DivStateManager>()
     private val divVisibilityActionTracker = mock<DivVisibilityActionTracker>()
-    private val errorCollectors = mock<ErrorCollectors>()
     private val variableBinder = mock<TwoWayStringVariableBinder>()
 
     private val stateLayout = (viewCreator.create(divOne.div, ExpressionResolver.EMPTY) as DivStateLayout).apply {
@@ -54,14 +52,16 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
         baseBinder = baseBinder,
         viewCreator = viewCreator,
         viewBinder = { viewBinder },
-        stateManager = stateManager,
         actionPerformer = actionPerformer,
         divVisibilityActionTracker = divVisibilityActionTracker,
-        errorCollectors = errorCollectors,
         variableBinder = variableBinder,
-        runtimeVisitor = mock(),
         animationsEnabledController = animationsEnabledController,
     )
+
+    init {
+        whenever { dataComponent.stateManager } doReturn stateManager
+        whenever { dataComponent.runtimeVisitor } doReturn mock()
+    }
 
     @Test
     fun `initial bind do not call release`() {
@@ -84,7 +84,7 @@ class DivStateBinderReleaseViewTest: DivBinderTest() {
     @Test
     fun `change state release old views`() {
         stateBinder.bindView(stateLayout, divOne.asDivState.toBlock(resolver, rootPath) as DivBlock.State, divView)
-        whenever(stateManager.getState(divOne.asDivState.value, divView, resolver, path = "0/state_container"))
+        whenever(stateManager.getState(divOne.asDivState.value, resolver, path = "0/state_container"))
             .thenReturn("second")
         val stateToBeSwitched: DivStateLayout = stateLayout
             .findStateLayout(DivStatePath.parse("0/state_container/first"))

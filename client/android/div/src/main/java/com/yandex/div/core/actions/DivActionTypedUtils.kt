@@ -9,12 +9,7 @@ import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivTypedValue
 
-internal fun Div2View.logWarning(throwable: Throwable) {
-    viewComponent
-        .errorCollectors
-        .getOrCreate(dataTag, divData)
-        .logWarning(throwable)
-}
+internal fun Div2View.logWarning(throwable: Throwable) = errorCollector.logWarning(throwable)
 
 internal fun DivTypedValue.longValue(expressionResolver: ExpressionResolver): Long? {
     return when (this) {

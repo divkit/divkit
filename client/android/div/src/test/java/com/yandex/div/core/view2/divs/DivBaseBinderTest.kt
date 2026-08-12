@@ -1,7 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.asExpression
-import com.yandex.div.core.dagger.Div2ViewComponent
+import com.yandex.div.core.dagger.DivDataComponent
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.animations.DivTransitionHandler
@@ -38,12 +38,13 @@ class DivBaseBinderTest {
     private val paddingsTop = DivEdgeInsets(top = 1L.asExpression())
 
     private val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
-    private val viewComponent = mock<Div2ViewComponent> {
+    private val dataComponent = mock<DivDataComponent> {
         on { layoutProviderBinder } doReturn mock()
     }
     private val divView = mock<Div2View> {
         on { divTransitionHandler } doReturn DivTransitionHandler(mock)
-        on { viewComponent } doReturn viewComponent
+        on { dataComponent } doReturn dataComponent
+        on { viewComponent } doReturn mock()
     }
     private val resolver = mock<ExpressionResolver>()
     private val path = DivStatePath.fromState(0)

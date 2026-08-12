@@ -59,7 +59,7 @@ class TwoWayVariableBinderTest {
     }
 
     init {
-        TwoWayStringVariableBinder(mock()).bindVariable(VARIABLE_NAME, expressionResolver, divView, callbacks)
+        TwoWayStringVariableBinder().bindVariable(VARIABLE_NAME, expressionResolver, divView, callbacks)
     }
 
     @Test

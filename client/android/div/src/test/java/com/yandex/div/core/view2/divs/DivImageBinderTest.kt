@@ -12,7 +12,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.internal.view.DivImageView
@@ -42,16 +41,11 @@ import org.robolectric.RobolectricTestRunner
 class DivImageBinderTest : DivBinderTest() {
 
     private val placeholderLoader = mock<DivPlaceholderLoader>()
-    private val errorCollector = mock<ErrorCollectors> {
-        on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn mock()
-    }
     private val path = DivStatePath.fromState(0)
     private val animationsEnabledController = mock<DivAnimationsEnabledController> {
         on { isEnabled() } doReturn true
     }
-    private val binder = DivImageBinder(
-            baseBinder, imageLoader, placeholderLoader, errorCollector, animationsEnabledController
-    )
+    private val binder = DivImageBinder(baseBinder, imageLoader, placeholderLoader, animationsEnabledController)
 
     @Before
     fun setUp() {
@@ -142,11 +136,11 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
-    fun `do not apply preview when both imageUrl and preview did not not change`() {
+    fun `do not apply preview when both imageUrl and preview have not changed`() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(imageUrl = "empty://", preview = PREVIEW, highPriorityPreviewShow = true)
 
-        binder.bindView(view, divImage, divView)
+
 
         val nextDivImage = createTestDiv(imageUrl = "empty://", preview = PREVIEW, highPriorityPreviewShow = true)
 

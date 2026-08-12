@@ -15,6 +15,7 @@ import com.yandex.div.core.DivCreationTracker;
 import com.yandex.div.core.DivCustomContainerChildFactory;
 import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivDataChangeListener;
+import com.yandex.div.core.DivDataComponentStore;
 import com.yandex.div.core.DivErrorsReporter;
 import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.DivViewDataPreloader;
@@ -23,7 +24,6 @@ import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
 import com.yandex.div.core.experiments.Experiment;
-import com.yandex.div.core.expression.RuntimeStoreProvider;
 import com.yandex.div.core.expression.storedvalues.StoredValuesController;
 import com.yandex.div.core.expression.variables.DivVariableController;
 import com.yandex.div.core.extension.DivExtensionController;
@@ -31,10 +31,6 @@ import com.yandex.div.core.player.DivPlayerFactory;
 import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.player.DivVideoActionHandler;
 import com.yandex.div.core.state.DivStateChangeListener;
-import com.yandex.div.core.state.DivStateManager;
-import com.yandex.div.core.state.TabsStateCache;
-import com.yandex.div.core.state.TemporaryDivStateCache;
-import com.yandex.div.core.timer.DivTimerEventDispatcherProvider;
 import com.yandex.div.core.tooltip.DivTooltipController;
 import com.yandex.div.core.tooltip.DivTooltipManager;
 import com.yandex.div.core.util.bitmap.BitmapEffectHelper;
@@ -42,12 +38,11 @@ import com.yandex.div.core.view2.Div2Builder;
 import com.yandex.div.core.view2.DivBinder;
 import com.yandex.div.core.view2.DivImagePreloader;
 import com.yandex.div.core.view2.DivViewCreator;
-import com.yandex.div.core.view2.DivVisibilityActionDispatcher;
 import com.yandex.div.core.view2.DivVisibilityActionTracker;
 import com.yandex.div.core.view2.ReleaseManager;
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController;
 import com.yandex.div.core.view2.divs.DivActionBinder;
-import com.yandex.div.core.view2.errors.ErrorCollectors;
+import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository;
@@ -96,19 +91,10 @@ public interface Div2Component {
     DivVisibilityActionTracker getVisibilityActionTracker();
 
     @NonNull
-    DivVisibilityActionDispatcher getVisibilityActionDispatcher();
-
-    @NonNull
     DivActionBinder getActionBinder();
 
     @NonNull
     DivActionPerformer getActionPerformer();
-
-    @NonNull
-    TemporaryDivStateCache getTemporaryDivStateCache();
-
-    @NonNull
-    TabsStateCache getTabsStateCache();
 
     @NonNull
     DivCustomContainerChildFactory getDivCustomContainerChildFactory();
@@ -123,16 +109,7 @@ public interface Div2Component {
     DivDataChangeListener getDivDataChangeListener();
 
     @NonNull
-    RuntimeStoreProvider getRuntimeStoreProvider();
-
-    @NonNull
-    DivTimerEventDispatcherProvider getDivTimersControllerProvider();
-
-    @NonNull
     DivVideoActionHandler getDivVideoActionHandler();
-
-    @NonNull
-    DivStateManager getStateManager();
 
     @NonNull
     DivStateChangeListener getDivStateChangeListener();
@@ -206,9 +183,6 @@ public interface Div2Component {
     DivActionTypedHandlerCombiner getActionTypedHandlerCombiner();
 
     @NonNull
-    ErrorCollectors getErrorCollectors();
-
-    @NonNull
     BitmapEffectHelper getBitmapEffectHelper();
 
     @NonNull
@@ -216,6 +190,12 @@ public interface Div2Component {
 
     @NonNull
     DivTooltipManager getTooltipManager();
+
+    @NonNull
+    DivDataComponent.Builder getDataComponent();
+
+    @NonNull
+    DivDataComponentStore getDataComponentStore();
 
     /**
      * Builder for Div2Component

@@ -5,16 +5,13 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import javax.inject.Inject
 
 @DivScope
-internal class TwoWayStringVariableBinder @Inject constructor(
-    errorCollectors: ErrorCollectors,
-) : TwoWayVariableBinder<String>(errorCollectors) {
+internal class TwoWayStringVariableBinder @Inject constructor() : TwoWayVariableBinder<String>() {
 
     interface Callbacks : TwoWayVariableBinder.Callbacks<String>
 
@@ -22,9 +19,7 @@ internal class TwoWayStringVariableBinder @Inject constructor(
 }
 
 @DivScope
-internal class TwoWayIntegerVariableBinder @Inject constructor(
-    errorCollectors: ErrorCollectors,
-) : TwoWayVariableBinder<Long>(errorCollectors) {
+internal class TwoWayIntegerVariableBinder @Inject constructor() : TwoWayVariableBinder<Long>() {
 
     interface Callbacks : TwoWayVariableBinder.Callbacks<Long>
 
@@ -32,16 +27,14 @@ internal class TwoWayIntegerVariableBinder @Inject constructor(
 }
 
 @DivScope
-internal class TwoWayBooleanVariableBinder @Inject constructor(
-    errorCollectors: ErrorCollectors,
-) : TwoWayVariableBinder<Boolean>(errorCollectors) {
+internal class TwoWayBooleanVariableBinder @Inject constructor() : TwoWayVariableBinder<Boolean>() {
 
     interface Callbacks : TwoWayVariableBinder.Callbacks<Boolean>
 
     override fun Boolean.toStringValue(): String = toString()
 }
 
-internal abstract class TwoWayVariableBinder<T>(private val errorCollectors: ErrorCollectors) {
+internal abstract class TwoWayVariableBinder<T> {
 
     interface Callbacks<T> {
         @MainThread
@@ -55,11 +48,9 @@ internal abstract class TwoWayVariableBinder<T>(private val errorCollectors: Err
         divView: Div2View,
         callbacks: Callbacks<T>,
     ): Disposable {
-        val data = divView.divData ?: return Disposable.NULL
         val resolver = resolver.asImpl ?: return Disposable.NULL
 
         var pendingValue: T? = null
-        val tag = divView.dataTag
 
         callbacks.setViewStateChangeListener { value ->
             if (pendingValue == value) return@setViewStateChangeListener
@@ -69,7 +60,7 @@ internal abstract class TwoWayVariableBinder<T>(private val errorCollectors: Err
 
         return resolver.variableController.subscribeToVariableChange(
             variableName,
-            errorCollectors.getOrCreate(tag, data),
+            divView.errorCollector,
             invokeOnSubscription = true
         ) { changed: Variable ->
             @Suppress("UNCHECKED_CAST")

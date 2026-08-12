@@ -16,7 +16,6 @@ import com.yandex.div.core.util.hotreload.HotReloadController
 import com.yandex.div.core.util.hotreload.HotReloadStatus
 import com.yandex.div.core.view2.Binding
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.errors.LogcatErrorDumper
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.util.UiThreadHandler
@@ -32,7 +31,6 @@ private const val DOC_LINK = "https://github.com/divkit/divkit/tree/main/tools/h
  * Provides [DebugViewModel] to view for rendering.
  */
 internal class DebugViewModelProvider(
-    private val errorCollectors: ErrorCollectors,
     private val div2View: Div2View,
     private val visualErrorsEnabled: Boolean,
     private val alwaysShowDebugView: Boolean,
@@ -50,8 +48,8 @@ internal class DebugViewModelProvider(
     }
 
     private fun observeErrors(binding: Binding): Disposable {
-        return errorCollectors
-            .getOrCreate(binding.tag, binding.data)
+        return div2View.dataComponent.errorCollectors
+            .getOrCreate(binding.data)
             .observeAndGet(updateOnErrors)
     }
 

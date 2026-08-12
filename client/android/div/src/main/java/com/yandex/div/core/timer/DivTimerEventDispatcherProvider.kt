@@ -1,34 +1,30 @@
 package com.yandex.div.core.timer
 
-import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivActionPerformer
-import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.DivDataScope
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTimer
-import java.util.Collections
 import javax.inject.Inject
 
-@DivScope
+@DivDataScope
 internal class DivTimerEventDispatcherProvider @Inject constructor(
     private val actionPerformer: DivActionPerformer,
     private val errorCollectors: ErrorCollectors
 ) {
 
-    private val controllers =
-        Collections.synchronizedMap(mutableMapOf<String, DivTimerEventDispatcher>())
+    private var controller: DivTimerEventDispatcher? = null
 
     internal fun getOrCreate(
-        dataTag: DivDataTag,
         data: DivData,
         expressionResolver: ExpressionResolver
     ): DivTimerEventDispatcher? {
         val timers = data.timers ?: return null
 
-        val errorCollector = errorCollectors.getOrCreate(dataTag, data)
-        val timerEventDispatcher = controllers.getOrPut(dataTag.id) {
+        val errorCollector = errorCollectors.getOrCreate(data)
+        val timerEventDispatcher = controller ?: run {
             val divTimerEventDispatcher = DivTimerEventDispatcher(errorCollector)
 
             timers.forEach { timer ->
@@ -37,6 +33,7 @@ internal class DivTimerEventDispatcherProvider @Inject constructor(
                 divTimerEventDispatcher.addTimerController(controller)
             }
 
+            controller = divTimerEventDispatcher
             divTimerEventDispatcher
         }
 

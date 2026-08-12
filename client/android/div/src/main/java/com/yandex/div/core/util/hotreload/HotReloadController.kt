@@ -143,8 +143,7 @@ internal class HotReloadController(
             // Re-new tag to evade previous state.
             val dataTag = DivDataTag(UUID.randomUUID().toString())
             divView.setData(divData, dataTag)
-            divView.viewComponent.errorCollectors.getOrNull(divView.dataTag, divData)
-                ?.cleanRuntimeWarningsAndErrors()
+            divView.errorCollector.cleanRuntimeWarningsAndErrors()
             errors.forEach {
                 logError(it)
             }

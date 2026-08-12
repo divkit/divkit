@@ -69,7 +69,8 @@ internal class DivBaseBinder @Inject constructor(
         bindLayoutParams(div, oldDiv, resolver, divView, subscriber)
         bindMargins(div, oldDiv, resolver, subscriber)
         bindAlignment(div, oldDiv, resolver, subscriber)
-        divView.viewComponent.layoutProviderBinder.bind(this, div.layoutProvider, oldDiv?.layoutProvider, resolver)
+        divView.dataComponent.layoutProviderBinder
+            .bind(this, div.layoutProvider, oldDiv?.layoutProvider, resolver, divView)
         bindAccessibility(div, oldDiv, resolver, subscriber)
         bindAlpha(div, oldDiv, resolver, subscriber)
 

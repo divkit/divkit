@@ -22,7 +22,6 @@ import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -66,6 +65,7 @@ class DivTooltipViewControllerTest {
     private val runtimeStore = mock<RuntimeStore> {
         on { getOrCreateRuntime(any(), any(), any()) } doReturn ExpressionsRuntime(mock())
     }
+    private val errorCollector = mock<ErrorCollector>()
     private val div2View = mock<Div2View> {
         on { resources } doReturn resources
         on { getContext() } doReturn mock()
@@ -74,6 +74,7 @@ class DivTooltipViewControllerTest {
         }
         on { childCount } doReturn 0
         on { runtimeStore } doReturn runtimeStore
+        on { errorCollector } doReturn errorCollector
     }
     private val layoutListenerCaptor = argumentCaptor<View.OnLayoutChangeListener>()
     private val preDrawListenerCaptor = argumentCaptor<ViewTreeObserver.OnPreDrawListener>()
@@ -112,10 +113,6 @@ class DivTooltipViewControllerTest {
         on { buildTooltipView(any(), anyOrNull(), any(), any()) } doReturn tooltipWrapper
     }
 
-    private val errorCollector = mock<ErrorCollector>()
-    private val errorCollectors = mock<ErrorCollectors> {
-        on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn errorCollector
-    }
     private val accessibilityStateProvider = AccessibilityStateProvider(false)
 
     private val dismissListenerCaptor = argumentCaptor<PopupWindow.OnDismissListener>()
@@ -126,7 +123,6 @@ class DivTooltipViewControllerTest {
     }
 
     private val underTest = DivTooltipViewController(
-        errorCollectors,
         divTooltipViewBuilder,
         accessibilityStateProvider,
     ) { _, _, _ -> popupWindow }
@@ -206,7 +202,6 @@ class DivTooltipViewControllerTest {
     fun `createPopupWindow assigns back press callback when accessibility enabled`() {
         AccessibilityStateProvider.touchExplorationEnabled = true
         val accessibilityEnabledController = DivTooltipViewController(
-            errorCollectors,
             divTooltipViewBuilder,
             AccessibilityStateProvider(true),
         ) { _, _, _ -> popupWindow }
@@ -358,7 +353,6 @@ class DivTooltipViewControllerTest {
     fun `createOnBackPressCallback returns callback when accessibility enabled`() {
         AccessibilityStateProvider.touchExplorationEnabled = true
         val accessibilityEnabledController = DivTooltipViewController(
-            errorCollectors,
             divTooltipViewBuilder,
             AccessibilityStateProvider(true),
         ) { _, _, _ -> popupWindow }

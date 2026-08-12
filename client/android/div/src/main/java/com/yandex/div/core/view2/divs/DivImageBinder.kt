@@ -24,7 +24,6 @@ import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.errors.ErrorCollector
-import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.core.DivBlock
@@ -48,7 +47,6 @@ internal class DivImageBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
-    private val errorCollectors: ErrorCollectors,
     private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<DivBlock.Image, DivImageView>(baseBinder) {
 
@@ -75,7 +73,7 @@ internal class DivImageBinder @Inject constructor(
             divView,
         )
 
-        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+        val errorCollector = divView.errorCollector
 
         bindAspectRatio(div.aspect, oldDiv?.aspect, expressionResolver)
         bindImageScale(div, oldDiv, expressionResolver)
@@ -512,12 +510,8 @@ internal class DivImageBinder @Inject constructor(
 
     //endregion
 
-    fun loadImage(
-        view: DivImageView,
-        divBlock: DivBlock.Image,
-        divView: Div2View,
-        errorCollector: ErrorCollector,
-    ) = view.applyImage(divBlock.divValue, divBlock.expressionResolver, divView, errorCollector)
+    fun loadImage(view: DivImageView, divBlock: DivBlock.Image, divView: Div2View) =
+        view.applyImage(divBlock.divValue, divBlock.expressionResolver, divView, divView.errorCollector)
 
     private fun DivImageView.setImageDrawable(divView: Div2View, drawable: Drawable?) {
         divView.runMainThreadAction {

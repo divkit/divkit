@@ -253,11 +253,7 @@ class ViewLocatorTest {
 
         ViewLocator.findSingleViewWithTag<DivInputView>(divView, ID, SCOPE_ID)
 
-        val warnings = divView.viewComponent
-            .errorCollectors
-            .getOrCreate(divView.dataTag, divView.divData)
-            .getWarnings()
-            .toList()
+        val warnings = divView.errorCollector.getWarnings().toList()
         Assert.assertEquals(1, warnings.size)
         Assert.assertTrue(warnings.single() is ViewLocator.MissingTarget)
     }

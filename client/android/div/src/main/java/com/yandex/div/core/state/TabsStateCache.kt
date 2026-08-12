@@ -1,15 +1,15 @@
 package com.yandex.div.core.state
 
-import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.dagger.DivDataScope
 import javax.inject.Inject
 
-@DivScope
+@DivDataScope
 internal class TabsStateCache @Inject constructor() {
-    private val temporaryCache = mutableMapOf<String, MutableMap<String, Int>>()
+    private val temporaryCache = mutableMapOf<String, Int>()
 
-    fun getSelectedTab(cardId: String, path: String) = temporaryCache[cardId]?.get(path)
+    fun getSelectedTab(path: String) = temporaryCache[path]
 
-    fun putSelectedTab(cardId: String, path: String, index: Int) {
-        temporaryCache.getOrPut(cardId) { mutableMapOf() } [path] = index
+    fun putSelectedTab(path: String, index: Int) {
+        temporaryCache[path] = index
     }
 }
