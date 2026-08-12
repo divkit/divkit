@@ -36,6 +36,31 @@ public class JsonFieldParser {
     private static final ValueValidator<String> IS_NOT_EMPTY = value -> !value.isEmpty();
 
     @NonNull
+    private static <V> Field<V> valueOrReferenceWithFallback(
+            @NonNull final ParsingContext context,
+            @NonNull final JSONObject json,
+            @NonNull final String key,
+            final boolean overridable,
+            @NonNull final V value
+    ) {
+        String reference = readReference(context, json, key);
+        if (reference != null) {
+            return new Field.Reference<>(overridable, reference, value);
+        }
+        return new Field.Value<>(overridable, value);
+    }
+
+    @Nullable
+    private static <V> V fallbackValueOf(@Nullable final Field<V> field) {
+        if (field instanceof Field.Value<?>) {
+            return ((Field.Value<V>) field).value;
+        } else if (field instanceof Field.Reference<?>) {
+            return ((Field.Reference<V>) field).fallbackValue;
+        }
+        return null;
+    }
+
+    @NonNull
     public static <V> Field<V> readField(
             @NonNull final ParsingContext context,
             @NonNull final JSONObject json,
@@ -82,7 +107,7 @@ public class JsonFieldParser {
     ) {
         try {
             V value = JsonPropertyParser.read(context, json, key, converter, validator);
-            return new Field.Value<>(overridable, value);
+            return valueOrReferenceWithFallback(context, json, key, overridable, value);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, json, key);
@@ -106,7 +131,7 @@ public class JsonFieldParser {
     ) {
         try {
             V result = JsonPropertyParser.read(context, json, key, deserializer);
-            return new Field.Value<>(overridable, result);
+            return valueOrReferenceWithFallback(context, json, key, overridable, result);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, json, key);
@@ -166,11 +191,11 @@ public class JsonFieldParser {
     ) {
         V opt = JsonPropertyParser.readOptional(context, json, key, converter, validator);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         }
         String reference = readReference(context, json, key);
         if (reference != null) {
-            return new Field.Reference<>(overridable, reference);
+            return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
         } else if (fallback != null) {
             return FieldKt.clone(fallback, overridable);
         } else {
@@ -189,11 +214,11 @@ public class JsonFieldParser {
     ) {
         V opt = JsonPropertyParser.readOptional(context, json, key, deserializer);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         }
         String reference = readReference(context, json, key);
         if (reference != null) {
-            return new Field.Reference<>(overridable, reference);
+            return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
         } else if (fallback != null) {
             return FieldKt.clone(fallback, overridable);
         } else {
@@ -256,7 +281,7 @@ public class JsonFieldParser {
         try {
             Expression<V> expression = JsonExpressionParser.readExpression(
                     context, json, key, typeHelper, converter, validator);
-            return new Field.Value<>(overridable, expression);
+            return valueOrReferenceWithFallback(context, json, key, overridable, expression);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             Field<Expression<V>> referenceOrFallback = referenceOrFallback(
@@ -326,11 +351,11 @@ public class JsonFieldParser {
         Expression<V> opt = JsonExpressionParser.readOptionalExpression(
                 context, json, key, typeHelper, converter, validator, null);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } else {
             String reference = readReference(context, json, key);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -380,7 +405,7 @@ public class JsonFieldParser {
         try {
             List<V> opt = JsonPropertyParser.readList(
                     context, json, key, converter, listValidator, itemValidator);
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, json, key);
@@ -405,7 +430,7 @@ public class JsonFieldParser {
         try {
             List<V> opt = JsonPropertyParser.readList(
                     context, json, key, deserializer);
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, json, key);
@@ -431,7 +456,7 @@ public class JsonFieldParser {
         try {
             List<V> opt = JsonPropertyParser.readList(
                     context, json, key, deserializer, listValidator);
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(context, json, key);
@@ -499,11 +524,11 @@ public class JsonFieldParser {
         List<V> opt = JsonPropertyParser.readOptionalList(
                 context, json, key, converter, listValidator, itemValidator);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } else {
             String reference = readReference(context, json, key);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -523,11 +548,11 @@ public class JsonFieldParser {
     ) {
         List<V> opt = JsonPropertyParser.readOptionalList(context, json, key, deserializer);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } else {
             String reference = readReference(context, json, key);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -549,11 +574,11 @@ public class JsonFieldParser {
         List<V> opt = JsonPropertyParser.readOptionalList(
                 context, json, key, deserializer, listValidator);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } else {
             String reference = readReference(context, json, key);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -635,11 +660,11 @@ public class JsonFieldParser {
         ExpressionList<V> opt = JsonExpressionParser.readOptionalExpressionList(
                 context, json, key, typeHelper, converter, listValidator, itemValidator);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } else {
             String reference = readReference(context, json, key);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -721,11 +746,11 @@ public class JsonFieldParser {
         ExpressionList<V> opt = JsonExpressionParser.readOptionalExpressionList(
                 context, json, key, typeHelper, converter, listValidator, itemValidator);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(context, json, key, overridable, opt);
         } else {
             String reference = readReference(context, json, key);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -751,7 +776,7 @@ public class JsonFieldParser {
             @Nullable final Field<V> fallback
     ) {
         if (reference != null) {
-            return new Field.Reference<>(overridable, reference);
+            return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
         } else if (fallback != null) {
             return FieldKt.clone(fallback, overridable);
         } else {
@@ -779,6 +804,10 @@ public class JsonFieldParser {
             JsonPropertyParser.write(context, jsonObject, key, ((Field.Value<V>) field).value, converter);
         } else if (field instanceof Field.Reference<?>) {
             JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+            V fallbackValue = ((Field.Reference<V>) field).fallbackValue;
+            if (fallbackValue != null) {
+                JsonPropertyParser.write(context, jsonObject, key, fallbackValue, converter);
+            }
         }
     }
 
@@ -793,6 +822,10 @@ public class JsonFieldParser {
             JsonPropertyParser.write(context, jsonObject, key, ((Field.Value<V>) field).value, serializer);
         } else if (field instanceof Field.Reference<?>) {
             JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+            V fallbackValue = ((Field.Reference<V>) field).fallbackValue;
+            if (fallbackValue != null) {
+                JsonPropertyParser.write(context, jsonObject, key, fallbackValue, serializer);
+            }
         }
     }
 
@@ -816,6 +849,10 @@ public class JsonFieldParser {
             JsonPropertyParser.writeList(context, jsonObject, key, ((Field.Value<List<V>>) field).value, converter);
         } else if (field instanceof Field.Reference<?>) {
             JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+            List<V> fallbackValue = ((Field.Reference<List<V>>) field).fallbackValue;
+            if (fallbackValue != null) {
+                JsonPropertyParser.writeList(context, jsonObject, key, fallbackValue, converter);
+            }
         }
     }
 
@@ -830,6 +867,10 @@ public class JsonFieldParser {
             JsonPropertyParser.writeList(context, jsonObject, key, ((Field.Value<List<V>>) field).value, serializer);
         } else if (field instanceof Field.Reference<?>) {
             JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+            List<V> fallbackValue = ((Field.Reference<List<V>>) field).fallbackValue;
+            if (fallbackValue != null) {
+                JsonPropertyParser.writeList(context, jsonObject, key, fallbackValue, serializer);
+            }
         }
     }
 
@@ -854,6 +895,11 @@ public class JsonFieldParser {
                     context, jsonObject, key, ((Field.Value<Expression<V>>) field).value, converter);
         } else if (field instanceof Field.Reference<?>) {
             JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null) {
+                JsonExpressionParser.writeExpression(
+                        context, jsonObject, key, fallbackValue, converter);
+            }
         }
     }
 
@@ -878,6 +924,11 @@ public class JsonFieldParser {
                     context, jsonObject, key, ((Field.Value<ExpressionList<V>>) field).value, converter);
         } else if (field instanceof Field.Reference<?>) {
             JsonPropertyParser.write(context, jsonObject, "$" + key, ((Field.Reference<?>) field).reference);
+            ExpressionList<V> fallbackValue = ((Field.Reference<ExpressionList<V>>) field).fallbackValue;
+            if (fallbackValue != null) {
+                JsonExpressionParser.writeExpressionList(
+                        context, jsonObject, key, fallbackValue, converter);
+            }
         }
     }
 }

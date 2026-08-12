@@ -82,11 +82,11 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         T opt = JsonParser.readOptional(json, key, converter, validator, logger, env);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         }
         String reference = readReference(json, key, logger, env);
         if (reference != null) {
-            return new Field.Reference<>(overridable, reference);
+            return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
         } else if (fallback != null) {
             return FieldKt.clone(fallback, overridable);
         } else {
@@ -118,11 +118,11 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         T opt = JsonParser.readOptional(json, key, creator, validator, logger, env);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         }
         String reference = readReference(json, key, logger, env);
         if (reference != null) {
-            return new Field.Reference<>(overridable, reference);
+            return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
         } else if (fallback != null) {
             return FieldKt.clone(fallback, overridable);
         } else {
@@ -178,7 +178,7 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         try {
             T value = JsonParser.read(json, key, converter, validator, logger, env);
-            return new Field.Value<>(overridable, value);
+            return valueOrReferenceWithFallback(json, key, overridable, value, logger, env);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(json, key, logger, env);
@@ -215,7 +215,7 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         try {
             T result = JsonParser.read(json, key, creator, validator, logger, env);
-            return new Field.Value<>(overridable, result);
+            return valueOrReferenceWithFallback(json, key, overridable, result, logger, env);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(json, key, logger, env);
@@ -235,6 +235,31 @@ public class JsonTemplateParser {
                                        @NonNull ParsingErrorLogger logger,
                                        @NonNull ParsingEnvironment env) {
         return JsonParser.readOptional(json, '$' + key, IS_NOT_EMPTY, logger, env);
+    }
+
+    @NonNull
+    private static <T> Field<T> valueOrReferenceWithFallback(
+            @NonNull JSONObject json,
+            @NonNull String key,
+            boolean overridable,
+            @NonNull T value,
+            @NonNull ParsingErrorLogger logger,
+            @NonNull ParsingEnvironment env) {
+        String reference = readReference(json, key, logger, env);
+        if (reference != null) {
+            return new Field.Reference<>(overridable, reference, value);
+        }
+        return new Field.Value<>(overridable, value);
+    }
+
+    @Nullable
+    private static <T> T fallbackValueOf(@Nullable Field<T> field) {
+        if (field instanceof Field.Value<?>) {
+            return ((Field.Value<T>) field).value;
+        } else if (field instanceof Field.Reference<?>) {
+            return ((Field.Reference<T>) field).fallbackValue;
+        }
+        return null;
     }
 
     @NonNull
@@ -291,11 +316,11 @@ public class JsonTemplateParser {
             @NonNull TypeHelper<T> typeHelper) {
         Expression<T> opt = JsonParser.readOptionalExpression(json, key, converter, validator, logger, env, null, typeHelper);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } else {
             String reference = readReference(json, key, logger, env);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -316,7 +341,7 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         try {
             List<T> opt = JsonParser.readList(json, key, converter, listValidator, alwaysValid(), logger, env);
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(json, key, logger, env);
@@ -342,11 +367,11 @@ public class JsonTemplateParser {
             @NonNull final TypeHelper<T> typeHelper) {
         ExpressionList<T> opt = JsonParser.readOptionalExpressionList(json, key, converter, listValidator, alwaysValid(), logger, env, typeHelper);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } else {
             String reference = readReference(json, key, logger, env);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -384,11 +409,11 @@ public class JsonTemplateParser {
         ExpressionList<T> opt = JsonParser.readOptionalExpressionList(json, key, doNotConvert(),
                 listValidator, itemValidator, logger, env, typeHelper);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } else {
             String reference = readReference(json, key, logger, env);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -437,11 +462,11 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         List<T> opt = JsonParser.readOptionalList(json, key, converter, listValidator, itemValidator, logger, env);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } else {
             String reference = readReference(json, key, logger, env);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -474,11 +499,11 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         List<T> opt = JsonParser.readOptionalList(json, key, creator, validator, logger, env);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } else {
             String reference = readReference(json, key, logger, env);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -499,11 +524,11 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         List<T> opt = JsonParser.readOptionalList(json, key, doNotConvert(), validator, itemValidator, logger, env);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } else {
             String reference = readReference(json, key, logger, env);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -543,11 +568,11 @@ public class JsonTemplateParser {
         ExpressionList<T> opt = JsonParser.readOptionalExpressionList(json, key, doNotConvert(),
                 listValidator, itemValidator, logger, env, typeHelper);
         if (opt != null) {
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } else {
             String reference = readReference(json, key, logger, env);
             if (reference != null) {
-                return new Field.Reference<>(overridable, reference);
+                return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
             } else if (fallback != null) {
                 return FieldKt.clone(fallback, overridable);
             } else {
@@ -593,7 +618,7 @@ public class JsonTemplateParser {
             @NonNull ParsingEnvironment env) {
         try {
             List<T> opt = JsonParser.readList(json, key, creator, listValidator, itemValidator, logger, env);
-            return new Field.Value<>(overridable, opt);
+            return valueOrReferenceWithFallback(json, key, overridable, opt, logger, env);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             String reference = readReference(json, key, logger, env);
@@ -614,7 +639,7 @@ public class JsonTemplateParser {
             @Nullable String reference,
             @Nullable Field<T> fallback) {
         if (reference != null) {
-            return new Field.Reference<>(overridable, reference);
+            return new Field.Reference<>(overridable, reference, fallbackValueOf(fallback));
         } else if (fallback != null) {
             return FieldKt.clone(fallback, overridable);
         } else {
@@ -671,7 +696,7 @@ public class JsonTemplateParser {
         try {
             Expression<T> expression = JsonParser.readExpression(jsonObject, key, converter, validator, logger, env,
                                                                  typeHelper);
-            return new Field.Value<>(overridable, expression);
+            return valueOrReferenceWithFallback(jsonObject, key, overridable, expression, logger, env);
         } catch (ParsingException e) {
             suppressMissingValueOrThrow(e);
             Field<Expression<T>> referenceOrFallback = referenceOrFallback(

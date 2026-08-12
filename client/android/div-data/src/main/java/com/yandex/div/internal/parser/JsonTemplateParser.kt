@@ -24,7 +24,7 @@ fun <T : Any> JSONObject.readField(
 ): Field<T> {
     try {
         read(key = key, validator = validator, logger = logger, env = env).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -44,7 +44,7 @@ inline fun <reified R, reified T : Any> JSONObject.readField(
 ): Field<T> {
     try {
         read(key = key, converter = converter, validator = validator, logger = logger, env = env).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -65,7 +65,7 @@ fun <T : JSONSerializable> JSONObject.readField(
 ): Field<T> {
     try {
         read(key = key, creator = creator, logger = logger, env = env).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -83,11 +83,11 @@ fun <T : Any> JSONObject.readOptionalField(
     env: ParsingEnvironment,
 ): Field<T> {
     readOptional(key = key, validator = validator, logger = logger, env = env)?.let {
-        return Field.Value(overridable, it)
+        return valueOrReferenceWithFallback(key, it, overridable, logger, env)
     }
 
     readReference(key = key, logger = logger, env = env)?.let {
-        return Field.Reference(overridable, it)
+        return Field.Reference(overridable, it, fallback.fallbackValueOrNull())
     }
 
     fallback?.let {
@@ -107,11 +107,11 @@ fun <R, T : Any> JSONObject.readOptionalField(
     env: ParsingEnvironment,
 ): Field<T> {
     readOptional(key = key, converter = converter, validator = validator, logger = logger, env = env)?.let {
-        return Field.Value(overridable, it)
+        return valueOrReferenceWithFallback(key, it, overridable, logger, env)
     }
 
     readReference(key = key, logger = logger, env = env)?.let {
-        return Field.Reference(overridable, it)
+        return Field.Reference(overridable, it, fallback.fallbackValueOrNull())
     }
 
     fallback?.let {
@@ -131,11 +131,11 @@ fun <T : JSONSerializable> JSONObject.readOptionalField(
     env: ParsingEnvironment,
 ): Field<T> {
     readOptional(key = key, creator = creator, logger = logger, env = env)?.let {
-        return Field.Value(overridable, it)
+        return valueOrReferenceWithFallback(key, it, overridable, logger, env)
     }
 
     readReference(key = key, logger = logger, env = env)?.let {
-        return Field.Reference(overridable, it)
+        return Field.Reference(overridable, it, fallback.fallbackValueOrNull())
     }
 
     fallback?.let {
@@ -162,7 +162,7 @@ fun <T : Any> JSONObject.readListField(
             logger = logger,
             env = env,
         ).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -190,7 +190,7 @@ fun <R, T : Any> JSONObject.readListField(
             logger = logger,
             env = env,
         ).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -217,7 +217,7 @@ fun <T : JSONSerializable> JSONObject.readListField(
             logger = logger,
             env = env,
         ).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -241,11 +241,11 @@ fun <T : Any> JSONObject.readOptionalListField(
         itemValidator = itemValidator,
         logger = logger
     )?.let {
-        return Field.Value(overridable, it)
+        return valueOrReferenceWithFallback(key, it, overridable, logger, env)
     }
 
     readReference(key = key, logger = logger, env = env)?.let {
-        return Field.Reference(overridable, it)
+        return Field.Reference(overridable, it, fallback.fallbackValueOrNull())
     }
 
     fallback?.let {
@@ -272,11 +272,11 @@ fun <R, T : Any> JSONObject.readOptionalListField(
         itemValidator = itemValidator,
         logger = logger
     )?.let {
-        return Field.Value(overridable, it)
+        return valueOrReferenceWithFallback(key, it, overridable, logger, env)
     }
 
     readReference(key = key, logger = logger, env = env)?.let {
-        return Field.Reference(overridable, it)
+        return Field.Reference(overridable, it, fallback.fallbackValueOrNull())
     }
 
     fallback?.let {
@@ -305,11 +305,11 @@ fun <T : JSONSerializable> JSONObject.readOptionalListField(
         logger = logger,
         env = env,
     )?.let {
-        return Field.Value(overridable, it)
+        return valueOrReferenceWithFallback(key, it, overridable, logger, env)
     }
 
     readReference(key = key, logger = logger, env)?.let {
-        return Field.Reference(overridable, it)
+        return Field.Reference(overridable, it, fallback.fallbackValueOrNull())
     }
 
     fallback?.let {
@@ -335,7 +335,7 @@ fun <T : Any> JSONObject.readStrictListField(
             itemValidator = itemValidator,
             logger = logger
         ).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -362,7 +362,7 @@ fun <R, T : Any> JSONObject.readStrictListField(
             itemValidator = itemValidator,
             logger = logger
         ).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -389,7 +389,7 @@ fun <T : JSONSerializable> JSONObject.readStrictListField(
             logger = logger,
             env = env,
         ).let {
-            return Field.Value(overridable, it)
+            return valueOrReferenceWithFallback(key, it, overridable, logger, env)
         }
     } catch (e: ParsingException) {
         suppressMissingValueOrThrow(e)
@@ -412,12 +412,32 @@ internal fun JSONObject.readReference(key: String, logger: ParsingErrorLogger, e
 }
 
 @PublishedApi
+internal fun <T : Any> JSONObject.valueOrReferenceWithFallback(
+    key: String,
+    value: T,
+    overridable: Boolean,
+    logger: ParsingErrorLogger,
+    env: ParsingEnvironment,
+): Field<T> {
+    val reference = readReference(key = key, logger = logger, env = env)
+        ?: return Field.Value(overridable, value)
+    return Field.Reference(overridable, reference, value)
+}
+
+@PublishedApi
+internal fun <T> Field<T>?.fallbackValueOrNull(): T? = when (this) {
+    is Field.Value -> value
+    is Field.Reference -> fallbackValue
+    else -> null
+}
+
+@PublishedApi
 internal fun <T> referenceOrFallback(
     overridable: Boolean,
     reference: String?,
     fallback: Field<T>?,
 ): Field<T>? {
-    if (reference != null) return Field.Reference(overridable, reference)
+    if (reference != null) return Field.Reference(overridable, reference, fallback.fallbackValueOrNull())
     if (fallback != null) return fallback.clone(overridable)
     if (overridable) return Field.nullField(overridable)
     return null
@@ -430,7 +450,10 @@ fun <T : Any> JSONObject.writeField(
 ) {
     when (field) {
         is Field.Value -> write(key, converter(field.value))
-        is Field.Reference -> write("$$key", field.reference)
+        is Field.Reference -> {
+            write("$$key", field.reference)
+            field.fallbackValue?.let { write(key, converter(it)) }
+        }
         else -> Unit
     }
 }
@@ -442,7 +465,10 @@ fun <T: Any, R> JSONObject.writeFieldWithExpression(
 ) {
     when (field) {
         is Field.Value -> writeExpression(key, field.value, converter)
-        is Field.Reference -> write("$$key", field.reference)
+        is Field.Reference -> {
+            write("$$key", field.reference)
+            field.fallbackValue?.let { writeExpression(key, it, converter) }
+        }
         else -> Unit
     }
 }
@@ -454,7 +480,10 @@ fun <T : JSONSerializable> JSONObject.writeField(
 ) {
     when (field) {
         is Field.Value -> write(key, field.value.writeToJSON())
-        is Field.Reference -> write("$$key", field.reference)
+        is Field.Reference -> {
+            write("$$key", field.reference)
+            field.fallbackValue?.let { write(key, it.writeToJSON()) }
+        }
         else -> Unit
     }
 }
@@ -465,7 +494,10 @@ fun <T: Any> JSONObject.writeFieldWithExpression(
 ) {
     when (field) {
         is Field.Value -> writeExpression(key, field.value)
-        is Field.Reference -> write("$$key", field.reference)
+        is Field.Reference -> {
+            write("$$key", field.reference)
+            field.fallbackValue?.let { writeExpression(key, it) }
+        }
         else -> Unit
     }
 }
@@ -477,7 +509,10 @@ fun <T: Any> JSONObject.writeExpressionListField(
 ) {
     when (field) {
         is Field.Value -> writeExpressionList(key, field.value, converter)
-        is Field.Reference -> write("$$key", field.reference)
+        is Field.Reference -> {
+            write("$$key", field.reference)
+            field.fallbackValue?.let { writeExpressionList(key, it, converter) }
+        }
         else -> Unit
     }
 }
@@ -497,7 +532,10 @@ fun <T : Any> JSONObject.writeField(
 ) {
     when (field) {
         is Field.Value -> write(key, field.value)
-        is Field.Reference -> write("$$key", field.reference)
+        is Field.Reference -> {
+            write("$$key", field.reference)
+            field.fallbackValue?.let { write(key, it) }
+        }
         else -> Unit
     }
 }
@@ -510,7 +548,10 @@ fun <T : Any> JSONObject.writeField(
 ) {
     when (field) {
         is Field.Value -> write(key, field.value, converter)
-        is Field.Reference -> write("$$key", field.reference)
+        is Field.Reference -> {
+            write("$$key", field.reference)
+            field.fallbackValue?.let { write(key, it, converter) }
+        }
         else -> Unit
     }
 }

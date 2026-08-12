@@ -29,9 +29,10 @@ sealed class Field<T>(
         @JvmField val value: T
     ) : Field<T>(type = TYPE_VALUE, overridable)
 
-    class Reference<T>(
+    class Reference<T> @JvmOverloads constructor(
         overridable: Boolean,
-        @JvmField val reference: String
+        @JvmField val reference: String,
+        @JvmField val fallbackValue: T? = null
     ) : Field<T>(type = TYPE_REFERENCE, overridable)
 
     companion object {
@@ -58,7 +59,9 @@ fun <T> Field<T>.resolve(
     return when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value<T> -> value
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue
         else -> throw missingValue(data, key)
     }
 }
@@ -72,7 +75,9 @@ fun <T> Field<T>.resolveOptional(
     return when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value<T> -> value
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue
         else -> null
     }
 }
@@ -87,7 +92,9 @@ fun <T> Field<out List<T>>.resolveList(
     val result = when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value -> value
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue
         else -> throw missingValue(data, key)
     }
 
@@ -108,7 +115,9 @@ fun <T> Field<out List<T>>.resolveOptionalList(
     val result = when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value -> value
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue
         else -> null
     } ?: return null
 
@@ -129,7 +138,9 @@ fun <T : JSONSerializable> Field<out JsonTemplate<T>>.resolveTemplate(
     return when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value -> value.resolveDependency(env, key, data)
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue.resolveDependency(env, key, data)
         else -> throw missingValue(data, key)
     }
 }
@@ -143,7 +154,9 @@ fun <T : JSONSerializable> Field<out JsonTemplate<T>>.resolveOptionalTemplate(
     return when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value -> value.resolveOptionalDependency(env, data)
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue.resolveOptionalDependency(env, data)
         else -> null
     }
 }
@@ -158,7 +171,9 @@ fun <T : JSONSerializable> Field<out List<JsonTemplate<T>>>.resolveTemplateList(
     val result = when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value -> value.mapNotNull { it.resolveOptionalDependency(env, data) }
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue.mapNotNull { it.resolveOptionalDependency(env, data) }
         else -> throw missingValue(data, key)
     }
 
@@ -179,7 +194,9 @@ fun <T : JSONSerializable> Field<out List<JsonTemplate<T>>>.resolveOptionalTempl
     val result = when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value -> value.mapNotNull { it.resolveOptionalDependency(env, data) }
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue.mapNotNull { it.resolveOptionalDependency(env, data) }
         else -> null
     } ?: return null
 
@@ -221,7 +238,7 @@ fun <T> Field<T>?.clone(overridable: Boolean): Field<T> {
     return when {
         this == null || this == Field.Null || this == Field.Placeholder -> Field.nullField(overridable)
         this is Field.Value -> Field.Value(overridable, value)
-        this is Field.Reference -> Field.Reference(overridable, reference)
+        this is Field.Reference -> Field.Reference(overridable, reference, fallbackValue)
         else -> throw IllegalStateException("Unknown field type")
     }
 }
@@ -235,7 +252,9 @@ fun <T: Any> Field<Expression<T>>.resolveExpression(
     return when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value<Expression<T>> -> value
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue
         else -> throw missingValue(data, key)
     }
 }
@@ -249,7 +268,9 @@ fun <T: Any> Field<ExpressionList<T>>.resolveExpressionList(
     return when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value -> value
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue
         else -> throw missingValue(data, key)
     }
 }
@@ -263,7 +284,9 @@ fun <T: Any> Field<Expression<T>>.resolveOptionalExpression(
     return when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value<Expression<T>> -> value
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue
         else -> null
     }
 }
@@ -277,7 +300,9 @@ fun <T: Any> Field<ExpressionList<T>>.resolveOptionalExpressionList(
     return when {
         overridable && data.has(key) -> reader.invoke(key, data, env)
         this is Field.Value -> value
-        this is Field.Reference -> reader.invoke(reference, data, env)
+        this is Field.Reference ->
+            if (fallbackValue == null || data.has(reference)) reader.invoke(reference, data, env)
+            else fallbackValue
         else -> null
     }
 }

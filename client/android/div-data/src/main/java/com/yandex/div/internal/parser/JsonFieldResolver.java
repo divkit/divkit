@@ -76,6 +76,10 @@ public class JsonFieldResolver {
             return ((Field.Value<V>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            V fallbackValue = ((Field.Reference<V>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonPropertyParser.read(context, data, reference, converter, validator);
         }
 
@@ -97,6 +101,10 @@ public class JsonFieldResolver {
             return resolveDependency(context, ((Field.Value<T>) field).value, data, key, resolver.getValue());
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            T fallbackValue = ((Field.Reference<T>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return resolveDependency(context, fallbackValue, data, key, resolver.getValue());
+            }
             return JsonPropertyParser.read(context, data, reference, deserializer);
         }
 
@@ -150,6 +158,10 @@ public class JsonFieldResolver {
             return ((Field.Value<V>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            V fallbackValue = ((Field.Reference<V>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonPropertyParser.readOptional(context, data, reference, converter, validator);
         }
 
@@ -171,6 +183,10 @@ public class JsonFieldResolver {
             return resolveOptionalDependency(context, ((Field.Value<T>) field).value, data, resolver.getValue());
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            T fallbackValue = ((Field.Reference<T>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return resolveOptionalDependency(context, fallbackValue, data, resolver.getValue());
+            }
             return JsonPropertyParser.readOptional(context, data, reference, deserializer);
         }
 
@@ -191,6 +207,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readExpression(context, data, reference, typeHelper);
         }
 
@@ -212,6 +232,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readExpression(context, data, reference, typeHelper, converter);
         }
 
@@ -233,6 +257,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readExpression(context, data, reference, typeHelper, validator);
         }
 
@@ -255,6 +283,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readExpression(
                     context, data, reference, typeHelper, converter, validator);
         }
@@ -276,6 +308,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpression(
                     context, data, reference, typeHelper, doNotConvert());
         }
@@ -299,6 +335,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpression(
                     context, data, reference, typeHelper, doNotConvert(), defaultValue);
         }
@@ -321,6 +361,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpression(context, data, reference, typeHelper, converter);
         }
 
@@ -344,6 +388,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpression(
                     context, data, reference, typeHelper, converter, defaultValue);
         }
@@ -366,6 +414,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpression(context, data, reference, typeHelper, validator);
         }
 
@@ -389,6 +441,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpression(
                     context, data, reference, typeHelper, validator, defaultValue);
         }
@@ -413,6 +469,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpression(
                     context, data, reference, typeHelper, converter, validator, null);
         }
@@ -438,6 +498,10 @@ public class JsonFieldResolver {
             return ((Field.Value<Expression<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            Expression<V> fallbackValue = ((Field.Reference<Expression<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpression(
                     context, data, reference, typeHelper, converter, validator, defaultValue);
         }
@@ -507,6 +571,10 @@ public class JsonFieldResolver {
             return ((Field.Value<List<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            List<V> fallbackValue = ((Field.Reference<List<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonPropertyParser.readList(context, data, reference, converter, listValidator, itemValidator);
         }
 
@@ -539,6 +607,10 @@ public class JsonFieldResolver {
             return result;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            List<T> fallbackValue = ((Field.Reference<List<T>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return resolveList(context, new Field.Value<>(field.overridable, fallbackValue), data, key, resolver, deserializer);
+            }
             return JsonPropertyParser.readList(context, data, reference, deserializer);
         }
 
@@ -575,6 +647,10 @@ public class JsonFieldResolver {
             return result;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            List<T> fallbackValue = ((Field.Reference<List<T>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return resolveList(context, new Field.Value<>(field.overridable, fallbackValue), data, key, resolver, deserializer, listValidator);
+            }
             return JsonPropertyParser.readList(context, data, reference, deserializer, listValidator);
         }
 
@@ -644,6 +720,10 @@ public class JsonFieldResolver {
             return  ((Field.Value<List<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            List<V> fallbackValue = ((Field.Reference<List<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonPropertyParser.readOptionalList(context, data, reference, converter, listValidator, itemValidator);
         }
 
@@ -676,6 +756,10 @@ public class JsonFieldResolver {
             return result;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            List<T> fallbackValue = ((Field.Reference<List<T>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return resolveOptionalList(context, new Field.Value<>(field.overridable, fallbackValue), data, key, resolver, deserializer);
+            }
             return JsonPropertyParser.readOptionalList(context, data, reference, deserializer);
         }
 
@@ -713,6 +797,10 @@ public class JsonFieldResolver {
             return result;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            List<T> fallbackValue = ((Field.Reference<List<T>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return resolveOptionalList(context, new Field.Value<>(field.overridable, fallbackValue), data, key, resolver, deserializer, listValidator);
+            }
             return JsonPropertyParser.readOptionalList(context, data, reference, deserializer, listValidator);
         }
 
@@ -786,6 +874,10 @@ public class JsonFieldResolver {
             return  ((Field.Value<ExpressionList<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            ExpressionList<V> fallbackValue = ((Field.Reference<ExpressionList<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readExpressionList(
                     context, data, reference, typeHelper, converter, listValidator, itemValidator);
         }
@@ -877,6 +969,10 @@ public class JsonFieldResolver {
             return ((Field.Value<ExpressionList<V>>) field).value;
         } else if (field.type == Field.TYPE_REFERENCE) {
             String reference = ((Field.Reference<?>) field).reference;
+            ExpressionList<V> fallbackValue = ((Field.Reference<ExpressionList<V>>) field).fallbackValue;
+            if (fallbackValue != null && !data.has(reference)) {
+                return fallbackValue;
+            }
             return JsonExpressionParser.readOptionalExpressionList(
                     context, data, reference, typeHelper, converter, listValidator, itemValidator);
         }
