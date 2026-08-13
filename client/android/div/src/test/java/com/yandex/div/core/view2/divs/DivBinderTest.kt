@@ -100,6 +100,7 @@ open class DivBinderTest {
     internal val baseBinder = mock<DivBaseBinder> {
         on { bindView(any(), any(), anyOrNull(), any()) } doAnswer {
             (it.arguments[0] as? DivHolderView<DivBlock>)?.let { view ->
+                view.closeAllSubscription()
                 view.divBlock = it.arguments[1] as? DivBlock
             }
         }
