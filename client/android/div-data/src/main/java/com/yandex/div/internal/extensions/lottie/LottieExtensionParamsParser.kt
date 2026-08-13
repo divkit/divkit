@@ -57,13 +57,17 @@ class LottieExtensionParamsParser(
         )?.evaluate(expressionResolver)
     }
 
+    fun parseInlineJson(json: JSONObject): LottieData.Json? {
+        return json.optJSONObject("lottie_json")?.let { LottieData.Json(it.toString()) }
+    }
+
     private fun parseData(
         json: JSONObject,
         expressionResolver: ExpressionResolver
     ): LottieData? {
         val url = parseUrl(json, expressionResolver)
         if (url == null) {
-            return json.optJSONObject("lottie_json")?.let { LottieData.Json(it.toString()) }
+            return parseInlineJson(json)
         }
 
 

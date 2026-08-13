@@ -22,4 +22,6 @@ dependencies {
     implementation(libs.lottie) {
         exclude(group = "androidx.fragment", module = "fragment")
     }
+
+    testImplementation(libs.androidx.test.core)
 }

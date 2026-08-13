@@ -9,6 +9,7 @@ import android.view.View.LAYER_TYPE_HARDWARE
 import android.view.View.LAYER_TYPE_SOFTWARE
 import androidx.annotation.FloatRange
 import androidx.annotation.MainThread
+import com.airbnb.lottie.AsyncUpdates
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieDrawable
@@ -27,6 +28,7 @@ import com.yandex.div.internal.extensions.lottie.LottieData
  */
 internal class LottieController(
     private val gifImageView: LoadableImageView,
+    asyncUpdatesEnabled: Boolean = true,
 ) : DivViewDelegate {
 
     // LottieAnimationView fields
@@ -61,6 +63,11 @@ internal class LottieController(
     // purposes was cut off, everything else left untouched.
     init {
         enableMergePathsForKitKatAndAbove(true)
+        // When enabled, keyframe evaluation runs on Lottie's background executor instead of
+        // the main thread, draw() only replays the precomputed frame state. Explicit DISABLED
+        // (instead of unset) makes the opt-out independent of the host's process-wide default.
+        lottieDrawable.asyncUpdates =
+            if (asyncUpdatesEnabled) AsyncUpdates.ENABLED else AsyncUpdates.DISABLED
         enableOrDisableHardwareLayer()
         isInitialized = true
     }
@@ -234,6 +241,8 @@ internal class LottieController(
     fun setSafeMode(safeMode: Boolean) {
         lottieDrawable.setSafeMode(safeMode)
     }
+
+    fun getAsyncUpdates(): AsyncUpdates = lottieDrawable.asyncUpdates
 
     fun isAnimating(): Boolean = lottieDrawable.isAnimating
 

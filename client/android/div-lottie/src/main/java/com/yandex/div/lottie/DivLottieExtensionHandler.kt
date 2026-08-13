@@ -7,6 +7,7 @@ import com.airbnb.lottie.LottieResult
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.preload.PreloadingRegistry
+import com.yandex.div.core.preload.UriPreloadResult
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.core.ExpressionSubscriber
@@ -18,20 +19,38 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivGifImage
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Handler for `lottie` extension.
  *
  * You can use this extension for `gif` element and not worry about backward compatibility, as this
  * extension inherit all [DivGifImage] attributes and use [DivGifImage.gifUrl] as fallback.
+ *
+ * @param asyncUpdatesEnabled enables background preparation of animations: Lottie async frame
+ * updates and preload of inline `lottie_json` compositions.
+ * @param preloadScope scope for inline composition preload coroutines. Provide your own scope
+ * and cancel it to stop preload work when the handler is no longer needed; by default preloads
+ * run in an internal scope that lives as long as the handler.
  */
 open class DivLottieExtensionHandler(
     private val rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
     private val logger: DivLottieLogger = DivLottieLogger.STUB,
     cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
+    private val asyncUpdatesEnabled: Boolean,
+    private val preloadScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
 ) : DivExtensionHandler, ExpressionSubscriber {
+
+    constructor(
+        rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
+        logger: DivLottieLogger = DivLottieLogger.STUB,
+        cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
+    ) : this(rawResProvider, logger, cache, asyncUpdatesEnabled = true)
 
     private val parser = LottieExtensionParamsParser(
         assetMapper = rawResProvider::provideAssetFile,
@@ -61,13 +80,34 @@ open class DivLottieExtensionHandler(
         expressionResolver: ExpressionResolver,
         preloadingRegistry: PreloadingRegistry?,
     ) {
-        val url = div.lottieExtension
-            ?.params
-            ?.let { parser.parseUrl(it, expressionResolver) }
-            ?: return
+        val params = div.lottieExtension?.params ?: return
+        val url = parser.parseUrl(params, expressionResolver)
+        if (url != null) {
+            val preloading = preloadingRegistry?.registerPreloading("lottie")
+            repo.preloadLottieComposition(url) { result ->
+                preloading?.onCompleted(result)
+            }
+            return
+        }
+        if (!asyncUpdatesEnabled) return
+        val jsonData = parser.parseInlineJson(params) ?: return
         val preloading = preloadingRegistry?.registerPreloading("lottie")
-        repo.preloadLottieComposition(url) { result ->
-            preloading?.onCompleted(result)
+        if (preloading == null) {
+            preloadScope.launch { repo.preloadInlineComposition(jsonData) {} }
+            return
+        }
+        val completed = AtomicBoolean(false)
+        val job = preloadScope.launch {
+            repo.preloadInlineComposition(jsonData) { result ->
+                if (completed.compareAndSet(false, true)) preloading.onCompleted(result)
+            }
+        }
+        job.invokeOnCompletion { cause ->
+            // If the preload coroutine is cancelled (e.g. the host cancelled preloadScope),
+            // report the registered preload as failed so DivPreloader is not stranded.
+            if (cause != null && completed.compareAndSet(false, true)) {
+                preloading.onCompleted(UriPreloadResult(jsonData.inlinePreloadUri, cause))
+            }
         }
     }
 
@@ -79,7 +119,7 @@ open class DivLottieExtensionHandler(
     ) {
         val divGifImageView = view as? LoadableImageView ?: return
         if (divGifImageView.delegate !is LottieController) {
-            divGifImageView.delegate = LottieController(divGifImageView).apply {
+            divGifImageView.delegate = LottieController(divGifImageView, asyncUpdatesEnabled).apply {
                 enableMergePathsForKitKatAndAbove(true)
                 setImageAssetsFolder(rawResProvider.provideAssetFolder())
             }
