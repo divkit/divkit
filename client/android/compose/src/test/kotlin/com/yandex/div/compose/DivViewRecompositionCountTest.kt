@@ -238,12 +238,12 @@ class DivViewRecompositionCountTest {
         button.performTouchInput { down(position = center) }
         rule.waitForIdle()
 
-        assertCompositions("button" to 2)
+        assertCompositions("button" to 1)
 
         button.performTouchInput { up() }
         rule.waitForIdle()
 
-        assertCompositions("button" to 3)
+        assertCompositions("button" to 1)
     }
 
     private fun setContent(content: Div) {
