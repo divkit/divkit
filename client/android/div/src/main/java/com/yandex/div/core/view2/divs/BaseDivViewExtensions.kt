@@ -375,14 +375,14 @@ internal val View.asDivHolderView: DivHolderView<*>? get() {
 
 internal val View.divBlock: DivBlock? get() = asDivHolderView?.divBlock
 
-internal fun bindItemBuilder(
+internal fun ExpressionSubscriber.bindItemBuilder(
     builder: DivCollectionItemBuilder,
     resolver: ExpressionResolver,
     callback: (Any) -> Unit,
 ) {
-    builder.data.observe(resolver, callback)
+    addSubscription(builder.data.observe(resolver, callback))
     builder.prototypes.forEach {
-        it.selector.observe(resolver, callback)
+        addSubscription(it.selector.observe(resolver, callback))
     }
 }
 

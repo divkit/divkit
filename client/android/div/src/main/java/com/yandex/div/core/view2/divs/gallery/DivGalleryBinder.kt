@@ -10,6 +10,7 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
 import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -209,7 +210,7 @@ internal class DivGalleryBinder @Inject constructor(
         divView: Div2View,
     ) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, resolver) {
+        expressionSubscriber.bindItemBuilder(builder, resolver) {
             val adapter = adapter as? DivGalleryAdapter ?: return@bindItemBuilder
             val id = div.id ?: div.hashCode().toString()
             val hasState = divView.currentState?.getPositionAndOffset(id) != null

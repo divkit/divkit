@@ -133,6 +133,34 @@ class DivGalleryBinderTest : DivBinderTest() {
     }
 
     @Test
+    fun `dispose item builder subscriptions on rebind`() {
+        val data = mock<Expression<JSONArray>>()
+        val selector = mock<Expression<Boolean>>()
+        val dataSubscription = mock<Disposable>()
+        val selectorSubscription = mock<Disposable>()
+        whenever(data.evaluate(resolver)).thenReturn(JSONArray())
+        whenever(data.observe(any(), any())).thenReturn(dataSubscription)
+        whenever(selector.observe(any(), any())).thenReturn(selectorSubscription)
+        val itemBuilder = DivCollectionItemBuilder(
+            data = data,
+            prototypes = listOf(
+                DivCollectionItemBuilder.Prototype(div.value.items!!.first(), null, selector)
+            ),
+        )
+        val itemBuilderDiv = Div.Gallery(div.value.copy(itemBuilder = itemBuilder))
+        val itemBuilderBlock = itemBuilderDiv.toBlock(resolver, rootPath()) as DivBlock.Gallery
+        val reboundBlock = Div.Gallery(itemBuilderDiv.value.copy())
+            .toBlock(resolver, rootPath()) as DivBlock.Gallery
+        val itemBuilderView = divRecyclerView(itemBuilderDiv).apply { layoutParams = defaultLayoutParams() }
+
+        underTest.bindView(itemBuilderView, itemBuilderBlock, divView)
+        underTest.bindView(itemBuilderView, reboundBlock, divView)
+
+        verify(dataSubscription).close()
+        verify(selectorSubscription).close()
+    }
+
+    @Test
     fun `do not snap on first position`() {
         val galleryJson = div.writeToJSON()
         galleryJson.remove("default_item")
