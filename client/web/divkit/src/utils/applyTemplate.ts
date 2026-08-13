@@ -36,22 +36,43 @@ export function applyTemplate(
     }
 
     let i;
-    const newContext: TemplateContext = {};
+    const contextValues = templateContext.values || {};
+    // Objects that were produced from a template body during an expansion.
+    // If such an object is later applied as a template usage, reference values
+    // from the outer instance (accumulated in the context values) cascade into it
+    // and override the same-named defaults written on the usage site inside the body.
+    // Instance-provided data is not tracked here, so its own values win,
+    // preserving the scope isolation of nested usages in the instance data.
+    const templateBodyContent = templateContext.templateBodyContent || new Set<object>();
+    const contextOverridesJson = templateBodyContent.has(json);
+    const newValues: Record<string, unknown> = {};
 
-    for (i in templateContext) {
-        if (templateContext.hasOwnProperty(i)) {
-            newContext[i] = templateContext[i];
+    const copyContextToNewValues = (): void => {
+        for (const key in contextValues) {
+            if (contextValues.hasOwnProperty(key)) {
+                newValues[key] = contextValues[key];
+            }
         }
-    }
+    };
 
-    for (i in json) {
-        if (i === 'type' || i === '__proto__') {
-            continue;
-        }
+    const copyJsonKeysToNewValues = (): void => {
+        for (const key in json) {
+            if (key === 'type' || key === '__proto__') {
+                continue;
+            }
 
-        if (json.hasOwnProperty(i)) {
-            newContext[i] = json[i as keyof typeof json];
+            if (json.hasOwnProperty(key)) {
+                newValues[key] = json[key as keyof typeof json];
+            }
         }
+    };
+
+    if (contextOverridesJson) {
+        copyJsonKeysToNewValues();
+        copyContextToNewValues();
+    } else {
+        copyContextToNewValues();
+        copyJsonKeysToNewValues();
     }
 
     function copyTemplated(base: any, extender: any) {
@@ -64,6 +85,7 @@ export function applyTemplate(
 
             if (typeof item === 'object' && item !== null) {
                 base[key] = Array.isArray(item) ? [] : {};
+                templateBodyContent.add(base[key]);
                 copyTemplated(base[key], item);
             } else {
                 base[key] = item;
@@ -73,7 +95,7 @@ export function applyTemplate(
         templateKeys.forEach(key => {
             const item = extender[key];
 
-            const val = newContext[item];
+            const val = newValues[item];
 
             if (val !== undefined) {
                 const prop = key.substring(1);
@@ -98,6 +120,9 @@ export function applyTemplate(
 
     return {
         json: newJson,
-        templateContext: newContext
+        templateContext: {
+            values: newValues,
+            templateBodyContent
+        }
     };
 }

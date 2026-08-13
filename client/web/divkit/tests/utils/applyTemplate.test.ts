@@ -23,7 +23,10 @@ describe('applyTemplate', () => {
                 type: 'text',
                 text: 'hello'
             },
-            templateContext: {}
+            templateContext: {
+                values: {},
+                templateBodyContent: expect.any(Set)
+            }
         });
 
         expect(onError).not.toHaveBeenCalled();
@@ -46,7 +49,10 @@ describe('applyTemplate', () => {
                 text: 'abc'
             },
             templateContext: {
-                text: 'abc'
+                values: {
+                    text: 'abc'
+                },
+                templateBodyContent: expect.any(Set)
             }
         });
 
@@ -70,7 +76,10 @@ describe('applyTemplate', () => {
                 text2: 'abc'
             },
             templateContext: {
-                text2: 'abc'
+                values: {
+                    text2: 'abc'
+                },
+                templateBodyContent: expect.any(Set)
             }
         });
 
@@ -83,7 +92,9 @@ describe('applyTemplate', () => {
         expect(applyTemplate({
             type: 'hello'
         }, {
-            text: 'abc'
+            values: {
+                text: 'abc'
+            }
         }, {
             hello: {
                 type: 'text',
@@ -95,7 +106,10 @@ describe('applyTemplate', () => {
                 text: 'abc'
             },
             templateContext: {
-                text: 'abc'
+                values: {
+                    text: 'abc'
+                },
+                templateBodyContent: expect.any(Set)
             }
         });
 
@@ -109,7 +123,9 @@ describe('applyTemplate', () => {
             type: 'hello',
             text: 'def'
         }, {
-            text: 'abc'
+            values: {
+                text: 'abc'
+            }
         }, {
             hello: {
                 type: 'text',
@@ -121,7 +137,10 @@ describe('applyTemplate', () => {
                 text: 'def'
             },
             templateContext: {
-                text: 'def'
+                values: {
+                    text: 'def'
+                },
+                templateBodyContent: expect.any(Set)
             }
         });
 
@@ -135,7 +154,9 @@ describe('applyTemplate', () => {
             type: 'hello',
             text: 'def'
         }, {
-            text: 'abc'
+            values: {
+                text: 'abc'
+            }
         }, {
             hello: {
                 type: 'text',
@@ -147,7 +168,10 @@ describe('applyTemplate', () => {
                 text: 'def'
             },
             templateContext: {
-                text: 'def'
+                values: {
+                    text: 'def'
+                },
+                templateBodyContent: expect.any(Set)
             }
         });
 
@@ -178,7 +202,10 @@ describe('applyTemplate', () => {
                 val: 'abc'
             },
             templateContext: {
-                val: 'abc'
+                values: {
+                    val: 'abc'
+                },
+                templateBodyContent: expect.any(Set)
             }
         });
 
@@ -191,7 +218,9 @@ describe('applyTemplate', () => {
         expect(applyTemplate({
             type: 'hello',
         }, {
-            val: 'def'
+            values: {
+                val: 'def'
+            }
         }, {
             hello: {
                 type: 'text',
@@ -209,7 +238,10 @@ describe('applyTemplate', () => {
                 }
             },
             templateContext: {
-                val: 'def'
+                values: {
+                    val: 'def'
+                },
+                templateBodyContent: expect.any(Set)
             }
         });
 
@@ -223,7 +255,9 @@ describe('applyTemplate', () => {
             type: 'hello',
             val: 'abc'
         }, {
-            val: 'def'
+            values: {
+                val: 'def'
+            }
         }, {
             hello: {
                 type: 'text',
@@ -242,7 +276,10 @@ describe('applyTemplate', () => {
                 val: 'abc'
             },
             templateContext: {
-                val: 'abc'
+                values: {
+                    val: 'abc'
+                },
+                templateBodyContent: expect.any(Set)
             }
         });
 

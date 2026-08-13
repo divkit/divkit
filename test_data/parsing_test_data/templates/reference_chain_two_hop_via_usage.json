@@ -4,6 +4,9 @@
     "android",
     "ios"
   ],
+  "unsupported_platforms": {
+    "web": "Web correctly resolves such usage"
+  },
   "templates": {
     "header": {
       "type": "text",

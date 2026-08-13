@@ -17,7 +17,18 @@ export type AnimatorDirection = 'normal' | 'reverse' | 'alternate' | 'alternate_
 
 export type BooleanInt = 0 | 1 | false | true;
 
-export type TemplateContext = Record<string, unknown>;
+export interface TemplateContext {
+    /**
+     * Reference values, collected from the instances on the way
+     * from the card root to the current node
+     */
+    values?: Record<string, unknown>;
+    /**
+     * Objects that were produced from a template body during an expansion
+     * (as opposed to the instance-provided data)
+     */
+    templateBodyContent?: Set<object>;
+}
 
 export interface DivBase {
     type: string;

@@ -1,7 +1,8 @@
 {
   "description": "A template usage supplies a literal field whose name matches the source of a deep (non-top-level) reference definition inside the template body. Verifies two things simultaneously: the usage's literal is preserved on the expanded middle-level dict (it is not consumed as a formal parameter value), and the deep reference still resolves against the outer card instance rather than the usage's same-named literal (the literal does not shadow the deep reference).",
   "platforms": [
-    "android"
+    "android",
+    "web"
   ],
   "card": {
     "log_id": "test",
