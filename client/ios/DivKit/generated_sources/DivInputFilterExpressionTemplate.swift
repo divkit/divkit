@@ -59,8 +59,8 @@ public final class DivInputFilterExpressionTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.condition?.link {
-           conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.condition?.link, context.templateData["condition"] == nil {
+           conditionValue = deserialize(__dictValue).orFallback(conditionValue)
           }
         }()
       }

@@ -85,23 +85,23 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.bottom?.link {
-           bottomValue = bottomValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomValidator) })
+         if key == parent?.bottom?.link, context.templateData["bottom"] == nil {
+           bottomValue = deserialize(__dictValue, validator: ResolvedValue.bottomValidator).orFallback(bottomValue)
           }
         }()
         _ = {
-         if key == parent?.left?.link {
-           leftValue = leftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.leftValidator) })
+         if key == parent?.left?.link, context.templateData["left"] == nil {
+           leftValue = deserialize(__dictValue, validator: ResolvedValue.leftValidator).orFallback(leftValue)
           }
         }()
         _ = {
-         if key == parent?.right?.link {
-           rightValue = rightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rightValidator) })
+         if key == parent?.right?.link, context.templateData["right"] == nil {
+           rightValue = deserialize(__dictValue, validator: ResolvedValue.rightValidator).orFallback(rightValue)
           }
         }()
         _ = {
-         if key == parent?.top?.link {
-           topValue = topValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topValidator) })
+         if key == parent?.top?.link, context.templateData["top"] == nil {
+           topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).orFallback(topValue)
           }
         }()
       }

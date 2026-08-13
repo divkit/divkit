@@ -59,8 +59,8 @@ public final class DivBlurTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.radius?.link {
-           radiusValue = radiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.radiusValidator) })
+         if key == parent?.radius?.link, context.templateData["radius"] == nil {
+           radiusValue = deserialize(__dictValue, validator: ResolvedValue.radiusValidator).orFallback(radiusValue)
           }
         }()
       }

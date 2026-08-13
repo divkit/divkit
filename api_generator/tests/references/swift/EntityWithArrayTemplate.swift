@@ -59,8 +59,8 @@ public final class EntityWithArrayTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.array?.link {
-           arrayValue = arrayValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self) })
+         if key == parent?.array?.link, context.templateData["array"] == nil {
+           arrayValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self).orFallback(arrayValue)
           }
         }()
       }

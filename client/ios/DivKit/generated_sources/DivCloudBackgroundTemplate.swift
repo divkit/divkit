@@ -89,18 +89,18 @@ public final class DivCloudBackgroundTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.color?.link, context.templateData["color"] == nil {
+           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(colorValue)
           }
         }()
         _ = {
-         if key == parent?.cornerRadius?.link {
-           cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator) })
+         if key == parent?.cornerRadius?.link, context.templateData["corner_radius"] == nil {
+           cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).orFallback(cornerRadiusValue)
           }
         }()
         _ = {
-         if key == parent?.paddings?.link {
-           paddingsValue = paddingsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self) })
+         if key == parent?.paddings?.link, context.templateData["paddings"] == nil {
+           paddingsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivEdgeInsetsTemplate.self).orFallback(paddingsValue)
           }
         }()
       }

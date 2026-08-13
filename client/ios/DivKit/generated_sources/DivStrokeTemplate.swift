@@ -93,23 +93,23 @@ public final class DivStrokeTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.color?.link, context.templateData["color"] == nil {
+           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(colorValue)
           }
         }()
         _ = {
-         if key == parent?.style?.link {
-           styleValue = styleValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeStyleTemplate.self) })
+         if key == parent?.style?.link, context.templateData["style"] == nil {
+           styleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeStyleTemplate.self).orFallback(styleValue)
           }
         }()
         _ = {
-         if key == parent?.unit?.link {
-           unitValue = unitValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.unit?.link, context.templateData["unit"] == nil {
+           unitValue = deserialize(__dictValue).orFallback(unitValue)
           }
         }()
         _ = {
-         if key == parent?.width?.link {
-           widthValue = widthValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.widthValidator) })
+         if key == parent?.width?.link, context.templateData["width"] == nil {
+           widthValue = deserialize(__dictValue, validator: ResolvedValue.widthValidator).orFallback(widthValue)
           }
         }()
       }

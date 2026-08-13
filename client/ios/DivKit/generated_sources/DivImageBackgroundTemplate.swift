@@ -137,38 +137,38 @@ public final class DivImageBackgroundTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.alpha?.link {
-           alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+         if key == parent?.alpha?.link, context.templateData["alpha"] == nil {
+           alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).orFallback(alphaValue)
           }
         }()
         _ = {
-         if key == parent?.contentAlignmentHorizontal?.link {
-           contentAlignmentHorizontalValue = contentAlignmentHorizontalValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.contentAlignmentHorizontal?.link, context.templateData["content_alignment_horizontal"] == nil {
+           contentAlignmentHorizontalValue = deserialize(__dictValue).orFallback(contentAlignmentHorizontalValue)
           }
         }()
         _ = {
-         if key == parent?.contentAlignmentVertical?.link {
-           contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.contentAlignmentVertical?.link, context.templateData["content_alignment_vertical"] == nil {
+           contentAlignmentVerticalValue = deserialize(__dictValue).orFallback(contentAlignmentVerticalValue)
           }
         }()
         _ = {
-         if key == parent?.filters?.link {
-           filtersValue = filtersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self) })
+         if key == parent?.filters?.link, context.templateData["filters"] == nil {
+           filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFilterTemplate.self).orFallback(filtersValue)
           }
         }()
         _ = {
-         if key == parent?.imageUrl?.link {
-           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.imageUrl?.link, context.templateData["image_url"] == nil {
+           imageUrlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(imageUrlValue)
           }
         }()
         _ = {
-         if key == parent?.preloadRequired?.link {
-           preloadRequiredValue = preloadRequiredValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.preloadRequired?.link, context.templateData["preload_required"] == nil {
+           preloadRequiredValue = deserialize(__dictValue).orFallback(preloadRequiredValue)
           }
         }()
         _ = {
-         if key == parent?.scale?.link {
-           scaleValue = scaleValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.scale?.link, context.templateData["scale"] == nil {
+           scaleValue = deserialize(__dictValue).orFallback(scaleValue)
           }
         }()
       }

@@ -81,18 +81,18 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
             }
           }()
           _ = {
-           if key == parent?.action?.link {
-             actionValue = actionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+           if key == parent?.action?.link, context.templateData["action"] == nil {
+             actionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(actionValue)
             }
           }()
           _ = {
-           if key == parent?.actions?.link {
-             actionsValue = actionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+           if key == parent?.actions?.link, context.templateData["actions"] == nil {
+             actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(actionsValue)
             }
           }()
           _ = {
-           if key == parent?.text?.link {
-             textValue = textValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.text?.link, context.templateData["text"] == nil {
+             textValue = deserialize(__dictValue).orFallback(textValue)
             }
           }()
         }
@@ -295,53 +295,53 @@ public final class DivActionTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
-         if key == parent?.downloadCallbacks?.link {
-           downloadCallbacksValue = downloadCallbacksValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDownloadCallbacksTemplate.self) })
+         if key == parent?.downloadCallbacks?.link, context.templateData["download_callbacks"] == nil {
+           downloadCallbacksValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDownloadCallbacksTemplate.self).orFallback(downloadCallbacksValue)
           }
         }()
         _ = {
-         if key == parent?.isEnabled?.link {
-           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.isEnabled?.link, context.templateData["is_enabled"] == nil {
+           isEnabledValue = deserialize(__dictValue).orFallback(isEnabledValue)
           }
         }()
         _ = {
-         if key == parent?.logId?.link {
-           logIdValue = logIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.logId?.link, context.templateData["log_id"] == nil {
+           logIdValue = deserialize(__dictValue).orFallback(logIdValue)
           }
         }()
         _ = {
-         if key == parent?.logUrl?.link {
-           logUrlValue = logUrlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.logUrl?.link, context.templateData["log_url"] == nil {
+           logUrlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(logUrlValue)
           }
         }()
         _ = {
-         if key == parent?.menuItems?.link {
-           menuItemsValue = menuItemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.MenuItemTemplate.self) })
+         if key == parent?.menuItems?.link, context.templateData["menu_items"] == nil {
+           menuItemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.MenuItemTemplate.self).orFallback(menuItemsValue)
           }
         }()
         _ = {
-         if key == parent?.payload?.link {
-           payloadValue = payloadValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.payload?.link, context.templateData["payload"] == nil {
+           payloadValue = deserialize(__dictValue).orFallback(payloadValue)
           }
         }()
         _ = {
-         if key == parent?.referer?.link {
-           refererValue = refererValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.referer?.link, context.templateData["referer"] == nil {
+           refererValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(refererValue)
           }
         }()
         _ = {
-         if key == parent?.scopeId?.link {
-           scopeIdValue = scopeIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.scopeId?.link, context.templateData["scope_id"] == nil {
+           scopeIdValue = deserialize(__dictValue).orFallback(scopeIdValue)
           }
         }()
         _ = {
-         if key == parent?.typed?.link {
-           typedValue = typedValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTypedTemplate.self) })
+         if key == parent?.typed?.link, context.templateData["typed"] == nil {
+           typedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTypedTemplate.self).orFallback(typedValue)
           }
         }()
         _ = {
-         if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.url?.link, context.templateData["url"] == nil {
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(urlValue)
           }
         }()
       }

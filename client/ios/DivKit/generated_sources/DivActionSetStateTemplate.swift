@@ -72,13 +72,13 @@ public final class DivActionSetStateTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.stateId?.link {
-           stateIdValue = stateIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.stateId?.link, context.templateData["state_id"] == nil {
+           stateIdValue = deserialize(__dictValue).orFallback(stateIdValue)
           }
         }()
         _ = {
-         if key == parent?.temporary?.link {
-           temporaryValue = temporaryValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.temporary?.link, context.templateData["temporary"] == nil {
+           temporaryValue = deserialize(__dictValue).orFallback(temporaryValue)
           }
         }()
       }

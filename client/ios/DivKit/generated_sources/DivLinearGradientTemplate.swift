@@ -72,13 +72,13 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.color?.link {
-             colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+           if key == parent?.color?.link, context.templateData["color"] == nil {
+             colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(colorValue)
             }
           }()
           _ = {
-           if key == parent?.position?.link {
-             positionValue = positionValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.positionValidator) })
+           if key == parent?.position?.link, context.templateData["position"] == nil {
+             positionValue = deserialize(__dictValue, validator: ResolvedValue.positionValidator).orFallback(positionValue)
             }
           }()
         }
@@ -187,18 +187,18 @@ public final class DivLinearGradientTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.angle?.link {
-           angleValue = angleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.angleValidator) })
+         if key == parent?.angle?.link, context.templateData["angle"] == nil {
+           angleValue = deserialize(__dictValue, validator: ResolvedValue.angleValidator).orFallback(angleValue)
           }
         }()
         _ = {
-         if key == parent?.colorMap?.link {
-           colorMapValue = colorMapValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.colorMapValidator, type: DivLinearGradientTemplate.ColorPointTemplate.self) })
+         if key == parent?.colorMap?.link, context.templateData["color_map"] == nil {
+           colorMapValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.colorMapValidator, type: DivLinearGradientTemplate.ColorPointTemplate.self).orFallback(colorMapValue)
           }
         }()
         _ = {
-         if key == parent?.colors?.link {
-           colorsValue = colorsValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) })
+         if key == parent?.colors?.link, context.templateData["colors"] == nil {
+           colorsValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator).orFallback(colorsValue)
           }
         }()
       }

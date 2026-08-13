@@ -116,33 +116,33 @@ public final class DivScaleTransitionTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.duration?.link {
-           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+         if key == parent?.duration?.link, context.templateData["duration"] == nil {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).orFallback(durationValue)
           }
         }()
         _ = {
-         if key == parent?.interpolator?.link {
-           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.interpolator?.link, context.templateData["interpolator"] == nil {
+           interpolatorValue = deserialize(__dictValue).orFallback(interpolatorValue)
           }
         }()
         _ = {
-         if key == parent?.pivotX?.link {
-           pivotXValue = pivotXValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pivotXValidator) })
+         if key == parent?.pivotX?.link, context.templateData["pivot_x"] == nil {
+           pivotXValue = deserialize(__dictValue, validator: ResolvedValue.pivotXValidator).orFallback(pivotXValue)
           }
         }()
         _ = {
-         if key == parent?.pivotY?.link {
-           pivotYValue = pivotYValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pivotYValidator) })
+         if key == parent?.pivotY?.link, context.templateData["pivot_y"] == nil {
+           pivotYValue = deserialize(__dictValue, validator: ResolvedValue.pivotYValidator).orFallback(pivotYValue)
           }
         }()
         _ = {
-         if key == parent?.scale?.link {
-           scaleValue = scaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.scaleValidator) })
+         if key == parent?.scale?.link, context.templateData["scale"] == nil {
+           scaleValue = deserialize(__dictValue, validator: ResolvedValue.scaleValidator).orFallback(scaleValue)
           }
         }()
         _ = {
-         if key == parent?.startDelay?.link {
-           startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
+         if key == parent?.startDelay?.link, context.templateData["start_delay"] == nil {
+           startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).orFallback(startDelayValue)
           }
         }()
       }

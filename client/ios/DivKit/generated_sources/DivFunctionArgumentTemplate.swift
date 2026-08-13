@@ -71,13 +71,13 @@ public final class DivFunctionArgumentTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.name?.link {
-           nameValue = nameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.name?.link, context.templateData["name"] == nil {
+           nameValue = deserialize(__dictValue).orFallback(nameValue)
           }
         }()
         _ = {
-         if key == parent?.type?.link {
-           typeValue = typeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.type?.link, context.templateData["type"] == nil {
+           typeValue = deserialize(__dictValue).orFallback(typeValue)
           }
         }()
       }

@@ -116,33 +116,33 @@ public final class DivPageTransformationOverlapTemplate: TemplateValue, Sendable
           }
         }()
         _ = {
-         if key == parent?.interpolator?.link {
-           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.interpolator?.link, context.templateData["interpolator"] == nil {
+           interpolatorValue = deserialize(__dictValue).orFallback(interpolatorValue)
           }
         }()
         _ = {
-         if key == parent?.nextPageAlpha?.link {
-           nextPageAlphaValue = nextPageAlphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nextPageAlphaValidator) })
+         if key == parent?.nextPageAlpha?.link, context.templateData["next_page_alpha"] == nil {
+           nextPageAlphaValue = deserialize(__dictValue, validator: ResolvedValue.nextPageAlphaValidator).orFallback(nextPageAlphaValue)
           }
         }()
         _ = {
-         if key == parent?.nextPageScale?.link {
-           nextPageScaleValue = nextPageScaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nextPageScaleValidator) })
+         if key == parent?.nextPageScale?.link, context.templateData["next_page_scale"] == nil {
+           nextPageScaleValue = deserialize(__dictValue, validator: ResolvedValue.nextPageScaleValidator).orFallback(nextPageScaleValue)
           }
         }()
         _ = {
-         if key == parent?.previousPageAlpha?.link {
-           previousPageAlphaValue = previousPageAlphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.previousPageAlphaValidator) })
+         if key == parent?.previousPageAlpha?.link, context.templateData["previous_page_alpha"] == nil {
+           previousPageAlphaValue = deserialize(__dictValue, validator: ResolvedValue.previousPageAlphaValidator).orFallback(previousPageAlphaValue)
           }
         }()
         _ = {
-         if key == parent?.previousPageScale?.link {
-           previousPageScaleValue = previousPageScaleValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.previousPageScaleValidator) })
+         if key == parent?.previousPageScale?.link, context.templateData["previous_page_scale"] == nil {
+           previousPageScaleValue = deserialize(__dictValue, validator: ResolvedValue.previousPageScaleValidator).orFallback(previousPageScaleValue)
           }
         }()
         _ = {
-         if key == parent?.reversedStackingOrder?.link {
-           reversedStackingOrderValue = reversedStackingOrderValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.reversedStackingOrder?.link, context.templateData["reversed_stacking_order"] == nil {
+           reversedStackingOrderValue = deserialize(__dictValue).orFallback(reversedStackingOrderValue)
           }
         }()
       }

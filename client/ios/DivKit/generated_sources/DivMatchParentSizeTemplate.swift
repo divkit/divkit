@@ -77,18 +77,18 @@ public final class DivMatchParentSizeTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.maxSize?.link {
-           maxSizeValue = maxSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeUnitValueTemplate.self) })
+         if key == parent?.maxSize?.link, context.templateData["max_size"] == nil {
+           maxSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeUnitValueTemplate.self).orFallback(maxSizeValue)
           }
         }()
         _ = {
-         if key == parent?.minSize?.link {
-           minSizeValue = minSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeUnitValueTemplate.self) })
+         if key == parent?.minSize?.link, context.templateData["min_size"] == nil {
+           minSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivSizeUnitValueTemplate.self).orFallback(minSizeValue)
           }
         }()
         _ = {
-         if key == parent?.weight?.link {
-           weightValue = weightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.weightValidator) })
+         if key == parent?.weight?.link, context.templateData["weight"] == nil {
+           weightValue = deserialize(__dictValue, validator: ResolvedValue.weightValidator).orFallback(weightValue)
           }
         }()
       }

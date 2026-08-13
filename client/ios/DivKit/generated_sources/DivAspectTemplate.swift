@@ -54,8 +54,8 @@ public final class DivAspectTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.ratio?.link {
-           ratioValue = ratioValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.ratioValidator) })
+         if key == parent?.ratio?.link, context.templateData["ratio"] == nil {
+           ratioValue = deserialize(__dictValue, validator: ResolvedValue.ratioValidator).orFallback(ratioValue)
           }
         }()
       }

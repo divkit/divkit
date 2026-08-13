@@ -119,28 +119,28 @@ public final class PropertyVariableTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.get?.link {
-           getValue = getValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.get?.link, context.templateData["get"] == nil {
+           getValue = deserialize(__dictValue).orFallback(getValue)
           }
         }()
         _ = {
-         if key == parent?.name?.link {
-           nameValue = nameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.name?.link, context.templateData["name"] == nil {
+           nameValue = deserialize(__dictValue).orFallback(nameValue)
           }
         }()
         _ = {
-         if key == parent?.newValueVariableName?.link {
-           newValueVariableNameValue = newValueVariableNameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.newValueVariableName?.link, context.templateData["new_value_variable_name"] == nil {
+           newValueVariableNameValue = deserialize(__dictValue).orFallback(newValueVariableNameValue)
           }
         }()
         _ = {
-         if key == parent?.set?.link {
-           setValue = setValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.set?.link, context.templateData["set"] == nil {
+           setValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(setValue)
           }
         }()
         _ = {
-         if key == parent?.valueType?.link {
-           valueTypeValue = valueTypeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.valueType?.link, context.templateData["value_type"] == nil {
+           valueTypeValue = deserialize(__dictValue).orFallback(valueTypeValue)
           }
         }()
       }

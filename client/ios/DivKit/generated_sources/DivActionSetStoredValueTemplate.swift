@@ -108,23 +108,23 @@ public final class DivActionSetStoredValueTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.lifetime?.link {
-           lifetimeValue = lifetimeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.lifetime?.link, context.templateData["lifetime"] == nil {
+           lifetimeValue = deserialize(__dictValue).orFallback(lifetimeValue)
           }
         }()
         _ = {
-         if key == parent?.name?.link {
-           nameValue = nameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.name?.link, context.templateData["name"] == nil {
+           nameValue = deserialize(__dictValue).orFallback(nameValue)
           }
         }()
         _ = {
-         if key == parent?.scope?.link {
-           scopeValue = scopeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.scope?.link, context.templateData["scope"] == nil {
+           scopeValue = deserialize(__dictValue).orFallback(scopeValue)
           }
         }()
         _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+         if key == parent?.value?.link, context.templateData["value"] == nil {
+           valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).orFallback(valueValue)
           }
         }()
       }

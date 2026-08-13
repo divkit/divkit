@@ -89,18 +89,18 @@ public final class DivActionScrollToTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.animated?.link {
-           animatedValue = animatedValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.animated?.link, context.templateData["animated"] == nil {
+           animatedValue = deserialize(__dictValue).orFallback(animatedValue)
           }
         }()
         _ = {
-         if key == parent?.destination?.link {
-           destinationValue = destinationValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionScrollDestinationTemplate.self) })
+         if key == parent?.destination?.link, context.templateData["destination"] == nil {
+           destinationValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionScrollDestinationTemplate.self).orFallback(destinationValue)
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
       }

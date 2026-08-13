@@ -22,9 +22,9 @@ extension Field {
   ) -> DeserializationResult<T> where T == Expression<E>, E.RawValue == String {
     switch self {
     case let .value(value):
-      .success(value)
-    case let .link(link):
-      safeValueForLink {
+      return .success(value)
+    case let .link(link, fallback):
+      let result: DeserializationResult<T> = safeValueForLink {
         try context.templateData.getField(
           link,
           transform: {
@@ -32,6 +32,10 @@ extension Field {
           }
         )
       }
+      guard result.isUnresolvedLink, let fallback else {
+        return result
+      }
+      return .success(fallback)
     }
   }
 
@@ -43,14 +47,18 @@ extension Field {
   ) -> DeserializationResult<T> where T == Expression<E> {
     switch self {
     case let .value(value):
-      .success(value)
-    case let .link(link):
-      safeValueForLink {
+      return .success(value)
+    case let .link(link, fallback):
+      let result: DeserializationResult<T> = safeValueForLink {
         try context.templateData.getField(
           link,
           transform: { expressionTransform($0, transform: transform, validator: validator) }
         )
       }
+      guard result.isUnresolvedLink, let fallback else {
+        return result
+      }
+      return .success(fallback)
     }
   }
 
@@ -60,14 +68,17 @@ extension Field {
     transform: (U) -> E?,
     validator: AnyArrayValueValidator<Expression<E>>
   ) -> DeserializationResult<T> where T == [Expression<E>] {
-    switch self {
-    case let .value(value):
+    func resolveFallback(_ value: T) -> DeserializationResult<T> {
       guard validator.isValid(value) != false else {
         return .failure(NonEmptyArray(.invalidValue(result: value, value: nil)))
       }
       return .success(value)
-    case let .link(link):
-      return context.templateData.getArray(
+    }
+    switch self {
+    case let .value(value):
+      return resolveFallback(value)
+    case let .link(link, fallback):
+      let result: DeserializationResult<T> = context.templateData.getArray(
         link,
         transform: { (value: U) -> DeserializationResult<Expression<E>> in
           guard let transformed = expressionTransform(value, transform: transform) else {
@@ -77,6 +88,10 @@ extension Field {
         },
         validator: validator
       )
+      guard result.isUnresolvedLink, let fallback else {
+        return result
+      }
+      return resolveFallback(fallback)
     }
   }
 

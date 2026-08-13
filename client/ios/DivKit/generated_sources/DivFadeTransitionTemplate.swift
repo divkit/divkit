@@ -90,23 +90,23 @@ public final class DivFadeTransitionTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.alpha?.link {
-           alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+         if key == parent?.alpha?.link, context.templateData["alpha"] == nil {
+           alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).orFallback(alphaValue)
           }
         }()
         _ = {
-         if key == parent?.duration?.link {
-           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+         if key == parent?.duration?.link, context.templateData["duration"] == nil {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).orFallback(durationValue)
           }
         }()
         _ = {
-         if key == parent?.interpolator?.link {
-           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.interpolator?.link, context.templateData["interpolator"] == nil {
+           interpolatorValue = deserialize(__dictValue).orFallback(interpolatorValue)
           }
         }()
         _ = {
-         if key == parent?.startDelay?.link {
-           startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
+         if key == parent?.startDelay?.link, context.templateData["start_delay"] == nil {
+           startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).orFallback(startDelayValue)
           }
         }()
       }

@@ -55,8 +55,8 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
             }
           }()
           _ = {
-           if key == parent?.value?.link {
-             valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+           if key == parent?.value?.link, context.templateData["value"] == nil {
+             valueValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(valueValue)
             }
           }()
         }
@@ -133,8 +133,8 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, Sen
           }
         }()
         _ = {
-         if key == parent?.property?.link {
-           propertyValue = propertyValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.ComplexPropertyTemplate.self) })
+         if key == parent?.property?.link, context.templateData["property"] == nil {
+           propertyValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithOptionalComplexPropertyTemplate.ComplexPropertyTemplate.self).orFallback(propertyValue)
           }
         }()
       }

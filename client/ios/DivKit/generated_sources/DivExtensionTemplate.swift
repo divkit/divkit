@@ -80,18 +80,18 @@ public final class DivExtensionTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
         _ = {
-         if key == parent?.isEnabled?.link {
-           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.isEnabled?.link, context.templateData["is_enabled"] == nil {
+           isEnabledValue = deserialize(__dictValue).orFallback(isEnabledValue)
           }
         }()
         _ = {
-         if key == parent?.params?.link {
-           paramsValue = paramsValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.params?.link, context.templateData["params"] == nil {
+           paramsValue = deserialize(__dictValue).orFallback(paramsValue)
           }
         }()
       }

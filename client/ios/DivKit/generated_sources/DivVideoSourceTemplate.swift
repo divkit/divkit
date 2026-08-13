@@ -77,13 +77,13 @@ public final class DivVideoSourceTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.height?.link {
-             heightValue = heightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.heightValidator) })
+           if key == parent?.height?.link, context.templateData["height"] == nil {
+             heightValue = deserialize(__dictValue, validator: ResolvedValue.heightValidator).orFallback(heightValue)
             }
           }()
           _ = {
-           if key == parent?.width?.link {
-             widthValue = widthValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.widthValidator) })
+           if key == parent?.width?.link, context.templateData["width"] == nil {
+             widthValue = deserialize(__dictValue, validator: ResolvedValue.widthValidator).orFallback(widthValue)
             }
           }()
         }
@@ -227,23 +227,23 @@ public final class DivVideoSourceTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.bitrate?.link {
-           bitrateValue = bitrateValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.bitrate?.link, context.templateData["bitrate"] == nil {
+           bitrateValue = deserialize(__dictValue).orFallback(bitrateValue)
           }
         }()
         _ = {
-         if key == parent?.mimeType?.link {
-           mimeTypeValue = mimeTypeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.mimeType?.link, context.templateData["mime_type"] == nil {
+           mimeTypeValue = deserialize(__dictValue).orFallback(mimeTypeValue)
           }
         }()
         _ = {
-         if key == parent?.resolution?.link {
-           resolutionValue = resolutionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.ResolutionTemplate.self) })
+         if key == parent?.resolution?.link, context.templateData["resolution"] == nil {
+           resolutionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVideoSourceTemplate.ResolutionTemplate.self).orFallback(resolutionValue)
           }
         }()
         _ = {
-         if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.url?.link, context.templateData["url"] == nil {
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(urlValue)
           }
         }()
       }

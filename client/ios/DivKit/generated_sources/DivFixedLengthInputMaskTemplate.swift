@@ -81,18 +81,18 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.key?.link {
-             keyValue = keyValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.keyValidator) })
+           if key == parent?.key?.link, context.templateData["key"] == nil {
+             keyValue = deserialize(__dictValue, validator: ResolvedValue.keyValidator).orFallback(keyValue)
             }
           }()
           _ = {
-           if key == parent?.placeholder?.link {
-             placeholderValue = placeholderValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.placeholderValidator) })
+           if key == parent?.placeholder?.link, context.templateData["placeholder"] == nil {
+             placeholderValue = deserialize(__dictValue, validator: ResolvedValue.placeholderValidator).orFallback(placeholderValue)
             }
           }()
           _ = {
-           if key == parent?.regex?.link {
-             regexValue = regexValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.regex?.link, context.templateData["regex"] == nil {
+             regexValue = deserialize(__dictValue).orFallback(regexValue)
             }
           }()
         }
@@ -228,23 +228,23 @@ public final class DivFixedLengthInputMaskTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.alwaysVisible?.link {
-           alwaysVisibleValue = alwaysVisibleValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.alwaysVisible?.link, context.templateData["always_visible"] == nil {
+           alwaysVisibleValue = deserialize(__dictValue).orFallback(alwaysVisibleValue)
           }
         }()
         _ = {
-         if key == parent?.pattern?.link {
-           patternValue = patternValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.pattern?.link, context.templateData["pattern"] == nil {
+           patternValue = deserialize(__dictValue).orFallback(patternValue)
           }
         }()
         _ = {
-         if key == parent?.patternElements?.link {
-           patternElementsValue = patternElementsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self) })
+         if key == parent?.patternElements?.link, context.templateData["pattern_elements"] == nil {
+           patternElementsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.patternElementsValidator, type: DivFixedLengthInputMaskTemplate.PatternElementTemplate.self).orFallback(patternElementsValue)
           }
         }()
         _ = {
-         if key == parent?.rawTextVariable?.link {
-           rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.rawTextVariable?.link, context.templateData["raw_text_variable"] == nil {
+           rawTextVariableValue = deserialize(__dictValue).orFallback(rawTextVariableValue)
           }
         }()
       }

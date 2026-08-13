@@ -72,13 +72,13 @@ public final class DivTextRangeMaskSolidTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.color?.link, context.templateData["color"] == nil {
+           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(colorValue)
           }
         }()
         _ = {
-         if key == parent?.isEnabled?.link {
-           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.isEnabled?.link, context.templateData["is_enabled"] == nil {
+           isEnabledValue = deserialize(__dictValue).orFallback(isEnabledValue)
           }
         }()
       }

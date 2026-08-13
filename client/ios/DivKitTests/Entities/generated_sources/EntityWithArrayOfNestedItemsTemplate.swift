@@ -75,13 +75,13 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Sendable
             }
           }()
           _ = {
-           if key == parent?.entity?.link {
-             entityValue = entityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self) })
+           if key == parent?.entity?.link, context.templateData["entity"] == nil {
+             entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self).orFallback(entityValue)
             }
           }()
           _ = {
-           if key == parent?.property?.link {
-             propertyValue = propertyValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.property?.link, context.templateData["property"] == nil {
+             propertyValue = deserialize(__dictValue).orFallback(propertyValue)
             }
           }()
         }
@@ -180,8 +180,8 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Sendable
           }
         }()
         _ = {
-         if key == parent?.items?.link {
-           itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self) })
+         if key == parent?.items?.link, context.templateData["items"] == nil {
+           itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: EntityWithArrayOfNestedItemsTemplate.ItemTemplate.self).orFallback(itemsValue)
           }
         }()
       }

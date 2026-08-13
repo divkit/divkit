@@ -59,8 +59,8 @@ public final class ColorValueTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.value?.link, context.templateData["value"] == nil {
+           valueValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(valueValue)
           }
         }()
       }

@@ -6,7 +6,7 @@ import VGSL
 @frozen
 public indirect enum Field<T: Sendable>: Sendable {
   case value(T)
-  case link(String)
+  case link(String, fallback: T?)
 }
 
 extension Field {
@@ -17,12 +17,13 @@ extension Field {
   ) -> DeserializationResult<T> {
     switch self {
     case let .value(value):
-      guard validator?.isValid(value) != false else {
-        return .failure(NonEmptyArray(.invalidValue(result: value, value: nil)))
+      return validated(value, by: validator)
+    case let .link(link, fallback):
+      let result = valueForLink(link)
+      guard result.isUnresolvedLink, let fallback else {
+        return result
       }
-      return .success(value)
-    case let .link(link):
-      return valueForLink(link)
+      return validated(fallback, by: validator)
     }
   }
 
@@ -39,7 +40,7 @@ extension Field {
   var link: String? {
     switch self {
     case .value: nil
-    case let .link(link): link
+    case let .link(link, _): link
     }
   }
 
@@ -142,16 +143,19 @@ extension Field {
   func resolveParent<U: TemplateValue>(
     templates: [TemplateName: Any]
   ) throws -> Field<[U]> where T == [U] {
-    switch self {
-    case .link:
-      return self
-    case let .value(value):
+    func resolveParents(of value: [U]) -> [U] {
       var result: [U] = []
       result.reserveCapacity(value.count)
       for index in value.indices {
         try? result.append(value[index].resolveParent(templates: templates))
       }
-      return .value(result)
+      return result
+    }
+    switch self {
+    case let .value(value):
+      return .value(resolveParents(of: value))
+    case let .link(link, fallback):
+      return .link(link, fallback: fallback.map(resolveParents(of:)))
     }
   }
 
@@ -170,10 +174,10 @@ extension Field where T: TemplateValue {
   @inlinable
   func resolveParent(templates: [TemplateName: Any]) throws -> Field<T> {
     switch self {
-    case let .link(link):
-      .link(link)
     case let .value(value):
       try .value(value.resolveParent(templates: templates))
+    case let .link(link, fallback):
+      try .link(link, fallback: fallback?.resolveParent(templates: templates))
     }
   }
 
@@ -182,8 +186,7 @@ extension Field where T: TemplateValue {
     context: TemplatesContext,
     useOnlyLinks: Bool
   ) -> DeserializationResult<ResolvedValue> {
-    switch self {
-    case let .link(link):
+    func resolveLink(_ link: String) -> DeserializationResult<ResolvedValue> {
       let valueDictResult: DeserializationResult<[String: Any]> = safeValueForLink {
         try context.templateData.getField(link)
       }
@@ -197,18 +200,26 @@ extension Field where T: TemplateValue {
         context: modified(context) { $0.templateData = valueDict },
         useOnlyLinks: false
       )
+    }
+    switch self {
     case let .value(value):
       return value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+    case let .link(link, fallback):
+      let result = resolveLink(link)
+      guard result.isUnresolvedLink, let fallback else {
+        return result
+      }
+      return fallback.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
     }
   }
 
   @inlinable
   func tryResolveParent(templates: [TemplateName: Any]) -> Field<T>? {
     switch self {
-    case .link:
-      self
     case let .value(value):
       value.tryResolveParent(templates: templates).map(Field.value)
+    case let .link(link, fallback):
+      .link(link, fallback: fallback?.tryResolveParent(templates: templates))
     }
   }
 
@@ -237,13 +248,20 @@ extension Field {
     useOnlyLinks _: Bool
     // swiftformat:disable:next typeSugar
   ) -> DeserializationResult<Array<U>.ResolvedValue> where Array<U> == T {
-    switch self {
-    case let .value(value):
+    func resolveFallback(_ value: [U]) -> DeserializationResult<Array<U>.ResolvedValue> {
       value
         .resolveParent(templates: context.templates)
         .resolveValue(context: context, validator: validator)
-    case let .link(link):
-      context.getArray(link, validator: validator, type: T.Element.self)
+    }
+    switch self {
+    case let .value(value):
+      return resolveFallback(value)
+    case let .link(link, fallback):
+      let result = context.getArray(link, validator: validator, type: T.Element.self)
+      guard result.isUnresolvedLink, let fallback else {
+        return result
+      }
+      return resolveFallback(fallback)
     }
   }
 
@@ -259,6 +277,48 @@ extension Field {
       return .noValue
     }
     return result
+  }
+}
+
+@inlinable
+func validated<T>(
+  _ value: T,
+  by validator: AnyValueValidator<T>?
+) -> DeserializationResult<T> {
+  guard validator?.isValid(value) != false else {
+    return .failure(NonEmptyArray(.invalidValue(result: value, value: nil)))
+  }
+  return .success(value)
+}
+
+extension DeserializationResult {
+  @usableFromInline
+  func orFallback(
+    _ fallback: @autoclosure () -> DeserializationResult<T>
+  ) -> DeserializationResult<T> {
+    isUnresolvedLink ? merged(with: fallback()) : self
+  }
+
+  @usableFromInline
+  var isUnresolvedLink: Bool {
+    switch self {
+    case .success, .partialSuccess:
+      false
+    case let .failure(errors):
+      errors.count == 1 && errors.first.isNoData
+    case .noValue:
+      true
+    }
+  }
+}
+
+extension DeserializationError {
+  @usableFromInline
+  var isNoData: Bool {
+    if case .noData = self {
+      return true
+    }
+    return false
   }
 }
 

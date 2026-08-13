@@ -54,8 +54,8 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.entity?.link {
-           entityValue = entityValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self) })
+         if key == parent?.entity?.link, context.templateData["entity"] == nil {
+           entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityTemplate.self).orFallback(entityValue)
           }
         }()
       }

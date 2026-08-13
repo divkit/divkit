@@ -64,13 +64,13 @@ public final class DivStretchIndicatorItemPlacementTemplate: TemplateValue, Send
           }
         }()
         _ = {
-         if key == parent?.itemSpacing?.link {
-           itemSpacingValue = itemSpacingValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+         if key == parent?.itemSpacing?.link, context.templateData["item_spacing"] == nil {
+           itemSpacingValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).orFallback(itemSpacingValue)
           }
         }()
         _ = {
-         if key == parent?.maxVisibleItems?.link {
-           maxVisibleItemsValue = maxVisibleItemsValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.maxVisibleItemsValidator) })
+         if key == parent?.maxVisibleItems?.link, context.templateData["max_visible_items"] == nil {
+           maxVisibleItemsValue = deserialize(__dictValue, validator: ResolvedValue.maxVisibleItemsValidator).orFallback(maxVisibleItemsValue)
           }
         }()
       }

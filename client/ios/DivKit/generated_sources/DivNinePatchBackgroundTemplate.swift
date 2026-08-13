@@ -76,13 +76,13 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.imageUrl?.link {
-           imageUrlValue = imageUrlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.imageUrl?.link, context.templateData["image_url"] == nil {
+           imageUrlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(imageUrlValue)
           }
         }()
         _ = {
-         if key == parent?.insets?.link {
-           insetsValue = insetsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self) })
+         if key == parent?.insets?.link, context.templateData["insets"] == nil {
+           insetsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAbsoluteEdgeInsetsTemplate.self).orFallback(insetsValue)
           }
         }()
       }

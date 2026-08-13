@@ -68,6 +68,9 @@ final class UntypedDivTemplateResolver {
 
     for (key, value) in templateDict {
       result[key] = value
+      if !key.hasPrefix("$"), templateDict["$" + key] == nil {
+        result["$" + key] = nil
+      }
     }
     result["type"] = templateToType[templateName] ??
       (templateDict["type"] as? String ?? templateName)
@@ -89,7 +92,7 @@ final class UntypedDivTemplateResolver {
       let key = String(linkKey.dropFirst())
       linkFieldNames.insert(key)
       guard let linkName = dict[linkKey] as? String else { continue }
-      guard dict[key] == nil else { continue }
+      guard !instanceProvidedKeys.contains(key) else { continue }
       guard let value = linkSource?[linkName] else { continue }
       dict[key] = value
     }

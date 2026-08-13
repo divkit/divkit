@@ -72,13 +72,13 @@ public final class DivFixedTranslationTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.unit?.link {
-           unitValue = unitValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.unit?.link, context.templateData["unit"] == nil {
+           unitValue = deserialize(__dictValue).orFallback(unitValue)
           }
         }()
         _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.value?.link, context.templateData["value"] == nil {
+           valueValue = deserialize(__dictValue).orFallback(valueValue)
           }
         }()
       }

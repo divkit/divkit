@@ -59,8 +59,8 @@ public final class DivActionCopyToClipboardTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.content?.link {
-           contentValue = contentValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionCopyToClipboardContentTemplate.self) })
+         if key == parent?.content?.link, context.templateData["content"] == nil {
+           contentValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionCopyToClipboardContentTemplate.self).orFallback(contentValue)
           }
         }()
       }

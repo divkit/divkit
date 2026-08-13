@@ -77,18 +77,18 @@ public final class DivCircleShapeTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.backgroundColor?.link {
-           backgroundColorValue = backgroundColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.backgroundColor?.link, context.templateData["background_color"] == nil {
+           backgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(backgroundColorValue)
           }
         }()
         _ = {
-         if key == parent?.radius?.link {
-           radiusValue = radiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+         if key == parent?.radius?.link, context.templateData["radius"] == nil {
+           radiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).orFallback(radiusValue)
           }
         }()
         _ = {
-         if key == parent?.stroke?.link {
-           strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
+         if key == parent?.stroke?.link, context.templateData["stroke"] == nil {
+           strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).orFallback(strokeValue)
           }
         }()
       }

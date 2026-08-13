@@ -105,23 +105,23 @@ public final class DivFunctionTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.arguments?.link {
-           argumentsValue = argumentsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionArgumentTemplate.self) })
+         if key == parent?.arguments?.link, context.templateData["arguments"] == nil {
+           argumentsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionArgumentTemplate.self).orFallback(argumentsValue)
           }
         }()
         _ = {
-         if key == parent?.body?.link {
-           bodyValue = bodyValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.body?.link, context.templateData["body"] == nil {
+           bodyValue = deserialize(__dictValue).orFallback(bodyValue)
           }
         }()
         _ = {
-         if key == parent?.name?.link {
-           nameValue = nameValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.nameValidator) })
+         if key == parent?.name?.link, context.templateData["name"] == nil {
+           nameValue = deserialize(__dictValue, validator: ResolvedValue.nameValidator).orFallback(nameValue)
           }
         }()
         _ = {
-         if key == parent?.returnType?.link {
-           returnTypeValue = returnTypeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.returnType?.link, context.templateData["return_type"] == nil {
+           returnTypeValue = deserialize(__dictValue).orFallback(returnTypeValue)
           }
         }()
       }

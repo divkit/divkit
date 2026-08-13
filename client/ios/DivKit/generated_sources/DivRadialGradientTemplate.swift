@@ -72,13 +72,13 @@ public final class DivRadialGradientTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.color?.link {
-             colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+           if key == parent?.color?.link, context.templateData["color"] == nil {
+             colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(colorValue)
             }
           }()
           _ = {
-           if key == parent?.position?.link {
-             positionValue = positionValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.positionValidator) })
+           if key == parent?.position?.link, context.templateData["position"] == nil {
+             positionValue = deserialize(__dictValue, validator: ResolvedValue.positionValidator).orFallback(positionValue)
             }
           }()
         }
@@ -213,28 +213,28 @@ public final class DivRadialGradientTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.centerX?.link {
-           centerXValue = centerXValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self) })
+         if key == parent?.centerX?.link, context.templateData["center_x"] == nil {
+           centerXValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self).orFallback(centerXValue)
           }
         }()
         _ = {
-         if key == parent?.centerY?.link {
-           centerYValue = centerYValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self) })
+         if key == parent?.centerY?.link, context.templateData["center_y"] == nil {
+           centerYValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientCenterTemplate.self).orFallback(centerYValue)
           }
         }()
         _ = {
-         if key == parent?.colorMap?.link {
-           colorMapValue = colorMapValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.colorMapValidator, type: DivRadialGradientTemplate.ColorPointTemplate.self) })
+         if key == parent?.colorMap?.link, context.templateData["color_map"] == nil {
+           colorMapValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.colorMapValidator, type: DivRadialGradientTemplate.ColorPointTemplate.self).orFallback(colorMapValue)
           }
         }()
         _ = {
-         if key == parent?.colors?.link {
-           colorsValue = colorsValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) })
+         if key == parent?.colors?.link, context.templateData["colors"] == nil {
+           colorsValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator).orFallback(colorsValue)
           }
         }()
         _ = {
-         if key == parent?.radius?.link {
-           radiusValue = radiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientRadiusTemplate.self) })
+         if key == parent?.radius?.link, context.templateData["radius"] == nil {
+           radiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivRadialGradientRadiusTemplate.self).orFallback(radiusValue)
           }
         }()
       }

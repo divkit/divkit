@@ -201,58 +201,58 @@ public final class DivColorAnimatorTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.cancelActions?.link {
-           cancelActionsValue = cancelActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.cancelActions?.link, context.templateData["cancel_actions"] == nil {
+           cancelActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(cancelActionsValue)
           }
         }()
         _ = {
-         if key == parent?.direction?.link {
-           directionValue = directionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.direction?.link, context.templateData["direction"] == nil {
+           directionValue = deserialize(__dictValue).orFallback(directionValue)
           }
         }()
         _ = {
-         if key == parent?.duration?.link {
-           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+         if key == parent?.duration?.link, context.templateData["duration"] == nil {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).orFallback(durationValue)
           }
         }()
         _ = {
-         if key == parent?.endActions?.link {
-           endActionsValue = endActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.endActions?.link, context.templateData["end_actions"] == nil {
+           endActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(endActionsValue)
           }
         }()
         _ = {
-         if key == parent?.endValue?.link {
-           endValueValue = endValueValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.endValue?.link, context.templateData["end_value"] == nil {
+           endValueValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(endValueValue)
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
         _ = {
-         if key == parent?.interpolator?.link {
-           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.interpolator?.link, context.templateData["interpolator"] == nil {
+           interpolatorValue = deserialize(__dictValue).orFallback(interpolatorValue)
           }
         }()
         _ = {
-         if key == parent?.repeatCount?.link {
-           repeatCountValue = repeatCountValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self) })
+         if key == parent?.repeatCount?.link, context.templateData["repeat_count"] == nil {
+           repeatCountValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self).orFallback(repeatCountValue)
           }
         }()
         _ = {
-         if key == parent?.startDelay?.link {
-           startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
+         if key == parent?.startDelay?.link, context.templateData["start_delay"] == nil {
+           startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).orFallback(startDelayValue)
           }
         }()
         _ = {
-         if key == parent?.startValue?.link {
-           startValueValue = startValueValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.startValue?.link, context.templateData["start_value"] == nil {
+           startValueValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(startValueValue)
           }
         }()
         _ = {
-         if key == parent?.variableName?.link {
-           variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.variableName?.link, context.templateData["variable_name"] == nil {
+           variableNameValue = deserialize(__dictValue).orFallback(variableNameValue)
           }
         }()
       }

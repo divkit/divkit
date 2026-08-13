@@ -78,13 +78,13 @@ public final class DivActionTimerTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.action?.link {
-           actionValue = actionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.action?.link, context.templateData["action"] == nil {
+           actionValue = deserialize(__dictValue).orFallback(actionValue)
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
       }

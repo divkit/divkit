@@ -51,8 +51,8 @@ public final class DivDefaultIndicatorItemPlacementTemplate: TemplateValue, Send
           }
         }()
         _ = {
-         if key == parent?.spaceBetweenCenters?.link {
-           spaceBetweenCentersValue = spaceBetweenCentersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+         if key == parent?.spaceBetweenCenters?.link, context.templateData["space_between_centers"] == nil {
+           spaceBetweenCentersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).orFallback(spaceBetweenCentersValue)
           }
         }()
       }

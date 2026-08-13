@@ -51,8 +51,8 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.property?.link {
-           propertyValue = propertyValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.property?.link, context.templateData["property"] == nil {
+           propertyValue = deserialize(__dictValue).orFallback(propertyValue)
           }
         }()
       }

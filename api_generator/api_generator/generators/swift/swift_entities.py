@@ -286,10 +286,11 @@ class SwiftEntity(Entity):
             result += '      }()'
         for prop in template_props:
             result += '      _ = {'
-            result += f'       if key == parent?.{prop.declaration_name}?.link {{'
+            result += f'       if key == parent?.{prop.declaration_name}?.link, ' \
+                      f'context.templateData["{prop.dict_field}"] == nil {{'
             local_var_name = prop.value_resolving_local_var_name
             deserialize = cast(SwiftProperty, prop).deserialize_from_value_expression
-            result += f'         {local_var_name} = {local_var_name}.merged(with: {{ {deserialize} }})'
+            result += f'         {local_var_name} = {deserialize}.orFallback({local_var_name})'
             result += '        }'
             result += '      }()'
         result += '    }'

@@ -58,8 +58,8 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
             }
           }()
           _ = {
-           if key == parent?.value?.link {
-             valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.value?.link, context.templateData["value"] == nil {
+             valueValue = deserialize(__dictValue).orFallback(valueValue)
             }
           }()
         }
@@ -136,8 +136,8 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
           }
         }()
         _ = {
-         if key == parent?.property?.link {
-           propertyValue = propertyValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithComplexPropertyWithDefaultValueTemplate.PropertyTemplate.self) })
+         if key == parent?.property?.link, context.templateData["property"] == nil {
+           propertyValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithComplexPropertyWithDefaultValueTemplate.PropertyTemplate.self).orFallback(propertyValue)
           }
         }()
       }

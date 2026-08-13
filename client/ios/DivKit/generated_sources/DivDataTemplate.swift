@@ -72,13 +72,13 @@ public final class DivDataTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.div?.link {
-             divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+           if key == parent?.div?.link, context.templateData["div"] == nil {
+             divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).orFallback(divValue)
             }
           }()
           _ = {
-           if key == parent?.stateId?.link {
-             stateIdValue = stateIdValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.stateId?.link, context.templateData["state_id"] == nil {
+             stateIdValue = deserialize(__dictValue).orFallback(stateIdValue)
             }
           }()
         }
@@ -254,38 +254,38 @@ public final class DivDataTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.functions?.link {
-           functionsValue = functionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self) })
+         if key == parent?.functions?.link, context.templateData["functions"] == nil {
+           functionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFunctionTemplate.self).orFallback(functionsValue)
           }
         }()
         _ = {
-         if key == parent?.logId?.link {
-           logIdValue = logIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.logId?.link, context.templateData["log_id"] == nil {
+           logIdValue = deserialize(__dictValue).orFallback(logIdValue)
           }
         }()
         _ = {
-         if key == parent?.states?.link {
-           statesValue = statesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self) })
+         if key == parent?.states?.link, context.templateData["states"] == nil {
+           statesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self).orFallback(statesValue)
           }
         }()
         _ = {
-         if key == parent?.timers?.link {
-           timersValue = timersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTimerTemplate.self) })
+         if key == parent?.timers?.link, context.templateData["timers"] == nil {
+           timersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTimerTemplate.self).orFallback(timersValue)
           }
         }()
         _ = {
-         if key == parent?.transitionAnimationSelector?.link {
-           transitionAnimationSelectorValue = transitionAnimationSelectorValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.transitionAnimationSelector?.link, context.templateData["transition_animation_selector"] == nil {
+           transitionAnimationSelectorValue = deserialize(__dictValue).orFallback(transitionAnimationSelectorValue)
           }
         }()
         _ = {
-         if key == parent?.variableTriggers?.link {
-           variableTriggersValue = variableTriggersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self) })
+         if key == parent?.variableTriggers?.link, context.templateData["variable_triggers"] == nil {
+           variableTriggersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTriggerTemplate.self).orFallback(variableTriggersValue)
           }
         }()
         _ = {
-         if key == parent?.variables?.link {
-           variablesValue = variablesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self) })
+         if key == parent?.variables?.link, context.templateData["variables"] == nil {
+           variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivVariableTemplate.self).orFallback(variablesValue)
           }
         }()
       }

@@ -85,23 +85,23 @@ public final class DivCornersRadiusTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.bottomLeft?.link {
-           bottomLeftValue = bottomLeftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomLeftValidator) })
+         if key == parent?.bottomLeft?.link, context.templateData["bottom-left"] == nil {
+           bottomLeftValue = deserialize(__dictValue, validator: ResolvedValue.bottomLeftValidator).orFallback(bottomLeftValue)
           }
         }()
         _ = {
-         if key == parent?.bottomRight?.link {
-           bottomRightValue = bottomRightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomRightValidator) })
+         if key == parent?.bottomRight?.link, context.templateData["bottom-right"] == nil {
+           bottomRightValue = deserialize(__dictValue, validator: ResolvedValue.bottomRightValidator).orFallback(bottomRightValue)
           }
         }()
         _ = {
-         if key == parent?.topLeft?.link {
-           topLeftValue = topLeftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topLeftValidator) })
+         if key == parent?.topLeft?.link, context.templateData["top-left"] == nil {
+           topLeftValue = deserialize(__dictValue, validator: ResolvedValue.topLeftValidator).orFallback(topLeftValue)
           }
         }()
         _ = {
-         if key == parent?.topRight?.link {
-           topRightValue = topRightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topRightValidator) })
+         if key == parent?.topRight?.link, context.templateData["top-right"] == nil {
+           topRightValue = deserialize(__dictValue, validator: ResolvedValue.topRightValidator).orFallback(topRightValue)
           }
         }()
       }

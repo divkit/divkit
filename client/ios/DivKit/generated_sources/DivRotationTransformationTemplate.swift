@@ -85,18 +85,18 @@ public final class DivRotationTransformationTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.angle?.link {
-           angleValue = angleValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.angle?.link, context.templateData["angle"] == nil {
+           angleValue = deserialize(__dictValue).orFallback(angleValue)
           }
         }()
         _ = {
-         if key == parent?.pivotX?.link {
-           pivotXValue = pivotXValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
+         if key == parent?.pivotX?.link, context.templateData["pivot_x"] == nil {
+           pivotXValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self).orFallback(pivotXValue)
           }
         }()
         _ = {
-         if key == parent?.pivotY?.link {
-           pivotYValue = pivotYValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
+         if key == parent?.pivotY?.link, context.templateData["pivot_y"] == nil {
+           pivotYValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self).orFallback(pivotYValue)
           }
         }()
       }

@@ -61,8 +61,8 @@ public final class EntityWithArrayOfEnumsTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.items?.link {
-           itemsValue = itemsValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.itemsValidator) })
+         if key == parent?.items?.link, context.templateData["items"] == nil {
+           itemsValue = deserialize(__dictValue, validator: ResolvedValue.itemsValidator).orFallback(itemsValue)
           }
         }()
       }

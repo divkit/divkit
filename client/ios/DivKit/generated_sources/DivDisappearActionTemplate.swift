@@ -176,58 +176,58 @@ public final class DivDisappearActionTemplate: TemplateValue, @unchecked Sendabl
           }
         }()
         _ = {
-         if key == parent?.disappearDuration?.link {
-           disappearDurationValue = disappearDurationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.disappearDurationValidator) })
+         if key == parent?.disappearDuration?.link, context.templateData["disappear_duration"] == nil {
+           disappearDurationValue = deserialize(__dictValue, validator: ResolvedValue.disappearDurationValidator).orFallback(disappearDurationValue)
           }
         }()
         _ = {
-         if key == parent?.downloadCallbacks?.link {
-           downloadCallbacksValue = downloadCallbacksValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDownloadCallbacksTemplate.self) })
+         if key == parent?.downloadCallbacks?.link, context.templateData["download_callbacks"] == nil {
+           downloadCallbacksValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDownloadCallbacksTemplate.self).orFallback(downloadCallbacksValue)
           }
         }()
         _ = {
-         if key == parent?.isEnabled?.link {
-           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.isEnabled?.link, context.templateData["is_enabled"] == nil {
+           isEnabledValue = deserialize(__dictValue).orFallback(isEnabledValue)
           }
         }()
         _ = {
-         if key == parent?.logId?.link {
-           logIdValue = logIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.logId?.link, context.templateData["log_id"] == nil {
+           logIdValue = deserialize(__dictValue).orFallback(logIdValue)
           }
         }()
         _ = {
-         if key == parent?.logLimit?.link {
-           logLimitValue = logLimitValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.logLimitValidator) })
+         if key == parent?.logLimit?.link, context.templateData["log_limit"] == nil {
+           logLimitValue = deserialize(__dictValue, validator: ResolvedValue.logLimitValidator).orFallback(logLimitValue)
           }
         }()
         _ = {
-         if key == parent?.payload?.link {
-           payloadValue = payloadValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.payload?.link, context.templateData["payload"] == nil {
+           payloadValue = deserialize(__dictValue).orFallback(payloadValue)
           }
         }()
         _ = {
-         if key == parent?.referer?.link {
-           refererValue = refererValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.referer?.link, context.templateData["referer"] == nil {
+           refererValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(refererValue)
           }
         }()
         _ = {
-         if key == parent?.scopeId?.link {
-           scopeIdValue = scopeIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.scopeId?.link, context.templateData["scope_id"] == nil {
+           scopeIdValue = deserialize(__dictValue).orFallback(scopeIdValue)
           }
         }()
         _ = {
-         if key == parent?.typed?.link {
-           typedValue = typedValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTypedTemplate.self) })
+         if key == parent?.typed?.link, context.templateData["typed"] == nil {
+           typedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTypedTemplate.self).orFallback(typedValue)
           }
         }()
         _ = {
-         if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.url?.link, context.templateData["url"] == nil {
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(urlValue)
           }
         }()
         _ = {
-         if key == parent?.visibilityPercentage?.link {
-           visibilityPercentageValue = visibilityPercentageValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.visibilityPercentageValidator) })
+         if key == parent?.visibilityPercentage?.link, context.templateData["visibility_percentage"] == nil {
+           visibilityPercentageValue = deserialize(__dictValue, validator: ResolvedValue.visibilityPercentageValidator).orFallback(visibilityPercentageValue)
           }
         }()
       }

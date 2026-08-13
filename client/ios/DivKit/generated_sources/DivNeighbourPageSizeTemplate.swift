@@ -59,8 +59,8 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.neighbourPageWidth?.link {
-           neighbourPageWidthValue = neighbourPageWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+         if key == parent?.neighbourPageWidth?.link, context.templateData["neighbour_page_width"] == nil {
+           neighbourPageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).orFallback(neighbourPageWidthValue)
           }
         }()
       }

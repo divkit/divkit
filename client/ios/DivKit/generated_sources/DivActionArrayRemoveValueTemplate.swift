@@ -76,13 +76,13 @@ public final class DivActionArrayRemoveValueTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.index?.link {
-           indexValue = indexValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.index?.link, context.templateData["index"] == nil {
+           indexValue = deserialize(__dictValue).orFallback(indexValue)
           }
         }()
         _ = {
-         if key == parent?.variableName?.link {
-           variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.variableName?.link, context.templateData["variable_name"] == nil {
+           variableNameValue = deserialize(__dictValue).orFallback(variableNameValue)
           }
         }()
       }

@@ -59,8 +59,8 @@ public final class DivAppearanceSetTransitionTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.items?.link {
-           itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivAppearanceTransitionTemplate.self) })
+         if key == parent?.items?.link, context.templateData["items"] == nil {
+           itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivAppearanceTransitionTemplate.self).orFallback(itemsValue)
           }
         }()
       }

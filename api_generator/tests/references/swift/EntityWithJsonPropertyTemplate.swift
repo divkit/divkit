@@ -51,8 +51,8 @@ public final class EntityWithJsonPropertyTemplate: TemplateValue, @unchecked Sen
           }
         }()
         _ = {
-         if key == parent?.jsonProperty?.link {
-           jsonPropertyValue = jsonPropertyValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.jsonProperty?.link, context.templateData["json_property"] == nil {
+           jsonPropertyValue = deserialize(__dictValue).orFallback(jsonPropertyValue)
           }
         }()
       }

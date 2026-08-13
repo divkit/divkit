@@ -119,33 +119,33 @@ public final class DivTimerTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.duration?.link {
-           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+         if key == parent?.duration?.link, context.templateData["duration"] == nil {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).orFallback(durationValue)
           }
         }()
         _ = {
-         if key == parent?.endActions?.link {
-           endActionsValue = endActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.endActions?.link, context.templateData["end_actions"] == nil {
+           endActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(endActionsValue)
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
         _ = {
-         if key == parent?.tickActions?.link {
-           tickActionsValue = tickActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.tickActions?.link, context.templateData["tick_actions"] == nil {
+           tickActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(tickActionsValue)
           }
         }()
         _ = {
-         if key == parent?.tickInterval?.link {
-           tickIntervalValue = tickIntervalValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.tickIntervalValidator) })
+         if key == parent?.tickInterval?.link, context.templateData["tick_interval"] == nil {
+           tickIntervalValue = deserialize(__dictValue, validator: ResolvedValue.tickIntervalValidator).orFallback(tickIntervalValue)
           }
         }()
         _ = {
-         if key == parent?.valueVariable?.link {
-           valueVariableValue = valueVariableValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.valueVariable?.link, context.templateData["value_variable"] == nil {
+           valueVariableValue = deserialize(__dictValue).orFallback(valueVariableValue)
           }
         }()
       }

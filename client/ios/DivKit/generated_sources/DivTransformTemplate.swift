@@ -72,18 +72,18 @@ public final class DivTransformTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.pivotX?.link {
-           pivotXValue = pivotXValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
+         if key == parent?.pivotX?.link, context.templateData["pivot_x"] == nil {
+           pivotXValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self).orFallback(pivotXValue)
           }
         }()
         _ = {
-         if key == parent?.pivotY?.link {
-           pivotYValue = pivotYValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self) })
+         if key == parent?.pivotY?.link, context.templateData["pivot_y"] == nil {
+           pivotYValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPivotTemplate.self).orFallback(pivotYValue)
           }
         }()
         _ = {
-         if key == parent?.rotation?.link {
-           rotationValue = rotationValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.rotation?.link, context.templateData["rotation"] == nil {
+           rotationValue = deserialize(__dictValue).orFallback(rotationValue)
           }
         }()
       }

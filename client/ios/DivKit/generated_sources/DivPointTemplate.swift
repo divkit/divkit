@@ -71,13 +71,13 @@ public final class DivPointTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.x?.link {
-           xValue = xValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
+         if key == parent?.x?.link, context.templateData["x"] == nil {
+           xValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).orFallback(xValue)
           }
         }()
         _ = {
-         if key == parent?.y?.link {
-           yValue = yValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
+         if key == parent?.y?.link, context.templateData["y"] == nil {
+           yValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).orFallback(yValue)
           }
         }()
       }

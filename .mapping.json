@@ -20897,7 +20897,6 @@
   "test_data/parsing_test_data/required_property_value_is_missing.json":"divkit/public/test_data/parsing_test_data/required_property_value_is_missing.json",
   "test_data/parsing_test_data/simple_values.json":"divkit/public/test_data/parsing_test_data/simple_values.json",
   "test_data/parsing_test_data/templates/basic_template_definition.json":"divkit/public/test_data/parsing_test_data/templates/basic_template_definition.json",
-  "test_data/parsing_test_data/templates/definition_literal_wins_over_reference.json":"divkit/public/test_data/parsing_test_data/templates/definition_literal_wins_over_reference.json",
   "test_data/parsing_test_data/templates/definition_with_nested_object_literal.json":"divkit/public/test_data/parsing_test_data/templates/definition_with_nested_object_literal.json",
   "test_data/parsing_test_data/templates/derived_template_preserves_parent_references.json":"divkit/public/test_data/parsing_test_data/templates/derived_template_preserves_parent_references.json",
   "test_data/parsing_test_data/templates/derived_template_rebinds_reference.json":"divkit/public/test_data/parsing_test_data/templates/derived_template_rebinds_reference.json",

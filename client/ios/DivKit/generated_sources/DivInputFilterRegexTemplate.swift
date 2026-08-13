@@ -59,8 +59,8 @@ public final class DivInputFilterRegexTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.pattern?.link {
-           patternValue = patternValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.pattern?.link, context.templateData["pattern"] == nil {
+           patternValue = deserialize(__dictValue).orFallback(patternValue)
           }
         }()
       }

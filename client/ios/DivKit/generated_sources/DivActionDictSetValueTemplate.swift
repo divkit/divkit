@@ -89,18 +89,18 @@ public final class DivActionDictSetValueTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.key?.link {
-           keyValue = keyValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.key?.link, context.templateData["key"] == nil {
+           keyValue = deserialize(__dictValue).orFallback(keyValue)
           }
         }()
         _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+         if key == parent?.value?.link, context.templateData["value"] == nil {
+           valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).orFallback(valueValue)
           }
         }()
         _ = {
-         if key == parent?.variableName?.link {
-           variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.variableName?.link, context.templateData["variable_name"] == nil {
+           variableNameValue = deserialize(__dictValue).orFallback(variableNameValue)
           }
         }()
       }

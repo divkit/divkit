@@ -111,28 +111,28 @@ public final class DivTextRangeMaskParticlesTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.color?.link, context.templateData["color"] == nil {
+           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(colorValue)
           }
         }()
         _ = {
-         if key == parent?.density?.link {
-           densityValue = densityValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.densityValidator) })
+         if key == parent?.density?.link, context.templateData["density"] == nil {
+           densityValue = deserialize(__dictValue, validator: ResolvedValue.densityValidator).orFallback(densityValue)
           }
         }()
         _ = {
-         if key == parent?.isAnimated?.link {
-           isAnimatedValue = isAnimatedValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.isAnimated?.link, context.templateData["is_animated"] == nil {
+           isAnimatedValue = deserialize(__dictValue).orFallback(isAnimatedValue)
           }
         }()
         _ = {
-         if key == parent?.isEnabled?.link {
-           isEnabledValue = isEnabledValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.isEnabled?.link, context.templateData["is_enabled"] == nil {
+           isEnabledValue = deserialize(__dictValue).orFallback(isEnabledValue)
           }
         }()
         _ = {
-         if key == parent?.particleSize?.link {
-           particleSizeValue = particleSizeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+         if key == parent?.particleSize?.link, context.templateData["particle_size"] == nil {
+           particleSizeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).orFallback(particleSizeValue)
           }
         }()
       }

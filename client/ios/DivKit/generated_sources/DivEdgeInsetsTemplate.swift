@@ -124,38 +124,38 @@ public final class DivEdgeInsetsTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.bottom?.link {
-           bottomValue = bottomValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.bottomValidator) })
+         if key == parent?.bottom?.link, context.templateData["bottom"] == nil {
+           bottomValue = deserialize(__dictValue, validator: ResolvedValue.bottomValidator).orFallback(bottomValue)
           }
         }()
         _ = {
-         if key == parent?.end?.link {
-           endValue = endValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.endValidator) })
+         if key == parent?.end?.link, context.templateData["end"] == nil {
+           endValue = deserialize(__dictValue, validator: ResolvedValue.endValidator).orFallback(endValue)
           }
         }()
         _ = {
-         if key == parent?.left?.link {
-           leftValue = leftValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.leftValidator) })
+         if key == parent?.left?.link, context.templateData["left"] == nil {
+           leftValue = deserialize(__dictValue, validator: ResolvedValue.leftValidator).orFallback(leftValue)
           }
         }()
         _ = {
-         if key == parent?.right?.link {
-           rightValue = rightValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.rightValidator) })
+         if key == parent?.right?.link, context.templateData["right"] == nil {
+           rightValue = deserialize(__dictValue, validator: ResolvedValue.rightValidator).orFallback(rightValue)
           }
         }()
         _ = {
-         if key == parent?.start?.link {
-           startValue = startValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startValidator) })
+         if key == parent?.start?.link, context.templateData["start"] == nil {
+           startValue = deserialize(__dictValue, validator: ResolvedValue.startValidator).orFallback(startValue)
           }
         }()
         _ = {
-         if key == parent?.top?.link {
-           topValue = topValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.topValidator) })
+         if key == parent?.top?.link, context.templateData["top"] == nil {
+           topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).orFallback(topValue)
           }
         }()
         _ = {
-         if key == parent?.unit?.link {
-           unitValue = unitValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.unit?.link, context.templateData["unit"] == nil {
+           unitValue = deserialize(__dictValue).orFallback(unitValue)
           }
         }()
       }

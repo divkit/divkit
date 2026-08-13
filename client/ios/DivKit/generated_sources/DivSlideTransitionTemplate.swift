@@ -105,28 +105,28 @@ public final class DivSlideTransitionTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.distance?.link {
-           distanceValue = distanceValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self) })
+         if key == parent?.distance?.link, context.templateData["distance"] == nil {
+           distanceValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).orFallback(distanceValue)
           }
         }()
         _ = {
-         if key == parent?.duration?.link {
-           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+         if key == parent?.duration?.link, context.templateData["duration"] == nil {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).orFallback(durationValue)
           }
         }()
         _ = {
-         if key == parent?.edge?.link {
-           edgeValue = edgeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.edge?.link, context.templateData["edge"] == nil {
+           edgeValue = deserialize(__dictValue).orFallback(edgeValue)
           }
         }()
         _ = {
-         if key == parent?.interpolator?.link {
-           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.interpolator?.link, context.templateData["interpolator"] == nil {
+           interpolatorValue = deserialize(__dictValue).orFallback(interpolatorValue)
           }
         }()
         _ = {
-         if key == parent?.startDelay?.link {
-           startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
+         if key == parent?.startDelay?.link, context.templateData["start_delay"] == nil {
+           startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).orFallback(startDelayValue)
           }
         }()
       }

@@ -2,6 +2,7 @@
   "description": "A template definition declares both a literal value and a reference definition for the same field. Verifies the reference wins.",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

@@ -85,18 +85,18 @@ public final class DivActionDownloadTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.onFailActions?.link {
-           onFailActionsValue = onFailActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.onFailActions?.link, context.templateData["on_fail_actions"] == nil {
+           onFailActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(onFailActionsValue)
           }
         }()
         _ = {
-         if key == parent?.onSuccessActions?.link {
-           onSuccessActionsValue = onSuccessActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.onSuccessActions?.link, context.templateData["on_success_actions"] == nil {
+           onSuccessActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(onSuccessActionsValue)
           }
         }()
         _ = {
-         if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.url?.link, context.templateData["url"] == nil {
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(urlValue)
           }
         }()
       }

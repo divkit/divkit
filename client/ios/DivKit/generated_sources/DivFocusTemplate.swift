@@ -99,28 +99,28 @@ public final class DivFocusTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.down?.link {
-             downValue = downValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.down?.link, context.templateData["down"] == nil {
+             downValue = deserialize(__dictValue).orFallback(downValue)
             }
           }()
           _ = {
-           if key == parent?.forward?.link {
-             forwardValue = forwardValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.forward?.link, context.templateData["forward"] == nil {
+             forwardValue = deserialize(__dictValue).orFallback(forwardValue)
             }
           }()
           _ = {
-           if key == parent?.left?.link {
-             leftValue = leftValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.left?.link, context.templateData["left"] == nil {
+             leftValue = deserialize(__dictValue).orFallback(leftValue)
             }
           }()
           _ = {
-           if key == parent?.right?.link {
-             rightValue = rightValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.right?.link, context.templateData["right"] == nil {
+             rightValue = deserialize(__dictValue).orFallback(rightValue)
             }
           }()
           _ = {
-           if key == parent?.up?.link {
-             upValue = upValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.up?.link, context.templateData["up"] == nil {
+             upValue = deserialize(__dictValue).orFallback(upValue)
             }
           }()
         }
@@ -244,28 +244,28 @@ public final class DivFocusTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.background?.link {
-           backgroundValue = backgroundValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self) })
+         if key == parent?.background?.link, context.templateData["background"] == nil {
+           backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBackgroundTemplate.self).orFallback(backgroundValue)
           }
         }()
         _ = {
-         if key == parent?.border?.link {
-           borderValue = borderValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self) })
+         if key == parent?.border?.link, context.templateData["border"] == nil {
+           borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivBorderTemplate.self).orFallback(borderValue)
           }
         }()
         _ = {
-         if key == parent?.nextFocusIds?.link {
-           nextFocusIdsValue = nextFocusIdsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.NextFocusIdsTemplate.self) })
+         if key == parent?.nextFocusIds?.link, context.templateData["next_focus_ids"] == nil {
+           nextFocusIdsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFocusTemplate.NextFocusIdsTemplate.self).orFallback(nextFocusIdsValue)
           }
         }()
         _ = {
-         if key == parent?.onBlur?.link {
-           onBlurValue = onBlurValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.onBlur?.link, context.templateData["on_blur"] == nil {
+           onBlurValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(onBlurValue)
           }
         }()
         _ = {
-         if key == parent?.onFocus?.link {
-           onFocusValue = onFocusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.onFocus?.link, context.templateData["on_focus"] == nil {
+           onFocusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(onFocusValue)
           }
         }()
       }

@@ -113,28 +113,28 @@ public final class DivActionScrollByTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.animated?.link {
-           animatedValue = animatedValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.animated?.link, context.templateData["animated"] == nil {
+           animatedValue = deserialize(__dictValue).orFallback(animatedValue)
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
         _ = {
-         if key == parent?.itemCount?.link {
-           itemCountValue = itemCountValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.itemCount?.link, context.templateData["item_count"] == nil {
+           itemCountValue = deserialize(__dictValue).orFallback(itemCountValue)
           }
         }()
         _ = {
-         if key == parent?.offset?.link {
-           offsetValue = offsetValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.offset?.link, context.templateData["offset"] == nil {
+           offsetValue = deserialize(__dictValue).orFallback(offsetValue)
           }
         }()
         _ = {
-         if key == parent?.overflow?.link {
-           overflowValue = overflowValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.overflow?.link, context.templateData["overflow"] == nil {
+           overflowValue = deserialize(__dictValue).orFallback(overflowValue)
           }
         }()
       }

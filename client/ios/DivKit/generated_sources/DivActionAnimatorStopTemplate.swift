@@ -59,8 +59,8 @@ public final class DivActionAnimatorStopTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.animatorId?.link {
-           animatorIdValue = animatorIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.animatorId?.link, context.templateData["animator_id"] == nil {
+           animatorIdValue = deserialize(__dictValue).orFallback(animatorIdValue)
           }
         }()
       }

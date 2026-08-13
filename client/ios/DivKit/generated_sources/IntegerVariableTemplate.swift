@@ -76,13 +76,13 @@ public final class IntegerVariableTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.name?.link {
-           nameValue = nameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.name?.link, context.templateData["name"] == nil {
+           nameValue = deserialize(__dictValue).orFallback(nameValue)
           }
         }()
         _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.value?.link, context.templateData["value"] == nil {
+           valueValue = deserialize(__dictValue).orFallback(valueValue)
           }
         }()
       }

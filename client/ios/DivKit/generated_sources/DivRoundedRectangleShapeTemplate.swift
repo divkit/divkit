@@ -103,28 +103,28 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.backgroundColor?.link {
-           backgroundColorValue = backgroundColorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.backgroundColor?.link, context.templateData["background_color"] == nil {
+           backgroundColorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(backgroundColorValue)
           }
         }()
         _ = {
-         if key == parent?.cornerRadius?.link {
-           cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+         if key == parent?.cornerRadius?.link, context.templateData["corner_radius"] == nil {
+           cornerRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).orFallback(cornerRadiusValue)
           }
         }()
         _ = {
-         if key == parent?.itemHeight?.link {
-           itemHeightValue = itemHeightValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+         if key == parent?.itemHeight?.link, context.templateData["item_height"] == nil {
+           itemHeightValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).orFallback(itemHeightValue)
           }
         }()
         _ = {
-         if key == parent?.itemWidth?.link {
-           itemWidthValue = itemWidthValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self) })
+         if key == parent?.itemWidth?.link, context.templateData["item_width"] == nil {
+           itemWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).orFallback(itemWidthValue)
           }
         }()
         _ = {
-         if key == parent?.stroke?.link {
-           strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
+         if key == parent?.stroke?.link, context.templateData["stroke"] == nil {
+           strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).orFallback(strokeValue)
           }
         }()
       }

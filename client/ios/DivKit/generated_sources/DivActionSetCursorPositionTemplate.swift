@@ -73,13 +73,13 @@ public final class DivActionSetCursorPositionTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.end?.link {
-             endValue = endValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.end?.link, context.templateData["end"] == nil {
+             endValue = deserialize(__dictValue).orFallback(endValue)
             }
           }()
           _ = {
-           if key == parent?.start?.link {
-             startValue = startValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.start?.link, context.templateData["start"] == nil {
+             startValue = deserialize(__dictValue).orFallback(startValue)
             }
           }()
         }
@@ -193,13 +193,13 @@ public final class DivActionSetCursorPositionTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
         _ = {
-         if key == parent?.position?.link {
-           positionValue = positionValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionSetCursorPositionTemplate.PositionTemplate.self) })
+         if key == parent?.position?.link, context.templateData["position"] == nil {
+           positionValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionSetCursorPositionTemplate.PositionTemplate.self).orFallback(positionValue)
           }
         }()
       }

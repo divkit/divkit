@@ -128,38 +128,38 @@ public final class DivAccessibilityTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.description?.link {
-           descriptionValue = descriptionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.description?.link, context.templateData["description"] == nil {
+           descriptionValue = deserialize(__dictValue).orFallback(descriptionValue)
           }
         }()
         _ = {
-         if key == parent?.hint?.link {
-           hintValue = hintValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.hint?.link, context.templateData["hint"] == nil {
+           hintValue = deserialize(__dictValue).orFallback(hintValue)
           }
         }()
         _ = {
-         if key == parent?.isChecked?.link {
-           isCheckedValue = isCheckedValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.isChecked?.link, context.templateData["is_checked"] == nil {
+           isCheckedValue = deserialize(__dictValue).orFallback(isCheckedValue)
           }
         }()
         _ = {
-         if key == parent?.mode?.link {
-           modeValue = modeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.mode?.link, context.templateData["mode"] == nil {
+           modeValue = deserialize(__dictValue).orFallback(modeValue)
           }
         }()
         _ = {
-         if key == parent?.muteAfterAction?.link {
-           muteAfterActionValue = muteAfterActionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.muteAfterAction?.link, context.templateData["mute_after_action"] == nil {
+           muteAfterActionValue = deserialize(__dictValue).orFallback(muteAfterActionValue)
           }
         }()
         _ = {
-         if key == parent?.stateDescription?.link {
-           stateDescriptionValue = stateDescriptionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.stateDescription?.link, context.templateData["state_description"] == nil {
+           stateDescriptionValue = deserialize(__dictValue).orFallback(stateDescriptionValue)
           }
         }()
         _ = {
-         if key == parent?.type?.link {
-           typeValue = typeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.type?.link, context.templateData["type"] == nil {
+           typeValue = deserialize(__dictValue).orFallback(typeValue)
           }
         }()
       }

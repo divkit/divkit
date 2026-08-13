@@ -59,13 +59,13 @@ public final class DivTextRangeBorderTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.cornerRadius?.link {
-           cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator) })
+         if key == parent?.cornerRadius?.link, context.templateData["corner_radius"] == nil {
+           cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).orFallback(cornerRadiusValue)
           }
         }()
         _ = {
-         if key == parent?.stroke?.link {
-           strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
+         if key == parent?.stroke?.link, context.templateData["stroke"] == nil {
+           strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).orFallback(strokeValue)
           }
         }()
       }

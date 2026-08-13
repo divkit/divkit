@@ -62,8 +62,8 @@ public final class EntityWithRawArrayTemplate: TemplateValue, @unchecked Sendabl
           }
         }()
         _ = {
-         if key == parent?.array?.link {
-           arrayValue = arrayValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.array?.link, context.templateData["array"] == nil {
+           arrayValue = deserialize(__dictValue).orFallback(arrayValue)
           }
         }()
       }

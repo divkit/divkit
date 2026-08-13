@@ -59,8 +59,8 @@ public final class DivActionFocusElementTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.elementId?.link {
-           elementIdValue = elementIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.elementId?.link, context.templateData["element_id"] == nil {
+           elementIdValue = deserialize(__dictValue).orFallback(elementIdValue)
           }
         }()
       }

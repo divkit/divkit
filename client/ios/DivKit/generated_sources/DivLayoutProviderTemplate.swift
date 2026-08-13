@@ -59,13 +59,13 @@ public final class DivLayoutProviderTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.heightVariableName?.link {
-           heightVariableNameValue = heightVariableNameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.heightVariableName?.link, context.templateData["height_variable_name"] == nil {
+           heightVariableNameValue = deserialize(__dictValue).orFallback(heightVariableNameValue)
           }
         }()
         _ = {
-         if key == parent?.widthVariableName?.link {
-           widthVariableNameValue = widthVariableNameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.widthVariableName?.link, context.templateData["width_variable_name"] == nil {
+           widthVariableNameValue = deserialize(__dictValue).orFallback(widthVariableNameValue)
           }
         }()
       }

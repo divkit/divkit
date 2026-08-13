@@ -93,18 +93,18 @@ public final class DivActionUpdateStructureTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.path?.link {
-           pathValue = pathValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.pathValidator) })
+         if key == parent?.path?.link, context.templateData["path"] == nil {
+           pathValue = deserialize(__dictValue, validator: ResolvedValue.pathValidator).orFallback(pathValue)
           }
         }()
         _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+         if key == parent?.value?.link, context.templateData["value"] == nil {
+           valueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).orFallback(valueValue)
           }
         }()
         _ = {
-         if key == parent?.variableName?.link {
-           variableNameValue = variableNameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.variableName?.link, context.templateData["variable_name"] == nil {
+           variableNameValue = deserialize(__dictValue).orFallback(variableNameValue)
           }
         }()
       }

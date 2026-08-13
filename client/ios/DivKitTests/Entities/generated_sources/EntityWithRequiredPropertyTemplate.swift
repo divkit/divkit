@@ -62,8 +62,8 @@ public final class EntityWithRequiredPropertyTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.property?.link {
-           propertyValue = propertyValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.propertyValidator) })
+         if key == parent?.property?.link, context.templateData["property"] == nil {
+           propertyValue = deserialize(__dictValue, validator: ResolvedValue.propertyValidator).orFallback(propertyValue)
           }
         }()
       }

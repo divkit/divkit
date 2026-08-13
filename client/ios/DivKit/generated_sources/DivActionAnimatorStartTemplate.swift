@@ -150,43 +150,43 @@ public final class DivActionAnimatorStartTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.animatorId?.link {
-           animatorIdValue = animatorIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.animatorId?.link, context.templateData["animator_id"] == nil {
+           animatorIdValue = deserialize(__dictValue).orFallback(animatorIdValue)
           }
         }()
         _ = {
-         if key == parent?.direction?.link {
-           directionValue = directionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.direction?.link, context.templateData["direction"] == nil {
+           directionValue = deserialize(__dictValue).orFallback(directionValue)
           }
         }()
         _ = {
-         if key == parent?.duration?.link {
-           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+         if key == parent?.duration?.link, context.templateData["duration"] == nil {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).orFallback(durationValue)
           }
         }()
         _ = {
-         if key == parent?.endValue?.link {
-           endValueValue = endValueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+         if key == parent?.endValue?.link, context.templateData["end_value"] == nil {
+           endValueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).orFallback(endValueValue)
           }
         }()
         _ = {
-         if key == parent?.interpolator?.link {
-           interpolatorValue = interpolatorValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.interpolator?.link, context.templateData["interpolator"] == nil {
+           interpolatorValue = deserialize(__dictValue).orFallback(interpolatorValue)
           }
         }()
         _ = {
-         if key == parent?.repeatCount?.link {
-           repeatCountValue = repeatCountValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self) })
+         if key == parent?.repeatCount?.link, context.templateData["repeat_count"] == nil {
+           repeatCountValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCountTemplate.self).orFallback(repeatCountValue)
           }
         }()
         _ = {
-         if key == parent?.startDelay?.link {
-           startDelayValue = startDelayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.startDelayValidator) })
+         if key == parent?.startDelay?.link, context.templateData["start_delay"] == nil {
+           startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).orFallback(startDelayValue)
           }
         }()
         _ = {
-         if key == parent?.startValue?.link {
-           startValueValue = startValueValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self) })
+         if key == parent?.startValue?.link, context.templateData["start_value"] == nil {
+           startValueValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTypedValueTemplate.self).orFallback(startValueValue)
           }
         }()
       }

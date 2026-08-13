@@ -59,8 +59,8 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Sendable
           }
         }()
         _ = {
-         if key == parent?.array?.link {
-           arrayValue = arrayValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator) })
+         if key == parent?.array?.link, context.templateData["array"] == nil {
+           arrayValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator).orFallback(arrayValue)
           }
         }()
       }

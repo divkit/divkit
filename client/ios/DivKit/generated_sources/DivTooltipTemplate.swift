@@ -220,68 +220,68 @@ public final class DivTooltipTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.animationIn?.link {
-           animationInValue = animationInValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self) })
+         if key == parent?.animationIn?.link, context.templateData["animation_in"] == nil {
+           animationInValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).orFallback(animationInValue)
           }
         }()
         _ = {
-         if key == parent?.animationOut?.link {
-           animationOutValue = animationOutValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self) })
+         if key == parent?.animationOut?.link, context.templateData["animation_out"] == nil {
+           animationOutValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivAnimationTemplate.self).orFallback(animationOutValue)
           }
         }()
         _ = {
-         if key == parent?.backgroundAccessibilityDescription?.link {
-           backgroundAccessibilityDescriptionValue = backgroundAccessibilityDescriptionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.backgroundAccessibilityDescription?.link, context.templateData["background_accessibility_description"] == nil {
+           backgroundAccessibilityDescriptionValue = deserialize(__dictValue).orFallback(backgroundAccessibilityDescriptionValue)
           }
         }()
         _ = {
-         if key == parent?.bringToTopId?.link {
-           bringToTopIdValue = bringToTopIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.bringToTopId?.link, context.templateData["bring_to_top_id"] == nil {
+           bringToTopIdValue = deserialize(__dictValue).orFallback(bringToTopIdValue)
           }
         }()
         _ = {
-         if key == parent?.closeByTapOutside?.link {
-           closeByTapOutsideValue = closeByTapOutsideValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.closeByTapOutside?.link, context.templateData["close_by_tap_outside"] == nil {
+           closeByTapOutsideValue = deserialize(__dictValue).orFallback(closeByTapOutsideValue)
           }
         }()
         _ = {
-         if key == parent?.div?.link {
-           divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+         if key == parent?.div?.link, context.templateData["div"] == nil {
+           divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).orFallback(divValue)
           }
         }()
         _ = {
-         if key == parent?.duration?.link {
-           durationValue = durationValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.durationValidator) })
+         if key == parent?.duration?.link, context.templateData["duration"] == nil {
+           durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).orFallback(durationValue)
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
         _ = {
-         if key == parent?.mode?.link {
-           modeValue = modeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipModeTemplate.self) })
+         if key == parent?.mode?.link, context.templateData["mode"] == nil {
+           modeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTooltipModeTemplate.self).orFallback(modeValue)
           }
         }()
         _ = {
-         if key == parent?.offset?.link {
-           offsetValue = offsetValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self) })
+         if key == parent?.offset?.link, context.templateData["offset"] == nil {
+           offsetValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self).orFallback(offsetValue)
           }
         }()
         _ = {
-         if key == parent?.position?.link {
-           positionValue = positionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.position?.link, context.templateData["position"] == nil {
+           positionValue = deserialize(__dictValue).orFallback(positionValue)
           }
         }()
         _ = {
-         if key == parent?.substrateDiv?.link {
-           substrateDivValue = substrateDivValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+         if key == parent?.substrateDiv?.link, context.templateData["substrate_div"] == nil {
+           substrateDivValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).orFallback(substrateDivValue)
           }
         }()
         _ = {
-         if key == parent?.tapOutsideActions?.link {
-           tapOutsideActionsValue = tapOutsideActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.tapOutsideActions?.link, context.templateData["tap_outside_actions"] == nil {
+           tapOutsideActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(tapOutsideActionsValue)
           }
         }()
       }

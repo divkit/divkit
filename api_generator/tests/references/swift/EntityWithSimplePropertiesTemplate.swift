@@ -155,48 +155,48 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
           }
         }()
         _ = {
-         if key == parent?.boolean?.link {
-           booleanValue = booleanValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.boolean?.link, context.templateData["boolean"] == nil {
+           booleanValue = deserialize(__dictValue).orFallback(booleanValue)
           }
         }()
         _ = {
-         if key == parent?.booleanInt?.link {
-           booleanIntValue = booleanIntValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.booleanInt?.link, context.templateData["boolean_int"] == nil {
+           booleanIntValue = deserialize(__dictValue).orFallback(booleanIntValue)
           }
         }()
         _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.color?.link, context.templateData["color"] == nil {
+           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(colorValue)
           }
         }()
         _ = {
-         if key == parent?.double?.link {
-           doubleValue = doubleValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.double?.link, context.templateData["double"] == nil {
+           doubleValue = deserialize(__dictValue).orFallback(doubleValue)
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
         _ = {
-         if key == parent?.integer?.link {
-           integerValue = integerValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.integer?.link, context.templateData["integer"] == nil {
+           integerValue = deserialize(__dictValue).orFallback(integerValue)
           }
         }()
         _ = {
-         if key == parent?.positiveInteger?.link {
-           positiveIntegerValue = positiveIntegerValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.positiveIntegerValidator) })
+         if key == parent?.positiveInteger?.link, context.templateData["positive_integer"] == nil {
+           positiveIntegerValue = deserialize(__dictValue, validator: ResolvedValue.positiveIntegerValidator).orFallback(positiveIntegerValue)
           }
         }()
         _ = {
-         if key == parent?.string?.link {
-           stringValue = stringValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.string?.link, context.templateData["string"] == nil {
+           stringValue = deserialize(__dictValue).orFallback(stringValue)
           }
         }()
         _ = {
-         if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+         if key == parent?.url?.link, context.templateData["url"] == nil {
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(urlValue)
           }
         }()
       }

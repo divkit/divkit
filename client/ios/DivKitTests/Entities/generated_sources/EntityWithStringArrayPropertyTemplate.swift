@@ -62,8 +62,8 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Sendabl
           }
         }()
         _ = {
-         if key == parent?.array?.link {
-           arrayValue = arrayValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.arrayValidator) })
+         if key == parent?.array?.link, context.templateData["array"] == nil {
+           arrayValue = deserialize(__dictValue, validator: ResolvedValue.arrayValidator).orFallback(arrayValue)
           }
         }()
       }

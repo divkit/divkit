@@ -93,23 +93,23 @@ public final class DivShadowTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.alpha?.link {
-           alphaValue = alphaValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.alphaValidator) })
+         if key == parent?.alpha?.link, context.templateData["alpha"] == nil {
+           alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).orFallback(alphaValue)
           }
         }()
         _ = {
-         if key == parent?.blur?.link {
-           blurValue = blurValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.blurValidator) })
+         if key == parent?.blur?.link, context.templateData["blur"] == nil {
+           blurValue = deserialize(__dictValue, validator: ResolvedValue.blurValidator).orFallback(blurValue)
           }
         }()
         _ = {
-         if key == parent?.color?.link {
-           colorValue = colorValue.merged(with: { deserialize(__dictValue, transform: Color.color(withHexString:)) })
+         if key == parent?.color?.link, context.templateData["color"] == nil {
+           colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).orFallback(colorValue)
           }
         }()
         _ = {
-         if key == parent?.offset?.link {
-           offsetValue = offsetValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self) })
+         if key == parent?.offset?.link, context.templateData["offset"] == nil {
+           offsetValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPointTemplate.self).orFallback(offsetValue)
           }
         }()
       }

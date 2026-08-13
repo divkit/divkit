@@ -81,18 +81,18 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue, @unchecked S
             }
           }()
           _ = {
-           if key == parent?.div?.link {
-             divValue = divValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+           if key == parent?.div?.link, context.templateData["div"] == nil {
+             divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).orFallback(divValue)
             }
           }()
           _ = {
-           if key == parent?.id?.link {
-             idValue = idValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.id?.link, context.templateData["id"] == nil {
+             idValue = deserialize(__dictValue).orFallback(idValue)
             }
           }()
           _ = {
-           if key == parent?.selector?.link {
-             selectorValue = selectorValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.selector?.link, context.templateData["selector"] == nil {
+             selectorValue = deserialize(__dictValue).orFallback(selectorValue)
             }
           }()
         }
@@ -215,18 +215,18 @@ public final class DivCollectionItemBuilderTemplate: TemplateValue, @unchecked S
           }
         }()
         _ = {
-         if key == parent?.data?.link {
-           dataValue = dataValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.data?.link, context.templateData["data"] == nil {
+           dataValue = deserialize(__dictValue).orFallback(dataValue)
           }
         }()
         _ = {
-         if key == parent?.dataElementName?.link {
-           dataElementNameValue = dataElementNameValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.dataElementName?.link, context.templateData["data_element_name"] == nil {
+           dataElementNameValue = deserialize(__dictValue).orFallback(dataElementNameValue)
           }
         }()
         _ = {
-         if key == parent?.prototypes?.link {
-           prototypesValue = prototypesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self) })
+         if key == parent?.prototypes?.link, context.templateData["prototypes"] == nil {
+           prototypesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.prototypesValidator, type: DivCollectionItemBuilderTemplate.PrototypeTemplate.self).orFallback(prototypesValue)
           }
         }()
       }

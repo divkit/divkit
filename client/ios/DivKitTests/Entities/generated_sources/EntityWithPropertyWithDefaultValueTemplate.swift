@@ -84,18 +84,18 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
             }
           }()
           _ = {
-           if key == parent?.int?.link {
-             intValue = intValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.intValidator) })
+           if key == parent?.int?.link, context.templateData["int"] == nil {
+             intValue = deserialize(__dictValue, validator: ResolvedValue.intValidator).orFallback(intValue)
             }
           }()
           _ = {
-           if key == parent?.nonOptional?.link {
-             nonOptionalValue = nonOptionalValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.nonOptional?.link, context.templateData["non_optional"] == nil {
+             nonOptionalValue = deserialize(__dictValue).orFallback(nonOptionalValue)
             }
           }()
           _ = {
-           if key == parent?.url?.link {
-             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator) })
+           if key == parent?.url?.link, context.templateData["url"] == nil {
+             urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator).orFallback(urlValue)
             }
           }()
         }
@@ -202,18 +202,18 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Se
           }
         }()
         _ = {
-         if key == parent?.int?.link {
-           intValue = intValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.intValidator) })
+         if key == parent?.int?.link, context.templateData["int"] == nil {
+           intValue = deserialize(__dictValue, validator: ResolvedValue.intValidator).orFallback(intValue)
           }
         }()
         _ = {
-         if key == parent?.nested?.link {
-           nestedValue = nestedValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self) })
+         if key == parent?.nested?.link, context.templateData["nested"] == nil {
+           nestedValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: EntityWithPropertyWithDefaultValueTemplate.NestedTemplate.self).orFallback(nestedValue)
           }
         }()
         _ = {
-         if key == parent?.url?.link {
-           urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator) })
+         if key == parent?.url?.link, context.templateData["url"] == nil {
+           urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString, validator: ResolvedValue.urlValidator).orFallback(urlValue)
           }
         }()
       }

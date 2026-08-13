@@ -14,13 +14,11 @@ extension [String: Any] {
     _ key: String,
     transform: (U) -> T?
   ) -> Field<T>? {
-    if let value: T = try? getOptionalField(key, transform: transform) {
-      return .value(value)
+    let value: T? = try? getOptionalField(key, transform: transform)
+    guard let link = link(for: key) else {
+      return value.map { .value($0) }
     }
-    if let link = link(for: key) {
-      return .link(link)
-    }
-    return nil
+    return .link(link, fallback: value)
   }
 
   @inlinable
@@ -53,14 +51,15 @@ extension [String: Any] {
     transform: (U) throws -> T,
     validator: AnyArrayValueValidator<T>? = nil
   ) -> Field<[T]>? {
-    if let value: [T] = try? getOptionalArray(
+    let value: [T]? = try? getOptionalArray(
       key,
       transform: transform,
       validator: validator
-    ) {
-      return .value(value)
+    )
+    guard let link = link(for: key) else {
+      return value.map { .value($0) }
     }
-    return link(for: key).map { .link($0) }
+    return .link(link, fallback: value)
   }
 
   @inlinable

@@ -73,13 +73,13 @@ public final class DivActionSubmitTemplate: TemplateValue, Sendable {
               }
             }()
             _ = {
-             if key == parent?.name?.link {
-               nameValue = nameValue.merged(with: { deserialize(__dictValue) })
+             if key == parent?.name?.link, context.templateData["name"] == nil {
+               nameValue = deserialize(__dictValue).orFallback(nameValue)
               }
             }()
             _ = {
-             if key == parent?.value?.link {
-               valueValue = valueValue.merged(with: { deserialize(__dictValue) })
+             if key == parent?.value?.link, context.templateData["value"] == nil {
+               valueValue = deserialize(__dictValue).orFallback(valueValue)
               }
             }()
           }
@@ -193,18 +193,18 @@ public final class DivActionSubmitTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.headers?.link {
-             headersValue = headersValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionSubmitTemplate.RequestTemplate.HeaderTemplate.self) })
+           if key == parent?.headers?.link, context.templateData["headers"] == nil {
+             headersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionSubmitTemplate.RequestTemplate.HeaderTemplate.self).orFallback(headersValue)
             }
           }()
           _ = {
-           if key == parent?.method?.link {
-             methodValue = methodValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.method?.link, context.templateData["method"] == nil {
+             methodValue = deserialize(__dictValue).orFallback(methodValue)
             }
           }()
           _ = {
-           if key == parent?.url?.link {
-             urlValue = urlValue.merged(with: { deserialize(__dictValue, transform: URL.makeFromNonEncodedString) })
+           if key == parent?.url?.link, context.templateData["url"] == nil {
+             urlValue = deserialize(__dictValue, transform: URL.makeFromNonEncodedString).orFallback(urlValue)
             }
           }()
         }
@@ -345,23 +345,23 @@ public final class DivActionSubmitTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.containerId?.link {
-           containerIdValue = containerIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.containerId?.link, context.templateData["container_id"] == nil {
+           containerIdValue = deserialize(__dictValue).orFallback(containerIdValue)
           }
         }()
         _ = {
-         if key == parent?.onFailActions?.link {
-           onFailActionsValue = onFailActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.onFailActions?.link, context.templateData["on_fail_actions"] == nil {
+           onFailActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(onFailActionsValue)
           }
         }()
         _ = {
-         if key == parent?.onSuccessActions?.link {
-           onSuccessActionsValue = onSuccessActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.onSuccessActions?.link, context.templateData["on_success_actions"] == nil {
+           onSuccessActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(onSuccessActionsValue)
           }
         }()
         _ = {
-         if key == parent?.request?.link {
-           requestValue = requestValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionSubmitTemplate.RequestTemplate.self) })
+         if key == parent?.request?.link, context.templateData["request"] == nil {
+           requestValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionSubmitTemplate.RequestTemplate.self).orFallback(requestValue)
           }
         }()
       }

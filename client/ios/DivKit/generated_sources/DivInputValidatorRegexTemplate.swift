@@ -106,23 +106,23 @@ public final class DivInputValidatorRegexTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.allowEmpty?.link {
-           allowEmptyValue = allowEmptyValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.allowEmpty?.link, context.templateData["allow_empty"] == nil {
+           allowEmptyValue = deserialize(__dictValue).orFallback(allowEmptyValue)
           }
         }()
         _ = {
-         if key == parent?.labelId?.link {
-           labelIdValue = labelIdValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.labelId?.link, context.templateData["label_id"] == nil {
+           labelIdValue = deserialize(__dictValue).orFallback(labelIdValue)
           }
         }()
         _ = {
-         if key == parent?.pattern?.link {
-           patternValue = patternValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.pattern?.link, context.templateData["pattern"] == nil {
+           patternValue = deserialize(__dictValue).orFallback(patternValue)
           }
         }()
         _ = {
-         if key == parent?.variable?.link {
-           variableValue = variableValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.variable?.link, context.templateData["variable"] == nil {
+           variableValue = deserialize(__dictValue).orFallback(variableValue)
           }
         }()
       }

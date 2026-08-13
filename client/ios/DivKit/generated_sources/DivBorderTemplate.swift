@@ -98,28 +98,28 @@ public final class DivBorderTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.cornerRadius?.link {
-           cornerRadiusValue = cornerRadiusValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator) })
+         if key == parent?.cornerRadius?.link, context.templateData["corner_radius"] == nil {
+           cornerRadiusValue = deserialize(__dictValue, validator: ResolvedValue.cornerRadiusValidator).orFallback(cornerRadiusValue)
           }
         }()
         _ = {
-         if key == parent?.cornersRadius?.link {
-           cornersRadiusValue = cornersRadiusValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self) })
+         if key == parent?.cornersRadius?.link, context.templateData["corners_radius"] == nil {
+           cornersRadiusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivCornersRadiusTemplate.self).orFallback(cornersRadiusValue)
           }
         }()
         _ = {
-         if key == parent?.hasShadow?.link {
-           hasShadowValue = hasShadowValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.hasShadow?.link, context.templateData["has_shadow"] == nil {
+           hasShadowValue = deserialize(__dictValue).orFallback(hasShadowValue)
           }
         }()
         _ = {
-         if key == parent?.shadow?.link {
-           shadowValue = shadowValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self) })
+         if key == parent?.shadow?.link, context.templateData["shadow"] == nil {
+           shadowValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShadowTemplate.self).orFallback(shadowValue)
           }
         }()
         _ = {
-         if key == parent?.stroke?.link {
-           strokeValue = strokeValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self) })
+         if key == parent?.stroke?.link, context.templateData["stroke"] == nil {
+           strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivStrokeTemplate.self).orFallback(strokeValue)
           }
         }()
       }

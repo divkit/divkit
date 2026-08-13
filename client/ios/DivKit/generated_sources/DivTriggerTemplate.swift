@@ -86,18 +86,18 @@ public final class DivTriggerTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.actions?.link {
-           actionsValue = actionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self) })
+         if key == parent?.actions?.link, context.templateData["actions"] == nil {
+           actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self).orFallback(actionsValue)
           }
         }()
         _ = {
-         if key == parent?.condition?.link {
-           conditionValue = conditionValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.condition?.link, context.templateData["condition"] == nil {
+           conditionValue = deserialize(__dictValue).orFallback(conditionValue)
           }
         }()
         _ = {
-         if key == parent?.mode?.link {
-           modeValue = modeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.mode?.link, context.templateData["mode"] == nil {
+           modeValue = deserialize(__dictValue).orFallback(modeValue)
           }
         }()
       }

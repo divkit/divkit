@@ -59,8 +59,8 @@ public final class DivFixedCountTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.value?.link {
-           valueValue = valueValue.merged(with: { deserialize(__dictValue, validator: ResolvedValue.valueValidator) })
+         if key == parent?.value?.link, context.templateData["value"] == nil {
+           valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).orFallback(valueValue)
           }
         }()
       }

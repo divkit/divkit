@@ -68,13 +68,13 @@ public final class DivPatchTemplate: TemplateValue, Sendable {
             }
           }()
           _ = {
-           if key == parent?.id?.link {
-             idValue = idValue.merged(with: { deserialize(__dictValue) })
+           if key == parent?.id?.link, context.templateData["id"] == nil {
+             idValue = deserialize(__dictValue).orFallback(idValue)
             }
           }()
           _ = {
-           if key == parent?.items?.link {
-             itemsValue = itemsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self) })
+           if key == parent?.items?.link, context.templateData["items"] == nil {
+             itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).orFallback(itemsValue)
             }
           }()
         }
@@ -205,23 +205,23 @@ public final class DivPatchTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.changes?.link {
-           changesValue = changesValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self) })
+         if key == parent?.changes?.link, context.templateData["changes"] == nil {
+           changesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.changesValidator, type: DivPatchTemplate.ChangeTemplate.self).orFallback(changesValue)
           }
         }()
         _ = {
-         if key == parent?.mode?.link {
-           modeValue = modeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.mode?.link, context.templateData["mode"] == nil {
+           modeValue = deserialize(__dictValue).orFallback(modeValue)
           }
         }()
         _ = {
-         if key == parent?.onAppliedActions?.link {
-           onAppliedActionsValue = onAppliedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.onAppliedActions?.link, context.templateData["on_applied_actions"] == nil {
+           onAppliedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(onAppliedActionsValue)
           }
         }()
         _ = {
-         if key == parent?.onFailedActions?.link {
-           onFailedActionsValue = onFailedActionsValue.merged(with: { deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self) })
+         if key == parent?.onFailedActions?.link, context.templateData["on_failed_actions"] == nil {
+           onFailedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivActionTemplate.self).orFallback(onFailedActionsValue)
           }
         }()
       }

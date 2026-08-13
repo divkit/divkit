@@ -72,13 +72,13 @@ public final class DivActionShowTooltipTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.id?.link {
-           idValue = idValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.id?.link, context.templateData["id"] == nil {
+           idValue = deserialize(__dictValue).orFallback(idValue)
           }
         }()
         _ = {
-         if key == parent?.multiple?.link {
-           multipleValue = multipleValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.multiple?.link, context.templateData["multiple"] == nil {
+           multipleValue = deserialize(__dictValue).orFallback(multipleValue)
           }
         }()
       }

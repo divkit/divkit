@@ -72,13 +72,13 @@ public final class DivCurrencyInputMaskTemplate: TemplateValue, Sendable {
           }
         }()
         _ = {
-         if key == parent?.locale?.link {
-           localeValue = localeValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.locale?.link, context.templateData["locale"] == nil {
+           localeValue = deserialize(__dictValue).orFallback(localeValue)
           }
         }()
         _ = {
-         if key == parent?.rawTextVariable?.link {
-           rawTextVariableValue = rawTextVariableValue.merged(with: { deserialize(__dictValue) })
+         if key == parent?.rawTextVariable?.link, context.templateData["raw_text_variable"] == nil {
+           rawTextVariableValue = deserialize(__dictValue).orFallback(rawTextVariableValue)
           }
         }()
       }
