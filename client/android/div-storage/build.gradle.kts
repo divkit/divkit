@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.androidx.appcompat) {
         exclude(group = "androidx.fragment", module = "fragment")
     }
-    implementation(libs.androidx.coreKtx)
+    implementation(libs.androidx.core)
     implementation(libs.javax)
 
     testImplementation(libs.androidx.test.core)

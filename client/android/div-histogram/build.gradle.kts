@@ -16,6 +16,6 @@ dependencies {
     implementation(project(":logging"))
     implementation(project(":utils"))
 
-    implementation(libs.androidx.coreKtx)
+    implementation(libs.androidx.core)
     implementation(libs.yatagan.api.compiled)
 }

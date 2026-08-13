@@ -30,12 +30,11 @@ dependencies {
     implementation(project(":div-markdown"))
     implementation(project(":div-pinch-to-zoom"))
     implementation(project(":div-rive"))
-    implementation(project(":utils"))
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.coreKtx)
+    implementation(libs.androidx.core)
     implementation(libs.androidx.material)
     implementation(libs.okhttp)
 }

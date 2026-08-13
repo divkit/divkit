@@ -13,6 +13,4 @@ android {
 dependencies {
     implementation(project(":div"))
     implementation(project(":utils"))
-
-    testImplementation(libs.androidx.test.coreKtx)
 }

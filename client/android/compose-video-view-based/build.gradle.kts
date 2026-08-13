@@ -17,6 +17,6 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.coreKtx)
+    implementation(libs.androidx.core)
     implementation(libs.kotlin.corountines.core)
 }

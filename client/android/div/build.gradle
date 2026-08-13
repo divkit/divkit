@@ -65,7 +65,6 @@ dependencies {
 
     implementation libs.androidx.activity
     implementation libs.androidx.core
-    implementation libs.androidx.coreKtx
     implementation libs.androidx.recyclerview
     implementation libs.androidx.transition
     implementation libs.androidx.viewpager
@@ -75,6 +74,6 @@ dependencies {
 
     testImplementation project(path: ':test-utils')
 
-    testImplementation libs.androidx.test.coreKtx
+    testImplementation libs.androidx.test.core
     testImplementation libs.json
 }

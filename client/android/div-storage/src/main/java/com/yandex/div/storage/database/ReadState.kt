@@ -1,11 +1,10 @@
 package com.yandex.div.storage.database
 
 import android.database.Cursor
-import com.yandex.div.internal.util.IOUtils
 import java.io.Closeable
 import javax.inject.Provider
 
-internal class ReadState constructor(
+internal class ReadState(
     private val onCloseState: () -> Unit = { },
         private val cursorProvider: Provider<Cursor>,
 ) : Closeable {
@@ -21,7 +20,10 @@ internal class ReadState constructor(
         }
 
     override fun close() {
-        IOUtils.closeCursorSilently(_cursor)
+        val cursor = _cursor
+        if (cursor != null && !cursor.isClosed) {
+            cursor.close()
+        }
         onCloseState()
     }
 }

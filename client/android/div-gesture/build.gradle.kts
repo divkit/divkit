@@ -17,7 +17,6 @@ dependencies {
     implementation(project(":utils"))
 
     testImplementation(project(":div-data"))
-    testImplementation(libs.androidx.test.coreKtx)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

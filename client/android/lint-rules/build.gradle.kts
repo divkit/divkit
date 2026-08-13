@@ -13,9 +13,9 @@ kotlin {
 dependencies {
     compileOnly(libs.android.lint.api)
 
-    testImplementation(libs.junit)
     testImplementation(libs.android.lint)
     testImplementation(libs.android.lint.tests)
+    testImplementation(libs.kotlin.test)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

@@ -14,7 +14,6 @@ googleTestingPlatform = "0.0.9-alpha04"
 gson = "2.14.0"
 javax = "1"
 json = "20260719"
-junit = "4.13.2"
 jvm-toolchain = "17"
 kotlin = "2.2.10"
 kotlin-binaryCompatibilityValidator = "0.18.1"
@@ -69,8 +68,7 @@ androidx-annotations = { module = "androidx.annotation:annotation", version.ref 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
-androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
-androidx-coreKtx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment" }
 androidx-material = { module = "com.google.android.material:material", version.ref = "androidx-material" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
@@ -104,7 +102,6 @@ androidx-media3-exoplayer-smoothstreaming = { module = "androidx.media3:media3-e
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }
 
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
-androidx-test-coreKtx = { module = "androidx.test:core-ktx", version.ref = "androidx-test" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
 androidx-test-services = { module = "androidx.test.services:test-services", version.ref = "androidx-test-services" }
@@ -133,7 +130,6 @@ hamcrest = { module = "org.hamcrest:hamcrest", version = "2.2" }
 
 javax = { module = "javax.inject:javax.inject", version.ref = "javax" }
 json = { module = "org.json:json", version.ref = "json" }
-junit = { module = "junit:junit", version.ref = "junit" }
 
 kotlin-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "kotlin-binaryCompatibilityValidator" }
 kotlin-corountines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }

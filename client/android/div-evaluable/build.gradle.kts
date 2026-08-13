@@ -62,6 +62,6 @@ dependencies {
     "generatorImplementation"(libs.kotlinpoet)
 
     testImplementation(libs.json)
-    testImplementation(libs.junit)
+    testImplementation(libs.kotlin.test)
     testImplementation(libs.mockito.kotlin)
 }

@@ -22,4 +22,6 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer.smoothstreaming)
     implementation(libs.androidx.media3.ui)
     implementation(libs.kotlin.corountines.core)
+
+    testImplementation(libs.androidx.test.core)
 }

@@ -15,5 +15,4 @@ dependencies {
     implementation(project(":div-core"))
 
     implementation(libs.androidx.core)
-    implementation(libs.androidx.coreKtx)
 }

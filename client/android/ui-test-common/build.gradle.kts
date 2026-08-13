@@ -13,7 +13,6 @@ dependencies {
 
     api(libs.androidx.appcompat)
     api(libs.androidx.core)
-    api(libs.androidx.coreKtx)
     api(libs.androidx.espresso.core)
     api(libs.androidx.espresso.contrib) {
         exclude(group = "org.checkerframework", module = "checker-qual")

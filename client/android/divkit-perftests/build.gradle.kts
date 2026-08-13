@@ -26,9 +26,9 @@ android {
 dependencies {
     implementation(project(":div-data"))
 
-    implementation(libs.androidx.coreKtx)
+    implementation(libs.androidx.core)
 
-    testImplementation(libs.junit)
+    testImplementation(libs.kotlin.test)
 
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -41,12 +41,9 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core)
-    implementation(libs.androidx.coreKtx)
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.material)
     implementation(libs.androidx.recyclerview)
     implementation(libs.gson)
-
-    testImplementation(libs.kotlin.corountines.test)
 }

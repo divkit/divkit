@@ -13,6 +13,5 @@ dependencies {
     implementation(project(":div-evaluable"))
 
     implementation(libs.androidx.core)
-    implementation(libs.androidx.coreKtx)
     implementation(libs.kotlin.test)
 }

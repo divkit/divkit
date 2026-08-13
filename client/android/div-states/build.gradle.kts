@@ -18,5 +18,5 @@ dependencies {
     implementation(libs.androidx.appcompat) {
         exclude(group = "androidx.fragment", module = "fragment")
     }
-    implementation(libs.androidx.coreKtx)
+    implementation(libs.androidx.core)
 }

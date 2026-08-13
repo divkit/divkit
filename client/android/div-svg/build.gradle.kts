@@ -17,7 +17,6 @@ dependencies {
 
     implementation(libs.androidsvg.aar)
     implementation(libs.androidx.core)
-    implementation(libs.androidx.coreKtx)
     implementation(libs.kotlin.corountines.android)
     implementation(libs.kotlin.corountines.core)
     implementation(libs.okhttp)

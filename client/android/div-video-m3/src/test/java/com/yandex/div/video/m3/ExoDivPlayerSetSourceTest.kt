@@ -1,5 +1,6 @@
 package com.yandex.div.video.m3
 
+import android.app.Application
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.core.player.DivPlayer
@@ -16,7 +17,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class ExoDivPlayerSetSourceTest {
 
-    private val context = ApplicationProvider.getApplicationContext<android.app.Application>()
+    private val context = ApplicationProvider.getApplicationContext<Application>()
 
     private val defaultConfig = DivPlayerPlaybackConfig()
 

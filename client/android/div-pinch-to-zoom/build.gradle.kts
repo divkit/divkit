@@ -20,7 +20,6 @@ dependencies {
         exclude(group = "androidx.fragment", module = "fragment")
     }
     implementation(libs.androidx.core)
-    implementation(libs.androidx.coreKtx)
 
     testImplementation(libs.androidx.test.core)
 }
