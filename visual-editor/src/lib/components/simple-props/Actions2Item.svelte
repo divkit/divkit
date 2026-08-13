@@ -18,7 +18,8 @@
         ActionSubmit,
         ActionScrollBy,
         ActionScrollTo,
-        ActionUpdateStructure
+        ActionUpdateStructure,
+        ActionSetCursorPosition
     } from '@divkitframework/divkit/typings/common.d.ts';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
     import { parseAction } from '../../data/actions';
@@ -106,6 +107,12 @@
             } else if (parsed.type === 'typed:submit') {
                 type = $l10n('actions.submit');
                 text = (parsed.typedParams as ActionSubmit)?.container_id || '';
+            } else if (parsed.type === 'typed:set_cursor_position') {
+                type = $l10n('actions.set_cursor_position');
+                text = (parsed.typedParams as ActionSetCursorPosition)?.id || '';
+            } else if (parsed.type === 'typed:custom') {
+                type = $l10n('actions.custom');
+                text = '';
             } else {
                 type = $l10n('actions-unknown');
                 text = parsed.url || '';

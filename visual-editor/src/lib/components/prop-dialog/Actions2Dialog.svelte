@@ -18,6 +18,8 @@
         scroll_by: 'div-action-scroll-by',
         scroll_to: 'div-action-scroll-to',
         set_stored_value: 'div-action-set-stored-value',
+        set_cursor_position: 'div-action-set-cursor-position',
+        custom: 'div-action-custom',
         submit: 'div-action-submit'
     };
 </script>
@@ -26,7 +28,7 @@
     import { getContext } from 'svelte';
     import type { Action, TypedAction } from '@divkitframework/divkit/typings/common.d.ts';
     import { LANGUAGE_CTX, type LanguageContext } from '../../ctx/languageContext';
-    import Select from '../Select.svelte';
+    import Select, { type Item, type Separator } from '../Select.svelte';
     import Text from '../controls/Text.svelte';
     import ContextDialog from './ContextDialog.svelte';
     import { parseAction, type ArgResult } from '../../data/actions';
@@ -136,7 +138,16 @@
     $: types = [{
         value: 'url',
         text: $l10n('actions-url')
-    }, {
+    } as (Item | Separator)].concat($customActions?.length ? [{
+        type: 'separator'
+    } as Item | Separator] : []).concat($customActions.map((actionDesc, i) => {
+        return {
+            value: `custom:${i}`,
+            text: actionDesc.text[$lang] || actionDesc.baseUrl
+        } as Item | Separator;
+    })).concat($customActions?.length ? [{
+        type: 'separator'
+    } as Item | Separator] : []).concat([{
         value: 'typed:set_variable',
         text: $l10n('actions.set_variable')
     }, {
@@ -193,12 +204,13 @@
     }, {
         value: 'typed:submit',
         text: $l10n('actions.submit')
-    }].concat($customActions.map((actionDesc, i) => {
-        return {
-            value: `custom:${i}`,
-            text: actionDesc.text[$lang] || actionDesc.baseUrl
-        };
-    }));
+    }, {
+        value: 'typed:set_cursor_position',
+        text: $l10n('actions.set_cursor_position')
+    }, {
+        value: 'typed:custom',
+        text: $l10n('actions.custom')
+    }] as (Item | Separator)[]);
 </script>
 
 {#if isShown && target}

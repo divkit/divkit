@@ -1,5 +1,16 @@
 <script lang="ts" context="module">
     const WINDOW_OFFSET = 24;
+
+    export interface Item {
+        value: string;
+        text: string;
+        icon?: string;
+        isEmpty?: boolean;
+    }
+
+    export interface Separator {
+        type: 'separator';
+    }
 </script>
 
 <script lang="ts">
@@ -9,14 +20,7 @@
     import { encodeBackground } from '../utils/encodeBackground';
     import { simpleThrottle } from '../utils/simpleThrottle';
 
-    interface Item {
-        value: string;
-        text: string;
-        icon?: string;
-        isEmpty?: boolean;
-    }
-
-    export let items: Item[];
+    export let items: (Item | Separator)[];
     export let value: string | undefined;
     export let theme: 'normal' | 'canvas' | 'transparent' | 'preview';
     export let size: 'small' | 'medium' = 'small';
@@ -28,10 +32,11 @@
 
     const id = 'select' + Math.random();
 
-    $: text = items.find(item => item.value === value || !item.value && !value)?.text || value || '';
-    $: icon = items.find(item => item.value === value || !item.value && !value)?.icon;
-    $: isEmpty = items.find(item => item.value === value || !item.value && !value)?.isEmpty;
-    $: requiredError = required && Boolean(!items.find(item => item.value === value)?.value);
+    $: valueItems = items.filter(item => 'value' in item) as Item[];
+    $: text = valueItems.find(item => item.value === value || !item.value && !value)?.text || value || '';
+    $: icon = valueItems.find(item => item.value === value || !item.value && !value)?.icon;
+    $: isEmpty = valueItems.find(item => item.value === value || !item.value && !value)?.isEmpty;
+    $: requiredError = required && Boolean(!valueItems.find(item => item.value === value)?.value);
 
     const dispatch = createEventDispatcher();
 
@@ -42,21 +47,21 @@
     let popup: HTMLElement;
 
     function move(by: number): void {
-        let index = items.findIndex(item => item.value === value || !item.value && !value);
+        let index = valueItems.findIndex(item => item.value === value || !item.value && !value);
         if (index === -1) {
             return;
         }
 
         index += by;
 
-        if (index >= items.length) {
+        if (index >= valueItems.length) {
             index = 0;
         }
         if (index < 0) {
-            index = items.length - 1;
+            index = valueItems.length - 1;
         }
 
-        selectValue(items[index].value);
+        selectValue(valueItems[index].value);
     }
 
     function onKeyDown(event: KeyboardEvent): void {
@@ -69,9 +74,9 @@
         } else if (suggestDown.isPressed(event)) {
             move(1);
         } else if (suggestFirst.isPressed(event)) {
-            selectValue(items[0].value);
+            selectValue(valueItems[0].value);
         } else if (suggestLast.isPressed(event)) {
-            selectValue(items[items.length - 1].value);
+            selectValue(valueItems[valueItems.length - 1].value);
         } else if (submit.isPressed(event)) {
             toggled = !toggled;
         } else {
@@ -194,25 +199,29 @@
         >
             <ul class="select__list">
                 {#each items as item}
-                    <!-- svelte-ignore a11y_click_events_have_key_events -->
-                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                    <li
-                        class="select__item"
-                        class:select__item_selected={item.value === value}
-                        class:select__item_empty={item.isEmpty}
-                        class:select__item_icon={item.icon}
-                        on:click|preventDefault={() => select(item.value)}
-                    >
-                        {#if item.icon}
-                            <div class="select__icon-wrapper">
-                                <div
-                                    class="select__icon"
-                                    style:background-image="url({encodeBackground(item.icon)})"
-                                ></div>
-                            </div>
-                        {/if}
-                        {item.text ?? item.value}
-                    </li>
+                    {#if 'value' in item}
+                        <!-- svelte-ignore a11y_click_events_have_key_events -->
+                        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                        <li
+                            class="select__item"
+                            class:select__item_selected={item.value === value}
+                            class:select__item_empty={item.isEmpty}
+                            class:select__item_icon={item.icon}
+                            on:click|preventDefault={() => select(item.value)}
+                        >
+                            {#if item.icon}
+                                <div class="select__icon-wrapper">
+                                    <div
+                                        class="select__icon"
+                                        style:background-image="url({encodeBackground(item.icon)})"
+                                    ></div>
+                                </div>
+                            {/if}
+                            {item.text ?? item.value}
+                        </li>
+                    {:else}
+                        <hr class="select__separator">
+                    {/if}
                 {/each}
             </ul>
         </div>
@@ -470,5 +479,12 @@
         background: 50% 50% no-repeat;
         background-size: contain;
         filter: var(--icon-filter);
+    }
+
+    .select__separator {
+        height: 1px;
+        margin: 8px 0;
+        border: none;
+        background: var(--fill-transparent-4);
     }
 </style>
