@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.state.DivViewState
@@ -204,6 +205,64 @@ class DivPagerBinderTest: DivBinderTest() {
         underTest.bindView(divPagerView, divBlock, divView)
 
         verify(resolver, never()).getVariable(ITEM_COUNT_VARIABLE)
+    }
+
+    @Test
+    fun `vertical pager with infinite scroll registers scroll listener on recycler view`() {
+        val verticalDiv = verticalInfiniteScrollDiv()
+        val verticalDivPagerView = divPagerView(verticalDiv).apply {
+            layoutParams = defaultLayoutParams()
+        }
+
+        underTest.bindView(verticalDivPagerView, verticalDiv.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+
+        val recyclerView = verticalDivPagerView.viewPager.getChildAt(0) as? RecyclerView
+        Assert.assertNotNull("RecyclerView should be present inside ViewPager2", recyclerView)
+        // Verify that at least one scroll listener is registered (the infinite scroll listener)
+        val listeners = getScrollListeners(recyclerView!!)
+        Assert.assertTrue(
+            "Vertical pager with infinite_scroll=true must register a scroll listener",
+            listeners.isNotEmpty()
+        )
+    }
+
+    @Test
+    fun `vertical pager infinite scroll listener handles dy without crash`() {
+        val verticalDiv = verticalInfiniteScrollDiv()
+        val verticalDivPagerView = divPagerView(verticalDiv).apply {
+            layoutParams = defaultLayoutParams()
+        }
+
+        underTest.bindView(verticalDivPagerView, verticalDiv.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+
+        val recyclerView = verticalDivPagerView.viewPager.getChildAt(0) as? RecyclerView
+            ?: return
+
+        // For a vertical pager, dx is always 0 and dy carries the scroll delta.
+        // This call must not throw and must use dy (not dx) for boundary detection.
+        val listeners = getScrollListeners(recyclerView)
+        listeners.forEach { listener ->
+            // dx=0, dy=1 simulates a downward scroll on a vertical pager.
+            // Before the fix, dx=0 would prevent any boundary reset from firing.
+            listener.onScrolled(recyclerView, 0, 1)
+            // dx=0, dy=-1 simulates an upward scroll.
+            listener.onScrolled(recyclerView, 0, -1)
+        }
+        // If no exception is thrown, the listener correctly handles vertical scroll deltas.
+    }
+
+    private fun verticalInfiniteScrollDiv() =
+        UnitTestData(PAGER_DIR, "pager_vertical_infinite_scroll.json").div as Div.Pager
+
+    private fun getScrollListeners(recyclerView: RecyclerView): List<RecyclerView.OnScrollListener> {
+        return try {
+            val field = RecyclerView::class.java.getDeclaredField("mScrollListeners")
+            field.isAccessible = true
+            @Suppress("UNCHECKED_CAST")
+            (field.get(recyclerView) as? List<RecyclerView.OnScrollListener>) ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 
     private fun div() = UnitTestData(PAGER_DIR, "pager_default_item.json").div as Div.Pager

@@ -22485,6 +22485,7 @@
   "test_data/unit_test_data/div-pager/pager_default_item.json":"divkit/public/test_data/unit_test_data/div-pager/pager_default_item.json",
   "test_data/unit_test_data/div-pager/pager_gone_with_infinite_scroll.json":"divkit/public/test_data/unit_test_data/div-pager/pager_gone_with_infinite_scroll.json",
   "test_data/unit_test_data/div-pager/pager_selected_actions.json":"divkit/public/test_data/unit_test_data/div-pager/pager_selected_actions.json",
+  "test_data/unit_test_data/div-pager/pager_vertical_infinite_scroll.json":"divkit/public/test_data/unit_test_data/div-pager/pager_vertical_infinite_scroll.json",
   "test_data/unit_test_data/div-select/with_options.json":"divkit/public/test_data/unit_test_data/div-select/with_options.json",
   "test_data/unit_test_data/div-separator/horizontal_wrap_content_width.json":"divkit/public/test_data/unit_test_data/div-separator/horizontal_wrap_content_width.json",
   "test_data/unit_test_data/div-separator/vertical_wrap_content_height.json":"divkit/public/test_data/unit_test_data/div-separator/vertical_wrap_content_height.json",

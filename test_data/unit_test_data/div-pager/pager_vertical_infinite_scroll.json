@@ -1,0 +1,21 @@
+{
+  "type": "pager",
+  "id": "test_pager",
+  "orientation": "vertical",
+  "infinite_scroll": true,
+  "platforms": ["android"],
+  "layout_mode": {
+    "type": "fixed",
+    "neighbour_page_width": {
+      "type": "fixed",
+      "value": 16
+    }
+  },
+  "items": [
+    { "type": "text", "text": "0" },
+    { "type": "text", "text": "1" },
+    { "type": "text", "text": "2" },
+    { "type": "text", "text": "3" },
+    { "type": "text", "text": "4" }
+  ]
+}

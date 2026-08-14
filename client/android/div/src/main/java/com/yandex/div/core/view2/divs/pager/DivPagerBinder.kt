@@ -201,9 +201,10 @@ internal class DivPagerBinder @Inject constructor(
             val itemCount = viewPager.adapter?.itemCount ?: 0
             val firstItemVisible = layoutManager.findFirstVisibleItemPosition()
             val lastItemVisible = layoutManager.findLastVisibleItemPosition()
-            if (firstItemVisible >= (itemCount - OFFSET_TO_REAL_ITEM) && dx > 0) {
+            val scrollDelta = if (viewPager.orientation == ViewPager2.ORIENTATION_HORIZONTAL) dx else dy
+            if (firstItemVisible >= (itemCount - OFFSET_TO_REAL_ITEM) && scrollDelta > 0) {
                 recyclerView.scrollToPosition(OFFSET_TO_REAL_ITEM)
-            } else if (lastItemVisible <= OFFSET_TO_REAL_ITEM - 1 && dx < 0) {
+            } else if (lastItemVisible <= OFFSET_TO_REAL_ITEM - 1 && scrollDelta < 0) {
                 recyclerView.scrollToPosition(itemCount - 1 - OFFSET_TO_REAL_ITEM)
             }
         }
