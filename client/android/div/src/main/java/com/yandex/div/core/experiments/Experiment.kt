@@ -54,6 +54,9 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     COMPLEX_REBIND_ENABLED(
         "complex_rebind_enabled"
     ),
+    STRICT_ITEM_BUILDER_VIEW_REUSE_ENABLED(
+        "strict_item_builder_view_reuse_enabled"
+    ),
     PAGER_PAGE_CLIP_ENABLED(
         "pager_page_children_enabled",
         defaultValue = true

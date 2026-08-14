@@ -94,6 +94,7 @@ public class DivConfiguration {
     private boolean mMultipleStateChangeEnabled;
     private boolean mBindOnAttachEnabled;
     private boolean mComplexRebindEnabled;
+    private boolean mStrictItemBuilderViewReuseEnabled;
     private boolean mPagerPageClipEnabled;
     private boolean mPermanentDebugPanelEnabled;
     private boolean mRenderEffectEnabled;
@@ -136,6 +137,7 @@ public class DivConfiguration {
             boolean multipleStateChangeEnabled,
             boolean bindOnAttachEnabled,
             boolean complexRebindEnabled,
+            boolean strictItemBuilderViewReuseEnabled,
             boolean pagerChildrenClipEnabled,
             boolean permanentDebugPanelEnabled,
             float recyclerScrollInterceptionAngle,
@@ -176,6 +178,7 @@ public class DivConfiguration {
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
         mComplexRebindEnabled = complexRebindEnabled;
+        mStrictItemBuilderViewReuseEnabled = strictItemBuilderViewReuseEnabled;
         mPermanentDebugPanelEnabled = permanentDebugPanelEnabled;
         mDivVariableController = divVariableController;
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
@@ -406,6 +409,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @ExperimentFlag(experiment = Experiment.STRICT_ITEM_BUILDER_VIEW_REUSE_ENABLED)
+    public boolean isStrictItemBuilderViewReuseEnabled() {
+        return mStrictItemBuilderViewReuseEnabled;
+    }
+
+    @Provides
     @ExperimentFlag(experiment = Experiment.PERMANENT_DEBUG_PANEL_ENABLED)
     public boolean isPermanentDebugPanelEnabled() {
         return mPermanentDebugPanelEnabled;
@@ -490,6 +499,8 @@ public class DivConfiguration {
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
         private boolean mBindOnAttachEnabled = false;
         private boolean mComplexRebindEnabled = Experiment.COMPLEX_REBIND_ENABLED.getDefaultValue();
+        private boolean mStrictItemBuilderViewReuseEnabled =
+                Experiment.STRICT_ITEM_BUILDER_VIEW_REUSE_ENABLED.getDefaultValue();
         private boolean mPagerPageClipEnabled = Experiment.PAGER_PAGE_CLIP_ENABLED.getDefaultValue();
         private boolean mPermanentDebugPanelEnabled = Experiment.PERMANENT_DEBUG_PANEL_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
@@ -716,6 +727,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder enableStrictItemBuilderViewReuse(boolean enable) {
+            mStrictItemBuilderViewReuseEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         public Builder enablePagerPageClipping(boolean enable) {
             mPagerPageClipEnabled = enable;
             return this;
@@ -802,6 +819,7 @@ public class DivConfiguration {
                     mMultipleStateChangeEnabled,
                     mBindOnAttachEnabled,
                     mComplexRebindEnabled,
+                    mStrictItemBuilderViewReuseEnabled,
                     mPagerPageClipEnabled,
                     mPermanentDebugPanelEnabled,
                     mRecyclerScrollInterceptionAngle,
