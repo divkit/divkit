@@ -11,7 +11,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":assertion"))
     implementation(project(":div"))
 
     implementation(libs.androidx.appcompat) {

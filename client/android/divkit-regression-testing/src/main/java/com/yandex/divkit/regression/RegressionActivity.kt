@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView.Adapter.StateRestorationPolicy
-import com.yandex.div.internal.Assert
 import com.yandex.divkit.regression.databinding.RegressionActivityBinding
 import com.yandex.divkit.regression.di.provideDiv2ViewCreator
 import com.yandex.divkit.regression.di.provideIsComposeRendererEnabled
@@ -92,8 +91,8 @@ class RegressionActivity : AppCompatActivity() {
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         if (menu == null) return super.onPrepareOptionsMenu(menu)
+
         val tagFilterSubMenu = menu.findItem(TAG_FILTER_MENU_ID).subMenu
-        Assert.assertNotNull(tagFilterSubMenu)
         tagFilterSubMenu?.clear()
 
         tagFilter.entries.forEachIndexed { index, (tag, checked) ->

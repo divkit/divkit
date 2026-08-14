@@ -19,7 +19,6 @@ import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.internal.Log
-import com.yandex.div.internal.util.IOUtils
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.lottie.DivLottieLogger
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
@@ -29,6 +28,7 @@ import com.yandex.divkit.demo.databinding.SamplesActivityBinding
 import com.yandex.divkit.demo.utils.DivkitDemoPermissionHelper
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.showToast
+import com.yandex.divkit.regression.utils.AssetReader
 import org.json.JSONObject
 
 open class DivActivity : AppCompatActivity() {
@@ -133,11 +133,8 @@ open class DivActivity : AppCompatActivity() {
 
     protected fun addItemFromAsset(assetName: String, path: String) {
         val assetFullName = if (!TextUtils.isEmpty(path)) "$path/$assetName" else assetName
-        val stream = assets.open(assetFullName)
-        addItemFromJson(IOUtils.toString(stream))
+        addItemFromJson(AssetReader(this).readJson(assetFullName))
     }
-
-    private fun addItemFromJson(jsonString: String) = JSONObject(jsonString).let { addItemFromJson(it) }
 
     private fun addItemFromJson(json: JSONObject) =
         try {

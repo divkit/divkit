@@ -2,8 +2,8 @@ package com.yandex.div
 
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import com.yandex.div.rule.baseRule
-import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.screenshot.Screenshot
 import com.yandex.test.screenshot.captureScreenshots
@@ -39,7 +39,7 @@ class DivComposeInteractiveScreenshotTest(
     @Screenshot(viewTag = DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun test() {
-        val json = DivAssetReader(activity).read(fileName)
+        val json = AssetReader(activity).readJson(fileName)
         val testData = InteractiveScreenshotTestData.parse(json)
 
         composeRule.runOnUiThread {

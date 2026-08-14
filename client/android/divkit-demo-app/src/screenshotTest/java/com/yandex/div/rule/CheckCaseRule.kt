@@ -3,7 +3,7 @@ package com.yandex.div.rule
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.internal.util.asList
-import com.yandex.divkit.demo.screenshot.DivAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.SimpleStatement
 import org.json.JSONArray
 import org.json.JSONObject
@@ -17,7 +17,7 @@ class CheckCaseRule(private val casePath: String) : TestRule {
     private val context: Context = ApplicationProvider.getApplicationContext()
 
     override fun apply(base: Statement, description: Description): Statement = SimpleStatement {
-        val json = DivAssetReader(context).read(casePath)
+        val json = AssetReader(context).readJson(casePath)
 
         json.checkField<String>(DESCRIPTION_FIELD)
         json.checkField<JSONArray>(PLATFORMS_FIELD)

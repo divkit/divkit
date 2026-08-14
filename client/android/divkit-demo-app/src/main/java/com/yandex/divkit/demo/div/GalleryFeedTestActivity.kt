@@ -11,12 +11,11 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.R
-import com.yandex.divkit.demo.screenshot.DivAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import java.util.*
 
 class GalleryFeedTestActivity : AppCompatActivity() {
-
-    private val assetReader = DivAssetReader(this)
+    private val assetReader = AssetReader(this)
 
     private val divContext by lazy {
         divContext(activity = this)
@@ -66,6 +65,6 @@ class GalleryFeedTestActivity : AppCompatActivity() {
     }
 
     private fun loadCard(): DivData {
-        return assetReader.read("div2-test/pager.json").asDiv2DataWithTemplates()
+        return assetReader.readJson("div2-test/pager.json").asDiv2DataWithTemplates()
     }
 }

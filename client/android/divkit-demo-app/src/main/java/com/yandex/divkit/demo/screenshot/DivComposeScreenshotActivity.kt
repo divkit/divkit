@@ -28,6 +28,7 @@ import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
+import com.yandex.divkit.regression.utils.AssetReader
 import okio.ByteString.Companion.encodeUtf8
 import org.json.JSONObject
 
@@ -66,7 +67,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         )
 
         intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {
-            setDivData(DivAssetReader(this).read(it))
+            setDivData(AssetReader(this).readJson(it))
         }
     }
 

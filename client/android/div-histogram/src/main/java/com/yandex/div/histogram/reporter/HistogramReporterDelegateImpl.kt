@@ -9,7 +9,6 @@ import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.histogram.util.HistogramUtils
 import com.yandex.div.histogram.util.MIN_DURATION_HISTOGRAM_VALUE
 import com.yandex.div.histogram.util.MIN_SIZE_HISTOGRAM_VALUE
-import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 
 /**

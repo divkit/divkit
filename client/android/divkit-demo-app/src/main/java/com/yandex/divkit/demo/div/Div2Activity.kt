@@ -40,13 +40,13 @@ import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2Binding
 import com.yandex.divkit.demo.div.editor.DEMO_ACTIVITY_COMPONENT_NAME
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
-import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
 import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.QRCaptureActivity
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.demo.utils.setDataByConfig
 import com.yandex.divkit.demo.utils.showToast
+import com.yandex.divkit.regression.utils.AssetReader
 import org.json.JSONObject
 import java.net.URL
 
@@ -118,8 +118,9 @@ class Div2Activity : AppCompatActivity() {
         globalVariableController.declare(variable)
 
         div2Adapter = DivEditorAdapter(context)
-        val divJson = DivAssetReader(context).read("application/demo.json")
-        val divData = divJson.asDiv2DataWithTemplates(componentName = DEMO_ACTIVITY_COMPONENT_NAME)
+        val divData = AssetReader(context)
+            .readJson("application/demo.json")
+            .asDiv2DataWithTemplates(componentName = DEMO_ACTIVITY_COMPONENT_NAME)
         val div = Div2View(context)
         div.setDataByConfig(divData, DivDataTag("div2")) {
             binding.container.addView(div)

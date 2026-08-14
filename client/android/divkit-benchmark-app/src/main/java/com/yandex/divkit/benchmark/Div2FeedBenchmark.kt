@@ -11,7 +11,7 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivTemplate
 import com.yandex.divkit.benchmark.div.createDivDataWithHistograms
 import com.yandex.divkit.benchmark.div.parseTemplatesWithHistograms
-import com.yandex.divkit.benchmark.utils.JsonAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,7 +35,7 @@ internal class Div2FeedBenchmark(
         InMemoryTemplateProvider(),
         TemplateProvider.empty(),
     )
-    private val assetReader = JsonAssetReader(divContext)
+    private val assetReader = AssetReader(divContext)
     private val benchmarkMetrics = linkedMapOf<String, LongArray>()
 
     private val job = SupervisorJob()

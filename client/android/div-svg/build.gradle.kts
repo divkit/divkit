@@ -13,7 +13,6 @@ android {
 
 dependencies {
     implementation(project(":div-core"))
-    implementation(project(":logging"))
 
     implementation(libs.androidsvg.aar)
     implementation(libs.androidx.core)

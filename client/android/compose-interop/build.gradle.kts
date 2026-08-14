@@ -21,9 +21,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":assertion"))
     implementation(project(":div"))
-    implementation(project(":logging"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)

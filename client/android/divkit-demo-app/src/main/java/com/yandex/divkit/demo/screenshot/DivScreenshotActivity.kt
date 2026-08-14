@@ -15,6 +15,8 @@ import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.settings.Preferences
+import com.yandex.divkit.regression.utils.AssetReader
+import org.json.JSONObject
 
 /**
  * Run:
@@ -24,7 +26,7 @@ adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.D
  */
 class DivScreenshotActivity : AppCompatActivity() {
 
-    private val assetReader = DivAssetReader(this)
+    private val assetReader = AssetReader(this)
     private lateinit var divContext: Div2Context
 
     private var cardAssetName: String? = null
@@ -74,8 +76,11 @@ class DivScreenshotActivity : AppCompatActivity() {
         Container.imageLoaderOverride = Container.createImageLoader(loader)
     }
 
-    fun getTestCaseJson() = cardAssetName?.let { assetReader.read(it) }
-        ?: throw IllegalArgumentException("Missing div asset name")
+    fun getTestCaseJson(): JSONObject{
+        return cardAssetName
+            ?.let { assetReader.readJson(it) }
+            ?: throw IllegalArgumentException("Missing div asset name")
+    }
 
     private fun Div2View.onBound() {
         val matchParentHeight = getChildAt(0)?.layoutParams?.height == LayoutParams.MATCH_PARENT

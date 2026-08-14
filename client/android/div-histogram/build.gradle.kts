@@ -13,7 +13,6 @@ android {
 dependencies {
     implementation(project(":assertion"))
     implementation(project(":div-core"))
-    implementation(project(":logging"))
     implementation(project(":utils"))
 
     implementation(libs.androidx.core)

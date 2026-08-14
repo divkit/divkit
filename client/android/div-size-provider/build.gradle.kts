@@ -12,5 +12,4 @@ android {
 
 dependencies {
     implementation(project(":div"))
-    implementation(project(":utils"))
 }

@@ -10,7 +10,7 @@ import com.yandex.div.internal.util.forEach
 import com.yandex.div.storage.DivDataRepository
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawDataAndMetadata
-import com.yandex.divkit.benchmark.utils.JsonAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -28,10 +28,7 @@ internal class DivStorageBenchmark(
     private val viewController: DivStorageBenchmarkViewController,
     prohibitedHistograms: Array<String>?,
 ) {
-
-    private val assetReader = JsonAssetReader(divContext)
-    private val benchmarkMetrics = linkedMapOf<String, LongArray>()
-
+    private val assetReader = AssetReader(divContext)
     private val exceptionHandler = BenchmarkCoroutineExceptionHandler(viewController)
     private val mainContext = Dispatchers.Main + exceptionHandler
     private val backgroundContext = newSingleThreadContext("BenchmarkThread")
@@ -43,7 +40,6 @@ internal class DivStorageBenchmark(
             val jsonFiles = readJsonFiles(assetNames)
             putAssetsToDivStorage(jsonFiles)
             loadAssetFromDivStorage("${CARD_ID}0")
-            benchmarkMetrics.clear()
             finish()
         }
     }

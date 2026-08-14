@@ -23,7 +23,7 @@ import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.div.divContext
-import com.yandex.divkit.demo.screenshot.DivAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import java.util.UUID
@@ -39,7 +39,7 @@ abstract class DivTestAssetSteps {
 
     @MainThread
     fun ActivityTestRule<*>.setTestData(dataTag: DivDataTag? = null) {
-        val divJson = DivAssetReader(activity).read(testAsset)
+        val divJson = AssetReader(activity).readJson(testAsset)
         val cardJson = if (divJson.has("card")) {
             val templates = divJson.optJSONObject("templates")
             templates?.let {
@@ -102,7 +102,7 @@ abstract class DivTestAssetSteps {
 
     @MainThread
     fun Div2Context.setTestData(dataTag: DivDataTag? = null) {
-        val divJson = DivAssetReader(this).read(testAsset)
+        val divJson = AssetReader(this).readJson(testAsset)
         val cardJson = if (divJson.has("card")) {
             val templates = divJson.optJSONObject("templates")
             templates?.let {

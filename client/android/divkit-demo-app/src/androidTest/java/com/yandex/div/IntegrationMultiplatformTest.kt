@@ -3,13 +3,13 @@ package com.yandex.div
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.core.DivKit
-import com.yandex.div.internal.util.IOUtils
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.integration
 import com.yandex.div.test.crossplatform.IntegrationTestCase
 import com.yandex.div.test.crossplatform.IntegrationTestCaseParser
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.divkit.demo.DummyActivity
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.ActivityParamsTestRule
 import org.junit.After
 import org.junit.Rule
@@ -47,8 +47,11 @@ class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<Integrat
         fun cases(): List<ParsingResult<IntegrationTestCase>> {
             return AssetEnumerator()
                 .enumerate("integration_test_data")
-                .flatMap {
-                    IntegrationTestCaseParser.parseCases(it, IOUtils.toString(context.assets.open(it)))
+                .flatMap { fileName ->
+                    IntegrationTestCaseParser.parseCases(
+                        fileName = fileName,
+                        jsonString = AssetReader(context).readString(fileName)
+                    )
                 }
         }
     }

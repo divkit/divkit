@@ -17,7 +17,7 @@ import com.yandex.div2.DivTemplate
 import com.yandex.divkit.benchmark.div.createDivDataWithHistograms
 import com.yandex.divkit.benchmark.div.parseTemplatesWithHistograms
 import com.yandex.divkit.benchmark.div.toJSONObjectWithHistograms
-import com.yandex.divkit.benchmark.utils.JsonAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,7 @@ internal class Div2StateBenchmark(
         InMemoryTemplateProvider(),
         TemplateProvider.empty(),
     )
-    private val assetReader = JsonAssetReader(divContext)
+    private val assetReader = AssetReader(divContext)
     private val divDataTag = DivDataTag(UUID.randomUUID().toString())
     private val benchmarkMetrics = linkedMapOf<String, Long>().withDefault { 0L }
 
@@ -88,7 +88,7 @@ internal class Div2StateBenchmark(
     private suspend fun readJsonFile(assetName: String): JSONObject {
         viewController.showMessage("Reading JSON file…")
         val metrics = withContext(backgroundContext) {
-            val jsonString = assetReader.readText(assetName)
+            val jsonString = assetReader.readString(assetName)
             profile { jsonString.toJSONObjectWithHistograms() }
         }
 

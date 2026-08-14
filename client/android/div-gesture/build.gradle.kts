@@ -14,7 +14,6 @@ android {
 
 dependencies {
     implementation(project(":div"))
-    implementation(project(":utils"))
 
     testImplementation(project(":div-data"))
 }

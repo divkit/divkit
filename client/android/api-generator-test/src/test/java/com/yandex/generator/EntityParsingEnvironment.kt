@@ -2,7 +2,6 @@ package com.yandex.generator
 
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.TemplateParsingEnvironment
-import com.yandex.div.json.TemplateParsingEnvironment.TemplateFactory
 import com.yandex.testing.EntityTemplate
 
 internal class EntityParsingEnvironment(

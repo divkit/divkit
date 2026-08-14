@@ -20,11 +20,11 @@ import com.yandex.divkit.demo.div.CustomTextViewFactory
 import com.yandex.divkit.demo.div.NestedScrollViewFactory
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
-import com.yandex.divkit.demo.screenshot.DivAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.div.compose.DivView as ComposeDivView
 
 class RegressionComposeViewCreator(context: Context) {
-    private val assetReader = DivAssetReader(context)
+    private val assetReader = AssetReader(context)
 
     fun createView(
         activity: Activity,

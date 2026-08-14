@@ -8,14 +8,14 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.div.DemoDivActionHandler
 import com.yandex.divkit.demo.div.parseToDiv2
-import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.setDataByConfig
+import com.yandex.divkit.regression.utils.AssetReader
 import java.util.UUID
 
 class RegressionDivActionHandler(
     uriHandler: DemoUriHandler,
-    private val divAssetReader: DivAssetReader
+    private val assetReader: AssetReader
 ) : DemoDivActionHandler(uriHandler) {
     override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
         val url = action.url?.evaluate(resolver)
@@ -30,7 +30,7 @@ class RegressionDivActionHandler(
     private fun handleDemoActionUrl(url: Uri, view: DivViewFacade) {
         val path = parseSetDataPath(url) ?: return
         if (view !is Div2View) return
-        val divData = divAssetReader.read(path).parseToDiv2()
+        val divData = assetReader.readJson(path).parseToDiv2()
         val dataTag = view.dataTag.takeIf { it != DivDataTag.INVALID }
             ?: DivDataTag(UUID.randomUUID().toString())
         view.setDataByConfig(divData, dataTag, null)

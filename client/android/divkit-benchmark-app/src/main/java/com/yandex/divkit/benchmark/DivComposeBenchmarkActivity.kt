@@ -20,7 +20,7 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
-import com.yandex.divkit.benchmark.utils.JsonAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -100,7 +100,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
         val assetName = intent.getStringExtra(EXTRA_ASSET_NAME)
             ?: throw RuntimeException("Extra is required: $EXTRA_ASSET_NAME")
 
-        val json = JsonAssetReader(this).readJson(assetName)
+        val json = AssetReader(this).readJson(assetName)
         val templatesJson = json.optJSONObject("templates")
         val environment = DivParsingEnvironment(FailingReporter).apply {
             if (templatesJson != null) parseTemplates(templatesJson)

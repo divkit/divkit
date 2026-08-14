@@ -16,16 +16,16 @@ import com.yandex.divkit.demo.div.Div2Activity
 import com.yandex.divkit.demo.div.divConfiguration
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.screenshot.Div2ViewFactory
-import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.lifecycleOwner
 import com.yandex.divkit.regression.Div2ViewCreator
 import com.yandex.divkit.regression.ScenarioLogDelegate
+import com.yandex.divkit.regression.utils.AssetReader
 import java.util.concurrent.Executors
 
 class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
 
-    private val assetReader = DivAssetReader(context)
+    private val assetReader = AssetReader(context)
     private val uriHandler = DemoUriHandler(context)
 
     private val divStateStorage = DivStateDatabase(

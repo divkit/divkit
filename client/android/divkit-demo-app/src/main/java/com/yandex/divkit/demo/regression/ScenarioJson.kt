@@ -4,7 +4,7 @@ import android.net.Uri
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
-import com.yandex.divkit.demo.screenshot.DivAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 import org.json.JSONObject
 
 internal const val DIV_DEMO_ACTION_SCHEME = "div-demo-action"
@@ -16,8 +16,8 @@ internal data class ScenarioJson(
     val cardJson: JSONObject,
 )
 
-internal fun DivAssetReader.readScenarioJson(scenarioPath: String): ScenarioJson {
-    val divJson = read(scenarioPath)
+internal fun AssetReader.readScenarioJson(scenarioPath: String): ScenarioJson {
+    val divJson = readJson(scenarioPath)
     return ScenarioJson(
         templatesJson = divJson.optJSONObject("templates"),
         cardJson = divJson.getJSONObject("card"),

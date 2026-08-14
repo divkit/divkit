@@ -5,7 +5,6 @@ import com.yandex.div.histogram.metrics.RenderMetrics
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.KAssert
-import com.yandex.div.internal.util.Clock
 
 @MainThread
 class Div2ViewHistogramReporter(

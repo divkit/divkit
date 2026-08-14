@@ -15,7 +15,6 @@ dependencies {
     implementation(project(":div-core"))
     implementation(project(":div-data"))
     implementation(project(":div-histogram"))
-    implementation(project(":logging"))
     implementation(project(":utils"))
 
     implementation(libs.androidx.appcompat) {

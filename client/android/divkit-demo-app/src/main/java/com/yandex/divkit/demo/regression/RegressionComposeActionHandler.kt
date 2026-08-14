@@ -5,10 +5,10 @@ import com.yandex.div.compose.actions.DivActionData
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivExternalActionHandler
 import com.yandex.div2.DivData
-import com.yandex.divkit.demo.screenshot.DivAssetReader
+import com.yandex.divkit.regression.utils.AssetReader
 
 class RegressionComposeActionHandler(
-    private val divAssetReader: DivAssetReader,
+    private val assetReader: AssetReader,
     private val divDataState: MutableState<DivData>,
 ) : DivExternalActionHandler {
 
@@ -16,7 +16,7 @@ class RegressionComposeActionHandler(
         val url = action.url ?: return
         if (url.scheme != DIV_DEMO_ACTION_SCHEME) return
         val path = parseSetDataPath(url) ?: return
-        val (templatesJson, cardJson) = divAssetReader.readScenarioJson(path)
+        val (templatesJson, cardJson) = assetReader.readScenarioJson(path)
         divDataState.value = parseDivData(templatesJson, cardJson)
     }
 }

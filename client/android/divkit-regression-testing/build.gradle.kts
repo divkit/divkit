@@ -28,11 +28,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":assertion"))
     implementation(project(":div"))
     implementation(project(":fonts"))
-    implementation(project(":logging"))
-    implementation(project(":utils"))
 
     api(libs.yatagan.api.compiled)
     ksp(libs.yatagan.processor.ksp)
