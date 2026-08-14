@@ -21,20 +21,20 @@ struct GalleryViewStateTests {
     #expect(result.animated == false)
   }
 
-  // MARK: - firstVisibleItemIndex out of range
+  // MARK: - firstVisibleItemIndex out of range without a known scroll range
 
   @Test(
     arguments: [
-      // (firstVisibleItemIndex, itemsCount, expectedOffset)
-      (10, 3, CGFloat(0)), // index far beyond count
-      (3, 3, CGFloat(0)), // index == count (off-by-one)
-      (-1, 3, CGFloat(0)), // negative index
+      // (firstVisibleItemIndex, itemsCount, expectedIndex)
+      (10, 3, 2), // index far beyond count
+      (3, 3, 2), // index == count (off-by-one)
+      (-1, 3, 0), // negative index
     ]
   )
-  func offset_invalidFirstVisibleItemIndex_resetsToZeroWithoutAnimation(
+  func offset_invalidFirstVisibleItemIndex_clampsIndexKeepingOffset(
     firstVisibleItemIndex: Int,
     itemsCount: Int,
-    expectedOffset: CGFloat
+    expectedIndex: Int
   ) {
     let state = GalleryViewState(
       contentPosition: .offset(500, firstVisibleItemIndex: firstVisibleItemIndex),
@@ -43,24 +43,28 @@ struct GalleryViewStateTests {
       animated: true
     )
     let result = state.resetToModelIfInconsistent(model(count: itemsCount))
-    #expect(result.contentPosition == .offset(expectedOffset, firstVisibleItemIndex: 0))
+    #expect(result.contentPosition == .offset(500, firstVisibleItemIndex: expectedIndex))
     #expect(result.animated == false)
   }
 
-  // MARK: - offset beyond maxValidScrollRange → reset to zero
+  // MARK: - offset beyond maxValidScrollRange → clamped to the new trailing edge
 
   @Test(
     arguments: [
-      (500.0, 100.0), // way beyond range → reset
-      (200.0, 0.0), // scrollRange=0, any positive offset → reset
+      // (offset, maxValidScrollRange, expectedOffset, expectedIndex)
+      (500.0, 100.0, 100.0, 1), // content got shorter → pinned to the new trailing edge
+      (200.0, 0.0, 0.0, 0), // content fits entirely → pinned to the beginning, index reset
+      (500.0, -50.0, 0.0, 0), // content smaller than bounds → pinned to the beginning
     ]
   )
-  func offset_beyondMaxValidScrollRange_resetsToZeroWithoutAnimation(
+  func offset_beyondMaxValidScrollRange_isClampedWithoutAnimation(
     offset: CGFloat,
-    maxValidScrollRange: CGFloat
+    maxValidScrollRange: CGFloat,
+    expectedOffset: CGFloat,
+    expectedIndex: Int
   ) {
     let state = GalleryViewState(
-      contentPosition: .offset(offset, firstVisibleItemIndex: 0),
+      contentPosition: .offset(offset, firstVisibleItemIndex: 1),
       itemsCount: 3,
       isScrolling: false,
       animated: true
@@ -69,7 +73,58 @@ struct GalleryViewStateTests {
       model(count: 3),
       maxValidScrollRange: maxValidScrollRange
     )
-    #expect(result.contentPosition == .offset(0, firstVisibleItemIndex: 0))
+    #expect(result.contentPosition == .offset(expectedOffset, firstVisibleItemIndex: expectedIndex))
+    #expect(result.scrollRange == maxValidScrollRange)
+    #expect(result.animated == false)
+  }
+
+  // MARK: - invalid firstVisibleItemIndex with a known scroll range → clamped, not reset
+
+  @Test(
+    arguments: [
+      // (offset, firstVisibleItemIndex, expectedOffset, expectedIndex)
+      (700.0, 7, 100.0, 2), // both offset and index are stale → pinned to the trailing edge
+      (50.0, 7, 50.0, 2), // offset still fits, only the index is stale → offset preserved
+      (700.0, -1, 100.0, 0), // negative index → clamped to the first item
+      (-30.0, 7, 0.0, 0), // negative offset left from bounce → clamped to the beginning
+    ]
+  )
+  func offset_invalidIndexWithMaxValidScrollRange_isClampedWithoutAnimation(
+    offset: CGFloat,
+    firstVisibleItemIndex: Int,
+    expectedOffset: CGFloat,
+    expectedIndex: Int
+  ) {
+    let state = GalleryViewState(
+      contentPosition: .offset(offset, firstVisibleItemIndex: firstVisibleItemIndex),
+      itemsCount: 10,
+      isScrolling: false,
+      animated: true
+    )
+    let result = state.resetToModelIfInconsistent(
+      model(count: 3),
+      maxValidScrollRange: 100
+    )
+    #expect(result.contentPosition == .offset(expectedOffset, firstVisibleItemIndex: expectedIndex))
+    #expect(result.itemsCount == 3)
+    #expect(result.animated == false)
+  }
+
+  // MARK: - block-level pass followed by the range-aware one
+
+  @Test
+  func invalidIndexWithoutRange_thenRangeAwarePass_clampsOffsetToTrailingEdge() {
+    let shrunkModel = model(count: 3)
+    let state = GalleryViewState(
+      contentPosition: .offset(700, firstVisibleItemIndex: 8),
+      itemsCount: 10,
+      isScrolling: false,
+      animated: true
+    )
+    let result = state
+      .resetToModelIfInconsistent(shrunkModel)
+      .resetToModelIfInconsistent(shrunkModel, maxValidScrollRange: 100)
+    #expect(result.contentPosition == .offset(100, firstVisibleItemIndex: 2))
     #expect(result.animated == false)
   }
 
