@@ -9,6 +9,7 @@
 * Fixed a vertical container with `wrap_content` + `min_size` width not rendering when all of its items have `match_parent` width.
 * Fixed an issue where fixed-width elements were expanded when their paddings exceeded their width.
 * Fixed background color showing through as a thin halo along the outer edge of an opaque border stroke on rounded corners.
+* Fixed gallery scroll offset reset to zero when content size shrinks.
 * Fixed missing animation when triggering a state transition that adds a new animated view.
 
 # Web Client:
