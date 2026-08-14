@@ -158,11 +158,29 @@ extension GalleryViewState {
         contentPosition = .zeroPaging
         animated = false
       case .default:
+        let validRange = maxValidScrollRange.map { max(0, $0) }
         let isIndexInvalid = firstVisibleItemIndex < 0 || firstVisibleItemIndex >= itemsCount
-        let isOffsetBeyondRange = maxValidScrollRange
-          .map { value.isApproximatelyGreaterThan(max(0, $0), withAccuracy: accuracy) } ?? false
-        if isIndexInvalid || isOffsetBeyondRange {
-          contentPosition = contentPosition.zero
+
+        if let validRange,
+           isIndexInvalid || value.isApproximatelyGreaterThan(validRange, withAccuracy: accuracy) {
+          // The content got shorter (e.g. some items became gone and were dropped from the
+          // model), so the stored position no longer fits it. Pin the offset to the new trailing
+          // edge instead of resetting it to the very beginning: the gallery should stay where
+          // the user scrolled it to.
+          let clampedOffset = clamp(value, min: 0, max: validRange)
+          let clampedIndex = clampedOffset > 0
+            ? clamp(firstVisibleItemIndex, min: 0, max: itemsCount - 1)
+            : 0
+          contentPosition = .offset(clampedOffset, firstVisibleItemIndex: clampedIndex)
+          animated = false
+        } else if isIndexInvalid {
+          // No layout information to clamp the offset against yet: this is the block-level pass,
+          // which runs before the range-aware one in GalleryView.configure. Repair the index only
+          // and keep the offset, otherwise it would be lost before it can be clamped there.
+          contentPosition = .offset(
+            value,
+            firstVisibleItemIndex: clamp(firstVisibleItemIndex, min: 0, max: itemsCount - 1)
+          )
           animated = false
         }
       }
