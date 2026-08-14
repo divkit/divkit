@@ -7,6 +7,8 @@ import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import java.util.concurrent.CopyOnWriteArraySet
 
+internal const val DATABASE_OPEN = "DivStorage.Database.Open"
+
 internal class HistogramRecorder(
         histogramReporterDelegate: HistogramReporterDelegate,
         private val histogramNameProvider: HistogramNameProvider?,
@@ -34,6 +36,11 @@ internal class HistogramRecorder(
         histogramNameProvider?.run {
             reportDuration(divDataLoadReportName, duration, filter)
         }
+    }
+
+    @AnyThread
+    fun reportDatabaseOpenTime(duration: Long) {
+        reportDuration(DATABASE_OPEN, duration)
     }
 
     private fun reportDuration(

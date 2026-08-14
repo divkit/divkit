@@ -14,6 +14,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argThat
 import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
@@ -106,6 +107,22 @@ class HistogramReporterTest {
                         duration = any(),
                         forceCallType = anyOrNull(),
                 )
+    }
+
+    @Test
+    fun `database open time histogram has expected name`() {
+        underTest.get(listOf(ID_0))
+
+        verify(histogramReporter, atLeastOnce()).reportDuration(
+                histogramName = eq(DATABASE_OPEN),
+                duration = any(),
+                forceCallType = eq(histogramNameProvider.coldCallTypeSuffix),
+        )
+        verify(histogramReporter, atLeastOnce()).reportDuration(
+                histogramName = eq("${histogramNameProvider.componentName}.$DATABASE_OPEN"),
+                duration = any(),
+                forceCallType = eq(histogramNameProvider.coldCallTypeSuffix),
+        )
     }
 
     @Test

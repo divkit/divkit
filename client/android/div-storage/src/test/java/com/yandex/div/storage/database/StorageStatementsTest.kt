@@ -10,6 +10,7 @@ import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
 import org.robolectric.RobolectricTestRunner
 
 private const val GROUP_1 = "group#1"
@@ -25,7 +26,7 @@ private const val CARD_2 = "card_id:2"
 @RunWith(RobolectricTestRunner::class)
 class StorageStatementsTest {
     private val provider = DatabaseOpenHelperProvider { context, name, version, ccb, ucb ->
-        AndroidDatabaseOpenHelper(context, name, version, ccb, ucb)
+        AndroidDatabaseOpenHelper(context, name, version, ccb, ucb, mock())
     }
     private val divStorage = DivStorageImpl(
             ApplicationProvider.getApplicationContext(),

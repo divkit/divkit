@@ -1284,6 +1284,7 @@
   "client/android/div-storage/src/test/java/com/yandex/div/storage/RawJsonRepositoryTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/RawJsonRepositoryTest.kt",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/StubCursor.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/StubCursor.kt",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/analytics/TemplateCardErrorTransformerTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/analytics/TemplateCardErrorTransformerTest.kt",
+  "client/android/div-storage/src/test/java/com/yandex/div/storage/database/AndroidDatabaseOpenHelperTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/database/AndroidDatabaseOpenHelperTest.kt",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/database/DivStorageDatabaseTest.java":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/database/DivStorageDatabaseTest.java",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/database/StorageStatementsTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/database/StorageStatementsTest.kt",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/histogram/HistogramReporterTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/histogram/HistogramReporterTest.kt",

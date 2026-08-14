@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.yandex.div.storage.DivStorageImpl;
+import com.yandex.div.storage.histogram.HistogramRecorder;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -46,7 +47,8 @@ public class DivStorageDatabaseTest {
                                           @NonNull DatabaseOpenHelper.CreateCallback ccb,
                                           @NonNull DatabaseOpenHelper.UpgradeCallback ucb) {
             if (mHelper == null) {
-                mHelper = spy(new AndroidDatabaseOpenHelper(context, name, version, ccb, ucb));
+                mHelper = spy(new AndroidDatabaseOpenHelper(
+                        context, name, version, ccb, ucb, mock(HistogramRecorder.class)));
                 SQLiteDatabase spyDb = spy(SQLiteDatabase.create(null));
                 spyDb.setForeignKeyConstraintsEnabled(true);
                 doNothing().when(spyDb).close();

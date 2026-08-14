@@ -36,7 +36,7 @@ class DivStorageErrorTest {
     private var db: DatabaseOpenHelper.Database = mock()
     private val openHelperProvider: DatabaseOpenHelperProvider =
             DatabaseOpenHelperProvider { context, name, version, ccb, ucb ->
-                dbHelper ?: spy(AndroidDatabaseOpenHelper(context, name, version, ccb, ucb)).apply {
+                dbHelper ?: spy(AndroidDatabaseOpenHelper(context, name, version, ccb, ucb, mock())).apply {
                     whenever(writableDatabase).doReturn(db)
                     whenever(readableDatabase).doReturn(db)
                 }.also { dbHelper = it }

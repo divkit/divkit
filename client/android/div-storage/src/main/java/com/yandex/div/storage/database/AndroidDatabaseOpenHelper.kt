@@ -6,9 +6,11 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.sqlite.SQLiteStatement
 import androidx.annotation.VisibleForTesting
+import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.internal.Assert
 import com.yandex.div.storage.database.DatabaseOpenHelper.CreateCallback
 import com.yandex.div.storage.database.DatabaseOpenHelper.UpgradeCallback
+import com.yandex.div.storage.histogram.HistogramRecorder
 import java.io.IOException
 
 /**
@@ -21,9 +23,11 @@ internal class AndroidDatabaseOpenHelper(
     version: Int,
     ccb: CreateCallback,
     ucb: UpgradeCallback,
+    histogramRecorder: HistogramRecorder,
 ) : DatabaseOpenHelper {
     private val mSQLiteOpenHelper: SQLiteOpenHelper
     private val databaseManager: DatabaseManager
+    private val databaseOpenTracker = DatabaseOpenTracker()
 
     /**
      * [SQLiteOpenHelper]'s refcount is broken:
@@ -58,9 +62,10 @@ internal class AndroidDatabaseOpenHelper(
             }
             override fun onConfigure(db: SQLiteDatabase) {
                 db.setForeignKeyConstraintsEnabled(true)
+                databaseOpenTracker.onDatabaseOpened()
             }
         }
-        databaseManager = DatabaseManager(mSQLiteOpenHelper)
+        databaseManager = DatabaseManager(mSQLiteOpenHelper, histogramRecorder, databaseOpenTracker)
     }
 
     // to prevent close for concurrent user of the same database object
@@ -140,8 +145,25 @@ internal class AndroidDatabaseOpenHelper(
         var currentlyOpenedCount = 0
     }
 
+    private class DatabaseOpenTracker {
+        private var openedDuringMeasurement = false
+
+        fun measureOpen(openDatabase: () -> Unit): Long? {
+            openedDuringMeasurement = false
+            val openingStarted = HistogramClock.uptime()
+            openDatabase()
+            return if (openedDuringMeasurement) HistogramClock.uptime() - openingStarted else null
+        }
+
+        fun onDatabaseOpened() {
+            openedDuringMeasurement = true
+        }
+    }
+
     private class DatabaseManager(
         private val databaseHelper: SQLiteOpenHelper,
+        private val histogramRecorder: HistogramRecorder,
+        private val databaseOpenTracker: DatabaseOpenTracker,
     ) {
         private val readableUsers = mutableSetOf<Thread>()
         private var readableUsersCount = 0
@@ -153,7 +175,9 @@ internal class AndroidDatabaseOpenHelper(
 
         @Synchronized
         fun openWritableDatabase(): SQLiteDatabase {
-            writableDatabase = databaseHelper.writableDatabase
+            databaseOpenTracker.measureOpen {
+                writableDatabase = databaseHelper.writableDatabase
+            }?.let(histogramRecorder::reportDatabaseOpenTime)
             writableUsersCount++
             writableUsers.add(Thread.currentThread())
             return writableDatabase!!
@@ -161,7 +185,9 @@ internal class AndroidDatabaseOpenHelper(
 
         @Synchronized
         fun openReadableDatabase(): SQLiteDatabase {
-            readableDatabase = databaseHelper.readableDatabase
+            databaseOpenTracker.measureOpen {
+                readableDatabase = databaseHelper.readableDatabase
+            }?.let(histogramRecorder::reportDatabaseOpenTime)
             readableUsersCount++
             readableUsers.add(Thread.currentThread())
             return readableDatabase!!

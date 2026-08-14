@@ -51,8 +51,9 @@ interface DivStorageComponent {
                     LazyProvider { DivParsingHistogramReporter.DEFAULT },
                 databaseNamePrefix: String = "",
         ): InternalStorageComponent {
+            val histogramRecorder = HistogramRecorder(histogramReporter, histogramNameProvider)
             val openHelperProvider = DatabaseOpenHelperProvider { c, name, version, ccb, ucb ->
-                AndroidDatabaseOpenHelper(c, name, version, ccb, ucb)
+                AndroidDatabaseOpenHelper(c, name, version, ccb, ucb, histogramRecorder)
             }
             val divStorage = DivStorageImpl(
                     context,
@@ -61,7 +62,6 @@ interface DivStorageComponent {
             )
             val parsingHistogramProxy =
                 LazyProvider { DivParsingHistogramProxy { parsingHistogramReporter.get() } }
-            val histogramRecorder = HistogramRecorder(histogramReporter, histogramNameProvider)
             val templatesContainer = TemplatesContainer(
                     divStorage = divStorage,
                     errorLogger = errorLogger,
