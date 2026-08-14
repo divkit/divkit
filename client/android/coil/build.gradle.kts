@@ -14,9 +14,9 @@ dependencies {
     implementation(project(":div-core"))
 
     api(libs.coil)
-    api(libs.coil.svg)
 
     implementation(libs.coil.gif)
     implementation(libs.coil.network)
     implementation(libs.coil.network.cachecontrol)
+    implementation(libs.coil.svg)
 }

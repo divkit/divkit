@@ -20,7 +20,7 @@ dependencies {
     implementation(project(":logging"))
     implementation(project(":utils"))
 
-    api(libs.androidx.core)
+    implementation(libs.androidx.core)
 
     testImplementation(project(":test-utils"))
 

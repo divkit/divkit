@@ -12,8 +12,8 @@ android {
 }
 
 dependencies {
-    api(libs.kotlin.corountines.core)
     implementation(libs.androidx.core)
+    implementation(libs.kotlin.corountines.core)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

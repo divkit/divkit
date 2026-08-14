@@ -31,9 +31,6 @@ dependencies {
     implementation(project(":div"))
     implementation(project(":fonts"))
 
-    api(libs.yatagan.api.compiled)
-    ksp(libs.yatagan.processor.ksp)
-
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
@@ -43,4 +40,7 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.recyclerview)
     implementation(libs.gson)
+    implementation(libs.yatagan.api.compiled)
+
+    ksp(libs.yatagan.processor.ksp)
 }
