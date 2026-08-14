@@ -183,10 +183,20 @@ extension [GalleryViewModel.Item] {
 }
 
 extension BlocksState {
+  /// A pager is addressed by its id, so several elements sharing that id match equally well
+  /// and the dictionary gives no stable order between them. Such a lookup resolves to nothing,
+  /// leaving the caller to fall back to a path based search.
   public func pagerViewState(for pagerPath: PagerPath?) -> PagerViewState? {
-    pagerPath.flatMap { pagerPath in
-      first(where: { pagerPath.matches($0.key) })?.value as? PagerViewState
+    guard let pagerPath else {
+      return nil
     }
+
+    let matches = compactMap { path, state -> PagerViewState? in
+      guard pagerPath.matches(path) else { return nil }
+      return state as? PagerViewState
+    }
+
+    return matches.count == 1 ? matches[0] : nil
   }
 
   func pagerViewState(

@@ -311,8 +311,7 @@ extension DivView: ElementStateObserver {
 
   public func clearFocus() {
     let blockStateStorage = divKitComponents.blockStateStorage
-    let focusedElement = blockStateStorage.getFocusedElement()
-    guard focusedElement != nil else {
+    guard blockStateStorage.focusedElement != nil else {
       return
     }
     blockStateStorage.clearFocus()

@@ -1,18 +1,12 @@
 import LayoutKit
 
-enum PathResolution {
-  case resolved(UIElementPath)
-  case notFound
-  case ambiguous
-}
-
 struct ActionPathResolver {
   private let reporter: DivReporter
-  private let idToPath: IdToPath
+  private let pathResolver: PathResolver
 
   init(reporter: DivReporter, idToPath: IdToPath) {
     self.reporter = reporter
-    self.idToPath = idToPath
+    pathResolver = PathResolver(idToPath: idToPath)
   }
 
   func resolvePath(
@@ -21,18 +15,12 @@ struct ActionPathResolver {
     scopePath: UIElementPath?,
     divTypes: Set<String>? = nil
   ) -> PathResolution {
-    let componentPaths = idToPath.paths(forId: cardId.path + id, divTypes: divTypes)
-    let paths = scopePath
-      .map { scope in componentPaths.filter { $0.starts(with: scope) } } ?? componentPaths
-
-    switch paths.count {
-    case 0:
-      return .notFound
-    case 1:
-      return .resolved(paths[0])
-    default:
-      return .ambiguous
-    }
+    pathResolver.resolvePath(
+      id: id,
+      cardId: cardId,
+      scopePath: scopePath,
+      divTypes: divTypes
+    )
   }
 
   /// Resolves `id` and performs the action. If the element is not modeled yet

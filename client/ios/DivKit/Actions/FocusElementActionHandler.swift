@@ -13,7 +13,7 @@ final class FocusElementActionHandler {
     }
 
     let cardId = context.cardId
-    if let previousCard = context.blockStateStorage.getFocusedElement()?.cardId,
+    if let previousCard = context.blockStateStorage.focusedElement?.cardId,
        previousCard != cardId {
       context.updateCard(.state(previousCard))
     }

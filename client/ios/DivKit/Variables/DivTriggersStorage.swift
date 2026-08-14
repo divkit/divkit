@@ -242,15 +242,15 @@ public final class DivTriggersStorage {
       for index in 0..<tabState.countOfPages {
         if index != activeTab {
           disableTriggers(predicate: {
-            $0.cardId == stateEvent.id.cardId
-              && $0.findTabId(stateEvent.id.id) == String(index)
+            $0.cardId == stateEvent.path.cardId
+              && $0.findTabId(stateEvent.path.leaf) == String(index)
           })
         }
       }
 
       enableTriggers(predicate: {
-        $0.cardId == stateEvent.id.cardId
-          && $0.findTabId(stateEvent.id.id) == String(activeTab)
+        $0.cardId == stateEvent.path.cardId
+          && $0.findTabId(stateEvent.path.leaf) == String(activeTab)
       })
     }
   }

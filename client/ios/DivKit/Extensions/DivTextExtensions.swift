@@ -127,10 +127,9 @@ extension DivText: DivBlockModeling {
       text: truncationToken
     )
 
-    if let id {
+    if context.currentDivId != nil {
       context.blockStateStorage.setState(
-        id: id,
-        cardId: context.cardId,
+        path: context.path,
         state: TextBlockViewState(text: attributedString.string)
       )
     }

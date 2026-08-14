@@ -2,49 +2,19 @@ import Foundation
 import LayoutKit
 import VGSL
 
-struct IdAndCardId: Hashable {
-  let id: String
-  let cardId: DivCardID
-
-  init(id: String, cardId: DivCardID) {
-    self.id = id
-    self.cardId = cardId
-  }
-
-  init(path: UIElementPath) {
-    id = path.leaf
-    cardId = path.cardId
-  }
-}
-
 public final class DivBlockStateStorage {
   struct ChangeEvent {
-    let id: IdAndCardId
+    let path: UIElementPath
     let state: ElementState
   }
 
-  private enum FocusedElement: Equatable {
-    case none
-    case pathFocused(UIElementPath)
-    case idFocused(IdAndCardId)
-  }
+  private var _states: BlocksState
+  private var _pendingStates: BlocksState = [:]
+  private var _isInputFocused = false
 
-  private(set) var isInputFocused = false
-
-  private var shouldRefreshCachedStates = false
-  private var _cachedStates: BlocksState?
-
-  private var _states: [StateKey: ElementState] {
+  private var _focusedElement: UIElementPath? {
     didSet {
-      shouldRefreshCachedStates = true
-    }
-  }
-
-  private var _pendingStates: [StateKey: ElementState] = [:]
-
-  private var focusedElement: FocusedElement = .none {
-    didSet {
-      isInputFocused = false
+      _isInputFocused = false
     }
   }
 
@@ -52,26 +22,20 @@ public final class DivBlockStateStorage {
   private let stateUpdatesPipe = SignalPipe<ChangeEvent>()
 
   public var states: BlocksState {
-    if let cached = _cachedStates,
-       !shouldRefreshCachedStates {
-      return cached
+    lock.withLock {
+      _states
     }
+  }
 
-    return lock.withLock {
-      let dict = Dictionary(
-        _states.compactMap { key, value in
-          if let path = key.path {
-            (path, value)
-          } else {
-            nil
-          }
-        },
-        uniquingKeysWith: { _, new in new }
-      )
+  var focusedElement: UIElementPath? {
+    lock.withLock {
+      _focusedElement
+    }
+  }
 
-      _cachedStates = dict
-      shouldRefreshCachedStates = false
-      return dict
+  var isInputFocused: Bool {
+    lock.withLock {
+      _isInputFocused
     }
   }
 
@@ -80,12 +44,7 @@ public final class DivBlockStateStorage {
   }
 
   public init(states: BlocksState = [:]) {
-    self._states = Dictionary(
-      states.map { key, value in
-        (.path(key), value)
-      },
-      uniquingKeysWith: { _, new in new }
-    )
+    _states = states
   }
 
   @inlinable
@@ -95,57 +54,24 @@ public final class DivBlockStateStorage {
 
   public func getStateUntyped(_ path: UIElementPath) -> ElementState? {
     lock.withLock {
-      _states[.path(path)]
-    }
-  }
-
-  @inlinable
-  public func getState<T: ElementState>(_ id: String, cardId: DivCardID) -> T? {
-    getStateUntyped(id, cardId: cardId) as? T
-  }
-
-  public func getStateUntyped(_ id: String, cardId: DivCardID) -> ElementState? {
-    lock.withLock {
-      _states[.id(IdAndCardId(id: id, cardId: cardId))]
+      _states[path]
     }
   }
 
   public func setState(path: UIElementPath, state: ElementState) {
-    let key = StateKey.path(path)
     var shouldUpdatePipe = true
 
     lock.withLock {
-      if let existingState = _states.removeValue(forKey: key),
+      if let existingState = _states.updateValue(state, forKey: path),
          !state.isDifferent(from: existingState) {
         shouldUpdatePipe = false
       }
-
-      _states[key] = state
     }
 
     if shouldUpdatePipe {
       stateUpdatesPipe.send(
-        ChangeEvent(id: IdAndCardId(path: path), state: state)
+        ChangeEvent(path: path, state: state)
       )
-    }
-  }
-
-  public func setState(id: String, cardId: DivCardID, state: ElementState) {
-    let id = IdAndCardId(id: id, cardId: cardId)
-    let key = StateKey.id(id)
-    var shouldUpdatePipe = true
-
-    lock.withLock {
-      if let existingState = _states[key],
-         !state.isDifferent(from: existingState) {
-        shouldUpdatePipe = false
-      } else {
-        _states[key] = state
-      }
-    }
-
-    if shouldUpdatePipe {
-      stateUpdatesPipe.send(ChangeEvent(id: id, state: state))
     }
   }
 
@@ -154,19 +80,23 @@ public final class DivBlockStateStorage {
     path: UIElementPath
   ) {
     lock.withLock {
-      focusedElement = isFocused ? .pathFocused(path) : .none
+      if isFocused {
+        _focusedElement = path
+      } else if _focusedElement == path {
+        _focusedElement = nil
+      }
     }
   }
 
   public func clearFocus() {
     lock.withLock {
-      focusedElement = .none
+      _focusedElement = nil
     }
   }
 
   public func isFocused(path: UIElementPath) -> Bool {
     lock.withLock {
-      isFocusedInternal(checkedElement: .pathFocused(path))
+      _focusedElement == path
     }
   }
 
@@ -174,93 +104,43 @@ public final class DivBlockStateStorage {
     lock.withLock {
       _states = [:]
       _pendingStates = [:]
-      focusedElement = .none
+      _focusedElement = nil
     }
   }
 
   public func reset(cardId: DivCardID) {
     lock.withLock {
-      _states = _states.filter { $0.key.cardID != cardId }
-      _pendingStates = _pendingStates.filter { $0.key.cardID != cardId }
-      if getFocusedElement()?.cardId == cardId {
-        focusedElement = .none
+      _states = _states.filter { $0.key.cardId != cardId }
+      _pendingStates = _pendingStates.filter { $0.key.cardId != cardId }
+      if _focusedElement?.cardId == cardId {
+        _focusedElement = nil
       }
     }
   }
 
-  func setPendingState(id: String, cardId: DivCardID, state: ElementState) {
-    let key = IdAndCardId(id: id, cardId: cardId)
-    lock.withLock {
-      _pendingStates[.id(key)] = state
-    }
-    setState(id: id, cardId: cardId, state: state)
-  }
-
   func setPendingState(_ path: UIElementPath, state: ElementState) {
     lock.withLock {
-      _pendingStates[.path(path)] = state
+      _pendingStates[path] = state
     }
     setState(path: path, state: state)
   }
 
   func takePendingState(_ path: UIElementPath) -> ElementState? {
-    let key = StateKey.path(path)
-    return lock.withLock {
-      _pendingStates.removeValue(forKey: key)
+    lock.withLock {
+      _pendingStates.removeValue(forKey: path)
     }
   }
 
   func peekPendingState(_ path: UIElementPath) -> ElementState? {
-    let key = StateKey.path(path)
-    return lock.withLock {
-      _pendingStates[key]
-    }
-  }
-
-  func setFocused(isFocused: Bool, element: IdAndCardId) {
     lock.withLock {
-      focusedElement = isFocused ? .idFocused(element) : removeFocus(from: element)
-    }
-  }
-
-  func isFocused(element: IdAndCardId) -> Bool {
-    lock.withLock {
-      isFocusedInternal(checkedElement: .idFocused(element))
+      _pendingStates[path]
     }
   }
 
   func setInputFocused() {
-    isInputFocused = true
-  }
-
-  func getFocusedElement() -> IdAndCardId? {
-    switch focusedElement {
-    case .none:
-      nil
-    case let .pathFocused(focusedPath):
-      IdAndCardId(path: focusedPath)
-    case let .idFocused(focusedId):
-      focusedId
+    lock.withLock {
+      _isInputFocused = true
     }
-  }
-
-  private func isFocusedInternal(checkedElement: FocusedElement) -> Bool {
-    switch (focusedElement, checkedElement) {
-    case (.none, _), (_, .none):
-      false
-    case let (.pathFocused(focusedPath), .pathFocused(checkedPath)):
-      focusedPath == checkedPath
-    case let (.idFocused(focusedId), .idFocused(checkedId)):
-      focusedId == checkedId
-    case let (.pathFocused(focusedPath), .idFocused(checkedId)):
-      IdAndCardId(path: focusedPath) == checkedId
-    case let (.idFocused(focusedId), .pathFocused(checkedPath)):
-      focusedId == IdAndCardId(path: checkedPath)
-    }
-  }
-
-  private func removeFocus(from element: IdAndCardId) -> FocusedElement {
-    isFocusedInternal(checkedElement: FocusedElement.idFocused(element)) ? .none : focusedElement
   }
 }
 
@@ -274,47 +154,5 @@ extension DivBlockStateStorage: ElementStateObserver {
     forPath path: UIElementPath
   ) {
     setFocused(isFocused: isFocused, path: path)
-  }
-}
-
-private enum StateKey {
-  case path(UIElementPath)
-  case id(IdAndCardId)
-
-  var path: UIElementPath? {
-    switch self {
-    case let .path(path):
-      path
-    case .id:
-      nil
-    }
-  }
-
-  var cardID: DivCardID {
-    id.cardId
-  }
-
-  private var id: IdAndCardId {
-    switch self {
-    case let .path(path):
-      IdAndCardId(path: path)
-    case let .id(id):
-      id
-    }
-  }
-}
-
-extension StateKey: Equatable, Hashable {
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
-  }
-
-  static func ==(lhs: StateKey, rhs: StateKey) -> Bool {
-    switch (lhs, rhs) {
-    case let (.path(lhsPath), .path(rhsPath)):
-      lhsPath == rhsPath
-    default:
-      lhs.id == rhs.id
-    }
   }
 }

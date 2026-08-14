@@ -35,7 +35,7 @@ final class SnapshotTestRunner {
 
   func run(
     caseName: String,
-    blocksState: [IdAndCardId: ElementState] = [:],
+    statesByElementId: [String: ElementState] = [:],
     extensions: [DivExtensionHandler] = []
   ) async throws {
     let jsonDict = try #require(readJson(path: file.absolutePath))
@@ -47,8 +47,15 @@ final class SnapshotTestRunner {
       imageHolderFactory: TestImageHolderFactory(),
       layoutDirection: getLayoutDirection(jsonDict)
     )
-    for (id, state) in blocksState {
-      divKitComponents.blockStateStorage.setState(id: id.id, cardId: id.cardId, state: state)
+    for (id, state) in statesByElementId {
+      let paths = elementPaths(id: id, json: jsonDict)
+      guard paths.count <= 1 else {
+        Issue.record("Can not seed state: id '\(id)' is not unique in \(file.name)")
+        continue
+      }
+      if let path = paths.first {
+        divKitComponents.blockStateStorage.setState(path: path, state: state)
+      }
     }
 
     divKitComponents.variablesStorage.append(
@@ -184,6 +191,41 @@ final class SnapshotTestRunner {
         isDirectory: false
       )
   }
+}
+
+/// Repeats the path DivKit builds while modeling a card: every div contributes its id
+/// (or its type when there is no id), and every item of a container contributes its index.
+/// The state has to be stored under the exact path, otherwise the element does not see it.
+/// Every match is returned, so that an id shared by several elements does not silently
+/// seed an arbitrary one of them.
+private func elementPaths(id: String, json: [String: Any]) -> [UIElementPath] {
+  func find(div: [String: Any], path: UIElementPath, into paths: inout [UIElementPath]) {
+    let divId = div["id"] as? String
+    guard let segment = divId ?? div["type"] as? String else {
+      return
+    }
+    let divPath = path + segment
+    if divId == id {
+      paths.append(divPath)
+    }
+    let items = div["items"] as? [[String: Any]] ?? []
+    for (index, item) in items.enumerated() {
+      find(div: item, path: divPath + String(index), into: &paths)
+    }
+  }
+
+  let divData = json["div_data"] as? [String: Any] ?? json
+  let card = divData["card"] as? [String: Any] ?? divData
+  let states = card["states"] as? [[String: Any]] ?? []
+  var paths = [UIElementPath]()
+  for state in states {
+    guard let div = state["div"] as? [String: Any],
+          let stateId = state["state_id"] else {
+      continue
+    }
+    find(div: div, path: testCardId.path + "\(stateId)", into: &paths)
+  }
+  return paths
 }
 
 private func readJson(path: String) -> [String: any Sendable]? {

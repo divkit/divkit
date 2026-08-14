@@ -496,7 +496,8 @@ final class DivTriggerTests: XCTestCase {
     let variables: DivVariables = [
       "should_trigger": .bool(false),
     ]
-    let path = UIElementPath("card_id") + "tabs_id" + "0" + "5"
+    let tabsPath = UIElementPath("card_id") + "tabs_id"
+    let path = tabsPath + "0" + "5"
 
     variablesStorage.initializeIfNeeded(path: path, variables: variables)
     let trigger = DivTrigger(
@@ -506,8 +507,7 @@ final class DivTriggerTests: XCTestCase {
     )
     triggerStorage.setIfNeeded(path: path, triggers: [trigger])
     blockStateStorage.setState(
-      id: "tabs_id",
-      cardId: "card_id",
+      path: tabsPath,
       state: TabViewState(selectedPageIndex: 1, countOfPages: 2)
     )
 

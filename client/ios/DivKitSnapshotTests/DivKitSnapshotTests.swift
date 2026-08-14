@@ -33,7 +33,7 @@ struct DivKitSnapshotTests {
 
     try await test.run(
       caseName: file.name.removingFileExtension,
-      blocksState: defaultPagerViewState,
+      statesByElementId: defaultPagerViewState,
       extensions: [
         CustomImagePreviewExtensionHandler(
           id: "label_image_preview",
@@ -48,13 +48,10 @@ struct DivKitSnapshotTests {
     _ file: JsonFile
   ) async throws {
     for state in testPagerViewStates {
-      let blocksState = [
-        pagerId: state,
-      ]
       let test = SnapshotTestRunner(file: file)
       try await test.run(
         caseName: "\(state.currentPage)_" + file.name.removingFileExtension,
-        blocksState: blocksState
+        statesByElementId: [pagerId: state]
       )
     }
   }
@@ -90,9 +87,9 @@ private class LabelImagePreviewProvider: @MainActor ViewProvider {
   }
 }
 
-private let defaultPagerViewState = [
-  pagerId: PagerViewState(numberOfPages: 11, floatCurrentPage: 1.0),
-]
+private var defaultPagerViewState: [String: ElementState] {
+  [pagerId: PagerViewState(numberOfPages: 11, floatCurrentPage: 1.0)]
+}
 
 private let testPagerViewStates = [
   PagerViewState(numberOfPages: 11, floatCurrentPage: 0),
@@ -104,7 +101,7 @@ private let testPagerViewStates = [
   PagerViewState(numberOfPages: 11, floatCurrentPage: 10),
 ]
 
-private let pagerId = IdAndCardId(path: testCardId.path + "pager_id")
+private let pagerId = "pager_id"
 
 extension String {
   var removingFileExtension: String {

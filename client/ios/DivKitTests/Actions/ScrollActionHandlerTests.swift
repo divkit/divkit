@@ -738,13 +738,12 @@ final class ScrollActionHandlerTests: XCTestCase {
     if let pending: T = blockStateStorage.peekPendingState(elementPath) as? T {
       return pending
     }
-    return blockStateStorage.getState("element_id", cardId: cardId)!
+    return blockStateStorage.getState(elementPath)!
   }
 
   private func setState(_ state: ElementState) {
     blockStateStorage.setState(
-      id: "element_id",
-      cardId: cardId,
+      path: elementPath,
       state: state
     )
   }

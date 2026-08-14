@@ -13198,6 +13198,7 @@
   "client/ios/DivKit/LayoutProvider/SizeProviderBlock.swift":"divkit/public/client/ios/DivKit/LayoutProvider/SizeProviderBlock.swift",
   "client/ios/DivKit/Patches/DivPatchDownloader.swift":"divkit/public/client/ios/DivKit/Patches/DivPatchDownloader.swift",
   "client/ios/DivKit/Patches/DivPatchProvider.swift":"divkit/public/client/ios/DivKit/Patches/DivPatchProvider.swift",
+  "client/ios/DivKit/PathResolver.swift":"divkit/public/client/ios/DivKit/PathResolver.swift",
   "client/ios/DivKit/RawDivData.swift":"divkit/public/client/ios/DivKit/RawDivData.swift",
   "client/ios/DivKit/ResourcesPreloader/DivDataResourcesPreloader.swift":"divkit/public/client/ios/DivKit/ResourcesPreloader/DivDataResourcesPreloader.swift",
   "client/ios/DivKit/ResourcesPreloader/ResourceDivExtensions.swift":"divkit/public/client/ios/DivKit/ResourcesPreloader/ResourceDivExtensions.swift",

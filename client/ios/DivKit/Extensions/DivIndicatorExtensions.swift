@@ -62,9 +62,7 @@ extension DivIndicator: DivBlockModeling {
         pagerId: $0
       )
     }
-    let state: PagerViewState = pagerPath.flatMap {
-      context.blockStateStorage.getState($0.pagerId, cardId: context.cardId)
-    } ?? .default
+    let state = context.blockStateStorage.states.pagerViewState(for: pagerPath) ?? .default
     let spaceBetweenCenters = CGFloat(spaceBetweenCenters.resolveValue(expressionResolver) ?? 0)
 
     let configuration = PageIndicatorConfiguration(

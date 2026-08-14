@@ -10,7 +10,7 @@ struct DivActionURLHandlerTests {
 
   init() {
     let idToPath = IdToPath()
-    idToPath.add(cardId.path + elementId, forId: cardId.path + elementId)
+    idToPath.add(elementPath, forId: cardId.path + elementId)
     actionHandler = DivActionHandler(
       blockStateStorage: blockStateStorage,
       idToPath: idToPath
@@ -289,14 +289,14 @@ struct DivActionURLHandlerTests {
     afterState: State,
     mode: SetItemAction.Mode
   ) {
-    blockStateStorage.setState(id: elementId, cardId: cardId, state: beforeState)
+    blockStateStorage.setState(path: elementPath, state: beforeState)
     actionHandler.handle(
       divAction(logId: "test", url: SetItemAction.makeURL(mode: mode)),
       path: cardId.path,
       source: .tap,
       sender: nil
     )
-    #expect(blockStateStorage.getState(elementId, cardId: cardId) == afterState)
+    #expect(blockStateStorage.getState(elementPath) == afterState)
   }
 }
 
@@ -421,3 +421,4 @@ private enum SetItemAction {
 
 private let cardId: DivCardID = "cardId"
 private let elementId: String = "element"
+private let elementPath = cardId.path + elementId
