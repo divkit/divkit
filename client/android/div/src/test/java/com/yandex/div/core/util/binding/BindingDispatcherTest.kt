@@ -10,10 +10,17 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLooper
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
@@ -219,5 +226,98 @@ internal class BindingDispatcherTest {
         val handle = criticalSection.tryEnter()
         assertNotNull(handle)
         criticalSection.exit(handle!!)
+    }
+
+    @Test(timeout = 5_000)
+    fun `pending task does not block shared executor while previous task waits for main thread`() {
+        val sharedExecutor = BindingThreadExecutor.create("shared-test-binding-thread")
+        val firstDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
+        val secondDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
+        val firstBackgroundPhaseFinished = CountDownLatch(1)
+        val firstPendingTaskFinished = CountDownLatch(1)
+        val secondDispatcherTaskFinished = CountDownLatch(1)
+
+        firstDispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+            firstBackgroundPhaseFinished.countDown()
+        }
+        assertTrue(firstBackgroundPhaseFinished.await(2, TimeUnit.SECONDS))
+
+        firstDispatcher.runOnBindingThread<Unit> {
+            firstPendingTaskFinished.countDown()
+        }
+        secondDispatcher.runOnBindingThread<Unit> {
+            secondDispatcherTaskFinished.countDown()
+        }
+
+        assertTrue(
+            "A pending task of one dispatcher must not occupy the shared binding thread",
+            secondDispatcherTaskFinished.await(2, TimeUnit.SECONDS)
+        )
+        assertEquals(1L, firstPendingTaskFinished.count)
+
+        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        assertTrue(firstPendingTaskFinished.await(2, TimeUnit.SECONDS))
+    }
+
+    @Test(timeout = 5_000)
+    fun `tasks of one dispatcher execute in fifo order`() {
+        val executionOrder = CopyOnWriteArrayList<Int>()
+        val firstBackgroundPhaseFinished = CountDownLatch(1)
+        val allTasksFinished = CountDownLatch(1)
+
+        dispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+            executionOrder += 1
+            firstBackgroundPhaseFinished.countDown()
+        }
+        assertTrue(firstBackgroundPhaseFinished.await(2, TimeUnit.SECONDS))
+
+        dispatcher.runOnBindingThread<Unit> {
+            executionOrder += 2
+        }
+        dispatcher.runOnBindingThread<Unit> {
+            executionOrder += 3
+            allTasksFinished.countDown()
+        }
+
+        assertEquals(listOf(1), executionOrder)
+
+        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        assertTrue(allTasksFinished.await(2, TimeUnit.SECONDS))
+        assertEquals(listOf(1, 2, 3), executionOrder)
+    }
+
+    @Test(timeout = 5_000)
+    fun `executor rejection drains queue iteratively and reports every error`() {
+        val rejectedExecutor = mock<BindingThreadExecutor>()
+        val rejectedDivView = mock<Div2View>()
+        val rejectedDispatcher = BindingDispatcher(
+            rejectedDivView,
+            BindingCriticalSection(),
+            rejectedExecutor,
+        )
+        val firstTask = AtomicReference<Runnable>()
+        val executeCount = AtomicInteger()
+        val errorCount = AtomicInteger()
+        val pendingTaskCount = 2_000
+        whenever(rejectedExecutor.ensureThreadCreated()).thenReturn(Thread.currentThread())
+        doAnswer { invocation ->
+            if (executeCount.getAndIncrement() == 0) {
+                firstTask.set(invocation.getArgument(0))
+            } else {
+                throw RejectedExecutionException("rejected")
+            }
+            Unit
+        }.whenever(rejectedExecutor).execute(any())
+
+        rejectedDispatcher.runOnBindingThread<Unit> { Unit }
+        repeat(pendingTaskCount) {
+            rejectedDispatcher.runOnBindingThread<Unit>(onError = { errorCount.incrementAndGet() }) { Unit }
+        }
+
+        firstTask.get().run()
+        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+
+        assertEquals(pendingTaskCount, errorCount.get())
+        verify(rejectedDivView, times(pendingTaskCount)).logError(any())
     }
 }
