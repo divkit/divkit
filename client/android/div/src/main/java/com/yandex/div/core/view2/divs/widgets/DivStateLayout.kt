@@ -39,6 +39,8 @@ internal class DivStateLayout @JvmOverloads constructor(
     private val gestureDetector = GestureDetectorCompat(context, swipeListener, Handler(Looper.getMainLooper()))
     var swipeOutCallback: (() -> Unit)? = null
     internal var activeStateDivBlock: DivBlock? = null
+    internal var bindingInProgress = false
+    internal var pendingStateBlock: DivBlock.State? = null
     private var divView: Div2View? = null
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {

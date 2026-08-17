@@ -58,6 +58,8 @@ import com.yandex.div2.DivState
 import javax.inject.Inject
 import javax.inject.Provider
 
+private const val MAX_PENDING_REBINDS = 5
+
 @DivScope
 internal class DivStateBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
@@ -70,6 +72,34 @@ internal class DivStateBinder @Inject constructor(
 ) : DivViewBinder<DivBlock.State, DivStateLayout>(baseBinder) {
 
     override fun bindView(view: DivStateLayout, divBlock: DivBlock.State, divView: Div2View) {
+        if (view.bindingInProgress) {
+            // A nested state switch (e.g. set_state fired from DivCustomViewAdapter.bindView
+            // or video fatal actions) arrived while this layout is being bound. Binding it
+            // in place would rebind children of the previous state with the new state div,
+            // so defer it until the current pass completes.
+            view.pendingStateBlock = divBlock
+            return
+        }
+
+        view.bindingInProgress = true
+        try {
+            var pendingBlock: DivBlock.State? = divBlock
+            var rebindsLeft = MAX_PENDING_REBINDS
+            while (pendingBlock != null && rebindsLeft-- > 0) {
+                view.pendingStateBlock = null
+                bindViewInternal(view, pendingBlock, divView)
+                pendingBlock = view.pendingStateBlock
+            }
+            if (pendingBlock != null) {
+                divView.logError(RuntimeException("Infinite state switching detected"))
+            }
+        } finally {
+            view.bindingInProgress = false
+            view.pendingStateBlock = null
+        }
+    }
+
+    private fun bindViewInternal(view: DivStateLayout, divBlock: DivBlock.State, divView: Div2View) {
         val divValue = divBlock.divValue
         val oldDivBlock = view.divBlock
 
@@ -147,9 +177,9 @@ internal class DivStateBinder @Inject constructor(
         }
         val previousStateId = stateId
 
-        // Publish the new state before binding children so nested set_state (e.g. video
-        // fatal/buffering actions) does not re-enter this binder as another state switch and
-        // recreate the child that will spawn a loop.
+        // Publish the new state before binding children so code observing this layout
+        // mid-bind (e.g. state path lookup for a nested set_state) sees the state being
+        // applied. Nested switches themselves are deferred by the guard in bindView.
         activeStateDivBlock = newStateDivBlock
         currentStatePath = currentPath
 
