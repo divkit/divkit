@@ -2,7 +2,7 @@ import com.android.build.api.variant.BuildConfigField
 import groovy.json.JsonOutput
 
 plugins {
-    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.ksp)
 }
 
 apply from: "${project.projectDir}/../div-library.gradle"

@@ -15,8 +15,5 @@ dependencies {
     implementation(project(":div-data"))
     implementation(project(":utils"))
 
-    implementation(libs.androidx.appcompat) {
-        exclude(group = "androidx.fragment", module = "fragment")
-    }
     implementation(libs.androidx.core)
 }

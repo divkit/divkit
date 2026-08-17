@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.ksp)
 }
 
 apply(from = "../div-library.gradle")
@@ -35,7 +35,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.core)
-    implementation(libs.androidx.fragment)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.material)
     implementation(libs.androidx.recyclerview)

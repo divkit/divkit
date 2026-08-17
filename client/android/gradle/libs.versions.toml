@@ -18,8 +18,8 @@ jvm-toolchain = "17"
 kotlin = "2.4.10"
 kotlin-binaryCompatibilityValidator = "0.18.1"
 kotlin-coroutines = "1.10.2"
-kotlin-ksp = "2.3.7"
 kotlinpoet = "2.3.0"
+ksp = "2.3.11"
 lottie = "6.7.1"
 markwon = "4.6.2"
 mockito-kotlin = "6.3.0"
@@ -34,22 +34,20 @@ webp-imageio = "0.1.6"
 yatagan = "1.6.2"
 
 androidx-activity = "1.11.0"
-androidx-annotation = "1.10.0"
 androidx-appcompat = "1.6.1"
 androidx-collection = "1.6.0"
 androidx-compose-bom = "2026.06.01"
-androidx-constraintlayout = "2.2.1"
+androidx-constraintlayout = "2.2.2"
 androidx-core = "1.16.0"
 androidx-espresso = "3.7.0"
-androidx-fragment = "1.8.9"
 androidx-lifecycle = "2.9.4"
-androidx-material = "1.13.0"
+androidx-material = "1.14.0"
 androidx-media3 = "1.6.1"
 androidx-recyclerview = "1.3.0"
 androidx-test = "1.7.0"
 androidx-test-services = "1.6.0"
 androidx-transition = "1.6.0"
-androidx-uiautomator = "2.3.0"
+androidx-uiautomator = "2.4.0"
 androidx-viewpager = "1.0.0"
 androidx-viewpager2 = "1.0.0"
 androidx-work = "2.11.2"
@@ -64,12 +62,10 @@ android-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref
 androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
 
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
-androidx-annotations = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
-androidx-fragment = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment" }
 androidx-material = { module = "com.google.android.material:material", version.ref = "androidx-material" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
 androidx-transition = { module = "androidx.transition:transition", version.ref = "androidx-transition" }
@@ -180,6 +176,6 @@ apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified"
 buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.22.0" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kotlin-ksp" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 screenshotTestPlugin = { id = "com.yandex.test.screenshot-test-plugin", version = "unspecified" }

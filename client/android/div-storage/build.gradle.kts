@@ -17,9 +17,6 @@ dependencies {
     implementation(project(":div-histogram"))
     implementation(project(":utils"))
 
-    implementation(libs.androidx.appcompat) {
-        exclude(group = "androidx.fragment", module = "fragment")
-    }
     implementation(libs.androidx.core)
     implementation(libs.javax)
 

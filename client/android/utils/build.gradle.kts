@@ -15,10 +15,6 @@ dependencies {
     implementation(project(":assertion"))
     implementation(project(":div-core"))
 
-    implementation(libs.androidx.annotations)
-    implementation(libs.androidx.appcompat) {
-        exclude(group = "androidx.fragment", module = "fragment")
-    }
     implementation(libs.androidx.collection)
     implementation(libs.androidx.core)
     implementation(libs.androidx.viewpager)

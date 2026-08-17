@@ -13,9 +13,6 @@ android {
 dependencies {
     implementation(project(":div"))
 
-    implementation(libs.androidx.appcompat) {
-        exclude(group = "androidx.fragment", module = "fragment")
-    }
     implementation(libs.kotlin.corountines.core)
     implementation(libs.kotlin.corountines.android)
     implementation(libs.lottie) {
