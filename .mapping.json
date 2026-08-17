@@ -23117,6 +23117,8 @@
   "client/android/picasso/build.gradle.kts":"divkit/public/client/android/picasso/build.gradle.kts",
   "client/android/picasso/proguard-rules.pro":"divkit/public/client/android/picasso/proguard-rules.pro",
   "client/android/picasso/src/main/java/com/yandex/div/picasso/PicassoDivImageLoader.kt":"divkit/public/client/android/picasso/src/main/java/com/yandex/div/picasso/PicassoDivImageLoader.kt",
+  "client/android/picasso/src/test/java/com/yandex/div/picasso/PicassoDivImageLoaderTest.kt":"divkit/public/client/android/picasso/src/test/java/com/yandex/div/picasso/PicassoDivImageLoaderTest.kt",
+  "client/android/picasso/src/test/resources/robolectric.properties":"divkit/public/client/android/picasso/src/test/resources/robolectric.properties",
   "client/android/publish-android.gradle":"divkit/public/client/android/publish-android.gradle",
   "client/android/publish-common.gradle":"divkit/public/client/android/publish-common.gradle",
   "client/android/publish-java.gradle":"divkit/public/client/android/publish-java.gradle",

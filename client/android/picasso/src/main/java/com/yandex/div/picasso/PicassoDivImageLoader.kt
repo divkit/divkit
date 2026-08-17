@@ -77,7 +77,7 @@ class PicassoDivImageLoader(
 
     private fun createPicasso(): Picasso {
         return Picasso.Builder(appContext)
-            .downloader(OkHttp3Downloader(appContext, DISK_CACHE_SIZE))
+            .downloader(OkHttp3Downloader(httpClient))
             .build()
     }
 
