@@ -223,6 +223,7 @@ class Div2View private constructor(
 
     private fun resetRuntimeStoreAndTag() {
         runtimeStore.clearBindings(this)
+        runtimeStore.cleanupRuntimes(this)
         oldRuntimeStore = runtimeStore
         runtimeStore = RuntimeStore.EMPTY
         dataComponent = div2Component.dataComponentStore.getOrPut("", div2Component)
