@@ -1,10 +1,12 @@
 package com.yandex.div.core.util.binding
 
+import androidx.annotation.MainThread
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.UiThreadHandler
 import java.util.ArrayDeque
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
 private typealias Action = () -> Unit
@@ -26,7 +28,28 @@ internal class BindingDispatcher @Inject constructor(
     private val mainThreadActions = mutableListOf<Action>()
     private val pendingTasksLock = Any()
     private val pendingTasks = ArrayDeque<PendingTask>()
+    private val bindingGeneration = AtomicInteger()
     private var activeTask: PendingTask? = null
+    private var activeTaskStarted = false
+
+    /**
+     * Cancels queued work and invalidates running work before its main-thread continuation.
+     * Must be called on main to serialize invalidation with continuation application.
+     */
+    @MainThread
+    fun cancelPendingTasks() {
+        bindingGeneration.incrementAndGet()
+        synchronized(pendingTasksLock) {
+            pendingTasks.clear()
+
+            val task = activeTask
+            if (task != null && !activeTaskStarted && executor.remove(task.runnable)) {
+                activeTask = null
+                activeTaskStarted = false
+                task.reservationThread?.let(criticalSection::cancelReservationFor)
+            }
+        }
+    }
 
     /**
      * Use to schedule new task for background binding.
@@ -36,9 +59,27 @@ internal class BindingDispatcher @Inject constructor(
         noinline onError: ((Throwable) -> Unit)? = null,
         crossinline block: () -> T
     ) {
+        val generation = bindingGeneration.get()
         lateinit var task: Runnable
         task = Runnable {
+            synchronized(pendingTasksLock) {
+                if (!isActiveTaskLocked(task)) {
+                    return@Runnable
+                }
+                activeTaskStarted = true
+            }
+            if (bindingGeneration.get() != generation) {
+                criticalSection.cancelReservationFor(Thread.currentThread())
+                completeTask(task)
+                return@Runnable
+            }
+
             val handle = criticalSection.enter()
+            if (bindingGeneration.get() != generation) {
+                criticalSection.exit(handle)
+                completeTask(task)
+                return@Runnable
+            }
             try {
                 val (result, deferredActions) = collectMainThreadAction {
                     block()
@@ -49,14 +90,19 @@ internal class BindingDispatcher @Inject constructor(
                 } else {
                     UiThreadHandler.postOnMainThread {
                         criticalSection.transferToCurrentThread()
+                        val isCurrent = bindingGeneration.get() == generation
                         try {
-                            deferredActions.forEach { action ->
-                                action.invoke()
+                            if (isCurrent) {
+                                deferredActions.forEach { action ->
+                                    action.invoke()
+                                }
+                                onComplete?.invoke(result)
                             }
-                            onComplete?.invoke(result)
                         } catch (e: Throwable) {
                             divView.logError(e)
-                            onError?.invoke(e)
+                            if (isCurrent) {
+                                onError?.invoke(e)
+                            }
                         } finally {
                             criticalSection.exit(handle)
                             completeTask(task)
@@ -68,7 +114,9 @@ internal class BindingDispatcher @Inject constructor(
                 completeTask(task)
                 UiThreadHandler.postOnMainThread {
                     divView.logError(e)
-                    onError?.invoke(e)
+                    if (bindingGeneration.get() == generation) {
+                        onError?.invoke(e)
+                    }
                 }
             }
         }
@@ -104,12 +152,14 @@ internal class BindingDispatcher @Inject constructor(
             return error
         }
 
+        task.reservationThread = bindingThread
         criticalSection.reserveFor(bindingThread)
         return try {
             executor.execute(task.runnable)
             null
         } catch (error: Throwable) {
-            criticalSection.cancelReservation()
+            criticalSection.cancelReservationFor(bindingThread)
+            task.reservationThread = null
             error
         }
     }
@@ -127,6 +177,7 @@ internal class BindingDispatcher @Inject constructor(
                 return null
             }
             activeTask = null
+            activeTaskStarted = false
             takeNextTaskLocked()
         }
     }
@@ -137,9 +188,14 @@ internal class BindingDispatcher @Inject constructor(
                 return
             }
             activeTask = null
+            activeTaskStarted = false
             takeNextTaskLocked()
         }
         nextTask?.let(::submitTask)
+    }
+
+    private fun isActiveTaskLocked(task: Runnable): Boolean {
+        return activeTask?.runnable === task
     }
 
     private fun takeNextTaskLocked(): PendingTask? {
@@ -270,5 +326,8 @@ internal class BindingDispatcher @Inject constructor(
     private class PendingTask(
         val runnable: Runnable,
         val onError: ((Throwable) -> Unit)?,
-    )
+    ) {
+        @Volatile
+        var reservationThread: Thread? = null
+    }
 }

@@ -741,8 +741,11 @@ class Div2View private constructor(
         releaseMedia(this)
     }
 
-    override fun cleanup(): Unit = bindingDispatcher.runWithinBindingContext {
-        cleanup(removeChildren = true)
+    override fun cleanup() {
+        bindingDispatcher.cancelPendingTasks()
+        bindingDispatcher.runWithinBindingContext {
+            cleanup(removeChildren = true)
+        }
     }
 
     private fun cleanup(removeChildren: Boolean) {

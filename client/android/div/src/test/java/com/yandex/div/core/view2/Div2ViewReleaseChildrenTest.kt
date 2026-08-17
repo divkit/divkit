@@ -27,8 +27,13 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.shadows.ShadowLooper
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicInteger
 
 @RunWith(RobolectricTestRunner::class)
 class Div2ViewReleaseChildrenTest {
@@ -97,6 +102,32 @@ class Div2ViewReleaseChildrenTest {
         divView.cleanup()
 
         assertChildrenReleased(children)
+    }
+
+    @Test(timeout = 5_000)
+    fun `cleanup cancels running asynchronous binding`() {
+        val backgroundBindingStarted = CountDownLatch(1)
+        val releaseBackgroundBinding = CountDownLatch(1)
+        val completionRuns = AtomicInteger()
+        doAnswer {
+            backgroundBindingStarted.countDown()
+            releaseBackgroundBinding.await()
+        }.whenever(viewBinder).attachIndicators(any())
+
+        divView.setDataAsync(testOtherData.data, tag) { completionRuns.incrementAndGet() }
+        Assert.assertTrue(backgroundBindingStarted.await(1, TimeUnit.SECONDS))
+
+        divView.cleanup()
+        releaseBackgroundBinding.countDown()
+
+        val deadline = System.currentTimeMillis() + 2_000
+        while (divView.divData != null && System.currentTimeMillis() < deadline) {
+            Thread.sleep(10)
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        }
+
+        Assert.assertNull(divView.divData)
+        Assert.assertEquals(0, completionRuns.get())
     }
 
     private fun assertChildrenReleased(children: List<View>) {

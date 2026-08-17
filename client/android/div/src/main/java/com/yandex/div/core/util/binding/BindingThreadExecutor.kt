@@ -8,8 +8,9 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 internal class BindingThreadExecutor private constructor(
-    private val threadFactory: NamedThreadFactory
-) : Executor by singleThreadExecutor(threadFactory, keepAliveTime = 1000L) {
+    private val threadFactory: NamedThreadFactory,
+    private val executor: FinalizableExecutorService = singleThreadExecutor(threadFactory, keepAliveTime = 1000L),
+) : Executor by executor {
 
     val bindingThread: Thread?
         get() {
@@ -36,6 +37,11 @@ internal class BindingThreadExecutor private constructor(
             thread
         }
     }
+
+    val queueSize: Int
+        get() = executor.queueSize
+
+    fun remove(task: Runnable): Boolean = executor.remove(task)
 
     companion object {
 
@@ -65,7 +71,7 @@ private fun singleThreadExecutor(
     threadFactory: ThreadFactory,
     keepAliveTime: Long,
     timeUnit: TimeUnit = TimeUnit.MILLISECONDS
-): Executor {
+): FinalizableExecutorService {
     return FinalizableExecutorService(
         executor = ThreadPoolExecutor(
             /* corePoolSize = */ 1,
@@ -79,8 +85,13 @@ private fun singleThreadExecutor(
 }
 
 private class FinalizableExecutorService(
-    val executor: ExecutorService
+    private val executor: ThreadPoolExecutor
 ) : ExecutorService by executor {
+
+    val queueSize: Int
+        get() = executor.queue.size
+
+    fun remove(task: Runnable): Boolean = executor.remove(task)
 
     protected fun finalize() {
         executor.shutdown()

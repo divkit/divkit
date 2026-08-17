@@ -320,4 +320,107 @@ internal class BindingDispatcherTest {
         assertEquals(pendingTaskCount, errorCount.get())
         verify(rejectedDivView, times(pendingTaskCount)).logError(any())
     }
+
+    @Test(timeout = 5_000)
+    fun `cancelPendingTasks removes only this dispatcher's queued task`() {
+        val blockerStarted = CountDownLatch(1)
+        val releaseBlocker = CountDownLatch(1)
+        executor.execute {
+            blockerStarted.countDown()
+            releaseBlocker.await()
+        }
+        assertTrue(blockerStarted.await(1, TimeUnit.SECONDS))
+        val mainThreadHandle = criticalSection.enter()
+
+        val cancelledRuns = AtomicInteger()
+        repeat(100) {
+            dispatcher.runOnBindingThread<Unit> {
+                cancelledRuns.incrementAndGet()
+            }
+        }
+
+        val otherDispatcher = BindingDispatcher(divView, BindingCriticalSection(), executor)
+        val otherRun = CountDownLatch(1)
+        otherDispatcher.runOnBindingThread<Unit> {
+            otherRun.countDown()
+        }
+
+        assertEquals(2, executor.queueSize)
+        dispatcher.cancelPendingTasks()
+        assertEquals(1, executor.queueSize)
+        assertTrue(criticalSection.isHeld)
+        assertFalse(criticalSection.isReserved)
+        mainThreadHandle.close()
+
+        releaseBlocker.countDown()
+        assertTrue(otherRun.await(2, TimeUnit.SECONDS))
+        assertEquals(0, cancelledRuns.get())
+    }
+
+    @Test(timeout = 5_000)
+    fun `cancelPendingTasks ignores stale main thread actions and completion`() {
+        val backgroundStarted = CountDownLatch(1)
+        val releaseBackground = CountDownLatch(1)
+        val backgroundFinished = CountDownLatch(1)
+        val deferredRuns = AtomicInteger()
+        val completionRuns = AtomicInteger()
+
+        dispatcher.runOnBindingThread<Unit>(onComplete = { completionRuns.incrementAndGet() }) {
+            dispatcher.runMainThreadAction { deferredRuns.incrementAndGet() }
+            backgroundStarted.countDown()
+            releaseBackground.await()
+            backgroundFinished.countDown()
+        }
+        assertTrue(backgroundStarted.await(1, TimeUnit.SECONDS))
+
+        dispatcher.cancelPendingTasks()
+        releaseBackground.countDown()
+        assertTrue(backgroundFinished.await(1, TimeUnit.SECONDS))
+        repeat(10) {
+            Thread.sleep(20)
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        }
+
+        assertEquals(0, deferredRuns.get())
+        assertEquals(0, completionRuns.get())
+        assertFalse(criticalSection.isHeld)
+        assertFalse(criticalSection.isReserved)
+    }
+
+    @Test(timeout = 5_000)
+    fun `cancelPendingTasks logs stale background error without invoking callback`() {
+        val backgroundStarted = CountDownLatch(1)
+        val releaseBackground = CountDownLatch(1)
+        val backgroundFinished = CountDownLatch(1)
+        val errorLogged = CountDownLatch(1)
+        val expectedError = RuntimeException("background failure")
+        val errorCallbackRuns = AtomicInteger()
+        doAnswer { errorLogged.countDown() }.whenever(divView).logError(expectedError)
+
+        dispatcher.runOnBindingThread<Unit>(onError = { errorCallbackRuns.incrementAndGet() }) {
+            backgroundStarted.countDown()
+            try {
+                releaseBackground.await()
+                throw expectedError
+            } finally {
+                backgroundFinished.countDown()
+            }
+        }
+        assertTrue(backgroundStarted.await(1, TimeUnit.SECONDS))
+
+        dispatcher.cancelPendingTasks()
+        releaseBackground.countDown()
+        assertTrue(backgroundFinished.await(1, TimeUnit.SECONDS))
+        val deadline = System.currentTimeMillis() + 2_000
+        while (errorLogged.count > 0 && System.currentTimeMillis() < deadline) {
+            Thread.sleep(10)
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        }
+
+        assertTrue("Background error was not logged", errorLogged.await(0, TimeUnit.MILLISECONDS))
+        verify(divView).logError(expectedError)
+        assertEquals(0, errorCallbackRuns.get())
+        assertFalse(criticalSection.isHeld)
+        assertFalse(criticalSection.isReserved)
+    }
 }

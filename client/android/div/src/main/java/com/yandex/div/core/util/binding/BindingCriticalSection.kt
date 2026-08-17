@@ -149,6 +149,24 @@ internal class BindingCriticalSection @Inject constructor() {
     }
 
     /**
+     * Cancels a reservation owned by [thread] without affecting the current holder.
+     */
+    @AnyThread
+    fun cancelReservationFor(thread: Thread): Boolean {
+        return synchronized(lock) {
+            if (reserver !== thread) {
+                return@synchronized false
+            }
+
+            reserver = null
+            waiters.toList().forEach { waiter ->
+                LockSupport.unpark(waiter)
+            }
+            true
+        }
+    }
+
+    /**
      * Tries to enter the critical section without blocking.
      *
      * Returns immediately with a [Disposable] handle if the section is free (or already
