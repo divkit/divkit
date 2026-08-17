@@ -1,5 +1,8 @@
 ## 32.61.1
 
+# Android Client:
+* Fixed `PicassoDivImageLoader` ignoring the user-configured `OkHttpClient` when loading bitmap images.
+
 # iOS Client:
 * Fixed gallery scroll offset reset to zero when content size shrinks.
 
