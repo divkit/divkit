@@ -29,15 +29,26 @@ extension SizeProviderBlock {
 }
 
 private final class SizeProviderBlockView: BlockView {
+  override var frame: CGRect {
+    didSet { isSizeAssigned = true }
+  }
+
+  override var bounds: CGRect {
+    didSet { isSizeAssigned = true }
+  }
+
   var childMarginsSize = CGSize.zero
 
   private var block: SizeProviderBlock!
   private var childView: BlockView!
 
+  private var isSizeAssigned = false
+
   var effectiveBackgroundColor: UIColor? { childView.backgroundColor }
 
   init() {
     super.init(frame: .zero)
+    isSizeAssigned = false
   }
 
   @available(*, unavailable)
@@ -48,8 +59,9 @@ private final class SizeProviderBlockView: BlockView {
   override func layoutSubviews() {
     super.layoutSubviews()
     childView.frame = bounds
-    block.widthUpdater?(Int(bounds.width - childMarginsSize.width))
-    block.heightUpdater?(Int(bounds.height - childMarginsSize.height))
+    guard isSizeAssigned else { return }
+    block.widthUpdater?(max(0, Int(bounds.width - childMarginsSize.width)))
+    block.heightUpdater?(max(0, Int(bounds.height - childMarginsSize.height)))
   }
 
   func configure(
