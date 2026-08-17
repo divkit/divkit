@@ -171,7 +171,7 @@ internal class DivContainerBinder @Inject constructor(
         errorCollector: ErrorCollector,
     ) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver) {
+        expressionSubscriber.bindItemBuilder(builder, context.expressionResolver) {
             val newItems = builder.build(context.expressionResolver, path)
             val oldItems = (this as DivCollectionHolder).items ?: emptyList()
             replaceWithReuse(context.divView, divViewCreator, oldItems, newItems)

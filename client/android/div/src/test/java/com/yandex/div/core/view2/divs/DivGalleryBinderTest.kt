@@ -2,20 +2,26 @@ package com.yandex.div.core.view2.divs
 
 import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.divs.gallery.DivGalleryAdapter
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
+import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivGallery
+import org.json.JSONArray
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
@@ -85,6 +91,70 @@ class DivGalleryBinderTest : DivBinderTest() {
     }
 
     @Test
+    fun `use updated default item only when gallery state is missing`() {
+        val data = mock<Expression<JSONArray>>()
+        val defaultItem = mock<Expression<Long>>()
+        val observer = argumentCaptor<(JSONArray) -> Unit>()
+        whenever(data.evaluate(resolver)).thenReturn(JSONArray())
+        whenever(data.observe(any(), observer.capture())).thenReturn(Disposable.NULL)
+        whenever(defaultItem.evaluate(resolver)).thenReturn(DEFAULT_ITEM.toLong())
+        val itemBuilder = DivCollectionItemBuilder(
+            data = data,
+            prototypes = listOf(DivCollectionItemBuilder.Prototype(div.value.items!!.first())),
+        )
+        val itemBuilderDiv = Div.Gallery(div.value.copy(defaultItem = defaultItem, itemBuilder = itemBuilder))
+        val itemBuilderView = divRecyclerView(itemBuilderDiv).apply { layoutParams = defaultLayoutParams() }
+        underTest.bindView(bindingContext, itemBuilderView, itemBuilderDiv, rootPath())
+        val adapter = mock<DivGalleryAdapter>()
+        whenever(adapter.itemCount).thenReturn(ITEM_COUNT)
+        itemBuilderView.adapter = adapter
+        itemBuilderView.itemAnimator = mock()
+        whenever(defaultItem.evaluate(resolver)).thenReturn(UPDATED_DEFAULT_ITEM.toLong())
+
+        observer.firstValue(JSONArray())
+
+        Assert.assertNull(itemBuilderView.itemAnimator)
+        verify(itemBuilderView).scrollToPosition(UPDATED_DEFAULT_ITEM)
+
+        whenever(divViewState.getBlockState<GalleryState>(any())).thenReturn(GalleryState(SAVED_ITEM, 0))
+        (itemBuilderView.layoutManager as DivLinearLayoutManager).instantScrollToPosition(SAVED_ITEM, 0)
+        val itemAnimator = mock<RecyclerView.ItemAnimator>()
+        itemBuilderView.itemAnimator = itemAnimator
+        whenever(defaultItem.evaluate(resolver)).thenReturn((UPDATED_DEFAULT_ITEM + 1).toLong())
+
+        observer.firstValue(JSONArray())
+
+        Assert.assertSame(itemAnimator, itemBuilderView.itemAnimator)
+        Assert.assertEquals(SAVED_ITEM, itemBuilderView.layoutManager.shadow().position)
+    }
+
+    @Test
+    fun `dispose item builder subscriptions on rebind`() {
+        val data = mock<Expression<JSONArray>>()
+        val selector = mock<Expression<Boolean>>()
+        val dataSubscription = mock<Disposable>()
+        val selectorSubscription = mock<Disposable>()
+        whenever(data.evaluate(resolver)).thenReturn(JSONArray())
+        whenever(data.observe(any(), any())).thenReturn(dataSubscription)
+        whenever(selector.observe(any(), any())).thenReturn(selectorSubscription)
+        val itemBuilder = DivCollectionItemBuilder(
+            data = data,
+            prototypes = listOf(
+                DivCollectionItemBuilder.Prototype(div.value.items!!.first(), null, selector)
+            ),
+        )
+        val itemBuilderDiv = Div.Gallery(div.value.copy(itemBuilder = itemBuilder))
+        val reboundDiv = Div.Gallery(itemBuilderDiv.value.copy())
+        val itemBuilderView = divRecyclerView(itemBuilderDiv).apply { layoutParams = defaultLayoutParams() }
+
+        underTest.bindView(bindingContext, itemBuilderView, itemBuilderDiv, rootPath())
+        underTest.bindView(bindingContext, itemBuilderView, reboundDiv, rootPath())
+
+        verify(dataSubscription).close()
+        verify(selectorSubscription).close()
+    }
+
+    @Test
     fun `do not snap on first position`() {
         val galleryJson = div.writeToJSON()
         galleryJson.remove("default_item")
@@ -119,5 +189,8 @@ class DivGalleryBinderTest : DivBinderTest() {
     private companion object {
         private const val GALLERY_DIR = "div-gallery"
         private const val DEFAULT_ITEM = 2
+        private const val ITEM_COUNT = 5
+        private const val SAVED_ITEM = 1
+        private const val UPDATED_DEFAULT_ITEM = 3
     }
 }

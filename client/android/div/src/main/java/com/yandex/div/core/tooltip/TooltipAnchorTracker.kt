@@ -34,7 +34,6 @@ internal class TooltipAnchorTracker(
     }
     private val preDrawListener = onPreDrawListener {
         updateIfNeeded()
-        true
     }
     private val viewTreeObserver = anchor.viewTreeObserver
     private val timeoutRunnable = Runnable { close() }

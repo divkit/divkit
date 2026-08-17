@@ -11,10 +11,12 @@ import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.scale
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.util.bitmap.BitmapEffectHelper
 import com.yandex.div.core.util.bitmap.blur.BlurUtils.isBlurParamsValid
 
-internal class LowApiBitmapEffectHelper(
+@InternalApi
+class LowApiBitmapEffectHelper(
     private val context: Context,
 ) : BitmapEffectHelper() {
     private var cachedRenderScript: RenderScript? = null

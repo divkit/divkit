@@ -191,6 +191,10 @@ public interface Div2Component {
     boolean isComplexRebindEnabled();
 
     @NonNull
+    @ExperimentFlag(experiment = Experiment.STRICT_ITEM_BUILDER_VIEW_REUSE_ENABLED)
+    boolean isStrictItemBuilderViewReuseEnabled();
+
+    @NonNull
     @ExperimentFlag(experiment = Experiment.PAGER_PAGE_CLIP_ENABLED)
     boolean isPagerPageClipEnabled();
 

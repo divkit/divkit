@@ -17,6 +17,7 @@ import androidx.core.graphics.withSave
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
 import com.yandex.div.core.util.allSightActions
@@ -372,14 +373,14 @@ internal val View.asDivHolderView: DivHolderView<*>? get() {
 
 internal val View.bindingContext: BindingContext? get() = asDivHolderView?.bindingContext
 
-internal fun bindItemBuilder(
+internal fun ExpressionSubscriber.bindItemBuilder(
     builder: DivCollectionItemBuilder,
     resolver: ExpressionResolver,
     callback: (Any) -> Unit,
 ) {
-    builder.data.observe(resolver, callback)
+    addSubscription(builder.data.observe(resolver, callback))
     builder.prototypes.forEach {
-        it.selector.observe(resolver, callback)
+        addSubscription(it.selector.observe(resolver, callback))
     }
 }
 
@@ -453,9 +454,11 @@ internal fun ViewGroup.replaceWithReuse(
     oldItems: List<DivItemBuilderResult>,
     newItems: List<DivItemBuilderResult>,
 ) {
-    val oldChildren = mutableMapOf<Div, View>()
+    val strictItemBuilderViewReuseEnabled =
+        divView.div2Component.isStrictItemBuilderViewReuseEnabled
+    val oldChildren = mutableMapOf<Div, Pair<DivItemBuilderResult, View>>()
     oldItems.zip(children.toList()) { childDiv, child ->
-        oldChildren[childDiv.div] = child
+        oldChildren[childDiv.div] = childDiv to child
     }
 
     removeAllViews()
@@ -463,32 +466,68 @@ internal fun ViewGroup.replaceWithReuse(
     val createViewIndices = mutableListOf<Int>()
 
     newItems.forEachIndexed { index, newChild ->
-        val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
-            if (oldChildDiv.isBranch) {
-                newChild.div.type == oldChildDiv.type
-            } else {
-                oldChildDiv.canBeReused(newChild.div, newChild.expressionResolver)
-            }
+        val oldViewDiv = oldChildren.keys.firstOrNull { oldChildDiv ->
+            oldChildren.getValue(oldChildDiv).first.canReuseViewFor(
+                newChild,
+                strictItemBuilderViewReuseEnabled,
+            )
         }
 
-        oldChildren.remove(oldViewIndex)?.let { addView(it) }
+        oldChildren.remove(oldViewDiv)?.second?.let { addView(it) }
             ?: run { createViewIndices += index }
     }
 
     createViewIndices.forEach { index ->
         val newChild = newItems[index]
 
-        val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
-            oldChildDiv.type == newChild.div.type
+        val oldViewDiv = oldChildren.keys.firstOrNull { oldChildDiv ->
+            oldChildren.getValue(oldChildDiv).first.canRecycleViewFor(
+                newChild,
+                strictItemBuilderViewReuseEnabled,
+            )
         }
 
-        val childView = oldChildren.remove(oldViewIndex)
+        val childView = oldChildren.remove(oldViewDiv)?.second
             ?: divViewCreator.get().create(newChild.div, newChild.expressionResolver)
 
         addView(childView, index)
     }
 
-    oldChildren.values.forEach {
-        divView.releaseViewVisitor.visitViewTree(it)
+    oldChildren.values.forEach { (_, view) ->
+        divView.releaseViewVisitor.visitViewTree(view)
     }
 }
+
+internal fun DivItemBuilderResult.canReuseViewFor(
+    newItem: DivItemBuilderResult,
+    strictItemBuilderViewReuseEnabled: Boolean,
+): Boolean {
+    if (strictItemBuilderViewReuseEnabled && !hasCompatibleItemBuilderData(newItem)) {
+        return false
+    }
+
+    return if (div.isBranch) {
+        newItem.div.type == div.type
+    } else {
+        div.canBeReused(newItem.div, newItem.expressionResolver)
+    }
+}
+
+internal fun DivItemBuilderResult.canRecycleViewFor(
+    newItem: DivItemBuilderResult,
+    strictItemBuilderViewReuseEnabled: Boolean,
+): Boolean {
+    if (strictItemBuilderViewReuseEnabled && hasItemBuilderDataWith(newItem)) {
+        return false
+    }
+
+    return div.type == newItem.div.type
+}
+
+private fun DivItemBuilderResult.hasCompatibleItemBuilderData(newItem: DivItemBuilderResult): Boolean =
+    expressionResolver.asImpl?.itemBuilderData ==
+        newItem.expressionResolver.asImpl?.itemBuilderData
+
+private fun DivItemBuilderResult.hasItemBuilderDataWith(newItem: DivItemBuilderResult): Boolean =
+    expressionResolver.asImpl?.itemBuilderData != null ||
+        newItem.expressionResolver.asImpl?.itemBuilderData != null

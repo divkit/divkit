@@ -14,6 +14,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.AccessibilityStateProvider
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
@@ -320,7 +321,7 @@ internal class DivPagerBinder @Inject constructor(
 
     private fun DivPagerView.bindItemBuilder(context: BindingContext, div: DivPager, path: DivStatePath) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver) {
+        expressionSubscriber.bindItemBuilder(builder, context.expressionResolver) {
             (viewPager.adapter as DivPagerAdapter?)?.let { adapter ->
                 adapter.setItems(builder.build(context.expressionResolver, path))
                 pagerOnItemsCountChange?.onItemsUpdated()

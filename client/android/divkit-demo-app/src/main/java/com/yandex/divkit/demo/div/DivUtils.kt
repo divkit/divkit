@@ -4,6 +4,7 @@ import android.app.Activity
 import android.net.Uri
 import android.view.ContextThemeWrapper
 import androidx.lifecycle.LifecycleOwner
+import com.yandex.div.backdrop.BackdropEffectExtensionHandler
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
@@ -108,6 +109,7 @@ fun divConfiguration(
         .extension(createMarkdownExtension(activity))
         .extension(DivShimmerExtensionHandler())
         .extension(createDivShineExtensionHandler())
+        .extension(BackdropEffectExtensionHandler())
         .divPlayerFactory(ExoDivPlayerFactory(activity))
 }
 

@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs.gallery
 
 import android.annotation.SuppressLint
+import androidx.core.view.doOnNextLayout
 import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.dagger.DivScope
@@ -9,6 +10,7 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
 import com.yandex.div.core.util.doOnActualLayout
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.DivBinder
@@ -203,8 +205,25 @@ internal class DivGalleryBinder @Inject constructor(
 
     private fun DivRecyclerView.bindItemBuilder(context: BindingContext, div: DivGallery, path: DivStatePath) {
         val builder = div.itemBuilder ?: return
-        bindItemBuilder(builder, context.expressionResolver) {
-            (adapter as DivGalleryAdapter?)?.setItems(builder.build(context.expressionResolver, path))
+        val resolver = context.expressionResolver
+        expressionSubscriber.bindItemBuilder(builder, resolver) {
+            val adapter = adapter as? DivGalleryAdapter ?: return@bindItemBuilder
+            val id = div.id ?: div.hashCode().toString()
+            val hasState = context.divView.currentState?.getPositionAndOffset(id) != null
+
+            adapter.setItems(builder.build(resolver, path))
+            if (hasState) return@bindItemBuilder
+
+            resetAnimatorAndRestoreOnLayout()
+
+            val itemCount = adapter.itemCount.takeIf { it > 1 } ?: return@bindItemBuilder
+            val itemHelper = layoutManager as? DivGalleryItemHelper ?: return@bindItemBuilder
+            val (position, offset) = getPositionAndOffset(div, resolver, adapter.orientation)
+            val targetPosition = position.coerceAtMost(itemCount - 1)
+            doOnNextLayout {
+                itemHelper.trySnapToPosition(targetPosition, offset)
+            }
+            scrollToPosition(targetPosition)
         }
     }
 }

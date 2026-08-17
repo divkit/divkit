@@ -62,6 +62,96 @@ class VariableTest {
     }
 
     @Test
+    fun `array variable ignores structurally equal value from another json instance`() {
+        val initialValue = JSONArray("""[1,{"nested":[true,null,"value"]}]""")
+        val variable = Variable.ArrayVariable(VARIABLE_NAME_1, initialValue)
+        var callbackCount = 0
+        variable.addObserver { callbackCount++ }
+
+        variable.setValue(
+            Variable.ArrayVariable(
+                VARIABLE_NAME_1,
+                JSONArray("""[1,{"nested":[true,null,"value"]}]"""),
+            ),
+        )
+
+        Assert.assertEquals(0, callbackCount)
+        Assert.assertSame(initialValue, variable.getValue())
+    }
+
+    @Test
+    fun `dict variable ignores structurally equal value with different key order`() {
+        val initialValue = JSONObject("""{"first":1,"second":{"nested":[true,null,"value"]}}""")
+        val variable = Variable.DictVariable(VARIABLE_NAME_1, initialValue)
+        var callbackCount = 0
+        variable.addObserver { callbackCount++ }
+
+        variable.setValue(
+            Variable.DictVariable(
+                VARIABLE_NAME_1,
+                JSONObject("""{"second":{"nested":[true,null,"value"]},"first":1}"""),
+            ),
+        )
+
+        Assert.assertEquals(0, callbackCount)
+        Assert.assertSame(initialValue, variable.getValue())
+    }
+
+    @Test
+    fun `array variable notifies once when nested value changes`() {
+        val variable = Variable.ArrayVariable(
+            VARIABLE_NAME_1,
+            JSONArray("""[1,{"nested":[true,null,"value"]}]"""),
+        )
+        val newValue = JSONArray("""[1,{"nested":[false,null,"value"]}]""")
+        var callbackCount = 0
+        variable.addObserver { callbackCount++ }
+
+        variable.set(newValue)
+
+        Assert.assertEquals(1, callbackCount)
+        Assert.assertSame(newValue, variable.getValue())
+    }
+
+    @Test
+    fun `dict variable notifies once when nested value changes`() {
+        val variable = Variable.DictVariable(
+            VARIABLE_NAME_1,
+            JSONObject("""{"first":1,"second":{"nested":[true,null,"value"]}}"""),
+        )
+        val newValue = JSONObject("""{"first":1,"second":{"nested":[true,null,"new value"]}}""")
+        var callbackCount = 0
+        variable.addObserver { callbackCount++ }
+
+        variable.set(newValue)
+
+        Assert.assertEquals(1, callbackCount)
+        Assert.assertSame(newValue, variable.getValue())
+    }
+
+    @Test
+    fun `array variable notifies when item order changes`() {
+        val variable = Variable.ArrayVariable(VARIABLE_NAME_1, JSONArray("""[1,2]"""))
+        var callbackCount = 0
+        variable.addObserver { callbackCount++ }
+
+        variable.set(JSONArray("""[2,1]"""))
+
+        Assert.assertEquals(1, callbackCount)
+    }
+
+    @Test
+    fun `array variable notifies when json value type changes`() {
+        val variable = Variable.ArrayVariable(VARIABLE_NAME_1, JSONArray("""[1]"""))
+        var callbackCount = 0
+        variable.addObserver { callbackCount++ }
+
+        variable.set(JSONArray("""[1.0]"""))
+
+        Assert.assertEquals(1, callbackCount)
+    }
+
+    @Test
     fun `remove observer during set value iteration does not cause error`() {
         val v = Variable.BooleanVariable(VARIABLE_NAME_1, true)
         val observers = ArrayList<(Variable) -> Unit>().apply {

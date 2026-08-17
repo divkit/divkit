@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <item name="backdrop_filter_on_attach_state_change_listener" type="id"/>
+</resources>

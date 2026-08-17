@@ -2,9 +2,11 @@ package com.yandex.div.core.util.bitmap
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.util.bitmap.blur.BlurHelper
 
-internal abstract class BitmapEffectHelper : BlurHelper {
+@InternalApi
+abstract class BitmapEffectHelper : BlurHelper {
     fun mirrorBitmap(bitmap: Bitmap): Bitmap {
         val mirrorMatrix = Matrix()
         mirrorMatrix.preScale(-1f, 1f)

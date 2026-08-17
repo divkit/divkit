@@ -11,4 +11,8 @@ fun interface DrawingPassOverrideStrategy {
     }
 
     object Safe : SafeDrawingPassOverrideStrategy()
+
+    object AlwaysPass : DrawingPassOverrideStrategy {
+        override fun overrideDrawingPass(listener: OnPreDrawListener, proceed: Boolean): Boolean = true
+    }
 }
