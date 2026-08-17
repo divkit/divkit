@@ -1,3 +1,9 @@
+## 32.61.1
+
+# iOS Client:
+* Fixed gallery scroll offset reset to zero when content size shrinks.
+
+
 ## 32.61.0
 
 # Android Client:
