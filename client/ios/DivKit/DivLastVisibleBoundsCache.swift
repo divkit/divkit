@@ -2,8 +2,7 @@ import CoreGraphics
 import LayoutKit
 import VGSL
 
-@_spi(Internal)
-public final class DivLastVisibleBoundsCache {
+final class DivLastVisibleBoundsCache {
   private let lock = AllocatedUnfairLock()
 
   private var storage: [UIElementPath: Int] = [:]

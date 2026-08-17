@@ -1,6 +1,6 @@
 import Foundation
 
-public enum DivStoredValueScope: String, Hashable, Sendable, Decodable {
+enum DivStoredValueScope: String, Hashable, Sendable, Decodable {
   case global
   case card
 }

@@ -1,6 +1,6 @@
 import VGSL
 
-public struct DivTooltipViewFactory {
+struct DivTooltipViewFactory {
   private let divKitComponents: DivKitComponents
   private let cardId: DivCardID
 
