@@ -122,25 +122,31 @@ private fun DrawScope.drawSliderDrawable(drawable: SliderDrawable, start: Float,
     val top = (size.height - drawable.height) / 2f
     val width = end - start
     val height = drawable.height
-    val stroke = drawable.stroke
-    val fillInset = if (stroke != null) 1f else 0f
+    val radius = drawable.radius
+    val border = drawable.stroke
+    val borderWidth = border?.width ?: 0f
+    val borderInset = borderWidth / 2f
+    val topLeft = Offset(start + borderInset, top + borderInset)
+    val size = Size(
+        (width - borderWidth).coerceAtLeast(0f),
+        (height - borderWidth).coerceAtLeast(0f)
+    )
     drawRoundRect(
         color = drawable.color,
-        topLeft = Offset(start + fillInset, top + fillInset),
-        size = Size((width - 2 * fillInset).coerceAtLeast(0f), (height - 2 * fillInset).coerceAtLeast(0f)),
+        topLeft = topLeft,
+        size = size,
         cornerRadius = CornerRadius(
-            drawable.radius.shrinkBy(height, stroke?.width ?: 0f),
-            drawable.radius.shrinkBy(width, stroke?.width ?: 0f),
-        ),
+            radius.shrinkBy(width, borderInset),
+            radius.shrinkBy(height, borderInset)
+        )
     )
-    if (stroke != null) {
-        val inset = stroke.width / 2f
+    if (border != null) {
         drawRoundRect(
-            color = stroke.color,
-            topLeft = Offset(start + inset, top + inset),
-            size = Size((width - stroke.width).coerceAtLeast(0f), (height - stroke.width).coerceAtLeast(0f)),
-            cornerRadius = CornerRadius(drawable.radius, drawable.radius),
-            style = Stroke(width = stroke.width, pathEffect = stroke.pathEffect),
+            color = border.color,
+            topLeft = topLeft,
+            size = size,
+            cornerRadius = CornerRadius(radius, radius),
+            style = Stroke(width = borderWidth, pathEffect = border.pathEffect)
         )
     }
 }

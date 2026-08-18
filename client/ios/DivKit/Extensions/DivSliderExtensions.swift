@@ -20,8 +20,7 @@ extension DivSlider: DivBlockModeling {
     } ?? .zero
     let firstThumb = SliderModel.ThumbModel(
       block: makeThumbBlock(
-        thumb: thumbStyle
-          .makeBlock(context: context, corners: .all),
+        thumb: thumbStyle.makeBlock(context: context, corners: .all),
         textBlock: thumbTextStyle?.makeThumbTextBlock(
           context: context,
           value: firstThumbValue.value
@@ -38,8 +37,7 @@ extension DivSlider: DivBlockModeling {
         width: thumbStyle.resolveWidth(context),
         height: thumbStyle.resolveHeight(context)
       ),
-      offsetX: thumbTextStyle?.offset?.x.resolveValue(expressionResolver) ?? 0,
-      offsetY: thumbTextStyle?.offset?.y.resolveValue(expressionResolver) ?? 0
+      offset: thumbTextStyle?.offset?.resolve(expressionResolver) ?? .zero
     )
     let secondThumb: SliderModel.ThumbModel?
     if let thumbSecondaryValueVariable {
@@ -55,12 +53,7 @@ extension DivSlider: DivBlockModeling {
             context: context,
             value: secondThumbValue.value
           ),
-          textOffset: thumbSecondaryTextStyle.flatMap {
-            CGPoint(
-              x: $0.offset?.x.resolveValue(expressionResolver) ?? 0,
-              y: $0.offset?.y.resolveValue(expressionResolver) ?? 0
-            )
-          } ?? .zero
+          textOffset: thumbSecondaryTextStyle?.offset?.resolve(expressionResolver) ?? .zero
         ),
         value: secondThumbValue,
         size: CGSize(
@@ -69,16 +62,18 @@ extension DivSlider: DivBlockModeling {
           height: thumbSecondaryStyle?.resolveHeight(context)
             ?? thumbStyle.resolveHeight(context)
         ),
-        offsetX: thumbSecondaryTextStyle?.offset?.x.resolveValue(expressionResolver) ?? 0,
-        offsetY: thumbSecondaryTextStyle?.offset?.y.resolveValue(expressionResolver) ?? 0
+        offset: thumbSecondaryTextStyle?.offset?.resolve(expressionResolver) ?? .zero
       )
     } else {
       secondThumb = nil
     }
 
-    let activeMark = makeRoundedRectangle(with: tickMarkActiveStyle, resolver: expressionResolver)
+    let activeMark = makeRoundedRectangle(
+      drawable: tickMarkActiveStyle,
+      resolver: expressionResolver
+    )
     let inactiveMark = makeRoundedRectangle(
-      with: tickMarkInactiveStyle,
+      drawable: tickMarkInactiveStyle,
       resolver: expressionResolver
     )
 
@@ -213,40 +208,53 @@ private func makeThumbBlock(
 }
 
 private func makeRoundedRectangle(
-  with mark: DivDrawable?,
+  drawable: DivDrawable?,
   resolver: ExpressionResolver
-) -> MarksConfigurationModel
-  .RoundedRectangle? {
-  guard let mark,
-        let divShapeDrawable = mark.value as? DivShapeDrawable else {
+) -> MarksConfigurationModel.RoundedRectangle? {
+  guard let drawable else {
     return nil
   }
 
-  let color = divShapeDrawable.resolveColor(resolver) ?? .clear
-  let borderWidth = CGFloat(divShapeDrawable.stroke?.resolveWidth(resolver) ?? 0)
-  let borderColor = divShapeDrawable.stroke?.resolveColor(resolver) ?? .clear
-  switch divShapeDrawable.shape {
-  case let .divRoundedRectangleShape(shape):
-    return MarksConfigurationModel.RoundedRectangle(
-      size: CGSize(
-        width: shape.itemWidth.resolveValue(resolver) ?? 0,
-        height: shape.itemHeight.resolveValue(resolver) ?? 0
-      ),
-      cornerRadius: CGFloat(shape.cornerRadius.resolveValue(resolver) ?? 0),
-      color: color,
-      borderWidth: borderWidth,
-      borderColor: borderColor
-    )
-  case let .divCircleShape(shape):
-    let cornerRadius = CGFloat(shape.radius.resolveValue(resolver) ?? 0)
-    let sideSize = cornerRadius * 2
-    return MarksConfigurationModel.RoundedRectangle(
-      size: CGSize(squareDimension: sideSize),
-      cornerRadius: cornerRadius,
-      color: color,
-      borderWidth: borderWidth,
-      borderColor: borderColor
-    )
+  switch drawable {
+  case let .divShapeDrawable(drawable):
+    let color = drawable.resolveColor(resolver) ?? .clear
+    let fallbackBorder = drawable.stroke
+    switch drawable.shape {
+    case let .divRoundedRectangleShape(shape):
+      let border = shape.stroke
+      let borderWidth = border?.resolveWidth(resolver)
+        ?? fallbackBorder?.resolveWidth(resolver)
+        ?? .zero
+      let borderColor = border?.resolveColor(resolver)
+        ?? fallbackBorder?.resolveColor(resolver)
+        ?? .clear
+      return MarksConfigurationModel.RoundedRectangle(
+        size: CGSize(
+          width: shape.itemWidth.resolveValue(resolver) ?? 0,
+          height: shape.itemHeight.resolveValue(resolver) ?? 0
+        ),
+        cornerRadius: CGFloat(shape.cornerRadius.resolveValue(resolver) ?? 0),
+        color: color,
+        borderWidth: borderWidth,
+        borderColor: borderColor
+      )
+    case let .divCircleShape(shape):
+      let cornerRadius = CGFloat(shape.radius.resolveValue(resolver) ?? 0)
+      let border = shape.stroke
+      let borderWidth = border?.resolveWidth(resolver)
+        ?? fallbackBorder?.resolveWidth(resolver)
+        ?? .zero
+      let borderColor = border?.resolveColor(resolver)
+        ?? fallbackBorder?.resolveColor(resolver)
+        ?? .clear
+      return MarksConfigurationModel.RoundedRectangle(
+        size: CGSize(squareDimension: cornerRadius * 2),
+        cornerRadius: cornerRadius,
+        color: color,
+        borderWidth: borderWidth,
+        borderColor: borderColor
+      )
+    }
   }
 }
 

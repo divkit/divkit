@@ -39,8 +39,8 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
 
   private var pointWidth: CGFloat {
     let width = bounds.width - sliderModel.horizontalInset - max(
-      abs(sliderModel.firstThumb.offsetX),
-      abs(sliderModel.secondThumb?.offsetX ?? 0)
+      abs(sliderModel.firstThumb.offset.x),
+      abs(sliderModel.secondThumb?.offset.x ?? 0)
     )
     return if sliderModel.valueRange == 0 {
       width
@@ -364,28 +364,26 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   private func configureSliderView(_ view: UIView, with horizontalInset: CGFloat = 0) {
+    let firstThumbOffset = sliderModel.firstThumb.offset.x
+    let secondThumbOffset = sliderModel.secondThumb?.offset.x ?? 0
+
     view.frame = CGRect(
       x: horizontalInset / 2,
       y: 0,
-      width: bounds
-        .width - max(
-          abs(sliderModel.firstThumb.offsetX),
-          abs(sliderModel.secondThumb?.offsetX ?? 0)
-        ) - horizontalInset,
+      width: bounds.width - max(abs(firstThumbOffset), abs(secondThumbOffset)) - horizontalInset,
       height: sliderModel.sliderHeight
     )
+
     view.center = bounds.center
       .movingX(
         by:
-        (
-          abs(sliderModel.firstThumb.offsetX) > abs(sliderModel.secondThumb?.offsetX ?? 0)
-        )
-          ? sliderModel.firstThumb.offsetX > 0 ?
-          -(sliderModel.firstThumb.offsetX / 2)
-          : sliderModel.firstThumb.offsetX / 2
-          : sliderModel.firstThumb.offsetX > 0 ?
-          -(sliderModel.secondThumb?.offsetX ?? 0) / 2
-          : (sliderModel.secondThumb?.offsetX ?? 0) / 2
+        (abs(firstThumbOffset) > abs(secondThumbOffset))
+          ? firstThumbOffset > 0
+          ? -(firstThumbOffset / 2)
+          : firstThumbOffset / 2
+          : firstThumbOffset > 0
+          ? -secondThumbOffset / 2
+          : secondThumbOffset / 2
       )
   }
 

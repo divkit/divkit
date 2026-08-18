@@ -15,34 +15,31 @@ public struct SliderModel: Equatable {
         block: EmptyBlock.zeroSized,
         value: .zero,
         size: .zero,
-        offsetX: 0,
-        offsetY: 0
+        offset: .zero
       )
     }
 
     public let block: Block
     public var value: Binding<Int>
     public let size: CGSize
-    public let offsetX: CGFloat
-    public let offsetY: CGFloat
+    public let offset: CGPoint
 
     public init(
       block: Block,
       value: Binding<Int>,
       size: CGSize,
-      offsetX: CGFloat,
-      offsetY: CGFloat
+      offset: CGPoint
     ) {
       self.block = block
       self.value = value
       self.size = size
-      self.offsetX = offsetX
-      self.offsetY = offsetY
+      self.offset = offset
     }
 
     public static func ==(lhs: SliderModel.ThumbModel, rhs: SliderModel.ThumbModel) -> Bool {
       lhs.value == rhs.value &&
         lhs.size == rhs.size &&
+        lhs.offset == rhs.offset &&
         lhs.block == rhs.block
     }
   }
@@ -158,11 +155,11 @@ public struct SliderModel: Equatable {
   }
 
   public var sliderTopTextPadding: CGFloat {
-    max(0, -firstThumb.offsetY, -(secondThumb?.offsetY ?? 0))
+    max(0, -firstThumb.offset.y, -(secondThumb?.offset.y ?? 0))
   }
 
   public var sliderBottomTextPadding: CGFloat {
-    max(0, firstThumb.offsetY, secondThumb?.offsetY ?? 0)
+    max(0, firstThumb.offset.y, secondThumb?.offset.y ?? 0)
   }
 
   public var horizontalInset: CGFloat {
