@@ -8,16 +8,29 @@ export interface MarkdownOptions {
 
 export function markdownExtensionBuilder(process: MarkdownProcessor, options: MarkdownOptions = {}) {
     return class Markdown implements DivExtension {
-        private prevDOM: Node | null = null;
+        private prevDOM: HTMLElement | null = null;
+        private clonedRange: HTMLElement | null = null;
 
         private recalc(node: HTMLElement, context: DivExtensionContext): void {
             const textWrapper = node.firstElementChild;
             const firstRange = textWrapper?.firstElementChild;
-            if (!firstRange) {
+            if (!firstRange || !(firstRange instanceof HTMLElement)) {
                 return;
             }
 
-            this.prevDOM = textWrapper.cloneNode(true);
+            if (!this.prevDOM) {
+                this.prevDOM = firstRange;
+                this.clonedRange = firstRange.cloneNode(true) as HTMLElement;
+                Array.from(textWrapper.children || []).forEach(child => {
+                    if (child instanceof HTMLElement) {
+                        child.style.display = 'none';
+                    }
+                });
+                textWrapper.appendChild(this.clonedRange);
+            }
+            if (!this.clonedRange) {
+                return;
+            }
 
             const text = context.getComponentProperty<string>('text') || '';
 
@@ -29,16 +42,8 @@ export function markdownExtensionBuilder(process: MarkdownProcessor, options: Ma
                 div.classList.add(options.cssClass);
             }
 
-            const children = Array.from(textWrapper.childNodes);
-            for (let i = 0, len = children.length; i < len; ++i) {
-                const node = children[i];
-                if (node.nodeType !== 1 || node !== firstRange) {
-                    textWrapper.removeChild(node);
-                }
-            }
-
-            firstRange.innerHTML = '';
-            firstRange.appendChild(div);
+            this.clonedRange.innerHTML = '';
+            this.clonedRange.appendChild(div);
         }
         mountView(node: HTMLElement, context: DivExtensionContext): void {
             this.recalc(node, context);
@@ -47,14 +52,18 @@ export function markdownExtensionBuilder(process: MarkdownProcessor, options: Ma
             this.recalc(node, context);
         }
         unmountView(node: HTMLElement): void {
-            if (this.prevDOM) {
+            if (this.prevDOM && this.clonedRange) {
                 const textWrapper = node.firstElementChild;
-                if (textWrapper) {
-                    textWrapper.replaceWith(this.prevDOM);
-                }
-
-                this.prevDOM = null;
+                Array.from(textWrapper?.children || []).forEach(child => {
+                    if (child instanceof HTMLElement) {
+                        child.style.display = '';
+                    }
+                });
+                this.clonedRange.remove();
+                this.prevDOM.style.display = '';
             }
+            this.prevDOM = null;
+            this.clonedRange = null;
         }
     };
 }
