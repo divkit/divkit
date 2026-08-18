@@ -1,7 +1,9 @@
 <script lang="ts" context="module">
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    import { urlPath } from '../utils/const';
     import type * as monaco from 'monaco-editor';
+    import rootSchema from '../schema/root.json';
+    import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker.js?worker';
+    import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker.js?worker';
 
     let monacoPromose: Promise<{
         monaco: typeof import('monaco-editor');
@@ -228,10 +230,12 @@
                 }
             };
 
-            const schemas = require.context('../../../../schema/', false, /\.json$/);
-            let schema = schemas.keys().map((key: string) => {
-                const filename = key.replace(/^\.\//, '');
-                const module = schemas(key) as any;
+            const schemas = import.meta.glob('@divkit/schema/**/*.json', {
+                eager: true
+            });
+            let schema = Object.keys(schemas).map((key: string) => {
+                const filename = key.replace(/^.*?\/schema\//, '');
+                const module = (schemas[key] as any).default as any;
 
                 if (filename.includes('div-trigger.json')) {
                     patchTriggerCondition(module);
@@ -248,7 +252,7 @@
             schema.push({
                 uri: 'schema://div2/root.json',
                 fileMatch: [jsonModelUri.toString()],
-                schema: require('../schema/root.json')
+                schema: rootSchema
             });
 
             monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
@@ -258,11 +262,11 @@
             });
 
             window.MonacoEnvironment = {
-                getWorkerUrl(_moduleId: string, label: string) {
+                getWorker(_moduleId: string, label: string) {
                     if (label === 'json') {
-                        return urlPath + '/json.worker.js';
+                        return new JsonWorker();
                     }
-                    return urlPath + '/editor.worker.js';
+                    return new EditorWorker();
                 }
             };
 

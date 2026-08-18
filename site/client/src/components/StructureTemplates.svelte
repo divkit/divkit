@@ -4,7 +4,7 @@
     import JsonView from './JsonView.svelte';
     import { valueStore } from '../data/valueStore';
     import { getContext } from 'svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
@@ -55,6 +55,7 @@
 
 <div class="structure-templates">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="structure-templates__title" on:click={toggle}>
         {$l10n('appliedTemplates')}
     </div>

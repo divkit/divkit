@@ -1,7 +1,7 @@
+import { mount } from 'svelte';
 import App from './components/App.svelte';
 import './styles/monaco-fixes.css';
 
-new App({
+mount(App, {
     target: document.body,
-    props: {}
 });

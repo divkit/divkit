@@ -2,7 +2,7 @@
     import {slide} from 'svelte/transition';
     import type { ViewerError } from '../data/externalViewers';
     import { getContext } from 'svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
 
     const {l10n, lang} = getContext<LanguageContext>(LANGUAGE_CTX);
 

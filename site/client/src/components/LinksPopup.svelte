@@ -3,7 +3,7 @@
     import { fly } from 'svelte/transition';
     import QRCode from 'qrcode';
     import { session } from '../data/session';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
     import Button from './Button.svelte';
 
     import { CustomError, save } from '../data/sessionController';

@@ -3,7 +3,7 @@
     import Main from './Main.svelte';
     import { onMount, setContext } from 'svelte';
     import { derived, get, writable } from 'svelte/store';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
     import translations from '../auto/lang.json';
     import PointingPopup from './PointingPopup.svelte';
     // import LivePreview from './LivePreview.svelte';

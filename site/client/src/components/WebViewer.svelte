@@ -19,7 +19,7 @@
         updateComponents
     } from '../data/webStructure';
     import { jsonStore } from '../data/jsonStore';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
     import { webViewerErrors } from '../data/webViewerErrors';
     import { sampleWarningStore } from '../data/sampleWarningStore';
     import { templatesCheck } from '../utils/templatesCheck';
@@ -252,6 +252,7 @@
             <div class="web-viewer__content-highlight-overlay-wrapper">
                 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div
                     class="web-viewer__content-highlight-overlay"
                     on:mousemove={onHighlightOverlayMove}

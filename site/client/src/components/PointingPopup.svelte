@@ -1,24 +1,27 @@
-<script context="module">
-    let showVar;
+<script lang="ts" context="module">
+    let showVar: ((elem: HTMLElement, msg: string) => void) | undefined;
 
-    export function show(elem, msg) {
+    export function show(elem: HTMLElement, msg: string) {
         if (showVar) {
             showVar(elem, msg);
         }
     }
 </script>
 
-<script>
+<script lang="ts">
     import {fly} from 'svelte/transition';
 
-    let popup;
+    let popup: HTMLElement;
     let visible = false;
-    let elem;
-    let msg;
-    let coords = {};
+    let elem: HTMLElement;
+    let msg: string;
+    let coords: {
+        left?: number;
+        top?: number;
+    } = {};
     let showTs = 0;
 
-    function calcCoords(elem) {
+    function calcCoords(elem: HTMLElement) {
         const bbox = elem.getBoundingClientRect();
 
         return {
@@ -35,8 +38,8 @@
         showTs = Date.now();
     };
 
-    function onWindowClick(event) {
-        if (Date.now() - showTs > 1000 && event.target && popup && !popup.contains(event.target)) {
+    function onWindowClick(event: MouseEvent) {
+        if (Date.now() - showTs > 1000 && event.target && popup && event.target instanceof Element && !popup.contains(event.target)) {
             visible = false;
         }
     }
@@ -63,6 +66,7 @@
             {msg}
         </div>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
         <div class="pointing-popup__close" on:click={onCloseClick}></div>
     </div>
 {/if}

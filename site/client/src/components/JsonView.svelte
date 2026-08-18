@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from 'svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
 
     export let name = '';
     export let comma = false;
@@ -28,11 +28,13 @@
                 {#if expanded}
                     <div class="json-view__row">
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
                         <div class="json-view__collapse" on:click={() => expanded = false} title={$l10n('collapse')}></div>
                         {'['}
                     </div>
                 {:else}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div class="json-view__toggler" on:click={() => expanded = true} title={$l10n('expand')}>
                         {`[ ${json.length} item${json.length > 1 ? 's' : ''} ]`}
                     </div>
@@ -41,11 +43,13 @@
                 {#if expanded}
                     <div class="json-view__row">
                         <!-- svelte-ignore a11y-click-events-have-key-events -->
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
                         <div class="json-view__collapse" on:click={() => expanded = false} title={$l10n('collapse')}></div>
                         {'{'}
                     </div>
                 {:else}
                     <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <div class="json-view__toggler" on:click={() => expanded = true}>
                         {'{...}'}
                     </div>

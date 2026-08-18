@@ -174,6 +174,7 @@
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div class="tree" tabindex="0" on:keydown={onKeydown} bind:this={rootNode}>
     {#if showRoot}
         <TreeLeafView leaf={root} on:selected={onChildSelect} on:hovered={onChildHover} />

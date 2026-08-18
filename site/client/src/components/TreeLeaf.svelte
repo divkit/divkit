@@ -2,7 +2,7 @@
     import { createEventDispatcher, getContext } from 'svelte';
     import type { TreeContext, TreeLeaf } from '../ctx/tree';
     import { TREE_CTX } from '../ctx/tree';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
 
     export let leaf: TreeLeaf;
     export let level = 0;
@@ -52,6 +52,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
     class="tree-leaf"
     class:tree-leaf_alternate-hovered={alternateHover}

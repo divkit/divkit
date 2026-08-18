@@ -70,6 +70,7 @@
 </script>
 
 <div class="structure-box">
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div class="structure-box__part structure-box__part_margin" class:structure-box__part_highlight={$highlightPart & 1} on:mouseenter={onMouseEnter} on:mouseleave={onMouseLeave}>
         <div class="structure-box__title">margin</div>
         <div class="structure-box__val structure-box__val_top">{margin.top}</div>

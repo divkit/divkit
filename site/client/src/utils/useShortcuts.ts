@@ -1,5 +1,5 @@
 import type Shortcut from './shortcut';
-import { globalHandler, Handler } from './keybinder';
+import { globalHandler, type Handler } from './keybinder';
 
 export type ShortcutList = [Shortcut, Handler, number?][];
 

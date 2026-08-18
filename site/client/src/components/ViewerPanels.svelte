@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getContext } from 'svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
     import { panelErrors, panelStructure } from '../data/panels';
     import type { ViewerError } from '../data/externalViewers';
     import ErrorView from './ErrorView.svelte';

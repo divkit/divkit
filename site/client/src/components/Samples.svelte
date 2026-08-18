@@ -1,19 +1,18 @@
 <script lang="ts">
     import PanelHeader from './PanelHeader.svelte';
     import { getContext } from 'svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
     import type { TreeLeaf } from '../ctx/tree';
     import { savedStore } from '../data/savedStore';
     import { editorMode } from '../data/editorMode';
     import { initialValueStore, valueStore } from '../data/valueStore';
     import Tree from './Tree.svelte';
     import { sampleWarningStore } from '../data/sampleWarningStore';
+    import { wrapJson } from '../utils/divjson';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
-    const samples = require.context('../../../../test_data/samples/', true, /^\.\/.*$/, 'lazy-once');
-
-    const promise = samples(samples.keys()[0]);
+    const promise = import('../utils/testData');
 
     let tree: TreeLeaf = {
         id: 'root',
@@ -44,53 +43,42 @@
         });
     }
 
-    const keys = samples.keys();
-    keys.forEach(key => {
-        const trimmedKey = key.replace(/^\.\//, '').replace(/\.json$/, '');
+    promise.then(({
+        samples,
+    }) => {
+        const samplesKeys = Object.keys(samples);
+        samplesKeys.forEach(key => {
+            const trimmedKey = key.replace(/^.*?\/test_data\//, '').replace(/\.json$/, '');
 
-        if (!trimmedKey.endsWith('/templates')) {
-            appendKey(key, trimmedKey);
-        }
+            if (!trimmedKey.endsWith('/templates')) {
+                appendKey(key, trimmedKey);
+            }
+        });
     });
 
     function treeGetText(leaf: TreeLeaf): string {
         return leaf.props.name;
     }
 
-    function onSelectionChange(event: CustomEvent<TreeLeaf | null>) {
+    async function onSelectionChange(event: CustomEvent<TreeLeaf | null>) {
         if (!$savedStore && !confirm('Unsaved changes will be lost. Continue?')) {
             return;
         }
 
+        const { samples } = await promise;
+
         const key = event.detail?.props.key;
         if (key) {
-            const templatesKey = key.replace(/\/[^/]+\.json/, '/templates.json');
-            const jsonPromise = samples(key);
-            const templatesPromise = keys.includes(templatesKey) ? samples(templatesKey) : Promise.resolve(null);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const card = (samples[key] as any).default;
+            let json = wrapJson(card);
 
-            Promise.all([jsonPromise, templatesPromise]).then(([card, templates]) => {
-                let json;
+            editorMode.set('json');
+            const value = JSON.stringify(json, null, 4);
+            initialValueStore.set(value);
+            valueStore.set(value);
 
-                if (card.card) {
-                    json = card;
-                } else if (templates) {
-                    json = {
-                        card,
-                        templates
-                    };
-                } else {
-                    json = {
-                        card
-                    };
-                }
-
-                editorMode.set('json');
-                const value = JSON.stringify(json, null, 4);
-                initialValueStore.set(value);
-                valueStore.set(value);
-
-                sampleWarningStore.set(key.includes('base/size_units'));
-            });
+            sampleWarningStore.set(key.includes('base/size_units'));
         }
     }
 </script>

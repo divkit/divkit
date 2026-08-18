@@ -1,7 +1,7 @@
 <script lang="ts">
     import Header from './Header.svelte';
     import { getContext } from 'svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 </script>

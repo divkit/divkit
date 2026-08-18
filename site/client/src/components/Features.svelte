@@ -4,7 +4,7 @@
     import { compareVersions } from '../utils/compareVersions';
     import FeaturesText from './FeaturesText.svelte';
     import Spoiler from './Spoiler.svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
 
     interface FeatureCompat {
         version_added?: string;
@@ -25,10 +25,13 @@
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
-    const compatData = require.context('../../../../compat_data/', false, /\.json$/);
+    const compatData = import.meta.glob('@divkit/compat_data/**/*.json', {
+        eager: true
+    });
     const features: Feature[] = [];
-    compatData.keys().forEach(key => {
-        const json = compatData(key);
+    Object.keys(compatData).forEach(key => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const json = (compatData[key] as any).default;
         features.push(...json.features);
     });
 

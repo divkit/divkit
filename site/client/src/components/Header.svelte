@@ -1,7 +1,7 @@
 <script lang="ts">
     import {getContext} from 'svelte';
     import LanguageSelector from './LanguageSelector.svelte';
-    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import { LANGUAGE_CTX, type LanguageContext } from '../data/languageContext';
     import LinksPopup from './LinksPopup.svelte';
     import { isFeatures } from '../data/session';
 

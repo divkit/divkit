@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { ComponentType } from 'svelte';
+    import type { Component } from 'svelte';
 
     export let components: {
-        component: ComponentType;
+        component: Component;
         weight: number;
         minWidth?: number;
     }[];
@@ -58,6 +58,7 @@
 <div class="split-view">
     {#each components as item, index (item.component)}
         {#if index > 0}
+            <!-- svelte-ignore a11y_no_static_element_interactions -->
             <div class="split-view__splitter" on:pointerdown|preventDefault={event => onPointerdown(event, index - 1)}></div>
         {/if}
         <div
