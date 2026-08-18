@@ -60,7 +60,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
     }
 
     override fun bindView(
-        customView: View,
+        view: View,
         div: DivCustom,
         divView: Div2View,
         expressionResolver: ExpressionResolver,
@@ -68,12 +68,12 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
     ) {
         when(div.customType) {
             NEW_CUSTOM_CONTAINER_1, NESTED_SCROLL_VIEW -> {
-                if (div.items != null && customView is ViewGroup) {
-                    if (div.items!!.size != customView.childCount) {
+                if (div.items != null && view is ViewGroup) {
+                    if (div.items!!.size != view.childCount) {
                         throw IllegalStateException("Custom view childCount not equal to div child count! Div type is ${div.customType}")
                     }
                     for (i in div.items!!.indices) {
-                        val childDivView = customView.getChildAt(i)
+                        val childDivView = view.getChildAt(i)
                         val childDiv = div.items!![i]
                         getDivChildFactory(divView).bindChildView(
                             childDivView,
@@ -87,12 +87,12 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
                 }
             }
             else -> {
-                if (customView.parent != null) {
-                    (customView as? Chronometer)?.bind()
+                if (view.parent != null) {
+                    (view as? Chronometer)?.bind()
                     return
                 }
-                Handler (Looper.getMainLooper()).post {
-                    (customView as? Chronometer)?.bind()
+                Handler(Looper.getMainLooper()).post {
+                    (view as? Chronometer)?.bind()
                 }
             }
         }

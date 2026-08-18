@@ -5,7 +5,7 @@ import androidx.annotation.RequiresApi
 import java.util.WeakHashMap
 
 internal class SynchronizedWeakHashMap<K: Any, N: Any>: WeakHashMap<K, N>() {
-    private val lock = Object()
+    private val lock = Any()
 
     override val entries: MutableSet<MutableMap.MutableEntry<K, N>>
         get() = synchronized(lock) { super.entries }

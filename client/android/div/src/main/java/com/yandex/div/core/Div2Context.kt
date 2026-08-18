@@ -192,6 +192,7 @@ class Div2Context @MainThread private constructor(
             RESET_BITMAP_EFFECT_CACHE
         ]
     )
+    @Retention(AnnotationRetention.SOURCE)
     annotation class ResetFlag
 
     companion object {

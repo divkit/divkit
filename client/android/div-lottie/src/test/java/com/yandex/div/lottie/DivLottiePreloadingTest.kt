@@ -1,6 +1,5 @@
 package com.yandex.div.lottie
 
-import android.widget.ImageView
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.images.DivImageDownloadCallback
@@ -16,7 +15,6 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import javax.inject.Inject
 
 @RunWith(RobolectricTestRunner::class)
 class DivLottiePreloadUrlCapturingTest {
@@ -29,8 +27,11 @@ class DivLottiePreloadUrlCapturingTest {
         )
 
         val urls = preloadAndCollectUrls(loadDivData())
-        Assert.assertArrayEquals("Actual preload urls: $urls",
-            uniqueUrls.sorted().toTypedArray(), urls.sorted().toTypedArray())
+        Assert.assertArrayEquals(
+            "Actual preload urls: $urls",
+            uniqueUrls.sorted().toTypedArray(),
+            urls.sorted().toTypedArray()
+        )
     }
 
     private fun loadDivData(): DivData {
@@ -69,16 +70,17 @@ private fun preloadAndCollectUrls(divData: DivData): Set<String> {
     return urls
 }
 
-private val DivLoadReferenceStub = LoadReference {}
+private class NoOpDivImageLoader : DivImageLoader {
 
-private class NoOpDivImageLoader @Inject constructor() : DivImageLoader {
+    override fun loadImage(
+        imageUrl: String,
+        callback: DivImageDownloadCallback
+    ): LoadReference = LoadReference {}
 
-    override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference = DivLoadReferenceStub
-
-    override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference = DivLoadReferenceStub
-
-    override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference =
-        DivLoadReferenceStub
+    override fun loadAnimatedImage(
+        imageUrl: String,
+        callback: DivImageDownloadCallback
+    ): LoadReference = LoadReference {}
 }
 
 private const val DIV_JSON = """

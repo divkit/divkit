@@ -1,4 +1,5 @@
 import com.yandex.div.gradle.FileExtensions
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -45,7 +46,7 @@ allprojects {
     configurations.configureEach {
         resolutionStrategy {
             eachDependency { details ->
-                if (details.requested.group == "com.christophsturm" &&  details.requested.name == "filepeek") {
+                if (details.requested.group == "com.christophsturm" && details.requested.name == "filepeek") {
                     details.useVersion "0.1.3"
                 }
             }
@@ -54,13 +55,20 @@ allprojects {
 
     tasks.withType(KotlinCompile).configureEach {
         compilerOptions {
-            freeCompilerArgs.addAll(
-                    "-Xjvm-default=all",
-                    "-Xannotation-default-target=param-property",
-                    "-opt-in=com.yandex.div.data.DivModelInternalApi",
-                    "-opt-in=com.yandex.div.core.annotations.InternalApi",
-                    "-opt-in=com.yandex.div.core.annotations.ExperimentalApi",
+            apiVersion = KotlinVersion.KOTLIN_2_2
+            languageVersion = KotlinVersion.KOTLIN_2_2
+
+            jvmTarget = JvmTarget.fromTarget(libs.versions.jvm.toolchain.get())
+            jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
+
+            optIn.addAll(
+                    "com.yandex.div.core.annotations.ExperimentalApi",
+                    "com.yandex.div.core.annotations.InternalApi",
+                    "com.yandex.div.data.DivModelInternalApi",
             )
+
+            freeCompilerArgs.add("-Xannotation-default-target=param-property")
+
             if (name.toLowerCase().contains("release")) {
                 freeCompilerArgs.addAll(
                         "-Xno-param-assertions",
@@ -69,9 +77,6 @@ allprojects {
                         "-Xno-source-debug-extension",
                 )
             }
-            languageVersion = KotlinVersion.KOTLIN_2_2
-            apiVersion = KotlinVersion.KOTLIN_2_2
-            jvmTarget = JvmTarget.fromTarget(libs.versions.jvm.toolchain.get())
         }
     }
 }
@@ -96,16 +101,16 @@ subprojects {
 
 apiValidation {
     ignoredProjects += [
-        "api-generator-test",
-        "divkit-benchmark-app",
-        "divkit-demo-app",
-        "divkit-perftests",
-        "divkit-regression-testing",
-        "lint-rules",
-        "sample",
-        "screenshot-test-runtime",
-        "test-utils",
-        "ui-test-common",
+            "api-generator-test",
+            "divkit-benchmark-app",
+            "divkit-demo-app",
+            "divkit-perftests",
+            "divkit-regression-testing",
+            "lint-rules",
+            "sample",
+            "screenshot-test-runtime",
+            "test-utils",
+            "ui-test-common",
     ]
     ignoredPackages += ["com.yandex.div.internal"]
     nonPublicMarkers += [

@@ -38,6 +38,6 @@ public class ExoPlayerCache(private val context: Context) {
 
     private companion object {
         private var _simpleCache: SimpleCache? = null
-        private val lock = Object()
+        private val lock = Any()
     }
 }

@@ -16,7 +16,7 @@ internal class PrimitiveResourceCache(baseResources: Resources) : ResourcesWrapp
 
     // Optimization to minimize TypedValue allocations (taken from Resources implementation).
     private var tmpValue: TypedValue? = TypedValue()
-    private val tmpValueLock = Object()
+    private val tmpValueLock = Any()
 
     @Throws(NotFoundException::class)
     override fun getBoolean(id: Int): Boolean =

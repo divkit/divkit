@@ -18,7 +18,7 @@ import javax.inject.Inject
 /**
  * DivCustomContainerChildFactory used to create div views in [DivCustomContainerViewAdapter]
  */
-class DivCustomContainerChildFactory @Inject internal constructor (){
+class DivCustomContainerChildFactory @Inject internal constructor() {
 
     /**
      * Call to create child div view. And then call ViewGroup.addView by yourself!
@@ -38,7 +38,6 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
      * Call to create child div view. And then call bindChildView and ViewGroup.addView by yourself!
      */
     @AnyThread
-    @JvmOverloads
     fun createUnboundChildView(
         div: Div,
         divStatePath: DivStatePath,
@@ -47,7 +46,6 @@ class DivCustomContainerChildFactory @Inject internal constructor (){
     ) = divView.div2Component.div2Builder.createView(div, expressionResolver, divStatePath, divView)
 
     @AnyThread
-    @JvmOverloads
     fun createUnboundChildView(
         div: Div,
         divStatePath: DivStatePath,

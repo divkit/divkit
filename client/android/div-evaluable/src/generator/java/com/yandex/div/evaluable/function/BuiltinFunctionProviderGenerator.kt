@@ -1,5 +1,6 @@
 package com.yandex.div.evaluable.function
 
+import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
@@ -46,11 +47,13 @@ object BuiltinFunctionProviderGenerator {
     private fun prepareTypeSpec(): TypeSpec =
         TypeSpec.objectBuilder("GeneratedBuiltinFunctionProvider")
             .addSuperinterface(FunctionProvider::class)
-            .addFunctions(listOf(
-                prepareGetFunction(nameAndFunctions, SignatureType.Function),
-                prepareGetFunction(nameAndMethods, SignatureType.Method),
-                prepareWarmUpFunction()
-            ))
+            .addFunctions(
+                listOf(
+                    prepareGetFunction(nameAndFunctions, SignatureType.Function),
+                    prepareGetFunction(nameAndMethods, SignatureType.Method),
+                    prepareWarmUpFunction()
+                )
+            )
             .build()
 
     private fun prepareGetFunction(
@@ -140,6 +143,11 @@ object BuiltinFunctionProviderGenerator {
         }
 
         return FunSpec.builder("warmUp")
+            .addAnnotation(
+                AnnotationSpec.builder(Suppress::class)
+                    .addMember("%S", "UnusedExpression")
+                    .build()
+            )
             .addCode(code.build())
             .build()
     }

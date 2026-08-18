@@ -109,14 +109,14 @@ internal class BindingDispatcherTest {
      * looper, so we drive it forward with [ShadowLooper.runUiThreadTasksIncludingDelayedTasks].
      */
     @Test(timeout = 5_000)
-    fun `withLock inside onComplete executes its block — proves transferToCurrentThread happened`() {
+    fun `withLock inside onComplete executes its block - proves transferToCurrentThread happened`() {
         val blockThread = AtomicReference<Thread>()
         val onCompleteThread = AtomicReference<Thread>()
-        val reentrantOutcome = AtomicReference<String>("not-set")
+        val reentrantOutcome = AtomicReference("not-set")
         val reentrantBlockRan = AtomicInteger(0)
         val onCompleteRan = CountDownLatch(1)
 
-        dispatcher.runOnBindingThread<Unit>(
+        dispatcher.runOnBindingThread(
             onComplete = { _ ->
                 onCompleteThread.set(Thread.currentThread())
 
@@ -173,7 +173,7 @@ internal class BindingDispatcherTest {
         val successes = AtomicInteger(0)
         val done = CountDownLatch(1)
 
-        dispatcher.runOnBindingThread<Unit>(
+        dispatcher.runOnBindingThread(
             onComplete = { _ ->
                 repeat(3) {
                     dispatcher.withLock(fallback = false) {
@@ -207,7 +207,7 @@ internal class BindingDispatcherTest {
     fun `runOnBindingThread without onComplete releases lock from binding thread`() {
         val ran = CountDownLatch(1)
 
-        dispatcher.runOnBindingThread<Unit>(onComplete = null) {
+        dispatcher.runOnBindingThread(onComplete = null) {
             ran.countDown()
         }
 
@@ -237,15 +237,15 @@ internal class BindingDispatcherTest {
         val firstPendingTaskFinished = CountDownLatch(1)
         val secondDispatcherTaskFinished = CountDownLatch(1)
 
-        firstDispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+        firstDispatcher.runOnBindingThread(onComplete = {}) {
             firstBackgroundPhaseFinished.countDown()
         }
         assertTrue(firstBackgroundPhaseFinished.await(2, TimeUnit.SECONDS))
 
-        firstDispatcher.runOnBindingThread<Unit> {
+        firstDispatcher.runOnBindingThread {
             firstPendingTaskFinished.countDown()
         }
-        secondDispatcher.runOnBindingThread<Unit> {
+        secondDispatcher.runOnBindingThread {
             secondDispatcherTaskFinished.countDown()
         }
 
@@ -265,16 +265,16 @@ internal class BindingDispatcherTest {
         val firstBackgroundPhaseFinished = CountDownLatch(1)
         val allTasksFinished = CountDownLatch(1)
 
-        dispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+        dispatcher.runOnBindingThread(onComplete = {}) {
             executionOrder += 1
             firstBackgroundPhaseFinished.countDown()
         }
         assertTrue(firstBackgroundPhaseFinished.await(2, TimeUnit.SECONDS))
 
-        dispatcher.runOnBindingThread<Unit> {
+        dispatcher.runOnBindingThread {
             executionOrder += 2
         }
-        dispatcher.runOnBindingThread<Unit> {
+        dispatcher.runOnBindingThread {
             executionOrder += 3
             allTasksFinished.countDown()
         }
@@ -306,12 +306,11 @@ internal class BindingDispatcherTest {
             } else {
                 throw RejectedExecutionException("rejected")
             }
-            Unit
         }.whenever(rejectedExecutor).execute(any())
 
-        rejectedDispatcher.runOnBindingThread<Unit> { Unit }
+        rejectedDispatcher.runOnBindingThread {}
         repeat(pendingTaskCount) {
-            rejectedDispatcher.runOnBindingThread<Unit>(onError = { errorCount.incrementAndGet() }) { Unit }
+            rejectedDispatcher.runOnBindingThread(onError = { errorCount.incrementAndGet() }) {}
         }
 
         firstTask.get().run()
@@ -334,14 +333,14 @@ internal class BindingDispatcherTest {
 
         val cancelledRuns = AtomicInteger()
         repeat(100) {
-            dispatcher.runOnBindingThread<Unit> {
+            dispatcher.runOnBindingThread {
                 cancelledRuns.incrementAndGet()
             }
         }
 
         val otherDispatcher = BindingDispatcher(divView, BindingCriticalSection(), executor)
         val otherRun = CountDownLatch(1)
-        otherDispatcher.runOnBindingThread<Unit> {
+        otherDispatcher.runOnBindingThread {
             otherRun.countDown()
         }
 
@@ -365,7 +364,7 @@ internal class BindingDispatcherTest {
         val deferredRuns = AtomicInteger()
         val completionRuns = AtomicInteger()
 
-        dispatcher.runOnBindingThread<Unit>(onComplete = { completionRuns.incrementAndGet() }) {
+        dispatcher.runOnBindingThread(onComplete = { completionRuns.incrementAndGet() }) {
             dispatcher.runMainThreadAction { deferredRuns.incrementAndGet() }
             backgroundStarted.countDown()
             releaseBackground.await()
@@ -397,7 +396,7 @@ internal class BindingDispatcherTest {
         val errorCallbackRuns = AtomicInteger()
         doAnswer { errorLogged.countDown() }.whenever(divView).logError(expectedError)
 
-        dispatcher.runOnBindingThread<Unit>(onError = { errorCallbackRuns.incrementAndGet() }) {
+        dispatcher.runOnBindingThread(onError = { errorCallbackRuns.incrementAndGet() }) {
             backgroundStarted.countDown()
             try {
                 releaseBackground.await()

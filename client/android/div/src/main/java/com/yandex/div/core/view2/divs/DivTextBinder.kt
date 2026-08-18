@@ -159,7 +159,6 @@ internal class DivTextBinder @Inject constructor(
             DivAlignmentHorizontal.RIGHT -> TextView.TEXT_ALIGNMENT_VIEW_END
             DivAlignmentHorizontal.START -> TextView.TEXT_ALIGNMENT_VIEW_START
             DivAlignmentHorizontal.END -> TextView.TEXT_ALIGNMENT_VIEW_END
-            else -> TextView.TEXT_ALIGNMENT_VIEW_START
         }
     }
 
@@ -338,10 +337,9 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun TextView.applyUnderline(underline: DivLineStyle) {
-        when (underline) {
-            DivLineStyle.SINGLE -> paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
-            DivLineStyle.NONE -> paintFlags = paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
-            else -> Unit
+        paintFlags = when (underline) {
+            DivLineStyle.SINGLE -> paintFlags or Paint.UNDERLINE_TEXT_FLAG
+            DivLineStyle.NONE -> paintFlags and Paint.UNDERLINE_TEXT_FLAG.inv()
         }
     }
 
@@ -370,10 +368,9 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun TextView.applyStrikethrough(strikethrough: DivLineStyle) {
-        when (strikethrough) {
-            DivLineStyle.SINGLE -> paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-            DivLineStyle.NONE -> paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-            else -> Unit
+        paintFlags = when (strikethrough) {
+            DivLineStyle.SINGLE -> paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            DivLineStyle.NONE -> paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
         }
     }
 

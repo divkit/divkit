@@ -2,7 +2,6 @@ package com.yandex.div.lottie
 
 import android.content.Context
 import android.os.Looper
-import android.widget.ImageView
 import androidx.test.core.app.ApplicationProvider
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.model.LottieCompositionCache
@@ -243,12 +242,15 @@ private val StubLoadReference = LoadReference {}
 
 private class StubImageLoader : DivImageLoader {
 
-    override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference = StubLoadReference
+    override fun loadImage(
+        imageUrl: String,
+        callback: DivImageDownloadCallback
+    ): LoadReference = StubLoadReference
 
-    override fun loadImage(imageUrl: String, imageView: ImageView): LoadReference = StubLoadReference
-
-    override fun loadImageBytes(imageUrl: String, callback: DivImageDownloadCallback): LoadReference =
-        StubLoadReference
+    override fun loadAnimatedImage(
+        imageUrl: String,
+        callback: DivImageDownloadCallback
+    ): LoadReference = StubLoadReference
 }
 
 private const val PIXEL_PNG_BASE64 =

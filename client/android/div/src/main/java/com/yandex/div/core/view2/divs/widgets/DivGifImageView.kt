@@ -31,9 +31,9 @@ internal open class DivGifImageView @JvmOverloads constructor(
         gifUrl = null
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        onBoundsChanged(w, h)
+    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight)
+        onBoundsChanged(width, height)
     }
 
     override fun draw(canvas: Canvas) {
