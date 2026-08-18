@@ -31,6 +31,7 @@ import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.json.expressions.isConstant
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoScale
 import java.util.concurrent.ExecutorService
@@ -62,65 +63,70 @@ internal class DivVideoBinder @Inject constructor(
         div: DivVideo,
         resolver: ExpressionResolver,
         divView: Div2View,
-    ) = divView.runMainThreadAction {
+    ) {
         val source = div.createSource(resolver)
         val config = div.createConfig(resolver)
+        val preview = div.preview?.evaluate(resolver)
 
-        if (source.isEmpty() && div.playerSettingsPayload == null) {
-            divView.logSourceError(div)
-        }
-
-        val currentPlayerView = getPlayerView()
-        var currentPreviewView: PreviewImageView? = null
-
-        for (i in 0 until childCount) {
-            val childView = getChildAt(i)
-            if (childView is PreviewImageView) {
-                currentPreviewView = childView
-                break
+        divView.runMainThreadAction {
+            val currentSource = if (div.hasDynamicSource()) div.createSource(resolver) else source
+            val currentConfig = if (div.hasDynamicConfig()) div.createConfig(resolver) else config
+            if (currentSource.isEmpty() && div.playerSettingsPayload == null) {
+                divView.logSourceError(div)
             }
-        }
 
-        val playerView = currentPlayerView ?: playerFactory.makePlayerView(context).apply {
-            // We won't show black video square before preview is rendered
-            visibility = View.INVISIBLE
-        }
+            val currentPlayerView = getPlayerView()
+            var currentPreviewView: PreviewImageView? = null
 
-        val previewImageView: PreviewImageView = currentPreviewView ?: PreviewImageView(context)
-
-        div.applyPreview(resolver) { preview ->
-            preview?.let {
-                with(previewImageView) {
-                    when (it) {
-                        is ImageRepresentation.PictureDrawable -> setImageDrawable(it.value)
-                        is ImageRepresentation.Bitmap -> setImageBitmap(it.value)
-                        is ImageRepresentation.Error -> {
-                            divView.logWarning(it.value)
-                            return@let
-                        }
-                    }
-                    visibility = View.VISIBLE
+            for (i in 0 until childCount) {
+                val childView = getChildAt(i)
+                if (childView is PreviewImageView) {
+                    currentPreviewView = childView
+                    break
                 }
             }
-            playerView.visibility = View.VISIBLE
-        }
 
-        val player = playerFactory.makePlayer(source, config).apply {
-            addObserver(createObserver(div, resolver, divView, previewImageView))
-            playerView.attach(this)
-        }
+            val playerView = currentPlayerView ?: playerFactory.makePlayerView(context).apply {
+                // We won't show black video square before preview is rendered
+                visibility = View.INVISIBLE
+            }
 
-        observeElapsedTime(div, resolver, divView, player)
-        observeMuted(div, resolver, player)
-        observePlaybackSpeed(div, resolver, player)
-        observeScale(div, resolver, playerView, previewImageView)
-        observeSource(div, resolver, player, divView)
+            val previewImageView: PreviewImageView = currentPreviewView ?: PreviewImageView(context)
 
-        if (currentPreviewView == null && currentPlayerView == null) {
-            removeAllViews()
+            applyPreview(preview) { decodedPreview ->
+                decodedPreview?.let {
+                    with(previewImageView) {
+                        when (it) {
+                            is ImageRepresentation.PictureDrawable -> setImageDrawable(it.value)
+                            is ImageRepresentation.Bitmap -> setImageBitmap(it.value)
+                            is ImageRepresentation.Error -> {
+                                divView.logWarning(it.value)
+                                return@let
+                            }
+                        }
+                        visibility = View.VISIBLE
+                    }
+                }
+                playerView.visibility = View.VISIBLE
+            }
 
-            addView(playerView)
-            addView(previewImageView)
+            val player = playerFactory.makePlayer(currentSource, currentConfig).apply {
+                addObserver(createObserver(div, resolver, divView, previewImageView))
+                playerView.attach(this)
+            }
+
+            observeElapsedTime(div, resolver, divView, player)
+            observeMuted(div, resolver, player)
+            observePlaybackSpeed(div, resolver, player)
+            observeScale(div, resolver, playerView, previewImageView)
+            observeSource(div, resolver, player, divView)
+
+            if (currentPreviewView == null && currentPlayerView == null) {
+                removeAllViews()
+
+                addView(playerView)
+                addView(previewImageView)
+            }
         }
     }
 
@@ -289,12 +295,10 @@ internal class DivVideoBinder @Inject constructor(
         return disposable
     }
 
-    private fun DivVideo.applyPreview(
-        resolver: ExpressionResolver,
+    private fun applyPreview(
+        base64String: String?,
         onPreviewDecoded: (ImageRepresentation?) -> Unit,
     ) {
-        val base64String = preview?.evaluate(resolver)
-
         if (base64String == null) {
             onPreviewDecoded(null)
             return
@@ -313,6 +317,23 @@ internal class DivVideoBinder @Inject constructor(
         payload = playerSettingsPayload?.evaluate(resolver),
         playbackSpeed = playbackSpeed.evaluate(resolver).toFloat(),
     )
+
+    private fun DivVideo.hasDynamicSource(): Boolean {
+        return videoSources?.any { source ->
+            !source.url.isConstant() ||
+                !source.mimeType.isConstant() ||
+                source.bitrate?.isConstant() == false ||
+                source.resolution?.let { !it.width.isConstant() || !it.height.isConstant() } == true
+        } == true
+    }
+
+    private fun DivVideo.hasDynamicConfig(): Boolean {
+        return !autostart.isConstant() ||
+            !muted.isConstant() ||
+            !repeatable.isConstant() ||
+            playerSettingsPayload?.isConstant() == false ||
+            !playbackSpeed.isConstant()
+    }
 
     private fun Div2View.logSourceError(div: DivVideo) {
         logError(Throwable(

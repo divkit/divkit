@@ -1960,6 +1960,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivStateBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivStateBinderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivSwitchBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivSwitchBinderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivTextBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivTextBinderTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivVideoBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivVideoBinderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivViewMocks.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivViewMocks.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/Expected.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/Expected.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/FocusClickSynthesizerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/FocusClickSynthesizerTest.kt",
