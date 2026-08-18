@@ -1,0 +1,75 @@
+{
+  "description": "Shape with modern background_color/stroke properties",
+  "platforms": [
+    "web",
+    "android",
+    "ios"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 70
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "slider",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "thumb_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "background_color": "#ff0000",
+              "stroke": {
+                "width": 5,
+                "color": "#00ff00"
+              },
+              "item_width": {
+                "type": "fixed",
+                "value": 28
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 28
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 14
+              }
+            }
+          },
+          "thumb_value_variable": "slider_variable",
+          "track_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "background_color": "#000000"
+            }
+          },
+          "track_active_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "background_color": "#0000ff"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

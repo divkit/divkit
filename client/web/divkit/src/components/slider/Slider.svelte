@@ -41,10 +41,10 @@
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { composeAccessibilityDescription } from '../../utils/composeAccessibilityDescription';
     import { fillTicks } from '../../utils/slider';
+    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import Outer from '../utilities/Outer.svelte';
     import DevtoolHolder from '../utilities/DevtoolHolder.svelte';
-  import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
-  import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
 
     export let componentContext: ComponentContext<DivSliderData>;
     export let layoutParams: LayoutParams | undefined = undefined;
