@@ -1,7 +1,12 @@
 ## 32.61.1
 
 # Android Client:
+* Added `backdrop-effect` extension. It allows you to apply various graphic effects to the view backdrop.
+* Added configurable strict view reuse for item-builder elements.
 * Fixed `PicassoDivImageLoader` ignoring the user-configured `OkHttpClient` when loading bitmap images.
+* Fixed gallery update after an `item_builder` change.
+* Fixed stale `item_builder` subscriptions after view rebind.
+* Structurally equal JSON variable values no longer trigger redundant change notifications.
 
 # iOS Client:
 * Fixed gallery scroll offset reset to zero when content size shrinks.
