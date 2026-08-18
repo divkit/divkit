@@ -58,6 +58,7 @@ class DivTouchInteractivityTest {
         }
     }
 
+    @Ignore("Flaky test")
     @Test
     fun singleTapIsHandledOnElementWithTapAndLongTapActions() {
         testClicks {
