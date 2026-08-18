@@ -90,7 +90,9 @@ internal inline fun LinearContainer(
     renderSpacing: @Composable () -> Unit,
     renderItem: @Composable (Div) -> Unit,
 ) {
-    if (separatorVisibility.showAtStart && separator != null) {
+    val hasItems = items.isNotEmpty()
+
+    if (hasItems && separatorVisibility.showAtStart && separator != null) {
         renderSeparator(separator)
     }
 
@@ -106,7 +108,7 @@ internal inline fun LinearContainer(
         }
     }
 
-    if (separatorVisibility.showAtEnd && separator != null) {
+    if (hasItems && separatorVisibility.showAtEnd && separator != null) {
         renderSeparator(separator)
     }
 }
