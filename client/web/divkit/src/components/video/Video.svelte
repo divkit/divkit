@@ -169,7 +169,9 @@
 
     $: loop = correctBooleanInt($jsonRepeatable, loop);
 
-    $: autoplay = correctBooleanInt($jsonAutostart, autoplay);
+    $: autoplay = componentContext.videoPlaybackState === 'start' || (
+        componentContext.videoPlaybackState !== 'pause' && correctBooleanInt($jsonAutostart, autoplay)
+    );
 
     $: muted = correctBooleanInt($jsonMuted, muted);
 
@@ -235,7 +237,12 @@
     }
 
     // Video will not start after autoplay set in setData, do it manually
-    $: if (componentContext.json && $jsonAutostart && videoElem) {
+    $: if (
+        componentContext.json &&
+        componentContext.videoPlaybackState !== 'pause' &&
+        $jsonAutostart &&
+        videoElem
+    ) {
         start();
     }
 
@@ -293,6 +300,11 @@
                     shouldUseVideoProvider = false;
                 }
             }
+        }
+
+        const playbackState = componentContext.videoPlaybackState;
+        if (playbackState === 'start' || playbackState === 'pause') {
+            ({ start, pause })[playbackState]();
         }
     });
 

@@ -125,6 +125,16 @@
         const crossplatformJson = params.get('crossplatform_json');
         const resultType = params.get('result_type');
 
+        if (params.get('mock_video_playback') === 'true') {
+            HTMLMediaElement.prototype.play = function () {
+                this.setAttribute('data-mock-playback-state', 'playing');
+                return Promise.resolve();
+            };
+            HTMLMediaElement.prototype.pause = function () {
+                this.setAttribute('data-mock-playback-state', 'paused');
+            };
+        }
+
         function getJson(json) {
             return fetch(json)
                 .then(res => res.json());

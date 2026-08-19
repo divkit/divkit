@@ -6,6 +6,7 @@ import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.timer.DivTimerEventDispatcherProvider
 import com.yandex.div.core.view2.DivVisibilityActionDispatcher
+import com.yandex.div.core.view2.DivViewStateStoreImpl
 import com.yandex.div.core.view2.divs.DivLayoutProviderBinder
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.yatagan.BindsInstance
@@ -27,6 +28,7 @@ internal interface DivDataComponent {
     val tabsStateCache: TabsStateCache
     val timerEventDispatcherProvider: DivTimerEventDispatcherProvider
     val visibilityActionDispatcher: DivVisibilityActionDispatcher
+    val viewStateStore: DivViewStateStoreImpl
 
     @Component.Builder
     interface Builder {

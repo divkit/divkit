@@ -22,11 +22,14 @@ import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerFactory
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivPlayerView
+import com.yandex.div.core.player.DivVideoPlaybackState
 import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
+import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.DivVideoViewState
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.internal.core.DivBlock
@@ -52,25 +55,26 @@ internal class DivVideoBinder @Inject constructor(
         oldDivBlock: DivBlock.Video?,
         divView: Div2View,
     ) {
-        applyVideo(divBlock.divValue, divBlock.expressionResolver, divView)
+        applyVideo(divBlock.divValue, divBlock.expressionResolver, divBlock.path, divView)
         bindAspectRatio(divBlock.divValue.aspect, oldDivBlock?.divValue?.aspect, divBlock.expressionResolver)
     }
 
     fun loadVideo(view: DivVideoView, divBlock: DivBlock.Video, divView: Div2View) =
-        view.applyVideo(divBlock.divValue, divBlock.expressionResolver, divView)
+        view.applyVideo(divBlock.divValue, divBlock.expressionResolver, divBlock.path, divView)
 
     private fun DivVideoView.applyVideo(
         div: DivVideo,
         resolver: ExpressionResolver,
+        path: DivStatePath,
         divView: Div2View,
     ) {
         val source = div.createSource(resolver)
-        val config = div.createConfig(resolver)
+        val config = div.createConfig(resolver, path, divView)
         val preview = div.preview?.evaluate(resolver)
 
         divView.runMainThreadAction {
             val currentSource = if (div.hasDynamicSource()) div.createSource(resolver) else source
-            val currentConfig = if (div.hasDynamicConfig()) div.createConfig(resolver) else config
+            val currentConfig = if (div.hasDynamicConfig()) div.createConfig(resolver, path, divView) else config
             if (currentSource.isEmpty() && div.playerSettingsPayload == null) {
                 divView.logSourceError(div)
             }
@@ -118,8 +122,9 @@ internal class DivVideoBinder @Inject constructor(
             observeElapsedTime(div, resolver, divView, player)
             observeMuted(div, resolver, player)
             observePlaybackSpeed(div, resolver, player)
+            observePlaybackState(path, divView, player)
             observeScale(div, resolver, playerView, previewImageView)
-            observeSource(div, resolver, player, divView)
+            observeSource(div, resolver, path, player, divView)
 
             if (currentPreviewView == null && currentPlayerView == null) {
                 removeAllViews()
@@ -220,6 +225,22 @@ internal class DivVideoBinder @Inject constructor(
         )
     }
 
+    private fun DivVideoView.observePlaybackState(
+        path: DivStatePath,
+        divView: Div2View,
+        player: DivPlayer,
+    ) {
+        addVideoSubscription(
+            divView.viewStateStore.observe(path.fullPath) { state ->
+                val playbackState = (state as? DivVideoViewState)?.playbackState ?: return@observe
+                when (playbackState) {
+                    DivVideoPlaybackState.PLAYING -> player.play()
+                    DivVideoPlaybackState.PAUSED -> player.pause()
+                }
+            }
+        )
+    }
+
     private fun DivVideoView.observeScale(
         div: DivVideo,
         resolver: ExpressionResolver,
@@ -237,6 +258,7 @@ internal class DivVideoBinder @Inject constructor(
     private fun DivVideoView.observeSource(
         div: DivVideo,
         resolver: ExpressionResolver,
+        path: DivStatePath,
         player: DivPlayer,
         divView: Div2View,
     ) {
@@ -245,13 +267,13 @@ internal class DivVideoBinder @Inject constructor(
                 if (it.isEmpty() && div.playerSettingsPayload == null) {
                     divView.logSourceError(div)
                 }
-                player.setSource(it, div.createConfig(resolver))
+                player.setSource(it, div.createConfig(resolver, path, divView))
             }
         )
         div.playerSettingsPayload?.let { payload ->
             addVideoSubscription(
                 payload.observe(resolver) {
-                    player.setSource(div.createSource(resolver), div.createConfig(resolver))
+                    player.setSource(div.createSource(resolver), div.createConfig(resolver, path, divView))
                 }
             )
         }
@@ -310,13 +332,23 @@ internal class DivVideoBinder @Inject constructor(
 
     private fun DivVideo.createConfig(
         resolver: ExpressionResolver,
-    ) = DivPlayerPlaybackConfig(
-        autoplay = autostart.evaluate(resolver),
-        isMuted = muted.evaluate(resolver),
-        repeatable = repeatable.evaluate(resolver),
-        payload = playerSettingsPayload?.evaluate(resolver),
-        playbackSpeed = playbackSpeed.evaluate(resolver).toFloat(),
-    )
+        path: DivStatePath,
+        divView: Div2View,
+    ): DivPlayerPlaybackConfig {
+        val defaultPlaybackState =
+            if (autostart.evaluate(resolver)) DivVideoPlaybackState.PLAYING else DivVideoPlaybackState.PAUSED
+        val playbackState = divView.viewStateStore.getOrPut(path.fullPath) {
+            DivVideoViewState(defaultPlaybackState)
+        } as? DivVideoViewState
+
+        return DivPlayerPlaybackConfig(
+            autoplay = (playbackState?.playbackState ?: defaultPlaybackState) == DivVideoPlaybackState.PLAYING,
+            isMuted = muted.evaluate(resolver),
+            repeatable = repeatable.evaluate(resolver),
+            payload = playerSettingsPayload?.evaluate(resolver),
+            playbackSpeed = playbackSpeed.evaluate(resolver).toFloat(),
+        )
+    }
 
     private fun DivVideo.hasDynamicSource(): Boolean {
         return videoSources?.any { source ->

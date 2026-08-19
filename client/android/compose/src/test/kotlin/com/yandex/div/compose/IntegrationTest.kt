@@ -109,6 +109,7 @@ private class Reporter(private val logger: IntegrationTestLogger) : DivReporter(
 }
 
 private val ignoredFiles = listOf(
+    "action_before_bind.json",
     "decl_expressions_item_builder.json",
     "decl_expressions_item_builder_override.json",
     "item_builder_variable_triggers.json",

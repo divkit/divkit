@@ -189,7 +189,8 @@ class Div2Context @MainThread private constructor(
             RESET_ERROR_COLLECTORS,
             RESET_SELECTED_STATES,
             RESET_VISIBILITY_COUNTERS,
-            RESET_BITMAP_EFFECT_CACHE
+            RESET_BITMAP_EFFECT_CACHE,
+            RESET_VIEW_STATES
         ]
     )
     @Retention(AnnotationRetention.SOURCE)
@@ -201,12 +202,14 @@ class Div2Context @MainThread private constructor(
         const val RESET_SELECTED_STATES = 1 shl 2
         const val RESET_VISIBILITY_COUNTERS = 1 shl 3
         const val RESET_BITMAP_EFFECT_CACHE = 1 shl 4
+        const val RESET_VIEW_STATES = 1 shl 5
 
         internal const val RESET_ALL = RESET_EXPRESSION_RUNTIMES and
             RESET_ERROR_COLLECTORS and
             RESET_SELECTED_STATES and
             RESET_VISIBILITY_COUNTERS and
-            RESET_BITMAP_EFFECT_CACHE
+            RESET_BITMAP_EFFECT_CACHE and
+            RESET_VIEW_STATES
     }
 
     private class Div2InflaterFactory(

@@ -149,6 +149,7 @@ class Div2View private constructor(
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldRuntimeStore.resolver
     internal var runtimeStore: RuntimeStore = RuntimeStore.EMPTY
+    internal var viewStateStore: DivViewStateStore = DivViewStateStore.EMPTY
     internal var inMiddleOfBind = false
 
     internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
@@ -219,6 +220,7 @@ class Div2View private constructor(
         oldRuntimeStore = runtimeStore
         dataComponent = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
         runtimeStore = dataComponent.runtimeStoreProvider.getOrCreate(data, this)
+        viewStateStore = dataComponent.viewStateStore
         runtimeStore.updateSubscriptions()
         if (oldRuntimeStore != runtimeStore) {
             oldRuntimeStore?.clearBindings(this)
@@ -233,6 +235,7 @@ class Div2View private constructor(
         oldRuntimeStore = runtimeStore
         runtimeStore = RuntimeStore.EMPTY
         dataComponent = div2Component.dataComponentStore.getOrPut("", div2Component)
+        viewStateStore = DivViewStateStore.EMPTY
         dataTag = DivDataTag.INVALID
     }
 

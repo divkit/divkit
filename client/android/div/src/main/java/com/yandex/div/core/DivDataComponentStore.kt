@@ -6,6 +6,7 @@ import com.yandex.div.core.Div2Context.Companion.RESET_ERROR_COLLECTORS
 import com.yandex.div.core.Div2Context.Companion.RESET_EXPRESSION_RUNTIMES
 import com.yandex.div.core.Div2Context.Companion.RESET_SELECTED_STATES
 import com.yandex.div.core.Div2Context.Companion.RESET_VISIBILITY_COUNTERS
+import com.yandex.div.core.Div2Context.Companion.RESET_VIEW_STATES
 import com.yandex.div.core.Div2Context.ResetFlag
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.DivDataComponent
@@ -54,6 +55,9 @@ internal class DivDataComponentStore @Inject constructor() {
     private fun DivDataComponent.reset(@ResetFlag flags: Int) {
         if (flags and RESET_EXPRESSION_RUNTIMES != 0) {
             runtimeStoreProvider.reset()
+        }
+        if (flags and RESET_VIEW_STATES != 0) {
+            viewStateStore.reset()
         }
         if (flags and RESET_ERROR_COLLECTORS != 0) {
             errorCollectors.reset()

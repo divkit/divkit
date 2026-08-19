@@ -1243,6 +1243,44 @@
         }
     }
 
+    function callVideoAction(
+        scope: ComponentContext,
+        id: string | null | undefined,
+        action: string | null | undefined,
+        isScopeFound: boolean
+    ): void {
+        if (!id || (action !== 'start' && action !== 'pause')) {
+            return;
+        }
+
+        const found = new Set<ComponentContext>();
+        const walk = (context: ComponentContext) => {
+            if (context.children) {
+                for (const child of context.children) {
+                    walk(child);
+                }
+            }
+            if (context.id === id && context.json.type === 'video' && !context.fakeElement) {
+                found.add(context);
+            }
+        };
+        walk(scope);
+
+        if (found.size === 1) {
+            const target = [...found][0];
+            target.videoPlaybackState = action;
+            target.getViewInfo('video')?.[action]();
+        } else if (found.size > 1) {
+            scope.logError(wrapError(new Error(`Element with id '${id}' is ambiguous${isScopeFound ? ' in scope' : ''}`), {
+                additional: {
+                    count: found.size
+                }
+            }));
+        } else {
+            scope.logError(wrapError(new Error(`Element with id '${id}' not found${isScopeFound ? ' in scope' : ''}`)));
+        }
+    }
+
     function findAnimator(
         scope: ComponentContext,
         animatorId: string,
@@ -1580,13 +1618,7 @@
                     break;
                 }
                 case 'video': {
-                    const target = findComponentContextWithInfo(scopeContext, actionTyped.id, 'video', isScopeFound);
-                    if (target) {
-                        const info = target.getViewInfo('video');
-                        if (info && (actionTyped.action === 'start' || actionTyped.action === 'pause')) {
-                            info[actionTyped.action]();
-                        }
-                    }
+                    callVideoAction(scopeContext, actionTyped.id, actionTyped.action, isScopeFound);
                     break;
                 }
                 case 'set_stored_value': {
@@ -1739,14 +1771,7 @@
                         }
                         break;
                     case 'video': {
-                        const target = findComponentContextWithInfo(scopeContext, params.get('id'), 'video', isScopeFound);
-                        const action = params.get('action');
-                        if (target) {
-                            const info = target.getViewInfo('video');
-                            if (info && (action === 'start' || action === 'pause')) {
-                                info[action]();
-                            }
-                        }
+                        callVideoAction(scopeContext, params.get('id'), params.get('action'), isScopeFound);
                         break;
                     }
                     case 'download':

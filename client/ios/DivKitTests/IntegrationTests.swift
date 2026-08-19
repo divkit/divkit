@@ -64,6 +64,21 @@ private func runTest(_ testData: IntegrationTestData) async {
   )
 
   let divView = DivView(divKitComponents: divkitComponents)
+  let window: UIWindow?
+  if testData.divData?.containsVideo == true {
+    let testWindow = UIWindow(frame: UIScreen.main.bounds)
+    let viewController = UIViewController()
+    testWindow.rootViewController = viewController
+    divView.frame = testWindow.bounds
+    divView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    viewController.view.addSubview(divView)
+    testWindow.makeKeyAndVisible()
+    window = testWindow
+  } else {
+    window = nil
+  }
+  defer { window?.isHidden = true }
+
   await divView.setSource(
     DivViewSource(
       kind: .divData(testData.divData ?? emptyDivData),
@@ -79,6 +94,12 @@ private func runTest(_ testData: IntegrationTestData) async {
       sender: nil
     )
   }
+  divView.layoutIfNeeded()
+
+  await waitForExpectedVariables(
+    testCase.expected,
+    in: divkitComponents.variablesStorage
+  )
 
   let task = Task { @MainActor in
     for item in testCase.expected {
@@ -122,6 +143,34 @@ private func runTest(_ testData: IntegrationTestData) async {
   }
 
   await task.value
+}
+
+@MainActor
+private func waitForExpectedVariables(
+  _ expected: [Expected],
+  in storage: DivVariablesStorage
+) async {
+  let variables = expected.compactMap { item -> (String, ExpectedValue)? in
+    if case let .variable(name, value) = item {
+      return (name, value)
+    }
+    return nil
+  }
+  guard !variables.isEmpty else { return }
+
+  for _ in 0..<expectedVariablesWaitAttempts {
+    let variablesMatch = variables.allSatisfy { name, expectedValue in
+      let actualValue = storage.getVariableValue(
+        cardId: cardId,
+        name: DivVariableName(rawValue: name)
+      )
+      return expectedValue.matches(actualValue)
+    }
+    if variablesMatch {
+      return
+    }
+    try? await Task.sleep(nanoseconds: expectedVariablesPollingIntervalNanoseconds)
+  }
 }
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
@@ -205,6 +254,21 @@ private struct IntegrationTestCase: Decodable {
   let platforms: [Platform]
 }
 
+private extension DivData {
+  var containsVideo: Bool {
+    states.contains { $0.div.containsVideo }
+  }
+}
+
+private extension Div {
+  var containsVideo: Bool {
+    if case .divVideo = self {
+      return true
+    }
+    return children.contains { $0.containsVideo }
+  }
+}
+
 private enum Expected: Decodable {
   case variable(String, ExpectedValue)
   case error(String)
@@ -281,6 +345,18 @@ extension DivData: Swift.Decodable {
 }
 
 extension ExpectedValue {
+  fileprivate func matches(_ actualValue: DivVariableValue?) -> Bool {
+    if case let .unorderedArray(expectedArray) = self {
+      let actualArray: DivArray? = if case let .array(array) = actualValue {
+        array
+      } else {
+        nil
+      }
+      return expectedArray.isEqualUnordered(actualArray)
+    }
+    return divVariableValue == actualValue
+  }
+
   fileprivate var divVariableValue: DivVariableValue? {
     switch self {
     case let .string(value):
@@ -349,6 +425,8 @@ private func makeDefault(_ value: ExpectedValue) -> DivVariableValue? {
 }
 
 private let cardId: DivCardID = "test_card"
+private let expectedVariablesWaitAttempts = 30
+private let expectedVariablesPollingIntervalNanoseconds: UInt64 = 100_000_000
 
 private var emptyDivData: DivData {
   DivData(

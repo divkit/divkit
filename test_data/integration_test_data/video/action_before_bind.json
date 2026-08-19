@@ -1,0 +1,191 @@
+{
+  "description": "A pause action sent before a gallery video is bound must override autostart.",
+  "div_data": {
+    "card": {
+      "log_id": "video_action_before_bind",
+      "variables": [
+        {
+          "name": "paused_video_started",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "autostart_video_started",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "video_failed",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "gallery",
+            "id": "gallery",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "fixed",
+              "value": 180
+            },
+            "items": [
+              { "type": "text", "text": "0", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "1", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "2", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "3", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "4", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "5", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "6", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "7", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "8", "width": { "type": "fixed", "value": 320 } },
+              { "type": "text", "text": "9", "width": { "type": "fixed", "value": 320 } },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 180
+                },
+                "items": [
+                  {
+                    "type": "video",
+                    "id": "paused_video",
+                    "width": {
+                      "type": "fixed",
+                      "value": 160
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 180
+                    },
+                    "video_sources": [
+                      {
+                        "type": "video_source",
+                        "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                        "mime_type": "video/mp4"
+                      }
+                    ],
+                    "autostart": true,
+                    "muted": true,
+                    "resume_actions": [
+                      {
+                        "log_id": "paused_video_started",
+                        "url": "div-action://set_variable?name=paused_video_started&value=true"
+                      }
+                    ],
+                    "fatal_actions": [
+                      {
+                        "log_id": "paused_video_failed",
+                        "url": "div-action://set_variable?name=video_failed&value=true"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "video",
+                    "id": "autostart_video",
+                    "width": {
+                      "type": "fixed",
+                      "value": 160
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 180
+                    },
+                    "video_sources": [
+                      {
+                        "type": "video_source",
+                        "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                        "mime_type": "video/mp4"
+                      }
+                    ],
+                    "autostart": true,
+                    "muted": true,
+                    "resume_actions": [
+                      {
+                        "log_id": "autostart_video_started",
+                        "url": "div-action://set_variable?name=autostart_video_started&value=true"
+                      }
+                    ],
+                    "fatal_actions": [
+                      {
+                        "log_id": "autostart_video_failed",
+                        "url": "div-action://set_variable?name=video_failed&value=true"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "mock_video_playback": true,
+      "div_actions": [
+        {
+          "log_id": "pause_unbound_video",
+          "typed": {
+            "type": "video",
+            "id": "paused_video",
+            "action": "pause"
+          }
+        },
+        {
+          "log_id": "scroll_to_video",
+          "typed": {
+            "type": "scroll_to",
+            "id": "gallery",
+            "animated": false,
+            "destination": {
+              "type": "index",
+              "value": 10
+            }
+          }
+        }
+      ],
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "autostart_video_started",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "paused_video_started",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        },
+        {
+          "type": "variable",
+          "variable_name": "video_failed",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

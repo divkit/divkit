@@ -27,8 +27,17 @@ class IntegrationTestCase(
         class Variable(
             val name: String,
             val type: String,
-            private val value: Any
+            private val value: Any,
         ) : ExpectedResult {
+            fun matches(expressionResolver: ExpressionResolver): Boolean {
+                val actualValue = expressionResolver.getVariable(name)?.getValue()
+                return if (type == "array" || type == "dict" || type == "url") {
+                    value.toString() == actualValue.toString()
+                } else {
+                    value == actualValue
+                }
+            }
+
             fun check(expressionResolver: ExpressionResolver) {
                 val actualValue = expressionResolver.getVariable(name)?.getValue()
                 if (type == "array" || type == "dict" || type == "url") {
@@ -125,6 +134,14 @@ class IntegrationTestCase(
             }
         }
     }
+
+    val hasExpectedVariables: Boolean
+        get() = expectedResults.any { it is ExpectedResult.Variable }
+
+    fun areExpectedVariablesReady(expressionResolver: ExpressionResolver): Boolean =
+        expectedResults
+            .filterIsInstance<ExpectedResult.Variable>()
+            .all { it.matches(expressionResolver) }
 }
 
 private fun createVariable(type: String, name: String): Variable {

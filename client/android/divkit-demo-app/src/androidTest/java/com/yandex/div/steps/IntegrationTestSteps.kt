@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
@@ -18,15 +19,19 @@ import com.yandex.div.glide.GlideDivImageLoader
 import com.yandex.div.test.crossplatform.IntegrationTestCase
 import com.yandex.div.test.crossplatform.IntegrationTestLogger
 import com.yandex.div.utils.contentView
+import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div.view.ViewAssertions.notExistOrDisplayed
 import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div2.DivData
+import com.yandex.test.idling.SimpleIdlingResource
+import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.performOnMain
 import com.yandex.test.util.runOnMainSync
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
+import java.util.concurrent.TimeUnit
 
 internal fun integration(case: IntegrationTestCase, activity: Activity, block: IntegrationTestSteps.() -> Unit) =
     block(IntegrationTestSteps(case, activity))
@@ -48,6 +53,7 @@ class IntegrationTestSteps(private val case: IntegrationTestCase, private val ac
         runOnMainSync {
             val config = DivConfiguration.Builder(GlideDivImageLoader(activity))
                 .divErrorsReporter(ErrorReporter(case.logger))
+                .divPlayerFactory(ExoDivPlayerFactory(activity))
                 .build()
             val context = Div2Context(activity, config)
 
@@ -62,8 +68,28 @@ class IntegrationTestSteps(private val case: IntegrationTestCase, private val ac
     }
 
     fun checkResult(): Unit = step("Check expected result") {
+        if (case.hasExpectedVariables) {
+            waitForExpectedVariables()
+        }
         val resolver = performOnMain { divView.expressionResolver }
         case.checkResult(resolver, ::checkView)
+    }
+
+    private fun waitForExpectedVariables() {
+        val previousPolicy = IdlingPolicies.getDynamicIdlingResourceErrorPolicy()
+        IdlingPolicies.setIdlingResourceTimeout(VARIABLE_WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        try {
+            waitForIdlingResource(object : SimpleIdlingResource(
+                pollingIntervalMillis = VARIABLE_POLLING_INTERVAL_MS,
+                description = "Integration test expected variables",
+            ) {
+                override fun checkIdle() = performOnMain {
+                    case.areExpectedVariablesReady(divView.expressionResolver)
+                }
+            })
+        } finally {
+            IdlingPolicies.setIdlingResourceTimeout(previousPolicy.idleTimeout, previousPolicy.idleTimeoutUnit)
+        }
     }
 
     private fun checkView(view: IntegrationTestCase.ExpectedResult.View) {
@@ -91,5 +117,10 @@ class IntegrationTestSteps(private val case: IntegrationTestCase, private val ac
 
         override fun onWarning(divData: DivData?, divDataTag: DivDataTag, warning: Throwable) =
             logger.logErrorDirectly(warning)
+    }
+
+    private companion object {
+        const val VARIABLE_POLLING_INTERVAL_MS = 100L
+        const val VARIABLE_WAIT_TIMEOUT_SECONDS = 3L
     }
 }
