@@ -281,8 +281,12 @@ internal class BindingDispatcherTest {
 
         assertEquals(listOf(1), executionOrder)
 
-        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
-        assertTrue(allTasksFinished.await(2, TimeUnit.SECONDS))
+        val deadline = System.currentTimeMillis() + 2_000
+        while (allTasksFinished.count > 0 && System.currentTimeMillis() < deadline) {
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+            Thread.sleep(10)
+        }
+        assertTrue(allTasksFinished.await(0, TimeUnit.MILLISECONDS))
         assertEquals(listOf(1, 2, 3), executionOrder)
     }
 
@@ -421,5 +425,140 @@ internal class BindingDispatcherTest {
         assertEquals(0, errorCallbackRuns.get())
         assertFalse(criticalSection.isHeld)
         assertFalse(criticalSection.isReserved)
+    }
+
+    @Test(timeout = 5_000)
+    fun `coalescing keeps only the latest pending task`() {
+        val backgroundPhaseFinished = CountDownLatch(1)
+        dispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+            backgroundPhaseFinished.countDown()
+        }
+        assertTrue(backgroundPhaseFinished.await(1, TimeUnit.SECONDS))
+
+        val runs = AtomicInteger()
+        val latestValue = AtomicInteger(-1)
+        repeat(100) { value ->
+            dispatcher.runWithinBindingContext(coalescingKey = "visibility") {
+                runs.incrementAndGet()
+                latestValue.set(value)
+            }
+        }
+
+        assertEquals(0, runs.get())
+        val deadline = System.currentTimeMillis() + 1_000
+        while (runs.get() == 0 && System.currentTimeMillis() < deadline) {
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+            Thread.sleep(10)
+        }
+        assertEquals(1, runs.get())
+        assertEquals(99, latestValue.get())
+    }
+
+    @Test(timeout = 5_000)
+    fun `coalescing does not cancel an active task`() {
+        val firstTaskStarted = CountDownLatch(1)
+        val releaseFirstTask = CountDownLatch(1)
+        val latestTaskFinished = CountDownLatch(1)
+        val runs = AtomicInteger()
+        val latestValue = AtomicInteger(-1)
+
+        dispatcher.runOnBindingThread<Unit>(coalescingKey = "visibility") {
+            firstTaskStarted.countDown()
+            releaseFirstTask.await()
+            runs.incrementAndGet()
+        }
+        assertTrue(firstTaskStarted.await(1, TimeUnit.SECONDS))
+
+        repeat(100) { value ->
+            dispatcher.runOnBindingThread<Unit>(coalescingKey = "visibility") {
+                runs.incrementAndGet()
+                latestValue.set(value)
+                latestTaskFinished.countDown()
+            }
+        }
+
+        releaseFirstTask.countDown()
+        assertTrue(latestTaskFinished.await(2, TimeUnit.SECONDS))
+        assertEquals(2, runs.get())
+        assertEquals(99, latestValue.get())
+    }
+
+    @Test(timeout = 5_000)
+    fun `coalescing is isolated between dispatchers`() {
+        val sharedExecutor = BindingThreadExecutor.create("coalescing-test-binding-thread")
+        val firstDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
+        val secondDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
+        val backgroundPhasesFinished = CountDownLatch(2)
+
+        firstDispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+            backgroundPhasesFinished.countDown()
+        }
+        secondDispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+            backgroundPhasesFinished.countDown()
+        }
+        assertTrue(backgroundPhasesFinished.await(1, TimeUnit.SECONDS))
+
+        val latestTasksFinished = CountDownLatch(2)
+        val firstLatestValue = AtomicInteger(-1)
+        val secondLatestValue = AtomicInteger(-1)
+        repeat(10) { value ->
+            firstDispatcher.runWithinBindingContext(coalescingKey = "visibility") {
+                firstLatestValue.set(value)
+                latestTasksFinished.countDown()
+            }
+            secondDispatcher.runWithinBindingContext(coalescingKey = "visibility") {
+                secondLatestValue.set(value)
+                latestTasksFinished.countDown()
+            }
+        }
+
+        repeat(10) {
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+            if (latestTasksFinished.count == 0L) return@repeat
+            Thread.sleep(20)
+        }
+        assertTrue(latestTasksFinished.await(1, TimeUnit.SECONDS))
+        assertEquals(9, firstLatestValue.get())
+        assertEquals(9, secondLatestValue.get())
+    }
+
+    @Test(timeout = 5_000)
+    fun `coalescing preserves order between different operation keys`() {
+        val backgroundPhaseFinished = CountDownLatch(1)
+        val operationsFinished = CountDownLatch(2)
+        val operations = CopyOnWriteArrayList<String>()
+        dispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+            backgroundPhaseFinished.countDown()
+        }
+        assertTrue(backgroundPhaseFinished.await(1, TimeUnit.SECONDS))
+
+        dispatcher.runWithinBindingContext(coalescingKey = "discard") {
+            operations += "discard"
+            operationsFinished.countDown()
+        }
+        dispatcher.runWithinBindingContext(coalescingKey = "track") {
+            operations += "track"
+            operationsFinished.countDown()
+        }
+
+        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        assertTrue(operationsFinished.await(1, TimeUnit.SECONDS))
+        assertEquals(listOf("discard", "track"), operations)
+    }
+
+    @Test
+    fun `coalescing rejects callbacks that could be silently dropped`() {
+        var rejected = false
+
+        try {
+            dispatcher.runOnBindingThread<Unit>(
+                onComplete = {},
+                coalescingKey = "visibility",
+            ) { Unit }
+        } catch (_: IllegalArgumentException) {
+            rejected = true
+        }
+
+        assertTrue(rejected)
     }
 }

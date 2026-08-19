@@ -105,6 +105,12 @@ import com.yandex.div2.DivTransitionSelector
 import java.util.UUID
 import java.util.WeakHashMap
 
+private enum class VisibilityTrackingOperation {
+    LOG_VISIBILITY,
+    DISCARD,
+    TRACK_CHILDREN,
+}
+
 /**
  * Main entry point for building Div2s
  */
@@ -571,16 +577,20 @@ class Div2View private constructor(
         return result
     }
 
-    fun tryLogVisibility() {
+    fun tryLogVisibility(): Unit = bindingDispatcher.runWithinBindingContext(
+        VisibilityTrackingOperation.LOG_VISIBILITY
+    ) {
         val state = divData?.states?.firstOrNull { it.stateId == stateId }
         state?.let { trackStateVisibility(it) }
-        trackChildrenVisibility()
+        trackChildrenVisibilityInternal()
     }
 
     /**
      * Canceling visibility tracking.
      * */
-    fun discardVisibilityTracking(): Unit = bindingDispatcher.runWithinBindingContext {
+    fun discardVisibilityTracking(): Unit = bindingDispatcher.runWithinBindingContext(
+        VisibilityTrackingOperation.DISCARD
+    ) {
         val state = divData?.states?.firstOrNull { it.stateId == stateId }
         state?.let { discardStateVisibility(it) }
         discardChildrenVisibility()
@@ -599,7 +609,13 @@ class Div2View private constructor(
         )
     }
 
-    fun trackChildrenVisibility(): Unit = bindingDispatcher.runWithinBindingContext {
+    fun trackChildrenVisibility(): Unit = bindingDispatcher.runWithinBindingContext(
+        VisibilityTrackingOperation.TRACK_CHILDREN
+    ) {
+        trackChildrenVisibilityInternal()
+    }
+
+    private fun trackChildrenVisibilityInternal() {
         val visibilityActionTracker = div2Component.visibilityActionTracker
         val bindingsSnapshot = synchronized(viewToDivBindings) {
             viewToDivBindings.toMapSafe()

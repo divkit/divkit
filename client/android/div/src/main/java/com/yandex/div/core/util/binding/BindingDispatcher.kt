@@ -28,6 +28,7 @@ internal class BindingDispatcher @Inject constructor(
     private val mainThreadActions = mutableListOf<Action>()
     private val pendingTasksLock = Any()
     private val pendingTasks = ArrayDeque<PendingTask>()
+    private val pendingCoalescingTasks = mutableMapOf<Any, PendingTask>()
     private val bindingGeneration = AtomicInteger()
     private var activeTask: PendingTask? = null
     private var activeTaskStarted = false
@@ -41,6 +42,7 @@ internal class BindingDispatcher @Inject constructor(
         bindingGeneration.incrementAndGet()
         synchronized(pendingTasksLock) {
             pendingTasks.clear()
+            pendingCoalescingTasks.clear()
 
             val task = activeTask
             if (task != null && !activeTaskStarted && executor.remove(task.runnable)) {
@@ -57,8 +59,12 @@ internal class BindingDispatcher @Inject constructor(
     inline fun <T> runOnBindingThread(
         noinline onComplete: ((T) -> Unit)? = null,
         noinline onError: ((Throwable) -> Unit)? = null,
+        coalescingKey: Any? = null,
         crossinline block: () -> T
     ) {
+        require(coalescingKey == null || (onComplete == null && onError == null)) {
+            "Coalescing tasks must not have completion or error callbacks"
+        }
         val generation = bindingGeneration.get()
         lateinit var task: Runnable
         task = Runnable {
@@ -120,12 +126,20 @@ internal class BindingDispatcher @Inject constructor(
                 }
             }
         }
-        enqueueTask(task, onError)
+        enqueueTask(task, onError, coalescingKey)
     }
 
-    private fun enqueueTask(task: Runnable, onError: ((Throwable) -> Unit)?) {
+    private fun enqueueTask(
+        task: Runnable,
+        onError: ((Throwable) -> Unit)?,
+        coalescingKey: Any?,
+    ) {
         val nextTask = synchronized(pendingTasksLock) {
-            pendingTasks.addLast(PendingTask(task, onError))
+            val pendingTask = PendingTask(task, onError, coalescingKey)
+            if (coalescingKey != null) {
+                pendingCoalescingTasks.put(coalescingKey, pendingTask)?.let(pendingTasks::remove)
+            }
+            pendingTasks.addLast(pendingTask)
             takeNextTaskLocked()
         }
         nextTask?.let(::submitTask)
@@ -202,7 +216,13 @@ internal class BindingDispatcher @Inject constructor(
         if (activeTask != null) {
             return null
         }
-        return pendingTasks.pollFirst()?.also { activeTask = it }
+        return pendingTasks.pollFirst()?.also { task ->
+            val key = task.coalescingKey
+            if (key != null && pendingCoalescingTasks[key] === task) {
+                pendingCoalescingTasks.remove(key)
+            }
+            activeTask = task
+        }
     }
 
     private inline fun <T> collectMainThreadAction(block: () -> T): Pair<T, List<Action>> {
@@ -260,10 +280,11 @@ internal class BindingDispatcher @Inject constructor(
      * If background binding in progress, executes on background binding thread.
      */
     inline fun <T> runWithinBindingContext(
+        coalescingKey: Any? = null,
         crossinline block: () -> T
     ) {
         if (isBackgroundBindingInProgress && UiThreadHandler.get().isMainThread()) {
-            runOnBindingThread(null, null, block)
+            runOnBindingThread(null, null, coalescingKey, block)
         } else {
             block()
         }
@@ -326,6 +347,7 @@ internal class BindingDispatcher @Inject constructor(
     private class PendingTask(
         val runnable: Runnable,
         val onError: ((Throwable) -> Unit)?,
+        val coalescingKey: Any?,
     ) {
         @Volatile
         var reservationThread: Thread? = null
