@@ -1,3 +1,11 @@
+## 33.0.0 (August 24, 2026)
+
+* Breaking change. The logic of `templates` has been changed to better match native platforms. The priority of template properties has been updated: properties provided at the template usage site now take precedence over those declared in the template definition.
+* Breaking change. `package.json` exports were updated to support newer Node.js versions. Node.js 14+ is now required.
+* Additional type exports can now be imported from the main package (for example from `@divkitframework/divkit` or `@divkitframework/divkit/client`).
+* Fixed an issue with the `markdown` extension when unmounting.
+
+
 ## 32.61.0 (August 3, 2026)
 
 * Added support of scoped search for elements in `submit` and `show_tooltip` / `hide_tooltip` actions (and their associated div-action:// URL actions). When scope_id is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire Div2View.
