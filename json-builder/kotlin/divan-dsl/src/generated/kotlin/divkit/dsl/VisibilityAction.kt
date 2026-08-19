@@ -21,8 +21,6 @@ import kotlin.collections.Map
  * Actions performed when an element becomes visible.
  * 
  * Can be created using the method [visibilityAction].
- * 
- * Required parameters: `log_id`.
  */
 @Generated
 @ExposedCopyVisibility

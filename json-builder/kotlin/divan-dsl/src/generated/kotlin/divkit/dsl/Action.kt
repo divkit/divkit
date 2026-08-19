@@ -21,8 +21,6 @@ import kotlin.collections.Map
  * It defines an action when clicking on an element.
  * 
  * Can be created using the method [action].
- * 
- * Required parameters: `log_id`.
  */
 @Generated
 @ExposedCopyVisibility

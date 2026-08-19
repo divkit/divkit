@@ -21,8 +21,6 @@ import kotlin.collections.Map
  * Actions performed when an element is no longer visible.
  * 
  * Can be created using the method [disappearAction].
- * 
- * Required parameters: `log_id`.
  */
 @Generated
 @ExposedCopyVisibility
