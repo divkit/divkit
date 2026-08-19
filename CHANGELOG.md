@@ -1,3 +1,71 @@
+## 33.0.0
+
+### Schema
+* `div-action.log_id` has become optional. Warning! Actions without `log_id` are ignored by the clients that use pre-33 DivKit version. Consider keeping `log_id` in the backend response for forward compatibility.
+* `div-image.image_url` and `div-gif-image.gif_url` has become optional. Warning! Images without urls are ignored by the clients that use pre-33 DivKit version. Consider keeping `image_url` / `gif_url` in the backend response for forward compatibility.
+* `div-shape-drawable.color` is deprecated and has become optional. Use `shape` property instead. Warning! Drawables without `color` are ignored by the clients that use pre-33 DivKit version. Consider keeping it in the backend response for forward compatibility.
+
+### Android Client:
+* DivKit for Compose is no longer in experimental state 🎉 🎉 🎉.
+* Migrated to Java 17 compatibility version.
+* Migrated to Kotlin 2.2 language version.
+* Migrated to Android Gradle Plugin 9.1.1.
+* Updated `minSdk` version to 23.
+* Removed deprecated `DivApi` class.
+* Removed unused `DivImagePreloader.Callback` and `DivImagePreloader.Ticket` interfaces.
+* Removed unused `ScrollPosition` enum.
+* Removed unused `UriHandler` interface.
+* Removed empty `div-json` module.
+* Removed deprecated `div-video` and `video-custom` modules. Use `div-video-m3` module instead.
+* Removed deprecated `picasso` module publication.
+* Removed `@Mockable` annotation. It was not intended for use outside DivKit.
+* Changed `DivSizeProviderVariablesHolder` class visibility to internal. It was not intended for use outside DivKit.
+* A template field declared with both a literal and a `$` reference is now resolved from the reference. The literal is kept as a default for usages that do not provide the reference source.
+* Added support for the `item_count_variable` property in `pager`.
+* Added `DivAnimationsEnabledProvider` to disable all DivKit animations at runtime (e.g. for power saving mode).
+* Added `asyncUpdatesEnabled` parameter to `DivLottieExtensionHandler` to opt out of async frame updates and inline composition preload, and `preloadScope` parameter to control the lifecycle of preload coroutines.
+* Fixed a crash in `div-custom` when a state switch was triggered while another state switch was still being bound: `bindView()` was called for an already attached custom view without `release()`/`createView()`.
+* Fixed flickering of custom views during complex rebind when the bound content is structurally unchanged.
+* Fixed jitter/wobbling in vertical pager when `infinite_scroll` is enabled.
+* Fixed visibility changes being ignored when triggered during a state transition animation.
+* Improved `lottie` extension startup performance: inline `lottie_json` compositions are now parsed and cached during preload, images embedded as base64 data URIs are decoded on a background thread instead of the main thread during the first draw, and Lottie async frame updates move keyframe evaluation off the main thread.
+* Improved fairness of asynchronous `Div2View` binding by keeping only one active task per dispatcher.
+* Stale asynchronous `Div2View` binding work is now cancelled when a view is rebound or reused.
+* Fixed a crash caused by invalid variable trigger conditions during runtime creation.
+* Moved `DivVideo` model and expression preparation off the main thread.
+* Video start and pause actions are now preserved when they are issued before the target video view is bound.
+
+### iOS Client:
+* Removed `DivLastVisibleBoundsCache` from the public API.
+* Removed `DivTooltipViewFactory` from the public API.
+* Removed `DivStoredValueScope` from the public API.
+* Removed deprecated `DivActionHandler.ShowTooltipAction` API and the `showTooltip` parameter from `DivKitComponents`. Use `TooltipActionPerformer` instead.
+* Removed deprecated `DivActionHandler.TrackVisibility` API and the `trackVisibility` and `trackDisappear` parameters from `DivKitComponents`. Use `DivReporter` instead.
+* Removed deprecated `DivActionURLHandler` API. Use `DivCardUpdateReason` instead.
+* Removed deprecated `DivTimerAction` API. Use `DivActionTimer.Action` instead.
+* Removed deprecated `DivVideoAction` API. Use `DivActionVideo.Action` instead.
+* Renamed asynchronous `TooltipActionPerformer.showTooltipAsync(info:)` to `showTooltip(info:)`.
+* Made `DivBlockProvider.id` non-optional.
+* Restricted `extractDivVariableValues` to the legacy SPI.
+* A template field declared with both a literal and a `$` reference is now resolved from the reference, matching web. The literal is kept as a default for usages that do not provide the reference source.
+* Added support for the `allow_suggestions_bar` property in the `input` component.
+* Added support for the `item_count_variable` property in `pager`.
+* Breaking change. Removed id-based APIs from `DivBlockStateStorage`: `setState(id:cardId:state:)`, `getState(_:cardId:)`, and `getStateUntyped(_:cardId:)`. Element state is now stored and looked up only by `UIElementPath`. Use `setState(path:state:)`, `getState(_:)`, and `getStateUntyped(_:)` instead. To migrate, resolve the element `id` to a `UIElementPath` (for example via the modeling context path or `IdToPath`) and call the path-based API. Elements that share the same `id` under different paths no longer share a single state slot.
+* Fixed an issue where fixed-width elements were expanded when their paddings exceeded their width.
+* Fixed flickering image on Restart tap for Rive animation (loop=oneShot).
+* Fixed incorrect cursor position in masked input after autocomplete on iOS.
+* Fixed invalid `layout_provider` variable values reported for not yet measured elements, for example while `gallery` cells are reused.
+
+### Web Client:
+* Breaking change. The logic of `templates` has been changed to better match native platforms. The priority of template properties has been updated: properties provided at the template usage site now take precedence over those declared in the template definition.
+* Breaking change. `package.json` exports were updated to support newer Node.js versions. Node.js 14+ is now required.
+* Additional type exports can now be imported from the main package (for example from `@divkitframework/divkit` or `@divkitframework/divkit/client`).
+* Fixed an issue with the `markdown` extension when unmounting.
+
+### TypeScript JSON Builder:
+* Breaking change. TypeScript was updated (4.6.4 -> 6.0.2). The heavy-duty `templateHelper` typecheck has been removed at compile time (due to limitations in newer versions of TypeScript).
+
+
 ## 32.61.1
 
 # Android Client:
