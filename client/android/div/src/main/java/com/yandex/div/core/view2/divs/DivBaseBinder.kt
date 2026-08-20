@@ -281,6 +281,7 @@ internal class DivBaseBinder @Inject constructor(
         val oldFocusBackground = oldDiv?.focus?.background ?: emptyList()
 
         if (checkEquality &&
+            underlay == boundBackgroundUnderlay &&
             newBackground.compareWith(oldBackground) { left, right -> left.equalsToConstant(right) } &&
             newFocusBackground.compareWith(oldFocusBackground) { left, right -> left.equalsToConstant(right) }) {
             return
