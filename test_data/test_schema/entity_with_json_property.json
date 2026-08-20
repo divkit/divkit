@@ -1,5 +1,10 @@
 {
   "type": "object",
+  "codegen": {
+    "swift": {
+      "template_is_public": false
+    }
+  },
   "properties": {
     "type": {
       "type": "string",

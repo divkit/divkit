@@ -14,6 +14,12 @@ private func runTest(_ data: TestData) {
     templates: data.templates,
     flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: false)
   )
+  let divTemplates = DivTemplates(dictionary: data.templates)
+  let preParsedTemplatesResult = DivData.resolve(
+    card: data.card,
+    templates: divTemplates,
+    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: false)
+  )
   let untypedResult = DivData.resolve(
     card: data.card,
     templates: data.templates,
@@ -27,12 +33,18 @@ private func runTest(_ data: TestData) {
   )
 
   assertEqual(typedResult.value, expectedResult.value)
+  assertEqual(preParsedTemplatesResult.value, expectedResult.value)
   assertEqual(untypedResult.value, expectedResult.value)
 
   XCTAssertEqual(
     typedResult.errorsOrWarnings?.count ?? 0,
     data.expectedErrorCount,
     "Expected error count does not match actual result"
+  )
+  XCTAssertEqual(
+    preParsedTemplatesResult.errorsOrWarnings?.count ?? 0,
+    typedResult.errorsOrWarnings?.count ?? 0,
+    "Pre-parsed typed templates should produce the same number of warnings/errors"
   )
   XCTAssertEqual(
     untypedResult.errorsOrWarnings?.count ?? 0,

@@ -1003,6 +1003,7 @@ class SwiftGeneratorProperties(GeneratorProperties):
         self.generate_optional_args: bool = specific_properties.get('generate_optional_arguments', True)
         self.super_protocol: Optional[str] = specific_properties.get('super_protocol')
         self.public_default_values: bool = specific_properties.get('public_default_values', False)
+        self.template_is_public: bool = specific_properties.get('template_is_public', True)
 
 
 class KotlinGeneratorProperties(GeneratorProperties):
