@@ -39,6 +39,8 @@ internal class BackdropEffectDrawable(
     private var isBackdropValid = false
     private var isBackdropCaptured = false
 
+    private val occludingViewsHider = OccludingViewsHider()
+
     private val backdropOnPreDrawListener = onPreDrawListener {
         if (isBackdropCaptured) {
             return@onPreDrawListener
@@ -53,11 +55,14 @@ internal class BackdropEffectDrawable(
         }
 
         if (view.isVisible) {
-            view.visibility = INVISIBLE
             try {
+                occludingViewsHider.hide(backdropViewProvider.collectOccludingViews())
+                view.visibility = INVISIBLE
+
                 backdropLayer.capture(backdropView)
             } finally {
                 view.visibility = VISIBLE
+                occludingViewsHider.restore()
                 isBackdropValid = true
                 isBackdropCaptured = true
             }
@@ -175,6 +180,7 @@ internal class BackdropEffectDrawable(
             removeOnScrollChangedListener(viewUpdateListener)
             removeOnDrawListener(viewUpdateListener)
         }
+        occludingViewsHider.release()
         backdropLayer.recycle()
     }
 

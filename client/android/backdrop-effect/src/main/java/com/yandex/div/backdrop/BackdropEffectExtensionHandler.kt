@@ -1,8 +1,10 @@
 package com.yandex.div.backdrop
 
+import android.os.Build
 import android.view.View
 import com.yandex.div.backdrop.model.AmbientRimHighlight
 import com.yandex.div.backdrop.model.BackdropEffect
+import com.yandex.div.backdrop.model.BackdropScope
 import com.yandex.div.backdrop.model.SpecularRimHighlight
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.view2.Div2View
@@ -49,7 +51,14 @@ import org.json.JSONException
  * - `backdrop_id` — tag of the ancestor [ViewGroup][android.view.ViewGroup] to capture as the backdrop; when omitted
  *   the nearest ancestor [Div2View] is used. The tag is looked up on the ancestors of the element up to
  *   the enclosing [Div2View], then anywhere inside that [Div2View]; a tag set above the card is out
- *   of scope.
+ *   of scope unless `backdrop_scope` says otherwise.
+ * - `backdrop_scope` — how far the lookup reaches, `"card"` (default) or `"window"`. Combined with
+ *   `backdrop_id` it lifts the card boundary, so the tag is searched in the whole window; this
+ *   works on every supported version. Without `backdrop_id` it captures everything painted below
+ *   the element in the window — including sibling [Div2View]s and plain host views — by using the
+ *   window root as the backdrop and hiding the views drawn above the element while the capture
+ *   runs; that mode requires Android 13 (API 33) and degrades to `"card"` on older versions. An
+ *   unrecognized value is a parsing error and drops the whole effect, as with `rim_highlight.type`.
  * - `blur` — `radius` (`dp`, default `0`).
  * - `refraction` — `height` and `strength` (`dp`, default `0`) and `chromatic_aberration`
  *   (default `false`).
@@ -82,7 +91,9 @@ import org.json.JSONException
  * result back into a bitmap. Cost scales with the captured view's size and complexity and is paid
  * again whenever that content invalidates. Apply it sparingly — prefer small, mostly static
  * elements and avoid attaching it to frequently redrawing or scrolling content, or to many elements
- * at once.
+ * at once. `"backdrop_scope": "window"` does not change how often the capture is taken — the
+ * observers already fire for anything happening in the window — but it makes each one record the
+ * whole window's display list and re-record every branch it hides.
  *
  * **Invalidation.** The captured content is reused until a layout pass or a scroll on the decorated
  * view or the backdrop marks it stale. Redraws of the backdrop are not tracked, so content that
@@ -112,10 +123,7 @@ class BackdropEffectExtensionHandler(
             return
         }
 
-        val backdropViewProvider = when (val backdropId = backdropEffect.backdropId) {
-            null -> DivViewBackdropViewProvider(view)
-            else -> TaggedBackdropViewProvider(view, backdropId)
-        }
+        val backdropViewProvider = createBackdropViewProvider(view, backdropEffect)
         val backdropEffectDrawable = BackdropEffectDrawable(
             view,
             backdropViewProvider,
@@ -190,6 +198,17 @@ class BackdropEffectExtensionHandler(
         }
     }
 
+    private fun createBackdropViewProvider(view: View, backdropEffect: BackdropEffect): BackdropViewProvider {
+        val backdropId = backdropEffect.backdropId
+        val isWindowScope = backdropEffect.scope == BackdropScope.WINDOW
+
+        return when {
+            backdropId != null -> TaggedBackdropViewProvider(view, backdropId, searchWholeWindow = isWindowScope)
+            isWindowScope && isWholeWindowCaptureSupported -> WindowBackdropViewProvider(view)
+            else -> DivViewBackdropViewProvider(view)
+        }
+    }
+
     private fun setCornerRadii(
         drawable: BackdropEffectDrawable,
         border: DivBorder?,
@@ -246,6 +265,14 @@ class BackdropEffectExtensionHandler(
 }
 
 private const val EXTENSION_ID = "backdrop_effect"
+
+/**
+ * Capturing the whole window redraws it off-screen on every invalidation. Below
+ * [TIRAMISU][Build.VERSION_CODES.TIRAMISU] that redraw is a software pass into a bitmap, which is
+ * too expensive to run against a whole window, so the scope degrades to the enclosing card.
+ */
+private val isWholeWindowCaptureSupported: Boolean
+    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
 private val DivBase.backdropEffectExtension: DivExtension?
     get() = extensions?.find { it.id == EXTENSION_ID }

@@ -1,5 +1,7 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.dagger.DivDataComponent
 import com.yandex.div.core.state.DivStatePath
@@ -17,6 +19,8 @@ import com.yandex.div2.DivVisibility
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
@@ -37,7 +41,8 @@ class DivBaseBinderTest {
     private val paddingsBottom2 = DivEdgeInsets(bottom = 1L.asExpression())
     private val paddingsTop = DivEdgeInsets(top = 1L.asExpression())
 
-    private val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
+    private val divBackgroundBinder = mock<DivBackgroundBinder>()
+    private val baseBinder = DivBaseBinder(divBackgroundBinder, mock(), mock(), mock(), mock())
     private val dataComponent = mock<DivDataComponent> {
         on { layoutProviderBinder } doReturn mock()
     }
@@ -86,6 +91,42 @@ class DivBaseBinderTest {
 
         verify(view).setPadding(any(), any(), any(), any())
         verify(view, atLeastOnce()).requestLayout()
+    }
+
+    @Test
+    fun `bind background of a div without background when an underlay is installed`() {
+        val div = createDiv().toBlock(resolver, path)
+        val underlay = ColorDrawable(Color.RED)
+        view.backgroundUnderlay = underlay
+
+        baseBinder.bindView(view, div, div, divView)
+
+        verify(divBackgroundBinder).bindBackground(
+            any(), any(), any(), any(), any(), any(), any(), any(), eq(underlay), anyOrNull()
+        )
+    }
+
+    @Test
+    fun `do not bind background when an overlay is bound and nothing changed`() {
+        val div = createDiv().toBlock(resolver, path)
+        view.boundBackgroundOverlay = ColorDrawable(Color.GREEN)
+
+        baseBinder.bindView(view, div, div, divView)
+
+        verify(divBackgroundBinder, never()).bindBackground(
+            any(), any(), any(), any(), any(), any(), any(), any(), anyOrNull(), anyOrNull()
+        )
+    }
+
+    @Test
+    fun `do not bind background of a div without background when nothing changed`() {
+        val div = createDiv().toBlock(resolver, path)
+
+        baseBinder.bindView(view, div, div, divView)
+
+        verify(divBackgroundBinder, never()).bindBackground(
+            any(), any(), any(), any(), any(), any(), any(), any(), anyOrNull(), anyOrNull()
+        )
     }
 
     @Test

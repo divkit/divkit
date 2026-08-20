@@ -7,6 +7,7 @@ import org.json.JSONObject
 
 internal class BackdropEffect(
     val backdropId: String? = null,
+    val scope: BackdropScope = BackdropScope.CARD,
     val blur: Blur? = null,
     val refraction: Refraction? = null,
     val rimHighlight: RimHighlight? = null,
@@ -20,6 +21,7 @@ internal class BackdropEffect(
         fun deserialize(json: JSONObject): BackdropEffect {
             return BackdropEffect(
                 backdropId = json.optionalString("backdrop_id"),
+                scope = BackdropScope.deserialize(json.optionalString("backdrop_scope") ?: BackdropScope.CARD_SCOPE),
                 blur = json.optObject("blur") { Blur.deserialize(it) },
                 refraction = json.optObject("refraction") { Refraction.deserialize(it) },
                 rimHighlight = json.optObject("rim_highlight") { RimHighlight.deserialize(it) },
