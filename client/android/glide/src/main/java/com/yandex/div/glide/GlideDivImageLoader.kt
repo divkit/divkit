@@ -6,6 +6,7 @@ import android.graphics.drawable.PictureDrawable
 import android.net.Uri
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.Option
 import com.bumptech.glide.load.Options
@@ -59,8 +60,18 @@ class GlideDivImageLoader @JvmOverloads constructor(
 
         // load result will be handled by RequestListener to get dataSource
         val requestManager = Glide.with(context)
-        requestManager.load(imageUri)
-            .set(Option.memory(KEY_SVG), SvgDecoder.isSvg(imageUrl))
+        // SVG must use a dedicated transcode class: Registry memoizes decoder lookups by
+        // (model, resourceClass, transcodeClass) and append() does not invalidate that memo,
+        // so sharing the asDrawable() key with the host app makes svgDecoder unreachable
+        // as soon as the host issues any load() before this loader is constructed.
+        val request = if (SvgDecoder.isSvg(imageUrl)) {
+            @Suppress("UNCHECKED_CAST")
+            requestManager.`as`(PictureDrawable::class.java)
+                .set(Option.memory(KEY_SVG), true) as RequestBuilder<Drawable>
+        } else {
+            requestManager.asDrawable()
+        }
+        request.load(imageUri)
             .limitImageBitmapSizeIfNeed(canLimitSize)
             .listener(ImageRequestListener(imageUrl, callback))
             .into(target)
