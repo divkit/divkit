@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [gifImage].
  * 
- * Required parameters: `type, gif_url`.
+ * Required parameters: `type`.
  */
 @Generated
 @ExposedCopyVisibility

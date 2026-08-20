@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [image].
  * 
- * Required parameters: `type, image_url`.
+ * Required parameters: `type`.
  */
 @Generated
 @ExposedCopyVisibility

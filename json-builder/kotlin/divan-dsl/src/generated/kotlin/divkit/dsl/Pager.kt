@@ -61,6 +61,7 @@ data class Pager internal constructor(
             layoutMode = additive.layoutMode ?: properties.layoutMode,
             layoutProvider = additive.layoutProvider ?: properties.layoutProvider,
             margins = additive.margins ?: properties.margins,
+            multiPageScroll = additive.multiPageScroll ?: properties.multiPageScroll,
             orientation = additive.orientation ?: properties.orientation,
             paddings = additive.paddings ?: properties.paddings,
             pageTransformation = additive.pageTransformation ?: properties.pageTransformation,
@@ -190,6 +191,11 @@ data class Pager internal constructor(
          */
         val margins: Property<EdgeInsets>?,
         /**
+         * Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
+         * Default value: `false`.
+         */
+        val multiPageScroll: Property<Boolean>?,
+        /**
          * Pager orientation.
          * Default value: `horizontal`.
          */
@@ -306,6 +312,7 @@ data class Pager internal constructor(
             result.tryPutProperty("layout_mode", layoutMode)
             result.tryPutProperty("layout_provider", layoutProvider)
             result.tryPutProperty("margins", margins)
+            result.tryPutProperty("multi_page_scroll", multiPageScroll)
             result.tryPutProperty("orientation", orientation)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("page_transformation", pageTransformation)
@@ -371,6 +378,7 @@ data class Pager internal constructor(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -420,6 +428,7 @@ fun DivScope.pager(
     layoutMode: PagerLayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
+    multiPageScroll: Boolean? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
     pageTransformation: PageTransformation? = null,
@@ -467,6 +476,7 @@ fun DivScope.pager(
         layoutMode = valueOrNull(layoutMode),
         layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
+        multiPageScroll = valueOrNull(multiPageScroll),
         orientation = valueOrNull(orientation),
         paddings = valueOrNull(paddings),
         pageTransformation = valueOrNull(pageTransformation),
@@ -516,6 +526,7 @@ fun DivScope.pager(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -565,6 +576,7 @@ fun DivScope.pagerProps(
     layoutMode: PagerLayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
+    multiPageScroll: Boolean? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
     pageTransformation: PageTransformation? = null,
@@ -611,6 +623,7 @@ fun DivScope.pagerProps(
     layoutMode = valueOrNull(layoutMode),
     layoutProvider = valueOrNull(layoutProvider),
     margins = valueOrNull(margins),
+    multiPageScroll = valueOrNull(multiPageScroll),
     orientation = valueOrNull(orientation),
     paddings = valueOrNull(paddings),
     pageTransformation = valueOrNull(pageTransformation),
@@ -659,6 +672,7 @@ fun DivScope.pagerProps(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -708,6 +722,7 @@ fun TemplateScope.pagerRefs(
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
+    multiPageScroll: ReferenceProperty<Boolean>? = null,
     orientation: ReferenceProperty<Pager.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pageTransformation: ReferenceProperty<PageTransformation>? = null,
@@ -754,6 +769,7 @@ fun TemplateScope.pagerRefs(
     layoutMode = layoutMode,
     layoutProvider = layoutProvider,
     margins = margins,
+    multiPageScroll = multiPageScroll,
     orientation = orientation,
     paddings = paddings,
     pageTransformation = pageTransformation,
@@ -802,6 +818,7 @@ fun TemplateScope.pagerRefs(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -851,6 +868,7 @@ fun Pager.override(
     layoutMode: PagerLayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
+    multiPageScroll: Boolean? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
     pageTransformation: PageTransformation? = null,
@@ -898,6 +916,7 @@ fun Pager.override(
         layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
         layoutProvider = valueOrNull(layoutProvider) ?: properties.layoutProvider,
         margins = valueOrNull(margins) ?: properties.margins,
+        multiPageScroll = valueOrNull(multiPageScroll) ?: properties.multiPageScroll,
         orientation = valueOrNull(orientation) ?: properties.orientation,
         paddings = valueOrNull(paddings) ?: properties.paddings,
         pageTransformation = valueOrNull(pageTransformation) ?: properties.pageTransformation,
@@ -947,6 +966,7 @@ fun Pager.override(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -996,6 +1016,7 @@ fun Pager.defer(
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
+    multiPageScroll: ReferenceProperty<Boolean>? = null,
     orientation: ReferenceProperty<Pager.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pageTransformation: ReferenceProperty<PageTransformation>? = null,
@@ -1043,6 +1064,7 @@ fun Pager.defer(
         layoutMode = layoutMode ?: properties.layoutMode,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
+        multiPageScroll = multiPageScroll ?: properties.multiPageScroll,
         orientation = orientation ?: properties.orientation,
         paddings = paddings ?: properties.paddings,
         pageTransformation = pageTransformation ?: properties.pageTransformation,
@@ -1092,6 +1114,7 @@ fun Pager.defer(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -1141,6 +1164,7 @@ fun Pager.modify(
     layoutMode: Property<PagerLayoutMode>? = null,
     layoutProvider: Property<LayoutProvider>? = null,
     margins: Property<EdgeInsets>? = null,
+    multiPageScroll: Property<Boolean>? = null,
     orientation: Property<Pager.Orientation>? = null,
     paddings: Property<EdgeInsets>? = null,
     pageTransformation: Property<PageTransformation>? = null,
@@ -1188,6 +1212,7 @@ fun Pager.modify(
         layoutMode = layoutMode ?: properties.layoutMode,
         layoutProvider = layoutProvider ?: properties.layoutProvider,
         margins = margins ?: properties.margins,
+        multiPageScroll = multiPageScroll ?: properties.multiPageScroll,
         orientation = orientation ?: properties.orientation,
         paddings = paddings ?: properties.paddings,
         pageTransformation = pageTransformation ?: properties.pageTransformation,
@@ -1220,6 +1245,7 @@ fun Pager.modify(
  * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -1237,6 +1263,7 @@ fun Pager.evaluate(
     crossAxisAlignment: ExpressionProperty<Pager.ItemAlignment>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
     infiniteScroll: ExpressionProperty<Boolean>? = null,
+    multiPageScroll: ExpressionProperty<Boolean>? = null,
     orientation: ExpressionProperty<Pager.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     reuseId: ExpressionProperty<String>? = null,
@@ -1269,6 +1296,7 @@ fun Pager.evaluate(
         layoutMode = properties.layoutMode,
         layoutProvider = properties.layoutProvider,
         margins = properties.margins,
+        multiPageScroll = multiPageScroll ?: properties.multiPageScroll,
         orientation = orientation ?: properties.orientation,
         paddings = properties.paddings,
         pageTransformation = properties.pageTransformation,
@@ -1318,6 +1346,7 @@ fun Pager.evaluate(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -1367,6 +1396,7 @@ fun Component<Pager>.override(
     layoutMode: PagerLayoutMode? = null,
     layoutProvider: LayoutProvider? = null,
     margins: EdgeInsets? = null,
+    multiPageScroll: Boolean? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
     pageTransformation: PageTransformation? = null,
@@ -1415,6 +1445,7 @@ fun Component<Pager>.override(
         layoutMode = valueOrNull(layoutMode),
         layoutProvider = valueOrNull(layoutProvider),
         margins = valueOrNull(margins),
+        multiPageScroll = valueOrNull(multiPageScroll),
         orientation = valueOrNull(orientation),
         paddings = valueOrNull(paddings),
         pageTransformation = valueOrNull(pageTransformation),
@@ -1464,6 +1495,7 @@ fun Component<Pager>.override(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -1513,6 +1545,7 @@ fun Component<Pager>.defer(
     layoutMode: ReferenceProperty<PagerLayoutMode>? = null,
     layoutProvider: ReferenceProperty<LayoutProvider>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
+    multiPageScroll: ReferenceProperty<Boolean>? = null,
     orientation: ReferenceProperty<Pager.Orientation>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     pageTransformation: ReferenceProperty<PageTransformation>? = null,
@@ -1561,6 +1594,7 @@ fun Component<Pager>.defer(
         layoutMode = layoutMode,
         layoutProvider = layoutProvider,
         margins = margins,
+        multiPageScroll = multiPageScroll,
         orientation = orientation,
         paddings = paddings,
         pageTransformation = pageTransformation,
@@ -1593,6 +1627,7 @@ fun Component<Pager>.defer(
  * @param crossAxisAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
  * @param infiniteScroll Enables infinite scrolling of cards. Scrolling is looped: after the last card is displayed, it starts over again.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
@@ -1610,6 +1645,7 @@ fun Component<Pager>.evaluate(
     crossAxisAlignment: ExpressionProperty<Pager.ItemAlignment>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
     infiniteScroll: ExpressionProperty<Boolean>? = null,
+    multiPageScroll: ExpressionProperty<Boolean>? = null,
     orientation: ExpressionProperty<Pager.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     reuseId: ExpressionProperty<String>? = null,
@@ -1643,6 +1679,7 @@ fun Component<Pager>.evaluate(
         layoutMode = null,
         layoutProvider = null,
         margins = null,
+        multiPageScroll = multiPageScroll,
         orientation = orientation,
         paddings = null,
         pageTransformation = null,
@@ -1692,6 +1729,7 @@ fun Component<Pager>.evaluate(
  * @param layoutMode Type of calculation of the main page width:<li>`fixed` — from the fixed width of the next page `neighbour_page_width`;</li><li>`percentage` — from the percentage value `page_width`.</li>
  * @param layoutProvider Provides data on the actual size of the element.
  * @param margins External margins from the element stroke.
+ * @param multiPageScroll Enables or disables the ability to scroll more than one pager page with a single swipe. Doesn't affect programmatic scrolling.
  * @param orientation Pager orientation.
  * @param paddings Internal margins from the element stroke.
  * @param pageTransformation Page transformation during pager scrolling.
@@ -1741,6 +1779,7 @@ fun Component<Pager>.modify(
     layoutMode: Property<PagerLayoutMode>? = null,
     layoutProvider: Property<LayoutProvider>? = null,
     margins: Property<EdgeInsets>? = null,
+    multiPageScroll: Property<Boolean>? = null,
     orientation: Property<Pager.Orientation>? = null,
     paddings: Property<EdgeInsets>? = null,
     pageTransformation: Property<PageTransformation>? = null,
@@ -1789,6 +1828,7 @@ fun Component<Pager>.modify(
         layoutMode = layoutMode,
         layoutProvider = layoutProvider,
         margins = margins,
+        multiPageScroll = multiPageScroll,
         orientation = orientation,
         paddings = paddings,
         pageTransformation = pageTransformation,
