@@ -18,6 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
+import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
@@ -238,6 +239,65 @@ class DivStateBinderTest: DivBinderTest() {
         assertNotNull(stateLayout.swipeOutCallback)
         assertEquals(1, stateLayout.childCount)
         verify(divView).bindViewToDiv(stateLayout.getChildAt(0), newData.value.states[0].div!!)
+    }
+
+    @Test
+    fun `nested switch to target state during binding does not rebind child of previous state`() {
+        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        val oldChild = stateLayout.getChildAt(0)
+        clearInvocations(viewCreator, viewBinder)
+
+        switchToState("second")
+        var reentered = false
+        doAnswer {
+            if (!reentered) {
+                reentered = true
+                stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+            }
+            it.callRealMethod()
+        }.whenever(viewCreator).create(any(), any())
+
+        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+
+        verify(viewBinder, never()).bind(any(), eq(oldChild), any(), any())
+        assertEquals(pathToState("second"), stateLayout.currentStatePath)
+        assertEquals(1, stateLayout.childCount)
+    }
+
+    @Test
+    fun `nested state switch during binding is deferred and applied after current pass`() {
+        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        clearInvocations(viewCreator, viewBinder)
+
+        var target = "second"
+        whenever(stateManager.getState(div.value, divView, resolver, path = "0/state_container")) doAnswer { target }
+        var nestedSwitchDone = false
+        whenever(viewBinder.bind(any(), any(), any(), any())) doAnswer {
+            if (!nestedSwitchDone) {
+                nestedSwitchDone = true
+                target = "first"
+                stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+            }
+        }
+
+        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+
+        assertEquals(pathToState("first"), stateLayout.currentStatePath)
+        assertEquals(1, stateLayout.childCount)
+    }
+
+    @Test
+    fun `endless nested state switching is interrupted and reported`() {
+        var target = "second"
+        whenever(stateManager.getState(div.value, divView, resolver, path = "0/state_container")) doAnswer { target }
+        whenever(viewBinder.bind(any(), any(), any(), any())) doAnswer {
+            target = if (target == "second") "first" else "second"
+            stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+        }
+
+        stateBinder.bindView(bindingContext, stateLayout, div, rootPath)
+
+        verify(divView).logError(any())
     }
 
     private fun switchToState(stateId: String) {

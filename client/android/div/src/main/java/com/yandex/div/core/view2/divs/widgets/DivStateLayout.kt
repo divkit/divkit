@@ -16,6 +16,7 @@ import androidx.core.math.MathUtils
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.isVisible
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.BindingContext
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.internal.widget.FrameContainerLayout
 import com.yandex.div2.Div
@@ -38,6 +39,8 @@ internal class DivStateLayout @JvmOverloads constructor(
     private val gestureDetector = GestureDetectorCompat(context, swipeListener, Handler(Looper.getMainLooper()))
     var swipeOutCallback: (() -> Unit)? = null
     internal var activeStateDiv: Div? = null
+    internal var bindingInProgress = false
+    internal var pendingStateBind: PendingStateBind? = null
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         if (swipeOutCallback == null) {
@@ -172,3 +175,9 @@ internal class DivStateLayout @JvmOverloads constructor(
         }
     }
 }
+
+internal class PendingStateBind(
+    val context: BindingContext,
+    val div: Div.State,
+    val path: DivStatePath,
+)

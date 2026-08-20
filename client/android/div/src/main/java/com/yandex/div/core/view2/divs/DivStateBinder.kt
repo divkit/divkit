@@ -44,6 +44,7 @@ import com.yandex.div.core.view2.animations.allowsTransitionsOnStateChange
 import com.yandex.div.core.view2.animations.toTransitionData
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.PendingStateBind
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
@@ -83,6 +84,34 @@ internal class DivStateBinder @Inject constructor(
      * @param path path 0/content/expanded/comments/expanded, so to previous [DivStateLayout].
      */
     override fun bindView(context: BindingContext, view: DivStateLayout, div: Div.State, path: DivStatePath) {
+        if (view.bindingInProgress) {
+            // A nested state switch (e.g. set_state fired from DivCustomViewAdapter.bindView
+            // or video fatal actions) arrived while this layout is being bound. Binding it
+            // in place would rebind children of the previous state with the new state div,
+            // so defer it until the current pass completes.
+            view.pendingStateBind = PendingStateBind(context, div, path)
+            return
+        }
+
+        view.bindingInProgress = true
+        try {
+            var pendingBind: PendingStateBind? = PendingStateBind(context, div, path)
+            var rebindsLeft = MAX_PENDING_REBINDS
+            while (pendingBind != null && rebindsLeft-- > 0) {
+                view.pendingStateBind = null
+                bindViewInternal(pendingBind.context, view, pendingBind.div, pendingBind.path)
+                pendingBind = view.pendingStateBind
+            }
+            if (pendingBind != null) {
+                context.divView.logError(RuntimeException("Infinite state switching detected"))
+            }
+        } finally {
+            view.bindingInProgress = false
+            view.pendingStateBind = null
+        }
+    }
+
+    private fun bindViewInternal(context: BindingContext, view: DivStateLayout, div: Div.State, path: DivStatePath) {
         val divValue = div.value
         val oldDivState = view.div
         val oldResolver = view.bindingContext?.expressionResolver
@@ -470,6 +499,10 @@ internal class DivStateBinder @Inject constructor(
             return transition
         }
         return null
+    }
+
+    private companion object {
+        const val MAX_PENDING_REBINDS = 5
     }
 }
 
