@@ -11,7 +11,8 @@
       ]
     },
     "swift": {
-      "generate_optional_arguments": false
+      "generate_optional_arguments": false,
+      "template_is_public": false
     }
   },
   "definitions": {
@@ -28,7 +29,8 @@
           ]
         },
         "swift": {
-          "generate_optional_arguments": false
+          "generate_optional_arguments": false,
+          "template_is_public": false
         }
       },
       "properties": {

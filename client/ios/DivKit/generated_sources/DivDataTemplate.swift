@@ -4,8 +4,8 @@ import Foundation
 import Serialization
 import VGSL
 
-public final class DivDataTemplate: TemplateValue, Sendable {
-  public final class StateTemplate: TemplateValue, Sendable {
+final class DivDataTemplate: TemplateValue, Sendable {
+  final class StateTemplate: TemplateValue, Sendable {
     public let div: Field<DivTemplate>?
     public let stateId: Field<Int>?
 

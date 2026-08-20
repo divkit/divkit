@@ -310,7 +310,8 @@ class SwiftGenerator(Generator):
                     sendable_conformance = '@unchecked Sendable'
         protocols = list(filter(None, [entity.protocol_plus_super_entities(), sendable_conformance]))
         conformance = f': {", ".join(protocols)}'
-        access_modifier = self._access_level.value
+        is_public = not entity.generation_mode.is_template or entity.generator_properties.template_is_public
+        access_modifier = self._access_level.value if is_public else SwiftAccessLevel.INTERNAL.value
         return f'{access_modifier}final class {utils.capitalize_camel_case(entity.name)}{conformance} {{'
 
     def _entity_enumeration_declaration(self, entity_enumeration: EntityEnumeration) -> Text:

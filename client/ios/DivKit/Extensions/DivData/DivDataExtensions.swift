@@ -93,6 +93,17 @@ extension DivData: DivBlockModeling {
 }
 
 extension DivData {
+  /// Resolves a card using pre-parsed typed templates.
+  ///
+  /// Use this overload when the same templates are reused across multiple cards.
+  public static func resolve(
+    card cardDict: [String: Any],
+    templates: DivTemplates,
+    flagsInfo _: DivFlagsInfo = .default
+  ) -> DeserializationResult<DivData> {
+    templates.parseValue(type: DivDataTemplate.self, from: cardDict)
+  }
+
   public static func resolve(
     card cardDict: [String: Any],
     templates templatesDict: [String: Any]?,
@@ -129,7 +140,7 @@ extension DivData {
     }
 
     let divTemplates = templatesDict.map(DivTemplates.init) ?? .empty
-    return divTemplates.parseValue(type: DivDataTemplate.self, from: cardDict)
+    return resolve(card: cardDict, templates: divTemplates, flagsInfo: flagsInfo)
   }
 }
 
