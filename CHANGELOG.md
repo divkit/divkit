@@ -8,7 +8,7 @@
 ### Android Client:
 * DivKit for Compose is no longer in experimental state 🎉 🎉 🎉.
 * Migrated to Java 17 compatibility version.
-* Migrated to Kotlin 2.2 language version.
+* Migrated to Kotlin 2.3.21 compiler and Kotlin 2.2 language version.
 * Migrated to Android Gradle Plugin 9.1.1.
 * Updated `minSdk` version to 23.
 * Removed deprecated `DivApi` class.
