@@ -1,11 +1,11 @@
 ## 33.0.0
 
-### Schema
+### JSON Schema
 * `div-action.log_id` has become optional. Warning! Actions without `log_id` are ignored by the clients that use pre-33 DivKit version. Consider keeping `log_id` in the backend response for forward compatibility.
 * `div-image.image_url` and `div-gif-image.gif_url` has become optional. Warning! Images without urls are ignored by the clients that use pre-33 DivKit version. Consider keeping `image_url` / `gif_url` in the backend response for forward compatibility.
 * `div-shape-drawable.color` is deprecated and has become optional. Use `shape` property instead. Warning! Drawables without `color` are ignored by the clients that use pre-33 DivKit version. Consider keeping it in the backend response for forward compatibility.
 
-### Android Client:
+### Android Client
 * DivKit for Compose is no longer in experimental state 🎉 🎉 🎉.
 * Migrated to Java 17 compatibility version.
 * Migrated to Kotlin 2.3.21 compiler and Kotlin 2.2 language version.
@@ -35,7 +35,7 @@
 * Moved `DivVideo` model and expression preparation off the main thread.
 * Video start and pause actions are now preserved when they are issued before the target video view is bound.
 
-### iOS Client:
+### iOS Client
 * Removed `DivLastVisibleBoundsCache` from the public API.
 * Removed `DivTooltipViewFactory` from the public API.
 * Removed `DivStoredValueScope` from the public API.
@@ -56,19 +56,19 @@
 * Fixed incorrect cursor position in masked input after autocomplete on iOS.
 * Fixed invalid `layout_provider` variable values reported for not yet measured elements, for example while `gallery` cells are reused.
 
-### Web Client:
+### Web Client
 * Breaking change. The logic of `templates` has been changed to better match native platforms. The priority of template properties has been updated: properties provided at the template usage site now take precedence over those declared in the template definition.
 * Breaking change. `package.json` exports were updated to support newer Node.js versions. Node.js 14+ is now required.
 * Additional type exports can now be imported from the main package (for example from `@divkitframework/divkit` or `@divkitframework/divkit/client`).
 * Fixed an issue with the `markdown` extension when unmounting.
 
-### TypeScript JSON Builder:
+### TypeScript JSON Builder
 * Breaking change. TypeScript was updated (4.6.4 -> 6.0.2). The heavy-duty `templateHelper` typecheck has been removed at compile time (due to limitations in newer versions of TypeScript).
 
 
 ## 32.61.1
 
-# Android Client:
+### Android Client
 * Added `backdrop-effect` extension. It allows you to apply various graphic effects to the view backdrop.
 * Added configurable strict view reuse for item-builder elements.
 * Fixed `PicassoDivImageLoader` ignoring the user-configured `OkHttpClient` when loading bitmap images.
@@ -76,30 +76,30 @@
 * Fixed stale `item_builder` subscriptions after view rebind.
 * Structurally equal JSON variable values no longer trigger redundant change notifications.
 
-# iOS Client:
+### iOS Client
 * Fixed gallery scroll offset reset to zero when content size shrinks.
 
 
 ## 32.61.0
 
-# Android Client:
+### Android Client
 * Added `safe_mode` parameter to Lottie extension.
 * Fixed an issue where both `first_tap` and `second_tap` logging actions were triggered on a single tap when a view was reused between bindings with and without double-tap actions.
 * Removed NestedScrollView from ScenarioActivity in regression testing.
 
-# iOS Client:
+### iOS Client
 * Fixed a vertical container with `wrap_content` + `min_size` width not rendering when all of its items have `match_parent` width.
 * Fixed an issue where fixed-width elements were expanded when their paddings exceeded their width.
 * Fixed background color showing through as a thin halo along the outer edge of an opaque border stroke on rounded corners.
 * Fixed missing animation when triggering a state transition that adds a new animated view.
 
-# Web Client:
+### Web Client
 * Added support of scoped search for elements in `submit` and `show_tooltip` / `hide_tooltip` actions (and their associated div-action:// URL actions). When scope_id is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire Div2View.
 
 
 ## 32.60.0
 
-# Android Client:
+### Android Client
 * Added support for the `is_enabled` property in extensions. An extension whose `is_enabled` resolves to `false` is not applied to the element.
 * Fix default indicator `active_item_color` being transparent on Android; it is now the opaque default (`#ffdc60`), matching iOS/web/Flutter.
 * Fix shadow rendering when alpha is specified via color value (e.g. `"color": "#2F000000"`).
@@ -111,25 +111,25 @@
 * Fixed background color showing through as a thin halo along the outer edge of an opaque border stroke on rounded corners.
 * Fixed video not loading in `div-video-m3`.
 
-# iOS Client:
+### iOS Client
 * Added support for the `is_enabled` property in extensions. An extension whose `is_enabled` resolves to `false` is not applied to the element.
 * Fixed `div-select` dropdown menu not closing after selecting an item.
 * Fixed `focus_element` not focusing an element that is revealed (`gone` → `visible`) by a preceding action in the same batch.
 * Fixed an issue where tab header colors were not updated when DivKit variables changed (e.g. theme switching in tabs with variables).
 * Fixed typed actions targeting a specific element kind (`video`, `scroll_by` / `scroll_to`, `set_cursor_position`) failing with an "ambiguous id" error when another element shares the target `id`. Id lookup now takes the element type into account.
 
-# Web Client:
+### Web Client
 * Added support for the `baseline_offset` property for `image`s within `text`.
 * Added support of scoped search for elements in `video` and `scroll_to` / `scroll_by` actions (and their associated `div-action://` URL actions). When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
 
 
 ## 32.59.0
 
-# Android Client:
+### Android Client
 * Fix DivInput with keyboard_type=search: pressing the Search IME button no longer moves focus to the next input field.
 * Fixed continuous backspace in `div-input` with mask.
 
-# iOS Client:
+### iOS Client
 * Added `min_size` and `max_size` support for `match_parent` size.
 * Fix cursor jumping in multiline text input.
 * Fix fast taps on div with `action_animation`.
@@ -137,7 +137,7 @@
 * Fixed a crash when entering emoji in a `div-input` with a mask configured.
 * Fixed a possible data race when creating a tooltip.
 
-# Web Client:
+### Web Client
 * Added support for the `is_enabled` property in the `extensions` list.
 * Added support of scoped search for animators in `animator_start` and `animator_stop` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
 * Fixed an issue with the `infinite_scroll` `pager` with the `hidden` components inside it.
@@ -147,11 +147,11 @@
 
 ## 32.58.0
 
-# Android Client:
+### Android Client
 * Fix rotation pivot-point reset after layout size changes.
 * Fixed crash in `div-input` with currency mask when text input is empty.
 
-# iOS Client:
+### iOS Client
 * DivVisibilityCounter is now thread safe.
 * Fixed appearance animations (`transition_in`) being skipped on the first render or restarted mid-flight when a block is reconfigured rapidly (e.g. during fast data/variable updates).
 * Implemented scope_id support for focus actions.
@@ -162,42 +162,42 @@
 * Remove redundant DivGallery animation on default_item resolve.
 * Retain cursor position after mask change in FixedLengthMaskFormatter.
 
-# Web Client:
+### Web Client
 * Added support of scoped search for elements with given `id` in `focus_element` and `set_cursor_position` actions. When `scope_id` is defined in action search for the target view takes place inside the view, which is a scope, and not in the entire `Div2View`.
 
 
 ## 32.57.0
 
-# Android Client:
+### Android Client
 * Fixed `paddings` of a `wrap_content` container being ignored when a child has `width: match_parent`. The child no longer overflows into the container's horizontal padding area.
 
-# Web Client:
+### Web Client
 * Added support for the `bring_to_top_id` property in `tooltip`.
 
 
 ## 32.56.0
 
-# Android Client:
+### Android Client
 * `transition_change` set on a container now cascades to its child elements that have an `id` but don't declare their own `transition_change`, so they animate their bounds on state and data changes instead of snapping to the final layout.
 
-# iOS Client:
+### iOS Client
 * A `match_parent` item on the cross-axis of a `wrap_content` container now stretches to match the largest content among such items; when the container defines a `min_size`, the item (and its nested `match_parent` content) stretches to fill that size.
 * Fixed infinite scroll pager animation direction: `set_next_item` now always animates forward and `set_previous_item` backward across the loop boundary.
 
-# Web Client:
+### Web Client
 * Fixed an issue where disabled `menu_items` in `action` were displayed.
 
 
 ## 32.55.0
 
-# iOS Client:
+### iOS Client
 * Fixed an issue where the pager would freeze between pages when its size changed during scrolling.
 * Fixed the `focus_element` action not moving the text cursor to the end of an already focused input field.
 * Fixed transition_change "change_bounds" animation being clipped by action, border and other decorations.
 * Fixed transition_change "change_bounds" animation not animating the element's size.
 * Implemented scope_id support for video actions.
 
-# Web Client:
+### Web Client
 * Added support for the `item_count_variable` property in `pager`.
 * Added support for the `range_builder` and `image_builder` properties in `text`.
 * Fixed an issue with the variable resolution in `pager` in rare cases.
@@ -205,12 +205,12 @@
 
 ## 32.54.0
 
-# Android Client:
+### Android Client
 * Added support of media resources preloading for `DivData` in `DivPreloader`.
 * Fixed possible ANR at variable change during async binding.
 * Fixed shimmer deadlock bug when animation duration scale is zero.
 
-# Web Client:
+### Web Client
 * Added support for the `press_start_actions` and `press_end_actions` properties in the `slider`.
 * Allowed `integer`s to be in range `[-9007199254740991, 9007199254740991]` instead of range `[-2147483648, 2147483647]` after expression execution.
 * Animators with a limited number of repetitions now respect the system's "prefer reduced motion" setting.
@@ -218,7 +218,7 @@
 
 ## 32.53.0
 
-# Android Client:
+### Android Client
 * Added `scope_id` support for anchor search for `show_tooltip` and `hide_tooltip` actions.
 * Added extended error handling at async binding.
 * Added support for `image_builder` in `text` that generates inline images dynamically from a `data` array using `prototypes` and `selector`. Each data element is bound to the `data_element_name` variable (default `it`) and to `index`, and takes priority over a static `images` list.
@@ -234,7 +234,7 @@
 * Fixed possible ANR at variable change during async binding.
 * Fixed timer variable update behavior.
 
-# iOS Client:
+### iOS Client
 * Added `Player.configure(_:)` to `LayoutKit` to apply playback settings (mute, speed, loop, autoplay) to a running player without reloading the video source; a no-op default implementation is provided for source compatibility with existing custom `Player` types.
 * Added `image_builder` property on `text` that generates inline images dynamically from a `data` array using `prototypes` and `selector`, the same way as `range_builder`. Each data element is bound to the `data_element_name` variable (default `it`) and to `index`, and takes priority over a static `images` list.
 * Added `playback_speed` property on `video` so layouts can set how fast the default player plays the clip (must be greater than 0; default is 1.0).
@@ -248,7 +248,7 @@
 * Fixed timer variable update behavior.
 * Optimized `DecoratingView.Model` with Heap Boxing pattern to avoid expensive copying.
 
-# Web Client:
+### Web Client
 * Added a `context` API in the `onCustomAction` handler.
 * Added support for the `scroll_content_alignment` property in the `gallery`.
 * Changed scroll alignment in the `gallery` to better match Android behaviour.
@@ -258,7 +258,7 @@
 
 ## 32.52.0
 
-# iOS Client:
+### iOS Client
 * Fixed Retain Cycle in `FunctionsProvider` that caused `DivKitComponents` memory leak.
 * Fixed `scroll_to` and `set_next_item` actions on an infinite `div-pager`: navigating from the last item to the first (or vice versa) now plays a single-item animation across the buffered edge instead of scrolling linearly through every intermediate page.
 * Fixed an issue where tapping a gallery, pager or tabs item during an in-flight scroll animation was ignored.
@@ -267,24 +267,24 @@
 * Fixed potential memory leaks in `ValueAnimator`, `DivViewPreloader`, and `TabContentsView`.
 * Supported `set-cursor-position` action.
 
-# Web Client:
+### Web Client
 * Added support for the `alphaBlend` function.
 * Fixed `set_cursor_position` with multiple types of `input`.
 
 
 ## 32.51.1
 
-# Android Client:
+### Android Client
 * Fixed an issue where `div-image` continued to show a placeholder after the image had loaded when using asynchronous binding.
 
 
 ## 32.51.0
 
-# Android Client:
+### Android Client
 * Added `alphaBlend` function for blending two colors.
 * Added `scroll_content_alignment` support in `gallery`.
 
-# iOS Client:
+### iOS Client
 * Added `alphaBlend` function for blending two colors.
 * Added new styles to `blur` extension: `extra_light`, `regular`, `prominent`, and the `system_*_material` family (including the `_light` and `_dark` variants).
 * Added static images prefetch API for DivData.
@@ -294,39 +294,39 @@
 
 ## 32.50.1
 
-# Android Client:
+### Android Client
 * Fixed crash at `DivPagerView` constructor called on background thread.
 * Fixed execution order at `Div2View.setDataAsync()`.
 
 
 ## 32.50.0
 
-# Android Client:
+### Android Client
 * Added `playback_speed` support in `video`.
 * Added `press_start_actions` and `press_end_actions` support in `slider`.
 * Added stored values reset for particular `DivDataTag`.
 * Fixed `is_playing: false` being ignored on initial bind of `lottie` extension.
 * Fixed an issue where `pager` and `gallery` items with `visibility: invisible` were removed from layout instead of reserving space.
 
-# iOS Client:
+### iOS Client
 * Fixed an issue where a scroll action on a gallery, pager or tabs could be ignored if it was triggered before the previous scroll animation finished.
 * Fixed an issue where the first `transition_out` animation inside a pager (or other view that creates cells lazily) was skipped on initial visibility change.
 * Text images vertical alignment support.
 * The ability to trigger actions when the user interacts with the slider has been implemented.
 
-# Web Client:
+### Web Client
 * Added support for the `playback_speed` parameter in the `video` component.
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Added `DivanPatch.copy()` for creating modified patch instances.
 
 
 ## 32.49.0
 
-# Android Client:
+### Android Client
 * Fixed `IllegalStateException` at BindingCriticalSection.reserveFor() call.
 
-# iOS Client:
+### iOS Client
 * Do not log model.child.view in renderingDelegate "Touchable view is too small" error.
 * Fixed accessibility mode merge, to respect inactive states and gone blocks.
 * Fixed caret jumping on fast typing in masked text input.
@@ -334,7 +334,7 @@
 * Supported get/set stored values by cardId.
 * TriggerUpdate boolean flag added to DivVariablesStorage.append.
 
-# Web Client:
+### Web Client
 * Added suuport for the `scope` value in the `set_stored_value` action.
 * Added the `themeVariableName` configuration property, which creates a variable that stores the current theme (`light` or `dark`).
 * Fixed accessibility type = `image`.
@@ -344,7 +344,7 @@
 
 ## 32.48.0
 
-# Android Client:
+### Android Client
 * Added `getStoredValue` functions with scope.
 * Added `scope` parameter to `set_stored_value` action.
 * Added `set_cursor_position` typed action support.
@@ -355,19 +355,19 @@
 * Fixed deadlock at `Div2View.setDataAsync()`.
 * Fixed snapping after scroll actions in gallery with `scroll_mode` `paging`.
 
-# iOS Client:
+### iOS Client
 * The `select_all_on_focus` property on iOS works again.
 
 
 ## 32.47.0
 
-# Android Client:
+### Android Client
 * Added image loading errors reporting.
 * Fixed `ConcurrentModificationException` at ErrorCollector.notifyObservers() call.
 * Fixed an issue where `div-custom` binding was called on a background thread.
 * Fixed loading of animated images in `.webp` format by `GlideDivImageLoader`.
 
-# iOS Client:
+### iOS Client
 * Added `RasterizeExtensionHandler` to fix offscreen rendering issues in overlap containers.
 * Also reduced redundant full-card refreshes when only the pager size changes, and made automatic page changes on an infinite carousel more reliable.
 * Fixed VideoBlock preview size.
@@ -376,13 +376,13 @@
 * Supported reset of persistent variables and data in `DivKitComponents`.
 * When a dictionary is turned into a string in expressions (for example `@{dict}` or `toString(dict)`), string keys and values are serialized with JSON-style escaping for special characters.
 
-# Web Client:
+### Web Client
 * Supported typed action `scroll_to` with destination `item_id` and corresponding `scroll_to_item_id` action url.
 
 
 ## 32.46.0
 
-# Android Client:
+### Android Client
 * Async binding no longer triggers if the DivData hasn't changed.
 * Fixed alpha restoring at the end of fade animation in set of animations with different durations.
 * Fixed memory leak in case when `Div2View` is destroyed earlier than corresponding `Div2Context`.
@@ -391,50 +391,50 @@
 * Supported reset of persistent variables and data in `DivStorage`.
 * Supported typed action `scroll_to` with destination `item_id` and corresponding `scroll_to_item_id` action url.
 
-# iOS Client:
+### iOS Client
 * Fixed a flickering issue in overlap container during transition animations caused by offscreen rendering.
 * Fixed remote image distortion in wrap_content mode by using image size in points (scale = 1) for intrinsic layout.
 
-# Web Client:
+### Web Client
 * Added `set_cursor_position` action.
 * Updated `slider` ticks limits logic, the maximum number of ticks is now 1000.
 
 
 ## 32.45.0
 
-# Android Client:
+### Android Client
 * Fixed `Div2View` self locks at async bindng.
 
-# iOS Client:
+### iOS Client
 * Div-video `preview` strings (base64 image data, including `data:` URL form) are decoded on a background queue through the image holder pipeline instead of blocking layout on the main thread.
 
 
 ## 32.44.0
 
-# Android Client:
+### Android Client
 * Fixed ANR at `RuntimeStoreImpl` initialization.
 
-# iOS Client:
+### iOS Client
 * Fix blur effect during animations.
 * Fixed visibility action resolve with collection item builder.
 
 
 ## 32.43.0
 
-# Android Client:
+### Android Client
 * Do not interrupt visit of div hierarchy without ExpressionResolverImpl.
 * Fix ConcurrentModificationException during preload.
 * Fixed `div-state` state restoring on rebind after `state_id_variable` changes.
 * Shift debug view below status bar area.
 
-# Web Client:
+### Web Client
 * Fixed an issue where `visibility_actions` were called inside a component with `visibility=invisible`.
 * The `!:` operator now has higher precedence than logical and comparison operators.
 
 
 ## 32.42.0
 
-# Android Client:
+### Android Client
 * Fixed NoSuchElementException at `Div2View.trackChildrenVisibility()` call.
 * Fixed showing of non-animated images in `gif-image` downloaded via `GlideDivImageLoader`.
 * Fixed showing of preview by url in `gif-image` after rebind.
@@ -445,11 +445,11 @@
 * The `!:` operator now has higher precedence than logical and comparison operators.
 * `video_sources` made optional for `video`.
 
-# iOS Client:
+### iOS Client
 * Support `active_font_weight_value` and `inactive_font_weight_value` in `tab_title_style`.
 * `video_sources` made optional for `video`.
 
-# Web Client:
+### Web Client
 * Changed the default datetime conversion to a string according to the local time zone to better match other platforms.
 * Fixed an issue with the layout of items in the `container`, the total weight of which was less than 1.
 * Support `active_font_weight_value` and `inactive_font_weight_value` in `tab_title_style`.
@@ -458,41 +458,41 @@
 
 ## 32.41.0
 
-# Android Client:
+### Android Client
 * Added `getTimestamp` function.
 * Added error logging for video playing.
 * Fixed `ConcurrentModificationException` at `PagerIndicatorConnector.attach()` call.
 * Fixed an issue where non-modal tooltips intercepted the system back gesture on Android 10+.
 
-# iOS Client:
+### iOS Client
 * Added SVG support in div-image preview.
 * Added `getTimestamp` function.
 * Fixed z-order during transition_change animation.
 
-# Web Client:
+### Web Client
 * Added `getTimestamp` function.
 * Added support for the negative `letter_spacing`.
 
 
 ## 32.40.0
 
-# Android Client:
+### Android Client
 * Deprecated `UriHandler` interface.
 * Fix invalid timezone offsets during datetime formatting.
 
-# iOS Client:
+### iOS Client
 * Fix text gradient rendering when reusing text view with non-zero frame.
 
 
 ## 32.39.0
 
-# Android Client:
+### Android Client
 * Fixed ConcurrentModificationException at `ErrorCollector.notifyObservers()` call.
 * Fixed NoSuchElementException at `Div2View.discardChildrenVisibility()` call.
 * Fixed incorrect transition duration inside a transition set.
 * Fixed match_parent width child size inside a wrap_content parent with min size.
 
-# iOS Client:
+### iOS Client
 * Added logging of video player fatal errors to `DivKitLogger`.
 * Eliminated redundant animation triggers caused by isHighlighted oscillation during touch tracking.
 * Fixed action_animation not returning to its original state, causing elements to remain visually stuck in the pressed (scaled down) state.
@@ -503,21 +503,21 @@
 
 ## 32.38.0
 
-# Android Client:
+### Android Client
 * Add variable description to VariableMutationException.
 * Removed dependencies to `androidx.datastore:datastore` and `org.jetbrains.kotlin:kotlin-serialization`.
 
-# iOS Client:
+### iOS Client
 * Fixed Lottie animation repeat_count semantics: repeat_count now means the number of additional plays (repeat_count=0 plays once, repeat_count=1 plays twice, repeat_count=-1 plays infinitely).
 * The custom action function has been implemented.
 
-# Web Client:
+### Web Client
 * Changed `lottie`s `repeat_count` logic (to better align with other platforms).
 
 
 ## 32.37.0
 
-# Android Client:
+### Android Client
 * Added `getExpressionResolver` method to `Div2Context` to access `ExpressionResolver` implementation for given `DivData`. Can be used for preloading when there is no created `Div2View`.
 * Changed indicator sizing behavior: in middle pager positions with 3 visible indicators, edge items now use `inactive_shape` instead of `inactive_minimum_shape`.
 * Fixed `gif` images loading by `GlideDivImageLoader`.
@@ -526,73 +526,73 @@
 * Introduced `DivCachedImage` to transfer loaded images from `DivImageLoader`. `CachedBitmap` is now deprecated — please migrate to `DivCachedImage`.
 * `PicassoDivImageLoader` is now deprecated because the Picasso library is outdated. Recommended alternatives for image loading: `GlideDivImageLoader`, `CoilDivImageLoader` or custom implementation of the `DivImageLoader` interface.
 
-# iOS Client:
+### iOS Client
 * Changed indicator sizing behavior: in middle pager positions with 3 visible indicators, edge items now use `inactive_shape` instead of `inactive_minimum_shape`.
 * The number of ticks on the slider is limited to 1000 elements.
 
-# Web Client:
+### Web Client
 * Added a warning about using gifs in the `div-image` component.
 
 
 ## 32.36.2
 
-# Android Client:
+### Android Client
 * Fixed NoSuchElementException at `Div2View.trackChildrenVisibility()` call.
 
 
 ## 32.36.1
 
-# Android Client:
+### Android Client
 * Fixed ConcurrentModificationException at `ErrorCollector.notifyObservers()` call.
 * Fixed NoSuchElementException at `Div2View.discardChildrenVisibility()` call.
 
 
 ## 32.36.0
 
-# Android Client:
+### Android Client
 * Fixed unhandled exceptions in `SvgDivImageLoader`.
 * Fixed visibility actions not triggering after navigating back to screen.
 
-# iOS Client:
+### iOS Client
 * Fixed comparison of two CachedRemoteImageHolders.
 * Supported `bring_to_top_id` in tooltips.
 
 
 ## 32.35.0
 
-# Android Client:
+### Android Client
 * Use microseconds at all duration histograms.
 
-# iOS Client:
+### iOS Client
 * Added `DivReporter.reportAction(context)`.
 * Fixed an issue with visibility actions triggering on elements in an invisible container.
 * Fixed scrolling issues in paginated galleries.
 * Supported `item_spacing` and `line_spacing` in `div-container`.
 * Supported `substrate_div` in tooltips.
 
-# Web Client:
+### Web Client
 * Check whether action is enabled right before execution.
 
 
 ## 32.34.0
 
-# Android Client:
+### Android Client
 * **Experimantal API**: Fixed `IllegalThreadStateException` during asynchronous binding.
 * **Experimental API**: Fixed `ConcurrentModificationException` during asynchronous binding.
 * Fixed separator positioning in RTL horizontal containers.
 
-# iOS Client:
+### iOS Client
 * Restart contentAnimation in ContainerBlock when app goes from background to foreground.
 * The slider is optimized for working with large ranges of values.
 
-# Web Client:
+### Web Client
 * Fixed `currency` input mask for values below "1".
 * Fixed the layout of the `image` in several conditions (especially using `aspect` and/or `min_size` / `max_size`).
 
 
 ## 32.33.0
 
-# Android Client:
+### Android Client
 * Add support properties `substrate_div` and `bring_to_top_id` to `div-tooltip`.
 * Check whether action is enabled right before execution.
 * Fix text `alignment_vertical` in ellipsis in api < 28.
@@ -601,32 +601,32 @@
 * Fixed image blur after `div-data` rebind.
 * Supported `.svg` images inside `text`.
 
-# iOS Client:
+### iOS Client
 * Implemented currency masks for the input field.
 
 
 ## 32.32.0
 
-# Android Client:
+### Android Client
 * Fixed capturing leaking contexts at image loaders.
 * Fixed Verification in StorageStatementExecutor.
 * Fixed background and border drawing in ellipsis when text not ellipsize.
 * Fixed background and border drawing in text ranges when custom height and alignment.
 * Fixed debug views hiding (re-add views if something covers them).
 
-# iOS Client:
+### iOS Client
 * Fixed display of ShimmerImagePreviewViewProvider.
 
-# Web Client:
+### Web Client
 * Fixed `gallery` layout in several conditions.
 
 
 ## 32.31.0
 
-# Android Client:
+### Android Client
 * Added bitmap size limiting to prevent Canvas rendering crash when loading large images and GIFs. New `limitImageBitmapSizeEnabled` parameter in all `DivImageLoader` implementations (enabled by default, can be disabled via constructor). In your own `DivImageLoader` you can override fun `needLimitBitmapSize`.
 
-# Web Client:
+### Web Client
 * Added support for the `font_family` in `slider` component.
 * Added support for the `font_variation_settings` properties (including `text`, `select`, `input`, `slider` and `tabs` components).
 * Added support for the `transformations` property in all components (div-base).
@@ -638,14 +638,14 @@
 
 ## 32.30.0
 
-# Android Client:
+### Android Client
 * Experimental API: added methods for async binding of Div2View.
 
-# iOS Client:
+### iOS Client
 * Added `DivThemeManager` component to manage changes to the screen color scheme.
 * Added a global `theme` variable that depends on the screen color scheme.
 
-# Web Client:
+### Web Client
 * Added support for the `preview_url` property in the `gif` component.
 * Added support for the `substrate_div` property in the `tooltip` component.
 * Fixed `tabs` `delimiter` default values for the `width` and `height`.
@@ -654,14 +654,14 @@
 
 ## 32.29.0
 
-# Android Client:
+### Android Client
 * Fixed `Div2Context.reset()` method. If called without flags, it now performs a full reset.
 * Fixed crash "config must not be null" when binding DivView.
 * Fixed size of gallery with `wrap_content` size and children with `match_parent` size along cross axis.
 * Support property variable.
 * `Div2Context.reset(RESET_BITMAP_EFFECT_CACHE)` now clears the Bitmap effects cache.
 
-# Web Client:
+### Web Client
 * Added support for the `filter` method of an `array`.
 * Added support for the `getKeys` and `getValues` `dict` methods.
 * Added support for the `min_size` and `max_size` in `match_parent` size.
@@ -670,102 +670,102 @@
 
 ## 32.28.0
 
-# Android Client:
+### Android Client
 * Add support property `preview_url` to `div-gif-image`.
 
-# iOS Client:
+### iOS Client
 * Add support property `preview_url` to `div-gif-image`.
 * Fixed a possible scroll rollback when performing a wide swipe.
 
-# Web Client:
+### Web Client
 * Fix active tab scaling inside the scaled element.
 
 
 ## 32.27.0
 
-# Android Client:
+### Android Client
 * Fixed UI hovering when moving slider when there is a large difference between `min_value` and `max_value`.
 * Show error details in popup window for small cards.
 * Support Androidx Media3 library in `div-video-m3` artifact and `div-video` deprecate.
 * Use local resolver for tracking sight-actions inside gallery.
 * `video-custom` is now deprecate. Use `div-video-m3` instead.
 
-# iOS Client:
+### iOS Client
 * Fixed bugs in visibility actions on iOS 26.
 
 
 ## 32.26.0
 
-# Android Client:
+### Android Client
 * Added subscriptions to `video_sources` expressions in DivVideo.
 * Notify DivView about various patch errors.
 
-# iOS Client:
+### iOS Client
 * Fixed animator configuration update. Now, if animator parameters are set using expressions, they will be recalculated and displayed correctly.
 
 
 ## 32.25.0
 
-# Android Client:
+### Android Client
 * Support hot reloading via debug panel at DivView.
 
-# iOS Client:
+### iOS Client
 * Fixed a possible issue where focus would disappear from elements within a gallery when changing the number of elements.
 
-# Web Client:
+### Web Client
 * Added support for the `property` variable type.
 * Fixed an issue with the layout of `wrap_content` components inside `container`.
 
 
 ## 32.24.0
 
-# Android Client:
+### Android Client
 * Fixed memory leak in DivBaseBinder by properly removing the pre-draw listener from ViewTreeObserver on detach.
 * Fixed multiple observations of a single variable.
 * Kotlin runtime null checks are disabled in release builds.
 * Place custom video player view under preview in hierarchy.
 
-# iOS Client:
+### iOS Client
 * Fixed crash when using empty gallery with paging scroll mode.
 * Fixed hit test for DetachableAnimationBlockView.
 * Fixed intrinsic size calculation for wide and tall images with wrap_content sizing.
 
-# Web Client:
+### Web Client
 * Fixed an error with missing global variables when calculating the values of local card-level variables.
 
 
 ## 32.23.0
 
-# Android Client:
+### Android Client
 * Add Div2Context.tooltipManager service for aquiring state of current tooltips.
 * Fixed background and border drawing in text ranges when custom ellipsis is defined.
 * Fixed memory leak in DivVariableController by preventing duplicate declarationObserver subscriptions when variable sources are added or restored.
 
-# iOS Client:
+### iOS Client
 * Fixed an issue where some masked div-input views could display text from other div-input views.
 * Fixed intrinsic size calculation for images with `wrap_content` sizing and constraints.
 
 
 ## 32.22.0
 
-# Android Client:
+### Android Client
 * Fixed view ids generating for different `Div2View`s.
 
-# iOS Client:
+### iOS Client
 * Fixed the application of fade animation on views with opacity.
 
-# Web Client:
+### Web Client
 * Fixed an issue with the timer properties validation.
 
 
 ## 32.21.0
 
-# Android Client:
+### Android Client
 * Fix state change and animation conflict.
 * Fixed possible overflow of stored value lifetime.
 * Support animated WebP format.
 
-# iOS Client:
+### iOS Client
 * Fixed SwitchBlock UISwitch parametrs update from model.
 * Fixed a bug that could cause the slider to render incorrectly when scrolling.
 * Fixed a bug with infinite pager scrolling.
@@ -773,14 +773,14 @@
 * Fixed handling of transitive dependencies in templates when using the `DivTemplates.resolve` function.
 * Fixed possible duplication of interface elements during animation execution.
 
-# Web Client:
+### Web Client
 * Fixed a bug with converting different types of values in actions.
 * Non-actionable containers of non-modal tooltips now pass motion events to window from which tooltip was initiated.
 
 
 ## 32.20.0
 
-# Android Client:
+### Android Client
 * Add `DivErrorsReporter` for external error handling.
 * Fix gradient positions not updating with animator and support colorMap for radial gradients.
 * Fixed `url` and `color` values setting into `dict` and `array`.
@@ -789,124 +789,124 @@
 * Supported `min_size` and `max_size` constraints for children with `match_parent` size in `container` with `horizontal` and `vertical` orientation.
 * Supported `min_size` and `max_size` constraints for children with `match_parent` size in `gallery`.
 
-# Web Client:
+### Web Client
 * Fixed the layout of the `grid` in various rare cases.
 
 
 ## 32.19.0
 
-# Android Client:
+### Android Client
 * Fixed cell layout of grid with vertical spans.
 * Non-actionable containers of non-modal tooltips now pass motion events to window from which tooltip was initiated.
 * Support accessibility for `switch`.
 
-# iOS Client:
+### iOS Client
 * Non-actionable containers of non-modal tooltips now pass motion events to window from which tooltip was initiated.
 
-# Web Client:
+### Web Client
 * Fixed the handling of the situation when the `min_size` is greater than the `max_size` in the `wrap_content` size.
 
 
 ## 32.18.0
 
-# Android Client:
+### Android Client
 * Fixed `IndexOutOfBoundsException` in grid when the last row contains cells with different spans.
 
-# iOS Client:
+### iOS Client
 * Fixed a bug that caused animation to flicker when moving from state to state.
 * Fixed infinite pager scrolling when initiated by an action.
 
 
 ## 32.17.0
 
-# Android Client:
+### Android Client
 * Support `div-text-range` `mask` property.
 * Support item_spacing and line_spacing for container.
 
-# iOS Client:
+### iOS Client
 * Fixed a crash in the gallery when deleting items.
 * Fixed bug with switching tabs with dynamic height.
 
-# Web Client:
+### Web Client
 * Added support for the `item_spacing` and `line_spacing` properties in `container`.
 
 
 ## 32.16.0
 
-# Android Client:
+### Android Client
 * Added `decimalFormat` function support.
 * Fixed crash in empty `pager` with `indicator`.
 * Fixed text variable lookup in the `div-input` component when a mask is defined.
 * Provide default DivDownloader and DivRequestExecutor.
 
-# iOS Client:
+### iOS Client
 * Added properties cycle and empty setter errors handling.
 * Fixed triggering of visibility actions in collections when changing the visibility of items.
 
 
 ## 32.15.0
 
-# Android Client:
+### Android Client
 * Fixed local variables observing.
 * Supported `min_size` and `max_size` constraints for children with `match_parent` size in `container` with `overlap` orientation.
 
-# iOS Client:
+### iOS Client
 * Added `decimalFormat` functions and methods for formatting numbers.
 * Fixed switching pages in the pager with infinite scroll.
 * Fixed the cause of the application crash when entering Cyrillic characters in the input field with a mask.
 * Supported `div-text-range` `mask` property.
 
-# Web Client:
+### Web Client
 * Fixed a bug that could cause duplicates to appear in `item_builder` after updating data.
 * Fixed access to local variables inside successful/unsuccessful callbacks of `submit` and `download` actions.
 * Fixed the logic of re-alignment in the `pager` when updating data.
 * Updated the logic of saving child element variables in `item_builder`s when updating data.
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Added deprecation lint rule.
 
 
 ## 32.14.0
 
-# Android Client:
+### Android Client
 * Fix crash when applying second div patch.
 * Fix input keyboardType not being applied.
 
-# iOS Client:
+### iOS Client
 * Added property that is handeled with get and set methods.
 * Fixed a bug with empty spaces in the pager in place of elements with `visibility: gone`.
 
-# Web Client:
+### Web Client
 * Fixed the expectation of global variables in certain fields (`state_id_variable`, `text_variable`, `thumb_value_variable` and the like).
 
 
 ## 32.13.0
 
-# iOS Client:
+### iOS Client
 * Fixed the problem with the action `set_next_item` in the pager with infinite scrolling and clamp overflow.
 
-# Web Client:
+### Web Client
 * Added `decimalFormat` function and method for `integer` and `number`.
 * Fixed memory leak on every render call.
 
 
 ## 32.12.0
 
-# Android Client:
+### Android Client
 * Added releasing DivImageView and DivGifImageView inside MediaReleaseViewVisitor.
 * Bump Rive to 10.3.1 to fix static rive animations.
 * Fixed IndexOutOfBoundsException in PagerIndicator.
 * Support divkit-asset for lottie.
 * Support is_checked accessibility property.
 
-# iOS Client:
+### iOS Client
 * Fixed calculation of lottie block sizes with fixed values.
 * Fixed crash of infinite scroll pager built with item_builder.
 
 
 ## 32.11.0
 
-# Android Client:
+### Android Client
 * Add a cancelled callback to `DivImageDownloadCallback`.
 * Added `cot` function.
 * Added actions to `div-state`.
@@ -917,13 +917,13 @@
 * Fixed gallery item measurement when `maxSize` specified.
 * Fixed items removing in pager with infinite scroll.
 
-# iOS Client:
+### iOS Client
 * Applying alignment_vertical to ranges in div-text.
 * Fixed a bug that in some cases could lead to a mismatch between the size of the image container and its contents.
 * Fixed a bug with painting the active part of the slider track.
 * The text selection algorithm has been changed to bring it into line with the iOS standard. It is now impossible to select an empty text fragment.
 
-# Web Client:
+### Web Client
 * Added `getDictKeys` and `getDictValues` functions.
 * Added support for expressions in the `lottie` extension in the `lottie_url`, `repeat_count` and `repeat_mode` fields.
 * Added support for the relative action urls (like `/smth`).
@@ -934,7 +934,7 @@
 
 ## 32.10.0
 
-# Android Client:
+### Android Client
 * Added `dict` to `array` conversion.
 * Added `len` function for `dict` variables.
 * Fixed default value usage when property has incorrect value.
@@ -942,16 +942,16 @@
 * Support `preload_required` for images in `div-text`.
 * Supported `functions` in `div-data`.
 
-# iOS Client:
+### iOS Client
 * Fix infinite `invalidateIntrinsicContentSize` layout cycle.
 
-# Web Client:
+### Web Client
 * Added `len` function for `dict` variables.
 
 
 ## 32.9.0
 
-# Android Client:
+### Android Client
 * Brought back fixes for accessibility mode `merge`.
 * Fixed `pager`'s `indication` clipping.
 * Fixed gallery item reordering after item builder data update.
@@ -959,7 +959,7 @@
 * RenderEffect support moved under DivConfiguration flag.
 * Updated compile SDK and target SDK to 35.
 
-# iOS Client:
+### iOS Client
 * Added dict function `getDictKeys`, which return a collection containing just the keys of the dictionary.
 * Added dict function `getDictValues`, which return a collection containing just the values of the dictionary.
 * Added dict method `getKeys`, which return a collection containing just the keys of the dictionary.
@@ -971,12 +971,12 @@
 
 ## 32.8.0
 
-# Android Client:
+### Android Client
 * Added ability to discard sequential drawing pass cancellation. Corresponding events will be logged to `Div2Logger`.
 * Fixed ranges with actions in selectable text.
 * Fixed unnecessary selection of ranges with actions.
 
-# iOS Client:
+### iOS Client
 * Added DivKit Sample app on SwiftUI.
 * Added len() function for dictionaries.
 * Fixed animation usage when scrolling in tabs, triggered by an action.
@@ -985,43 +985,43 @@
 * Lottie-extension expressions support.
 * Supported `update_structure` action.
 
-# Web Client:
+### Web Client
 * Fixed an error with the calculation of the expression for the `visibility` property of the child element of the gallery.
 
 
 ## 32.7.1
 
-# Android Client:
+### Android Client
 * Reverted fixes for accessibility mode `merge`.
 
 
 ## 32.7.0
 
-# Android Client:
+### Android Client
 * Dump error monitor report to logcat.
 * Remove view from TriggerExecutor's attachedViews when view is detached from window to prevent memory leaks.
 * Supported `update_structure` actions.
 * Updated Coil to 3.0.4.
 
-# iOS Client:
+### iOS Client
 * Fixed a bug with the slider where the marks would change randomly when moving the slider.
 * Fixed bug with updating slider value.
 * Supported complex variables observing in get[Type]Value functions in `div-trigger`.
 
-# Web Client:
+### Web Client
 * Added the `update_structure` action support.
 * Fixed the calculation of expressions using `boolean` variables and obtaining boolean values from arrays and dicts.
 
 
 ## 32.6.0
 
-# Android Client:
+### Android Client
 * Allowed to draw shadows defined by `shadow` within transient div hierarchy.
 * Fixed actions inside containers with accessibility mode `merge`.
 * Fixed content voicing in accessibility mode `merge`.
 * Moved to RenderEffect from RenderScript for API 31+.
 
-# iOS Client:
+### iOS Client
 * Added actions to `div-state`.
 * Changed the phone number mask to avoid the possibility of entering expressions with a hyphen at the end, such as "+1 (900) 000-".
 * Fix states updating inside block with `transition_out`.
@@ -1029,7 +1029,7 @@
 * Hid indicator if there is only one item in the pager.
 * `InputPropertiesExtensionHandler` implemented. It allows you to configure the following properties: `enablesReturnKeyAutomatically`, `spellChecking`.
 
-# Web Client:
+### Web Client
 * Expressions with the `getIntegerValue`/`getNumberValue`/`getBooleanValue`/`getStringValue`/`getColorValue`/`getUrlValue` functions are now recalculated when changing the variables used in the first argument.
 * Fixed an issue with calculating the `animation_in`/`animation_out` parameters in the `tooltip`.
 * The logic of `variable_triggers` is unified with the work of all other expressions.
@@ -1037,13 +1037,13 @@
 
 ## 32.5.0
 
-# Android Client:
+### Android Client
 * Fixed GestireDetector creation on background thread.
 * Fixed memory leak for LoadableImageView after release call.
 * Instantly copy error report to clipboard when no space for details.
 * Supported subscriptions to `get<Type>Value` functions.
 
-# iOS Client:
+### iOS Client
 * Added `DivHostingView` adapter for `SwiftUI`.
 * Fixed gradient angle with different width and height.
 * Fixed slider thump shaking at breakpoints when moving manually.
@@ -1052,80 +1052,80 @@
 
 ## 32.4.1
 
-# iOS Client:
+### iOS Client
 * Adding DivKitSVG podspec.
 
 
 ## 32.4.0
 
-# Android Client:
+### Android Client
 * Fixed `items` position in `gallery` after state changed.
 * Fixed multiple actions handling on `text` with `ranges` or `images`.
 
-# iOS Client:
+### iOS Client
 * Fixed alignment in galleries with Right-To-Left orientation.
 * Fixed freezing of videos when scrolling in the gallery.
 * Fixed transition-in animations with delay.
 * Support div-text focused_text_color.
 * Сalling `enter_key_actions` for a multiline input.
 
-# Web Client:
+### Web Client
 * Fixed incorrect logic, due to which the `filters` property of the `input` component did not work with an empty value.
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Added ability to create Color outside DivScope.
 * Added modify method for entities in Kotlin DSL.
 
 
 ## 32.3.1
 
-# iOS Client:
+### iOS Client
 * Add DivKitSVG package.
 
 
 ## 32.3.0
 
-# Android Client:
+### Android Client
 * Fixed input actions not working for single line inputs.
 * Fixed that the keyboard type would sometimes not change.
 * Fixed triggers in elements built by item-builder.
 * Fixed variables observing in elements built by `item-builder`.
 * Prevent keyboard from resetting state after rebind.
 
-# iOS Client:
+### iOS Client
 * Adding the target `DivKitSVG` to support SVG images.
 * Fix space-evenly with gone items.
 * Report warning "Touchable view is too small" only when both view's dimensions are non-zero.
 * Support `tab_title_delimiter` for `div_tabs`.
 * Supported hover and press actions.
 
-# Web Client:
+### Web Client
 * Fixed a issue with incorrect priority of `url` over `typed` in `actions` in rare cases.
 
 
 ## 32.2.0
 
-# Android Client:
+### Android Client
 * Transition animation fix so it clips rounted corners of an image.
 
-# iOS Client:
+### iOS Client
 * Fixed incorrect height resolution for containers with aspect.
 * Supported `div-slider` properties.
 * Supported `font_variation_settings` in `div-text`, `div-input`, `div-slider`, `div-select` and `div-tabs`.
 * Supported `is_checked` property for `div-accessibility`.
 
-# Web Client:
+### Web Client
 * Fixed a bug with an `animator` that could be accessed from a sibling component (the `animator` should be found only from the element itself or a child).
 
 
 ## 32.1.0
 
-# Android Client:
+### Android Client
 * Crash by using blur = 0 и corner_radius = 0 fixed.
 * Fixed an issue when triggers may not work in for multiple div views.
 * Supported `font_variation_settings` property in `text` and text ranges, `input`, `select` and `slider` thumbs text.
 
-# iOS Client:
+### iOS Client
 * Fix scrolling `div-pager` with `infinite_scroll` and `set_next_item` action on last item selected.
 * Size provider size now does not take into account margins of child views.
 * Supported `wrap_content` for images.
@@ -1133,7 +1133,7 @@
 
 ## 32.0.0
 
-# Android Client:
+### Android Client
 * Breaking change. The `value` of a `variable` can now take expressions. The result of this expression will be used as the initial value of the variable.
 * Added the ability to load local SVG files for Android.
 * Crash in DivTransitionHandler#beginDelayedTransitions fixed.
@@ -1141,7 +1141,7 @@
 * Keyboard now closes on missclick.
 * Support enter_key_actions for multiline input.
 
-# iOS Client:
+### iOS Client
 * Corrected gallery/pager twitching.
 * Fix submit action sending outer variables.
 * Fixed ignoring of `is_enabled` parameter in div-actions.
@@ -1150,7 +1150,7 @@
 * Update `return_key_type` dynamically.
 * You can now use the "#" symbol in div-action urls to set color variables.
 
-# Web Client:
+### Web Client
 * Breaking change. The `input` component will now apply `focus` styles to each focus, regardless of whether it is a keyboard or not.
 * Breaking change. The `url` value should now be a valid URL, as it already was on Android/iOS.
 * Breaking change. The `value` of a `variable` can now take expressions. The result of this expression will be used as the initial value of the variable.
@@ -1162,29 +1162,29 @@
 * Added the ability to scroll the `pager` using the mouse. This behavior can be disabled using the `pagerMouseDragEnabled` configuration property.
 * The incorrect size of the `page` with the "percentage" markup has been fixed.
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Added template constructor with name builder based on template card.
 
 
 ## 31.14.1
 
-# Android Client:
+### Android Client
 * Fixed `items` position in `gallery` after state changed.
 
 
 ## 31.14.0
 
-# Android Client:
+### Android Client
 * Fixed an issue when triggers may not work in for multiple div views.
 * Support of tan, acos, atan, atan2 functions.
 * Tap_outside_actions - property in tooltips implemented.
 * ViewCopiesKt: IllegalArgumentException: width and height must be > 0 fix.
 * We used to check if there is a soft hyphen in the first 10 chars of a text, now we check if it's present in the text.
 
-# iOS Client:
+### iOS Client
 * Shadow rendering has been adjusted to match other platforms.
 
-# Web Client:
+### Web Client
 * Fixed an error with the `integer` variables in the `submit` action (the bigint variable could not be converted to a string).
 * Fixed and issue with the `start` and `end` positions of the background.
 * Fixed the behavior of the `pager` with elements that have `visibility` = `gone`.
@@ -1192,17 +1192,17 @@
 
 ## 31.13.0
 
-# Android Client:
+### Android Client
 * Fixed images drawing in `pager`.
 * Support expressions in `set_variable` action for `dict` variables.
 
-# iOS Client:
+### iOS Client
 * Added the ability to set collection variables (array and dictionary) from URL.
 * Change wrong image name prefix for asset url.
 * Fixed views popping to the foreground when performing animation in overlap containers.
 * Support expressions in `set_variable` action for `dict` variables.
 
-# Web Client:
+### Web Client
 * Fixed an erroneous situation where an action with a `scope_id` was launched and no such scope was found, the action will now fail.
 * Fixed the logic of the size of the `image` with `aspect` and `wrap_content`.
 * Fixed the overflow logic of the `tabs` component with the height of `match_parent` and `fixed`.
@@ -1211,21 +1211,21 @@
 
 ## 31.12.0
 
-# Android Client:
+### Android Client
 * Added `cos` and `asin` functions.
 * Fix for image vertical alignment after animation.
 * Fixed `indicator` doesn't bind to `pager` with no `id`.
 * Removed overrides of`dispatchDraw()`. Border clipping is performed by `draw()` calls.
 * Supported `start` and `end` horizontal alignment for image background.
 
-# iOS Client:
+### iOS Client
 * Added `cot` function.
 * Changed non-modal `DivToolip` presentation.
 * Displays a warning if the animation cannot be shown because the element does not have an id.
 * Fixed the transition_out animation when switching back to the default state.
 * Font cache support implemented. Enabled by default. Can be disabled via `DivFlagsInfo.fontCacheEnabled`.
 
-# Web Client:
+### Web Client
 * Added `cot` function.
 * Added support for the `header` value of `accessibility.type`.
 * Added support for the `high_priority_preview_show` in `image`.
@@ -1242,18 +1242,18 @@
 
 ## 31.11.0
 
-# Android Client:
+### Android Client
 * Added support for `capture_focus_on_action` property.
 * Fix leaks and StackOverflows by stopping generation of expression resolvers outside RuntimeStore.
 * Supported expressions in lottie extension params.
 
-# iOS Client:
+### iOS Client
 * Added support for `color_map` property in `div-radial-gradient`.
 * Fix transition_change animation.
 * Fixed performance degradation for images with tint filter in text.
 * Supported search for the nearest pager if `pager_id` is not specified in `div-indicator`.
 
-# Web Client:
+### Web Client
 * Added support for the `accessibility` `mode` = `exclude`. Interactive components are prohibited in it.
 * Added support for the `capture_focus_on_action` property.
 * `input` / `select` / `switch` is now prohibited inside components with actions (as is `select`, as well as any other interactive components with actions).
@@ -1261,12 +1261,12 @@
 
 ## 31.10.0
 
-# Android Client:
+### Android Client
 * Fixed preloading in case when tree includes `item-builder`s or local variables.
 * Supported `truncate` property in `text`.
 * `Indicator` now attaches to the nearest `pager` if no `pager_id` is specified.
 
-# iOS Client:
+### iOS Client
 * Added `InputAutocorrectionExtensionHandler`.
 * Added support for `capture_focus_on_action` property.
 * Added support for `clip_to_bounds` property in `div-state`.
@@ -1274,7 +1274,7 @@
 * Fix transition_change animation.
 * Fixed pager scroll actions interruption with visibility_actions.
 
-# Web Client:
+### Web Client
 * Added support for the `color_map` in `radial_gradient`.
 * Added support for the `scroll_axis_alignment` in `pager`.
 * Fixed an issue with an incorrect default state in `pager` when `default_item` is provided.
@@ -1284,17 +1284,17 @@
 
 ## 31.9.0
 
-# Android Client:
+### Android Client
 * Fix animator on text gradient.
 
-# iOS Client:
+### iOS Client
 * Added Voice Over focus when focusing on `DivInput`.
 * Added support for `mode` with value "transactional" and `on_failed_actions` properties in `div-patch`.
 * Hide keyboard on tap outside.
 * Replace deprecated `EdgeInsets.horizontalInsets`/`EdgeInsets.verticalInsets` API usages with `EdgeInsets.horizontal`/`EdgeInsets.vertical`.
 * Visual animation no longer requires specifying an element ID.
 
-# Web Client:
+### Web Client
 * Added support for `functions` in the `card` (div data). Previously, they were supported only in components.
 * Added support for the `animation_type` and `animation_duration` in `tabs`.
 * Fixed a bug with the importance of properties in action, now `typed` is more important than `url`.
@@ -1304,26 +1304,26 @@
 
 ## 31.8.1
 
-# iOS Client:
+### iOS Client
 * Fix pager infinite scrolling + scroll_axis_alignment start and paddings.
 
 
 ## 31.8.0
 
-# Android Client:
+### Android Client
 * Fixed an issue where `pager` padding was not applied properly.
 * Fixed local video files playback.
 * Fixed multiple UI update on variable change.
 * Open DivVariableController.captureAllVariables.
 
-# iOS Client:
+### iOS Client
 * Added public `applyPatch` function in `DivView` to allow applying patches from clients.
 * Added public func `getVariableValue` in `DivVariableStorage` to get `DivVariableValue` from the storage.
 * Fixed a bug with visibility actions not working when resizing the DivView.
 * Supported `animated` property for `scroll_by` action.
 * Updated `parentPath` property logic.
 
-# Web Client:
+### Web Client
 * Added support for `background_accessibility_description` for the `tooltip`. If specified, the backdrop (background) of the `tooltip` is converted to a button with the specified text.
 * Added support for the `mask` in `text`.
 * Added the ability to provide a custom implementation of the video player using the `videoPlayerProvider` property.
@@ -1339,7 +1339,7 @@
 
 ## 31.7.0
 
-# Android Client:
+### Android Client
 * Added a way for shine animation to have onPause/onResume lifecycle from client through `pauseShineObservable`.
 * Do not hide keyboard by clicks on divs.
 * Fixed access to local variables in `state`.
@@ -1349,14 +1349,14 @@
 * Supported elements comparing by`reuse_id` to optimize `item_builder` data updating.
 * Updated Gradle to 8.13 and Android Gradle Plugin to 8.8.2.
 
-# iOS Client:
+### iOS Client
 * Fixed `DefaultTooltipManager.reset()` to make it close showing tooltips.
 * Input with mask updates text color when color scheme changes.
 * Separated visibility counter storage for `visibility_actions` and `disappear_actions`. Fixed `log_limit` common `id` in both `visibility_actions` and `disappear_actions`. Added warning for common `id` in `visibility_actions` or `disappear_actions`.
 * Supported `animation_in`, `animation_out` properties for `div-tooltip`.
 * Supported `password` `keyboard_type`.
 
-# Web Client:
+### Web Client
 * Added support for the `phone` `input` mask.
 * Added support for the `ranges` in `slider`.
 * Added support for the `scroll_to` and `scroll_by` actions.
@@ -1364,7 +1364,7 @@
 
 ## 31.6.0
 
-# Android Client:
+### Android Client
 * Supported `filters` property in `input`.
 * Added `Div2Context.closeTooltips()` method.
 * Made `item_builder` have a higher priority than `items`, just like other platforms.
@@ -1372,12 +1372,12 @@
 * Fixed `shine` gradient angle. Angle goes counterclockwise and rotates the gradient relative to the horizontal line.
 * Fixed gallery scroll in `paging` mode.
 
-# iOS Client:
+### iOS Client
 * `input` autocorrection value depends on `input_type`.
 * Fixed arrays parsing in typed actions.
 * Fixed calculation of sizes in `layout_provider`.
 
-# Web Client:
+### Web Client
 * Added `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.
 * Added support for parsing `array` and `dict` from a string (including both the `div-action://set_variable` and the `variable.set('value')` programming api). The format is json.
 * Added support for the `tap_outside_actions` and `close_by_tap_outside` in `tooltip`.
@@ -1387,7 +1387,7 @@
 
 ## 31.5.0
 
-# Android Client:
+### Android Client
 * Added PreloadFilter interface for the DivPreloader, designed to allows you to control which content needs to be preloaded, regardless of the preloadRequired value for the element.
 * Added resume/pause for shine extension while gone.
 * Added support for the `submit` action.
@@ -1399,12 +1399,12 @@
 * Prevent patch from modifying items in containers so item_builder could continue working after patch.
 * Supported `Div2View.setVariable(name, value)` for array variables.
 
-# iOS Client:
+### iOS Client
 * Fixed transition animation when view size changes.
 * The size of resizable elements with a given weight is now calculated without taking margins into account. This means that if you make two or more elements in a container with the same weight, their size will be the same even if one or more of them have margins set.
 * Updated `div-tooltip` accessibility.
 
-# Web Client:
+### Web Client
 * Added a warning for the `transition_id` / `transition_out` / `transition_change` properties without the required `id` property when changing state.
 * Added configuration flag `pagerChildrenClipEnabled`. It can be useful in cases with shadow elements of a `pager`.
 * Added support for the `color_map` property in the linear gradient.
@@ -1422,19 +1422,19 @@
 
 ## 31.4.0
 
-# Android Client:
+### Android Client
 * Div2View.discardVisibilityTracking() now public for cancelling visibility tracking.
 * Fixed corner clipping of elements inside transient hierarchy.
 * Improved complex rebind.
 * Supported dashed stroke style.
 * Use a CME-safe collection to resolve crashes occurring during patch application with item_builder.
 
-# iOS Client:
+### iOS Client
 * Supported `color_map` parameter in linear gradient.
 * Supported `dashed` stroke style in `div-border`.
 * Updated `TooltipEvent` struct with `div-tooltip` properties.
 
-# Web Client:
+### Web Client
 * Added `applyPatch` api for an DivKit instance.
 * Added support for the `is_playing` parameter in the `lottie` extension.
 * Fixed `functions` inheriting.
@@ -1446,13 +1446,13 @@
 
 ## 31.3.0
 
-# Android Client:
+### Android Client
 * Fixed items creation by `item_builder` in `container` with local variables.
 * Removed redundant check for API 26.
 * Throw errors when switching to ambiguous state.
 * Supported non-modal tooltip mode and `close_by_tap_outside` flag.
 
-# iOS Client:
+### iOS Client
 * Add flag `defaultTextAutoEllipsize`. It allows to change default value of `auto_ellipsize` property to `false`.
 * Added `mode` support for `div-tooltip`.
 * Changed the definition of the number of lottie animation repetitions in the "repeat_mode": "reverse" mode.
@@ -1462,20 +1462,20 @@
 * Supported `div-text` `auto_ellipsize` property. Default value is `true`.
 * Supported `indexing_direction` and `tint_mode` properties for `image` in `div-text`.
 
-# Web Client:
+### Web Client
 * Fixed an issue with `container` separators rendereed between invisible elements.
 * Fixed, which allows you to return dicts values and arrays in expressions inside actions.
 
 
 ## 31.2.0
 
-# Android Client:
+### Android Client
 * Fixed StackOverflowError at video playback during state change.
 * Fixed issue when text range `font_family` property was ignored.
 * Use Handler in timers instead of java.util.Timer.
 * Fixed empty text height measurement.
 
-# iOS Client:
+### iOS Client
 * Added `DivCardUpdateReason` typealias for `DivActionURLHandler.UpdateReason`.
 * Added `close_by_tap_outside`/`tap_outside_actions` support for tooltips.
 * Fixed shadow clipping during animation.
@@ -1485,18 +1485,18 @@
 
 ## 31.1.0
 
-# Android Client:
+### Android Client
 * Supported `cross_axis_alignment` in `pager`.
 * Supported `scroll_axis_alignment` in `pager`.
 
-# iOS Client:
+### iOS Client
 * Added `download` action handler.
 * Fixed `DivFlagsInfo.useUrlHandlerForVisibilityActions` behavior.
 * Fixed `pager` paddings.
 * Fixed a bug where short taps on a button did not animate.
 * When rendering grid view, the min_size property for height is now respected.
 
-# Web Client:
+### Web Client
 * Added support for switching states in the `tooltip`.
 * Added support for the `filters` property in the `input` component.
 * Added support for the functions `tan`, `asin`, `acos`.
@@ -1507,7 +1507,7 @@
 
 ## 31.0.0
 
-# Android Client:
+### Android Client
 * Removed method `DivKitConfiguration.Builder.histogramConfiguration(HistogramConfiguration)`. Use `DivKitConfiguration.Builder.histogramConfiguration(Provider<HistogramConfiguration>)` instead.
 * Removed method `HistogramBridgerecordTimeHistogram(String, Long, Long, Long, TimeUnit, Long)`. Use `HistogramBridgerecordTimeHistogram(String, Long, Long, Long, TimeUnit, Int)` instead.
 * Removed constructor `Div2Context(Activity, DivConfiguration)`. Use `Div2Context(ContextThemeWrapper, DivConfiguration)`, `Div2Context(ContextThemeWrapper, DivConfiguration, Int)` or `Div2Context(ContextThemeWrapper, DivConfiguration, Int, lifecycleOwner?)` instead.
@@ -1545,7 +1545,7 @@
 * Supported `layout_mode` `wrap_content` in `pager`.
 * Fixed combination of line heights set for whole text and specific ranges.
 
-# iOS Client:
+### iOS Client
 * Breaking change. From now the default tooltip width is `match_parent` (previously was `wrap_content` which did not match the default `div-base` behavior).
 * Removed `DivActionHandler.handleDivActionUrl` method.
 * Removed `DivActionLogger` protocol. Use `DivReporter` instead.
@@ -1582,7 +1582,7 @@
 * Supported `baseline_offset` for `range` in `div-text`.
 * Fixed `div-state` switching in tooltips.
 
-# Web Client:
+### Web Client
 * Breaking change. Api `Ya.Divkit` in window is now deprecated, and the `Ya.DivKit` should be used (please note the big letter "K" instead of the small "K").
 * Breaking change. Browsers/Node,js now require BigInt support (Chrome 58 -> 67, Safari 11 -> 14, Firefox 67 -> 68, Node.js 8 -> 10.4). Integer values in markup expressions now always use BigInt. `subscribe` and other methods for integer variables now always return BigInt values.
 * Breaking change. Components with actions (not links) are now rendered using a `button`. This may change the default tap animation in iOS and other minor updates.
@@ -1599,13 +1599,13 @@
 * Changed `doubletap_actions` detect logic.
 * Fixed `array` and `dict` variable types in d.ts.
 
-# Schema
+### JSON Schema
 * Changed `div-action-download.url` property type to `url`.
 
 
 ## 30.33.0
 
-# Android Client:
+### Android Client
 * Add `animated` parameter to `set_current_item`, `set_next_item`, `set_previous_item`, `scroll_forward`, `scroll_backward`, `scroll_to_position`, `scroll_to_end`, `scroll_to_start` actions.
 * Added `ImageTransformer` for `LoadableImageView`.
 * Added `shine` extension.
@@ -1619,7 +1619,7 @@
 * Lighten R8 rules.
 * Save Disposable in DivActionBinder to prevent subscription leak.
 
-# iOS Client:
+### iOS Client
 * Added `atan` function.
 * Added `getStoredArrayValue`, `getStoredDictValue` functions.
 * Added `match_parent` width support for tooltips.
@@ -1635,7 +1635,7 @@
 * Supported corner_radius param in shimmer extension.
 * Supported empty cells in a row in `div-grid`.
 
-# Web Client:
+### Web Client
 * Added `download` typed action support.
 * Added `is_enabled` property support for the `slider`.
 * Added new functions: `pi`, `toRadians`, `toDegrees`, `sin`, `cos` and `atan`.
@@ -1650,13 +1650,13 @@
 
 ## 30.32.0
 
-# Android Client:
+### Android Client
 * Added `baseline_offset` property for text ranges.
 * Added `pi`, `toRadians`, `toDegrees`, `sin` functions.
 * Fixed alpha in div wasn't applied to shadow.
 * Fixed empty URL beacon sending.
 
-# iOS Client:
+### iOS Client
 * Added `cos` function.
 * Added `pi`, `sin`, `toRadians`, `toDegrees` functions.
 * Added `scroll_by`/`scroll_to` actions support.
@@ -1667,14 +1667,14 @@
 
 ## 30.31.0
 
-# Android Client:
+### Android Client
 * Fixed updating variables by `layout_provider` for recycled views in `gallery`.
 * Supported `is_enabled` property in `slider`.
 * Supported array methods: `getInteger`, `getNumber`, `getString`, `getBoolean`, `getColor`, `getUrl`, `getArray`, `getDict`, `isEmpty`.
 * Use neutral accent colors to ensure they contrast well with any theme.
 * Fix border drawing of transient views.
 
-# iOS Client:
+### iOS Client
 * Added `set_state` action support.
 * Added `step` parameter support in `set_next_item`/`set_previous_item` actions.
 * Added empty `div-grid` support.
@@ -1684,7 +1684,7 @@
 * Fixed size calculation of `div-container` with paddings and aspect height.
 * Restricted integer/number as string parsing.
 
-# Web Client:
+### Web Client
 * Added support for `accessibility` property in images of `text`.
 * Added support for `indexing_direction` in `images` inside `text`.
 * Added support for the `clip_to_bounds` property in the `state`.
@@ -1702,22 +1702,22 @@
 
 ## 30.30.0
 
-# Android Client:
+### Android Client
 * Fixed border clipping of views placed in transient container.
 * Postpone trigger execution until the end of the bind process. Otherwise, actions for displaying tooltips may not work properly.
 
-# iOS Client:
+### iOS Client
 * Fixed `div-gallery` paddings and page size calculation.
 * Fixed number to boolean conversion.
 
-# Web Client:
+### Web Client
 * Added limited support for the `accessibility->type` property (only `button`, `image`, `checkbox` and `radio` values is supported). Added support for the `accessibility->is_checked` property.
 * Added typed actions `show_tooltip` and `hide_tooltip`.
 
 
 ## 30.29.0
 
-# Android Client:
+### Android Client
 * Added support for `indexing_direction` property in `text.image`.
 * Fix video cache to take videoPlayer by id.
 * Fixed `duration` and `tick_interval` values in test screens for `timers`.
@@ -1726,14 +1726,14 @@
 * Fixed gallery cross axis alignment.
 * Supported `div-function` in `div-base`. Functions can be declared in any div element. Access to functions is carried out in the same way as local variables.
 
-# iOS Client:
+### iOS Client
 * Added `ShineExtension`.
 * Adjusted visibility actions work for video start.
 * Fix DivTypedValue parsing.
 * Fixed background animation for actions.
 * Supported `div-size` for `div-switch`.
 
-# Web Client:
+### Web Client
 * Added support for local `functions` in all components.
 * Added support for the `item_builder` in the `pager` component.
 * Added support for the `switch` component.
@@ -1743,7 +1743,7 @@
 
 ## 30.28.0
 
-# Android Client:
+### Android Client
 * Fix gesture extension. Now extension works at regression test (note that vertical swipes are intercepted by regression container).
 * Added support for `clip_to_bounds` property in `div-state`.
 * Fixed `placeholder_color` subscription for `DivImage`.
@@ -1754,12 +1754,12 @@
 * Supported `div-switch` element.
 * Supported `enter_key_type` and `enter_key_actions` properties for `div-input`.
 
-# iOS Client:
+### iOS Client
 * Add variables to the request body in `DivNetworkSubmitter`.
 * Fixed inserting in the middle of the single `div-input`.
 * The snapshot test image generation has been updated to allow additional DivViews to be displayed.
 
-# Web Client:
+### Web Client
 * Added support for the `default_item` property in `pager`.
 * Added support for the `enter_key_actions` property in the `input` component.
 * Added support for the `validators` property in `input` component.
@@ -1774,35 +1774,35 @@
 
 ## 30.27.0
 
-# Android Client:
+### Android Client
 * Fixed `border` after `blur`.
 
-# iOS Client:
+### iOS Client
 * Added `remove` func for `DivVariableStorage`.
 * Tooltip position always fits within the screen bounds.
 
 
 ## 30.26.0
 
-# Web Client:
+### Web Client
 * Incorrect caching of method calls has been fixed.
 
 
 ## 30.25.0
 
-# Android Client:
+### Android Client
 * Close tooltips on backPress when screen reader is turned on.
 * Fixed drawing shadows on tooltip views.
 * Fixed how `DivPagerView` is shown when it wraps its children along cross axis and children have different dimensions along that axis. Now `DivPagerView` chooses its dimension as maximum of dimensions of initially visible children.
 
-# iOS Client:
+### iOS Client
 * Added XCode 16.0 / Swift 6 support.
 * Added new typed action `div-action-hide-tooltip` that can be used instead of `div-action://hide_tooltip`.
 * DivPatchProvider.getPatch method extended with DivActionInfo parameter.
 * Supported `div-switch`.
 * Supported `enter_key_type` and `enter_key_actions` properties for `div-input`.
 
-# Web Client:
+### Web Client
 * Added `direction` property into extension context.
 * Added `isEmpty` method for the arrays.
 * Added `scope_id` action property support.
@@ -1814,10 +1814,10 @@
 
 ## 30.24.0
 
-# Android Client:
+### Android Client
 * Added API to force specific `Div2View` to use canvas clipping.
 
-# iOS Client:
+### iOS Client
 * Add `isEmpty()` method to dict and array.
 * Added `div-focus.next_focus_ids.forward` support.
 * Added new typed action `div-action-show-tooltip` that can be used instead of `div-action://show_tooltip`.
@@ -1825,7 +1825,7 @@
 * Fix statusbar blinking.
 * Fixed unnecessary focus clearing in inputs.
 
-# Web Client:
+### Web Client
 * Added support for a `cloud` background for `range` in `text`.
 * Added support for the `tab_title_delimiter` property in the `tabs` component.
 * Fixed incorrect size of `corner_radius` and `width` of `stroke` in `range` for `text`.
@@ -1835,11 +1835,11 @@
 
 ## 30.23.0
 
-# Android Client:
+### Android Client
 * Fixed memory leak in timers.
 * `variable_triggers` defined locally are now attached only when they are within an active `state`.
 
-# iOS Client:
+### iOS Client
 * Added DivSubmitAction which allows to submit data from container. Can be used while creating forms with DivKit.
 * Disabled states in tooltips.
 * Fixed animation of infinite scroll indicator in pager.
@@ -1849,7 +1849,7 @@
 
 ## 30.22.0
 
-# Android Client:
+### Android Client
 * Added clearing of adapters in `pager` and `gallery`.
 * Added table of variables into debug panel (ErrorView). Values of variables in table can be changed.
 * Enable setting a11y focus on views inside tooltips.
@@ -1861,7 +1861,7 @@
 * Properties `start` and `end` of `div-text.range` are optional now.
 * Supported cloud text range background.
 
-# iOS Client:
+### iOS Client
 * Added `TooltipManager.reset()`.
 * Fixed hint availability in masked div-input.
 * Improved DivData parsing.
@@ -1872,7 +1872,7 @@
 * Use alternative tooltip position if requested position doesn't fit.
 * Fixed tooltip not hiding on screen rotation.
 
-# Web Client:
+### Web Client
 * Added local `variable_triggers` property support.
 * Added support for `0` / `1` values in the `set_stored_value` action with the `boolean` type.
 * Added support for the `alignment_vertical` in `text`. Please note that the location of the images may change slightly.
@@ -1880,33 +1880,33 @@
 * Fixed minor memory leaks.
 * Properties `start` and `end` of `div-text.range` are optional now.
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Kotlin Json Builder DSL models upgraded to kotlin data classes.
 
 
 ## 30.21.0
 
-# Android Client:
+### Android Client
 * Added evaluable functions `getStoredArrayValue(name)`, `getStoredDictValue(name)`.
 * Added new typed action `scroll_by` that can be used instead of `div-action://scroll_forward`, `div-action://scroll_backward`, `div-action://set_next_item` and `div-action://set_previous_item`.
 * Added new typed action `scroll_to` that can be used instead of `div-action://set_current_item`, `div-action://scroll_to_position`, `div-action://scroll_to_start` and `div-action://scroll_to_end`.
 * Added new typed action `set_stored_value` that can be used instead of `div-action://set_stored_value`.
 
-# iOS Client:
+### iOS Client
 * Changed pager's page size evaluation to make the behavior consistent with other platforms.
 * Fixed focus on ios. update blocks after changing focus via actions or inside blocks.
 * `ImageBlock` `tintMode: TintMode` and `tintColor: Color?` can now be rendered using `RemoteImageView` instead of `MetalImageView`. To do so `imageTintPreferMetal: Bool` must be set to `false` via `DivFlagsInfo`
 
-# Web Client:
+### Web Client
 * Supported `id` property for the prototypes in the `item_builder`.
 
-# TypeScript JSON Builder:
+### TypeScript JSON Builder
 * Added platforms support in the TSDoc comments.
 
 
 ## 30.20.0
 
-# Android Client:
+### Android Client
 * Added implementation for local `variable_trigger` field.
 * Added method `DivVariableController#replaceAll` which updates all existing variables, declare new ones and removes variables which are not provided in the list of new variables, and `DivVariableController#replaceAll` which removes all provided variables.
 * Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts.
@@ -1917,7 +1917,7 @@
 * Fixed `indicator` behavior when connected `pager` has invisible items.
 * Fixed `indicator` behavior when infinite scroll is enabled.
 
-# iOS Client:
+### iOS Client
 * Added `tighten_width` parameter for `div-text`, that removes unnecessary horizontal paddings in multiline texts.
 * Added new typed action `div-action-timer` that can be used instead of `div-action://timer`.
 * Added new typed action `div-action-video` that can be used instead of `div-action://video`.
@@ -1926,7 +1926,7 @@
 * Supported `DivFunction` in `div-base`. Functions can be declared in any div element. Access to functions is carried out in the same way as local div-variables.
 * Fixed problems with keyboard appearing in multiline text input.
 
-# Web Client:
+### Web Client
 * Added support for the `on_applied_actions` and `on_failed_actions` inside `patch`.
 * Added support for the `autocapitalization` property in the `input` fields.
 * Added `encodeRegex` function.
@@ -1936,7 +1936,7 @@
 
 ## 30.19.0
 
-# Android Client:
+### Android Client
 * Experimental API: added new parsers for properties and template fields.
 * Supported `item-builder` property in `gallery` and `pager`.
 * Supported `autocapitalization` in `input`. Allows you to control capital letters in the keyboard
@@ -1949,11 +1949,11 @@
 * Fixed focus navigation inside `gallery`.
 * Fixed keyboard blinking when changing focus between inputs.
 
-# iOS Client:
+### iOS Client
 * Fixed a bug with notification observers while changing parent variable from child scope
 * Fixed opacity for elements with solid background.
 
-# Web Client:
+### Web Client
 * Added local `variables` support.
 * Added `layout_provider` property support.
 * Fixed the behavior of `toNumber('')` to return an error.
@@ -1966,13 +1966,13 @@
 
 ## 30.18.0
 
-# Android Client:
+### Android Client
 * Experimental API: added template serialization interfaces.
 * Fixed a bug where the input field intercept vertical scrolling.
 * Fixed corner clipping while transitions is in progress.
 * Support `div-custom` patching.
 
-# iOS Client:
+### iOS Client
 * Experiment added to use different drawing methods for blur/tint effects inside `ImageBlock`. Previously `MetalImageView.swift` was the only option. Now using `DivFlagsInfo` - we can set `imageBlurPreferMetal: Bool` or `imageTintPreferMetal: Bool` to false, and `RemoteImageView.swift` will be used instead (with new way to render). By default behaviour stays the same as before.
 * Support resolveValue for RawRepresentable type.
 * Supported div-input max_length field for ios
@@ -1980,7 +1980,7 @@
 
 ## 30.17.0
 
-# Android Client:
+### Android Client
 * Bump OkHttp version to 4.12.0
 * Implemented support for field `accessibility` for images inside text. (from version 30.14)
 * Supported `alignment_vertical` for `ranges` and `images` elements.
@@ -1993,18 +1993,18 @@
 * Fix bug when image preview was skipped after bind with same image_url, but different preview.
 * Throw AssertationError on try to load patch without providing `DivDownloader` to `DivConfiguration`.
 
-# iOS Client:
+### iOS Client
 * Fixed bug with last small page.
 * Fixed bug with pager scrolling.
 
 
 ## 30.16.0
 
-# Android Client:
+### Android Client
 * Fixed visibility actions within patch layout.
 * Fixed a bug when separators inside a `container` ignore margins.
 
-# iOS Client:
+### iOS Client
 * Added test playgrounds with layout of objects from LayoutKit.
 * Added support of autocapitalization type in `div-input` text fields.
 * Added filtering entered data in `div-input` using regexp or expressions.
@@ -2013,45 +2013,45 @@
 
 ## 30.15.0
 
-# Android Client:
+### Android Client
 * Fix indicator disappearing after patch.
 
-# iOS Client:
+### iOS Client
 * Added fix of scrolling multiline text input while typing text to avoid active input to be under keyboard.
 * Fixed variable trigger invocation after calling appends from the client.
 
 
 ## 30.14.0
 
-# Android Client:
+### Android Client
 * Added support for local `variables` field.
 * Fixed an issue when items built from prototypes couldn't receive variable updates.
 * Deprecated method `DivCustomContainerChildFactory#bindChildView`. Use a new method implementation with `childIndex` param instead. Otherwise, local variables inside custom containers wouldn't work.
 * Support toString() methods for dicts and arrays.
 
-# iOS Client:
+### iOS Client
 * Moved edits from the patch for the swipe_down fix.
 * Fixed a bug when scrolling from page to another page.
 * Fixed boolean type parsing in `set_stored_value` action.
 
-# Web Client:
+### Web Client
 * Added `markdownExtensionBuilder` function, which accepts the markdown processing function and produces a `markdown` extension.
 * Added `getComponentProperty` extension API.
 
 
 ## 30.13.0
 
-# Android Client:
+### Android Client
 * Now `next_focus_ids.forward` supports accessibility order.
 * Now `div-gallery` in `paging` scroll mode will be centered like in other platforms.
 * Fixed visibility action tracking when `DivData` moved to another `Div2View`.
 * Fixed multiple state switching within pager items.
 
-# iOS Client:
+### iOS Client
 * Added variable triggers to div-base. They can be triggered by parent variables.
 * Reset local triggers in the elements after applying div-patch.
 
-# Web Client:
+### Web Client
 * Updated the layout of the `grid`, in which elements are superimposed on each other to match the behavior of Android.
 * The logic of `transition_change` has been brought into line with other platforms: with this change, there is no need to contain the `transition_change` property in the final state. In addition, parameters from the previous state will be used, not from the new one.
 * Fixed the `auto_ellipsize` property in the presence of `max_lines` for the `text` component.
@@ -2060,25 +2060,25 @@
 
 ## 30.12.0
 
-# Android Client:
+### Android Client
 * Supported `layout_provider` property.
 * Supported `div-patch.on_applied_actions` and `div-patch.on_failed_actions`.
 * Support custom corner radius at `shimmer` extension.
 * Fixed pages in `pager` not switching in accessibility.
 
-# iOS Client:
+### iOS Client
 * Supported `item_builder` for pager and gallery.
 * Added callbacks with div actions in div-patch. Called after applying patches.
 
 
 ## 30.11.0
 
-# Android Client:
+### Android Client
 * Supported `reuse_id` field. Use `reuse_id` for more efficient reuse of items with same structure in `gallery`/`pager`.
 * Fixed gallery not reusing items.
 * Fixed custom shadow drawing when view is in transient state.
 
-# iOS Client:
+### iOS Client
 * Supported page transformations in pager.
 * Supported reuse_id field for items in pager, gallery, tabs, grid
 * Update alpha while changing states with action_animation params.
@@ -2089,71 +2089,71 @@
 
 ## 30.10.0
 
-# Android Client:
+### Android Client
 * Make `div-stroke.width` a number.
 * Now visual errors dump includes card's json and all global variables states.
 
-# iOS Client:
+### iOS Client
 * Fixed video player initialization in `VideoBlock`.
 
 
 ## 30.9.0
 
-# Android Client:
+### Android Client
 * Fix `shadow` rotation if `div` uses `transform`.
 
-# iOS Client:
+### iOS Client
 * Fixed element paths for `div-gallery`.
 * Added `div-base.layout_provider`.
 * Optimized `DivLastVisibleBoundsCache`.
 
-# Web Client:
+### Web Client
 * Performance optimizations.
 
 
 ## 30.8.0
 
-# Android Client:
+### Android Client
 * Implemented `DivMarkdownExtensionHandler` to support `markdown` extension for `text`.
 * Fixed crash after removing child in `gallery`.
 * Fixed drawing shadows when view is invisible or gone.
 * Fixed NPE at `shimmer` extension
 * Fix issue when Div2View could not access variable via nested DivVariableController.
 
-# iOS Client:
+### iOS Client
 * Added local variables support.
 * Fixed infinity pager scroll.
 * Opening tooltips in new window.
 * Fixed multiple `player.seek` call in `VideoBlock`.
 
-# Web Client:
+### Web Client
 * Fixed several issues with `variable_triggers` evaluation.
 
 
 ## 30.7.0
 
-# Android Client:
+### Android Client
 * Add numeric value support for `fontWeightValue`
 * Supported `id` property in `div-collection-item-builder.prototype`.
 * Fixed div view state change happened before binding.
 
-# iOS Client:
+### iOS Client
 * Optimized `ExpressionResolver`.
 * `DivVariableTracker` state made public.
 
-# Web Client:
+### Web Client
 * Fixed the `top_offset` mutation for incoming data in the `text` component.
 
 
 ## 30.6.0
 
-# Android Client:
+### Android Client
 * Fixed multiple state switching with different root state.
 * **Experimental API:** added new interfaces for data serialization.
 * Introduced `index` variable for prototyped elements.
 * Fixed grid cell size calculation when margins are set.
 
-# iOS Client:
+### iOS Client
 * Fixed inline image reusing in DivText.
 * Added `DivVariableStorage.hasValue` method.
 * Added `font_weight_value` support.
@@ -2161,14 +2161,14 @@
 * Fixed memory leak in VisibilityActionPerfromers.
 * Added `hitTest` implementation into `StateBlockView` to pass through touches.
 
-# Web Client:
+### Web Client
 * Added support for the property `font_weight_value` in `text`, `input`, `slider` and `select`.
 * Introduced `index` variable for prototyped elements.
 
 
 ## 30.5.0
 
-# Android Client:
+### Android Client
 * Implemented support for field `page_transformation` in `pager`.
 * Old visibility actions are no longer logged after Div2View was rebound by another DivData.
 * Fixed image drawing when its padding bigger than size.
@@ -2179,38 +2179,38 @@
 * Detach old indicators from pager on attach new ones.
 * `okhttp` library updated to version 4.11.0
 
-# iOS Client:
+### iOS Client
 * Introduced `index` variable for prototyped elements.
 * Fixed escaped strings resolving in expressions
 
-# Web Client:
+### Web Client
 * Added `array_set_value` action.
 
 
 ## 30.4.0
 
-# Android Client:
+### Android Client
 * Fixed `pager` page size evaluation. Now all the pages are the same size, the same as on other platforms.
 * Fixed scroll of `pager` when more then 2 pages is visible.
 * Added `array_set_value` action.
 * Added `dict_set_value` action.
 * Added `containsKey` method for dictionaries.
 
-# iOS Client:
+### iOS Client
 * Fixed `input` paddings.
 * Fixed comparing `scrollRange` in `GalleryViewState`.
 * Added `array_set_value` action.
 * Added `dict_set_value` action.
 * Added `containsKey` method for dictionaries.
 
-# Web Client:
+### Web Client
 * Added `dict_set_value` action.
 * Added `containsKey` method for dictionaries.
 
 
 ## 30.3.0
 
-# Android Client:
+### Android Client
 * Fixed sizes calculation for `gallery` `items` wrapped within `container`.
 * Added `tab_title_delimiter` property support for `tabs`.
 * Remove focus from focused `input` if some clickable div were clicked.
@@ -2219,13 +2219,13 @@
 * Fixed crash by `gallery` when count of `items` was less then `column_count`.
 * Supported `font_feature_settings` property for `div-text`.
 
-# iOS Client:
+### iOS Client
 * Fixed items position in `gallery`.
 * Supported `font_feature_settings` property for `div-text`.
 * Removed `z`/`Z` patterns restriction from datetime formatting functions.
 * Fixed clipping in `container`.
 
-# Web Client:
+### Web Client
 * Fixed an issue with the `text` property `top_offset` and ranges intersection.
 * Added new API's for the extensions: `processExpressions` and `execAction`.
 * Added `gesture` extension.
@@ -2239,16 +2239,16 @@
 
 ## 30.2.0
 
-# Android Client:
+### Android Client
 * Fixed line height adjustment for embedded images and image placeholdes in `div-text`.
 * Added padding on draw `default_item` in `gallery`.
 * Improved expression error messages.
 
-# iOS Client:
+### iOS Client
 * Fixed disappear actions for gone blocks.
 * Improved expression error messages.
 
-# Web Client:
+### Web Client
 * Calculate `is_enabled` in `actions` before executing the entire list of actions, not in the process.
 * Implemented `toString` function and method for arrays and dicts.
 * Improved expression error messages.
@@ -2258,16 +2258,16 @@
 
 ## 30.1.0
 
-# Android Client:
+### Android Client
 * Fixed a bug where updates to global variables are lost if they occurred after the destruction of Div2View, but before the creation of a new one.
 
-# iOS Client:
+### iOS Client
 * Implemented operands lazy evaluation.
 
 
 ## 30.0.0
 
-# Android Client:
+### Android Client
 * Breaking change: Classes `StandardExoDivPlayerView` and `ZoomExoDivPlayerView` replaced with common `ExoDivPlayerView`
 * Breaking change: Classes removed from public API: `ExoDivMediaSourceAbstractFactory`, `ExoDivPlayer` (accessible by interface `DivPlayer`), `ExoDivPlayerView` (accessible by interface `DivPlayerView`)
 * Breaking change: Removed method `isCompatibleWithNewParams(scale: DivVideoScale)` from `DivPlayerView`
@@ -2288,7 +2288,7 @@
 * TextureView is now a default view for DivVideo.
 
 
-# iOS Client:
+### iOS Client
 * Breaking change: Changed method signature in `ExpressionResolver` from `resolveString(_ expression: String) -> String` to `resolveString(_ expression: String) -> String?`.
 * Breaking change: Protocol `DivStateInterceptor` and corresponding implementation `DivStateInterceptorImpl` was removed. Please use `DivExtensionHandler` instead.
 * Breaking change: public API for `DivActionURLHandler.updateReason` has been changed.
@@ -2309,11 +2309,11 @@
 * Fixed validation in expressions.
 * Fixed view reuse in `ShimmerImagePreviewExtension`.
 
-# Web Client:
+### Web Client
 * Breaking change: actions from `variable_triggers` lead to execution of a callback `onStat` with type = `trigger`.
 * Disallowed variable names with consecutive dots or with trailing dot.
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Changed the way of how primitive array elements are added.
 
 This change supports usage of expressions in array elements. As for now, primitive array elements  (e.g., transition triggers, gradient backgrounds) must be
@@ -2322,7 +2322,7 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 29.15.0
 
-# Android Client:
+### Android Client
 * Added ability to set a specific logging level using DivKit#setLogLevel.
 * Replaced `String` with `CharArray` at expression tokenization process.
 * Recreating subscriptions to local variables in case Div2View is recreated after destroying its lifecyclerOwner in order to preserve the state of local variables.
@@ -2331,7 +2331,7 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Fixed accessibility of gallery children when exclude a11y mode turned on.
 * Fixed that `video` screen could show up before `preview` was rendered.
 
-# iOS Client:
+### iOS Client
 * Removed mask from GalleryView to reduce offscreen rendering.
 * Added `toString` method/function for arrays and dictionaries.
 * Fixed arrays and dictionaries convertion to string.
@@ -2345,7 +2345,7 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Fixed pager state after reuse.
 * Fixed looping of video player events.
 
-# Web Client:
+### Web Client
 * Persistent variable storage has been implemented, including the action `set_stored_value` along with the function `getStoredStringValue` and others.
 * Fixed an issue with calling `disappear_actions` when destroying a component (for example, when hiding a tooltip).
 * Supported flag `is_enabled` for `input`.
@@ -2358,14 +2358,14 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 29.14.0
 
-# Android Client:
+### Android Client
 * Added implicit cast from `integer` to `number` inside evaluable expressions.
 * Supported flag `is_enabled` for `input`.
 * Fixed `restrict_parent_scroll` to restrict both directions
 * Fixed reusing of view id in same Div2Context
 * Added support of signed numbers in numeric `div-input`
 
-# iOS Client:
+### iOS Client
 * Added `toString()` method support in expressions.
 * Fixed ternary operator parsing.
 * Added get methods for dictionaries and arrays in expressions.
@@ -2373,12 +2373,12 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 29.13.0
 
-# Android Client:
+### Android Client
 * Supported loading images from assets by url `divkit-asset://`
 * Fixed that sometimes extensions could be removed on state change.
 * Fixed a memory leak occurring when using expressions in the "alignment" fields of the `container` element.
 
-# iOS Client:
+### iOS Client
 * Fixed focus setting when state changes and there are multiple inputs without id.
 * Supported `is_enabled` property in `input`.
 * Fixed variables usage in tooltips.
@@ -2389,18 +2389,18 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 29.12.0
 
-# Android Client:
+### Android Client
 * Enable android.nonTransitiveRClass.
 * Supported `item-builder` property in `container`.
 * Removed excessive list copy creation for thread-safe iteration.
 
-# iOS Client:
+### iOS Client
 * Fixed nested expression parsing.
 * Implemented new typed action `clear_focus` which removes focus from any focused view.
 * Improved views reuse.
 * Removed `id` requirement for `div-state`.
 
-# Web Client:
+### Web Client
 * Fixed an issue with deep `state` changes.
 * Implemented new typed action `clear_focus` which removes focus from any focused view.
 * Supported `preload_required` property for the `video` component.
@@ -2411,13 +2411,13 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Minor performance optimization.
 * Fixed parsing of incorrect values of `items` / `states` in `container`, `tabs` and `state`.
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Added ability to create `Patch` declaration.
 
 
 ## 29.11.0
 
-# Android Client:
+### Android Client
 * Fixed visibility recognition of pages in pager.
 * Removed validation for rectangular grid layout.
 * Screenshot test plugin improvements.
@@ -2426,23 +2426,23 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Implemented new typed action `clear_focus` which removes focus from any focused view inside Div2View.
 * Fixed overriding of `custom` layout params.
 
-# iOS Client:
+### iOS Client
 * Fixed variable names parsing.
 * Add default assets image provider.
 
-# Web Client:
+### Web Client
 * Fixed a rare call to "tick_actions" after "end_actions" in timers.
 * Removed validation for rectangular grid layout.
 
 
 ## 29.10.0
 
-# Android Client:
+### Android Client
 * Migrated to Gradle version catalog.
 * Add div data generator plugin.
 * Fixed SO at state variable change.
 
-# Web Client:
+### Web Client
 * Fixed several issues with the `tabs` component with the `match_parent` and `wrap_content` heights with the `constrained` flag.
 * Fixed an animation issue after swipe in `tabs` component.
 * Fixed a small issue with rendering corners with a frame and radius.
@@ -2454,7 +2454,7 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 29.9.0
 
-# Android Client:
+### Android Client
 * Reduced number of memory allocations at observing of client-side variables.
 * Fixed periodic crash in `pager` on view rebind.
 * `keyboard_type` = `password` has been supported for `input`.
@@ -2462,55 +2462,55 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Removed redundant memory usage when calling the `putOrUpdate` method on a `DivVariableController` with already known variables.
 * `Complex rebind` enabled by default.
 
-# iOS Client:
+### iOS Client
 * Implemented new actions to scroll gallery `scroll_to_start`, `scroll_to_end`, `scroll_backward`, `scroll_forward`, `scroll_to_position`.
 * Added implicit cast from integer to number.
 * Fixed actions using item_builder.
 * Fixed numeric values parsing.
 * Fixed skipping pages when scrolling pager by timer.
 
-# Web Client:
+### Web Client
 * Fixed space symbols collapse inside `tabs` title.
 * `keyboard_type` = `password` has been supported for `input`.
 
 
 ## 29.8.0
 
-# Android Client:
+### Android Client
 * New rebinding algorithm is implemented under `complexRebind` flag (can be enabled using the DivConfiguration builder).
 * Implemented new actions to scroll gallery `scroll_to_start`, `scroll_to_end`, `scroll_backward`, `scroll_forward`.
 * Fixed autoallipsizing of `div-text` with fixed line height.
 * Fixed artifacts on drawing corner_radius with border.
 
-# iOS Client:
+### iOS Client
 * `GestureExtensionHandler` introduced.
 
-# Web Client:
+### Web Client
 * The `visibility_duration` and `disappear_duration` properties in `actions` now supports the value 0.
 
 
 ## 29.7.0
 
-# Android Client:
+### Android Client
 * Fixed text line height so that it behaves as on other platforms.
 * Fixed baseline alignment for `image`, `gif-image` and `video`.
 
 
 ## 29.6.0
 
-# Android Client:
+### Android Client
 * Supported page switching inside `pager` using focus.
 * `separator` and `image` without any `action` or `accessibility` block are excluded from accessibility.
 * Fixed subscription in `video` to fields with `variables`
 
-# iOS Client:
+### iOS Client
 * Added `focus_element` action support.
 * Added `auto` `div-accessibility.type`.
 * Fixed accessibility for `div-input`.
 * Fixed concurrency crash in `DivStateManager`.
 * Added more information about associated `action` in URL handling.
 
-# Web Client:
+### Web Client
 * Added support for the `preload_required` property in `image`, `gif` and `text` components.
 * Fixed an issue with the `max_lines` and `auto_ellipsize` on the same `text` component.
 * Errors from expressions now also contain the `path` property.
@@ -2518,16 +2518,16 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 29.5.0
 
-# Android Client:
+### Android Client
 * Supported functions `getArrayFromDict`, `getDictFromDict`, `getOptArrayFromDict`, `getOptDictFromDict`.
 * Supported accessibility for `slider`.
 * Fixed visibility actions not working for items children inside `div-pager` and `div-tabs`.
 
-# iOS Client:
+### iOS Client
 * Fixed cursor position in the text with emoji.
 * Improved `DivData` parsing.
 
-# Web Client:
+### Web Client
 * Fixed several input issues in the `slider` with two thumbs.
 * Fixed `gallery` markup in several cases.
 * Fixed `input` focus outlines in several cases.
@@ -2537,31 +2537,31 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 29.4.0
 
-# Android Client:
+### Android Client
 * Optimized the performance of `div-tabs` when scrolling.
 * Fixed a bug when the last element twitched when scrolling `div-pager` with `infinite-scroll`.
 * Added ability to scroll `div-gallery` forward/backward by N-items using `div-action`.
 * Fixed div models generating without templates.
 
-# iOS Client:
+### iOS Client
 * Added action payload to `DivReporter.reportAction`.
 * Add operators error messages.
 * Supported datetime format functions.
 * Added `list` value support for `div-accessibility.type`.
 * Fixed visibility actions for views that can change their size.
 
-# Web Client:
+### Web Client
 * Added `item_builder` property support in the `container` component.
 * Added `getDictFromDict`, `getArrayFromDict`, `getOptArrayFromDict` and `getOptDictFromDict` functions.
 * Added support for the `RTL` layout (with the `direction` configuration property).
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Completely removed divkit.dsl.Url input value validation since it doesn't comply with RFC 2396.
 
 
 ## 29.3.0
 
-# Android Client:
+### Android Client
 * Fixed element blinking when rebinding `div-gallery`.
 * Implemented `hash()` method for Divs.
 * Added a parameter to `DivConfiguration.Builder#divPlayerPreloader`. Also implemented `ExoPlayerVideoPreloader`, which can be used to preload videos if you are using `ExoDivPlayerFactory` as your video player.
@@ -2570,18 +2570,18 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Added parameter describing the reason of `div-action` call to `DivActionHandler` methods.
 * Fixed `visibility_change` animation
 
-# iOS Client:
+### iOS Client
 * Updated VGSL version to 3.0.0.
 * Fixed `DivView` size calculation.
 * Added ability to force action updates scheduled for the next run loop iteration.
 
-# Web Client:
+### Web Client
 * `transition_in`, `transition_out`, `transition_change`, `action_animation` and `animation_in` / `animation_out` from the `tooltip` will now use system setting "prefers reduced motion".
 
 
 ## 29.2.0
 
-# Android Client:
+### Android Client
 * Fixed character escaping.
 * Fixed `state` does not switch inside `div-custom`.
 * Added support `is_enabled` for `action`.
@@ -2591,7 +2591,7 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Fix wrong gradient color in `div-text`.
 * Fixed not sending taps through the `div-gallery`.
 
-# iOS Client:
+### iOS Client
 * Supported `is_enabled` property in `div-action`.
 * Optimized accessibility elements creation.
 * Changed `DivText.text` property type from `CFString` to `String`.
@@ -2600,7 +2600,7 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Fixed memory leak in `FunctionsProvider`.
 * Fixed Lottie blinking when state changed.
 
-# Web Client:
+### Web Client
 * Fixed an issue with the `visibility_action`s restart on variable changes and their cleanup.
 * Added support for the `is_enabled` flag inside all types of actions.
 * Added `clip_to_bounds` property support for the `container` component.
@@ -2611,13 +2611,13 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Fixed an issue with the experimental method `setData` and `video` updates.
 * Fixed `null` value processing in `array` getter functions.
 
-# TypeScript JSON Builder:
+### TypeScript JSON Builder
 * Added expressions support in `fixed` function.
 
 
 ## 29.1.0
 
-# Android Client:
+### Android Client
 * Supported `clip_to_bounds` property in `div-container`.
 * Optimized binding process of base div properties.
 * Optimized binding process of `div-text`.
@@ -2629,23 +2629,23 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Fixed incorrect height of `div-input`.
 * Fixed text color applying for ranges in `div-text`.
 
-# iOS Client:
+### iOS Client
 * Fixed `DivVariableStorage` change events.
 * Optimized `DivData` parsing.
 * Improved `DivBlockModelingContext` cloning.
 
-# Web Client:
+### Web Client
 * Fixed rare cases with the `lottie` animations load errors.
 
 
 ## 29.0.0
 
-# JSON Schema:
+### JSON Schema
 * Removed `non_empty_string` type.
 * Removed some `minItems` restirctions.
 * `items` property in `container`, `gallery`, `pager` and `grid` became not required.
 
-# Android Client:
+### Android Client
 * Fixed timers cleared after patch.
 * Added Complex Rebind flag.
 * Added ability to reset expression runtimes, error collectors and selected states for given data tags.
@@ -2657,12 +2657,12 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Added the ability to enable/disable the scrollbar in the gallery.
 * Added Coil image loader.
 
-# iOS Client:
+### iOS Client
 * Supported `item_builder` property in `DivContainer`.
 * Supported `scrollbar` property in `DivGallery`.
 * Supported `clipToBounds` parameter in `DivContainer`.
 
-# Web Client:
+### Web Client
 * Breaking change: expressions are now executed without waiting for all variables in them.
 * Breaking change. The type `Variable` and other related types (such as `StringVariable`) are now classes, not interfaces. In most cases, all the code will work the same way, but in rare cases it may break something. Also note that it is now possible to check variable type with the `instanceof`, which works as a type-guard in TypeScript (`getValue()` will return a value with the correct type). Previously, this was not possible because only `getType` existed, and TypeScript would not use it as a type-guard.
 * Breaking change: private methods in DivKit instance was removed. This methods was not typed and was not documented.
@@ -2686,18 +2686,18 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 28.13.0
 
-# Android Client:
+### Android Client
 * Fixed using incorrect uri scheme in Beacon.
 * Fixed broken fade animation.
 * Added the ability to set the lineHeight to be smaller than the font size.
 
-# iOS Client:
+### iOS Client
 * Supported `!:` operator.
 
 
 ## 28.12.0
 
-# Android Client:
+### Android Client
 * Added `getStoredUrlValue` functions.
 * Removed dependency on androidx.fragment.
 * Fixed the hyphenation of images in the text.
@@ -2705,14 +2705,14 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Fixed bind on enabled bind_on_attach.
 * Fixed alignment of the DivStateLayout.
 
-# iOS Client:
+### iOS Client
 * Change the unit of video duration to ms
 * Optimized actions resolving.
 * Removed `UserInterfaceAction.Payload.json` usage.
 * Fixed putting text to pasteboard when cutting in the input with a mask.
 * Fixed `DivPager` state updating.
 
-# Web Client:
+### Web Client
 * Added `scrollbar` property support in `gallery`.
 * Fixed the text of the missing `gif_url` error. Also the `gif` component now uses `gif_url` and `image` uses `image_url`, instead of both of them consuming any of these 2 properties.
 * Removed empty `padding` attribute from html.
@@ -2721,23 +2721,23 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 28.11.0
 
-# Android Client:
+### Android Client
 * Added functions to get URL value: `getUrlValue`, `getUrlFromArray`, `getUrlFromDict`.
 * Added functions to get Color from Dict: `getOptColorFromDict`, `getDictOptColor`.
 * Fixed incorrect height of select.
 
-# iOS Client:
+### iOS Client
 * Supported infinite scrolling in the pager.
 * Fixed `change_bounds` animations content scale.
 
-# Web Client:
+### Web Client
 * Fixed an issue with the `focus` property support in `slider` component.
 * Added `focus_element` typed action support.
 
 
 ## 28.10.0
 
-# Android Client:
+### Android Client
 * Added new evaluable type - EvaluableType.URL
 * Added functions `toString(url)`, `toUrl(str)` and `toColor(str)`.
 * Added `scale` property support in the `video` component.
@@ -2745,10 +2745,10 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 * Fixed crash when clicking "Next" on keyboard in `DivInput` inside `DivGallery`.
 * Fixed `DivInput` not working in `DivPager`.
 
-# iOS Client:
+### iOS Client
 * Fixed clipping to bounds of view when rotating.
 
-# Web Client:
+### Web Client
 * Added `copy_to_clipboard` action support.
 * Fixed cross-axis container items with the `match_parent` size logic in combination with the `wrap_content` size of the container itself.
 * Fixed `gallery` scrolling with `wrap_content` and `max_size` property.
@@ -2756,16 +2756,16 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 28.9.0
 
-# Android Client:
+### Android Client
 * Added infinite scrolling property to the pager.
 * Added common interface for all div views.
 * Added a workaround for a bug in R8 that sometimes causes a `ClassCastException` when using `DivGallery` or `DivGridLayout`.
 * Fixed `DivCustom` wrong ids for `DivGallery` items.
 
-# iOS Client:
+### iOS Client
 * Added `VideoDurationExtensionHandler`.
 
-# Web Client:
+### Web Client
 * Fixed the first/last separator of the `container` with `space-evenly` and `space-around` alignment.
 * Added an additional api with `props` and `variables` for `custom` components.
 * Added `array_insert_value` and `array_remove_value` typed actions.
@@ -2774,17 +2774,17 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 28.8.0
 
-# Android Client:
+### Android Client
 * Added optional param `databasePrefix` to `DivStorageComponent#create` method.
 * Fixed crash in `DivGallery` with `scroll_mode` set to `paging`.
 * Fixed unnecessary bindings after triggers changing DivGallery state before its elements are bound.
 * Fixed `DivDataRepositoryImpl.getAll()` card duplicates.
 * Fixed variable triggers cleared after patch.
 
-# iOS Client:
+### iOS Client
 * Added `DivImageHolderFactory` protocol.
 
-# Web Client:
+### Web Client
 * Added `aspect` support for the `video` component.
 * Added `text_shadow` support for the `text` component.
 * Supported `set_variable` typed action.
@@ -2794,26 +2794,26 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 28.7.0
 
-# iOS Client:
+### iOS Client
 * Added `DivVariableStorage`.
 * Added `scale` property support in the `video` component.
 
-# Web Client:
+### Web Client
 * Added `custom` component support.
 
 
 ## 28.6.0
 
-# Android Client:
+### Android Client
 
 * Fixed width of drawables stroke.
 * Fixed runtime warnings and errors clearing when reusing `Div2View` after calling `cleanup`.
 
-# iOS Client:
+### iOS Client
 
 * Replaced `DivActionSource.custom` with `.timer` and `.trigger`.
 
-# Web Client:
+### Web Client
 
 * Added `scale` property support in the `video` component.
 * Added `array` variable type, alongside with the couple of functions `getStringFromArray`, `getOptDictFromArray` and others.
@@ -2824,14 +2824,14 @@ wrapped with either `divkit.dsl.core.valueArrayElement` or`divkit.dsl.core.expre
 
 ## 28.5.1
 
-# iOS Client:
+### iOS Client
 
 * Changed `variablesStorage` visibility to public.
 
 
 ## 28.5.0
 
-# Android Client:
+### Android Client
 
 Additions:
 * Updated divkit-demo-app and divkit-lottie okhttp and okio dependencies due to CVE.
@@ -2847,7 +2847,7 @@ Fixes:
 * Fixed snapping in `div-gallery` with `paging` `scroll_mode`.
 * Fixed `div-pager` visibility action with 100% visibility percentage not called for last item.
 
-# iOS Client:
+### iOS Client
 
 Additions:
 * Added `copy_to_clipboard` action handler.
@@ -2857,7 +2857,7 @@ Additions:
 Fixes:
 * Fixed clickability of a margin area.
 
-# Web Client:
+### Web Client
 
 Deprecation:
 * `palette` and `theme` marked as deprecated.
@@ -2867,26 +2867,26 @@ Fixes:
 
 ## 28.4.0
 
-# JSON Schema:
+### JSON Schema
 * Added support of ranges in `DivSlider` for Android and iOS
 
-# Android Client:
+### Android Client
 * Added automatic `ViewPool` optimization flag
 * Fixed crash on empty `DivInput` placeholder
 * `DivImageLoader` methods should be called on main thread now
 
-# iOS Client:
+### iOS Client
 * Added support of ranges in `DivSlider`
 * Fix cursor position in phone input mask
 * Supported variable in `DivState`
 
-# Web Client:
+### Web Client
 * Fixed custom `text` color with focus (without explicit `focused_text_color` property)
 
 
 ## 28.3.0
 
-# Android Client:
+### Android Client
 Additions:
 * Added RTL-mirror filter for `DivImage`
 * Added support of ranges in `DivSlider`.
@@ -2898,20 +2898,20 @@ Fixes:
 * Fixed drawing corners during transition
 * Fixed slider sticking in the beginning of moving.
 
-# iOS Client:
+### iOS Client
 Additions:
 * Implemented `space-between`, `space-around`, `space-evenly` alignments
 * Added `DivReporter` protocol.
 * Added `set_variable` action handler.
 
-# Web Client:
+### Web Client
 Additions:
 * Added `state_id_variable` support in the `state` component
 
 
 ## 28.2.0
 
-# Android Client:
+### Android Client
 * Typed actions moved to singleton scope.
 * Removed asserts in `DivDataRepository`.
 * Locally collect `ViewPool` statistic for optimization.
@@ -2925,35 +2925,35 @@ Additions:
 * Array variable mutations.
 * Fixed the inability to patch an item inside the gallery that inside the other gallery.
 
-# iOS Client:
+### iOS Client
 * Improved `DivSlider` performance.
 * Fixed memory leaks in `ExpressionResolver`.
 * Fixed `DivContainer` with constrained children height.
 * Fixed phone mask in `DivInput`.
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Fixed missing * symbol in Url validating regex.
 
 
 ## 28.1.0
 
-# Android Client:
+### Android Client
 * Support RTL for `DivPager`.
 * Added `get<Type>FromDict/get<Type>FromArray` functions for arrays.
 
-# iOS Client:
+### iOS Client
 * Fixed `DivInput` mask.
 * Fixed alignment in overlapped `DivContainer`.
 
 
 ## 28.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added `text_shadow` property
 * Added `ranges` to slider
 * Added `array` variable type
 
-# Android Client:
+### Android Client
 
 Breaking changes:
 * Added ArrayVariable case into Variable class.
@@ -2964,7 +2964,7 @@ Added:
 * Phone masks
 * Array get functions
 
-# iOS Client:
+### iOS Client
 
 Braking changes:
 * Added array variables support. Added `array` case into `DivVariableValue` enum.
@@ -2980,64 +2980,64 @@ Other changes:
 
 ## 27.4.0
 
-# Android Client:
+### Android Client
 * Deprecate constructors without LifecycleOwner
 * Added aspect ratio for video
 * Fixed doubletaps
 * Improved visibility action binding performance
 
-# iOS Client:
+### iOS Client
 * Added center alignment for tooltips.
 * Fixed Swift 5.7 compatibility.
 * Fixed DivInput line height.
 
-# Web Client:
+### Web Client
 * Added `tooltips` support
 * Fixed an issue with the big amount of the unused event listeners on the DOM nodes
 
 
 ## 27.3.0
 
-# JSON Schema:
+### JSON Schema
 * Added phone input mask schema
 * Added `state_id_variable` to `DivState`
 
-# Android Client:
+### Android Client
 * Enabled accessibility flag by default
 * Fixed state update on rebind
 * Fixed showing `transition` from `visible` to `invisible`/`gone` on first draw
 * Fixed `SQLiteFullException` in `DivStorage` causing app crash
 
-# iOS Client:
+### iOS Client
 * Added RTL support for `DivImage`, `DivInput`, `DivSlider`.
 * Fixed `updateCardAction` calls for elements with variables binding.
 * Fixed visibility counters.
 * Fixed Lottie and Rive blocks comparison.
 
-# Web Client:
+### Web Client
 Fixes:
 * Fixed an issue with a `gallery` component with the `default_item` outside of the items range
 
 
 ## 27.2.0
 
-# JSON Schema:
+### JSON Schema
 * Replaced `left` with `start` alignment by default
 * Added `center` `DivTooltip` position
 * Added `aspect` to `DivVideo`
 
-# Android Client:
+### Android Client
 * Fixed `DivTooltip` with `match_parent` size
 * Fixed crash caused by `DivTimer` actions execution after `DivView` detach
 * Observe `DivVideo` `muted` property
 * Updated video player manager
 * Improved binding performance
 
-# iOS Client:
+### iOS Client
 * Added RTL-layout support for `DivTabs`.
 * Fixed crash in `DivInput` mask validator.
 
-# Web Client:
+### Web Client
 Additions:
 * Added `div-patch`, `download` action and `download_callbacks` support
 * Added support for the `focus` parameters (including ``focused_text_color`)
@@ -3045,7 +3045,7 @@ Additions:
 
 ## 27.1.0
 
-# Android Client:
+### Android Client
 * Lottie version updated to 6.1.0
 * Added configuration paramater for scroll interception angle.
 * Method DivConfiguration.Builder#enableAccessibility is deprecated now.
@@ -3054,7 +3054,7 @@ Additions:
 * Fixed image layout with constrained wrap_content size.
 * Fixed visibility tracking of views that has been removed after patch.
 
-# iOS Client:
+### iOS Client
 * Added `DivView`.
 * Added RTL support for `DivText`, `DivGallery`, `DivPager` and `DivIndicator`.
 * Fixed state management for `DivGallery`.
@@ -3062,71 +3062,71 @@ Additions:
 
 ## 27.0.0
 
-# Android Client:
+### Android Client
 * Added RTL support for container, tabs, slider and indicator
 * Fixed multiple find lifecycleOwner call
 * Fixed multiple out animations ignoring or view doubling
 
-# iOS Client:
+### iOS Client
 * Added `getStoredValue` functions support.
 * Added RTL layout support in `DivContainer`.
 * Added `updateCardSignal` to `DivKitComponents`.
 * Replaced `UrlOpener` with `DivUrlHandler` protocol. Changed `DivActionHandler` API.
 
-# Web Client:
+### Web Client
 Fixes:
 * Fixed an issue with the integer values from the several functions: `getYear`, `getMonth`, `getDay`, `getDayOfWeek`, `getHours`, `getMinutes`, `getSeconds`, `getMillis`, `len`, `index` and `lastIndex`. These integer values previously could produce errors in integer operations
 
 
 ## 26.2.0
 
-# JSON Schema:
+### JSON Schema
 * Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `div-input`
 
-# Android Client:
+### Android Client
 * Added `start` and `end` values to horizontal alignment
 * Added `start` and `end` values to paddings and margins
 * Supported right-to-left layout direction for `wrap` container
 * Supported dictionary functions
 * Fixed `visibility_actions` in DivStates
 
-# iOS Client:
+### iOS Client
 * Added `testRegex` function.
 * Fixed visibility action for `DivStates`.
 
-# Web Client:
+### Web Client
 * Supported `text_alignement_horizontal` and `text_alignement_vertical` properties in `input`
 
 ## 26.1.0
 
-# JSON Schema:
+### JSON Schema
 * Added `start` and `end` to horizontal alignment.
 
-# Android Client:
+### Android Client
 * Added `testRegex` function.
 * Supported `constrained` property in `wrap_content` size for pagers.
 * Ignore constrained along wrap-container's cross axis.
 * Fixed gallery `item_space` in RTL layout direction.
 
-# iOS Client:
+### iOS Client
 * Ignore constrained along wrap-container's cross axis.
 * Supported `start` and `end` parameters in margins, padding.
 
-# Web Client:
+### Web Client
 * Implemented `testRegex` function
 * `content_alignment_` properties along cross-axis in `container` with the `wrap` mode will now align rows / columns of items, instead of children components (to better match Android / iOS behavior).
 * Fixed expression processing without variables (constant expressions).
 
-# TypeScript JSON Builder:
+### TypeScript JSON Builder
 * `boolean_int` properties will now accept `true` and `false` values in addition to `1` / `0`. These boolean values will be automatically converted to `1` / `0`, but only if the `divCard` function is used. Beware of old clients with the old DivKit SDK, they may not accept boolean `true` / `false` values.
 
 ## 26.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added `start` and `end` properties to edge insets.
 * Supported user-defined font families.
 
-# Android Client:
+### Android Client
 * Added profile to configure number of precreated views.
 * Supported margins for wrap container separators.
 * Supported user-defined font families.
@@ -3135,13 +3135,13 @@ Fixes:
 * Fixed `release` method not called on destroy
 * Fixed sequential patch applyment
 
-# iOS Client:
+### iOS Client
 * Supported user-defined font families.
 * Added async image previews loading.
 * Fixed expressions support in `DivState.default_state_id`.
 * Fixed recurring visibility actions.
 
-# Web Client:
+### Web Client
 * Fixed `fatal_actions` in the `video` component logic
 * Fixed `video` unmount logic
 * Incorrect non-array `background`s will not throw error
@@ -3149,80 +3149,80 @@ Fixes:
 * Fixed `disappear_action` with the percentage equal to `0`
 * Allowed expressions in the `visibility_percentage`
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Added extension div data creation.
 
 ## 25.7.0
 
-# Android Client:
+### Android Client
 * `compileSdkVersion` updated to 34
 * Supported margins for linear container separators.
 
-# iOS Client:
+### iOS Client
 * Added Xcode 14.3 & Xcode 15 support.
 * Fixed player pausing in VideoBlock.
 
-# Web Client:
+### Web Client
 * Fixed update of the`gallery` with the `scroll_mode` = `paging` and `default_item` in rare cases
 
 ## 25.6.0
 
-# JSON Schema:
+### JSON Schema
 * Fixed accessibility for `DivSelect`
 
-# Android Client:
+### Android Client
 * Fixed `min_width` for horizontal container
 * Fixed accessibility for `DivSelect`
 
-# iOS Client:
+### iOS Client
 * Fixed borders with rounded corners.
 * Fixed `DivGallery` with `match_parent` items layout.
 
 ## 25.5.0
 
-# Android Client:
+### Android Client
 
 * ExoPlayer version updated to `2.18.4`
 * Supported preview image in DivVideo
 * Fixed trigger rebind for DivData with the same DivDataTag
 
-# iOS Client:
+### iOS Client
 
 * Fixed disappear actions timer invalidation
 
 ## 25.4.1
 
-# Android Client:
+### Android Client
 
 * Fixed video player engine disconnecting from view when any activity stopped
 
 ## 25.4.0
 
-# Android Client:
+### Android Client
 
 * Added regex validator for `div-input`
 * Added support of disappear actions
 * Added support of text alignment to `div-input`
 * `DivStorage` forwards IllegalStateExceptions to `LoadDataResult` now
 
-# iOS Client:
+### iOS Client
 
 * Supported resume, pause, fatal actions in `DivVideo`
 * Supported disappearing actions
 
-# Web Client:
+### Web Client
 
 Added:
 * Supported `dict` variable type
 
 ## 25.3.0
 
-# JSON Schema:
+### JSON Schema
 
 Additions:
 * Added `text_alignment_` properties for `div-input`
 
-# Android Client:
+### Android Client
 
 Additions:
 * Added `disappear_actions`
@@ -3233,27 +3233,27 @@ Fixes:
 * Fixed permanent destroying video manager on view detach
 * Fixed big corner radius drawing
 
-# iOS Client:
+### iOS Client
 
 Additions:
 * Added `disappear_actions`
 * Added `fixed_length` mask for `DivInput`
 * Added `margins` for separators in `DivContainer`
 
-# Web Client:
+### Web Client
 
 Added:
 * New content alignments in the `container`: `space-between`, `space-around`, `space-evenly`
 * `font_family` property is now supported in the different components. Keep in mind, for this property to work, you need to provide a `typefaceProvider`
 * `margins` for a `container` separators are now supported
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 
 * Supported properties from scheme up to 25.2.0
 
 ## 25.2.0
 
-# JSON Schema:
+### JSON Schema
 
 Additions:
 * Added `disappear_actions`
@@ -3261,7 +3261,7 @@ Additions:
 * Added new types of content-alignment: `space-between`, `space-around`, `space-evenly`
 * Added new property of container separators: `margins`
 
-# Android Client:
+### Android Client
 
 Additions:
 * Supported multiple `RenderScript` contexts
@@ -3273,13 +3273,13 @@ Fixes:
 * Fixed black screen at the end of playback after onPause
 * Fixed `VariableController` potential memory leaks
 
-# iOS Client:
+### iOS Client
 
 Fixes:
 * Fixed cursor offset in `DivInput`
 * Deserialization optimization
 
-# Web Client:
+### Web Client
 
 Additions:
 * `disappear_actions` is now supported
@@ -3287,7 +3287,7 @@ Additions:
 
 ## 25.1.0
 
-# JSON Schema:
+### JSON Schema
 
 Additions:
 * Added `pause_actions` and `fatal_actions` to `div-video`
@@ -3295,7 +3295,7 @@ Additions:
 Changes:
 * Combined `stream` and `video` source types in `div-video`
 
-# Android Client:
+### Android Client
 
 Additions:
 * Supported `DivVideo`
@@ -3307,24 +3307,24 @@ Fixes & Changes:
 * Extended API of `DivPlayer.Observer`
 * Fixed array validation at JSON parsing
 
-# iOS Client:
+### iOS Client
 
 Additions:
 * Supported `DivVideo`
 
-# TypeScript JSON Builder:
+### TypeScript JSON Builder
 
 Updates:
 * Optimized `rewriteTemplateVersions`
 
 ## 25.0.0
 
-# JSON Schema:
+### JSON Schema
 
 * Added `input` `valdator`
 * Moved `input` mask's `raw_text_variable` into the base `mask`
 
-# Android Client:
+### Android Client
 
 Fixes:
 
@@ -3333,13 +3333,13 @@ Fixes:
 * Fixed various DivStorage concurrency issues
 * Fixed various currency input mask issues
 
-# iOS Client:
+### iOS Client
 
 * Removed metal, selecting feature flags
 * Supported getValue functions
 * Supported stretch parameter for DivImage
 
-# Web Client:
+### Web Client
 
 Additions:
 * Supported expressions in `tabs` title
@@ -3354,7 +3354,7 @@ Fixes:
 
 ## 24.4.0
 
-# Android Client:
+### Android Client
 
 Additions:
 * Added overload for variable set functions
@@ -3369,20 +3369,20 @@ Fixes:
 * Fix cards feed size in demo-app
 * Fixed image loading race condition
 
-# iOS Client:
+### iOS Client
 
 Additions:
 * Added video block implementation
 
 ## 24.3.0
 
-# JSON Schema:
+### JSON Schema
 
 Additions:
 * Added `div-video.json` to schema
 * Actualized supported features on Android
 
-# Android Client:
+### Android Client
 
 Additions:
 * Added the ability to stretch background images without saving aspect ratio
@@ -3394,12 +3394,12 @@ Fixes:
 * Fixed deletion and insertion bugs in `fixed_length` input masks
 * Added workaround for bug in `View.isLaidOut`
 
-# iOS Client:
+### iOS Client
 
 Additions:
 * Implemented `select` component
 
-# Web Client:
+### Web Client
 
 Additions:
 * `extensions` support
@@ -3414,7 +3414,7 @@ Fixes:
 
 ## 24.2.0
 
-# JSON Schema:
+### JSON Schema
 
 Additions:
 * Added stretch image scale type
@@ -3425,7 +3425,7 @@ Changes:
 * Moved raw_text_variable to input mask
 * Updated `platforms` field in schema
 
-# Android Client:
+### Android Client
 
 Additions:
 * Implemented wrap_content constrained size for gallery items
@@ -3442,10 +3442,10 @@ Fixes & Changes:
 * Fixed expression evaluation cache
 * Fixed linear container accessibility
 
-# iOS Client:
+### iOS Client
 * Removed TemplateSupport module.
 
-# Web Client:
+### Web Client
 
 Additions:
 * `stretch` image scale type
@@ -3454,7 +3454,7 @@ Additions:
 Fixes:
 * `no_scale` image scale type should now work properly
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 
 Changes:
 * Changed Int to Long
@@ -3462,13 +3462,13 @@ Changes:
 
 ## 24.1.0
 
-# JSON Schema:
+### JSON Schema
 
 Fixes & Changes:
 * Removed selection input schema
 * Updated `platforms` field in schema
 
-# Android Client:
+### Android Client
 
 Additions:
 * Implemented aspect height in wrap container
@@ -3479,7 +3479,7 @@ Fixes & Changes:
 * Fixed visibility animations on disappear
 * Fixed triggering changes after variable declaration
 
-# iOS Client:
+### iOS Client
 
 Additions:
 * Added aspect support for vertical wrap container
@@ -3491,18 +3491,18 @@ Fixes & Changes:
 * Replaced fatalError with assertionFailure where possible
 * Removed selection input implementation
 
-# Web Client:
+### Web Client
 
 Fixes:
 * The `aspect` property in the `container` should work better in combination with the `height` property
 
 ## 24.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added raw_text_variable for div_input
 * Added new keyboard type
 
-# Android Client:
+### Android Client
 
 Breaking changes:
 * Changed Int to Long
@@ -3519,7 +3519,7 @@ Fixes & Changes:
 * Opt-in primary constructors of div models
 * Fixed crash on set_state in trigger actions
 
-# iOS Client:
+### iOS Client
 
 Additions:
 * Added new keyboard type
@@ -3535,19 +3535,19 @@ Fixes & Changes:
 * Fixed shimmer-view block reuse
 * Fixed constrained logic in wrap container
 
-# Web Client:
+### Web Client
 
 Breaking changes:
 * The `setVariable` / `GetVariable` methods have been removed (these methods were deprecated long time ago before opensource, in web version 1.11.0)
 * DivKit now uses `BigInt` internally if it is supported by the current platform. This also means that variable methods such as `subscribe` can now return `bigint` values instead of `number` (and accept such values in json). `integer` values in expressions are now limited to 64 bits instead of 32, and the minimum/maximum value for `integer` variables has been changed. Note that outside of expressions, DivKit restricts values to 32-bit integers, as was the case in previous versions. Also note that the js builtin methods, such as `JSON.parse`, return a simple `number`, so these values may lose accuracy outside the logic of DivKit. Make sure that your values are in the range `-2^53 — 2^53` or a custom json parsing function is used
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Added new keyboard type
 
 
 ## 23.7.0
 
-# Android Client:
+### Android Client
 Additions:
 * Added cache for expressions
 
@@ -3557,16 +3557,16 @@ Fixes:
 * Fixed declaration of new local variables
 * Fixed scroll view for demo-app
 
-# iOS Client:
+### iOS Client
 * Added overflow parameter support in actions for DivTabs
 * Allowed zero duration
 
-# Web Client:
+### Web Client
 * Removed missing template field warning
 
 ## 23.6.0
 
-# Android Client:
+### Android Client
 Additions:
 * Added format date function
 * Added trigger logging
@@ -3576,19 +3576,19 @@ Fixes:
 * Fixed ripple animation duplication
 * Fixed alignment in `DivGallery`
 
-# iOS Client:
+### iOS Client
 * Added `overflow` parameter support in `div-action` for `DivPager` navigation.
 * Fixed constrained element size calculation inside `DivContainer`.
 * Fixed `MetalImageView` images rendering.
 
-# Web Client:
+### Web Client
 Additions:
 * `toUrl` / `toColor` functions
 
 
 ## 23.5.0
 
-# Android Client:
+### Android Client
 
 Additions:
 * Sampling for div-blur
@@ -3598,12 +3598,12 @@ Additions:
 Fixes and changes:
 * fixed image binding perfomance
 
-# iOS Client:
+### iOS Client
 * added `selection` input method into `DivInput`.
 * added error level into `externalLogger`.
 * fixed `DivImage` layout trait check.
 
-# Web Client:
+### Web Client
 Additions:
 * Functions for getting `datetime ` components
 * Functions for getting value of a variable, if it exists. `getStringValue`, `getIntegerValue`, etc
@@ -3615,7 +3615,7 @@ Fixes and changes:
 
 ## 23.4.0
 
-# Android Client:
+### Android Client
 Added:
 * Added `shimmer` extension
 * Supported `aspect ratio` in `overlap container`
@@ -3627,7 +3627,7 @@ Fixes:
 * Fixed `focus` when `accessibility` is turned on
 * Fixed `transition animations` in `state layout`
 
-# iOS Client:
+### iOS Client
 Added:
 * added `images` support for `ellipsis` in DivText
 
@@ -3637,7 +3637,7 @@ Fixes:
 * fixed concurrency issues in DivTriggersStorage
 * fixed transition animations inside DivGallery/DivPager
 
-# Web Client:
+### Web Client
 Added:
 * `aspect` support for `container` (`aspect-ratio` css property support is required!)
 
@@ -3648,19 +3648,19 @@ Fixes:
 
 ## 23.3.0
 
-# Android Client:
+### Android Client
 * Fixed algorithm of `indicator` attach to specified `pager`
 * Fixed accessibility type binding for `gallery`
 * Fixed NPE in `DecodeBase64ImageTask`
 
-# iOS Client:
+### iOS Client
 * Fixed corners in `DivIndicator`
 * Fixed wrapped `DivContainer` layout
 
 
 ## 23.2.0
 
-# Android Client:
+### Android Client
 * Added support of `max_size` property
 * Added support of `wrap_content` size with constraints
 * Added border to indicator
@@ -3668,7 +3668,7 @@ Fixes:
 * Fixed filters not being applied to image preview
 * Fixed visibility change of gallery items
 
-# iOS Client:
+### iOS Client
 * Added SizeProviderExtensionHandler
 * Added plus operator support for strings
 * Fixed last tick action in DivTimer
@@ -3677,15 +3677,15 @@ Fixes:
 
 ## 23.1.0
 
-# Android Client:
+### Android Client
 * Added time interval functions
 * Added support of shape properties to slider
 
-# iOS Client:
+### iOS Client
 * Added functions for DateTime
 * Fixed `padStart`/`padEnd` functions
 
-# Web Client:
+### Web Client
 Added:
 * `indicator` can now be rendered in two ways, `placement` field is now supported
 * `indicator` can now have a border inside every point, shape objects have been updated to support `background_color` and `border` properties. Several fields in `indicator` are now deprecated, including `space_between_centers`, `inactive_item_color`, `active_item_color`, `shape` and `active_item_size`. Shape objects support in `slider` was also updated
@@ -3699,49 +3699,49 @@ Fixed:
 
 ## 23.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added `div-shape-base` to `div-circle-shape`
 
-# Android Client:
+### Android Client
 * Added support of timers
 * Added `div-indicator` style based on `div-rounded-rectangle-shape`
 * Added subscription to image preview changes
 * Fixed border clipping in transition animations
 * Fixed patch application to child of container with id
 
-# iOS Client:
+### iOS Client
 * Added `ShimmerImagePreviewExtension`
 * Added `aspect` size support in `DivContainer`
 * Added batch actions handling, `DivActionURLHandler.UpdateCardAction` refactoring
 
-# Web Client:
+### Web Client
 Fixed:
 * `image` preview size and filters support
 * `gallery` arrows on the desktop should now appear faster
 
-# TypeScript JSON Builder:
+### TypeScript JSON Builder
 * Speed up object walking in several operations
 
 
 ## 22.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added `aspect` in div-container
 * Added `background_color` and `stroke` in div-rounded-rectangle-shape
 
-# Android Client:
+### Android Client
 * Added extension for Rive animations
 * Added function to get time component from datetime
 * Fixed layout of linear container children with match parent size
 * Fixed background blur radius updating by variable
 
-# iOS Client:
+### iOS Client
 * Added border in DivIndicator
 * Added minSize/maxSize for constrained elements
 * Added CustomImagePreviewExtensionHandler
 * Added errors view in DivKit Playground
 
-# Web Client:
+### Web Client
 Fixes:
 * Fixed `tint_color` update for Safari
 
@@ -3749,16 +3749,16 @@ Fixes:
 
 ## 21.1.0
 
-# JSON Schema:
+### JSON Schema
 * updated translations
 
-# Android Client:
+### Android Client
 * Fixed baseline alignment in linear container
 * Fixed minor layout issues
 * Fixed rare crash when animating not laid out view
 * Clear warnings after setting new data to `Div2View`
 
-# iOS Client:
+### iOS Client
 * Added functions for time intervals
 * Added `padStart`, `padEnd` functions
 * Added stretching `DivIndicator` support
@@ -3766,7 +3766,7 @@ Fixes:
 * Fixed `DivSlider` thumbs
 * Fixed `nowLocal` function
 
-# Web Client:
+### Web Client
 Added:
 * `min_size` / `max_size` for the `wrap_content` size
 * Functions `padStart` / `padEnd`
@@ -3780,44 +3780,44 @@ Changed:
 
 ## 21.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added `timers` support
 
-# Android Client:
+### Android Client
 * Removed warning about element's wrong size in case when it doesn't affect its parent size
 
-# iOS Client:
+### iOS Client
 * Added `timers` support
 
-# Web Client:
+### Web Client
 * Added `timers` support
 * Added customization of the link protocols that should be rendered as native link (`builtinProtocols`)
 
 
 ## 20.0.0
 
-# Android Client:
+### Android Client
 * Updated gradle wrapper to version `7.6`
 * Added tapjacking protection
 * Added separation of `wrap_content` and `wrap_content constrained` logic
 
-# Kotlin JSON Builder:
+### Kotlin JSON Builder
 * Updated gradle wrapper to version `7.6`
 
 
 ## 19.0.0
 
-# Android Client:
+### Android Client
 * Added backgrounds for ranges of text
 * Added cache for background spans
 * Added implementation of wrapping list control to single item for accessibility
 * Removed redundant layout steps in gallery
 
-# iOS Client:
+### iOS Client
 * Added custom for rive animations
 * Added memoization for image placeholders
 
-# Web Client:
+### Web Client
 Added:
 * `mix` property for a custom class name
 * `customization` render property for a desktop `gallery`
@@ -3828,12 +3828,12 @@ Fixed:
 
 ## 18.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added Min/max sizes in schema
 * Added type=list to accessiblity
 * Changed command format for timers
 
-# Android Client:
+### Android Client
 * Added border support to div-customs
 * Added accessibility hint and mode subscriptions
 * Fixed state patches
@@ -3843,12 +3843,12 @@ Fixed:
 * Removed Div2Context#div2Component. In order to update global variables use Div2Context#globalVariableController
 * Log and Assert is internal now. Use DivKit class methods in oder to toggle logging and assertions
 
-# iOS Client:
+### iOS Client
 * Added backgrounds for ranges of text
 * Optimize escaping in expression resolving
 * Fixed getting preview from url starts with data:image/png;base64
 
-# Web Client:
+### Web Client
 Added:
 * `background` and `border` for the `text` ranges
 * `baseline` vertical alignment
@@ -3863,16 +3863,16 @@ Fixed:
 
 ## 17.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added indicator items stretching mode
 
-# Android Client:
+### Android Client
 * Added baseline alignment in wrap container
 * Fixed patch applying
 * Fixed crash on invalid patch field
 * Fixed blur when radius is 0
 
-# iOS Client:
+### iOS Client
 * Fixed redrawing after blur radius changed
 * Fixed slider failure.
 * Fixed height for linear container
@@ -3881,10 +3881,10 @@ Fixed:
 
 ## 16.0.0
 
-# Android Client:
+### Android Client
 * Added baseline alignment in linear container
 
-# iOS Client:
+### iOS Client
 * Added blur and tint mode support
 * Added baseline alignment in DivContainer
 * Improved DivErrorsStorage
@@ -3892,27 +3892,27 @@ Fixed:
 
 ## 15.0.0
 
-# JSON Schema:
+### JSON Schema
 * Added `div-timer`
 * Added zero blur radius support
 * Added `border` and `background` for text range
 
-# Android Client:
+### Android Client
 * Align elements in wrap container rows by default
 * Added generated method to apply patch
 * Fixed expressions serialization
 * Fixed shadows in DivGallery
 
-# Web Client:
+### Web Client
 * Added separators support in DivContainer
 
 
 ## 14.0.0
-# JSON Schema:
+### JSON Schema
 * Added `div-blur` and `div-blur-background`
 * Added `baseline_alignment` to `div-container`
 
-# Android Client:
+### Android Client
 * Added blur implementation
 * Added extensions unbind for DivCustom
 * Added static method for version name
@@ -3923,7 +3923,7 @@ Fixed:
 * Fixed missing ellipses
 * Open url if DemoActivity opened from intent
 
-# iOS Client:
+### iOS Client
 * Added image blur implementation
 * Added separators support in DivContainer
 * Fixed DivPager last page layout
@@ -3931,7 +3931,7 @@ Fixed:
 * Fixed memory leak in PinchToZoomExtensionHandler
 * Fixed screen capture for web preview
 
-# Web Client:
+### Web Client
 
 Additions:
 * Added `setTheme` instance method
@@ -3940,15 +3940,15 @@ Additions:
 Fixed:
 * `Enter` handling in multiline input
 
-# TypeScript JSON Builder:
+### TypeScript JSON Builder
 * Synchronized version number with DivKit version
 
 
 ## 13.0.0
-## JSON Schema:
+### JSON Schema
 * Added `tint_mode` for images in `div-text`
 
-## Android Client:
+### Android Client
 * Added circle shape
 * Implemented Nine-patch background
 * Implement separators in wrap container
@@ -3957,7 +3957,7 @@ Fixed:
 * Fixed escaping symbols processing in expressions
 * Fixed expression result convertion for string properties
 
-## iOS Client:
+### iOS Client
 * Updated Lottie dependency to 3.5.0
 * Added Lottie prefetching
 * Combined video and images prefetching
@@ -3968,41 +3968,41 @@ Fixed:
 * Fixed escaping symbols processing in expressions
 * Fixed animations for div-text
 
-## Web Client:
+### Web Client
 * Added `circle` shape support
 * Supported `no_animation` and `native` values for the `action_anmation`
 * Supported `tint_mode`
 
 ## 12.0.0
-## JSON Schema:
+### JSON Schema
 * Added Nine-patch background
 
-## Android Client:
+### Android Client
 * Added separators in linear layout
 * Fixed text style change after slider position change
 * Fixed invalid view visibility on change state
 * Fixed gallery pages position
 * Fixed attaching pager indicator
 
-## iOS Client:
+### iOS Client
 * Added text gradient support
 * Implemented Nine-patch background
 * Fixed animation traits
 
-## Web Client:
+### Web Client
 * Implemented Nine-patch background
 * Supported for the `selected_actions` in `pager`
 * Fixed color values convertion
 
 ## 11.0.0
-## JSON Schema:
+### JSON Schema
 * Added `cross_spacing` support for gallery
 * Added `tint_mode` for `div-image`
 * Added separator in DivContainer
 * Added circle shape to schema
 * Updated description for `longtap_actions` and `doubletap_actions`
 
-## Android Client:
+### Android Client
 Additions and changes:
 * Implemented support external theme in DivContext
 * Implemented `tint_mode` for DivImage
@@ -4014,14 +4014,14 @@ Additions and changes:
 Fixes:
 * Fixed list of expressions generating
 
-## iOS Client:
+### iOS Client
 * Added `cross_spacing` support in DivGallery.
 * Added radial gradient support.
 * Improved `match_parent` items behaviour in DivContainer and DivGallery.
 * Fixed invisible items size.
 * Fixed actions handling in Sample app.
 
-## Web Client:
+### Web Client
 Additions:
 * Support for the `wrap` layout mode in a `container`
 * Support for the `cross_spacing` property in `gallery`
@@ -4042,7 +4042,7 @@ Changes and fixes:
 * Component actions will now wait for the result of each of them. This means that you can create an array using 2 actions: one to change the state, and the second to change the created component inside the state
 
 ## 10.0.0
-## Android Client:
+### Android Client
 Additions and changes:
 * Implemented alignments in `WrapLayout`
 * Implemented radial gradient
@@ -4050,16 +4050,16 @@ Additions and changes:
 * Implemented visibility transition support
 * Allow patch multiple view with same id
 
-## iOS Client:
+### iOS Client
 Fixes:
 * Fixed Lottie extension params parsing
 
 ## 9.0.0 (September 27, 2022)
-## JSON Schema:
+### JSON Schema
 * Clarification of wrap container documentation
 * Added radial gradient schema
 
-## Android Client:
+### Android Client
 Additions and changes:
 * Implemented `WrapLayout` - layout with transfer of elements to the next line if they don't fit in the previous one
 * Implemented showing of rendering time in demo activity
@@ -4069,19 +4069,19 @@ Fixes:
 * Fixed `tint_color` observing on element's rebind
 * Fixed lottie resources providing for tests
 
-## iOS Client:
+### iOS Client
 * Added Swift Package Manager support
 * Fixed concurrency issues in `DivStateManager` and `DivVariablesStorage`
 * Improved `DivContainer` height calculation
 * Improved snapshot tests
 
-## Web Client:
+### Web Client
 Added:
 * `radial_gradient` support
 
 
 ## 8.0.0 (September 20, 2022)
-### Android Client:
+### Android Client
 Additions and changes:
 * Added image change subscription
 * Moved `observeTintColor` into `bind` method
@@ -4098,7 +4098,7 @@ Fixes:
 * Fixed text alignment in `input` when rtl enabled
 * Fixed extensions reuse
 
-### iOS Client:
+### iOS Client
 Additions and changes:
 * Added `true`/`false` values support in `set_variable` actions
 * Added `wrap` mode in DivContainer
@@ -4110,7 +4110,7 @@ Fixes:
 * Fixed transition animations
 * Fixed DivContainer error messages
 
-### Web Client:
+### Web Client
 Additions and changes:
 * BooleanInt props now accepts booleans too
 * Implemented boolean values for boolean variables
@@ -4128,14 +4128,14 @@ Addition:
 
 
 ## 7.0.0 (September 13, 2022)
-### Android Client:
+### Android Client
 Additions and changes:
 * improve actions binding
 * cover generator with tests
 Fixes:
 * use public gradle distribution url
 
-### iOS Client:
+### iOS Client
 * Added test data into DivKit Playground
 * Added color themes support in DivKit Playground
 * Added DivInput tests
@@ -4143,20 +4143,20 @@ Fixes:
 * Fixed DivInput keyboard behavior
 * Fixed boolean values serialization
 
-### Web Client:
+### Web Client
 Addition:
 * `transform` is now supported for the `base` component
 
 
 ## 6.0.0 (September 6, 2022)
-### Android Client:
+### Android Client
 Additions and changes:
 * Supported rotation transformation
 * Switched to new API Generator
 Fixes:
 * Fixed build configuration
 
-### iOS Client:
+### iOS Client
 * Added LottieExceptionHandler
 * Added focus support in DivInput
 * Renamed DivKit Demo to DivKit Playground
@@ -4167,7 +4167,7 @@ Fixes:
 * Improved parseDivData methods in DivKitComponents
 * Improved Sample app
 
-### Web Client:
+### Web Client
 * Updated `input` to sync with the schema, also fixed `text_color` and height
 * Fixed the behavior of `transition_in` / `transition_out` (when to start and when not to start animation)
 * Fixed the default value of `variable_trigger.mode`
