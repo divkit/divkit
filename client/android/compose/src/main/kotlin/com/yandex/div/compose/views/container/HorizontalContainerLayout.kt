@@ -24,6 +24,7 @@ import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.verticalPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivSize
 
 @Composable
@@ -55,7 +56,13 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
-        .applyIf(needsCrossAxisIntrinsicSize) { height(IntrinsicSize.Max) }
+        // Row's intrinsic height does not include baseline offsets. Let Row calculate those
+        // offsets itself when baseline alignment and a match-parent child are combined.
+        .applyIf(
+            needsCrossAxisIntrinsicSize && verticalAlignment != DivContentAlignmentVertical.BASELINE
+        ) {
+            height(IntrinsicSize.Max)
+        }
 
     Row(
         modifier = containerModifier,
@@ -75,7 +82,14 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
                 if (itemSpacing > 0) Spacer(Modifier.width(itemSpacing.toDp()))
             },
         ) { childDiv ->
-            HorizontalChildItem(childDiv, data.width, hasWeightedChildren, weightedChildrenMargins)
+            HorizontalChildItem(
+                childDiv,
+                data.width,
+                alignByBaseline = verticalAlignment == DivContentAlignmentVertical.BASELINE &&
+                    !(isCrossAxisWrapContent && childDiv.value().height.isMatchParent),
+                hasWeightedChildren,
+                weightedChildrenMargins,
+            )
         }
     }
 }
@@ -84,6 +98,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
 private fun RowScope.HorizontalChildItem(
     item: Div,
     containerMainSize: DivSize,
+    alignByBaseline: Boolean,
     hasWeightedChildren: Boolean,
     weightedChildrenMargins: Dp
 ) {
@@ -96,7 +111,7 @@ private fun RowScope.HorizontalChildItem(
         hasWeightedChildren,
         weightedChildrenMargins
     )
-    item.observeVerticalChildAlignment()?.let { modifier = modifier.align(it) }
+    modifier = modifier.then(observeVerticalChildModifier(item, alignByBaseline = alignByBaseline))
 
     if (isWeightedChild) {
         val (startMargin, endMargin) = divBase.margins.observeHorizontalInsets()

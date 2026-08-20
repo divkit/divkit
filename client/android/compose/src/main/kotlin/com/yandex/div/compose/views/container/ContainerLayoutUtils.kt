@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.container
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,6 +11,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.Div
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivVisibility
 
@@ -57,8 +59,20 @@ internal fun DivContainer.visibleItems(): List<Div> {
 }
 
 @Composable
-internal fun Div.observeVerticalChildAlignment(): Alignment.Vertical? =
-    value().alignmentVertical?.observedValue()?.toVerticalAlignment()
+internal fun RowScope.observeVerticalChildModifier(
+    item: Div,
+    defaultAlignment: Alignment.Vertical? = null,
+    alignByBaseline: Boolean = false,
+): Modifier {
+    val childAlignment = item.value().alignmentVertical?.observedValue()
+    return when {
+        childAlignment == DivAlignmentVertical.BASELINE -> Modifier.alignByBaseline()
+        childAlignment != null -> Modifier.align(childAlignment.toVerticalAlignment())
+        alignByBaseline -> Modifier.alignByBaseline()
+        defaultAlignment != null -> Modifier.align(defaultAlignment)
+        else -> Modifier
+    }
+}
 
 @Composable
 internal fun Div.observeHorizontalChildAlignment(): Alignment.Horizontal? =

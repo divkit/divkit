@@ -27,7 +27,7 @@ import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.container.SeparatorVisibility
 import com.yandex.div.compose.views.container.adaptiveContainerPadding
 import com.yandex.div.compose.views.container.observeHorizontalChildAlignment
-import com.yandex.div.compose.views.container.observeVerticalChildAlignment
+import com.yandex.div.compose.views.container.observeVerticalChildModifier
 import com.yandex.div.compose.views.container.resolveSeparatorVisibility
 import com.yandex.div.compose.views.container.toCrossAxisHorizontalAlignment
 import com.yandex.div.compose.views.container.toCrossAxisVerticalAlignment
@@ -35,6 +35,7 @@ import com.yandex.div.compose.views.container.toHorizontalArrangement
 import com.yandex.div.compose.views.container.toVerticalArrangement
 import com.yandex.div.compose.views.container.visibleItems
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentVertical
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -75,9 +76,11 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
         visibleItems.forEachIndexed { index, item ->
             DivBlockView(
                 data = item,
-                modifier = Modifier
-                    .align(item.observeVerticalChildAlignment() ?: defaultVerticalAlignment)
-                    .trackChildPlacement(separatorGeometry, index),
+                modifier = observeVerticalChildModifier(
+                    item = item,
+                    defaultAlignment = defaultVerticalAlignment,
+                    alignByBaseline = verticalAlignment == DivContentAlignmentVertical.BASELINE,
+                ).trackChildPlacement(separatorGeometry, index),
             )
         }
     }
