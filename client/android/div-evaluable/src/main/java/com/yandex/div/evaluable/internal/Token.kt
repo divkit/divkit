@@ -17,124 +17,124 @@ internal sealed interface Token {
     sealed interface Operator : Token {
 
         sealed interface Unary : Operator {
-            object Plus : Unary {
+            data object Plus : Unary {
                 override fun toString() = "+"
             }
 
-            object Minus : Unary {
+            data object Minus : Unary {
                 override fun toString() = "-"
             }
 
-            object Not : Unary {
+            data object Not : Unary {
                 override fun toString() = "!"
             }
         }
 
         sealed interface Binary : Operator {
             sealed interface Sum : Binary {
-                object Plus : Sum {
+                data object Plus : Sum {
                     override fun toString() = "+"
                 }
 
-                object Minus : Sum {
+                data object Minus : Sum {
                     override fun toString() = "-"
                 }
             }
 
             sealed interface Factor : Binary {
-                object Multiplication : Factor {
+                data object Multiplication : Factor {
                     override fun toString() = "*"
                 }
 
-                object Division : Factor {
+                data object Division : Factor {
                     override fun toString() = "/"
                 }
 
-                object Modulo : Factor {
+                data object Modulo : Factor {
                     override fun toString() = "%"
                 }
             }
 
             // Exponent
-            object Power : Binary {
+            data object Power : Binary {
                 override fun toString() = "^"
             }
 
             sealed interface Logical : Binary {
-                object And : Logical {
+                data object And : Logical {
                     override fun toString() = "&&"
                 }
 
-                object Or : Logical {
+                data object Or : Logical {
                     override fun toString() = "||"
                 }
             }
 
             sealed interface Comparison : Binary {
-                object Greater : Comparison {
+                data object Greater : Comparison {
                     override fun toString() = ">"
                 }
 
-                object GreaterOrEqual : Comparison {
+                data object GreaterOrEqual : Comparison {
                     override fun toString() = ">="
                 }
 
-                object Less : Comparison {
+                data object Less : Comparison {
                     override fun toString() = "<"
                 }
 
-                object LessOrEqual : Comparison {
+                data object LessOrEqual : Comparison {
                     override fun toString() = "<="
                 }
             }
 
             sealed interface Equality : Binary {
-                object Equal : Equality {
+                data object Equal : Equality {
                     override fun toString() = "=="
                 }
 
-                object NotEqual : Equality {
+                data object NotEqual : Equality {
                     override fun toString() = "!="
                 }
             }
         }
 
-        object Try : Operator {
+        data object Try : Operator {
             override fun toString() = "!:"
         }
 
-        object Dot: Operator {
+        data object Dot : Operator {
             override fun toString() = "."
         }
 
         // Ternary
-        object TernaryIf : Operator {
+        data object TernaryIf : Operator {
             override fun toString() = "?"
         }
-        object TernaryElse : Operator {
+        data object TernaryElse : Operator {
             override fun toString() = ":"
         }
-        object TernaryIfElse : Operator
+        data object TernaryIfElse : Operator
     }
 
     data class Function(val name: String) : Token {
-        object ArgumentDelimiter : Token {
+        data object ArgumentDelimiter : Token {
             override fun toString() = ","
         }
     }
 
-    object StringTemplate : Operand {
-        object Start : Token
-        object End : Token
-        object StartOfExpression : Token
-        object EndOfExpression : Token
+    data object StringTemplate : Operand {
+        data object Start : Token
+        data object End : Token
+        data object StartOfExpression : Token
+        data object EndOfExpression : Token
     }
 
     sealed interface Bracket : Token {
-        object LeftRound : Bracket {
+        data object LeftRound : Bracket {
             override fun toString() = "("
         }
-        object RightRound : Bracket {
+        data object RightRound : Bracket {
             override fun toString() = ")"
         }
     }

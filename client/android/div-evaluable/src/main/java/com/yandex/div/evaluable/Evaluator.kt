@@ -251,39 +251,29 @@ class Evaluator(val evaluationContext: EvaluationContext) {
 
     companion object {
         internal fun evalSum(operator: Token.Operator.Binary.Sum, left: Any, right: Any): Any {
-            return when {
-                left is String && right is String -> {
-                    // Concatenation
-                    when (operator) {
-                        is Token.Operator.Binary.Sum.Plus -> "$left$right"
-                        else -> throwExceptionOnEvaluationFailed(operator, left, right)
-                    }
+            return when (operator) {
+                is Token.Operator.Binary.Sum.Plus if left is String && right is String -> {
+                    "$left$right"
                 }
-                left is Long && right is Long -> {
-                    when (operator) {
-                        is Token.Operator.Binary.Sum.Plus -> {
-                            val result = left + right
-                            return if (left xor result and (right xor result) < 0L) {
-                                throw IntegerOverflow("$left + $right")
-                            } else {
-                                result
-                            }
-                        }
-                        is Token.Operator.Binary.Sum.Minus -> {
-                            val result = left - right
-                            return if (left xor right and (left xor result) < 0L) {
-                                throw IntegerOverflow("$left - $right")
-                            } else {
-                                result
-                            }
-                        }
+                is Token.Operator.Binary.Sum.Plus if left is Long && right is Long -> {
+                    val result = left + right
+                    if (left xor result and (right xor result) < 0L) {
+                        throw IntegerOverflow("$left + $right")
                     }
+                    result
                 }
-                left is Double && right is Double -> {
-                    when (operator) {
-                        is Token.Operator.Binary.Sum.Plus -> left + right
-                        is Token.Operator.Binary.Sum.Minus -> left - right
+                is Token.Operator.Binary.Sum.Minus if left is Long && right is Long -> {
+                    val result = left - right
+                    if (left xor right and (left xor result) < 0L) {
+                        throw IntegerOverflow("$left - $right")
                     }
+                    result
+                }
+                is Token.Operator.Binary.Sum.Plus if left is Double && right is Double -> {
+                    left + right
+                }
+                is Token.Operator.Binary.Sum.Minus if left is Double && right is Double -> {
+                    left - right
                 }
                 else -> throwExceptionOnEvaluationFailed(operator, left, right)
             }
@@ -294,49 +284,43 @@ class Evaluator(val evaluationContext: EvaluationContext) {
             left: Any,
             right: Any
         ): Any {
-            return when {
-                left is Long && right is Long -> {
-                    when (operator) {
-                        is Token.Operator.Binary.Factor.Multiplication -> {
-                            val result = left * right
-                            val absLeft: Long = abs(left)
-                            val absRight: Long = abs(right)
-                            return if (absLeft or absRight ushr 31 == 0L || (right == 0L || result / right == left) && (left != Long.MIN_VALUE || right != -1L)) {
-                                result
-                            } else {
-                                throw IntegerOverflow("$left * $right")
-                            }
-                        }
-                        is Token.Operator.Binary.Factor.Division -> {
-                            if (right == 0L) {
-                                throwExceptionOnEvaluationFailed("$left / $right", REASON_DIVISION_BY_ZERO)
-                            }
-                            left / right
-                        }
-                        is Token.Operator.Binary.Factor.Modulo -> {
-                            if (right == 0L) {
-                                throwExceptionOnEvaluationFailed("$left % $right", REASON_DIVISION_BY_ZERO)
-                            }
-                            left % right
-                        }
+            return when (operator) {
+                is Token.Operator.Binary.Factor.Multiplication if left is Long && right is Long -> {
+                    val result = left * right
+                    if (abs(left) or abs(right) ushr 31 == 0L
+                        || (right == 0L || result / right == left)
+                        && (left != Long.MIN_VALUE || right != -1L)
+                    ) {
+                        result
+                    }
+                    else {
+                        throw IntegerOverflow("$left * $right")
                     }
                 }
-                left is Double && right is Double -> {
-                    when (operator) {
-                        is Token.Operator.Binary.Factor.Multiplication -> left * right
-                        is Token.Operator.Binary.Factor.Division -> {
-                            if (right == 0.0) {
-                                throwExceptionOnEvaluationFailed("$left / $right", REASON_DIVISION_BY_ZERO)
-                            }
-                            left / right
-                        }
-                        is Token.Operator.Binary.Factor.Modulo -> {
-                            if (right == 0.0) {
-                                throwExceptionOnEvaluationFailed("$left % $right", REASON_DIVISION_BY_ZERO)
-                            }
-                            left % right
-                        }
+                is Token.Operator.Binary.Factor.Division if left is Long && right is Long -> {
+                    if (right == 0L) {
+                        throwExceptionOnEvaluationFailed("$left / $right", REASON_DIVISION_BY_ZERO)
                     }
+                    left / right
+                }
+                is Token.Operator.Binary.Factor.Modulo if left is Long && right is Long -> {
+                    if (right == 0L) {
+                        throwExceptionOnEvaluationFailed("$left % $right", REASON_DIVISION_BY_ZERO)
+                    }
+                    left % right
+                }
+                is Token.Operator.Binary.Factor.Multiplication if left is Double && right is Double -> left * right
+                is Token.Operator.Binary.Factor.Division if left is Double && right is Double -> {
+                    if (right == 0.0) {
+                        throwExceptionOnEvaluationFailed("$left / $right", REASON_DIVISION_BY_ZERO)
+                    }
+                    left / right
+                }
+                is Token.Operator.Binary.Factor.Modulo if left is Double && right is Double -> {
+                    if (right == 0.0) {
+                        throwExceptionOnEvaluationFailed("$left % $right", REASON_DIVISION_BY_ZERO)
+                    }
+                    left % right
                 }
                 else -> throwExceptionOnEvaluationFailed(operator, left, right)
             }

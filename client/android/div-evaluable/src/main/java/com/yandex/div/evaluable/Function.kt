@@ -90,7 +90,7 @@ abstract class Function {
     }
 
     internal sealed class MatchResult {
-        object Ok : MatchResult()
+        data object Ok : MatchResult()
         class ArgCountMismatch(val expected: Int) : MatchResult()
         class ArgTypeMismatch(val expected: EvaluableType, val actual: EvaluableType) : MatchResult()
     }

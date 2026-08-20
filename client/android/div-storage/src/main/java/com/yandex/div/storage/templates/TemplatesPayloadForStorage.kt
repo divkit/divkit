@@ -10,10 +10,10 @@ internal sealed interface TemplatesPayloadForStorage {
     /**
      * Indicates that source from which templates were assembled not contained any templates.
      */
-    object Empty : TemplatesPayloadForStorage
+    data object Empty : TemplatesPayloadForStorage
 
     /**
      * Variation of [Empty] payloads that is empty because of issues in cards.
      */
-    object AllCardsInvalid : TemplatesPayloadForStorage
+    data object AllCardsInvalid : TemplatesPayloadForStorage
 }

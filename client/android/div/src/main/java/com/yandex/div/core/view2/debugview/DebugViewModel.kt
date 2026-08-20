@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.debugview
 import androidx.annotation.DrawableRes
 
 internal sealed interface DebugViewModel {
-    object Hidden : DebugViewModel
+    data object Hidden : DebugViewModel
 
     data class InfoButton(
         val label: String,

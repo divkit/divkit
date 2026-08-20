@@ -53,12 +53,12 @@ private class Result(val input: String) {
 }
 
 private sealed interface State {
-    object Start : State {
+    data object Start : State {
         override fun input(input: Input, result: Result) =
             initialInput(input)
     }
 
-    object Raw : State {
+    data object Raw : State {
         override fun input(input: Input, result: Result) = when (input) {
             Other, VarSpecial, OpeningBracket, EscapeCharacter -> Raw
             Letter -> {
@@ -76,7 +76,7 @@ private sealed interface State {
         }
     }
 
-    object Variable : State {
+    data object Variable : State {
         override fun input(input: Input, result: Result) = when (input) {
             Letter, VarSpecial -> Variable
             OpeningBracket -> {
@@ -97,14 +97,14 @@ private sealed interface State {
         }
     }
 
-    object Function : State {
+    data object Function : State {
         override fun input(input: Input, result: Result): State {
             result.emitRaw()
             return initialInput(input)
         }
     }
 
-    object QuotedString : State {
+    data object QuotedString : State {
         override fun input(input: Input, result: Result) = when (input) {
             Letter,
             VarSpecial,
@@ -118,7 +118,7 @@ private sealed interface State {
         }
     }
 
-    object QuotedStringEscaped : State {
+    data object QuotedStringEscaped : State {
         override fun input(input: Input, result: Result) = when (input) {
             Letter,
             VarSpecial,
@@ -130,14 +130,14 @@ private sealed interface State {
         }
     }
 
-    object EndOfString : State {
+    data object EndOfString : State {
         override fun input(input: Input, result: Result): State {
             result.emitRaw()
             return initialInput(input)
         }
     }
 
-    object End : State {
+    data object End : State {
         override fun input(input: Input, result: Result) = throw IllegalStateException()
     }
 

@@ -5,9 +5,9 @@ import org.json.JSONObject
 
 sealed class DivEditorState {
 
-    object InitialState : DivEditorState()
+    data object InitialState : DivEditorState()
 
-    object LoadingState : DivEditorState()
+    data object LoadingState : DivEditorState()
 
     data class FailedState(
         val message: String
