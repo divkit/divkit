@@ -35,7 +35,9 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
       crossSpacing: 0,
       defaultCrossAlignment: crossAlignment,
-      scrollMode: .autoPaging(inertionEnabled: false),
+      scrollMode: .autoPaging(
+        inertionEnabled: resolveMultiPageScroll(expressionResolver)
+      ),
       infiniteScroll: resolveInfiniteScroll(expressionResolver),
       layoutMode: layoutMode,
       transformation: pageTransformation?.resolve(

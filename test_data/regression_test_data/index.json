@@ -698,6 +698,24 @@
       "file": "pager/pager_infinite_scroll_with_start_paddings.json"
     },
     {
+      "title": "Pager with multi page scroll",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivPager"
+      ],
+      "steps": [
+        "1. Make a long fast swipe to the left",
+        "2. Turn on the \"Multipage scroll\" switch and make the same long fast swipe to the left"
+      ],
+      "expected_results": [
+        "1. The pager moves by one page only, regardless of the swipe length and speed",
+        "2. The pager moves by several pages at once, the further page is the faster and the longer the swipe is. The pager always stops snapped to a page"
+      ],
+      "file": "pager/pager_multi_page_scroll.json"
+    },
+    {
       "title": "Action animations",
       "case_id": 33,
       "platforms": [

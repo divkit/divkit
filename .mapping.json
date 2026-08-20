@@ -21124,6 +21124,7 @@
   "test_data/regression_test_data/pager/pager_infinite_scroll.json":"divkit/public/test_data/regression_test_data/pager/pager_infinite_scroll.json",
   "test_data/regression_test_data/pager/pager_infinite_scroll2.json":"divkit/public/test_data/regression_test_data/pager/pager_infinite_scroll2.json",
   "test_data/regression_test_data/pager/pager_infinite_scroll_with_start_paddings.json":"divkit/public/test_data/regression_test_data/pager/pager_infinite_scroll_with_start_paddings.json",
+  "test_data/regression_test_data/pager/pager_multi_page_scroll.json":"divkit/public/test_data/regression_test_data/pager/pager_multi_page_scroll.json",
   "test_data/regression_test_data/pager/pagers-with-page-transformation.json":"divkit/public/test_data/regression_test_data/pager/pagers-with-page-transformation.json",
   "test_data/regression_test_data/patch/actions_applied.json":"divkit/public/test_data/regression_test_data/patch/actions_applied.json",
   "test_data/regression_test_data/patch/actions_failed.json":"divkit/public/test_data/regression_test_data/patch/actions_failed.json",

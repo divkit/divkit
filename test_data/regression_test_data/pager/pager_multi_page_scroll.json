@@ -1,0 +1,211 @@
+{
+  "templates": {
+    "circle_item": {
+      "type": "container",
+      "$border": "border",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F0F0F0"
+        }
+      ],
+      "items": [
+        {
+          "type": "text",
+          "$text": "label",
+          "height": {
+            "type": "fixed",
+            "value": 150
+          },
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "font_size": 18,
+          "font_weight": "medium",
+          "text_color": "#333333"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "pager_multi_page_scroll",
+    "variables": [
+      {
+        "name": "multi_page_scroll",
+        "type": "boolean",
+        "value": false
+      },
+      {
+        "name": "selected",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "pager",
+              "id": "multi_page_scroll_pager",
+              "infinite_scroll": true,
+              "multi_page_scroll": "@{multi_page_scroll}",
+              "layout_mode": {
+                "type": "fixed",
+                "neighbour_page_width": {
+                  "type": "fixed",
+                  "value": 100
+                }
+              },
+              "item_spacing": {
+                "type": "fixed",
+                "value": 16
+              },
+              "items": [
+                {
+                  "type": "circle_item",
+                  "label": "1",
+                  "border": {
+                    "corner_radius": 44,
+                    "stroke": {
+                      "color": "@{selected == 0 ? '#2196F3' : '#00000000'}",
+                      "width": 2
+                    }
+                  },
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_0",
+                      "url": "div-action://set_variable?name=selected&value=0"
+                    }
+                  ]
+                },
+                {
+                  "type": "circle_item",
+                  "label": "2",
+                  "border": {
+                    "corner_radius": 44,
+                    "stroke": {
+                      "color": "@{selected == 1 ? '#2196F3' : '#00000000'}",
+                      "width": 2
+                    }
+                  },
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_1",
+                      "url": "div-action://set_variable?name=selected&value=1"
+                    }
+                  ]
+                },
+                {
+                  "type": "circle_item",
+                  "label": "3",
+                  "border": {
+                    "corner_radius": 44,
+                    "stroke": {
+                      "color": "@{selected == 2 ? '#2196F3' : '#00000000'}",
+                      "width": 2
+                    }
+                  },
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_2",
+                      "url": "div-action://set_variable?name=selected&value=2"
+                    }
+                  ]
+                },
+                {
+                  "type": "circle_item",
+                  "label": "4",
+                  "border": {
+                    "corner_radius": 44,
+                    "stroke": {
+                      "color": "@{selected == 3 ? '#2196F3' : '#00000000'}",
+                      "width": 2
+                    }
+                  },
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_3",
+                      "url": "div-action://set_variable?name=selected&value=3"
+                    }
+                  ]
+                },
+                {
+                  "type": "circle_item",
+                  "label": "5",
+                  "border": {
+                    "corner_radius": 44,
+                    "stroke": {
+                      "color": "@{selected == 4 ? '#2196F3' : '#00000000'}",
+                      "width": 2
+                    }
+                  },
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_4",
+                      "url": "div-action://set_variable?name=selected&value=4"
+                    }
+                  ]
+                },
+                {
+                  "type": "circle_item",
+                  "label": "6",
+                  "border": {
+                    "corner_radius": 44,
+                    "stroke": {
+                      "color": "@{selected == 5 ? '#2196F3' : '#00000000'}",
+                      "width": 2
+                    }
+                  },
+                  "selected_actions": [
+                    {
+                      "log_id": "selected_5",
+                      "url": "div-action://set_variable?name=selected&value=5"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_vertical": "center",
+              "margins": {
+                "top": 32,
+                "right": 16,
+                "left": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Multipage scroll: ",
+                  "font_weight": "bold",
+                  "font_size": 16,
+                  "margins": {
+                    "left": 16,
+                    "right": 16
+                  },
+                  "width": {
+                    "type": "wrap_content"
+                  }
+                },
+                {
+                  "type": "switch",
+                  "is_on_variable": "multi_page_scroll",
+                  "width": {
+                    "type": "wrap_content"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

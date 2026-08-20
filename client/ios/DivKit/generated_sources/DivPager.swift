@@ -43,6 +43,7 @@ public final class DivPager: DivBase, Sendable {
   public let layoutMode: DivPagerLayoutMode
   public let layoutProvider: DivLayoutProvider?
   public let margins: DivEdgeInsets?
+  public let multiPageScroll: Expression<Bool> // default value: false
   public let orientation: Expression<Orientation> // default value: horizontal
   public let paddings: DivEdgeInsets?
   public let pageTransformation: DivPageTransformation?
@@ -91,6 +92,10 @@ public final class DivPager: DivBase, Sendable {
 
   public func resolveInfiniteScroll(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(infiniteScroll) ?? false
+  }
+
+  public func resolveMultiPageScroll(_ resolver: ExpressionResolver) -> Bool {
+    resolver.resolveNumeric(multiPageScroll) ?? false
   }
 
   public func resolveOrientation(_ resolver: ExpressionResolver) -> Orientation {
@@ -158,6 +163,7 @@ public final class DivPager: DivBase, Sendable {
       layoutMode: try dictionary.getField("layout_mode", transform: { (dict: [String: Any]) in try DivPagerLayoutMode(dictionary: dict, context: context) }, context: context),
       layoutProvider: try dictionary.getOptionalField("layout_provider", transform: { (dict: [String: Any]) in try DivLayoutProvider(dictionary: dict, context: context) }),
       margins: try dictionary.getOptionalField("margins", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
+      multiPageScroll: try dictionary.getOptionalExpressionField("multi_page_scroll", context: context),
       orientation: try dictionary.getOptionalExpressionField("orientation", context: context),
       paddings: try dictionary.getOptionalField("paddings", transform: { (dict: [String: Any]) in try DivEdgeInsets(dictionary: dict, context: context) }),
       pageTransformation: try dictionary.getOptionalField("page_transformation", transform: { (dict: [String: Any]) in try DivPageTransformation(dictionary: dict, context: context) }),
@@ -207,6 +213,7 @@ public final class DivPager: DivBase, Sendable {
     layoutMode: DivPagerLayoutMode,
     layoutProvider: DivLayoutProvider?,
     margins: DivEdgeInsets?,
+    multiPageScroll: Expression<Bool>?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
     pageTransformation: DivPageTransformation?,
@@ -253,6 +260,7 @@ public final class DivPager: DivBase, Sendable {
     self.layoutMode = layoutMode
     self.layoutProvider = layoutProvider
     self.margins = margins
+    self.multiPageScroll = multiPageScroll ?? .value(false)
     self.orientation = orientation ?? .value(.horizontal)
     self.paddings = paddings
     self.pageTransformation = pageTransformation
@@ -337,50 +345,55 @@ extension DivPager: Equatable {
       return false
     }
     guard
+      lhs.multiPageScroll == rhs.multiPageScroll,
       lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings,
-      lhs.pageTransformation == rhs.pageTransformation
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.pageTransformation == rhs.pageTransformation,
       lhs.restrictParentScroll == rhs.restrictParentScroll,
-      lhs.reuseId == rhs.reuseId,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.reuseId == rhs.reuseId
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.scrollAxisAlignment == rhs.scrollAxisAlignment,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transformations == rhs.transformations,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transformations == rhs.transformations
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.variableTriggers == rhs.variableTriggers,
-      lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility
+      lhs.variables == rhs.variables
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -419,6 +432,7 @@ extension DivPager: Serializable {
     result["layout_mode"] = layoutMode.toDictionary()
     result["layout_provider"] = layoutProvider?.toDictionary()
     result["margins"] = margins?.toDictionary()
+    result["multi_page_scroll"] = multiPageScroll.toValidSerializationValue()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings?.toDictionary()
     result["page_transformation"] = pageTransformation?.toDictionary()
