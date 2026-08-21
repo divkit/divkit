@@ -98,6 +98,7 @@ public class DivConfiguration {
     private boolean mPagerPageClipEnabled;
     private boolean mPermanentDebugPanelEnabled;
     private boolean mRenderEffectEnabled;
+    private boolean mDeferredVideoPlayerCreationEnabled;
 
     private float mRecyclerScrollInterceptionAngle;
 
@@ -142,6 +143,7 @@ public class DivConfiguration {
             boolean permanentDebugPanelEnabled,
             float recyclerScrollInterceptionAngle,
             boolean renderEffectEnabled,
+            boolean deferredVideoPlayerCreationEnabled,
             @NonNull DivAnimationsEnabledProvider animationsEnabledProvider
     ) {
         mImageLoader = imageLoader;
@@ -184,6 +186,7 @@ public class DivConfiguration {
         mRecyclerScrollInterceptionAngle = recyclerScrollInterceptionAngle;
         mPagerPageClipEnabled = pagerChildrenClipEnabled;
         mRenderEffectEnabled = renderEffectEnabled;
+        mDeferredVideoPlayerCreationEnabled = deferredVideoPlayerCreationEnabled;
         mAnimationsEnabledProvider = animationsEnabledProvider;
     }
 
@@ -353,6 +356,15 @@ public class DivConfiguration {
         return mRenderEffectEnabled;
     }
 
+    /**
+     * Returns whether video player creation is deferred while a parent RecyclerView is scrolling.
+     */
+    @Provides
+    @ExperimentFlag(experiment = Experiment.DEFER_VIDEO_PLAYER_CREATION_ENABLED)
+    public boolean isDeferredVideoPlayerCreationEnabled() {
+        return mDeferredVideoPlayerCreationEnabled;
+    }
+
     @Provides
     @NonNull
     public DivDownloader getDivDownloader() {
@@ -505,6 +517,8 @@ public class DivConfiguration {
         private boolean mPermanentDebugPanelEnabled = Experiment.PERMANENT_DEBUG_PANEL_ENABLED.getDefaultValue();
         private float mRecyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT;
         private boolean mRenderEffectEnabled = Experiment.RENDER_EFFECT_ENABLED.getDefaultValue();
+        private boolean mDeferredVideoPlayerCreationEnabled =
+                Experiment.DEFER_VIDEO_PLAYER_CREATION_ENABLED.getDefaultValue();
         @NonNull
         private DivAnimationsEnabledProvider mAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT;
 
@@ -768,6 +782,15 @@ public class DivConfiguration {
             return this;
         }
 
+        /**
+         * Configures whether video player creation waits for parent RecyclerView scrolling to become idle.
+         */
+        @NonNull
+        public Builder enableDeferredVideoPlayerCreation(boolean enable) {
+            mDeferredVideoPlayerCreationEnabled = enable;
+            return this;
+        }
+
         @NonNull
         public Builder animationsEnabledProvider(@NonNull DivAnimationsEnabledProvider provider) {
             mAnimationsEnabledProvider = provider;
@@ -824,6 +847,7 @@ public class DivConfiguration {
                     mPermanentDebugPanelEnabled,
                     mRecyclerScrollInterceptionAngle,
                     mRenderEffectEnabled,
+                    mDeferredVideoPlayerCreationEnabled,
                     mAnimationsEnabledProvider);
         }
     }

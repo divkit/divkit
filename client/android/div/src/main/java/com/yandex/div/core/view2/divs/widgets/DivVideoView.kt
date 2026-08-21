@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import androidx.annotation.MainThread
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionView
@@ -23,6 +24,20 @@ internal class DivVideoView @JvmOverloads constructor(
     MediaReleasable {
 
     private val videoSubscriptions = mutableListOf<Disposable>()
+    internal val videoBindingController = DivVideoBindingController(
+        hostView = this,
+        resetVideoBinding = ::resetVideoBinding,
+    )
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        videoBindingController.onAttachedToWindow()
+    }
+
+    override fun onDetachedFromWindow() {
+        videoBindingController.onDetachedFromWindow()
+        super.onDetachedFromWindow()
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -38,12 +53,25 @@ internal class DivVideoView @JvmOverloads constructor(
         releaseMedia()
     }
 
+    @MainThread
     override fun releaseMedia() {
+        videoBindingController.release()
+    }
+
+    private fun resetVideoBinding() {
+        closeVideoSubscriptions()
+        releaseCurrentPlayer()
+    }
+
+    private fun releaseCurrentPlayer() {
         getPlayerView()?.let { playerView ->
             val lastPlayer = playerView.getAttachedPlayer()
             playerView.detach()
             lastPlayer?.release()
         }
+    }
+
+    private fun closeVideoSubscriptions() {
         videoSubscriptions.forEach { it.close() }
         videoSubscriptions.clear()
     }

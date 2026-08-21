@@ -69,4 +69,8 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
         "render_effect_enabled",
         defaultValue = false,
     ),
+    DEFER_VIDEO_PLAYER_CREATION_ENABLED(
+        "defer_video_player_creation",
+        defaultValue = false,
+    ),
 }
