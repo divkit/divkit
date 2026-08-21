@@ -18,6 +18,7 @@ import com.yandex.div.test.crossplatform.ParsingUtils
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
+import java.io.File
 import kotlin.test.Test
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
@@ -82,11 +83,16 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         // Store parsed test cases to prevent multiple parsing by
         // ParameterizedRobolectricTestRunner
         private val cases: List<ParsingResult<IntegrationTestCase>> = run {
+            val selector = System.getProperty("divkit.test.filter")?.takeIf { it.isNotBlank() }
             ParsingUtils.parseFiles("integration_test_data") { file, json ->
-                if (ignoredFiles.contains(file.name)) {
+                if (ignoredFiles.contains(file.name) || !file.isSelected(selector)) {
                     emptyList()
                 } else {
                     IntegrationTestCaseParser.parseCases(file.name, json)
+                }
+            }.also { selectedCases ->
+                check(selector == null || selectedCases.isNotEmpty()) {
+                    "No integration test matches: $selector"
                 }
             }
         }
@@ -97,6 +103,9 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         fun cases() = cases
     }
 }
+
+private fun File.isSelected(selector: String?) =
+    selector == null || invariantSeparatorsPath.endsWith("/$selector")
 
 private class Reporter(private val logger: IntegrationTestLogger) : DivReporter() {
     override fun reportError(message: String) {

@@ -39,8 +39,10 @@ class Div2ScreenshotTest(case: String, escapedCase: String) {
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            return AssetEnumerator().enumerate(TEST_CASES_PATH)
+            val enumerator = AssetEnumerator()
+            return enumerator.enumerate(TEST_CASES_PATH)
                 .filter { !ignoredCases.contains(it) }
+                .let(enumerator::requireSelectedCase)
                 .withEscapedParameter()
         }
 

@@ -1,6 +1,8 @@
 @testable import DivKit
 import DivKitExtensions
 import DivKitMarkdownExtension
+import DivKitTestsSupport
+import Foundation
 @testable import LayoutKit
 import Testing
 import UIKit
@@ -9,7 +11,7 @@ import VGSL
 @MainActor
 @Suite
 struct DivKitSnapshotTests {
-  @Test("Snapshots", .serialized, arguments: snapshotTestsFiles)
+  @Test("Snapshots", .serialized, arguments: selectedSnapshotTestsFiles)
   func snapshotTest(jsonFile: JsonFile) async throws {
     if exclusions.contains(where: { $0 == jsonFile.relativePath }) {
       try await doTestForDifferentStates(jsonFile)
@@ -22,7 +24,7 @@ struct DivKitSnapshotTests {
     "Interactive Snapshots",
     .serialized,
     .timeLimit(.minutes(1)),
-    arguments: interactiveSnapshotTestsFiles
+    arguments: selectedInteractiveSnapshotTestsFiles
   )
   func interactiveSnapshotTest(jsonFile: JsonFile) async throws {
     try await doTest(jsonFile)
@@ -55,6 +57,42 @@ struct DivKitSnapshotTests {
       )
     }
   }
+}
+
+private let selectedSnapshotTestsFiles = selectedJsonFiles(
+  snapshotTestsFiles,
+  kind: "snapshot-json",
+  prefix: "snapshot_test_data/"
+)
+
+private let selectedInteractiveSnapshotTestsFiles = selectedJsonFiles(
+  interactiveSnapshotTestsFiles,
+  kind: "interactive-snapshot-json",
+  prefix: "interactive_snapshot_test_data/"
+)
+
+private func selectedJsonFiles(
+  _ files: [JsonFile],
+  kind: String,
+  prefix: String
+) -> [JsonFile] {
+  guard let selectedKind = ProcessInfo.processInfo.testArgument("divkit-test-kind"),
+        ["snapshot-json", "interactive-snapshot-json"].contains(selectedKind) else {
+    return files
+  }
+  guard selectedKind == kind else {
+    return []
+  }
+  guard let selector = ProcessInfo.processInfo.testArgument("divkit-test-filter"),
+        selector.hasPrefix(prefix),
+        !selector.contains("..") else {
+    preconditionFailure("Invalid \(kind) selector")
+  }
+
+  let relativePath = String(selector.dropFirst(prefix.count))
+  let selected = files.filter { $0.relativePath == relativePath }
+  precondition(!selected.isEmpty, "No \(kind) test matches: \(selector)")
+  return selected
 }
 
 private let exclusions = [

@@ -45,7 +45,10 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            return AssetEnumerator().enumerate(TEST_CASES_PATH).withEscapedParameter()
+            val enumerator = AssetEnumerator()
+            return enumerator.enumerate(TEST_CASES_PATH)
+                .let(enumerator::requireSelectedCase)
+                .withEscapedParameter()
         }
     }
 }

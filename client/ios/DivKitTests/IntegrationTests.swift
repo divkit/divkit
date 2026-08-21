@@ -1,5 +1,6 @@
 @_spi(Internal) @testable @preconcurrency import DivKit
 import DivKitTestsSupport
+import Foundation
 import LayoutKit
 import VGSL
 import XCTest
@@ -19,10 +20,10 @@ final class IntegrationTests: XCTestCase {
 }
 
 private func makeTestCases() -> [(String, IntegrationTestData)] {
-  getFiles(
+  selectedIntegrationFiles(getFiles(
     "integration_test_data",
     forBundle: Bundle(for: IntegrationTests.self)
-  ).flatMap { url in
+  )).flatMap { url in
     let fileName = url.lastPathComponent
     let test = try! IntegrationTest(Data(contentsOf: url))
 
@@ -39,6 +40,22 @@ private func makeTestCases() -> [(String, IntegrationTestData)] {
         )
       }
   }
+}
+
+private func selectedIntegrationFiles(_ files: [URL]) -> [URL] {
+  guard ProcessInfo.processInfo.testArgument("divkit-test-kind") == "integration-json",
+        let selector = ProcessInfo.processInfo.testArgument("divkit-test-filter"),
+        !selector.isEmpty else {
+    return files
+  }
+
+  precondition(
+    selector.hasPrefix("integration_test_data/") && !selector.contains(".."),
+    "Invalid integration test selector: \(selector)"
+  )
+  let selected = files.filter { $0.path.hasSuffix("/\(selector)") }
+  precondition(!selected.isEmpty, "No integration test matches: \(selector)")
+  return selected
 }
 
 @MainActor

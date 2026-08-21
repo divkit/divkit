@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.google.testing.platform.proto)
     implementation(libs.webp.imageio)
+    testImplementation(kotlin("test"))
 }
 
 gradlePlugin {

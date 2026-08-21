@@ -31,9 +31,10 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            return AssetEnumerator()
-                .enumerate("snapshot_test_data")
+            val enumerator = AssetEnumerator()
+            return enumerator.enumerate("snapshot_test_data")
                 .filter { !ignoredFiles.contains(it) }
+                .let(enumerator::requireSelectedCase)
                 .withEscapedParameter(prefix = "snapshot_test_data/")
         }
     }

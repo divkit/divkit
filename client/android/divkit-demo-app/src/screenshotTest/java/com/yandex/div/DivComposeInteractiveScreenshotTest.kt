@@ -78,16 +78,18 @@ class DivComposeInteractiveScreenshotTest(
         @JvmStatic
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
-            return listOf(
-                "interactive_snapshot_test_data/div-action/base.json",
-                "interactive_snapshot_test_data/div-action/set-variable.json",
-                "interactive_snapshot_test_data/div-container/base-properties.json",
-                "interactive_snapshot_test_data/div-container/visibility.json",
-                "interactive_snapshot_test_data/div-extension/is-enabled.json",
-                "interactive_snapshot_test_data/div-input/fixed_length_input_mask.json",
-                "interactive_snapshot_test_data/div-input/phone_input_mask.json",
-                "interactive_snapshot_test_data/div-input/currency_input_mask.json",
-                "interactive_snapshot_test_data/div-text/text-properties.json",
+            return AssetEnumerator().requireSelectedCase(
+                listOf(
+                    "interactive_snapshot_test_data/div-action/base.json",
+                    "interactive_snapshot_test_data/div-action/set-variable.json",
+                    "interactive_snapshot_test_data/div-container/base-properties.json",
+                    "interactive_snapshot_test_data/div-container/visibility.json",
+                    "interactive_snapshot_test_data/div-extension/is-enabled.json",
+                    "interactive_snapshot_test_data/div-input/fixed_length_input_mask.json",
+                    "interactive_snapshot_test_data/div-input/phone_input_mask.json",
+                    "interactive_snapshot_test_data/div-input/currency_input_mask.json",
+                    "interactive_snapshot_test_data/div-text/text-properties.json",
+                )
             ).withEscapedParameter()
         }
     }

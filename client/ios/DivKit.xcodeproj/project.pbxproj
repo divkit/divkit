@@ -12,6 +12,7 @@
 		0C03FD082DF2E9BA002746DA /* DivDataResourcesPreloaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1B9FDF2DDE1D6B00F69371 /* DivDataResourcesPreloaderTests.swift */; };
 		0C9BB8802DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9BB87E2DF02ECF001C4E72 /* MockDivExtensionHandler.swift */; };
 		0CECADB82EA10D7B00B3E60A /* libDivKitTestsSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE7D3042CF7526C00BAF071 /* libDivKitTestsSupport.a */; };
+		A1B2C3D42F4A000100000001 /* libDivKitTestsSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FE7D3042CF7526C00BAF071 /* libDivKitTestsSupport.a */; };
 		431CF8582B7BC47E005A2E61 /* DivActionURLHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */; };
 		4356EDC12A6C54E40017205B /* PlaygroundJsonProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4356EDC02A6C54E40017205B /* PlaygroundJsonProvider.swift */; };
 		4391F7C32A77DB9B006D8818 /* DivViewController+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4391F7C22A77DB9B006D8818 /* DivViewController+SwiftUI.swift */; };
@@ -259,6 +260,13 @@
 
 /* Begin PBXContainerItemProxy section */
 		0CECADB92EA10D7B00B3E60A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9FE7D3032CF7526C00BAF071;
+			remoteInfo = DivKitTestsSupport;
+		};
+		A1B2C3D42F4A000100000002 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
 			proxyType = 1;
@@ -655,6 +663,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C0E7371288AE219009BEB3C /* DivKit in Frameworks */,
+				A1B2C3D42F4A000100000001 /* libDivKitTestsSupport.a in Frameworks */,
 				E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */,
 				52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */,
 			);
@@ -1347,6 +1356,7 @@
 			dependencies = (
 				8C0E736F288AE211009BEB3C /* PBXTargetDependency */,
 				8C81DF9928AE4B80009B17D2 /* PBXTargetDependency */,
+				A1B2C3D42F4A000100000003 /* PBXTargetDependency */,
 			);
 			name = DivKitSnapshotTests;
 			packageProductDependencies = (
@@ -1932,6 +1942,11 @@
 			isa = PBXTargetDependency;
 			target = 9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */;
 			targetProxy = 0CECADB92EA10D7B00B3E60A /* PBXContainerItemProxy */;
+		};
+		A1B2C3D42F4A000100000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */;
+			targetProxy = A1B2C3D42F4A000100000002 /* PBXContainerItemProxy */;
 		};
 		7E2DFAB12C7C7FD50095775C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

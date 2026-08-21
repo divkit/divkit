@@ -47,6 +47,9 @@ abstract class CompareScreenshotsTask : DefaultTask() {
     @get:Input
     abstract val strictComparison: Property<Boolean>
 
+    @get:Input
+    abstract val selectedReferencePrefix: Property<String>
+
     @get:Internal
     abstract val reportDir: DirectoryProperty
 
@@ -73,7 +76,6 @@ abstract class CompareScreenshotsTask : DefaultTask() {
         comparisonDir.asFile.get().deleteRecursively()
 
         val screenshotDirs = screenshotDir.asFile.get().listFiles { file -> file.isDirectory }!!
-
         screenshotDirs.forEach { screenshotDirFile ->
             val device = screenshotDirFile.toPath().last().name
             val deviceReferenceDir =
@@ -177,7 +179,15 @@ abstract class CompareScreenshotsTask : DefaultTask() {
 
         if (skippedScreenshots.isNotEmpty()) {
             logger.w("${skippedScreenshots.size} skipped references:\n\t${skippedScreenshots.joinToString("\n\t")}")
-            if (strictComparison.get()) {
+            val requiredReferences = requiredSkippedReferences(
+                skippedScreenshots,
+                selectedReferencePrefix.get(),
+            )
+            if (strictComparison.get() && requiredReferences.isNotEmpty()) {
+                logger.w(
+                    "${requiredReferences.size} required references were not produced:\n\t" +
+                        requiredReferences.joinToString("\n\t")
+                )
                 return false
             }
         }
@@ -333,6 +343,7 @@ abstract class CompareScreenshotsTask : DefaultTask() {
                 it.referencesDir.set(project.file(extension.referencesDir))
                 it.comparableCategories.set(extension.comparableCategories)
                 it.strictComparison.set(extension.strictComparison)
+                it.selectedReferencePrefix.set(extension.selectedReferencePrefix)
                 it.screenshotDir.set(
                     project.layout.buildDirectory.dir(additionalTestOutputDir(variant))
                 )
@@ -342,6 +353,20 @@ abstract class CompareScreenshotsTask : DefaultTask() {
 
                 it.onlyIf { extension.enableComparison.get() }
             }
+    }
+}
+
+internal fun requiredSkippedReferences(
+    skippedReferences: Collection<String>,
+    selectedReferencePrefix: String,
+): List<String> {
+    if (selectedReferencePrefix.isBlank()) return skippedReferences.toList()
+
+    val selectedFile = "$selectedReferencePrefix.png"
+    val selectedDirectory = "$selectedReferencePrefix/"
+    return skippedReferences.filter { reference ->
+        val pathWithoutCategory = reference.substringAfter('/')
+        pathWithoutCategory == selectedFile || pathWithoutCategory.startsWith(selectedDirectory)
     }
 }
 

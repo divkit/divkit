@@ -42,3 +42,9 @@ dependencies {
     testImplementation(libs.json)
     testImplementation(libs.kotlin.test)
 }
+
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+    providers.gradleProperty("divkitTestFilter").orNull?.let { filter ->
+        systemProperty("divkit.test.filter", filter)
+    }
+}

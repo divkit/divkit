@@ -130,6 +130,7 @@ screenshotTests {
     enabled = providers.gradleProperty("screenshot-tests").isPresent() || isInIde
     enableComparison = !providers.gradleProperty("disable-screenshot-comparison").isPresent()
     strictComparison = providers.gradleProperty("screenshot-strict-comparison").isPresent()
+    selectedReferencePrefix = providers.gradleProperty("screenshot-selected-reference-prefix").getOrElse("")
     testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
     referencesDir = "src/screenshotTest/screenshots"
 }
