@@ -16,11 +16,13 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.isWrapContent
+import com.yandex.div.compose.utils.observeHorizontalMarginsSum
 import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div.compose.views.modifiers.horizontalPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -40,17 +42,20 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     var hasWeightedChildren = false
     var weightedChildrenMargins = 0.dp
     var needsCrossAxisIntrinsicSize = false
-    var index = 0
-    while (index < visibleItems.size) {
-        val child = visibleItems[index].value()
+    var hasCrossAxisSizingChild = false
+    for (item in visibleItems) {
+        val child = item.value()
         if (supportsMainAxisWeight && child.height.isMatchParent) {
             hasWeightedChildren = true
             weightedChildrenMargins += child.observeVerticalMarginsSum()
         }
-        if (isCrossAxisWrapContent && child.width is DivSize.MatchParent) {
-            needsCrossAxisIntrinsicSize = true
+        if (isCrossAxisWrapContent) {
+            if (child.width.isMatchParent) {
+                needsCrossAxisIntrinsicSize = true
+            } else {
+                hasCrossAxisSizingChild = true
+            }
         }
-        index++
     }
 
     val containerModifier = modifier
@@ -75,7 +80,16 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
                 if (itemSpacing > 0) Spacer(Modifier.height(itemSpacing.toDp()))
             },
         ) { childDiv ->
-            VerticalChildItem(childDiv, data.height, hasWeightedChildren, weightedChildrenMargins)
+            VerticalChildItem(
+                childDiv,
+                data.height,
+                // A match-parent child must not define a wrap-content cross axis when a sibling
+                // can define it. Without such a sibling, legacy DivKit treats it as wrap-content.
+                excludeCrossAxisFromIntrinsics = hasCrossAxisSizingChild &&
+                    childDiv.value().width.isMatchParent,
+                hasWeightedChildren,
+                weightedChildrenMargins,
+            )
         }
     }
 }
@@ -84,18 +98,25 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
 private fun ColumnScope.VerticalChildItem(
     item: Div,
     containerMainSize: DivSize,
+    excludeCrossAxisFromIntrinsics: Boolean,
     hasWeightedChildren: Boolean,
     weightedChildrenMargins: Dp
 ) {
     val divBase = item.value()
     val isWeightedChild = divBase.height is DivSize.MatchParent && !containerMainSize.isWrapContent
 
-    var modifier = makeVerticalChildModifier(
-        divBase.height,
-        containerMainSize,
-        hasWeightedChildren,
-        weightedChildrenMargins
-    )
+    var modifier = Modifier
+        .applyIf(excludeCrossAxisFromIntrinsics) {
+            fixedIntrinsics(width = divBase.observeHorizontalMarginsSum())
+        }
+        .then(
+            makeVerticalChildModifier(
+                divBase.height,
+                containerMainSize,
+                hasWeightedChildren,
+                weightedChildrenMargins
+            )
+        )
     item.observeHorizontalChildAlignment()?.let { modifier = modifier.align(it) }
 
     if (isWeightedChild) {

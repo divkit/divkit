@@ -19,8 +19,10 @@ import com.yandex.div.compose.utils.isWrapContent
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeHorizontalMarginsSum
 import com.yandex.div.compose.utils.observeIsConstrained
+import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div.compose.views.modifiers.verticalPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
@@ -41,17 +43,20 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     var hasWeightedChildren = false
     var weightedChildrenMargins = 0.dp
     var needsCrossAxisIntrinsicSize = false
-    var index = 0
-    while (index < visibleItems.size) {
-        val child = visibleItems[index].value()
+    var hasCrossAxisSizingChild = false
+    for (item in visibleItems) {
+        val child = item.value()
         if (supportsMainAxisWeight && child.width.isMatchParent) {
             hasWeightedChildren = true
             weightedChildrenMargins += child.observeHorizontalMarginsSum()
         }
-        if (isCrossAxisWrapContent && child.height is DivSize.MatchParent) {
-            needsCrossAxisIntrinsicSize = true
+        if (isCrossAxisWrapContent) {
+            if (child.height.isMatchParent) {
+                needsCrossAxisIntrinsicSize = true
+            } else {
+                hasCrossAxisSizingChild = true
+            }
         }
-        index++
     }
 
     val containerModifier = modifier
@@ -87,6 +92,10 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
                 data.width,
                 alignByBaseline = verticalAlignment == DivContentAlignmentVertical.BASELINE &&
                     !(isCrossAxisWrapContent && childDiv.value().height.isMatchParent),
+                // A match-parent child must not define a wrap-content cross axis when a sibling
+                // can define it. Without such a sibling, legacy DivKit treats it as wrap-content.
+                excludeCrossAxisFromIntrinsics = hasCrossAxisSizingChild &&
+                    childDiv.value().height.isMatchParent,
                 hasWeightedChildren,
                 weightedChildrenMargins,
             )
@@ -99,19 +108,26 @@ private fun RowScope.HorizontalChildItem(
     item: Div,
     containerMainSize: DivSize,
     alignByBaseline: Boolean,
+    excludeCrossAxisFromIntrinsics: Boolean,
     hasWeightedChildren: Boolean,
     weightedChildrenMargins: Dp
 ) {
     val divBase = item.value()
     val isWeightedChild = divBase.width.isMatchParent && !containerMainSize.isWrapContent
 
-    var modifier = makeHorizontalChildModifier(
-        divBase.width,
-        containerMainSize,
-        hasWeightedChildren,
-        weightedChildrenMargins
-    )
-    modifier = modifier.then(observeVerticalChildModifier(item, alignByBaseline = alignByBaseline))
+    var modifier = Modifier
+        .applyIf(excludeCrossAxisFromIntrinsics) {
+            fixedIntrinsics(height = divBase.observeVerticalMarginsSum())
+        }
+        .then(
+            makeHorizontalChildModifier(
+                divBase.width,
+                containerMainSize,
+                hasWeightedChildren,
+                weightedChildrenMargins
+            )
+        )
+        .then(observeVerticalChildModifier(item, alignByBaseline = alignByBaseline))
 
     if (isWeightedChild) {
         val (startMargin, endMargin) = divBase.margins.observeHorizontalInsets()
