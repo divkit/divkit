@@ -36,6 +36,9 @@
 * Video start and pause actions are now preserved when they are issued before the target video view is bound.
 
 ### iOS Client:
+* Removed `RawDivData.resolve(flagsInfo:)`. Use `DivData.resolve(card:templates:flagsInfo:)` instead.
+* `DivDataTemplate` is no longer public. Use `DivData.resolve(card:templates:)` instead of `DivTemplates.parseValue(type: DivDataTemplate.self, from:)`.
+* Added `DivData.resolve(card:templates:flagsInfo:)` overload that accepts pre-parsed `DivTemplates` for reusing templates across multiple cards.
 * Removed `DivLastVisibleBoundsCache` from the public API.
 * Removed `DivTooltipViewFactory` from the public API.
 * Removed `DivStoredValueScope` from the public API.
