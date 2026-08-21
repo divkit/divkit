@@ -4,9 +4,13 @@ import Foundation
 import PackageDescription
 
 let vgsl = {
-  let version = Version("7.25.1-0")
+  let vgslLow = Version("7.25.1-0")
+  let vgslHigh = Version("9.0.0-0")
   return (
-    package: Package.Dependency.package(url: "https://github.com/yandex/vgsl.git", from: version),
+    package: Package.Dependency.package(
+      url: "https://github.com/yandex/vgsl.git",
+      vgslLow..<vgslHigh
+    ),
     packageName: "vgsl"
   )
 }()
