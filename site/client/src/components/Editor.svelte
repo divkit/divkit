@@ -2,8 +2,8 @@
     /* eslint-disable @typescript-eslint/no-explicit-any */
     import type * as monaco from 'monaco-editor';
     import rootSchema from '../schema/root.json';
-    import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker.js?worker';
-    import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker.js?worker';
+    import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker.js?worker&url';
+    import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker.js?worker&url';
 
     let monacoPromose: Promise<{
         monaco: typeof import('monaco-editor');
@@ -263,10 +263,19 @@
 
             window.MonacoEnvironment = {
                 getWorker(_moduleId: string, label: string) {
+                    let url = editorWorker;
                     if (label === 'json') {
-                        return new JsonWorker();
+                        url = jsonWorker;
                     }
-                    return new EditorWorker();
+
+                    if (import.meta.env.PROD) {
+                        url = '/playground/assets/' + url.split('/assets/')[1];
+                    }
+
+                    return new Worker(url, {
+                        type: 'module',
+                        name: label
+                    });
                 }
             };
 

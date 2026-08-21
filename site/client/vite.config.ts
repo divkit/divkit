@@ -19,7 +19,7 @@ export default defineConfig({
     base: S3_PATH ? `https://yastatic.net/s3/${S3_PATH}/${VERSION}/` : '/',
     build: {
         rolldownOptions: {
-            external: /(node:.+)|worker_threads|buffer/
+            // external: /(node:.+)|worker_threads|buffer/
         },
     },
     resolve: {
