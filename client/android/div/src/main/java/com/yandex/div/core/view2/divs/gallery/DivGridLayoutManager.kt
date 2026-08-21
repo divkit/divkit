@@ -118,27 +118,49 @@ internal class DivGridLayoutManager(
     }
 
     override fun firstCompletelyVisibleItemPosition(): Int {
-        val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
+        val indexes = IntArray(spanCount) { RecyclerView.NO_POSITION }
         findFirstCompletelyVisibleItemPositions(indexes)
-        return indexes.first()
+        return indexes.minValidPosition()
     }
 
     override fun lastCompletelyVisibleItemPosition(): Int {
-        val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
+        val indexes = IntArray(spanCount) { RecyclerView.NO_POSITION }
         findLastCompletelyVisibleItemPositions(indexes)
-        return indexes.last()
+        return indexes.maxValidPosition()
     }
 
     override fun firstVisibleItemPosition(): Int {
-        val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
+        val indexes = IntArray(spanCount) { RecyclerView.NO_POSITION }
         findFirstVisibleItemPositions(indexes)
-        return indexes.first()
+        return indexes.minValidPosition()
     }
 
     override fun lastVisibleItemPosition(): Int {
-        val indexes = IntArray(itemCount.coerceAtLeast(spanCount))
+        val indexes = IntArray(spanCount) { RecyclerView.NO_POSITION }
         findLastVisibleItemPositions(indexes)
-        return indexes.last()
+        return indexes.maxValidPosition()
+    }
+
+    private fun IntArray.minValidPosition(): Int {
+        var result = RecyclerView.NO_POSITION
+        for (position in this) {
+            if (position != RecyclerView.NO_POSITION &&
+                (result == RecyclerView.NO_POSITION || position < result)
+            ) {
+                result = position
+            }
+        }
+        return result
+    }
+
+    private fun IntArray.maxValidPosition(): Int {
+        var result = RecyclerView.NO_POSITION
+        for (position in this) {
+            if (position != RecyclerView.NO_POSITION && position > result) {
+                result = position
+            }
+        }
+        return result
     }
 
     override fun getNearestItemPosition(direction: Int) = RecyclerView.NO_POSITION
