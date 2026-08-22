@@ -386,7 +386,9 @@ extension GalleryView: ScrollHandlerDelegate {
     updateContentOffset(to: pos, animated: animated)
 
     if animated {
-      collectionView.layoutIfNeeded()
+      if !dataSource.isConfiguringCell {
+        collectionView.layoutIfNeeded()
+      }
     } else {
       onDidEndScroll()
     }
@@ -485,6 +487,10 @@ private final class GalleryDataSource: NSObject, UICollectionViewDataSource {
   weak var overscrollDelegate: ScrollDelegate?
   weak var renderingDelegate: RenderingDelegate?
 
+  private var configurationDepth = 0
+
+  var isConfiguringCell: Bool { configurationDepth > 0 }
+
   func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
     blocks.count
   }
@@ -499,6 +505,8 @@ private final class GalleryDataSource: NSObject, UICollectionViewDataSource {
       for: indexPath
     ) as! CellType
 
+    configurationDepth += 1
+    defer { configurationDepth -= 1 }
     cell.configure(
       model: block,
       observer: observer,
