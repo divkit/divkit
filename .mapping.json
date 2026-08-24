@@ -705,6 +705,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/DivkitAssetUriMapper.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/DivkitAssetUriMapper.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/GifDecoderFactory.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/GifDecoderFactory.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageLoaderConfiguration.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageLoaderConfiguration.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageLoaderFactory.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageLoaderFactory.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageNetworkRestoration.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageNetworkRestoration.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImagePreviewDecoder.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImagePreviewDecoder.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageRequestFactory.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageRequestFactory.kt",

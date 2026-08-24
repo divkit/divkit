@@ -6,11 +6,8 @@ import android.content.res.AssetManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import coil3.ImageLoader
-import coil3.request.allowHardware
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.images.DivkitAssetUriMapper
-import com.yandex.div.compose.images.ImageLoaderConfiguration
-import com.yandex.div.compose.images.gifDecoderFactory
+import com.yandex.div.compose.images.ImageLoaderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.preload.CoilImagePreloader
 import com.yandex.div.compose.preload.ImagePreloader
@@ -53,19 +50,8 @@ internal interface DivContextModule {
 
         @DivContextScope
         @Provides
-        fun provideImageLoader(
-            context: Context,
-            imageLoaderConfiguration: ImageLoaderConfiguration,
-        ): ImageLoader {
-            return ImageLoader.Builder(context = context)
-                .allowHardware(false)
-                .components {
-                    imageLoaderConfiguration.applyComponents(this)
-                    add(DivkitAssetUriMapper())
-                    add(gifDecoderFactory())
-                }
-                .eventListener(imageLoaderConfiguration.eventListener)
-                .build()
+        fun provideImageLoader(factory: ImageLoaderFactory): ImageLoader {
+            return factory.createImageLoader()
         }
 
         @DivContextScope
