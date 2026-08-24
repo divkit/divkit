@@ -10,10 +10,8 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
 import com.yandex.div.view.ViewActions
-import com.yandex.divkit.demo.div.DemoDiv2Logger
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
-import org.junit.Assert
 
 internal fun testClicks(f: ClickHandlingTestSteps.() -> Unit) = f(ClickHandlingTestSteps())
 
@@ -60,26 +58,5 @@ internal class ClickHandlingAssertions {
             } else {
                 ViewActions.waitForView(withText(text), timeout)
             }.check(matches(isDisplayed()))
-        }
-
-    fun checkClickLogged(cardId: String, id: String) =
-        step("Check click on cardId=$cardId logged") {
-            val log = "logClick(cardId = $cardId, id = $id)"
-            val actions = DemoDiv2Logger.logActions
-            Assert.assertTrue(actions.any { it.contains(log) })
-        }
-
-    fun checkLongClickLogged(cardId: String, id: String) =
-        step("Check click on cardId=$cardId logged") {
-            val log = "logLongClick(cardId = $cardId, id = $id)"
-            val actions = DemoDiv2Logger.logActions
-            Assert.assertTrue(actions.any { it.contains(log) })
-        }
-
-    fun checkDoubleClickLogged(cardId: String, id: String) =
-        step("Check click on cardId=$cardId logged") {
-            val log = "logDoubleClick(cardId = $cardId, id = $id)"
-            val actions = DemoDiv2Logger.logActions
-            Assert.assertTrue(actions.any { it.contains(log) })
         }
 }

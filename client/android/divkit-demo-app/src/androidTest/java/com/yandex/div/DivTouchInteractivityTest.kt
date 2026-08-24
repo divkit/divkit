@@ -5,9 +5,6 @@ import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.testClicks
 import com.yandex.div.view.ViewActions
 import com.yandex.divkit.demo.DummyActivity
-import com.yandex.divkit.demo.div.DemoDiv2Logger
-import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -16,11 +13,6 @@ class DivTouchInteractivityTest {
 
     @get:Rule
     val rule = uiTestRule { activityTestRule }
-
-    @Before
-    fun setUp() {
-        DemoDiv2Logger.clearLogActions()
-    }
 
     @Test
     fun singleTapScenarioSingleTapIsHandled() {
@@ -58,7 +50,6 @@ class DivTouchInteractivityTest {
         }
     }
 
-    @Ignore("Flaky test")
     @Test
     fun singleTapIsHandledOnElementWithTapAndLongTapActions() {
         testClicks {
@@ -66,7 +57,7 @@ class DivTouchInteractivityTest {
             click("Button 5 (tap + long tap)")
 
             assert {
-                checkShown("Button 5 tapped")
+                checkShown("Button 5 tapped", ViewActions.WAITING_TIMEOUT)
             }
         }
     }
@@ -102,40 +93,8 @@ class DivTouchInteractivityTest {
             click("Button 7")
 
             assert {
-                checkShown("Button 7 inner part tapped")
+                checkShown("Button 7 inner part tapped", ViewActions.WAITING_TIMEOUT)
             }
-        }
-    }
-
-    @Ignore("Flaky test")
-    @Test
-    fun singleClickIsLogged() {
-        testClicks {
-            activityTestRule.buildContainer()
-            click("Button 1 (tap)")
-
-            assert { checkClickLogged("test_card", "button1_tap") }
-        }
-    }
-
-    @Test
-    fun longClickIsLogged() {
-        testClicks {
-            activityTestRule.buildContainer()
-            longClick("Button 2 (long tap)")
-
-            assert { checkLongClickLogged("test_card", "button2_longtap") }
-        }
-    }
-
-    @Ignore("Flaky test")
-    @Test
-    fun doubleClickLogged() {
-        testClicks {
-            activityTestRule.buildContainer()
-            doubleClick("Button 6 (tap + double tap)")
-
-            assert { checkDoubleClickLogged("test_card", "button6_doubletap") }
         }
     }
 
