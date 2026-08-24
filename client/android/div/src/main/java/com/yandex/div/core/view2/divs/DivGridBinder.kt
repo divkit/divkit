@@ -45,7 +45,7 @@ internal class DivGridBinder @Inject constructor(
         oldDivBlock: DivBlock.Grid?,
         divView: Div2View,
     ) {
-        releaseViewVisitor = divView.releaseViewVisitor
+        releaseViewVisitor = divView.viewComponent.releaseViewVisitor
 
         val div = divBlock.divValue
         val expressionResolver = divBlock.expressionResolver

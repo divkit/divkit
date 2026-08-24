@@ -14,13 +14,13 @@ internal object ReleaseUtils {
 
     internal fun ViewGroup.releaseChildren(divView: Div2View) {
         children.forEach {
-            divView.releaseViewVisitor.visitViewTree(it)
+            divView.viewComponent.releaseViewVisitor.visitViewTree(it)
         }
     }
 
     internal fun ViewGroup.releaseMedia(divView: Div2View) {
         children.forEach {
-            divView.mediaReleaseViewVisitor.visitViewTree(it)
+            divView.viewComponent.mediaReleaseViewVisitor.visitViewTree(it)
         }
     }
 }

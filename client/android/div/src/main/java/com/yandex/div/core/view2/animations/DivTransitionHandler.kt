@@ -5,11 +5,15 @@ import android.view.ViewGroup
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
+import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.view2.Div2View
+import javax.inject.Inject
 
-internal class DivTransitionHandler(
+@DivViewScope
+internal class DivTransitionHandler @Inject constructor(
     private val divView: Div2View
 ) {
+
     private var pendingTransitions = mutableListOf<TransitionData>()
     private var activeTransitions = mutableListOf<TransitionData>()
 
@@ -25,10 +29,6 @@ internal class DivTransitionHandler(
                 posted = false
             }
         }
-    }
-
-    fun runTransitions() {
-        runTransitions(divView, true)
     }
 
     fun runTransitions(root: ViewGroup, endTransitions: Boolean) {

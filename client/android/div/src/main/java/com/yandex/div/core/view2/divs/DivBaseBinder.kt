@@ -403,7 +403,7 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver,
         firstApply: Boolean
     ) {
-        val divTransitionHandler = divView.divTransitionHandler
+        val divTransitionHandler = divView.viewComponent.transitionHandler
 
         val newVisibility = when (newDiv.visibility.evaluate(resolver)) {
             DivVisibility.VISIBLE -> View.VISIBLE

@@ -254,7 +254,7 @@ internal class RebindTaskImpl(
     private fun releaseIfNecessary(div: Div, view: View) {
         when (div) {
             is Div.Custom,
-            is Div.Video -> div2View.releaseViewVisitor.visit(view)
+            is Div.Video -> div2View.viewComponent.releaseViewVisitor.visit(view)
             else -> Unit
         }
     }

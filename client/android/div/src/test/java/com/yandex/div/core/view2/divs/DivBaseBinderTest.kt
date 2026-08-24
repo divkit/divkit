@@ -3,10 +3,10 @@ package com.yandex.div.core.view2.divs
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.dagger.DivDataComponent
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -46,10 +46,12 @@ class DivBaseBinderTest {
     private val dataComponent = mock<DivDataComponent> {
         on { layoutProviderBinder } doReturn mock()
     }
+    private val viewComponent = mock<Div2ViewComponent> {
+        on { transitionHandler } doReturn mock()
+    }
     private val divView = mock<Div2View> {
-        on { divTransitionHandler } doReturn DivTransitionHandler(mock)
         on { dataComponent } doReturn dataComponent
-        on { viewComponent } doReturn mock()
+        on { viewComponent } doReturn viewComponent
     }
     private val resolver = mock<ExpressionResolver>()
     private val path = DivStatePath.fromState(0)

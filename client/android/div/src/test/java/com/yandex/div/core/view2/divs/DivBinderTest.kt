@@ -8,7 +8,6 @@ import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.dagger.DivDataComponent
 import com.yandex.div.core.expression.ExpressionResolverImpl
-import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
@@ -16,7 +15,6 @@ import com.yandex.div.core.view2.DivValidator
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivViewIdProvider
 import com.yandex.div.core.view2.DivViewStateStore
-import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.errors.ErrorCollectors
@@ -60,6 +58,15 @@ open class DivBinderTest {
     internal val dataComponent = mock<DivDataComponent> {
         on { errorCollectors } doReturn errorCollectors
     }
+
+    private val transitionBuilder = mock<DivTransitionBuilder>()
+    private val viewIdProvider = DivViewIdProvider()
+
+    internal val viewComponent = mock<Div2ViewComponent>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {
+        on { viewIdProvider } doReturn viewIdProvider
+        on { transitionBuilder } doReturn transitionBuilder
+    }
+
     internal val divView = mock<Div2View> {
         on { div2Component } doReturn mockComponent
         on { context } doReturn mock()
@@ -68,35 +75,15 @@ open class DivBinderTest {
         on { logId } doReturn "id"
         on { config } doReturn mock()
         on { oldExpressionResolver } doReturn oldExpressionResolver
-        on { divTransitionHandler } doReturn DivTransitionHandler(mock)
         on { dataComponent } doReturn dataComponent
         on { errorCollector } doReturn mock()
         on { viewStateStore } doReturn DivViewStateStore.EMPTY
+        on { viewComponent } doReturn viewComponent
     }
-    private val divExtensionController = DivExtensionController(emptyList())
 
     internal val visitor: ReleaseViewVisitor = spy(
-        ReleaseViewVisitor(
-            divView,
-            DivCustomContainerViewAdapter.STUB,
-            divExtensionController,
-        )
-    ).apply {
-        whenever(divView.releaseViewVisitor) doReturn this
-    }
-
-    private val transitionBuilder = mock<DivTransitionBuilder>()
-
-    private val viewIdProvider = DivViewIdProvider()
-
-    @Suppress("unused")
-    private val viewComponent = mock<Div2ViewComponent>(defaultAnswer = Mockito.RETURNS_DEEP_STUBS) {
-        on { viewIdProvider } doReturn viewIdProvider
-        on { releaseViewVisitor } doReturn visitor
-        on { transitionBuilder } doReturn transitionBuilder
-    }.apply {
-        whenever(divView.viewComponent) doReturn this
-    }
+        ReleaseViewVisitor(divView, DivCustomContainerViewAdapter.STUB, mock())
+    )
 
     internal val viewCreator = spy(DivViewCreator(context(), PseudoViewPool(), validator, ViewPreCreationProfile(), mock()))
     internal val baseBinder = mock<DivBaseBinder> {
@@ -106,5 +93,9 @@ open class DivBinderTest {
                 view.divBlock = it.arguments[1] as? DivBlock
             }
         }
+    }
+
+    init {
+        whenever { viewComponent.releaseViewVisitor } doReturn visitor
     }
 }

@@ -122,7 +122,7 @@ internal class DivCustomBinder @Inject constructor(
         divView: Div2View
     ) {
         if (parent.isNotEmpty()) {
-            divView.releaseViewVisitor.visitViewTree(parent[0])
+            divView.viewComponent.releaseViewVisitor.visitViewTree(parent[0])
             parent.removeViewAt(0)
         }
         parent.addView(newCustomView)

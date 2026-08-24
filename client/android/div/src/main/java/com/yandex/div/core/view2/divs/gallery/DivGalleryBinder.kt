@@ -70,7 +70,7 @@ internal class DivGalleryBinder @Inject constructor(
         addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
         div.columnCount?.let { addSubscription(it.observe(resolver, reusableObserver)) }
 
-        setRecycledViewPool(ReleasingViewPool(divView.releaseViewVisitor))
+        setRecycledViewPool(ReleasingViewPool(divView.viewComponent.releaseViewVisitor))
         setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER

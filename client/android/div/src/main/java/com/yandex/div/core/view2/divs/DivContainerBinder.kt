@@ -116,12 +116,9 @@ internal class DivContainerBinder @Inject constructor(
         bindAspectRatio(div.aspect, oldDiv?.aspect, resolver)
         bindClipChildren(div.clipToBounds, oldDiv?.clipToBounds, resolver)
 
-        if (this is DivFrameLayout) return
-
-        val errorCollector = divView.errorCollector
         when (this) {
-            is DivLinearLayout -> bindProperties(div, oldDiv, resolver, errorCollector)
-            is DivWrapLayout -> bindProperties(div, oldDiv, resolver, errorCollector)
+            is DivLinearLayout -> bindProperties(div, oldDiv, resolver, divView.errorCollector)
+            is DivWrapLayout -> bindProperties(div, oldDiv, resolver, divView.errorCollector)
         }
     }
 

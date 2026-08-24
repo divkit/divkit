@@ -41,18 +41,15 @@ import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.images.LoadReference
-import com.yandex.div.core.player.DivVideoActionHandler
 import com.yandex.div.core.state.DivPathUtils.fromState
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.timer.DivTimerEventDispatcher
-import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
 import com.yandex.div.core.util.binding.BindingDispatcher
 import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
-import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.animations.SceneRootWatcher
 import com.yandex.div.core.view2.animations.TransitionData
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
@@ -62,17 +59,12 @@ import com.yandex.div.core.view2.divs.clearFocusOnClick
 import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
-import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor
-import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseMedia
-import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
-import com.yandex.div.core.view2.logging.bind.BindingEventReporterProvider
 import com.yandex.div.core.view2.logging.bind.ForceRebindReporter
 import com.yandex.div.core.view2.logging.bind.SimpleRebindReporter
 import com.yandex.div.core.view2.logging.patch.PatchEventReporter
-import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
 import com.yandex.div.core.view2.reuse.ComplexRebindReporter
 import com.yandex.div.core.view2.reuse.RebindTask
 import com.yandex.div.core.view2.reuse.RebindTaskImpl
@@ -128,22 +120,11 @@ class Div2View private constructor(
     private val isComplexRebindEnabled
         inline get() = div2Component.isComplexRebindEnabled
 
-    private val divBuilder: Div2Builder = context.div2Component.div2Builder
     private val loadReferences = mutableListOf<LoadReference>()
     private val overflowMenuListeners = mutableListOf<OverflowMenuSubscriber.Listener>()
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
     private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
     private val viewToDivBindings = WeakHashMap<View, Div>()
-    private val divVideoActionHandler: DivVideoActionHandler
-        get() = div2Component.divVideoActionHandler
-    private val tooltipController: DivTooltipController
-        get() = div2Component.tooltipController
-    internal val releaseViewVisitor: ReleaseViewVisitor
-        get() = viewComponent.releaseViewVisitor
-    internal val mediaReleaseViewVisitor: MediaReleaseViewVisitor
-        get() = viewComponent.mediaReleaseViewVisitor
-    private val mediaLoadViewVisitor: MediaLoadViewVisitor
-        get() = viewComponent.mediaLoadViewVisitor
     private var oldRuntimeStore: RuntimeStore? = null
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldRuntimeStore.resolver
@@ -284,10 +265,6 @@ class Div2View private constructor(
     private var drawWasSkipped = true
     private var mediaWasReleased = false
 
-    internal val divTransitionHandler = DivTransitionHandler(this)
-
-    private val bindingReporterProvider = BindingEventReporterProvider(this)
-    private val patchReporterProvider = PatchEventReporterProvider(this)
     internal var dataComponent = div2Component.dataComponentStore.getOrPut("", div2Component)
 
     internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()
@@ -363,7 +340,7 @@ class Div2View private constructor(
         paths: List<DivStatePath>? = null,
         temporary: Boolean = true,
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
-        val reporter = bindingReporterProvider.get(oldDivData, data)
+        val reporter = viewComponent.bindingReporterProvider.get(oldDivData, data)
 
         if (data == null) {
             reporter.onBindingFatalNoData()
@@ -464,7 +441,7 @@ class Div2View private constructor(
             resolver = expressionResolver,
             divView = this,
         )
-        val reporter = patchReporterProvider.get(patch)
+        val reporter = viewComponent.patchReporterProvider.get(patch)
 
         if (newDivData != null && tryApplyPatch(patch, oldData, newDivData, reporter)) {
             div2Component.patchManager.removePatch(dataTag)
@@ -512,7 +489,7 @@ class Div2View private constructor(
             else -> items[0]
         }
 
-        val bindingReporter = bindingReporterProvider.get(newDivData, oldData)
+        val bindingReporter = viewComponent.bindingReporterProvider.get(newDivData, oldData)
         val newDivBlock = createDivBlock(newRootDiv, currentRootPath)
         val isDataReplaceable = DivComparator.areDivsReplaceable(rootDivBlock, newDivBlock, bindingReporter)
         return applyBindingStrategy(newDivData, newDivBlock, oldData, isDataReplaceable, reporter, bindingReporter)
@@ -749,7 +726,7 @@ class Div2View private constructor(
     fun loadMedia(): Unit = bindingDispatcher.runWithinBindingContext {
         if (mediaWasReleased) {
             mediaWasReleased = false
-            mediaLoadViewVisitor.loadMedia()
+            viewComponent.mediaLoadViewVisitor.loadMedia()
         }
     }
 
@@ -1025,7 +1002,7 @@ class Div2View private constructor(
         divBlock: DivBlock,
     ): View {
         dataComponent.stateManager.updateState(stateId, isUpdateTemporary)
-        return divBuilder.buildView(divBlock, this).also {
+        return div2Component.div2Builder.buildView(divBlock, this).also {
             div2Component.divBinder.attachIndicators(this)
         }
     }
@@ -1036,7 +1013,7 @@ class Div2View private constructor(
         isUpdateTemporary: Boolean = true
     ): View {
         dataComponent.stateManager.updateState(stateId, isUpdateTemporary)
-        val view = divBuilder.createView(divBlock.div, divBlock.expressionResolver, divBlock.path, this)
+        val view = div2Component.div2Builder.createView(divBlock.div, divBlock.expressionResolver, divBlock.path, this)
         if (bindOnAttachEnabled) {
             bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
                 suppressExpressionErrors {
@@ -1230,7 +1207,7 @@ class Div2View private constructor(
 
     override fun showTooltip(tooltipId: String, multiple: Boolean, scopeId: String?) {
         bindingDispatcher.withLock {
-            tooltipController.showTooltip(tooltipId, this, multiple, scopeId)
+            div2Component.tooltipController.showTooltip(tooltipId, this, multiple, scopeId)
         }
     }
 
@@ -1239,12 +1216,12 @@ class Div2View private constructor(
 
     override fun hideTooltip(tooltipId: String, scopeId: String?) {
         bindingDispatcher.withLock {
-            tooltipController.hideTooltip(tooltipId, scopeId)
+            div2Component.tooltipController.hideTooltip(tooltipId, scopeId)
         }
     }
 
     override fun cancelTooltips(): Unit = bindingDispatcher.withLock {
-        tooltipController.cancelTooltips(this)
+        div2Component.tooltipController.cancelTooltips(this)
     }
 
     override fun dispatchDraw(canvas: Canvas) {
@@ -1302,7 +1279,7 @@ class Div2View private constructor(
         expressionResolver: ExpressionResolver = getExpressionResolver(),
         scopeId: String? = null,
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
-        return divVideoActionHandler.handleAction(this, divId, scopeId, command)
+        return div2Component.divVideoActionHandler.handleAction(this, divId, scopeId, command)
     }
 
     internal fun unbindViewFromDiv(view: View): Div? = synchronized(viewToDivBindings) {

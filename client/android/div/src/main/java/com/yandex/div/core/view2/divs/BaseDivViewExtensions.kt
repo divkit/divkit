@@ -497,7 +497,7 @@ internal fun ViewGroup.replaceWithReuse(
     }
 
     oldChildren.values.forEach { (_, view) ->
-        divView.releaseViewVisitor.visitViewTree(view)
+        divView.viewComponent.releaseViewVisitor.visitViewTree(view)
     }
 }
 

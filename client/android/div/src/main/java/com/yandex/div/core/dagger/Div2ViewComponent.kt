@@ -8,10 +8,13 @@ import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewIdProvider
 import com.yandex.div.core.view2.ViewBindingProvider
 import com.yandex.div.core.view2.animations.DivAnimatorController
+import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor
 import com.yandex.div.core.view2.divs.widgets.MediaReleaseViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.errors.ErrorVisualMonitor
+import com.yandex.div.core.view2.logging.bind.BindingEventReporterProvider
+import com.yandex.div.core.view2.logging.patch.PatchEventReporterProvider
 import com.yandex.div.core.view2.reuse.InputFocusTracker
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.core.view2.state.DivStateTransitionHolder
@@ -46,6 +49,9 @@ internal interface Div2ViewComponent {
     val drawingPassOverrideStrategy: DrawingPassOverrideStrategy
     val bindingDispatcher: BindingDispatcher
     val bulkActionHandler: BulkActionHandler
+    val bindingReporterProvider: BindingEventReporterProvider
+    val patchReporterProvider: PatchEventReporterProvider
+    val transitionHandler: DivTransitionHandler
 
     @Component.Builder
     interface Builder {
