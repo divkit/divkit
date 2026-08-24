@@ -21,7 +21,6 @@ import com.yandex.div.core.view2.items.DivItemChangeActionHandler;
 import com.yandex.div.data.VariableMutationException;
 import com.yandex.div.internal.Assert;
 import com.yandex.div.internal.core.DivBlock;
-import com.yandex.div.internal.core.VariableMutationHandler;
 import com.yandex.div.json.ParsingErrorLogger;
 import com.yandex.div.json.expressions.Expression;
 import com.yandex.div.json.expressions.ExpressionResolver;
@@ -457,12 +456,13 @@ public class DivActionHandler {
 
             if (div2View == null) {
                 Assert.fail("Variable '" + name + "' mutation failed! View("+
-                                    view.getClass().getSimpleName()+") not supports variables!");
+                        view.getClass().getSimpleName()+") not supports variables!");
                 return false;
             }
             ExpressionResolver localResolver = getLocalResolver(scopeId, view, resolver);
             try {
-                VariableMutationHandler.setVariable(div2View, name, value, localResolver);
+                div2View.getDiv2Component().getVariableMutationHandler()
+                        .setVariable(name, value, localResolver, div2View.getErrorCollector$div());
             } catch (VariableMutationException e) {
                 Assert.fail("Variable '" + name + "' mutation failed: " + e.getMessage(), e);
                 return false;

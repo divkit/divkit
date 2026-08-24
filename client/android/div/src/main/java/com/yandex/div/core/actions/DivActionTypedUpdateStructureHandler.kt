@@ -1,6 +1,7 @@
 package com.yandex.div.core.actions
 
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.actions.UpdateStructureHelper
 import com.yandex.div.internal.core.VariableMutationHandler
@@ -12,7 +13,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class DivActionTypedUpdateStructureHandler @Inject constructor() : DivActionTypedHandler {
+internal class DivActionTypedUpdateStructureHandler @Inject constructor(
+    private val variableMutationHandler: VariableMutationHandler,
+) : DivActionTypedHandler {
 
     override fun handleAction(
         scopeId: String?,
@@ -21,7 +24,7 @@ internal class DivActionTypedUpdateStructureHandler @Inject constructor() : DivA
         resolver: ExpressionResolver
     ): Boolean = when (action) {
         is DivActionTyped.UpdateStructure -> {
-            handleAction(action.value, view, resolver)
+            handleAction(action.value, resolver, view.errorCollector)
             true
         }
 
@@ -30,27 +33,31 @@ internal class DivActionTypedUpdateStructureHandler @Inject constructor() : DivA
 
     private fun handleAction(
         action: DivActionUpdateStructure,
-        divView: Div2View,
-        resolver: ExpressionResolver
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector,
+    ) {
+        val variableName = action.variableName.evaluate(resolver)
+        variableMutationHandler.setVariable(variableName, resolver, errorCollector) { variable: Variable ->
+            variable.also { it.mutate(action, resolver, errorCollector) }
+        }
+    }
+
+    private fun Variable.mutate(
+        action: DivActionUpdateStructure,
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector,
     ) {
         val helper = UpdateStructureHelper(
-            reportError = { divView.logError(RuntimeException(it)) }
+            reportError = { errorCollector.logError(RuntimeException(it)) }
         )
-        val variableName = action.variableName.evaluate(resolver)
-        VariableMutationHandler.setVariable(divView, variableName, resolver) { variable: Variable ->
-            val path = action.path.evaluate(resolver)
-            val newValue = action.value.evaluateAsPrimitive(resolver)
-            when (variable) {
-                is Variable.ArrayVariable ->
-                    helper.updateArrayStructure(variable, path, newValue)
+        val path = action.path.evaluate(resolver)
+        val newValue = action.value.evaluateAsPrimitive(resolver)
+        when (this) {
+            is Variable.ArrayVariable -> helper.updateArrayStructure(this, path, newValue)
 
-                is Variable.DictVariable ->
-                    helper.updateDictStructure(variable, path, newValue)
+            is Variable.DictVariable -> helper.updateDictStructure(this, path, newValue)
 
-                else ->
-                    divView.logError(RuntimeException("Action requires array or dictionary variable"))
-            }
-            return@setVariable variable
+            else -> errorCollector.logError(RuntimeException("Action requires array or dictionary variable"))
         }
     }
 }

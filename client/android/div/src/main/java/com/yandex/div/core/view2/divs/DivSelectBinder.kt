@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs
 
 import android.widget.TextView
-import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.view2.Div2View
@@ -9,6 +8,7 @@ import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
 import com.yandex.div.core.view2.divs.widgets.DivSelectView
+import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivSelect
@@ -32,7 +32,7 @@ internal class DivSelectBinder @Inject constructor(
         val div = divBlock.divValue
         val expressionResolver = divBlock.expressionResolver
         applyOptions(div, expressionResolver, divView)
-        observeVariable(div, expressionResolver, divView)
+        observeVariable(div, expressionResolver, divView.errorCollector)
 
         observeBaseTextProperties(div, oldDivBlock?.divValue, expressionResolver)
 
@@ -73,12 +73,12 @@ internal class DivSelectBinder @Inject constructor(
     private fun DivSelectView.observeVariable(
         div: DivSelect,
         resolver: ExpressionResolver,
-        divView: Div2View,
+        errorCollector: ErrorCollector,
     ) {
         val subscription = variableBinder.bindVariable(
             div.valueVariable,
             resolver,
-            divView,
+            errorCollector,
             callbacks = object : TwoWayStringVariableBinder.Callbacks {
                 override fun onVariableChanged(value: String?) {
                     val matchingOptionsSequence = div.options
@@ -87,14 +87,14 @@ internal class DivSelectBinder @Inject constructor(
                         .iterator()
 
                     text = if (!matchingOptionsSequence.hasNext()) {
-                        divView.logWarning(Throwable("No option found with value = \"$value\""))
+                        errorCollector.logWarning(Throwable("No option found with value = \"$value\""))
 
                         ""
                     } else {
                         val option = matchingOptionsSequence.next()
 
                         if (matchingOptionsSequence.hasNext()) {
-                            divView.logWarning(
+                            errorCollector.logWarning(
                                 Throwable("Multiple options found with value = \"$value\", selecting first one")
                             )
                         }

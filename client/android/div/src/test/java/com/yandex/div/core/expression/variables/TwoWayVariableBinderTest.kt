@@ -2,10 +2,9 @@ package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionResolverImpl
-import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
-import com.yandex.div2.DivData
-import org.junit.Assert.assertEquals
+import com.yandex.div.internal.core.VariableMutationHandler
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -13,6 +12,7 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
@@ -49,17 +49,16 @@ class TwoWayVariableBinderTest {
         on { getVariable(VARIABLE_NAME) } doReturn variable
     }
 
-    private val divView = mock<Div2View> {
-        on { dataTag } doReturn mock()
-        on { divData } doReturn DivData(logId = "test", states = emptyList())
-    }
+    private val variableMutationHandler = mock<VariableMutationHandler>()
+    private val errorCollector = mock<ErrorCollector>()
     private val updateCaptor = argumentCaptor<(String) -> Unit>()
     private val callbacks = mock<TwoWayStringVariableBinder.Callbacks> {
         on { setViewStateChangeListener(updateCaptor.capture()) } doAnswer {}
     }
 
     init {
-        TwoWayStringVariableBinder().bindVariable(VARIABLE_NAME, expressionResolver, divView, callbacks)
+        TwoWayStringVariableBinder(variableMutationHandler)
+            .bindVariable(VARIABLE_NAME, expressionResolver, errorCollector, callbacks)
     }
 
     @Test
@@ -76,7 +75,7 @@ class TwoWayVariableBinderTest {
     @Test
     fun `set variable value on view state change`() {
         updateCaptor.firstValue.invoke(NEW_VALUE)
-        assertEquals(NEW_VALUE, variable.getValue())
+        verify(variableMutationHandler).setVariable(eq(VARIABLE_NAME), eq(NEW_VALUE), any(), any())
     }
 
     @Test
@@ -108,7 +107,7 @@ class TwoWayVariableBinderTest {
     fun `set variable value on view state change after variable change with another value`() {
         updateVariable()
         updateCaptor.firstValue.invoke(ANOTHER_VALUE)
-        assertEquals(ANOTHER_VALUE, variable.getValue())
+        verify(variableMutationHandler).setVariable(eq(VARIABLE_NAME), eq(ANOTHER_VALUE), any(), any())
     }
 
     private fun updateVariable(value: String = NEW_VALUE) {

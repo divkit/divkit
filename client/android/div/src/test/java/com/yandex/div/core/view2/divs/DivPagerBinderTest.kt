@@ -12,8 +12,8 @@ import com.yandex.div.core.view2.divs.pager.DivPagerBinder
 import com.yandex.div.core.view2.divs.pager.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.data.DivParsingEnvironment
-import com.yandex.div.data.Variable
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.ParsingErrorLogger
@@ -29,6 +29,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
+import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
@@ -39,6 +40,7 @@ class DivPagerBinderTest: DivBinderTest() {
     private val divViewState = mock<DivViewState>()
     private val divBinder = mock<DivBinder>()
     private val accessibilityStateProvider = AccessibilityStateProvider(false)
+    private val variableMutationHandler = mock<VariableMutationHandler>()
 
     private val underTest = DivPagerBinder(
         baseBinder = baseBinder,
@@ -47,6 +49,7 @@ class DivPagerBinderTest: DivBinderTest() {
         actionPerformer = mock(),
         pagerIndicatorConnector = PagerIndicatorConnector(),
         accessibilityStateProvider = accessibilityStateProvider,
+        variableMutationHandler = variableMutationHandler,
     )
 
     private val div = div()
@@ -151,34 +154,32 @@ class DivPagerBinderTest: DivBinderTest() {
 
     @Test
     fun `item count variable is initialized with non gone item count`() {
-        val itemCountVariable = itemCountVariable()
         val div = divWithItemCountVariable()
         val view = divPagerViewWithLayout(div)
 
         underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
 
-        Assert.assertEquals(3L, itemCountVariable.getValue())
+        verifyItemCountVariableChange(3)
     }
 
     @Test
     fun `item count variable is updated when item visibility changes`() {
-        val itemCountVariable = itemCountVariable()
         val div = divWithItemCountVariable()
         val view = divPagerViewWithLayout(div)
         underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
         val adapter = view.viewPager.adapter as DivPagerAdapter
         val firstItem = adapter.items.first()
+        reset(variableMutationHandler)
 
         adapter.removeItem(0)
-        Assert.assertEquals(2L, itemCountVariable.getValue())
+        verifyItemCountVariableChange(2)
 
         adapter.addItems(0, listOf(firstItem))
-        Assert.assertEquals(3L, itemCountVariable.getValue())
+        verifyItemCountVariableChange(3)
     }
 
     @Test
     fun `item count variable is updated when adapter items change`() {
-        val itemCountVariable = itemCountVariable()
         val div = divWithItemCountVariable()
         val view = divPagerViewWithLayout(div)
         underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
@@ -186,18 +187,17 @@ class DivPagerBinderTest: DivBinderTest() {
 
         adapter.setItems(adapter.items.dropLast(1))
 
-        Assert.assertEquals(2L, itemCountVariable.getValue())
+        verifyItemCountVariableChange(2)
     }
 
     @Test
     fun `item count variable ignores infinite scroll duplicates`() {
-        val itemCountVariable = itemCountVariable()
         val div = divWithItemCountVariable("pager_gone_with_infinite_scroll.json")
         val view = divPagerViewWithLayout(div)
 
         underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
 
-        Assert.assertEquals(6L, itemCountVariable.getValue())
+        verifyItemCountVariableChange(6)
     }
 
     @Test
@@ -260,7 +260,7 @@ class DivPagerBinderTest: DivBinderTest() {
             field.isAccessible = true
             @Suppress("UNCHECKED_CAST")
             (field.get(recyclerView) as? List<RecyclerView.OnScrollListener>) ?: emptyList()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             emptyList()
         }
     }
@@ -273,15 +273,14 @@ class DivPagerBinderTest: DivBinderTest() {
         return Div.Pager(DivPager(DivParsingEnvironment(ParsingErrorLogger.ASSERT), pagerJson))
     }
 
-    private fun itemCountVariable() = Variable.IntegerVariable(ITEM_COUNT_VARIABLE, 0L).also {
-        whenever(resolver.getVariable(ITEM_COUNT_VARIABLE)).thenReturn(it)
-    }
-
     private fun divPagerView(div: Div) = viewCreator.create(div, ExpressionResolver.EMPTY) as DivPagerView
 
     private fun divPagerViewWithLayout(div: Div) = divPagerView(div).apply {
         layoutParams = defaultLayoutParams()
     }
+
+    private fun verifyItemCountVariableChange(value: Long) =
+        verify(variableMutationHandler).setVariable(eq(ITEM_COUNT_VARIABLE), eq(value.toString()), any(), any())
 
     private companion object {
         private const val PAGER_DIR = "div-pager"

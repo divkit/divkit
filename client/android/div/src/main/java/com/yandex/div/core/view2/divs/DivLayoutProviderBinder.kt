@@ -16,7 +16,9 @@ import javax.inject.Inject
 private typealias MeasuredSizes = MutableMap<String, Int>
 
 @DivDataScope
-internal class DivLayoutProviderBinder @Inject constructor() {
+internal class DivLayoutProviderBinder @Inject constructor(
+    private val variableMutationHandler: VariableMutationHandler,
+) {
 
     private val measuredSizes = mutableMapOf<ExpressionResolver, MeasuredSizes>()
     private var variableHolder: DivLayoutProviderVariableHolder? = null
@@ -135,7 +137,7 @@ internal class DivLayoutProviderBinder @Inject constructor() {
             variableHolder = null
             measuredSizes.forEach { (resolver, sizes) ->
                 sizes.forEach {
-                    VariableMutationHandler.setVariable(divView, it.name, it.value.toString(), resolver)
+                    variableMutationHandler.setVariable(it.name, it.value.toString(), resolver, divView.errorCollector)
                 }
             }
             measuredSizes.clear()

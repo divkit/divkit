@@ -42,8 +42,8 @@ import com.yandex.div.core.view2.DivVisibilityActionTracker;
 import com.yandex.div.core.view2.ReleaseManager;
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController;
 import com.yandex.div.core.view2.divs.DivActionBinder;
-import com.yandex.div.core.view2.divs.widgets.MediaLoadViewVisitor;
 import com.yandex.div.histogram.reporter.HistogramReporter;
+import com.yandex.div.internal.core.VariableMutationHandler;
 import com.yandex.div.internal.viewpool.optimization.PerformanceDependentSessionProfiler;
 import com.yandex.div.internal.viewpool.optimization.ViewPreCreationProfileRepository;
 import com.yandex.yatagan.BindsInstance;
@@ -200,6 +200,9 @@ public interface Div2Component {
 
     @NonNull
     DivDataComponentStore getDataComponentStore();
+
+    @NonNull
+    VariableMutationHandler getVariableMutationHandler();
 
     /**
      * Builder for Div2Component

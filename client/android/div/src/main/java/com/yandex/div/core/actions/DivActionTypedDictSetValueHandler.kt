@@ -1,8 +1,9 @@
 package com.yandex.div.core.actions
 
-import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.util.clone
 import com.yandex.div.internal.variables.evaluateAsPrimitive
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -13,8 +14,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class DivActionTypedDictSetValueHandler @Inject constructor()
-    : DivActionTypedHandler {
+internal class DivActionTypedDictSetValueHandler @Inject constructor(
+    private val variableMutationHandler: VariableMutationHandler,
+) : DivActionTypedHandler {
 
     override fun handleAction(
         scopeId: String?,
@@ -23,7 +25,7 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor()
         resolver: ExpressionResolver,
     ): Boolean = when (action) {
         is DivActionTyped.DictSetValue -> {
-            handleSetValue(action.value, view, resolver)
+            handleSetValue(action.value, resolver, view.errorCollector)
             true
         }
         else -> false
@@ -31,34 +33,28 @@ internal class DivActionTypedDictSetValueHandler @Inject constructor()
 
     private fun handleSetValue(
         action: DivActionDictSetValue,
-        view: Div2View,
-        resolver: ExpressionResolver
+        resolver: ExpressionResolver,
+        errorCollector: ErrorCollector,
     ) {
         val variableName = action.variableName.evaluate(resolver)
         val key = action.key.evaluate(resolver)
         val newValue = action.value?.evaluateAsPrimitive(resolver)
-        VariableMutationHandler.setVariable(view, variableName, resolver) { variable: Variable ->
-            if (variable !is Variable.DictVariable) {
-                view.logError(
-                    IllegalArgumentException("dict_set_value action requires dict variable")
-                )
-                return@setVariable variable
-            }
-
-            val dict = variable.getValue() as? JSONObject
-            if (dict == null) {
-                view.logError(IllegalArgumentException("Invalid variable value"))
-                return@setVariable variable
-            }
-
-            val newDict = dict.clone()
-            if (newValue == null) {
-                newDict.remove(key)
-                variable.set(newDict)
-            } else {
-                variable.set(newDict.put(key, newValue))
-            }
-            return@setVariable variable
+        variableMutationHandler.setVariable(variableName, resolver, errorCollector) { variable: Variable ->
+            variable.also { it.mutate(key, newValue, errorCollector) }
         }
+    }
+
+    private fun Variable.mutate(key: String, newValue: Any?, errorCollector: ErrorCollector) {
+        val dictVariable = this as? Variable.DictVariable
+            ?: return errorCollector.logError(IllegalArgumentException("dict_set_value action requires dict variable"))
+
+        val dict = dictVariable.getValue() as? JSONObject
+            ?: return errorCollector.logError(IllegalArgumentException("Invalid variable value"))
+
+        val newDict = dict.clone()
+        newValue?.let { return dictVariable.set(newDict.put(key, it)) }
+
+        newDict.remove(key)
+        dictVariable.set(newDict)
     }
 }

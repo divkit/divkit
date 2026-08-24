@@ -115,7 +115,7 @@ internal class DivSliderBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(variableName, resolver, divView, callbacks))
+        addSubscription(variableBinder.bindVariable(variableName, resolver, divView.errorCollector, callbacks))
     }
 
     private fun DivSliderView.observeThumbStyle(resolver: ExpressionResolver, thumbStyle: DivDrawable) {
@@ -228,7 +228,7 @@ internal class DivSliderBinder @Inject constructor(
             }
         }
 
-        addSubscription(variableBinder.bindVariable(variableName, resolver, divView, callbacks))
+        addSubscription(variableBinder.bindVariable(variableName, resolver, divView.errorCollector, callbacks))
     }
 
     private fun DivSliderView.setupTrack(div: DivSlider, resolver: ExpressionResolver) {

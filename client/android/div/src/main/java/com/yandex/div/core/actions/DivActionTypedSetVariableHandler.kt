@@ -2,6 +2,7 @@ package com.yandex.div.core.actions
 
 import com.yandex.div.core.util.ContainerFinder
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.core.VariableMutationHandler
@@ -13,7 +14,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class DivActionTypedSetVariableHandler @Inject constructor() : DivActionTypedHandler {
+internal class DivActionTypedSetVariableHandler @Inject constructor(
+    private val variableMutationHandler: VariableMutationHandler,
+) : DivActionTypedHandler {
 
     override fun handleAction(
         scopeId: String?,
@@ -42,13 +45,17 @@ internal class DivActionTypedSetVariableHandler @Inject constructor() : DivActio
 
         val variableName = action.value.variableName.evaluate(resolver)
         val newValue = action.value.value.evaluate(resolver)
-        VariableMutationHandler.setVariable(view, variableName, resolver) { variable: Variable ->
-            try {
-                variable.castAndSetValue(newValue)
-            } catch (e: VariableMutationException) {
-                view.logError(e)
-            }
-            return@setVariable variable
+        val errorCollector = view.errorCollector
+        variableMutationHandler.setVariable(variableName, resolver, errorCollector) { variable: Variable ->
+            variable.also { it.mutate(newValue, errorCollector) }
+        }
+    }
+
+    private fun Variable.mutate(newValue: Any, errorCollector: ErrorCollector) {
+        try {
+            castAndSetValue(newValue)
+        } catch (e: VariableMutationException) {
+            errorCollector.logError(e)
         }
     }
 }

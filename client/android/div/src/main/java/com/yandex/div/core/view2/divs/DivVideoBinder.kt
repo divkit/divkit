@@ -33,6 +33,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivVideoViewState
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
+import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -265,7 +266,7 @@ internal class DivVideoBinder @Inject constructor(
             videoViews.playerView.attach(this)
         }
 
-        observeElapsedTime(div, resolver, divView, player)
+        observeElapsedTime(div, resolver, player, divView.errorCollector)
         observeMuted(div, resolver, player)
         observePlaybackSpeed(div, resolver, player)
         observePlaybackState(path, divView, player)
@@ -323,8 +324,8 @@ internal class DivVideoBinder @Inject constructor(
     private fun DivVideoView.observeElapsedTime(
         div: DivVideo,
         resolver: ExpressionResolver,
-        divView: Div2View,
         player: DivPlayer,
+        errorCollector: ErrorCollector,
     ) {
         val elapsedTimeVariable = div.elapsedTimeVariable ?: return
 
@@ -345,7 +346,7 @@ internal class DivVideoBinder @Inject constructor(
             }
         }
 
-        addVideoSubscription(variableBinder.bindVariable(elapsedTimeVariable, resolver, divView, callbacks))
+        addVideoSubscription(variableBinder.bindVariable(elapsedTimeVariable, resolver, errorCollector, callbacks))
     }
 
     private fun DivVideoView.observeMuted(

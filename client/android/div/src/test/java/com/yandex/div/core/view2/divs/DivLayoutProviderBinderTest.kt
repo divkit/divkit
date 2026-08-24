@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewTreeObserver
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
-import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
@@ -24,9 +23,6 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.Implementation
-import org.robolectric.annotation.Implements
 
 private const val HEIGHT_VARIABLE_NAME = "height"
 private const val WIDTH_VARIABLE_NAME = "width"
@@ -38,10 +34,6 @@ private const val RIGHT = 110
 private const val BOTTOM = 320
 
 @RunWith(RobolectricTestRunner::class)
-@Config(shadows = [
-    DivLayoutProviderBinderTest.ShadowVariableMutationHandler::class,
-    DivLayoutProviderBinderTest.ShadowVariableMutationHandlerCompanion::class,
-])
 class DivLayoutProviderBinderTest {
 
     private var onPreDrawListener: ViewTreeObserver.OnPreDrawListener? = null
@@ -57,8 +49,19 @@ class DivLayoutProviderBinderTest {
         on { divData } doReturn divData
         on { dataTag } doReturn mock()
         on { expressionResolver } doReturn mock()
+        on { errorCollector } doReturn mock()
     }
-    private val underTest = DivLayoutProviderBinder()
+    private val variableMutationHandler = mock<VariableMutationHandler> {
+        on { setVariable(any(), any(), any(), any()) } doAnswer {
+            val value = it.arguments[1] as String
+            when (it.arguments[0]) {
+                HEIGHT_VARIABLE_NAME -> heightVariable.set(value.toLong())
+                WIDTH_VARIABLE_NAME -> widthVariable.set(value.toLong())
+            }
+            null
+        }
+    }
+    private val underTest = DivLayoutProviderBinder(variableMutationHandler)
     private val layoutProvider = DivLayoutProvider(HEIGHT_VARIABLE_NAME, WIDTH_VARIABLE_NAME)
     private val resolver = mock<ExpressionResolver>()
     private val metrics = DisplayMetrics().apply { density = 1f }
@@ -207,26 +210,5 @@ class DivLayoutProviderBinderTest {
     companion object {
         private val heightVariable = Variable.IntegerVariable(HEIGHT_VARIABLE_NAME, 0L)
         private val widthVariable = Variable.IntegerVariable(WIDTH_VARIABLE_NAME, 0L)
-    }
-
-    @Implements(VariableMutationHandler::class)
-    class ShadowVariableMutationHandler
-
-    @Implements(VariableMutationHandler.Companion::class)
-    class ShadowVariableMutationHandlerCompanion {
-        @Implementation
-        @Suppress("unused")
-        fun setVariable(
-            div2View: Div2View,
-            name: String,
-            value: String,
-            resolver: ExpressionResolver
-        ): VariableMutationException? {
-            when (name) {
-                HEIGHT_VARIABLE_NAME -> heightVariable.set(value.toLong())
-                WIDTH_VARIABLE_NAME -> widthVariable.set(value.toLong())
-            }
-            return null
-        }
     }
 }

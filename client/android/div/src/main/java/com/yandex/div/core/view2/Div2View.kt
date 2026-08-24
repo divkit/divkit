@@ -87,7 +87,6 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivBlock
-import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.toMapSafe
@@ -1286,7 +1285,7 @@ class Div2View private constructor(
         name: String,
         value: String
     ): VariableMutationException? = bindingDispatcher.withLock(fallback = null) {
-        VariableMutationHandler.setVariable(this, name, value, expressionResolver)
+        div2Component.variableMutationHandler.setVariable(name, value, expressionResolver, errorCollector)
     }
 
     fun applyTimerCommand(

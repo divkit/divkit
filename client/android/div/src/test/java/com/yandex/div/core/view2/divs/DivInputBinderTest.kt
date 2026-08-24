@@ -48,6 +48,7 @@ class DivInputBinderTest : DivBinderTest() {
         variableBinder = variableBinder,
         actionPerformer = actionPerformer,
         accessibilityStateProvider = accessibilityStateProvider,
+        variableMutationHandler = mock(),
     )
 
     private val path = DivStatePath(0)

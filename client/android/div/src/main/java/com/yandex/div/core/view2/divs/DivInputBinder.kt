@@ -64,6 +64,7 @@ internal class DivInputBinder @Inject constructor(
     private val variableBinder: TwoWayStringVariableBinder,
     private val actionPerformer: DivActionPerformer,
     private val accessibilityStateProvider: AccessibilityStateProvider,
+    private val variableMutationHandler: VariableMutationHandler,
 ) : DivViewBinder<DivBlock.Input, DivInputView>(baseBinder) {
 
     override fun DivInputView.bind(
@@ -358,7 +359,7 @@ internal class DivInputBinder @Inject constructor(
         }
 
         val callbacks = createCallbacks(resolver, inputMask, inputFilters, secondaryVariable)
-        addSubscription(variableBinder.bindVariable(primaryVariable, resolver, divView, callbacks))
+        addSubscription(variableBinder.bindVariable(primaryVariable, resolver, divView.errorCollector, callbacks))
 
         observeValidators(div, resolver, divView)
     }
@@ -544,7 +545,7 @@ internal class DivInputBinder @Inject constructor(
     ) {
         val isValid = validator.validate(newValue)
 
-        VariableMutationHandler.setVariable(divView, variableName, isValid.toString(), resolver)
+        variableMutationHandler.setVariable(variableName, isValid.toString(), resolver, divView.errorCollector)
 
         attachAccessibility(divView, view, isValid)
     }
