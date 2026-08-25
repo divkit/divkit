@@ -40,6 +40,7 @@ androidx-compose-bom = "2026.06.01"
 androidx-constraintlayout = "2.2.2"
 androidx-core = "1.16.0"
 androidx-espresso = "3.7.0"
+androidx-fragment = "1.8.9"
 androidx-lifecycle = "2.9.4"
 androidx-material = "1.14.0"
 androidx-media3 = "1.6.1"
@@ -66,6 +67,7 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "androidx-fragment" }
 androidx-material = { module = "com.google.android.material:material", version.ref = "androidx-material" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
 androidx-transition = { module = "androidx.transition:transition", version.ref = "androidx-transition" }

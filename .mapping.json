@@ -12051,6 +12051,8 @@
   "client/android/fonts/src/main/res/font/ys_text_regular_italic.ttf":"divkit/public/client/android/fonts/src/main/res/font/ys_text_regular_italic.ttf",
   "client/android/glide/build.gradle.kts":"divkit/public/client/android/glide/build.gradle.kts",
   "client/android/glide/src/main/java/com/yandex/div/glide/GlideDivImageLoader.kt":"divkit/public/client/android/glide/src/main/java/com/yandex/div/glide/GlideDivImageLoader.kt",
+  "client/android/glide/src/test/java/com/yandex/div/glide/GlideDivImageLoaderTest.kt":"divkit/public/client/android/glide/src/test/java/com/yandex/div/glide/GlideDivImageLoaderTest.kt",
+  "client/android/glide/src/test/resources/robolectric.properties":"divkit/public/client/android/glide/src/test/resources/robolectric.properties",
   "client/android/gradle.properties":"divkit/public/client/android/gradle.properties",
   "client/android/gradle/libs.versions.toml":"divkit/public/client/android/gradle/libs.versions.toml",
   "client/android/gradle/wrapper/gradle-wrapper.jar":"divkit/public/client/android/gradle/wrapper/gradle-wrapper.jar",
