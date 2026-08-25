@@ -2735,6 +2735,10 @@
     "en": "Location of text cropping marker.",
     "ru": "Расположение маркера обрезки текста."
   },
+  "div_text_truncate_policy": {
+    "en": "Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.",
+    "ru": "Определяет допустимую границу обрезки текста, когда `truncate` имеет значение `end`. Само по себе свойство не включает обрезку и не влияет на текст, если он помещается целиком. `grapheme` сохраняет максимально длинное начало текста, которое помещается вместе с маркером обрезки. Обрезка выполняется по границе расширенной Unicode-графемы, поэтому воспринимаемый пользователем символ, например последовательность эмодзи или буква с комбинируемым знаком, не разделяется; слово при этом может быть разделено. `word` обрезает текст по последней допустимой Unicode-позиции переноса, которая помещается вместе с маркером обрезки; если подходящей позиции нет, используется `grapheme`."
+  },
   "div_text_underline": {
     "en": "Underline.",
     "ru": "Подчеркивание."
