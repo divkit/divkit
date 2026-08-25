@@ -14,6 +14,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   private var onVisibleBoundsChanged: Action?
 
   private var highlighted: (view: BlockView, snapshot: UIView)?
+  private var highlightObserver: AncestorFrameObserver?
 
   private lazy var backgroundElement: UIAccessibilityElement? = {
     guard tooltip.params.closeByTapOutside else { return nil }
@@ -61,6 +62,9 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
          let topView = getViewById(BlockViewID(rawValue: topViewId)),
          let snapshot = createViewSnapshot(from: topView) {
         highlighted = (view: topView, snapshot: snapshot)
+        highlightObserver = AncestorFrameObserver(view: topView) { [weak self] in
+          self?.setNeedsLayout()
+        }
         addSubview(snapshot)
       }
     }
@@ -112,11 +116,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
     if let substrateView = tooltip.substrateView {
       substrateView.frame = bounds
-
-      if let highlighted, let window {
-        let frameInWindow = highlighted.view.convert(highlighted.view.bounds, to: window)
-        highlighted.snapshot.frame = convert(frameInWindow, from: window)
-      }
+      updateHighlightedSnapshotFrame()
     }
 
     backgroundElement?.accessibilityFrameInContainerSpace = bounds
@@ -132,6 +132,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   public func close(animated: Bool) {
     guard !isClosing else { return }
     isClosing = true
+    highlightObserver = nil
     tooltip.view.onVisibleBoundsChanged(from: tooltip.view.bounds, to: .zero)
     tooltip.view.layoutIfNeeded()
 
@@ -216,12 +217,21 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     tooltip.view.point(inside: tooltip.view.convert(point, from: self), with: event)
   }
 
+  private func updateHighlightedSnapshotFrame() {
+    guard let highlighted, let window, highlighted.view.window != nil else { return }
+
+    let frameInWindow = highlighted.view.convert(highlighted.view.bounds, to: window)
+    highlighted.snapshot.frame = convert(frameInWindow, from: window)
+    highlighted.snapshot.isHidden = false
+  }
+
   private func createViewSnapshot(from view: UIView) -> UIView? {
     guard let snapshotView = view.snapshotView(afterScreenUpdates: true) else {
       return nil
     }
 
     snapshotView.frame = view.bounds
+    snapshotView.isHidden = true
     snapshotView.isUserInteractionEnabled = false
     snapshotView.isAccessibilityElement = view.isAccessibilityElement
     snapshotView.accessibilityLabel = view.accessibilityLabel
