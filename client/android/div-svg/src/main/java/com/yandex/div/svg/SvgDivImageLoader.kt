@@ -23,14 +23,9 @@ import okhttp3.OkHttpClient
 @InternalApi
 public class SvgDivImageLoader(
     context: Context,
-    networkClient: DivNetworkClient?,
-    private val coroutineScope: CoroutineScope,
+    networkClient: DivNetworkClient? = null,
+    private val coroutineScope: CoroutineScope = createCoroutineScope(),
 ) : DivImageLoader {
-    public constructor(context: Context) : this(context, null, createCoroutineScope())
-
-    public constructor(context: Context, networkClient: DivNetworkClient?) :
-        this(context, networkClient, createCoroutineScope())
-
     private val context = context.applicationContext
     private val networkClient = networkClient ?: OkHttpDivNetworkClient(OkHttpClient.Builder().build())
     private val svgCacheManager = SvgCacheManager()

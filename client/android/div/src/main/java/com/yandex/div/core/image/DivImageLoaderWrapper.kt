@@ -42,9 +42,7 @@ class DivImageLoaderWrapper @Inject constructor(
 
     private val svgImageLoader: SvgDivImageLoader? =
         makeIf(!providedImageLoader.hasSvgSupport()) {
-            networkClient
-                ?.let { SvgDivImageLoader(appContext, it) }
-                ?: SvgDivImageLoader(appContext)
+            SvgDivImageLoader(appContext, networkClient)
         }
 
     private val maxDisplaySize = divContext.resources.displayMetrics.let {
