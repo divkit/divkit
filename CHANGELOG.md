@@ -5,7 +5,7 @@
 * `div-image.image_url` and `div-gif-image.gif_url` has become optional. Warning! Images without urls are ignored by the clients that use pre-33 DivKit version. Consider keeping `image_url` / `gif_url` in the backend response for forward compatibility.
 * `div-shape-drawable.color` is deprecated and has become optional. Use `shape` property instead. Warning! Drawables without `color` are ignored by the clients that use pre-33 DivKit version. Consider keeping it in the backend response for forward compatibility.
 
-### Android Client:
+### Android Client
 * DivKit for Compose is no longer in experimental state 🎉 🎉 🎉.
 * Migrated to Java 17 compatibility version.
 * Migrated to Kotlin 2.3.21 compiler and Kotlin 2.2 language version.
@@ -35,7 +35,7 @@
 * Moved `DivVideo` model and expression preparation off the main thread.
 * Video start and pause actions are now preserved when they are issued before the target video view is bound.
 
-### iOS Client:
+### iOS Client
 * Removed `RawDivData.resolve(flagsInfo:)`. Use `DivData.resolve(card:templates:flagsInfo:)` instead.
 * `DivDataTemplate` is no longer public. Use `DivData.resolve(card:templates:)` instead of `DivTemplates.parseValue(type: DivDataTemplate.self, from:)`.
 * Added `DivData.resolve(card:templates:flagsInfo:)` overload that accepts pre-parsed `DivTemplates` for reusing templates across multiple cards.
@@ -58,13 +58,18 @@
 * Fixed flickering image on Restart tap for Rive animation (loop=oneShot).
 * Fixed invalid `layout_provider` variable values reported for not yet measured elements, for example while `gallery` cells are reused.
 
-### Web Client:
+### Web Client
 * Breaking change. The logic of `templates` has been changed to better match native platforms. The priority of template properties has been updated: properties provided at the template usage site now take precedence over those declared in the template definition.
 * Breaking change. `package.json` exports were updated to support newer Node.js versions. Node.js 14+ is now required.
 * Additional type exports can now be imported from the main package (for example from `@divkitframework/divkit` or `@divkitframework/divkit/client`).
 * Fixed an issue with the `markdown` extension when unmounting.
 
-### TypeScript JSON Builder:
+### Kotlin JSON Builder
+* Removed `DivScope.color(String)` and `DivScope.url(String)`. Use `color(String)` and `url(String)` instead.
+* Migrated color expressions to `Color` type.
+* Migrated url expressions to `Url` type.
+
+### TypeScript JSON Builder
 * Breaking change. TypeScript was updated (4.6.4 -> 6.0.2). The heavy-duty `templateHelper` typecheck has been removed at compile time (due to limitations in newer versions of TypeScript).
 
 
