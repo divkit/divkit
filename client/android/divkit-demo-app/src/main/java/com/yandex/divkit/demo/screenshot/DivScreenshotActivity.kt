@@ -83,9 +83,20 @@ class DivScreenshotActivity : AppCompatActivity() {
     }
 
     private fun Div2View.onBound() {
+        val matchParentWidth = getChildAt(0)?.layoutParams?.width == LayoutParams.MATCH_PARENT
+        layoutParams?.width = if (matchParentWidth) {
+            LayoutParams.MATCH_PARENT
+        } else {
+            LayoutParams.WRAP_CONTENT
+        }
+
         val matchParentHeight = getChildAt(0)?.layoutParams?.height == LayoutParams.MATCH_PARENT
-        val divViewHeight = if (matchParentHeight) LayoutParams.MATCH_PARENT else LayoutParams.WRAP_CONTENT
-        layoutParams?.height = divViewHeight
+        layoutParams?.height = if (matchParentHeight) {
+            LayoutParams.MATCH_PARENT
+        } else {
+            LayoutParams.WRAP_CONTENT
+        }
+
         tag = SCREENSHOT_VIEW_TAG
         removeAutofocusForOldApis()
         hideCursor()
