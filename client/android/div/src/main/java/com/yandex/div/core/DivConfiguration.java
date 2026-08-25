@@ -6,6 +6,9 @@ import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.dagger.ExperimentFlag;
 import com.yandex.div.core.dagger.Names;
 import com.yandex.div.core.downloader.DivDownloader;
+import com.yandex.div.core.network.DivNetworkClient;
+import com.yandex.div.core.network.DivNetworkClientHolder;
+import com.yandex.div.core.network.DivNetworkDivDownloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.variables.DivVariableController;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
@@ -64,7 +67,7 @@ public class DivConfiguration {
     private final DivTooltipRestrictor mTooltipRestrictor;
     @NonNull
     private final List<DivExtensionHandler> mExtensionHandlers;
-    @NonNull
+    @Nullable
     private final DivDownloader mDivDownloader;
     @NonNull
     private final DivTypefaceProvider mTypefaceProvider;
@@ -117,7 +120,7 @@ public class DivConfiguration {
             @NonNull DivPlayerPreloader divPlayerPreloader,
             @NonNull DivTooltipRestrictor tooltipRestrictor,
             @NonNull List<DivExtensionHandler> extensionHandlers,
-            @NonNull DivDownloader divDownloader,
+            @Nullable DivDownloader divDownloader,
             @NonNull DivTypefaceProvider typefaceProvider,
             @NonNull Map<String, DivTypefaceProvider> typefaceProviders,
             @NonNull ViewPreCreationProfile viewPreCreationProfile,
@@ -367,8 +370,14 @@ public class DivConfiguration {
 
     @Provides
     @NonNull
-    public DivDownloader getDivDownloader() {
-        return mDivDownloader;
+    public DivDownloader getDivDownloader(@NonNull DivNetworkClientHolder networkClientHolder) {
+        if (mDivDownloader != null) {
+            return mDivDownloader;
+        }
+        DivNetworkClient networkClient = networkClientHolder.getClient();
+        return networkClient == null
+                ? DivDownloader.STUB
+                : new DivNetworkDivDownloader(networkClient);
     }
 
     @Provides
@@ -821,7 +830,7 @@ public class DivConfiguration {
                     divPlayerPreloader,
                     mTooltipRestrictor == null ? DivTooltipRestrictor.STUB : mTooltipRestrictor,
                     mExtensionHandlers,
-                    mDivDownloader == null ? DivDownloader.STUB : mDivDownloader,
+                    mDivDownloader,
                     nonNullTypefaceProvider,
                     mAdditionalTypefaceProviders == null ? new HashMap<>() : mAdditionalTypefaceProviders,
                     mViewPreCreationProfile == null ? new ViewPreCreationProfile() : mViewPreCreationProfile,

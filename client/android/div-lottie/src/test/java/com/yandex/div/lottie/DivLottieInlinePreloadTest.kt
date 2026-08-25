@@ -37,7 +37,11 @@ import java.util.concurrent.atomic.AtomicBoolean
 @RunWith(RobolectricTestRunner::class)
 class DivLottieInlinePreloadTest {
 
-    private val repo = DivLottieCompositionRepository(DivLottieNetworkCache.STUB, DivLottieLogger.STUB)
+    private val repo = DivLottieCompositionRepository(
+        DivLottieNetworkCache.STUB,
+        DivLottieLogger.STUB,
+        networkScope = CoroutineScope(Dispatchers.Unconfined),
+    )
     private val context: Context get() = ApplicationProvider.getApplicationContext()
 
     @Before

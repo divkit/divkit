@@ -1,14 +1,25 @@
 package com.yandex.div.core
 
 import androidx.test.core.app.ApplicationProvider
+import com.yandex.android.beacon.SendBeaconConfiguration
+import com.yandex.android.beacon.SendBeaconPerWorkerLogger
+import com.yandex.android.beacon.SendBeaconRequestExecutor
+import com.yandex.android.beacon.SendBeaconWorkerScheduler
 import com.yandex.div.DivDataTag
+import com.yandex.div.core.network.DivNetworkClient
+import com.yandex.div.core.network.DivNetworkDivRequestExecutor
 import com.yandex.div.storage.DivDataRepository
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.RawDataAndMetadata
 import com.yandex.div.storage.RawJsonRepository
 import com.yandex.div.storage.rawjson.RawJson
+import java.util.concurrent.Executor
+import javax.inject.Provider
 import org.json.JSONObject
+import org.junit.After
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,6 +57,68 @@ class DivKitTest {
             .divStorageComponent { storageComponent }
             .build()
     )
+
+    @After
+    fun resetSingleton() {
+        DivKit.resetSingletonForTesting()
+    }
+
+    @Test
+    fun `uses host network client`() {
+        val networkClient = mock<DivNetworkClient>()
+        val configuration = DivKitConfiguration.Builder()
+            .networkClient(networkClient)
+            .build()
+
+        assertSame(networkClient, configuration.networkClient())
+    }
+
+
+    @Test
+    fun `configure after singleton initialization preserves legacy behavior`() {
+        DivKit.getInstance(ApplicationProvider.getApplicationContext())
+
+        DivKit.configure(DivKitConfiguration.Builder().build())
+    }
+
+    @Test
+    fun `uses host network client for submit requests`() {
+        val configuration = DivKitConfiguration.Builder()
+            .networkClient(mock<DivNetworkClient>())
+            .build()
+
+        assertTrue(configuration.divRequestExecutor() is DivNetworkDivRequestExecutor)
+    }
+
+    @Test
+    fun `explicit submit request executor takes precedence over network client`() {
+        val requestExecutor = mock<DivRequestExecutor>()
+        val configuration = DivKitConfiguration.Builder()
+            .networkClient(mock<DivNetworkClient>())
+            .divRequestExecutor { requestExecutor }
+            .build()
+
+        assertSame(requestExecutor, configuration.divRequestExecutor())
+    }
+
+    @Test
+    fun `preserves configured beacon request executor`() {
+        val requestExecutor = mock<SendBeaconRequestExecutor>()
+        val beaconConfiguration = SendBeaconConfiguration(
+            executor = mock<Executor>(),
+            requestExecutor = requestExecutor,
+            workerScheduler = mock<SendBeaconWorkerScheduler>(),
+            perWorkerLogger = mock<SendBeaconPerWorkerLogger>(),
+            databaseName = "test_beacon",
+        )
+        val configuration = DivKitConfiguration.Builder()
+            .networkClient(mock<DivNetworkClient>())
+            .sendBeaconConfiguration(beaconConfiguration)
+            .build()
+
+        assertSame(requestExecutor, configuration.sendBeaconConfiguration()!!.requestExecutor)
+        assertSame(beaconConfiguration, configuration.sendBeaconConfiguration())
+    }
 
     @Test
     fun `reset with no flags does not touch repositories`() {

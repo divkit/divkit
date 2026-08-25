@@ -20,4 +20,6 @@ dependencies {
     }
 
     testImplementation(libs.androidx.test.core)
+    testImplementation(libs.okhttp)
+    testImplementation(project(":div-network-okhttp"))
 }

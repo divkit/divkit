@@ -6,6 +6,7 @@ import java.io.IOException
 /**
  * Responsible for send beacon request execution.
  */
+@Deprecated("Use DivNetworkClient")
 interface SendBeaconRequestExecutor {
 
     /**

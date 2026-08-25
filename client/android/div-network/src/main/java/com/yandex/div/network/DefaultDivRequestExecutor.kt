@@ -17,6 +17,10 @@ import java.io.IOException
 /**
  * The [executeRequest] function — network request handler, pluggable for different HTTP clients.
  */
+@Deprecated(
+    message = "Use OkHttpDivNetworkClient instead.",
+    replaceWith = ReplaceWith("OkHttpDivNetworkClient(client)", "com.yandex.div.network.OkHttpDivNetworkClient"),
+)
 class DefaultDivRequestExecutor(
     private val executeRequest: suspend (DivRequestExecutor.Request) -> Result<Unit>,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),

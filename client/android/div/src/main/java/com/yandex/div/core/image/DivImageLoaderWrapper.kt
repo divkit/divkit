@@ -15,6 +15,7 @@ import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div.internal.util.makeIf
 import com.yandex.div.svg.SvgDivImageLoader
 import javax.inject.Inject
@@ -31,6 +32,7 @@ import kotlin.math.max
 class DivImageLoaderWrapper @Inject constructor(
     private val providedImageLoader: DivImageLoader,
     divContext: Context,
+    networkClient: DivNetworkClient?,
 ) : DivImageLoader {
     private val appContext = divContext.applicationContext
 
@@ -39,7 +41,11 @@ class DivImageLoaderWrapper @Inject constructor(
     )
 
     private val svgImageLoader: SvgDivImageLoader? =
-        makeIf(!providedImageLoader.hasSvgSupport()) { SvgDivImageLoader(appContext) }
+        makeIf(!providedImageLoader.hasSvgSupport()) {
+            networkClient
+                ?.let { SvgDivImageLoader(appContext, it) }
+                ?: SvgDivImageLoader(appContext)
+        }
 
     private val maxDisplaySize = divContext.resources.displayMetrics.let {
         max(it.widthPixels, it.heightPixels)

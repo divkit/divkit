@@ -16,6 +16,7 @@ import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.image.DivImageLoaderWrapper;
 import com.yandex.div.core.images.DivImageLoader;
+import com.yandex.div.core.network.DivNetworkClientHolder;
 import com.yandex.div.core.player.DivPlayerPreloader;
 import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
 import com.yandex.div.core.util.bitmap.BitmapEffectHelper;
@@ -98,9 +99,10 @@ abstract public class Div2Module {
     @NonNull
     public static DivImageLoader provideDivImageLoader(
             @NonNull @Named(Names.UNWRAPPED_IMAGE_LOADER) DivImageLoader divImageLoader,
-            @NonNull @Named(Names.CONTEXT) Context context
+            @NonNull @Named(Names.CONTEXT) Context context,
+            @NonNull DivNetworkClientHolder networkClientHolder
     ) {
-        return new DivImageLoaderWrapper(divImageLoader, context);
+        return new DivImageLoaderWrapper(divImageLoader, context, networkClientHolder.getClient());
     }
 
     @Provides

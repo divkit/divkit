@@ -6,6 +6,10 @@ import com.yandex.div.core.images.LoadReference
 /**
  * A default implementation, [DefaultDivRequestExecutor], is available.
  */
+@Deprecated(
+    message = "Use DivNetworkClient instead.",
+    replaceWith = ReplaceWith("DivNetworkClient", "com.yandex.div.core.network.DivNetworkClient"),
+)
 interface DivRequestExecutor {
 
     class Header(val name: String, val value: String)

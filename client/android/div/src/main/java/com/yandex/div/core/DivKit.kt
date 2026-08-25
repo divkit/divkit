@@ -113,6 +113,14 @@ class DivKit @VisibleForTesting internal constructor(
             }
         }
 
+        @VisibleForTesting
+        internal fun resetSingletonForTesting() {
+            synchronized(this) {
+                instance = null
+                configuration = null
+            }
+        }
+
         @JvmStatic
         val versionName: String
             get() = BuildConfig.VERSION_NAME

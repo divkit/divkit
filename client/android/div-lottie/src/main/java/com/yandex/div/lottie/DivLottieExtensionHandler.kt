@@ -6,6 +6,7 @@ import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.LottieResult
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionHandler
+import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div.core.preload.PreloadingRegistry
 import com.yandex.div.core.preload.UriPreloadResult
 import com.yandex.div.core.view2.Div2View
@@ -38,12 +39,13 @@ import java.util.concurrent.atomic.AtomicBoolean
  * and cancel it to stop preload work when the handler is no longer needed; by default preloads
  * run in an internal scope that lives as long as the handler.
  */
-open class DivLottieExtensionHandler(
+open class DivLottieExtensionHandler @JvmOverloads constructor(
     private val rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
     private val logger: DivLottieLogger = DivLottieLogger.STUB,
     cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
     private val asyncUpdatesEnabled: Boolean,
     private val preloadScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+    networkClient: DivNetworkClient? = null,
 ) : DivExtensionHandler, ExpressionSubscriber {
 
     constructor(
@@ -52,13 +54,20 @@ open class DivLottieExtensionHandler(
         cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
     ) : this(rawResProvider, logger, cache, asyncUpdatesEnabled = true)
 
+    public constructor(
+        networkClient: DivNetworkClient,
+        rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
+        logger: DivLottieLogger = DivLottieLogger.STUB,
+        cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
+    ) : this(rawResProvider, logger, cache, asyncUpdatesEnabled = true, networkClient = networkClient)
+
     private val parser = LottieExtensionParamsParser(
         assetMapper = rawResProvider::provideAssetFile,
         rawResMapper = rawResProvider::provideRes,
         reportError = logger::fail
     )
 
-    private val repo = DivLottieCompositionRepository(cache, logger)
+    internal val compositionRepository = DivLottieCompositionRepository(cache, logger, networkClient, preloadScope)
     private val playbackRecords = mutableMapOf<String, PlaybackStateController>()
 
     override val subscriptions: MutableList<Disposable> = mutableListOf()
@@ -84,7 +93,7 @@ open class DivLottieExtensionHandler(
         val url = parser.parseUrl(params, expressionResolver)
         if (url != null) {
             val preloading = preloadingRegistry?.registerPreloading("lottie")
-            repo.preloadLottieComposition(url) { result ->
+            compositionRepository.preloadLottieComposition(url) { result ->
                 preloading?.onCompleted(result)
             }
             return
@@ -93,12 +102,12 @@ open class DivLottieExtensionHandler(
         val jsonData = parser.parseInlineJson(params) ?: return
         val preloading = preloadingRegistry?.registerPreloading("lottie")
         if (preloading == null) {
-            preloadScope.launch { repo.preloadInlineComposition(jsonData) {} }
+            preloadScope.launch { compositionRepository.preloadInlineComposition(jsonData) {} }
             return
         }
         val completed = AtomicBoolean(false)
         val job = preloadScope.launch {
-            repo.preloadInlineComposition(jsonData) { result ->
+            compositionRepository.preloadInlineComposition(jsonData) { result ->
                 if (completed.compareAndSet(false, true)) preloading.onCompleted(result)
             }
         }
@@ -157,7 +166,7 @@ open class DivLottieExtensionHandler(
 
         lottieView.launchOnAttachedToWindow {
             val result = withContext(Dispatchers.IO) {
-                repo.receiveLottieComposition(lottieData, view.context)
+                compositionRepository.receiveLottieCompositionAsync(lottieData, view.context)
             }
             withContext(Dispatchers.Main) {
                 val playbackState = getOrCreatePlaybackState(divView, div)
