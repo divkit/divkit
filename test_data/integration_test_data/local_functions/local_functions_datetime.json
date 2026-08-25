@@ -45,29 +45,26 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "check set2064Year",
-          "url": "div-action://set_variable?name=step&value=0"
-        }
-      ],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "result",
-          "value": {
-            "type": "integer",
-            "value": 2064
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "check set2064Year",
+        "url": "div-action://set_variable?name=step&value=0"
+      }
+    },
+    {
+      "type": "verify_variable",
+      "variable_name": "result",
+      "value": {
+        "type": "integer",
+        "value": 2064
+      }
     }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
   ]
 }

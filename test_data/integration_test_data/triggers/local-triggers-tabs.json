@@ -71,9 +71,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_tabs",
           "value": {
             "type": "string",
@@ -81,7 +81,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_item",
           "value": {
             "type": "string",
@@ -96,15 +96,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=50",
-          "log_id": "set_50"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=50",
+            "log_id": "set_50"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_tabs",
           "value": {
             "type": "string",
@@ -112,7 +113,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_item",
           "value": {
             "type": "string",
@@ -127,15 +128,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=110",
-          "log_id": "set_110"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=110",
+            "log_id": "set_110"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_tabs",
           "value": {
             "type": "string",
@@ -143,7 +145,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_item",
           "value": {
             "type": "string",
@@ -158,15 +160,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=210",
-          "log_id": "set_210"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=210",
+            "log_id": "set_210"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_tabs",
           "value": {
             "type": "string",
@@ -174,7 +177,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_item",
           "value": {
             "type": "string",
@@ -189,19 +192,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_current_item?id=sample&item=1",
-          "log_id": "set_second_tab"
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_current_item?id=sample&item=1",
+            "log_id": "set_second_tab"
+          }
         },
         {
-          "url": "div-action://set_variable?name=counter&value=210",
-          "log_id": "set_210"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=210",
+            "log_id": "set_210"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_tabs",
           "value": {
             "type": "string",
@@ -209,7 +216,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_item",
           "value": {
             "type": "string",
@@ -224,23 +231,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_current_item?id=sample&item=1",
-          "log_id": "set_second_tab"
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_current_item?id=sample&item=1",
+            "log_id": "set_second_tab"
+          }
         },
         {
-          "url": "div-action://set_variable?name=counter&value=210",
-          "log_id": "set_210"
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=210",
+            "log_id": "set_210"
+          }
         },
         {
-          "url": "div-action://set_current_item?id=sample&item=0",
-          "log_id": "set_first_tab"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_current_item?id=sample&item=0",
+            "log_id": "set_first_tab"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_tabs",
           "value": {
             "type": "string",
@@ -248,7 +262,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_item",
           "value": {
             "type": "string",

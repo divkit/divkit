@@ -22,15 +22,16 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from string by url action",
-          "url": "div-action://set_variable?name=result&value=new_string"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "set from string by url action",
+            "url": "div-action://set_variable?name=result&value=new_string"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "string",
@@ -45,15 +46,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from string variable by url action",
-          "url": "div-action://set_variable?name=result&value=@{string_var}"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "set from string variable by url action",
+            "url": "div-action://set_variable?name=result&value=@{string_var}"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "string",
@@ -68,22 +70,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from string by typed action",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result",
-            "value": {
-              "type": "string",
-              "value": "new_string"
+          "type": "div_action",
+          "action": {
+            "log_id": "set from string by typed action",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result",
+              "value": {
+                "type": "string",
+                "value": "new_string"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "string",

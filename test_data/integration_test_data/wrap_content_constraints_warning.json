@@ -112,14 +112,13 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "error",
-          "value": "Element has incorrect width constraints (min size is bigger than max size). Id: 'width_item', minSize: 400dp, maxSize: 200dp."
-        },
-        {
-          "type": "error",
-          "value": "Element has incorrect height constraints (min size is bigger than max size). Id: 'height_item', minSize: 120dp, maxSize: 90dp."
+          "type": "verify_errors",
+          "errors": [
+            "Element has incorrect width constraints (min size is bigger than max size). Id: 'width_item', minSize: 400dp, maxSize: 200dp.",
+            "Element has incorrect height constraints (min size is bigger than max size). Id: 'height_item', minSize: 120dp, maxSize: 90dp."
+          ]
         }
       ],
       "platforms": [
@@ -130,14 +129,13 @@
       }
     },
     {
-      "expected": [
+      "steps": [
         {
-          "type": "error",
-          "value": "Element has incorrect width constraints (min size is bigger than max size)."
-        },
-        {
-          "type": "error",
-          "value": "Element has incorrect height constraints (min size is bigger than max size)."
+          "type": "verify_errors",
+          "errors": [
+            "Element has incorrect width constraints (min size is bigger than max size).",
+            "Element has incorrect height constraints (min size is bigger than max size)."
+          ]
         }
       ],
       "platforms": [

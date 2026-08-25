@@ -22,15 +22,16 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from integer by url action",
-          "url": "div-action://set_variable?name=result&value=10"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "set from integer by url action",
+            "url": "div-action://set_variable?name=result&value=10"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -45,15 +46,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from integer variable by url action",
-          "url": "div-action://set_variable?name=result&value=@{int_var}"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "set from integer variable by url action",
+            "url": "div-action://set_variable?name=result&value=@{int_var}"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -68,22 +70,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from integer by typed action",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result",
-            "value": {
-              "type": "integer",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "set from integer by typed action",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -98,22 +101,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from integer out of 32-bit range",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result",
-            "value": {
-              "type": "integer",
-              "value": "@{1767214800000 + 10}"
+          "type": "div_action",
+          "action": {
+            "log_id": "set from integer out of 32-bit range",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result",
+              "value": {
+                "type": "integer",
+                "value": "@{1767214800000 + 10}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",

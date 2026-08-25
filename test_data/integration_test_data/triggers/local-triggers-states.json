@@ -92,9 +92,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_div_state",
           "value": {
             "type": "string",
@@ -102,7 +102,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_1",
           "value": {
             "type": "string",
@@ -110,7 +110,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_2",
           "value": {
             "type": "string",
@@ -125,15 +125,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=50",
-          "log_id": "set_50"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=50",
+            "log_id": "set_50"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_div_state",
           "value": {
             "type": "string",
@@ -141,7 +142,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_1",
           "value": {
             "type": "string",
@@ -149,7 +150,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_2",
           "value": {
             "type": "string",
@@ -164,15 +165,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=110",
-          "log_id": "set_110"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=110",
+            "log_id": "set_110"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_div_state",
           "value": {
             "type": "string",
@@ -180,7 +182,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_1",
           "value": {
             "type": "string",
@@ -188,7 +190,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_2",
           "value": {
             "type": "string",
@@ -203,15 +205,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=210",
-          "log_id": "set_210"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=210",
+            "log_id": "set_210"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_div_state",
           "value": {
             "type": "string",
@@ -219,7 +222,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_1",
           "value": {
             "type": "string",
@@ -227,7 +230,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_2",
           "value": {
             "type": "string",
@@ -242,19 +245,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=210",
-          "log_id": "set_210"
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=210",
+            "log_id": "set_210"
+          }
         },
         {
-          "url": "div-action://set_state?state_id=0/sample/second",
-          "log_id": "set_second_state"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_state?state_id=0/sample/second",
+            "log_id": "set_second_state"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_div_state",
           "value": {
             "type": "string",
@@ -262,7 +269,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_1",
           "value": {
             "type": "string",
@@ -270,7 +277,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state_2",
           "value": {
             "type": "string",

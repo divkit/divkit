@@ -61,23 +61,24 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_2_dict_item_updated",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/int_value",
-            "value": {
-              "type": "integer",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_2_dict_item_updated",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/int_value",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -101,23 +102,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_1_array_item_updated",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_array/0",
-            "value": {
-              "type": "integer",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_1_array_item_updated",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_array/0",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -141,25 +143,26 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_2_dict_new_item_inserted",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/level_3_dict",
-            "value": {
-              "type": "dict",
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_2_dict_new_item_inserted",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/level_3_dict",
               "value": {
-                "value": "inserted"
+                "type": "dict",
+                "value": {
+                  "value": "inserted"
+                }
               }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -186,25 +189,26 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_1_array_new_item_inserted",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_array/1",
-            "value": {
-              "type": "dict",
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_1_array_new_item_inserted",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_array/1",
               "value": {
-                "value": "inserted"
+                "type": "dict",
+                "value": {
+                  "value": "inserted"
+                }
               }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -231,27 +235,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_1_array_insert_failed_negative_index",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_array/-1",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_1_array_insert_failed_negative_index",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_array/-1",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Position '-1' is out of array bounds"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Position '-1' is out of array bounds"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -275,27 +282,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_1_array_insert_failed_out_of_range_index",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_array/2",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_1_array_insert_failed_out_of_range_index",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_array/2",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Position '2' is out of array bounds"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Position '2' is out of array bounds"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -319,23 +329,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_2_dict_item_replaced_with_other_type_value",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/int_value",
-            "value": {
-              "type": "string",
-              "value": "replaced"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_2_dict_item_replaced_with_other_type_value",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/int_value",
+              "value": {
+                "type": "string",
+                "value": "replaced"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -359,28 +370,28 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_1_array_item_replaced_with_other_type_value",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_array/0",
-            "value": {
-              "type": "string",
-              "value": "replaced"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_1_array_item_replaced_with_other_type_value",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_array/0",
+              "value": {
+                "type": "string",
+                "value": "replaced"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
-            "value":
-            {
+            "value": {
               "level_1_dict": {
                 "level_2_dict": {
                   "int_value": 1
@@ -400,23 +411,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_2_dict_item_updated_multiple_slash_reduced",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict//level_2_dict////int_value",
-            "value": {
-              "type": "integer",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_2_dict_item_updated_multiple_slash_reduced",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict//level_2_dict////int_value",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -440,23 +452,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_level_1_array_item_updated_multiple_slash_reduced",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_array////0",
-            "value": {
-              "type": "integer",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_level_1_array_item_updated_multiple_slash_reduced",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_array////0",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -480,27 +493,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_update_failed_empty_path",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_update_failed_empty_path",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Value '' for key 'path' is not valid"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Value '' for key 'path' is not valid"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -523,27 +539,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_update_failed_effectively_empty_path",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "////",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_update_failed_effectively_empty_path",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "////",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Value '////' for key 'path' is not valid"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Value '////' for key 'path' is not valid"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -566,27 +585,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_update_failed_path_starts_with_slash",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "/level_1_dict/level_2_dict/int_value",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_update_failed_path_starts_with_slash",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "/level_1_dict/level_2_dict/int_value",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Value '/level_1_dict/level_2_dict/int_value' for key 'path' is not valid"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Value '/level_1_dict/level_2_dict/int_value' for key 'path' is not valid"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -609,27 +631,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_update_failed_path_ends_with_slash",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/int_value/",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_update_failed_path_ends_with_slash",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/int_value/",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Value 'level_1_dict/level_2_dict/int_value/' for key 'path' is not valid"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Value 'level_1_dict/level_2_dict/int_value/' for key 'path' is not valid"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -652,71 +677,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_update_failed_missing_path",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/missing_dict/missing_value",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_update_failed_missing_path",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/missing_dict/missing_value",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Element with path 'level_1_dict/missing_dict' is not found"
         },
         {
-          "type": "variable",
-          "variable_name": "dict_var",
-          "value": {
-            "type": "dict",
-            "value": {
-              "level_1_dict": {
-                "level_2_dict": {
-                  "int_value": 1
-                }
-              },
-              "level_1_array": [
-                1
-              ]
-            }
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "dict_var_update_failed_path_segment_is_not_a_structure",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/int_value/missing",
-            "value": {
-              "type": "string",
-              "value": "failed"
-            }
-          }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Element with path 'level_1_dict/level_2_dict/int_value' is not a structure"
+          "type": "verify_errors",
+          "errors": [
+            "Element with path 'level_1_dict/missing_dict' is not found"
+          ]
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -740,27 +724,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_update_failed_non_integer_array_index",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_array/non_integer/int_value",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_update_failed_path_segment_is_not_a_structure",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/int_value/missing",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Unable to use 'non_integer' as array index"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Element with path 'level_1_dict/level_2_dict/int_value' is not a structure"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -784,23 +771,71 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_2_array_item_updated",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_update_failed_non_integer_array_index",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_array/non_integer/int_value",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Unable to use 'non_integer' as array index"
+          ]
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "dict_var",
+          "value": {
+            "type": "dict",
             "value": {
-              "type": "integer",
-              "value": 10
+              "level_1_dict": {
+                "level_2_dict": {
+                  "int_value": 1
+                }
+              },
+              "level_1_array": [
+                1
+              ]
             }
           }
         }
       ],
-      "expected": [
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
         {
-          "type": "variable",
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_2_array_item_updated",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -824,23 +859,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_1_dict_item_updated",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "1/int_value",
-            "value": {
-              "type": "integer",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_1_dict_item_updated",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "1/int_value",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -864,25 +900,26 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_2_array_new_item_inserted",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/1",
-            "value": {
-              "type": "dict",
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_2_array_new_item_inserted",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/1",
               "value": {
-                "value": "inserted"
+                "type": "dict",
+                "value": {
+                  "value": "inserted"
+                }
               }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -909,25 +946,26 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_1_dict_new_item_inserted",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "1/level_2_dict",
-            "value": {
-              "type": "dict",
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_1_dict_new_item_inserted",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "1/level_2_dict",
               "value": {
-                "value": "inserted"
+                "type": "dict",
+                "value": {
+                  "value": "inserted"
+                }
               }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -954,27 +992,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_1_array_insert_failed_negative_index",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/-1",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_1_array_insert_failed_negative_index",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/-1",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Position '-1' is out of array bounds"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Position '-1' is out of array bounds"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -998,27 +1039,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_1_array_insert_failed_out_of_range_index",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/2",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_1_array_insert_failed_out_of_range_index",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/2",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Position '2' is out of array bounds"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Position '2' is out of array bounds"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1042,23 +1086,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_2_array_item_replaced_with_other_type_value",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
-            "value": {
-              "type": "string",
-              "value": "replaced"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_2_array_item_replaced_with_other_type_value",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "string",
+                "value": "replaced"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1082,28 +1127,28 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_1_dict_item_replaced_with_other_type_value",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "1/int_value",
-            "value": {
-              "type": "string",
-              "value": "replaced"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_1_dict_item_replaced_with_other_type_value",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "1/int_value",
+              "value": {
+                "type": "string",
+                "value": "replaced"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
-            "value":
-            [
+            "value": [
               [
                 [
                   1
@@ -1123,23 +1168,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_2_array_item_updated_multiple_slash_reduced",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0//0////0",
-            "value": {
-              "type": "integer",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_2_array_item_updated_multiple_slash_reduced",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0//0////0",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1163,23 +1209,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_level_1_dict_item_updated_multiple_slash_reduced",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "1////int_value",
-            "value": {
-              "type": "integer",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_level_1_dict_item_updated_multiple_slash_reduced",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "1////int_value",
+              "value": {
+                "type": "integer",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1203,27 +1250,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_update_failed_empty_path",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_update_failed_empty_path",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Value '' for key 'path' is not valid"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Value '' for key 'path' is not valid"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1246,27 +1296,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_update_failed_effectively_empty_path",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "////",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_update_failed_effectively_empty_path",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "////",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Value '////' for key 'path' is not valid"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Value '////' for key 'path' is not valid"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1289,27 +1342,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_update_failed_path_starts_with_slash",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "/0/0/0",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_update_failed_path_starts_with_slash",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "/0/0/0",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Value '/0/0/0' for key 'path' is not valid"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Value '/0/0/0' for key 'path' is not valid"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1332,27 +1388,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_update_failed_path_ends_with_slash",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0/",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_update_failed_path_ends_with_slash",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0/",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Value '0/0/0/' for key 'path' is not valid"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Value '0/0/0/' for key 'path' is not valid"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1375,71 +1434,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_update_failed_missing_path",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/2/0",
-            "value": {
-              "type": "string",
-              "value": "failed"
-            }
-          }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Element with path '0/2' is not found"
-        },
-        {
-          "type": "variable",
-          "variable_name": "array_var",
-          "value": {
-            "type": "array",
-            "value": [
-              [
-                [
-                  1
-                ]
-              ],
-              {
-                "int_value": 1
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_update_failed_missing_path",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/2/0",
+              "value": {
+                "type": "string",
+                "value": "failed"
               }
-            ]
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "array_var_update_failed_path_segment_is_not_a_structure",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0/missing",
-            "value": {
-              "type": "string",
-              "value": "failed"
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Element with path '0/0/0' is not a structure"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Element with path '0/2' is not found"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1463,27 +1481,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_update_failed_non_integer_array_index",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/non_integer/0",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_update_failed_path_segment_is_not_a_structure",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0/missing",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Unable to use 'non_integer' as array index"
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Element with path '0/0/0' is not a structure"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1507,27 +1528,77 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "string_var_update_failed_nonstructural_variable",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "string_var",
-            "path": "missing",
-            "value": {
-              "type": "string",
-              "value": "failed"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_update_failed_non_integer_array_index",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/non_integer/0",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
             }
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Unable to use 'non_integer' as array index"
+          ]
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "array_var",
+          "value": {
+            "type": "array",
+            "value": [
+              [
+                [
+                  1
+                ]
+              ],
+              {
+                "int_value": 1
+              }
+            ]
           }
         }
       ],
-      "expected": [
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
         {
-          "type": "error",
-          "value": "Action requires array or dictionary variable"
+          "type": "div_action",
+          "action": {
+            "log_id": "string_var_update_failed_nonstructural_variable",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "string_var",
+              "path": "missing",
+              "value": {
+                "type": "string",
+                "value": "failed"
+              }
+            }
+          }
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Action requires array or dictionary variable"
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "string_var",
           "value": {
             "type": "string",
@@ -1542,23 +1613,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_updated_with_string",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/string_value",
-            "value": {
-              "type": "string",
-              "value": "new_value"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_updated_with_string",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/string_value",
+              "value": {
+                "type": "string",
+                "value": "new_value"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -1583,23 +1655,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_updated_with_number",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/number_value",
-            "value": {
-              "type": "number",
-              "value": 123.45
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_updated_with_number",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/number_value",
+              "value": {
+                "type": "number",
+                "value": 123.45
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -1624,23 +1697,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_updated_with_boolean",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/boolean_value",
-            "value": {
-              "type": "boolean",
-              "value": true
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_updated_with_boolean",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/boolean_value",
+              "value": {
+                "type": "boolean",
+                "value": true
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -1665,23 +1739,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_updated_with_url",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/url_value",
-            "value": {
-              "type": "url",
-              "value": "https://ya.ru"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_updated_with_url",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/url_value",
+              "value": {
+                "type": "url",
+                "value": "https://ya.ru"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -1705,23 +1780,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_updated_with_color",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/color_value",
-            "value": {
-              "type": "color",
-              "value": "#FF0000"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_updated_with_color",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/color_value",
+              "value": {
+                "type": "color",
+                "value": "#FF0000"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -1745,23 +1821,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_updated_with_url_variable",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/url_value",
-            "value": {
-              "type": "url",
-              "value": "@{url_var}"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_updated_with_url_variable",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/url_value",
+              "value": {
+                "type": "url",
+                "value": "@{url_var}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -1785,23 +1862,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "dict_var_updated_with_color_variable",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "dict_var",
-            "path": "level_1_dict/level_2_dict/color_value",
-            "value": {
-              "type": "color",
-              "value": "@{color_var}"
+          "type": "div_action",
+          "action": {
+            "log_id": "dict_var_updated_with_color_variable",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "dict_var",
+              "path": "level_1_dict/level_2_dict/color_value",
+              "value": {
+                "type": "color",
+                "value": "@{color_var}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "dict_var",
           "value": {
             "type": "dict",
@@ -1825,23 +1903,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_item_updated_with_string",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
-            "value": {
-              "type": "string",
-              "value": "new_value"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_item_updated_with_string",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "string",
+                "value": "new_value"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1865,23 +1944,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_item_updated_with_number",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
-            "value": {
-              "type": "number",
-              "value": 123.45
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_item_updated_with_number",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "number",
+                "value": 123.45
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1905,23 +1985,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_item_updated_with_boolean",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
-            "value": {
-              "type": "boolean",
-              "value": true
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_item_updated_with_boolean",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "boolean",
+                "value": true
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1945,23 +2026,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_item_updated_with_url",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
-            "value": {
-              "type": "url",
-              "value": "https://ya.ru"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_item_updated_with_url",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "url",
+                "value": "https://ya.ru"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -1984,23 +2066,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_item_updated_with_color",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
-            "value": {
-              "type": "color",
-              "value": "#FF0000"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_item_updated_with_color",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "color",
+                "value": "#FF0000"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -2023,23 +2106,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_item_updated_with_url_variable",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
-            "value": {
-              "type": "url",
-              "value": "@{url_var}"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_item_updated_with_url_variable",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "url",
+                "value": "@{url_var}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",
@@ -2062,23 +2146,24 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "array_var_item_updated_with_color_variable",
-          "typed": {
-            "type": "update_structure",
-            "variable_name": "array_var",
-            "path": "0/0/0",
-            "value": {
-              "type": "color",
-              "value": "@{color_var}"
+          "type": "div_action",
+          "action": {
+            "log_id": "array_var_item_updated_with_color_variable",
+            "typed": {
+              "type": "update_structure",
+              "variable_name": "array_var",
+              "path": "0/0/0",
+              "value": {
+                "type": "color",
+                "value": "@{color_var}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "array_var",
           "value": {
             "type": "array",

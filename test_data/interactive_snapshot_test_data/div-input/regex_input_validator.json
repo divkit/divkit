@@ -115,61 +115,74 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input&value=12345678",
-          "log_id": "change text to digits"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input&value=12345678",
+        "log_id": "change text to digits"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=regex&value=[a-zA-Z]%2B",
-          "log_id": "change regex"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input&value=aAbBcC",
-          "log_id": "change text to 6 letters"
-        }
-      ],
-      "expected_screenshot": "step3.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=regex&value=[a-zA-Z]%2B",
+        "log_id": "change regex"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input&value=aAbBcCdD",
-          "log_id": "change text to 8 letters"
-        }
-      ],
-      "expected_screenshot": "step4.png"
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input&value=",
-          "log_id": "change text to blank"
-        }
-      ],
-      "expected_screenshot": "step5.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input&value=aAbBcC",
+        "log_id": "change text to 6 letters"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=allow_empty&value=1",
-          "log_id": "allow empty"
-        }
-      ],
-      "expected_screenshot": "step6.png"
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input&value=aAbBcCdD",
+        "log_id": "change text to 8 letters"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input&value=",
+        "log_id": "change text to blank"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=allow_empty&value=1",
+        "log_id": "allow empty"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step6"
     }
   ]
 }

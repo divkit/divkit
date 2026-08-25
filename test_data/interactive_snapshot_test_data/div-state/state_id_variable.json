@@ -61,25 +61,30 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "state3",
-          "url": "div-action://set_state?state_id=0/states/state3"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "log_id": "state3",
+        "url": "div-action://set_state?state_id=0/states/state3"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "state2",
-          "url": "div-action://set_variable?name=state_id_var&value=state2"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "state2",
+        "url": "div-action://set_variable?name=state_id_var&value=state2"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

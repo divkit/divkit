@@ -1,10 +1,5 @@
 {
   "description": "Local triggers",
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "div_data": {
     "card": {
       "log_id": "sample_card",
@@ -50,9 +45,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state",
           "value": {
             "type": "string",
@@ -67,15 +62,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=50",
-          "log_id": "set_50"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=50",
+            "log_id": "set_50"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state",
           "value": {
             "type": "string",
@@ -90,15 +86,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=counter&value=110",
-          "log_id": "set_110"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=counter&value=110",
+            "log_id": "set_110"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "trigger_state",
           "value": {
             "type": "string",

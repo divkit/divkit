@@ -56,9 +56,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "source",
           "value": {
             "type": "dict",
@@ -68,7 +68,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "color_prop",
           "value": {
             "type": "color",
@@ -83,15 +83,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=color_prop&value=%23FF00FF",
-          "log_id": "set_color_var"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=color_prop&value=%23FF00FF",
+            "log_id": "set_color_var"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "source",
           "value": {
             "type": "dict",
@@ -101,7 +102,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "color_prop",
           "value": {
             "type": "color",

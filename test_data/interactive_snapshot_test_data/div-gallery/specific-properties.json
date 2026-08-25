@@ -268,31 +268,41 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=orientation&value=vertical",
-          "log_id": "orientation"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=orientation&value=vertical",
+        "log_id": "orientation"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=item_spacing&value=24",
-          "log_id": "item_spacing"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=column_count_value&value=2",
-          "log_id": "column_count"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=item_spacing&value=24",
+        "log_id": "item_spacing"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=column_count_value&value=2",
+        "log_id": "column_count"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
     }
   ]
 }

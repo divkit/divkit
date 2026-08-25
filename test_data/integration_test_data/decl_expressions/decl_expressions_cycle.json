@@ -28,14 +28,13 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "error",
-          "value": "Variable 'val2' is missing. Expression: @{val2 + 2}"
-        },
-        {
-          "type": "error",
-          "value": "Variable 'val' is missing. Expression: @{val + 1}"
+          "type": "verify_errors",
+          "errors": [
+            "Variable 'val2' is missing. Expression: @{val2 + 2}",
+            "Variable 'val' is missing. Expression: @{val + 1}"
+          ]
         }
       ],
       "platforms": [
@@ -46,14 +45,13 @@
       }
     },
     {
-      "expected": [
+      "steps": [
         {
-          "type": "error",
-          "value": "Variable 'val2' is missing."
-        },
-        {
-          "type": "error",
-          "value": "Variable 'val' is missing."
+          "type": "verify_errors",
+          "errors": [
+            "Variable 'val2' is missing.",
+            "Variable 'val' is missing."
+          ]
         }
       ],
       "platforms": [

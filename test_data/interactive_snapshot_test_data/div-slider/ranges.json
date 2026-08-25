@@ -226,112 +226,172 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=range_end&value=30",
-          "log_id": "decrease second range"
-        },
-        {
-          "url": "div-action://set_variable?name=range_start&value=30",
-          "log_id": "increase third range"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=range_end&value=30",
+        "log_id": "decrease second range"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=margin_end&value=4",
-          "log_id": "increase margins"
-        },
-        {
-          "url": "div-action://set_variable?name=margin_start&value=8",
-          "log_id": "increase margins"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=range_start&value=30",
+        "log_id": "increase third range"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=active_color&value=%2380FF8000",
-          "log_id": "change active color"
-        },
-        {
-          "url": "div-action://set_variable?name=inactive_color&value=%23CC000000",
-          "log_id": "change inactive color"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=active_height&value=16",
-          "log_id": "increase active height"
-        },
-        {
-          "url": "div-action://set_variable?name=inactive_height&value=4",
-          "log_id": "decrease active height"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=margin_end&value=4",
+        "log_id": "increase margins"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=active_radius&value=4",
-          "log_id": "change active radius"
-        },
-        {
-          "url": "div-action://set_variable?name=inactive_radius&value=2",
-          "log_id": "change inactive radius"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=margin_start&value=8",
+        "log_id": "increase margins"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=range_end&value=40",
-          "log_id": "decrease second range"
-        },
-        {
-          "url": "div-action://set_variable?name=range_start&value=40",
-          "log_id": "increase third range"
-        },
-        {
-          "url": "div-action://set_variable?name=margin_end&value=2",
-          "log_id": "increase margins"
-        },
-        {
-          "url": "div-action://set_variable?name=margin_start&value=2",
-          "log_id": "increase margins"
-        },
-        {
-          "url": "div-action://set_variable?name=active_color&value=%2380FFCC00",
-          "log_id": "change active color"
-        },
-        {
-          "url": "div-action://set_variable?name=inactive_color&value=%2340000000",
-          "log_id": "change inactive color"
-        },
-        {
-          "url": "div-action://set_variable?name=active_height&value=10",
-          "log_id": "increase active height"
-        },
-        {
-          "url": "div-action://set_variable?name=inactive_height&value=10",
-          "log_id": "decrease active height"
-        },
-        {
-          "url": "div-action://set_variable?name=active_radius&value=0",
-          "log_id": "change active radius"
-        },
-        {
-          "url": "div-action://set_variable?name=inactive_radius&value=0",
-          "log_id": "change inactive radius"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=active_color&value=%2380FF8000",
+        "log_id": "change active color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=inactive_color&value=%23CC000000",
+        "log_id": "change inactive color"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=active_height&value=16",
+        "log_id": "increase active height"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=inactive_height&value=4",
+        "log_id": "decrease active height"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=active_radius&value=4",
+        "log_id": "change active radius"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=inactive_radius&value=2",
+        "log_id": "change inactive radius"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=range_end&value=40",
+        "log_id": "decrease second range"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=range_start&value=40",
+        "log_id": "increase third range"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=margin_end&value=2",
+        "log_id": "increase margins"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=margin_start&value=2",
+        "log_id": "increase margins"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=active_color&value=%2380FFCC00",
+        "log_id": "change active color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=inactive_color&value=%2340000000",
+        "log_id": "change inactive color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=active_height&value=10",
+        "log_id": "increase active height"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=inactive_height&value=10",
+        "log_id": "decrease active height"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=active_radius&value=0",
+        "log_id": "change active radius"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=inactive_radius&value=0",
+        "log_id": "change inactive radius"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

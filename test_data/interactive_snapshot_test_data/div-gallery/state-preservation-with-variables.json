@@ -255,55 +255,70 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=counter&value=5",
-          "scope_id": "card_1",
-          "log_id": "set_counter1"
-        },
-        {
-          "url": "div-action://set_variable?name=counter&value=3",
-          "scope_id": "card_2",
-          "log_id": "set_counter2"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=counter&value=5",
+        "scope_id": "card_1",
+        "log_id": "set_counter1"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_end?id=var_gallery&animated=false",
-          "log_id": "scroll_to_end"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=counter&value=3",
+        "scope_id": "card_2",
+        "log_id": "set_counter2"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=counter&value=8",
-          "scope_id": "card_19",
-          "log_id": "set_counter19"
-        },
-        {
-          "url": "div-action://set_variable?name=value&value=10",
-          "scope_id": "card_20",
-          "log_id": "set_value20"
-        }
-      ],
-      "expected_screenshot": "step3.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_start?id=var_gallery&animated=false",
-          "log_id": "scroll_to_start"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_end?id=var_gallery&animated=false",
+        "log_id": "scroll_to_end"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=counter&value=8",
+        "scope_id": "card_19",
+        "log_id": "set_counter19"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=value&value=10",
+        "scope_id": "card_20",
+        "log_id": "set_value20"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_start?id=var_gallery&animated=false",
+        "log_id": "scroll_to_start"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

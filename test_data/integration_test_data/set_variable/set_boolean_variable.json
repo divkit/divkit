@@ -22,15 +22,16 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from boolean by url action",
-          "url": "div-action://set_variable?name=result&value=true"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "set from boolean by url action",
+            "url": "div-action://set_variable?name=result&value=true"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "boolean",
@@ -45,15 +46,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from boolean variable by url action",
-          "url": "div-action://set_variable?name=result&value=@{boolean_var}"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "set from boolean variable by url action",
+            "url": "div-action://set_variable?name=result&value=@{boolean_var}"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "boolean",
@@ -68,22 +70,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from boolean by typed action",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result",
-            "value": {
-              "type": "boolean",
-              "value": true
+          "type": "div_action",
+          "action": {
+            "log_id": "set from boolean by typed action",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result",
+              "value": {
+                "type": "boolean",
+                "value": true
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "boolean",

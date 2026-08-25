@@ -40,39 +40,52 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=switch_value&value=true",
-          "log_id": "switch_value"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=switch_value&value=true",
+        "log_id": "switch_value"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=on_color_var&value=%232a35ad",
-          "log_id": "change_color"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=switch_enabled&value=false",
-          "log_id": "disable_switch"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=on_color_var&value=%232a35ad",
+        "log_id": "change_color"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=switch_value&value=false",
-          "log_id": "disabled_switch_off"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=switch_enabled&value=false",
+        "log_id": "disable_switch"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=switch_value&value=false",
+        "log_id": "disabled_switch_off"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
     }
   ]
 }

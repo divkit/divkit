@@ -134,51 +134,75 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=hide_odd&value=@{!hide_odd}",
-          "log_id": "hide_odd_items"
-        }
-      ],
-      "expected_screenshot": "step1.png",
-      "delay": 500
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=hide_odd&value=@{!hide_odd}",
+        "log_id": "hide_odd_items"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_next_item?id=test_pager",
-          "log_id": "next"
-        }
-      ],
-      "expected_screenshot": "step2.png",
-      "delay": 500
+      "type": "wait",
+      "duration_ms": 500
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_previous_item?id=test_pager",
-          "log_id": "prev_wrap"
-        },
-        {
-          "url": "div-action://set_previous_item?id=test_pager",
-          "log_id": "prev_to_last"
-        }
-      ],
-      "expected_screenshot": "step3.png",
-      "delay": 500
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=hide_odd&value=@{!hide_odd}",
-          "log_id": "show_odd_items"
-        }
-      ],
-      "expected_screenshot": "step4.png",
-      "delay": 500
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_next_item?id=test_pager",
+        "log_id": "next"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_previous_item?id=test_pager",
+        "log_id": "prev_wrap"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_previous_item?id=test_pager",
+        "log_id": "prev_to_last"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=hide_odd&value=@{!hide_odd}",
+        "log_id": "show_odd_items"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
     }
   ]
 }

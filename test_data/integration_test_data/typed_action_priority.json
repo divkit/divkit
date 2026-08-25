@@ -41,29 +41,26 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "run trigger",
-          "url": "div-action://set_variable?name=val&value=run"
-        }
-      ],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "val",
-          "value": {
-            "type": "string",
-            "value": "triggered"
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "run trigger",
+        "url": "div-action://set_variable?name=val&value=run"
+      }
+    },
+    {
+      "type": "verify_variable",
+      "variable_name": "val",
+      "value": {
+        "type": "string",
+        "value": "triggered"
+      }
     }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
   ]
 }

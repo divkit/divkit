@@ -22,18 +22,15 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "div_actions": [],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Playback encountered an error: \"Unsupported MIME Type\""
-        }
-      ],
-      "platforms": [
-        "ios"
+      "type": "verify_errors",
+      "errors": [
+        "Playback encountered an error: \"Unsupported MIME Type\""
       ]
     }
+  ],
+  "platforms": [
+    "ios"
   ]
 }

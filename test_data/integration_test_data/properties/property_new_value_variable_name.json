@@ -53,39 +53,36 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=title&value=New Title",
-          "log_id": "set_string_var"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=title&value=New Title",
+        "log_id": "set_string_var"
+      }
+    },
+    {
+      "type": "verify_variable",
+      "variable_name": "source",
+      "value": {
+        "type": "dict",
+        "value": {
+          "title": "New Title"
         }
-      ],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "source",
-          "value": {
-            "type": "dict",
-            "value": {
-              "title": "New Title"
-            }
-          }
-        },
-        {
-          "type": "variable",
-          "variable_name": "title",
-          "value": {
-            "type": "string",
-            "value": "New Title"
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      }
+    },
+    {
+      "type": "verify_variable",
+      "variable_name": "title",
+      "value": {
+        "type": "string",
+        "value": "New Title"
+      }
     }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
   ]
 }

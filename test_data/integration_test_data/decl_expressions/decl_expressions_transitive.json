@@ -26,23 +26,19 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "val2",
-          "value": {
-            "type": "integer",
-            "value": 4
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "type": "verify_variable",
+      "variable_name": "val2",
+      "value": {
+        "type": "integer",
+        "value": 4
+      }
     }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
   ]
 }

@@ -91,33 +91,44 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "update_row_span_left",
-          "url": "div-action://set_variable?name=row_span_left&value=1"
-        },
-        {
-          "log_id": "update_row_span_right",
-          "url": "div-action://set_variable?name=row_span_right&value=2"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "log_id": "update_row_span_left",
+        "url": "div-action://set_variable?name=row_span_left&value=1"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "update_row_span_left",
-          "url": "div-action://set_variable?name=row_span_left&value=2"
-        },
-        {
-          "log_id": "update_row_span_right",
-          "url": "div-action://set_variable?name=row_span_right&value=1"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "div_action",
+      "action": {
+        "log_id": "update_row_span_right",
+        "url": "div-action://set_variable?name=row_span_right&value=2"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "update_row_span_left",
+        "url": "div-action://set_variable?name=row_span_left&value=2"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "update_row_span_right",
+        "url": "div-action://set_variable?name=row_span_right&value=1"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

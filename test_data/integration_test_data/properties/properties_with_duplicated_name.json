@@ -33,17 +33,15 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "expected": [
-        {
-          "type": "error",
-          "value": "Duplicate variable"
-        }
-      ],
-      "platforms": [
-        "web"
+      "type": "verify_errors",
+      "errors": [
+        "Duplicate variable"
       ]
     }
+  ],
+  "platforms": [
+    "web"
   ]
 }

@@ -87,41 +87,52 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=visibility3&value=gone",
-          "log_id": "hide item 3"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=visibility3&value=gone",
+        "log_id": "hide item 3"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=visibility3&value=visible",
-          "log_id": "show item 3"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=visibility1&value=visible",
-          "log_id": "show item 1"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=visibility3&value=visible",
+        "log_id": "show item 3"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=visibility1&value=gone",
-          "log_id": "hide item 1"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=visibility1&value=visible",
+        "log_id": "show item 1"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=visibility1&value=gone",
+        "log_id": "hide item 1"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

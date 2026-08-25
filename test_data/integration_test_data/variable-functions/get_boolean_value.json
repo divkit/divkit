@@ -52,9 +52,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "boolean",
@@ -69,65 +69,71 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change part of name",
-          "url": "div-action://set_variable?name=part_of_name&value=2"
-        }
-      ],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "result",
-          "value": {
-            "type": "boolean",
-            "value": true
+          "type": "div_action",
+          "action": {
+            "log_id": "change part of name",
+            "url": "div-action://set_variable?name=part_of_name&value=2"
           }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "change value",
-          "url": "div-action://set_variable?name=var_1&value=true"
-        }
-      ],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "result",
-          "value": {
-            "type": "boolean",
-            "value": true
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "change part of name",
-          "url": "div-action://set_variable?name=part_of_name&value=2"
         },
         {
-          "log_id": "change value",
-          "url": "div-action://set_variable?name=var_2&value=false"
+          "type": "verify_variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
         }
       ],
-      "expected": [
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
         {
-          "type": "variable",
+          "type": "div_action",
+          "action": {
+            "log_id": "change value",
+            "url": "div-action://set_variable?name=var_1&value=true"
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "result",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "change part of name",
+            "url": "div-action://set_variable?name=part_of_name&value=2"
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "change value",
+            "url": "div-action://set_variable?name=var_2&value=false"
+          }
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "boolean",
@@ -142,23 +148,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change part of name",
-          "url": "div-action://set_variable?name=part_of_name&value=2"
+          "type": "div_action",
+          "action": {
+            "log_id": "change part of name",
+            "url": "div-action://set_variable?name=part_of_name&value=2"
+          }
         },
         {
-          "log_id": "change old value",
-          "url": "div-action://set_variable?name=var_1&value=true"
+          "type": "div_action",
+          "action": {
+            "log_id": "change old value",
+            "url": "div-action://set_variable?name=var_1&value=true"
+          }
         },
         {
-          "log_id": "change old value",
-          "url": "div-action://set_variable?name=var_1&value=false"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change old value",
+            "url": "div-action://set_variable?name=var_1&value=false"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "boolean",
@@ -173,19 +186,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change another value",
-          "url": "div-action://set_variable?name=var_2&value=false"
+          "type": "div_action",
+          "action": {
+            "log_id": "change another value",
+            "url": "div-action://set_variable?name=var_2&value=false"
+          }
         },
         {
-          "log_id": "change part of name",
-          "url": "div-action://set_variable?name=part_of_name&value=2"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change part of name",
+            "url": "div-action://set_variable?name=part_of_name&value=2"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "boolean",

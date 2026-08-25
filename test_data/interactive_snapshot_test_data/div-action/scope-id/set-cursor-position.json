@@ -147,60 +147,72 @@
   },
   "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "set_step_title_outside_input",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "last_action",
-            "value": {
-              "type": "string",
-              "value": "set_cursor_position for target_input in scope_2"
-            }
-          }
-        },
-        {
-          "log_id": "set_cursor_scope_2",
-          "scope_id": "scope_2",
-          "typed": {
-            "type": "set_cursor_position",
-            "id": "target_input",
-            "position": {
-              "type": "absolute",
-              "start": 7,
-              "end": 12
-            }
+      "type": "div_action",
+      "action": {
+        "log_id": "set_step_title_outside_input",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "last_action",
+          "value": {
+            "type": "string",
+            "value": "set_cursor_position for target_input in scope_2"
           }
         }
-      ]
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "set_step_title_outside_input",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "last_action",
-            "value": {
-              "type": "string",
-              "value": "set_cursor_position for outside_input with wrong scope_id"
-            }
-          }
-        },
-        {
-          "log_id": "set_cursor_outside_input",
-          "scope_id": "scope",
-          "typed": {
-            "type": "set_cursor_position",
-            "id": "outside_input",
-            "position": {
-              "type": "absolute",
-              "start": 5,
-              "end": 10
-            }
+      "type": "div_action",
+      "action": {
+        "log_id": "set_cursor_scope_2",
+        "scope_id": "scope_2",
+        "typed": {
+          "type": "set_cursor_position",
+          "id": "target_input",
+          "position": {
+            "type": "absolute",
+            "start": 7,
+            "end": 12
           }
         }
-      ]
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "set_step_title_outside_input",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "last_action",
+          "value": {
+            "type": "string",
+            "value": "set_cursor_position for outside_input with wrong scope_id"
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "set_cursor_outside_input",
+        "scope_id": "scope",
+        "typed": {
+          "type": "set_cursor_position",
+          "id": "outside_input",
+          "position": {
+            "type": "absolute",
+            "start": 5,
+            "end": 10
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

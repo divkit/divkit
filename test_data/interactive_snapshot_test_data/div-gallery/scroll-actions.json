@@ -132,85 +132,107 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_forward?id=gallery1&step=30",
-          "log_id": "scroll_forward"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_forward?id=gallery1&step=30",
+        "log_id": "scroll_forward"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_forward?id=gallery1&step=300&overflow=clamp",
-          "log_id": "scroll_forward_clamp"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_forward?id=gallery1&step=30&overflow=ring",
-          "log_id": "scroll_forward_ring"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_forward?id=gallery1&step=300&overflow=clamp",
+        "log_id": "scroll_forward_clamp"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_backward?id=gallery1&step=60&overflow=ring",
-          "log_id": "scroll_backward_ring"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_backward?id=gallery1&step=300&overflow=clamp",
-          "log_id": "scroll_backward_clamp"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_forward?id=gallery1&step=30&overflow=ring",
+        "log_id": "scroll_forward_ring"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_position?id=gallery1&step=30",
-          "log_id": "scroll_to_position"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_position?id=gallery1&step=300",
-          "log_id": "scroll_to_position_clamp"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_backward?id=gallery1&step=60&overflow=ring",
+        "log_id": "scroll_backward_ring"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_start?id=gallery1",
-          "log_id": "scroll_to_start"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step4"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_end?id=gallery1",
-          "log_id": "scroll_to_end"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_backward?id=gallery1&step=300&overflow=clamp",
+        "log_id": "scroll_backward_clamp"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_position?id=gallery1&step=30",
+        "log_id": "scroll_to_position"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_position?id=gallery1&step=300",
+        "log_id": "scroll_to_position_clamp"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_start?id=gallery1",
+        "log_id": "scroll_to_start"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_end?id=gallery1",
+        "log_id": "scroll_to_end"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
     }
   ]
 }

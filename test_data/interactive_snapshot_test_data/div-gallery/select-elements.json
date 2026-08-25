@@ -109,107 +109,173 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_next_item?id=test_gallery",
-          "log_id": "second item"
-        }
-      ],
-      "delay": 500
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_next_item?id=test_gallery",
+        "log_id": "second item"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_previous_item?id=test_gallery",
-          "log_id": "first item"
-        }
-      ],
-      "delay": 500
+      "type": "wait",
+      "duration_ms": 500
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_previous_item?id=test_gallery&overflow=clamp",
-          "log_id": "first item"
-        }
-      ],
-      "delay": 500
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_previous_item?id=test_gallery&overflow=ring",
-          "log_id": "last item"
-        }
-      ],
-      "delay": 500
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_previous_item?id=test_gallery",
+        "log_id": "first item"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_next_item?id=test_gallery&overflow=clamp",
-          "log_id": "last item"
-        }
-      ],
-      "delay": 500
+      "type": "wait",
+      "duration_ms": 500
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_next_item?id=test_gallery&overflow=ring",
-          "log_id": "first item"
-        }
-      ],
-      "delay": 500
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_current_item?id=test_gallery&item=2",
-          "log_id": "middle item"
-        }
-      ],
-      "delay": 500
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_previous_item?id=test_gallery&overflow=clamp",
+        "log_id": "first item"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_current_item?id=test_gallery&item=-1",
-          "log_id": "middle (nonexistent) item"
-        }
-      ],
-      "delay": 500
+      "type": "wait",
+      "duration_ms": 500
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_next_item?id=test_gallery&step=2",
-          "log_id": "last item"
-        }
-      ],
-      "delay": 500
+      "type": "verify_snapshot",
+      "name": "step3"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_previous_item?id=test_gallery&step=3",
-          "log_id": "second item"
-        }
-      ],
-      "delay": 500
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_previous_item?id=test_gallery&overflow=ring",
+        "log_id": "last item"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_current_item?id=test_gallery&item=0",
-          "log_id": "first item"
-        }
-      ],
-      "expected_screenshot": "step0.png",
-      "delay": 500
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_next_item?id=test_gallery&overflow=clamp",
+        "log_id": "last item"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_next_item?id=test_gallery&overflow=ring",
+        "log_id": "first item"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step6"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_current_item?id=test_gallery&item=2",
+        "log_id": "middle item"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step7"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_current_item?id=test_gallery&item=-1",
+        "log_id": "middle (nonexistent) item"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step8"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_next_item?id=test_gallery&step=2",
+        "log_id": "last item"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step9"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_previous_item?id=test_gallery&step=3",
+        "log_id": "second item"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step10"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_current_item?id=test_gallery&item=0",
+        "log_id": "first item"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

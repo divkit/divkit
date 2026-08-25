@@ -79,139 +79,164 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/current",
-          "typed": {
-            "type": "scroll_to",
-            "id": "gallery1",
-            "destination": {
-              "type": "index",
-              "value": 1
-            }
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/current",
+        "typed": {
+          "type": "scroll_to",
+          "id": "gallery1",
+          "destination": {
+            "type": "index",
+            "value": 1
           }
         }
-      ],
-      "expected_screenshot": "step1.png"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/next",
-          "typed": {
-            "type": "scroll_by",
-            "id": "gallery1",
-            "item_count": 1
-          }
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/prev",
-          "typed": {
-            "type": "scroll_by",
-            "id": "gallery1",
-            "item_count": -1
-          }
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/next",
+        "typed": {
+          "type": "scroll_by",
+          "id": "gallery1",
+          "item_count": 1
         }
-      ],
-      "expected_screenshot": "step1.png"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/end",
-          "typed": {
-            "type": "scroll_to",
-            "destination": {
-              "type": "end"
-            },
-            "id": "gallery1"
-          }
-        }
-      ],
-      "delay": 500,
-      "expected_screenshot": "step4.png"
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/start",
-          "typed": {
-            "type": "scroll_to",
-            "destination": {
-              "type": "start"
-            },
-            "id": "gallery1"
-          }
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/prev",
+        "typed": {
+          "type": "scroll_by",
+          "id": "gallery1",
+          "item_count": -1
         }
-      ],
-      "delay": 500,
-      "expected_screenshot": "step0.png"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/current 2",
-          "typed": {
-            "type": "scroll_to",
-            "id": "gallery1",
-            "destination": {
-              "type": "index",
-              "value": 1
-            }
-          }
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/forward",
-          "typed": {
-            "type": "scroll_by",
-            "id": "gallery1",
-            "offset": 50
-          }
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/end",
+        "typed": {
+          "type": "scroll_to",
+          "destination": {
+            "type": "end"
+          },
+          "id": "gallery1"
         }
-      ],
-      "expected_screenshot": "step7.png"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/backward",
-          "typed": {
-            "type": "scroll_by",
-            "id": "gallery1",
-            "offset": -50
-          }
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "wait",
+      "duration_ms": 500
     },
     {
-      "div_actions": [
-        {
-          "log_id": "gallery1/to_position",
-          "typed": {
-            "type": "scroll_to",
-            "id": "gallery1",
-            "destination": {
-              "type": "offset",
-              "value": 200
-            }
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/start",
+        "typed": {
+          "type": "scroll_to",
+          "destination": {
+            "type": "start"
+          },
+          "id": "gallery1"
+        }
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/current 2",
+        "typed": {
+          "type": "scroll_to",
+          "id": "gallery1",
+          "destination": {
+            "type": "index",
+            "value": 1
           }
         }
-      ],
-      "expected_screenshot": "step9.png"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/forward",
+        "typed": {
+          "type": "scroll_by",
+          "id": "gallery1",
+          "offset": 50
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step7"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/backward",
+        "typed": {
+          "type": "scroll_by",
+          "id": "gallery1",
+          "offset": -50
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "gallery1/to_position",
+        "typed": {
+          "type": "scroll_to",
+          "id": "gallery1",
+          "destination": {
+            "type": "offset",
+            "value": 200
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step9"
     }
   ]
 }

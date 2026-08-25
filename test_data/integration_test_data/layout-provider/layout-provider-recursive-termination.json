@@ -70,9 +70,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "loop_width",
           "value": {
             "type": "integer",

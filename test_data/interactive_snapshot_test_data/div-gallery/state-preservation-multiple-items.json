@@ -254,47 +254,59 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/state_1/active",
-          "log_id": "activate_item1"
-        },
-        {
-          "url": "div-action://set_state?state_id=0/state_2/active",
-          "log_id": "activate_item2"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/state_1/active",
+        "log_id": "activate_item1"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_end?id=multi_state_gallery&animated=false",
-          "log_id": "scroll_to_end"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/state_2/active",
+        "log_id": "activate_item2"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/state_19/active",
-          "log_id": "activate_item19"
-        }
-      ],
-      "expected_screenshot": "step3.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_start?id=multi_state_gallery&animated=false",
-          "log_id": "scroll_to_start"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_end?id=multi_state_gallery&animated=false",
+        "log_id": "scroll_to_end"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/state_19/active",
+        "log_id": "activate_item19"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_start?id=multi_state_gallery&animated=false",
+        "log_id": "scroll_to_start"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

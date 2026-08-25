@@ -132,60 +132,84 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=min_value&value=17",
-          "log_id": "min_value"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=min_value&value=17",
+        "log_id": "min_value"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=max_value&value=168",
-          "log_id": "max_value"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=thumb_value&value=51",
-          "log_id": "thumb_value"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=max_value&value=168",
+        "log_id": "max_value"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=thumb_secondary_value&value=123",
-          "log_id": "thumb_secondary_value"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=min_value&value=0",
-          "log_id": "restore: min_value"
-        },
-        {
-          "url": "div-action://set_variable?name=max_value&value=100",
-          "log_id": "restore: max_value"
-        },
-        {
-          "url": "div-action://set_variable?name=thumb_value&value=30",
-          "log_id": "restore: thumb_value"
-        },
-        {
-          "url": "div-action://set_variable?name=thumb_secondary_value&value=70",
-          "log_id": "restore: thumb_secondary_value"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=thumb_value&value=51",
+        "log_id": "thumb_value"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=thumb_secondary_value&value=123",
+        "log_id": "thumb_secondary_value"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=min_value&value=0",
+        "log_id": "restore: min_value"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=max_value&value=100",
+        "log_id": "restore: max_value"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=thumb_value&value=30",
+        "log_id": "restore: thumb_value"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=thumb_secondary_value&value=70",
+        "log_id": "restore: thumb_secondary_value"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

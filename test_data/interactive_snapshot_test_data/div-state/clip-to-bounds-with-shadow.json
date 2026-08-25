@@ -116,40 +116,52 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=clipping_to_bounds&value=false",
-          "log_id": "clip_to_bounds=false"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=clipping_to_bounds&value=false",
+        "log_id": "clip_to_bounds=false"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/tested/green_100",
-          "log_id": "switch to green"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=clipping_to_bounds&value=true",
-          "log_id": "clip_to_bounds=true"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/tested/green_100",
+        "log_id": "switch to green"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/tested/red_50",
-          "log_id": "back to red"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=clipping_to_bounds&value=true",
+        "log_id": "clip_to_bounds=true"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/tested/red_50",
+        "log_id": "back to red"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

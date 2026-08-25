@@ -85,41 +85,47 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "change part of nested name",
-          "url": "div-action://set_variable?name=part_of_nested_name&value=2"
-        },
-        {
-          "log_id": "change nested name",
-          "url": "div-action://set_variable?name=nested_name_2&value=name_3"
-        },
-        {
-          "log_id": "change name",
-          "url": "div-action://set_variable?name=name_3&value=var_4"
-        },
-        {
-          "log_id": "change value",
-          "url": "div-action://set_variable?name=var_4&value=41"
-        }
-      ],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "result",
-          "value": {
-            "type": "integer",
-            "value": 41
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "change part of nested name",
+        "url": "div-action://set_variable?name=part_of_nested_name&value=2"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change nested name",
+        "url": "div-action://set_variable?name=nested_name_2&value=name_3"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change name",
+        "url": "div-action://set_variable?name=name_3&value=var_4"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change value",
+        "url": "div-action://set_variable?name=var_4&value=41"
+      }
+    },
+    {
+      "type": "verify_variable",
+      "variable_name": "result",
+      "value": {
+        "type": "integer",
+        "value": 41
+      }
     }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
   ]
 }

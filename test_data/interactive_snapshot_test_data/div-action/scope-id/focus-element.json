@@ -148,50 +148,62 @@
   },
   "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "set_step_title_scope_2",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "last_action",
-            "value": {
-              "type": "string",
-              "value": "focus_element for target_input in scope_2"
-            }
-          }
-        },
-        {
-          "log_id": "focus_scope_2",
-          "scope_id": "scope_2",
-          "typed": {
-            "type": "focus_element",
-            "element_id": "target_input"
+      "type": "div_action",
+      "action": {
+        "log_id": "set_step_title_scope_2",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "last_action",
+          "value": {
+            "type": "string",
+            "value": "focus_element for target_input in scope_2"
           }
         }
-      ]
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "set_step_title_outside_input",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "last_action",
-            "value": {
-              "type": "string",
-              "value": "focus_element for outside_input with wrong scope_id"
-            }
-          }
-        },
-        {
-          "log_id": "focus_outside_input",
-          "scope_id": "scope",
-          "typed": {
-            "type": "focus_element",
-            "element_id": "outside_input"
+      "type": "div_action",
+      "action": {
+        "log_id": "focus_scope_2",
+        "scope_id": "scope_2",
+        "typed": {
+          "type": "focus_element",
+          "element_id": "target_input"
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "set_step_title_outside_input",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "last_action",
+          "value": {
+            "type": "string",
+            "value": "focus_element for outside_input with wrong scope_id"
           }
         }
-      ]
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "focus_outside_input",
+        "scope_id": "scope",
+        "typed": {
+          "type": "focus_element",
+          "element_id": "outside_input"
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

@@ -34,15 +34,16 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_state?state_id=0/sample/second",
-          "log_id": "set_second_state"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_state?state_id=0/sample/second",
+            "log_id": "set_second_state"
+          }
+        },
         {
-          "type": "view",
+          "type": "verify_view",
           "id": "text",
           "text": "second state"
         }
@@ -52,19 +53,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_state?state_id=0/sample/second",
-          "log_id": "set_second_state"
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_state?state_id=0/sample/second",
+            "log_id": "set_second_state"
+          }
         },
         {
-          "url": "div-action://set_state?state_id=0/sample/first",
-          "log_id": "return_first_state"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_state?state_id=0/sample/first",
+            "log_id": "return_first_state"
+          }
+        },
         {
-          "type": "view",
+          "type": "verify_view",
           "id": "text",
           "text": "first state"
         }

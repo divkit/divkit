@@ -43,23 +43,26 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "change_color",
-          "scope_id": "local_color_holder",
-          "typed": {
-            "type": "custom"
-          },
-          "payload": {
-            "type": "change_color",
-            "color": "@{target_color}"
-          }
+      "type": "div_action",
+      "action": {
+        "log_id": "change_color",
+        "scope_id": "local_color_holder",
+        "typed": {
+          "type": "custom"
+        },
+        "payload": {
+          "type": "change_color",
+          "color": "@{target_color}"
         }
-      ],
-      "expected_screenshot": "step1.png"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

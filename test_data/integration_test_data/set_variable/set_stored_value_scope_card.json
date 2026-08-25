@@ -43,7 +43,8 @@
           "name": "result_dict_card",
           "type": "dict",
           "value": {}
-        },{
+        },
+        {
           "name": "result_dict_global",
           "type": "dict",
           "value": {}
@@ -61,34 +62,38 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set without scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_set_default",
-            "lifetime": 100,
-            "value": {
-              "type": "string",
-              "value": "typed_default_global"
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set without scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_set_default",
+              "lifetime": 100,
+              "value": {
+                "type": "string",
+                "value": "typed_default_global"
+              }
             }
           }
         },
         {
-          "log_id": "read card after default set",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result_card",
-            "value": {
-              "type": "string",
-              "value": "@{getStoredStringValue('stored_set_default', 'card', 'fallback')}"
+          "type": "div_action",
+          "action": {
+            "log_id": "read card after default set",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result_card",
+              "value": {
+                "type": "string",
+                "value": "@{getStoredStringValue('stored_set_default', 'card', 'fallback')}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_card",
           "value": {
             "type": "string",
@@ -103,33 +108,37 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set array card scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_set_array_card",
-            "scope": "card",
-            "lifetime": 100,
-            "value": {
-              "type": "array",
-              "value": [
-                true,
-                1,
-                1.0,
-                "typed_card_array"
-              ]
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set array card scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_set_array_card",
+              "scope": "card",
+              "lifetime": 100,
+              "value": {
+                "type": "array",
+                "value": [
+                  true,
+                  1,
+                  1.0,
+                  "typed_card_array"
+                ]
+              }
             }
           }
         },
         {
-          "log_id": "read array with card scope after card scoped set",
-          "url": "div-action://set_variable?name=result_array_card&value=@{getStoredArrayValue('stored_set_array_card', 'card')}"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "read array with card scope after card scoped set",
+            "url": "div-action://set_variable?name=result_array_card&value=@{getStoredArrayValue('stored_set_array_card', 'card')}"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_array_card",
           "value": {
             "type": "array",
@@ -149,33 +158,37 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set dict card scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_set_dict_card",
-            "scope": "card",
-            "lifetime": 100,
-            "value": {
-              "type": "dict",
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set dict card scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_set_dict_card",
+              "scope": "card",
+              "lifetime": 100,
               "value": {
-                "boolean": true,
-                "integer": 1,
-                "number": 1.0,
-                "string": "typed_card_dict"
+                "type": "dict",
+                "value": {
+                  "boolean": true,
+                  "integer": 1,
+                  "number": 1.0,
+                  "string": "typed_card_dict"
+                }
               }
             }
           }
         },
         {
-          "log_id": "read dict with card scope after card scoped set",
-          "url": "div-action://set_variable?name=result_dict_card&value=@{getStoredDictValue('stored_set_dict_card', 'card')}"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "read dict with card scope after card scoped set",
+            "url": "div-action://set_variable?name=result_dict_card&value=@{getStoredDictValue('stored_set_dict_card', 'card')}"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_dict_card",
           "value": {
             "type": "dict",
@@ -195,35 +208,39 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set card scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_set_card",
-            "scope": "card",
-            "lifetime": 100,
-            "value": {
-              "type": "string",
-              "value": "typed_card_scoped"
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set card scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_set_card",
+              "scope": "card",
+              "lifetime": 100,
+              "value": {
+                "type": "string",
+                "value": "typed_card_scoped"
+              }
             }
           }
         },
         {
-          "log_id": "read card after card set",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result_card",
-            "value": {
-              "type": "string",
-              "value": "@{getStoredStringValue('stored_set_card', 'card', 'fallback')}"
+          "type": "div_action",
+          "action": {
+            "log_id": "read card after card set",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result_card",
+              "value": {
+                "type": "string",
+                "value": "@{getStoredStringValue('stored_set_card', 'card', 'fallback')}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_card",
           "value": {
             "type": "string",
@@ -238,35 +255,39 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set global scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_key_global_scope",
-            "scope": "global",
-            "lifetime": 100,
-            "value": {
-              "type": "string",
-              "value": "typed_scope_global"
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set global scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_key_global_scope",
+              "scope": "global",
+              "lifetime": 100,
+              "value": {
+                "type": "string",
+                "value": "typed_scope_global"
+              }
             }
           }
         },
         {
-          "log_id": "read explicit card fallback from global scope write",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result_card",
-            "value": {
-              "type": "string",
-              "value": "@{getStoredStringValue('stored_key_global_scope', 'card', 'fallback')}"
+          "type": "div_action",
+          "action": {
+            "log_id": "read explicit card fallback from global scope write",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result_card",
+              "value": {
+                "type": "string",
+                "value": "@{getStoredStringValue('stored_key_global_scope', 'card', 'fallback')}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_card",
           "value": {
             "type": "string",
@@ -281,35 +302,39 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set unknown scope defaults to global",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_key_unknown_scope",
-            "scope": "unexpected_scope",
-            "lifetime": 100,
-            "value": {
-              "type": "string",
-              "value": "typed_unknown_scope_global"
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set unknown scope defaults to global",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_key_unknown_scope",
+              "scope": "unexpected_scope",
+              "lifetime": 100,
+              "value": {
+                "type": "string",
+                "value": "typed_unknown_scope_global"
+              }
             }
           }
         },
         {
-          "log_id": "read explicit card fallback from unknown scope write",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result_card",
-            "value": {
-              "type": "string",
-              "value": "@{getStoredStringValue('stored_key_unknown_scope', 'card', 'fallback')}"
+          "type": "div_action",
+          "action": {
+            "log_id": "read explicit card fallback from unknown scope write",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result_card",
+              "value": {
+                "type": "string",
+                "value": "@{getStoredStringValue('stored_key_unknown_scope', 'card', 'fallback')}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_card",
           "value": {
             "type": "string",
@@ -324,31 +349,35 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set array without scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_set_array_default",
-            "lifetime": 100,
-            "value": {
-              "type": "array",
-              "value": [
-                1,
-                2,
-                3
-              ]
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set array without scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_set_array_default",
+              "lifetime": 100,
+              "value": {
+                "type": "array",
+                "value": [
+                  1,
+                  2,
+                  3
+                ]
+              }
             }
           }
         },
         {
-          "log_id": "read array with card scope after typed set",
-          "url": "div-action://set_variable?name=result_array_card&value=@{getStoredArrayValue('stored_set_array_default', 'card')}"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "read array with card scope after typed set",
+            "url": "div-action://set_variable?name=result_array_card&value=@{getStoredArrayValue('stored_set_array_default', 'card')}"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_array_card",
           "value": {
             "type": "array",
@@ -365,35 +394,41 @@
       }
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set array without scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_set_array_default",
-            "lifetime": 100,
-            "value": {
-              "type": "array",
-              "value": [
-                1,
-                2,
-                3
-              ]
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set array without scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_set_array_default",
+              "lifetime": 100,
+              "value": {
+                "type": "array",
+                "value": [
+                  1,
+                  2,
+                  3
+                ]
+              }
             }
           }
         },
         {
-          "log_id": "read array with card scope after typed set",
-          "url": "div-action://set_variable?name=result_array_card&value=@{getStoredArrayValue('stored_set_array_default', 'card')}"
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Failed to evaluate [getStoredArrayValue('stored_set_array_default', 'card')]. Missing value."
+          "type": "div_action",
+          "action": {
+            "log_id": "read array with card scope after typed set",
+            "url": "div-action://set_variable?name=result_array_card&value=@{getStoredArrayValue('stored_set_array_default', 'card')}"
+          }
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Failed to evaluate [getStoredArrayValue('stored_set_array_default', 'card')]. Missing value."
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "result_array_card",
           "value": {
             "type": "array",
@@ -407,32 +442,36 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set dict without scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_set_dict_default",
-            "lifetime": 100,
-            "value": {
-              "type": "dict",
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set dict without scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_set_dict_default",
+              "lifetime": 100,
               "value": {
-                "boolean": true,
-                "integer": 1,
-                "number": 1.0,
-                "string": "typed_default_dict"
+                "type": "dict",
+                "value": {
+                  "boolean": true,
+                  "integer": 1,
+                  "number": 1.0,
+                  "string": "typed_default_dict"
+                }
               }
             }
           }
         },
         {
-          "log_id": "read dict with card scope after typed set",
-          "url": "div-action://set_variable?name=result_dict_card&value=@{getStoredDictValue('stored_set_dict_default', 'card')}"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "read dict with card scope after typed set",
+            "url": "div-action://set_variable?name=result_dict_card&value=@{getStoredDictValue('stored_set_dict_default', 'card')}"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_dict_card",
           "value": {
             "type": "dict",
@@ -449,36 +488,42 @@
       }
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "typed set dict without scope",
-          "typed": {
-            "type": "set_stored_value",
-            "name": "stored_set_dict_default",
-            "lifetime": 100,
-            "value": {
-              "type": "dict",
+          "type": "div_action",
+          "action": {
+            "log_id": "typed set dict without scope",
+            "typed": {
+              "type": "set_stored_value",
+              "name": "stored_set_dict_default",
+              "lifetime": 100,
               "value": {
-                "boolean": true,
-                "integer": 1,
-                "number": 1.0,
-                "string": "typed_default_dict"
+                "type": "dict",
+                "value": {
+                  "boolean": true,
+                  "integer": 1,
+                  "number": 1.0,
+                  "string": "typed_default_dict"
+                }
               }
             }
           }
         },
         {
-          "log_id": "read dict with card scope after typed set",
-          "url": "div-action://set_variable?name=result_dict_card&value=@{getStoredDictValue('stored_set_dict_default', 'card')}"
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Failed to evaluate [getStoredDictValue('stored_set_dict_default', 'card')]. Missing value."
+          "type": "div_action",
+          "action": {
+            "log_id": "read dict with card scope after typed set",
+            "url": "div-action://set_variable?name=result_dict_card&value=@{getStoredDictValue('stored_set_dict_default', 'card')}"
+          }
         },
         {
-          "type": "variable",
+          "type": "verify_errors",
+          "errors": [
+            "Failed to evaluate [getStoredDictValue('stored_set_dict_default', 'card')]. Missing value."
+          ]
+        },
+        {
+          "type": "verify_variable",
           "variable_name": "result_dict_card",
           "value": {
             "type": "dict",
@@ -492,30 +537,37 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "url set card scope",
-          "url": "div-action://set_stored_value?name=stored_set_url_card&value=https%3A%2F%2Fya.ru&type=url&lifetime=100&scope=card"
+          "type": "div_action",
+          "action": {
+            "log_id": "url set card scope",
+            "url": "div-action://set_stored_value?name=stored_set_url_card&value=https%3A%2F%2Fya.ru&type=url&lifetime=100&scope=card"
+          }
         },
         {
-          "log_id": "url set unknown scope defaults to global",
-          "url": "div-action://set_stored_value?name=stored_set_url_unknown&value=https%3A%2F%2Fyandex.by&type=url&lifetime=100&scope=unexpected"
+          "type": "div_action",
+          "action": {
+            "log_id": "url set unknown scope defaults to global",
+            "url": "div-action://set_stored_value?name=stored_set_url_unknown&value=https%3A%2F%2Fyandex.by&type=url&lifetime=100&scope=unexpected"
+          }
         },
         {
-          "log_id": "read card from card url set",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result_card",
-            "value": {
-              "type": "string",
-              "value": "@{getStoredUrlValue('stored_set_url_card', 'card', 'https://test.ru')}"
+          "type": "div_action",
+          "action": {
+            "log_id": "read card from card url set",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result_card",
+              "value": {
+                "type": "string",
+                "value": "@{getStoredUrlValue('stored_set_url_card', 'card', 'https://test.ru')}"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result_card",
           "value": {
             "type": "string",

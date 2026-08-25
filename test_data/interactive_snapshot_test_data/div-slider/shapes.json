@@ -234,68 +234,95 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=slider_rect_height&value=48",
-          "log_id": "bigger thumb height"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=slider_rect_height&value=48",
+        "log_id": "bigger thumb height"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=slider_rect_width&value=48",
-          "log_id": "bigger thumb width"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=slider_rect_radius&value=15",
-          "log_id": "bigger thumb corner radius"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=slider_rect_width&value=48",
+        "log_id": "bigger thumb width"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/state_container/circle",
-          "log_id": "state with circle shapes"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=slider_circle_radius&value=24",
-          "log_id": "bigger thumb radius"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=slider_rect_radius&value=15",
+        "log_id": "bigger thumb corner radius"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=slider_rect_height&value=32",
-          "log_id": "restore: slider_rect_height"
-        },
-        {
-          "url": "div-action://set_variable?name=slider_rect_width&value=32",
-          "log_id": "restore: slider_rect_width"
-        },
-        {
-          "url": "div-action://set_variable?name=slider_rect_radius&value=10",
-          "log_id": "restore: slider_rect_radius"
-        },
-        {
-          "url": "div-action://set_state?state_id=0/state_container/rect",
-          "log_id": "restore: state"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/state_container/circle",
+        "log_id": "state with circle shapes"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=slider_circle_radius&value=24",
+        "log_id": "bigger thumb radius"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=slider_rect_height&value=32",
+        "log_id": "restore: slider_rect_height"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=slider_rect_width&value=32",
+        "log_id": "restore: slider_rect_width"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=slider_rect_radius&value=10",
+        "log_id": "restore: slider_rect_radius"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/state_container/rect",
+        "log_id": "restore: state"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

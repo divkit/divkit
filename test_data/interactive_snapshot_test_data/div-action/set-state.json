@@ -39,25 +39,30 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/sample/second",
-          "log_id": "set_second_state"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/sample/second",
+        "log_id": "set_second_state"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/sample/first",
-          "log_id": "return_first_state"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/sample/first",
+        "log_id": "return_first_state"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

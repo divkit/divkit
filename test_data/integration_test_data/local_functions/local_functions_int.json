@@ -78,15 +78,16 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check increment with integer variable",
-          "url": "div-action://set_variable?name=step&value=0"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check increment with integer variable",
+            "url": "div-action://set_variable?name=step&value=0"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -101,15 +102,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check increment with integer",
-          "url": "div-action://set_variable?name=step&value=1"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check increment with integer",
+            "url": "div-action://set_variable?name=step&value=1"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -124,16 +126,19 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check method",
-          "url": "div-action://set_variable?name=step&value=2"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check method",
+            "url": "div-action://set_variable?name=step&value=2"
+          }
+        },
         {
-          "type": "error",
-          "value": "Failed to evaluate [increment(2)]. Unknown method name: increment."
+          "type": "verify_errors",
+          "errors": [
+            "Failed to evaluate [increment(2)]. Unknown method name: increment."
+          ]
         }
       ],
       "platforms": [
@@ -142,16 +147,19 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check method",
-          "url": "div-action://set_variable?name=step&value=2"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check method",
+            "url": "div-action://set_variable?name=step&value=2"
+          }
+        },
         {
-          "type": "error",
-          "value": "Failed to evaluate [increment(2)]. Unknown method name: increment. Expression: div-action://set_variable?name=integer_var&value=@{array_var.increment(2)}"
+          "type": "verify_errors",
+          "errors": [
+            "Failed to evaluate [increment(2)]. Unknown method name: increment. Expression: div-action://set_variable?name=integer_var&value=@{array_var.increment(2)}"
+          ]
         }
       ],
       "platforms": [

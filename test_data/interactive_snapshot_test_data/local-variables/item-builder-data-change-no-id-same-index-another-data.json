@@ -100,46 +100,58 @@
   },
   "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "change text",
-          "url": "div-action://set_variable?name=step&value=1"
-        },
-        {
-          "log_id": "change expected text",
-          "url": "div-action://set_variable?name=expected&value=changed%20text"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "change text",
+        "url": "div-action://set_variable?name=step&value=1"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "set new data",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "data",
-            "value": {
-              "type": "array",
-              "value": [
-                {
-                  "item_type": "stub"
-                },
-                {
-                  "item_type": "test",
-                  "property": "new"
-                },
-                {
-                  "item_type": "expected"
-                }
-              ]
-            }
+      "type": "div_action",
+      "action": {
+        "log_id": "change expected text",
+        "url": "div-action://set_variable?name=expected&value=changed%20text"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "set new data",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "data",
+          "value": {
+            "type": "array",
+            "value": [
+              {
+                "item_type": "stub"
+              },
+              {
+                "item_type": "test",
+                "property": "new"
+              },
+              {
+                "item_type": "expected"
+              }
+            ]
           }
-        },
-        {
-          "log_id": "change expected text",
-          "url": "div-action://set_variable?name=expected&value=initial%20text"
         }
-      ]
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change expected text",
+        "url": "div-action://set_variable?name=expected&value=initial%20text"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

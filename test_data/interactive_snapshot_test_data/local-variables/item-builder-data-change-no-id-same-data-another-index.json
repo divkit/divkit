@@ -101,38 +101,50 @@
   },
   "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "change text",
-          "url": "div-action://set_variable?name=step&value=1"
-        },
-        {
-          "log_id": "change expected text",
-          "url": "div-action://set_variable?name=expected&value=changed%20text"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "change text",
+        "url": "div-action://set_variable?name=step&value=1"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "add item",
-          "typed": {
-            "type": "array_insert_value",
-            "variable_name": "data",
-            "index": 1,
+      "type": "div_action",
+      "action": {
+        "log_id": "change expected text",
+        "url": "div-action://set_variable?name=expected&value=changed%20text"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "add item",
+        "typed": {
+          "type": "array_insert_value",
+          "variable_name": "data",
+          "index": 1,
+          "value": {
+            "type": "dict",
             "value": {
-              "type": "dict",
-              "value": {
-                "item_type": "stub"
-              }
+              "item_type": "stub"
             }
           }
-        },
-        {
-          "log_id": "change expected text",
-          "url": "div-action://set_variable?name=expected&value=initial%20text"
         }
-      ]
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change expected text",
+        "url": "div-action://set_variable?name=expected&value=initial%20text"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

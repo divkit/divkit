@@ -11,8 +11,8 @@ object IntegrationTestCaseParser {
         jsonString: String
     ): List<ParsingResult<IntegrationTestCase>> {
         val json = JSONObject(jsonString)
-        return json.getJSONArray("cases")
-            .toObjectList()
+        val cases = json.optJSONArray("cases")?.toObjectList() ?: listOf(json)
+        return cases
             .mapIndexedNotNull { index, jsonObject ->
                 if (!jsonObject.isForAndroid) {
                     return@mapIndexedNotNull null
@@ -38,7 +38,28 @@ private fun JSONObject.parseTestCase(
     index: Int,
     divData: JSONObject
 ): IntegrationTestCase {
-    val actions = optJSONArray("div_actions").toObjectList()
+    val actions = mutableListOf<JSONObject>()
+    val expectedResults = mutableListOf<IntegrationTestCase.ExpectedResult>()
+    var verificationFound = false
+
+    getJSONArray("steps").toObjectList().forEach { step ->
+        when (val type = step.getString("type")) {
+            "div_action" -> {
+                if (verificationFound) {
+                    throw JSONException(
+                        "div_action after verification is not supported by the Android integration runner"
+                    )
+                }
+                actions.add(step.getJSONObject("action"))
+            }
+            "verify_variable", "verify_errors", "verify_view" -> {
+                verificationFound = true
+                expectedResults.add(step.parseExpectedResult())
+            }
+            else -> throw JSONException("Unknown integration step type: $type")
+        }
+    }
+
     var name = "$fileName Case $index"
     actions.forEach {
         name += ", ${it.getString("log_id")}"
@@ -48,15 +69,13 @@ private fun JSONObject.parseTestCase(
         name = name,
         divData = divData,
         actions = actions,
-        expectedResults = getJSONArray("expected")
-            .toObjectList()
-            .map { it.parseExpectedResult() }
+        expectedResults = expectedResults
     )
 }
 
 private fun JSONObject.parseExpectedResult(): IntegrationTestCase.ExpectedResult {
     return when (val type = getString("type")) {
-        "variable" -> {
+        "verify_variable" -> {
             val value = getJSONObject("value")
             IntegrationTestCase.ExpectedResult.Variable(
                 name = getString("variable_name"),
@@ -64,9 +83,14 @@ private fun JSONObject.parseExpectedResult(): IntegrationTestCase.ExpectedResult
                 value = value.getVariableValue()
             )
         }
-        "error" -> IntegrationTestCase.ExpectedResult.Error(getString("value"))
+        "verify_errors" -> {
+            val errors = getJSONArray("errors")
+            IntegrationTestCase.ExpectedResult.Errors(
+                List(errors.length()) { errors.getString(it) }
+            )
+        }
 
-        "view" -> {
+        "verify_view" -> {
             IntegrationTestCase.ExpectedResult.View(
                 id = getString("id"),
                 isShown = optBoolean("shown", true),

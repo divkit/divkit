@@ -55,9 +55,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "source",
           "value": {
             "type": "dict",
@@ -68,7 +68,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "title",
           "value": {
             "type": "string",
@@ -83,15 +83,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=title&value=New Title",
-          "log_id": "set_string_var"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=title&value=New Title",
+            "log_id": "set_string_var"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "source",
           "value": {
             "type": "dict",
@@ -102,7 +103,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "title",
           "value": {
             "type": "string",

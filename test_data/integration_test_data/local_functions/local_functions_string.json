@@ -37,8 +37,7 @@
                 "name": "captureFunction",
                 "body": "@{len(string_var)}",
                 "return_type": "string",
-                "arguments": [
-                ]
+                "arguments": []
               }
             ],
             "variable_triggers": [
@@ -77,15 +76,16 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check stringLen with string variable",
-          "url": "div-action://set_variable?name=step&value=0"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check stringLen with string variable",
+            "url": "div-action://set_variable?name=step&value=0"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -100,15 +100,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check stringLen with string",
-          "url": "div-action://set_variable?name=step&value=1"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check stringLen with string",
+            "url": "div-action://set_variable?name=step&value=1"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -123,16 +124,19 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check wrong type",
-          "url": "div-action://set_variable?name=step&value=2"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check wrong type",
+            "url": "div-action://set_variable?name=step&value=2"
+          }
+        },
         {
-          "type": "error",
-          "value": "Failed to evaluate [captureFunction('test')]. Exactly 0 argument(s) expected. Expression: div-action://set_variable?name=string_var&value=@{captureFunction(string_var)}"
+          "type": "verify_errors",
+          "errors": [
+            "Failed to evaluate [captureFunction('test')]. Exactly 0 argument(s) expected. Expression: div-action://set_variable?name=string_var&value=@{captureFunction(string_var)}"
+          ]
         }
       ],
       "platforms": [
@@ -143,16 +147,19 @@
       }
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check wrong type",
-          "url": "div-action://set_variable?name=step&value=2"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check wrong type",
+            "url": "div-action://set_variable?name=step&value=2"
+          }
+        },
         {
-          "type": "error",
-          "value": "Failed to evaluate [captureFunction('test')]. Exactly 0 argument(s) expected."
+          "type": "verify_errors",
+          "errors": [
+            "Failed to evaluate [captureFunction('test')]. Exactly 0 argument(s) expected."
+          ]
         }
       ],
       "platforms": [

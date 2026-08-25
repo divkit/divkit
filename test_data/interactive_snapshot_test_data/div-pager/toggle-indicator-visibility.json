@@ -158,62 +158,68 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "data",
-            "value": {
-              "type": "array",
-              "value": [
-                {
-                  "style": "with_image",
-                  "title": "First card with image",
-                  "image_url": "https://yastatic.net/s3/home/divkit/chess.png"
-                }
-              ]
-            }
-          },
-          "log_id": "set new data"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "data",
+          "value": {
+            "type": "array",
+            "value": [
+              {
+                "style": "with_image",
+                "title": "First card with image",
+                "image_url": "https://yastatic.net/s3/home/divkit/chess.png"
+              }
+            ]
+          }
+        },
+        "log_id": "set new data"
+      }
     },
     {
-      "div_actions": [
-        {
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "data",
-            "value": {
-              "type": "array",
-              "value": [
-                {
-                  "style": "only_text",
-                  "title": "First text card"
-                },
-                {
-                  "style": "only_text",
-                  "title": "Second text card"
-                },
-                {
-                  "style": "with_image",
-                  "title": "Card with image",
-                  "image_url": "https://yastatic.net/s3/home/divkit/chess.png"
-                },
-                {
-                  "style": "only_text",
-                  "title": "Third text card"
-                }
-              ]
-            }
-          },
-          "log_id": "restore data"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "data",
+          "value": {
+            "type": "array",
+            "value": [
+              {
+                "style": "only_text",
+                "title": "First text card"
+              },
+              {
+                "style": "only_text",
+                "title": "Second text card"
+              },
+              {
+                "style": "with_image",
+                "title": "Card with image",
+                "image_url": "https://yastatic.net/s3/home/divkit/chess.png"
+              },
+              {
+                "style": "only_text",
+                "title": "Third text card"
+              }
+            ]
+          }
+        },
+        "log_id": "restore data"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

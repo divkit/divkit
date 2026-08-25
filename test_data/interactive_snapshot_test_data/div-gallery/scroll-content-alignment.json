@@ -194,271 +194,332 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "set_active_0",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "active_item",
-            "value": {
-              "type": "integer",
-              "value": 0
-            }
-          }
-        },
-        {
-          "log_id": "g_default_start/scrollTo0",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_start",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 0
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_start/scrollTo0",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_start",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 0
-            }
-          }
-        },
-        {
-          "log_id": "g_default_center/scrollTo0",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_center",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 0
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_center/scrollTo0",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_center",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 0
-            }
-          }
-        },
-        {
-          "log_id": "g_default_end/scrollTo0",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_end",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 0
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_end/scrollTo0",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_end",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 0
-            }
+      "type": "div_action",
+      "action": {
+        "log_id": "set_active_0",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "active_item",
+          "value": {
+            "type": "integer",
+            "value": 0
           }
         }
-      ],
-      "expected_screenshot": "step1.png"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "set_active_2",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "active_item",
-            "value": {
-              "type": "integer",
-              "value": 2
-            }
-          }
-        },
-        {
-          "log_id": "g_default_start/scrollTo2",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_start",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 2
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_start/scrollTo2",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_start",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 2
-            }
-          }
-        },
-        {
-          "log_id": "g_default_center/scrollTo2",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_center",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 2
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_center/scrollTo2",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_center",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 2
-            }
-          }
-        },
-        {
-          "log_id": "g_default_end/scrollTo2",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_end",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 2
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_end/scrollTo2",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_end",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 2
-            }
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_start/scrollTo0",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_start",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 0
           }
         }
-      ],
-      "expected_screenshot": "step2.png"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "set_active_5",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "active_item",
-            "value": {
-              "type": "integer",
-              "value": 5
-            }
-          }
-        },
-        {
-          "log_id": "g_default_start/scrollToLast",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_start",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 5
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_start/scrollToLast",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_start",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 5
-            }
-          }
-        },
-        {
-          "log_id": "g_default_center/scrollToLast",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_center",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 5
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_center/scrollToLast",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_center",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 5
-            }
-          }
-        },
-        {
-          "log_id": "g_default_end/scrollToLast",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_default_end",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 5
-            }
-          }
-        },
-        {
-          "log_id": "g_paging_end/scrollToLast",
-          "typed": {
-            "type": "scroll_to",
-            "id": "g_paging_end",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 5
-            }
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_start/scrollTo0",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_start",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 0
           }
         }
-      ],
-      "expected_screenshot": "step3.png"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_center/scrollTo0",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_center",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_center/scrollTo0",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_center",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_end/scrollTo0",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_end",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_end/scrollTo0",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_end",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 0
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "set_active_2",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "active_item",
+          "value": {
+            "type": "integer",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_start/scrollTo2",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_start",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_start/scrollTo2",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_start",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_center/scrollTo2",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_center",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_center/scrollTo2",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_center",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_end/scrollTo2",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_end",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_end/scrollTo2",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_end",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 2
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "set_active_5",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "active_item",
+          "value": {
+            "type": "integer",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_start/scrollToLast",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_start",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_start/scrollToLast",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_start",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_center/scrollToLast",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_center",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_center/scrollToLast",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_center",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_default_end/scrollToLast",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_default_end",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "g_paging_end/scrollToLast",
+        "typed": {
+          "type": "scroll_to",
+          "id": "g_paging_end",
+          "animated": false,
+          "destination": {
+            "type": "index",
+            "value": 5
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
     }
   ]
 }

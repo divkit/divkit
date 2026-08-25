@@ -76,34 +76,41 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=locale&value=ru-RU",
-          "log_id": "change locale"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=locale&value=ru-RU",
+        "log_id": "change locale"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=raw_input&value=1234567890",
-          "log_id": "set bigger number"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=locale&value=en-US",
-          "log_id": "change locale back"
-        }
-      ],
-      "expected_screenshot": "step3.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=raw_input&value=1234567890",
+        "log_id": "set bigger number"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=locale&value=en-US",
+        "log_id": "change locale back"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
     }
   ]
 }

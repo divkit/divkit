@@ -79,25 +79,30 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_next_item?id=gallery&animated=false",
-          "log_id": "scroll_forward"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_next_item?id=gallery&animated=false",
+        "log_id": "scroll_forward"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_end?id=gallery&animated=false",
-          "log_id": "scroll_to_end"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_end?id=gallery&animated=false",
+        "log_id": "scroll_to_end"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
     }
   ]
 }

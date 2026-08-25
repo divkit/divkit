@@ -63,10 +63,10 @@ private func runTest(_ testData: IntegrationTestData) async {
   let testCase = testData.testCase
   let reporter = MockReporter()
   DivKitLogger.isEnabled = true
-  DivKitLogger.setLogger { reporter.insertErrorMessage($0) }
+  DivKitLogger.setLogger { reporter.insertLoggedErrorMessage($0) }
 
   for deserializationErrorMessage in testData.deserializationErrorMessages {
-    reporter.insertErrorMessage(deserializationErrorMessage)
+    reporter.insertLoggedErrorMessage(deserializationErrorMessage)
   }
 
   let globalStorage = DivVariableStorage()
@@ -144,17 +144,8 @@ private func runTest(_ testData: IntegrationTestData) async {
           )
         }
 
-      case let .error(message):
-        XCTAssert(
-          reporter.errorMessages.contains(message),
-          "Error: [\(message)] is not found in errors: \(reporter.errorMessages)"
-        )
-
-      case let .action(logId):
-        XCTAssert(
-          reporter.reportedLogIds.contains(logId),
-          "Action with log_id [\(logId)] was not reported. Reported: \(reporter.reportedLogIds)"
-        )
+      case let .errors(messages):
+        XCTAssertEqual(reporter.errorMessages, Set(messages))
       }
     }
   }
@@ -192,18 +183,22 @@ private func waitForExpectedVariables(
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
   private(set) var errorMessages = Set<String>()
-  private(set) var reportedLogIds = Set<String>()
 
   func reportError(cardId _: DivCardID, error: DivError) {
     errorMessages.insert(error.message)
   }
 
-  func reportAction(cardId _: DivCardID, info: DivActionInfo) {
-    reportedLogIds.insert(info.logId)
+  func insertLoggedErrorMessage(_ message: String) {
+    errorMessages.insert(message.removingDivErrorPathPrefix)
   }
+}
 
-  func insertErrorMessage(_ message: String) {
-    errorMessages.insert(message)
+extension String {
+  fileprivate var removingDivErrorPathPrefix: String {
+    guard hasPrefix("["), let prefixEnd = range(of: "]: ") else {
+      return self
+    }
+    return String(self[prefixEnd.upperBound...])
   }
 }
 
@@ -223,7 +218,12 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
     let json = try JSONSerialization.jsonObject(with: data) as! [String: Any]
     self.description = json["description"] as! String
 
-    let casesJson = (json["cases"] as! [[String: Any]]).filter(Platform.isSupported(by:))
+    let allCasesJson: [[String: Any]] = if json["steps"] != nil {
+      [json]
+    } else {
+      json["cases"] as! [[String: Any]]
+    }
+    let casesJson = allCasesJson.filter(Platform.isSupported(by:))
     if casesJson.isEmpty {
       self.divData = nil
       self.deserializationErrorMessages = []
@@ -263,12 +263,62 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
 
 private struct IntegrationTestCase: Decodable {
   private enum CodingKeys: String, CodingKey {
-    case divActions = "div_actions", expected, platforms
+    case action, steps, type
+  }
+
+  private enum Step: Decodable {
+    case action(DivAction)
+    case expected(Expected)
+
+    init(from decoder: Decoder) throws {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+      let type = try container.decode(String.self, forKey: .type)
+
+      switch type {
+      case "div_action":
+        self = try .action(container.decode(DivAction.self, forKey: .action))
+      case "verify_variable", "verify_errors":
+        self = try .expected(Expected(from: decoder))
+      default:
+        throw DecodingError.dataCorruptedError(
+          forKey: .type,
+          in: container,
+          debugDescription: "Unsupported integration step type: \(type)"
+        )
+      }
+    }
   }
 
   let divActions: [DivAction]?
   let expected: [Expected]
-  let platforms: [Platform]
+
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    let steps = try container.decode([Step].self, forKey: .steps)
+    var actions: [DivAction] = []
+    var expected: [Expected] = []
+    var verificationFound = false
+
+    for step in steps {
+      switch step {
+      case let .action(action):
+        guard !verificationFound else {
+          throw DecodingError.dataCorruptedError(
+            forKey: .steps,
+            in: container,
+            debugDescription: "div_action after verification is not supported by the iOS integration runner"
+          )
+        }
+        actions.append(action)
+      case let .expected(value):
+        verificationFound = true
+        expected.append(value)
+      }
+    }
+
+    self.divActions = actions.isEmpty ? nil : actions
+    self.expected = expected
+  }
 }
 
 private extension DivData {
@@ -288,11 +338,10 @@ private extension Div {
 
 private enum Expected: Decodable {
   case variable(String, ExpectedValue)
-  case error(String)
-  case action(String)
+  case errors([String])
 
   private enum CodingKeys: String, CodingKey {
-    case variableName = "variable_name", type, value
+    case errors, variableName = "variable_name", type, value
   }
 
   init(from decoder: Decoder) throws {
@@ -300,14 +349,12 @@ private enum Expected: Decodable {
 
     let type = try container.decode(String.self, forKey: .type)
     switch type {
-    case "variable":
+    case "verify_variable":
       let variable = try container.decode(ExpectedValue.self, forKey: .value)
       let variableName = try container.decode(String.self, forKey: .variableName)
       self = .variable(variableName, variable)
-    case "error":
-      self = try .error(container.decode(String.self, forKey: .value))
-    case "action":
-      self = try .action(container.decode(String.self, forKey: .value))
+    case "verify_errors":
+      self = try .errors(container.decode([String].self, forKey: .errors))
     default:
       throw DecodingError.valueNotFound(
         String.self,
@@ -409,8 +456,7 @@ extension [Expected] {
         if let defaultValue = makeDefault(value) {
           $0[DivVariableName(rawValue: name)] = defaultValue
         }
-      case .error: break
-      case .action: break
+      case .errors: break
       }
     }
   }

@@ -50,9 +50,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "source",
           "value": {
             "type": "dict",
@@ -62,7 +62,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "price_prop",
           "value": {
             "type": "number",
@@ -77,15 +77,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=price_prop&value=123.45",
-          "log_id": "set_num_var"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=price_prop&value=123.45",
+            "log_id": "set_num_var"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "source",
           "value": {
             "type": "dict",
@@ -95,7 +96,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "price_prop",
           "value": {
             "type": "number",

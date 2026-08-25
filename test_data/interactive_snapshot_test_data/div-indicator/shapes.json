@@ -258,68 +258,95 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=rect_height&value=4",
-          "log_id": "bigger indicator height"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=rect_height&value=4",
+        "log_id": "bigger indicator height"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=rect_width&value=12",
-          "log_id": "bigger indicator width"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=rect_corner_radius&value=5",
-          "log_id": "bigger indicator corner radius"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=rect_width&value=12",
+        "log_id": "bigger indicator width"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/state_container/circle",
-          "log_id": "state with circle shape"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=circle_radius&value=6",
-          "log_id": "bigger indicator radius"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=rect_corner_radius&value=5",
+        "log_id": "bigger indicator corner radius"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=rect_height&value=2",
-          "log_id": "restore: rect_height"
-        },
-        {
-          "url": "div-action://set_variable?name=rect_width&value=8",
-          "log_id": "restore: rect_width"
-        },
-        {
-          "url": "div-action://set_variable?name=rect_corner_radius&value=1",
-          "log_id": "restore: rect_corner_radius"
-        },
-        {
-          "url": "div-action://set_state?state_id=0/state_container/rect",
-          "log_id": "restore: state"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/state_container/circle",
+        "log_id": "state with circle shape"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=circle_radius&value=6",
+        "log_id": "bigger indicator radius"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=rect_height&value=2",
+        "log_id": "restore: rect_height"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=rect_width&value=8",
+        "log_id": "restore: rect_width"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=rect_corner_radius&value=1",
+        "log_id": "restore: rect_corner_radius"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/state_container/rect",
+        "log_id": "restore: state"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

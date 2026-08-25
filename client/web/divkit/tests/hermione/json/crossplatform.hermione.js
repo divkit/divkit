@@ -56,44 +56,61 @@ function createInteractiveTestCase(testCase, testPath) {
     it(`${testCase}`, async function() {
         await this.browser.yaOpenCrossplatformJson(testPath);
 
-        for (let i = 0; i < steps.length; i++) {
-            const { delay, div_actions, web_keyboard } = steps[i];
-
-            if (web_keyboard) {
-                // enter, to force "keyboard" focus mode
-                await this.browser.keys('\uE007	');
+        let snapshotIndex = 0;
+        for (const step of steps) {
+            if (step.type === 'div_action') {
+                await this.browser.execute(action => {
+                    window.divkitRoot.execAction(action);
+                }, step.action);
+            } else if (step.type === 'wait') {
+                await this.browser.pause(step.duration_ms);
+            } else if (step.type === 'verify_snapshot') {
+                await this.browser.pause(300);
+                await this.browser.assertView(`step${snapshotIndex}`, '#root');
+                snapshotIndex++;
+            } else {
+                throw new Error(`Unsupported interactive step type: ${step.type}`);
             }
-
-            if (div_actions) {
-                for (const action of div_actions) {
-                    await this.browser.execute(action => {
-                        window.divkitRoot.execAction(action);
-                    }, action);
-                }
-            }
-
-            if (delay) {
-                await this.browser.pause(delay);
-            }
-
-            await this.browser.pause(300);
-            await this.browser.assertView(`step${i}`, '#root');
         }
     });
 }
 
 function createIntegrationTestCase(testCase, testPath) {
-    const { description, div_data, cases } = JSON.parse(fs.readFileSync(path.join(path.resolve(__dirname, '../../..'), testPath), 'utf8'));
+    const testData = JSON.parse(fs.readFileSync(path.join(path.resolve(__dirname, '../../..'), testPath), 'utf8'));
+    const cases = testData.steps ? [testData] : testData.cases;
 
     for (let i = 0; i < cases.length; ++i) {
         const item = cases[i];
-        const resultType = item.expected.find(it => it.type === 'variable' && it.variable_name === 'result')?.value?.type;
 
         if (item.platforms && !item.platforms.includes('web')) {
             continue;
         }
 
-        describe(description, () => {
+        const actions = [];
+        const expectedVariables = [];
+        const expectedErrors = [];
+        let verificationFound = false;
+
+        for (const step of item.steps) {
+            if (step.type === 'div_action') {
+                if (verificationFound) {
+                    throw new Error('div_action after verification is not supported by the Web integration runner');
+                }
+                actions.push(step.action);
+            } else if (step.type === 'verify_variable') {
+                verificationFound = true;
+                expectedVariables.push(step);
+            } else if (step.type === 'verify_errors') {
+                verificationFound = true;
+                expectedErrors.push(...step.errors);
+            } else {
+                throw new Error(`Unsupported integration step type: ${step.type}`);
+            }
+        }
+
+        const resultType = expectedVariables.find(it => it.variable_name === 'result')?.value?.type;
+
+        describe(testData.description, () => {
             it(`Case [${i}]`, async function() {
                 await this.browser.yaOpenCrossplatformJson(testPath, {
                     result_type: resultType,
@@ -103,14 +120,10 @@ function createIntegrationTestCase(testCase, testPath) {
                     localStorage.clear();
                 });
 
-                if (item.div_actions) {
-                    for (let j = 0; j < item.div_actions.length; j++) {
-                        const action = item.div_actions[j];
-
-                        await this.browser.execute(action => {
-                            window.divkitRoot.execAction(action);
-                        }, action);
-                    }
+                for (const action of actions) {
+                    await this.browser.execute(action => {
+                        window.divkitRoot.execAction(action);
+                    }, action);
                 }
 
                 if (item.mock_video_playback) {
@@ -132,80 +145,57 @@ function createIntegrationTestCase(testCase, testPath) {
                     });
                 }
 
-                const expectErrors = item.expected.filter(it => it.type === 'error');
                 const errors = await this.browser.execute(() => {
-                    if (!window.errors) {
-                        return [];
-                    }
-
-                    return window.errors.filter(it => {
+                    return (window.errors || []).filter(error => {
                         // Filter video errors
-                        return it.message !== 'Video playing error';
-                    }).map(it => {
-                        return {
-                            message: it.message,
-                            additionalMessage: it.additional ? it.additional.message : undefined,
-                            expression: it.additional ? it.additional.expression : undefined
-                        };
+                        return error.message !== 'Video playing error';
+                    }).map(error => {
+                        const additionalMessage = error.additional ?
+                            error.additional.message :
+                            undefined;
+
+                        return additionalMessage || error.message;
                     });
                 });
 
-                if (errors.length !== expectErrors.length) {
-                    console.error({ errors: errors.map(err => {
-                        let str = err.additionalMessage || err.message;
-
-                        return str;
-                    }), expectErrors: expectErrors });
+                if (errors.length !== expectedErrors.length) {
+                    console.error({ errors, expectedErrors });
                 }
 
-                errors.length.should.equal(expectErrors.length);
+                errors.length.should.equal(expectedErrors.length);
 
-                for (let j = 0; j < expectErrors.length; ++j) {
-                    let expected = expectErrors[j];
-                    let str = errors[j].additionalMessage || errors[j].message;
-
-                    /* if (errors[j].expression) {
-                        str += ' Expression: ' + errors[j].expression.replace(/\\/g, '\\\\');
-                    } */
-
-                    if (str !== expected.value) {
-                        console.error({actual: str, expected});
+                for (let j = 0; j < expectedErrors.length; ++j) {
+                    if (errors[j] !== expectedErrors[j]) {
+                        console.error({ actual: errors[j], expected: expectedErrors[j] });
                     }
 
-                    str.should.equal(expected.value);
+                    errors[j].should.equal(expectedErrors[j]);
                 }
 
-                for (let j = 0; j < item.expected.length; j++) {
-                    const expected = item.expected[j];
-
-                    if (expected.type === 'variable') {
-                        if (item.mock_video_playback) {
-                            continue;
-                        }
-                        const result = await this.browser.execute(variableName => {
-                            const inst = window.divkitRoot.getDebugAllVariables().get(variableName);
-                            const type = inst.getType();
-                            let value = inst.getValue();
-
-                            if (typeof value === 'bigint') {
-                                value = Number(value);
-                            } else if (type === 'boolean') {
-                                value = Boolean(value);
-                            }
-
-                            return {
-                                type,
-                                value
-                            };
-                        }, expected.variable_name);
-
-                        result.type.should.equal(expected.value.type);
-                        result.value.should.deep.equal(expected.value.value);
-                    } else if (expected.type === 'error') {
+                for (const expected of expectedVariables) {
+                    if (item.mock_video_playback) {
                         continue;
-                    } else {
-                        throw new Error('Unsupported expected type ' + expected.type);
                     }
+
+                    const result = await this.browser.execute(variableName => {
+                        const inst = window.divkitRoot.getDebugAllVariables().get(variableName);
+                        const type = inst.getType();
+                        let value = inst.getValue();
+
+                        if (typeof value === 'bigint') {
+                            value = Number(value);
+                        } else if (type === 'boolean') {
+                            value = Boolean(value);
+                        }
+
+                        return {
+                            type,
+                            value
+                        };
+                    }, expected.variable_name);
+
+                    result.type.should.equal(expected.value.type);
+                    result.value.should.deep.equal(expected.value.value);
                 }
             });
         });

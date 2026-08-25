@@ -27,15 +27,16 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from dict variable by url action",
-          "url": "div-action://set_variable?name=result&value=@{dict_var}"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "set from dict variable by url action",
+            "url": "div-action://set_variable?name=result&value=@{dict_var}"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "dict",
@@ -55,27 +56,28 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "set from dict by typed action",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "result",
-            "value": {
-              "type": "dict",
+          "type": "div_action",
+          "action": {
+            "log_id": "set from dict by typed action",
+            "typed": {
+              "type": "set_variable",
+              "variable_name": "result",
               "value": {
-                "boolean": true,
-                "integer": 1,
-                "number": 1.0,
-                "string": "value"
+                "type": "dict",
+                "value": {
+                  "boolean": true,
+                  "integer": 1,
+                  "number": 1.0,
+                  "string": "value"
+                }
               }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "dict",

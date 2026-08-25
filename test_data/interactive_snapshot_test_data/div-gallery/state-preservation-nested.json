@@ -356,55 +356,73 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/card1_outer/expanded",
-          "log_id": "expand_card1"
-        },
-        {
-          "url": "div-action://set_state?state_id=0/card1_outer/expanded/card1_inner/option_b",
-          "log_id": "card1_select_b"
-        },
-        {
-          "url": "div-action://set_state?state_id=0/card2_outer/expanded",
-          "log_id": "expand_card2"
-        },
-        {
-          "url": "div-action://set_state?state_id=0/card2_outer/expanded/card2_inner/option_c",
-          "log_id": "card2_select_c"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/card1_outer/expanded",
+        "log_id": "expand_card1"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_end?id=nested_gallery&animated=false",
-          "log_id": "scroll_to_end"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/card1_outer/expanded/card1_inner/option_b",
+        "log_id": "card1_select_b"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/card19_outer/expanded",
-          "log_id": "expand_card19"
-        }
-      ],
-      "expected_screenshot": "step3.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/card2_outer/expanded",
+        "log_id": "expand_card2"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_start?id=nested_gallery&animated=false",
-          "log_id": "scroll_to_start"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/card2_outer/expanded/card2_inner/option_c",
+        "log_id": "card2_select_c"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_end?id=nested_gallery&animated=false",
+        "log_id": "scroll_to_end"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/card19_outer/expanded",
+        "log_id": "expand_card19"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_start?id=nested_gallery&animated=false",
+        "log_id": "scroll_to_start"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

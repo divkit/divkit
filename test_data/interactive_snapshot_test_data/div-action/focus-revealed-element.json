@@ -101,23 +101,29 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "reveal",
-          "url": "div-action://set_variable?name=visible&value=true"
-        },
-        {
-          "log_id": "focus",
-          "typed": {
-            "type": "focus_element",
-            "element_id": "phone_input"
-          }
+      "type": "div_action",
+      "action": {
+        "log_id": "reveal",
+        "url": "div-action://set_variable?name=visible&value=true"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "focus",
+        "typed": {
+          "type": "focus_element",
+          "element_id": "phone_input"
         }
-      ],
-      "expected_screenshot": "step1.png"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

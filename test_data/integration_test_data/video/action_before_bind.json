@@ -133,31 +133,35 @@
   "cases": [
     {
       "mock_video_playback": true,
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "pause_unbound_video",
-          "typed": {
-            "type": "video",
-            "id": "paused_video",
-            "action": "pause"
+          "type": "div_action",
+          "action": {
+            "log_id": "pause_unbound_video",
+            "typed": {
+              "type": "video",
+              "id": "paused_video",
+              "action": "pause"
+            }
           }
         },
         {
-          "log_id": "scroll_to_video",
-          "typed": {
-            "type": "scroll_to",
-            "id": "gallery",
-            "animated": false,
-            "destination": {
-              "type": "index",
-              "value": 10
+          "type": "div_action",
+          "action": {
+            "log_id": "scroll_to_video",
+            "typed": {
+              "type": "scroll_to",
+              "id": "gallery",
+              "animated": false,
+              "destination": {
+                "type": "index",
+                "value": 10
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "autostart_video_started",
           "value": {
             "type": "boolean",
@@ -165,7 +169,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "paused_video_started",
           "value": {
             "type": "boolean",
@@ -173,7 +177,7 @@
           }
         },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "video_failed",
           "value": {
             "type": "boolean",

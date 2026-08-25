@@ -67,9 +67,9 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -84,15 +84,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change part of name",
-          "url": "div-action://set_variable?name=part_of_name&value=2"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change part of name",
+            "url": "div-action://set_variable?name=part_of_name&value=2"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -107,15 +108,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change value",
-          "url": "div-action://set_variable?name=var_1&value=11"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change value",
+            "url": "div-action://set_variable?name=var_1&value=11"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -130,19 +132,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change part of name",
-          "url": "div-action://set_variable?name=part_of_name&value=2"
+          "type": "div_action",
+          "action": {
+            "log_id": "change part of name",
+            "url": "div-action://set_variable?name=part_of_name&value=2"
+          }
         },
         {
-          "log_id": "change value",
-          "url": "div-action://set_variable?name=var_2&value=21"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change value",
+            "url": "div-action://set_variable?name=var_2&value=21"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -157,19 +163,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change another value",
-          "url": "div-action://set_variable?name=var_2&value=21"
+          "type": "div_action",
+          "action": {
+            "log_id": "change another value",
+            "url": "div-action://set_variable?name=var_2&value=21"
+          }
         },
         {
-          "log_id": "change part of name",
-          "url": "div-action://set_variable?name=part_of_name&value=2"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change part of name",
+            "url": "div-action://set_variable?name=part_of_name&value=2"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -184,15 +194,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change name",
-          "url": "div-action://set_variable?name=name_1&value=var_3"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change name",
+            "url": "div-action://set_variable?name=name_1&value=var_3"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -207,19 +218,23 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change name",
-          "url": "div-action://set_variable?name=name_1&value=var_3"
+          "type": "div_action",
+          "action": {
+            "log_id": "change name",
+            "url": "div-action://set_variable?name=name_1&value=var_3"
+          }
         },
         {
-          "log_id": "change value",
-          "url": "div-action://set_variable?name=var_3&value=31"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change value",
+            "url": "div-action://set_variable?name=var_3&value=31"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -234,23 +249,30 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "change part of name",
-          "url": "div-action://set_variable?name=part_of_name&value=2"
+          "type": "div_action",
+          "action": {
+            "log_id": "change part of name",
+            "url": "div-action://set_variable?name=part_of_name&value=2"
+          }
         },
         {
-          "log_id": "change name",
-          "url": "div-action://set_variable?name=name_2&value=var_3"
+          "type": "div_action",
+          "action": {
+            "log_id": "change name",
+            "url": "div-action://set_variable?name=name_2&value=var_3"
+          }
         },
         {
-          "log_id": "change value",
-          "url": "div-action://set_variable?name=var_3&value=31"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "change value",
+            "url": "div-action://set_variable?name=var_3&value=31"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",

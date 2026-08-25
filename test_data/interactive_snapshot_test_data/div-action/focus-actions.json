@@ -47,30 +47,35 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "focus the input",
-          "typed": {
-            "type": "focus_element",
-            "element_id": "input"
-          }
+      "type": "div_action",
+      "action": {
+        "log_id": "focus the input",
+        "typed": {
+          "type": "focus_element",
+          "element_id": "input"
         }
-      ],
-      "expected_screenshot": "step1.png"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "clear focus",
-          "typed": {
-            "type": "clear_focus"
-          }
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "clear focus",
+        "typed": {
+          "type": "clear_focus"
         }
-      ],
-      "expected_screenshot": "step2.png"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
     }
   ]
 }

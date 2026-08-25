@@ -48,12 +48,14 @@ class IntegrationTestCase(
             }
         }
 
-        class Error(private val message: String) : ExpectedResult {
+        class Errors(private val messages: List<String>) : ExpectedResult {
             fun check(errors: List<String>) {
-                assertTrue(
-                    errors.contains(message),
-                    "Expected: <$message> but was: <${errors.toSet().joinToString(", ")}>"
-                )
+                messages.forEach { message ->
+                    assertTrue(
+                        errors.contains(message),
+                        "Expected: <$message> but was: <${errors.toSet().joinToString(", ")}>"
+                    )
+                }
             }
         }
 
@@ -84,7 +86,7 @@ class IntegrationTestCase(
         } catch (throwable: Throwable) {
             var isErrorExpected = false
             expectedResults
-                .filterIsInstance<ExpectedResult.Error>()
+                .filterIsInstance<ExpectedResult.Errors>()
                 .forEach { result ->
                     result.check(logger.messages)
                     isErrorExpected = true
@@ -123,7 +125,7 @@ class IntegrationTestCase(
     fun checkResult(expressionResolver: ExpressionResolver, checkView: (ExpectedResult.View) -> Unit) {
         expectedResults.forEach {
             when (it) {
-                is ExpectedResult.Error ->
+                is ExpectedResult.Errors ->
                     it.check(logger.messages)
 
                 is ExpectedResult.Variable ->

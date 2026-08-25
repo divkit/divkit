@@ -129,103 +129,128 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "typed": {
-            "type": "set_variable",
-            "value": {
-              "type": "integer",
-              "value": 1234567890
-            },
-            "variable_name": "integer_variable"
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "value": {
+            "type": "integer",
+            "value": 1234567890
           },
-          "log_id": "set_integer"
+          "variable_name": "integer_variable"
         },
-        {
-          "typed": {
-            "type": "set_variable",
-            "value": {
-              "type": "number",
-              "value": 987.65
-            },
-            "variable_name": "number_variable"
+        "log_id": "set_integer"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "value": {
+            "type": "number",
+            "value": 987.65
           },
-          "log_id": "set_number"
+          "variable_name": "number_variable"
         },
-        {
-          "typed": {
-            "type": "set_variable",
-            "value": {
-              "type": "string",
-              "value": "new_string_value"
-            },
-            "variable_name": "string_variable"
+        "log_id": "set_number"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "value": {
+            "type": "string",
+            "value": "new_string_value"
           },
-          "log_id": "set_string"
+          "variable_name": "string_variable"
         },
-        {
-          "typed": {
-            "type": "set_variable",
-            "value": {
-              "type": "color",
-              "value": "#00998877"
-            },
-            "variable_name": "color_variable"
+        "log_id": "set_string"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "value": {
+            "type": "color",
+            "value": "#00998877"
           },
-          "log_id": "set_color"
+          "variable_name": "color_variable"
         },
-        {
-          "typed": {
-            "type": "set_variable",
-            "value": {
-              "type": "boolean",
-              "value": false
-            },
-            "variable_name": "boolean_variable"
+        "log_id": "set_color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "value": {
+            "type": "boolean",
+            "value": false
           },
-          "log_id": "set_boolean"
+          "variable_name": "boolean_variable"
         },
-        {
-          "typed": {
-            "type": "set_variable",
-            "value": {
-              "type": "url",
-              "value": "https://ya.ru"
-            },
-            "variable_name": "url_variable"
+        "log_id": "set_boolean"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "value": {
+            "type": "url",
+            "value": "https://ya.ru"
           },
-          "log_id": "set_url"
+          "variable_name": "url_variable"
         },
-        {
-          "typed": {
-            "type": "set_variable",
-            "value": {
-              "type": "array",
-              "value": [
-                123
-              ]
-            },
-            "variable_name": "array_variable"
+        "log_id": "set_url"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "value": {
+            "type": "array",
+            "value": [
+              123
+            ]
           },
-          "log_id": "set_array"
+          "variable_name": "array_variable"
         },
-        {
-          "typed": {
-            "type": "set_variable",
+        "log_id": "set_array"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "typed": {
+          "type": "set_variable",
+          "value": {
+            "type": "dict",
             "value": {
-              "type": "dict",
-              "value": {
-                "key": "value"
-              }
-            },
-            "variable_name": "dict_variable"
+              "key": "value"
+            }
           },
-          "log_id": "set_dict"
-        }
-      ]
+          "variable_name": "dict_variable"
+        },
+        "log_id": "set_dict"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

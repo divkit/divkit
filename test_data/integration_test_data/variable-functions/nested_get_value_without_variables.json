@@ -65,37 +65,40 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "change nested name",
-          "url": "div-action://set_variable?name=nested_name&value=name_2"
-        },
-        {
-          "log_id": "change name",
-          "url": "div-action://set_variable?name=name_2&value=var_3"
-        },
-        {
-          "log_id": "change value",
-          "url": "div-action://set_variable?name=var_3&value=31"
-        }
-      ],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "result",
-          "value": {
-            "type": "integer",
-            "value": 31
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "change nested name",
+        "url": "div-action://set_variable?name=nested_name&value=name_2"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change name",
+        "url": "div-action://set_variable?name=name_2&value=var_3"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change value",
+        "url": "div-action://set_variable?name=var_3&value=31"
+      }
+    },
+    {
+      "type": "verify_variable",
+      "variable_name": "result",
+      "value": {
+        "type": "integer",
+        "value": 31
+      }
     }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
   ]
 }

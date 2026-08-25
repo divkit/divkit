@@ -97,43 +97,52 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "bigger",
-          "url": "div-action://set_variable?name=input&value=200"
-        }
-      ],
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "log_id": "bigger",
+        "url": "div-action://set_variable?name=input&value=200"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "change minimum",
-          "url": "div-action://set_variable?name=minimum_value&value=300"
-        }
-      ],
-      "expected_screenshot": "step2.png"
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "empty",
-          "url": "div-action://set_variable?name=input&value="
-        }
-      ],
-      "expected_screenshot": "step3.png"
+      "type": "div_action",
+      "action": {
+        "log_id": "change minimum",
+        "url": "div-action://set_variable?name=minimum_value&value=300"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "allow empty",
-          "url": "div-action://set_variable?name=allow_empty&value=1"
-        }
-      ],
-      "expected_screenshot": "step4.png"
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "empty",
+        "url": "div-action://set_variable?name=input&value="
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "allow empty",
+        "url": "div-action://set_variable?name=allow_empty&value=1"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
     }
   ]
 }

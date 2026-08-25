@@ -25,20 +25,25 @@ internal class InteractiveScreenshotSteps {
         artifactsRelativePath: String
     ) = step("Run interactive screenshot steps") {
         val testData = InteractiveScreenshotTestData.parse(activity.getTestCaseJson())
-        testData.steps.forEachIndexed { i, step ->
+        var snapshotIndex = 0
+        testData.steps.forEach { step ->
             InstrumentationRegistry.getInstrumentation().runOnMainSync {
                 handleActions(activity.divView, step.actions)
             }
+            if (step.delay > 0) {
+                Thread.sleep(step.delay)
+            }
+            if (step.expectedScreenshot.isNotEmpty()) {
+                waitForConditions(activity, delay = 0)
 
-            waitForConditions(activity, step.delay)
-
-            captureScreenshots(
-                activity.divView,
-                artifactsRelativePath,
-                casePath,
-                stepId = i,
-                expectedScreenshot = step.expectedScreenshot
-            )
+                captureScreenshots(
+                    activity.divView,
+                    artifactsRelativePath,
+                    casePath,
+                    stepId = snapshotIndex++,
+                    expectedScreenshot = step.expectedScreenshot
+                )
+            }
         }
     }
 

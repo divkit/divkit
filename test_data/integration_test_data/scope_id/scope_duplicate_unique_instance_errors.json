@@ -49,7 +49,7 @@
                     "video_sources": [
                       {
                         "type": "video_source",
-                        "url": "",
+                        "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
                         "mime_type": "video/mp4"
                       }
                     ]
@@ -75,47 +75,26 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "scroll_to_dup_scope",
-          "scope_id": "scope_element",
-          "typed": {
-            "type": "scroll_to",
-            "id": "inner_gallery",
-            "destination": {
-              "type": "start"
+          "type": "div_action",
+          "action": {
+            "log_id": "scroll_to_dup_scope",
+            "scope_id": "scope_element",
+            "typed": {
+              "type": "scroll_to",
+              "id": "inner_gallery",
+              "destination": {
+                "type": "start"
+              }
             }
           }
-        }
-      ],
-      "expected": [
+        },
         {
-          "type": "error",
-          "value": "Scope with id 'scope_element' is ambiguous"
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "scroll_by_dup_scope",
-          "scope_id": "scope_element",
-          "typed": {
-            "type": "scroll_by",
-            "id": "inner_gallery",
-            "offset": 1
-          }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Scope with id 'scope_element' is ambiguous"
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'scope_element' is ambiguous"
+          ]
         }
       ],
       "platforms": [
@@ -125,93 +104,132 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "video_dup_scope",
-          "scope_id": "scope_element",
-          "typed": {
-            "type": "video",
-            "id": "inner_video",
-            "action": "start"
-          }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Scope with id 'scope_element' is ambiguous"
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "animator_start_dup_scope",
-          "scope_id": "scope_element",
-          "typed": {
-            "type": "animator_start",
-            "animator_id": "inner_animator"
-          }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Scope with id 'scope_element' is ambiguous"
-        }
-      ],
-      "platforms": [
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "animator_stop_dup_scope",
-          "scope_id": "scope_element",
-          "typed": {
-            "type": "animator_stop",
-            "animator_id": "inner_animator"
-          }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Scope with id 'scope_element' is ambiguous"
-        }
-      ],
-      "platforms": [
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "set_cursor_position_dup_scope",
-          "scope_id": "scope_element",
-          "typed": {
-            "type": "set_cursor_position",
-            "id": "inner_input",
-            "position": {
-              "type": "absolute",
-              "start": 0,
-              "end": 0
+          "type": "div_action",
+          "action": {
+            "log_id": "scroll_by_dup_scope",
+            "scope_id": "scope_element",
+            "typed": {
+              "type": "scroll_by",
+              "id": "inner_gallery",
+              "offset": 1
             }
           }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'scope_element' is ambiguous"
+          ]
         }
       ],
-      "expected": [
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
         {
-          "type": "error",
-          "value": "Scope with id 'scope_element' is ambiguous"
+          "type": "div_action",
+          "action": {
+            "log_id": "video_dup_scope",
+            "scope_id": "scope_element",
+            "typed": {
+              "type": "video",
+              "id": "inner_video",
+              "action": "start"
+            }
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'scope_element' is ambiguous"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "animator_start_dup_scope",
+            "scope_id": "scope_element",
+            "typed": {
+              "type": "animator_start",
+              "animator_id": "inner_animator"
+            }
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'scope_element' is ambiguous"
+          ]
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "animator_stop_dup_scope",
+            "scope_id": "scope_element",
+            "typed": {
+              "type": "animator_stop",
+              "animator_id": "inner_animator"
+            }
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'scope_element' is ambiguous"
+          ]
+        }
+      ],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "set_cursor_position_dup_scope",
+            "scope_id": "scope_element",
+            "typed": {
+              "type": "set_cursor_position",
+              "id": "inner_input",
+              "position": {
+                "type": "absolute",
+                "start": 0,
+                "end": 0
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'scope_element' is ambiguous"
+          ]
         }
       ],
       "platforms": [

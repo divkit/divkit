@@ -126,23 +126,30 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "download patch",
-          "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fstate-patch-partial.json"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "download patch",
+        "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fstate-patch-partial.json"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "toggle state",
-          "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "toggle state",
+        "url": "div-action://set_variable?name=state_id&value=@{state_id == 'default' ? 'not_default' : 'default'}"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
     }
   ]
 }

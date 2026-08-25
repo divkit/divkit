@@ -77,15 +77,16 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check two local functions in one expression",
-          "url": "div-action://set_variable?name=step&value=0"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check two local functions in one expression",
+            "url": "div-action://set_variable?name=step&value=0"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",
@@ -100,15 +101,16 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "check function in function",
-          "url": "div-action://set_variable?name=step&value=1"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "log_id": "check function in function",
+            "url": "div-action://set_variable?name=step&value=1"
+          }
+        },
         {
-          "type": "variable",
+          "type": "verify_variable",
           "variable_name": "result",
           "value": {
             "type": "integer",

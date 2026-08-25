@@ -109,47 +109,63 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=value_variable&value=uk",
-          "log_id": "value_variable"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=value_variable&value=uk",
+        "log_id": "value_variable"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=value_variable&value=show_hint",
-          "log_id": "value_variable"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=value_variable&value=ru",
-          "log_id": "value_variable"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=value_variable&value=show_hint",
+        "log_id": "value_variable"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=value_variable&value=kz",
-          "log_id": "value_variable"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=value_variable&value=",
-          "log_id": "restore: value_variable"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=value_variable&value=ru",
+        "log_id": "value_variable"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=value_variable&value=kz",
+        "log_id": "value_variable"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=value_variable&value=",
+        "log_id": "restore: value_variable"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
     }
   ]
 }

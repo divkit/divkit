@@ -135,32 +135,41 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=visibility&value=invisible",
-          "log_id": "invisible"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=visibility&value=invisible",
+        "log_id": "invisible"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=visibility&value=gone",
-          "log_id": "gone"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=visibility&value=visible",
-          "log_id": "restore: visible"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=visibility&value=gone",
+        "log_id": "gone"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=visibility&value=visible",
+        "log_id": "restore: visible"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

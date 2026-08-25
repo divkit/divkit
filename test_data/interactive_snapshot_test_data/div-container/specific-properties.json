@@ -126,44 +126,62 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=content_alignment_horizontal&value=right",
-          "log_id": "content_alignment_horizontal"
-        },
-        {
-          "url": "div-action://set_variable?name=content_alignment_vertical&value=bottom",
-          "log_id": "content_alignment_vertical"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=content_alignment_horizontal&value=right",
+        "log_id": "content_alignment_horizontal"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=orientation&value=vertical",
-          "log_id": "orientation"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=content_alignment_vertical&value=bottom",
+        "log_id": "content_alignment_vertical"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=content_alignment_horizontal&value=left",
-          "log_id": "restore: content_alignment_horizontal"
-        },
-        {
-          "url": "div-action://set_variable?name=content_alignment_vertical&value=top",
-          "log_id": "restore: content_alignment_vertical"
-        },
-        {
-          "url": "div-action://set_variable?name=orientation&value=horizontal",
-          "log_id": "restore: orientation"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=orientation&value=vertical",
+        "log_id": "orientation"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=content_alignment_horizontal&value=left",
+        "log_id": "restore: content_alignment_horizontal"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=content_alignment_vertical&value=top",
+        "log_id": "restore: content_alignment_vertical"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=orientation&value=horizontal",
+        "log_id": "restore: orientation"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

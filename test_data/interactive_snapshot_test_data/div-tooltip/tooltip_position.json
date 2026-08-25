@@ -106,24 +106,30 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://show_tooltip?id=tooltip&multiple=false",
-          "log_id": "show_tooltip"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://show_tooltip?id=tooltip&multiple=false",
+        "log_id": "show_tooltip"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://hide_tooltip?id=tooltip",
-          "log_id": "hide_tooltip"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://hide_tooltip?id=tooltip",
+        "log_id": "hide_tooltip"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

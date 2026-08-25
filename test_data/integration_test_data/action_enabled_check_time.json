@@ -42,23 +42,18 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "div_actions": [],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "target_action_executed",
-          "value": {
-            "type": "boolean",
-            "value": true
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "web"
-      ]
+      "type": "verify_variable",
+      "variable_name": "target_action_executed",
+      "value": {
+        "type": "boolean",
+        "value": true
+      }
     }
+  ],
+  "platforms": [
+    "android",
+    "web"
   ]
 }

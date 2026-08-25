@@ -51,7 +51,7 @@
                 "video_sources": [
                   {
                     "type": "video_source",
-                    "url": "",
+                    "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
                     "mime_type": "video/mp4"
                   }
                 ]
@@ -69,66 +69,69 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "scroll_to_scope_missing",
-          "scope_id": "nonexistent_scope",
-          "typed": {
-            "type": "scroll_to",
-            "id": "inner_gallery",
-            "destination": {
-              "type": "start"
+          "type": "div_action",
+          "action": {
+            "log_id": "scroll_to_scope_missing",
+            "scope_id": "nonexistent_scope",
+            "typed": {
+              "type": "scroll_to",
+              "id": "inner_gallery",
+              "destination": {
+                "type": "start"
+              }
             }
           }
         },
         {
-          "log_id": "scroll_by_scope_missing",
-          "scope_id": "nonexistent_scope",
-          "typed": {
-            "type": "scroll_by",
-            "id": "inner_gallery",
-            "offset": 1
-          }
-        },
-        {
-          "log_id": "video_scope_missing",
-          "scope_id": "nonexistent_scope",
-          "typed": {
-            "type": "video",
-            "id": "inner_video",
-            "action": "start"
-          }
-        },
-        {
-          "log_id": "set_cursor_position_scope_missing",
-          "scope_id": "nonexistent_scope",
-          "typed": {
-            "type": "set_cursor_position",
-            "id": "inner_input",
-            "position": {
-              "type": "absolute",
-              "start": 0,
-              "end": 0
+          "type": "div_action",
+          "action": {
+            "log_id": "scroll_by_scope_missing",
+            "scope_id": "nonexistent_scope",
+            "typed": {
+              "type": "scroll_by",
+              "id": "inner_gallery",
+              "offset": 1
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Scope with id 'nonexistent_scope' not found"
         },
         {
-          "type": "error",
-          "value": "Scope with id 'nonexistent_scope' not found"
+          "type": "div_action",
+          "action": {
+            "log_id": "video_scope_missing",
+            "scope_id": "nonexistent_scope",
+            "typed": {
+              "type": "video",
+              "id": "inner_video",
+              "action": "start"
+            }
+          }
         },
         {
-          "type": "error",
-          "value": "Scope with id 'nonexistent_scope' not found"
+          "type": "div_action",
+          "action": {
+            "log_id": "set_cursor_position_scope_missing",
+            "scope_id": "nonexistent_scope",
+            "typed": {
+              "type": "set_cursor_position",
+              "id": "inner_input",
+              "position": {
+                "type": "absolute",
+                "start": 0,
+                "end": 0
+              }
+            }
+          }
         },
         {
-          "type": "error",
-          "value": "Scope with id 'nonexistent_scope' not found"
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'nonexistent_scope' not found",
+            "Scope with id 'nonexistent_scope' not found",
+            "Scope with id 'nonexistent_scope' not found",
+            "Scope with id 'nonexistent_scope' not found"
+          ]
         }
       ],
       "platforms": [
@@ -138,32 +141,35 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "animator_start_scope_missing",
-          "scope_id": "nonexistent_scope",
-          "typed": {
-            "type": "animator_start",
-            "animator_id": "inner_animator"
+          "type": "div_action",
+          "action": {
+            "log_id": "animator_start_scope_missing",
+            "scope_id": "nonexistent_scope",
+            "typed": {
+              "type": "animator_start",
+              "animator_id": "inner_animator"
+            }
           }
         },
         {
-          "log_id": "animator_stop_scope_missing",
-          "scope_id": "nonexistent_scope",
-          "typed": {
-            "type": "animator_stop",
-            "animator_id": "inner_animator"
+          "type": "div_action",
+          "action": {
+            "log_id": "animator_stop_scope_missing",
+            "scope_id": "nonexistent_scope",
+            "typed": {
+              "type": "animator_stop",
+              "animator_id": "inner_animator"
+            }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Scope with id 'nonexistent_scope' not found"
         },
         {
-          "type": "error",
-          "value": "Scope with id 'nonexistent_scope' not found"
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'nonexistent_scope' not found",
+            "Scope with id 'nonexistent_scope' not found"
+          ]
         }
       ],
       "platforms": [

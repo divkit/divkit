@@ -55,51 +55,25 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "submit_no_scope_duplicate",
-          "typed": {
-            "type": "submit",
-            "container_id": "form_container",
-            "request": {
-              "url": "div-action://stub"
+          "type": "div_action",
+          "action": {
+            "log_id": "submit_no_scope_duplicate",
+            "typed": {
+              "type": "submit",
+              "container_id": "form_container",
+              "request": {
+                "url": "div-action://stub"
+              }
             }
           }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Element with id 'form_container' is ambiguous"
-        }
-      ],
-      "platforms": [
-        "ios",
-        "web"
-      ]
-    },
-    {
-      "div_actions": [
-        {
-          "log_id": "submit_scope_not_found",
-          "scope_id": "nonexistent_scope",
-          "typed": {
-            "type": "submit",
-            "container_id": "form_container",
-            "request": {
-              "url": "div-action://stub"
-            }
-          }
-        }
-      ],
-      "expected": [
-        {
-          "type": "error",
-          "value": "Scope with id 'nonexistent_scope' not found"
         },
         {
-          "type": "error",
-          "value": "Element with id 'form_container' is ambiguous"
+          "type": "verify_errors",
+          "errors": [
+            "Element with id 'form_container' is ambiguous"
+          ]
         }
       ],
       "platforms": [
@@ -108,23 +82,55 @@
       ]
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "log_id": "submit_scope_item1_missing_container",
-          "scope_id": "item_1",
-          "typed": {
-            "type": "submit",
-            "container_id": "missing_form",
-            "request": {
-              "url": "div-action://stub"
+          "type": "div_action",
+          "action": {
+            "log_id": "submit_scope_not_found",
+            "scope_id": "nonexistent_scope",
+            "typed": {
+              "type": "submit",
+              "container_id": "form_container",
+              "request": {
+                "url": "div-action://stub"
+              }
             }
           }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Scope with id 'nonexistent_scope' not found",
+            "Element with id 'form_container' is ambiguous"
+          ]
         }
       ],
-      "expected": [
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
         {
-          "type": "error",
-          "value": "Element with id 'missing_form' not found in scope"
+          "type": "div_action",
+          "action": {
+            "log_id": "submit_scope_item1_missing_container",
+            "scope_id": "item_1",
+            "typed": {
+              "type": "submit",
+              "container_id": "missing_form",
+              "request": {
+                "url": "div-action://stub"
+              }
+            }
+          }
+        },
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Element with id 'missing_form' not found in scope"
+          ]
         }
       ],
       "platforms": [

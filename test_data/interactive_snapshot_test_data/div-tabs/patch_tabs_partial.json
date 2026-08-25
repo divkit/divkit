@@ -94,40 +94,52 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "download patch",
-          "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Ftabs-patch-partial2.json"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "div_action",
+      "action": {
+        "log_id": "download patch",
+        "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Ftabs-patch-partial2.json"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "change 1",
-          "url": "div-action://set_current_item?id=tabs&item=1"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "change 2",
-          "url": "div-action://set_current_item?id=tabs&item=2"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "change 1",
+        "url": "div-action://set_current_item?id=tabs&item=1"
+      }
     },
     {
-      "div_actions": [
-        {
-          "log_id": "change 3",
-          "url": "div-action://set_current_item?id=tabs&item=3"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change 2",
+        "url": "div-action://set_current_item?id=tabs&item=2"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change 3",
+        "url": "div-action://set_current_item?id=tabs&item=3"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
     }
   ]
 }

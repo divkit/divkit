@@ -256,36 +256,51 @@
   },
   "steps": [
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_state?state_id=0/item20_state/on",
-          "log_id": "turn_on_item20"
-        },
-        {
-          "log_id": "change_title",
-          "url": "div-action://set_variable?name=title&value=State%20of%20item%2020%20changed%20by%20action%20-%20all%20states%20are%20On"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_state?state_id=0/item20_state/on",
+        "log_id": "turn_on_item20"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=state&value=off",
-          "log_id": "turn_off_items"
-        },
-        {
-          "log_id": "change_title",
-          "url": "div-action://set_variable?name=title&value=State%20variable%20changed%20to%20off%20-%20all%20states%20are%20Off"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "change_title",
+        "url": "div-action://set_variable?name=title&value=State%20of%20item%2020%20changed%20by%20action%20-%20all%20states%20are%20On"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://scroll_to_end?id=test_gallery&animated=false",
-          "log_id": "scroll_to_end"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=state&value=off",
+        "log_id": "turn_off_items"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "change_title",
+        "url": "div-action://set_variable?name=title&value=State%20variable%20changed%20to%20off%20-%20all%20states%20are%20Off"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_end?id=test_gallery&animated=false",
+        "log_id": "scroll_to_end"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
     }
   ]
 }

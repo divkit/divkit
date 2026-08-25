@@ -39,18 +39,15 @@
   },
   "cases": [
     {
-      "expected": [
+      "steps": [
         {
-          "type": "error",
-          "value": "Variable 'title' is missing. Expression: @{title}"
-        },
-        {
-          "type": "error",
-          "value": "Variable 'title' is missing. Expression: @{title}"
+          "type": "verify_errors",
+          "errors": [
+            "Variable 'title' is missing. Expression: @{title}"
+          ]
         }
       ],
       "platforms": [
-        "android",
         "ios"
       ],
       "unsupported_platforms": {
@@ -58,18 +55,32 @@
       }
     },
     {
-      "expected": [
+      "steps": [
         {
-          "type": "error",
-          "value": "Variable 'title' is missing."
-        },
-        {
-          "type": "error",
-          "value": "Variable 'title' is missing."
+          "type": "verify_errors",
+          "errors": [
+            "Variable 'title' is missing.",
+            "Variable 'title' is missing."
+          ]
         }
       ],
       "platforms": [
         "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "verify_errors",
+          "errors": [
+            "Property variable 'title' has cycle in 'get' expression.",
+            "Variable 'title' is missing.",
+            "No variable could be resolved for 'title"
+          ]
+        }
+      ],
+      "platforms": [
+        "android"
       ]
     }
   ]

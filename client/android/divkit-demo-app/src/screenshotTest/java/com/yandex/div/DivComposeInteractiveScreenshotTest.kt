@@ -46,15 +46,20 @@ class DivComposeInteractiveScreenshotTest(
             activity.setDivData(testData.divJson)
         }
 
-        testData.steps.forEachIndexed { id, step ->
-            step(id = id, data = step)
+        var snapshotIndex = 0
+        testData.steps.forEach { step ->
+            activity.performActions(step.actions)
+            if (step.expectedScreenshot.isNotEmpty()) {
+                verifySnapshot(id = snapshotIndex++, data = step)
+            }
         }
     }
 
-    private fun step(id: Int, data: InteractiveScreenshotTestData.Step) {
+    private fun verifySnapshot(
+        id: Int,
+        data: InteractiveScreenshotTestData.Step
+    ) {
         step("Step $id") {
-            activity.performActions(data.actions)
-
             waitForIdle()
 
             captureScreenshots(

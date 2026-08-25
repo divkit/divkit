@@ -194,128 +194,194 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=background_color&value=%2370A1A1A1",
-          "log_id": "background_color"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=background_color&value=%2370A1A1A1",
+        "log_id": "background_color"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=margins&value=15",
-          "log_id": "margins"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=paddings&value=15",
-          "log_id": "paddings"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=margins&value=15",
+        "log_id": "margins"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=width_value&value=150",
-          "log_id": "width"
-        },
-        {
-          "url": "div-action://set_variable?name=height_value&value=100",
-          "log_id": "height"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=alignment_vertical&value=bottom",
-          "log_id": "alignment_vertical"
-        },
-        {
-          "url": "div-action://set_variable?name=alignment_horizontal&value=right",
-          "log_id": "alignment_horizontal"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=paddings&value=15",
+        "log_id": "paddings"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=border_corner_radius&value=15",
-          "log_id": "border_corner_radius"
-        },
-        {
-          "url": "div-action://set_variable?name=border_stroke_color&value=%237000FF00",
-          "log_id": "border_stroke_color"
-        },
-        {
-          "url": "div-action://set_variable?name=border_stroke_width&value=3",
-          "log_id": "border_stroke_width"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step3"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=alpha&value=0.2",
-          "log_id": "alpha"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=width_value&value=150",
+        "log_id": "width"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=alpha&value=1.0",
-          "log_id": "restore: alpha"
-        },
-        {
-          "url": "div-action://set_variable?name=background_color&value=%230000FF",
-          "log_id": "restore: background_color"
-        },
-        {
-          "url": "div-action://set_variable?name=border_corner_radius&value=0",
-          "log_id": "restore: border_corner_radius"
-        },
-        {
-          "url": "div-action://set_variable?name=border_stroke_color&value=%23FFFF00",
-          "log_id": "restore: border_stroke_color"
-        },
-        {
-          "url": "div-action://set_variable?name=border_stroke_width&value=1",
-          "log_id": "restore: border_stroke_width"
-        },
-        {
-          "url": "div-action://set_variable?name=margins&value=0",
-          "log_id": "restore: margins"
-        },
-        {
-          "url": "div-action://set_variable?name=paddings&value=0",
-          "log_id": "restore: paddings"
-        },
-        {
-          "url": "div-action://set_variable?name=height_value&value=250",
-          "log_id": "restore: height_value"
-        },
-        {
-          "url": "div-action://set_variable?name=width_value&value=360",
-          "log_id": "restore: width_value"
-        },
-        {
-          "url": "div-action://set_variable?name=alignment_horizontal&value=left",
-          "log_id": "restore: alignment_horizontal"
-        },
-        {
-          "url": "div-action://set_variable?name=alignment_vertical&value=top",
-          "log_id": "restore: alignment_vertical"
-        }
-      ],
-      "expected_screenshot": "step0.png"
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=height_value&value=100",
+        "log_id": "height"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=alignment_vertical&value=bottom",
+        "log_id": "alignment_vertical"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=alignment_horizontal&value=right",
+        "log_id": "alignment_horizontal"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=border_corner_radius&value=15",
+        "log_id": "border_corner_radius"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=border_stroke_color&value=%237000FF00",
+        "log_id": "border_stroke_color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=border_stroke_width&value=3",
+        "log_id": "border_stroke_width"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step6"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=alpha&value=0.2",
+        "log_id": "alpha"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step7"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=alpha&value=1.0",
+        "log_id": "restore: alpha"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=background_color&value=%230000FF",
+        "log_id": "restore: background_color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=border_corner_radius&value=0",
+        "log_id": "restore: border_corner_radius"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=border_stroke_color&value=%23FFFF00",
+        "log_id": "restore: border_stroke_color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=border_stroke_width&value=1",
+        "log_id": "restore: border_stroke_width"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=margins&value=0",
+        "log_id": "restore: margins"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=paddings&value=0",
+        "log_id": "restore: paddings"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=height_value&value=250",
+        "log_id": "restore: height_value"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=width_value&value=360",
+        "log_id": "restore: width_value"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=alignment_horizontal&value=left",
+        "log_id": "restore: alignment_horizontal"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=alignment_vertical&value=top",
+        "log_id": "restore: alignment_vertical"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

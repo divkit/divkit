@@ -120,11 +120,44 @@ final class SnapshotTestRunner {
     return .rightToLeft
   }
 
-  private func loadSteps(dictionary: [String: Any]) throws -> [TestStep]? {
-    try? dictionary.getOptionalArray(
-      "steps",
-      transform: { try TestStep(dictionary: $0 as [String: Any]) }
-    )
+  private func loadSteps(
+    dictionary: [String: any Sendable]
+  ) throws -> [TestStep]? {
+    guard dictionary["steps"] != nil else {
+      return nil
+    }
+
+    let stepDictionaries: [[String: any Sendable]] = try dictionary.getField("steps")
+    var actions: [DivActionBase] = []
+    var steps: [TestStep] = []
+
+    for stepDictionary in stepDictionaries {
+      let type: String = try stepDictionary.getField("type")
+
+      switch type {
+      case "div_action":
+        let actionDictionary: [String: any Sendable] = try stepDictionary.getField("action")
+        let action = try DivTemplates.empty.parseValue(
+          type: DivActionTemplate.self,
+          from: actionDictionary
+        ).unwrap()
+        actions.append(action)
+      case "wait":
+        // Keep the existing iOS behavior: delays are ignored by the snapshot runner.
+        break
+      case "verify_snapshot":
+        let name: String = try stepDictionary.getField("name")
+        steps.append(TestStep(name: name, actions: actions))
+        actions.removeAll()
+      default:
+        throw TestStepParsingError.unsupportedType(type)
+      }
+    }
+
+    guard actions.isEmpty else {
+      throw TestStepParsingError.actionsWithoutSnapshot
+    }
+    return steps
   }
 
   private func checkSnapshots(
@@ -265,17 +298,15 @@ private struct TestStep: Sendable {
   let name: String?
   let actions: [DivActionBase]?
 
-  init(dictionary: [String: Any]) throws {
-    let expectedScreenshot: String? = try dictionary.getOptionalField("expected_screenshot")
-    name = expectedScreenshot?.replacingOccurrences(of: ".png", with: "")
-    actions = try? dictionary.getOptionalArray(
-      "div_actions",
-      transform: { (actionDictionary: [String: Any]) -> DivActionBase in
-        try DivTemplates.empty.parseValue(type: DivActionTemplate.self, from: actionDictionary)
-          .unwrap()
-      }
-    ).unwrap()
+  init(name: String, actions: [DivActionBase]) {
+    self.name = name
+    self.actions = actions
   }
+}
+
+private enum TestStepParsingError: Error {
+  case actionsWithoutSnapshot
+  case unsupportedType(String)
 }
 
 extension CGSize {

@@ -64,23 +64,26 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "enable_extension",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "md_on",
-            "value": {
-              "type": "boolean",
-              "value": true
-            }
+      "type": "div_action",
+      "action": {
+        "log_id": "enable_extension",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "md_on",
+          "value": {
+            "type": "boolean",
+            "value": true
           }
         }
-      ],
-      "expected_screenshot": "step1.png"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

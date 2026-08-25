@@ -168,79 +168,116 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_show_between&value=false",
-          "log_id": "change_separator"
-        },
-        {
-          "url": "div-action://set_variable?name=title&value=Between%20separators%20were%20disabled",
-          "log_id": "change_title"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=separator_show_between&value=false",
+        "log_id": "change_separator"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_show_at_start&value=false",
-          "log_id": "change_separator"
-        },
-        {
-          "url": "div-action://set_variable?name=title&value=Start%20and%20between%20separators%20were%20disabled",
-          "log_id": "change_title"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=title&value=Between%20separators%20were%20disabled",
+        "log_id": "change_title"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_show_at_end&value=false",
-          "log_id": "change_separator"
-        },
-        {
-          "url": "div-action://set_variable?name=title&value=All%20separators%20were%20disabled",
-          "log_id": "change_title"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_show_between&value=true",
-          "log_id": "change_separator"
-        },
-        {
-          "url": "div-action://set_variable?name=title&value=Between%20separators%20were%20enabled",
-          "log_id": "change_title"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=separator_show_at_start&value=false",
+        "log_id": "change_separator"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_show_at_start&value=true",
-          "log_id": "change_separator"
-        },
-        {
-          "url": "div-action://set_variable?name=title&value=Start%20and%20between%20separators%20were%20enabled",
-          "log_id": "change_title"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=title&value=Start%20and%20between%20separators%20were%20disabled",
+        "log_id": "change_title"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=separator_show_at_end&value=true",
-          "log_id": "change_separator"
-        },
-        {
-          "url": "div-action://set_variable?name=title&value=All%20separators%20were%20enabled",
-          "log_id": "change_title"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=separator_show_at_end&value=false",
+        "log_id": "change_separator"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=title&value=All%20separators%20were%20disabled",
+        "log_id": "change_title"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=separator_show_between&value=true",
+        "log_id": "change_separator"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=title&value=Between%20separators%20were%20enabled",
+        "log_id": "change_title"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=separator_show_at_start&value=true",
+        "log_id": "change_separator"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=title&value=Start%20and%20between%20separators%20were%20enabled",
+        "log_id": "change_title"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=separator_show_at_end&value=true",
+        "log_id": "change_separator"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=title&value=All%20separators%20were%20enabled",
+        "log_id": "change_title"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step6"
     }
   ]
 }

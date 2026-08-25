@@ -50,29 +50,26 @@
       ]
     }
   },
-  "cases": [
+  "steps": [
     {
-      "div_actions": [
-        {
-          "log_id": "check urlFunction",
-          "url": "div-action://set_variable?name=step&value=0"
-        }
-      ],
-      "expected": [
-        {
-          "type": "variable",
-          "variable_name": "result",
-          "value": {
-            "type": "url",
-            "value": "https://some.url"
-          }
-        }
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "type": "div_action",
+      "action": {
+        "log_id": "check urlFunction",
+        "url": "div-action://set_variable?name=step&value=0"
+      }
+    },
+    {
+      "type": "verify_variable",
+      "variable_name": "result",
+      "value": {
+        "type": "url",
+        "value": "https://some.url"
+      }
     }
+  ],
+  "platforms": [
+    "android",
+    "ios",
+    "web"
   ]
 }

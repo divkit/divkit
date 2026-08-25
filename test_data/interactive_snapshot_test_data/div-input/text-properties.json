@@ -108,188 +108,278 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=1-font_size",
-          "log_id": "changing_text"
-        },
-        {
-          "url": "div-action://set_variable?name=font_size&value=24",
-          "log_id": "font_size"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=1-font_size",
+        "log_id": "changing_text"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=2-font_size_unit_px",
-          "log_id": "changing_text"
-        },
-        {
-          "url": "div-action://set_variable?name=font_size_unit&value=px",
-          "log_id": "font_size_unit"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_size&value=24",
+        "log_id": "font_size"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=3-font_size_unit_dp",
-          "log_id": "changing_text"
-        },
-        {
-          "url": "div-action://set_variable?name=font_size_unit&value=dp",
-          "log_id": "font_size_unit"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step1"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=4-font_weight",
-          "log_id": "changing_text"
-        },
-        {
-          "url": "div-action://set_variable?name=font_weight&value=bold",
-          "log_id": "font_weight"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=2-font_size_unit_px",
+        "log_id": "changing_text"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=5-font_family",
-          "log_id": "changing_text"
-        },
-        {
-          "url": "div-action://set_variable?name=font_family&value=display",
-          "log_id": "font_family"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_size_unit&value=px",
+        "log_id": "font_size_unit"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=6-text_color_n_letter_spacing",
-          "log_id": "changing_text"
-        },
-        {
-          "url": "div-action://set_variable?name=text_color&value=%230000FF",
-          "log_id": "text_color"
-        },
-        {
-          "url": "div-action://set_variable?name=letter_spacing&value=1.5",
-          "log_id": "letter_spacing"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step2"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=7-multi_line_text%0Aline_2%0Aline_3%0Aline_4",
-          "log_id": "changing_text"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=3-font_size_unit_dp",
+        "log_id": "changing_text"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=8-font_variations",
-          "log_id": "changing_text"
-        },
-        {
-          "log_id": "font_variations",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "font_variations",
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_size_unit&value=dp",
+        "log_id": "font_size_unit"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step3"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=4-font_weight",
+        "log_id": "changing_text"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_weight&value=bold",
+        "log_id": "font_weight"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=5-font_family",
+        "log_id": "changing_text"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_family&value=display",
+        "log_id": "font_family"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step5"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=6-text_color_n_letter_spacing",
+        "log_id": "changing_text"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=text_color&value=%230000FF",
+        "log_id": "text_color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=letter_spacing&value=1.5",
+        "log_id": "letter_spacing"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step6"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=7-multi_line_text%0Aline_2%0Aline_3%0Aline_4",
+        "log_id": "changing_text"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step7"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=8-font_variations",
+        "log_id": "changing_text"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "font_variations",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "font_variations",
+          "value": {
+            "type": "dict",
             "value": {
-              "type": "dict",
-              "value": {
-                "slnt": -7
-              }
+              "slnt": -7
             }
           }
-        },
-        {
-          "url": "div-action://set_variable?name=font_family&value=roboto_flex",
-          "log_id": "font_family"
         }
-      ]
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=",
-          "log_id": "clear_text"
-        }
-      ]
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_family&value=roboto_flex",
+        "log_id": "font_family"
+      }
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=hint_text&value=10-hint_text_n_color",
-          "log_id": "hint_text"
-        },
-        {
-          "url": "div-action://set_variable?name=hint_color&value=%23AAAAFF",
-          "log_id": "hint_color"
-        }
-      ]
+      "type": "verify_snapshot",
+      "name": "step8"
     },
     {
-      "div_actions": [
-        {
-          "url": "div-action://set_variable?name=input_value&value=initial_text",
-          "log_id": "restore: text"
-        },
-        {
-          "url": "div-action://set_variable?name=font_size&value=20",
-          "log_id": "restore: font_size"
-        },
-        {
-          "url": "div-action://set_variable?name=font_size_unit&value=sp",
-          "log_id": "restore: font_size_unit"
-        },
-        {
-          "url": "div-action://set_variable?name=font_weight&value=medium",
-          "log_id": "restore: font_weight"
-        },
-        {
-          "url": "div-action://set_variable?name=font_family&value=text",
-          "log_id": "restore: font_family"
-        },
-        {
-          "log_id": "restore: font_variations",
-          "typed": {
-            "type": "set_variable",
-            "variable_name": "font_variations",
-            "value": {
-              "type": "dict",
-              "value": {}
-            }
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=",
+        "log_id": "clear_text"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step9"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=hint_text&value=10-hint_text_n_color",
+        "log_id": "hint_text"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=hint_color&value=%23AAAAFF",
+        "log_id": "hint_color"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step10"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=input_value&value=initial_text",
+        "log_id": "restore: text"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_size&value=20",
+        "log_id": "restore: font_size"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_size_unit&value=sp",
+        "log_id": "restore: font_size_unit"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_weight&value=medium",
+        "log_id": "restore: font_weight"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=font_family&value=text",
+        "log_id": "restore: font_family"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "restore: font_variations",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "font_variations",
+          "value": {
+            "type": "dict",
+            "value": {}
           }
-        },
-        {
-          "url": "div-action://set_variable?name=text_color&value=%23444444",
-          "log_id": "restore: text_color"
-        },
-        {
-          "url": "div-action://set_variable?name=letter_spacing&value=0",
-          "log_id": "restore: letter_spacing"
-        },
-        {
-          "url": "div-action://set_variable?name=hint_text&value=initial_hint",
-          "log_id": "restore: hint_text"
-        },
-        {
-          "url": "div-action://set_variable?name=hint_color&value=%23AAAAAA",
-          "log_id": "restore: hint_color"
         }
-      ],
-      "expected_screenshot": "step0.png"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=text_color&value=%23444444",
+        "log_id": "restore: text_color"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=letter_spacing&value=0",
+        "log_id": "restore: letter_spacing"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=hint_text&value=initial_hint",
+        "log_id": "restore: hint_text"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=hint_color&value=%23AAAAAA",
+        "log_id": "restore: hint_color"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
     }
   ]
 }

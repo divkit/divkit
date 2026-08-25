@@ -60,21 +60,30 @@
   },
   "steps": [
     {
-      "expected_screenshot": "step0.png"
+      "type": "verify_snapshot",
+      "name": "step0"
     },
     {
-      "div_actions": [
-        {
-          "log_id": "Start timer",
-          "url": "div-action://timer?id=timer1&action=start"
-        },
-        {
-          "url": "div-action://set_variable?name=timer_label&value=started",
-          "log_id": "change label"
-        }
-      ],
-      "delay": 2000,
-      "expected_screenshot": "step1.png"
+      "type": "div_action",
+      "action": {
+        "log_id": "Start timer",
+        "url": "div-action://timer?id=timer1&action=start"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_variable?name=timer_label&value=started",
+        "log_id": "change label"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 2000
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
     }
   ]
 }

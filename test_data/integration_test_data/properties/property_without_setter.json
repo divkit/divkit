@@ -29,16 +29,19 @@
   },
   "cases": [
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=prop&value=setter",
-          "log_id": "set_prop"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=prop&value=setter",
+            "log_id": "set_prop"
+          }
+        },
         {
-          "type": "error",
-          "value": "Cannot set property. No setters provided. Name: 'prop'"
+          "type": "verify_errors",
+          "errors": [
+            "Cannot set property. No setters provided. Name: 'prop'"
+          ]
         }
       ],
       "platforms": [
@@ -50,16 +53,19 @@
       }
     },
     {
-      "div_actions": [
+      "steps": [
         {
-          "url": "div-action://set_variable?name=prop&value=setter",
-          "log_id": "set_prop"
-        }
-      ],
-      "expected": [
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=prop&value=setter",
+            "log_id": "set_prop"
+          }
+        },
         {
-          "type": "error",
-          "value": "Cannot set property. No setters provided."
+          "type": "verify_errors",
+          "errors": [
+            "Cannot set property. No setters provided."
+          ]
         }
       ],
       "platforms": [
