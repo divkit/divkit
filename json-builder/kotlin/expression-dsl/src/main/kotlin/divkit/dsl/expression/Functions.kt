@@ -4,6 +4,7 @@
 
 package divkit.dsl.expression
 
+import divkit.dsl.Color
 import divkit.dsl.Url
 
 /**
@@ -94,7 +95,7 @@ fun getArrayBoolean(
 fun getArrayColor(
     param0: Expression<out List<*>>,
     param1: Expression<Long>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getArrayColor",
         param0,
@@ -198,12 +199,34 @@ fun getArrayOptBoolean(
  * @return function expression
  */
 
+@JvmName("getArrayOptColorListIntColor")
+fun getArrayOptColor(
+    param0: Expression<out List<*>>,
+    param1: Expression<Long>,
+    param2: Expression<Color>,
+): Expression<Color> =
+    FunctionExpression(
+        "getArrayOptColor",
+        param0,
+        param1,
+        param2,
+    )
+
+/**
+ * Returns an optional color value from array.
+ *
+ * @param param0 Array.
+ * @param param1 Index at array.
+ * @param param2 Fallback value if value by index not exists or it's is not a color.
+ * @return function expression
+ */
+
 @JvmName("getArrayOptColorListIntString")
 fun getArrayOptColor(
     param0: Expression<out List<*>>,
     param1: Expression<Long>,
     param2: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getArrayOptColor",
         param0,
@@ -362,7 +385,7 @@ fun getBooleanFromArray(
 fun getColorFromArray(
     param0: Expression<out List<*>>,
     param1: Expression<Long>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getColorFromArray",
         param0,
@@ -466,12 +489,34 @@ fun getOptBooleanFromArray(
  * @return function expression
  */
 
+@JvmName("getOptColorFromArrayListIntColor")
+fun getOptColorFromArray(
+    param0: Expression<out List<*>>,
+    param1: Expression<Long>,
+    param2: Expression<Color>,
+): Expression<Color> =
+    FunctionExpression(
+        "getOptColorFromArray",
+        param0,
+        param1,
+        param2,
+    )
+
+/**
+ * Returns an optional color value from array.
+ *
+ * @param param0 Array.
+ * @param param1 Index at array.
+ * @param param2 Fallback value if value by index not exists or it's is not a color.
+ * @return function expression
+ */
+
 @JvmName("getOptColorFromArrayListIntString")
 fun getOptColorFromArray(
     param0: Expression<out List<*>>,
     param1: Expression<Long>,
     param2: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getOptColorFromArray",
         param0,
@@ -671,6 +716,32 @@ fun getColorAlpha(
 fun Expression<String>.getColorAlpha(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getColorAlpha(this)
 
 /**
+ * Gets alpha value of argument color. Returns number value in range 0.0 to 1.0 of alpha value of color.
+ *
+ * @param param0 Color
+ * @return function expression
+ */
+
+@JvmName("getColorAlphaColor")
+fun getColorAlpha(
+    param0: Expression<Color>,
+): Expression<Double> =
+    FunctionExpression(
+        "getColorAlpha",
+        param0,
+    )
+
+/**
+ * Gets alpha value of argument color. Returns number value in range 0.0 to 1.0 of alpha value of color.
+ *
+ * @receiver Color
+ * @return function expression
+ */
+
+@JvmName("extension_getColorAlphaColor")
+fun Expression<Color>.getColorAlpha(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getColorAlpha(this)
+
+/**
  * Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.
  *
  * @param param0 String value of color in hex format.
@@ -695,6 +766,32 @@ fun getColorRed(
 
 @JvmName("extension_getColorRedString")
 fun Expression<String>.getColorRed(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getColorRed(this)
+
+/**
+ * Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.
+ *
+ * @param param0 Color
+ * @return function expression
+ */
+
+@JvmName("getColorRedColor")
+fun getColorRed(
+    param0: Expression<Color>,
+): Expression<Double> =
+    FunctionExpression(
+        "getColorRed",
+        param0,
+    )
+
+/**
+ * Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.
+ *
+ * @receiver Color
+ * @return function expression
+ */
+
+@JvmName("extension_getColorRedColor")
+fun Expression<Color>.getColorRed(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getColorRed(this)
 
 /**
  * Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.
@@ -723,6 +820,32 @@ fun getColorGreen(
 fun Expression<String>.getColorGreen(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getColorGreen(this)
 
 /**
+ * Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.
+ *
+ * @param param0 Color.
+ * @return function expression
+ */
+
+@JvmName("getColorGreenColor")
+fun getColorGreen(
+    param0: Expression<Color>,
+): Expression<Double> =
+    FunctionExpression(
+        "getColorGreen",
+        param0,
+    )
+
+/**
+ * Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.
+ *
+ * @receiver Color.
+ * @return function expression
+ */
+
+@JvmName("extension_getColorGreenColor")
+fun Expression<Color>.getColorGreen(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getColorGreen(this)
+
+/**
  * Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.
  *
  * @param param0 String value of color in hex format.
@@ -749,6 +872,32 @@ fun getColorBlue(
 fun Expression<String>.getColorBlue(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getColorBlue(this)
 
 /**
+ * Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.
+ *
+ * @param param0 Color.
+ * @return function expression
+ */
+
+@JvmName("getColorBlueColor")
+fun getColorBlue(
+    param0: Expression<Color>,
+): Expression<Double> =
+    FunctionExpression(
+        "getColorBlue",
+        param0,
+    )
+
+/**
+ * Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.
+ *
+ * @receiver Color.
+ * @return function expression
+ */
+
+@JvmName("extension_getColorBlueColor")
+fun Expression<Color>.getColorBlue(@Suppress("UNUSED_PARAMETER", "LocalVariableName") `do not use`: Unit = Unit) = getColorBlue(this)
+
+/**
  * Sets alpha value of argument color. Returns string value of color in hex format '#FFAABBCC'.
  *
  * @param param0 String value of color in hex format.
@@ -760,7 +909,26 @@ fun Expression<String>.getColorBlue(@Suppress("UNUSED_PARAMETER", "LocalVariable
 fun setColorAlpha(
     param0: Expression<String>,
     param1: Expression<Double>,
-): Expression<String> =
+): Expression<Color> =
+    FunctionExpression(
+        "setColorAlpha",
+        param0,
+        param1,
+    )
+
+/**
+ * Sets alpha value of argument color. Returns color.
+ *
+ * @param param0 Color.
+ * @param param1 Number value of alpha in range 0.0 to 1.0.
+ * @return function expression
+ */
+
+@JvmName("setColorAlphaColorDouble")
+fun setColorAlpha(
+    param0: Expression<Color>,
+    param1: Expression<Double>,
+): Expression<Color> =
     FunctionExpression(
         "setColorAlpha",
         param0,
@@ -779,7 +947,26 @@ fun setColorAlpha(
 fun setColorRed(
     param0: Expression<String>,
     param1: Expression<Double>,
-): Expression<String> =
+): Expression<Color> =
+    FunctionExpression(
+        "setColorRed",
+        param0,
+        param1,
+    )
+
+/**
+ * Sets red value of argument color. Returns color.
+ *
+ * @param param0 Color.
+ * @param param1 Number value of red in range 0.0 to 1.0.
+ * @return function expression
+ */
+
+@JvmName("setColorRedColorDouble")
+fun setColorRed(
+    param0: Expression<Color>,
+    param1: Expression<Double>,
+): Expression<Color> =
     FunctionExpression(
         "setColorRed",
         param0,
@@ -798,7 +985,26 @@ fun setColorRed(
 fun setColorGreen(
     param0: Expression<String>,
     param1: Expression<Double>,
-): Expression<String> =
+): Expression<Color> =
+    FunctionExpression(
+        "setColorGreen",
+        param0,
+        param1,
+    )
+
+/**
+ * Sets green value of argument color. Returns Color.
+ *
+ * @param param0 Color.
+ * @param param1 Number value of green in range 0.0 to 1.0.
+ * @return function expression
+ */
+
+@JvmName("setColorGreenColorDouble")
+fun setColorGreen(
+    param0: Expression<Color>,
+    param1: Expression<Double>,
+): Expression<Color> =
     FunctionExpression(
         "setColorGreen",
         param0,
@@ -817,7 +1023,26 @@ fun setColorGreen(
 fun setColorBlue(
     param0: Expression<String>,
     param1: Expression<Double>,
-): Expression<String> =
+): Expression<Color> =
+    FunctionExpression(
+        "setColorBlue",
+        param0,
+        param1,
+    )
+
+/**
+ * Sets blue value of argument color. Returns Color.
+ *
+ * @param param0 Color.
+ * @param param1 Number value of blue in range 0.0 to 1.0.
+ * @return function expression
+ */
+
+@JvmName("setColorBlueColorDouble")
+fun setColorBlue(
+    param0: Expression<Color>,
+    param1: Expression<Double>,
+): Expression<Color> =
     FunctionExpression(
         "setColorBlue",
         param0,
@@ -840,7 +1065,7 @@ fun argb(
     param1: Expression<Double>,
     param2: Expression<Double>,
     param3: Expression<Double>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "argb",
         param0,
@@ -857,11 +1082,11 @@ fun argb(
  * @return function expression
  */
 
-@JvmName("alphaBlendStringString")
+@JvmName("alphaBlendColorColor")
 fun alphaBlend(
-    param0: Expression<String>,
-    param1: Expression<String>,
-): Expression<String> =
+    param0: Expression<Color>,
+    param1: Expression<Color>,
+): Expression<Color> =
     FunctionExpression(
         "alphaBlend",
         param0,
@@ -882,7 +1107,7 @@ fun rgb(
     param0: Expression<Double>,
     param1: Expression<Double>,
     param2: Expression<Double>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "rgb",
         param0,
@@ -978,7 +1203,7 @@ fun getDictBoolean(
 fun getDictColor(
     param0: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getDictColor",
         param0,
@@ -1101,12 +1326,34 @@ fun getDictOptBoolean(
  * @return function expression
  */
 
+@JvmName("getDictOptColorColorMapString")
+fun getDictOptColor(
+    param0: Expression<Color>,
+    param1: Expression<out Map<*, *>>,
+    vararg varargs: Expression<String>,
+): Expression<Color> =
+    FunctionExpression(
+        "getDictOptColor",
+        param0,
+        param1,
+        *varargs,
+    )
+
+/**
+ * Returns an optional color property from dictionary.
+ *
+ * @param param0 Fallback value if property does not exist or a property value is not a color.
+ * @param param1 Dictionary.
+ * @param varargs Path in dictionary.
+ * @return function expression
+ */
+
 @JvmName("getDictOptColorStringMapString")
 fun getDictOptColor(
     param0: Expression<String>,
     param1: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getDictOptColor",
         param0,
@@ -1246,7 +1493,7 @@ fun getBooleanFromDict(
 fun getColorFromDict(
     param0: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getColorFromDict",
         param0,
@@ -1407,12 +1654,34 @@ fun getOptBooleanFromDict(
  * @return function expression
  */
 
+@JvmName("getOptColorFromDictColorMapString")
+fun getOptColorFromDict(
+    param0: Expression<Color>,
+    param1: Expression<out Map<*, *>>,
+    vararg varargs: Expression<String>,
+): Expression<Color> =
+    FunctionExpression(
+        "getOptColorFromDict",
+        param0,
+        param1,
+        *varargs,
+    )
+
+/**
+ * Returns an optional color property from dictionary.
+ *
+ * @param param0 Fallback value if property does not exist or a property value is not a color.
+ * @param param1 Dictionary.
+ * @param varargs Path in dictionary.
+ * @return function expression
+ */
+
 @JvmName("getOptColorFromDictStringMapString")
 fun getOptColorFromDict(
     param0: Expression<String>,
     param1: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getOptColorFromDict",
         param0,
@@ -2570,7 +2839,7 @@ fun Expression<String>.toNumber(@Suppress("UNUSED_PARAMETER", "LocalVariableName
 @JvmName("toColorString")
 fun toColor(
     param0: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "toColor",
         param0,
@@ -2715,11 +2984,30 @@ fun getUrlValue(
  * @return function expression
  */
 
+@JvmName("getColorValueStringColor")
+fun getColorValue(
+    param0: Expression<String>,
+    param1: Expression<Color>,
+): Expression<Color> =
+    FunctionExpression(
+        "getColorValue",
+        param0,
+        param1,
+    )
+
+/**
+ * Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Variable name.
+ * @param param1 Fallback value.
+ * @return function expression
+ */
+
 @JvmName("getColorValueStringString")
 fun getColorValue(
     param0: Expression<String>,
     param1: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getColorValue",
         param0,
@@ -2958,11 +3246,52 @@ fun getStoredUrlValue(
  * @return function expression
  */
 
+@JvmName("getStoredColorValueStringColor")
+fun getStoredColorValue(
+    param0: Expression<String>,
+    param1: Expression<Color>,
+): Expression<Color> =
+    FunctionExpression(
+        "getStoredColorValue",
+        param0,
+        param1,
+    )
+
+/**
+ * Returns the stored value by its name. If the value doesn't exist in specified scope or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Storage scope: `global` — not bound to a specific card; `card` — bound to the current card. On Android the card is identified by `DivDataTag`, on iOS by the `cardId` parameter, on Web the scope value is passed to `Store` and the developer integrating DivKit must implement reading values for that scope.
+ * @param param2 Fallback value.
+ * @return function expression
+ */
+
+@JvmName("getStoredColorValueStringStringColor")
+fun getStoredColorValue(
+    param0: Expression<String>,
+    param1: Expression<String>,
+    param2: Expression<Color>,
+): Expression<Color> =
+    FunctionExpression(
+        "getStoredColorValue",
+        param0,
+        param1,
+        param2,
+    )
+
+/**
+ * Returns the stored value by its name. If the value doesn't exist or has incorrect type, the default value would be returned.
+ *
+ * @param param0 Stored value name.
+ * @param param1 Fallback value.
+ * @return function expression
+ */
+
 @JvmName("getStoredColorValueStringString")
 fun getStoredColorValue(
     param0: Expression<String>,
     param1: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getStoredColorValue",
         param0,
@@ -2983,7 +3312,7 @@ fun getStoredColorValue(
     param0: Expression<String>,
     param1: Expression<String>,
     param2: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getStoredColorValue",
         param0,
@@ -3603,9 +3932,9 @@ fun toString(
  * @return function expression
  */
 
-@JvmName("toStringString")
+@JvmName("toStringColor")
 fun toString(
-    param0: Expression<String>,
+    param0: Expression<Color>,
 ): Expression<String> =
     FunctionExpression(
         "toString",
@@ -3992,7 +4321,7 @@ fun getBoolean(
 fun getColor(
     param0: Expression<out Map<*, *>>,
     vararg varargs: Expression<String>,
-): Expression<String> =
+): Expression<Color> =
     FunctionExpression(
         "getColor",
         param0,
