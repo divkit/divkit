@@ -53,7 +53,6 @@
 * Breaking change. Removed id-based APIs from `DivBlockStateStorage`: `setState(id:cardId:state:)`, `getState(_:cardId:)`, and `getStateUntyped(_:cardId:)`. Element state is now stored and looked up only by `UIElementPath`. Use `setState(path:state:)`, `getState(_:)`, and `getStateUntyped(_:)` instead. To migrate, resolve the element `id` to a `UIElementPath` (for example via the modeling context path or `IdToPath`) and call the path-based API. Elements that share the same `id` under different paths no longer share a single state slot.
 * Fixed an issue where fixed-width elements were expanded when their paddings exceeded their width.
 * Fixed flickering image on Restart tap for Rive animation (loop=oneShot).
-* Fixed incorrect cursor position in masked input after autocomplete on iOS.
 * Fixed invalid `layout_provider` variable values reported for not yet measured elements, for example while `gallery` cells are reused.
 
 ### Web Client

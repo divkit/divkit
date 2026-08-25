@@ -89,9 +89,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var isInputFocused = false
   private var keyboardHeight: CGFloat?
   private var maxLength: Int?
-  /// Expected caret while UIKit may still reset selection after autocomplete.
-  private var pendingMaskedCursor: NSRange?
-  private var isApplyingMaskedCursor = false
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -114,9 +111,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.delegate = self
     multiLineInput.textContainer.lineFragmentPadding = 0
     multiLineInput.returnKeyType = .default
-    multiLineInput.selectionChanged = { [weak self] in
-      self?.reassertPendingMaskedCursorIfNeeded()
-    }
 
     singleLineInput.isHidden = true
     singleLineInput.backgroundColor = .clear
@@ -124,9 +118,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     singleLineInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     singleLineInput.contentVerticalAlignment = .top
     singleLineInput.returnKeyType = .default
-    singleLineInput.selectionChanged = { [weak self] in
-      self?.reassertPendingMaskedCursorIfNeeded()
-    }
 
     hintView.backgroundColor = .clear
     hintView.numberOfLines = 0
@@ -365,8 +356,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.filters = filters
     if filters != nil {
       setSmartInsertDeleteType(.no)
-    } else if maskedViewModel == nil {
-      // Mask path leaves smart insert off (set in setMaskModel); restore only without a mask.
+    } else {
       setSmartInsertDeleteType(.default)
     }
   }
@@ -474,74 +464,46 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.accessibilityLabel = accessibilityLabel
   }
 
-  private func setTextData(_ text: String, cursor: NSRange? = nil) {
+  private func setTextData(_ text: String) {
     guard let typo else { return }
     let attributedText = text.with(typo: typo)
 
     if multiLineInput.isHidden {
-      setSingleLineTextData(text: text, attributedText: attributedText, cursor: cursor)
+      setSingleLineTextData(text: text, attributedText: attributedText)
     } else {
-      setMultiLineTextData(text: text, attributedText: attributedText, cursor: cursor)
+      setMultiLineTextData(text: text, attributedText: attributedText)
     }
 
     multiLineInput.typingAttributes = typo.attributes
     singleLineInput.defaultTextAttributes = typo.attributes
   }
 
-  private func setMultiLineTextData(
-    text: String,
-    attributedText: NSAttributedString,
-    cursor: NSRange? = nil
-  ) {
-    let previousRange = multiLineInput.selectedRange
-    let textChanged = text != multiLineInput.attributedText.string
+  private func setMultiLineTextData(text: String, attributedText: NSAttributedString) {
+    let selectedRange = multiLineInput.selectedRange
+    let shouldResetRange = maskedViewModel == nil && text != multiLineInput.attributedText.string
     multiLineInput.attributedText = attributedText
 
-    // Masked input: caret is owned by commitMaskedCursor / applyMaskedCursor.
-    // When the model has no cursor yet, keep the previous selection.
-    if maskedViewModel != nil {
-      if cursor == nil {
-        multiLineInput.selectedRange = previousRange
-      }
-      return
-    }
-
-    if textChanged {
+    if shouldResetRange {
       let endLocation = (attributedText.string as NSString).length
       multiLineInput.selectedRange = NSRange(location: endLocation, length: 0)
     } else {
-      multiLineInput.selectedRange = previousRange
+      multiLineInput.selectedRange = selectedRange
     }
   }
 
-  private func setSingleLineTextData(
-    text: String,
-    attributedText: NSAttributedString,
-    cursor: NSRange? = nil
-  ) {
-    let previousRange = singleLineInput.selectedTextRange
-    let textChanged = text != singleLineInput.attributedText?.string
+  private func setSingleLineTextData(text: String, attributedText: NSAttributedString) {
+    guard let selectedRange = singleLineInput.selectedTextRange else { return }
+    let shouldResetRange = maskedViewModel == nil && text != singleLineInput.attributedText?.string
     singleLineInput.attributedText = attributedText
 
-    // Masked input: caret is owned by commitMaskedCursor / applyMaskedCursor.
-    // When the model has no cursor yet, keep the previous selection.
-    if maskedViewModel != nil {
-      if cursor == nil {
-        singleLineInput.selectedTextRange = previousRange
-      }
-      return
-    }
-
-    guard let previousRange else { return }
-
-    if textChanged {
+    if shouldResetRange {
       let endPosition = singleLineInput.endOfDocument
       singleLineInput.selectedTextRange = singleLineInput.textRange(
         from: endPosition,
         to: endPosition
       )
     } else {
-      singleLineInput.selectedTextRange = previousRange
+      singleLineInput.selectedTextRange = selectedRange
     }
   }
 
@@ -551,15 +513,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   ) {
     guard let mask, let rawTextValue else {
       maskedViewModel = nil
-      pendingMaskedCursor = nil
-      if filters == nil {
-        setSmartInsertDeleteType(.default)
-      }
       return
     }
 
-    // Prevent UIKit smart insert/delete from injecting spaces around autocomplete.
-    setSmartInsertDeleteType(.no)
     self.rawTextValue = rawTextValue
     guard maskedViewModel == nil else {
       maskedViewModel?.rawText = rawTextValue.value
@@ -573,84 +529,35 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       typo: typo,
       signal: userInputPipe.signal
     )
-    guard let maskedViewModel else { return }
-    maskedViewModel.$rawText.currentAndNewValues.addObserver { [weak self] input in
+    maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] range in
+      guard let self, let range else { return }
+      DispatchQueue.main.async {
+        self.multiLineInput.selectedRange = range
+        if let textFieldPosition = self.singleLineInput.position(
+          from: self.singleLineInput.beginningOfDocument,
+          offset: range.location
+        ), self.singleLineInput.selectedTextRange?.start != textFieldPosition {
+          self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
+            from: textFieldPosition,
+            to: textFieldPosition
+          )
+        }
+      }
+    }.dispose(in: disposePool)
+    maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
       guard let self else { return }
       self.rawTextValue.value = input
     }.dispose(in: disposePool)
 
-    // Apply formatted text and caret together. UIKit may reset selection after
-    // shouldChange returns (QuickType); pendingMaskedCursor + selectionChanged reassert.
-    Signal.combineLatest(
-      maskedViewModel.$formattedText.currentAndNewValues,
-      maskedViewModel.$cursorPosition.currentAndNewValues
-    ).addObserver { [weak self] text, cursor in
-      guard let self else { return }
-      DispatchQueue.main.async {
-        self.setTextData(text, cursor: cursor)
-        self.textValue.value = text
-        self.updateHintVisibility()
-        if let cursor {
-          self.commitMaskedCursor(cursor)
-        } else {
-          self.pendingMaskedCursor = nil
+    maskedViewModel?.$formattedText.currentAndNewValues
+      .addObserver { [weak self] input in
+        guard let self else { return }
+        DispatchQueue.main.async {
+          self.setTextData(input)
+          self.textValue.value = input
+          self.updateHintVisibility()
         }
-      }
-    }.dispose(in: disposePool)
-  }
-
-  private func commitMaskedCursor(_ cursor: NSRange) {
-    pendingMaskedCursor = cursor
-    applyMaskedCursor(cursor)
-    // Next runloop: reassert cursor if UIKit reset it (e.g. QuickType), then clear pending.
-    // The reassert window only needs to cover the current runloop; keeping pendingMaskedCursor
-    // past this point allows a stale cursor to hijack user taps when the field was unfocused.
-    DispatchQueue.main.async { [weak self] in
-      guard let self, let pending = self.pendingMaskedCursor else { return }
-      if !self.currentSelectionMatches(pending) {
-        self.applyMaskedCursor(pending)
-      }
-      self.pendingMaskedCursor = nil
-    }
-  }
-
-  private func reassertPendingMaskedCursorIfNeeded() {
-    guard !isApplyingMaskedCursor, let pending = pendingMaskedCursor else { return }
-    if currentSelectionMatches(pending) {
-      return
-    }
-    applyMaskedCursor(pending)
-  }
-
-  private func currentSelectionMatches(_ cursor: NSRange) -> Bool {
-    if multiLineInput.isHidden {
-      guard let selected = singleLineInput.selectedNSRange else { return false }
-      return selected.location == cursor.location && selected.length == cursor.length
-    }
-    return multiLineInput.selectedRange == cursor
-  }
-
-  private func applyMaskedCursor(_ cursor: NSRange) {
-    isApplyingMaskedCursor = true
-    defer { isApplyingMaskedCursor = false }
-
-    let textLength = (currentText as NSString).length
-    let location = min(max(cursor.location, 0), textLength)
-    let clamped = NSRange(location: location, length: 0)
-
-    if multiLineInput.isHidden {
-      if let position = singleLineInput.position(
-        from: singleLineInput.beginningOfDocument,
-        offset: clamped.location
-      ) {
-        singleLineInput.selectedTextRange = singleLineInput.textRange(
-          from: position,
-          to: position
-        )
-      }
-    } else {
-      multiLineInput.selectedRange = clamped
-    }
+      }.dispose(in: disposePool)
   }
 
   private func startKeyboardTracking() {
@@ -731,11 +638,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
 extension TextInputBlockView {
   func inputViewDidBeginEditing(_ view: UIView) {
-    if maskedViewModel != nil {
-      // Must be set while editing — QuickType otherwise injects spaces.
-      setSmartInsertDeleteType(.no)
-    }
-
     if let pickerView = multiLineInput.inputView as? UIPickerView {
       let index = selectionItems?.firstIndex { $0.value == textValue.value } ?? 0
       pickerView.selectRow(index, inComponent: 0, animated: false)
@@ -753,26 +655,6 @@ extension TextInputBlockView {
 
   func inputViewDidChange(_: UIView) {
     updateHintVisibility()
-    // Masked path owns text via MaskedInputViewModel. UIKit-only edits (dictation,
-    // marked-text IMEs, some autofill) never go through shouldChange — reject them by
-    // resyncing the view from the model instead of leaving text/model diverged.
-    // Skip while marked text is active so we don't break the IME session.
-    if let maskedViewModel {
-      let hasMarkedText = multiLineInput.isHidden
-        ? singleLineInput.markedTextRange != nil
-        : multiLineInput.markedTextRange != nil
-      if hasMarkedText {
-        return
-      }
-      let formatted = maskedViewModel.formattedText
-      if currentText != formatted {
-        setTextData(formatted, cursor: maskedViewModel.cursorPosition)
-      }
-      if let cursor = maskedViewModel.cursorPosition {
-        applyMaskedCursor(cursor)
-      }
-      return
-    }
     textValue.value = currentText
   }
 
@@ -850,19 +732,7 @@ extension TextInputBlockView {
             .send(.clearRange(range: offsetRange))
         }
       } else {
-        // QuickType / smart-insert can inject padding spaces even with
-        // smartInsertDeleteType=.no. Trim only leading/trailing spaces for
-        // multi-character inserts — never strip interior spaces (paste /
-        // multi-word suggestions). Skip trimming entirely when pasting.
-        let insertText: String
-        if text.count > 1 {
-          let isPasting = multiLineInput.isPasting || singleLineInput.isPasting
-          insertText = isPasting ? text : text.trimmingCharacters(in: .whitespaces)
-        } else {
-          insertText = text
-        }
-        guard !insertText.isEmpty else { return false }
-        userInputPipe.send(.insert(string: insertText, range: offsetRange))
+        userInputPipe.send(.insert(string: text, range: offsetRange))
       }
       return false
     }
@@ -907,16 +777,13 @@ extension TextInputBlockView: UITextViewDelegate {
 
   func textView(
     _: UITextView,
-    shouldChangeTextIn nsRange: NSRange,
+    shouldChangeTextIn _: NSRange,
     replacementText text: String
   ) -> Bool {
     defer {
       multiLineInput.isPasting = false
     }
-    // Masked: prefer delegate range (selectedRange can be stale during autocomplete).
-    // Unmasked: keep preferring selectedRange (legacy behavior).
-    let rangeSource = maskedViewModel != nil ? nsRange : multiLineInput.selectedRange
-    guard let range = Range(rangeSource, in: currentText) else {
+    guard let range = Range(multiLineInput.selectedRange, in: currentText) else {
       return false
     }
     if text == "\n", !enterKeyActions.isEmpty, !multiLineInput.isPasting {
@@ -945,14 +812,13 @@ extension TextInputBlockView: UITextFieldDelegate {
     shouldChangeCharactersIn range: NSRange,
     replacementString string: String
   ) -> Bool {
-    // Masked: prefer delegate range (selectedNSRange can be stale during autocomplete).
-    // Unmasked: keep preferring selectedNSRange (legacy behavior).
-    let nsRange = maskedViewModel != nil ? range : (textField.selectedNSRange ?? range)
-    guard let textRange = Range(nsRange, in: currentText) else {
+    let nsRange = textField.selectedNSRange ?? range
+
+    guard let range = Range(nsRange, in: currentText) else {
       return false
     }
 
-    return inputViewReplaceTextIn(view: textField, range: textRange, text: string)
+    return inputViewReplaceTextIn(view: textField, range: range, text: string)
   }
 
   func textFieldShouldReturn(_: UITextField) -> Bool {
@@ -1144,16 +1010,6 @@ extension UITextField {
 
 private class PatchedUITextField: UITextField {
   var paddings: EdgeInsets = .zero
-  var selectionChanged: (() -> Void)?
-  var isPasting: Bool = false
-
-  override var selectedTextRange: UITextRange? {
-    get { super.selectedTextRange }
-    set {
-      super.selectedTextRange = newValue
-      selectionChanged?()
-    }
-  }
 
   override func cut(_ sender: Any?) {
     copy(sender)
@@ -1179,10 +1035,6 @@ private class PatchedUITextField: UITextField {
       return
     }
 
-    // Set before shouldChange so masked insert can preserve interior spaces.
-    isPasting = true
-    defer { isPasting = false }
-
     if (self.delegate as? TextInputBlockView)?.textField(
       self,
       shouldChangeCharactersIn: range,
@@ -1201,15 +1053,6 @@ private class PatchedUITextField: UITextField {
 
 private class PatchedUITextView: UITextView {
   var isPasting: Bool = false
-  var selectionChanged: (() -> Void)?
-
-  override var selectedTextRange: UITextRange? {
-    get { super.selectedTextRange }
-    set {
-      super.selectedTextRange = newValue
-      selectionChanged?()
-    }
-  }
 
   override func cut(_ sender: Any?) {
     copy(sender)
@@ -1221,15 +1064,12 @@ private class PatchedUITextView: UITextView {
       return
     }
 
-    // Set before shouldChange so masked insert can preserve interior spaces.
-    isPasting = true
-    defer { isPasting = false }
-
     if (self.delegate as? TextInputBlockView)?.textView(
       self,
       shouldChangeTextIn: self.selectedRange,
       replacementText: string
     ) == true {
+      isPasting = true
       super.paste(sender)
     }
   }
