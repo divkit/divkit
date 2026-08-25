@@ -1,0 +1,88 @@
+{
+  "description": "layout_provider has an explicit cycle breaker: when a variable update loop occurs, writes to the same variable are capped during one layout cycle. This test verifies that the cap is reached and further writes are rejected.",
+  "div_data": {
+    "templates": {
+      "writer": {
+        "type": "text",
+        "$text": "label",
+        "width": {
+          "type": "fixed",
+          "$value": "reported_width"
+        },
+        "height": {
+          "type": "fixed",
+          "value": 20
+        },
+        "layout_provider": {
+          "width_variable_name": "loop_width"
+        }
+      }
+    },
+    "card": {
+      "log_id": "layout_provider_recursive_termination",
+      "variables": [
+        {
+          "name": "loop_width",
+          "type": "integer",
+          "value": 0
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+              "type": "fixed",
+              "value": 400
+            },
+            "items": [
+              {
+                "type": "writer",
+                "id": "writer_40",
+                "label": "First writer",
+                "reported_width": "@{loop_width + 40}"
+              },
+              {
+                "type": "writer",
+                "id": "writer_80",
+                "label": "Second writer",
+                "reported_width": "@{loop_width + 80}"
+              },
+              {
+                "type": "writer",
+                "id": "writer_120",
+                "label": "Third writer",
+                "reported_width": "@{loop_width + 120}"
+              },
+              {
+                "type": "writer",
+                "id": "writer_160",
+                "label": "Blocked fourth writer",
+                "reported_width": "@{loop_width + 160}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "expected": [
+        {
+          "type": "variable",
+          "variable_name": "loop_width",
+          "value": {
+            "type": "integer",
+            "value": 80
+          }
+        }
+      ],
+      "platforms": [
+        "ios"
+      ]
+    }
+  ]
+}

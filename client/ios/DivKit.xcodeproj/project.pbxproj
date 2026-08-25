@@ -254,6 +254,8 @@
 		E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */; };
 		E945FC46293E1CA80066C3EA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC45293E1CA80066C3EA /* Utils.swift */; };
 		E94B516328D0AC0300AFACEA /* interactive_snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */; };
+		D97082000000000300000001 /* DivLayoutProviderHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97082000000000200000001 /* DivLayoutProviderHandlerTests.swift */; };
+		D97082000000000400000001 /* DivBlockProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97082000000000500000001 /* DivBlockProviderTests.swift */; };
 		E99F91822DF04A52003A8AF3 /* DivKitSVG in Frameworks */ = {isa = PBXBuildFile; productRef = E99F91812DF04A52003A8AF3 /* DivKitSVG */; };
 		E9E484C129AF434D00C803A8 /* RegressionFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E484C029AF434D00C803A8 /* RegressionFile.swift */; };
 /* End PBXBuildFile section */
@@ -506,6 +508,8 @@
 		8C7B1B272865C01C0036EF4C /* DivGalleryExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGalleryExtensionsTests.swift; sourceTree = "<group>"; };
 		D967000101010001DEADBEEF /* DivPagerExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivPagerExtensionsTests.swift; sourceTree = "<group>"; };
 		D967000101010002DEADBEEF /* DivPagerExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D967000101010001DEADBEEF /* DivPagerExtensionsTests.swift */; };
+		D97082000000000200000001 /* DivLayoutProviderHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivLayoutProviderHandlerTests.swift; sourceTree = "<group>"; };
+		D97082000000000500000001 /* DivBlockProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBlockProviderTests.swift; sourceTree = "<group>"; };
 		8C7B1B282865C01C0036EF4C /* DivTextExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTextExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B292865C01C0036EF4C /* DivContainerExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivContainerExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B2A2865C01C0036EF4C /* DivGifImageExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGifImageExtensionsTests.swift; sourceTree = "<group>"; };
@@ -1017,6 +1021,7 @@
 				8C7B1BE72865C01C0036EF4C /* Templates */,
 				8CAB08982B39ABC6009330F3 /* TestData */,
 				E986A85A293DE77000D19572 /* Timers */,
+				D97082000000000100000001 /* LayoutProvider */,
 				8CF8BBE62B3265E000569777 /* Utils */,
 				8C7B1BE42865C01C0036EF4C /* Variables */,
 				52EEC66D293E64C90030FB11 /* DivBlockModelingContextTests.swift */,
@@ -1204,6 +1209,15 @@
 				E945FC45293E1CA80066C3EA /* Utils.swift */,
 			);
 			path = Timers;
+			sourceTree = "<group>";
+		};
+		D97082000000000100000001 /* LayoutProvider */ = {
+			isa = PBXGroup;
+			children = (
+				D97082000000000200000001 /* DivLayoutProviderHandlerTests.swift */,
+				D97082000000000500000001 /* DivBlockProviderTests.swift */,
+			);
+			path = LayoutProvider;
 			sourceTree = "<group>";
 		};
 		E99F917C2DEF01A3003A8AF3 /* Frameworks */ = {
@@ -1826,6 +1840,8 @@
 				8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */,
 				8C23F43829DDB3810069F3F7 /* EntityWithoutPropertiesTemplate.swift in Sources */,
 				E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */,
+				D97082000000000300000001 /* DivLayoutProviderHandlerTests.swift in Sources */,
+				D97082000000000400000001 /* DivBlockProviderTests.swift in Sources */,
 				8C0DC7122865CA1100286F6B /* DivKitTests.swift in Sources */,
 				8C1233AB2C32F08600F534DC /* DivFontProviderTests.swift in Sources */,
 				8C7B1BF62865C01C0036EF4C /* DivTextExtensionsTests.swift in Sources */,

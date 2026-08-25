@@ -140,7 +140,9 @@ final class DivBlockProvider {
 
     self.divData = divData
 
-    if reasons.filter(\.isVariable).isEmpty {
+    // Variable-only updates come from layout_provider itself;
+    // the counter must accumulate across them to break circular update chains.
+    if reasons.hasNonVariableReason {
       context.layoutProviderHandler?.resetUpdatedVariables()
     }
 

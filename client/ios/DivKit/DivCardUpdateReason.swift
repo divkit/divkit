@@ -18,3 +18,14 @@ public enum DivCardUpdateReason {
     }
   }
 }
+
+extension [DivCardUpdateReason] {
+  /// Returns `true` when the batch contains at least one reason that is not `.variable`.
+  /// An empty batch (initial layout) also returns `true` so the counter resets on first render.
+  /// Variable-only batches originate from `layout_provider` itself and must NOT reset the counter,
+  /// allowing the circular-update guard to accumulate across them.
+  @_spi(Internal)
+  public var hasNonVariableReason: Bool {
+    isEmpty || contains(where: { !$0.isVariable })
+  }
+}
