@@ -1,3 +1,23 @@
+## 33.1.0
+
+### Android Client
+* Added `backdrop_scope` param to the `backdrop_effect` extension. It allows capturing the backdrop outside of the card the element belongs to.
+* Added a common host network client for built-in DivKit network requests.
+* Added an opt-in configuration to defer `DivVideo` player creation until the view is attached and `RecyclerView` scrolling is idle.
+* Fixed SVG loading through `GlideDivImageLoader` after another Glide request to the same resource.
+* Fixed background underlay being dropped for an element that declares no `background`, which made the `backdrop_effect` extension do nothing on such elements.
+* Fixed grid gallery paging snapping back to the first item when using multiple rows or columns.
+
+### iOS Client
+* Added `DivData.resolve(card:templates:flagsInfo:)` overload that accepts pre-parsed `DivTemplates` for reusing templates across multiple cards.
+* Breaking change. Removed `RawDivData.resolve(flagsInfo:)`. Use `DivData.resolve(card:templates:flagsInfo:)` instead.
+* Breaking change. `DivDataTemplate` is no longer public. Use `DivData.resolve(card:templates:)` instead of `DivTemplates.parseValue(type: DivDataTemplate.self, from:)`.
+* Fixed a crash that could happen when a `gallery` scroll position was restored while its items were being built.
+* Fixed incorrect block sizes in portrait orientation for the `layout_provider` recursive scenario.
+* Fixed the position of the element copy created for `bring_to_top_id` in tooltips with `substrate_div`: the copy now follows the original view when it is moved.
+* The `multi_page_scroll` pager property has been implemented.
+
+
 ## 33.0.0
 
 ### JSON Schema
