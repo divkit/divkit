@@ -713,7 +713,8 @@
         "1. The pager moves by one page only, regardless of the swipe length and speed",
         "2. The pager moves by several pages at once, the further page is the faster and the longer the swipe is. The pager always stops snapped to a page"
       ],
-      "file": "pager/pager_multi_page_scroll.json"
+      "file": "pager/pager_multi_page_scroll.json",
+      "case_id": 528
     },
     {
       "title": "Action animations",
