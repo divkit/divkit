@@ -6,9 +6,11 @@ import androidx.compose.foundation.gestures.calculateCentroid
 import androidx.compose.foundation.gestures.calculatePan
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -38,10 +40,20 @@ class PinchToZoomExtensionHandler(
         }
 
         val state = remember { mutableStateOf<PinchToZoomState?>(null) }
+        val popupReady = remember { mutableStateOf(false) }
+        val sourceVisible = remember {
+            derivedStateOf { state.value == null || !popupReady.value }
+        }
         val coordinates = remember { mutableStateOf<LayoutCoordinates?>(null) }
 
         content(
-            modifier
+            Modifier
+                .drawWithContent {
+                    if (sourceVisible.value) {
+                        drawContent()
+                    }
+                }
+                .then(modifier)
                 .onGloballyPositioned { coordinates.value = it }
                 .pointerInput(Unit) {
                     awaitEachGesture {
@@ -56,6 +68,7 @@ class PinchToZoomExtensionHandler(
                                 !zooming && pointers.size >= 2 -> {
                                     val bounds = coordinates.value?.boundsInWindow() ?: break
                                     val centroid = event.calculateCentroid()
+                                    popupReady.value = false
                                     state.value = PinchToZoomState(
                                         bounds = bounds,
                                         pivot = centroid - Offset(bounds.left, bounds.top),
@@ -84,6 +97,14 @@ class PinchToZoomExtensionHandler(
                     }
                 }
         )
-        ZoomHost(state, content)
+        ZoomHost(
+            state = state,
+            onReady = {
+                if (state.value != null) {
+                    popupReady.value = true
+                }
+            },
+            content = content
+        )
     }
 }

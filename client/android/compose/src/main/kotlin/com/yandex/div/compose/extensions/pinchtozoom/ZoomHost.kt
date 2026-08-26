@@ -13,6 +13,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
@@ -25,6 +26,7 @@ import androidx.compose.ui.window.PopupProperties
 @Composable
 internal fun ZoomHost(
     state: MutableState<PinchToZoomState?>,
+    onReady: () -> Unit,
     content: @Composable (Modifier) -> Unit
 ) {
     val zoom = state.value ?: return
@@ -68,6 +70,7 @@ internal fun ZoomHost(
             Modifier
                 .fillMaxSize()
                 .background(zoom.dimColor.copy(alpha = zoom.dimColor.alpha * dimAlpha))
+                .onPlaced { onReady() }
         ) {
             Box(
                 Modifier
