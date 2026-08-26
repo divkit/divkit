@@ -61,6 +61,11 @@
 * Additional type exports can now be imported from the main package (for example from `@divkitframework/divkit` or `@divkitframework/divkit/client`).
 * Fixed an issue with the `markdown` extension when unmounting.
 
+### Kotlin JSON Builder
+* Removed `DivScope.color(String)` and `DivScope.url(String)`. Use `color(String)` and `url(String)` instead.
+* Migrated color expressions to `Color` type.
+* Migrated url expressions to `Url` type.
+
 ### TypeScript JSON Builder
 * Breaking change. TypeScript was updated (4.6.4 -> 6.0.2). The heavy-duty `templateHelper` typecheck has been removed at compile time (due to limitations in newer versions of TypeScript).
 
