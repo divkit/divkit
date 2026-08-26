@@ -113,8 +113,7 @@ function createIntegrationTestCase(testCase, testPath) {
         describe(testData.description, () => {
             it(`Case [${i}]`, async function() {
                 await this.browser.yaOpenCrossplatformJson(testPath, {
-                    result_type: resultType,
-                    mock_video_playback: item.mock_video_playback
+                    result_type: resultType
                 });
                 await this.browser.execute(() => {
                     localStorage.clear();
@@ -124,25 +123,6 @@ function createIntegrationTestCase(testCase, testPath) {
                     await this.browser.execute(action => {
                         window.divkitRoot.execAction(action);
                     }, action);
-                }
-
-                if (item.mock_video_playback) {
-                    await this.browser.waitUntil(async () => {
-                        return this.browser.execute(() => {
-                            const getPlaybackState = id => {
-                                const component = document.querySelector(`[data-test-id="${id}"]`);
-                                const video = component && component.querySelector('video');
-                                return video && video.getAttribute('data-mock-playback-state');
-                            };
-
-                            return getPlaybackState('paused_video') === 'paused' &&
-                                getPlaybackState('autostart_video') === 'playing';
-                        });
-                    }, {
-                        timeout: 3000,
-                        interval: 100,
-                        timeoutMsg: 'expected mocked videos to reach their requested playback states'
-                    });
                 }
 
                 const errors = await this.browser.execute(() => {
@@ -173,10 +153,6 @@ function createIntegrationTestCase(testCase, testPath) {
                 }
 
                 for (const expected of expectedVariables) {
-                    if (item.mock_video_playback) {
-                        continue;
-                    }
-
                     const result = await this.browser.execute(variableName => {
                         const inst = window.divkitRoot.getDebugAllVariables().get(variableName);
                         const type = inst.getType();

@@ -31,8 +31,6 @@ export type ComponentKey = string | {
     data: object;
 };
 
-export type VideoPlaybackState = 'start' | 'pause';
-
 export interface InfoGetter {
     node: () => HTMLElement;
     focus: () => void;
@@ -81,7 +79,6 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     states?: Record<string, StateSetter[]>;
     pagers?: Map<string | undefined, PagerData | null>;
     pagerListeners?: Map<string | undefined, PagerListener[]>;
-    videoPlaybackState?: VideoPlaybackState;
     key?: ComponentKey;
     viewInfo: Partial<InfoGetter>;
 

@@ -187,9 +187,11 @@
       ],
       "platforms": [
         "android",
-        "ios",
-        "web"
-      ]
+        "ios"
+      ],
+      "unsupported_platforms": {
+        "web": "Web does not bind or unbind gallery items during scrolling, so the action-before-bind scenario is not applicable"
+      }
     }
   ]
 }
