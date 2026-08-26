@@ -13,12 +13,23 @@ npm i @divkitframework/react --save
 ### Usage
 
 ```tsx
-import { DivKit } from '@divkitframework/react';
+import { useRef } from 'react';
+import { DivKit, type DivKitHandle } from '@divkitframework/react';
 
-return <DivKit id="smth" json={json} />;
+const ref = useRef<DivKitHandle>(null);
+
+return <DivKit ref={ref} id="smth" json={json} />;
 ```
 
 All other props are similar to the `render` options for the `@divkitframework/divkit` module.
+
+### Imperative API
+
+`DivKit` supports `ref` with imperative API:
+
+```tsx
+ref.current?.applyPatch(patch);
+```
 
 ### SSR
 
