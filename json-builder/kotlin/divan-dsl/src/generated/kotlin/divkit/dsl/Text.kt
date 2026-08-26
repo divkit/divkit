@@ -102,6 +102,7 @@ data class Text internal constructor(
             transitionOut = additive.transitionOut ?: properties.transitionOut,
             transitionTriggers = additive.transitionTriggers ?: properties.transitionTriggers,
             truncate = additive.truncate ?: properties.truncate,
+            truncatePolicy = additive.truncatePolicy ?: properties.truncatePolicy,
             underline = additive.underline ?: properties.underline,
             variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
             variables = additive.variables ?: properties.variables,
@@ -383,6 +384,11 @@ data class Text internal constructor(
          */
         val truncate: Property<Truncate>?,
         /**
+         * Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
+         * Default value: `grapheme`.
+         */
+        val truncatePolicy: Property<TruncatePolicy>?,
+        /**
          * Underline.
          * Default value: `none`.
          */
@@ -482,6 +488,7 @@ data class Text internal constructor(
             result.tryPutProperty("transition_out", transitionOut)
             result.tryPutProperty("transition_triggers", transitionTriggers)
             result.tryPutProperty("truncate", truncate)
+            result.tryPutProperty("truncate_policy", truncatePolicy)
             result.tryPutProperty("underline", underline)
             result.tryPutProperty("variable_triggers", variableTriggers)
             result.tryPutProperty("variables", variables)
@@ -500,6 +507,14 @@ data class Text internal constructor(
      */
     @Generated
     sealed interface Truncate
+
+    /**
+     * Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
+     * 
+     * Possible values: [grapheme], [word].
+     */
+    @Generated
+    sealed interface TruncatePolicy
 
     /**
      * Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
@@ -1151,6 +1166,7 @@ data class Text internal constructor(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -1227,6 +1243,7 @@ fun DivScope.text(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
+    truncatePolicy: Text.TruncatePolicy? = null,
     underline: LineStyle? = null,
     variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
@@ -1301,6 +1318,7 @@ fun DivScope.text(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         truncate = valueOrNull(truncate),
+        truncatePolicy = valueOrNull(truncatePolicy),
         underline = valueOrNull(underline),
         variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
@@ -1375,6 +1393,7 @@ fun DivScope.text(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -1451,6 +1470,7 @@ fun DivScope.textProps(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
+    truncatePolicy: Text.TruncatePolicy? = null,
     underline: LineStyle? = null,
     variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
@@ -1524,6 +1544,7 @@ fun DivScope.textProps(
     transitionOut = valueOrNull(transitionOut),
     transitionTriggers = valueOrNull(transitionTriggers),
     truncate = valueOrNull(truncate),
+    truncatePolicy = valueOrNull(truncatePolicy),
     underline = valueOrNull(underline),
     variableTriggers = valueOrNull(variableTriggers),
     variables = valueOrNull(variables),
@@ -1597,6 +1618,7 @@ fun DivScope.textProps(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -1673,6 +1695,7 @@ fun TemplateScope.textRefs(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
+    truncatePolicy: ReferenceProperty<Text.TruncatePolicy>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
     variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
@@ -1746,6 +1769,7 @@ fun TemplateScope.textRefs(
     transitionOut = transitionOut,
     transitionTriggers = transitionTriggers,
     truncate = truncate,
+    truncatePolicy = truncatePolicy,
     underline = underline,
     variableTriggers = variableTriggers,
     variables = variables,
@@ -1819,6 +1843,7 @@ fun TemplateScope.textRefs(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -1895,6 +1920,7 @@ fun Text.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
+    truncatePolicy: Text.TruncatePolicy? = null,
     underline: LineStyle? = null,
     variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
@@ -1969,6 +1995,7 @@ fun Text.override(
         transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
         transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
         truncate = valueOrNull(truncate) ?: properties.truncate,
+        truncatePolicy = valueOrNull(truncatePolicy) ?: properties.truncatePolicy,
         underline = valueOrNull(underline) ?: properties.underline,
         variableTriggers = valueOrNull(variableTriggers) ?: properties.variableTriggers,
         variables = valueOrNull(variables) ?: properties.variables,
@@ -2043,6 +2070,7 @@ fun Text.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -2119,6 +2147,7 @@ fun Text.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
+    truncatePolicy: ReferenceProperty<Text.TruncatePolicy>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
     variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
@@ -2193,6 +2222,7 @@ fun Text.defer(
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
+        truncatePolicy = truncatePolicy ?: properties.truncatePolicy,
         underline = underline ?: properties.underline,
         variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
@@ -2267,6 +2297,7 @@ fun Text.defer(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -2343,6 +2374,7 @@ fun Text.modify(
     transitionOut: Property<AppearanceTransition>? = null,
     transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: Property<Text.Truncate>? = null,
+    truncatePolicy: Property<Text.TruncatePolicy>? = null,
     underline: Property<LineStyle>? = null,
     variableTriggers: Property<List<Trigger>>? = null,
     variables: Property<List<Variable>>? = null,
@@ -2417,6 +2449,7 @@ fun Text.modify(
         transitionOut = transitionOut ?: properties.transitionOut,
         transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
+        truncatePolicy = truncatePolicy ?: properties.truncatePolicy,
         underline = underline ?: properties.underline,
         variableTriggers = variableTriggers ?: properties.variableTriggers,
         variables = variables ?: properties.variables,
@@ -2456,6 +2489,7 @@ fun Text.modify(
  * @param textColor Text color.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param visibility Element visibility.
  */
@@ -2490,6 +2524,7 @@ fun Text.evaluate(
     textColor: ExpressionProperty<Color>? = null,
     tightenWidth: ExpressionProperty<Boolean>? = null,
     truncate: ExpressionProperty<Text.Truncate>? = null,
+    truncatePolicy: ExpressionProperty<Text.TruncatePolicy>? = null,
     underline: ExpressionProperty<LineStyle>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Text = Text(
@@ -2559,6 +2594,7 @@ fun Text.evaluate(
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
         truncate = truncate ?: properties.truncate,
+        truncatePolicy = truncatePolicy ?: properties.truncatePolicy,
         underline = underline ?: properties.underline,
         variableTriggers = properties.variableTriggers,
         variables = properties.variables,
@@ -2633,6 +2669,7 @@ fun Text.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -2709,6 +2746,7 @@ fun Component<Text>.override(
     transitionOut: AppearanceTransition? = null,
     transitionTriggers: List<ArrayElement<TransitionTrigger>>? = null,
     truncate: Text.Truncate? = null,
+    truncatePolicy: Text.TruncatePolicy? = null,
     underline: LineStyle? = null,
     variableTriggers: List<Trigger>? = null,
     variables: List<Variable>? = null,
@@ -2784,6 +2822,7 @@ fun Component<Text>.override(
         transitionOut = valueOrNull(transitionOut),
         transitionTriggers = valueOrNull(transitionTriggers),
         truncate = valueOrNull(truncate),
+        truncatePolicy = valueOrNull(truncatePolicy),
         underline = valueOrNull(underline),
         variableTriggers = valueOrNull(variableTriggers),
         variables = valueOrNull(variables),
@@ -2858,6 +2897,7 @@ fun Component<Text>.override(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -2934,6 +2974,7 @@ fun Component<Text>.defer(
     transitionOut: ReferenceProperty<AppearanceTransition>? = null,
     transitionTriggers: ReferenceProperty<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: ReferenceProperty<Text.Truncate>? = null,
+    truncatePolicy: ReferenceProperty<Text.TruncatePolicy>? = null,
     underline: ReferenceProperty<LineStyle>? = null,
     variableTriggers: ReferenceProperty<List<Trigger>>? = null,
     variables: ReferenceProperty<List<Variable>>? = null,
@@ -3009,6 +3050,7 @@ fun Component<Text>.defer(
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
         truncate = truncate,
+        truncatePolicy = truncatePolicy,
         underline = underline,
         variableTriggers = variableTriggers,
         variables = variables,
@@ -3048,6 +3090,7 @@ fun Component<Text>.defer(
  * @param textColor Text color.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param visibility Element visibility.
  */
@@ -3082,6 +3125,7 @@ fun Component<Text>.evaluate(
     textColor: ExpressionProperty<Color>? = null,
     tightenWidth: ExpressionProperty<Boolean>? = null,
     truncate: ExpressionProperty<Text.Truncate>? = null,
+    truncatePolicy: ExpressionProperty<Text.TruncatePolicy>? = null,
     underline: ExpressionProperty<LineStyle>? = null,
     visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Text> = Component(
@@ -3152,6 +3196,7 @@ fun Component<Text>.evaluate(
         transitionOut = null,
         transitionTriggers = null,
         truncate = truncate,
+        truncatePolicy = truncatePolicy,
         underline = underline,
         variableTriggers = null,
         variables = null,
@@ -3226,6 +3271,7 @@ fun Component<Text>.evaluate(
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param truncate Location of text cropping marker.
+ * @param truncatePolicy Defines where text can be cropped when `truncate` is set to `end`. The property does not enable cropping itself and has no effect when the entire text fits. `grapheme` keeps the longest text prefix that fits together with the cropping marker. The prefix ends at a Unicode extended grapheme cluster boundary, so a user-perceived character, such as an emoji sequence or a letter with a combining mark, is not split; a word may be split. `word` crops at the last available Unicode line break opportunity that fits together with the cropping marker; if none fits, it falls back to `grapheme`.
  * @param underline Underline.
  * @param variableTriggers Triggers for changing variables within an element.
  * @param variables Declaration of variables that can be used within an element. Variables declared in this array can only be used within the element and its child elements.
@@ -3302,6 +3348,7 @@ fun Component<Text>.modify(
     transitionOut: Property<AppearanceTransition>? = null,
     transitionTriggers: Property<List<ArrayElement<TransitionTrigger>>>? = null,
     truncate: Property<Text.Truncate>? = null,
+    truncatePolicy: Property<Text.TruncatePolicy>? = null,
     underline: Property<LineStyle>? = null,
     variableTriggers: Property<List<Trigger>>? = null,
     variables: Property<List<Variable>>? = null,
@@ -3377,6 +3424,7 @@ fun Component<Text>.modify(
         transitionOut = transitionOut,
         transitionTriggers = transitionTriggers,
         truncate = truncate,
+        truncatePolicy = truncatePolicy,
         underline = underline,
         variableTriggers = variableTriggers,
         variables = variables,
@@ -4650,3 +4698,6 @@ fun Text.RangeBuilder.asList() = listOf(this)
 
 @Generated
 fun Text.Truncate.asList() = listOf(this)
+
+@Generated
+fun Text.TruncatePolicy.asList() = listOf(this)

@@ -553,6 +553,14 @@ object MiddleEnumValue : EnumValue("middle"),
     Text.Truncate
 
 @Generated
+object GraphemeEnumValue : EnumValue("grapheme"),
+    Text.TruncatePolicy
+
+@Generated
+object WordEnumValue : EnumValue("word"),
+    Text.TruncatePolicy
+
+@Generated
 object ReversedEnumValue : EnumValue("reversed"),
     Text.Image.IndexingDirection
 
@@ -1073,6 +1081,14 @@ val DivScope.slide: SlideEnumValue
 @Generated
 val DivScope.middle: MiddleEnumValue
     get() = MiddleEnumValue
+
+@Generated
+val DivScope.grapheme: GraphemeEnumValue
+    get() = GraphemeEnumValue
+
+@Generated
+val DivScope.word: WordEnumValue
+    get() = WordEnumValue
 
 @Generated
 val DivScope.reversed: ReversedEnumValue
