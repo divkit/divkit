@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    testImplementation libs.androidx.test.ext.junit
     testImplementation libs.kotlin.corountines.test
     testImplementation libs.kotlin.test
     testImplementation libs.mockito.kotlin

@@ -1,127 +1,126 @@
 package com.yandex.div.core.view2.divs
 
+import android.os.Looper
+import android.view.MotionEvent
 import android.view.View
-import com.yandex.div.core.view2.DivGestureListener
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Test
+import android.view.ViewConfiguration
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.action
+import com.yandex.div2.DivAction
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
+import org.mockito.kotlin.any
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.only
+import org.mockito.kotlin.verify
+import org.robolectric.Shadows.shadowOf
+import java.time.Duration
+import kotlin.test.Test
+import kotlin.test.assertFalse
 
-@RunWith(RobolectricTestRunner::class)
-class DivActionBinderSetTapListenerTest {
+@RunWith(AndroidJUnit4::class)
+class DivActionBinderSetTapListenerTest : DivBinderTest() {
 
-    private val context = RuntimeEnvironment.application
-
-    @Test
-    fun `onSingleTapUp invokes singleTapListener when no doubleTapListener set`() {
-        val gestureListener = DivGestureListener(awaitLongClick = false)
-        var invokeCount = 0
-        gestureListener.onSingleTapListener = { invokeCount++ }
-
-        gestureListener.onSingleTapUp(mockMotionEvent())
-
-        assertEquals(1, invokeCount)
-    }
-
-    @Test
-    fun `onSingleTapUp does not invoke singleTapListener when doubleTapListener is set`() {
-        val gestureListener = DivGestureListener(awaitLongClick = false)
-        var invokeCount = 0
-        gestureListener.onSingleTapListener = { invokeCount++ }
-        gestureListener.onDoubleTapListener = { /* no-op */ }
-
-        gestureListener.onSingleTapUp(mockMotionEvent())
-
-        assertEquals(0, invokeCount)
-    }
+    private val view = View(context)
+    private val actionDivView = divView()
+    private val oldTapActions = listOf(action(url = "old_tap"))
+    private val tapActions = listOf(action(url = "tap"))
+    private val doubleTapActions = listOf(action(url = "double_tap"))
+    private val underTest = DivActionBinder(
+        actionPerformer = actionPerformer,
+        logger = mock(),
+        divActionBeaconSender = mock(),
+        longtapActionsPassToChild = false,
+        shouldIgnoreActionMenuItems = false,
+    )
 
     @Test
-    fun `onSingleTapConfirmed invokes singleTapListener when doubleTapListener is set`() {
-        val gestureListener = DivGestureListener(awaitLongClick = false)
-        var invokeCount = 0
-        gestureListener.onSingleTapListener = { invokeCount++ }
-        gestureListener.onDoubleTapListener = { /* no-op */ }
-
-        gestureListener.onSingleTapConfirmed(mockMotionEvent())
-
-        assertEquals(1, invokeCount)
-    }
-
-    @Test
-    fun `onSingleTapConfirmed does not invoke singleTapListener when doubleTapListener is null`() {
-        val gestureListener = DivGestureListener(awaitLongClick = false)
-        var invokeCount = 0
-        gestureListener.onSingleTapListener = { invokeCount++ }
-
-        gestureListener.onSingleTapConfirmed(mockMotionEvent())
-
-        assertEquals(0, invokeCount)
-    }
-
-    @Test
-    fun `view reuse from no-doubletap to doubletap clears onClickListener`() {
-        val view = View(context)
-        val gestureListenerFirst = DivGestureListener(awaitLongClick = false)
-
-        var clickCountFirst = 0
-        view.setOnClickListener { clickCountFirst++ }
-        gestureListenerFirst.onSingleTapListener = null
-
-        val gestureListenerSecond = DivGestureListener(awaitLongClick = false)
-        gestureListenerSecond.onDoubleTapListener = { /* doubletap handler */ }
-
-        var clickCountSecond = 0
-        view.setOnClickListener(null)
-        gestureListenerSecond.onSingleTapListener = { clickCountSecond++ }
+    fun `single tap action is invoked through view click when double tap is absent`() {
+        bind(tapActions = tapActions)
 
         view.performClick()
 
-        assertEquals("Old onClickListener must not fire after re-bind with doubletap", 0, clickCountFirst)
-        assertEquals("New listener must not have been invoked via performClick", 0, clickCountSecond)
-        assertNotNull(gestureListenerSecond.onSingleTapListener)
+        verifyAction(tapActions, DivActionReason.CLICK)
     }
 
     @Test
-    fun `view reuse from doubletap to no-doubletap clears gestureListener onSingleTapListener`() {
-        val view = View(context)
+    fun `rebind with double tap clears stale view click and invokes new tap once`() {
+        bind(tapActions = oldTapActions)
+        bind(tapActions = tapActions, doubleTapActions = doubleTapActions)
 
-        val gestureListenerFirst = DivGestureListener(awaitLongClick = false)
-        gestureListenerFirst.onDoubleTapListener = { /* doubletap handler */ }
-        var clickCountFirst = 0
-        gestureListenerFirst.onSingleTapListener = { clickCountFirst++ }
+        view.performClick()
+        dispatchTaps(0L)
 
-        gestureListenerFirst.onSingleTapListener = null
-        var clickCountSecond = 0
-        view.setOnClickListener { clickCountSecond++ }
+        verifyAction(tapActions, DivActionReason.CLICK)
+    }
 
-        assertNull(
-            "Stale gestureListener.onSingleTapListener must be cleared after re-bind without doubletap",
-            gestureListenerFirst.onSingleTapListener
+    @Test
+    fun `rebind without double tap replaces gesture callback with view click`() {
+        bind(tapActions = oldTapActions, doubleTapActions = doubleTapActions)
+        bind(tapActions = tapActions)
+
+        view.performClick()
+        dispatchTaps(0L)
+
+        verifyAction(tapActions, DivActionReason.CLICK)
+    }
+
+    @Test
+    fun `double tap invokes only double tap action`() {
+        bind(tapActions = tapActions, doubleTapActions = doubleTapActions)
+
+        dispatchTaps(0L, 100L)
+
+        verifyAction(doubleTapActions, DivActionReason.DOUBLE_CLICK)
+    }
+
+    @Test
+    fun `removing all actions on rebind makes view non clickable`() {
+        bind(tapActions = tapActions)
+
+        bind()
+
+        assertFalse(view.isClickable)
+    }
+
+    private fun bind(
+        tapActions: List<DivAction> = emptyList(),
+        doubleTapActions: List<DivAction> = emptyList(),
+    ) {
+        underTest.bindDivActions(
+            target = view,
+            actions = tapActions,
+            longTapActions = null,
+            doubleTapActions = doubleTapActions,
+            hoverStartActions = null,
+            hoverEndActions = null,
+            pressStartActions = null,
+            pressEndActions = null,
+            actionAnimation = DEFAULT_CLICK_ANIMATION,
+            captureFocusOnAction = Expression.constant(false),
+            resolver = resolver,
+            divView = actionDivView,
         )
-
-        view.performClick()
-        assertEquals("New onClickListener must fire exactly once", 1, clickCountSecond)
-        assertEquals("Old gestureListener.onSingleTapListener must not fire after being cleared", 0, clickCountFirst)
     }
 
-    @Test
-    fun `gestureListener singleTapListener fires exactly once via onSingleTapConfirmed with doubletap set`() {
-        val gestureListener = DivGestureListener(awaitLongClick = false)
-        gestureListener.onDoubleTapListener = { /* doubletap */ }
-
-        var invokeCount = 0
-        gestureListener.onSingleTapListener = { invokeCount++ }
-
-        gestureListener.onSingleTapUp(mockMotionEvent())
-        gestureListener.onSingleTapConfirmed(mockMotionEvent())
-
-        assertEquals("Listener must be called exactly once via onSingleTapConfirmed", 1, invokeCount)
+    private fun verifyAction(actions: List<DivAction>, reason: String) {
+        verify(actionPerformer, only()).performBulkActions(any(), eq(actions), any(), any(), eq(reason))
     }
 
-    private fun mockMotionEvent(): android.view.MotionEvent {
-        return android.view.MotionEvent.obtain(0L, 0L, android.view.MotionEvent.ACTION_UP, 0f, 0f, 0)
+    private fun dispatchTaps(vararg downTimes: Long) {
+        downTimes.forEach { downTime ->
+            listOf(MotionEvent.ACTION_DOWN to downTime, MotionEvent.ACTION_UP to downTime + 10L).forEach {
+                MotionEvent.obtain(downTime, it.second, it.first, 0f, 0f, 0).run {
+                    view.dispatchTouchEvent(this)
+                    recycle()
+                }
+            }
+        }
+        shadowOf(Looper.getMainLooper()).idleFor(
+            Duration.ofMillis(ViewConfiguration.getDoubleTapTimeout().toLong() + 1L),
+        )
     }
 }

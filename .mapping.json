@@ -2871,6 +2871,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/pager/PagerSelectedActionsDispatcherTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/pager/PagerSelectedActionsDispatcherTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivBorderDrawerShadowTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivBorderDrawerShadowTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivPagerViewClickTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivPagerViewClickTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivVideoBindingControllerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivVideoBindingControllerTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivVideoViewTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivVideoViewTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/StateLayoutTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/StateLayoutTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/items/ClampOverflowItemStrategyTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/items/ClampOverflowItemStrategyTest.kt",

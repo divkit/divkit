@@ -2,153 +2,138 @@ package com.yandex.div.internal.core
 
 import android.net.Uri
 import com.yandex.div.core.expression.ExpressionResolverImpl
-import com.yandex.div.core.expression.local.RuntimeStoreImpl
+import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.evaluable.EvaluationContext
+import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.data.booleanExpression
 import com.yandex.div2.DivText
+import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertSame
-import org.junit.Test
 import org.mockito.kotlin.any
-import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 class DivTextImageBuilderTest {
 
-    private val path = DivStatePath.fromState(0)
-    private val store = mock<RuntimeStoreImpl> {
-        on { getOrPutItemBuilderResolver(any(), any()) } doAnswer { answer ->
-            val path = answer.arguments[0] as String
-            if (path.endsWith(":0")) {
-                createResolver().also { firstResolver = it }
-            } else {
-                createResolver().also { secondResolver = it }
-            }
+    private val itemResolvers = mutableMapOf<String, ExpressionResolver>()
+    private val runtimeStore = mock<RuntimeStore> {
+        on { getOrPutItemBuilderResolver(any(), any()) } doAnswer {
+            val itemPath = it.getArgument<String>(0)
+            val createResolver = it.getArgument<() -> ExpressionResolver>(1)
+            itemResolvers.getOrPut(itemPath, createResolver)
         }
     }
-    private val resolver = createResolver()
-    private var firstResolver: ExpressionResolverImpl? = null
-    private var secondResolver: ExpressionResolverImpl? = null
-
-    private fun createResolver(): ExpressionResolverImpl = ExpressionResolverImpl(store, mock(), mock(), mock())
+    private val evaluator = Evaluator(EvaluationContext(
+        variableProvider = { null },
+        storedValueProvider = mock(),
+        functionProvider = mock(),
+        warningSender = { _, _ -> },
+    ))
+    private val resolver = ExpressionResolverImpl(runtimeStore, mock(), evaluator, mock())
+    private val path = DivStatePath.fromState(0)
 
     @Test
-    fun `builder produces an image per data element`() {
-        val text = createText(
+    fun `builder creates one result for every data element`() {
+        val text = text(imageBuilder = builder(3, prototype(image(start = 7L))))
+
+        val results = requireNotNull(text.buildImages(resolver, path))
+
+        assertEquals(listOf(7L, 7L, 7L), results.starts())
+    }
+
+    @Test
+    fun `builder selects prototype using item index`() {
+        val text = text(
             imageBuilder = builder(
-                data = jsonArray(JSONObject(), JSONObject(), JSONObject()),
-                prototypes = listOf(prototype(image()))
-            )
+                3,
+                prototype(image(start = 10L), indexIs(0)),
+                prototype(image(start = 20L), indexIs(1)),
+                prototype(image(start = 30L), indexIs(2)),
+            ),
         )
 
-        val images = text.buildImages(resolver, path)
+        val results = requireNotNull(text.buildImages(resolver, path))
 
-        assertEquals(3, images?.size)
+        assertEquals(listOf(10L, 20L, 30L), results.starts())
     }
 
     @Test
-    fun `builder takes priority over static images`() {
-        val text = createText(
-            images = listOf(image(start = 1L), image(start = 2L)),
-            imageBuilder = builder(
-                data = jsonArray(JSONObject()),
-                prototypes = listOf(prototype(image(start = 7L)))
-            )
+    fun `builder omits elements without a matching prototype`() {
+        val text = text(imageBuilder = builder(2, prototype(image(start = 10L), indexIs(0))))
+
+        val results = requireNotNull(text.buildImages(resolver, path))
+
+        assertEquals(listOf(10L), results.starts())
+    }
+
+    @Test
+    fun `builder results take priority over static images`() {
+        val text = text(
+            images = listOf(image(start = 1L)),
+            imageBuilder = builder(1, prototype(image(start = 7L))),
         )
 
-        val images = text.buildImages(resolver, path)
+        val results = requireNotNull(text.buildImages(resolver, path))
 
-        assertEquals(1, images?.size)
-        assertEquals(7L, images?.first()?.image?.start?.evaluate(resolver))
+        assertEquals(listOf(7L), results.starts())
     }
 
     @Test
-    fun `static images are used when no builder is set`() {
-        val text = createText(images = listOf(image(), image()))
+    fun `static images keep image and root resolver when builder is absent`() {
+        val firstImage = image(start = 1L)
+        val secondImage = image(start = 2L)
 
-        val images = text.buildImages(resolver, path)
-
-        assertEquals(2, images?.size)
-        images?.forEach { assertSame(resolver, it.resolver) }
-    }
-
-    @Test
-    fun `selector chooses prototype per element`() {
-        val text = createText(
-            imageBuilder = builder(
-                data = jsonArray(JSONObject(), JSONObject()),
-                prototypes = listOf(
-                    prototype(image(start = 10L), selectorForIndex(0)),
-                    prototype(image(start = 20L), selectorForIndex(1)),
-                )
-            )
+        val results = requireNotNull(
+            text(images = listOf(firstImage, secondImage)).buildImages(resolver, path),
         )
 
-        val images = text.buildImages(resolver, path)
-
-        assertEquals(2, images?.size)
-        assertEquals(10L, images?.get(0)?.image?.start?.evaluate(resolver))
-        assertEquals(20L, images?.get(1)?.image?.start?.evaluate(resolver))
-    }
-
-    @Test
-    fun `element with no matching prototype is skipped`() {
-        val text = createText(
-            imageBuilder = builder(
-                data = jsonArray(JSONObject(), JSONObject()),
-                prototypes = listOf(prototype(image(), selectorForIndex(0)))
-            )
+        assertEquals(
+            listOf(firstImage to resolver, secondImage to resolver),
+            results.map { it.image to it.resolver },
         )
-
-        val images = text.buildImages(resolver, path)
-
-        assertEquals(1, images?.size)
     }
 
     @Test
-    fun `null when neither images nor builder are set`() {
-        val images = createText().buildImages(resolver, path)
-
-        assertNull(images)
+    fun `text images are absent when builder and static images are absent`() {
+        assertNull(text().buildImages(resolver, path))
     }
 
     @Test
-    fun `ellipsis builder produces an image per data element`() {
+    fun `ellipsis builder uses item selectors`() {
         val ellipsis = DivText.Ellipsis(
             text = Expression.constant("..."),
             imageBuilder = builder(
-                data = jsonArray(JSONObject(), JSONObject()),
-                prototypes = listOf(prototype(image()))
-            )
+                2,
+                prototype(image(start = 10L), indexIs(0)),
+                prototype(image(start = 20L), indexIs(1)),
+            ),
         )
 
-        val images = ellipsis.buildImages(resolver, path)
+        val results = requireNotNull(ellipsis.buildImages(resolver, path))
 
-        assertEquals(2, images?.size)
+        assertEquals(listOf(10L, 20L), results.starts())
     }
 
     @Test
-    fun `ellipsis builder takes priority over static images`() {
+    fun `ellipsis builder results take priority over static images`() {
         val ellipsis = DivText.Ellipsis(
             text = Expression.constant("..."),
             images = listOf(image(start = 1L)),
-            imageBuilder = builder(
-                data = jsonArray(JSONObject()),
-                prototypes = listOf(prototype(image(start = 7L)))
-            )
+            imageBuilder = builder(1, prototype(image(start = 7L))),
         )
 
-        val images = ellipsis.buildImages(resolver, path)
+        val results = requireNotNull(ellipsis.buildImages(resolver, path))
 
-        assertEquals(1, images?.size)
-        assertEquals(7L, images?.first()?.image?.start?.evaluate(resolver))
+        assertEquals(listOf(7L), results.starts())
     }
 
-    private fun createText(
+    private fun text(
         images: List<DivText.Image>? = null,
         imageBuilder: DivText.ImageBuilder? = null,
     ) = DivText(
@@ -158,11 +143,11 @@ class DivTextImageBuilderTest {
     )
 
     private fun builder(
-        data: org.json.JSONArray,
-        prototypes: List<DivText.ImageBuilder.Prototype>,
+        dataSize: Int,
+        vararg prototypes: DivText.ImageBuilder.Prototype,
     ) = DivText.ImageBuilder(
-        data = Expression.constant(data),
-        prototypes = prototypes,
+        data = Expression.constant(JSONArray().apply { repeat(dataSize) { put(JSONObject()) } }),
+        prototypes = prototypes.toList(),
     )
 
     private fun prototype(
@@ -170,23 +155,14 @@ class DivTextImageBuilderTest {
         selector: Expression<Boolean> = Expression.constant(true),
     ) = DivText.ImageBuilder.Prototype(image = image, selector = selector)
 
-    private fun image(start: Long = 0L) = DivText.Image(
+    private fun image(start: Long) = DivText.Image(
         start = Expression.constant(start),
-        url = Expression.constant(Uri.parse("https://divkit.tech/image.png")),
+        url = Expression.constant(Uri.parse("https://divkit.tech/image-$start.png")),
     )
 
-    private fun jsonArray(vararg elements: Any): org.json.JSONArray = org.json.JSONArray().apply {
-        elements.forEach { put(it) }
-    }
+    private fun indexIs(expectedIndex: Long) = booleanExpression("@{index == $expectedIndex}")
 
-    private fun selectorForIndex(index: Int): Expression<Boolean> = mock {
-        onGeneric { evaluate(any()) } doAnswer {
-            when (it.arguments[0]) {
-                firstResolver -> index == 0
-                secondResolver -> index == 1
-                else -> false
-            }
-        }
-        on { observe(any(), anyOrNull()) } doReturn mock()
+    private fun List<DivTextImageResult>.starts(): List<Long> {
+        return map { it.image.start.evaluate(it.resolver) }
     }
 }

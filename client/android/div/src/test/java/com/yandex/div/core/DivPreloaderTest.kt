@@ -1,13 +1,15 @@
 package com.yandex.div.core
 
 import android.net.Uri
-import com.yandex.div.core.DivPreloader.Callback
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.preload.PreloadResult
+import com.yandex.div.core.preload.UriPreloadResult
 import com.yandex.div.core.view2.DivImagePreloader
+import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
@@ -18,197 +20,230 @@ import com.yandex.div2.DivInput
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoSource
-import com.yandex.div.internal.util.UiThreadHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-/**
- * Tests for [DivPreloader].
- */
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class DivPreloaderTest {
 
-    private val divCustomContainerViewAdapter = mock<DivCustomContainerViewAdapter> {
+    private val imagePreloader = mock<DivImagePreloader> {
+        on { preloadImage(any(), any(), any(), any()) } doReturn emptyList()
+    }
+    private val customAdapter = mock<DivCustomContainerViewAdapter> {
         on { preload(any(), any()) } doReturn DivPreloader.PreloadReference.EMPTY
     }
-    private val divImagePreloader = mock<DivImagePreloader>()
-
-    private val extensionHandlers = listOf<DivExtensionHandler>(mock(), mock())
-    private val extensionHandlersController = DivExtensionController(extensionHandlers)
-
-    private val divText = text(text = "test")
-
-    private val custom = DivCustom(customType = "test")
-    private val divCustom = Div.Custom(custom)
-
-    private val input = DivInput(textVariable = "test")
-    private val divInput = Div.Input(input)
-
-    private val separator = DivSeparator(extensions = listOf(DivExtension(id = "test1")))
-    private val divSeparator = Div.Separator(separator)
-
-    private val containerItems = listOf(divText, divInput, divCustom, divSeparator)
-
-    private val container = DivContainer(items = containerItems, extensions = listOf(DivExtension(id = "test2")))
-    private val divContainer = Div.Container(container)
     private val videoPreloader = mock<DivPlayerPreloader>()
     private val resolver = mockExpressionResolver()
-
-    private val videoSourceUrl = Uri.parse("https://example.com/video.mp4")
-    private val videoSource = DivVideoSource(
-        mimeType = Expression.constant("video/mp4"),
-        url = Expression.constant(videoSourceUrl)
-    )
-    private val videoWithPreload = DivVideo(
-        videoSources = listOf(videoSource),
-        preloadRequired = Expression.constant(true)
-    )
-    private val divVideoWithPreload = Div.Video(videoWithPreload)
-
-    private val underTest: DivPreloader = DivPreloader(
-        divImagePreloader,
-        divCustomContainerViewAdapter,
-        extensionHandlersController,
+    private val callback = mock<DivPreloader.Callback>()
+    private val underTest = DivPreloader(
+        imagePreloader,
+        customAdapter,
+        DivExtensionController(emptyList()),
         videoPreloader,
-        DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER
+        DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER,
     )
 
-    @Before
+    @BeforeTest
     fun setUp() {
         UiThreadHandler.setInTestMode(true)
     }
 
-    @After
-    fun teardown() {
+    @AfterTest
+    fun tearDown() {
         UiThreadHandler.setInTestMode(false)
     }
 
     @Test
-    fun `preload div background`() {
-        underTest.preload(divInput, resolver)
+    fun `preload visits root and every child exactly once`() {
+        val visitedDivs = argumentCaptor<Div>()
+        val firstChild = text(text = "first")
+        val secondChild = Div.Input(DivInput(textVariable = "input"))
+        val root = Div.Container(DivContainer(items = listOf(firstChild, secondChild)))
 
-        verify(divImagePreloader).preloadImage(eq(divInput), any(), any(), any())
+        underTest.preload(root, resolver)
+
+        verify(imagePreloader, times(3)).preloadImage(visitedDivs.capture(), any(), any(), any())
+        assertEquals(listOf(root, firstChild, secondChild), visitedDivs.allValues)
     }
 
     @Test
-    fun `preload div items background in containers`() {
-        underTest.preload(divContainer, resolver)
+    fun `preload delegates custom content to custom adapter`() {
+        val custom = DivCustom(customType = "map")
 
-        verify(divImagePreloader, times(1)).preloadImage(eq(divContainer), any(), any(), any())
-        verify(divImagePreloader, times(1)).preloadImage(eq(divInput), any(), any(), any())
-        verify(divImagePreloader, times(1)).preloadImage(eq(divText), any(), any(), any())
-        verify(divImagePreloader, times(1)).preloadImage(eq(divCustom), any(), any(), any())
+        underTest.preload(Div.Custom(custom), resolver)
+
+        verify(customAdapter).preload(eq(custom), any())
     }
 
     @Test
-    fun `preload div custom`() {
-        underTest.preload(divCustom, resolver)
+    fun `preload runs only matching extension handlers for nested divs`() {
+        val separator = DivSeparator(extensions = listOf(DivExtension(id = "extension")))
+        val matchingHandler = mock<DivExtensionHandler> {
+            on { matches(separator) } doReturn true
+        }
+        val unrelatedHandler = mock<DivExtensionHandler>()
+        val underTest = DivPreloader(
+            imagePreloader,
+            customAdapter,
+            DivExtensionController(listOf(matchingHandler, unrelatedHandler)),
+            videoPreloader,
+            DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER,
+        )
 
-        verify(divCustomContainerViewAdapter).preload(eq(custom), any())
+        underTest.preload(
+            Div.Container(DivContainer(items = listOf(Div.Separator(separator)))),
+            resolver,
+        )
+
+        verify(matchingHandler).preprocess(eq(separator), eq(resolver), any())
+        verify(unrelatedHandler, never()).preprocess(any(), any(), any())
     }
 
     @Test
-    fun `preload div custom in container`() {
-        underTest.preload(divContainer, resolver)
-
-        verify(divCustomContainerViewAdapter).preload(eq(custom), any())
-    }
-
-    @Test
-    fun `loadReferences cancel called when preload cancelled`() {
-        val containerLoadReference = mock<LoadReference>()
-        val inputLoadReference = mock<LoadReference>()
-        val textLoadReference = mock<LoadReference>()
-        val customLoadReference = mock<LoadReference>()
-        whenever(divImagePreloader.preloadImage(eq(divContainer), any(), any(), any()))
-            .thenReturn(listOf(containerLoadReference))
-        whenever(divImagePreloader.preloadImage(eq(divInput), any(), any(), any()))
-            .thenReturn(listOf(inputLoadReference))
-        whenever(divImagePreloader.preloadImage(eq(divText), any(), any(), any()))
-            .thenReturn(listOf(textLoadReference))
-        whenever(divImagePreloader.preloadImage(eq(divCustom), any(), any(), any()))
-            .thenReturn(listOf(customLoadReference))
-        val ticket = underTest.preload(divContainer, resolver)
-
-        ticket.cancel()
-
-        verify(containerLoadReference).cancel()
-        verify(inputLoadReference).cancel()
-        verify(textLoadReference).cancel()
-        verify(customLoadReference).cancel()
-    }
-
-    @Test
-    fun `preprocesses div extensions when extension handlers present`() {
-        whenever(extensionHandlers[0].matches(eq(container))).thenReturn(true)
-        whenever(extensionHandlers[1].matches(eq(separator))).thenReturn(true)
-
-        underTest.preload(divContainer, resolver)
-
-        verify(extensionHandlers[0], times(1)).preprocess(eq(container), any(), any())
-        verify(extensionHandlers[1], times(1)).preprocess(eq(separator), any(), any())
-    }
-
-    @Test
-    fun `preload div video calls video preloader when preload required`() {
-        whenever(videoPreloader.preloadVideo(any(), any())).doAnswer { invocation ->
-            (invocation.getArgument<(List<PreloadResult>) -> Unit>(1)).invoke(emptyList())
+    fun `video content is preloaded when preload is required`() {
+        val firstUrl = Uri.parse("https://example.com/first.mp4")
+        val secondUrl = Uri.parse("https://example.com/second.mp4")
+        whenever(videoPreloader.preloadVideo(any(), any())) doAnswer {
+            it.getArgument<(List<PreloadResult>) -> Unit>(1).invoke(emptyList())
             DivPreloader.PreloadReference.EMPTY
         }
 
-        underTest.preload(divVideoWithPreload, resolver)
+        underTest.preload(Div.Video(video(true, firstUrl, secondUrl)), resolver)
 
-        verify(videoPreloader).preloadVideo(eq(listOf(videoSourceUrl)), any())
+        verify(videoPreloader).preloadVideo(eq(listOf(firstUrl, secondUrl)), any())
     }
 
     @Test
-    fun `video preload reference cancelled when ticket cancelled`() {
-        val videoPreloadReference = mock<DivPreloader.PreloadReference>()
-        whenever(videoPreloader.preloadVideo(any(), any())).doReturn(videoPreloadReference)
+    fun `video content is not preloaded when preload is not required`() {
+        underTest.preload(
+            Div.Video(video(false, Uri.parse("https://example.com/video.mp4"))),
+            resolver,
+        )
 
-        val ticket = underTest.preload(divVideoWithPreload, resolver)
-
-        ticket.cancel()
-
-        verify(videoPreloadReference).cancel()
+        verify(videoPreloader, never()).preloadVideo(any(), any())
     }
 
     @Test
-    fun `concurrency stress-test`() = runBlocking {
-        val videoChildren = (1..100).map { divVideoWithPreload }
-        val div = Div.Container(DivContainer(items = videoChildren))
-        val completionDispatcher = Dispatchers.Default.limitedParallelism(32)
-        val jobs = mutableListOf<Job>()
-        whenever(videoPreloader.preloadVideo(any(), any())).doAnswer { invocation ->
-            val callback = invocation.getArgument<(List<PreloadResult>) -> Unit>(1)
-            val job = launch(completionDispatcher) {
-                callback(emptyList())
-            }
-            jobs.add(job)
-            DivPreloader.PreloadReference.EMPTY
+    fun `ticket cancellation cancels every collected reference`() {
+        val custom = DivCustom(customType = "map")
+        val customDiv = Div.Custom(custom)
+        val videoDiv = Div.Video(video(true, Uri.parse("https://example.com/video.mp4")))
+        val root = Div.Container(DivContainer(items = listOf(customDiv, videoDiv)))
+        val cancelled = mutableSetOf<String>()
+        val rootImageReference = LoadReference { cancelled += "root image" }
+        val customImageReference = LoadReference { cancelled += "custom image" }
+        val videoImageReference = LoadReference { cancelled += "video image" }
+        val customReference = DivPreloader.PreloadReference { cancelled += "custom" }
+        val videoReference = DivPreloader.PreloadReference { cancelled += "video" }
+        whenever(imagePreloader.preloadImage(eq(root), any(), any(), any()))
+            .thenReturn(listOf(rootImageReference))
+        whenever(imagePreloader.preloadImage(eq(customDiv), any(), any(), any()))
+            .thenReturn(listOf(customImageReference))
+        whenever(imagePreloader.preloadImage(eq(videoDiv), any(), any(), any()))
+            .thenReturn(listOf(videoImageReference))
+        whenever(customAdapter.preload(eq(custom), any())).thenReturn(customReference)
+        whenever(videoPreloader.preloadVideo(any(), any())) doAnswer {
+            it.getArgument<(List<PreloadResult>) -> Unit>(1).invoke(emptyList())
+            videoReference
         }
 
-        val callback = mock<Callback>()
-        underTest.preload(div, resolver, callback)
+        underTest.preload(root, resolver).cancel()
 
-        jobs.joinAll()
+        assertEquals(
+            setOf("root image", "custom image", "video image", "custom", "video"),
+            cancelled,
+        )
+    }
+
+    @Test
+    fun `callback remains pending while a video preload is unfinished`() {
+        val videoCallbacks = argumentCaptor<(List<PreloadResult>) -> Unit>()
+        whenever(videoPreloader.preloadVideo(any(), videoCallbacks.capture()))
+            .thenReturn(DivPreloader.PreloadReference.EMPTY)
+        val root = Div.Container(DivContainer(items = listOf(
+            Div.Video(video(true, Uri.parse("https://example.com/first.mp4"))),
+            Div.Video(video(true, Uri.parse("https://example.com/second.mp4"))),
+        )))
+
+        underTest.preload(root, resolver, callback)
+        videoCallbacks.firstValue.invoke(emptyList())
+
+        verify(callback, never()).finish(any())
+    }
+
+    @Test
+    fun `callback finishes after all video preloads`() {
+        val videoCallbacks = argumentCaptor<(List<PreloadResult>) -> Unit>()
+        whenever(videoPreloader.preloadVideo(any(), videoCallbacks.capture()))
+            .thenReturn(DivPreloader.PreloadReference.EMPTY)
+        val root = Div.Container(DivContainer(items = listOf(
+            Div.Video(video(true, Uri.parse("https://example.com/first.mp4"))),
+            Div.Video(video(true, Uri.parse("https://example.com/second.mp4"))),
+        )))
+
+        underTest.preload(root, resolver, callback)
+        videoCallbacks.allValues.forEach { it.invoke(emptyList()) }
 
         verify(callback).finish(false)
     }
+
+    @Test
+    fun `callback reports an error from video preload`() {
+        val videoCallback = argumentCaptor<(List<PreloadResult>) -> Unit>()
+        val url = Uri.parse("https://example.com/video.mp4")
+        whenever(videoPreloader.preloadVideo(eq(listOf(url)), videoCallback.capture()))
+            .thenReturn(DivPreloader.PreloadReference.EMPTY)
+
+        underTest.preload(Div.Video(video(true, url)), resolver, callback)
+        videoCallback.firstValue.invoke(listOf(UriPreloadResult(url, IllegalStateException("decode failed"))))
+
+        verify(callback).finish(true)
+    }
+
+    @Test
+    fun `concurrent video completions finish preload once`() = runBlocking {
+        val videos = List(100) {
+            Div.Video(video(true, Uri.parse("https://example.com/video-$it.mp4")))
+        }
+        val completionDispatcher = Dispatchers.Default.limitedParallelism(32)
+        val completionJobs = mutableListOf<Job>()
+        whenever(videoPreloader.preloadVideo(any(), any())) doAnswer {
+            val videoCallback = it.getArgument<(List<PreloadResult>) -> Unit>(1)
+            completionJobs += launch(completionDispatcher) { videoCallback(emptyList()) }
+            DivPreloader.PreloadReference.EMPTY
+        }
+
+        underTest.preload(Div.Container(DivContainer(items = videos)), resolver, callback)
+        completionJobs.joinAll()
+
+        verify(callback, times(1)).finish(false)
+    }
+
+    private fun video(preloadRequired: Boolean, vararg urls: Uri) = DivVideo(
+        videoSources = urls.map { url ->
+            DivVideoSource(
+                mimeType = Expression.constant("video/mp4"),
+                url = Expression.constant(url),
+            )
+        },
+        preloadRequired = Expression.constant(preloadRequired),
+    )
 }

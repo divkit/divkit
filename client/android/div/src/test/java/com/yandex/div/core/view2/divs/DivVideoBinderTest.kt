@@ -7,10 +7,11 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.ImageView
+import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerFactory
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
@@ -29,11 +30,6 @@ import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoSource as Div2VideoSource
 import com.yandex.div2.DivVideoScale
 import org.json.JSONObject
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
@@ -41,29 +37,59 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
+import java.util.concurrent.AbstractExecutorService
 import java.util.concurrent.CopyOnWriteArrayList
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertSame
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 internal class DivVideoBinderTest : DivBinderTest() {
 
-    private val playerFactory = mock<DivPlayerFactory>()
-    private val executorService = mock<ExecutorService>()
-    private val binder = createBinder(deferredVideoPlayerCreationEnabled = true)
+    private val playerWorkThreads = CopyOnWriteArrayList<Thread>()
+    private val playerView = TestPlayerView(context) { playerWorkThreads += Thread.currentThread() }
+    private val player = mock<DivPlayer>()
+    private val videoView = DivVideoView(context)
+    private val createdSource = argumentCaptor<List<DivVideoSource>>()
+    private val createdConfig = argumentCaptor<DivPlayerPlaybackConfig>()
+    private val playerFactory = mock<DivPlayerFactory> {
+        on { makePlayerView(any()) } doAnswer {
+            playerWorkThreads += Thread.currentThread()
+            playerView
+        }
+        on { makePlayer(createdSource.capture(), createdConfig.capture()) } doAnswer {
+            playerWorkThreads += Thread.currentThread()
+            player
+        }
+    }
+    private val executorService = QueuedExecutorService()
+    private val underTest = createBinder(deferredVideoPlayerCreationEnabled = true)
+    private val immediateUnderTest = createBinder(deferredVideoPlayerCreationEnabled = false)
 
-    private fun createBinder(deferredVideoPlayerCreationEnabled: Boolean) = DivVideoBinder(
+    @BeforeTest
+    fun setUpBindingDispatcher() {
+        val mainHandler = Handler(Looper.getMainLooper())
+        divView.viewComponent.bindingDispatcher.apply {
+            whenever { postMainThreadAction(any()) } doAnswer { invocation ->
+                mainHandler.post(invocation.getArgument<() -> Unit>(0))
+                null
+            }
+        }
+    }
+
+    private fun createBinder(
+        deferredVideoPlayerCreationEnabled: Boolean,
+        playerFactory: DivPlayerFactory = this.playerFactory,
+    ) = DivVideoBinder(
         baseBinder = baseBinder,
-        variableBinder = mock<TwoWayIntegerVariableBinder>(),
+        variableBinder = mock(),
         actionPerformer = actionPerformer,
         executorService = executorService,
         playerFactory = playerFactory,
@@ -73,128 +99,36 @@ internal class DivVideoBinderTest : DivBinderTest() {
     @Test
     fun `video expressions are evaluated on binding thread`() {
         val preview = MutableTestExpression("preview")
-        val players = PlayerMocks()
 
-        val bindingThread = bindOffMain(
-            DivVideo(videoSources = emptyList(), preview = preview),
-            players,
-        )
+        val bindingThread = bindOffMain(DivVideo(videoSources = emptyList(), preview = preview))
 
         assertEquals(listOf(bindingThread), preview.evaluationThreads)
     }
 
     @Test
     fun `player work waits for main looper`() {
-        val players = PlayerMocks()
+        bindOffMain(videoWithConstantSource())
 
-        bindOffMain(videoWithConstantSource(), players)
-
-        verifyNoInteractions(players.factory)
+        verifyNoInteractions(playerFactory)
     }
 
     @Test
     fun `player work runs on main thread`() {
-        val callThreads = CopyOnWriteArrayList<Thread>()
-        val players = PlayerMocks(
-            onMakePlayerView = { callThreads += Thread.currentThread() },
-            onMakePlayer = { callThreads += Thread.currentThread() },
-            onAttach = { callThreads += Thread.currentThread() },
-        )
-        bindOffMain(videoWithConstantSource(), players)
+        bindOffMain(videoWithConstantSource())
 
         shadowOf(Looper.getMainLooper()).idle()
 
-        assertEquals(List(3) { Looper.getMainLooper().thread }, callThreads)
+        assertEquals(List(3) { Looper.getMainLooper().thread }, playerWorkThreads)
     }
 
     @Test
     fun `each dynamic source field keeps its current value`() {
-        val cases = dynamicSourceCases()
-
-        val actual = cases.associate { case ->
-            val players = PlayerMocks()
-            bindOffMain(DivVideo(videoSources = listOf(case.source)), players)
-            case.update()
-            shadowOf(Looper.getMainLooper()).idle()
-            case.name to players.source.get().single()
-        }
-
-        assertEquals(cases.associate { it.name to it.expected }, actual)
-    }
-
-    @Test
-    fun `each dynamic config field keeps its current value`() {
-        val cases = dynamicConfigCases()
-
-        val actual = cases.associate { case ->
-            val players = PlayerMocks()
-            bindOffMain(case.video, players)
-            case.update()
-            shadowOf(Looper.getMainLooper()).idle()
-            case.name to players.config.get()
-        }
-
-        assertEquals(cases.associate { it.name to it.expected }, actual)
-    }
-
-    private fun bindOffMain(div: DivVideo, players: PlayerMocks): Thread {
-        val binder = DivVideoBinder(
-            baseBinder = baseBinder,
-            variableBinder = mock<TwoWayIntegerVariableBinder>(),
-            actionPerformer = actionPerformer,
-            executorService = mock<ExecutorService>(),
-            playerFactory = players.factory,
-            deferredVideoPlayerCreationEnabled = false,
-        )
-        val divBlock = DivBlock.Video(Div.Video(div), resolver, DivStatePath(0))
-        val view = spy(DivVideoView(context))
-        whenever(view.isAttachedToWindow).thenReturn(true)
-        return runOffMain { binder.loadVideo(view, divBlock, divView) }
-    }
-
-    private fun runOffMain(action: () -> Unit): Thread {
-        val mainHandler = Handler(Looper.getMainLooper())
-        val bindingDispatcher = divView.viewComponent.bindingDispatcher
-        doAnswer { invocation ->
-            mainHandler.post(invocation.getArgument<() -> Unit>(0))
-            null
-        }.whenever(bindingDispatcher).postMainThreadAction(any())
-
-        val failure = AtomicReference<Throwable>()
-        val finished = CountDownLatch(1)
-        val bindingThread = Thread {
-            try {
-                action()
-            } catch (error: Throwable) {
-                failure.set(error)
-            } finally {
-                finished.countDown()
-            }
-        }
-        bindingThread.start()
-
-        if (!finished.await(2, TimeUnit.SECONDS)) {
-            throw AssertionError("Video binding did not finish")
-        }
-        failure.get()?.let { throw AssertionError("Video binding failed", it) }
-        return bindingThread
-    }
-
-    private fun videoWithConstantSource() = DivVideo(
-        videoSources = listOf(Div2VideoSource(
-            mimeType = Expression.constant(DEFAULT_MIME_TYPE),
-            url = Expression.constant(DEFAULT_URL),
-        )),
-    )
-
-    private fun dynamicSourceCases(): List<DynamicSourceCase> {
         val url = MutableTestExpression(DEFAULT_URL)
         val mimeType = MutableTestExpression(DEFAULT_MIME_TYPE)
         val bitrate = MutableTestExpression(DEFAULT_BITRATE)
         val width = MutableTestExpression(DEFAULT_WIDTH)
         val height = MutableTestExpression(DEFAULT_HEIGHT)
-
-        return listOf(
+        val cases = listOf(
             DynamicSourceCase(
                 name = "url",
                 source = source(url = url),
@@ -244,17 +178,26 @@ internal class DivVideoBinderTest : DivBinderTest() {
                 ),
             ),
         )
+
+        val actual = cases.associate { case ->
+            bindOffMain(DivVideo(videoSources = listOf(case.source)))
+            case.update()
+            shadowOf(Looper.getMainLooper()).idle()
+            case.name to createdSource.lastValue.single()
+        }
+
+        assertEquals(cases.associate { it.name to it.expected }, actual)
     }
 
-    private fun dynamicConfigCases(): List<DynamicConfigCase> {
+    @Test
+    fun `each dynamic config field keeps its current value`() {
         val autostart = MutableTestExpression(false)
         val muted = MutableTestExpression(false)
         val repeatable = MutableTestExpression(false)
         val payload = MutableTestExpression(JSONObject().put("version", "old"))
         val currentPayload = JSONObject().put("version", "current")
         val playbackSpeed = MutableTestExpression(1.0)
-
-        return listOf(
+        val cases = listOf(
             DynamicConfigCase(
                 name = "autostart",
                 video = videoWithConstantSource().copy(autostart = autostart),
@@ -286,7 +229,46 @@ internal class DivVideoBinderTest : DivBinderTest() {
                 expected = DivPlayerPlaybackConfig(playbackSpeed = CURRENT_PLAYBACK_SPEED.toFloat()),
             ),
         )
+
+        val actual = cases.associate { case ->
+            bindOffMain(case.video)
+            case.update()
+            shadowOf(Looper.getMainLooper()).idle()
+            case.name to createdConfig.lastValue
+        }
+
+        assertEquals(cases.associate { it.name to it.expected }, actual)
     }
+
+    private fun bindOffMain(div: DivVideo): Thread {
+        (playerView.parent as? android.view.ViewGroup)?.removeView(playerView)
+        val divBlock = DivBlock.Video(Div.Video(div), resolver, DivStatePath(0))
+        val view = spy(DivVideoView(context))
+        whenever(view.isAttachedToWindow).thenReturn(true)
+        return runOffMain { immediateUnderTest.loadVideo(view, divBlock, divView) }
+    }
+
+    private fun runOffMain(action: () -> Unit): Thread {
+        val failure = AtomicReference<Throwable>()
+        val bindingThread = Thread {
+            try {
+                action()
+            } catch (error: Throwable) {
+                failure.set(error)
+            }
+        }
+        bindingThread.start()
+        bindingThread.join()
+        failure.get()?.let { throw AssertionError("Video binding failed", it) }
+        return bindingThread
+    }
+
+    private fun videoWithConstantSource() = DivVideo(
+        videoSources = listOf(Div2VideoSource(
+            mimeType = Expression.constant(DEFAULT_MIME_TYPE),
+            url = Expression.constant(DEFAULT_URL),
+        )),
+    )
 
     private fun source(
         bitrate: Expression<Long>? = null,
@@ -299,6 +281,321 @@ internal class DivVideoBinderTest : DivBinderTest() {
         resolution = resolution,
         url = url,
     )
+
+    @Test
+    fun `player creation waits until video view is attached`() {
+        val attachmentStates = mutableListOf<Boolean>()
+        val playerFactory = mock<DivPlayerFactory> {
+            on { makePlayerView(any()) } doAnswer { playerView }
+            on { makePlayer(any(), any()) } doAnswer {
+                attachmentStates += videoView.isAttachedToWindow
+                player
+            }
+        }
+        val underTest = createBinder(true, playerFactory)
+
+        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+        attach(videoView)
+
+        assertEquals(listOf(true), attachmentStates)
+    }
+
+    @Test
+    fun `player stays hidden and is not created while scrolling`() {
+        attachToScrollingParent(videoView)
+
+        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+
+        assertEquals(View.INVISIBLE, playerView.visibility)
+        verify(playerFactory, never()).makePlayer(any(), any())
+    }
+
+    @Test
+    fun `player is attached and visible when scrolling finishes`() {
+        val recycler = attachToScrollingParent(videoView)
+        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+
+        recycler.moveToIdle()
+
+        assertEquals(player to View.VISIBLE, playerView.getAttachedPlayer() to playerView.visibility)
+    }
+
+    @Test
+    fun `player creation does not wait for scroll idle when deferred creation is disabled`() {
+        attachToScrollingParent(videoView)
+
+        immediateUnderTest.loadVideo(
+            videoView,
+            createBlock(DivVideo(videoSources = emptyList())),
+            divView,
+        )
+
+        assertSame(player, playerView.getAttachedPlayer())
+    }
+
+    @Test
+    fun `disabled deferred creation preserves legacy rebind behavior`() {
+        val firstPlayer = mock<DivPlayer>()
+        val secondPlayer = mock<DivPlayer>()
+        val underTest = createBinder(false, playerFactoryReturning(firstPlayer, secondPlayer))
+        val div = DivVideo(
+            videoSources = emptyList(),
+            preview = Expression.constant(INVALID_PREVIEW),
+        )
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+        executorService.runNext()
+        shadowOf(Looper.getMainLooper()).idle()
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+
+        assertSame(secondPlayer, playerView.getAttachedPlayer())
+        verify(firstPlayer, never()).release()
+    }
+
+    @Test
+    fun `disabled deferred creation propagates player initialization failure`() {
+        val expected = IllegalStateException("player creation failed")
+        val underTest = createBinder(false, failingPlayerFactory(expected))
+
+        val failure = runCatching {
+            underTest.loadVideo(
+                videoView,
+                createBlock(DivVideo(videoSources = emptyList())),
+                divView,
+            )
+        }.exceptionOrNull()
+
+        assertSame(expected, failure)
+    }
+
+    @Test
+    fun `deferred creation propagates player initialization failure`() {
+        val expected = IllegalStateException("player creation failed")
+        val underTest = createBinder(true, failingPlayerFactory(expected))
+        val recyclerView = attachToScrollingParent(videoView)
+        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+
+        val failure = runCatching { recyclerView.moveToIdle() }.exceptionOrNull()
+
+        assertSame(expected, failure)
+    }
+
+    @Test
+    fun `preview scale is applied during binding`() {
+        val div = DivVideo(
+            videoSources = emptyList(),
+            scale = Expression.constant(DivVideoScale.NO_SCALE),
+        )
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+
+        assertEquals(ImageView.ScaleType.CENTER, previewView(videoView).scaleType)
+    }
+
+    @Test
+    fun `deferred preview uses latest dynamic scale on main thread`() {
+        val scale = MutableTestExpression(DivVideoScale.FIT)
+        val div = DivVideo(
+            videoSources = emptyList(),
+            scale = scale,
+        )
+
+        val bindingThread = runOffMain { underTest.loadVideo(videoView, createBlock(div), divView) }
+        scale.value = DivVideoScale.NO_SCALE
+        shadowOf(Looper.getMainLooper()).idle()
+
+        assertEquals(
+            ImageView.ScaleType.CENTER to listOf(bindingThread, Looper.getMainLooper().thread),
+            previewView(videoView).scaleType to scale.evaluationThreads,
+        )
+    }
+
+    @Test
+    fun `rebind keeps current preview visible while replacement is decoded`() {
+        attach(videoView)
+
+        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+        val previewView = previewView(videoView)
+        previewView.visibility = View.VISIBLE
+
+        underTest.loadVideo(
+            videoView,
+            createBlock(DivVideo(
+                videoSources = emptyList(),
+                preview = Expression.constant("pending preview"),
+            )),
+            divView,
+        )
+
+        assertEquals(View.VISIBLE to View.INVISIBLE, previewView.visibility to playerView.visibility)
+    }
+
+    @Test
+    fun `rebind keeps pending decode for unchanged preview`() {
+        val div = DivVideo(
+            videoSources = emptyList(),
+            preview = Expression.constant("pending preview"),
+            scale = Expression.constant(DivVideoScale.FIT),
+        )
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+        underTest.loadVideo(videoView, createBlock(div), divView)
+
+        assertEquals(1, executorService.pendingTaskCount)
+    }
+
+    @Test
+    fun `rebind keeps player visible after unchanged applied preview becomes ready`() {
+        val firstPlayer = mock<DivPlayer>()
+        val secondPlayer = mock<DivPlayer>()
+        val observer = argumentCaptor<DivPlayer.Observer>()
+        val underTest = createBinder(true, playerFactoryReturning(firstPlayer, secondPlayer))
+        val div = DivVideo(
+            videoSources = emptyList(),
+            preview = Expression.constant(VALID_PREVIEW),
+            scale = Expression.constant(DivVideoScale.FIT),
+        )
+        attach(videoView)
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+        executorService.runNext()
+        shadowOf(Looper.getMainLooper()).idle()
+        val previewView = previewView(videoView)
+        videoView.releaseMedia()
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+
+        verify(secondPlayer).addObserver(observer.capture())
+        observer.firstValue.onReady()
+        assertEquals(View.INVISIBLE to View.VISIBLE, previewView.visibility to playerView.visibility)
+    }
+
+    @Test
+    fun `failed preview decode is retried on rebind`() {
+        val div = DivVideo(
+            videoSources = emptyList(),
+            preview = Expression.constant(INVALID_PREVIEW),
+            scale = Expression.constant(DivVideoScale.FIT),
+        )
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+        executorService.runNext()
+        shadowOf(Looper.getMainLooper()).idle()
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+
+        assertEquals(1, executorService.pendingTaskCount)
+    }
+
+    @Test
+    fun `deferred player uses dynamic source from scroll idle`() {
+        val sourceUrl = MutableTestExpression(Uri.parse("https://example.com/old.mp4"))
+        val recyclerView = attachToScrollingParent(videoView)
+        val div = DivVideo(
+            videoSources = listOf(Div2VideoSource(
+                mimeType = Expression.constant("video/mp4"),
+                url = sourceUrl,
+            )),
+        )
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+        sourceUrl.value = Uri.parse("https://example.com/current.mp4")
+        recyclerView.moveToIdle()
+
+        assertEquals(
+            listOf(DivVideoSource(url = sourceUrl.value, mimeType = "video/mp4")),
+            createdSource.allValues.flatten(),
+        )
+    }
+
+    @Test
+    fun `deferred player uses dynamic config from scroll idle`() {
+        val repeatable = MutableTestExpression(false)
+        val recyclerView = attachToScrollingParent(videoView)
+        val div = DivVideo(videoSources = emptyList(), repeatable = repeatable)
+
+        underTest.loadVideo(videoView, createBlock(div), divView)
+        repeatable.value = true
+        recyclerView.moveToIdle()
+
+        assertEquals(
+            listOf(DivPlayerPlaybackConfig(repeatable = true)),
+            createdConfig.allValues,
+        )
+    }
+
+    @Test
+    fun `deferred player uses latest playback state`() {
+        val viewStateStore = DivViewStateStoreImpl()
+        whenever(divView.viewStateStore).thenReturn(viewStateStore)
+        val recyclerView = attachToScrollingParent(videoView)
+        val divBlock = createBlock(DivVideo(
+            videoSources = emptyList(),
+            autostart = Expression.constant(true),
+        ))
+
+        underTest.loadVideo(videoView, divBlock, divView)
+        viewStateStore.put(
+            divBlock.path.fullPath,
+            DivVideoViewState(DivVideoPlaybackState.PAUSED),
+        )
+
+        recyclerView.moveToIdle()
+
+        assertEquals(
+            listOf(DivPlayerPlaybackConfig(autoplay = false)),
+            createdConfig.allValues,
+        )
+    }
+
+    private fun createBlock(div: DivVideo) = DivBlock.Video(Div.Video(div), resolver, DivStatePath(0))
+
+    private fun attach(view: View) {
+        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(view)
+    }
+
+    private fun attachToScrollingParent(view: DivVideoView): TestRecyclerView {
+        return TestRecyclerView(context, RecyclerView.SCROLL_STATE_SETTLING).apply {
+            layoutManager = LinearLayoutManager(context)
+            addView(view)
+            attach(this)
+        }
+    }
+
+    private fun previewView(view: DivVideoView): ImageView {
+        return view.children.filterIsInstance<ImageView>().single()
+    }
+
+    private fun playerFactoryReturning(
+        firstPlayer: DivPlayer,
+        secondPlayer: DivPlayer,
+    ) = mock<DivPlayerFactory> {
+        on { makePlayerView(any()) }.thenReturn(playerView)
+        on { makePlayer(any(), any()) }.thenReturn(firstPlayer, secondPlayer)
+    }
+
+    private fun failingPlayerFactory(error: Throwable) = mock<DivPlayerFactory> {
+        on { makePlayerView(any()) }.thenReturn(playerView)
+        on { makePlayer(any(), any()) }.thenThrow(error)
+    }
+
+    private companion object {
+        val DEFAULT_URL: Uri = Uri.parse("https://example.com/old.mp4")
+        val CURRENT_URL: Uri = Uri.parse("https://example.com/current.mp4")
+        const val DEFAULT_MIME_TYPE = "video/mp4"
+        const val CURRENT_MIME_TYPE = "video/webm"
+        const val DEFAULT_BITRATE = 1_000L
+        const val CURRENT_BITRATE = 2_000L
+        const val DEFAULT_WIDTH = 320L
+        const val CURRENT_WIDTH = 640L
+        const val DEFAULT_HEIGHT = 180L
+        const val CURRENT_HEIGHT = 360L
+        const val CURRENT_PLAYBACK_SPEED = 1.5
+        const val VALID_PREVIEW =
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+        const val INVALID_PREVIEW = "data:image/svg+xml;base64,bm90IHN2Zw=="
+    }
 
     private data class DynamicSourceCase(
         val name: String,
@@ -313,35 +610,6 @@ internal class DivVideoBinderTest : DivBinderTest() {
         val update: () -> Unit,
         val expected: DivPlayerPlaybackConfig,
     )
-
-    private class PlayerMocks(
-        onMakePlayerView: () -> Unit = {},
-        onMakePlayer: () -> Unit = {},
-        onAttach: () -> Unit = {},
-    ) {
-        val view = mock<DivPlayerView>()
-        val player = mock<DivPlayer>()
-        val factory = mock<DivPlayerFactory>()
-        val source = AtomicReference<List<DivVideoSource>>()
-        val config = AtomicReference<DivPlayerPlaybackConfig>()
-
-        init {
-            whenever(factory.makePlayerView(any())).thenAnswer {
-                onMakePlayerView()
-                view
-            }
-            whenever(factory.makePlayer(any(), any())).thenAnswer { invocation ->
-                onMakePlayer()
-                source.set(invocation.getArgument(0))
-                config.set(invocation.getArgument(1))
-                player
-            }
-            doAnswer {
-                onAttach()
-                Unit
-            }.whenever(view).attach(player)
-        }
-    }
 
     private class MutableTestExpression<T : Any>(
         @Volatile var value: T,
@@ -362,357 +630,16 @@ internal class DivVideoBinderTest : DivBinderTest() {
         ): Disposable = Disposable.NULL
     }
 
-    @Test
-    fun `player creation waits until video view is attached`() {
-        val playerView = TestPlayerView(context)
-        val player = mock<DivPlayer>()
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenReturn(player)
-        val view = DivVideoView(context)
-
-        binder.loadVideo(view, createBlock(DivVideo(videoSources = emptyList())), divView)
-
-        verify(playerFactory, never()).makePlayer(any(), any())
-
-        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(view)
-
-        verify(playerFactory).makePlayer(any(), any())
-        assertSame(player, playerView.getAttachedPlayer())
-    }
-
-    @Test
-    fun `player stays hidden without preview until deferred creation finishes`() {
-        val playerView = TestPlayerView(context)
-        val player = mock<DivPlayer>()
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenReturn(player)
-        val view = DivVideoView(context)
-        val recyclerView = TestRecyclerView(context, RecyclerView.SCROLL_STATE_SETTLING)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addView(view)
-        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(recyclerView)
-
-        binder.loadVideo(view, createBlock(DivVideo(videoSources = emptyList())), divView)
-
-        assertEquals(View.INVISIBLE, playerView.visibility)
-        verify(playerFactory, never()).makePlayer(any(), any())
-
-        recyclerView.moveToIdle()
-
-        assertSame(player, playerView.getAttachedPlayer())
-        assertEquals(View.VISIBLE, playerView.visibility)
-    }
-
-    @Test
-    fun `player creation does not wait for scroll idle when deferred creation is disabled`() {
-        val playerView = TestPlayerView(context)
-        val player = mock<DivPlayer>()
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenReturn(player)
-        val view = DivVideoView(context)
-        val recyclerView = TestRecyclerView(context, RecyclerView.SCROLL_STATE_SETTLING)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addView(view)
-        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(recyclerView)
-
-        createBinder(deferredVideoPlayerCreationEnabled = false).loadVideo(
-            view,
-            createBlock(DivVideo(videoSources = emptyList())),
-            divView,
-        )
-
-        verify(playerFactory).makePlayer(any(), any())
-        assertSame(player, playerView.getAttachedPlayer())
-    }
-
-    @Test
-    fun `disabled deferred creation preserves legacy rebind behavior`() {
-        val playerView = TestPlayerView(context)
-        val firstPlayer = mock<DivPlayer>()
-        val secondPlayer = mock<DivPlayer>()
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenReturn(firstPlayer, secondPlayer)
-        val view = DivVideoView(context)
-        val immediateBinder = createBinder(deferredVideoPlayerCreationEnabled = false)
-        val div = DivVideo(
-            videoSources = emptyList(),
-            preview = Expression.constant(INVALID_PREVIEW),
-        )
-
-        immediateBinder.loadVideo(view, createBlock(div), divView)
-        argumentCaptor<Runnable>().apply {
-            verify(executorService).submit(capture())
-            firstValue.run()
-        }
-        shadowOf(Looper.getMainLooper()).idle()
-
-        immediateBinder.loadVideo(view, createBlock(div), divView)
-
-        verify(firstPlayer, never()).release()
-        verify(executorService, times(2)).submit(any<Runnable>())
-        assertSame(secondPlayer, playerView.getAttachedPlayer())
-        assertEquals(View.VISIBLE, playerView.visibility)
-    }
-
-    @Test
-    fun `disabled deferred creation propagates player initialization failure`() {
-        val playerView = TestPlayerView(context)
-        val expected = IllegalStateException("player creation failed")
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenThrow(expected)
-        val view = DivVideoView(context)
-
-        val failure = runCatching {
-            createBinder(deferredVideoPlayerCreationEnabled = false).loadVideo(
-                view,
-                createBlock(DivVideo(videoSources = emptyList())),
-                divView,
-            )
-        }.exceptionOrNull()
-
-        assertSame(expected, failure)
-    }
-
-    @Test
-    fun `deferred creation propagates player initialization failure`() {
-        val playerView = TestPlayerView(context)
-        val expected = IllegalStateException("player creation failed")
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenThrow(expected)
-        val view = DivVideoView(context)
-        val recyclerView = TestRecyclerView(context, RecyclerView.SCROLL_STATE_SETTLING)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addView(view)
-        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(recyclerView)
-        binder.loadVideo(view, createBlock(DivVideo(videoSources = emptyList())), divView)
-
-        val failure = runCatching { recyclerView.moveToIdle() }.exceptionOrNull()
-
-        assertSame(expected, failure)
-    }
-
-    @Test
-    fun `preview scale is applied before player creation`() {
-        val playerView = TestPlayerView(context)
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        val view = DivVideoView(context)
-        val div = DivVideo(
-            videoSources = emptyList(),
-            scale = Expression.constant(DivVideoScale.NO_SCALE),
-        )
-
-        binder.loadVideo(view, createBlock(div), divView)
-
-        val previewView = view.getChildAt(1) as ImageView
-        assertEquals(ImageView.ScaleType.CENTER, previewView.scaleType)
-        verify(playerFactory, never()).makePlayer(any(), any())
-    }
-
-    @Test
-    fun `deferred preview uses latest dynamic scale on main thread`() {
-        val scale = MutableTestExpression(DivVideoScale.FIT)
-        val playerView = TestPlayerView(context)
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        val view = DivVideoView(context)
-        val div = DivVideo(
-            videoSources = emptyList(),
-            scale = scale,
-        )
-
-        val bindingThread = runOffMain { binder.loadVideo(view, createBlock(div), divView) }
-        scale.value = DivVideoScale.NO_SCALE
-        shadowOf(Looper.getMainLooper()).idle()
-
-        val previewView = view.getChildAt(1) as ImageView
-        assertEquals(ImageView.ScaleType.CENTER, previewView.scaleType)
-        assertEquals(listOf(bindingThread, Looper.getMainLooper().thread), scale.evaluationThreads)
-    }
-
-    @Test
-    fun `rebind keeps current preview visible while replacement is decoded`() {
-        val playerView = TestPlayerView(context)
-        val player = mock<DivPlayer>()
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenReturn(player)
-        val view = DivVideoView(context)
-        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(view)
-
-        binder.loadVideo(view, createBlock(DivVideo(videoSources = emptyList())), divView)
-        val previewView = view.getChildAt(1)
-        previewView.visibility = View.VISIBLE
-
-        binder.loadVideo(
-            view,
-            createBlock(DivVideo(
-                videoSources = emptyList(),
-                preview = Expression.constant("pending preview"),
-            )),
-            divView,
-        )
-
-        assertEquals(View.VISIBLE, previewView.visibility)
-        assertEquals(View.INVISIBLE, playerView.visibility)
-    }
-
-    @Test
-    fun `rebind keeps pending decode for unchanged preview`() {
-        val playerView = TestPlayerView(context)
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        val view = DivVideoView(context)
-        val div = DivVideo(
-            videoSources = emptyList(),
-            preview = Expression.constant("pending preview"),
-            scale = Expression.constant(DivVideoScale.FIT),
-        )
-
-        binder.loadVideo(view, createBlock(div), divView)
-        binder.loadVideo(view, createBlock(div), divView)
-
-        argumentCaptor<Runnable>().apply {
-            verify(executorService, times(1)).submit(capture())
-        }
-    }
-
-    @Test
-    fun `rebind keeps player visible after unchanged applied preview becomes ready`() {
-        val playerView = TestPlayerView(context)
-        val firstPlayer = mock<DivPlayer>()
-        val secondPlayer = mock<DivPlayer>()
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenReturn(firstPlayer, secondPlayer)
-        val view = DivVideoView(context)
-        val div = DivVideo(
-            videoSources = emptyList(),
-            preview = Expression.constant(VALID_PREVIEW),
-            scale = Expression.constant(DivVideoScale.FIT),
-        )
-        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(view)
-
-        binder.loadVideo(view, createBlock(div), divView)
-        argumentCaptor<Runnable>().apply {
-            verify(executorService).submit(capture())
-            firstValue.run()
-        }
-        shadowOf(Looper.getMainLooper()).idle()
-        val previewView = view.getChildAt(1) as ImageView
-        view.releaseMedia()
-
-        binder.loadVideo(view, createBlock(div), divView)
-
-        verify(executorService, times(1)).submit(any<Runnable>())
-        assertEquals(View.VISIBLE, previewView.visibility)
-        assertEquals(View.VISIBLE, playerView.visibility)
-
-        argumentCaptor<DivPlayer.Observer>().apply {
-            verify(secondPlayer).addObserver(capture())
-            firstValue.onReady()
-        }
-        assertEquals(View.INVISIBLE, previewView.visibility)
-        assertEquals(View.VISIBLE, playerView.visibility)
-    }
-
-    @Test
-    fun `failed preview decode is retried on rebind`() {
-        val playerView = TestPlayerView(context)
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        val view = DivVideoView(context)
-        val div = DivVideo(
-            videoSources = emptyList(),
-            preview = Expression.constant(INVALID_PREVIEW),
-            scale = Expression.constant(DivVideoScale.FIT),
-        )
-
-        binder.loadVideo(view, createBlock(div), divView)
-        argumentCaptor<Runnable>().apply {
-            verify(executorService).submit(capture())
-            firstValue.run()
-        }
-        shadowOf(Looper.getMainLooper()).idle()
-
-        binder.loadVideo(view, createBlock(div), divView)
-
-        verify(executorService, times(2)).submit(any<Runnable>())
-    }
-
-    @Test
-    fun `deferred player uses dynamic source and config from scroll idle`() {
-        val sourceUrl = MutableTestExpression(Uri.parse("https://example.com/old.mp4"))
-        val repeatable = MutableTestExpression(false)
-        val playerView = TestPlayerView(context)
-        val player = mock<DivPlayer>()
-        val playerSource = AtomicReference<List<DivVideoSource>>()
-        val playerConfig = AtomicReference<DivPlayerPlaybackConfig>()
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenAnswer { invocation ->
-            playerSource.set(invocation.getArgument(0))
-            playerConfig.set(invocation.getArgument(1))
-            player
-        }
-        val view = DivVideoView(context)
-        val recyclerView = TestRecyclerView(context, RecyclerView.SCROLL_STATE_SETTLING)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addView(view)
-        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(recyclerView)
-        val div = DivVideo(
-            videoSources = listOf(Div2VideoSource(
-                mimeType = Expression.constant("video/mp4"),
-                url = sourceUrl,
-            )),
-            repeatable = repeatable,
-        )
-
-        binder.loadVideo(view, createBlock(div), divView)
-        verify(playerFactory, never()).makePlayer(any(), any())
-
-        sourceUrl.value = Uri.parse("https://example.com/current.mp4")
-        repeatable.value = true
-        recyclerView.moveToIdle()
-
-        assertEquals(sourceUrl.value, playerSource.get().single().url)
-        assertTrue(playerConfig.get().repeatable)
-    }
-
-    @Test
-    fun `deferred player uses latest playback state`() {
-        val playerView = TestPlayerView(context)
-        val player = mock<DivPlayer>()
-        val playerConfig = AtomicReference<DivPlayerPlaybackConfig>()
-        val viewStateStore = DivViewStateStoreImpl()
-        whenever(divView.viewStateStore).thenReturn(viewStateStore)
-        whenever(playerFactory.makePlayerView(any())).thenReturn(playerView)
-        whenever(playerFactory.makePlayer(any(), any())).thenAnswer { invocation ->
-            playerConfig.set(invocation.getArgument(1))
-            player
-        }
-        val view = DivVideoView(context)
-        val recyclerView = TestRecyclerView(context, RecyclerView.SCROLL_STATE_SETTLING)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addView(view)
-        Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(recyclerView)
-        val divBlock = createBlock(DivVideo(
-            videoSources = emptyList(),
-            autostart = Expression.constant(true),
-        ))
-
-        binder.loadVideo(view, divBlock, divView)
-        viewStateStore.put(
-            divBlock.path.fullPath,
-            DivVideoViewState(DivVideoPlaybackState.PAUSED),
-        )
-
-        recyclerView.moveToIdle()
-
-        assertFalse(playerConfig.get().autoplay)
-    }
-
-    private fun createBlock(div: DivVideo) = DivBlock.Video(Div.Video(div), resolver, DivStatePath(0))
-
-    private class TestPlayerView(context: Context) : DivPlayerView(context) {
+    private class TestPlayerView(
+        context: Context,
+        private val onAttach: () -> Unit,
+    ) : DivPlayerView(context) {
 
         private var player: DivPlayer? = null
 
         override fun attach(player: DivPlayer) {
             this.player = player
+            onAttach()
         }
 
         override fun detach() {
@@ -727,40 +654,53 @@ internal class DivVideoBinderTest : DivBinderTest() {
         private var state: Int,
     ) : RecyclerView(context) {
 
-        private var listener: OnScrollListener? = null
+        private val listeners = linkedSetOf<OnScrollListener>()
 
         override fun getScrollState(): Int = state
 
         override fun addOnScrollListener(listener: OnScrollListener) {
-            this.listener = listener
+            listeners += listener
         }
 
         override fun removeOnScrollListener(listener: OnScrollListener) {
-            if (this.listener === listener) {
-                this.listener = null
-            }
+            listeners -= listener
         }
 
         fun moveToIdle() {
             state = SCROLL_STATE_IDLE
-            listener?.onScrollStateChanged(this, state)
+            listeners.toList().forEach { it.onScrollStateChanged(this, state) }
         }
     }
 
-    private companion object {
-        val DEFAULT_URL: Uri = Uri.parse("https://example.com/old.mp4")
-        val CURRENT_URL: Uri = Uri.parse("https://example.com/current.mp4")
-        const val DEFAULT_MIME_TYPE = "video/mp4"
-        const val CURRENT_MIME_TYPE = "video/webm"
-        const val DEFAULT_BITRATE = 1_000L
-        const val CURRENT_BITRATE = 2_000L
-        const val DEFAULT_WIDTH = 320L
-        const val CURRENT_WIDTH = 640L
-        const val DEFAULT_HEIGHT = 180L
-        const val CURRENT_HEIGHT = 360L
-        const val CURRENT_PLAYBACK_SPEED = 1.5
-        const val VALID_PREVIEW =
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
-        const val INVALID_PREVIEW = "data:image/svg+xml;base64,bm90IHN2Zw=="
+    private class QueuedExecutorService : AbstractExecutorService() {
+        private val tasks = ArrayDeque<Runnable>()
+        private var shutdown = false
+
+        val pendingTaskCount: Int
+            get() = tasks.size
+
+        override fun execute(command: Runnable) {
+            check(!shutdown) { "Executor is shut down" }
+            tasks += command
+        }
+
+        fun runNext() {
+            tasks.removeFirst().run()
+        }
+
+        override fun shutdown() {
+            shutdown = true
+        }
+
+        override fun shutdownNow(): MutableList<Runnable> {
+            shutdown = true
+            return tasks.toMutableList().also { tasks.clear() }
+        }
+
+        override fun isShutdown(): Boolean = shutdown
+
+        override fun isTerminated(): Boolean = shutdown && tasks.isEmpty()
+
+        override fun awaitTermination(timeout: Long, unit: java.util.concurrent.TimeUnit): Boolean = isTerminated
     }
 }
