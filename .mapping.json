@@ -15259,6 +15259,7 @@
   "client/ios/LayoutKitSnapshotTests/SwitchableContainerSnapshotTest.swift":"divkit/public/client/ios/LayoutKitSnapshotTests/SwitchableContainerSnapshotTest.swift",
   "client/ios/LayoutKitSnapshotTests/TooltipFactorySnapshotTests.swift":"divkit/public/client/ios/LayoutKitSnapshotTests/TooltipFactorySnapshotTests.swift",
   "client/ios/LayoutKitSnapshotTests/YSFontProvider.swift":"divkit/public/client/ios/LayoutKitSnapshotTests/YSFontProvider.swift",
+  "client/ios/MIGRATION.md":"divkit/public/client/ios/MIGRATION.md",
   "client/ios/Package.swift":"divkit/public/client/ios/Package.swift",
   "client/ios/README.md":"divkit/public/client/ios/README.md",
   "client/ios/Samples/CollectionViewSample/CollectionViewSample.xcodeproj/project.pbxproj":"divkit/public/client/ios/Samples/CollectionViewSample/CollectionViewSample.xcodeproj/project.pbxproj",
