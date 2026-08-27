@@ -2,9 +2,16 @@ import CoreGraphics
 import Foundation
 import VGSL
 
+#if canImport(UIKit)
+import UIKit
+#else
+import AppKit
+#endif
+
 public enum TooltipFactory {
   public static func makeTooltip(
     text: String,
+    alignment: TextAlignment = .left,
     position: BlockTooltip.Position,
     width: CGFloat? = nil,
     theme: Theme = .light
@@ -12,7 +19,7 @@ public enum TooltipFactory {
     let sideInset: CGFloat = 12
     let text = TextBlock(
       widthTrait: width.flatMap { .fixed($0 - 2 * sideInset) } ?? .intrinsic,
-      text: text.with(typo: textTypo.with(color: theme.textColor))
+      text: text.with(typo: textTypo.with(color: theme.textColor).with(alignment: alignment))
     )
     .addingEdgeInsets(EdgeInsets(top: 8, left: sideInset, bottom: 8, right: sideInset))
     .addingDecorations(boundary: .clipCorner(radius: 10), backgroundColor: theme.backgroundColor)
