@@ -24,6 +24,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
@@ -75,6 +76,16 @@ class DivGalleryBinderTest : DivBinderTest() {
         underTest.bindView(recyclerView, divBlock, divView)
 
         Assert.assertEquals(DEFAULT_ITEM + 1, recyclerView.layoutManager.shadow().position)
+    }
+
+    @Test
+    fun `reset cross axis remeasure on rebind`() {
+        underTest.bindView(recyclerView, divBlock, divView)
+        clearInvocations(recyclerView)
+
+        underTest.bindView(recyclerView, divBlock, divView)
+
+        verify(recyclerView).resetCrossAxisRemeasure()
     }
 
     @Test

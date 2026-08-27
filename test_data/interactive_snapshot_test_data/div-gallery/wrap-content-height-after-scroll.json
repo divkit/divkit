@@ -1,0 +1,379 @@
+{
+  "description": "Horizontal wrap_content gallery grows when a taller item becomes visible after scrolling",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "gallery_item": {
+        "type": "container",
+        "orientation": "vertical",
+        "alignment_vertical": "bottom",
+        "content_alignment_horizontal": "center",
+        "height": {
+          "type": "wrap_content"
+        },
+        "items": [
+          {
+            "$text": "top_text",
+            "width": {
+              "type": "wrap_content"
+            },
+            "type": "caption",
+            "$text_color": "text_color"
+          },
+          {
+            "type": "container",
+            "orientation": "vertical",
+            "background": [
+              {
+                "type": "solid",
+                "$color": "bar_color"
+              }
+            ],
+            "border": {
+              "corner_radius": 8
+            },
+            "height": {
+              "type": "fixed",
+              "$value": "bar_height"
+            },
+            "items": [],
+            "paddings": {
+              "bottom": 2,
+              "top": 2
+            },
+            "width": {
+              "type": "match_parent"
+            }
+          },
+          {
+            "$text": "bottom_text",
+            "width": {
+              "type": "wrap_content"
+            },
+            "type": "caption",
+            "paddings": {
+              "bottom": 4,
+              "top": 4
+            },
+            "$text_color": "text_color"
+          }
+        ],
+        "width": {
+          "type": "fixed",
+          "value": 60
+        }
+      },
+      "caption": {
+        "type": "text",
+        "font_size": 11,
+        "font_weight": "regular",
+        "line_height": 12
+      },
+      "section_separator": {
+        "type": "container",
+        "orientation": "vertical",
+        "alignment_vertical": "bottom",
+        "content_alignment_horizontal": "center",
+        "height": {
+          "type": "wrap_content"
+        },
+        "items": [
+          {
+            "$text": "separator_text",
+            "width": {
+              "type": "wrap_content"
+            },
+            "text_color": "#DB000000",
+            "type": "caption_medium"
+          }
+        ],
+        "paddings": {
+          "bottom": 4,
+          "top": 4
+        },
+        "width": {
+          "type": "fixed",
+          "value": 60
+        }
+      },
+      "caption_medium": {
+        "type": "text",
+        "font_size": 11,
+        "font_weight": "medium",
+        "line_height": 12
+      }
+    },
+    "card": {
+      "log_id": "gallery_remeasure_after_scroll",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "height": {
+              "type": "wrap_content"
+            },
+            "items": [
+              {
+                "type": "gallery",
+                "id": "resizable_gallery",
+                "alignment_horizontal": "center",
+                "height": {
+                  "type": "wrap_content"
+                },
+                "item_spacing": 4,
+                "items": [
+                  {
+                    "bottom_text": "Item 01",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 02",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 03",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 04",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 05",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 06",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 07",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 08",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 09",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 10",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "type": "section_separator",
+                    "separator_text": "Group A"
+                  },
+                  {
+                    "bottom_text": "Item 11",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 12",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 13",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 14",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 15",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 16",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 17",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 18",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 19",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 20",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 21",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 22",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "type": "section_separator",
+                    "separator_text": "Group B"
+                  },
+                  {
+                    "bottom_text": "Item 23",
+                    "bar_color": "#FFD6D6",
+                    "bar_height": 4,
+                    "top_text": "Low",
+                    "type": "gallery_item",
+                    "text_color": "#FF4C52"
+                  },
+                  {
+                    "bottom_text": "Item 24",
+                    "bar_color": "#EDEFF2",
+                    "bar_height": 52,
+                    "top_text": "High",
+                    "type": "gallery_item",
+                    "text_color": "#DB000000"
+                  }
+                ],
+                "orientation": "horizontal",
+                "paddings": {
+                  "bottom": 12,
+                  "end": 16,
+                  "start": 16
+                },
+                "width": {
+                  "type": "wrap_content",
+                  "constrained": true
+                }
+              }
+            ],
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "scroll_to_tall_item",
+        "typed": {
+          "type": "scroll_to",
+          "id": "resizable_gallery",
+          "animated": false,
+          "destination": {
+            "type": "end"
+          }
+        }
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 500
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    }
+  ]
+}

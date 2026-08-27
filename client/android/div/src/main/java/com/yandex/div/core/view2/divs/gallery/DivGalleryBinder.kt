@@ -47,6 +47,7 @@ internal class DivGalleryBinder @Inject constructor(
         val oldDivBlock = view.divBlock
         if (divBlock.div === oldDivBlock?.div) {
             val adapter = view.adapter as? DivGalleryAdapter ?: return
+            view.resetCrossAxisRemeasure()
             adapter.setItems(divBlock.buildItems())
             view.bindStates(divBinder.get(), divView)
             return
@@ -86,6 +87,7 @@ internal class DivGalleryBinder @Inject constructor(
         resolver: ExpressionResolver,
         divView: Div2View,
     ) {
+        resetCrossAxisRemeasure()
         val metrics = resources.displayMetrics
         val divOrientation = div.orientation.evaluate(resolver)
         val orientation = if (divOrientation == DivGallery.Orientation.HORIZONTAL) {
@@ -146,7 +148,7 @@ internal class DivGalleryBinder @Inject constructor(
                 crossContentAlignment,
                 columnCount,
                 itemSpacing,
-                crossSpacing.toInt()
+                crossSpacing.roundToInt()
             )
         }
         layoutManager = itemHelper.toLayoutManager()
@@ -215,6 +217,7 @@ internal class DivGalleryBinder @Inject constructor(
             val id = div.id ?: div.hashCode().toString()
             val hasState = divView.currentState?.getPositionAndOffset(id) != null
 
+            resetCrossAxisRemeasure()
             adapter.setItems(builder.build(resolver, path))
             if (hasState) return@bindItemBuilder
 

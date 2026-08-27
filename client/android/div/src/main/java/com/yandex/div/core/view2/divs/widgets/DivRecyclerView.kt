@@ -64,7 +64,47 @@ internal class DivRecyclerView @JvmOverloads constructor(
 
     var widthMeasureSpec = 0
     var heightMeasureSpec = 0
+    var parentCrossAxisMeasureSpec = 0
     var considerMatchParent = false
+
+    private var remeasureIsHorizontal: Boolean? = null
+    private var requestedCrossAxisSize = 0
+    private var isCrossAxisRemeasurePosted = false
+
+    internal fun requestCrossAxisRemeasure(targetCrossAxisSize: Int, isHorizontal: Boolean) {
+        if (remeasureIsHorizontal != isHorizontal) {
+            remeasureIsHorizontal = isHorizontal
+            requestedCrossAxisSize = 0
+        }
+        if (targetCrossAxisSize <= crossAxisSize(isHorizontal) ||
+            targetCrossAxisSize <= requestedCrossAxisSize
+        ) {
+            return
+        }
+
+        requestedCrossAxisSize = targetCrossAxisSize
+        if (!isCrossAxisRemeasurePosted) {
+            isCrossAxisRemeasurePosted = true
+            if (!post {
+                isCrossAxisRemeasurePosted = false
+                val orientation = remeasureIsHorizontal ?: return@post
+                if (requestedCrossAxisSize > crossAxisSize(orientation)) {
+                    requestLayout()
+                } else {
+                    requestedCrossAxisSize = 0
+                }
+            }) {
+                isCrossAxisRemeasurePosted = false
+                requestedCrossAxisSize = 0
+            }
+        }
+    }
+
+    internal fun resetCrossAxisRemeasure() {
+        requestedCrossAxisSize = 0
+    }
+
+    private fun crossAxisSize(isHorizontal: Boolean) = if (isHorizontal) measuredHeight else measuredWidth
 
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
         widthMeasureSpec = widthSpec
@@ -75,6 +115,7 @@ internal class DivRecyclerView @JvmOverloads constructor(
             is DivGridLayoutManager -> layoutManager.orientation
             else -> HORIZONTAL
         }
+        parentCrossAxisMeasureSpec = if (orientation == HORIZONTAL) heightSpec else widthSpec
         considerMatchParent = if (orientation == HORIZONTAL) {
             needConsiderMatchParent(heightMeasureSpec) { height }
         } else {
@@ -265,6 +306,14 @@ internal class DivRecyclerView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        val crossAxisSizeChanged = when (remeasureIsHorizontal) {
+            true -> h != oldh
+            false -> w != oldw
+            null -> false
+        }
+        if (crossAxisSizeChanged && !isCrossAxisRemeasurePosted) {
+            requestedCrossAxisSize = 0
+        }
         onBoundsChanged(w, h)
     }
 

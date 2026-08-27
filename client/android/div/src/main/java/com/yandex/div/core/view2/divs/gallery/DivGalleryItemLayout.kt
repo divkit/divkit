@@ -52,7 +52,34 @@ internal class DivGalleryItemLayout(
             setMeasuredDimension(0, 0)
         } else {
             super.onMeasure(widthSpec, heightSpec)
+            requestGalleryRemeasureIfNeeded(recyclerView, isHorizontal)
         }
+    }
+
+    private fun requestGalleryRemeasureIfNeeded(recyclerView: DivRecyclerView, isHorizontal: Boolean) {
+        val galleryCrossAxisSpec = recyclerView.parentCrossAxisMeasureSpec
+        val galleryCrossAxisMode = MeasureSpec.getMode(galleryCrossAxisSpec)
+        if (galleryCrossAxisMode == MeasureSpec.EXACTLY) return
+
+        val galleryPaddings = if (isHorizontal) {
+            recyclerView.paddingTop + recyclerView.paddingBottom
+        } else {
+            recyclerView.paddingLeft + recyclerView.paddingRight
+        }
+        val itemCrossAxisSize = if (isHorizontal) measuredHeight else measuredWidth
+        val requiredCrossAxisSize = itemCrossAxisSize * columnCount() + totalCrossSpacing() + galleryPaddings
+        val targetCrossAxisSize = if (galleryCrossAxisMode == MeasureSpec.AT_MOST) {
+            min(requiredCrossAxisSize, MeasureSpec.getSize(galleryCrossAxisSpec))
+        } else {
+            requiredCrossAxisSize
+        }
+
+        recyclerView.requestCrossAxisRemeasure(targetCrossAxisSize, isHorizontal)
+    }
+
+    private fun totalCrossSpacing(): Int {
+        val halfCrossSpacing = crossSpacing().roundToInt() / 2
+        return 2 * (columnCount() - 1) * halfCrossSpacing
     }
 
     private fun setEmptySize(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -75,7 +102,9 @@ internal class DivGalleryItemLayout(
         considerMatchParent: Boolean,
     ): Int? {
         val parentSize = (MeasureSpec.getSize(parentSpec) - paddings).let {
-            if (alongScrollAxis) it else ((it - crossSpacing() * (columnCount() - 1)) / columnCount()).roundToInt()
+            if (alongScrollAxis) it else {
+                (it - totalCrossSpacing()) / columnCount()
+            }
         }
         val actualMaxSize = if (maxSize == DivLayoutParams.DEFAULT_MAX_SIZE) maxSize else maxSize + margins
         val actualSize = when {
