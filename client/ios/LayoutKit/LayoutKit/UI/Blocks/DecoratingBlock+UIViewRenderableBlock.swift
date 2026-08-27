@@ -345,6 +345,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private var pendingAnimationWorkItem: DispatchWorkItem?
 
   private var visibilityActionPerformers: VisibilityActionPerformers?
+  private var isForwardingTouches = false
   private var hasFocused = false
   private var tapRecognizer: UITapGestureRecognizer? {
     didSet {
@@ -409,6 +410,10 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   private var isViewOnWindow: Bool { window != nil }
+
+  private var handlesTouches: Bool {
+    model.shouldHandleAnyAction || model.actionAnimation != nil
+  }
 
   private var highlightState: HighlightState {
     (isHighlighted || !isEnabled) && model.hasResponsiveUI
@@ -497,18 +502,41 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   }
 
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    isForwardingTouches = !handlesTouches
+    guard !isForwardingTouches else {
+      next?.touchesBegan(touches, with: event)
+      return
+    }
     super.touchesBegan(touches, with: event)
     applyActionAnimation(state: .highlighted)
     model.pressStartActions?.asArray().perform(sendingFrom: self)
   }
 
+  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    guard !isForwardingTouches else {
+      next?.touchesMoved(touches, with: event)
+      return
+    }
+    super.touchesMoved(touches, with: event)
+  }
+
   override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    guard !isForwardingTouches else {
+      isForwardingTouches = false
+      next?.touchesEnded(touches, with: event)
+      return
+    }
     super.touchesEnded(touches, with: event)
     applyActionAnimation(state: .normal)
     model.pressEndActions?.asArray().perform(sendingFrom: self)
   }
 
   override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    guard !isForwardingTouches else {
+      isForwardingTouches = false
+      next?.touchesCancelled(touches, with: event)
+      return
+    }
     super.touchesCancelled(touches, with: event)
     applyActionAnimation(state: .normal)
     model.pressEndActions?.asArray().perform(sendingFrom: self)
