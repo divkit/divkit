@@ -2,8 +2,11 @@
 
 # Android Client:
 * Added `backdrop-effect` extension. It allows you to apply various graphic effects to the view backdrop.
+* Added `backdrop_scope` param to the `backdrop_effect` extension. It allows capturing the backdrop outside of the card the element belongs to.
 * Added configurable strict view reuse for item-builder elements.
 * Fixed `PicassoDivImageLoader` ignoring the user-configured `OkHttpClient` when loading bitmap images.
+* Fixed a crash in `div-custom` when a state switch was triggered while another state switch was still being bound: `bindView()` was called for an already attached custom view without `release()`/`createView()`.
+* Fixed background underlay being dropped for an element that declares no `background`, which made the `backdrop_effect` extension do nothing on such elements.
 * Fixed gallery update after an `item_builder` change.
 * Fixed stale `item_builder` subscriptions after view rebind.
 * Structurally equal JSON variable values no longer trigger redundant change notifications.
