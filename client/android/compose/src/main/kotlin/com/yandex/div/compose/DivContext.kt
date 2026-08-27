@@ -29,7 +29,7 @@ class DivContext private constructor(
     constructor(
         baseContext: Context,
         configuration: DivConfiguration
-    ) : this(createComponent(baseContext, configuration, DivDebugConfiguration()))
+    ) : this(createComponent(baseContext, configuration, DivDebugConfiguration.Default))
 
     /**
      * Creates a [DivContext] with provided [DivConfiguration] and [DivDebugConfiguration].

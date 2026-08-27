@@ -261,7 +261,7 @@ class DivViewHostTest {
         return DivContext(
             baseContext = ApplicationProvider.getApplicationContext(),
             configuration = DivConfiguration(reporter = TestReporter()),
-            debugConfiguration = DivDebugConfiguration(),
+            debugConfiguration = DivDebugConfiguration.Default,
         )
     }
 

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.transform.Transformation
 import com.yandex.div.compose.context.LocalDivViewContext
@@ -54,13 +55,16 @@ internal fun DivImageContent(
     }
 
     Box(modifier = backgroundModifier) {
-        val imageLoader = divContext.component.imageLoader
+        val component = divContext.component
+        val imageLoader = component.imageLoader
+        val painterStateListener = component.debugConfiguration.imagePainterStateListener
         if (!isImageLoaded && previewRequest != null) {
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = rememberAsyncImagePainter(
                     model = previewRequest,
-                    imageLoader = imageLoader
+                    imageLoader = imageLoader,
+                    onState = painterStateListener
                 ),
                 contentDescription = null,
                 contentScale = contentScale,
@@ -77,8 +81,11 @@ internal fun DivImageContent(
             val imagePainter = rememberAsyncImagePainter(
                 model = rememberImageRequest(imageRequestParams),
                 imageLoader = imageLoader,
-                onSuccess = {
-                    imageStateStorage.setIsLoaded(data, true)
+                onState = { state ->
+                    if (state is AsyncImagePainter.State.Success) {
+                        imageStateStorage.setIsLoaded(data, true)
+                    }
+                    painterStateListener?.invoke(state)
                 }
             )
             imagePainter.observeNetworkRestoration()

@@ -31,13 +31,16 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
         data.contentAlignmentVertical
     )
 
-    val imageRequestParams = ImageRequestParams(
-        data = data.imageUrl.observedValue(),
-        transformations = data.filters.observedTransformations()
-    )
+    val component = divContext.component
     val painter = rememberAsyncImagePainter(
-        model = rememberImageRequest(imageRequestParams),
-        imageLoader = divContext.component.imageLoader
+        model = rememberImageRequest(
+            ImageRequestParams(
+                data = data.imageUrl.observedValue(),
+                transformations = data.filters.observedTransformations()
+            )
+        ),
+        imageLoader = component.imageLoader,
+        onState = component.debugConfiguration.imagePainterStateListener
     )
     painter.observeNetworkRestoration()
 

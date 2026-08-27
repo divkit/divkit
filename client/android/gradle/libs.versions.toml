@@ -28,9 +28,10 @@ picasso = "2.8"
 protobuf = "4.35.1"
 rive = "10.3.1"
 robolectric = "4.16.1"
+roborazzi = "1.72.0"
 stetho = "1.6.0"
 unmock = "0.11.0"
-webp-imageio = "0.1.6"
+webp-imageio = "0.3.3"
 yatagan = "1.6.2"
 
 androidx-activity = "1.11.0"
@@ -158,12 +159,16 @@ rive = { module = "app.rive:rive-android", version.ref = "rive" }
 
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
+roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-junit-rule = { module = "io.github.takahirom.roborazzi:roborazzi-junit-rule", version.ref = "roborazzi" }
+
 stetho-core = { module = "com.facebook.stetho:stetho", version.ref = "stetho" }
 stetho-okhttp3 = { module = "com.facebook.stetho:stetho-okhttp3", version.ref = "stetho" }
 
 unmock-plugin = { module = "com.github.bjoernq:unmockplugin", version.ref = "unmock" }
 
-webp-imageio = { module = "org.sejda.imageio:webp-imageio", version.ref = "webp-imageio" }
+webp-imageio = { module = "io.github.darkxanter:webp-imageio", version.ref = "webp-imageio" }
 
 yatagan-api-compiled = { module = "com.yandex.yatagan:api-compiled", version.ref = "yatagan" }
 yatagan-processor-ksp = { module = "com.yandex.yatagan:processor-ksp", version.ref = "yatagan" }
@@ -181,4 +186,5 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 screenshotTestPlugin = { id = "com.yandex.test.screenshot-test-plugin", version = "unspecified" }

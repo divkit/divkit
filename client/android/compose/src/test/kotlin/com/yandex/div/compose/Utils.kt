@@ -69,7 +69,7 @@ internal fun mockLocalComponent(
 
 fun ComposeContentTestRule.setContentWithDivContext(
     configuration: DivConfiguration,
-    debugConfiguration: DivDebugConfiguration = DivDebugConfiguration(),
+    debugConfiguration: DivDebugConfiguration = DivDebugConfiguration.Default,
     content: @Composable () -> Unit
 ) {
     setContent {
@@ -86,7 +86,7 @@ fun ComposeContentTestRule.setContentWithDivContext(
 
 fun ComposeContentTestRule.setContent(
     configuration: DivConfiguration,
-    debugConfiguration: DivDebugConfiguration = DivDebugConfiguration(),
+    debugConfiguration: DivDebugConfiguration = DivDebugConfiguration.Default,
     data: DivData
 ) {
     setContentWithDivContext(

@@ -32,9 +32,11 @@ import kotlinx.coroutines.CoroutineScope
 )
 internal interface DivContextComponent {
 
+    val animationConfiguration: AnimationConfiguration
     val baseContext: Context
     val coroutineScope: CoroutineScope
     val customViewFactories: Map<String, DivCustomViewFactory>
+    val debugConfiguration: DivDebugConfiguration
     val debugFeatures: DivDebugFeatures
     val extensionHandlers: Map<String, DivExtensionHandler>
     val fontSourceProvider: DivFontSourceProvider
@@ -44,10 +46,9 @@ internal interface DivContextComponent {
     val imageRequestFactory: ImageRequestFactory
     val imageRequestListener: ImageRequestListener
     val playerFactory: DivVideoPlayerFactory
-    val viewContextFactory: DivViewContextFactory
-    val animationConfiguration: AnimationConfiguration
-    val viewContextStorage: DivViewContextStorage
     val preloader: DivPreloader
+    val viewContextFactory: DivViewContextFactory
+    val viewContextStorage: DivViewContextStorage
 
     @get:Named(Names.HOST_VARIABLES)
     val variableController: DivVariableController

@@ -57,15 +57,13 @@ internal fun TabTitleItem(
 
 @Composable
 private fun TabTitleDelimiter(delimiter: DivTabs.TabTitleDelimiter) {
-    val request = rememberImageRequest(
-        ImageRequestParams(
-            data = delimiter.imageUrl.observedValue(),
-            transformations = emptyList(),
-        )
-    )
+    val component = divContext.component
     val painter = rememberAsyncImagePainter(
-        model = request,
-        imageLoader = divContext.component.imageLoader
+        model = rememberImageRequest(
+            ImageRequestParams(data = delimiter.imageUrl.observedValue())
+        ),
+        imageLoader = component.imageLoader,
+        onState = component.debugConfiguration.imagePainterStateListener
     )
     Image(
         modifier = Modifier.size(

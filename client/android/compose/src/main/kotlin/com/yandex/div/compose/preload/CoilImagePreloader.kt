@@ -60,7 +60,7 @@ internal class CoilImagePreloader @Inject constructor(
             return
         }
 
-        val params = ImageRequestParams(data = url, transformations = emptyList())
+        val params = ImageRequestParams(data = url)
         val request = imageRequestFactory.build(params)
         imageLoader.execute(request)
     }

@@ -12,10 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.FixedScale
 import androidx.compose.ui.platform.LocalDensity
-import coil3.ImageLoader
 import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
@@ -35,7 +35,6 @@ import com.yandex.div2.DivVideoSource as Div2VideoSource
 internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
     val component = divContext.component
     val config = data.observedConfig()
-
     if (config.sources.isEmpty() && data.playerSettingsPayload == null) {
         reportError(
             "Neither 'video_source' nor 'player_settings_payload' are specified for video with id '${data.id}'"
@@ -62,13 +61,14 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
         player.Content(config = config, modifier = Modifier.fillMaxSize())
 
         if (!player.isReady.collectAsState().value) {
-            data.preview?.observedValue(transform = component.imagePreviewDecoder::decodePreview)?.let { preview ->
-                VideoPreviewImage(
-                    imageLoader = component.imageLoader,
-                    scale = config.scale,
-                    preview = preview
-                )
-            }
+            data.preview
+                ?.observedValue(transform = component.imagePreviewDecoder::decodePreview)
+                ?.let { preview ->
+                    VideoPreviewImage(
+                        preview = preview,
+                        scale = config.scale
+                    )
+                }
         }
     }
 }
@@ -91,17 +91,19 @@ private fun ObserveElapsedTimeVariable(player: DivVideoPlayer, variableName: Str
 }
 
 @Composable
-private fun VideoPreviewImage(imageLoader: ImageLoader, scale: DivVideoScale, preview: ByteArray) {
-    val density = LocalDensity.current.density
-    val contentScale = scale.toContentScale(density)
-    val imageRequest = rememberImageRequest(
-        ImageRequestParams(data = preview, transformations = emptyList())
-    )
+private fun VideoPreviewImage(preview: ByteArray, scale: DivVideoScale) {
+    val component = divContext.component
     Image(
         modifier = Modifier.fillMaxSize(),
-        painter = rememberAsyncImagePainter(model = imageRequest, imageLoader = imageLoader),
+        painter = rememberAsyncImagePainter(
+            model = rememberImageRequest(
+                ImageRequestParams(data = preview)
+            ),
+            imageLoader = component.imageLoader,
+            onState = component.debugConfiguration.imagePainterStateListener
+        ),
         contentDescription = null,
-        contentScale = contentScale,
+        contentScale = scale.toContentScale(LocalDensity.current.density)
     )
 }
 
@@ -113,7 +115,7 @@ private fun DivVideo.observedConfig(): DivVideoPlayerConfig {
         repeatable = repeatable.observedValue(),
         payload = playerSettingsPayload?.observedValue(),
         muted = muted.observedValue(),
-        playbackSpeed = playbackSpeed.observedValue().toFloat(),
+        playbackSpeed = playbackSpeed.observedFloatValue(),
         scale = scale.observedValue(),
     )
 }
