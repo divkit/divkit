@@ -12,19 +12,21 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivData
 
-internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> Boolean)? = null) {
+internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T?) -> Boolean)? = null) {
 
-    protected fun visit(data: DivData, resolver: ExpressionResolver) {
+    protected fun visit(data: DivData, resolver: ExpressionResolver): T? {
         data.states.forEach { state ->
             val path = DivStatePath.fromState(state)
             val stateResolver = resolver.asImpl?.runtimeStore
                 ?.getOrCreateRuntime(path.fullPath, state.div, resolver)?.expressionResolver
                 ?: resolver
-            visit(state.div, stateResolver, path)
+            val result = visit(state.div, stateResolver, path)
+            if (returnCondition?.invoke(result) == true) return result
         }
+        return null
     }
 
-    fun visit(div: Div, resolver: ExpressionResolver, path: DivStatePath): T {
+    fun visit(div: Div, resolver: ExpressionResolver, path: DivStatePath): T? {
         return when (div) {
             is Div.Text -> visit(div, resolver, path)
             is Div.Image -> visit(div, resolver, path)
@@ -46,7 +48,7 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         }
     }
 
-    protected abstract fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath): T
+    protected abstract fun defaultVisit(data: Div, resolver: ExpressionResolver, path: DivStatePath): T?
 
     protected open fun defaultVisitCollection(
         data: Div,
@@ -55,7 +57,7 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         items: List<Div>?,
         itemBuilder: DivCollectionItemBuilder? = null,
         pathOverride: List<DivStatePath>? = null
-    ): T {
+    ): T? {
         val result = defaultVisit(data, resolver, path)
         if (returnCondition?.invoke(result) == true) return result
 
@@ -79,8 +81,8 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
     private fun DivCollectionItemBuilder.visit(
         resolver: ExpressionResolverImpl,
         path: DivStatePath,
-        parent: T,
-    ): T {
+        parent: T?,
+    ): T? {
         build(resolver, path).forEach {
             val result = visitCollectionChild(it.div, it.expressionResolver, it.path, parent)
             if (returnCondition?.invoke(result) == true) return result
@@ -88,7 +90,7 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
         return parent
     }
 
-    protected open fun visitCollectionChild(div: Div, resolver: ExpressionResolver, path: DivStatePath, parent: T) =
+    protected open fun visitCollectionChild(div: Div, resolver: ExpressionResolver, path: DivStatePath, parent: T?) =
         visit(div, resolver, path)
 
     protected open fun visit(data: Div.Container, resolver: ExpressionResolver, path: DivStatePath) =
@@ -106,7 +108,7 @@ internal abstract class DivTreeVisitor<T>(private val returnCondition: ((T) -> B
     protected open fun visit(data: Div.Tabs, resolver: ExpressionResolver, path: DivStatePath) =
         defaultVisitCollection(data, resolver, path, data.value.items.map { it.div })
 
-    protected open fun visit(data: Div.State, resolver: ExpressionResolver, path: DivStatePath): T {
+    protected open fun visit(data: Div.State, resolver: ExpressionResolver, path: DivStatePath): T? {
         val id = data.value.getId()
         val paths = data.value.states.mapNotNull {
             it.div ?: return@mapNotNull null

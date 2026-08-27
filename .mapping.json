@@ -1461,6 +1461,7 @@
   "client/android/div/src/main/java/com/yandex/div/core/player/DivVideoAttachable.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/player/DivVideoAttachable.kt",
   "client/android/div/src/main/java/com/yandex/div/core/player/DivVideoResolution.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/player/DivVideoResolution.kt",
   "client/android/div/src/main/java/com/yandex/div/core/player/DivVideoSource.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/player/DivVideoSource.kt",
+  "client/android/div/src/main/java/com/yandex/div/core/player/DivVideoViewMapper.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/player/DivVideoViewMapper.kt",
   "client/android/div/src/main/java/com/yandex/div/core/player/PlayerViewsVisibilityChangeListener.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/player/PlayerViewsVisibilityChangeListener.kt",
   "client/android/div/src/main/java/com/yandex/div/core/preload/PreloadResult.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/preload/PreloadResult.kt",
   "client/android/div/src/main/java/com/yandex/div/core/preload/PreloadingCompletion.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/preload/PreloadingCompletion.kt",

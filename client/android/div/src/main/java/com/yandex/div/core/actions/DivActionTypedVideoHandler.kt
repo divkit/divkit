@@ -18,7 +18,7 @@ internal class DivActionTypedVideoHandler @Inject constructor()
         resolver: ExpressionResolver
     ): Boolean = when(action) {
         is DivActionTyped.Video -> {
-            handleVideoAction(action.value, scopeId, view, resolver)
+            handleVideoAction(action.value, view, resolver)
             true
         }
         else -> false
@@ -26,12 +26,11 @@ internal class DivActionTypedVideoHandler @Inject constructor()
 
     private fun handleVideoAction(
         action: DivActionVideo,
-        scopeId: String?,
         view: Div2View,
         resolver: ExpressionResolver
     ) {
         val id = action.id.evaluate(resolver)
         val videoAction = DivActionVideo.Action.toString(action.action.evaluate(resolver))
-        view.applyVideoCommand(id, videoAction, resolver, scopeId)
+        view.applyVideoCommand(id, videoAction, resolver)
     }
 }
