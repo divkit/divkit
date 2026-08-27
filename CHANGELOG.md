@@ -12,6 +12,7 @@
 * Added `DivData.resolve(card:templates:flagsInfo:)` overload that accepts pre-parsed `DivTemplates` for reusing templates across multiple cards.
 * Breaking change. Removed `RawDivData.resolve(flagsInfo:)`. Use `DivData.resolve(card:templates:flagsInfo:)` instead.
 * Breaking change. `DivDataTemplate` is no longer public. Use `DivData.resolve(card:templates:)` instead of `DivTemplates.parseValue(type: DivDataTemplate.self, from:)`.
+* Fixed `action_animation` and press actions not firing when the tap landed on an interactive view nested inside the actionable element, such as a `lottie` extension.
 * Fixed a crash that could happen when a `gallery` scroll position was restored while its items were being built.
 * Fixed incorrect block sizes in portrait orientation for the `layout_provider` recursive scenario.
 * Fixed the position of the element copy created for `bring_to_top_id` in tooltips with `substrate_div`: the copy now follows the original view when it is moved.
