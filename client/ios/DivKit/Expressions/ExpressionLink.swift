@@ -2,12 +2,14 @@ import Foundation
 import Serialization
 import VGSL
 
+enum ExpressionLinkItem {
+  case string(String)
+  case calcExpression(CalcExpression)
+  case nestedExpression(ExpressionLink<String>)
+}
+
 public struct ExpressionLink<T: Sendable>: Sendable {
-  enum Item {
-    case string(String)
-    case calcExpression(CalcExpression)
-    case nestedExpression(ExpressionLink<String>)
-  }
+  typealias Item = ExpressionLinkItem
 
   let items: [Item]
   let variablesNames: [String]
@@ -23,6 +25,14 @@ public struct ExpressionLink<T: Sendable>: Sendable {
   ) {
     guard rawValue.contains(expressionPrefix) else {
       return nil
+    }
+
+    if resolveNested, let cachedLink = parsedExpressionCache.withLock({ $0[rawValue] }) {
+      self.items = cachedLink.items
+      self.variablesNames = cachedLink.variablesNames
+      self.rawValue = rawValue
+      self.validator = validator
+      return
     }
 
     var items = [Item]()
@@ -83,6 +93,15 @@ public struct ExpressionLink<T: Sendable>: Sendable {
     self.variablesNames = variablesNames
     self.rawValue = rawValue
     self.validator = validator
+
+    if resolveNested {
+      parsedExpressionCache.withLock {
+        if $0.count >= parsedExpressionCacheLimit {
+          $0.removeAll(keepingCapacity: true)
+        }
+        $0[rawValue] = ParsedExpressionLink(items: items, variablesNames: variablesNames)
+      }
+    }
   }
 
   func extractDynamicVariableNames(_ context: ExpressionContext) -> [String] {
@@ -102,6 +121,16 @@ public struct ExpressionLink<T: Sendable>: Sendable {
 }
 
 private let expressionPrefix = "@{"
+
+private struct ParsedExpressionLink {
+  let items: [ExpressionLinkItem]
+  let variablesNames: [String]
+}
+
+private let parsedExpressionCacheLimit = 1024
+
+private let parsedExpressionCache =
+  AllocatedUnfairLock<[String: ParsedExpressionLink]>(uncheckedState: [:])
 
 extension StringProtocol {
   fileprivate func makeLinkIndices() -> (String.Index, String.Index)? {

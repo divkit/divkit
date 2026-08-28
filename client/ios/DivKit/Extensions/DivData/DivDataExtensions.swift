@@ -110,10 +110,14 @@ extension DivData {
     flagsInfo: DivFlagsInfo = .default
   ) -> DeserializationResult<DivData> {
     if flagsInfo.useUntypedTemplateResolver {
-      let resolver = UntypedDivTemplateResolver(templates: templatesDict)
-      let parsingContext = ParsingContext(
-        templateResolver: { resolver.resolveFlat($0) }
-      )
+      let templateResolver: TemplateResolver? = if let templatesDict, !templatesDict.isEmpty {
+        { [resolver = UntypedDivTemplateResolver(templates: templatesDict)] in
+          resolver.resolveFlat($0)
+        }
+      } else {
+        nil
+      }
+      let parsingContext = ParsingContext(templateResolver: templateResolver)
 
       let divDataResult: DeserializationResult<DivData>
       do {
