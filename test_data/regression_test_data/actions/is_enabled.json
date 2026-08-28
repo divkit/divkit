@@ -32,6 +32,7 @@
           "items": [
             {
               "type": "text",
+              "id": "actions_trigger_text",
               "text": "Tested text",
               "text_alignment_vertical": "center",
               "actions": [
@@ -76,6 +77,7 @@
             },
             {
               "type": "subtitle",
+              "id": "actions_result",
               "text": "Last catched action: @{catched_action}",
               "ranges": [
                 {
@@ -87,6 +89,7 @@
             },
             {
               "type": "text",
+              "id": "actions_toggle",
               "text": "@{is_enabled ? 'Disable actions' : 'Enable actions'}",
               "margins": {
                 "top": 16,

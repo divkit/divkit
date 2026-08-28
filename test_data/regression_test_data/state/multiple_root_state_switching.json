@@ -49,6 +49,7 @@
               "state_id": "initial",
               "div": {
                 "type": "button",
+                "id": "multiple_root_state_initial_button",
                 "background_color": "#2AA198",
                 "border_color": "#00FFFFFF",
                 "text": "STATE 0 (INITIAL)",
@@ -72,6 +73,7 @@
               "state_id": "final",
               "div": {
                 "type": "button",
+                "id": "multiple_root_state_final_button",
                 "background_color": "#2AA198",
                 "border_color": "#00FFFFFF",
                 "text": "STATE 0 (FINAL)",
@@ -85,6 +87,7 @@
         "state_id": 1,
         "div": {
           "type": "button",
+          "id": "multiple_root_state_state_1_button",
           "background_color": "#00FFFFFF",
           "border_color": "#CB4B16",
           "text": "STATE 1",

@@ -1,0 +1,122 @@
+{
+  "description": "Actions is_enabled",
+  "case_id": 59,
+  "platforms": [
+    "ios"
+  ],
+  "steps": [
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "actions_trigger_text"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "actions_result"
+      },
+      "text": "Last catched action: none"
+    },
+    {
+      "type": "long_tap",
+      "target": {
+        "type": "div_id",
+        "id": "actions_trigger_text"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "actions_result"
+      },
+      "text": "Last catched action: none"
+    },
+    {
+      "type": "double_tap",
+      "target": {
+        "type": "div_id",
+        "id": "actions_trigger_text"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "actions_result"
+      },
+      "text": "Last catched action: none"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "actions_toggle"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "actions_toggle"
+      },
+      "text": "Disable actions"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "actions_result"
+      },
+      "text": "Last catched action: none"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "actions_trigger_text"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "actions_result"
+      },
+      "text": "Last catched action: click"
+    },
+    {
+      "type": "long_tap",
+      "target": {
+        "type": "div_id",
+        "id": "actions_trigger_text"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "actions_result"
+      },
+      "text": "Last catched action: long_click"
+    },
+    {
+      "type": "double_tap",
+      "target": {
+        "type": "div_id",
+        "id": "actions_trigger_text"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "actions_result"
+      },
+      "text": "Last catched action: double_click"
+    }
+  ]
+}

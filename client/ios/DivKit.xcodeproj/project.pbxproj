@@ -249,6 +249,7 @@
 		AB0000040000000000000003 /* RegressionTestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2BFA5328C10EA000A16E9B /* RegressionTestModel.swift */; };
 		AB0000040000000000000004 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000010000000000000002 /* AppRouter.swift */; };
 		AB0000040000000000000006 /* AppRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000040000000000000005 /* AppRouterTests.swift */; };
+		D9763000000000000000000C /* automated in Resources */ = {isa = PBXBuildFile; fileRef = D97630000000000000000016 /* automated */; };
 		E91B558D2C89D78400DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */; };
 		E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */; };
 		E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */; };
@@ -290,6 +291,13 @@
 			remoteInfo = SnapshotTestsHostApp;
 		};
 		986F579D2CD68E8400990A2A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C4409EC2864C4D200EF4175;
+			remoteInfo = DivKitPlayground;
+		};
+		D97630000000000000000006 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
 			proxyType = 1;
@@ -570,6 +578,8 @@
 		8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCursorPositionActionHandlerTests.swift; sourceTree = "<group>"; };
 		983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTemplatesTests.swift; sourceTree = "<group>"; };
 		986F57972CD68E8400990A2A /* DivKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D97630000000000000000002 /* DivKitRegressionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitRegressionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D97630000000000000000016 /* automated */ = {isa = PBXFileReference; lastKnownFileType = folder; name = automated; path = ../../test_data/regression_test_data/automated; sourceTree = "<group>"; };
 		98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivSystemPropertyManagersTests.swift; sourceTree = "<group>"; };
 		989DF7F52FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusElementActionHandlerTests.swift; sourceTree = "<group>"; };
 		989DF7F62FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TooltipActionHandlerTests.swift; sourceTree = "<group>"; };
@@ -606,6 +616,7 @@
 		8C5894B02F34BE4300AFF80D /* DivKitTestsSupport */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DivKitTestsSupport; sourceTree = "<group>"; };
 		8C5894C52F34C0D200AFF80D /* DivKitExtensionsTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DivKitExtensionsTests; sourceTree = "<group>"; };
 		8C5894CE2F34C63A00AFF80D /* DivKitUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DivKitUITests; sourceTree = "<group>"; };
+		D97630000000000000000008 /* DivKitRegressionUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DivKitRegressionUITests; sourceTree = "<group>"; };
 		8C5895072F34C72500AFF80D /* LayoutKitTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = LayoutKitTests; path = LayoutKit/LayoutKitTests; sourceTree = "<group>"; };
 		8C58953F2F34C87A00AFF80D /* LayoutKitSnapshotTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LayoutKitSnapshotTests; sourceTree = "<group>"; };
 		8C5A449C2F34CA0600287316 /* SnapshotTestsHostApp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8C5A449F2F34CA3E00287316 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SnapshotTestsHostApp; sourceTree = "<group>"; };
@@ -690,6 +701,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		986F57942CD68E8400990A2A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D97630000000000000000004 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -909,6 +927,7 @@
 				52DED04729F7346900D64519 /* DivKitExtensionsTests.xctest */,
 				7E2DFA8F2C7C7ED40095775C /* LayoutKitPlayground.framework */,
 				986F57972CD68E8400990A2A /* DivKitUITests.xctest */,
+				D97630000000000000000002 /* DivKitRegressionUITests.xctest */,
 				9FE7D3042CF7526C00BAF071 /* libDivKitTestsSupport.a */,
 			);
 			name = Products;
@@ -1174,6 +1193,8 @@
 				8C7B1B1B2865BFF10036EF4C /* DivKitTests */,
 				8C5894B02F34BE4300AFF80D /* DivKitTestsSupport */,
 				8C5894CE2F34C63A00AFF80D /* DivKitUITests */,
+				D97630000000000000000008 /* DivKitRegressionUITests */,
+				D97630000000000000000016 /* automated */,
 				7E3B99872C6E4FB100FC633E /* LayoutKitPlayground */,
 				8C58953F2F34C87A00AFF80D /* LayoutKitSnapshotTests */,
 				8C5895072F34C72500AFF80D /* LayoutKitTests */,
@@ -1451,6 +1472,27 @@
 			productReference = 986F57972CD68E8400990A2A /* DivKitUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		D97630000000000000000001 /* DivKitRegressionUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D9763000000000000000000B /* Build configuration list for PBXNativeTarget "DivKitRegressionUITests" */;
+			buildPhases = (
+				D97630000000000000000003 /* Sources */,
+				D97630000000000000000004 /* Frameworks */,
+				D97630000000000000000005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D97630000000000000000007 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D97630000000000000000008 /* DivKitRegressionUITests */,
+			);
+			name = DivKitRegressionUITests;
+			productName = DivKitRegressionUITests;
+			productReference = D97630000000000000000002 /* DivKitRegressionUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9FE7D3082CF7526C00BAF071 /* Build configuration list for PBXNativeTarget "DivKitTestsSupport" */;
@@ -1518,6 +1560,10 @@
 						CreatedOnToolsVersion = 15.4;
 						TestTargetID = 8C4409EC2864C4D200EF4175;
 					};
+					D97630000000000000000001 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 8C4409EC2864C4D200EF4175;
+					};
 					9FE7D3032CF7526C00BAF071 = {
 						CreatedOnToolsVersion = 16.1;
 					};
@@ -1552,6 +1598,7 @@
 				8C7B1B192865BFF10036EF4C /* DivKitTests */,
 				9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */,
 				986F57962CD68E8400990A2A /* DivKitUITests */,
+				D97630000000000000000001 /* DivKitRegressionUITests */,
 				7E2DFA8E2C7C7ED40095775C /* LayoutKitPlayground */,
 				8C6E40B028AAA47B0038E107 /* LayoutKitSnapshotTests */,
 				8CF329232875D534003F799A /* LayoutKitTests */,
@@ -1640,6 +1687,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D97630000000000000000005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9763000000000000000000C /* automated in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1944,6 +1999,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D97630000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9FE7D3002CF7526C00BAF071 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2014,6 +2076,11 @@
 			isa = PBXTargetDependency;
 			target = 8C4409EC2864C4D200EF4175 /* DivKitPlayground */;
 			targetProxy = 986F579D2CD68E8400990A2A /* PBXContainerItemProxy */;
+		};
+		D97630000000000000000007 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C4409EC2864C4D200EF4175 /* DivKitPlayground */;
+			targetProxy = D97630000000000000000006 /* PBXContainerItemProxy */;
 		};
 		9FE7D3112CF752F000BAF071 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2791,6 +2858,42 @@
 			};
 			name = Release;
 		};
+		D97630000000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.divkit.playground.regression-uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DivKitPlayground;
+			};
+			name = Debug;
+		};
+		D9763000000000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.divkit.playground.regression-uitests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = DivKitPlayground;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2880,6 +2983,15 @@
 			buildConfigurations = (
 				986F579F2CD68E8400990A2A /* Debug */,
 				986F57A02CD68E8400990A2A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D9763000000000000000000B /* Build configuration list for PBXNativeTarget "DivKitRegressionUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D97630000000000000000009 /* Debug */,
+				D9763000000000000000000A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,0 +1,47 @@
+{
+  "description": "Multiple state switching with different root state",
+  "case_id": 175,
+  "platforms": [
+    "ios"
+  ],
+  "steps": [
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "multiple_root_state_initial_button"
+      },
+      "text": "STATE 0 (INITIAL)"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "multiple_root_state_initial_button"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "multiple_root_state_state_1_button"
+      },
+      "text": "STATE 1"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "multiple_root_state_state_1_button"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "multiple_root_state_final_button"
+      },
+      "text": "STATE 0 (FINAL)"
+    }
+  ]
+}

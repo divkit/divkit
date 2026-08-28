@@ -23,3 +23,14 @@ JSON data for framework testing inside `DivKit Playground` apps. Theese test cas
 `file` – relative path to JSON data.
 
 `platforms` – list of platforms where the test case is available. Possible values: `android`, `ios`, `web`.
+
+## Automated UI scenarios
+
+Executable scenarios are stored in the `automated` subdirectory. A scenario refers to an existing test case by `case_id`.
+
+The common scenario fields are:
+
+- `description` – a human-readable scenario description.
+- `case_id` – a positive test case identifier from `index.json`.
+- `platforms` – platforms that execute the scenario. The iOS runner ignores scenarios without `ios`.
+- `steps` – ordered UI operations.

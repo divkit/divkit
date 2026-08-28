@@ -2033,7 +2033,8 @@
       ],
       "automated": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "actions"
@@ -4087,6 +4088,9 @@
         "web",
         "ios",
         "android"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivState"
