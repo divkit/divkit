@@ -7,11 +7,21 @@ import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivVideoSource
+import com.yandex.div.core.network.DivNetworkClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
 public class ExoDivPlayerFactory(
-    private val context: Context
+    private val context: Context,
+    networkClient: DivNetworkClient?,
+    networkScope: CoroutineScope,
 ) : DivPlayerFactory {
-    private val cache = ExoPlayerCache(context)
+    public constructor(context: Context) : this(context, null, CoroutineScope(SupervisorJob() + Dispatchers.IO))
+    public constructor(context: Context, networkClient: DivNetworkClient?) :
+        this(context, networkClient, CoroutineScope(SupervisorJob() + Dispatchers.IO))
+
+    private val cache = ExoPlayerCache(context, networkClient, networkScope)
 
     override fun makePlayer(src: List<DivVideoSource>, config: DivPlayerPlaybackConfig): DivPlayer {
         return ExoDivPlayer(context, src, config, cache.cacheDataSourceFactory)

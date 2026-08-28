@@ -3,6 +3,9 @@ package com.yandex.div.core
 import com.yandex.android.beacon.SendBeaconConfiguration
 import com.yandex.div.core.dagger.ExternalOptional
 import com.yandex.div.core.dagger.Names
+import com.yandex.div.core.network.DivNetworkClient
+import com.yandex.div.core.network.DivNetworkClientHolder
+import com.yandex.div.core.network.DivNetworkDivRequestExecutor
 import com.yandex.div.histogram.CpuUsageHistogramReporter
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.HistogramRecordConfiguration
@@ -22,8 +25,19 @@ class DivKitConfiguration private constructor(
     private val executorService: ExecutorService,
     private val histogramConfiguration: Provider<HistogramConfiguration>,
     private val divStorageComponent: Provider<DivStorageComponent>?,
-    private val divRequestExecutor: Provider<DivRequestExecutor>,
+    private val divRequestExecutor: Provider<DivRequestExecutor>?,
+    private val networkClientProvider: Provider<DivNetworkClient>?,
 ) {
+
+    private val resolvedNetworkClient: DivNetworkClient? by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
+        networkClientProvider?.get()
+    }
+
+    internal fun networkClient(): DivNetworkClient? = resolvedNetworkClient
+
+    @Singleton
+    @Provides
+    internal fun networkClientHolder(): DivNetworkClientHolder = DivNetworkClientHolder(networkClient())
 
     @Provides
     fun sendBeaconConfiguration(): SendBeaconConfiguration? {
@@ -64,7 +78,11 @@ class DivKitConfiguration private constructor(
 
     @Singleton
     @Provides
-    fun divRequestExecutor(): DivRequestExecutor = divRequestExecutor.get()
+    fun divRequestExecutor(): DivRequestExecutor {
+        return divRequestExecutor?.get()
+            ?: networkClient()?.let(::DivNetworkDivRequestExecutor)
+            ?: DivRequestExecutor.STUB
+    }
 
     class Builder {
 
@@ -72,7 +90,8 @@ class DivKitConfiguration private constructor(
         private var executorService: ExecutorService? = null
         private var histogramConfiguration = Provider { HistogramConfiguration.DEFAULT }
         private var divStorageComponent: Provider<DivStorageComponent>? = null
-        private var divRequestExecutor = Provider { DivRequestExecutor.STUB }
+        private var divRequestExecutor: Provider<DivRequestExecutor>? = null
+        private var networkClient: Provider<DivNetworkClient>? = null
 
         fun sendBeaconConfiguration(configuration: SendBeaconConfiguration): Builder {
             sendBeaconConfiguration = Provider { configuration }
@@ -99,8 +118,30 @@ class DivKitConfiguration private constructor(
             return this
         }
 
+        @Deprecated("Use networkClient(DivNetworkClient) instead.")
         fun divRequestExecutor(requestExecutor: Provider<DivRequestExecutor>): Builder {
             divRequestExecutor = requestExecutor
+            return this
+        }
+
+        /**
+         * Sets the host network stack used by built-in DivKit network clients.
+         *
+         * Configure it before the first [DivKit.getInstance] call.
+         */
+        fun networkClient(client: DivNetworkClient): Builder {
+            networkClient = Provider { client }
+            return this
+        }
+
+        /**
+         * Sets a provider for the host network stack used by built-in DivKit network clients.
+         * The provider is invoked once, when the network client is first used, and the result is shared.
+         *
+         * Configure it before the first [DivKit.getInstance] call.
+         */
+        fun networkClient(client: Provider<DivNetworkClient>): Builder {
+            networkClient = client
             return this
         }
 
@@ -110,7 +151,8 @@ class DivKitConfiguration private constructor(
                 executorService ?: Executors.newSingleThreadExecutor(),
                 histogramConfiguration,
                 divStorageComponent,
-                divRequestExecutor
+                divRequestExecutor,
+                networkClient,
             )
         }
     }

@@ -7,13 +7,13 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSpec
 import androidx.media3.datasource.cache.CacheWriter
 import com.yandex.div.core.DivPreloader
+import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div.core.player.DivPlayerFactory
 import com.yandex.div.core.player.DivPlayerPreloader
 import com.yandex.div.core.preload.PreloadResult
 import com.yandex.div.core.preload.UriPreloadResult
 import com.yandex.div.internal.KLog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 private const val TAG = "DivExoPlayerCacheManager"
@@ -26,6 +26,15 @@ public class ExoPlayerVideoPreloader(
     private val context: Context,
     private val cache: ExoPlayerCache = ExoPlayerCache(context)
 ): DivPlayerPreloader {
+    public constructor(context: Context, networkClient: DivNetworkClient) :
+        this(context, ExoPlayerCache(context, networkClient))
+
+    public constructor(
+        context: Context,
+        networkClient: DivNetworkClient,
+        networkScope: CoroutineScope,
+    ) : this(context, ExoPlayerCache(context, networkClient, networkScope))
+
     override fun preloadVideo(src: List<Uri>): DivPreloader.PreloadReference {
         return preloadVideoInternal(src) {}
     }
@@ -39,14 +48,19 @@ public class ExoPlayerVideoPreloader(
         callback: (List<PreloadResult>) -> Unit,
     ): DivPreloader.PreloadReference {
         if (src.isEmpty()) return DivPreloader.PreloadReference.EMPTY
-        val job = GlobalScope.launch(Dispatchers.IO) { preCacheVideo(src, callback) }
+        val job = cache.networkScope.launch { preCacheVideo(src, callback) }
         return DivPreloader.PreloadReference {
             job.cancel()
         }
     }
 
     public fun createPlayerFactory(): DivPlayerFactory {
-        return ExoDivPlayerFactory(context)
+        val networkClient = cache.networkClient
+        return if (networkClient == null) {
+            ExoDivPlayerFactory(context)
+        } else {
+            ExoDivPlayerFactory(context, networkClient, cache.networkScope)
+        }
     }
 
     private fun preCacheVideo(src: List<Uri>, callback: (List<PreloadResult>) -> Unit) {

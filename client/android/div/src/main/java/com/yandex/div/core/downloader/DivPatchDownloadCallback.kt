@@ -19,4 +19,13 @@ interface DivPatchDownloadCallback {
     */
     @MainThread
     fun onFail()
+
+    /**
+     * Called when patch download fails with [cause]. The default implementation preserves the
+     * legacy callback contract.
+     */
+    @MainThread
+    fun onFail(cause: Throwable) {
+        onFail()
+    }
 }

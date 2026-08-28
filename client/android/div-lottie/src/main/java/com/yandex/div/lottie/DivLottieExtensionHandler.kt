@@ -6,6 +6,7 @@ import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.LottieResult
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.extension.DivExtensionHandler
+import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div.core.preload.PreloadingRegistry
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
@@ -18,7 +19,9 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivGifImage
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 
 /**
@@ -27,11 +30,20 @@ import kotlinx.coroutines.withContext
  * You can use this extension for `gif` element and not worry about backward compatibility, as this
  * extension inherit all [DivGifImage] attributes and use [DivGifImage.gifUrl] as fallback.
  */
-open class DivLottieExtensionHandler(
+open class DivLottieExtensionHandler @JvmOverloads constructor(
     private val rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
     private val logger: DivLottieLogger = DivLottieLogger.STUB,
     cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
+    preloadScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+    networkClient: DivNetworkClient? = null,
 ) : DivExtensionHandler, ExpressionSubscriber {
+
+    public constructor(
+        networkClient: DivNetworkClient,
+        rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
+        logger: DivLottieLogger = DivLottieLogger.STUB,
+        cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
+    ) : this(rawResProvider, logger, cache, networkClient = networkClient)
 
     private val parser = LottieExtensionParamsParser(
         assetMapper = rawResProvider::provideAssetFile,
@@ -39,7 +51,7 @@ open class DivLottieExtensionHandler(
         reportError = logger::fail
     )
 
-    private val repo = DivLottieCompositionRepository(cache, logger)
+    internal val compositionRepository = DivLottieCompositionRepository(cache, logger, networkClient, preloadScope)
     private val playbackRecords = mutableMapOf<String, PlaybackStateController>()
 
     override val subscriptions: MutableList<Disposable> = mutableListOf()
@@ -66,7 +78,7 @@ open class DivLottieExtensionHandler(
             ?.let { parser.parseUrl(it, expressionResolver) }
             ?: return
         val preloading = preloadingRegistry?.registerPreloading("lottie")
-        repo.preloadLottieComposition(url) { result ->
+        compositionRepository.preloadLottieComposition(url) { result ->
             preloading?.onCompleted(result)
         }
     }
@@ -117,7 +129,7 @@ open class DivLottieExtensionHandler(
 
         lottieView.launchOnAttachedToWindow {
             val result = withContext(Dispatchers.IO) {
-                repo.receiveLottieComposition(lottieData, view.context)
+                compositionRepository.receiveLottieCompositionAsync(lottieData, view.context)
             }
             withContext(Dispatchers.Main) {
                 val playbackState = getOrCreatePlaybackState(divView, div)

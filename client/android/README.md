@@ -134,3 +134,26 @@ From a coding perspective, in `DivConfiguration.Builder#overrideContextMenuHandl
 By default, longtap_actions events do not propagate (they work on the main container, but are not captured by child elements) if the nested element has its own actions. This behavior aligns with the standard logic of Android and iOS platforms.
 
 However, if you have a specific need for longtap_actions to propagate to all child elements you can change this by using the `DivConfiguration.Builder#enableLongtapActionsPassingToChild` method.
+
+## Host network stack
+
+Configure the host HTTP stack once, before the first `DivKit.getInstance()` call:
+
+```kotlin
+DivKit.configure(
+    DivKitConfiguration.Builder()
+        .networkClient(OkHttpDivNetworkClient(hostOkHttpClient))
+        .build()
+)
+```
+
+The client configured in `DivKitConfiguration` is inherited by each `Div2Component` and is used
+for submit actions, DivKit-owned SVG loading, and default patch downloading. No global static
+network-client provider is used. An explicit `DivDownloader` or `DivRequestExecutor` takes
+precedence for its channel. Optional Lottie, Media3, and beacon integrations receive the same
+client explicitly through their constructors.
+An implemented `DivLottieNetworkCache.cacheComposition(url, onComplete)` also takes precedence
+for Lottie preloading; the host client is its fallback.
+
+The primary `DivImageLoader` supplied to `DivConfiguration.Builder` keeps ownership of its own
+network stack. Pass the host client to `CoilDivImageLoader` or configure Glide in the host app.

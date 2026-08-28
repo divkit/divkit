@@ -24,4 +24,8 @@ dependencies {
         exclude(group = "androidx.fragment", module = "fragment")
     }
     implementation(libs.okio)
+
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.okhttp)
+    testImplementation(project(":div-network-okhttp"))
 }
