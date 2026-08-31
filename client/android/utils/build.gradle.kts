@@ -17,7 +17,6 @@ dependencies {
 
     implementation(libs.androidx.collection)
     implementation(libs.androidx.core)
-    implementation(libs.androidx.viewpager)
     implementation(libs.javax)
 }
 

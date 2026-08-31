@@ -1,4 +1,4 @@
-package com.yandex.div.internal.util;
+package com.yandex.div.internal.widget.tabs;
 
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,13 +9,10 @@ import androidx.annotation.VisibleForTesting;
 import androidx.core.view.ViewCompat;
 import androidx.viewpager.widget.ViewPager;
 
-import com.yandex.div.core.annotations.InternalApi;
-
 /**
  * Helper class that enables nested-scrolling.
  */
-@InternalApi
-public class NestedHorizontalScrollCompanion {
+class NestedHorizontalScrollCompanion {
     private static final int DX_UNCONSUMED = 1;
 
     private final View mTarget;

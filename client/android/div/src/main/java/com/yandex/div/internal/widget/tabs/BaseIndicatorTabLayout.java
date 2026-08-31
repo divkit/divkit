@@ -41,7 +41,6 @@ import com.yandex.div.core.util.ViewsKt;
 import com.yandex.div.core.view2.divs.BaseDivViewExtensionsKt;
 import com.yandex.div.core.view2.reuse.InputFocusTracker;
 import com.yandex.div.internal.Log;
-import com.yandex.div.internal.util.NestedHorizontalScrollCompanion;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
