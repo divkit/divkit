@@ -3,7 +3,6 @@ package com.yandex.div.compose.storedvalues
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div.compose.dagger.Names
-import com.yandex.div.compose.utils.TimeProvider
 import com.yandex.div.data.StoredValue
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.internal.storedvalues.StoredValueException
@@ -13,19 +12,22 @@ import com.yandex.div.internal.storedvalues.StoredValuesStorage
 import com.yandex.yatagan.Lazy
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @DivViewScope
+@OptIn(ExperimentalTime::class)
 internal class LazyStoredValuesStorage @Inject constructor(
     @param:Named(Names.CARD_ID) private val cardId: String,
+    clock: Clock,
     private val reporter: DivReporter,
-    repository: Lazy<StoredValuesRepository>,
-    timeProvider: TimeProvider
+    repository: Lazy<StoredValuesRepository>
 ) : ScopedStoredValueProvider {
 
     private val storage by lazy {
         StoredValuesStorage(
             repository = repository.get(),
-            currentTimeMillis = timeProvider::currentTimeMillis
+            currentTimeMillis = { clock.now().toEpochMilliseconds() }
         )
     }
 

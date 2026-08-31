@@ -749,7 +749,6 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/DrawMirror.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/DrawMirror.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/Modifier.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/Modifier.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/Shapes.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/Shapes.kt",
-  "client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/TimeProvider.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/TimeProvider.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/UnitConversions.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/UnitConversions.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/gradient/ColorMap.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/gradient/ColorMap.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/gradient/DivGradient.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/utils/gradient/DivGradient.kt",

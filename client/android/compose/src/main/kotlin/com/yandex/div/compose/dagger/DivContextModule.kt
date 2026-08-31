@@ -11,8 +11,6 @@ import com.yandex.div.compose.images.ImageLoaderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.preload.CoilImagePreloader
 import com.yandex.div.compose.preload.ImagePreloader
-import com.yandex.div.compose.utils.SystemTimeProvider
-import com.yandex.div.compose.utils.TimeProvider
 import com.yandex.div.internal.storedvalues.StoredValuesRepository
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.DivStorageComponent
@@ -20,11 +18,12 @@ import com.yandex.div.storage.storedvalues.StoredValuesRepositoryImpl
 import com.yandex.yatagan.Binds
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimeSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlin.time.ExperimentalTime
-import kotlin.time.TimeSource
 
 @Module
 internal interface DivContextModule {
@@ -36,6 +35,11 @@ internal interface DivContextModule {
         @DivContextScope
         @Provides
         fun provideAssetManager(context: Context): AssetManager = context.assets
+
+        @DivContextScope
+        @OptIn(ExperimentalTime::class)
+        @Provides
+        fun provideClock(): Clock = Clock.System
 
         @DivContextScope
         @Provides
@@ -76,12 +80,6 @@ internal interface DivContextModule {
             return StoredValuesRepositoryImpl(
                 rawJsonRepository = storageComponent.rawJsonRepository
             )
-        }
-
-        @DivContextScope
-        @Provides
-        fun provideTimeProvider(): TimeProvider {
-            return SystemTimeProvider()
         }
 
         @DivContextScope

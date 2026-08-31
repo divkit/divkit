@@ -2,25 +2,30 @@ package com.yandex.div.compose.storedvalues
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.utils.TimeProvider
 import com.yandex.div.data.StoredValue
 import com.yandex.div.internal.storedvalues.StoredValueScope
 import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.ExperimentalTime
+import kotlin.time.Instant
+import kotlin.time.TestTimeSource
+import kotlin.time.asClock
 
+@OptIn(ExperimentalTime::class)
 @RunWith(AndroidJUnit4::class)
 class LazyStoredValuesStorageTest {
     private val reporter = TestReporter()
     private val repository = TestStoredValuesRepository()
-    private val timeProvider = TestTimeProvider()
+    private val timeSource = TestTimeSource()
 
     private val storage = LazyStoredValuesStorage(
         cardId = "test",
+        clock = timeSource.asClock(origin = Instant.fromEpochMilliseconds(0)),
         reporter = reporter,
-        repository = { repository },
-        timeProvider = timeProvider
+        repository = { repository }
     )
 
     @Test
@@ -114,11 +119,11 @@ class LazyStoredValuesStorageTest {
             lifetime = ONE_HOUR
         )
 
-        timeProvider.advanceTime(ONE_HOUR / 2)
+        timeSource += 30.minutes
 
         assertEquals("stored value", getValue("value"))
 
-        timeProvider.advanceTime(ONE_HOUR / 2)
+        timeSource += 30.minutes
 
         assertNull(getValue("value"))
     }
@@ -131,7 +136,7 @@ class LazyStoredValuesStorageTest {
             lifetime = ONE_HOUR
         )
 
-        timeProvider.advanceTime(ONE_HOUR / 2)
+        timeSource += 30.minutes
 
         storage.setValue(
             value = StoredValue.StringStoredValue(name = "value", value = "new value"),
@@ -139,28 +144,17 @@ class LazyStoredValuesStorageTest {
             lifetime = ONE_HOUR
         )
 
-        timeProvider.advanceTime(ONE_HOUR / 2)
+        timeSource += 30.minutes
 
         assertEquals("new value", getValue("value"))
 
-        timeProvider.advanceTime(ONE_HOUR / 2)
+        timeSource += 30.minutes
 
         assertNull(getValue("value"))
     }
 
     private fun getValue(name: String): Any? {
         return storage.getValue(name, StoredValueScope.Global)
-    }
-}
-
-private class TestTimeProvider : TimeProvider {
-    private var _currentTimeMillis = 0L
-
-    override val currentTimeMillis: Long
-        get() = _currentTimeMillis
-
-    fun advanceTime(seconds: Long) {
-        _currentTimeMillis += seconds * 1000L
     }
 }
 
