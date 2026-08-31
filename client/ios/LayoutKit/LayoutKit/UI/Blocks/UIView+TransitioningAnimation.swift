@@ -22,7 +22,10 @@ extension UIView {
         UIView.animate(
           withDuration: animationParam.duration,
           delay: animationParam.delay,
-          options: animationParam.options,
+          options: animationParam.options.union([
+            .overrideInheritedDuration,
+            .overrideInheritedCurve,
+          ]),
           animations: animationParam.block,
           completion: { _ in partialCompletion() }
         )
@@ -46,9 +49,11 @@ extension UIView {
       return
     }
 
-    for kind in TransitioningAnimation.Kind.allCases {
-      if let firstOfKind = animations.first(where: { $0.kind == kind }) {
-        setValue(firstOfKind.start, for: kind)
+    UIView.performWithoutAnimation {
+      for kind in TransitioningAnimation.Kind.allCases {
+        if let firstOfKind = animations.first(where: { $0.kind == kind }) {
+          setValue(firstOfKind.start, for: kind)
+        }
       }
     }
     perform(animations, animated: true, completion: completion)

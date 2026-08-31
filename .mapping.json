@@ -15196,6 +15196,7 @@
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/Array+UIViewRenderableTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/Array+UIViewRenderableTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewActionAnimationFreezeTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewActionAnimationFreezeTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewTouchForwardingTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewTouchForwardingTests.swift",
+  "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DetachableAnimationBlockAnimationContextTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DetachableAnimationBlockAnimationContextTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/UIViewRenderable+AccessibilityTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/UIViewRenderable+AccessibilityTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Views/GalleryViewTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Views/GalleryViewTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Views/GradientStopsPremultipliedTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Views/GradientStopsPremultipliedTests.swift",

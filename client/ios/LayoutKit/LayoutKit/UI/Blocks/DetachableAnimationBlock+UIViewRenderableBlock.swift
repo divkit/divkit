@@ -142,27 +142,33 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     let transitionChangeAnimationContainer = UIView()
     self.transitionChangeAnimationContainer = transitionChangeAnimationContainer
 
-    transitionChangeAnimationContainer.frame = startFrameInParent
-    transitionChangeAnimationContainer.clipsToBounds = false
-    transitionChangeAnimationContainer.addSubview(childView)
-    // Seed the content with the source size. A layout pass before the animation
-    // may already have sized childView to the destination, which would make the
-    // in-animation size assignment a no-op (position would animate, size would
-    // snap). Starting from the source size gives its bounds a real delta to
-    // interpolate.
-    childView.frame = CGRect(origin: .zero, size: transitionChangeAnimationContainer.bounds.size)
-    self.isHidden = true
+    UIView.performWithoutAnimation {
+      transitionChangeAnimationContainer.frame = startFrameInParent
+      transitionChangeAnimationContainer.clipsToBounds = false
+      transitionChangeAnimationContainer.addSubview(childView)
+      // Seed the content with the source size. A layout pass before the animation
+      // may already have sized childView to the destination, which would make the
+      // in-animation size assignment a no-op (position would animate, size would
+      // snap). Starting from the source size gives its bounds a real delta to
+      // interpolate.
+      childView.frame = CGRect(origin: .zero, size: transitionChangeAnimationContainer.bounds.size)
+      self.isHidden = true
 
-    // Host the flight in the real structural parent at the element's own
-    // z-position, so decorations (action, border, ...) don't clip it while its
-    // sibling z-order is preserved.
-    animationParent.insertSubview(transitionChangeAnimationContainer, aboveSubview: anchorView)
+      // Host the flight in the real structural parent at the element's own
+      // z-position, so decorations (action, border, ...) don't clip it while its
+      // sibling z-order is preserved.
+      animationParent.insertSubview(transitionChangeAnimationContainer, aboveSubview: anchorView)
+    }
     animationParent.layoutIfNeeded()
 
     UIView.animate(
       withDuration: animationChange.duration,
       delay: animationChange.delay,
-      options: [animationChange.timingFunction.cast()],
+      options: [
+        animationChange.timingFunction.cast(),
+        .overrideInheritedDuration,
+        .overrideInheritedCurve,
+      ],
       animations: {
         transitionChangeAnimationContainer.frame = finishFrameInParent
         childView.frame.size = transitionChangeAnimationContainer.bounds.size
@@ -185,9 +191,11 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
       return
     }
 
-    childView.frame = convertFrame(to: container)
-    self.childView = nil
-    container.addSubview(childView)
+    UIView.performWithoutAnimation {
+      childView.frame = convertFrame(to: container)
+      self.childView = nil
+      container.addSubview(childView)
+    }
     childView.setInitialParamsAndAnimate(
       animations: animationOut?.map { animation in
         if animation.kind == .fade {
