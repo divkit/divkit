@@ -69,7 +69,7 @@ class RoborazziScreenshotTest(
     private val divContext = DivContext(
         baseContext = getApplicationContext(),
         configuration = DivConfiguration(
-            fontSourceProvider = YandexSansFontSourceProvider(),
+            fontSourceProvider = TestFontSourceProvider(),
             imageLoaderConfiguration = LocalImageLoaderConfiguration(),
             reporter = TestReporter()
         ),

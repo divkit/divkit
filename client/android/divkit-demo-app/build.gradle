@@ -93,6 +93,7 @@ dependencies {
     implementation project(path: ':logging')
     implementation project(path: ':picasso')
     implementation project(path: ':screenshot-test-runtime')
+    implementation project(path: ':test-utils')
     implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
 

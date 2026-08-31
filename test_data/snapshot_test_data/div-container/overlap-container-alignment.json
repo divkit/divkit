@@ -45,7 +45,6 @@
               },
               "items": [
                 {
-                  "font_family": "display",
                   "paddings": {
                     "left": 18
                   },
@@ -94,7 +93,6 @@
               },
               "items": [
                 {
-                  "font_family": "display",
                   "paddings": {
                     "left": 2
                   },
