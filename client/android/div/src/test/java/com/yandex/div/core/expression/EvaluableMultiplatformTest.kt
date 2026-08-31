@@ -181,7 +181,7 @@ class EvaluableMultiplatformTest(
         @Parameterized.Parameters(name = "{0}")
         fun cases(): List<ParsingResult<ExpressionTestCase>> {
             val cases = ParsingUtils.parseFiles("expression_test_data") { file, json ->
-                ExpressionTestCaseUtils.parseTestCases(JSONObject(json), file.name)
+                ExpressionTestCaseUtils.parseTestCases(json, file.name)
             }
             ExpressionTestCaseUtils.checkDuplicates(cases.asSequence())
             return cases

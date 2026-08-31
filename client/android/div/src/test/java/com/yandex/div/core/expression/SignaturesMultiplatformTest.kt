@@ -4,9 +4,9 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
-import com.yandex.div.test.crossplatform.isForAndroid
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
+import com.yandex.div.test.crossplatform.isForAndroid
 import com.yandex.div.test.crossplatform.toObjectList
 import org.json.JSONException
 import org.json.JSONObject
@@ -64,8 +64,7 @@ class SignaturesMultiplatformTest(testCaseParsingResult: ParsingResult<Signature
         @Parameterized.Parameters(name = "{0}")
         fun signatures(): List<ParsingResult<SignatureTestCase>> {
             return ParsingUtils.parseFiles(File(SIGNATURES_DIR_PATH)) { file, json ->
-                JSONObject(json)
-                    .optJSONArray(FIELD_SIGNATURE)
+                json.optJSONArray(FIELD_SIGNATURE)
                     .toObjectList()
                     .filter { it.isForAndroid }
                     .map { parseSignature(file, it) }

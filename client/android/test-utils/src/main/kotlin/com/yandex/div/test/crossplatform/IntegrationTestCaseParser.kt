@@ -8,15 +8,13 @@ object IntegrationTestCaseParser {
 
     fun parseCases(
         fileName: String,
-        jsonString: String
+        json: JSONObject
     ): List<ParsingResult<IntegrationTestCase>> {
-        val json = JSONObject(jsonString)
+        val jsonString = json.toString()
         val cases = json.optJSONArray("cases")?.toObjectList() ?: listOf(json)
         return cases
-            .mapIndexedNotNull { index, jsonObject ->
-                if (!jsonObject.isForAndroid) {
-                    return@mapIndexedNotNull null
-                }
+            .filter { it.isForAndroid }
+            .mapIndexed { index, jsonObject ->
                 try {
                     val testCase = jsonObject.parseTestCase(
                         fileName = fileName,
@@ -52,10 +50,12 @@ private fun JSONObject.parseTestCase(
                 }
                 actions.add(step.getJSONObject("action"))
             }
+
             "verify_variable", "verify_errors", "verify_view" -> {
                 verificationFound = true
                 expectedResults.add(step.parseExpectedResult())
             }
+
             else -> throw JSONException("Unknown integration step type: $type")
         }
     }
@@ -83,6 +83,7 @@ private fun JSONObject.parseExpectedResult(): IntegrationTestCase.ExpectedResult
                 value = value.getVariableValue()
             )
         }
+
         "verify_errors" -> {
             val errors = getJSONArray("errors")
             IntegrationTestCase.ExpectedResult.Errors(
@@ -98,6 +99,7 @@ private fun JSONObject.parseExpectedResult(): IntegrationTestCase.ExpectedResult
                 scopeId = if (has("scope_id")) getString("scope_id") else null,
             )
         }
+
         else -> throw JSONException("Unknown expected result type: $type")
     }
 }

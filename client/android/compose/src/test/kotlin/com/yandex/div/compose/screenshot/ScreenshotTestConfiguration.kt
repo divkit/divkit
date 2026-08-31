@@ -4,35 +4,35 @@ import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div2.DivData
 import org.json.JSONObject
-import java.io.File
 import kotlin.test.fail
 
 class ScreenshotTestConfiguration(
-    val data: DivData,
-    val layoutDirection: LayoutDirection
+    val name: String,
+    private val json: JSONObject
 ) {
+    private val configuration = json.optJSONObject("configuration")
 
-    companion object {
-        fun parse(file: File): ScreenshotTestConfiguration {
-            val json = JSONObject(file.readText())
-            val configuration = json.optJSONObject("configuration")
-            return ScreenshotTestConfiguration(
-                data = DivData(
-                    DivParsingEnvironment(
-                        logger = { fail(it.message) }
-                    ).apply {
-                        json.optJSONObject("templates")?.let {
-                            parseTemplates(it)
-                        }
-                    },
-                    json.getJSONObject("card")
-                ),
-                layoutDirection = if (configuration?.optString("layout_direction") == "rtl") {
-                    LayoutDirection.Rtl
-                } else {
-                    LayoutDirection.Ltr
-                }
-            )
+    val layoutDirection: LayoutDirection
+        get() {
+            return if (configuration?.optString("layout_direction") == "rtl") {
+                LayoutDirection.Rtl
+            } else {
+                LayoutDirection.Ltr
+            }
         }
+
+    fun parseDivData(): DivData {
+        return DivData(
+            DivParsingEnvironment(
+                logger = { fail(it.message) }
+            ).apply {
+                json.optJSONObject("templates")?.let {
+                    parseTemplates(it)
+                }
+            },
+            json.getJSONObject("card")
+        )
     }
+
+    override fun toString() = name
 }

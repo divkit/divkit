@@ -50,7 +50,7 @@ class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<Integrat
                 .flatMap { fileName ->
                     IntegrationTestCaseParser.parseCases(
                         fileName = fileName,
-                        jsonString = AssetReader(context).readString(fileName)
+                        json = AssetReader(context).readJson(fileName)
                     )
                 }
         }

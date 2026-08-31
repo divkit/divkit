@@ -23,6 +23,8 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.test.crossplatform.ParsingResult
+import com.yandex.div.test.crossplatform.ParsingUtils
 import org.junit.Rule
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
@@ -47,8 +49,8 @@ import kotlin.test.Test
  *
  * Verify/record a single file (path relative to snapshot_test_data):
  * ```
- * ./gradlew :compose:verifyRoborazziDebug --tests "*.RoborazziScreenshotTest" -PdivkitTestFilter=div-text/all_attributes.json
- * ./gradlew :compose:recordRoborazziDebug --tests "*.RoborazziScreenshotTest" -PdivkitTestFilter=div-text/all_attributes.json
+ * ./gradlew :compose:verifyRoborazziDebug --tests "*.RoborazziScreenshotTest" -PdivkitTestFilter=div-text/font_weight.json
+ * ./gradlew :compose:recordRoborazziDebug --tests "*.RoborazziScreenshotTest" -PdivkitTestFilter=div-text/font_weight.json
  * ```
  *
  * Goldens are stored in `src/test/screenshots/` and committed to the repository.
@@ -57,10 +59,11 @@ import kotlin.test.Test
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RoborazziScreenshotTest(
-    name: String,
-    private val file: File
+    parsingResult: ParsingResult<ScreenshotTestConfiguration>
 ) {
-    private val goldenFile = File("src/test/screenshots/$name.webp").apply {
+    private val configuration = parsingResult.getOrThrow()
+
+    private val goldenFile = File("src/test/screenshots/${configuration.name}.webp").apply {
         parentFile?.mkdirs()
     }
 
@@ -103,8 +106,6 @@ class RoborazziScreenshotTest(
 
     @Test
     fun test() {
-        val configuration = ScreenshotTestConfiguration.parse(file)
-
         var isViewEmpty by mutableStateOf(false)
 
         composeRule.apply {
@@ -118,7 +119,7 @@ class RoborazziScreenshotTest(
                     } else {
                         DivView(
                             modifier = Modifier.testTag("DivView"),
-                            data = configuration.data
+                            data = configuration.parseDivData()
                         )
                     }
                 }
@@ -139,16 +140,18 @@ class RoborazziScreenshotTest(
 
         // Store parsed test cases to prevent multiple parsing by
         // ParameterizedRobolectricTestRunner
-        private val cases: List<Array<Any>> = run {
-            val fileName = System.getProperty("divkit.test.filter")
-            if (fileName != null) {
-                val file = File("$BASE_DIR/$fileName")
-                listOf(arrayOf<Any>(file.testName, file))
+        private val cases: List<ParsingResult<ScreenshotTestConfiguration>> = run {
+            ParsingUtils.parseFiles("snapshot_test_data") { file, json ->
+                val fileName = file.relativeFileName
+                if (fileName in ignoredFiles) {
+                    return@parseFiles emptyList()
+                }
+                val configuration = ScreenshotTestConfiguration(
+                    name = fileName.removeSuffix(".json"),
+                    json = json
+                )
+                listOf(ParsingResult.Success(configuration))
             }
-
-            getJsonFiles(BASE_DIR)
-                .filter { it.relativeTo(BASE_DIR).path !in ignoredFiles }
-                .map { file -> arrayOf(file.testName, file) }
         }
 
         @JvmStatic
@@ -158,19 +161,10 @@ class RoborazziScreenshotTest(
     }
 }
 
-private val BASE_DIR = File("../../../test_data/snapshot_test_data")
+private val snapshotTestDataDir = File("../../../test_data/snapshot_test_data")
 
-private val File.testName: String
-    get() = relativeTo(BASE_DIR).path.removeSuffix(".json")
-
-private fun getJsonFiles(dir: File): List<File> {
-    val items = dir.listFiles() ?: return emptyList()
-    val (directories, files) = items.partition { it.isDirectory }
-    return buildList {
-        addAll(files.sortedBy { it.name })
-        addAll(directories.sortedBy { it.name }.flatMap { getJsonFiles(it) })
-    }
-}
+private val File.relativeFileName: String
+    get() = relativeTo(snapshotTestDataDir).invariantSeparatorsPath
 
 private val ignoredFiles = setOf(
     // div-nine-patch-background not supported

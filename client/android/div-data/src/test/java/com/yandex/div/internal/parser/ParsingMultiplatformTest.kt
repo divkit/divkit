@@ -5,7 +5,6 @@ import com.yandex.div.internal.util.forEach
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils.parseFiles
-import com.yandex.div.test.crossplatform.isForAndroid
 import com.yandex.div2.DivData
 import org.json.JSONArray
 import org.json.JSONObject
@@ -86,10 +85,7 @@ class ParsingMultiplatformTest(testCaseParsingResult: ParsingResult<ParsingTestC
         // Store parsed test cases to prevent multiple parsing by
         // ParameterizedRobolectricTestRunner
         private val cases: List<ParsingResult<ParsingTestCase>> = run {
-            parseFiles("parsing_test_data") { file, jsonString ->
-                val json = JSONObject(jsonString)
-                if (!json.isForAndroid) return@parseFiles emptyList()
-
+            parseFiles("parsing_test_data") { file, json ->
                 val result = try {
                     val testCase = ParsingTestCase.from(file.name, json)
                     ParsingResult.Success(testCase)

@@ -10,12 +10,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
-import kotlin.collections.filter
-import kotlin.collections.flatMap
-import kotlin.collections.forEach
-import kotlin.collections.orEmpty
-import kotlin.collections.partition
-import kotlin.io.extension
+import kotlin.test.fail
 
 private const val TEST_DATA_PATH = "../../../test_data/"
 
@@ -23,25 +18,36 @@ object ParsingUtils {
 
     fun <T : Any> parseFiles(
         relativePath: String,
-        parseAction: (file: File, json: String) -> List<ParsingResult<T>>
+        parseAction: (file: File, json: JSONObject) -> List<ParsingResult<T>>
     ): List<ParsingResult<T>> {
         return parseFiles(directory = File(TEST_DATA_PATH, relativePath), parseAction)
     }
 
     fun <T : Any> parseFiles(
         directory: File,
-        parseAction: (file: File, json: String) -> List<ParsingResult<T>>
+        parseAction: (file: File, json: JSONObject) -> List<ParsingResult<T>>
     ): List<ParsingResult<T>> {
+        val filter = System.getProperty("divkit.test.filter")?.takeIf { it.isNotBlank() }
         val results = mutableListOf<ParsingResult<T>>()
         getFiles(directory).forEach { file ->
+            if (!file.isSelected(filter)) {
+                return@forEach
+            }
             try {
-                val json = file.readText(Charsets.UTF_8)
-                results.addAll(parseAction(file, json))
+                val json = JSONObject(file.readText())
+                if (json.isForAndroid) {
+                    results.addAll(parseAction(file, json))
+                }
             } catch (e: Exception) {
                 results.add(ParsingResult.Error(fileName = file.name, error = e))
                 return@forEach
             }
         }
+
+        if (filter != null && results.isEmpty()) {
+            fail("No files match filter: $filter")
+        }
+
         return results
     }
 
@@ -54,9 +60,6 @@ object ParsingUtils {
         }
     }
 }
-
-val JSONObject.platforms: List<String>?
-    get() = optJSONArray("platforms")?.map { it as String }
 
 val JSONObject.isForAndroid: Boolean
     get() = platforms?.contains("android") ?: true
@@ -80,3 +83,10 @@ fun parseDateTime(utcString: String): DateTime {
         timezone = TimeZone.getTimeZone("UTC")
     )
 }
+
+private fun File.isSelected(filter: String?): Boolean {
+    return filter == null || invariantSeparatorsPath.endsWith("/$filter")
+}
+
+private val JSONObject.platforms: List<String>?
+    get() = optJSONArray("platforms")?.map { it as String }
