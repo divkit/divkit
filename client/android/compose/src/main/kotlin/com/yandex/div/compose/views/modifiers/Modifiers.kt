@@ -23,12 +23,18 @@ internal fun Modifier.apply(
     div: Div,
     actions: DivActions?,
     applyMargins: Boolean,
-    visibility: DivVisibility
+    visibility: DivVisibility,
+    fillMatchParentWidth: Boolean = true,
+    fillMatchParentHeight: Boolean = true,
 ): Modifier {
     val divBase = div.value()
     return this
         .applyIf(applyMargins) { padding(divBase.margins) }
-        .size(div)
+        .size(
+            div,
+            fillMatchParentWidth = fillMatchParentWidth,
+            fillMatchParentHeight = fillMatchParentHeight,
+        )
         .visibilityActions(divBase)
         .applyIfNotNull(divBase.transform) { transform(it) }
         .appearance(divBase, visibility)

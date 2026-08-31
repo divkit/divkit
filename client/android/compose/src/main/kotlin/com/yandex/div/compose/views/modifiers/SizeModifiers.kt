@@ -28,16 +28,28 @@ import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnitValue
 
 @Composable
-internal fun Modifier.size(div: Div): Modifier {
+internal fun Modifier.size(
+    div: Div,
+    fillMatchParentWidth: Boolean = true,
+    fillMatchParentHeight: Boolean = true,
+): Modifier {
     val data = div.value()
     val aspectRatio = div.observedAspectRatio()
     return this
-        .width(data.width, data.alignmentHorizontal?.observedValue())
+        .width(
+            width = data.width,
+            horizontalAlignment = data.alignmentHorizontal?.observedValue(),
+            fillMatchParent = fillMatchParentWidth,
+        )
         .applyIfNotNull(aspectRatio) { ratio ->
             aspectRatio(ratio)
         }
         .applyIf(aspectRatio == null) {
-            height(data.height, data.alignmentVertical?.observedValue())
+            height(
+                height = data.height,
+                verticalAlignment = data.alignmentVertical?.observedValue(),
+                fillMatchParent = fillMatchParentHeight,
+            )
         }
 }
 
@@ -57,7 +69,8 @@ private fun Div.observedAspectRatio(): Float? {
 @Composable
 private fun Modifier.width(
     width: DivSize,
-    horizontalAlignment: DivAlignmentHorizontal? = null
+    horizontalAlignment: DivAlignmentHorizontal? = null,
+    fillMatchParent: Boolean,
 ): Modifier {
     val align = horizontalAlignment?.toHorizontalAlignment() ?: Alignment.Start
     return when (width) {
@@ -66,7 +79,7 @@ private fun Modifier.width(
             width.value.maxSize,
             isWidth = true
         )
-            .fillMaxWidth()
+            .applyIf(fillMatchParent) { fillMaxWidth() }
 
         is DivSize.WrapContent -> {
             val isConstrained = width.value.constrained?.observedValue() == true
@@ -82,7 +95,8 @@ private fun Modifier.width(
 @Composable
 private fun Modifier.height(
     height: DivSize,
-    verticalAlignment: DivAlignmentVertical? = null
+    verticalAlignment: DivAlignmentVertical? = null,
+    fillMatchParent: Boolean,
 ): Modifier {
     val align = verticalAlignment?.toVerticalAlignment() ?: Alignment.Top
     return when (height) {
@@ -91,7 +105,7 @@ private fun Modifier.height(
             height.value.maxSize,
             isWidth = false
         )
-            .fillMaxHeight()
+            .applyIf(fillMatchParent) { fillMaxHeight() }
 
         is DivSize.WrapContent -> {
             val isConstrained = height.value.constrained?.observedValue() == true

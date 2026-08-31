@@ -38,24 +38,37 @@ internal fun DivBlockView(
     val divBase = data.value()
     WithLocalComponent(divBase) {
         val visibility = divBase.visibility.observedValue()
-        if (visibility == DivVisibility.GONE) {
-            return@WithLocalComponent
-        }
-        val actions = data.observedActions()
-        WithActionMenu(actions) {
-            BaseViewWithExtensions(
-                data = data,
-                extensions = divBase.extensions
-                    ?.filter { it.isEnabled.observedValue() }
-                    ?: emptyList(),
-                modifier = modifier.apply(
-                    data,
-                    actions = actions,
-                    applyMargins = applyMargins,
-                    visibility = visibility
-                )
+        if (visibility == DivVisibility.GONE) return@WithLocalComponent
+        VisibleDivBlockView(data, modifier, applyMargins, visibility)
+    }
+}
+
+@Composable
+internal fun VisibleDivBlockView(
+    data: Div,
+    modifier: Modifier,
+    applyMargins: Boolean,
+    visibility: DivVisibility,
+    fillMatchParentWidth: Boolean = true,
+    fillMatchParentHeight: Boolean = true,
+) {
+    val divBase = data.value()
+    val actions = data.observedActions()
+    WithActionMenu(actions) {
+        BaseViewWithExtensions(
+            data = data,
+            extensions = divBase.extensions
+                ?.filter { it.isEnabled.observedValue() }
+                ?: emptyList(),
+            modifier = modifier.apply(
+                data,
+                actions = actions,
+                applyMargins = applyMargins,
+                visibility = visibility,
+                fillMatchParentWidth = fillMatchParentWidth,
+                fillMatchParentHeight = fillMatchParentHeight,
             )
-        }
+        )
     }
 }
 
