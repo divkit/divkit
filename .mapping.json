@@ -20040,7 +20040,6 @@
   "json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/Divan.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/Divan.kt",
   "json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/DivanPatch.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/DivanPatch.kt",
   "json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/EdgeInsetsUtils.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/EdgeInsetsUtils.kt",
-  "json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/Schema.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/Schema.kt",
   "json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/Template.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/Template.kt",
   "json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/annotation/DeprecatedApi.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/annotation/DeprecatedApi.kt",
   "json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/annotation/Generated.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/main/kotlin/divkit/dsl/annotation/Generated.kt",
