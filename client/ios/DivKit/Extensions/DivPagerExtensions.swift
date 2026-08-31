@@ -54,7 +54,6 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
     }
     return try PagerBlock(
       pagerPath: pagerPath,
-      alignment: alignment,
       layoutMode: layoutMode,
       gallery: gallery,
       selectedActions: items.map { $0.value.makeSelectedActions(context: context) },

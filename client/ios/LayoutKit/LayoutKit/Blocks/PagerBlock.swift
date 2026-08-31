@@ -11,7 +11,6 @@ public final class PagerBlock: BlockWithTraits {
 
   public let pagerPath: PagerPath?
   public let layoutMode: LayoutMode
-  public let alignment: Alignment
   public let gallery: GalleryViewModel
   public let state: PagerViewState
   public let widthTrait: LayoutTrait
@@ -42,7 +41,6 @@ public final class PagerBlock: BlockWithTraits {
 
   public init(
     pagerPath: PagerPath?,
-    alignment: Alignment,
     layoutMode: LayoutMode,
     gallery: GalleryViewModel,
     selectedActions: [[UserInterfaceAction]],
@@ -51,7 +49,6 @@ public final class PagerBlock: BlockWithTraits {
     heightTrait: LayoutTrait
   ) throws {
     self.pagerPath = pagerPath
-    self.alignment = alignment
     self.layoutMode = layoutMode
     self.gallery = gallery
     self.selectedActions = selectedActions
@@ -134,7 +131,6 @@ extension PagerBlock: ElementStateUpdating {
 
     return try PagerBlock(
       pagerPath: pagerPath,
-      alignment: alignment,
       layoutMode: layoutMode,
       gallery: newModel,
       selectedActions: selectedActions,
@@ -161,7 +157,6 @@ extension PagerBlock: ElementFocusUpdating {
 
     return try PagerBlock(
       pagerPath: pagerPath,
-      alignment: alignment,
       layoutMode: layoutMode,
       gallery: newModel,
       selectedActions: selectedActions,

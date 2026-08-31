@@ -2,7 +2,8 @@
   "description": "Vertical pager with layout mode 'wrap_content', scroll_axis_alignment 'end' and few small pages",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "templates": {
     "text_page": {

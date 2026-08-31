@@ -35,17 +35,18 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
 
   public init(
     model: GalleryViewModel,
-    alignment: Alignment,
     layoutMode: PagerBlock.LayoutMode,
     boundsSize: CGSize
   ) {
     self.model = model
     self.layoutMode = layoutMode
-    blockFrames = model.frames(fitting: boundsSize, layoutMode: layoutMode)
+    blockFrames = model.frames(
+      fitting: boundsSize,
+      layoutMode: layoutMode
+    )
     blockPages = model.pages(
       for: blockFrames,
-      fitting: boundsSize,
-      alignment: alignment
+      fitting: boundsSize
     )
 
     let contentSize = model.contentSize(
@@ -72,7 +73,7 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
 
     let page = blockPages[integralIndex]
     let fractionalIndex = pageIndex.truncatingRemainder(dividingBy: 1)
-    return page.origin + page.size * fractionalIndex
+    return min(maxContentOffset, page.origin + page.size * fractionalIndex)
   }
 
   public func pageIndex(forContentOffset contentOffset: CGFloat) -> CGFloat {
@@ -103,7 +104,10 @@ extension GalleryViewModel {
 }
 
 extension GalleryViewModel {
-  fileprivate func frames(fitting size: CGSize?, layoutMode: PagerBlock.LayoutMode) -> [CGRect] {
+  fileprivate func frames(
+    fitting size: CGSize?,
+    layoutMode: PagerBlock.LayoutMode
+  ) -> [CGRect] {
     switch direction {
     case .horizontal:
       horizontallyOrientedFrames(fitting: size, layoutMode: layoutMode)
@@ -114,8 +118,7 @@ extension GalleryViewModel {
 
   fileprivate func pages(
     for frames: [CGRect],
-    fitting size: CGSize?,
-    alignment: Alignment
+    fitting size: CGSize?
   ) -> [PagerViewLayout.Page] {
     guard let firstFrame = frames.first, let lastFrame = frames.last else {
       return []
@@ -124,16 +127,52 @@ extension GalleryViewModel {
     let bound = (size ?? .zero).dimension(in: direction)
     let contentSize = contentSize(
       for: frames,
-      fitting: nil
+      fitting: size
     ).dimension(in: direction)
 
+    let isScrollable = contentSize > bound
+    let segmentBoundaries: [CGFloat] = if isScrollable {
+      scrollOrigins(
+        for: frames,
+        fitting: size,
+        bound: bound,
+        contentSize: contentSize,
+        firstFrame: firstFrame,
+        lastFrame: lastFrame
+      )
+    } else {
+      frames.map { $0.origin.dimension(in: direction) }
+    }
+
+    return segmentBoundaries.indices.map { index in
+      let boundary = segmentBoundaries[index]
+      let nextBoundary = index < segmentBoundaries.count - 1
+        ? segmentBoundaries[index + 1]
+        : contentSize
+
+      return PagerViewLayout.Page(
+        index: index,
+        origin: isScrollable ? boundary : 0,
+        size: nextBoundary - boundary
+      )
+    }
+  }
+
+  private func scrollOrigins(
+    for frames: [CGRect],
+    fitting size: CGSize?,
+    bound: CGFloat,
+    contentSize: CGFloat,
+    firstFrame: CGRect,
+    lastFrame: CGRect
+  ) -> [CGFloat] {
     let firstFrameOrigin = firstFrame.origin.dimension(in: direction)
     let lastFrameOffset = lastGap(
       forSize: size,
       elementMainAxisSize: lastFrame.size.dimension(in: direction)
     )
     var frameOrigin = 0.0
-    let origins = frames.enumerated().map { index, frame -> CGFloat in
+    return frames.enumerated().map { index, frame -> CGFloat in
       guard index > 0 else { return 0.0 }
 
       if index == frames.count - 1, transformation?.style != .overlap {
@@ -148,17 +187,6 @@ extension GalleryViewModel {
       )
       frameOrigin = frame.origin.dimension(in: direction) - alignmentOffset
       return max(0, frameOrigin)
-    }
-
-    return (0..<frames.count).map { index in
-      let origin = origins[index]
-      let nextOrigin = index < origins.count - 1 ? origins[index + 1] : contentSize
-
-      return PagerViewLayout.Page(
-        index: index,
-        origin: origin,
-        size: nextOrigin - origin
-      )
     }
   }
 
@@ -207,21 +235,21 @@ extension GalleryViewModel {
     case let .pageSize(relative):
       return relative.absoluteValue(in: availableSize)
     case let .neighbourPageSize(neighbourPageSize):
-      let gaps = gaps(forSize: nil, elementMainAxisSize: nil)
+      let gaps = gaps(forSize: size, elementMainAxisSize: nil)
       let leadingMargin = gaps.first ?? 0.0
       let trailingMargin = gaps.last ?? 0.0
-
-      if gaps.count == 2 {
-        return availableSize - neighbourPageSize * 2 - trailingMargin
-      }
-
       let spacing = gaps.dropFirst().dropLast().first ?? 0.0
+      let neighbourSize = neighbourPageSize + spacing
 
-      return availableSize - max(
-        neighbourPageSize * 2 + spacing * 2,
-        leadingMargin,
-        trailingMargin
-      )
+      let rawPageSize: CGFloat = switch alignment {
+      case .leading:
+        availableSize - leadingMargin - neighbourSize
+      case .center:
+        availableSize - neighbourSize * 2
+      case .trailing:
+        availableSize - trailingMargin - neighbourSize
+      }
+      return max(0, rawPageSize)
     case .pageContentSize:
       return contentSize
     }

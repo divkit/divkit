@@ -2,7 +2,8 @@
   "description": "Vertical pager with neighbour page width bigger than page",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "templates": {
     "text_page_match_parent_height": {

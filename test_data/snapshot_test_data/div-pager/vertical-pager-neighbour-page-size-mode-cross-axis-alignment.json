@@ -2,7 +2,6 @@
   "description": "Vertical pager with layout mode 'fixed' and different cross axis alignments.",
   "platforms": [
     "android",
-    "ios",
     "web"
   ],
   "templates": {

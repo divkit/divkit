@@ -581,16 +581,19 @@ private struct MockLayout: GalleryViewLayouting {
   let pageOrigins: [CGFloat]
   let blockFrames: [CGRect]
   let contentSize: CGSize
+  let boundsSize: CGSize
   let transformation: ElementsTransformation? = nil
   let scrollDirection: ScrollDirection
 
   static func horizontal(pageCount: Int, pageSize: CGFloat) -> MockLayout {
     let origins = (0..<pageCount).map { CGFloat($0) * pageSize }
     let frames = origins.map { CGRect(x: $0, y: 0, width: pageSize, height: 100) }
+    let contentSize = CGSize(width: CGFloat(pageCount) * pageSize, height: 100)
     return MockLayout(
       pageOrigins: origins,
       blockFrames: frames,
-      contentSize: CGSize(width: CGFloat(pageCount) * pageSize, height: 100),
+      contentSize: contentSize,
+      boundsSize: contentSize,
       scrollDirection: .horizontal
     )
   }
@@ -598,10 +601,12 @@ private struct MockLayout: GalleryViewLayouting {
   static func vertical(pageCount: Int, pageSize: CGFloat) -> MockLayout {
     let origins = (0..<pageCount).map { CGFloat($0) * pageSize }
     let frames = origins.map { CGRect(x: 0, y: $0, width: 100, height: pageSize) }
+    let contentSize = CGSize(width: 100, height: CGFloat(pageCount) * pageSize)
     return MockLayout(
       pageOrigins: origins,
       blockFrames: frames,
-      contentSize: CGSize(width: 100, height: CGFloat(pageCount) * pageSize),
+      contentSize: contentSize,
+      boundsSize: contentSize,
       scrollDirection: .vertical
     )
   }

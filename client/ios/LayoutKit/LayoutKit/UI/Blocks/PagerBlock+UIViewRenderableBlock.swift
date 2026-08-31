@@ -19,7 +19,6 @@ extension PagerBlock {
     pagerView.configure(
       model: gallery,
       selectedActions: selectedActions,
-      alignment: alignment,
       layoutMode: layoutMode,
       state: state,
       observer: observer,
@@ -63,7 +62,6 @@ private final class PagerView: BlockView {
   func configure(
     model: GalleryViewModel,
     selectedActions: [[UserInterfaceAction]],
-    alignment: Alignment,
     layoutMode: PagerBlock.LayoutMode,
     state: PagerViewState,
     observer: ElementStateObserver?,
@@ -77,7 +75,6 @@ private final class PagerView: BlockView {
     let layoutFactory: GalleryView.LayoutFactory = { model, boundsSize in
       PagerViewLayout(
         model: model,
-        alignment: alignment,
         layoutMode: layoutMode,
         boundsSize: boundsSize
       )

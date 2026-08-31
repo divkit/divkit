@@ -41,7 +41,6 @@ private func makePagerBlock(
 ) -> PagerBlock {
   try! PagerBlock(
     pagerPath: nil,
-    alignment: .center,
     layoutMode: .neighbourPageSize(10),
     gallery: GalleryViewModel(
       items: [

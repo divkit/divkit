@@ -6,12 +6,24 @@ public protocol GalleryViewLayouting {
   var pageOrigins: [CGFloat] { get }
   var blockFrames: [CGRect] { get }
   var contentSize: CGSize { get }
+  var boundsSize: CGSize { get }
   var transformation: ElementsTransformation? { get }
   var scrollDirection: ScrollDirection { get }
 
   func contentOffset(pageIndex: CGFloat) -> CGFloat
   func pageIndex(forContentOffset contentOffset: CGFloat) -> CGFloat
   func isEqual(to model: GalleryViewModel, boundsSize: CGSize) -> Bool
+}
+
+extension GalleryViewLayouting {
+  var maxContentOffset: CGFloat {
+    switch scrollDirection {
+    case .horizontal:
+      max(0, contentSize.width - boundsSize.width)
+    case .vertical:
+      max(0, contentSize.height - boundsSize.height)
+    }
+  }
 }
 
 public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
@@ -78,14 +90,7 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
     }
 
     let fractionalIndex = pageIndex.truncatingRemainder(dividingBy: 1)
-    let maxOffset: CGFloat = switch model.direction {
-    case .horizontal:
-      max(0, contentSize.width - boundsSize.width)
-    case .vertical:
-      max(0, contentSize.height - boundsSize.height)
-    }
-
-    return min(maxOffset, page.origin + page.size * fractionalIndex)
+    return min(maxContentOffset, page.origin + page.size * fractionalIndex)
   }
 
   public func pageIndex(forContentOffset contentOffset: CGFloat) -> CGFloat {
