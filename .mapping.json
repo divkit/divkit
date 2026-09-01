@@ -1384,6 +1384,7 @@
   "client/android/div/src/main/java/com/yandex/div/core/dagger/ExperimentFlag.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/dagger/ExperimentFlag.kt",
   "client/android/div/src/main/java/com/yandex/div/core/dagger/ExternalOptional.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/dagger/ExternalOptional.kt",
   "client/android/div/src/main/java/com/yandex/div/core/dagger/Names.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/dagger/Names.kt",
+  "client/android/div/src/main/java/com/yandex/div/core/data/DivDataViewConnector.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/data/DivDataViewConnector.kt",
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivDataChangedObserver.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivDataChangedObserver.kt",
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivDownloadActionHandler.kt":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivDownloadActionHandler.kt",
   "client/android/div/src/main/java/com/yandex/div/core/downloader/DivDownloader.java":"divkit/public/client/android/div/src/main/java/com/yandex/div/core/downloader/DivDownloader.java",

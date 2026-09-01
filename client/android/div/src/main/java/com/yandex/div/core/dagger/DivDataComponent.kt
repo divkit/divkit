@@ -1,5 +1,6 @@
 package com.yandex.div.core.dagger
 
+import com.yandex.div.core.data.DivDataViewConnector
 import com.yandex.div.core.expression.RuntimeStoreProvider
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
 import com.yandex.div.core.state.DivStateManager
@@ -28,6 +29,7 @@ internal interface DivDataComponent {
     val tabsStateCache: TabsStateCache
     val timerEventDispatcherProvider: DivTimerEventDispatcherProvider
     val visibilityActionDispatcher: DivVisibilityActionDispatcher
+    val viewConnector: DivDataViewConnector
     val viewStateStore: DivViewStateStoreImpl
 
     @Component.Builder
