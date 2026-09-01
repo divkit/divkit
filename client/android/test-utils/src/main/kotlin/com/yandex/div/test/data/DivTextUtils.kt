@@ -69,6 +69,7 @@ fun text(
     backgrounds: List<DivBackground>? = null,
     disappearActions: List<DivDisappearAction>? = null,
     doubleTapActions: List<DivAction>? = null,
+    ellipsis: DivText.Ellipsis? = null,
     extensions: List<DivExtension>? = null,
     fontSize: Long = 12,
     functions: List<DivFunction>? = null,
@@ -77,6 +78,7 @@ fun text(
     images: List<DivText.Image>? = null,
     longTapActions: List<DivAction>? = null,
     margins: DivEdgeInsets? = null,
+    maxLines: Long? = null,
     paddings: DivEdgeInsets? = null,
     text: Expression<String>,
     textColor: Color? = null,
@@ -85,7 +87,8 @@ fun text(
     triggers: List<DivTrigger>? = null,
     variables: List<DivVariable>? = null,
     visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
-    visibilityActions: List<DivVisibilityAction>? = null
+    visibilityActions: List<DivVisibilityAction>? = null,
+    width: DivSize = matchParent()
 ): Div {
     return Div.Text(
         value = DivText(
@@ -95,6 +98,7 @@ fun text(
             background = backgrounds,
             disappearActions = disappearActions,
             doubletapActions = doubleTapActions,
+            ellipsis = ellipsis,
             extensions = extensions,
             functions = functions,
             fontSize = constant(fontSize),
@@ -103,6 +107,7 @@ fun text(
             images = images,
             longtapActions = longTapActions,
             margins = margins,
+            maxLines = maxLines?.let { constant(it) },
             paddings = paddings,
             text = text,
             textColor = textColor?.let { constant(it.value) } ?: constant(0xFF000000.toInt()),
@@ -111,7 +116,8 @@ fun text(
             variables = variables,
             variableTriggers = triggers,
             visibility = visibility,
-            visibilityActions = visibilityActions
+            visibilityActions = visibilityActions,
+            width = width
         )
     )
 }

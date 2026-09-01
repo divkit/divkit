@@ -22,7 +22,8 @@ fun container(
     items: List<Div> = emptyList(),
     margins: DivEdgeInsets? = null,
     paddings: DivEdgeInsets? = null,
-    variables: List<DivVariable>? = null
+    variables: List<DivVariable>? = null,
+    width: DivSize = matchParent()
 ): Div {
     return Div.Container(
         value = DivContainer(
@@ -36,7 +37,8 @@ fun container(
             items = items,
             margins = margins,
             paddings = paddings,
-            variables = variables
+            variables = variables,
+            width = width
         )
     )
 }
