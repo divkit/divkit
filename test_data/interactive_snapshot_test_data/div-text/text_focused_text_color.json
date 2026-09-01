@@ -95,10 +95,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 300
-    },
-    {
       "type": "verify_snapshot",
       "name": "step1"
     }

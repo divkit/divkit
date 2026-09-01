@@ -145,10 +145,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step1"
     },
@@ -158,10 +154,6 @@
         "url": "div-action://set_next_item?id=test_pager",
         "log_id": "next"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
@@ -182,10 +174,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step3"
     },
@@ -195,10 +183,6 @@
         "url": "div-action://set_variable?name=hide_odd&value=@{!hide_odd}",
         "log_id": "show_odd_items"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",

@@ -120,10 +120,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step1"
     },
@@ -133,10 +129,6 @@
         "url": "div-action://set_previous_item?id=test_gallery",
         "log_id": "first item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
@@ -150,10 +142,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step3"
     },
@@ -163,10 +151,6 @@
         "url": "div-action://set_previous_item?id=test_gallery&overflow=ring",
         "log_id": "last item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
@@ -180,10 +164,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step5"
     },
@@ -193,10 +173,6 @@
         "url": "div-action://set_next_item?id=test_gallery&overflow=ring",
         "log_id": "first item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
@@ -210,10 +186,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step7"
     },
@@ -223,10 +195,6 @@
         "url": "div-action://set_current_item?id=test_gallery&item=-1",
         "log_id": "middle (nonexistent) item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
@@ -240,10 +208,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step9"
     },
@@ -255,10 +219,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step10"
     },
@@ -268,10 +228,6 @@
         "url": "div-action://set_current_item?id=test_gallery&item=0",
         "log_id": "first item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",

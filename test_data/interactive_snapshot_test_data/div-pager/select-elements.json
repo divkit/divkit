@@ -133,10 +133,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step1"
     },
@@ -146,10 +142,6 @@
         "url": "div-action://set_previous_item?id=test_pager",
         "log_id": "first item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
@@ -163,10 +155,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step3"
     },
@@ -176,10 +164,6 @@
         "url": "div-action://set_previous_item?id=test_pager&overflow=ring",
         "log_id": "last item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
@@ -193,10 +177,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step5"
     },
@@ -206,10 +186,6 @@
         "url": "div-action://set_next_item?id=test_pager&overflow=ring",
         "log_id": "first item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
@@ -223,10 +199,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step7"
     },
@@ -238,10 +210,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step8"
     },
@@ -251,10 +219,6 @@
         "url": "div-action://set_current_item?id=test_pager&item=0",
         "log_id": "first item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",

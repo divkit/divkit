@@ -133,10 +133,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step1"
     },
@@ -146,10 +142,6 @@
         "url": "div-action://set_next_item?id=test_pager",
         "log_id": "first item"
       }
-    },
-    {
-      "type": "wait",
-      "duration_ms": 500
     },
     {
       "type": "verify_snapshot",
