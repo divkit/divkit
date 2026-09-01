@@ -177,7 +177,7 @@ class Div2Context @MainThread private constructor(
      */
     fun getExpressionResolver(divData: DivData, tag: DivDataTag): ExpressionResolver {
         val component = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
-        val runtimeStore = component.runtimeStoreProvider.getOrCreate(divData, null)
+        val runtimeStore = component.runtimeStoreProvider.getOrCreate(divData)
         return runtimeStore.rootRuntime.expressionResolver
     }
 
