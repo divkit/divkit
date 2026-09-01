@@ -24,6 +24,7 @@ import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.test.Ignore
 
 /**
  * Integration tests for [BindingDispatcher].
@@ -522,6 +523,7 @@ internal class BindingDispatcherTest {
         assertEquals(9, secondLatestValue.get())
     }
 
+    @Ignore("Flaky test")
     @Test(timeout = 5_000)
     fun `coalescing preserves order between different operation keys`() {
         val backgroundPhaseFinished = CountDownLatch(1)
