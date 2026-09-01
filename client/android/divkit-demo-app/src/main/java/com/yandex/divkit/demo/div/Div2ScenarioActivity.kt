@@ -130,7 +130,6 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
             .additionalTypefaceProviders(
                 mapOf(
-                    "display" to YandexSansDisplayDivTypefaceProvider(this),
                     "condensed" to YandexSansCondensedTypefaceProvider(this),
                     "roboto_flex" to RobotoFlexTypefaceProvider(this),
                 )

@@ -11,25 +11,11 @@ class ComposeFontSourceProvider : DivFontSourceProvider {
     override fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource {
         val fontRes = when (fontFamilyName) {
             "condensed" -> condensedFont(weight)
-            "display" -> displayFont(weight)
             "roboto_flex" -> testR.font.roboto_flex
-            else -> textFont(weight)
+            "text", null -> defaultFont(weight)
+            else -> throw RuntimeException("Invalid font_family: $fontFamilyName")
         }
         return DivFontSource.Resource(fontRes)
-    }
-
-    private fun textFont(weight: FontWeight): Int = when {
-        weight.weight <= FontWeight.Light.weight -> fontR.font.ys_text_light
-        weight.weight <= FontWeight.Normal.weight -> fontR.font.ys_text_regular
-        weight.weight <= FontWeight.Medium.weight -> fontR.font.ys_text_medium
-        else -> fontR.font.ys_text_bold
-    }
-
-    private fun displayFont(weight: FontWeight): Int = when {
-        weight.weight <= FontWeight.Light.weight -> fontR.font.ys_display_light
-        weight.weight <= FontWeight.Normal.weight -> fontR.font.ys_display_regular
-        weight.weight <= FontWeight.Medium.weight -> fontR.font.ys_display_medium
-        else -> fontR.font.ys_display_bold
     }
 
     private fun condensedFont(weight: FontWeight): Int = when {
@@ -37,5 +23,12 @@ class ComposeFontSourceProvider : DivFontSourceProvider {
         weight.weight <= FontWeight.Normal.weight -> testR.font.ys_text_cond_regular
         weight.weight <= FontWeight.Medium.weight -> testR.font.ys_text_cond_medium
         else -> testR.font.ys_text_cond_bold
+    }
+
+    private fun defaultFont(weight: FontWeight): Int = when {
+        weight.weight <= FontWeight.Light.weight -> fontR.font.ys_text_light
+        weight.weight <= FontWeight.Normal.weight -> fontR.font.ys_text_regular
+        weight.weight <= FontWeight.Medium.weight -> fontR.font.ys_text_medium
+        else -> fontR.font.ys_text_bold
     }
 }

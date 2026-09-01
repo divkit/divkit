@@ -13,7 +13,7 @@ class TestFontSourceProvider : DivFontSourceProvider {
         val fontRes = when (fontFamilyName) {
             "condensed" -> condensedFont(weight)
             "roboto_flex" -> testR.font.roboto_flex
-            null -> defaultFont(weight)
+            "text", null -> defaultFont(weight)
             else -> fail("Invalid font_family: $fontFamilyName")
         }
         return DivFontSource.Resource(fontRes)

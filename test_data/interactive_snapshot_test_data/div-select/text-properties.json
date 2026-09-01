@@ -168,7 +168,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_variable?name=font_family&value=display",
+        "url": "div-action://set_variable?name=font_family&value=roboto_flex",
         "log_id": "font_family"
       }
     },
