@@ -41,6 +41,10 @@ tasks.named("sourcesJar") {
     dependsOn("generateFunctionProvider")
 }
 
+tasks.named("metalavaGenerateSignature") {
+    dependsOn("generateFunctionProvider")
+}
+
 tasks.register<Jar>("replJar") {
     dependsOn("testClasses")
     from(buildDir.dir("classes/kotlin/test"))

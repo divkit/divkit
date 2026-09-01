@@ -30,6 +30,10 @@ buildkonfig {
     }
 }
 
+tasks.named("metalavaGenerateSignature") {
+    dependsOn("generateBuildKonfig")
+}
+
 afterEvaluate {
     publishing {
         publications {
