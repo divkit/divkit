@@ -2,7 +2,9 @@ import com.android.build.api.variant.BuildConfigField
 import groovy.json.JsonOutput
 
 plugins {
+    alias(libs.plugins.android.library)
     alias(libs.plugins.ksp)
+    id("divkit.convention.abi-validation")
 }
 
 apply from: "${project.projectDir}/../div-library.gradle"

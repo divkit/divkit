@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    id("divkit.convention.abi-validation")
 }
 
 apply(from = "../publish-java.gradle")

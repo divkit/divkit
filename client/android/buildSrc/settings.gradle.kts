@@ -1,6 +1,8 @@
+@file:Suppress("UnstableApiUsage")
+
 dependencyResolutionManagement {
     versionCatalogs {
-        libs {
+        create("libs") {
             from(files("../gradle/libs.versions.toml"))
         }
     }

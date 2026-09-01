@@ -16,12 +16,12 @@ javax = "1"
 json = "20260719"
 jvm-toolchain = "17"
 kotlin = "2.3.21"
-kotlin-binaryCompatibilityValidator = "0.18.1"
 kotlin-coroutines = "1.10.2"
 kotlinpoet = "2.3.0"
 ksp = "2.3.11"
 lottie = "6.7.1"
 markwon = "4.6.2"
+metalava = "0.5.0"
 mockito-kotlin = "6.3.0"
 okhttp = "4.12.0"
 picasso = "2.8"
@@ -133,7 +133,6 @@ hamcrest = { module = "org.hamcrest:hamcrest", version = "2.2" }
 javax = { module = "javax.inject:javax.inject", version.ref = "javax" }
 json = { module = "org.json:json", version.ref = "json" }
 
-kotlin-binaryCompatibilityValidator = { module = "org.jetbrains.kotlinx:binary-compatibility-validator", version.ref = "kotlin-binaryCompatibilityValidator" }
 kotlin-corountines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
 kotlin-corountines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 kotlin-corountines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
@@ -145,6 +144,8 @@ lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 markwon = { module = "io.noties.markwon:core", version.ref = "markwon" }
+
+metalava = { module = "me.tylerbwong.gradle.metalava:plugin", version.ref = "metalava" }
 
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin" }
 

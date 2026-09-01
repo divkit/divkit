@@ -34,7 +34,7 @@ class Version private constructor(
         fixVersion: Int
     ) : this(majorVersion, minorVersion, fixVersion) {
         if (project.hasProperty("teamcity.version")) {
-            buildNumber = Integer.parseInt(project.properties["build.number"] as String)
+            buildNumber = Integer.parseInt(project.findProperty("build.number") as String?)
         } else {
             val tsrBuildNumber = System.getenv("BUILD_NUMBER")
             buildNumber = tsrBuildNumber?.toInt() ?: 0

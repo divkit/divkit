@@ -19,7 +19,6 @@ buildscript {
         classpath libs.agp.gradle
         classpath libs.appmetrica.plugin
         classpath libs.nexusPublishPlugin
-        classpath libs.kotlin.binaryCompatibilityValidator
         classpath libs.protobuf
         classpath libs.unmock.plugin
     }
@@ -32,8 +31,6 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
 }
-
-apply plugin: "org.jetbrains.kotlinx.binary-compatibility-validator"
 
 apply from: "$projectDir/version.gradle"
 
@@ -81,11 +78,35 @@ allprojects {
     }
 }
 
+def metalavaGenerateSignature = tasks.register('metalavaGenerateSignature') {
+    group = 'metalava'
+    description = 'Generates Metalava signature files for every module applying the abi-validation convention.'
+}
+
+def metalavaCheckCompatibility = tasks.register('metalavaCheckCompatibility') {
+    group = 'metalava'
+    description = 'Checks API compatibility for every module applying the abi-validation convention.'
+}
+
 subprojects {
     configurations.configureEach {
         exclude group: "com.google.protobuf", module: "protobuf-lite"
         exclude group: "com.intellij", module: "annotations"
         exclude group: "io.appmetrica.analytics", module: "analytics-local-socket"
+    }
+
+    plugins.withId('me.tylerbwong.gradle.metalava') {
+        metalavaGenerateSignature.configure {
+            dependsOn tasks.matching {
+                it.name == 'metalavaGenerateSignature' || it.name == 'metalavaGenerateSignatureRelease'
+            }
+        }
+
+        metalavaCheckCompatibility.configure {
+            dependsOn tasks.matching {
+                it.name == 'metalavaCheckCompatibility' || it.name == 'metalavaCheckCompatibilityRelease'
+            }
+        }
     }
 
     afterEvaluate {
@@ -97,27 +118,6 @@ subprojects {
             task.finalizedBy(reportVersion)
         }
     }
-}
-
-apiValidation {
-    ignoredProjects += [
-            "api-generator-test",
-            "divkit-benchmark-app",
-            "divkit-demo-app",
-            "divkit-perftests",
-            "divkit-regression-testing",
-            "lint-rules",
-            "sample",
-            "screenshot-test-runtime",
-            "test-utils",
-            "ui-test-common",
-    ]
-    ignoredPackages += ["com.yandex.div.internal"]
-    nonPublicMarkers += [
-            "com.yandex.yatagan.internal.YataganGenerated",
-            "com.yandex.div.core.annotations.ExperimentalApi",
-            "com.yandex.div.core.annotations.InternalApi"
-    ]
 }
 
 tasks.register('reportVersion') {

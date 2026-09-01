@@ -4,6 +4,7 @@ pluginManagement {
         google()
         mavenCentral()
     }
+    includeBuild('build-logic')
     includeBuild('api-generator-plugin')
     includeBuild('screenshot-test-plugin')
 }

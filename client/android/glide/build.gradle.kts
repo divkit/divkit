@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.ksp)
+    id("divkit.convention.abi-validation")
 }
 
 apply(from = "../div-library.gradle")

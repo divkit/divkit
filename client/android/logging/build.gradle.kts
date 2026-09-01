@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.buildkonfig)
     alias(libs.plugins.kotlin.multiplatform)
+    id("divkit.convention.abi-validation")
     id("maven-publish")
 }
 
@@ -16,7 +17,7 @@ apply(from = "../kmp-library.gradle")
 apply(from = "../publish-kmp.gradle")
 
 kotlin {
-    androidLibrary {
+    android {
         namespace = "com.yandex.div.logging"
     }
 }
