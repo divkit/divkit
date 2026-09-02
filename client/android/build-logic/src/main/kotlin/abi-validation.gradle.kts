@@ -14,6 +14,7 @@ metalava {
         "com.yandex.yatagan.internal.YataganGenerated",
     )
     arguments = setOf(
+        "--hide=ChangedValue",
         "--hide=DeprecationMismatch",
         "--hide=HiddenSuperclass",
         "--hide=HiddenTypeParameter",

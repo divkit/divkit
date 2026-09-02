@@ -34,6 +34,10 @@ tasks.named("metalavaGenerateSignature") {
     dependsOn("generateBuildKonfig")
 }
 
+tasks.named("metalavaCheckCompatibility") {
+    dependsOn("generateBuildKonfig")
+}
+
 afterEvaluate {
     publishing {
         publications {
