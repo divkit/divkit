@@ -801,6 +801,69 @@ export const COMPONENT_PROPS: Record<string, ComponentProperty[]> = {
             enableSources: true
         }]
     }],
+    pager: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
+        type: 'group',
+        title: 'pagerProps.title',
+        list: [{
+            name: 'props.orientation',
+            prop: 'orientation',
+            type: 'select',
+            default: 'horizontal',
+            options: [{
+                name: 'props.orientation_horizontal',
+                value: 'horizontal'
+            }, {
+                name: 'props.orientation_vertical',
+                value: 'vertical'
+            }],
+            enableSources: true
+        }, {
+            name: 'props.layout_mode',
+            prop: 'layout_mode.type',
+            type: 'select',
+            hasEmpty: false,
+            options: [{
+                name: 'props.layout_mode_percentage',
+                value: 'percentage'
+            }, {
+                name: 'props.layout_mode_fixed',
+                value: 'fixed'
+            }, {
+                name: 'props.layout_mode_wrap_content',
+                value: 'wrap_content'
+            }],
+            enableSources: true,
+            siblings: [{
+                prop: 'layout_mode.value',
+                type: 'percent',
+                show: {
+                    prop: 'layout_mode.type',
+                    equal: 'percentage'
+                }
+            }, {
+                prop: 'layout_mode.neighbour_page_width.value',
+                type: 'integer',
+                min: 0,
+                max: 9999,
+                show: {
+                    prop: 'layout_mode.type',
+                    equal: 'fixed'
+                }
+            }]
+        }, {
+            type: 'integer',
+            prop: 'item_spacing.value',
+            min: 0,
+            max: 9999,
+            default: 0,
+            name: 'props.spacing',
+            enableSources: true,
+            related: [{
+                prop: 'item_spacing.type',
+                value: 'fixed'
+            }]
+        }]
+    }],
     grid: [...BASE_COMPONENT_PROPS, ...A11Y_PROPS, {
         type: 'group',
         title: 'gridProps.title',

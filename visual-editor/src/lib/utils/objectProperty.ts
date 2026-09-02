@@ -81,7 +81,7 @@ export function setObjectProperty(obj: object, name: string, value: unknown, mer
             if (curMergeWith) {
                 const mergeVal = curMergeWith[parts[i] as string];
                 if (mergeVal && typeof mergeVal === 'object' && !Array.isArray(mergeVal)) {
-                    Object.assign(curObj[key] as object, copyValue(mergeVal));
+                    curObj[key] = Object.assign(copyValue(mergeVal), curObj[key]) as Record<string, unknown>;
                     curMergeWith = mergeVal as Record<string, unknown>;
                 } else {
                     curMergeWith = undefined;
@@ -115,7 +115,7 @@ export function setObjectProperty(obj: object, name: string, value: unknown, mer
                     if (curMergeWith) {
                         const mergeVal = curMergeWith[parts[i] as string];
                         if (mergeVal && typeof mergeVal === 'object' && !Array.isArray(mergeVal)) {
-                            Object.assign(curObj[key] as object, copyValue(mergeVal));
+                            curObj[key] = Object.assign(copyValue(mergeVal), curObj[key]) as Record<string, unknown>;
                             curMergeWith = mergeVal as Record<string, unknown>;
                         } else {
                             curMergeWith = undefined;

@@ -144,5 +144,13 @@ describe('objectProperty', () => {
             expect(obj).toEqual({ a: { b: { c: 1, d: 2 } } });
             expect(mergeWith).toEqual({ a: { b: { d: 2 } } });
         });
+
+        test('mergeWith object has lower priority', () => {
+            const mergeWith = { a: { b: { d: 2 } } };
+            const obj: Record<string, unknown> = { a: { b: { d: 1 } } };
+            setObjectProperty(obj, 'a.b.c', 1, mergeWith);
+            expect(obj).toEqual({ a: { b: { c: 1, d: 1 } } });
+            expect(mergeWith).toEqual({ a: { b: { d: 2 } } });
+        });
     });
 });

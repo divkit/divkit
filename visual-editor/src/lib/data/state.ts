@@ -812,6 +812,17 @@ export class State {
                     color: '#fff'
                 }
             };
+        } else if (type === 'pager') {
+            json = {
+                type,
+                layout_mode: {
+                    type: 'fixed',
+                    neighbour_page_width: {
+                        type: 'fixed',
+                        value: 20
+                    }
+                }
+            };
         } else if (type in namedTemplates && namedTemplates[type].newNode) {
             json = { ...namedTemplates[type].newNode, type };
         } else {
@@ -844,7 +855,7 @@ export class State {
                 }
             };
 
-            if (type === 'gallery' || type === 'container') {
+            if (type === 'gallery' || type === 'container' || type === 'pager') {
                 child.props.json.width = {
                     type: 'fixed',
                     value: 100

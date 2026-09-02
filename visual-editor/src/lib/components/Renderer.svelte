@@ -388,6 +388,21 @@
                                     value: index
                                 }))
                             };
+                        } else if (
+                            processedJson.type === 'pager' &&
+                            $selectedLeaf?.props.devapi &&
+                            Array.isArray(processedJson.items) &&
+                            processedJson.items.length
+                        ) {
+                            const val = $selectedLeaf?.props.devapi.getState();
+                            state = {
+                                selected: val,
+                                selectedValue: String(val),
+                                list: processedJson.items.map((it, index) => ({
+                                    text: index,
+                                    value: String(index)
+                                }))
+                            };
                         }
                     }
                 }
@@ -3248,7 +3263,7 @@
         let items;
         if (processedJson?.type === 'state') {
             items = processedJson.states;
-        } else if (processedJson?.type === 'tabs') {
+        } else if (processedJson?.type === 'tabs' || processedJson?.type === 'pager') {
             items = processedJson.items;
         }
         if (!devapi || !processedJson || !Array.isArray(items)) {
@@ -3601,8 +3616,8 @@
                         {#if highlight.state}
                             <div
                                 class="renderer__state-info"
-                                style:left="{highlight.left + highlight.margins.left - scrollX}px"
-                                style:top="{highlight.top + highlight.margins.top - scrollY}px"
+                                style:left="{highlight.left + highlight.margins.left * scale - scrollX}px"
+                                style:top="{highlight.top + highlight.margins.top * scale - scrollY}px"
                             >
                                 <div class="renderer__state-info-buttons">
                                     <button
