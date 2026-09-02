@@ -234,9 +234,6 @@ private val ignoredFiles = setOf(
     "div-image/wrap-content-image-with-aspect-in-vertical-match-parent-container.json",
     "div-image/wrap-content-image-with-aspect-in-vertical-wrap-content-container.json",
 
-    // div-filter.rtl_mirror not supported
-    "div-image/rtl-filter.json",
-
     // label_image_preview extension not supported
     "div-image/custom-preview.json",
 

@@ -2,13 +2,13 @@ package com.yandex.div.compose.views.image
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import coil3.transform.Transformation
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedIntValue
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.reportWarning
 import com.yandex.div2.DivFilter
-import com.yandex.div2.DivFilterRtlMirror
 
 @Composable
 internal fun List<DivFilter>?.observedTransformations(): List<Transformation> {
@@ -36,8 +36,7 @@ internal fun List<DivFilter>?.observedTransformations(): List<Transformation> {
             }
 
             is DivFilter.RtlMirror -> {
-                reportError("Filter not supported: ${DivFilterRtlMirror.TYPE}")
-                return@mapNotNull null
+                if (LocalLayoutDirection.current == LayoutDirection.Rtl) RtlMirrorTransformation else null
             }
         }
     }
