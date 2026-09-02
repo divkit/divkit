@@ -30,7 +30,7 @@ public final class PagerBlock: BlockWithTraits {
       return value
     case let .intrinsic(_, minSize, maxSize):
       let width = gallery.intrinsicPagerSize(
-        forWidth: CGFloat.greatestFiniteMagnitude,
+        forWidth: nil,
         layoutMode: layoutMode
       ).width
       return clamp(width, min: minSize, max: maxSize)

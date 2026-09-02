@@ -104,7 +104,7 @@ extension GalleryViewModel {
 }
 
 extension GalleryViewModel {
-  fileprivate func frames(
+  func frames(
     fitting size: CGSize?,
     layoutMode: PagerBlock.LayoutMode
   ) -> [CGRect] {
@@ -225,7 +225,16 @@ extension GalleryViewModel {
     contentSize: CGFloat,
     layoutMode: PagerBlock.LayoutMode
   ) -> CGFloat {
-    let availableSize = size?.dimension(in: direction) ?? 0
+    guard let size else {
+      switch layoutMode {
+      case .pageContentSize:
+        return contentSize
+      case .pageSize, .neighbourPageSize:
+        return 0.0
+      }
+    }
+
+    let availableSize = size.dimension(in: direction)
 
     guard availableSize > 0 else {
       return 0.0 // No space, nothing to layout
@@ -259,7 +268,9 @@ extension GalleryViewModel {
     fitting size: CGSize?,
     layoutMode: PagerBlock.LayoutMode
   ) -> [CGRect] {
-    guard let size, size.dimension(in: .horizontal) > 0 else { return [] }
+    if let size, size.dimension(in: .horizontal) <= 0 {
+      return []
+    }
 
     let blocks = items.map(\.content)
     let pageWidths = blocks.map { block in
@@ -271,7 +282,11 @@ extension GalleryViewModel {
     }
 
     let crossInsets = crossInsets(forSize: size)
-    let maxElementHeight = size.height - crossInsets.sum
+    let maxElementHeight: CGFloat = if let size {
+      size.height - crossInsets.sum
+    } else {
+      blocks.maxHeightOfVerticallyNonResizableBlocks(for: pageWidths) ?? 0
+    }
     let minY = crossInsets.leading
     let gaps = gaps(forSize: size, elementMainAxisSize: pageWidths.first)
     var x = gaps[0]
@@ -298,7 +313,7 @@ extension GalleryViewModel {
     let crossInsets = self.crossInsets(forSize: size)
     let blocks = items.map(\.content)
     let maxWidth = size.map { $0.width - crossInsets.sum } ??
-      blocks.maxWidthOfHorizontallyNonResizableBlocks!
+      blocks.maxWidthOfHorizontallyNonResizableBlocks ?? 0
 
     let minX = crossInsets.leading
 

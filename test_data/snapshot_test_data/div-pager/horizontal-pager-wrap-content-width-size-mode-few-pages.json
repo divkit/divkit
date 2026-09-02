@@ -1,0 +1,124 @@
+{
+  "description": "Horizontal pager with pager width wrap_content and layout_mode wrap_content",
+  "platforms": [
+    "web",
+    "ios"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "margins": {
+        "bottom": 12
+      }
+    },
+    "text_page_fixed_height": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "height": {
+        "type": "fixed",
+        "value": 60
+      },
+      "layout_mode": {
+        "type": "wrap_content"
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 2
+        }
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "left": 10,
+        "right": 10
+      },
+      "items": [
+        {
+          "type": "text_page_fixed_height",
+          "width": {
+            "type": "fixed",
+            "value": 70
+          },
+          "text": "Item 0\nwidth=70"
+        },
+        {
+          "type": "text_page_fixed_height",
+          "width": {
+            "type": "fixed",
+            "value": 80
+          },
+          "text": "Item 1\nwidth=80"
+        },
+        {
+          "type": "text_page_fixed_height",
+          "width": {
+            "type": "fixed",
+            "value": 60
+          },
+          "text": "Item 2\nwidth=60"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 414
+          },
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Pager width = wrap_content\nlayout_mode = wrap_content\nitems: 70 + 80 + 60, spacing = 10, paddings = 10"
+            },
+            {
+              "type": "test_pager",
+              "width": {
+                "type": "wrap_content"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

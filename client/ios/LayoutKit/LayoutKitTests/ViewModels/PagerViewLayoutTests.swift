@@ -134,6 +134,60 @@ struct PagerViewLayoutTests {
     verifyVerticalLayout(layout, matches: expected)
   }
 
+  @Test(arguments: [
+    PagerTestFixtures.Vertical.leadingCase,
+    PagerTestFixtures.Vertical.centerCase,
+    PagerTestFixtures.Vertical.trailingCase,
+  ])
+  func intrinsicPagerFrames_withNilWidth_positionsNarrowPageByCrossAxisAlignment(
+    crossAxisCase: PagerCrossAxisAlignmentCase
+  ) {
+    let layoutMode = PagerBlock.LayoutMode.neighbourPageSize(10)
+    #expect(
+      crossAxisCase.model.frames(fitting: nil, layoutMode: layoutMode).map(\.minX)
+        == crossAxisCase.expectedCrossAxisOffsets
+    )
+    #expect(
+      crossAxisCase.model.intrinsicPagerSize(forWidth: nil, layoutMode: layoutMode).width
+        == PagerTestFixtures.maxCrossAxisItemSize
+    )
+  }
+
+  @Test(arguments: [
+    PagerTestFixtures.Horizontal.leadingCase,
+    PagerTestFixtures.Horizontal.centerCase,
+    PagerTestFixtures.Horizontal.trailingCase,
+  ])
+  func intrinsicPagerFrames_withNilWidthAndPageContentSize_positionsShortPageByCrossAxisAlignment(
+    crossAxisCase: PagerCrossAxisAlignmentCase
+  ) {
+    let layoutMode = PagerBlock.LayoutMode.pageContentSize
+    #expect(
+      crossAxisCase.model.frames(fitting: nil, layoutMode: layoutMode).map(\.minY)
+        == crossAxisCase.expectedCrossAxisOffsets
+    )
+    #expect(
+      crossAxisCase.model.intrinsicPagerSize(forWidth: nil, layoutMode: layoutMode).height
+        == PagerTestFixtures.maxCrossAxisItemSize
+    )
+  }
+
+  @Test(arguments: [
+    PagerTestFixtures.Horizontal.leadingCase,
+    PagerTestFixtures.Horizontal.centerCase,
+    PagerTestFixtures.Horizontal.trailingCase,
+  ])
+  func boundedPagerFrames_withBoundedHeight_positionsShortPageByCrossAxisAlignment(
+    crossAxisCase: PagerCrossAxisAlignmentCase
+  ) {
+    let layout = PagerViewLayout(
+      model: crossAxisCase.model,
+      layoutMode: .neighbourPageSize(10),
+      boundsSize: CGSize(width: 390, height: 200)
+    )
+    #expect(layout.blockFrames.map(\.minY) == crossAxisCase.expectedCrossAxisOffsets)
+  }
+
   @Test
   func verticalNeighbouredLayout_centerAlignment() {
     let viewportHeight: CGFloat = 390
