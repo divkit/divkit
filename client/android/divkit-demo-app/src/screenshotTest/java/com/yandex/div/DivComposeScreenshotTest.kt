@@ -33,190 +33,30 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
         fun cases(): List<Array<String>> {
             val enumerator = AssetEnumerator()
             return enumerator.enumerate("snapshot_test_data")
-                .filter { !ignoredFiles.contains(it) }
+                .filter { includedFiles.contains(it) }
                 .let(enumerator::requireSelectedCase)
                 .withEscapedParameter(prefix = "snapshot_test_data/")
         }
     }
 }
 
-private val ignoredFiles = listOf(
-    // div-nine-patch-background not supported
-    "snapshot_test_data/div-background/nine-patch-rhombs.json",
-    "snapshot_test_data/div-background/nine-patch-rhombs-horizontal-insets.json",
-    "snapshot_test_data/div-background/nine-patch-rhombs-large-all-insets.json",
-    "snapshot_test_data/div-background/nine-patch-rhombs-large-bottom-inset.json",
-    "snapshot_test_data/div-background/nine-patch-rhombs-large-bottom-left-inset.json",
-    "snapshot_test_data/div-background/nine-patch-rhombs-large-bottom-left-right-inset.json",
-    "snapshot_test_data/div-background/nine-patch-rhombs-vertical-insets.json",
-    "snapshot_test_data/div-background/nine-patch-shape.json",
-
-    // div-container.aspect not fully supported
-    "snapshot_test_data/div-container/aspect/wrap_content-width-horizontal.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-overlap.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-overlap-fixed-height.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-overlap-match_parent-height.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-vertical.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-vertical-constrained-child-not-fit.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-vertical-fixed-height.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-vertical-match_parent-child-fits.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-vertical-match_parent-child-not-fit.json",
-    "snapshot_test_data/div-container/aspect/wrap_content-width-vertical-match_parent-height.json",
-
-    // size_provider extension not supported
-    "snapshot_test_data/div-container/size_provider.json",
-    "snapshot_test_data/div-container/size_provider_recursive.json",
-
-    // div-container.item_builder not supported
-    "snapshot_test_data/div-container/item_builder/index.json",
-    "snapshot_test_data/div-container/item_builder/item-builder.json",
-    "snapshot_test_data/div-container/item_builder/item-builder-priority.json",
-    "snapshot_test_data/div-container/item_builder/item-builder-with-local-variables.json",
-    "snapshot_test_data/div-container/item_builder/item-builder-with-nested-local-variables.json",
-    "snapshot_test_data/div-container/item_builder/nested-builders.json",
-    "snapshot_test_data/div-container/item_builder/non-unique-matched-selectors.json",
-    "snapshot_test_data/div-container/item_builder/non-unique-matched-selectors.json",
-    "snapshot_test_data/div-pager/vertical-pager-custom-neighbour-page-width.json",
-    "snapshot_test_data/div-pager/vertical-pager-custom-neighbour-page-width-with-paddings.json",
-    "snapshot_test_data/div-pager/vertical-pager-custom-page-width.json",
-    "snapshot_test_data/div-pager/vertical-pager-custom-page-width-with-paddings.json",
-    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-size-mode-alignment-end.json",
-    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-size-mode-alignment-start.json",
-    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-size-mode-item-spacing.json",
-    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-size-mode-two-pages.json",
-    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-width-0-with-item-spacing.json",
-    "snapshot_test_data/div-pager/vertical-pager-neighbour-page-width-0-with-paddings.json",
-    "snapshot_test_data/div-pager/vertical-pager-page-size-mode-alignment-end.json",
-    "snapshot_test_data/div-pager/vertical-pager-page-size-mode-alignment-start.json",
-    "snapshot_test_data/div-pager/vertical-pager-page-size-mode-item-spacing.json",
-    "snapshot_test_data/div-pager/vertical-pager-page-width-100-with-item-spacing.json",
-    "snapshot_test_data/div-pager/vertical-pager-page-width-100-with-paddings.json",
-    "snapshot_test_data/div-pager/vertical-pager-wrap-content-height.json",
-    "snapshot_test_data/div-pager/vertical-pager-wrap-content-height-with-paddings.json",
-    "snapshot_test_data/div-pager/vertical-pager-wrap-content-size-mode-alignment-end.json",
-    "snapshot_test_data/div-pager/vertical-pager-wrap-content-size-mode-alignment-start.json",
-    "snapshot_test_data/div-pager/vertical-pager-wrap-content-size-mode-with-item-spacing.json",
-
-    // div-image.aspect not supported
-    "snapshot_test_data/div-image/aspect-wrap_content.json",
-    "snapshot_test_data/div-image/wrap-content-aspect-zero-constraints.json",
-    "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-horizontal-match-parent-container.json",
-    "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-horizontal-wrap-content-container.json",
-    "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-overlap-match-parent-container.json",
-    "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-overlap-wrap-content-container.json",
-    "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-vertical-match-parent-container.json",
-    "snapshot_test_data/div-image/wrap-content-image-with-aspect-in-vertical-wrap-content-container.json",
-
-    // div-filter.rtl_mirror not supported
-    "snapshot_test_data/div-image/rtl-filter.json",
-
-    // div-gallery.scroll_content_alignment not supported
-    "snapshot_test_data/div-gallery/default-item/horizontal-gallery-alignment-center.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-gallery-alignment-center-rtl.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-gallery-alignment-end.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-gallery-alignment-end-rtl.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-gallery-alignment-start.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-gallery-alignment-start-rtl.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-grid-gallery-alignment-center.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-grid-gallery-alignment-center-rtl.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-grid-gallery-alignment-end.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-grid-gallery-alignment-end-rtl.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-grid-gallery-alignment-start.json",
-    "snapshot_test_data/div-gallery/default-item/horizontal-grid-gallery-alignment-start-rtl.json",
-    "snapshot_test_data/div-gallery/default-item/vertical-gallery-alignment-center.json",
-    "snapshot_test_data/div-gallery/default-item/vertical-gallery-alignment-end.json",
-    "snapshot_test_data/div-gallery/default-item/vertical-gallery-alignment-start.json",
-    "snapshot_test_data/div-gallery/default-item/vertical-gallery-alignment-start-rtl.json",
-    "snapshot_test_data/div-gallery/default-item/vertical-grid-gallery-alignment-center.json",
-    "snapshot_test_data/div-gallery/default-item/vertical-grid-gallery-alignment-end.json",
-    "snapshot_test_data/div-gallery/default-item/vertical-grid-gallery-alignment-start.json",
-    "snapshot_test_data/div-gallery/default-item/vertical-grid-gallery-alignment-start-rtl.json",
-
-    // div-gallery.item_builder not supported
-    "snapshot_test_data/div-gallery/item-builder/item-builder.json",
-    "snapshot_test_data/div-gallery/item-builder/item-builder-with-local-variables.json",
-    "snapshot_test_data/div-gallery/item-builder/nested-builders.json",
-    "snapshot_test_data/div-gallery/item-builder/non-unique-matched-selectors.json",
-
-    // div-base.layout_provider not supported
-    "snapshot_test_data/div-layout-provider/layout-provider.json",
-
-    // div-pager.item_builder not supported
-    "snapshot_test_data/div-pager/item-builder/item-builder.json",
-    "snapshot_test_data/div-pager/item-builder/item-builder-with-local-variables.json",
-    "snapshot_test_data/div-pager/item-builder/nested-builders.json",
-    "snapshot_test_data/div-pager/item-builder/non-unique-matched-selectors.json",
-
-    // div-text.images not supported
-    "snapshot_test_data/div-text/line-height/multi-line-text-with-image.json",
-    "snapshot_test_data/div-text/line-height/single-line-text-with-image.json",
-    "snapshot_test_data/div-text/all_attributes.json",
-    "snapshot_test_data/div-text/custom-image-tint-color.json",
-    "snapshot_test_data/div-text/custom-text-alignment-with-attachments.json",
-    "snapshot_test_data/div-text/ellipsis-with-image.json",
-    "snapshot_test_data/div-text/ellipsis_builder.json",
-    "snapshot_test_data/div-text/image-reverse-indexing.json",
-    "snapshot_test_data/div-text/image-tint-mode.json",
-    "snapshot_test_data/div-text/image_builder.json",
-    "snapshot_test_data/div-text/images.json",
-    "snapshot_test_data/div-text/images_hyphenation.json",
-    "snapshot_test_data/div-text/text_image_vertical_alignment.json",
-    "snapshot_test_data/image-formats/animated-webp/animated_webp_text_image.json",
-    "snapshot_test_data/image-formats/animated-webp/animated_webp_text_image_tint.json",
-    "snapshot_test_data/image-formats/gif/gif_text_image.json",
-    "snapshot_test_data/image-formats/gif/gif_text_image_tint.json",
-    "snapshot_test_data/image-formats/png/png_text_image.json",
-    "snapshot_test_data/image-formats/png/png_text_image_tint.json",
-    "snapshot_test_data/image-formats/svg/svg_text_image.json",
-    "snapshot_test_data/image-formats/svg/svg_text_image_tint.json",
-    "snapshot_test_data/image-formats/webp/webp_text_image.json",
-    "snapshot_test_data/image-formats/webp/webp_text_image_tint.json",
-
-    // div-text.range.mask not supported
-    "snapshot_test_data/div-text/mask.json",
-
-    // markdown extension not supported
-    "snapshot_test_data/div-text/markdown-extension.json",
-
-    // div-text.tighten_width not supported
-    "snapshot_test_data/div-text/maxwidth-tight-text.json",
-
-    // div-text.range_builder not supported
-    "snapshot_test_data/div-text/range_builder.json",
-
-    // div-text.range.background not supported
-    "snapshot_test_data/div-text/ranges-background-text.json",
-    "snapshot_test_data/div-text/text_range_with_cloud_background.json",
-    "snapshot_test_data/div-text/text_with_cloud_background_alignment.json",
-    "snapshot_test_data/div-text/text_with_cloud_background_padding.json",
-
-    // div-text.range.top_offset not supported
-    "snapshot_test_data/div-text/ranges-line-height-top-offset.json",
-
-    // div-text.ranges.top_offset not supported
-    "snapshot_test_data/div-text/ranges-intersection-top-offset.json",
-
-    // div-text.range.baseline_offset not supported
-    "snapshot_test_data/div-text/text_range_baseline_offset.json",
-
-    // div-text.range.alignment_vertical not supported
-    "snapshot_test_data/div-text/text_range_vertical_alignment.json",
-
-    // invalid scaling
-    "snapshot_test_data/image-formats/svg/svg_background.json",
-    "snapshot_test_data/image-formats/svg/svg_background_blur.json",
-    "snapshot_test_data/image-formats/svg/svg_image.json",
-    "snapshot_test_data/image-formats/svg/svg_image_blur.json",
-    "snapshot_test_data/image-formats/svg/svg_image_tint.json",
-    "snapshot_test_data/image-formats/svg/svg_in_gif_image.json",
-    "snapshot_test_data/image-formats/svg/svg_local.json",
-    "snapshot_test_data/image-formats/svg/svg_preview.json",
-    "snapshot_test_data/image-formats/svg/svg_preview_blur.json",
-    "snapshot_test_data/image-formats/svg/svg_preview_in_gif_image.json",
-    "snapshot_test_data/image-formats/svg/svg_preview_url_in_gif_image.json",
-    "snapshot_test_data/image-formats/svg/svg_wrap_content.json",
-
-    // test div-customs required
-    "snapshot_test_data/div-size/match-parent/overlap/height/platform-wrap-content-container-height.json",
-    "snapshot_test_data/div-size/match-parent/overlap/custom-with-fixed-size.json",
+// Run only tests that are not supported by RoborazziScreenshotTest.
+private val includedFiles = setOf(
+    // Image blur uses RenderScript, which is not supported in Robolectric.
+    "snapshot_test_data/div-background/blur.json",
+    "snapshot_test_data/div-image/blur-with-big-radius.json",
+    "snapshot_test_data/div-image/blur.json",
+    "snapshot_test_data/div-text/blur-background.json",
+    "snapshot_test_data/image-formats/animated-webp/animated_webp_background_blur.json",
+    "snapshot_test_data/image-formats/animated-webp/animated_webp_image_blur.json",
+    "snapshot_test_data/image-formats/animated-webp/animated_webp_preview_blur.json",
+    "snapshot_test_data/image-formats/gif/gif_background_blur.json",
+    "snapshot_test_data/image-formats/gif/gif_image_blur.json",
+    "snapshot_test_data/image-formats/gif/gif_preview_blur.json",
+    "snapshot_test_data/image-formats/png/png_background_blur.json",
+    "snapshot_test_data/image-formats/png/png_image_blur.json",
+    "snapshot_test_data/image-formats/png/png_preview_blur.json",
+    "snapshot_test_data/image-formats/webp/webp_background_blur.json",
+    "snapshot_test_data/image-formats/webp/webp_image_blur.json",
+    "snapshot_test_data/image-formats/webp/webp_preview_blur.json",
 )
