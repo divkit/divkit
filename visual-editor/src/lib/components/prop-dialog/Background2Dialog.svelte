@@ -26,7 +26,7 @@
     import { APP_CTX, type AppContext, type Background2DialogShowProps } from '../../ctx/appContext';
     import { gradientToList, isEqualDistribution, sortColorMap, type Background, type GradientBackground, type RadialBackground, type SolidBackground } from '../../data/background';
     import { deleteComponent } from '../../utils/keybinder/shortcuts';
-  import Rotation from '../controls/Rotation.svelte';
+    import Rotation from '../controls/Rotation.svelte';
 
     const { l10nString } = getContext<LanguageContext>(LANGUAGE_CTX);
     const { state } = getContext<AppContext>(APP_CTX);
@@ -546,6 +546,7 @@
                                             <div class="background2-dialog__label">{$l10nString('props.background_gradient_angle')}</div>
                                             <div class="background2-dialog__angle-row">
                                                 <Rotation
+                                                    mix="background2-dialog__rotation"
                                                     value={value.angle || 0}
                                                     disabled={readOnly}
                                                     inverse
@@ -1030,5 +1031,9 @@
     .background2-dialog__angle-row {
         display: flex;
         gap: 8px;
+    }
+
+    :global(.background2-dialog__rotation) {
+        flex: 0 0 auto;
     }
 </style>
