@@ -15,6 +15,7 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import org.json.JSONObject
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -147,6 +148,40 @@ class DivInputBinderTest : DivBinderTest() {
         assertTrue("Listener should return true for search action even with enter_key_actions", consumed)
     }
 
+    @Test
+    fun `cursor stays after the typed character when mask appends a separator`() {
+        val (div, view) = createDivAndView(INPUT_PHONE_MASK)
+        underTest.bindView(view, div, divView)
+        view.startListeningToTextChanges()
+
+        view.type("999")
+
+        assertEquals("+7 999 ", view.text.toString())
+        assertEquals("cursor must stay at the end of the typed text", 7, view.selectionStart)
+    }
+
+    @Test
+    fun `cursor follows the whole typed text`() {
+        val (div, view) = createDivAndView(INPUT_PHONE_MASK)
+        underTest.bindView(view, div, divView)
+        view.startListeningToTextChanges()
+
+        view.type("9991234567")
+
+        assertEquals("+7 999 123 45 67", view.text.toString())
+        assertEquals(16, view.selectionStart)
+    }
+
+    private fun DivInputView.startListeningToTextChanges() {
+        val captor = argumentCaptor<TwoWayStringVariableBinder.Callbacks>()
+        verify(variableBinder, atLeastOnce()).bindVariable(any(), any(), any(), captor.capture())
+        captor.lastValue.setViewStateChangeListener { }
+    }
+
+    private fun DivInputView.type(digits: String) = digits.forEach { digit ->
+        editableText.insert(selectionStart, digit.toString())
+    }
+
     private fun DivInputView.invokeEditorAction(actionId: Int): Boolean {
         val captor = argumentCaptor<TextView.OnEditorActionListener>()
         verify(this, atLeastOnce()).setOnEditorActionListener(captor.capture())
@@ -164,6 +199,23 @@ class DivInputBinderTest : DivBinderTest() {
     }
 
     companion object {
+        private val INPUT_PHONE_MASK = """
+            {
+              "type": "input",
+              "width": { "type": "match_parent" },
+              "height": { "type": "wrap_content" },
+              "text_variable": "text_variable",
+              "keyboard_type": "phone",
+              "mask": {
+                "type": "fixed_length",
+                "always_visible": false,
+                "pattern": "+7 ### ### ## ##",
+                "pattern_elements": [ { "key": "#", "regex": "[0-9]" } ],
+                "raw_text_variable": "raw_text_variable"
+              }
+            }
+        """.trimIndent()
+
         private val INPUT_SEARCH_NO_ACTIONS = """
             {
               "type": "input",
