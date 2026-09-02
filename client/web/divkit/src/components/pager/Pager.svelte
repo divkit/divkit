@@ -104,6 +104,7 @@
 
     let orientation: Orientation = 'horizontal';
     let itemSpacing = '0em';
+    let itemSpacingValue = 0;
     let paddingObj: EdgeInsets = {};
     let padding = '';
     let autoSizeVal = '';
@@ -137,6 +138,17 @@
     let transformStr = '';
     let swipeTs = 0;
     let cancelPointer: (() => void) | undefined;
+
+    let devapi = process.env.DEVTOOL ? {
+        devapi: {
+            getState() {
+                return currentItem;
+            },
+            setState(id: number) {
+                return scrollToPagerItem(id);
+            }
+        }
+    } : undefined;
 
     $: origJson = componentContext.origJson;
 
@@ -354,6 +366,7 @@
         const val = $jsonItemSpacing?.value;
         if (val && isNonNegativeNumber(val)) {
             itemSpacing = pxToEmWithUnits(val || 0);
+            itemSpacingValue = val || 0;
         }
     }
 
@@ -718,16 +731,17 @@
     function getScrollSize(): number {
         const isHorizontal = orientation === 'horizontal';
         const children = Array.from(pagerItemsWrapper.children) as HTMLElement[];
-        const first = children[0].getBoundingClientRect();
-        const last = children[children.length - 1].getBoundingClientRect();
+        const sizeProp = isHorizontal ? 'offsetWidth' : 'offsetHeight';
 
-        if (isHorizontal) {
-            if ($direction === 'rtl') {
-                return first.right - last.left;
+        let sum = 0;
+        for (let i = 0; i < children.length; ++i) {
+            sum += children[i][sizeProp];
+            if (i > 0) {
+                sum += itemSpacingValue;
             }
-            return last.right - first.left;
         }
-        return last.bottom - first.top;
+
+        return sum;
     }
 
     function onFocus(event: Event): void {
@@ -919,6 +933,7 @@
         {replaceItems}
         on:pointerdown={onPointerDown}
         on:wheel={onWheel}
+        {...devapi}
     >
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-static-element-interactions -->
