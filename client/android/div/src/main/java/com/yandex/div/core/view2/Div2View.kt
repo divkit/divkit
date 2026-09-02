@@ -106,7 +106,7 @@ private enum class VisibilityTrackingOperation {
  * Main entry point for building Div2s
  */
 @SuppressLint("ViewConstructor")
-class Div2View private constructor(
+open class Div2View private constructor(
     internal val context: Div2Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
@@ -287,6 +287,12 @@ class Div2View private constructor(
                 attrs: AttributeSet? = null,
                 defStyleAttr: Int = 0
     ) : this(context, attrs, defStyleAttr, HistogramClock.uptime())
+
+    final override var aspectRatio: Float
+        get() = super.aspectRatio
+        set(value) {
+            super.aspectRatio = value
+        }
 
     @ExperimentalApi
     fun isBackgroundBindingInProgress(): Boolean = bindingDispatcher.isBackgroundBindingInProgress
@@ -637,7 +643,7 @@ class Div2View private constructor(
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
+    final override fun onTouchEvent(event: MotionEvent): Boolean {
         if (inputFocusTracker.isFocusedOnInput()) {
             gestureDetector.onTouchEvent(event)
             if (event.action == MotionEvent.ACTION_DOWN) {
@@ -690,7 +696,7 @@ class Div2View private constructor(
         viewComponent.errorMonitor.onDetach()
     }
 
-    override fun addLoadReference(loadReference: LoadReference, targetView: View) {
+    final override fun addLoadReference(loadReference: LoadReference, targetView: View) {
         bindingDispatcher.runWithinBindingContext {
             loadReferences.add(loadReference)
         }
@@ -736,7 +742,7 @@ class Div2View private constructor(
         releaseMedia(this)
     }
 
-    override fun cleanup() {
+    final override fun cleanup() {
         bindingDispatcher.cancelPendingTasks()
         bindingDispatcher.runWithinBindingContext {
             cleanup(removeChildren = true)
@@ -777,7 +783,7 @@ class Div2View private constructor(
         loadReferences.clear()
     }
 
-    override fun switchToState(
+    final override fun switchToState(
         stateId: Long,
         temporary: Boolean
     ): Unit = bindingDispatcher.withLock {
@@ -787,7 +793,7 @@ class Div2View private constructor(
         }
     }
 
-    override fun switchToInitialState() {
+    final override fun switchToInitialState() {
         val data = divData ?: return
         var stateId = data.getInitialStateId()
         val viewState = currentState
@@ -797,7 +803,7 @@ class Div2View private constructor(
         switchToState(stateId)
     }
 
-    override fun switchToState(
+    final override fun switchToState(
         path: DivStatePath,
         temporary: Boolean
     ): Unit = bindingDispatcher.withLock {
@@ -865,7 +871,7 @@ class Div2View private constructor(
         }
     }
 
-    override fun resetToInitialState(): Unit = bindingDispatcher.withLock {
+    final override fun resetToInitialState(): Unit = bindingDispatcher.withLock {
         val viewState = currentState
         viewState?.reset()
         dataComponent.stateManager.reset()
@@ -1121,7 +1127,7 @@ class Div2View private constructor(
         )
     }
 
-    override fun handleUri(uri: Uri): Unit = bindingDispatcher.withLock {
+    final override fun handleUri(uri: Uri): Unit = bindingDispatcher.withLock {
         if (actionHandler?.handleActionUrl(uri, this) == true) {
             return
         }
@@ -1129,22 +1135,22 @@ class Div2View private constructor(
         div2Component.actionHandler.handleActionUrl(uri, this)
     }
 
-    override fun setConfig(viewConfig: DivViewConfig): Unit = bindingDispatcher.withLock {
+    final override fun setConfig(viewConfig: DivViewConfig): Unit = bindingDispatcher.withLock {
         this.config = viewConfig
     }
 
-    override fun getConfig(): DivViewConfig = config
+    final override fun getConfig(): DivViewConfig = config
 
     @AnyThread
-    override fun getDivTag(): DivDataTag = dataTag
+    final override fun getDivTag(): DivDataTag = dataTag
 
-    override fun subscribe(
+    final override fun subscribe(
         listener: OverflowMenuSubscriber.Listener
     ): Unit = bindingDispatcher.withLock {
         overflowMenuListeners.add(listener)
     }
 
-    override fun clearSubscriptions(): Unit = bindingDispatcher.withLock {
+    final override fun clearSubscriptions(): Unit = bindingDispatcher.withLock {
         overflowMenuListeners.clear()
     }
 
@@ -1153,7 +1159,7 @@ class Div2View private constructor(
         handleConfigurationChange()
     }
 
-    override fun onConfigurationChangedOutside(newConfig: Configuration) {
+    final override fun onConfigurationChangedOutside(newConfig: Configuration) {
         handleConfigurationChange()
     }
 
@@ -1162,13 +1168,13 @@ class Div2View private constructor(
         div2Component.tooltipController.handleConfigurationChange(this)
     }
 
-    override fun dismissPendingOverflowMenus(): Unit = bindingDispatcher.withLock {
+    final override fun dismissPendingOverflowMenus(): Unit = bindingDispatcher.withLock {
         overflowMenuListeners.forEach { it.dismiss() }
     }
 
-    override fun hasScrollableViewUnder(event: MotionEvent): Boolean = hasScrollableChildUnder(event)
+    final override fun hasScrollableViewUnder(event: MotionEvent): Boolean = hasScrollableChildUnder(event)
 
-    override fun getCurrentStateId(): Long = stateId
+    final override fun getCurrentStateId(): Long = stateId
 
     internal val currentRootPath: DivStatePath
         get() {
@@ -1177,7 +1183,7 @@ class Div2View private constructor(
             } ?: DivStatePath.fromState(stateId)
         }
 
-    override fun getCurrentState(): DivViewState? {
+    final override fun getCurrentState(): DivViewState? {
         val data = divData ?: return null
         val currentState = dataComponent.stateManager.state
         return if (data.states.any { it.stateId == currentState?.currentDivStateId }) {
@@ -1187,9 +1193,9 @@ class Div2View private constructor(
         }
     }
 
-    override fun getView(): Div2View = this
+    final override fun getView(): Div2View = this
 
-    override fun getExpressionResolver(): ExpressionResolver {
+    final override fun getExpressionResolver(): ExpressionResolver {
         return runtimeStore.resolver
     }
 
@@ -1197,30 +1203,30 @@ class Div2View private constructor(
         (this as? RuntimeStoreImpl)?.rootRuntime?.expressionResolver ?: ExpressionResolver.EMPTY
 
     @Deprecated("Use showTooltip(tooltipId, multiple, scopeId")
-    override fun showTooltip(tooltipId: String): Unit = showTooltip(tooltipId, false, null)
+    final override fun showTooltip(tooltipId: String): Unit = showTooltip(tooltipId, false, null)
 
     @Deprecated("Use showTooltip(tooltipId, multiple, scopeId")
-    override fun showTooltip(
+    final override fun showTooltip(
         tooltipId: String,
         multiple: Boolean
     ): Unit = showTooltip(tooltipId, multiple, null)
 
-    override fun showTooltip(tooltipId: String, multiple: Boolean, scopeId: String?) {
+    final override fun showTooltip(tooltipId: String, multiple: Boolean, scopeId: String?) {
         bindingDispatcher.withLock {
             div2Component.tooltipController.showTooltip(tooltipId, this, multiple, scopeId)
         }
     }
 
     @Deprecated("Use hideTooltip(tooltipId, scopeId)")
-    override fun hideTooltip(tooltipId: String): Unit = hideTooltip(tooltipId, null)
+    final override fun hideTooltip(tooltipId: String): Unit = hideTooltip(tooltipId, null)
 
-    override fun hideTooltip(tooltipId: String, scopeId: String?) {
+    final override fun hideTooltip(tooltipId: String, scopeId: String?) {
         bindingDispatcher.withLock {
             div2Component.tooltipController.hideTooltip(tooltipId, scopeId)
         }
     }
 
-    override fun cancelTooltips(): Unit = bindingDispatcher.withLock {
+    final override fun cancelTooltips(): Unit = bindingDispatcher.withLock {
         div2Component.tooltipController.cancelTooltips(this)
     }
 

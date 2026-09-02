@@ -1,6 +1,8 @@
 package com.yandex.div.core.view2
 
 import android.app.Activity
+import android.graphics.Canvas
+import android.view.ViewGroup
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
@@ -12,6 +14,7 @@ import com.yandex.div.core.path
 import com.yandex.div.core.view2.animations.DIV_STATE_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.state.DivStateSwitcher
+import java.lang.reflect.Modifier
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -27,6 +30,10 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class Div2ViewTest {
+    private class ExtendedDiv2View(context: Div2Context) : Div2View(context) {
+        override fun draw(canvas: Canvas) = super.draw(canvas)
+    }
+
     private val divImageLoader = mock<DivImageLoader>()
     private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val backingContext = Div2Context(
@@ -47,6 +54,30 @@ class Div2ViewTest {
 
     private val div2View = Div2View(div2Context)
     private val tag = DivDataTag("tag")
+
+    @Test
+    fun `can be extended`() {
+        val extendedView = ExtendedDiv2View(div2Context)
+        val drawMethod = extendedView.javaClass.getDeclaredMethod("draw", Canvas::class.java)
+
+        assertEquals(ExtendedDiv2View::class.java, drawMethod.declaringClass)
+    }
+
+    @Test
+    fun `Div2View public API methods cannot be overridden`() {
+        val androidViewMethods = ViewGroup::class.java.methods
+            .map { it.name to it.parameterTypes.toList() }
+            .toSet()
+        val nonFinalMethods = Div2View::class.java.declaredMethods
+            .filter { Modifier.isPublic(it.modifiers) }
+            .filterNot { Modifier.isStatic(it.modifiers) || it.isSynthetic }
+            .filterNot { it.name to it.parameterTypes.toList() in androidViewMethods }
+            .filterNot { Modifier.isFinal(it.modifiers) }
+            .map { it.toGenericString() }
+            .sorted()
+
+        assertEquals(emptyList<String>(), nonFinalMethods)
+    }
 
     @Test
     fun `test switch different root states`() = disableAssertions {
