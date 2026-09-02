@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
 import com.yandex.div.core.images.LoadReference
@@ -21,6 +22,7 @@ internal open class DivGifImageView @JvmOverloads constructor(
     internal var gifUrl: Uri? = null
     internal var loadPreviewReference: LoadReference? = null
     internal var previewUrl: Uri? = null
+    private var animationsEnabled = true
 
     init {
         cropToPadding = true
@@ -38,6 +40,16 @@ internal open class DivGifImageView @JvmOverloads constructor(
 
     override fun draw(canvas: Canvas) {
         drawBorderClipped(canvas) { super.draw(it) }
+    }
+
+    override fun setImage(drawable: Drawable?) {
+        setImageDrawable(drawable)
+        updateAnimationState(animationsEnabled)
+    }
+
+    internal fun setAnimationsEnabled(enabled: Boolean) {
+        animationsEnabled = enabled
+        updateAnimationState(enabled)
     }
 
     override fun release() {

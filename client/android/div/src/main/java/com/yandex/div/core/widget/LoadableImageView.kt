@@ -35,6 +35,9 @@ open class LoadableImageView(
 
     private var sourceDrawable: Drawable? = null
 
+    private val currentAnimatable: Animatable?
+        get() = if (externalImage == null) drawable as? Animatable else null
+
     var imageTransformer: ImageTransformer?
         get() = _imageTransformer
         set(value) {
@@ -85,12 +88,15 @@ open class LoadableImageView(
     override fun setImage(bitmap: Bitmap?) = setImageBitmap(bitmap)
 
     @MainThread
-    override fun setImage(drawable: Drawable?) {
-        setImageDrawable(drawable)
-        val currentDrawable = this.drawable
+    override fun setImage(drawable: Drawable?) = setImageDrawable(drawable)
 
-        if (currentDrawable is Animatable && externalImage == null) {
-            currentDrawable.start()
+    @MainThread
+    internal fun updateAnimationState(animationsEnabled: Boolean) {
+        val animatable = currentAnimatable ?: return
+        if (animationsEnabled && !animatable.isRunning) {
+            animatable.start()
+        } else if (!animationsEnabled && animatable.isRunning) {
+            animatable.stop()
         }
     }
 

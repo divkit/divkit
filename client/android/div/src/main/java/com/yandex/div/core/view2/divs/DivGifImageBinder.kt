@@ -19,6 +19,7 @@ import com.yandex.div.core.util.toImageScale
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
@@ -40,6 +41,7 @@ internal class DivGifImageBinder @Inject constructor(
     baseBinder: DivBaseBinder,
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader,
+    private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<DivBlock.GifImage, DivGifImageView>(baseBinder) {
 
     override fun DivGifImageView.bind(
@@ -50,6 +52,13 @@ internal class DivGifImageBinder @Inject constructor(
         val div = divBlock.divValue
         val expressionResolver = divBlock.expressionResolver
         val errorCollector = divView.errorCollector
+
+        setAnimationsEnabled(animationsEnabledController.isEnabled())
+        addSubscription(
+            animationsEnabledController.observe(divView) {
+                setAnimationsEnabled(animationsEnabledController.isEnabled())
+            }
+        )
 
         applyDivActions(
             div.action,
