@@ -1,3 +1,21 @@
+## 0.4.14
+
+* Updated DivKit 32.40.0 -> 32.61.0
+* Playback in the preview dialog now stops if you drag the slider
+* Fix for setting boolean properties in the panel with all properties
+* Added the `preload_required` property to images
+* Added the ability to pass your own set of `div-custom` and `extensions` to the editor
+* Fit to window is now toggled, as well as some other fit to window fixes
+* Separate rotation control for the gradient angle
+* Fix for gradient angle display and component resizing on preview scale != 100%
+* All tooltips on all components have been reworked; they no longer get trapped under dialogs
+* Merged nested component properties with template properties. For example, when setting a shadow for a button component that has rounded corners
+* Added the ability to check the minimum clickable area of elements; this is enabled via the new `minClickableSize` property
+* Added a new API for saving and restoring the state of editor panels
+* Added support for cursor setting in the input field and custom actions. And the actions themselves are now divided into groups and sorted differently in the list
+* Added basic `pager` support
+* A number of other minor interface improvements
+
 ## 0.4.13
 
 * DivKit updated 32.32.0 -> 32.40.0, minor updates to other dependencies
