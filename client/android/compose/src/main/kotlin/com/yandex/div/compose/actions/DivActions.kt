@@ -109,6 +109,6 @@ private fun observedActions(
 )
 
 @Composable
-private fun List<DivAction>?.observedEnabledActions(): List<DivAction> {
+internal fun List<DivAction>?.observedEnabledActions(): List<DivAction> {
     return this?.filter { it.isEnabled.observedValue() } ?: emptyList()
 }

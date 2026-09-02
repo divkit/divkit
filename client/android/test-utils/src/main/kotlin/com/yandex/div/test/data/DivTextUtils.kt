@@ -80,6 +80,8 @@ fun text(
     margins: DivEdgeInsets? = null,
     maxLines: Long? = null,
     paddings: DivEdgeInsets? = null,
+    ranges: List<DivText.Range>? = null,
+    selectable: Boolean = false,
     text: Expression<String>,
     textColor: Color? = null,
     tooltips: List<DivTooltip>? = null,
@@ -109,6 +111,8 @@ fun text(
             margins = margins,
             maxLines = maxLines?.let { constant(it) },
             paddings = paddings,
+            ranges = ranges,
+            selectable = constant(selectable),
             text = text,
             textColor = textColor?.let { constant(it.value) } ?: constant(0xFF000000.toInt()),
             tooltips = tooltips,
@@ -130,4 +134,14 @@ fun textImage(
     preloadRequired = constant(preloadRequired),
     start = constant(start.toLong()),
     url = constant(url.toUri())
+)
+
+fun textRange(
+    start: Int,
+    end: Int,
+    actions: List<DivAction>? = null
+) = DivText.Range(
+    actions = actions,
+    end = constant(end.toLong()),
+    start = constant(start.toLong())
 )

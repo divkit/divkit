@@ -17,6 +17,7 @@ import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
@@ -27,12 +28,17 @@ import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
+import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.actions.observedEnabledActions
+import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.toAlignment
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
@@ -80,7 +86,8 @@ private fun BasicText(
             ranges = ellipsis.ranges,
             gradientBrush = gradientBrush,
             baseFontSize = fontSize,
-            baseTextColorAlpha = textStyle.color.alpha
+            baseTextColorAlpha = textStyle.color.alpha,
+            actions = ellipsis.actions
         ) ?: AnnotatedString(ellipsisText)
     } else {
         null
@@ -149,7 +156,7 @@ private fun EllipsizedText(
     val intrinsics = remember(measurer, text, measuredStyle) {
         UntruncatedTextIntrinsics(measurer, text, measuredStyle)
     }
-    if (ellipsizedText.hasStyles()) {
+    if (ellipsizedText.hasAnnotations()) {
         BasicText(
             modifier = intrinsics,
             text = ellipsizedText,
@@ -257,9 +264,10 @@ private fun buildAnnotatedText(
     ranges: List<DivText.Range>?,
     gradientBrush: Brush?,
     baseFontSize: Int,
-    baseTextColorAlpha: Float
+    baseTextColorAlpha: Float,
+    actions: List<DivAction>? = null
 ): AnnotatedString? {
-    if (gradientBrush == null && ranges.isNullOrEmpty()) {
+    if (gradientBrush == null && ranges.isNullOrEmpty() && actions.isNullOrEmpty()) {
         return null
     }
 
@@ -267,6 +275,12 @@ private fun buildAnnotatedText(
     val builder = AnnotatedString.Builder(text)
     if (gradientBrush != null) {
         builder.addStyle(SpanStyle(brush = gradientBrush), 0, length)
+    }
+    if (!actions.isNullOrEmpty() && length > 0) {
+        val enabledActions = actions.observedEnabledActions()
+        if (enabledActions.isNotEmpty()) {
+            builder.addLink(rememberActionsLink(enabledActions), 0, length)
+        }
     }
 
     ranges?.forEach { range ->
@@ -278,10 +292,31 @@ private fun buildAnnotatedText(
                 start = start,
                 end = end
             )
+            val rangeActions = range.actions.observedEnabledActions()
+            if (rangeActions.isNotEmpty()) {
+                // Added after the whole text link so that it wins the hit test: a tap reaches the
+                // topmost link only, like on iOS where the range actions replace the ones of the
+                // ellipsis. The View renderer instead runs every action span under the tap.
+                builder.addLink(rememberActionsLink(rangeActions), start, end)
+            }
         }
     }
 
     return builder.toAnnotatedString()
+}
+
+// A link consumes the tap it receives, so the actions of the text element itself do not run under
+// a span and its long tap actions are unreachable there. The View renderer runs both: TextView
+// performs the click of the element before handing the touch to the movement method.
+@Composable
+private fun rememberActionsLink(actions: List<DivAction>): LinkAnnotation.Clickable {
+    val localComponent = LocalComponent.current
+    return remember(actions) {
+        LinkAnnotation.Clickable(
+            tag = ACTIONS_LINK_TAG,
+            linkInteractionListener = { localComponent.handleActions(actions, DivActionSource.TAP) }
+        )
+    }
 }
 
 private fun DivText.Ellipsis.isPlain(): Boolean {
@@ -290,9 +325,6 @@ private fun DivText.Ellipsis.isPlain(): Boolean {
 
 @Composable
 private fun DivText.Ellipsis.reportUnsupportedProperties() {
-    if (actions != null) {
-        reportError("Text ellipsis property not supported: actions")
-    }
     if (images != null) {
         reportError("Text ellipsis property not supported: images")
     }
@@ -304,8 +336,8 @@ private fun DivText.Ellipsis.reportUnsupportedProperties() {
     }
 }
 
-private fun AnnotatedString.hasStyles(): Boolean {
-    return spanStyles.isNotEmpty() || paragraphStyles.isNotEmpty()
+private fun AnnotatedString.hasAnnotations(): Boolean {
+    return spanStyles.isNotEmpty() || paragraphStyles.isNotEmpty() || hasLinkAnnotations(0, length)
 }
 
 private fun DivText.Truncate.toTextOverflow(): TextOverflow {
@@ -325,5 +357,6 @@ private fun DivTextGradient.observedValue(): Brush? {
     }
 }
 
+private const val ACTIONS_LINK_TAG = "div-action"
 private const val SOFT_HYPHEN = '\u00AD'
 private const val DEFAULT_ELLIPSIS = "\u2026"

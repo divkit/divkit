@@ -844,6 +844,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextStyle.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextStyle.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/video/DivVideoView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/video/DivVideoView.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/video/VideoActionPerformer.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/video/VideoActionPerformer.kt",
+  "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivTextActionsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivTextActionsTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivTextEllipsisTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivTextEllipsisTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewAccessibilityTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewAccessibilityTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewHostTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/DivViewHostTest.kt",
