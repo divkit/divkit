@@ -6,7 +6,6 @@ import com.yandex.div.core.expression.local.ExpressionsRuntimeProvider
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
 import com.yandex.div.core.expression.variables.declare
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
@@ -28,18 +27,17 @@ internal class RuntimeStoreProvider @Inject constructor(
     private val errorCollectors: ErrorCollectors,
 ) {
 
-    private var store: RuntimeStoreImpl? = null
+    var store: RuntimeStoreImpl? = null
+        private set
 
-    internal fun getOrCreate(data: DivData, div2View: Div2View?): RuntimeStore {
+    internal fun getOrCreate(data: DivData): RuntimeStore {
         val errorCollector = errorCollectors.getOrCreate(data)
-        val newStore = store?.also {
+        return store?.also {
             ensureVariablesSynced(it.rootRuntime, data, errorCollector)
             it.rootRuntime.triggersController?.ensureTriggersSynced(data.variableTriggers ?: emptyList())
-        } ?: RuntimeStoreImpl(data, dataTag, runtimeProvider, errorCollector)
-
-        div2View?.let { newStore.attachView(it) }
-        store = newStore
-        return newStore
+        } ?: RuntimeStoreImpl(data, dataTag, runtimeProvider, errorCollector).also {
+            store = it
+        }
     }
 
     fun reset() {

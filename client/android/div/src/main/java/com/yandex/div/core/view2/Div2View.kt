@@ -198,20 +198,21 @@ open class Div2View private constructor(
 
     private fun updateRuntimeStore(data: DivData, tag: DivDataTag) {
         oldRuntimeStore = runtimeStore
+        val oldDataComponent = dataComponent
         dataComponent = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
-        runtimeStore = dataComponent.runtimeStoreProvider.getOrCreate(data, this)
+        runtimeStore = dataComponent.runtimeStoreProvider.getOrCreate(data)
         viewStateStore = dataComponent.viewStateStore
         runtimeStore.updateSubscriptions()
         if (oldRuntimeStore != runtimeStore) {
-            oldRuntimeStore?.clearBindings(this)
+            oldDataComponent.viewConnector.detach(this)
+            dataComponent.viewConnector.attach(this)
         }
         dataComponent.stateManager.collectStateVariables(data, expressionResolver)
         dataTag = tag
     }
 
     private fun resetRuntimeStoreAndTag() {
-        runtimeStore.clearBindings(this)
-        runtimeStore.cleanupRuntimes(this)
+        dataComponent.viewConnector.detach(this)
         oldRuntimeStore = runtimeStore
         runtimeStore = RuntimeStore.EMPTY
         dataComponent = div2Component.dataComponentStore.getOrPut("", div2Component)
@@ -710,7 +711,7 @@ open class Div2View private constructor(
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
         val tag = newDataTag ?: DivDataTag(UUID.randomUUID().toString())
         val newRuntimeStore = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
-            .runtimeStoreProvider.getOrCreate(newData, this)
+            .runtimeStoreProvider.getOrCreate(newData)
         val canBeReplaced = DivComparator.isDivDataReplaceable(
             rootDivBlock ?: (divData ?: oldData)?.getRootDivBlock() ?: return@withLock false,
             newData.getRootDivBlock(newRuntimeStore),
