@@ -6,7 +6,6 @@
     "web"
   ],
   "div_data": {
-    "templates": {},
     "card": {
       "log_id": "snapshot_test_card",
       "variables": [

@@ -5,7 +5,6 @@
     "web",
     "flutter"
   ],
-  "templates": {},
   "card": {
     "log_id": "snapshot_test_card",
     "states": [

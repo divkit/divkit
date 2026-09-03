@@ -68,7 +68,7 @@ describe('array', () => {
         const json = require('../../../../../test_data/template_test_data/array/test_array_not_templated.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 

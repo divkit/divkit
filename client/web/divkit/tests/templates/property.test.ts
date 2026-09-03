@@ -12,7 +12,7 @@ describe('property', () => {
         const json = require('../../../../../test_data/template_test_data/property/test_property_not_templated.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 
@@ -20,7 +20,7 @@ describe('property', () => {
         const json = require('../../../../../test_data/template_test_data/property/test_property_not_templated_invalid.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 
@@ -36,7 +36,7 @@ describe('property', () => {
         const json = require('../../../../../test_data/template_test_data/property/test_property_unknown_type.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 

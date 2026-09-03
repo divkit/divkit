@@ -8,7 +8,6 @@
   "configuration": {
     "fail_on_parsing_error": false
   },
-  "templates": {},
   "card": {
     "log_id": "snapshot_test_card",
     "states": [

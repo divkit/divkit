@@ -1,5 +1,4 @@
 {
-  "templates": {},
   "entity": {
     "type": "entity_with_array_of_nested_items",
     "items": [

@@ -12,7 +12,7 @@ describe('complex_property', () => {
         const json = require('../../../../../test_data/template_test_data/complex_property/test_complex_property_not_templated.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 
@@ -84,7 +84,7 @@ describe('complex_property', () => {
         const json = require('../../../../../test_data/template_test_data/complex_property/test_invalid_complex_property_not_templated.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 });

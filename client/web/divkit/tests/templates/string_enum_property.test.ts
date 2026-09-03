@@ -12,7 +12,7 @@ describe('string_enum_property', () => {
         const json = require('../../../../../test_data/template_test_data/string_enum_property/test_string_enum_property_not_templated.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 

@@ -6,7 +6,6 @@
   "unsupported_platforms": {
     "web": "No such extension"
   },
-  "templates": {},
   "card": {
     "log_id": "snapshot_test_card",
     "states": [

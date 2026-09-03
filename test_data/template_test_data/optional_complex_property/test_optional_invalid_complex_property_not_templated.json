@@ -1,5 +1,4 @@
 {
-  "templates": {},
   "entity": {
     "type": "entity_with_optional_complex_property",
     "property": {}

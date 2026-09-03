@@ -12,7 +12,7 @@ describe('default_value', () => {
         const json = require('../../../../../test_data/template_test_data/default_value/test_invalid_value_presented_directly.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 

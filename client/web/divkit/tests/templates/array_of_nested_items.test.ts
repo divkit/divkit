@@ -60,7 +60,7 @@ describe('array_of_nested_items', () => {
         const json = require('../../../../../test_data/template_test_data/array_of_nested_items/test_array_of_nested_items_without_item_required_property.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 
@@ -68,7 +68,7 @@ describe('array_of_nested_items', () => {
         const json = require('../../../../../test_data/template_test_data/array_of_nested_items/test_array_of_nested_items_without_templates.json');
         const logError = vi.fn();
 
-        expect(applyTemplate(json.entity, {}, json.templates, logError)).toMatchSnapshot();
+        expect(applyTemplate(json.entity, {}, json.templates || {}, logError)).toMatchSnapshot();
         expect(logError.mock.calls).toMatchSnapshot();
     });
 });

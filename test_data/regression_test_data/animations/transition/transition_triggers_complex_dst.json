@@ -1,5 +1,4 @@
 {
-  "templates": {},
   "card": {
     "log_id": "state_trigger",
     "transition_animation_selector": "any_change",

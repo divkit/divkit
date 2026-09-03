@@ -36,11 +36,10 @@ class UnitTestData(
             val path = "${BuildConfig.DIV2_JSON_PATH}/$testDataDir/$dir/$fileName"
             val jsonString = File(path).readText(Charsets.UTF_8)
             val json = JSONObject(jsonString)
-            val templates = json.getJSONObject("templates")
             val card = json.getJSONObject("card")
 
             val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)
-            environment.parseTemplates(templates)
+            json.optJSONObject("templates")?.let(environment::parseTemplates)
 
             return DivData(environment, card)
         }
@@ -50,11 +49,10 @@ class UnitTestData(
             val path = "${BuildConfig.DIV2_JSON_PATH}/$testDataDir/$dir/$fileName"
             val jsonString = File(path).readText(Charsets.UTF_8)
             val json = JSONObject(jsonString)
-            val templates = json.getJSONObject("templates")
             val card = json.getJSONObject("patch")
 
             val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)
-            environment.parseTemplates(templates)
+            json.optJSONObject("templates")?.let(environment::parseTemplates)
 
             return DivPatch(environment, card)
         }

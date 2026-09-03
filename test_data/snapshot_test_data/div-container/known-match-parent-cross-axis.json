@@ -6,7 +6,6 @@
     "web",
     "flutter"
   ],
-  "templates": {},
   "card": {
     "log_id": "div2_sample_card",
     "states": [
