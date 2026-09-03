@@ -9,7 +9,9 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import com.yandex.div.R
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.core.resolveWeightedSizes
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_WEIGHT
@@ -671,35 +673,14 @@ internal open class GridContainer @JvmOverloads constructor(
             lines: List<Line>,
             constraint: SizeConstraint
         ) {
-            var totalSize = 0
-            var totalFixedSize = 0
-            var totalWeight = 0.0f
-            var maxWeightedSize = 0.0f
-            lines.iterate { line ->
+            val sizes = resolveWeightedSizes(
+                weights = FloatArray(lines.size) { lines[it].weight },
+                baseSizes = IntArray(lines.size) { lines[it].size },
+                minimumSize = constraint.min,
+            )
+            lines.forEachIndexed { index, line ->
                 if (line.isFlexible) {
-                    totalWeight += line.weight
-                    maxWeightedSize = max(maxWeightedSize, line.size / line.weight)
-                } else {
-                    totalFixedSize += line.size
-                }
-                totalSize += line.size
-            }
-
-            var maxTotalSize = 0
-            lines.iterate { line ->
-                maxTotalSize += if (line.isFlexible) {
-                    ceil((line.weight * maxWeightedSize)).toInt()
-                } else {
-                    line.size
-                }
-            }
-
-            val desiredTotalSize = max(constraint.min, maxTotalSize)
-            val totalWeightedSize = max(0, desiredTotalSize - totalFixedSize)
-            val weightedSize = totalWeightedSize / totalWeight
-            lines.iterate { line ->
-                if (line.isFlexible) {
-                    val size = ceil((line.weight * (weightedSize))).toInt()
+                    val size = sizes[index]
                     line.include(contentSize = size - line.marginSize, size = size)
                 }
             }

@@ -48,8 +48,8 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
     ) {
         Grid(
             config = {
-                columnTracks.forEach { column(it) }
-                rowTracks.forEach { row(it) }
+                columnTracks.resolve(constraints.maxWidth, this).forEach { column(it) }
+                rowTracks.resolve(constraints.maxHeight, this).forEach { row(it) }
             }
         ) {
             items.forEach { item ->

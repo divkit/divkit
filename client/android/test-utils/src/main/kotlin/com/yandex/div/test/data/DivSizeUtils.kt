@@ -8,6 +8,7 @@ import com.yandex.div2.DivWrapContentSize
 
 fun fixed(value: Expression<Long>): DivSize = DivSize.Fixed(DivFixedSize(value = value))
 
-fun matchParent(): DivSize = DivSize.MatchParent(DivMatchParentSize())
+fun matchParent(weight: Expression<Double>? = null): DivSize =
+    DivSize.MatchParent(DivMatchParentSize(weight = weight))
 
 fun wrapContent(): DivSize = DivSize.WrapContent(DivWrapContentSize())
