@@ -444,7 +444,12 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
 
   override func accessibilityActivate() -> Bool {
     guard let actions = model.actions?.asArray() else {
-      return false
+      // This view has no actions: forward activation to the child view.
+      // This is necessary when this DecoratingView acts as a pure layout wrapper
+      // (e.g., for margins) around an inner DecoratingView that holds the actual
+      // actions. VoiceOver may probe accessibilityActivate() on a parent UIControl
+      // to determine whether to announce "Double tap to activate" for its subtree.
+      return childView?.accessibilityActivate() ?? false
     }
     captureFocusIfNeeded()
     actions.perform(sendingFrom: self)

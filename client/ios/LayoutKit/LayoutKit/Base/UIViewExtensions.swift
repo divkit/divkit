@@ -15,12 +15,22 @@ extension UIView {
 
 extension UIView {
   func applyAccessibilityFromScratch(_ element: AccessibilityElement?) {
-    isAccessibilityElement = false
-    accessibilityLabel = nil
+    guard let element else {
+      isAccessibilityElement = false
+      accessibilityLabel = nil
+      accessibilityTraits = UIAccessibilityTraits()
+      accessibilityValue = nil
+      accessibilityHint = nil
+      return
+    }
+    // Reset fields that `applyAccessibility` overlays additively so that stale
+    // data from a previous element (e.g. a removed `.button` trait or a removed
+    // hint/value) is not preserved when transitioning between two non-nil
+    // elements.  We intentionally do NOT toggle `isAccessibilityElement` to
+    // `false` here to avoid a transient VoiceOver interruption.
     accessibilityTraits = UIAccessibilityTraits()
-    accessibilityValue = nil
     accessibilityHint = nil
-
+    accessibilityValue = nil
     applyAccessibility(element)
   }
 }

@@ -18,6 +18,134 @@ final class UIViewRenderable_AccessibilityTests: XCTestCase {
     view.assertHasAccessibilityEqualsTo(accessibility)
   }
 
+  func test_decoratingBlockStaleTraitsHintValueClearedOnReconfigure() {
+    // Verifies that after reconfiguring a DecoratingView, previously set
+    // accessibilityTraits, hint, and value are cleared when the new element does
+    // not carry them.  This is a regression test for DIVKIT-7963: the old
+    // applyAccessibilityFromScratch only reset fields when the new element was
+    // nil, so stale data from a previous non-nil element (e.g. a removed
+    // .button trait or a removed hint/value from a past action overlay) could
+    // persist.  The test fails on any implementation where the non-nil branch
+    // of applyAccessibilityFromScratch does not explicitly clear accessibilityTraits,
+    // accessibilityHint, and accessibilityValue before applying the new element.
+    let richAccessibility = AccessibilityElement(
+      traits: .button,
+      strings: AccessibilityElement.Strings(
+        label: "Кнопка",
+        hint: "Коснитесь дважды, чтобы активировать",
+        value: "Сейчас в состоянии false",
+        identifier: "button_1"
+      )
+    )
+    // New element has .none trait, no hint, no value — all previously set fields
+    // should be cleared.
+    let plainAccessibility = AccessibilityElement(
+      traits: .none,
+      strings: AccessibilityElement.Strings(
+        label: "Элемент",
+        hint: nil,
+        value: nil,
+        identifier: "element_1"
+      )
+    )
+
+    let block1 = makeDecoratingBlock(accessibility: richAccessibility)
+    let view = block1.makeBlockView()
+    view.assertHasAccessibilityEqualsTo(richAccessibility)
+
+    // Reconfigure: the new element lacks traits, hint, and value.
+    let block2 = makeDecoratingBlock(accessibility: plainAccessibility)
+    block2.configureBlockView(view, observer: nil, overscrollDelegate: nil, renderingDelegate: nil)
+
+    // All stale fields from the previous element must be gone.
+    XCTAssertEqual(view.accessibilityTraits, plainAccessibility.traits.uiTraits)
+    XCTAssertNil(view.accessibilityHint)
+    XCTAssertNil(view.accessibilityValue)
+    view.assertHasAccessibilityEqualsTo(plainAccessibility)
+  }
+
+  func test_decoratingBlockStaleTraitsHintValueClearedOnReconfigureWithActions() {
+    // Verifies that stale traits/hint/value contributed by a previous action's
+    // accessibilityElement are cleared when the action is removed and a new
+    // plain base element is applied.  This tests the non-nil-to-non-nil
+    // transition where action-overlay accessibility data from the old model
+    // must not bleed into the new model.
+    let actionElement = AccessibilityElement(
+      traits: .button,
+      strings: AccessibilityElement.Strings(
+        label: "Кнопка",
+        hint: "Коснитесь дважды",
+        value: nil,
+        identifier: nil
+      )
+    )
+    let action = UserInterfaceAction(
+      path: UIElementPath("button_1"),
+      accessibilityElement: actionElement
+    )
+    let baseAccessibility = AccessibilityElement(
+      traits: .none,
+      strings: AccessibilityElement.Strings(label: "Контейнер")
+    )
+    // Old model: base element + action that overlays .button trait and hint.
+    let blockWithAction = DecoratingBlock(
+      child: EmptyBlock.zeroSized,
+      actions: NonEmptyArray<UserInterfaceAction>([action]),
+      accessibilityElement: baseAccessibility
+    )
+    let view = blockWithAction.makeBlockView()
+
+    // New model: same base element but NO actions; the .button trait and hint
+    // from the action must be gone.
+    let plainAccessibility = AccessibilityElement(
+      traits: .none,
+      strings: AccessibilityElement.Strings(label: "Контейнер")
+    )
+    let blockWithoutAction = makeDecoratingBlock(accessibility: plainAccessibility)
+    blockWithoutAction.configureBlockView(
+      view, observer: nil, overscrollDelegate: nil, renderingDelegate: nil
+    )
+
+    XCTAssertEqual(view.accessibilityTraits, plainAccessibility.traits.uiTraits)
+    XCTAssertNil(view.accessibilityHint)
+    view.assertHasAccessibilityEqualsTo(plainAccessibility)
+  }
+
+  func test_wrapperDecoratingBlockForwardsAccessibilityActivateToChild() {
+    // Verifies that a wrapper DecoratingView (no actions, used for margins) forwards
+    // accessibilityActivate() to its child view so VoiceOver detects the subtree as
+    // activatable and announces "Double tap to activate".
+    // Regression test for DIVKIT-7963 (Bug 1: missing "Коснитесь дважды, чтобы активировать").
+    let action = UserInterfaceAction(
+      payload: .empty,
+      path: UIElementPath("button_1")
+    )
+    let innerBlock = DecoratingBlock(
+      child: EmptyBlock.zeroSized,
+      actions: NonEmptyArray<UserInterfaceAction>([action]),
+      accessibilityElement: AccessibilityElement(
+        traits: .button,
+        strings: AccessibilityElement.Strings(label: "Элемент 1")
+      )
+    )
+    // Outer wrapper block (no accessibility, no actions) — created when margins are applied.
+    let outerBlock = DecoratingBlock(child: innerBlock)
+
+    let outerView = outerBlock.makeBlockView()
+    outerBlock.configureBlockView(
+      outerView,
+      observer: nil,
+      overscrollDelegate: nil,
+      renderingDelegate: nil
+    )
+
+    // The outer wrapper view has no actions; it should forward to child.
+    XCTAssertTrue(
+      outerView.accessibilityActivate(),
+      "Outer wrapper DecoratingView should forward accessibilityActivate() to child"
+    )
+  }
+
   func test_decoratingBlockWithActionsAccessibilityApplied() {
     let view = makeDecoratingBlockWithActions(
       accessibility: accessibility
