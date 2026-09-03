@@ -1,3 +1,9 @@
+## 32.61.4
+
+# Android Client:
+* Added a common host network client for built-in DivKit network requests.
+
+
 ## 32.61.1
 
 # Android Client:
