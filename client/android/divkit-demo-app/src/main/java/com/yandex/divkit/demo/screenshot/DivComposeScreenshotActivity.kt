@@ -72,13 +72,18 @@ class DivComposeScreenshotActivity : ComponentActivity() {
     }
 
     fun setDivData(json: JSONObject) {
+        val configuration = ScreenshotTestConfiguration.from(json)
         val templatesJson = json.optJSONObject("templates")
-        val environment = DivParsingEnvironment(ParsingErrorLogger.ASSERT).apply {
+        val parsingErrorLogger = if (configuration.failOnParsingError) {
+            ParsingErrorLogger.ASSERT
+        } else {
+            ParsingErrorLogger.LOG
+        }
+        val environment = DivParsingEnvironment(parsingErrorLogger).apply {
             if (templatesJson != null) parseTemplates(templatesJson)
         }
         data = DivData(environment, json.getJSONObject("card"))
 
-        val configuration = ScreenshotTestConfiguration.from(json)
         val view = ComposeView(divContext).apply {
             tag = SCREENSHOT_VIEW_TAG
             configuration.applyTo(this)

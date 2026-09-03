@@ -39,13 +39,15 @@ final class SnapshotTestRunner {
     extensions: [DivExtensionHandler] = []
   ) async throws {
     let jsonDict = try #require(readJson(path: file.absolutePath))
+    let failOnParsingError = getFailOnParsingError(jsonDict)
 
     let divKitComponents = DivKitComponents(
       customActionHandler: customActionHandler,
       extensionHandlers: extensions,
       fontProvider: SnapshotFontProvider(),
       imageHolderFactory: TestImageHolderFactory(),
-      layoutDirection: getLayoutDirection(jsonDict)
+      layoutDirection: getLayoutDirection(jsonDict),
+      reporter: failOnParsingError ? SnapshotTestReporter() : nil
     )
     for (id, state) in statesByElementId {
       let paths = elementPaths(id: id, json: jsonDict)
@@ -118,6 +120,13 @@ final class SnapshotTestRunner {
       return .leftToRight
     }
     return .rightToLeft
+  }
+
+  private func getFailOnParsingError(
+    _ json: [String: any Sendable]
+  ) -> Bool {
+    let configuration = try? json.getField("configuration") as [String: any Sendable]
+    return configuration?["fail_on_parsing_error"] as? Bool ?? true
   }
 
   private func loadSteps(
@@ -223,6 +232,14 @@ final class SnapshotTestRunner {
         "\(caseName)_\(Int(screen.size.width))@\(Int(screen.scale))x\(stepDescription).png",
         isDirectory: false
       )
+  }
+}
+
+private struct SnapshotTestReporter: DivReporter {
+  func reportError(cardId _: DivCardID, error: DivError) {
+    if error.kind == .deserialization {
+      Issue.record(Comment(rawValue: error.prettyMessage))
+    }
   }
 }
 

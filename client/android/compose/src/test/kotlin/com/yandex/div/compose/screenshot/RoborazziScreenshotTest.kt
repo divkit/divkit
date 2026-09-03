@@ -353,8 +353,4 @@ private val ignoredFiles = setOf(
     "image-formats/webp/webp_background_blur.json",
     "image-formats/webp/webp_image_blur.json",
     "image-formats/webp/webp_preview_blur.json",
-
-    // intentional error/broken-state cases
-    "div-slider/slider_with_error_and_warning.json",
-    "div-tabs/selected-tab-broken-content.json",
 )

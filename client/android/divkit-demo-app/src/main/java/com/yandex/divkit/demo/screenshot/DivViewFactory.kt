@@ -11,10 +11,11 @@ import org.json.JSONObject
 
 internal class Div2ViewFactory(
     private val context: Div2Context,
-    private val templatesJson: JSONObject? = null
+    private val templatesJson: JSONObject? = null,
+    parsingErrorLogger: ParsingErrorLogger = ParsingErrorLogger.ASSERT,
 ) {
 
-    private val environment = DivParsingEnvironment(ParsingErrorLogger.ASSERT).apply {
+    private val environment = DivParsingEnvironment(parsingErrorLogger).apply {
         if (templatesJson != null) parseTemplates(templatesJson)
     }
 

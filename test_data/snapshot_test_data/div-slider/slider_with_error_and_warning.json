@@ -4,6 +4,9 @@
     "android",
     "web"
   ],
+  "configuration": {
+    "fail_on_parsing_error": false
+  },
   "card": {
     "log_id": "test",
     "variables": [

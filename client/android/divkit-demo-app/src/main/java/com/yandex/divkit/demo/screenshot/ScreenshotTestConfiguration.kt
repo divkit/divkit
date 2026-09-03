@@ -5,6 +5,7 @@ import org.json.JSONObject
 
 internal class ScreenshotTestConfiguration private constructor(
     private val isRtl: Boolean,
+    val failOnParsingError: Boolean,
 ) {
 
     fun applyTo(view: View) {
@@ -23,6 +24,7 @@ internal class ScreenshotTestConfiguration private constructor(
             val configuration = testCaseJson.optJSONObject(KEY_CONFIGURATION)
             return ScreenshotTestConfiguration(
                 isRtl = configuration?.optString(KEY_LAYOUT_DIRECTION) == LAYOUT_DIRECTION_RTL,
+                failOnParsingError = configuration?.optBoolean("fail_on_parsing_error", true) ?: true,
             )
         }
     }

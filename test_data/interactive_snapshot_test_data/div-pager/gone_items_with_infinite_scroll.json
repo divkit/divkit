@@ -63,7 +63,6 @@
                   "top": 10,
                   "bottom": 10
                 },
-                "space_between_centers": 10,
                 "inactive_item_color": "#D0D1D9",
                 "shape": {
                   "type": "rounded_rectangle",
@@ -104,17 +103,55 @@
                   }
                 },
                 "items": [
-                  { "type": "text_block", "text": "0" },
-                  { "type": "text_block", "text": "1", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
-                  { "type": "text_block", "text": "2" },
-                  { "type": "text_block", "text": "3", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
-                  { "type": "text_block", "text": "4" },
-                  { "type": "text_block", "text": "5", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
-                  { "type": "text_block", "text": "6" },
-                  { "type": "text_block", "text": "7", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
-                  { "type": "text_block", "text": "8" },
-                  { "type": "text_block", "text": "9", "visibility": "@{hide_odd ? 'gone' : 'visible'}" },
-                  { "type": "text_block", "text": "10" }
+                  {
+                    "type": "text_block",
+                    "text": "0"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "1",
+                    "visibility": "@{hide_odd ? 'gone' : 'visible'}"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "2"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "3",
+                    "visibility": "@{hide_odd ? 'gone' : 'visible'}"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "4"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "5",
+                    "visibility": "@{hide_odd ? 'gone' : 'visible'}"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "6"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "7",
+                    "visibility": "@{hide_odd ? 'gone' : 'visible'}"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "8"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "9",
+                    "visibility": "@{hide_odd ? 'gone' : 'visible'}"
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "10"
+                  }
                 ]
               },
               {
