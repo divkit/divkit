@@ -25,21 +25,20 @@ import org.json.JSONObject
 internal fun observeBaseTextStyle(
     fontSize: Int,
     textAlignmentHorizontal: DivAlignmentHorizontal,
-    fontSizeUnit: Expression<DivSizeUnit>,
+    fontSizeUnit: DivSizeUnit,
     textColor: Expression<Int>,
     fontWeight: Expression<DivFontWeight>?,
     fontWeightValue: Expression<Long>?,
     fontFamily: Expression<String>?,
     letterSpacing: Expression<Double>,
-    lineHeight: Expression<Long>?,
+    lineHeight: Int?,
     fontFeatureSettings: Expression<String>? = null,
     fontVariationSettings: Expression<JSONObject>? = null,
 ): TextStyle {
-    val sizeUnit = fontSizeUnit.observedValue()
     val weight = fontWeight?.observedValue()
     val weightValue = fontWeightValue?.observedIntValue()
-    val textSize = fontSize.toTextUnit(sizeUnit)
-    val resolvedLineHeight = lineHeight?.observedIntValue()?.toTextUnit(sizeUnit)
+    val textSize = fontSize.toTextUnit(fontSizeUnit)
+    val resolvedLineHeight = lineHeight?.toTextUnit(fontSizeUnit)
     val resolvedLetterSpacing = letterSpacing(letterSpacing.observedFloatValue(), fontSize)
     val resolvedFontFamily = rememberFontFamily(
         fontFamily = fontFamily?.observedValue(),

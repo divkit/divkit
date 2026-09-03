@@ -28,13 +28,13 @@ internal fun DivInputView(modifier: Modifier, data: DivInput) {
 
     val textStyle = observeBaseTextStyle(
         fontSize = data.fontSize.observedIntValue(),
-        fontSizeUnit = data.fontSizeUnit,
+        fontSizeUnit = data.fontSizeUnit.observedValue(),
         textColor = data.textColor,
         fontWeight = data.fontWeight,
         fontWeightValue = data.fontWeightValue,
         fontFamily = data.fontFamily,
         letterSpacing = data.letterSpacing,
-        lineHeight = data.lineHeight,
+        lineHeight = data.lineHeight?.observedIntValue(),
         textAlignmentHorizontal = textAlignmentHorizontal,
         fontVariationSettings = data.fontVariationSettings
     )

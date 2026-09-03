@@ -274,30 +274,15 @@ private val ignoredFiles = setOf(
     "div-pager/item-builder/nested-builders.json",
     "div-pager/item-builder/non-unique-matched-selectors.json",
 
-    // div-text.images not supported
-    "div-text/line-height/multi-line-text-with-image.json",
-    "div-text/line-height/single-line-text-with-image.json",
-    "div-text/all_attributes.json",
-    "div-text/custom-image-tint-color.json",
-    "div-text/custom-text-alignment-with-attachments.json",
+    // div-text ellipsis images not supported
     "div-text/ellipsis-with-image.json",
     "div-text/ellipsis_builder.json",
-    "div-text/image-reverse-indexing.json",
-    "div-text/image-tint-mode.json",
+
+    // div-text.range.line_height not supported
+    "div-text/line-height/multi-line-text-with-image.json",
+
+    // div-text.image_builder not supported
     "div-text/image_builder.json",
-    "div-text/images.json",
-    "div-text/images_hyphenation.json",
-    "div-text/text_image_vertical_alignment.json",
-    "image-formats/animated-webp/animated_webp_text_image.json",
-    "image-formats/animated-webp/animated_webp_text_image_tint.json",
-    "image-formats/gif/gif_text_image.json",
-    "image-formats/gif/gif_text_image_tint.json",
-    "image-formats/png/png_text_image.json",
-    "image-formats/png/png_text_image_tint.json",
-    "image-formats/svg/svg_text_image.json",
-    "image-formats/svg/svg_text_image_tint.json",
-    "image-formats/webp/webp_text_image.json",
-    "image-formats/webp/webp_text_image_tint.json",
 
     // div-text.range.mask not supported
     "div-text/mask.json",

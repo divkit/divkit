@@ -73,7 +73,9 @@ private fun BasicText(
     val fontSize = data.fontSize.observedIntValue()
     val hyphens = if (SOFT_HYPHEN in text) Hyphens.Auto else Hyphens.None
     val maxLines = data.maxLines.observedIntValue(Int.MAX_VALUE).coerceAtLeast(1)
-    val textStyle = data.observeTextStyle(fontSize, horizontalAlignment, hyphens)
+    val textMetrics = data.observeTextMetrics()
+    val textStyle = data.observeTextStyle(fontSize, horizontalAlignment, hyphens, textMetrics)
+    val inlineImages = data.observeInlineImages(text, fontSize, textMetrics, textStyle)
     val gradientBrush = data.textGradient?.observedValue()
     val ellipsis = data.ellipsis?.takeIf { data.maxLines != null }
     val ellipsisText = ellipsis?.text?.observedValue()
@@ -102,7 +104,8 @@ private fun BasicText(
         ranges = data.ranges,
         gradientBrush = gradientBrush,
         baseFontSize = fontSize,
-        baseTextColorAlpha = textStyle.color.alpha
+        baseTextColorAlpha = textStyle.color.alpha,
+        inlineImages = inlineImages
     )
     when {
         customEllipsis != null -> EllipsizedText(
@@ -121,6 +124,7 @@ private fun BasicText(
 
         else -> BasicText(
             text = annotatedString,
+            inlineContent = rememberInlineContent(inlineImages),
             style = textStyle,
             overflow = overflow,
             maxLines = maxLines
@@ -265,21 +269,23 @@ private fun buildAnnotatedText(
     gradientBrush: Brush?,
     baseFontSize: Int,
     baseTextColorAlpha: Float,
-    actions: List<DivAction>? = null
+    actions: List<DivAction>? = null,
+    inlineImages: List<InlineImageData> = emptyList()
 ): AnnotatedString? {
-    if (gradientBrush == null && ranges.isNullOrEmpty() && actions.isNullOrEmpty()) {
+    if (gradientBrush == null && ranges.isNullOrEmpty() && actions.isNullOrEmpty() && inlineImages.isEmpty()) {
         return null
     }
 
     val length = text.length
-    val builder = AnnotatedString.Builder(text)
+    val builder = AnnotatedString.Builder()
+    val offsets = builder.appendTextWithInlineImages(text, inlineImages)
     if (gradientBrush != null) {
-        builder.addStyle(SpanStyle(brush = gradientBrush), 0, length)
+        builder.addStyle(SpanStyle(brush = gradientBrush), 0, builder.length)
     }
     if (!actions.isNullOrEmpty() && length > 0) {
         val enabledActions = actions.observedEnabledActions()
         if (enabledActions.isNotEmpty()) {
-            builder.addLink(rememberActionsLink(enabledActions), 0, length)
+            builder.addLink(rememberActionsLink(enabledActions), 0, builder.length)
         }
     }
 
@@ -289,15 +295,19 @@ private fun buildAnnotatedText(
         if (start < end) {
             builder.addStyle(
                 style = range.observeSpanStyle(baseFontSize, baseTextColorAlpha),
-                start = start,
-                end = end
+                start = offsets.rangeStart(start),
+                end = offsets.rangeEnd(end)
             )
             val rangeActions = range.actions.observedEnabledActions()
             if (rangeActions.isNotEmpty()) {
                 // Added after the whole text link so that it wins the hit test: a tap reaches the
                 // topmost link only, like on iOS where the range actions replace the ones of the
                 // ellipsis. The View renderer instead runs every action span under the tap.
-                builder.addLink(rememberActionsLink(rangeActions), start, end)
+                builder.addLink(
+                    rememberActionsLink(rangeActions),
+                    offsets.rangeStart(start),
+                    offsets.rangeEnd(end)
+                )
             }
         }
     }

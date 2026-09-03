@@ -38,7 +38,7 @@ internal fun DivImageView(
     )
 }
 
-private fun toColorFilter(tintColor: Int, tintMode: DivBlendMode): ColorFilter {
+internal fun toColorFilter(tintColor: Int, tintMode: DivBlendMode): ColorFilter {
     val blendMode = when (tintMode) {
         DivBlendMode.SOURCE_IN -> BlendMode.SrcIn
         DivBlendMode.SOURCE_ATOP -> BlendMode.SrcAtop

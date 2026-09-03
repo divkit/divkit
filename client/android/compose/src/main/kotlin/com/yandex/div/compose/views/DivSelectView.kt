@@ -33,13 +33,13 @@ internal fun DivSelectView(
     val textStyle = observeBaseTextStyle(
         fontSize = data.fontSize.observedIntValue(),
         textAlignmentHorizontal = DivAlignmentHorizontal.START,
-        fontSizeUnit = data.fontSizeUnit,
+        fontSizeUnit = data.fontSizeUnit.observedValue(),
         textColor = data.textColor,
         fontWeight = data.fontWeight,
         fontWeightValue = data.fontWeightValue,
         fontFamily = data.fontFamily,
         letterSpacing = data.letterSpacing,
-        lineHeight = data.lineHeight,
+        lineHeight = data.lineHeight?.observedIntValue(),
         fontVariationSettings = data.fontVariationSettings
     )
     val displayText = options.firstOrNull { it.value == valueState.value }?.displayText

@@ -7,6 +7,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.text.observeBaseTextStyle
 import com.yandex.div.compose.utils.observedRoundedCornerShape
 import com.yandex.div2.DivAlignmentHorizontal
@@ -46,13 +47,13 @@ internal fun DivTabs.TabTitleStyle.observeTextStyle(isSelected: Boolean): TextSt
     return observeBaseTextStyle(
         fontSize = fontSize.observedIntValue(),
         textAlignmentHorizontal = DivAlignmentHorizontal.CENTER,
-        fontSizeUnit = fontSizeUnit,
+        fontSizeUnit = fontSizeUnit.observedValue(),
         textColor = if (isSelected) activeTextColor else inactiveTextColor,
         fontWeight = weight,
         fontWeightValue = if (isSelected) activeFontWeightValue else inactiveFontWeightValue,
         fontFamily = fontFamily,
         letterSpacing = letterSpacing,
-        lineHeight = lineHeight,
+        lineHeight = lineHeight?.observedIntValue(),
         fontVariationSettings = fontVariationSettings
     )
 }

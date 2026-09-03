@@ -59,7 +59,7 @@ internal fun Dp.toPx(): Float {
 internal fun Int.toTextUnit(unit: DivSizeUnit): TextUnit {
     return when (unit) {
         DivSizeUnit.SP -> sp
-        DivSizeUnit.DP -> sp // DP and SP are the same at default font scale
+        DivSizeUnit.DP -> with(LocalDensity.current) { dp.toSp() }
         DivSizeUnit.PX -> with(LocalDensity.current) { this@toTextUnit.toSp() }
     }
 }

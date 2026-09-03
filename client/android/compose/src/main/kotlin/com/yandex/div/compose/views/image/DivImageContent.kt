@@ -18,6 +18,7 @@ import coil3.transform.Transformation
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.images.ImageRequestParams
+import com.yandex.div.compose.images.isValidImageUri
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div2.DivBase
@@ -73,7 +74,7 @@ internal fun DivImageContent(
             )
         }
 
-        if (imageUrl?.isValid() == true) {
+        if (imageUrl?.isValidImageUri() == true) {
             val imageRequestParams = ImageRequestParams(
                 data = imageUrl,
                 transformations = transformations
@@ -104,8 +105,4 @@ internal fun DivImageContent(
             }
         }
     }
-}
-
-private fun Uri.isValid(): Boolean {
-    return toString() != "empty://"
 }
