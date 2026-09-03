@@ -1,11 +1,12 @@
 package com.yandex.divkit.demo.screenshot
 
 import android.view.View
+import com.yandex.div.json.ParsingErrorLogger
 import org.json.JSONObject
 
 internal class ScreenshotTestConfiguration private constructor(
     private val isRtl: Boolean,
-    val failOnParsingError: Boolean,
+    val parsingErrorLogger: ParsingErrorLogger,
 ) {
 
     fun applyTo(view: View) {
@@ -22,10 +23,23 @@ internal class ScreenshotTestConfiguration private constructor(
 
         fun from(testCaseJson: JSONObject): ScreenshotTestConfiguration {
             val configuration = testCaseJson.optJSONObject(KEY_CONFIGURATION)
+            val failOnParsingError = configuration
+                ?.optBoolean("fail_on_parsing_error", true)
+                ?: true
             return ScreenshotTestConfiguration(
                 isRtl = configuration?.optString(KEY_LAYOUT_DIRECTION) == LAYOUT_DIRECTION_RTL,
-                failOnParsingError = configuration?.optBoolean("fail_on_parsing_error", true) ?: true,
+                parsingErrorLogger = if (failOnParsingError) {
+                    FailingErrorLogger
+                } else {
+                    ParsingErrorLogger.LOG
+                },
             )
         }
+    }
+}
+
+private object FailingErrorLogger : ParsingErrorLogger {
+    override fun logError(e: Exception) {
+        throw e
     }
 }

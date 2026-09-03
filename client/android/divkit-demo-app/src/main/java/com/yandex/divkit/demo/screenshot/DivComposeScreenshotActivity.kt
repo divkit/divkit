@@ -23,7 +23,6 @@ import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.compose.images.gifDecoderFactory
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.data.DivParsingEnvironment
-import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
@@ -74,12 +73,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
     fun setDivData(json: JSONObject) {
         val configuration = ScreenshotTestConfiguration.from(json)
         val templatesJson = json.optJSONObject("templates")
-        val parsingErrorLogger = if (configuration.failOnParsingError) {
-            ParsingErrorLogger.ASSERT
-        } else {
-            ParsingErrorLogger.LOG
-        }
-        val environment = DivParsingEnvironment(parsingErrorLogger).apply {
+        val environment = DivParsingEnvironment(configuration.parsingErrorLogger).apply {
             if (templatesJson != null) parseTemplates(templatesJson)
         }
         data = DivData(environment, json.getJSONObject("card"))

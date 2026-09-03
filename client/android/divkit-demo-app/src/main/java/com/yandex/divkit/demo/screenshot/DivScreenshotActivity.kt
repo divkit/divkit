@@ -12,13 +12,11 @@ import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
-import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.regression.utils.AssetReader
 import org.json.JSONObject
-import java.lang.Exception
 
 /**
  * Run:
@@ -61,11 +59,7 @@ class DivScreenshotActivity : AppCompatActivity() {
         Div2ViewFactory(
             context = divContext,
             templatesJson = divJson.optJSONObject("templates"),
-            parsingErrorLogger = if (configuration.failOnParsingError) {
-                FailingErrorLogger
-            } else {
-                ParsingErrorLogger.LOG
-            }
+            parsingErrorLogger = configuration.parsingErrorLogger,
         ).bindViewByConfig(divView, cardJson) { it.onBound() }
     }
 
@@ -147,11 +141,5 @@ class DivScreenshotActivity : AppCompatActivity() {
         const val IMAGE_LOADER_PICASSO = "picasso"
         const val IMAGE_LOADER_GLIDE = "glide"
         const val IMAGE_LOADER_COIL = "coil"
-    }
-}
-
-object FailingErrorLogger : ParsingErrorLogger {
-    override fun logError(e: Exception) {
-        throw e
     }
 }
