@@ -1,3 +1,26 @@
+## 33.2.0
+
+### Android Client
+* Added `rtl_mirror` image filter support to the Compose renderer.
+* Fixed Gallery `wrap_content` cross-axis size when a larger item becomes visible after scrolling.
+* Fixed `match_parent` children in wrap-content overlap containers in the Compose renderer.
+* Fixed cursor positioning in phone masked input.
+* Made `Div2View` extendable.
+* Removed `DivScope.color(String)` and `DivScope.url(String)`. Use `color(String)` and `url(String)` instead.
+* Supported `actions` of `ellipsis` and of text `ranges` in `div-text` for the Compose renderer.
+* Supported custom `ellipsis` with range text styles in `div-text` for the Compose renderer.
+
+### iOS Client
+* Added `alignment` parameter to `TooltipFactory.makeTooltip`.
+* Corrected calculation of vertical pager position with horizontal alignment.
+* Fixed iOS pager layout in `neighbour_page_size` mode: page width and scroll offsets now respect scroll-axis alignment (`scroll_axis_alignment`, start/center/end), matching Android and Web.
+* Fixed pager layout when all pages fit the viewport: pages are pinned correctly and the last-page offset is clamped.
+* Fixed transition animations started from inside a host's `UIView.animate` closure (e.g. during an animated tab bar hide/show): seeding of `change_bounds` / `transition_in` / `transition_out` no longer inherits the ambient animation (elements no longer fly in from wrong geometry), and the transitions keep their own duration and curve instead of inheriting the host's.
+
+### Web Client
+* Fixed incorrect scrolling of the `pager` if it is inside the scale transformation.
+
+
 ## 33.1.0
 
 ### Android Client

@@ -1,3 +1,8 @@
+## 33.2.0 (September 7, 2026)
+
+* Fixed incorrect scrolling of the `pager` if it is inside the scale transformation.
+
+
 ## 33.0.0 (August 24, 2026)
 
 * Breaking change. The logic of `templates` has been changed to better match native platforms. The priority of template properties has been updated: properties provided at the template usage site now take precedence over those declared in the template definition.
