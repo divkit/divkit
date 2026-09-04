@@ -2,14 +2,12 @@ package com.yandex.div.steps
 
 import com.yandex.div.rule.NetworkLoadingIdlingResource
 import com.yandex.divkit.demo.Container
-import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.idling.waitForIdlingResource
-import javax.inject.Provider
 
-internal fun waitForLoadings(activityProvider: Provider<DivScreenshotActivity?>) {
+internal fun waitForLoadings() {
     try {
         waitForIdlingResource(
-            NetworkLoadingIdlingResource(Container.imageLoader, Container.downloader, activityProvider)
+            NetworkLoadingIdlingResource(Container.imageLoader, Container.downloader)
         )
     } catch (e: Exception) {
         Container.imageLoader.resetIdle()

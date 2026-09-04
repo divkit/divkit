@@ -1,6 +1,5 @@
 package com.yandex.divkit.demo.screenshot
 
-import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
@@ -10,12 +9,13 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.yandex.div.core.Div2Context
+import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.regression.utils.AssetReader
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONObject
 
 /**
@@ -39,7 +39,9 @@ class DivScreenshotActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setImageLoader()
-        divContext = divContext(activity = this)
+        divContext = divContext(activity = this) {
+            animationsEnabledProvider(DisabledAnimationsProvider)
+        }
         super.onCreate(savedInstanceState)
 
         divView = Div2View(divContext)
@@ -121,17 +123,6 @@ class DivScreenshotActivity : AppCompatActivity() {
         ScreenshotTestConfiguration.from(getTestCaseJson()).applyTo(this)
     }
 
-    fun stopAnimations() = divView.stopAnimations()
-
-    private fun ViewGroup.stopAnimations() {
-        for (child in children) {
-            when (child) {
-                is LoadableImageView -> (child.drawable as? Animatable)?.stop()
-                is ViewGroup -> child.stopAnimations()
-            }
-        }
-    }
-
     companion object {
         const val EXTRA_DIV_ASSET_NAME = "DivScreenshotActivity.EXTRA_DIV_ASSET_NAME"
         const val EXTRA_DIV_IMAGE_LOADER_NAME = "DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME"
@@ -142,4 +133,8 @@ class DivScreenshotActivity : AppCompatActivity() {
         const val IMAGE_LOADER_GLIDE = "glide"
         const val IMAGE_LOADER_COIL = "coil"
     }
+}
+
+private object DisabledAnimationsProvider : DivAnimationsEnabledProvider {
+    override val animationsEnabled = MutableStateFlow(false)
 }
