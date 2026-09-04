@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -90,7 +91,7 @@ private fun BasicText(
             baseFontSize = fontSize,
             baseTextColorAlpha = textStyle.color.alpha,
             actions = ellipsis.actions
-        ) ?: AnnotatedString(ellipsisText)
+        ) ?: AnnotatedText(AnnotatedString(ellipsisText), emptyList())
     } else {
         null
     }
@@ -99,7 +100,7 @@ private fun BasicText(
     } else {
         data.truncate.observedValue().toTextOverflow()
     }
-    val annotatedString = buildAnnotatedText(
+    val annotatedText = buildAnnotatedText(
         text = text,
         ranges = data.ranges,
         gradientBrush = gradientBrush,
@@ -109,33 +110,52 @@ private fun BasicText(
     )
     when {
         customEllipsis != null -> EllipsizedText(
-            text = annotatedString ?: AnnotatedString(text),
+            text = annotatedText ?: AnnotatedText(AnnotatedString(text), emptyList()),
             ellipsis = customEllipsis,
             style = textStyle,
             maxLines = maxLines
         )
 
-        annotatedString == null -> BasicText(
+        annotatedText == null -> BasicText(
             text = text,
             style = textStyle,
             overflow = overflow,
             maxLines = maxLines
         )
 
-        else -> BasicText(
-            text = annotatedString,
-            inlineContent = rememberInlineContent(inlineImages),
-            style = textStyle,
-            overflow = overflow,
-            maxLines = maxLines
-        )
+        else -> {
+            if (annotatedText.decorations.isEmpty()) {
+                BasicText(
+                    text = annotatedText.text,
+                    inlineContent = rememberInlineContent(inlineImages),
+                    style = textStyle,
+                    overflow = overflow,
+                    maxLines = maxLines,
+                )
+            } else {
+                val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+                val onTextLayout = remember { { result: TextLayoutResult -> layoutResult.value = result } }
+                BasicText(
+                    text = annotatedText.text,
+                    modifier = Modifier.drawTextRangeDecorations(
+                        layoutResult = layoutResult,
+                        decorations = annotatedText.decorations,
+                    ),
+                    inlineContent = rememberInlineContent(inlineImages),
+                    style = textStyle,
+                    overflow = overflow,
+                    maxLines = maxLines,
+                    onTextLayout = onTextLayout,
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun EllipsizedText(
-    text: AnnotatedString,
-    ellipsis: AnnotatedString,
+    text: AnnotatedText,
+    ellipsis: AnnotatedText,
     style: TextStyle,
     maxLines: Int
 ) {
@@ -144,11 +164,15 @@ private fun EllipsizedText(
     // offsets below are relative to the start edge of the line regardless of the text alignment.
     val measuredStyle = remember(style) { style.copy(textAlign = TextAlign.Start) }
     val availableWidth = remember { mutableIntStateOf(Constraints.Infinity) }
+    val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
     val onTextLayout = remember {
-        { layout: TextLayoutResult -> availableWidth.intValue = layout.layoutInput.constraints.maxWidth }
+        { layout: TextLayoutResult ->
+            availableWidth.intValue = layout.layoutInput.constraints.maxWidth
+            layoutResult.value = layout
+        }
     }
     val ellipsisWidth = remember(measurer, ellipsis, measuredStyle) {
-        measurer.measure(text = ellipsis, style = measuredStyle, softWrap = false)
+        measurer.measure(text = ellipsis.text, style = measuredStyle, softWrap = false)
             .multiParagraph.getLineWidth(0)
     }
     val ellipsizedText = remember(measurer, text, ellipsis, measuredStyle, maxLines, availableWidth.intValue) {
@@ -158,12 +182,12 @@ private fun EllipsizedText(
     // shorter ellipsized text reports a smaller intrinsic width, the container shrinks and the text
     // gets truncated again on every pass.
     val intrinsics = remember(measurer, text, measuredStyle) {
-        UntruncatedTextIntrinsics(measurer, text, measuredStyle)
+        UntruncatedTextIntrinsics(measurer, text.text, measuredStyle)
     }
-    if (ellipsizedText.hasAnnotations()) {
+    if (ellipsizedText.text.hasAnnotations()) {
         BasicText(
-            modifier = intrinsics,
-            text = ellipsizedText,
+            modifier = intrinsics.drawTextRangeDecorations(layoutResult, ellipsizedText.decorations),
+            text = ellipsizedText.text,
             style = style,
             overflow = TextOverflow.Clip,
             maxLines = maxLines,
@@ -171,8 +195,8 @@ private fun EllipsizedText(
         )
     } else {
         BasicText(
-            modifier = intrinsics,
-            text = ellipsizedText.text,
+            modifier = intrinsics.drawTextRangeDecorations(layoutResult, ellipsizedText.decorations),
+            text = ellipsizedText.text.text,
             style = style,
             overflow = TextOverflow.Clip,
             maxLines = maxLines,
@@ -203,19 +227,19 @@ private class UntruncatedTextIntrinsics(
 
 private fun ellipsize(
     measurer: TextMeasurer,
-    text: AnnotatedString,
-    ellipsis: AnnotatedString,
+    text: AnnotatedText,
+    ellipsis: AnnotatedText,
     ellipsisWidth: Float,
     style: TextStyle,
     maxLines: Int,
     availableWidth: Int
-): AnnotatedString {
-    if (text.isEmpty() || availableWidth <= 0) {
+): AnnotatedText {
+    if (text.text.isEmpty() || availableWidth <= 0) {
         return text
     }
 
     val layout = measurer.measure(
-        text = text,
+        text = text.text,
         style = style,
         overflow = TextOverflow.Clip,
         maxLines = maxLines,
@@ -245,7 +269,7 @@ private fun ellipsize(
         fittedSymbols--
     }
     // Dropping last symbol if it represents a first byte of two-byte unicode symbol
-    if (fittedSymbols > 0 && text[fittedSymbols - 1].isHighSurrogate()) {
+    if (fittedSymbols > 0 && text.text[fittedSymbols - 1].isHighSurrogate()) {
         fittedSymbols--
     }
     if (fittedSymbols <= 0) {
@@ -255,11 +279,25 @@ private fun ellipsize(
     return text.truncatedTo(fittedSymbols, ellipsis)
 }
 
-private fun AnnotatedString.truncatedTo(length: Int, ellipsis: AnnotatedString): AnnotatedString {
-    return buildAnnotatedString {
-        append(subSequence(0, length))
-        append(ellipsis)
+private fun AnnotatedText.truncatedTo(length: Int, ellipsis: AnnotatedText): AnnotatedText {
+    val resultText = buildAnnotatedString {
+        append(text.subSequence(0, length))
+        append(ellipsis.text)
     }
+    val resultDecorations = ArrayList<TextRangeDecoration>(decorations.size + ellipsis.decorations.size)
+    decorations.forEach { decoration ->
+        val end = decoration.end.coerceAtMost(length)
+        if (decoration.start < end) {
+            resultDecorations += decoration.copy(end = end)
+        }
+    }
+    ellipsis.decorations.forEach { decoration ->
+        resultDecorations += decoration.copy(
+            start = decoration.start + length,
+            end = decoration.end + length,
+        )
+    }
+    return AnnotatedText(resultText, resultDecorations)
 }
 
 @Composable
@@ -271,13 +309,14 @@ private fun buildAnnotatedText(
     baseTextColorAlpha: Float,
     actions: List<DivAction>? = null,
     inlineImages: List<InlineImageData> = emptyList()
-): AnnotatedString? {
+): AnnotatedText? {
     if (gradientBrush == null && ranges.isNullOrEmpty() && actions.isNullOrEmpty() && inlineImages.isEmpty()) {
         return null
     }
 
     val length = text.length
     val builder = AnnotatedString.Builder()
+    val decorations = mutableListOf<TextRangeDecoration>()
     val offsets = builder.appendTextWithInlineImages(text, inlineImages)
     if (gradientBrush != null) {
         builder.addStyle(SpanStyle(brush = gradientBrush), 0, builder.length)
@@ -293,11 +332,19 @@ private fun buildAnnotatedText(
         val start = range.start.observedIntValue().coerceIn(0, length)
         val end = range.end.observedIntValue(length).coerceIn(start, length)
         if (start < end) {
+            val decorationStart = offsets.rangeStart(start)
+            val decorationEnd = offsets.rangeEnd(end)
+            val decoration = range.observeDecoration(decorationStart, decorationEnd)
             builder.addStyle(
-                style = range.observeSpanStyle(baseFontSize, baseTextColorAlpha),
-                start = offsets.rangeStart(start),
-                end = offsets.rangeEnd(end)
+                style = range.observeSpanStyle(
+                    baseFontSize,
+                    baseTextColorAlpha,
+                    decoration?.hidesText == true,
+                ),
+                start = decorationStart,
+                end = decorationEnd,
             )
+            if (decoration != null) decorations += decoration
             val rangeActions = range.actions.observedEnabledActions()
             if (rangeActions.isNotEmpty()) {
                 // Added after the whole text link so that it wins the hit test: a tap reaches the
@@ -312,7 +359,16 @@ private fun buildAnnotatedText(
         }
     }
 
-    return builder.toAnnotatedString()
+    if (decorations.any(TextRangeDecoration::hidesText)) {
+        val maskedSpanStyle = rememberMaskedSpanStyle()
+        decorations.forEach { decoration ->
+            if (decoration.hidesText) {
+                builder.addStyle(maskedSpanStyle, decoration.start, decoration.end)
+            }
+        }
+    }
+
+    return AnnotatedText(builder.toAnnotatedString(), decorations)
 }
 
 // A link consumes the tap it receives, so the actions of the text element itself do not run under

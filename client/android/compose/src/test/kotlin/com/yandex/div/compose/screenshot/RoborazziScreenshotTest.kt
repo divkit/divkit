@@ -263,9 +263,6 @@ private val ignoredFiles = setOf(
     // div-text.image_builder not supported
     "div-text/image_builder.json",
 
-    // div-text.range.mask not supported
-    "div-text/mask.json",
-
     // markdown extension not supported
     "div-text/markdown-extension.json",
 
@@ -274,12 +271,6 @@ private val ignoredFiles = setOf(
 
     // div-text.range_builder not supported
     "div-text/range_builder.json",
-
-    // div-text.range.background not supported
-    "div-text/ranges-background-text.json",
-    "div-text/text_range_with_cloud_background.json",
-    "div-text/text_with_cloud_background_alignment.json",
-    "div-text/text_with_cloud_background_padding.json",
 
     // div-text.range.top_offset not supported
     "div-text/ranges-line-height-top-offset.json",

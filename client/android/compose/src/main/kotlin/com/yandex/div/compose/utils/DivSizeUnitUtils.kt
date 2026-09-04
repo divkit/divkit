@@ -35,3 +35,8 @@ internal fun Expression<Double>.observedPxValue(unit: Expression<DivSizeUnit>): 
 internal fun Expression<Long>.observedPxValue(unit: Expression<DivSizeUnit>): Float {
     return observedValue().toPx(unit.observedValue())
 }
+
+@Composable
+internal fun Expression<Long>.observedPxValue(unit: DivSizeUnit): Float {
+    return observedValue().toPx(unit)
+}

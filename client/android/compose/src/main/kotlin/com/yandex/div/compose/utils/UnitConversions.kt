@@ -38,7 +38,8 @@ internal fun Long.toDp(unit: DivSizeUnit): Dp {
 @Composable
 internal fun Float.toPx(unit: DivSizeUnit): Float {
     return when (unit) {
-        DivSizeUnit.DP, DivSizeUnit.SP -> dp.toPx()
+        DivSizeUnit.DP -> dp.toPx()
+        DivSizeUnit.SP -> with(LocalDensity.current) { this@toPx.sp.toPx() }
         DivSizeUnit.PX -> this
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Color.argb
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
@@ -24,7 +25,8 @@ import com.yandex.div2.DivText
 @Composable
 internal fun DivText.Range.observeSpanStyle(
     baseFontSize: Int,
-    baseTextColorAlpha: Float
+    baseTextColorAlpha: Float,
+    isTextMasked: Boolean,
 ): SpanStyle {
     val rangeFontSize = fontSize?.observedIntValue()
     val rangeFontWeight = fontWeight?.observedValue()
@@ -40,16 +42,35 @@ internal fun DivText.Range.observeSpanStyle(
         fontWeightValue = rangeFontWeightValue,
         fontVariationSettings = fontVariationSettings?.observedValue(),
     )
+    val spanBrush = if (isTextMasked) {
+        null
+    } else {
+        textColor?.observedColorValue()?.let { color ->
+            remember(color) { SolidColorShaderBrush(color) }
+        }
+    }
     return SpanStyle(
-        brush = textColor?.observedColorValue()?.let { SolidColorShaderBrush(it) },
+        brush = spanBrush,
         fontSize = spanFontSize,
         fontFamily = spanFontFamily,
         fontWeight = rangeFontWeight.toFontWeight(rangeFontWeightValue),
         letterSpacing = spanLetterSpacing,
-        textDecoration = observedTextDecoration(strike, underline),
-        shadow = textShadow?.observeShadow(baseTextColorAlpha),
+        textDecoration = if (isTextMasked) null else observedTextDecoration(strike, underline),
+        shadow = if (isTextMasked) null else textShadow?.observeShadow(baseTextColorAlpha),
         fontFeatureSettings = fontFeatureSettings?.observedValue()?.takeIf { it.isNotBlank() },
     )
+}
+
+@Composable
+internal fun rememberMaskedSpanStyle(): SpanStyle {
+    val brush = remember { SolidColorShaderBrush(Color.Transparent) }
+    return remember(brush) {
+        SpanStyle(
+            brush = brush,
+            textDecoration = androidx.compose.ui.text.style.TextDecoration.None,
+            shadow = androidx.compose.ui.graphics.Shadow.None,
+        )
+    }
 }
 
 private class SolidColorShaderBrush(color: Color) : ShaderBrush() {

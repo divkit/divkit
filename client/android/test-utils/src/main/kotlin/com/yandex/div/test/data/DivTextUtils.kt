@@ -13,6 +13,9 @@ import com.yandex.div2.DivExtension
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTextRangeBackground
+import com.yandex.div2.DivTextRangeBorder
+import com.yandex.div2.DivTextRangeMask
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTransform
 import com.yandex.div2.DivTrigger
@@ -139,9 +142,15 @@ fun textImage(
 fun textRange(
     start: Int,
     end: Int,
-    actions: List<DivAction>? = null
+    actions: List<DivAction>? = null,
+    background: DivTextRangeBackground? = null,
+    border: DivTextRangeBorder? = null,
+    mask: DivTextRangeMask? = null,
 ) = DivText.Range(
     actions = actions,
+    background = background,
+    border = border,
     end = constant(end.toLong()),
+    mask = mask,
     start = constant(start.toLong())
 )

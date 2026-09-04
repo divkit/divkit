@@ -9,6 +9,8 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+import com.github.takahirom.roborazzi.captureRoboImage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
@@ -18,11 +20,15 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.matchParent
+import com.yandex.div.test.data.solidBackground
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.textImage
+import com.yandex.div.test.data.textRange
 import com.yandex.div.test.data.wrapContent
 import com.yandex.div2.Div
+import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTextRangeBackground
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
@@ -76,6 +82,30 @@ class DivTextEllipsisTest {
         )
 
         rule.onNodeWithTag("text").assertTextEquals("Short")
+    }
+
+    @Test
+    @OptIn(ExperimentalRoborazziApi::class)
+    fun `range in hidden tail does not draw a background over end ellipsis`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("MMMMMMMMMMMMMMMM"),
+                fontSize = 20,
+                maxLines = 1,
+                width = fixed(constant(40)),
+                backgrounds = listOf(solidBackground(constant(0xFFFFFFFF.toInt()))),
+                ranges = listOf(textRange(
+                    start = 1,
+                    end = 3,
+                    background = DivTextRangeBackground.Solid(DivSolidBackground(color = constant(0xFFFF0000.toInt())))
+                ))
+            )
+        )
+
+        rule.onNodeWithTag("text").captureRoboImage(
+            filePath = "src/test/screenshots/div-text/hidden-range-end-ellipsis.png"
+        )
     }
 
     @Test
