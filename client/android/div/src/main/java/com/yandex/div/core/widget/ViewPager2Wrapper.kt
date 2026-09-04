@@ -3,14 +3,13 @@ package com.yandex.div.core.widget
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
 import com.yandex.div.core.view2.divs.pager.DivPagerPageTransformer
+import com.yandex.div2.DivPager
 
 internal open class ViewPager2Wrapper @JvmOverloads constructor(
     context: Context,
@@ -55,14 +54,9 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
      */
     var orientation: Int
         set(value) {
-            val adapter = viewPager.adapter as DivPagerAdapter?
-            if (viewPager.orientation == value && adapter?.orientation == value) {
-                return
-            }
+            if (viewPager.orientation == value) return
 
             viewPager.orientation = value
-            adapter?.orientation = value
-
             withRecyclerView {
                 // Sadly we need to clear pool cause it may
                 // contain elements with outdated translations.
@@ -74,6 +68,8 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
             }
         }
         get() = viewPager.orientation
+
+    var crossAxisAlignment = DivPager.ItemAlignment.START
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (!isWrapContentAlongCrossAxis()) {
@@ -96,8 +92,8 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
     }
 
     internal fun isWrapContentAlongCrossAxis(): Boolean =
-        orientation == ViewPager2.ORIENTATION_HORIZONTAL && layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT ||
-        orientation == ViewPager2.ORIENTATION_VERTICAL && layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT
+        orientation == ViewPager2.ORIENTATION_HORIZONTAL && layoutParams.height == LayoutParams.WRAP_CONTENT ||
+        orientation == ViewPager2.ORIENTATION_VERTICAL && layoutParams.width == LayoutParams.WRAP_CONTENT
 
 
     private fun findMaxChildDimension(decoratedDimensionGetter: LayoutManager.(View) -> Int): Int  {

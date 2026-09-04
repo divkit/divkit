@@ -96,7 +96,7 @@ internal class DivPagerBinder @Inject constructor(
 
         orientation =
             if (div.isHorizontal(resolver)) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
-        adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
+        crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
 
         val reusableObserver = { _: Any -> applyDecorations(div, resolver, pageTranslations, adapter) }
 
@@ -223,7 +223,7 @@ internal class DivPagerBinder @Inject constructor(
 
         val isHorizontal = div.isHorizontal(resolver)
         orientation = if (isHorizontal) ViewPager2.ORIENTATION_HORIZONTAL else ViewPager2.ORIENTATION_VERTICAL
-        adapter.crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
+        crossAxisAlignment = div.crossAxisAlignment.evaluate(resolver)
 
         if (!isActuallyLaidOut) return
 

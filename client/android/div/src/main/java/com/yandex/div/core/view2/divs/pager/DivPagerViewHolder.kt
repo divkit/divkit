@@ -35,6 +35,14 @@ internal class DivPagerViewHolder(
         (pageLayout.child?.layoutParams as? DivLayoutParams)?.setCrossAxisAlignment(divBlock)
     }
 
+    fun applyTranslation(translation: Float) {
+        if (isHorizontal()) {
+            itemView.translationX = translation
+        } else {
+            itemView.translationY = translation
+        }
+    }
+
     private fun DivLayoutParams.setCrossAxisAlignment(divBlock: DivBlock) {
         val div = divBlock.div.value()
         val childAlignment = if (isHorizontal()) div.alignmentVertical else div.alignmentHorizontal

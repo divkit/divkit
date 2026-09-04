@@ -86,7 +86,7 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
         val selectedWidth = style?.activeShape?.itemSize?.width ?: 0f
         val desiredWidth = when (val itemPlacement = style?.itemsPlacement) {
             is IndicatorParams.ItemPlacement.Default -> (itemPlacement.spaceBetweenCenters *
-                (divPager?.viewPager?.adapter?.itemCount ?: 0) + selectedWidth).toInt() +
+                (currentAdapter?.visibleItems?.size ?: 0) + selectedWidth).toInt() +
                 paddingLeft + paddingRight
             is IndicatorParams.ItemPlacement.Stretch -> widthSize
             null -> selectedWidth.toInt() + paddingLeft + paddingRight
@@ -129,9 +129,10 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
     }
 
     private fun IndicatorsStripDrawer.update() {
+        val pager = divPager ?: return
         currentAdapter?.let {
             setItemsCount(it.visibleItems.size)
-            val realPosition = it.realItemPosition(it.currentItem)
+            val realPosition = it.realItemPosition(pager.currentItem)
             onPageSelected(realPosition)
             invalidate()
         }

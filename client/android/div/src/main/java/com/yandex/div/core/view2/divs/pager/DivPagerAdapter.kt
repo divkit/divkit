@@ -9,7 +9,6 @@ import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.DivBlock
-import com.yandex.div2.DivPager
 
 internal class DivPagerAdapter(
     items: List<DivBlock>,
@@ -30,8 +29,6 @@ internal class DivPagerAdapter(
         }
     }
 
-    val currentItem get() = pagerView.currentItem
-
     private val offsetToRealItem get() = if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM else 0
 
     fun realItemPosition(position: Int): Int {
@@ -42,10 +39,6 @@ internal class DivPagerAdapter(
         val size = visibleItems.size.takeIf { it > 0 } ?: return 0
         return (position + size) % size
     }
-
-    var orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
-    var crossAxisAlignment = DivPager.ItemAlignment.START
 
     var infiniteScrollEnabled = false
         set(value) {
@@ -62,36 +55,24 @@ internal class DivPagerAdapter(
     fun getRealPosition(rawPosition: Int) = rawPosition - offsetToRealItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
-        val view = DivPagerPageLayout(divView.context) { isHorizontal }
-        return DivPagerViewHolder(
-            view,
-            divBinder,
-            viewCreator,
-            divView,
-            { isHorizontal },
-            { crossAxisAlignment },
-        )
+        val orientationProvider = { pagerView.orientation == ViewPager2.ORIENTATION_HORIZONTAL }
+        val view = DivPagerPageLayout(divView.context, orientationProvider)
+        return DivPagerViewHolder(view, divBinder, viewCreator, divView, orientationProvider) {
+            pagerView.crossAxisAlignment
+        }
     }
-
-    private val isHorizontal get() = orientation == ViewPager2.ORIENTATION_HORIZONTAL
 
     override fun getItemCount() = itemsToShow.size
 
     override fun onBindViewHolder(holder: DivPagerViewHolder, position: Int) {
         super.onBindViewHolder(holder, realItemPosition(position))
-        pageTranslations[position]?.let {
-            if (isHorizontal) {
-                holder.itemView.translationX = it
-            } else {
-                holder.itemView.translationY = it
-            }
-        }
+        pageTranslations[position]?.let { holder.applyTranslation(it) }
     }
 
     override fun setItems(newItems: List<DivBlock>) {
         val oldSize = items.size
         removedItems = 0
-        val oldCurrentItem = currentItem
+        val oldCurrentItem = pagerView.currentItem
         super.setItems(newItems)
         if (removedItems == oldSize) {
             pagerView.currentItem =  oldCurrentItem
