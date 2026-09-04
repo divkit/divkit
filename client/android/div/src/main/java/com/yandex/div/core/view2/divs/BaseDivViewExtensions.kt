@@ -24,7 +24,6 @@ import com.yandex.div.core.util.allSightActions
 import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.isBranch
-import com.yandex.div.core.util.type
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivGestureListener
@@ -510,7 +509,7 @@ internal fun DivBlock.canReuseViewFor(
     }
 
     return if (div.isBranch) {
-        newItem.div.type == div.type
+        hasSameViewType(newItem)
     } else {
         div.canBeReused(newItem.div, newItem.expressionResolver)
     }
@@ -524,8 +523,12 @@ internal fun DivBlock.canRecycleViewFor(
         return false
     }
 
-    return div.type == newItem.div.type
+    return hasSameViewType(newItem)
 }
+
+private fun DivBlock.hasSameViewType(newItem: DivBlock): Boolean =
+    DivViewCreator.viewTag(div, expressionResolver) ==
+        DivViewCreator.viewTag(newItem.div, newItem.expressionResolver)
 
 private fun DivBlock.hasCompatibleItemBuilderData(newItem: DivBlock): Boolean =
     expressionResolver.asImpl?.itemBuilderData ==

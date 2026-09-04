@@ -3,12 +3,15 @@ package com.yandex.div.core.view2.divs
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import com.yandex.div2.DivContainer.LayoutMode
+import com.yandex.div2.DivContainer.Orientation
 import org.mockito.kotlin.mock
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class BaseDivViewExtensionsReuseTest {
 
@@ -54,8 +57,48 @@ class BaseDivViewExtensionsReuseTest {
         assertTrue(oldItem.canRecycleViewFor(newItem, strictItemBuilderViewReuseEnabled = true))
     }
 
-    private fun container(itemBuilderData: String?): DivBlock.Container {
+    @Test
+    fun `container view is reused for container with the same layout kind`() {
+        val oldItem = container(orientation = Orientation.HORIZONTAL)
+        val newItem = container(orientation = Orientation.VERTICAL)
+
+        assertTrue(oldItem.canReuseViewFor(newItem, strictItemBuilderViewReuseEnabled = false))
+    }
+
+    @Test
+    fun `container view is not reused for container with different orientation`() {
+        val oldItem = container(orientation = Orientation.OVERLAP)
+        val newItem = container(orientation = Orientation.HORIZONTAL)
+
+        assertFalse(oldItem.canReuseViewFor(newItem, strictItemBuilderViewReuseEnabled = false))
+    }
+
+    @Test
+    fun `container view is not reused for wrap container`() {
+        val oldItem = container(orientation = Orientation.HORIZONTAL)
+        val newItem = container(orientation = Orientation.HORIZONTAL, layoutMode = LayoutMode.WRAP)
+
+        assertFalse(oldItem.canReuseViewFor(newItem, strictItemBuilderViewReuseEnabled = false))
+    }
+
+    @Test
+    fun `container view is not recycled for container with different orientation`() {
+        val oldItem = container(orientation = Orientation.OVERLAP)
+        val newItem = container(orientation = Orientation.HORIZONTAL)
+
+        assertFalse(oldItem.canRecycleViewFor(newItem, strictItemBuilderViewReuseEnabled = true))
+    }
+
+    private fun container(
+        itemBuilderData: String? = null,
+        orientation: Orientation = Orientation.VERTICAL,
+        layoutMode: LayoutMode = LayoutMode.NO_WRAP,
+    ): DivBlock.Container {
         val resolver = ExpressionResolverImpl(mock(), mock(), mock(), mock(), itemBuilderData)
-        return DivBlock.Container(Div.Container(DivContainer()), resolver, path)
+        val div = DivContainer(
+            layoutMode = Expression.constant(layoutMode),
+            orientation = Expression.constant(orientation),
+        )
+        return DivBlock.Container(Div.Container(div), resolver, path)
     }
 }

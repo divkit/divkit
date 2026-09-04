@@ -1953,6 +1953,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivActionBinderSetTapListenerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivActionBinderSetTapListenerTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivBaseBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivBaseBinderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivBinderTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivCollectionViewHolderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivCollectionViewHolderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivContainerBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivContainerBinderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivFocusBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivFocusBinderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivGalleryBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/DivGalleryBinderTest.kt",
