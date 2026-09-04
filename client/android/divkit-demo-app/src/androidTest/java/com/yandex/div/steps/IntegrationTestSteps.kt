@@ -63,8 +63,8 @@ class IntegrationTestSteps(private val case: IntegrationTestCase, private val ac
             divView.setData(data, DivDataTag("div2"))
             actions.forEach { divView.handleAction(it) }
             (activity.contentView as ViewGroup).addView(divView, MATCH_PARENT, MATCH_PARENT)
-            Espresso.onIdle()
         }
+        Espresso.onIdle()
     }
 
     fun checkResult(): Unit = step("Check expected result") {

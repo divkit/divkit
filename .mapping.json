@@ -18538,6 +18538,7 @@
   "test_data/integration_test_data/variable-functions/nested_get_value.json":"divkit/public/test_data/integration_test_data/variable-functions/nested_get_value.json",
   "test_data/integration_test_data/variable-functions/nested_get_value_without_variables.json":"divkit/public/test_data/integration_test_data/variable-functions/nested_get_value_without_variables.json",
   "test_data/integration_test_data/video/action_before_bind.json":"divkit/public/test_data/integration_test_data/video/action_before_bind.json",
+  "test_data/integration_test_data/video/action_same_id_in_states.json":"divkit/public/test_data/integration_test_data/video/action_same_id_in_states.json",
   "test_data/integration_test_data/video/player_error_reporting_ios.json":"divkit/public/test_data/integration_test_data/video/player_error_reporting_ios.json",
   "test_data/integration_test_data/wrap_content_constraints_warning.json":"divkit/public/test_data/integration_test_data/wrap_content_constraints_warning.json",
   "test_data/interactive_snapshot_test_data/div-action/base.json":"divkit/public/test_data/interactive_snapshot_test_data/div-action/base.json",

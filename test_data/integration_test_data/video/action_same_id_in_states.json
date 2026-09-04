@@ -1,0 +1,270 @@
+{
+  "description": "A video action must target a video in the active state and ignore matching ids in inactive states.",
+  "div_data": {
+    "card": {
+      "log_id": "video_action_same_id_in_states",
+      "variables": [
+        {
+          "name": "normal_video_started",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "alternative_video_started",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "duplicate_video_started",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "video_failed",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "state",
+            "id": "video_state",
+            "states": [
+              {
+                "state_id": "normal",
+                "div": {
+                  "type": "video",
+                  "id": "bears_video",
+                  "height": {
+                    "type": "fixed",
+                    "value": 180
+                  },
+                  "autostart": false,
+                  "muted": true,
+                  "video_sources": [
+                    {
+                      "type": "video_source",
+                      "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                      "mime_type": "video/mp4"
+                    }
+                  ],
+                  "resume_actions": [
+                    {
+                      "log_id": "normal_video_started",
+                      "url": "div-action://set_variable?name=normal_video_started&value=true"
+                    }
+                  ],
+                  "fatal_actions": [
+                    {
+                      "log_id": "video_failed",
+                      "url": "div-action://set_variable?name=video_failed&value=true"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "alternative",
+                "div": {
+                  "type": "video",
+                  "id": "bears_video",
+                  "height": {
+                    "type": "fixed",
+                    "value": 180
+                  },
+                  "autostart": false,
+                  "muted": true,
+                  "video_sources": [
+                    {
+                      "type": "video_source",
+                      "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                      "mime_type": "video/mp4"
+                    }
+                  ],
+                  "resume_actions": [
+                    {
+                      "log_id": "alternative_video_started",
+                      "url": "div-action://set_variable?name=alternative_video_started&value=true"
+                    }
+                  ],
+                  "fatal_actions": [
+                    {
+                      "log_id": "video_failed",
+                      "url": "div-action://set_variable?name=video_failed&value=true"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "duplicate",
+                "div": {
+                  "type": "container",
+                  "id": "duplicate_content",
+                  "orientation": "vertical",
+                  "items": [
+                    {
+                      "type": "video",
+                      "id": "bears_video",
+                      "height": {
+                        "type": "fixed",
+                        "value": 180
+                      },
+                      "autostart": false,
+                      "muted": true,
+                      "video_sources": [
+                        {
+                          "type": "video_source",
+                          "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                          "mime_type": "video/mp4"
+                        }
+                      ],
+                      "resume_actions": [
+                        {
+                          "log_id": "duplicate_video_started",
+                          "url": "div-action://set_variable?name=duplicate_video_started&value=true"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "video",
+                      "id": "bears_video",
+                      "height": {
+                        "type": "fixed",
+                        "value": 180
+                      },
+                      "autostart": false,
+                      "muted": true,
+                      "video_sources": [
+                        {
+                          "type": "video_source",
+                          "url": "https://yastatic.net/s3/home/divkit/bears.mp4",
+                          "mime_type": "video/mp4"
+                        }
+                      ],
+                      "resume_actions": [
+                        {
+                          "log_id": "duplicate_video_started",
+                          "url": "div-action://set_variable?name=duplicate_video_started&value=true"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "cases": [
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "start_video_in_normal_state",
+            "typed": {
+              "type": "video",
+              "id": "bears_video",
+              "action": "start"
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "normal_video_started",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "alternative_video_started",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "duplicate_video_started",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "video_failed",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_state?state_id=0/video_state/alternative",
+            "log_id": "set_alternative_state"
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "log_id": "start_video_in_alternative_state",
+            "typed": {
+              "type": "video",
+              "id": "bears_video",
+              "action": "start"
+            }
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "alternative_video_started",
+          "value": {
+            "type": "boolean",
+            "value": true
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "normal_video_started",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "duplicate_video_started",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "video_failed",
+          "value": {
+            "type": "boolean",
+            "value": false
+          }
+        }
+      ],
+      "platforms": [
+        "android"
+      ]
+    }
+  ]
+}
