@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonValue
 
 @JvmInline
 value class Url internal constructor(
-    @JsonValue
-    val value: String,
+    @JsonValue val value: String,
 ) {
-    override fun toString() = value
+    override fun toString(): String = value
 
     companion object {
         @Deprecated(message = "Use function `url(url: String)`", replaceWith = ReplaceWith("url"))

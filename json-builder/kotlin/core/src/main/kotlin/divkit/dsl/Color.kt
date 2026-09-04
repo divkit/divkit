@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonValue
 
 @JvmInline
 value class Color internal constructor(
-    @JsonValue
-    val value: String,
+    @JsonValue val value: String,
 ) {
     init {
         require(pattern.matchEntire(value) != null) {
             "Malformed color string: $value"
         }
     }
+
+    override fun toString(): String = value
 
     companion object {
         private val pattern: Regex =
