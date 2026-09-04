@@ -3,6 +3,7 @@ package com.yandex.div.compose.views.pager
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import com.yandex.div.compose.utils.scroll.desiredSnapOffset
 import kotlin.math.max
 
 internal data class InitialScroll(
@@ -41,18 +42,6 @@ internal fun calculateInitialScroll(
     return InitialScroll(itemIndex = 0, scrollOffset = scrollOffset)
 }
 
-internal fun desiredSnapOffset(
-    snapPosition: SnapPosition,
-    viewportSizePx: Int,
-    pageSizePx: Int,
-    endPaddingPx: Int,
-    startPaddingPx: Int,
-): Int = when (snapPosition) {
-    SnapPosition.Center -> (viewportSizePx - pageSizePx) / 2
-    SnapPosition.End -> viewportSizePx - endPaddingPx - pageSizePx
-    else -> startPaddingPx
-}
-
 private fun calculateScrollOffset(
     defaultItem: Int,
     snapPosition: SnapPosition,
@@ -63,7 +52,13 @@ private fun calculateScrollOffset(
     viewportPx: Int,
     itemCount: Int,
 ): Int {
-    val desiredOffset = desiredSnapOffset(snapPosition, viewportPx, pageSizePx, endPx, startPx)
+    val desiredOffset = desiredSnapOffset(
+        snapPosition = snapPosition,
+        viewportSizePx = viewportPx,
+        itemSizePx = pageSizePx,
+        startPaddingPx = startPx,
+        endPaddingPx = endPx,
+    )
     val centeredScroll = startPx + defaultItem * (pageSizePx + spacingPx) - desiredOffset
 
     val startClamp = edgeClamp(

@@ -237,28 +237,6 @@ private val ignoredFiles = setOf(
     // label_image_preview extension not supported
     "div-image/custom-preview.json",
 
-    // div-gallery.scroll_content_alignment not supported
-    "div-gallery/default-item/horizontal-gallery-alignment-center.json",
-    "div-gallery/default-item/horizontal-gallery-alignment-center-rtl.json",
-    "div-gallery/default-item/horizontal-gallery-alignment-end.json",
-    "div-gallery/default-item/horizontal-gallery-alignment-end-rtl.json",
-    "div-gallery/default-item/horizontal-gallery-alignment-start.json",
-    "div-gallery/default-item/horizontal-gallery-alignment-start-rtl.json",
-    "div-gallery/default-item/horizontal-grid-gallery-alignment-center.json",
-    "div-gallery/default-item/horizontal-grid-gallery-alignment-center-rtl.json",
-    "div-gallery/default-item/horizontal-grid-gallery-alignment-end.json",
-    "div-gallery/default-item/horizontal-grid-gallery-alignment-end-rtl.json",
-    "div-gallery/default-item/horizontal-grid-gallery-alignment-start.json",
-    "div-gallery/default-item/horizontal-grid-gallery-alignment-start-rtl.json",
-    "div-gallery/default-item/vertical-gallery-alignment-center.json",
-    "div-gallery/default-item/vertical-gallery-alignment-end.json",
-    "div-gallery/default-item/vertical-gallery-alignment-start.json",
-    "div-gallery/default-item/vertical-gallery-alignment-start-rtl.json",
-    "div-gallery/default-item/vertical-grid-gallery-alignment-center.json",
-    "div-gallery/default-item/vertical-grid-gallery-alignment-end.json",
-    "div-gallery/default-item/vertical-grid-gallery-alignment-start.json",
-    "div-gallery/default-item/vertical-grid-gallery-alignment-start-rtl.json",
-
     // div-gallery.item_builder not supported
     "div-gallery/item-builder/item-builder.json",
     "div-gallery/item-builder/item-builder-with-local-variables.json",

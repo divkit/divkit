@@ -1,5 +1,6 @@
 package com.yandex.div.compose.utils.scroll
 
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -66,4 +67,20 @@ internal fun PaddingValues.getScrollAxisPaddings(
     } else {
         Pair(calculateTopPadding(), calculateBottomPadding())
     }
+}
+
+/**
+ * Returns the item's target start relative to the viewport, including content padding.
+ * Lazy list/grid item offsets are content-relative: subtract [startPaddingPx] before comparing them.
+ */
+internal fun desiredSnapOffset(
+    snapPosition: SnapPosition,
+    viewportSizePx: Int,
+    itemSizePx: Int,
+    startPaddingPx: Int,
+    endPaddingPx: Int,
+): Int = when (snapPosition) {
+    SnapPosition.Center -> (viewportSizePx - itemSizePx) / 2
+    SnapPosition.End -> viewportSizePx - endPaddingPx - itemSizePx
+    else -> startPaddingPx
 }

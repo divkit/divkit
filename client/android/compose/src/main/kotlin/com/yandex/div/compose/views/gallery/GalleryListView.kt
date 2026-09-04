@@ -1,7 +1,6 @@
 package com.yandex.div.compose.views.gallery
 
 import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -9,14 +8,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
-import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
+import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
+import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 
@@ -27,6 +31,7 @@ internal fun GalleryListView(
     orientation: DivGallery.Orientation,
     itemSpacing: Dp,
     crossContentAlignment: DivGallery.ContentAlignment,
+    scrollContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
     defaultItem: Int,
     scrollMode: DivGallery.ScrollMode,
@@ -46,6 +51,7 @@ internal fun GalleryListView(
                     isHorizontal = isHorizontal,
                     itemSpacing = itemSpacing,
                     crossContentAlignment = crossContentAlignment,
+                    scrollContentAlignment = scrollContentAlignment,
                     contentPadding = contentPadding,
                     defaultItem = defaultItem,
                     scrollMode = scrollMode,
@@ -79,11 +85,13 @@ private fun ScrollableGalleryView(
     isHorizontal: Boolean,
     itemSpacing: Dp,
     crossContentAlignment: DivGallery.ContentAlignment,
+    scrollContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
     defaultItem: Int,
     scrollMode: DivGallery.ScrollMode,
 ) {
-    val clampedDefaultItem = defaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
+    val initialDefaultItem = remember { defaultItem }
+    val clampedDefaultItem = initialDefaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
     val isPaging = scrollMode == DivGallery.ScrollMode.PAGING
 
     val listState = rememberLazyListState(
@@ -91,16 +99,19 @@ private fun ScrollableGalleryView(
     )
 
     val flingBehavior = if (isPaging) {
-        rememberSnapFlingBehavior(lazyListState = listState, snapPosition = SnapPosition.Center)
+        val snapPosition = remember(scrollContentAlignment) { scrollContentAlignment.toSnapPosition() }
+        rememberSnapFlingBehavior(lazyListState = listState, snapPosition = snapPosition)
     } else {
         ScrollableDefaults.flingBehavior()
     }
 
-    if (isPaging && clampedDefaultItem > 0) {
-        AdjustScrollToItem(
+    if (initialDefaultItem > 0) {
+        AdjustDefaultItemAlignment(
             listState = listState,
             targetIndex = clampedDefaultItem,
-            desiredOffset = { viewportSize, itemSize -> (viewportSize - itemSize) / 2 },
+            isHorizontal = isHorizontal,
+            contentPadding = contentPadding,
+            scrollContentAlignment = scrollContentAlignment,
         )
     }
 
@@ -124,6 +135,40 @@ private fun ScrollableGalleryView(
             )
         }
     }
+}
+
+@Composable
+private fun AdjustDefaultItemAlignment(
+    listState: LazyListState,
+    targetIndex: Int,
+    isHorizontal: Boolean,
+    contentPadding: PaddingValues,
+    scrollContentAlignment: DivGallery.ContentAlignment,
+) {
+    val density = LocalDensity.current
+    val layoutDirection = LocalLayoutDirection.current
+    val (startPadding, endPadding) = contentPadding.getScrollAxisPaddings(isHorizontal, layoutDirection)
+    val startPaddingPx = with(density) { startPadding.roundToPx() }
+    val endPaddingPx = with(density) { endPadding.roundToPx() }
+
+    AdjustScrollToItem(
+        listState = listState,
+        targetIndex = targetIndex,
+        restartKey = GalleryScrollAlignmentKey(
+            alignment = scrollContentAlignment,
+            isHorizontal = isHorizontal,
+            startPaddingPx = startPaddingPx,
+            endPaddingPx = endPaddingPx,
+        ),
+        desiredOffset = { viewportSize, itemSize ->
+            scrollContentAlignment.calculateDesiredScrollOffset(
+                viewportSizePx = viewportSize,
+                itemSizePx = itemSize,
+                startPaddingPx = startPaddingPx,
+                endPaddingPx = endPaddingPx,
+            )
+        },
+    )
 }
 
 @Composable

@@ -23,6 +23,7 @@ import com.yandex.div.compose.utils.scroll.CrossAxisAlignment
 import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
+import com.yandex.div.compose.utils.scroll.desiredSnapOffset
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
@@ -44,24 +45,34 @@ internal fun PagerContent(
     crossAxisBounded: Boolean,
     stateStorage: DivPagerStateStorage
 ) {
+    val initialDefaultItem = remember { defaultItem }
     val density = LocalDensity.current
     val snapPosition = scrollAxisAlignment.toSnapPosition()
     val crossAlignment = crossAxisAlignment.toCrossAxisAlignment()
     val (startPadding, endPadding) = paddings.getScrollAxisPaddings(isHorizontal, layoutDirection)
 
     val pageSize = layoutMode.observePageSize(scrollAxisAlignment, viewportSize, itemSpacing, startPadding, endPadding)
-    val listState = rememberListState(defaultItem, snapPosition, pageSize, itemSpacing, startPadding, endPadding, viewportSize, items.size)
+    val listState = rememberListState(
+        initialDefaultItem,
+        snapPosition,
+        pageSize,
+        itemSpacing,
+        startPadding,
+        endPadding,
+        viewportSize,
+        items.size,
+    )
 
     stateStorage.rememberAndStoreState(
         id = id,
         pageCount = items.size,
         listState = listState,
         snapPosition = snapPosition,
-        initialPage = defaultItem,
+        initialPage = initialDefaultItem,
     )
 
     if (pageSize == null && snapPosition != SnapPosition.Start) {
-        AdjustScrollToItem(listState, defaultItem, snapPosition, endPadding)
+        AdjustScrollToItem(listState, initialDefaultItem, snapPosition, endPadding)
     }
 
     val snapProvider = remember(listState, snapPosition) {
@@ -99,7 +110,13 @@ private fun AdjustScrollToItem(
         listState = listState,
         targetIndex = defaultItem,
         desiredOffset = { viewportSize, itemSize ->
-            desiredSnapOffset(snapPosition, viewportSize, itemSize, endPaddingPx, 0)
+            desiredSnapOffset(
+                snapPosition = snapPosition,
+                viewportSizePx = viewportSize,
+                itemSizePx = itemSize,
+                startPaddingPx = 0,
+                endPaddingPx = endPaddingPx,
+            )
         }
     )
 }
