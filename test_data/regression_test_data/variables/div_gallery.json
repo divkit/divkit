@@ -169,7 +169,14 @@
       {
         "state_id": 0,
         "div": {
-          "type": "container",
+          "type": "gallery",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
           "background": [
             {
               "type": "solid",

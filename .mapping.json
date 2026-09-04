@@ -2922,6 +2922,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/UnitTestData.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/UnitTestData.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/VisibilityAwareAdapterTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/VisibilityAwareAdapterTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/gallery/DivGalleryItemLayoutTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/gallery/DivGalleryItemLayoutTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/divs/gallery/DivGallerySnapHelperTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/gallery/DivGallerySnapHelperTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/gallery/DivGridLayoutManagerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/gallery/DivGridLayoutManagerTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/pager/PagerSelectedActionsDispatcherTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/pager/PagerSelectedActionsDispatcherTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivBorderDrawerShadowTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/divs/widgets/DivBorderDrawerShadowTest.kt",

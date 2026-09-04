@@ -30,13 +30,30 @@ internal class DivGallerySnapHelper(private val view: RecyclerView) : PagerSnapH
         if (canScrollHorizontally()) getHorizontalHelper(this) else getVerticalHelper(this)
 
     override fun findTargetSnapPosition(manager: RecyclerView.LayoutManager, velocityX: Int, velocityY: Int) =
-        (manager as DivGalleryItemHelper).findTargetSnapPosition(velocityX, velocityY)
+        (manager as DivGalleryItemHelper).findTargetSnapPosition(velocityX, velocityY, manager.itemCount)
 
-    private fun DivGalleryItemHelper.findTargetSnapPosition(velocityX: Int, velocityY: Int): Int {
+    private fun DivGalleryItemHelper.findTargetSnapPosition(
+        velocityX: Int,
+        velocityY: Int,
+        itemCount: Int,
+    ): Int {
         val velocity = when {
             getLayoutManagerOrientation() == LinearLayoutManager.VERTICAL -> velocityY
             view.isLayoutRtl() -> -velocityX
             else -> velocityX
+        }
+
+        val firstVisibleItemPosition = firstVisibleItemPosition()
+        val lastVisibleItemPosition = lastVisibleItemPosition()
+        val isLinearLayout = toLayoutManager() is LinearLayoutManager
+        // Snap to a partially visible first item instead of moving away from the linear gallery edge.
+        if (isLinearLayout && velocity < 0 && firstVisibleItemPosition == 0) {
+            return firstVisibleItemPosition
+        }
+        val isLastItemVisible = itemCount > 0 && lastVisibleItemPosition == itemCount - 1
+        // Snap to a partially visible last item instead of moving away from the linear gallery edge.
+        if (isLinearLayout && velocity >= 0 && isLastItemVisible) {
+            return lastVisibleItemPosition
         }
 
         val nextCompletelyVisibleItemPosition = if (velocity < 0) {
@@ -47,9 +64,6 @@ internal class DivGallerySnapHelper(private val view: RecyclerView) : PagerSnapH
         if (nextCompletelyVisibleItemPosition != RecyclerView.NO_POSITION) {
             return nextCompletelyVisibleItemPosition
         }
-
-        val firstVisibleItemPosition = firstVisibleItemPosition()
-        val lastVisibleItemPosition = lastVisibleItemPosition()
 
         // workaround for first/last position
         if (lastVisibleItemPosition == firstVisibleItemPosition) {
