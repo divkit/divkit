@@ -1,15 +1,15 @@
 import LayoutKit
 
 struct DivContainerSizeModifier: DivSizeModifier {
-  private let shouldOverrideWidth: Bool
-  private let shouldOverrideHeight: Bool
+  let shouldOverrideWidth: Bool
+  let shouldOverrideHeight: Bool
 
   init(
     context: DivBlockModelingContext,
     container: DivContainer,
+    items: [Div],
     orientation: DivContainer.Orientation
   ) {
-    let items = container.nonNilItems
     if items.isEmpty {
       shouldOverrideWidth = false
       shouldOverrideHeight = false

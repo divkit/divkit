@@ -1,0 +1,121 @@
+{
+  "description": "wrap_content containers with item_builder producing match_parent items behave like containers with the same static items: the match_parent item falls back to its content size instead of collapsing the container to zero. Row 1: horizontal wrap_content-height container with match_parent-height text. Row 2: vertical wrap_content-width container with default (match_parent) width text. Row 3: overlap wrap_content container with default (match_parent) width text. The text must be visible in all rows.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#D0E8FF"
+                }
+              ],
+              "item_builder": {
+                "data": [
+                  {}
+                ],
+                "data_element_name": "item",
+                "prototypes": [
+                  {
+                    "div": {
+                      "type": "text",
+                      "text": "horizontal, builder text with match_parent height",
+                      "font_size": 14,
+                      "text_color": "#000000",
+                      "height": {
+                        "type": "match_parent"
+                      }
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#D0E8FF"
+                }
+              ],
+              "item_builder": {
+                "data": [
+                  {}
+                ],
+                "data_element_name": "item",
+                "prototypes": [
+                  {
+                    "div": {
+                      "type": "text",
+                      "text": "vertical, builder text with default width",
+                      "font_size": 14,
+                      "text_color": "#000000"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#D0E8FF"
+                }
+              ],
+              "item_builder": {
+                "data": [
+                  {}
+                ],
+                "data_element_name": "item",
+                "prototypes": [
+                  {
+                    "div": {
+                      "type": "text",
+                      "text": "overlap, builder text with default width",
+                      "font_size": 14,
+                      "text_color": "#000000"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

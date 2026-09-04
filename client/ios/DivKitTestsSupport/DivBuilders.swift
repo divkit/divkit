@@ -226,6 +226,7 @@ public func divContainer(
   height: DivSize? = nil,
   itemBuilder: DivCollectionItemBuilder? = nil,
   items: [Div]? = nil,
+  layoutMode: DivContainer.LayoutMode? = nil,
   width: DivSize? = nil,
   background: [DivBackground]? = nil
 ) -> Div {
@@ -258,7 +259,7 @@ public func divContainer(
     itemBuilder: itemBuilder,
     itemSpacing: nil,
     items: items,
-    layoutMode: nil,
+    layoutMode: layoutMode.map { .value($0) },
     layoutProvider: nil,
     lineSeparator: nil,
     lineSpacing: nil,

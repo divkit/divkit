@@ -364,6 +364,63 @@ final class DivContainerExtensionsTests: XCTestCase {
     assertEqual(block, expectedBlock)
   }
 
+  func test_ItemBuilder_AppliesSizeModifier() throws {
+    // item_builder items must go through DivContainerSizeModifier like static items do:
+    // a match_parent-width item inside a wrap_content-width container falls back to
+    // constrained wrap_content instead of collapsing the container to zero width.
+    let item = divText(text: "Item")
+
+    let itemBuilderBlock = makeBlock(
+      divContainer(
+        itemBuilder: DivCollectionItemBuilder(
+          data: .value([[:]]),
+          prototypes: [
+            DivCollectionItemBuilder.Prototype(div: item),
+          ]
+        ),
+        width: wrapContentSize()
+      ),
+      ignoreErrors: true // an expected "match_parent inside wrap_content" warning is emitted
+    )
+    let staticItemsBlock = makeBlock(
+      divContainer(
+        items: [item],
+        width: wrapContentSize()
+      ),
+      ignoreErrors: true
+    )
+
+    assertEqual(itemBuilderBlock, staticItemsBlock)
+  }
+
+  func test_ItemBuilder_FiltersMatchParentItemsInWrapLayoutMode() throws {
+    // In wrap layout mode, cross-axis match_parent items produced by item_builder are
+    // dropped with a warning, matching the static items path.
+    let item = divText(text: "Dropped") // default width is match_parent
+
+    let itemBuilderBlock = makeBlock(
+      divContainer(
+        itemBuilder: DivCollectionItemBuilder(
+          data: .value([[:]]),
+          prototypes: [
+            DivCollectionItemBuilder.Prototype(div: item),
+          ]
+        ),
+        layoutMode: .wrap
+      ),
+      ignoreErrors: true // an expected "wrap layout mode + match_parent" warning is emitted
+    )
+    let staticItemsBlock = makeBlock(
+      divContainer(
+        items: [item],
+        layoutMode: .wrap
+      ),
+      ignoreErrors: true
+    )
+
+    assertEqual(itemBuilderBlock, staticItemsBlock)
+  }
+
   func test_WithMergeAccessibility() throws {
     let block = makeBlock(
       divContainer(
@@ -709,6 +766,7 @@ final class DivContainerExtensionsTests: XCTestCase {
     let modifier = DivContainerSizeModifier(
       context: context,
       container: container,
+      items: container.nonNilItems,
       orientation: .vertical
     )
 

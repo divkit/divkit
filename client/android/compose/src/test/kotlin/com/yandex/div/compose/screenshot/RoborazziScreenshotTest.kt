@@ -201,6 +201,7 @@ private val ignoredFiles = setOf(
     "div-container/item_builder/item-builder-with-nested-local-variables.json",
     "div-container/item_builder/nested-builders.json",
     "div-container/item_builder/non-unique-matched-selectors.json",
+    "div-container/item_builder/wrap-content-container-with-match-parent-items.json",
 
     // div-pager vertical not supported
     "div-pager/vertical-pager-custom-neighbour-page-width.json",
