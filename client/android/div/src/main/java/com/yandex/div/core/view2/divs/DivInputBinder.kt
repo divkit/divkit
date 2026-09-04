@@ -332,8 +332,10 @@ internal class DivInputBinder @Inject constructor(
         observeMask(div, bindingContext.expressionResolver, divView) {
             inputMask = it
             inputMask?.let { mask ->
-                setText(mask.value)
-                setSelection(mask.cursorPosition)
+                if (text?.toString() != mask.value) {
+                    setText(mask.value)
+                }
+                setSelection(mask.cursorPosition.coerceIn(0, length()))
             }
         }
 
@@ -371,13 +373,15 @@ internal class DivInputBinder @Inject constructor(
         secondaryVariable: String?,
     ) = object : TwoWayStringVariableBinder.Callbacks {
 
+        private var applyingText = false
+
         override fun onVariableChanged(value: String?) {
             val newValue = value ?: ""
 
             inputMask?.let {
                 it.overrideRawValue(newValue)
                 setSecondVariable(it.value)
-                setTextWithSelection(it.value)
+                setTextResettingSelection(it.value)
                 return
             }
 
@@ -391,13 +395,27 @@ internal class DivInputBinder @Inject constructor(
             if (text?.toString() == newValue) {
                 return
             }
-            setTextWithSelection(newValue)
+            setTextResettingSelection(newValue)
         }
 
-        private fun setTextWithSelection(value: String) {
-            setText(value)
+        private fun setTextInternal(text: CharSequence) {
+            applyingText = true
+            try {
+                setText(text)
+            } finally {
+                applyingText = false
+            }
+        }
+
+        private fun setTextRestoringSelection(text: CharSequence, selection: Int) {
+            setTextInternal(text)
+            setSelection(selection.coerceIn(0, length()))
+        }
+
+        private fun setTextResettingSelection(text: CharSequence) {
+            setTextInternal(text)
             if (isFocused) {
-                setSelection(value.length)
+                setSelection(text.length)
             }
         }
 
@@ -405,14 +423,15 @@ internal class DivInputBinder @Inject constructor(
             addAfterTextChangeAction { applyMaskOrFilters(it, valueUpdater) }
 
         private fun applyMaskOrFilters(editable: Editable?, valueUpdater: (String) -> Unit) {
+            if (applyingText) return
+
             val fieldValue = editable?.toString() ?: ""
 
             inputMask?.run {
                 applyChangeFrom(text?.toString() ?: "", selectionStart)
                 val formatted = value
                 if (formatted != fieldValue) {
-                    setText(formatted)
-                    setSelection(cursorPosition)
+                    setTextRestoringSelection(formatted)
                 }
                 setSecondVariable(formatted)
                 valueUpdater(rawValue.replace(',', '.'))
@@ -423,8 +442,7 @@ internal class DivInputBinder @Inject constructor(
                 if (currentValue == fieldValue) return
 
                 if (!checkValue(fieldValue)) {
-                    setText(currentValue)
-                    setSelection(cursorPosition)
+                    setTextRestoringSelection(currentValue, cursorPosition)
                     return
                 }
 
@@ -434,6 +452,9 @@ internal class DivInputBinder @Inject constructor(
 
             valueUpdater(fieldValue)
         }
+
+        private fun BaseInputMask.setTextRestoringSelection(formatted: String) =
+            setTextRestoringSelection(formatted, cursorPosition)
 
         private fun setSecondVariable(value: String) {
             secondaryVariable?.let { bindingContext.expressionResolver.getVariable(it)?.set(value) }

@@ -59,6 +59,8 @@ internal abstract class BaseInputMask(
     }
 
     open fun updateMaskData(newMaskData: MaskData, restoreValue: Boolean = true) {
+        if (::destructedValue.isInitialized && maskData == newMaskData) return
+
         val previousRawValue = if (maskData != newMaskData && restoreValue) rawValue else null
 
         maskData = newMaskData
@@ -303,7 +305,7 @@ internal abstract class BaseInputMask(
 
     abstract fun onException(exception: Exception)
 
-    class MaskKey(
+    data class MaskKey(
         val key: Char,
         val filter: String?,
         val placeholder: Char
