@@ -9,6 +9,7 @@ import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
+import com.yandex.div.compose.expressions.ExpressionCache
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.state.DivStateStorage
@@ -56,8 +57,10 @@ internal fun mockLocalComponent(
         cardId = "test",
         expressionResolver = expressionResolver
     )
+    val expressionCache = ExpressionCache(expressionResolver)
     return mock<DivLocalComponent> {
         on { this.actionHandlingContext } doReturn actionHandlingContext
+        on { this.expressionCache } doReturn expressionCache
         on { this.expressionResolver } doReturn expressionResolver
         on { this.reporter } doReturn reporter
         on { this.variableController } doReturn variableController
