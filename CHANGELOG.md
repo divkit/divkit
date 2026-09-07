@@ -21,6 +21,12 @@
 * Fixed incorrect scrolling of the `pager` if it is inside the scale transformation.
 
 
+## 32.61.4
+
+# Android Client:
+* Fixed cursor positioning in phone masked input.
+
+
 ## 33.1.0
 
 ### Android Client
@@ -40,6 +46,12 @@
 * Fixed incorrect block sizes in portrait orientation for the `layout_provider` recursive scenario.
 * Fixed the position of the element copy created for `bring_to_top_id` in tooltips with `substrate_div`: the copy now follows the original view when it is moved.
 * The `multi_page_scroll` pager property has been implemented.
+
+
+## 32.61.3
+
+# Android Client:
+* Added a common host network client for built-in DivKit network requests.
 
 
 ## 33.0.0
