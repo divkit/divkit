@@ -29,7 +29,7 @@ internal abstract class DivCollectionViewHolder(
         val childView = viewWrapper.child
             ?.takeIf { oldDivBlock != null }
             ?.takeIf { child ->
-                child.divBlock?.let { DivComparator.areDivsReplaceable(oldDivBlock, it) } == true
+                child.divBlock?.let { DivComparator.areDivsReplaceable(it, divBlock) } == true
             } ?: createChildView(divBlock, divView).also { viewWrapper.addView(it) }
 
         oldDivBlock = divBlock

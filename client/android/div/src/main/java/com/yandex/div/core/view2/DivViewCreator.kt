@@ -113,7 +113,7 @@ internal class DivViewCreator @Inject constructor(
     }
 
     override fun defaultVisit(data: Div, resolver: ExpressionResolver): View =
-        viewPool.obtain(data.getTag(resolver))
+        viewPool.obtain(viewTag(data, resolver))
 
     override fun visit(data: Div.Separator, resolver: ExpressionResolver): View {
         return DivSeparatorView(context)
@@ -168,11 +168,11 @@ internal class DivViewCreator @Inject constructor(
             TAG_SWITCH
         )
 
-        private fun Div.getTag(resolver: ExpressionResolver) =
-            when (this) {
+        internal fun viewTag(div: Div, resolver: ExpressionResolver): String =
+            when (div) {
                 is Div.Container -> when {
-                    value.isWrapContainer(resolver) -> TAG_WRAP_CONTAINER
-                    value.orientation.evaluate(resolver) == Orientation.OVERLAP -> TAG_OVERLAP_CONTAINER
+                    div.value.isWrapContainer(resolver) -> TAG_WRAP_CONTAINER
+                    div.value.orientation.evaluate(resolver) == Orientation.OVERLAP -> TAG_OVERLAP_CONTAINER
                     else -> TAG_LINEAR_CONTAINER
                 }
                 is Div.Custom -> TAG_CUSTOM
