@@ -49,7 +49,7 @@ internal fun DivTabsView(
         initialIndex = remember(data.selectedTab, resolver) {
             data.selectedTab.evaluate(resolver).toInt().coerceIn(0, (items.size - 1).coerceAtLeast(0))
         },
-        initialTabCount = items.size,
+        tabCount = items.size,
     )
 
     val animated = animationsEnabled

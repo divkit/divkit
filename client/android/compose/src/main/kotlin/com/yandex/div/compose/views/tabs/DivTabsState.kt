@@ -10,9 +10,13 @@ import androidx.compose.runtime.setValue
 @Composable
 internal fun rememberDivTabsState(
     initialIndex: Int,
-    initialTabCount: Int,
-): DivTabsState = remember {
-    DivTabsState(initialIndex = initialIndex, initialTabCount = initialTabCount)
+    tabCount: Int,
+): DivTabsState {
+    val state = remember { DivTabsState(initialIndex = initialIndex, initialTabCount = tabCount) }
+    // The state outlives item updates: the pager clamps its current page to the new count,
+    // as the View renderer keeps min(page, size - 1) when it rebinds new items.
+    state.tabCount = tabCount
+    return state
 }
 
 internal class DivTabsState(
