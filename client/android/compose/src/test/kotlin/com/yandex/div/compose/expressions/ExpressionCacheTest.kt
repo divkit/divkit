@@ -50,6 +50,18 @@ class ExpressionCacheTest {
     }
 
     @Test
+    fun `two pending refs share a subscription after onRemembered()`() {
+        val expression = CountingExpression("@{counter}")
+        val ref1 = cache.getOrCreate(expression)
+        val ref2 = cache.getOrCreate(expression)
+
+        ref1.onRemembered()
+        ref2.onRemembered()
+
+        assertEquals(1, expression.observeCallCount)
+    }
+
+    @Test
     fun `getOrCreate() keeps separate values for the same raw string with different types`() {
         val rawExpression = "@{'#ffaabbcc'}"
 
@@ -84,28 +96,26 @@ class ExpressionCacheTest {
     }
 
     @Test
-    fun `onRemembered() starts subscription - state updates when variable changes`() {
+    fun `state updates when variable changes after onRemembered()`() {
         val variable = Variable.IntegerVariable("counter", 1)
         variableController.declare(variable)
 
         val ref = cache.getOrCreate(intExpression("@{counter}"))
         ref.onRemembered()
-
         variable.set(99)
 
         assertEquals(99L, ref.value)
     }
 
     @Test
-    fun `state does not update before onRemembered()`() {
+    fun `state updates when variable changes before onRemembered()`() {
         val variable = Variable.IntegerVariable("counter", 1)
         variableController.declare(variable)
 
         val ref = cache.getOrCreate(intExpression("@{counter}"))
-
         variable.set(99)
 
-        assertEquals(1L, ref.value)
+        assertEquals(99L, ref.value)
     }
 
     @Test
@@ -121,6 +131,34 @@ class ExpressionCacheTest {
         val ref = cache.getOrCreate(intExpression("@{counter}"))
 
         assertEquals(99L, ref.value)
+    }
+
+    @Test
+    fun `onAbandoned() closes subscription when last pending ref leaves`() {
+        val variable = Variable.IntegerVariable("counter", 1)
+        variableController.declare(variable)
+
+        val ref = cache.getOrCreate(intExpression("@{counter}"))
+        ref.onAbandoned()
+
+        variable.set(99)
+
+        assertEquals(1L, ref.value)
+    }
+
+    @Test
+    fun `onAbandoned() keeps subscription while another ref is pending`() {
+        val variable = Variable.IntegerVariable("counter", 1)
+        variableController.declare(variable)
+
+        val ref1 = cache.getOrCreate(intExpression("@{counter}"))
+        val ref2 = cache.getOrCreate(intExpression("@{counter}"))
+
+        ref1.onAbandoned()
+
+        variable.set(99)
+
+        assertEquals(99L, ref2.value)
     }
 
     @Test
@@ -191,7 +229,7 @@ class ExpressionCacheTest {
 
         variable.set(99)
 
-        assertEquals(1L, ref.value)
+        assertEquals(99L, ref.value)
     }
 }
 
@@ -200,6 +238,9 @@ private class CountingExpression(
 ) : Expression<String>() {
 
     var evaluateCallCount = 0
+        private set
+
+    var observeCallCount = 0
         private set
 
     override val rawValue: Any
@@ -211,6 +252,7 @@ private class CountingExpression(
     }
 
     override fun observe(resolver: ExpressionResolver, callback: (String) -> Unit): Disposable {
+        observeCallCount++
         return Disposable.NULL
     }
 }

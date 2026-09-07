@@ -12,12 +12,13 @@ import kotlin.reflect.KClass
 
 /**
  * Shares [MutableState] instances for the same expression string and value type within a
- * [DivLocalScope], reducing the number of [Expression.observe] subscriptions created during the
- * apply-changes phase of composition.
+ * [DivLocalScope], reducing the number of [Expression.observe] subscriptions.
+ * A subscription starts when an entry is created and is kept while any pending or remembered
+ * reference remains.
  *
  * [Expression.ConstantExpression] never reaches the cache — it is fast-pathed in [ExpressionUtils].
  *
- * All Compose apply-changes callbacks run on the main thread; no synchronisation is required.
+ * Cache access and expression updates are confined to the main thread.
  */
 @DivLocalScope
 internal class ExpressionCache @Inject constructor(
@@ -55,30 +56,25 @@ internal class ExpressionCache @Inject constructor(
             Entry(
                 key = key,
                 initialValue = expression.evaluate(expressionResolver)
-            )
+            ).also { entry ->
+                entry.subscription = expression.observe(expressionResolver) { value ->
+                    entry.state.value = value
+                }
+            }
         } as Entry<T>
         entry.pendingRefCount++
-        return ExpressionCacheRef(this, entry, expression)
+        return ExpressionCacheRef(this, entry)
     }
 
     /**
-     * Increments the ref count for the [entry] already committed by [getOrCreate], and sets up
-     * the [Expression.observe] subscription on first reference.
-     *
-     * [entry] is already the canonical entry from the cache map (assigned in [getOrCreate]),
-     * so no reconciliation is needed here.
+     * Promotes a pending reference to the [entry] created and subscribed by [getOrCreate].
      */
-    fun <T : Any> retain(expression: Expression<T>, entry: Entry<T>) {
+    fun <T : Any> retain(entry: Entry<T>) {
         if (entry.pendingRefCount <= 0) {
             return
         }
         entry.pendingRefCount--
         entry.refCount++
-        if (entry.subscription == null) {
-            entry.subscription = expression.observe(expressionResolver) { value ->
-                entry.state.value = value
-            }
-        }
     }
 
     fun <T : Any> release(entry: Entry<T>) {
@@ -109,19 +105,18 @@ internal class ExpressionCache @Inject constructor(
 /**
  * A [RememberObserver] that manages one reference in [ExpressionCache].
  *
- * [onRemembered] promotes a pending reference and sets up the subscription; [onForgotten] releases
+ * [onRemembered] promotes a pending reference; [onForgotten] releases
  * a remembered reference; [onAbandoned] releases one that never reached the apply phase.
  */
 internal class ExpressionCacheRef<T : Any>(
     private val cache: ExpressionCache,
-    private val entry: ExpressionCache.Entry<T>,
-    private val expression: Expression<T>
+    private val entry: ExpressionCache.Entry<T>
 ) : RememberObserver {
 
     val value: T get() = entry.state.value
 
     override fun onRemembered() {
-        cache.retain(expression, entry)
+        cache.retain(entry)
     }
 
     override fun onForgotten() {
