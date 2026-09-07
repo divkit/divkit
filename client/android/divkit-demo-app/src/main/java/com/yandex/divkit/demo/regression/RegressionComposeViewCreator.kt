@@ -7,16 +7,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.lottie.LottieExtensionHandler
-import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
+import com.yandex.div.lottie.CompositeDivLottieResourceLoader
+import com.yandex.div.lottie.DivLottieAssetResourceLoader
+import com.yandex.div.lottie.DivLottieRawResResourceLoader
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.ChronometerViewFactory
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
+import com.yandex.divkit.demo.div.DemoDivLottieRawResProvider
 import com.yandex.divkit.demo.div.NestedScrollViewFactory
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
@@ -47,7 +51,12 @@ class RegressionComposeViewCreator(context: Context) {
                     "nested_scroll_view" to NestedScrollViewFactory()
                 ),
                 extensionHandlers = mapOf(
-                    "lottie" to LottieExtensionHandler(),
+                    "lottie" to LottieExtensionHandler(
+                        resourceLoader = CompositeDivLottieResourceLoader(
+                            DivLottieAssetResourceLoader(activity, DemoDivLottieRawResProvider::provideAssetFile),
+                            DivLottieRawResResourceLoader(activity, DemoDivLottieRawResProvider::provideRes),
+                        )
+                    ),
                     "shimmer" to ShimmerExtensionHandler(),
                     "pinch-to-zoom" to PinchToZoomExtensionHandler(),
                 ),

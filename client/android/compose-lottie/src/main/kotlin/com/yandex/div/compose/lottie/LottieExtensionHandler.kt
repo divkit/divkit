@@ -1,9 +1,17 @@
 package com.yandex.div.compose.lottie
 
+import android.content.Context
+import android.util.LruCache
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.LottieResult
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -16,17 +24,63 @@ import com.yandex.div.internal.extensions.lottie.LottieData
 import com.yandex.div.internal.extensions.lottie.LottieExtensionParams
 import com.yandex.div.internal.extensions.lottie.LottieExtensionParamsParser
 import com.yandex.div.internal.extensions.lottie.LottieRepeatMode
+import com.yandex.div.internal.extensions.lottie.parseLottieUrl
+import com.yandex.div.lottie.CompositeDivLottieResourceLoader
+import com.yandex.div.lottie.DivLottieAssetResourceLoader
+import com.yandex.div.lottie.DivLottieRawResResourceLoader
+import com.yandex.div.lottie.DivLottieResourceLoader
+import com.yandex.div.lottie.loadComposition
 import org.json.JSONObject
+import java.util.WeakHashMap
 
 /**
  * [DivExtensionHandler] that allows to use Lottie animations inside
  * [com.yandex.div.compose.DivView]s.
  */
-class LottieExtensionHandler(
-    private val assetMapper: (String) -> String? = { null },
-    private val rawResMapper: (String) -> Int? = { null },
-    private val networkCache: LottieNetworkCache = LottieNetworkCache.STUB,
+class LottieExtensionHandler private constructor(
+    private val resourceLoaderFactory: (Context) -> DivLottieResourceLoader,
+    private val networkCache: LottieNetworkCache,
+    private val preloadResourceLoader: DivLottieResourceLoader?,
 ) : DivExtensionHandler {
+
+    private val resourceLoaders = WeakHashMap<Context, DivLottieResourceLoader>()
+    private val compositionCache = LruCache<String, LottieComposition>(COMPOSITION_CACHE_SIZE)
+
+    /** Retains the JVM no-argument constructor used by Java and compiled clients. */
+    constructor() : this(assetMapper = { null })
+
+    /**
+     * Creates the preferred Lottie extension handler with a host-provided [resourceLoader].
+     * URLs not claimed by the loader keep the existing cache and network behavior.
+     * Use [CompositeDivLottieResourceLoader] to combine custom, asset and raw-resource loaders.
+     */
+    constructor(
+        resourceLoader: DivLottieResourceLoader,
+        networkCache: LottieNetworkCache = LottieNetworkCache.STUB,
+    ) : this(
+        { resourceLoader },
+        networkCache,
+        resourceLoader,
+    )
+
+    /**
+     * Creates a backward-compatible handler using the legacy asset and raw-resource mappers.
+     * Local loaders are created with the rendering context; preloading retains the legacy network cache path.
+     */
+    constructor(
+        assetMapper: (String) -> String? = { null },
+        rawResMapper: (String) -> Int? = { null },
+        networkCache: LottieNetworkCache = LottieNetworkCache.STUB,
+    ) : this(
+        { context ->
+            CompositeDivLottieResourceLoader(
+                DivLottieAssetResourceLoader(context, assetMapper),
+                DivLottieRawResResourceLoader(context, rawResMapper),
+            )
+        },
+        networkCache,
+        null,
+    )
 
     @Composable
     override fun Content(
@@ -40,12 +94,11 @@ class LottieExtensionHandler(
             return
         }
 
+        val context = LocalContext.current
+        val loader = remember(context) { getResourceLoader(context) }
         val paramsJson = environment.extension.params
-        val params = remember(paramsJson) { parseParams(paramsJson, environment) } ?: return
-        val compositionSpec = remember(params.data, networkCache) {
-            params.data.toCompositionSpec(networkCache)
-        }
-        val composition by rememberLottieComposition(compositionSpec)
+        val params = remember(paramsJson, loader) { parseParams(paramsJson, environment, loader) } ?: return
+        val composition = rememberComposition(params.data, environment, loader)
         LottieAnimation(
             modifier = modifier,
             alignment = image.observedAlignment(),
@@ -60,20 +113,60 @@ class LottieExtensionHandler(
     }
 
     override suspend fun preload(environment: DivExtensionEnvironment) {
-        val parser = LottieExtensionParamsParser(
-            assetMapper = assetMapper,
-            rawResMapper = rawResMapper,
-            reportError = { environment.reporter.reportError(it) }
-        )
         val url = environment.extension.params?.let {
-            parser.parseUrl(it, environment.expressionResolver)
+            parseLottieUrl(
+                it,
+                environment.expressionResolver,
+                environment.reporter::reportError,
+            )
         } ?: return
+        preloadResourceLoader?.let { loader ->
+            val urlString = url.toString()
+            if (loader.canLoad(urlString)) {
+                getCachedComposition(urlString)?.let { return }
+                val result = cacheComposition(urlString, loader.loadComposition(urlString))
+                result.exception?.let { environment.reporter.reportError(it.loadErrorMessage(urlString)) }
+                return
+            }
+        }
         networkCache.save(url.toString())
+    }
+
+    @Composable
+    private fun rememberComposition(
+        data: LottieData,
+        environment: DivExtensionEnvironment,
+        loader: DivLottieResourceLoader,
+    ): LottieComposition? {
+        val useResourceLoader = remember(data, loader) {
+            data is LottieData.Url && loader.canLoad(data.url)
+        }
+        if (useResourceLoader) {
+            val url = (data as LottieData.Url).url
+            getCachedComposition(url)?.let { return it }
+            return key(url, loader) {
+                val result by produceState<LottieResult<LottieComposition>?>(null) {
+                    value = cacheComposition(url, loader.loadComposition(url))
+                }
+                val error = result?.exception
+                LaunchedEffect(url, error) {
+                    error?.let { environment.reporter.reportError(it.loadErrorMessage(url)) }
+                }
+                result?.value
+            }
+        }
+
+        val compositionSpec = remember(data, networkCache) {
+            data.toCompositionSpec(networkCache)
+        }
+        val composition by rememberLottieComposition(compositionSpec)
+        return composition
     }
 
     private fun parseParams(
         params: JSONObject?,
-        environment: DivExtensionEnvironment
+        environment: DivExtensionEnvironment,
+        loader: DivLottieResourceLoader,
     ): LottieExtensionParams? {
         val reporter = environment.reporter
         if (params == null) {
@@ -81,14 +174,42 @@ class LottieExtensionHandler(
             return null
         }
 
-        val parser = LottieExtensionParamsParser(
-            assetMapper = assetMapper,
-            rawResMapper = rawResMapper,
-            reportError = { reporter.reportError(it) }
-        )
+        val parser = createParamsParser(loader) { reporter.reportError(it) }
         return parser.parse(params, environment.expressionResolver)
     }
+
+    private fun createParamsParser(
+        loader: DivLottieResourceLoader?,
+        reportError: (String) -> Unit,
+    ): LottieExtensionParamsParser {
+        return LottieExtensionParamsParser(
+            assetMapper = { null },
+            rawResMapper = { null },
+            reportError = reportError,
+            urlFilter = { url -> loader?.canLoad(url) == true },
+        )
+    }
+
+    @Synchronized
+    private fun getResourceLoader(context: Context): DivLottieResourceLoader {
+        return resourceLoaders.getOrPut(context) { resourceLoaderFactory(context) }
+    }
+
+    @Synchronized
+    private fun getCachedComposition(url: String): LottieComposition? = compositionCache[url]
+
+    @Synchronized
+    private fun cacheComposition(
+        url: String,
+        result: LottieResult<LottieComposition>,
+    ): LottieResult<LottieComposition> {
+        result.value?.let { compositionCache.put(url, it) }
+        return result
+    }
 }
+
+private fun Throwable.loadErrorMessage(url: String): String =
+    "Failed to load Lottie composition from $url: ${message ?: this::class.java.simpleName}"
 
 private val LottieExtensionParams.iterations: Int
     get() {
@@ -108,3 +229,5 @@ private fun LottieData.toCompositionSpec(cache: LottieNetworkCache): LottieCompo
             ?: LottieCompositionSpec.Url(url)
     }
 }
+
+private const val COMPOSITION_CACHE_SIZE = 20

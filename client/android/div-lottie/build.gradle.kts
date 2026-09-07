@@ -12,6 +12,7 @@ android {
 }
 
 dependencies {
+    api(project(":lottie-core"))
     implementation(project(":div"))
 
     implementation(libs.kotlin.corountines.core)

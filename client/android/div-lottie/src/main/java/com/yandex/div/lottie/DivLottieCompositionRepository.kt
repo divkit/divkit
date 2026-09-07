@@ -28,6 +28,7 @@ internal class DivLottieCompositionRepository(
     private val logger: DivLottieLogger,
     private val networkClient: DivNetworkClient? = null,
     private val networkScope: CoroutineScope,
+    private val resourceLoader: DivLottieResourceLoader? = null,
 ) {
 
     private val inlineParseLocks = ConcurrentHashMap<String, Any>()
@@ -87,6 +88,17 @@ internal class DivLottieCompositionRepository(
     }
 
     internal fun preloadLottieComposition(url: Uri, onComplete: (PreloadResult) -> Unit) {
+        resourceLoader?.let { loader ->
+            val urlString = url.toString()
+            if (loader.canLoad(urlString)) {
+                getCachedComposition(urlString)?.let {
+                    onComplete(UriPreloadResult(url, null))
+                    return
+                }
+                preloadResourceComposition(loader, url, onComplete)
+                return
+            }
+        }
         if (url.isHttp) {
             val supported = networkCache.cacheComposition(url.toString()) { error ->
                 onComplete(UriPreloadResult(url, error))
@@ -123,6 +135,12 @@ internal class DivLottieCompositionRepository(
         context: Context,
         url: String,
     ): LottieResult<LottieComposition> {
+        resourceLoader?.let { loader ->
+            getCachedComposition(url)?.let { return LottieResult(it) }
+            if (loader.canLoad(url)) {
+                return cacheComposition(url, loader.loadComposition(url))
+            }
+        }
         if (!url.toUri().isHttp) {
             return LottieResult(IllegalArgumentException("Failed to retrieve lottie json from $url"))
         }
@@ -132,6 +150,26 @@ internal class DivLottieCompositionRepository(
                 ?.let { cacheComposition(url, LottieCompositionFactory.fromJsonStringSync(it, url)) }
             ?: networkClient?.let { fetchComposition(it, url) }
             ?: LottieCompositionFactory.fromUrlSync(context, url, url)
+    }
+
+    private fun preloadResourceComposition(
+        loader: DivLottieResourceLoader,
+        url: Uri,
+        onComplete: (PreloadResult) -> Unit,
+    ) {
+        val urlString = url.toString()
+        val completed = AtomicBoolean(false)
+        val job = networkScope.launch {
+            val result = cacheComposition(urlString, loader.loadComposition(urlString))
+            if (completed.compareAndSet(false, true)) {
+                onComplete(UriPreloadResult(url, result.exception))
+            }
+        }
+        job.invokeOnCompletion { cause ->
+            if (cause != null && completed.compareAndSet(false, true)) {
+                onComplete(UriPreloadResult(url, cause))
+            }
+        }
     }
 
     private fun preloadComposition(

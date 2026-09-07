@@ -2731,6 +2731,30 @@
       "case_id": 475
     },
     {
+      "title": "Lottie from custom scheme (res:// and asset://)",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "ios": "The bundled res:// and asset:// resources are specific to Android Playground",
+        "web": "The bundled res:// and asset:// resources are specific to Android Playground"
+      },
+      "tags": [
+        "lottie"
+      ],
+      "steps": [
+        "Enable animations and open the case with the standard renderer.",
+        "Observe both animations for at least 10 seconds.",
+        "Enable the Compose renderer in Settings, reopen the case and observe both animations for at least 10 seconds."
+      ],
+      "expected_results": [
+        "Two cards with readable res://love and asset://banana labels are displayed.",
+        "The res://love card plays the bundled love animation from res/raw, and the asset://banana card plays the bundled banana animation from assets.",
+        "Both animations continuously restart after completing, without loading errors, in the standard and Compose renderers."
+      ],
+      "file": "animations/lottie/local_resources_lottie.json"
+    },
+    {
       "title": "Lottie gallery with expressions",
       "platforms": [
         "android",

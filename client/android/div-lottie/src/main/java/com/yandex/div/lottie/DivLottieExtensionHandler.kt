@@ -12,6 +12,7 @@ import com.yandex.div.core.preload.UriPreloadResult
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.core.ExpressionSubscriber
+import com.yandex.div.internal.extensions.lottie.LottieData
 import com.yandex.div.internal.extensions.lottie.LottieExtensionParams
 import com.yandex.div.internal.extensions.lottie.LottieExtensionParamsParser
 import com.yandex.div.internal.extensions.lottie.LottieRepeat
@@ -38,6 +39,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @param preloadScope scope for inline composition preload coroutines. Provide your own scope
  * and cancel it to stop preload work when the handler is no longer needed; by default preloads
  * run in an internal scope that lives as long as the handler.
+ * @param resourceLoader optional loader for host-provided resources. Unclaimed URLs keep
+ * the existing cache and network behavior.
  */
 open class DivLottieExtensionHandler @JvmOverloads constructor(
     private val rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
@@ -46,6 +49,7 @@ open class DivLottieExtensionHandler @JvmOverloads constructor(
     private val asyncUpdatesEnabled: Boolean,
     private val preloadScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
     networkClient: DivNetworkClient? = null,
+    private val resourceLoader: DivLottieResourceLoader? = null,
 ) : DivExtensionHandler, ExpressionSubscriber {
 
     constructor(
@@ -64,10 +68,13 @@ open class DivLottieExtensionHandler @JvmOverloads constructor(
     private val parser = LottieExtensionParamsParser(
         assetMapper = rawResProvider::provideAssetFile,
         rawResMapper = rawResProvider::provideRes,
-        reportError = logger::fail
+        reportError = logger::fail,
+        urlFilter = { url -> resourceLoader?.canLoad(url) == true },
     )
 
-    internal val compositionRepository = DivLottieCompositionRepository(cache, logger, networkClient, preloadScope)
+    internal val compositionRepository = DivLottieCompositionRepository(
+        cache, logger, networkClient, preloadScope, resourceLoader,
+    )
     private val playbackRecords = mutableMapOf<String, PlaybackStateController>()
 
     override val subscriptions: MutableList<Disposable> = mutableListOf()

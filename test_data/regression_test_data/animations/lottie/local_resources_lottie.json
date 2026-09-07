@@ -1,0 +1,111 @@
+{
+  "templates": {
+    "lottie_gif": {
+      "type": "gif",
+      "width": {
+        "type": "fixed",
+        "value": 160
+      },
+      "height": {
+        "type": "fixed",
+        "value": 160
+      },
+      "alignment_horizontal": "center",
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center"
+    },
+    "lottie_card": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 200
+      },
+      "height": {
+        "type": "fixed",
+        "value": 200
+      },
+      "margins": {
+        "left": 4,
+        "right": 4,
+        "bottom": 4,
+        "top": 4
+      },
+      "paddings": {
+        "right": 2,
+        "left": 2
+      },
+      "border": {
+        "corner_radius": 32,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "orientation": "vertical"
+    },
+    "lottie_gif_card": {
+      "type": "lottie_card",
+      "items": [
+        {
+          "type": "text",
+          "$text": "source_label",
+          "font_size": 16,
+          "text_alignment_horizontal": "center",
+          "margins": {
+            "top": 8,
+            "bottom": 4
+          }
+        },
+        {
+          "type": "lottie_gif",
+          "scale": "fit",
+          "extensions": [
+            {
+              "id": "lottie",
+              "$params": "lottie_params"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "local_resources_lottie",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "id": "local_resources_lottie",
+          "type": "container",
+          "orientation": "vertical",
+          "content_alignment_horizontal": "center",
+          "items": [
+            {
+              "id": "res_lottie_card",
+              "type": "lottie_gif_card",
+              "source_label": "res://love",
+              "lottie_params": {
+                "lottie_url": "res://love",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            },
+            {
+              "id": "asset_lottie_card",
+              "type": "lottie_gif_card",
+              "source_label": "asset://banana",
+              "lottie_params": {
+                "lottie_url": "asset://banana",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

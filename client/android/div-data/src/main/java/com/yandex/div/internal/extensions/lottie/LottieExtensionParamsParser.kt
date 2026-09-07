@@ -19,7 +19,8 @@ import org.json.JSONObject
 class LottieExtensionParamsParser(
     private val assetMapper: (String) -> String?,
     private val rawResMapper: (String) -> Int?,
-    private val reportError: (String) -> Unit
+    private val reportError: (String) -> Unit,
+    private val urlFilter: (String) -> Boolean = { false },
 ) {
     private val parsingEnvironment = DivParsingEnvironment(
         logger = { e -> reportError(e.message ?: e.toString()) }
@@ -48,13 +49,7 @@ class LottieExtensionParamsParser(
     }
 
     fun parseUrl(json: JSONObject, expressionResolver: ExpressionResolver): Uri? {
-        return JsonExpressionParser.readOptionalExpression(
-            parsingEnvironment,
-            json,
-            "lottie_url",
-            TYPE_HELPER_URI,
-            ANY_TO_URI
-        )?.evaluate(expressionResolver)
+        return parseLottieUrl(json, expressionResolver, parsingEnvironment)
     }
 
     fun parseInlineJson(json: JSONObject): LottieData.Json? {
@@ -70,10 +65,11 @@ class LottieExtensionParamsParser(
             return parseInlineJson(json)
         }
 
+        val urlString = url.toString()
+        if (urlFilter(urlString)) return LottieData.Url(urlString)
 
         when (url.scheme) {
             "asset" -> {
-                val urlString = url.toString()
                 val assetFileName = assetMapper(urlString)
                 if (assetFileName == null) {
                     reportError("Failed to resolve asset file name for: $urlString")
@@ -91,7 +87,6 @@ class LottieExtensionParamsParser(
             }
 
             "res" -> {
-                val urlString = url.toString()
                 val rawRes = rawResMapper(urlString)
                 if (rawRes == null) {
                     reportError("Failed to resolve resource id for: $urlString")
@@ -101,7 +96,7 @@ class LottieExtensionParamsParser(
             }
         }
 
-        return LottieData.Url(url.toString())
+        return LottieData.Url(urlString)
     }
 
     private fun getRepeats(
@@ -185,4 +180,30 @@ class LottieExtensionParamsParser(
             ANY_TO_BOOLEAN
         )?.evaluate(expressionResolver) ?: false
     }
+}
+
+@InternalApi
+fun parseLottieUrl(
+    json: JSONObject,
+    expressionResolver: ExpressionResolver,
+    reportError: (String) -> Unit,
+): Uri? {
+    val parsingEnvironment = DivParsingEnvironment(
+        logger = { error -> reportError(error.message ?: error.toString()) }
+    )
+    return parseLottieUrl(json, expressionResolver, parsingEnvironment)
+}
+
+private fun parseLottieUrl(
+    json: JSONObject,
+    expressionResolver: ExpressionResolver,
+    parsingEnvironment: DivParsingEnvironment,
+): Uri? {
+    return JsonExpressionParser.readOptionalExpression(
+        parsingEnvironment,
+        json,
+        "lottie_url",
+        TYPE_HELPER_URI,
+        ANY_TO_URI,
+    )?.evaluate(expressionResolver)
 }
