@@ -5,6 +5,7 @@
 * Fixed Gallery `wrap_content` cross-axis size when a larger item becomes visible after scrolling.
 * Fixed `match_parent` children in wrap-content overlap containers in the Compose renderer.
 * Fixed cursor positioning in phone masked input.
+* Improved `DivView` performance by adding expression cache.
 * Made `Div2View` extendable.
 * Removed `DivScope.color(String)` and `DivScope.url(String)`. Use `color(String)` and `url(String)` instead.
 * Supported `actions` of `ellipsis` and of text `ranges` in `div-text` for the Compose renderer.
