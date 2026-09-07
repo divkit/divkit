@@ -53,6 +53,7 @@ private fun PagerView(
 
     val isHorizontal = data.orientation.observedValue() == DivPager.Orientation.HORIZONTAL
     val defaultItem = data.defaultItem.observedIntValue().coerceIn(0, items.size - 1)
+    val infiniteScroll = data.infiniteScroll.observedValue()
     val stateStorage = LocalDivViewContext.current.pagerStateStorage
 
     stateStorage.rememberAndStoreState(
@@ -61,6 +62,7 @@ private fun PagerView(
         listState = null,
         snapPosition = SnapPosition.Start,
         initialPage = defaultItem,
+        infiniteScroll = infiniteScroll,
     )
 
     Box(
@@ -95,6 +97,7 @@ private fun PagerView(
             crossAxisAlignment = data.crossAxisAlignment.observedValue(),
             layoutDirection = LocalLayoutDirection.current,
             defaultItem = defaultItem,
+            infiniteScroll = infiniteScroll,
             viewportSize = viewportSize,
             crossAxisBounded = crossAxisBounded.value,
             stateStorage = stateStorage

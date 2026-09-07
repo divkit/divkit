@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
@@ -16,6 +20,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.DivPagerStateStorage
+import com.yandex.div.compose.pager.PagerItemWindow
+import com.yandex.div.compose.pager.PagerWindowState
+import com.yandex.div.compose.pager.pagerPosition
 import com.yandex.div.compose.pager.rememberAndStoreState
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
@@ -28,6 +35,7 @@ import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
+import kotlinx.coroutines.flow.first
 
 @Composable
 internal fun PagerContent(
@@ -41,6 +49,7 @@ internal fun PagerContent(
     crossAxisAlignment: DivPager.ItemAlignment,
     layoutDirection: LayoutDirection,
     defaultItem: Int,
+    infiniteScroll: Boolean,
     viewportSize: Dp,
     crossAxisBounded: Boolean,
     stateStorage: DivPagerStateStorage
@@ -50,17 +59,25 @@ internal fun PagerContent(
     val snapPosition = scrollAxisAlignment.toSnapPosition()
     val crossAlignment = crossAxisAlignment.toCrossAxisAlignment()
     val (startPadding, endPadding) = paddings.getScrollAxisPaddings(isHorizontal, layoutDirection)
+    val itemWindow = remember(items.size, infiniteScroll) {
+        if (infiniteScroll && items.isNotEmpty()) {
+            PagerItemWindow.virtuallyUnbounded(items.size)
+        } else {
+            PagerItemWindow(items.size)
+        }
+    }
+    val rawDefaultItem = if (items.isEmpty()) 0 else itemWindow.rawIndex(initialDefaultItem)
 
     val pageSize = layoutMode.observePageSize(scrollAxisAlignment, viewportSize, itemSpacing, startPadding, endPadding)
     val listState = rememberListState(
-        initialDefaultItem,
+        rawDefaultItem,
         snapPosition,
         pageSize,
         itemSpacing,
         startPadding,
         endPadding,
         viewportSize,
-        items.size,
+        itemWindow.itemCount,
     )
 
     stateStorage.rememberAndStoreState(
@@ -69,10 +86,15 @@ internal fun PagerContent(
         listState = listState,
         snapPosition = snapPosition,
         initialPage = initialDefaultItem,
+        infiniteScroll = infiniteScroll,
+    )
+
+    PreservePageAcrossWindowChanges(
+        listState, snapPosition, itemWindow, initialDefaultItem, startPadding, endPadding
     )
 
     if (pageSize == null && snapPosition != SnapPosition.Start) {
-        AdjustScrollToItem(listState, initialDefaultItem, snapPosition, endPadding)
+        AdjustScrollToItem(listState, rawDefaultItem, snapPosition, endPadding)
     }
 
     val snapProvider = remember(listState, snapPosition) {
@@ -92,9 +114,81 @@ internal fun PagerContent(
         crossAxisAlignment = crossAlignment,
         flingBehavior = rememberSnapFlingBehavior(snapProvider),
     ) {
-        items(count = items.size) { index ->
-            ScrollableChildItem(items[index], childModifier, isHorizontal, crossAlignment)
+        items(count = itemWindow.itemCount) { index ->
+            ScrollableChildItem(items[itemWindow.realIndex(index)], childModifier, isHorizontal, crossAlignment)
         }
+    }
+}
+
+@Composable
+private fun PreservePageAcrossWindowChanges(
+    listState: LazyListState,
+    snapPosition: SnapPosition,
+    itemWindow: PagerItemWindow,
+    defaultItem: Int,
+    startPadding: Dp,
+    endPadding: Dp,
+) {
+    val isPositionAvailable by remember(listState) {
+        derivedStateOf { listState.layoutInfo.visibleItemsInfo.isNotEmpty() }
+    }
+    val density = LocalDensity.current
+    val startPaddingPx = with(density) { startPadding.roundToPx() }
+    val endPaddingPx = with(density) { endPadding.roundToPx() }
+    val state = remember(listState) {
+        PagerWindowState(
+            initialItemWindow = itemWindow,
+            initialRealPage = defaultItem,
+        )
+    }
+
+    LaunchedEffect(
+        listState, itemWindow, snapPosition, isPositionAvailable, startPaddingPx, endPaddingPx
+    ) {
+        if (!isPositionAvailable) return@LaunchedEffect
+
+        val rawPage = listState.pagerPosition(snapPosition).first
+        val targetRawPage = state.update(itemWindow, rawPage, isPositionAvailable)
+
+        if (targetRawPage != null) {
+            listState.scrollToSnappedPage(
+                targetRawPage, snapPosition, startPaddingPx, endPaddingPx
+            )
+        }
+
+        snapshotFlow { listState.pagerPosition(snapPosition).first }
+            .collect { page ->
+                state.update(
+                    itemWindow = itemWindow,
+                    rawPage = page,
+                    isPositionAvailable = listState.layoutInfo.visibleItemsInfo.isNotEmpty(),
+                )
+            }
+    }
+}
+
+private suspend fun LazyListState.scrollToSnappedPage(
+    targetRawPage: Int,
+    snapPosition: SnapPosition,
+    startPaddingPx: Int,
+    endPaddingPx: Int,
+) {
+    scrollToItem(targetRawPage)
+    snapshotFlow { layoutInfo.visibleItemsInfo }
+        .first { items -> items.any { it.index == targetRawPage } }
+
+    val info = layoutInfo
+    val targetItem = info.visibleItemsInfo.firstOrNull { it.index == targetRawPage } ?: return
+    val viewportSize = info.viewportEndOffset - info.viewportStartOffset
+    val desiredOffset = desiredSnapOffset(
+        snapPosition = snapPosition,
+        viewportSizePx = viewportSize,
+        itemSizePx = targetItem.size,
+        startPaddingPx = startPaddingPx,
+        endPaddingPx = endPaddingPx,
+    )
+    scroll {
+        scrollBy((targetItem.offset - desiredOffset).toFloat())
     }
 }
 

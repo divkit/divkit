@@ -20,6 +20,7 @@ internal fun DrawScope.drawIndicators(style: IndicatorStyle, pagerState: DivPage
         rawPage = pagerState.currentPage,
         rawOffset = pagerState.currentPageOffsetFraction,
         itemsCount = itemsCount,
+        infiniteScroll = pagerState.infiniteScroll,
     )
     val viewportWidth = size.width
     val centerY = size.height / 2f
@@ -73,11 +74,18 @@ internal fun DrawScope.drawIndicators(style: IndicatorStyle, pagerState: DivPage
     drawSelectionOverlay(style, positions, activePage, offset, centerY, viewportWidth, itemsCount)
 }
 
-internal fun normalizePagerPosition(rawPage: Int, rawOffset: Float, itemsCount: Int): Pair<Int, Float> {
+internal fun normalizePagerPosition(
+    rawPage: Int,
+    rawOffset: Float,
+    itemsCount: Int,
+    infiniteScroll: Boolean = false,
+): Pair<Int, Float> {
     val page = rawPage.coerceIn(0, itemsCount - 1)
     return when {
         rawOffset == 0f -> page to 0f
         rawOffset < 0f -> page to (-rawOffset).coerceIn(0f, MAX_OFFSET)
+        page == 0 && infiniteScroll ->
+            itemsCount - 1 to (1f - rawOffset).coerceIn(0f, MAX_OFFSET)
         page == 0 -> 0 to 0f
         else -> (page - 1) to (1f - rawOffset).coerceIn(0f, MAX_OFFSET)
     }

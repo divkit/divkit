@@ -26,8 +26,8 @@ internal fun calculateInitialScroll(
         return InitialScroll(itemIndex = defaultItem, scrollOffset = 0)
     }
 
-    val scrollOffset = with(density) {
-        calculateScrollOffset(
+    val (itemIndex, scrollOffset) = with(density) {
+        calculateScrollPosition(
             defaultItem = defaultItem,
             snapPosition = snapPosition,
             pageSizePx = pageSize.roundToPx(),
@@ -39,10 +39,10 @@ internal fun calculateInitialScroll(
         )
     }
 
-    return InitialScroll(itemIndex = 0, scrollOffset = scrollOffset)
+    return InitialScroll(itemIndex = itemIndex, scrollOffset = scrollOffset)
 }
 
-private fun calculateScrollOffset(
+private fun calculateScrollPosition(
     defaultItem: Int,
     snapPosition: SnapPosition,
     pageSizePx: Int,
@@ -51,7 +51,7 @@ private fun calculateScrollOffset(
     endPx: Int,
     viewportPx: Int,
     itemCount: Int,
-): Int {
+): InitialScroll {
     val desiredOffset = desiredSnapOffset(
         snapPosition = snapPosition,
         viewportSizePx = viewportPx,
@@ -59,21 +59,27 @@ private fun calculateScrollOffset(
         startPaddingPx = startPx,
         endPaddingPx = endPx,
     )
-    val centeredScroll = startPx + defaultItem * (pageSizePx + spacingPx) - desiredOffset
+    val itemStride = pageSizePx.toLong() + spacingPx
+    if (itemStride <= 0) return InitialScroll(defaultItem, 0)
+
+    val centeredScroll = startPx + defaultItem.toLong() * itemStride - desiredOffset
 
     val startClamp = edgeClamp(
-        excess = startPx - desiredOffset,
-        contentOutside = defaultItem * (pageSizePx + spacingPx),
+        excess = (startPx - desiredOffset).toLong(),
+        contentOutside = defaultItem.toLong() * itemStride,
     )
     val endClamp = edgeClamp(
-        excess = endPx - (viewportPx - desiredOffset - pageSizePx),
-        contentOutside = (itemCount - 1 - defaultItem) * (pageSizePx + spacingPx),
+        excess = (endPx - (viewportPx - desiredOffset - pageSizePx)).toLong(),
+        contentOutside = (itemCount - 1L - defaultItem) * itemStride,
     )
 
-    return (centeredScroll - startClamp + endClamp).coerceAtLeast(0)
+    val absoluteScroll = (centeredScroll - startClamp + endClamp).coerceAtLeast(0)
+    val itemIndex = (absoluteScroll / itemStride).coerceIn(0, itemCount - 1L).toInt()
+    val itemOffset = (absoluteScroll - itemIndex * itemStride).toInt()
+    return InitialScroll(itemIndex, itemOffset)
 }
 
-private fun edgeClamp(excess: Int, contentOutside: Int): Int {
+private fun edgeClamp(excess: Long, contentOutside: Long): Long {
     if (excess <= 0) return 0
     return max(0, excess - contentOutside)
 }

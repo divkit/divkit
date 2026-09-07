@@ -30,11 +30,12 @@ internal fun DivPagerStateStorage.rememberAndStoreState(
     listState: LazyListState?,
     snapPosition: SnapPosition,
     initialPage: Int,
+    infiniteScroll: Boolean,
 ) {
     if (id == null) return
 
-    val pagerState = remember(id, pageCount, listState, snapPosition, initialPage) {
-        DivPagerState(pageCount, listState, snapPosition, initialPage)
+    val pagerState = remember(id, pageCount, listState, snapPosition, initialPage, infiniteScroll) {
+        DivPagerState(pageCount, listState, snapPosition, initialPage, infiniteScroll)
     }
 
     put(id, pagerState)

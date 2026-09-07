@@ -13,14 +13,15 @@ import kotlin.test.assertTrue
 class DivPagerStateTest {
 
     @Test
-    fun `empty visible items - currentPage falls back to firstVisibleItemIndex with zero offset`() {
+    fun `empty visible items - currentPage keeps initial page with zero offset`() {
         val state = pagerState(
             snapPosition = SnapPosition.Start,
             firstVisibleItemIndex = 7,
             visibleItems = emptyList(),
+            initialPage = 3,
         )
 
-        assertEquals(7, state.currentPage)
+        assertEquals(3, state.currentPage)
         assertEquals(0f, state.currentPageOffsetFraction, EPSILON)
     }
 
@@ -130,6 +131,30 @@ class DivPagerStateTest {
         assertEquals(0f, state.currentPageOffsetFraction, EPSILON)
     }
 
+    @Test
+    fun `infinite window reports first real page for its first middle item`() {
+        val itemWindow = PagerItemWindow.virtuallyUnbounded(realItemCount = 5)
+        val state = pagerState(
+            snapPosition = SnapPosition.Start,
+            visibleItems = listOf(item(index = itemWindow.rawIndex(0), offset = 0, size = 100)),
+            infiniteScroll = true,
+        )
+
+        assertEquals(0, state.currentPage)
+    }
+
+    @Test
+    fun `infinite window reports last real page for leading edge copy`() {
+        val itemWindow = PagerItemWindow.virtuallyUnbounded(realItemCount = 5)
+        val state = pagerState(
+            snapPosition = SnapPosition.Start,
+            visibleItems = listOf(item(index = itemWindow.rawIndex(0) - 1, offset = 0, size = 100)),
+            infiniteScroll = true,
+        )
+
+        assertEquals(4, state.currentPage)
+    }
+
     private companion object {
         const val EPSILON = 1e-4f
         const val VIEWPORT_END = 100
@@ -140,6 +165,8 @@ class DivPagerStateTest {
             firstVisibleItemIndex: Int = 0,
             viewportStart: Int = 0,
             viewportEnd: Int = VIEWPORT_END,
+            infiniteScroll: Boolean = false,
+            initialPage: Int = 0,
         ): DivPagerState {
             val layoutInfo: LazyListLayoutInfo = mock {
                 on { this.visibleItemsInfo } doReturn visibleItems
@@ -151,7 +178,13 @@ class DivPagerStateTest {
                 on { this.layoutInfo } doReturn layoutInfo
                 on { this.firstVisibleItemIndex } doReturn firstVisibleItemIndex
             }
-            return DivPagerState(pageCount = 5, listState = listState, snapPosition = snapPosition)
+            return DivPagerState(
+                pageCount = 5,
+                listState = listState,
+                snapPosition = snapPosition,
+                initialPage = initialPage,
+                infiniteScroll = infiniteScroll,
+            )
         }
 
         fun item(index: Int, offset: Int, size: Int): LazyListItemInfo = mock {
