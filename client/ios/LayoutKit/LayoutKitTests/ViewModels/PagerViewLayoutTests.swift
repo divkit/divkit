@@ -323,6 +323,101 @@ struct PagerViewLayoutTests {
   }
 
   @Test
+  func horizontalPager_pageContentSize_withMatchParentPageWidth_measuresHeightAtPagerWidth() {
+    let pagerWidth: CGFloat = 360
+    let layoutMode = PagerBlock.LayoutMode.pageContentSize
+    let model = pageContentSizeMatchParentWidthGalleryModel()
+
+    let frames = model.frames(
+      fitting: PagerFittingSize(scrollAxis: pagerWidth, crossAxis: nil),
+      layoutMode: layoutMode
+    )
+
+    #expect(frames.map(\.width) == [pagerWidth, 400, 300])
+
+    let tallestPageHeight = frames.map(\.height).max() ?? 0
+    let intrinsicSize = model.intrinsicPagerSize(forWidth: pagerWidth, layoutMode: layoutMode)
+
+    #expect(intrinsicSize.height == tallestPageHeight)
+    #expect(tallestPageHeight < 200)
+  }
+
+  @Test
+  func horizontalPager_pageContentSize_withMatchParentPageWidth_subtractsAxialInsets() {
+    let pagerWidth: CGFloat = 360
+    let leadingInset: CGFloat = 16
+    let trailingInset: CGFloat = 24
+    let contentWidth = pagerWidth - leadingInset - trailingInset
+    let layoutMode = PagerBlock.LayoutMode.pageContentSize
+    let model = pageContentSizeMatchParentWidthGalleryModel(
+      axialInsets: SideInsets(leading: leadingInset, trailing: trailingInset)
+    )
+
+    let frames = model.frames(
+      fitting: PagerFittingSize(scrollAxis: pagerWidth, crossAxis: nil),
+      layoutMode: layoutMode
+    )
+
+    #expect(frames.map(\.width) == [contentWidth, 400, 300])
+    #expect(frames.first?.minX == leadingInset)
+  }
+
+  @Test
+  func horizontalPager_degenerateBoundedCrossAxis_clampsResizablePagesToZero() {
+    let scrollAxisSize: CGFloat = 360
+    let crossAxisSize: CGFloat = 20
+    let crossInsetSum: CGFloat = 32
+    let fixedPageHeight: CGFloat = 100
+
+    let fixedPageItem = GalleryViewModel.Item(
+      crossAlignment: .leading,
+      content: TextBlock(
+        widthTrait: .fixed(120),
+        heightTrait: .fixed(fixedPageHeight),
+        text: NSAttributedString(string: "fixed")
+      )
+    )
+    let resizablePageItem = GalleryViewModel.Item(
+      crossAlignment: .leading,
+      content: TextBlock(
+        widthTrait: .fixed(120),
+        heightTrait: .weighted(.default),
+        text: NSAttributedString(string: "resizable")
+      )
+    )
+
+    let model = GalleryViewModel(
+      items: [fixedPageItem, resizablePageItem],
+      metrics: GalleryViewMetrics(
+        axialInsetMode: .fixed(values: .zero),
+        crossInsetMode: .fixed(
+          values: SideInsets(leading: crossInsetSum / 2, trailing: crossInsetSum / 2)
+        ),
+        spacings: [0],
+        crossSpacing: 0
+      ),
+      path: UIElementPath("degenerate-bounded-cross-axis"),
+      direction: .horizontal
+    )
+    let layoutMode = PagerBlock.LayoutMode.pageContentSize
+
+    let boundedFrames = model.frames(
+      fitting: PagerFittingSize(scrollAxis: scrollAxisSize, crossAxis: crossAxisSize),
+      layoutMode: layoutMode
+    )
+    #expect(crossAxisSize < crossInsetSum)
+    #expect(boundedFrames[0].height == fixedPageHeight)
+    #expect(boundedFrames[1].height == 0)
+
+    let intrinsicFrames = model.frames(
+      fitting: PagerFittingSize(scrollAxis: scrollAxisSize, crossAxis: nil),
+      layoutMode: layoutMode
+    )
+    #expect(intrinsicFrames[0].height == fixedPageHeight)
+    #expect(intrinsicFrames[1].height == fixedPageHeight)
+  }
+
+  @Test
   func horizontalPager_clampsResizableItemHeightToConstraints() {
     func item(minHeight: CGFloat, maxHeight: CGFloat) -> GalleryViewModel.Item {
       GalleryViewModel.Item(
@@ -623,6 +718,46 @@ private func verifyVerticalLayout(
       )
     }
   }
+}
+
+private func pageContentSizeMatchParentWidthGalleryModel(
+  axialInsets: SideInsets = .zero
+) -> GalleryViewModel {
+  func page(
+    text: String,
+    minWidth: CGFloat = 0,
+    maxWidth: CGFloat = .infinity
+  ) -> GalleryViewModel.Item {
+    GalleryViewModel.Item(
+      crossAlignment: .leading,
+      content: TextBlock(
+        widthTrait: .weighted(.default, minSize: minWidth, maxSize: maxWidth),
+        heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
+        text: NSAttributedString(string: text)
+      )
+    )
+  }
+
+  return GalleryViewModel(
+    items: [
+      page(text: "First page\nWidth = match_parent\nNo constraints"),
+      page(
+        text: "Middle page\nPage width = match_parent\nMin width > pager width",
+        minWidth: 400
+      ),
+      page(
+        text: "Last page\nPage width = match_parent\nMax width < pager width",
+        maxWidth: 300
+      ),
+    ],
+    metrics: GalleryViewMetrics(
+      axialInsetMode: .fixed(values: axialInsets),
+      spacings: [10, 10],
+      crossSpacing: 0
+    ),
+    path: UIElementPath("horizontal-pager-wrap-content-size-mode-match-parent"),
+    direction: .horizontal
+  )
 }
 
 private func galleryModel(

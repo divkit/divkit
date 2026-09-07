@@ -40,18 +40,19 @@ public struct PagerViewLayout: GalleryViewLayouting, Equatable {
   ) {
     self.model = model
     self.layoutMode = layoutMode
+    let fittingSize = PagerFittingSize(boundsSize: boundsSize, direction: model.direction)
     blockFrames = model.frames(
-      fitting: boundsSize,
+      fitting: fittingSize,
       layoutMode: layoutMode
     )
     blockPages = model.pages(
       for: blockFrames,
-      fitting: boundsSize
+      fitting: fittingSize
     )
 
     let contentSize = model.contentSize(
       for: blockFrames,
-      fitting: boundsSize
+      fitting: fittingSize
     )
 
     self.contentSize = model.direction.isHorizontal
@@ -95,46 +96,64 @@ extension GalleryViewModel {
     forWidth width: CGFloat?,
     layoutMode: PagerBlock.LayoutMode
   ) -> CGSize {
-    let size = width.map { CGSize(width: $0, height: 0) }
+    let fittingSize = PagerFittingSize(scrollAxis: width, crossAxis: nil)
     return contentSize(
-      for: self.frames(fitting: size, layoutMode: layoutMode),
-      fitting: size
+      for: self.frames(fitting: fittingSize, layoutMode: layoutMode),
+      fitting: fittingSize
     )
+  }
+}
+
+struct PagerFittingSize: Equatable {
+  static let unbounded = PagerFittingSize(scrollAxis: nil, crossAxis: nil)
+
+  var scrollAxis: CGFloat?
+  var crossAxis: CGFloat?
+
+  init(scrollAxis: CGFloat?, crossAxis: CGFloat?) {
+    self.scrollAxis = scrollAxis
+    self.crossAxis = crossAxis
+  }
+
+  init(boundsSize: CGSize, direction: ScrollDirection) {
+    self.scrollAxis = boundsSize.dimension(in: direction)
+    self.crossAxis = direction.isHorizontal ? boundsSize.height : boundsSize.width
   }
 }
 
 extension GalleryViewModel {
   func frames(
-    fitting size: CGSize?,
+    fitting fittingSize: PagerFittingSize? = nil,
     layoutMode: PagerBlock.LayoutMode
   ) -> [CGRect] {
-    switch direction {
+    let fitting = fittingSize ?? .unbounded
+    return switch direction {
     case .horizontal:
-      horizontallyOrientedFrames(fitting: size, layoutMode: layoutMode)
+      horizontallyOrientedFrames(fitting: fitting, layoutMode: layoutMode)
     case .vertical:
-      verticallyOrientedFrames(fitting: size, layoutMode: layoutMode)
+      verticallyOrientedFrames(fitting: fitting, layoutMode: layoutMode)
     }
   }
 
   fileprivate func pages(
     for frames: [CGRect],
-    fitting size: CGSize?
+    fitting fittingSize: PagerFittingSize
   ) -> [PagerViewLayout.Page] {
     guard let firstFrame = frames.first, let lastFrame = frames.last else {
       return []
     }
 
-    let bound = (size ?? .zero).dimension(in: direction)
+    let bound = fittingSize.scrollAxis ?? 0
     let contentSize = contentSize(
       for: frames,
-      fitting: size
+      fitting: fittingSize
     ).dimension(in: direction)
 
     let isScrollable = contentSize > bound
     let segmentBoundaries: [CGFloat] = if isScrollable {
       scrollOrigins(
         for: frames,
-        fitting: size,
+        fitting: fittingSize,
         bound: bound,
         contentSize: contentSize,
         firstFrame: firstFrame,
@@ -160,7 +179,7 @@ extension GalleryViewModel {
 
   private func scrollOrigins(
     for frames: [CGRect],
-    fitting size: CGSize?,
+    fitting fittingSize: PagerFittingSize,
     bound: CGFloat,
     contentSize: CGFloat,
     firstFrame: CGRect,
@@ -168,7 +187,7 @@ extension GalleryViewModel {
   ) -> [CGFloat] {
     let firstFrameOrigin = firstFrame.origin.dimension(in: direction)
     let lastFrameOffset = lastGap(
-      forSize: size,
+      forFitting: fittingSize,
       elementMainAxisSize: lastFrame.size.dimension(in: direction)
     )
     var frameOrigin = 0.0
@@ -192,26 +211,26 @@ extension GalleryViewModel {
 
   fileprivate func contentSize(
     for frames: [CGRect],
-    fitting size: CGSize?
+    fitting fittingSize: PagerFittingSize
   ) -> CGSize {
     guard let lastFrame = frames.last else { return .zero }
 
     switch direction {
     case .horizontal:
       let rightGap = lastGap(
-        forSize: size,
+        forFitting: fittingSize,
         elementMainAxisSize: lastFrame.size.dimension(in: direction)
       )
 
-      let bottomGap = crossInsets(forSize: size).trailing
+      let bottomGap = crossInsets(forFitting: fittingSize).trailing
       let width = lastFrame.maxX + rightGap
       let maxHeight = frames.map(\.maxY).max()!
 
       return CGSize(width: width, height: maxHeight + bottomGap)
     case .vertical:
-      let rightGap = crossInsets(forSize: size).trailing
+      let rightGap = crossInsets(forFitting: fittingSize).trailing
       let bottomGap = lastGap(
-        forSize: size,
+        forFitting: fittingSize,
         elementMainAxisSize: lastFrame.size.dimension(in: direction)
       )
       let maxWidth = frames.map(\.maxX).max()!
@@ -221,74 +240,84 @@ extension GalleryViewModel {
   }
 
   fileprivate func pageSize(
-    fitting size: CGSize?,
-    contentSize: CGFloat,
-    layoutMode: PagerBlock.LayoutMode
+    for block: Block,
+    fitting fittingSize: PagerFittingSize,
+    crossAxisReferenceSize: CGFloat,
+    layoutMode: PagerBlock.LayoutMode,
+    axialInsets: SideInsets,
+    itemSpacing: CGFloat
   ) -> CGFloat {
-    guard let size else {
-      switch layoutMode {
-      case .pageContentSize:
-        return contentSize
-      case .pageSize, .neighbourPageSize:
-        return 0.0
+    let intrinsicScrollAxisSize: () -> CGFloat = {
+      switch direction {
+      case .horizontal:
+        block.intrinsicContentWidth
+      case .vertical:
+        block.intrinsicContentHeight(forWidth: crossAxisReferenceSize)
       }
     }
 
-    let availableSize = size.dimension(in: direction)
+    guard let availableSize = fittingSize.scrollAxis else {
+      return layoutMode == .pageContentSize ? intrinsicScrollAxisSize() : 0
+    }
 
     guard availableSize > 0 else {
-      return 0.0 // No space, nothing to layout
+      return 0 // No space, nothing to layout
     }
 
-    switch layoutMode {
+    return switch layoutMode {
     case let .pageSize(relative):
-      return relative.absoluteValue(in: availableSize)
-    case let .neighbourPageSize(neighbourPageSize):
-      let gaps = gaps(forSize: size, elementMainAxisSize: nil)
-      let leadingMargin = gaps.first ?? 0.0
-      let trailingMargin = gaps.last ?? 0.0
-      let spacing = gaps.dropFirst().dropLast().first ?? 0.0
-      let neighbourSize = neighbourPageSize + spacing
+      relative.absoluteValue(in: availableSize)
 
-      let rawPageSize: CGFloat = switch alignment {
-      case .leading:
-        availableSize - leadingMargin - neighbourSize
-      case .center:
-        availableSize - neighbourSize * 2
-      case .trailing:
-        availableSize - trailingMargin - neighbourSize
-      }
-      return max(0, rawPageSize)
+    case let .neighbourPageSize(neighbourPageSize):
+      neighbourPageScrollAxisSize(
+        availableSize: availableSize,
+        alignment: alignment,
+        neighbourPageSize: neighbourPageSize,
+        axialInsets: axialInsets,
+        itemSpacing: itemSpacing
+      )
+
     case .pageContentSize:
-      return contentSize
+      pageContentScrollAxisSize(
+        availableSize: availableSize,
+        block: block,
+        direction: direction,
+        crossAxisReferenceSize: crossAxisReferenceSize,
+        axialInsets: axialInsets
+      )
     }
   }
 
   private func horizontallyOrientedFrames(
-    fitting size: CGSize?,
+    fitting fittingSize: PagerFittingSize,
     layoutMode: PagerBlock.LayoutMode
   ) -> [CGRect] {
-    if let size, size.dimension(in: .horizontal) <= 0 {
+    if let scrollAxis = fittingSize.scrollAxis, scrollAxis <= 0 {
       return []
     }
 
     let blocks = items.map(\.content)
+    let axialInsets = self.axialInsets(forFitting: fittingSize)
+    let itemSpacing = metrics.spacings.first ?? 0
     let pageWidths = blocks.map { block in
       pageSize(
-        fitting: size,
-        contentSize: block.intrinsicContentWidth,
-        layoutMode: layoutMode
+        for: block,
+        fitting: fittingSize,
+        crossAxisReferenceSize: 0,
+        layoutMode: layoutMode,
+        axialInsets: axialInsets,
+        itemSpacing: itemSpacing
       )
     }
 
-    let crossInsets = crossInsets(forSize: size)
-    let maxElementHeight: CGFloat = if let size {
-      size.height - crossInsets.sum
+    let crossInsets = crossInsets(forFitting: fittingSize)
+    let maxElementHeight: CGFloat = if let crossAxis = fittingSize.crossAxis {
+      max(0, crossAxis - crossInsets.sum)
     } else {
       blocks.maxHeightOfVerticallyNonResizableBlocks(for: pageWidths) ?? 0
     }
     let minY = crossInsets.leading
-    let gaps = gaps(forSize: size, elementMainAxisSize: pageWidths.first)
+    let gaps = gaps(forFitting: fittingSize, elementMainAxisSize: pageWidths.first)
     var x = gaps[0]
     return zip3(items, pageWidths, gaps.dropFirst()).map { item, width, gap in
       let block = item.content
@@ -307,25 +336,33 @@ extension GalleryViewModel {
   }
 
   private func verticallyOrientedFrames(
-    fitting size: CGSize?,
+    fitting fittingSize: PagerFittingSize,
     layoutMode: PagerBlock.LayoutMode
   ) -> [CGRect] {
-    let crossInsets = self.crossInsets(forSize: size)
+    let crossInsets = self.crossInsets(forFitting: fittingSize)
     let blocks = items.map(\.content)
-    let maxWidth = size.map { $0.width - crossInsets.sum } ??
+    let maxWidth: CGFloat = if let crossAxis = fittingSize.crossAxis {
+      max(0, crossAxis - crossInsets.sum)
+    } else {
       blocks.maxWidthOfHorizontallyNonResizableBlocks ?? 0
+    }
 
     let minX = crossInsets.leading
 
-    let heights = (0..<blocks.count).map { index in
+    let axialInsets = self.axialInsets(forFitting: fittingSize)
+    let itemSpacing = metrics.spacings.first ?? 0
+    let heights = blocks.map { block in
       pageSize(
-        fitting: size,
-        contentSize: blocks[index].intrinsicContentHeight(forWidth: maxWidth),
-        layoutMode: layoutMode
+        for: block,
+        fitting: fittingSize,
+        crossAxisReferenceSize: maxWidth,
+        layoutMode: layoutMode,
+        axialInsets: axialInsets,
+        itemSpacing: itemSpacing
       )
     }
 
-    let gaps = self.gaps(forSize: size, elementMainAxisSize: heights.first)
+    let gaps = self.gaps(forFitting: fittingSize, elementMainAxisSize: heights.first)
     var y = gaps[0]
 
     return zip3(items, heights, gaps.dropFirst()).map { item, height, gap in
@@ -346,15 +383,22 @@ extension GalleryViewModel {
     }
   }
 
-  private func crossInsets(forSize size: CGSize?) -> SideInsets {
-    metrics.crossInsetMode.insets(forSize: size?.dimension(in: direction) ?? 0)
+  private func crossInsets(forFitting fittingSize: PagerFittingSize) -> SideInsets {
+    metrics.crossInsetMode.insets(forSize: fittingSize.scrollAxis ?? 0)
   }
 
-  private func lastGap(forSize size: CGSize?, elementMainAxisSize: CGFloat?) -> CGFloat {
-    let modelInset = metrics.axialInsetMode.insets(forSize: size?.dimension(in: direction) ?? 0)
+  private func axialInsets(forFitting fittingSize: PagerFittingSize) -> SideInsets {
+    metrics.axialInsetMode.insets(forSize: fittingSize.scrollAxis ?? 0)
+  }
+
+  private func lastGap(
+    forFitting fittingSize: PagerFittingSize,
+    elementMainAxisSize: CGFloat?
+  ) -> CGFloat {
+    let modelInset = metrics.axialInsetMode.insets(forSize: fittingSize.scrollAxis ?? 0)
       .trailing
     let overlapInset: CGFloat = if transformation?.style == .overlap,
-                                   let mainAxisSpace = size?.dimension(in: direction),
+                                   let mainAxisSpace = fittingSize.scrollAxis,
                                    let elementSize = elementMainAxisSize {
       (mainAxisSpace - elementSize) / 2
     } else {
@@ -363,10 +407,13 @@ extension GalleryViewModel {
     return modelInset + overlapInset
   }
 
-  private func gaps(forSize size: CGSize?, elementMainAxisSize: CGFloat?) -> [CGFloat] {
-    let modelInset = metrics.gaps(forSize: size?.dimension(in: direction) ?? 0)
+  private func gaps(
+    forFitting fittingSize: PagerFittingSize,
+    elementMainAxisSize: CGFloat?
+  ) -> [CGFloat] {
+    let modelInset = metrics.gaps(forSize: fittingSize.scrollAxis ?? 0)
     if transformation?.style == .overlap,
-       let mainAxisSpace = size?.dimension(in: direction),
+       let mainAxisSpace = fittingSize.scrollAxis,
        let elementSize = elementMainAxisSize {
       let overlapInset = (mainAxisSpace - elementSize) / 2
       return [overlapInset] + modelInset.dropFirst()
@@ -425,4 +472,49 @@ extension CGSize {
       height
     }
   }
+}
+
+fileprivate func pageContentScrollAxisSize(
+  availableSize: CGFloat,
+  block: Block,
+  direction: ScrollDirection,
+  crossAxisReferenceSize: CGFloat,
+  axialInsets: SideInsets
+) -> CGFloat {
+  let scrollAxisAvailableSize = max(availableSize - axialInsets.sum, 0)
+
+  return switch direction {
+  case .horizontal:
+    if block.isHorizontallyResizable {
+      clamp(scrollAxisAvailableSize, min: block.minWidth, max: block.maxWidth)
+    } else {
+      block.intrinsicContentWidth
+    }
+  case .vertical:
+    if block.isVerticallyResizable {
+      clamp(scrollAxisAvailableSize, min: block.minHeight, max: block.maxHeight)
+    } else {
+      block.intrinsicContentHeight(forWidth: crossAxisReferenceSize)
+    }
+  }
+}
+
+fileprivate func neighbourPageScrollAxisSize(
+  availableSize: CGFloat,
+  alignment: Alignment,
+  neighbourPageSize: CGFloat,
+  axialInsets: SideInsets,
+  itemSpacing: CGFloat
+) -> CGFloat {
+  let neighbourSize = neighbourPageSize + itemSpacing
+
+  let rawPageSize: CGFloat = switch alignment {
+  case .leading:
+    availableSize - axialInsets.leading - neighbourSize
+  case .center:
+    availableSize - neighbourSize * 2
+  case .trailing:
+    availableSize - axialInsets.trailing - neighbourSize
+  }
+  return max(0, rawPageSize)
 }
