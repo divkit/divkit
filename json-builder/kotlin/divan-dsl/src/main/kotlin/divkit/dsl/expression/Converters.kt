@@ -16,13 +16,6 @@ import divkit.dsl.scope.DivScope
 import divkit.dsl.stringVariable
 import divkit.dsl.urlVariable
 
-fun DivScope.divkitColorVariable(colorVariable: Var<String>, value: String): Variable {
-    return colorVariable(
-        name = colorVariable.name,
-        value = color(value)
-    )
-}
-
 fun DivScope.divkitVariable(variable: Var<Long>, value: Int): Variable {
     return integerVariable(
         name = variable.name,
@@ -65,6 +58,11 @@ inline fun <reified T> DivScope.divkitVariable(variable: Var<T>, value: T): Vari
             value = value as Double,
         )
 
+        Color::class -> colorVariable(
+            name = variable.name,
+            value = value as Color,
+        )
+
         Url::class -> urlVariable(
             name = variable.name,
             value = value as Url,
@@ -85,4 +83,7 @@ inline fun <reified T> DivScope.divkitVariable(variable: Var<T>, value: T): Vari
 }
 
 fun <T> Expression<T>.expressionArrayElement() = divkit.dsl.core.expressionArrayElement<T>(compile())
-fun Expression<String>.colorExpressionArrayElement() = divkit.dsl.core.expressionArrayElement<Color>(compile())
+
+fun Expression<Color>.colorExpressionArrayElement() = divkit.dsl.core.expressionArrayElement<Color>(compile())
+
+fun Color.colorExpressionArrayElement() = color().colorExpressionArrayElement()

@@ -79,7 +79,7 @@ fun <VALUE_TYPE> String.arrayVariable(): Var<List<VALUE_TYPE>> = Var(this)
 /**
  * Creates variable of 'color' divkit type.
  */
-fun String.colorVariable(): Var<String> = Var(this)
+fun String.colorVariable(): Var<Color> = Var(this)
 
 /**
  * Corresponds to 'integer' divkit data type.
@@ -149,13 +149,13 @@ internal data class BooleanValue(val value: Boolean) : Value<Boolean> {
 fun Boolean.boolean(): Expression<Boolean> = BooleanValue(this)
 
 internal data class ColorValue(val value: Color) : Value<Color> {
-    override fun build(): String = value.value
+    override fun build(): String = "'${value.value.shieldedString()}'"
 }
 
 fun Color.color(): Expression<Color> = ColorValue(this)
 
 internal data class UrlValue(val value: Url) : Value<Url> {
-    override fun build(): String = value.value
+    override fun build(): String = "'${value.value.shieldedString()}'"
 }
 
 fun Url.url(): Expression<Url> = UrlValue(this)

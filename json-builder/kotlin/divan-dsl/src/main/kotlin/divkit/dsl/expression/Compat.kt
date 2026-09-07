@@ -12,7 +12,6 @@ import divkit.dsl.expression.compile
 import divkit.dsl.expression.string
 import divkit.dsl.scope.DivScope
 import divkit.dsl.expression.divanExpression as divanExpressionImpl
-import divkit.dsl.expression.divkitColorVariable as divkitColorVariableImpl
 import divkit.dsl.expression.divkitVariable as divkitVariableImpl
 
 typealias ActionEnumValue = divkit.dsl.expression.ActionEnumValue
@@ -57,9 +56,6 @@ fun EnumValue.string(): Expression<String> = this.serialized.string()
 
 fun ActionEnumValue.string(): Expression<String> = this.value.string()
 
-fun DivScope.divkitColorVariable(colorVariable: Var<String>, value: String): Variable =
-    this.divkitColorVariableImpl(colorVariable, value)
-
 fun DivScope.divkitVariable(variable: Var<Long>, value: Int): Variable = divkitVariableImpl(variable, value)
 
 fun DivScope.divkitVariable(variable: Var<Double>, value: Float): Variable = divkitVariableImpl(variable, value)
@@ -70,7 +66,7 @@ fun <T> Expression<T>.expressionArrayElement() = divkit.dsl.core.expressionArray
 
 fun Expression<String>.colorExpressionArrayElement() = divkit.dsl.core.expressionArrayElement<Color>(compile())
 
-fun <T : Any> Expression<*>.divanExpression(): ExpressionProperty<T> = this.divanExpressionImpl()
+fun <T : Any> Expression<*>.divanExpression(): ExpressionProperty<T> = divanExpression(this)
 
 @JvmName("divanExpressionWrapper")
-fun <T : Any> divanExpression(expression: Expression<*>): ExpressionProperty<T> = divkit.dsl.expression.divanExpression(expression)
+fun <T : Any> divanExpression(expression: Expression<*>): ExpressionProperty<T> = divanExpressionImpl(expression)
