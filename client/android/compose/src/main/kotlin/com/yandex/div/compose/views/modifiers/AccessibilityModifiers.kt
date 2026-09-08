@@ -21,6 +21,7 @@ import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
+import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 
@@ -38,10 +39,11 @@ internal fun Modifier.accessibility(data: DivBase): Modifier {
     } else {
         data.defaultAccessibilityType
     }
+    val role = if (accessibility.type != Type.AUTO) type.role else data.defaultRole
 
     val isMerge = mode == Mode.MERGE
 
-    if (!accessibility.hasSemantics(type, isMerge)) {
+    if (!accessibility.hasSemantics(type, role, isMerge)) {
         return this
     }
 
@@ -52,15 +54,15 @@ internal fun Modifier.accessibility(data: DivBase): Modifier {
         contentDescription?.let { this.contentDescription = it }
         stateDescription?.let { this.stateDescription = it }
         isChecked?.let { toggleableState = if (it) ToggleableState.On else ToggleableState.Off }
-        type.role?.let { role = it }
+        role?.let { this.role = it }
         if (type.isHeader) {
             heading()
         }
     }
-    return if (isMerge) {
-        clearAndSetSemantics(properties = properties)
-    } else {
-        semantics(properties = properties)
+    return when {
+        !isMerge -> semantics(properties = properties)
+        data.keepsControlSemanticsOnMerge -> semantics(mergeDescendants = true, properties = properties)
+        else -> clearAndSetSemantics(properties = properties)
     }
 }
 
@@ -76,15 +78,25 @@ private fun DivAccessibility.observeContentDescription(): String? {
     }
 }
 
-private fun DivAccessibility.hasSemantics(type: Type, isMerge: Boolean): Boolean {
+private fun DivAccessibility.hasSemantics(type: Type, role: Role?, isMerge: Boolean): Boolean {
     return description != null
             || hint != null
             || stateDescription != null
             || (isChecked != null && type.isCheckable)
-            || type.role != null
+            || role != null
             || type.isHeader
             || isMerge
 }
+
+/** Controls without nested elements: merging must not clear the control's own semantics. */
+private val DivBase.keepsControlSemanticsOnMerge: Boolean
+    get() = this is DivSwitch
+
+private val DivBase.defaultRole: Role?
+    get() = when (this) {
+        is DivSwitch -> Role.Switch
+        else -> defaultAccessibilityType.role
+    }
 
 private val DivBase.defaultAccessibilityType: Type
     get() {
