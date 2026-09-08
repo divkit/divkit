@@ -60,7 +60,7 @@ class DivTextEllipsisTest {
                 text = constant("A very long text that does not fit into a single line"),
                 maxLines = 1,
                 ellipsis = ellipsis(constant("… more")),
-                width = fixed(constant(100))
+                width = fixed(100)
             )
         )
 
@@ -77,7 +77,7 @@ class DivTextEllipsisTest {
                 text = constant("Short"),
                 maxLines = 1,
                 ellipsis = ellipsis(constant("… more")),
-                width = fixed(constant(100))
+                width = fixed(100)
             )
         )
 
@@ -93,7 +93,7 @@ class DivTextEllipsisTest {
                 text = constant("MMMMMMMMMMMMMMMM"),
                 fontSize = 20,
                 maxLines = 1,
-                width = fixed(constant(40)),
+                width = fixed(40),
                 backgrounds = listOf(solidBackground(constant(0xFFFFFFFF.toInt()))),
                 ranges = listOf(textRange(
                     start = 1,
@@ -115,7 +115,7 @@ class DivTextEllipsisTest {
                 id = "text",
                 text = constant("A very long text that does not fit into a single line"),
                 ellipsis = ellipsis(constant("… more")),
-                width = fixed(constant(100))
+                width = fixed(100)
             )
         )
 
@@ -134,7 +134,7 @@ class DivTextEllipsisTest {
                 text = constant("A very long text that does not fit into a single line"),
                 maxLines = 1,
                 ellipsis = ellipsis(expression("@{suffix}")),
-                width = fixed(constant(100))
+                width = fixed(100)
             )
         )
 
@@ -197,7 +197,7 @@ class DivTextEllipsisTest {
                     text = constant("… more"),
                     images = listOf(textImage(url = "https://divkit.tech/image.png"))
                 ),
-                width = fixed(constant(100))
+                width = fixed(100)
             )
         )
 

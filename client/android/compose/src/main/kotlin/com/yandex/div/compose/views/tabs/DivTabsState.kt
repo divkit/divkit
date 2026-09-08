@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import kotlin.math.abs
 
 @Composable
 internal fun rememberDivTabsState(
@@ -45,3 +46,12 @@ internal class DivTabsState(
         }
     }
 }
+
+internal val PagerState.logicalPosition: Float
+    get() {
+        val offset = currentPageOffsetFraction.let { if (abs(it) < PAGE_OFFSET_EPSILON) 0f else it }
+        return (currentPage.toFloat() + offset)
+            .coerceIn(0f, (pageCount - 1).coerceAtLeast(0).toFloat())
+    }
+
+private const val PAGE_OFFSET_EPSILON = 0.00001f

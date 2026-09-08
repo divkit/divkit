@@ -146,7 +146,7 @@ class DivTabsSelectionTest {
             items = List(pages) { index ->
                 tabItem(
                     div = text(
-                        height = fixed(constant(200L)),
+                        height = fixed(200),
                         text = constant("Page ${index + 1}$pageSuffix"),
                     ),
                     title = "Tab ${index + 1}",
@@ -158,5 +158,5 @@ class DivTabsSelectionTest {
     )
 }
 
-// TabsContent's measure slot composes every page a second time without placing it.
+// Measurement can compose an unplaced copy of a page.
 private fun isPlaced() = SemanticsMatcher("is placed") { it.layoutInfo.isPlaced }

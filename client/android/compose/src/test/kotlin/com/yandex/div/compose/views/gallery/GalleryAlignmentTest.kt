@@ -115,20 +115,20 @@ class GalleryAlignmentTest {
             data = data(
                 gallery(
                     defaultItem = intExpression("@{default_item}"),
-                    height = fixed(constant(100L)),
+                    height = fixed(100),
                     id = "gallery",
                     itemSpacing = constant(8L),
                     items = List(5) { index ->
                         text(
-                            height = fixed(constant(100L)),
+                            height = fixed(100),
                             id = "item$index",
                             text = constant(index.toString()),
-                            width = fixed(constant(100L)),
+                            width = fixed(100),
                         )
                     },
                     scrollContentAlignment = contentAlignmentExpression("@{alignment}"),
                     scrollMode = constant(DivGallery.ScrollMode.PAGING),
-                    width = fixed(constant(300L)),
+                    width = fixed(300),
                 )
             ),
         )
@@ -174,19 +174,19 @@ class GalleryAlignmentTest {
                 gallery(
                     columnCount = constant(2L),
                     defaultItem = intExpression("@{default_item}"),
-                    height = fixed(constant(108L)),
+                    height = fixed(108),
                     id = "gallery",
                     itemSpacing = constant(8L),
                     items = List(12) { index ->
                         text(
-                            height = fixed(constant(50L)),
+                            height = fixed(50),
                             id = "item$index",
                             text = constant(index.toString()),
-                            width = fixed(constant(100L)),
+                            width = fixed(100),
                         )
                     },
                     scrollContentAlignment = contentAlignmentExpression("@{alignment}"),
-                    width = fixed(constant(300L)),
+                    width = fixed(300),
                 )
             ),
         )
@@ -240,18 +240,18 @@ class GalleryAlignmentTest {
                 gallery(
                     columnCount = columnCount,
                     defaultItem = intExpression("@{default_item}"),
-                    height = fixed(constant(108L)),
+                    height = fixed(108),
                     id = "gallery",
                     items = List(8) { index ->
                         text(
-                            height = fixed(constant(50L)),
+                            height = fixed(50),
                             id = "item$index",
                             text = constant(index.toString()),
-                            width = fixed(constant(100L)),
+                            width = fixed(100),
                         )
                     },
                     scrollContentAlignment = constant(DivGallery.ContentAlignment.START),
-                    width = fixed(constant(300L)),
+                    width = fixed(300),
                 )
             ),
         )

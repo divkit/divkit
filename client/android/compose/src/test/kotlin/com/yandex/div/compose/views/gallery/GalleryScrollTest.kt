@@ -254,15 +254,15 @@ class GalleryScrollTest {
             gallery(
                 columnCount = constant(columnCount),
                 defaultItem = intExpression("@{default_item}"),
-                height = fixed(constant(108L)),
+                height = fixed(108),
                 id = "gallery",
                 items = List(16) { index ->
                     text(
-                        height = fixed(constant(50L)),
+                        height = fixed(50),
                         id = "item$index",
                         text = constant(index.toString()),
                         visibility = visibilityExpression("@{visible_items > $index ? 'visible' : 'gone'}"),
-                        width = fixed(constant(100L)),
+                        width = fixed(100),
                     )
                 },
                 paddings = DivEdgeInsets(start = intExpression("@{start_padding}")),
@@ -277,7 +277,7 @@ class GalleryScrollTest {
                     },
                 ),
                 scrollMode = constant(scrollMode),
-                width = fixed(constant(300L)),
+                width = fixed(300),
             )
         )
         restorationTester.setContent {

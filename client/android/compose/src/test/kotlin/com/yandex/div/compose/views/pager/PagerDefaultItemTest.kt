@@ -89,19 +89,19 @@ class PagerDefaultItemTest {
                 Div.Pager(
                     value = DivPager(
                         defaultItem = intExpression("@{default_item}"),
-                        height = fixed(constant(100L)),
+                        height = fixed(100),
                         id = "pager",
                         items = List(10) { index ->
                             text(
-                                height = fixed(constant(100L)),
+                                height = fixed(100),
                                 id = "item$index",
                                 text = constant(index.toString()),
-                                width = fixed(constant(100L)),
+                                width = fixed(100),
                             )
                         },
                         layoutMode = DivPagerLayoutMode.PageContentSize(DivPageContentSize()),
                         scrollAxisAlignment = itemAlignmentExpression("@{alignment}"),
-                        width = fixed(constant(300L)),
+                        width = fixed(300),
                     )
                 )
             ),

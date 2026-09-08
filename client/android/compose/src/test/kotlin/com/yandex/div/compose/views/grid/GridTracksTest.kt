@@ -49,8 +49,8 @@ class GridTracksTest {
         setContent(
             grid(
                 columnCount = constant(2L),
-                width = fixed(constant(120L)),
-                height = fixed(constant(120L)),
+                width = fixed(120),
+                height = fixed(120),
                 items = listOf(
                     weightedSeparator("top-left", observedWeight, observedWeight),
                     weightedSeparator("top-right", constant(1.0), observedWeight),
@@ -76,28 +76,28 @@ class GridTracksTest {
         setContent(
             grid(
                 columnCount = constant(2L),
-                width = fixed(constant(10L)),
-                height = fixed(constant(10L)),
+                width = fixed(10),
+                height = fixed(10),
                 items = listOf(
                     separator(
                         width = matchParent(constant(1.0)),
-                        height = fixed(constant(5L)),
+                        height = fixed(5),
                         margins = itemMargins,
                     ),
                     separator(
                         width = matchParent(constant(1.0)),
-                        height = fixed(constant(5L)),
+                        height = fixed(5),
                         margins = itemMargins,
                     ),
                     separator(
                         id = "first-marker",
-                        width = fixed(constant(1L)),
-                        height = fixed(constant(5L)),
+                        width = fixed(1),
+                        height = fixed(5),
                     ),
                     separator(
                         id = "second-marker",
-                        width = fixed(constant(1L)),
-                        height = fixed(constant(5L)),
+                        width = fixed(1),
+                        height = fixed(5),
                     ),
                 ),
             )
@@ -115,29 +115,29 @@ class GridTracksTest {
         setContent(
             grid(
                 columnCount = constant(3L),
-                width = fixed(constant(40L)),
-                height = fixed(constant(15L)),
+                width = fixed(40),
+                height = fixed(15),
                 items = listOf(
-                    separator(width = matchParent(constant(1.0)), height = fixed(constant(5L))),
-                    separator(width = fixed(constant(5L)), height = fixed(constant(5L))),
-                    separator(width = fixed(constant(5L)), height = fixed(constant(5L))),
-                    separator(width = fixed(constant(1L)), height = fixed(constant(5L))),
+                    separator(width = matchParent(constant(1.0)), height = fixed(5)),
+                    separator(width = fixed(5), height = fixed(5)),
+                    separator(width = fixed(5), height = fixed(5)),
+                    separator(width = fixed(1), height = fixed(5)),
                     separator(
                         width = matchParent(),
-                        height = fixed(constant(5L)),
+                        height = fixed(5),
                         margins = itemMargins,
                     ),
-                    separator(width = fixed(constant(1L)), height = fixed(constant(5L))),
-                    separator(width = fixed(constant(1L)), height = fixed(constant(5L))),
+                    separator(width = fixed(1), height = fixed(5)),
+                    separator(width = fixed(1), height = fixed(5)),
                     separator(
                         id = "second-marker",
-                        width = fixed(constant(1L)),
-                        height = fixed(constant(5L)),
+                        width = fixed(1),
+                        height = fixed(5),
                     ),
                     separator(
                         id = "third-marker",
-                        width = fixed(constant(1L)),
-                        height = fixed(constant(5L)),
+                        width = fixed(1),
+                        height = fixed(5),
                     ),
                 ),
             )

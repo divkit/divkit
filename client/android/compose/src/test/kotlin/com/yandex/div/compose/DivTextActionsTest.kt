@@ -68,7 +68,7 @@ class DivTextActionsTest {
                     actions = listOf(action(url = "test://ellipsis")),
                     text = constant("… more")
                 ),
-                width = fixed(constant(100))
+                width = fixed(100)
             )
         )
 
@@ -213,7 +213,7 @@ class DivTextActionsTest {
         maxLines = 1,
         ellipsis = ellipsis,
         selectable = selectable,
-        width = fixed(constant(100))
+        width = fixed(100)
     )
 
     private fun clickFirstLink() {

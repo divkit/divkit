@@ -16,8 +16,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.yandex.div.compose.context.animationsEnabled
@@ -47,7 +49,8 @@ internal fun DivTabsView(
     val resolver = expressionResolver
     val state = rememberDivTabsState(
         initialIndex = remember(data.selectedTab, resolver) {
-            data.selectedTab.evaluate(resolver).toInt().coerceIn(0, (items.size - 1).coerceAtLeast(0))
+            data.selectedTab.evaluate(resolver).toInt()
+                .coerceIn(0, (items.size - 1).coerceAtLeast(0))
         },
         tabCount = items.size,
     )
@@ -84,7 +87,9 @@ internal fun DivTabsView(
             style = style,
             titleDelimiter = data.tabTitleDelimiter,
             titlePaddings = titlePaddings,
-            onTabSelected = { index -> scope.launch { state.selectTab(index, animated = animated) } },
+            onTabSelected = { index ->
+                scope.launch { state.selectTab(index, animated = animated) }
+            },
         )
 
         if (data.hasSeparator.observedValue()) {
@@ -124,42 +129,59 @@ private fun TabsContent(
     isDynamicHeight: Boolean,
     isSwipeEnabled: Boolean,
 ) {
+    val pageContents = remember(items) {
+        arrayOfNulls<@Composable () -> Unit>(items.size)
+    }
     SubcomposeLayout { constraints ->
-        val measureSlot = subcompose(TabsContentSlot.Measure) {
-            items.forEach { DivBlockView(it.div) }
-        }
-        val measureWidth = if (constraints.hasBoundedWidth) {
-            constraints.maxWidth
-        } else {
-            Constraints.Infinity
-        }
-        val pagePlaceables = measureSlot.map { measurable ->
-            val pageConstraints = if (constraints.hasBoundedHeight) {
-                constraints
-            } else {
-                constraints.copy(maxHeight = measurable.maxIntrinsicHeight(measureWidth))
+        fun subcomposePage(index: Int): List<Measurable> {
+            val content = pageContents[index] ?: run {
+                val newContent: @Composable () -> Unit = { DivBlockView(items[index].div) }
+                pageContents[index] = newContent
+                newContent
             }
-            measurable.measure(pageConstraints)
+            return subcompose(slotId = index, content = content)
         }
 
-        val maxHeight = pagePlaceables.maxOf { it.height }
-        val logicalPosition = (
-            pagerState.currentPage.toFloat() + pagerState.currentPageOffsetFraction
-        ).coerceIn(0f, (items.size - 1).toFloat())
+        val measuredPages = arrayOfNulls<IntSize>(items.size)
+        fun measurePage(index: Int): IntSize {
+            measuredPages[index]?.let { return it }
+            val measurable = subcomposePage(index).firstOrNull()
+            val size = if (measurable == null) {
+                IntSize.Zero
+            } else {
+                val pageConstraints = if (constraints.hasBoundedHeight) {
+                    constraints
+                } else {
+                    constraints.copy(maxHeight = measurable.maxIntrinsicHeight(constraints.maxWidth))
+                }
+                measurable.measure(pageConstraints).let { IntSize(it.width, it.height) }
+            }
+            measuredPages[index] = size
+            return size
+        }
+
         val desiredHeight = computeDesiredHeight(
-            placeables = pagePlaceables,
-            logicalPosition = logicalPosition,
-            maxHeight = maxHeight,
             isDynamicHeight = isDynamicHeight,
+            logicalPosition = pagerState.logicalPosition,
+            pageCount = items.size,
+            pageHeight = { measurePage(it).height },
         )
 
         val width = if (constraints.hasBoundedWidth) {
             constraints.maxWidth
         } else {
-            pagePlaceables.maxOf { it.width }
+            // With unbounded width every page can affect the pager's size.
+            items.indices.maxOf { measurePage(it).width }
         }
 
-        val pagerPlaceable = subcompose(TabsContentSlot.Pager) {
+        // Keep previously requested compositions active without measuring unused pages.
+        pageContents.indices.forEach { index ->
+            if (pageContents[index] != null && measuredPages[index] == null) {
+                subcomposePage(index)
+            }
+        }
+
+        val pagerPlaceable = subcompose(TabsPagerSlot) {
             HorizontalPager(
                 state = pagerState,
                 userScrollEnabled = isSwipeEnabled,
@@ -175,26 +197,34 @@ private fun TabsContent(
     }
 }
 
-private fun computeDesiredHeight(
-    placeables: List<androidx.compose.ui.layout.Placeable>,
-    logicalPosition: Float,
-    maxHeight: Int,
+private inline fun computeDesiredHeight(
     isDynamicHeight: Boolean,
+    logicalPosition: Float,
+    pageCount: Int,
+    pageHeight: (Int) -> Int,
 ): Int {
-    if (isDynamicHeight) {
-        val intPos = logicalPosition.toInt().coerceIn(0, placeables.lastIndex)
-        val frac = (logicalPosition - intPos).coerceIn(0f, 1f)
-        val source = placeables[intPos].height
-        val dest = placeables.getOrNull(intPos + 1)?.height ?: source
-        return lerp(source, dest, frac)
-    }
-    return when {
-        logicalPosition <= 0f -> placeables[0].height
-        logicalPosition >= 1f -> maxHeight
-        else -> lerp(placeables[0].height, maxHeight, logicalPosition)
+    return if (isDynamicHeight) {
+        val sourceIndex = logicalPosition.toInt()
+        val fraction = logicalPosition - sourceIndex
+        val sourceHeight = pageHeight(sourceIndex)
+        if (fraction == 0f) {
+            sourceHeight
+        } else {
+            lerp(sourceHeight, pageHeight(sourceIndex + 1), fraction)
+        }
+    } else if (logicalPosition == 0f) {
+        // The first tab uses only its own height. Other pages need not be composed yet.
+        pageHeight(0)
+    } else {
+        val maxHeight = (0 until pageCount).maxOf { pageHeight(it) }
+        if (logicalPosition >= 1f) {
+            maxHeight
+        } else {
+            lerp(pageHeight(0), maxHeight, logicalPosition)
+        }
     }
 }
 
-private enum class TabsContentSlot { Measure, Pager }
+private data object TabsPagerSlot
 
 private val DEFAULT_TAB_TITLE_STYLE = DivTabs.TabTitleStyle()

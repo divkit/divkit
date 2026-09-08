@@ -7,6 +7,7 @@ import com.yandex.div2.DivSize
 import com.yandex.div2.DivTabs
 
 fun tabs(
+    dynamicHeight: Expression<Boolean> = constant(false),
     height: DivSize = wrapContent(),
     id: String? = null,
     items: List<DivTabs.Item>,
@@ -16,6 +17,7 @@ fun tabs(
 ): Div {
     return Div.Tabs(
         value = DivTabs(
+            dynamicHeight = dynamicHeight,
             height = height,
             id = id,
             items = items,

@@ -6,6 +6,8 @@ import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivWrapContentSize
 
+fun fixed(value: Int): DivSize = fixed(constant(value.toLong()))
+
 fun fixed(value: Expression<Long>): DivSize = DivSize.Fixed(DivFixedSize(value = value))
 
 fun matchParent(weight: Expression<Double>? = null): DivSize =
