@@ -93,7 +93,9 @@ extension DivData: DivBlockModeling {
 }
 
 extension DivData {
-  /// Resolves a card using pre-parsed typed templates.
+  /// Resolves a card using pre-resolved templates. The parsing pipeline is
+  /// selected by the container: `DivTemplates(dictionary:flagsInfo:)` with
+  /// `useUntypedTemplateResolver` set opts into the untyped pipeline.
   ///
   /// Use this overload when the same templates are reused across multiple cards.
   public static func resolve(
@@ -110,41 +112,51 @@ extension DivData {
     flagsInfo: DivFlagsInfo = .default
   ) -> DeserializationResult<DivData> {
     if flagsInfo.useUntypedTemplateResolver {
-      let templateResolver: TemplateResolver? = if let templatesDict, !templatesDict.isEmpty {
-        { [resolver = UntypedDivTemplateResolver(templates: templatesDict)] in
-          resolver.resolveFlat($0)
-        }
+      let resolver: UntypedDivTemplateResolver? = if let templatesDict, !templatesDict.isEmpty {
+        UntypedDivTemplateResolver(templates: templatesDict)
       } else {
         nil
       }
-      let parsingContext = ParsingContext(templateResolver: templateResolver)
-
-      let divDataResult: DeserializationResult<DivData>
-      do {
-        divDataResult = try .success(DivData(dictionary: cardDict, context: parsingContext))
-      } catch {
-        divDataResult = .noValue
-      }
-
-      let contextErrors = parsingContext.errors
-      let contextWarnings = parsingContext.warnings
-
-      switch divDataResult {
-      case let .success(value), let .partialSuccess(value, _):
-        if let warnings = NonEmptyArray(contextErrors + contextWarnings) {
-          return .partialSuccess(value, warnings: warnings)
-        }
-        return .success(value)
-      default:
-        if let errors = NonEmptyArray(contextErrors) {
-          return .failure(errors)
-        }
-        return .failure(NonEmptyArray(.generic))
-      }
+      return resolveUntyped(card: cardDict, resolver: resolver)
     }
 
     let divTemplates = templatesDict.map(DivTemplates.init) ?? .empty
     return resolve(card: cardDict, templates: divTemplates, flagsInfo: flagsInfo)
+  }
+
+  static func resolveUntyped(
+    card cardDict: [String: Any],
+    resolver: UntypedDivTemplateResolver?
+  ) -> DeserializationResult<DivData> {
+    let templateResolver: TemplateResolver? = if let resolver {
+      { resolver.resolveFlat($0) }
+    } else {
+      nil
+    }
+    let parsingContext = ParsingContext(templateResolver: templateResolver)
+
+    let divDataResult: DeserializationResult<DivData>
+    do {
+      divDataResult = try .success(DivData(dictionary: cardDict, context: parsingContext))
+    } catch {
+      divDataResult = .noValue
+    }
+
+    let contextErrors = parsingContext.errors
+    let contextWarnings = parsingContext.warnings
+
+    switch divDataResult {
+    case let .success(value), let .partialSuccess(value, _):
+      if let warnings = NonEmptyArray(contextErrors + contextWarnings) {
+        return .partialSuccess(value, warnings: warnings)
+      }
+      return .success(value)
+    default:
+      if let errors = NonEmptyArray(contextErrors) {
+        return .failure(errors)
+      }
+      return .failure(NonEmptyArray(.generic))
+    }
   }
 }
 

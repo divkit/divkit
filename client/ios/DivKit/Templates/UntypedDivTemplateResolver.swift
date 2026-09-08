@@ -10,12 +10,23 @@ final class UntypedDivTemplateResolver {
     let hasTemplateTypes: Bool
   }
 
+  private(set) var resolvedTemplateCache: [TemplateName: Any] = [:]
+
   private let templates: [TemplateName: Any]
   private let templateToType: [TemplateName: String]
-  private var resolvedTemplateCache: [TemplateName: [String: Any]] = [:]
   private var templateParameterNamesCache: [TemplateName: Set<String>] = [:]
   private var subtreeInfoCache: [ObjectIdentifier: (container: AnyObject, info: SubtreeInfo)] = [:]
   private var currentlyResolvingTemplates = Set<TemplateName>()
+
+  init(
+    templates: [TemplateName: Any],
+    templateToType: [TemplateName: String],
+    resolvedTemplates: [TemplateName: Any]
+  ) {
+    self.templates = templates
+    self.templateToType = templateToType
+    resolvedTemplateCache = resolvedTemplates
+  }
 
   init(templates: [String: Any]?) {
     let templates = templates ?? [:]
@@ -50,9 +61,9 @@ final class UntypedDivTemplateResolver {
     ) ?? merged
   }
 
-  private func resolveTemplate(named templateName: TemplateName)
+  func resolveTemplate(named templateName: TemplateName)
     -> DeserializationResult<[String: Any]> {
-    if let cached = resolvedTemplateCache[templateName] {
+    if let cached = resolvedTemplateCache[templateName] as? [String: Any] {
       return .success(cached)
     }
 

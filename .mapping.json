@@ -11678,6 +11678,7 @@
   "client/ios/DivKitTests/ResourcesPreloader/MockDivExtensionHandler.swift":"divkit/public/client/ios/DivKitTests/ResourcesPreloader/MockDivExtensionHandler.swift",
   "client/ios/DivKitTests/RunLoopCardUpdateAggregatorTests.swift":"divkit/public/client/ios/DivKitTests/RunLoopCardUpdateAggregatorTests.swift",
   "client/ios/DivKitTests/RuntimeTestCase.swift":"divkit/public/client/ios/DivKitTests/RuntimeTestCase.swift",
+  "client/ios/DivKitTests/Templates/DivTemplatesRawModeTests.swift":"divkit/public/client/ios/DivKitTests/Templates/DivTemplatesRawModeTests.swift",
   "client/ios/DivKitTests/Templates/DivTemplatesTests.swift":"divkit/public/client/ios/DivKitTests/Templates/DivTemplatesTests.swift",
   "client/ios/DivKitTests/Templates/TemplateToTypeTests.swift":"divkit/public/client/ios/DivKitTests/Templates/TemplateToTypeTests.swift",
   "client/ios/DivKitTests/TestData/heavy.json":"divkit/public/client/ios/DivKitTests/TestData/heavy.json",

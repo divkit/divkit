@@ -25,6 +25,20 @@ private func runTest(_ data: TestData) {
     templates: data.templates,
     flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
   )
+  let rawTemplates = DivTemplates(
+    dictionary: data.templates,
+    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
+  )
+  let sharedTemplatesColdResult = DivData.resolve(
+    card: data.card,
+    templates: rawTemplates,
+    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
+  )
+  let sharedTemplatesWarmResult = DivData.resolve(
+    card: data.card,
+    templates: rawTemplates,
+    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
+  )
   let expectedResult = DivData.resolve(card: data.expectedCard, templates: [:])
 
   XCTAssertNil(
@@ -35,6 +49,8 @@ private func runTest(_ data: TestData) {
   assertEqual(typedResult.value, expectedResult.value)
   assertEqual(preParsedTemplatesResult.value, expectedResult.value)
   assertEqual(untypedResult.value, expectedResult.value)
+  assertEqual(sharedTemplatesColdResult.value, expectedResult.value)
+  assertEqual(sharedTemplatesWarmResult.value, expectedResult.value)
 
   XCTAssertEqual(
     typedResult.errorsOrWarnings?.count ?? 0,
@@ -50,6 +66,16 @@ private func runTest(_ data: TestData) {
     untypedResult.errorsOrWarnings?.count ?? 0,
     typedResult.errorsOrWarnings?.count ?? 0,
     "Untyped pipeline should produce same number of warnings/errors as typed"
+  )
+  XCTAssertEqual(
+    sharedTemplatesColdResult.errorsOrWarnings?.count ?? 0,
+    typedResult.errorsOrWarnings?.count ?? 0,
+    "Shared untyped templates should produce the same number of warnings/errors (cold cache)"
+  )
+  XCTAssertEqual(
+    sharedTemplatesWarmResult.errorsOrWarnings?.count ?? 0,
+    typedResult.errorsOrWarnings?.count ?? 0,
+    "Shared untyped templates should produce the same number of warnings/errors (warm cache)"
   )
 }
 

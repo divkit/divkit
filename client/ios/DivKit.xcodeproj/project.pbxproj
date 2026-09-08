@@ -225,6 +225,7 @@
 		8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD4C9D2B2C5B780092814C /* Theme.swift */; };
 		8D9283372F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */; };
 		983406132E85C3A4004B1AA3 /* DivTemplatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */; };
+		983406152E85C3A4004B1AA3 /* DivTemplatesRawModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983406142E85C39C004B1AA3 /* DivTemplatesRawModeTests.swift */; };
 		98730C102EDF3C8B00016117 /* DivSystemPropertyManagersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */; };
 		989DF7F72FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DF7F62FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift */; };
 		989DF7F82FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DF7F52FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift */; };
@@ -574,6 +575,7 @@
 		8CFD4C9D2B2C5B780092814C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCursorPositionActionHandlerTests.swift; sourceTree = "<group>"; };
 		983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTemplatesTests.swift; sourceTree = "<group>"; };
+		983406142E85C39C004B1AA3 /* DivTemplatesRawModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTemplatesRawModeTests.swift; sourceTree = "<group>"; };
 		986F57972CD68E8400990A2A /* DivKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivSystemPropertyManagersTests.swift; sourceTree = "<group>"; };
 		989DF7F52FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusElementActionHandlerTests.swift; sourceTree = "<group>"; };
@@ -1126,6 +1128,7 @@
 			children = (
 				8C23F3B329DDB2120069F3F7 /* TemplateToTypeTests.swift */,
 				983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */,
+				983406142E85C39C004B1AA3 /* DivTemplatesRawModeTests.swift */,
 			);
 			path = Templates;
 			sourceTree = "<group>";
@@ -1827,6 +1830,7 @@
 				8C7B1BFF2865C01C0036EF4C /* DivActionIntentTests.swift in Sources */,
 				8CBE33012BD699CC00CFFDF5 /* DivVariablesStorageTests.swift in Sources */,
 				983406132E85C3A4004B1AA3 /* DivTemplatesTests.swift in Sources */,
+				983406152E85C3A4004B1AA3 /* DivTemplatesRawModeTests.swift in Sources */,
 				8C23F42029DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift in Sources */,
 				8C7B1BF72865C01C0036EF4C /* DivContainerExtensionsTests.swift in Sources */,
 				8C0662302D09A43500B30CE3 /* SetStoredValueActionHandlerTests.swift in Sources */,
