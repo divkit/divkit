@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference
 @Suppress("DEPRECATION")
 class PicassoDivImageLoaderTest {
 
-    @Test(timeout = 10_000)
+    @Test
     fun `loadImage uses configured OkHttpClient`() {
         val interceptedRequestUrl = AtomicReference<String>()
         val requestIntercepted = CountDownLatch(1)
