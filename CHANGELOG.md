@@ -2,9 +2,11 @@
 
 ### Android Client
 * Added `rtl_mirror` image filter support to the Compose renderer.
+* Container views of different layout kinds (overlap, linear, wrap) are no longer reused for each other when items are replaced.
 * Fixed Gallery `wrap_content` cross-axis size when a larger item becomes visible after scrolling.
 * Fixed `match_parent` children in wrap-content overlap containers in the Compose renderer.
 * Fixed cursor positioning in phone masked input.
+* Fixed gallery and pager items reusing a recycled view for an incompatible div, which could lay out a horizontal container as an overlap one after scrolling.
 * Improved `DivView` performance by adding expression cache.
 * Made `Div2View` extendable.
 * Removed `DivScope.color(String)` and `DivScope.url(String)`. Use `color(String)` and `url(String)` instead.
@@ -20,6 +22,10 @@
 
 ### Web Client
 * Fixed incorrect scrolling of the `pager` if it is inside the scale transformation.
+
+### Kotlin JSON Builder
+* Migrated color expressions to `Color` type.
+* Migrated url expressions to `Url` type.
 
 
 ## 32.61.4
