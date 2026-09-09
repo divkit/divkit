@@ -2,7 +2,7 @@
 
 This is the DivKit project repository.
 DivKit is a backend-driven UI framework.
-Its main goal is to create a platform view (iOS, Android, Web, Flutter) based on markup in JSON format.
+Its main goal is to create a platform view (iOS, Android, Web) based on markup in JSON format.
 
 ## DivKit JSON Structure
 

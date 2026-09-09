@@ -171,7 +171,7 @@
 
 ### Android Client
 * Added support for the `is_enabled` property in extensions. An extension whose `is_enabled` resolves to `false` is not applied to the element.
-* Fix default indicator `active_item_color` being transparent on Android; it is now the opaque default (`#ffdc60`), matching iOS/web/Flutter.
+* Fix default indicator `active_item_color` being transparent on Android; it is now the opaque default (`#ffdc60`), matching iOS / Web.
 * Fix shadow rendering when alpha is specified via color value (e.g. `"color": "#2F000000"`).
 * Fixed `max_size` and `constrained` in `wrap_content` size being ignored on the root div of a `tooltip`. Margins of the tooltip root div are now applied as well.
 * Fixed a crash when video `fatal_actions` switched state during playback error handling.
