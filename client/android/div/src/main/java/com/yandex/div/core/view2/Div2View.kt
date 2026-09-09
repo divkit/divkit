@@ -573,21 +573,29 @@ open class Div2View private constructor(
 
     /**
      * Canceling visibility tracking.
+     *
+     * @param dispatchDisappearActions when true, disappear actions that were already appeared
+     * but haven't fired yet are dispatched instead of just being discarded, e.g. on [cleanup].
      * */
-    fun discardVisibilityTracking(): Unit = bindingDispatcher.runWithinBindingContext(
+    @JvmOverloads
+    fun discardVisibilityTracking(dispatchDisappearActions: Boolean = false): Unit = bindingDispatcher.runWithinBindingContext(
         VisibilityTrackingOperation.DISCARD
     ) {
         val state = divData?.states?.firstOrNull { it.stateId == stateId }
-        state?.let { discardStateVisibility(it) }
-        discardChildrenVisibility()
+        state?.let { discardStateVisibility(it, dispatchDisappearActions) }
+        discardChildrenVisibility(dispatchDisappearActions)
     }
 
     private fun trackStateVisibility(state: DivData.State) {
         div2Component.visibilityActionTracker.trackVisibilityActionsOf(this, expressionResolver, view, state.div)
     }
 
-    private fun discardStateVisibility(state: DivData.State) {
-        div2Component.visibilityActionTracker.trackVisibilityActionsOf(
+    private fun discardStateVisibility(state: DivData.State, dispatchDisappearActions: Boolean = false) {
+        val visibilityActionTracker = div2Component.visibilityActionTracker
+        if (dispatchDisappearActions) {
+            visibilityActionTracker.dispatchWaitingDisappearActions(this, expressionResolver, view)
+        }
+        visibilityActionTracker.trackVisibilityActionsOf(
             scope = this,
             resolver = expressionResolver,
             view = null,
@@ -617,13 +625,16 @@ open class Div2View private constructor(
         }
     }
 
-    private fun discardChildrenVisibility() {
+    private fun discardChildrenVisibility(dispatchDisappearActions: Boolean = false) {
         val visibilityActionTracker = div2Component.visibilityActionTracker
         val bindingsSnapshot = synchronized(viewToDivBindings) {
             viewToDivBindings.toMapSafe()
         }
         bindingsSnapshot.forEach { (view, div) ->
             view.divBlock?.expressionResolver?.let {
+                if (dispatchDisappearActions) {
+                    visibilityActionTracker.dispatchWaitingDisappearActions(this, it, view)
+                }
                 visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
             }
         }
@@ -754,7 +765,7 @@ open class Div2View private constructor(
         rebindTask?.clear()?.let {
             rebindTask = null
         }
-        discardVisibilityTracking()
+        discardVisibilityTracking(dispatchDisappearActions = removeChildren)
         cancelImageLoads()
         releaseMedia(this)
         stopLoadAndSubscriptions() // Depends on children, should be called before removing them

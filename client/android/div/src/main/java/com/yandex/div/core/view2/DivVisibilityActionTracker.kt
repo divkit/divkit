@@ -146,6 +146,24 @@ internal class DivVisibilityActionTracker @Inject constructor(
         )
     }
 
+    /**
+     * Dispatches disappear actions for divs that already appeared but haven't dropped below
+     * their disappear threshold yet, e.g. when [view] is being permanently removed via cleanup.
+     */
+    fun dispatchWaitingDisappearActions(scope: Div2View, resolver: ExpressionResolver, view: View) {
+        val actions = appearedForDisappearActions.remove(view)?.toList() ?: return
+        divWithWaitingDisappearActions.remove(view)
+        if (actions.isEmpty()) return
+
+        actions.forEach { action ->
+            val compositeLogId = compositeLogIdOf(scope, action.logId?.evaluate(resolver))
+            disappearTrackedTokens.remove(compositeLogId) { emptyToken ->
+                handler.removeCallbacksAndMessages(emptyToken)
+            }
+        }
+        scope.dataComponent.visibilityActionDispatcher.dispatchActions(scope, resolver, view, actions.toTypedArray())
+    }
+
     fun startTrackingViewsHierarchy(
         root: View,
         rootDiv: Div?,

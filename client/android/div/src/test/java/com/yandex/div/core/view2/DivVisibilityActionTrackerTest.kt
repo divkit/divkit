@@ -325,6 +325,78 @@ class DivVisibilityActionTrackerTest {
         )
     }
 
+    @Test
+    fun `dispatchWaitingDisappearActions fires a disappear action that already appeared`() {
+        trackVisibilityAction(view5, div5, 100)
+        Robolectric.flushForegroundThreadScheduler()
+        clearInvocations(visibilityActionDispatcher)
+
+        visibilityActionTracker.dispatchWaitingDisappearActions(scope, resolver, view5)
+
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view5),
+            argThat { this.contains(disappearAction1) && this.size == 1 }
+        )
+        assertTrue(view5 !in visibilityActionTracker.getDivWithWaitingDisappearActions())
+    }
+
+    @Test
+    fun `dispatchWaitingDisappearActions does not fire a disappear action that never appeared`() {
+        trackVisibilityAction(view5, div5, 0)
+        Robolectric.flushForegroundThreadScheduler()
+        clearInvocations(visibilityActionDispatcher)
+
+        visibilityActionTracker.dispatchWaitingDisappearActions(scope, resolver, view5)
+
+        verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+    }
+
+    @Test
+    fun `dispatchWaitingDisappearActions does nothing for a view without waiting disappear actions`() {
+        visibilityActionTracker.dispatchWaitingDisappearActions(scope, resolver, view1)
+
+        verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+    }
+
+    @Test
+    fun `dispatchWaitingDisappearActions does not refire an action already dispatched naturally`() {
+        trackVisibilityAction(view5, div5, 100)
+        Robolectric.flushForegroundThreadScheduler()
+        trackVisibilityAction(view5, div5, 0)
+        Robolectric.flushForegroundThreadScheduler()
+        clearInvocations(visibilityActionDispatcher)
+
+        visibilityActionTracker.dispatchWaitingDisappearActions(scope, resolver, view5)
+
+        verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+    }
+
+    @Test
+    fun `dispatchWaitingDisappearActions cancels the pending delayed dispatch to avoid double firing`() {
+        trackVisibilityAction(view5, div5, 100)
+        Robolectric.flushForegroundThreadScheduler()
+        // Visibility drops below threshold: the disappear action starts its (default 800ms) delay countdown,
+        // but hasn't fired yet.
+        trackVisibilityAction(view5, div5, 0)
+        clearInvocations(visibilityActionDispatcher)
+
+        visibilityActionTracker.dispatchWaitingDisappearActions(scope, resolver, view5)
+
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view5),
+            argThat { this.contains(disappearAction1) && this.size == 1 }
+        )
+        clearInvocations(visibilityActionDispatcher)
+
+        // The originally scheduled delayed dispatch must have been cancelled, so it must not fire again.
+        Robolectric.getForegroundThreadScheduler().advanceBy(1000L, TimeUnit.MILLISECONDS)
+        verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+    }
+
     private fun trackVisibilityAction(view: View, div: Div, visibilityPercentage: Int) {
         updateViewVisibility(view, visibilityPercentage)
         visibilityActionTracker.trackVisibilityActionsOf(scope, resolver, view, div)

@@ -14,6 +14,7 @@ import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.internal.util.textString
@@ -88,12 +89,15 @@ internal fun mockExpressionResolver(): ExpressionResolver {
 internal class TestComponent(
     private val wrapped: Div2Component,
     private val divBinder: DivBinder = wrapped.divBinder,
-    private val viewComponentBuilder: Div2ViewComponent.Builder = wrapped.viewComponent()
+    private val viewComponentBuilder: Div2ViewComponent.Builder = wrapped.viewComponent(),
+    private val visibilityActionTracker: DivVisibilityActionTracker = wrapped.visibilityActionTracker
 ) : Div2Component by wrapped {
 
     override fun getDivBinder(): DivBinder = divBinder
 
     override fun viewComponent(): Div2ViewComponent.Builder = viewComponentBuilder
+
+    override fun getVisibilityActionTracker(): DivVisibilityActionTracker = visibilityActionTracker
 }
 
 internal class TestViewComponentBuilder(
