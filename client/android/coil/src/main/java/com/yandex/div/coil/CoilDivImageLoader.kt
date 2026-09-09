@@ -8,7 +8,6 @@ import android.widget.ImageView
 import coil3.EventListener
 import coil3.ImageLoader
 import coil3.annotation.ExperimentalCoilApi
-import coil3.asDrawable
 import coil3.decode.DataSource
 import coil3.decode.Decoder
 import coil3.gif.AnimatedImageDecoder
@@ -22,13 +21,14 @@ import coil3.request.SuccessResult
 import coil3.request.allowHardware
 import coil3.size.Precision
 import coil3.size.Scale
-import coil3.svg.SvgDecoder
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoadError.Companion.toDivImageLoadError
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.internal.coil.asDivDrawable
+import com.yandex.div.internal.coil.svg.addSvgDecoderFactoryIfAvailable
 import okhttp3.OkHttpClient
 import kotlin.math.max
 import kotlin.time.ExperimentalTime
@@ -68,9 +68,7 @@ class CoilDivImageLoader private constructor(
         limitImageBitmapSizeEnabled: Boolean,
     ) : this(context, { okHttpClientBuilder.build() }, limitImageBitmapSizeEnabled)
 
-    private val maxDisplaySize = context.resources.displayMetrics.let {
-        max(it.widthPixels, it.heightPixels)
-    }
+    private val maxDisplaySize = context.resources.displayMetrics.let { max(it.widthPixels, it.heightPixels) }
 
     @OptIn(ExperimentalCoilApi::class, ExperimentalTime::class)
     private val imageLoader = ImageLoader.Builder(context)
@@ -81,7 +79,7 @@ class CoilDivImageLoader private constructor(
                     cacheStrategy = { CacheControlCacheStrategy() }
                 )
             )
-            add(SvgDecoder.Factory(renderToBitmap = false))
+            addSvgDecoderFactoryIfAvailable(context)
             add(gifDecoder())
         }
         .build()
@@ -117,7 +115,12 @@ class CoilDivImageLoader private constructor(
             .data(imageUri)
             .allowHardware(false)
             .limitImageBitmapSizeIfNeed()
-            .listener(RequestListener(imageUrl, context, callback))
+            .listener(RequestListener(
+                imageUrl = imageUrl,
+                context = context,
+                maxBitmapSize = if (limitImageBitmapSizeEnabled) maxDisplaySize else Int.MAX_VALUE,
+                callback = callback,
+            ))
             .build()
 
         val result = imageLoader.enqueue(request)
@@ -130,12 +133,14 @@ class CoilDivImageLoader private constructor(
     private class RequestListener(
         private val imageUrl: String,
         private val context: Context,
+        private val maxBitmapSize: Int,
         private val callback: DivImageDownloadCallback,
     ): EventListener() {
 
         override fun onSuccess(request: ImageRequest, result: SuccessResult) {
+            val drawable = result.image.asDivDrawable(context.resources, maxBitmapSize)
             callback.onSuccess(
-                DivCachedImage.Drawable(result.image.asDrawable(context.resources), result.dataSource.toBitmapSource())
+                DivCachedImage.Drawable(drawable, result.dataSource.toBitmapSource())
             )
         }
 

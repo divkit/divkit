@@ -24,6 +24,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":coil-core"))
     implementation(project(":div-core"))
     implementation(project(":div-data"))
     implementation(project(":div-evaluable"))
@@ -58,8 +59,7 @@ dependencies {
     testImplementation(libs.roborazzi.junit.rule)
     testImplementation(libs.webp.imageio)
 
-    // Adding dependency only to the tests to avoid the apk size increase for clients who do not
-    // use svg imgages.
+    // SVG is optional for Compose consumers; enable it here to test SVG rendering.
     testImplementation(libs.coil.svg)
 }
 

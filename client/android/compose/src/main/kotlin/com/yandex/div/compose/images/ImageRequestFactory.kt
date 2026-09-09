@@ -17,9 +17,7 @@ internal class ImageRequestFactory @Inject constructor(
     private val context: Context,
     private val imageRequestListener: ImageRequestListener,
 ) {
-    private val maxDisplaySize = context.resources.displayMetrics.let {
-        max(it.widthPixels, it.heightPixels)
-    }
+    private val maxDisplaySize = context.resources.displayMetrics.let { max(it.widthPixels, it.heightPixels) }
 
     fun build(params: ImageRequestParams): ImageRequest {
         return ImageRequest.Builder(context)

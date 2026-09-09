@@ -135,6 +135,18 @@ By default, longtap_actions events do not propagate (they work on the main conta
 
 However, if you have a specific need for longtap_actions to propagate to all child elements you can change this by using the `DivConfiguration.Builder#enableLongtapActionsPassingToChild` method.
 
+## SVG images in Compose
+
+SVG support is optional to avoid increasing the application size when it is not used.
+To enable it, add Coil's SVG decoder with the same version as the other Coil dependencies:
+
+```kotlin
+implementation("io.coil-kt.coil3:coil-svg:3.4.0")
+```
+
+DivKit automatically configures SVG decoding for Compose when this dependency is present.
+`CoilDivImageLoader` already includes it.
+
 ## Host network stack
 
 Configure the host HTTP stack once, before the first `DivKit.getInstance()` call:

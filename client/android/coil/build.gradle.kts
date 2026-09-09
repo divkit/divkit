@@ -11,6 +11,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":coil-core"))
     implementation(project(":div"))
     implementation(project(":div-core"))
 
