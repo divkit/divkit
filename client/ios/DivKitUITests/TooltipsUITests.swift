@@ -5,6 +5,7 @@ final class TooltipsUITests: XCTestCase {
     case tooltipPosition
     case closeOnSwitchOrientation
     case sightActionsOnAnimatedTooltip
+    case tapOutsideProperties
   }
 
   private enum Position: CaseIterable {
@@ -81,6 +82,22 @@ final class TooltipsUITests: XCTestCase {
     checkSightActionsForTooltip(withAnimation: .disabled)
   }
 
+  func testNonModalTooltipDoesNotBlockElementsBehindIt() throws {
+    goTo(test: .tapOutsideProperties)
+
+    let nonModalTooltip = app.staticTexts["Non modal tooltip"]
+    let buttonBehindTooltip = elementsQuery.staticTexts["tooltip with tap_outside_actions"]
+
+    elementsQuery.staticTexts["tooltip mode = non_modal"].tap()
+    XCTAssertTrue(nonModalTooltip.waitForExistence(timeout: 5))
+
+    XCTAssertTrue(buttonBehindTooltip.isHittable)
+    buttonBehindTooltip.tap()
+
+    XCTAssertTrue(tooltip.waitForExistence(timeout: 5))
+    XCTAssertFalse(nonModalTooltip.exists)
+  }
+
   private func checkSightActionsForTooltip(withAnimation animation: Animation) {
     let showTooltipButton = switch animation {
     case .enabled:
@@ -142,6 +159,8 @@ final class TooltipsUITests: XCTestCase {
       app.scrollViews.otherElements.staticTexts["Tooltip on different positions"].tap()
     case .sightActionsOnAnimatedTooltip:
       app.scrollViews.otherElements.staticTexts["Tooltips"].tap()
+    case .tapOutsideProperties:
+      app.scrollViews.otherElements.staticTexts["Tooltips with tap outside properties"].tap()
     }
   }
 }

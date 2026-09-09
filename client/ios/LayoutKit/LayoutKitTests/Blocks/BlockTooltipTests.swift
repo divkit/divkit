@@ -298,6 +298,70 @@ final class BlockTooltipTests: XCTestCase {
       "Snapshot frame should match target view position in window"
     )
   }
+
+  func test_ModalTooltip_WithCloseByTapOutside_ExportsBackgroundAccessibilityElement() {
+    let tooltipView = makeTooltipContainerView(
+      mode: .modal,
+      closeByTapOutside: true,
+      backgroundAccessibilityDescription: "Close tooltip"
+    )
+    layout(tooltipView)
+
+    let backgroundElement = tooltipView.accessibilityElements?.last as? UIAccessibilityElement
+    XCTAssertEqual(tooltipView.accessibilityElements?.count, 2)
+    XCTAssertEqual(backgroundElement?.accessibilityLabel, "Close tooltip")
+    XCTAssertEqual(backgroundElement?.accessibilityTraits, .button)
+    XCTAssertEqual(backgroundElement?.accessibilityFrameInContainerSpace, tooltipView.bounds)
+  }
+
+  func test_ModalTooltip_WithoutCloseByTapOutside_DoesNotExportBackgroundAccessibilityElement() {
+    let tooltipView = makeTooltipContainerView(mode: .modal, closeByTapOutside: false)
+    layout(tooltipView)
+
+    XCTAssertNil(tooltipView.accessibilityElements)
+  }
+
+  func test_NonModalTooltip_WithCloseByTapOutside_DoesNotExportBackgroundAccessibilityElement() {
+    let tooltipView = makeTooltipContainerView(
+      mode: .nonModal,
+      closeByTapOutside: true,
+      backgroundAccessibilityDescription: "Close tooltip"
+    )
+    layout(tooltipView)
+
+    XCTAssertNil(tooltipView.accessibilityElements)
+  }
+
+  func test_NonModalTooltip_WithoutCloseByTapOutside_DoesNotExportBackgroundAccessibilityElement() {
+    let tooltipView = makeTooltipContainerView(mode: .nonModal, closeByTapOutside: false)
+    layout(tooltipView)
+
+    XCTAssertNil(tooltipView.accessibilityElements)
+  }
+
+  func test_NonModalTooltip_HitTestOutsideTooltip_ReturnsNil() {
+    for closeByTapOutside in [true, false] {
+      let tooltipView = makeTooltipContainerView(
+        mode: .nonModal,
+        closeByTapOutside: closeByTapOutside
+      )
+      layout(tooltipView)
+
+      XCTAssertNil(tooltipView.hitTest(pointOutsideTooltip, with: nil))
+    }
+  }
+
+  func test_ModalTooltip_HitTestOutsideTooltip_ReturnsContainer() {
+    let tooltipView = makeTooltipContainerView(mode: .modal, closeByTapOutside: true)
+    layout(tooltipView)
+
+    XCTAssertTrue(tooltipView.hitTest(pointOutsideTooltip, with: nil) === tooltipView)
+  }
+
+  private func layout(_ tooltipView: TooltipContainerView) {
+    tooltipView.frame = boundsRect
+    tooltipView.forceLayout()
+  }
 }
 
 extension CGRect {
@@ -317,6 +381,32 @@ fileprivate func makeTooltip(offset: CGPoint, block: Block) -> BlockTooltip {
     ),
     offset: offset,
     position: .center
+  )
+}
+
+fileprivate let pointOutsideTooltip = CGPoint(x: 20.0, y: 20.0)
+
+fileprivate func makeTooltipContainerView(
+  mode: BlockTooltip.Mode,
+  closeByTapOutside: Bool,
+  backgroundAccessibilityDescription: String? = nil
+) -> TooltipContainerView {
+  TooltipContainerView(
+    tooltip: DefaultTooltipManager.Tooltip(
+      params: BlockTooltipParams(
+        id: "tooltip",
+        mode: mode,
+        duration: 0,
+        closeByTapOutside: closeByTapOutside,
+        backgroundAccessibilityDescription: backgroundAccessibilityDescription
+      ),
+      view: TestView(frame: CGRect(x: 100.0, y: 100.0, width: 100.0, height: 100.0)),
+      substrateView: nil,
+      bringToTopId: nil
+    ),
+    handleAction: { _ in },
+    onCloseAction: {},
+    getViewById: { _ in nil }
   )
 }
 

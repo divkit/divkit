@@ -17,7 +17,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   private var highlightObserver: AncestorFrameObserver?
 
   private lazy var backgroundElement: UIAccessibilityElement? = {
-    guard tooltip.params.closeByTapOutside else { return nil }
+    guard isModal, tooltip.params.closeByTapOutside else { return nil }
 
     let backgroundElement = ActivatableAccessibilityElement(
       activateAction: weakify(self, in: type(of: self).performTapOutsideActions),
