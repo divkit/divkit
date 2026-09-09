@@ -16,7 +16,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import coil3.compose.rememberAsyncImagePainter
+import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.rememberImageRequest
@@ -35,6 +38,14 @@ internal fun TabTitleItem(
     itemSpacing: Dp,
     onClick: () -> Unit,
 ) {
+    val titleClickAction = item.titleClickAction
+    val localComponent = LocalComponent.current
+    val onTitleClick: () -> Unit = {
+        if (isSelected && titleClickAction != null) {
+            localComponent.handleActions(listOf(titleClickAction), DivActionSource.TAP)
+        }
+        onClick()
+    }
     Row(
         horizontalArrangement = Arrangement.spacedBy(itemSpacing),
         verticalAlignment = Alignment.CenterVertically,
@@ -46,7 +57,7 @@ internal fun TabTitleItem(
             modifier = Modifier
                 .clip(style.observeTabShape())
                 .background(background)
-                .clickable(interactionSource = null, indication = null, onClick = onClick)
+                .clickable(interactionSource = null, indication = null, onClick = onTitleClick)
                 .padding(style.paddings.observeInsets()),
             contentAlignment = Alignment.Center,
         ) {

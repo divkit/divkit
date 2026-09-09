@@ -13,6 +13,10 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -157,8 +161,9 @@ private fun ScrollableTitleRow(
 ) {
     val selectedIndex = pagerState.currentPage
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = selectedIndex)
+    var activeTitleTaps by remember { mutableIntStateOf(0) }
 
-    CenterTitleRow(listState, selectedIndex)
+    CenterTitleRow(listState, selectedIndex, activeTitleTaps)
 
     val activeBackground = style.activeBackgroundColor.observedColorValue()
     val inactiveBackground = style.inactiveBackgroundColor?.observedColorValue() ?: Color.Transparent
@@ -205,16 +210,21 @@ private fun ScrollableTitleRow(
                 style = style,
                 titleDelimiter = titleDelimiter,
                 itemSpacing = itemSpacing,
-                onClick = { onTabSelected(index) },
+                onClick = {
+                    if (index == selectedIndex) {
+                        activeTitleTaps++
+                    }
+                    onTabSelected(index)
+                },
             )
         }
     }
 }
 
 @Composable
-private fun CenterTitleRow(listState: LazyListState, selectedIndex: Int) {
+private fun CenterTitleRow(listState: LazyListState, selectedIndex: Int, activeTitleTaps: Int) {
     val animated = animationsEnabled
-    LaunchedEffect(selectedIndex) {
+    LaunchedEffect(selectedIndex, activeTitleTaps) {
         val info = snapshotFlow { listState.layoutInfo }
             .first { it.visibleItemsInfo.isNotEmpty() }
         val viewport = info.viewportEndOffset - info.viewportStartOffset

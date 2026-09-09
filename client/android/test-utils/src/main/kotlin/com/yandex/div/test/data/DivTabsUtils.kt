@@ -13,6 +13,7 @@ fun tabs(
     items: List<DivTabs.Item>,
     selectedTab: Expression<Long> = constant(0L),
     switchTabsByContentSwipeEnabled: Expression<Boolean> = constant(true),
+    tabTitleStyle: DivTabs.TabTitleStyle? = null,
     width: DivSize = matchParent(),
 ): Div {
     return Div.Tabs(
@@ -23,6 +24,7 @@ fun tabs(
             items = items,
             selectedTab = selectedTab,
             switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
+            tabTitleStyle = tabTitleStyle,
             width = width
         )
     )
