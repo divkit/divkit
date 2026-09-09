@@ -2,6 +2,7 @@ package com.yandex.div.core.view2.divs.pager
 
 import android.util.SparseArray
 import android.view.ViewGroup
+import androidx.annotation.IntRange
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -20,16 +21,31 @@ internal class DivPagerAdapter(
 ) : DivCollectionAdapter<DivPagerViewHolder>(items) {
 
     val itemsToShow = object : AbstractList<DivBlock>() {
-        override val size get() = visibleItems.size + if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM * 2 else 0
+        override val size get() = visibleItems.size + virtualItemCount * 2
 
-        override fun get(index: Int): DivBlock {
-            if (!infiniteScrollEnabled) return visibleItems[index]
-
-            return visibleItems[realItemPosition(index)]
-        }
+        override fun get(index: Int): DivBlock =
+            if (virtualItemCount == 0) visibleItems[index] else visibleItems[realItemPosition(index)]
     }
 
-    private val offsetToRealItem get() = if (infiniteScrollEnabled) OFFSET_TO_REAL_ITEM else 0
+    var requestedVirtualItemCount = 0
+        set(@IntRange(from = 0) value) {
+            if (field == value) return
+
+            field = value
+            val offset = updateVirtualItemCount()
+            if (offset == 0) return
+
+            notifyVirtualItemCountChanged(offset)
+        }
+
+    var virtualItemCount = 0
+        private set
+
+    private fun updateVirtualItemCount(): Int {
+        val prevVirtualItemCount = virtualItemCount
+        virtualItemCount = if (visibleItems.size > 1) requestedVirtualItemCount else 0
+        return virtualItemCount - prevVirtualItemCount
+    }
 
     fun realItemPosition(position: Int): Int {
         return normalizeItemPosition(getRealPosition(position))
@@ -37,22 +53,12 @@ internal class DivPagerAdapter(
 
     fun normalizeItemPosition(position: Int): Int {
         val size = visibleItems.size.takeIf { it > 0 } ?: return 0
-        return (position + size) % size
+        return position.mod(size)
     }
 
-    var infiniteScrollEnabled = false
-        set(value) {
-            if (field == value) return
-            field = value
-            notifyItemRangeChanged(0, itemCount)
-            pagerView.currentItem += if (value) OFFSET_TO_REAL_ITEM else -OFFSET_TO_REAL_ITEM
-        }
+    fun getPosition(visibleItemIndex: Int) = visibleItemIndex + virtualItemCount
 
-    private var removedItems = 0
-
-    fun getPosition(visibleItemIndex: Int) = visibleItemIndex + offsetToRealItem
-
-    fun getRealPosition(rawPosition: Int) = rawPosition - offsetToRealItem
+    fun getRealPosition(rawPosition: Int) = rawPosition - virtualItemCount
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
         val orientationProvider = { pagerView.orientation == ViewPager2.ORIENTATION_HORIZONTAL }
@@ -69,6 +75,8 @@ internal class DivPagerAdapter(
         pageTranslations[position]?.let { holder.applyTranslation(it) }
     }
 
+    private var removedItems = 0
+
     override fun setItems(newItems: List<DivBlock>) {
         val oldSize = items.size
         removedItems = 0
@@ -81,53 +89,62 @@ internal class DivPagerAdapter(
 
     override fun notifyRawItemRemoved(position: Int) {
         removedItems++
-        if (!infiniteScrollEnabled) {
-            notifyItemRemoved(position)
+        val offset = -updateVirtualItemCount()
+
+        if (offset == 0) {
+            notifyItemRemoved(position + virtualItemCount)
+            notifyVirtualItemsChanged()
             return
         }
 
-        notifyItemRemoved(position + OFFSET_TO_REAL_ITEM)
-        notifyVirtualItemsChanged(position)
+        notifyItemRangeRemoved(visibleItems.size + offset + 1, offset)
+        notifyItemRemoved(position + offset)
+        notifyItemRangeRemoved(0, offset)
+
+        pagerView.currentItem -= offset
     }
 
-    override fun notifyRawItemInserted(position: Int) {
-        if (!infiniteScrollEnabled) {
-            notifyItemInserted(position)
+    override fun notifyRawItemsInserted(position: Int, count: Int) {
+        val offset = updateVirtualItemCount()
+
+        if (offset == 0) {
+            notifyItemRangeInserted(position + virtualItemCount, count)
+            notifyVirtualItemsChanged()
             return
         }
 
-        notifyItemInserted(position + OFFSET_TO_REAL_ITEM)
-        notifyVirtualItemsChanged(position)
+        if (visibleItems.size - count == 0) {
+            notifyItemRangeInserted(0, itemCount)
+        } else {
+            notifyItemRangeInserted(0, offset)
+            notifyItemRangeInserted(position + virtualItemCount, count)
+            notifyItemRangeInserted(itemCount - offset, offset)
+        }
+
+        pagerView.currentItem += offset
+        return
     }
 
     override fun notifyRawItemChanged(position: Int) {
-        if (!infiniteScrollEnabled) {
-            notifyItemChanged(position)
-            return
-        }
-
-        notifyItemChanged(position + OFFSET_TO_REAL_ITEM)
-        notifyVirtualItemsChanged(position)
+        notifyItemChanged(position + virtualItemCount)
+        notifyVirtualItemsChanged()
     }
 
-    private fun notifyVirtualItemsChanged(originalPosition: Int) {
-        when (originalPosition) {
-            in 0 until OFFSET_TO_REAL_ITEM -> {
-                notifyItemRangeChanged(
-                    visibleItems.size + originalPosition,
-                    OFFSET_TO_REAL_ITEM - originalPosition
-                )
-            }
-            in visibleItems.size - OFFSET_TO_REAL_ITEM  until visibleItems.size -> {
-                notifyItemRangeChanged(
-                    originalPosition - visibleItems.size + OFFSET_TO_REAL_ITEM,
-                    OFFSET_TO_REAL_ITEM
-                )
-            }
+    private fun notifyVirtualItemCountChanged(itemOffset: Int) {
+        if (itemOffset > 0) {
+            notifyItemRangeInserted(0, itemOffset)
+            notifyItemRangeInserted(itemCount - itemOffset, itemOffset)
+        } else {
+            notifyItemRangeRemoved(0, -itemOffset)
+            notifyItemRangeRemoved(itemCount, -itemOffset)
         }
+        pagerView.currentItem += itemOffset
     }
 
-    companion object {
-        const val OFFSET_TO_REAL_ITEM = 2
+    private fun notifyVirtualItemsChanged() {
+        if (virtualItemCount == 0) return
+
+        notifyItemRangeChanged(0, virtualItemCount)
+        notifyItemRangeChanged(getPosition(visibleItems.size), virtualItemCount)
     }
 }

@@ -49,14 +49,15 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         position: Int,
         items: Collection<DivBlock>
     ) {
+        val visiblePosition = visiblePositionOf(position)
+        val addedItemsReserveSpace = items.map { item -> item.reservesSpace }
         itemList.addAll(position, items)
-        itemReservesSpaceList.addAll(position, items.map { item -> item.reservesSpace })
+        itemReservesSpaceList.addAll(position, addedItemsReserveSpace)
         isVisibleItemListValid = false
 
-        items.forEachIndexed { index, item ->
-            if (item.reservesSpace) {
-                notifyVisibleItemInserted(position + index)
-            }
+        val visibleItemsCount = addedItemsReserveSpace.count { it }
+        if (visibleItemsCount > 0) {
+            notifyRawItemsInserted(visiblePosition, visibleItemsCount)
         }
     }
 
@@ -113,7 +114,9 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
 
     protected open fun notifyRawItemRemoved(position: Int) = notifyItemRemoved(position)
 
-    protected open fun notifyRawItemInserted(position: Int) = notifyItemInserted(position)
+    protected open fun notifyRawItemInserted(position: Int) = notifyRawItemsInserted(position, 1)
+
+    protected open fun notifyRawItemsInserted(position: Int, count: Int) = notifyItemRangeInserted(position, count)
 
     protected open fun notifyRawItemChanged(position: Int) = notifyItemChanged(position)
 }

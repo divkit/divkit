@@ -14,7 +14,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.AccessibilityStateProvider
-import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isActuallyLaidOut
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
@@ -25,7 +24,6 @@ import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.bindItemBuilder
 import com.yandex.div.core.view2.divs.bindStates
-import com.yandex.div.core.view2.divs.pager.DivPagerAdapter.Companion.OFFSET_TO_REAL_ITEM
 import com.yandex.div.core.view2.divs.toPxF
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
@@ -89,8 +87,8 @@ internal class DivPagerBinder @Inject constructor(
             DivPagerAdapter(divBlock.buildItems(), divView, divBinder.get(), pageTranslations, viewCreator, this)
         viewPager.adapter = adapter
         val errorCollector = divView.errorCollector
-        bindItemsCountObserver(div, resolver, adapter, errorCollector)
-        bindInfiniteScroll(div, resolver)
+        adapter.registerAdapterDataObserver(ItemCountObserver(this, div, resolver, adapter, errorCollector))
+        bindInfiniteScroll(div, resolver, adapter)
         notifyItemsUpdated(div, resolver, adapter, errorCollector)
         clipToPage = divView.div2Component.isPagerPageClipEnabled
 
@@ -154,23 +152,6 @@ internal class DivPagerBinder @Inject constructor(
         }
     }
 
-    private fun DivPagerView.bindItemsCountObserver(
-        div: DivPager,
-        resolver: ExpressionResolver,
-        adapter: DivPagerAdapter,
-        errorCollector: ErrorCollector,
-    ) {
-        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                notifyItemsUpdated(div, resolver, adapter, errorCollector)
-            }
-
-            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                notifyItemsUpdated(div, resolver, adapter, errorCollector)
-            }
-        })
-    }
-
     private fun DivPagerView.notifyItemsUpdated(
         div: DivPager,
         resolver: ExpressionResolver,
@@ -183,17 +164,32 @@ internal class DivPagerBinder @Inject constructor(
         pagerOnItemsCountChange?.onItemsUpdated()
     }
 
-    private fun DivPagerView.bindInfiniteScroll(div: DivPager, resolver: ExpressionResolver) {
+    private fun DivPagerView.bindInfiniteScroll(
+        div: DivPager,
+        resolver: ExpressionResolver,
+        adapter: DivPagerAdapter,
+    ) {
         val recyclerView = viewPager.getChildAt(0) as RecyclerView
         var listener: RecyclerView.OnScrollListener? = null
-        div.infiniteScroll.observeAndGet(resolver) { enabled: Boolean ->
-            (viewPager.adapter as? DivPagerAdapter)?.infiniteScrollEnabled = enabled
+        addSubscription(div.multiPageScroll.observeAndGet(resolver) {
+            adapter.setVirtualItemCount(div.infiniteScroll.evaluate(resolver), it)
+        })
+        addSubscription(div.infiniteScroll.observeAndGet(resolver) { enabled: Boolean ->
+            adapter.setVirtualItemCount(enabled, div.multiPageScroll.evaluate(resolver))
             if (enabled) {
                 (listener ?: createInfiniteScrollListener().also { listener = it })
                     .let { recyclerView.addOnScrollListener(it) }
             } else {
                 listener?.let { recyclerView.removeOnScrollListener(it) }
             }
+        })
+    }
+
+    private fun DivPagerAdapter.setVirtualItemCount(infiniteScrollEnabled: Boolean, multiPageScrollEnabled: Boolean) {
+        requestedVirtualItemCount = when {
+            !infiniteScrollEnabled -> 0
+            multiPageScrollEnabled -> VIRTUAL_ITEM_COUNT_EXTENDED
+            else -> VIRTUAL_ITEM_COUNT
         }
     }
 
@@ -201,14 +197,15 @@ internal class DivPagerBinder @Inject constructor(
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-            val itemCount = viewPager.adapter?.itemCount ?: 0
+            val adapter = viewPager.adapter as? DivPagerAdapter ?: return
+            val offset = adapter.virtualItemCount.takeIf { it > 0 } ?: return
             val firstItemVisible = layoutManager.findFirstVisibleItemPosition()
             val lastItemVisible = layoutManager.findLastVisibleItemPosition()
             val scrollDelta = if (viewPager.orientation == ViewPager2.ORIENTATION_HORIZONTAL) dx else dy
-            if (firstItemVisible >= (itemCount - OFFSET_TO_REAL_ITEM) && scrollDelta > 0) {
-                recyclerView.scrollToPosition(OFFSET_TO_REAL_ITEM)
-            } else if (lastItemVisible <= OFFSET_TO_REAL_ITEM - 1 && scrollDelta < 0) {
-                recyclerView.scrollToPosition(itemCount - 1 - OFFSET_TO_REAL_ITEM)
+            if (firstItemVisible >= adapter.itemCount - offset && scrollDelta > 0) {
+                recyclerView.scrollToPosition(offset)
+            } else if (lastItemVisible <= offset - 1 && scrollDelta < 0) {
+                recyclerView.scrollToPosition(adapter.itemCount - 1 - offset)
             }
         }
     }
@@ -355,13 +352,40 @@ internal class DivPagerBinder @Inject constructor(
         errorCollector: ErrorCollector,
     ) {
         val builder = div.itemBuilder ?: return
-        expressionSubscriber.bindItemBuilder(builder, resolver) {
+        bindItemBuilder(builder, resolver) {
             (viewPager.adapter as DivPagerAdapter?)?.let { adapter ->
                 adapter.setItems(builder.build(resolver, path))
                 notifyItemsUpdated(div, resolver, adapter, errorCollector)
                 getRecyclerView()?.scrollToPosition(adapter.normalizeItemPosition(currentItem))
                 viewPager.doOnNextLayout { viewPager.requestTransform() }
             }
+        }
+    }
+
+    companion object {
+        const val VIRTUAL_ITEM_COUNT = 2
+        const val VIRTUAL_ITEM_COUNT_EXTENDED = 20
+    }
+
+    private inner class ItemCountObserver(
+        private val pagerView: DivPagerView,
+        private val div: DivPager,
+        private val resolver: ExpressionResolver,
+        private val adapter: DivPagerAdapter,
+        private val errorCollector: ErrorCollector,
+    ) : RecyclerView.AdapterDataObserver() {
+
+        private var prevCount = adapter.visibleItems.size
+
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = notifyItemsUpdated()
+
+        override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) = notifyItemsUpdated()
+
+        private fun notifyItemsUpdated() {
+            val count = adapter.visibleItems.size
+            if (count == prevCount) return
+            prevCount = count
+            pagerView.notifyItemsUpdated(div, resolver, adapter, errorCollector)
         }
     }
 }

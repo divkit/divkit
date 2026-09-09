@@ -47,10 +47,10 @@ internal class DivGalleryAdapter(
         }
     }
 
-    override fun notifyRawItemInserted(position: Int) {
-        notifyItemInserted(position)
+    override fun notifyRawItemsInserted(position: Int, count: Int) {
+        notifyItemRangeInserted(position, count)
         if (columnCount == 1) {
-            notifyEdgeDecorationUpdateOnInsert(position)
+            notifyEdgeDecorationUpdateOnInsert(position, count)
         }
     }
 
@@ -66,10 +66,10 @@ internal class DivGalleryAdapter(
         }
     }
 
-    private fun notifyEdgeDecorationUpdateOnInsert(insertedPosition: Int) {
+    private fun notifyEdgeDecorationUpdateOnInsert(position: Int, count: Int) {
         when {
-            insertedPosition == 0 && itemCount > 1 -> notifyRawItemChanged(1)
-            insertedPosition == itemCount - 1 && insertedPosition > 0 -> notifyRawItemChanged(insertedPosition - 1)
+            position == 0 && itemCount > count -> notifyRawItemChanged(count)
+            position + count == itemCount && position > 0 -> notifyRawItemChanged(position - 1)
         }
     }
 }

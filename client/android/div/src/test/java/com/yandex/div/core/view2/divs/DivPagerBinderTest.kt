@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
-import androidx.recyclerview.widget.RecyclerView
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.state.DivViewState
@@ -9,33 +10,37 @@ import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
 import com.yandex.div.core.view2.divs.pager.DivPagerBinder
+import com.yandex.div.core.view2.divs.pager.DivPagerBinder.Companion.VIRTUAL_ITEM_COUNT
+import com.yandex.div.core.view2.divs.pager.DivPagerBinder.Companion.VIRTUAL_ITEM_COUNT_EXTENDED
 import com.yandex.div.core.view2.divs.pager.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
-import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.VariableMutationHandler
 import com.yandex.div.internal.core.nonNullItems
 import com.yandex.div.internal.core.toBlock
-import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import com.yandex.div2.DivPager
+import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivVisibilityAction
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.json.JSONArray
 import org.junit.runner.RunWith
+import org.mockito.kotlin.KArgumentCaptor
 import org.mockito.kotlin.any
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.never
-import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
+import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-@RunWith(RobolectricTestRunner::class)
-class DivPagerBinderTest: DivBinderTest() {
+@RunWith(AndroidJUnit4::class)
+class DivPagerBinderTest : DivBinderTest() {
 
     private val divViewState = mock<DivViewState>()
     private val divBinder = mock<DivBinder>()
@@ -58,16 +63,9 @@ class DivPagerBinderTest: DivBinderTest() {
         layoutParams = defaultLayoutParams()
     }
 
-    @Before
+    @BeforeTest
     fun `init current state`() {
         whenever(divView.currentState).thenReturn(divViewState)
-    }
-
-    @Test
-    fun `set default item`() {
-        underTest.bindView(divPagerView, divBlock, divView)
-
-        Assert.assertEquals(DEFAULT_ITEM, divPagerView.currentItem)
     }
 
     @Test
@@ -77,63 +75,61 @@ class DivPagerBinderTest: DivBinderTest() {
         divPagerView.currentItem = DEFAULT_ITEM + 1
         underTest.bindView(divPagerView, divBlock, divView)
 
-        Assert.assertEquals(DEFAULT_ITEM + 1, divPagerView.viewPager.currentItem)
+        assertEquals(DEFAULT_ITEM + 1, divPagerView.viewPager.currentItem)
     }
 
     @Test
-    fun `set default item when has current state without current page index`() {
+    fun `default item is selected when current state has no page index`() {
         underTest.bindView(divPagerView, divBlock, divView)
 
-        Assert.assertEquals(DEFAULT_ITEM, divPagerView.currentItem)
+        assertEquals(DEFAULT_ITEM, divPagerView.currentItem)
     }
 
     @Test
-    fun `restore previously selected page`() {
+    fun `stored page is restored when current state has page index`() {
         whenever(divViewState.getBlockState<PagerState>(any())).thenReturn(PagerState(DEFAULT_ITEM + 1))
 
         underTest.bindView(divPagerView, divBlock, divView)
 
-        Assert.assertEquals(DEFAULT_ITEM + 1, divPagerView.currentItem)
+        assertEquals(DEFAULT_ITEM + 1, divPagerView.currentItem)
     }
 
     @Test
     fun `do not log page change when selected page for the first time`() {
+        val logger = divView.div2Component.div2Logger
         underTest.bindView(divPagerView, divBlock, divView)
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
 
-        verify(divView.div2Component.div2Logger, never()).logPagerChangePage(
-            any(),
-            any(),
-            any(),
-            any(),
-            any()
-        )
+        verifyNoInteractions(logger)
     }
 
     @Test
     fun `log page change when selected next page`() {
+        val logger = divView.div2Component.div2Logger
         underTest.bindView(divPagerView, divBlock, divView)
 
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM)
         divPagerView.changePageCallbackForLogger?.onPageSelected(DEFAULT_ITEM + 1)
 
-        verify(divView.div2Component.div2Logger).logPagerChangePage(
+        verify(logger).logPagerChangePage(
             any(),
             any(),
             any(),
-            any(),
+            eq(DEFAULT_ITEM + 1),
             eq(ScrollDirection.NEXT)
         )
+        verifyNoMoreInteractions(logger)
     }
 
     @Test
     fun `bind view to div when selected page has visibility actions`() {
-        val pagerJson = div.writeToJSON()
-        pagerJson.getJSONArray("items")
-            .getJSONObject(DEFAULT_ITEM)
-            .put("visibility_action", DivVisibilityAction(logId = "test".asExpression()).writeToJSON())
-        val divPager = Div.Pager(DivPager(DivParsingEnvironment(ParsingErrorLogger.ASSERT), pagerJson))
+        val items = div.value.items!!.toMutableList()
+        val selectedItem = items[DEFAULT_ITEM] as Div.Text
+        items[DEFAULT_ITEM] = Div.Text(
+            selectedItem.value.copy(visibilityAction = DivVisibilityAction(logId = "test".asExpression()))
+        )
+        val divPager = Div.Pager(div.value.copy(items = items))
             .toBlock(resolver, rootPath()) as DivBlock.Pager
         underTest.bindView(divPagerView, divPager, divView)
 
@@ -163,18 +159,30 @@ class DivPagerBinderTest: DivBinderTest() {
     }
 
     @Test
-    fun `item count variable is updated when item visibility changes`() {
+    fun `item count variable is updated when an item is removed`() {
         val div = divWithItemCountVariable()
         val view = divPagerViewWithLayout(div)
         underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
         val adapter = view.viewPager.adapter as DivPagerAdapter
-        val firstItem = adapter.items.first()
-        reset(variableMutationHandler)
+        clearInvocations(variableMutationHandler)
 
         adapter.removeItem(0)
-        verifyItemCountVariableChange(2)
 
-        adapter.addItems(0, listOf(firstItem))
+        verifyItemCountVariableChange(2)
+    }
+
+    @Test
+    fun `item count variable is updated when an item is inserted`() {
+        val baseDiv = divWithItemCountVariable()
+        val div = Div.Pager(baseDiv.value.copy(items = baseDiv.value.items!!.take(2)))
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+        val firstItem = adapter.items.first()
+        clearInvocations(variableMutationHandler)
+
+        adapter.addItems(2, listOf(firstItem))
+
         verifyItemCountVariableChange(3)
     }
 
@@ -184,8 +192,30 @@ class DivPagerBinderTest: DivBinderTest() {
         val view = divPagerViewWithLayout(div)
         underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
         val adapter = view.viewPager.adapter as DivPagerAdapter
+        clearInvocations(variableMutationHandler)
 
         adapter.setItems(adapter.items.dropLast(1))
+
+        verifyItemCountVariableChange(2)
+    }
+
+    @Test
+    fun `item count variable is updated once when insertion creates virtual ranges`() {
+        val baseDiv = divWithItemCountVariable()
+        val div = Div.Pager(
+            baseDiv.value.copy(
+                items = baseDiv.value.items!!.take(1),
+                infiniteScroll = true.asExpression(),
+                multiPageScroll = true.asExpression(),
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+        val firstItem = adapter.items.first()
+        clearInvocations(variableMutationHandler)
+
+        adapter.addItems(1, listOf(firstItem))
 
         verifyItemCountVariableChange(2)
     }
@@ -201,76 +231,226 @@ class DivPagerBinderTest: DivBinderTest() {
     }
 
     @Test
+    fun `infinite scroll uses two virtual items on each side`() {
+        val div = divWithScroll(infiniteScroll = true, multiPageScroll = false)
+        val view = divPagerViewWithLayout(div)
+
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+        assertEquals(VIRTUAL_ITEM_COUNT, adapter.virtualItemCount)
+    }
+
+    @Test
+    fun `multi page infinite scroll uses extended virtual range`() {
+        val div = divWithScroll(infiniteScroll = true, multiPageScroll = true)
+        val view = divPagerViewWithLayout(div)
+
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+        assertEquals(VIRTUAL_ITEM_COUNT_EXTENDED, adapter.virtualItemCount)
+    }
+
+    @Test
+    fun `virtual range expands when multi page scroll becomes enabled`() {
+        val observer = argumentCaptor<(Boolean) -> Unit>()
+        val multiPageScroll = observableBoolean(initialValue = false, observer)
+        val div = Div.Pager(
+            div().value.copy(
+                infiniteScroll = true.asExpression(),
+                multiPageScroll = multiPageScroll,
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+
+        observer.firstValue(true)
+
+        assertEquals(VIRTUAL_ITEM_COUNT_EXTENDED, adapter.virtualItemCount)
+    }
+
+    @Test
+    fun `virtual range shrinks when multi page scroll becomes disabled`() {
+        val observer = argumentCaptor<(Boolean) -> Unit>()
+        val multiPageScroll = observableBoolean(initialValue = true, observer)
+        val div = Div.Pager(
+            div().value.copy(
+                infiniteScroll = true.asExpression(),
+                multiPageScroll = multiPageScroll,
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+
+        observer.firstValue(false)
+
+        assertEquals(VIRTUAL_ITEM_COUNT, adapter.virtualItemCount)
+    }
+
+    @Test
+    fun `multi page scroll does not create virtual items when infinite scroll is disabled`() {
+        val div = divWithScroll(infiniteScroll = false, multiPageScroll = true)
+        val view = divPagerViewWithLayout(div)
+
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+        assertEquals(0, adapter.virtualItemCount)
+    }
+
+    @Test
+    fun `virtual range disappears when infinite scroll becomes disabled`() {
+        val observer = argumentCaptor<(Boolean) -> Unit>()
+        val infiniteScroll = observableBoolean(initialValue = true, observer)
+        val div = Div.Pager(
+            div().value.copy(
+                infiniteScroll = infiniteScroll,
+                multiPageScroll = true.asExpression(),
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+
+        observer.firstValue(false)
+
+        assertEquals(0, adapter.virtualItemCount)
+    }
+
+    @Test
+    fun `virtual range appears when infinite scroll becomes enabled`() {
+        val observer = argumentCaptor<(Boolean) -> Unit>()
+        val infiniteScroll = observableBoolean(initialValue = false, observer)
+        val div = Div.Pager(
+            div().value.copy(
+                infiniteScroll = infiniteScroll,
+                multiPageScroll = true.asExpression(),
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        val adapter = view.viewPager.adapter as DivPagerAdapter
+
+        observer.firstValue(true)
+
+        assertEquals(VIRTUAL_ITEM_COUNT_EXTENDED, adapter.virtualItemCount)
+    }
+
+    @Test
+    fun `item count variable is not updated when only virtual range changes`() {
+        val observer = argumentCaptor<(Boolean) -> Unit>()
+        val multiPageScroll = observableBoolean(initialValue = false, observer)
+        val baseDiv = divWithItemCountVariable()
+        val div = Div.Pager(
+            baseDiv.value.copy(
+                infiniteScroll = true.asExpression(),
+                multiPageScroll = multiPageScroll,
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        clearInvocations(variableMutationHandler)
+
+        observer.firstValue(true)
+
+        verifyNoInteractions(variableMutationHandler)
+    }
+
+    @Test
+    fun `item count variable is not updated when virtual range shrinks`() {
+        val observer = argumentCaptor<(Boolean) -> Unit>()
+        val multiPageScroll = observableBoolean(initialValue = true, observer)
+        val baseDiv = divWithItemCountVariable()
+        val div = Div.Pager(
+            baseDiv.value.copy(
+                infiniteScroll = true.asExpression(),
+                multiPageScroll = multiPageScroll,
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        clearInvocations(variableMutationHandler)
+
+        observer.firstValue(false)
+
+        verifyNoInteractions(variableMutationHandler)
+    }
+
+    @Test
     fun `pager without item count variable does not mutate variable`() {
         underTest.bindView(divPagerView, divBlock, divView)
 
-        verify(resolver, never()).getVariable(ITEM_COUNT_VARIABLE)
+        verifyNoInteractions(variableMutationHandler)
     }
 
     @Test
-    fun `vertical pager with infinite scroll registers scroll listener on recycler view`() {
-        val verticalDiv = verticalInfiniteScrollDiv()
-        val verticalDivPagerView = divPagerView(verticalDiv).apply {
-            layoutParams = defaultLayoutParams()
-        }
-
-        underTest.bindView(verticalDivPagerView, verticalDiv.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
-
-        val recyclerView = verticalDivPagerView.viewPager.getChildAt(0) as? RecyclerView
-        Assert.assertNotNull("RecyclerView should be present inside ViewPager2", recyclerView)
-        // Verify that at least one scroll listener is registered (the infinite scroll listener)
-        val listeners = getScrollListeners(recyclerView!!)
-        Assert.assertTrue(
-            "Vertical pager with infinite_scroll=true must register a scroll listener",
-            listeners.isNotEmpty()
+    fun `item builder subscriptions are disposed on rebind`() {
+        val data = mock<Expression<JSONArray>>()
+        val selector = mock<Expression<Boolean>>()
+        val dataSubscription = mock<Disposable>()
+        val selectorSubscription = mock<Disposable>()
+        whenever(data.evaluate(resolver)).thenReturn(JSONArray())
+        whenever(data.observe(any(), any())).thenReturn(dataSubscription)
+        whenever(selector.observe(any(), any())).thenReturn(selectorSubscription)
+        val itemBuilder = DivCollectionItemBuilder(
+            data = data,
+            prototypes = listOf(
+                DivCollectionItemBuilder.Prototype(div.value.items!!.first(), null, selector),
+            ),
         )
+        val itemBuilderDiv = Div.Pager(div.value.copy(itemBuilder = itemBuilder))
+        val itemBuilderBlock = itemBuilderDiv.toBlock(resolver, rootPath()) as DivBlock.Pager
+        val reboundBlock = Div.Pager(itemBuilderDiv.value.copy())
+            .toBlock(resolver, rootPath()) as DivBlock.Pager
+        val view = divPagerViewWithLayout(itemBuilderDiv)
+
+        underTest.bindView(view, itemBuilderBlock, divView)
+        underTest.bindView(view, reboundBlock, divView)
+
+        verify(dataSubscription).close()
+        verify(selectorSubscription).close()
     }
 
     @Test
-    fun `vertical pager infinite scroll listener handles dy without crash`() {
-        val verticalDiv = verticalInfiniteScrollDiv()
-        val verticalDivPagerView = divPagerView(verticalDiv).apply {
-            layoutParams = defaultLayoutParams()
-        }
+    fun `infinite scroll expression subscriptions are disposed on rebind`() {
+        val multiPageObserver = argumentCaptor<(Boolean) -> Unit>()
+        val infiniteObserver = argumentCaptor<(Boolean) -> Unit>()
+        val multiPageSubscription = mock<Disposable>()
+        val infiniteSubscription = mock<Disposable>()
+        val div = Div.Pager(
+            div().value.copy(
+                infiniteScroll = observableBoolean(true, infiniteObserver, infiniteSubscription),
+                multiPageScroll = observableBoolean(true, multiPageObserver, multiPageSubscription),
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        val block = div.toBlock(resolver, rootPath()) as DivBlock.Pager
+        val reboundBlock = Div.Pager(div.value.copy()).toBlock(resolver, rootPath()) as DivBlock.Pager
 
-        underTest.bindView(verticalDivPagerView, verticalDiv.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        underTest.bindView(view, block, divView)
+        underTest.bindView(view, reboundBlock, divView)
 
-        val recyclerView = verticalDivPagerView.viewPager.getChildAt(0) as? RecyclerView
-            ?: return
-
-        // For a vertical pager, dx is always 0 and dy carries the scroll delta.
-        // This call must not throw and must use dy (not dx) for boundary detection.
-        val listeners = getScrollListeners(recyclerView)
-        listeners.forEach { listener ->
-            // dx=0, dy=1 simulates a downward scroll on a vertical pager.
-            // Before the fix, dx=0 would prevent any boundary reset from firing.
-            listener.onScrolled(recyclerView, 0, 1)
-            // dx=0, dy=-1 simulates an upward scroll.
-            listener.onScrolled(recyclerView, 0, -1)
-        }
-        // If no exception is thrown, the listener correctly handles vertical scroll deltas.
-    }
-
-    private fun verticalInfiniteScrollDiv() =
-        UnitTestData(PAGER_DIR, "pager_vertical_infinite_scroll.json").div as Div.Pager
-
-    private fun getScrollListeners(recyclerView: RecyclerView): List<RecyclerView.OnScrollListener> {
-        return try {
-            val field = RecyclerView::class.java.getDeclaredField("mScrollListeners")
-            field.isAccessible = true
-            @Suppress("UNCHECKED_CAST")
-            (field.get(recyclerView) as? List<RecyclerView.OnScrollListener>) ?: emptyList()
-        } catch (_: Exception) {
-            emptyList()
-        }
+        verify(multiPageSubscription).close()
+        verify(infiniteSubscription).close()
     }
 
     private fun div() = UnitTestData(PAGER_DIR, "pager_default_item.json").div as Div.Pager
 
     private fun divWithItemCountVariable(fileName: String = "pager_default_item.json"): Div.Pager {
-        val pagerJson = (UnitTestData(PAGER_DIR, fileName).div as Div.Pager).writeToJSON()
-        pagerJson.put("item_count_variable", ITEM_COUNT_VARIABLE)
-        return Div.Pager(DivPager(DivParsingEnvironment(ParsingErrorLogger.ASSERT), pagerJson))
+        val div = UnitTestData(PAGER_DIR, fileName).div as Div.Pager
+        return Div.Pager(div.value.copy(itemCountVariable = ITEM_COUNT_VARIABLE))
+    }
+
+    private fun divWithScroll(infiniteScroll: Boolean, multiPageScroll: Boolean): Div.Pager {
+        return Div.Pager(
+            div().value.copy(
+                infiniteScroll = infiniteScroll.asExpression(),
+                multiPageScroll = multiPageScroll.asExpression(),
+            )
+        )
     }
 
     private fun divPagerView(div: Div) = viewCreator.create(div, ExpressionResolver.EMPTY) as DivPagerView
@@ -279,8 +459,27 @@ class DivPagerBinderTest: DivBinderTest() {
         layoutParams = defaultLayoutParams()
     }
 
-    private fun verifyItemCountVariableChange(value: Long) =
-        verify(variableMutationHandler).setVariable(eq(ITEM_COUNT_VARIABLE), eq(value.toString()), any(), any())
+    private fun verifyItemCountVariableChange(value: Long) {
+        verify(variableMutationHandler).setVariable(
+            eq(ITEM_COUNT_VARIABLE),
+            eq(value.toString()),
+            any(),
+            any(),
+        )
+        verifyNoMoreInteractions(variableMutationHandler)
+    }
+
+    private fun observableBoolean(
+        initialValue: Boolean,
+        observer: KArgumentCaptor<(Boolean) -> Unit>,
+        subscription: Disposable = Disposable.NULL,
+    ): Expression<Boolean> {
+        val expression = mock<Expression<Boolean>>()
+        whenever(expression.evaluate(resolver)).thenReturn(initialValue)
+        whenever(expression.observeAndGet(eq(resolver), any())).thenCallRealMethod()
+        whenever(expression.observe(eq(resolver), observer.capture())).thenReturn(subscription)
+        return expression
+    }
 
     private companion object {
         private const val PAGER_DIR = "div-pager"
