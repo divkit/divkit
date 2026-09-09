@@ -36,6 +36,14 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
+
+        macrobenchmarkRelease {
+            initWith buildTypes.release
+            matchingFallbacks = ['release']
+            signingConfig signingConfigs.debug
+            applicationIdSuffix '.macrobenchmark'
+            debuggable false
+        }
     }
 
     sourceSets {
@@ -48,6 +56,10 @@ android {
         }
 
         release {
+            kotlin.srcDirs += 'src/public/java'
+        }
+
+        macrobenchmarkRelease {
             kotlin.srcDirs += 'src/public/java'
         }
     }
@@ -83,6 +95,9 @@ dependencies {
     implementation libs.androidx.compose.ui
     implementation libs.markwon
     implementation libs.okhttp
+
+    // Only the Macrobenchmark variant needs this; keep size-tracking variants unchanged.
+    macrobenchmarkReleaseImplementation libs.androidx.profileinstaller
 
     // ============================================================ \\
     // HELLO, USERNAME!                                             \\

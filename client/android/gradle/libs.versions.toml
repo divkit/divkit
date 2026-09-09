@@ -36,6 +36,7 @@ yatagan = "1.6.2"
 
 androidx-activity = "1.11.0"
 androidx-appcompat = "1.6.1"
+androidx-benchmark = "1.4.1"
 androidx-collection = "1.6.0"
 androidx-compose-bom = "2026.06.01"
 androidx-constraintlayout = "2.2.2"
@@ -45,6 +46,7 @@ androidx-fragment = "1.8.9"
 androidx-lifecycle = "2.9.4"
 androidx-material = "1.14.0"
 androidx-media3 = "1.6.1"
+androidx-profileinstaller = "1.4.1"
 androidx-recyclerview = "1.3.0"
 androidx-test = "1.7.0"
 androidx-test-ext = "1.1.5"
@@ -66,6 +68,8 @@ androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androi
 
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidx-benchmark" }
+androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "androidx-profileinstaller" }
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
@@ -183,6 +187,7 @@ zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = 
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+android-test = { id = "com.android.test", version.ref = "agp" }
 apiGenerator = { id = "com.yandex.divkit.api-generator", version = "unspecified" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version = "0.22.0" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
