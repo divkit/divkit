@@ -120,7 +120,7 @@ private fun DivAnimation.toTransition(position: DivTooltip.Position, incoming: B
             } else {
                 this.endValue
             }
-            Scale(scaleFactor?.evaluate(resolver)?.toFloat() ?: 1f)
+            Scale(scaleFactor?.evaluate(resolver)?.toFloat() ?: 0f)
         }
         DivAnimation.Name.SET -> {
             val set = TransitionSet()

@@ -2888,6 +2888,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/state/DivStatePathTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/state/DivStatePathTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/state/DivStatePathUtilsTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/state/DivStatePathUtilsTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/timer/TickerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/timer/TickerTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/tooltip/DivTooltipAnimationTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/tooltip/DivTooltipAnimationTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/tooltip/DivTooltipControllerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/tooltip/DivTooltipControllerTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/tooltip/DivTooltipViewBuilderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/tooltip/DivTooltipViewBuilderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/tooltip/DivTooltipViewControllerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/tooltip/DivTooltipViewControllerTest.kt",
