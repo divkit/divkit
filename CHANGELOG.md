@@ -1,3 +1,44 @@
+## 33.3.0
+
+### Android Client
+* Added Compose support for backgrounds, borders, and masks on text ranges, including custom ellipsis ranges.
+* Added PNG, WebP, animated WebP, GIF, and SVG support for inline text images.
+* Added `infinite_scroll` support for pagers rendered with Compose.
+* Added `title_click_action` support for `div-tabs` items in the Compose renderer.
+* Added inline images to text in the Compose renderer, including vertical alignment, baseline offset, tinting, and reverse indexing.
+* Added optional `DivLottieResourceLoader` support to the existing View and Compose Lottie extension handlers.
+* Added properties support in the Compose renderer.
+* Added scroll content alignment support to Compose galleries.
+* Fixed SVG image sizes with `no_scale` in Compose and when using Coil with the View renderer.
+* Fixed `disappear_action` not being dispatched for elements that were still visible when `Div2View` is cleaned up.
+* Fixed `div-switch` size in the Compose renderer: `wrap_content` no longer includes the Material minimum touch target padding around the switch.
+* Fixed `div-switch` with `accessibility.mode` set to `merge` in the Compose renderer: the switch stays operable for screen readers.
+* Fixed `div-tabs` in the Compose renderer not following updated `items`: the pages and the selected tab now match the new items.
+* Fixed `on_color` of `div-switch` in the Compose renderer: the checked track no longer draws an outline and respects the alpha of the color.
+* Fixed centering in padded Compose paging galleries, including after a fling with asymmetric padding.
+* Fixed decorations on hidden text after end ellipsis and unwanted connections between separate cloud backgrounds.
+* Fixed font scaling of SP-valued drawing dimensions.
+* Fixed particle masks restarting during unrelated text updates and advancing while offscreen.
+* Fixed snapping to partially visible edge items in single-column galleries.
+* Fixed text range decorations at word wraps and mixed-direction boundaries.
+* Fixed video actions to target the active state when matching video ids exist in multiple states.
+* Fixed weighted grid track sizing in the Compose renderer.
+* Improved SVG rendering sharpness in Compose.
+* Improved initial rendering performance of `div-tabs` in the Compose renderer by avoiding unnecessary measurement of inactive tabs.
+* Limited bitmap sizes for large SVG images loaded with Coil.
+* Offset gallery actions no longer move paging galleries.
+* Preserved gallery scroll position when alignment or padding changes and applied the initial item when content appears later.
+* Tapping the active tab title in the Compose renderer now scrolls the title row to center it, as in the View renderer.
+
+### iOS Client
+* Added a raw mode to `DivTemplates` (`init(dictionary:flagsInfo:)`) that reuses resolved templates across cards in the untyped template resolver pipeline.
+* Fixed VoiceOver not announcing "Double tap to activate" and "Button" traits when using accessibility on wrapper decorating views.
+* Fixed `match_parent` items produced by `item_builder` not rendering inside `wrap_content` containers: item sizes are now processed the same way as for static `items`.
+* Fixed iOS pager cross-axis sizing in pageContentSize mode for match_parent children.
+* Fixed non-modal tooltips blocking accessibility access to the elements behind them.
+* Fixed video slider thumb jitter when tapping the seek-backward button.
+
+
 ## 33.2.0
 
 ### Android Client
