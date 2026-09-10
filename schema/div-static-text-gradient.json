@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-linear-gradient.json",
+      "$description": "translations.json#/div_gradient_linear"
+    },
+    {
+      "$ref": "div-radial-gradient.json",
+      "$description": "translations.json#/div_gradient_radial"
+    }
+  ]
+}

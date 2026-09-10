@@ -1,0 +1,5 @@
+// Baseline format: 1.0
+AddedSubclassToSealedClass: com.yandex.div2.DivTextGradient:
+    Added a subclass to a sealed class that can be exhaustively matched
+AddedSubclassToSealedClass: com.yandex.div2.DivTextGradientTemplate:
+    Added a subclass to a sealed class that can be exhaustively matched

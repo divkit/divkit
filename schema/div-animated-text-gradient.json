@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_animated_text_gradient",
+  "platforms": [],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "animated"
+      ]
+    },
+    "gradient": {
+      "$ref": "div-static-text-gradient.json",
+      "$description": "translations.json#/div_animated_text_gradient_gradient"
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "1600",
+      "$description": "translations.json#/div_animated_text_gradient_duration"
+    }
+  },
+  "required": [
+    "type",
+    "gradient"
+  ]
+}

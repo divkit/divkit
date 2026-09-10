@@ -2804,6 +2804,31 @@
       ]
     },
     {
+      "title": "Animated Text Gradient",
+      "platforms": [],
+      "tags": [
+        "DivText",
+        "text_gradient",
+        "animation"
+      ],
+      "steps": [
+        "Observe the linear and radial animated gradients",
+        "Tap the radial gradient and observe its increased speed",
+        "Observe multiline text, range overrides, decorations, inline image and ellipsis",
+        "Focus the focus-color sample",
+        "Disable global animations, then leave the scenario and open it again"
+      ],
+      "expected_results": [
+        "Default-duration linear and expression-duration radial gradients move continuously through the whole text block",
+        "The radial gradient speeds up after the tap, while the duration-zero gradient stays visible without movement",
+        "The animated gradients paint only text glyphs and have priority over text_color and focused_text_color",
+        "Range text color and mask replace the gradient locally; inline image, background, border, decorations and shadow stay static",
+        "Multiline text uses one gradient, custom ellipsis shares its phase, and disabled animations show the static nested gradient",
+        "The animation restarts without stale state after reopening the scenario"
+      ],
+      "file": "animated_text_gradient.json"
+    },
+    {
       "title": "Custom container",
       "case_id": 92,
       "platforms": [

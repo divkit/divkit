@@ -338,7 +338,7 @@ data class Text internal constructor(
          */
         val textColor: Property<Color>?,
         /**
-         * Gradient text color.
+         * Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
          */
         val textGradient: Property<TextGradient>?,
         /**
@@ -958,7 +958,7 @@ data class Text internal constructor(
              */
             val strike: Property<LineStyle>?,
             /**
-             * Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
+             * Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.
              */
             val textColor: Property<Color>?,
             /**
@@ -1155,7 +1155,7 @@ data class Text internal constructor(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1382,7 +1382,7 @@ fun DivScope.text(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1607,7 +1607,7 @@ fun DivScope.textProps(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1832,7 +1832,7 @@ fun TemplateScope.textRefs(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2059,7 +2059,7 @@ fun Text.override(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2286,7 +2286,7 @@ fun Text.defer(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2658,7 +2658,7 @@ fun Text.evaluate(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2886,7 +2886,7 @@ fun Component<Text>.override(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -3260,7 +3260,7 @@ fun Component<Text>.evaluate(
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
- * @param textGradient Gradient text color.
+ * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -4066,7 +4066,7 @@ fun Text.ImageBuilder.asList() = listOf(this)
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
+ * @param textColor Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -4142,7 +4142,7 @@ fun DivScope.textRange(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
+ * @param textColor Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -4216,7 +4216,7 @@ fun DivScope.textRangeProps(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
+ * @param textColor Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -4290,7 +4290,7 @@ fun TemplateScope.textRangeRefs(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
+ * @param textColor Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -4366,7 +4366,7 @@ fun Text.Range.override(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
+ * @param textColor Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -4442,7 +4442,7 @@ fun Text.Range.defer(
  * @param mask A mask that hides a part of text. To show the hidden text, disable the mask using the `is_enabled` property.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
+ * @param textColor Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.
  * @param textShadow Parameters of the shadow applied to the character range.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
@@ -4514,7 +4514,7 @@ fun Text.Range.modify(
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
  * @param strike Strikethrough.
- * @param textColor Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.
+ * @param textColor Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
  * @param underline Underline.
  */

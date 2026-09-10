@@ -1,0 +1,206 @@
+{
+  "templates": {
+    "animated_text": {
+      "type": "text",
+      "font_size": 24,
+      "font_weight": "bold",
+      "text_gradient": {
+        "type": "animated",
+        "gradient": {
+          "type": "gradient",
+          "colors": ["#FFFF3B30", "#FFFFFFFF", "#FF007AFF"],
+          "angle": 0
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "animated_text_gradient",
+    "variables": [
+      {
+        "name": "gradient_duration",
+        "type": "integer",
+        "value": 2400
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": { "type": "match_parent" },
+          "height": { "type": "match_parent" },
+          "paddings": {
+            "left": 24,
+            "top": 24,
+            "right": 24,
+            "bottom": 24
+          },
+          "item_spacing": 12,
+          "background": [
+            { "type": "solid", "color": "#FF171A21" }
+          ],
+          "items": [
+            {
+              "type": "animated_text",
+              "id": "animated-default",
+              "text": "DEFAULT LINEAR (TEMPLATE)"
+            },
+            {
+              "type": "text",
+              "id": "animated-custom",
+              "text": "TAP TO SPEED UP RADIAL",
+              "font_size": 24,
+              "font_weight": "bold",
+              "action": {
+                "log_id": "update_gradient_duration",
+                "url": "div-action://set_variable?name=gradient_duration&value=800"
+              },
+              "text_gradient": {
+                "type": "animated",
+                "duration": "@{gradient_duration}",
+                "gradient": {
+                  "type": "radial_gradient",
+                  "colors": ["#FF34C759", "#FFFFFFFF", "#FFFF9500"]
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "animated-zero",
+              "text": "STATIC AT DURATION ZERO",
+              "font_size": 20,
+              "text_gradient": {
+                "type": "animated",
+                "duration": 0,
+                "gradient": {
+                  "type": "gradient",
+                  "colors": ["#FFFF3B30", "#FF007AFF"]
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "animated-focus",
+              "text": "GRADIENT WINS FOCUS COLOR",
+              "font_size": 20,
+              "focused_text_color": "#FF00FF00",
+              "action": {
+                "log_id": "focus"
+              },
+              "text_gradient": {
+                "type": "animated",
+                "duration": 0,
+                "gradient": {
+                  "type": "gradient",
+                  "colors": ["#FFFF3B30", "#FF007AFF"]
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "animated-range",
+              "text": "MULTILINE GRADIENT WITH RANGE COLOR",
+              "font_size": 20,
+              "line_height": 24,
+              "width": { "type": "fixed", "value": 280 },
+              "text_color": "#FF6F7786",
+              "text_gradient": {
+                "type": "animated",
+                "gradient": {
+                  "type": "gradient",
+                  "colors": ["#FFAF52DE", "#FFFFFFFF", "#FF5856D6"],
+                  "angle": 90
+                }
+              },
+              "ranges": [
+                {
+                  "start": 24,
+                  "end": 35,
+                  "text_color": "#FFFFD60A",
+                  "background": { "type": "solid", "color": "#3334C759" },
+                  "border": { "corner_radius": 4 }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "animated-mask",
+              "text": "MASK  UNDERLINE + STRIKE + SHADOW",
+              "font_size": 18,
+              "underline": "single",
+              "strike": "single",
+              "text_shadow": {
+                "color": "#FFFF3B30",
+                "offset": { "x": { "value": 2 }, "y": { "value": 2 } },
+                "blur": 2,
+                "alpha": 1
+              },
+              "text_gradient": {
+                "type": "animated",
+                "gradient": {
+                  "type": "gradient",
+                  "colors": ["#FF64D2FF", "#FFFFFFFF", "#FF0A84FF"]
+                }
+              },
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 4,
+                  "mask": {
+                    "type": "solid",
+                    "color": "#FF8E8E93"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "animated-image",
+              "text": "RANGE IMAGE",
+              "font_size": 20,
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 5,
+                  "text_color": "#FF00FF00"
+                }
+              ],
+              "images": [
+                {
+                  "start": 6,
+                  "url": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10'%3E%3Crect width='10' height='10' fill='%2300ff00'/%3E%3C/svg%3E"
+                }
+              ],
+              "text_gradient": {
+                "type": "animated",
+                "duration": 0,
+                "gradient": {
+                  "type": "gradient",
+                  "colors": ["#FFFF3B30", "#FF007AFF"]
+                }
+              }
+            },
+            {
+              "type": "text",
+              "id": "animated-ellipsis",
+              "text": "A long animated gradient text that ends with a custom ellipsis",
+              "font_size": 18,
+              "max_lines": 1,
+              "width": { "type": "fixed", "value": 280 },
+              "ellipsis": { "text": "… MORE" },
+              "text_gradient": {
+                "type": "animated",
+                "gradient": {
+                  "type": "gradient",
+                  "colors": ["#FFFF2D55", "#FFFFFFFF", "#FF5AC8FA"]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

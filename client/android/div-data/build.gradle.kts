@@ -14,6 +14,12 @@ android {
     namespace = "com.yandex.div.data"
 }
 
+metalava {
+    arguments.add(
+        "--baseline:compatibility:released=${file("metalava-compatibility-baseline.txt")}",
+    )
+}
+
 dependencies {
     implementation(project(":assertion"))
     implementation(project(":div-core"))

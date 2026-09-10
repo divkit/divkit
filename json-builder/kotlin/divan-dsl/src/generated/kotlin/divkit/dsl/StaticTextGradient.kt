@@ -18,10 +18,10 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Possible values: [LinearGradient], [RadialGradient], [AnimatedTextGradient].
+ * Possible values: [LinearGradient], [RadialGradient].
  */
 @Generated
-sealed interface TextGradient
+sealed interface StaticTextGradient
 
 @Generated
-fun TextGradient.asList() = listOf(this)
+fun StaticTextGradient.asList() = listOf(this)

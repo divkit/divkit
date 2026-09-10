@@ -29,7 +29,7 @@ import kotlin.collections.Map
 data class LinearGradient internal constructor(
     @JsonIgnore
     val properties: Properties,
-) : Background, TextGradient {
+) : Background, StaticTextGradient, TextGradient {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
         mapOf("type" to "gradient")

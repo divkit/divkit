@@ -403,6 +403,18 @@
     "en": "Actions performed at the start of a click/tap on an element.",
     "ru": "Действия, выполняемые в начале нажатия на элемент."
   },
+  "div_animated_text_gradient": {
+    "en": "An animated gradient applied to text glyphs. The nested static gradient moves indefinitely at a linear speed; when `duration` is `0` or global animations are disabled, it remains visible without movement.",
+    "ru": "Анимированный градиент, применяемый к глифам текста. Вложенный статический градиент бесконечно перемещается с линейной скоростью; если `duration` равен `0` или анимации глобально выключены, он остаётся видимым без движения."
+  },
+  "div_animated_text_gradient_duration": {
+    "en": "Duration of one linear animation cycle in milliseconds. A value of `0` keeps the gradient visible without movement.",
+    "ru": "Длительность одного цикла линейной анимации в миллисекундах. При значении `0` градиент остаётся видимым без движения."
+  },
+  "div_animated_text_gradient_gradient": {
+    "en": "Static linear or radial gradient moved by the animation.",
+    "ru": "Статический линейный или радиальный градиент, перемещаемый анимацией."
+  },
   "div_animation": {
     "en": "Element animation parameters.",
     "ru": "Параметры анимации элементов."
@@ -2676,8 +2688,8 @@
     "ru": "Зачеркивание."
   },
   "div_text_range_text_color": {
-    "en": "Text color for a specific range. Priority: has the highest priority over `text_gradient` and `text_color`.",
-    "ru": "Цвет текста для определенного диапазона. Приоритет: имеет высший приоритет над `text_gradient` и `text_color`."
+    "en": "Text color for a specific range. It has priority over `text_gradient` and `text_color`: the range is drawn with the specified color instead of the gradient.",
+    "ru": "Цвет текста для определенного диапазона. Имеет приоритет над `text_gradient` и `text_color`: диапазон рисуется указанным цветом вместо градиента."
   },
   "div_text_range_top_offset": {
     "en": "Top margin of the character range. Units specified in `font_size_unit`.",
@@ -2724,8 +2736,8 @@
     "ru": "Цвет текста. Не используется, если задан параметр `text_gradient`."
   },
   "div_text_text_gradient": {
-    "en": "Gradient text color.",
-    "ru": "Градиентный цвет текста."
+    "en": "Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.",
+    "ru": "Градиентный цвет, применяемый к глифам текста. Имеет приоритет над `text_color` и `focused_text_color`; цвета текста и маски диапазонов локально заменяют его. Inline-изображения и `image_builder` не являются глифами и не получают градиент. Тени текста, подчёркивания и зачёркивания сохраняют собственные цвета. Анимированный градиент остаётся видимым без движения, если его `duration` равен `0` или анимации глобально выключены."
   },
   "div_text_tighten_width": {
     "en": "Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.",

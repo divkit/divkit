@@ -448,6 +448,7 @@ internal class DivTextBinder @Inject constructor(
             null -> paint.shader = null
             is DivTextGradient.Linear -> bindLinearTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
             is DivTextGradient.Radial -> bindRadialTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
+            is DivTextGradient.Animated -> paint.shader = null
         }
     }
 

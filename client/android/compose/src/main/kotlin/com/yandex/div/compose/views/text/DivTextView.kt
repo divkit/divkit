@@ -420,6 +420,7 @@ private fun DivTextGradient.observedValue(): Brush? {
     return when (this) {
         is DivTextGradient.Linear -> value.observeLinearGradient()
         is DivTextGradient.Radial -> value.observeRadialGradient()
+        is DivTextGradient.Animated -> null
     }
 }
 
