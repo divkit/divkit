@@ -134,7 +134,7 @@ private fun BaseView(
         is Div.Separator -> DivSeparatorView(modifier.applyPaddings(data), data.value)
         is Div.Slider -> DivSliderView(modifier.applyPaddings(data), data.value)
         is Div.State -> DivStateView(modifier, data.value)
-        is Div.Switch -> DivSwitchView(modifier.applyPaddings(data), data.value)
+        is Div.Switch -> DivSwitchView(modifier, data.value)
         is Div.Tabs -> DivTabsView(modifier, data.value)
         is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
         is Div.Video -> DivVideoView(modifier.applyPaddings(data), data.value)

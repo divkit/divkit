@@ -94,6 +94,8 @@ class DivComposeInteractiveScreenshotTest(
                     "interactive_snapshot_test_data/div-input/fixed_length_input_mask.json",
                     "interactive_snapshot_test_data/div-input/phone_input_mask.json",
                     "interactive_snapshot_test_data/div-input/currency_input_mask.json",
+                    "interactive_snapshot_test_data/div-switch/base-properties.json",
+                    "interactive_snapshot_test_data/div-switch/switch-properties.json",
                     "interactive_snapshot_test_data/div-text/text-properties.json",
                 )
             ).withEscapedParameter()
