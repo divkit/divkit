@@ -2752,7 +2752,8 @@
         "The res://love card plays the bundled love animation from res/raw, and the asset://banana card plays the bundled banana animation from assets.",
         "Both animations continuously restart after completing, without loading errors, in the standard and Compose renderers."
       ],
-      "file": "animations/lottie/local_resources_lottie.json"
+      "file": "animations/lottie/local_resources_lottie.json",
+      "case_id": 529
     },
     {
       "title": "Lottie gallery with expressions",
