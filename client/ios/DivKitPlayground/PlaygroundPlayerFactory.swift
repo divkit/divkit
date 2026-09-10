@@ -113,6 +113,10 @@ final class PlaygroundPlayer: Player {
     defaultPlayer.seek(to: position)
   }
 
+  func seek(to position: CMTime, completion: @escaping () -> Void) {
+    defaultPlayer.seek(to: position, completion: completion)
+  }
+
   func set(isMuted: Bool) {
     defaultPlayer.set(isMuted: isMuted)
   }

@@ -13,6 +13,7 @@ public protocol Player {
   func set(isMuted: Bool)
   func configure(_ settings: PlaybackConfig.VideoPlaybackSettings)
   func seek(to position: CMTime)
+  func seek(to position: CMTime, completion: @escaping () -> Void)
 }
 
 extension Player {
@@ -23,6 +24,14 @@ extension Player {
   /// (e.g. mute or speed changes) will have no effect.
   public func configure(_ settings: PlaybackConfig.VideoPlaybackSettings) {
     set(isMuted: settings.isMuted)
+  }
+
+  /// Default implementation provided for source compatibility with players that only implement
+  /// ``seek(to:)``. It calls the legacy method but does not invoke `completion`, because the legacy
+  /// API provides no signal indicating when the seek actually finishes. Override this method when
+  /// the player engine supports asynchronous seek completion.
+  public func seek(to position: CMTime, completion _: @escaping () -> Void) {
+    seek(to: position)
   }
 }
 

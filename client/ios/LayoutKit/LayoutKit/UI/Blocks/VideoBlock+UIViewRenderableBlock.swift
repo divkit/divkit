@@ -28,6 +28,22 @@ extension VideoBlock {
 }
 
 private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
+  private struct PendingSeek {
+    let generation: UUID
+    let origin: Int
+    let target: Int
+
+    func accepts(time: Int) -> Bool {
+      if target < origin {
+        return time <= target + VideoBlockView.seekTargetToleranceMs
+      }
+      return time >= target - VideoBlockView.seekTargetToleranceMs
+    }
+  }
+
+  private static let seekTargetToleranceMs = 100
+  private static let seekCompletionTimeout: TimeInterval = 2
+
   var layoutReporter: LayoutReporter?
 
   var state: VideoBlockViewState = .init(state: .playing) {
@@ -38,6 +54,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
         player?.play()
         preview.currentValue?.isHidden = true
       case .paused:
+        pendingSeek = nil
         player?.pause()
       }
     }
@@ -50,6 +67,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
   private var model: VideoBlockViewModel = .zero
   private var playerSignal: Disposable?
   private var previousTime: Int = 0
+  private var pendingSeek: PendingSeek?
 
   private lazy var player: Player? = {
     let player = playerFactory?.makePlayer(
@@ -63,20 +81,27 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
       let action = {
         switch event {
         case let .currentTimeUpdate(time):
+          if let pendingSeek = self.pendingSeek {
+            guard pendingSeek.accepts(time: time) else { break }
+            self.pendingSeek = nil
+          }
           self.model.elapsedTime?.value = Int(time)
           self.previousTime = time
         case .end:
+          self.pendingSeek = nil
           self.observer?.elementStateChanged(self.state, forPath: self.model.path)
           self.model.endActions.perform(sendingFrom: self)
         case .buffering:
           self.model.bufferingActions.perform(sendingFrom: self)
         case .pause:
+          self.pendingSeek = nil
           self.observer?.elementStateChanged(
             VideoBlockViewState(state: .paused),
             forPath: self.model.path
           )
           self.model.pauseActions.perform(sendingFrom: self)
         case let .fatal(error):
+          self.pendingSeek = nil
           self.model.errorReporter?(error)
           self.model.fatalActions.perform(sendingFrom: self)
         case .play:
@@ -163,6 +188,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
     }
 
     if !model.hasEqualVideoData(to: oldValue) {
+      pendingSeek = nil
       player?.set(
         data: model.videoData,
         config: model.playbackConfig
@@ -183,8 +209,24 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
     if let elapsedTime = model.elapsedTime?.value,
        elapsedTime != previousTime {
-      player?.seek(to: CMTime(value: elapsedTime))
+      let origin = previousTime
       previousTime = elapsedTime
+      let generation = UUID()
+      pendingSeek = PendingSeek(
+        generation: generation,
+        origin: origin,
+        target: elapsedTime
+      )
+      player?.seek(to: CMTime(value: elapsedTime)) { [weak self] in
+        onMainThread {
+          guard let self, self.pendingSeek?.generation == generation else { return }
+          self.pendingSeek = nil
+        }
+      }
+      DispatchQueue.main.asyncAfter(deadline: .now() + Self.seekCompletionTimeout) { [weak self] in
+        guard let self, self.pendingSeek?.generation == generation else { return }
+        self.pendingSeek = nil
+      }
     }
   }
 

@@ -99,6 +99,10 @@ final class DefaultPlayer: Player {
     player.seek(to: position)
   }
 
+  func seek(to position: CMTime, completion: @escaping () -> Void) {
+    player.seek(to: position, completion: completion)
+  }
+
   private func configureObservers(for player: CorePlayer) {
     #if swift(>=6.2)
     weak let weakSelf = self
