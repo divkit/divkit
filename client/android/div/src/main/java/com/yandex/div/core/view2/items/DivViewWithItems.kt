@@ -16,6 +16,7 @@ import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.internal.KAssert
 import com.yandex.div2.Div
+import com.yandex.div2.DivGallery.ScrollMode
 import com.yandex.div2.DivSizeUnit
 
 /**
@@ -104,8 +105,10 @@ internal sealed class DivViewWithItems(view: View) {
             return adapter.visibleItems.getIndicesWithId(id) { div }
         }
 
-        override fun scrollTo(value: Int, animated: Boolean, sizeUnit: DivSizeUnit) =
+        override fun scrollTo(value: Int, animated: Boolean, sizeUnit: DivSizeUnit) {
+            if (view.scrollMode != ScrollMode.DEFAULT) return
             view.scrollTo(value, animated, sizeUnit)
+        }
 
         private fun DivRecyclerView.scrollTo(
             value: Int,
