@@ -9,7 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import com.yandex.div.compose.utils.variables.mutableStateFromVariable
+import com.yandex.div.compose.variables.mutableStateFromVariable
 import com.yandex.div.compose.views.input.mask.rememberCurrencyInputState
 import com.yandex.div.compose.views.input.mask.rememberFixedLengthInputState
 import com.yandex.div.compose.views.input.mask.rememberPhoneInputState

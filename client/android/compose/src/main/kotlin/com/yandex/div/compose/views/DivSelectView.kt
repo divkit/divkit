@@ -18,7 +18,7 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.text.observeBaseTextStyle
-import com.yandex.div.compose.utils.variables.mutableStateFromVariable
+import com.yandex.div.compose.variables.mutableStateFromVariable
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivSelect
 

@@ -26,28 +26,55 @@ import com.yandex.div.json.typeMismatch
 import javax.inject.Inject
 
 @DivLocalScope
-internal class DivComposeExpressionResolver @Inject constructor(
-    functionProvider: FunctionProviderDecorator,
+internal class DivComposeExpressionResolver private constructor(
+    private val evaluationContext: EvaluationContext,
     private val reporter: DivReporter,
-    storedValueProvider: ScopedStoredValueProvider,
     private val variableController: DivVariableController
 ) : ExpressionResolver {
 
-    private val evaluator: Evaluator
-
-    private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
-    private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
-
-    init {
-        val evaluationContext = EvaluationContext(
+    @Inject
+    constructor(
+        functionProvider: FunctionProviderDecorator,
+        reporter: DivReporter,
+        storedValueProvider: ScopedStoredValueProvider,
+        variableController: DivVariableController
+    ) : this(
+        evaluationContext = EvaluationContext(
             variableProvider = { name ->
                 variableController.get(name)?.getValue().variableValueToEvaluableValue()
             },
             storedValueProvider = storedValueProvider,
             functionProvider = functionProvider,
             warningSender = EvaluatorWarningSender(reporter)
+        ),
+        reporter = reporter,
+        variableController = variableController
+    )
+
+    private val evaluator = Evaluator(evaluationContext)
+
+    private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
+    private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
+
+    /**
+     * Creates a resolver exposing the assigned property value as `new_value` (or a custom name).
+     * This value overrides the named variable during setter expression evaluation while keeping
+     * the property's declaration scope.
+     */
+    fun withPropertyNewValueVariable(variableName: String, value: Any): DivComposeExpressionResolver {
+        return DivComposeExpressionResolver(
+            evaluationContext = evaluationContext.copy(
+                variableProvider = { name ->
+                    if (name == variableName) {
+                        value.variableValueToEvaluableValue()
+                    } else {
+                        evaluationContext.variableProvider.get(name)
+                    }
+                },
+            ),
+            reporter = reporter,
+            variableController = variableController,
         )
-        evaluator = Evaluator(evaluationContext)
     }
 
     override fun <R, T : Any> get(

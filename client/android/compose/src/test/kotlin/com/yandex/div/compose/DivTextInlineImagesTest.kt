@@ -21,6 +21,7 @@ import com.yandex.div.test.data.doubleExpression
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.text
+import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div.test.data.uriExpression
 import com.yandex.div2.Div
 import com.yandex.div2.DivFixedSize
@@ -30,7 +31,6 @@ import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
-import kotlin.test.fail
 
 @RunWith(AndroidJUnit4::class)
 class DivTextInlineImagesTest {
@@ -358,7 +358,7 @@ class DivTextInlineImagesTest {
             rawExpression = expression,
             converter = DivText.Image.IndexingDirection::fromString,
             validator = { true },
-            logger = { fail(it.message) },
+            logger = throwingErrorLogger,
             typeHelper = TypeHelper.from(default = DivText.Image.IndexingDirection.NORMAL) {
                 it is DivText.Image.IndexingDirection
             },

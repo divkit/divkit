@@ -32,14 +32,11 @@ class LocalFunction(
         argNames.forEachIndexed { index, name ->
             argsMap[name] = args[index]
         }
-        val newContext = EvaluationContext(
+        val newContext = evaluationContext.copy(
             variableProvider = VariableProviderWrapper(
                 values = argsMap,
                 wrappedProvider = evaluationContext.variableProvider
             ),
-            storedValueProvider = evaluationContext.storedValueProvider,
-            functionProvider = evaluationContext.functionProvider,
-            warningSender = evaluationContext.warningSender
         )
         return Evaluator(newContext).eval(evaluable)
     }

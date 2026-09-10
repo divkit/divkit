@@ -48,13 +48,13 @@ private fun Variable.PropertyVariable.checkValueAndCast(value: Any): Any {
     return when (valueType) {
         DivEvaluableType.ARRAY -> checkValueAndCast<JSONArray>(variableName = name, value = value)
         DivEvaluableType.BOOLEAN -> checkValueAndCast<Boolean>(variableName = name, value = value)
-        DivEvaluableType.COLOR -> checkValueAndCast<Color>(variableName = name, value = value)
+        DivEvaluableType.COLOR -> checkValueAndCast<Int>(variableName = name, value = value).let(::Color)
         DivEvaluableType.DATETIME -> checkValueAndCast<DateTime>(variableName = name, value = value)
         DivEvaluableType.DICT -> checkValueAndCast<JSONObject>(variableName = name, value = value)
         DivEvaluableType.INTEGER -> checkValueAndCast<Long>(variableName = name, value = value)
         DivEvaluableType.NUMBER -> checkValueAndCast<Double>(variableName = name, value = value)
         DivEvaluableType.STRING -> checkValueAndCast<String>(variableName = name, value = value)
-        DivEvaluableType.URL -> checkValueAndCast<Url>(variableName = name, value = value)
+        DivEvaluableType.URL -> Url(checkValueAndCast<Uri>(variableName = name, value = value).toString())
     }
 }
 

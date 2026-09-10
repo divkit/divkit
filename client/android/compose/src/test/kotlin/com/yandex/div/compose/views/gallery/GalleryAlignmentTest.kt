@@ -16,12 +16,12 @@ import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.text
+import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div2.DivGallery
 import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.fail
 
 @RunWith(AndroidJUnit4::class)
 class GalleryAlignmentTest {
@@ -281,7 +281,7 @@ class GalleryAlignmentTest {
         rawExpression = expression,
         converter = DivGallery.ContentAlignment::fromString,
         validator = { true },
-        logger = { fail(it.message) },
+        logger = throwingErrorLogger,
         typeHelper = TypeHelper.from(default = DivGallery.ContentAlignment.START) {
             it is DivGallery.ContentAlignment
         },

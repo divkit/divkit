@@ -17,6 +17,7 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.text
+import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div2.Div
 import com.yandex.div2.DivPageContentSize
 import com.yandex.div2.DivPager
@@ -25,7 +26,6 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.fail
 
 @RunWith(AndroidJUnit4::class)
 class PagerDefaultItemTest {
@@ -115,7 +115,7 @@ class PagerDefaultItemTest {
         rawExpression = expression,
         converter = DivPager.ItemAlignment::fromString,
         validator = { true },
-        logger = { fail(it.message) },
+        logger = throwingErrorLogger,
         typeHelper = TypeHelper.from(default = DivPager.ItemAlignment.CENTER) {
             it is DivPager.ItemAlignment
         },

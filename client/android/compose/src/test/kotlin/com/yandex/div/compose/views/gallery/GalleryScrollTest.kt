@@ -29,6 +29,7 @@ import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.text
+import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivGallery
@@ -37,7 +38,6 @@ import org.junit.runner.RunWith
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.fail
 
 @RunWith(AndroidJUnit4::class)
 class GalleryScrollTest {
@@ -271,7 +271,7 @@ class GalleryScrollTest {
                     rawExpression = "@{alignment}",
                     converter = DivGallery.ContentAlignment::fromString,
                     validator = { true },
-                    logger = { fail(it.message) },
+                    logger = throwingErrorLogger,
                     typeHelper = TypeHelper.from(default = DivGallery.ContentAlignment.CENTER) {
                         it is DivGallery.ContentAlignment
                     },

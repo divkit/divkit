@@ -6,7 +6,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.variables.mutableStateFromVariable
+import com.yandex.div.compose.variables.mutableStateFromVariable
 import com.yandex.div.compose.views.input.DivInputState
 import com.yandex.div.compose.views.input.rememberRegex
 import com.yandex.div2.DivFixedLengthInputMask

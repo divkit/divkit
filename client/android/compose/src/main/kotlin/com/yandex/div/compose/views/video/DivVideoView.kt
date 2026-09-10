@@ -21,7 +21,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.utils.reportError
-import com.yandex.div.compose.utils.variables.mutableStateFromIntegerVariable
+import com.yandex.div.compose.variables.mutableStateFromIntegerVariable
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoResolution

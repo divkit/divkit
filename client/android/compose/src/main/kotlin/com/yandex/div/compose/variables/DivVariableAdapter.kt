@@ -1,9 +1,7 @@
 package com.yandex.div.compose.variables
 
-import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivLocalScope
 import com.yandex.div.data.Variable
-import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div.internal.variables.toVariable
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -14,18 +12,13 @@ import javax.inject.Inject
 internal class DivVariableAdapter @Inject constructor(
     private val expressionResolver: ExpressionResolver,
     private val parsingErrorLogger: ParsingErrorLogger,
-    private val reporter: DivReporter
+    private val propertyVariableExecutor: DivPropertyVariableExecutor
 ) {
 
     fun convert(variable: DivVariable): Variable? {
-        if (variable is DivVariable.Property) {
-            reporter.reportError("Properties not supported")
-            return null
-        }
-
         return variable.toVariable(
             resolver = expressionResolver,
-            propertyVariableExecutor = PropertyVariableExecutor.STUB,
+            propertyVariableExecutor = propertyVariableExecutor,
             logger = parsingErrorLogger
         )
     }

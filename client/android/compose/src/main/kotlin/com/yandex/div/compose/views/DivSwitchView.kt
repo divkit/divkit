@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.variables.mutableStateFromVariable
+import com.yandex.div.compose.variables.mutableStateFromVariable
 import com.yandex.div2.DivSwitch
 
 @Composable

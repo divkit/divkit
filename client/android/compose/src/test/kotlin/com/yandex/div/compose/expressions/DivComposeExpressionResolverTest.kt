@@ -2,10 +2,15 @@ package com.yandex.div.compose.expressions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.createExpressionResolver
+import com.yandex.div.compose.variables.DivPropertyVariableExecutor
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.ScopedStoredValueProvider
+import com.yandex.div.internal.variables.toVariable
 import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.property
+import com.yandex.div.test.data.throwingErrorLogger
+import com.yandex.div2.DivEvaluableType
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
@@ -13,6 +18,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 @RunWith(AndroidJUnit4::class)
 class DivComposeExpressionResolverTest {
@@ -22,6 +28,12 @@ class DivComposeExpressionResolverTest {
     private val expressionResolver = createExpressionResolver(
         storedValueProvider = storedValueProvider,
         variableController = variableController
+    )
+
+    private val propertyVariableExecutor = DivPropertyVariableExecutor(
+        actionHandler = mock(),
+        actionHandlingContext = mock(),
+        expressionResolver = expressionResolver
     )
 
     @Test
@@ -61,6 +73,24 @@ class DivComposeExpressionResolverTest {
             "value + 10 = 133.45",
             evaluate("value + 10 = @{value + 10}")
         )
+    }
+
+    @Test
+    fun `expression with property`() {
+        variableController.declare(Variable.IntegerVariable("counter", 21))
+
+        val property = property(
+            name = "counterX2",
+            valueType = DivEvaluableType.INTEGER,
+            get = "@{counter * 2}"
+        ).toVariable(
+            resolver = expressionResolver,
+            propertyVariableExecutor = propertyVariableExecutor,
+            logger = throwingErrorLogger
+        )
+        variableController.declare(assertNotNull(property))
+
+        assertEquals("value = 42", evaluate("value = @{counterX2}"))
     }
 
     @Test
@@ -115,6 +145,18 @@ class DivComposeExpressionResolverTest {
         variable.set(20)
 
         assertEquals("value = 10", value)
+    }
+
+    @Test
+    fun `withPropertyNewValueVariable() shadows variable`() {
+        variableController.declare(Variable.StringVariable("value", "initial value"))
+
+        val expression = expression("@{value}")
+        val expressionResolverWithNewValue = expressionResolver
+            .withPropertyNewValueVariable(variableName = "value", value = "new value")
+
+        assertEquals("new value", expression.evaluate(expressionResolverWithNewValue))
+        assertEquals("initial value", expression.evaluate(expressionResolver))
     }
 
     private fun evaluate(expression: String): String {

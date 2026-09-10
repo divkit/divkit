@@ -22,7 +22,7 @@ fun expression(expression: String): Expression<String> {
         rawExpression = expression,
         converter = null,
         validator = { true },
-        logger = { fail(it.message) },
+        logger = throwingErrorLogger,
         typeHelper = TYPE_HELPER_STRING
     )
 }
@@ -33,7 +33,7 @@ fun booleanExpression(expression: String): Expression<Boolean> {
         rawExpression = expression,
         converter = { it },
         validator = { true },
-        logger = { fail(it.message) },
+        logger = throwingErrorLogger,
         typeHelper = TYPE_HELPER_BOOLEAN,
     )
 }
@@ -44,7 +44,7 @@ fun doubleExpression(expression: String): Expression<Double> {
         rawExpression = expression,
         converter = { it },
         validator = { true },
-        logger = { fail(it.message) },
+        logger = throwingErrorLogger,
         typeHelper = TYPE_HELPER_DOUBLE,
     )
 }
@@ -55,7 +55,7 @@ fun colorExpression(expression: String): Expression<Int> {
         rawExpression = expression,
         converter = STRING_TO_COLOR_INT,
         validator = { true },
-        logger = { fail(it.message) },
+        logger = throwingErrorLogger,
         typeHelper = TYPE_HELPER_COLOR,
     )
 }
@@ -80,7 +80,7 @@ fun uriExpression(expression: String): Expression<Uri> {
         rawExpression = expression,
         converter = STRING_TO_URI,
         validator = { true },
-        logger = { fail(it.message) },
+        logger = throwingErrorLogger,
         typeHelper = TYPE_HELPER_URI,
     )
 }
@@ -91,7 +91,7 @@ fun visibilityExpression(expression: String): Expression<DivVisibility> {
         rawExpression = expression,
         converter = DivVisibility::fromString,
         validator = { true },
-        logger = { fail(it.message) },
+        logger = throwingErrorLogger,
         typeHelper = TypeHelper.from(default = DivVisibility.VISIBLE) { it is DivVisibility },
     )
 }

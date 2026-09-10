@@ -1,4 +1,4 @@
-package com.yandex.div.compose.utils.variables
+package com.yandex.div.compose.variables
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -10,20 +10,34 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.data.Variable
+import com.yandex.div.json.missingVariable
+import com.yandex.div2.DivEvaluableType
 
 @Composable
-internal fun mutableStateFromVariable(variableName: String, defaultValue: String): MutableState<String> {
-    return mutableStateFromStringVariable(variableName) ?: remember { mutableStateOf(defaultValue) }
+internal fun mutableStateFromVariable(
+    variableName: String,
+    defaultValue: String
+): MutableState<String> {
+    return mutableStateFromStringVariable(variableName)
+        ?: remember { mutableStateOf(defaultValue) }
 }
 
 @Composable
-internal fun mutableStateFromVariable(variableName: String, defaultValue: Boolean): MutableState<Boolean> {
-    return mutableStateFromBooleanVariable(variableName) ?: remember { mutableStateOf(defaultValue) }
+internal fun mutableStateFromVariable(
+    variableName: String,
+    defaultValue: Boolean
+): MutableState<Boolean> {
+    return mutableStateFromBooleanVariable(variableName)
+        ?: remember { mutableStateOf(defaultValue) }
 }
 
 @Composable
-internal fun mutableStateFromVariable(variableName: String, defaultValue: Long): MutableState<Long> {
-    return mutableStateFromIntegerVariable(variableName) ?: remember { mutableLongStateOf(defaultValue) }
+internal fun mutableStateFromVariable(
+    variableName: String,
+    defaultValue: Long
+): MutableState<Long> {
+    return mutableStateFromIntegerVariable(variableName)
+        ?: remember { mutableLongStateOf(defaultValue) }
 }
 
 @Composable
@@ -32,8 +46,13 @@ internal fun mutableStateFromStringVariable(variableName: String): MutableState<
         variableName = variableName,
         readValue = { it.getValue().toString() },
         validate = { variable ->
-            if (variable is Variable.StringVariable) null
-            else "variable [$variableName] is not a string variable"
+            if (variable is Variable.StringVariable ||
+                variable.isProperty(DivEvaluableType.STRING)
+            ) {
+                null
+            } else {
+                "variable [$variableName] is not a string variable"
+            }
         },
     )
 }
@@ -44,8 +63,13 @@ internal fun mutableStateFromBooleanVariable(variableName: String): MutableState
         variableName = variableName,
         readValue = { it.getValue() as Boolean },
         validate = { variable ->
-            if (variable is Variable.BooleanVariable) null
-            else "variable [$variableName] is not a boolean variable"
+            if (variable is Variable.BooleanVariable ||
+                variable.isProperty(DivEvaluableType.BOOLEAN)
+            ) {
+                null
+            } else {
+                "variable [$variableName] is not a boolean variable"
+            }
         },
     )
 }
@@ -56,8 +80,13 @@ internal fun mutableStateFromIntegerVariable(variableName: String): MutableState
         variableName = variableName,
         readValue = { it.getValue() as Long },
         validate = { variable ->
-            if (variable is Variable.IntegerVariable) null
-            else "variable [$variableName] is not an integer variable"
+            if (variable is Variable.IntegerVariable ||
+                variable.isProperty(DivEvaluableType.INTEGER)
+            ) {
+                null
+            } else {
+                "variable [$variableName] is not an integer variable"
+            }
         },
     )
 }
@@ -74,7 +103,7 @@ private fun <T : Any> rememberVariableMutableState(
         val variable = controller.get(variableName)
 
         if (variable == null) {
-            reporter.reportError("variable [$variableName] not found")
+            reporter.reportError(missingVariable(variableName))
             null
         } else {
             val error = validate(variable)
@@ -95,7 +124,13 @@ private fun <T : Any> rememberVariableMutableState(
         DivVariableMutableState(
             variable = variable,
             readValue = readValue,
-            writeValue = { variable, value -> variable.setValueDirectly(value) },
+            writeValue = { variable, value ->
+                try {
+                    variable.setValueDirectly(value)
+                } catch (e: Exception) {
+                    reporter.reportError(e)
+                }
+            },
         )
     }
 
@@ -118,8 +153,8 @@ private class DivVariableMutableState<T : Any>(
     override var value: T
         get() = _value
         set(newValue) {
-            _value = newValue
             writeValue(variable, newValue)
+            _value = readValue(variable)
         }
 
     override fun component1(): T = value
@@ -128,4 +163,8 @@ private class DivVariableMutableState<T : Any>(
     fun onVariableChanged(variable: Variable) {
         _value = readValue(variable)
     }
+}
+
+private fun Variable.isProperty(type: DivEvaluableType): Boolean {
+    return this is Variable.PropertyVariable && valueType == type
 }

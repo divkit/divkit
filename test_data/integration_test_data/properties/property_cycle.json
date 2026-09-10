@@ -75,7 +75,7 @@
           "errors": [
             "Property variable 'title' has cycle in 'get' expression.",
             "Variable 'title' is missing.",
-            "No variable could be resolved for 'title"
+            "Variable 'title' is missing."
           ]
         }
       ],

@@ -13,7 +13,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.state.LocalDivStatePath
 import com.yandex.div.compose.state.findState
 import com.yandex.div.compose.utils.reportError
-import com.yandex.div.compose.utils.variables.mutableStateFromStringVariable
+import com.yandex.div.compose.variables.mutableStateFromStringVariable
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div.core.state.DivStatePath

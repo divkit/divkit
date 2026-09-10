@@ -167,7 +167,7 @@ class DivInputValidatorTest {
 
         validate(listOf(regexValidator("[a-z]+", "missing_var")), "hello")
 
-        assertEquals(listOf("variable [missing_var] not found"), reporter.errors)
+        assertEquals(listOf("Variable 'missing_var' is missing."), reporter.errors)
     }
 
     @Test

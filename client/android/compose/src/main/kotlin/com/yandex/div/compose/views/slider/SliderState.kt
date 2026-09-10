@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.variables.mutableStateFromVariable
+import com.yandex.div.compose.variables.mutableStateFromVariable
 import com.yandex.div2.DivSlider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

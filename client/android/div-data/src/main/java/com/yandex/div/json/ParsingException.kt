@@ -213,7 +213,7 @@ fun missingVariable(
 fun missingVariable(variableName: String, cause: Throwable? = null) =
     ParsingException(
         reason = ParsingExceptionReason.MISSING_VARIABLE,
-        message = "No variable could be resolved for '$variableName",
+        message = "Variable '$variableName' is missing.",
         cause = cause
     )
 

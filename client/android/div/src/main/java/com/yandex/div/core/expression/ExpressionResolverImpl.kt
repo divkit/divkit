@@ -10,7 +10,6 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
-import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.MissingVariableException
 import com.yandex.div.internal.parser.Converter
@@ -235,11 +234,8 @@ internal class ExpressionResolverImpl(
             runtimeStore = this.runtimeStore,
             variableController = variableAndConstantController,
             evaluator = Evaluator(
-                evaluationContext = EvaluationContext(
+                evaluationContext = evaluator.evaluationContext.copy(
                     variableProvider = variableAndConstantController,
-                    storedValueProvider = evaluator.evaluationContext.storedValueProvider,
-                    functionProvider = evaluator.evaluationContext.functionProvider,
-                    warningSender = evaluator.evaluationContext.warningSender
                 )
             ),
             errorCollector = errorCollector,

@@ -1,5 +1,6 @@
 package com.yandex.div.test.data
 
+import android.net.Uri
 import androidx.core.net.toUri
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
@@ -34,6 +35,24 @@ fun action(
         payload = payload,
         typed = typed,
         url = url?.let { constant(it.toUri()) }
+    )
+}
+
+fun action(
+    id: String? = null,
+    isEnabled: Boolean = true,
+    menuItems: List<DivAction.MenuItem>? = null,
+    payload: JSONObject? = null,
+    typed: DivActionTyped? = null,
+    url: Expression<Uri>,
+): DivAction {
+    return DivAction(
+        isEnabled = constant(isEnabled),
+        logId = id?.let { constant(it) },
+        menuItems = menuItems,
+        payload = payload,
+        typed = typed,
+        url = url
     )
 }
 

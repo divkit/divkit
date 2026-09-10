@@ -1,4 +1,4 @@
-package com.yandex.div.compose.utils.variables
+package com.yandex.div.compose.variables
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -61,7 +61,7 @@ class DivVariableMutableStateTest {
             mutableStateFromStringVariable("missing_var")
         }
 
-        assertEquals("variable [missing_var] not found", reporter.lastError)
+        assertEquals("Variable 'missing_var' is missing.", reporter.lastError)
     }
 
     @Test
@@ -281,7 +281,7 @@ class DivVariableMutableStateTest {
         }
 
         assertEquals(state?.value, "default")
-        assertEquals("variable [flag] not found", reporter.lastError)
+        assertEquals("Variable 'flag' is missing.", reporter.lastError)
     }
 
     @Test
@@ -294,7 +294,7 @@ class DivVariableMutableStateTest {
         }
 
         assertEquals(state?.value, true)
-        assertEquals("variable [flag] not found", reporter.lastError)
+        assertEquals("Variable 'flag' is missing.", reporter.lastError)
     }
 
     private fun setContent(content: @Composable () -> Unit) {
