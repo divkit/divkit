@@ -105,8 +105,8 @@
               "elapsed_time_variable": "video_time_3",
               "disappear_action_url": "div-action://video?id=bears_video_3&action=pause",
               "visibility_action_url": "div-action://video?id=bears_video_3&action=start",
-              "disappear_log_id": "disappeared_video_2",
-              "visibility_log_id": "visible_video_2"
+              "disappear_log_id": "disappeared_video_3",
+              "visibility_log_id": "visible_video_3"
             }
           ]
         }
