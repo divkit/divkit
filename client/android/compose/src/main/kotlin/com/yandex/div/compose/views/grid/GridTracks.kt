@@ -4,17 +4,25 @@ import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Fr
 import androidx.compose.foundation.layout.GridTrackSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.utils.aspect
+import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeHorizontalMarginsSum
+import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.observeVerticalMarginsSum
+import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.internal.core.GridItemMeasurement
+import com.yandex.div.internal.core.resolveGridTrackSizes
 import com.yandex.div.internal.core.resolveWeightedSizes
 import com.yandex.div2.Div
 import com.yandex.div2.DivSize
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalGridApi::class)
 @Composable
@@ -39,6 +47,11 @@ private fun List<Cell>.axisTracks(
     isColumn: Boolean,
     isWrapContent: Boolean,
 ): AxisTracks {
+    if (any { (if (isColumn) it.columnSpan else it.rowSpan) > 1 } &&
+        all { it.canResolveSpannedSize(isColumn) }
+    ) {
+        return rememberSpannedTracks(lineCount, isColumn, isWrapContent)
+    }
     val weights = observeLineWeights(lineCount, isColumn)
     val hasIntrinsicSizes = BooleanArray(lineCount) { line -> hasIntrinsicSize(line, isColumn) }
     val growableLines = BooleanArray(lineCount) { line -> isLineGrowable(line, isColumn, weights) }
@@ -90,7 +103,7 @@ private fun List<Cell>.axisTracks(
         (0 until lineCount).all { line ->
             weights[line] > 0f || resolvedBaseSizes[line] > 0f
         }
-    return AxisTracks(
+    return ConfiguredAxisTracks(
         tracks = tracks,
         weights = weights,
         baseSizes = resolvedBaseSizes,
@@ -99,15 +112,31 @@ private fun List<Cell>.axisTracks(
     )
 }
 
-@OptIn(ExperimentalGridApi::class, InternalApi::class)
-internal class AxisTracks(
+private fun Cell.canResolveSpannedSize(isColumn: Boolean): Boolean {
+    if (!base.variables.isNullOrEmpty() || !base.functions.isNullOrEmpty()) return false
+    if (!isColumn && base.aspect != null) return false
+    return when (val size = if (isColumn) base.width else base.height) {
+        is DivSize.Fixed -> true
+        is DivSize.MatchParent -> size.value.weight != null &&
+            size.value.minSize == null && size.value.maxSize == null
+        is DivSize.WrapContent -> false
+    }
+}
+
+@OptIn(ExperimentalGridApi::class)
+internal interface AxisTracks {
+    fun resolve(availableSize: Int, density: Density): List<GridTrackSize>
+}
+
+@OptIn(ExperimentalGridApi::class)
+private class ConfiguredAxisTracks(
     private val tracks: List<GridTrackSize>,
     private val weights: FloatArray,
     private val baseSizes: FloatArray,
     private val isWrapContent: Boolean,
     private val canResolveConstrainedWeights: Boolean,
-) {
-    fun resolve(availableSize: Int, density: Density): List<GridTrackSize> {
+) : AxisTracks {
+    override fun resolve(availableSize: Int, density: Density): List<GridTrackSize> {
         if (
             isWrapContent ||
             availableSize == Constraints.Infinity ||
@@ -122,6 +151,49 @@ internal class AxisTracks(
         }
         val resolvedSizes = resolveWeightedSizes(weights, baseSizesPx, availableSize)
         return resolvedSizes.map { size ->
+            GridTrackSize.Fixed(with(density) { size.toDp() })
+        }
+    }
+}
+
+@Composable
+private fun List<Cell>.rememberSpannedTracks(
+    lineCount: Int,
+    isColumn: Boolean,
+    isWrapContent: Boolean,
+): AxisTracks {
+    val density = LocalDensity.current
+    val measurements = map { cell ->
+        val size = if (isColumn) cell.base.width else cell.base.height
+        val contentSize = if (size is DivSize.Fixed) {
+            size.value.observedPxValue().roundToInt()
+        } else {
+            0
+        }
+        val (startMargin, endMargin) = if (isColumn) cell.base.margins.observeHorizontalInsets()
+                                      else cell.base.margins.observeVerticalInsets()
+        val marginSize = with(density) { startMargin.roundToPx() + endMargin.roundToPx() }
+        val weight = if (size is DivSize.MatchParent) size.value.weight?.observedFloatValue() ?: 0f else 0f
+        val lineIndex = if (isColumn) cell.columnIndex else cell.rowIndex
+        val span = if (isColumn) cell.columnSpan else cell.rowSpan
+        remember(lineIndex, contentSize, marginSize, span, weight) {
+            GridItemMeasurement(lineIndex, contentSize, contentSize + marginSize, span, weight)
+        }
+    }
+    return remember(lineCount, measurements, isWrapContent) {
+        SpannedAxisTracks(lineCount, measurements, isWrapContent)
+    }
+}
+
+@OptIn(ExperimentalGridApi::class)
+private class SpannedAxisTracks(
+    private val lineCount: Int,
+    private val measurements: List<GridItemMeasurement>,
+    private val isWrapContent: Boolean,
+) : AxisTracks {
+    override fun resolve(availableSize: Int, density: Density): List<GridTrackSize> {
+        val minimumSize = if (isWrapContent || availableSize == Constraints.Infinity) 0 else availableSize
+        return resolveGridTrackSizes(lineCount, measurements, minimumSize).map { size ->
             GridTrackSize.Fixed(with(density) { size.toDp() })
         }
     }

@@ -11,12 +11,11 @@ import android.view.View
 import com.yandex.div.R
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.internal.KLog
-import com.yandex.div.internal.core.resolveWeightedSizes
+import com.yandex.div.internal.core.GridItemMeasurement
+import com.yandex.div.internal.core.resolveGridTrackSizes
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
-import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_WEIGHT
 import com.yandex.div.internal.widget.DivViewGroup
-import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
 
@@ -375,49 +374,8 @@ internal open class GridContainer @JvmOverloads constructor(
         }
     }
 
-    private class CellProjection(
-        @JvmField val lineIndex: Int,
-        @JvmField val contentSize: Int,
-        @JvmField val marginStart: Int,
-        @JvmField val marginEnd: Int,
-        @JvmField val span: Int,
-        @JvmField val weight: Float
-    ) {
-        val size
-            get() = contentSize + marginStart + marginEnd
-
-        val specificSize
-            get() = size / span
-    }
-
-    private class Line {
-
+    private class Line(val size: Int) {
         var offset: Int = 0
-
-        var contentSize: Int = 0
-            private set
-
-        var size: Int = 0
-            private set
-
-        var weight: Float = 0.0f
-            private set
-
-        val marginSize: Int
-            get() = size - contentSize
-
-        val isFlexible: Boolean
-            get() = weight > DEFAULT_WEIGHT
-
-        fun include(
-            contentSize: Int = 0,
-            size: Int = 0,
-            weight: Float = 0.0f
-        ) {
-            this.contentSize = max(this.contentSize, contentSize)
-            this.size = max(this.size, size)
-            this.weight = max(this.weight, weight)
-        }
     }
 
     private class SizeConstraint(
@@ -543,11 +501,10 @@ internal open class GridContainer @JvmOverloads constructor(
         private fun measureColumns(): List<Line> {
             return measureAxis(columnCount, widthConstraint) { cell, view ->
                 val params = view.lp
-                CellProjection(
+                GridItemMeasurement(
                     lineIndex = cell.columnIndex,
                     contentSize = view.measuredWidth,
-                    marginStart = params.leftMargin,
-                    marginEnd = params.rightMargin,
+                    size = view.measuredWidth + params.horizontalMargins,
                     span = cell.columnSpan,
                     weight = params.columnWeight
                 )
@@ -557,11 +514,10 @@ internal open class GridContainer @JvmOverloads constructor(
         private fun measureRows(): List<Line> {
             return measureAxis(rowCount, heightConstraint) { cell, view ->
                 val params = view.lp
-                CellProjection(
+                GridItemMeasurement(
                     lineIndex = cell.rowIndex,
                     contentSize = view.measuredHeight,
-                    marginStart = params.topMargin,
-                    marginEnd = params.bottomMargin,
+                    size = view.measuredHeight + params.verticalMargins,
                     span = cell.rowSpan,
                     weight = params.rowWeight
                 )
@@ -571,119 +527,13 @@ internal open class GridContainer @JvmOverloads constructor(
         private fun measureAxis(
             count: Int,
             constraint: SizeConstraint,
-            projection: (Cell, View) -> CellProjection
+            projection: (Cell, View) -> GridItemMeasurement
         ): List<Line> {
-            val cells = _cells.get()
-            val result = List(count) { Line() }
-
-            applyFixedParamsToLines(cells, result, projection)
-            applySpansToLines(cells, result, projection)
-            adjustWeightedLines(result, constraint)
+            val items = _cells.get().map { cell -> projection(cell, getChildAt(cell.viewIndex)) }
+            val sizes = resolveGridTrackSizes(count, items, constraint.min)
+            val result = sizes.map { Line(it) }
             align(result)
-
             return result
-        }
-
-        private fun applyFixedParamsToLines(
-            cells: List<Cell>,
-            lines: List<Line>,
-            projection: (Cell, View) -> CellProjection
-        ) {
-            cells.iterate { cell ->
-                val child = getChildAt(cell.viewIndex)
-                val projected = projection(cell, child)
-                if (projected.span == 1) {
-                    val measurement = lines[projected.lineIndex]
-                    measurement.include(
-                        contentSize = projected.contentSize,
-                        size = projected.size,
-                        weight = projected.weight
-                    )
-                } else {
-                    val first = 0
-                    val last = projected.span - 1
-                    val weight = projected.weight / projected.span
-                    for (i in first .. last) {
-                        val measurement = lines[projected.lineIndex + i]
-                        measurement.include(weight = weight)
-                    }
-                }
-            }
-        }
-
-        private fun applySpansToLines(
-            cells: List<Cell>,
-            lines: List<Line>,
-            projection: (Cell, View) -> CellProjection
-        ) {
-            val spannedCells = ArrayList<CellProjection>()
-            cells.iterate { cell ->
-                val child = getChildAt(cell.viewIndex)
-                val projected = projection(cell, child)
-                if (projected.span > 1) {
-                    spannedCells.add(projected)
-                }
-            }
-            spannedCells.sortWith(SpannedCellComparator)
-
-            spannedCells.iterate { projected ->
-                val first = projected.lineIndex
-                val last = projected.lineIndex + projected.span - 1
-
-                var undistributedSize = projected.size
-                var flexibleSize = undistributedSize
-                var totalWeight = 0.0f
-                var unusedLineCount = 0
-                for (i in first .. last) {
-                    val line = lines[i]
-                    undistributedSize -= line.size
-                    if (line.isFlexible) {
-                        totalWeight += line.weight
-                    } else {
-                        if (line.contentSize == 0) unusedLineCount++
-                        flexibleSize -= line.size
-                    }
-                }
-                if (totalWeight > 0.0f) {
-                    for (i in first..last) {
-                        val line = lines[i]
-                        if (line.isFlexible) {
-                            val size = ceil(line.weight / totalWeight * flexibleSize).toInt()
-                            line.include(contentSize = size - line.marginSize, size = size)
-                        }
-                    }
-                } else if (undistributedSize > 0) {
-                    for (i in first..last) {
-                        val line = lines[i]
-                        if (unusedLineCount > 0) {
-                            if (line.contentSize == 0 && !line.isFlexible) {
-                                val extraSize = undistributedSize / unusedLineCount
-                                line.include(contentSize = line.contentSize + extraSize, size = line.size + extraSize)
-                            }
-                        } else {
-                            val extraSize = undistributedSize / projected.span
-                            line.include(contentSize = line.contentSize + extraSize, size = line.size + extraSize)
-                        }
-                    }
-                }
-            }
-        }
-
-        private fun adjustWeightedLines(
-            lines: List<Line>,
-            constraint: SizeConstraint
-        ) {
-            val sizes = resolveWeightedSizes(
-                weights = FloatArray(lines.size) { lines[it].weight },
-                baseSizes = IntArray(lines.size) { lines[it].size },
-                minimumSize = constraint.min,
-            )
-            lines.forEachIndexed { index, line ->
-                if (line.isFlexible) {
-                    val size = sizes[index]
-                    line.include(contentSize = size - line.marginSize, size = size)
-                }
-            }
         }
 
         private fun align(lines: List<Line>) {
@@ -696,15 +546,7 @@ internal open class GridContainer @JvmOverloads constructor(
         }
     }
 
-    private object SpannedCellComparator : Comparator<CellProjection> {
-        override fun compare(lhs: CellProjection, rhs: CellProjection): Int {
-            return when {
-                lhs.specificSize < rhs.specificSize -> 1
-                lhs.specificSize > rhs.specificSize -> -1
-                else -> 0
-            }
-        }
-    }
+
 }
 
 private class Resettable<T>(private val initializer: () -> T) {

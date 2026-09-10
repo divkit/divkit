@@ -5,6 +5,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div2.DivSizeUnit
@@ -37,6 +38,15 @@ class UnitConversionsTest {
         assertEquals(5.sp, dpTextUnit)
         assertEquals(10.sp, spTextUnit)
         assertEquals(2.5.sp, pxTextUnit)
+    }
+
+    @Test
+    fun `sp dimensions apply font scaling`() {
+        rule.setContent {
+            CompositionLocalProvider(LocalDensity provides Density(density = 2f, fontScale = 2f)) {
+                assertEquals(20.dp, 10f.toDp(DivSizeUnit.SP))
+            }
+        }
     }
 
     @Test

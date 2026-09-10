@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.aspect
 import com.yandex.div.compose.utils.combineAlignment
 import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.observeHorizontalInsets
@@ -53,7 +54,7 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
 
     val isWidthWrapContent = data.width is DivSize.WrapContent
     val isHeightWrapContent = data.height is DivSize.WrapContent
-    val needsMatchParentMeasurement = data.aspect == null && items.none { it.hasAspect } &&
+    val needsMatchParentMeasurement = data.aspect == null && items.none { it.value().aspect != null } &&
         items.any {
             val child = it.value()
             (isWidthWrapContent && child.width.isMatchParent) ||
@@ -423,12 +424,3 @@ private fun resolveOverlapChildAlignment(
         ?: defaultVertical.toCrossAxisVerticalAlignment()
     return combineAlignment(horizontal, vertical)
 }
-
-private val Div.hasAspect: Boolean
-    get() = when (this) {
-        is Div.Container -> value.aspect != null
-        is Div.GifImage -> value.aspect != null
-        is Div.Image -> value.aspect != null
-        is Div.Video -> value.aspect != null
-        else -> false
-    }

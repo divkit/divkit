@@ -17,6 +17,7 @@ import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
+import com.yandex.div.compose.utils.aspect
 import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
@@ -55,13 +56,7 @@ internal fun Modifier.size(
 
 @Composable
 private fun Div.observedAspectRatio(): Float? {
-    val aspect = when (this) {
-        is Div.Container -> value.aspect
-        is Div.Image -> value.aspect
-        is Div.GifImage -> value.aspect
-        is Div.Video -> value.aspect
-        else -> null
-    }
+    val aspect = value().aspect
     val aspectRatio = aspect?.ratio?.observedFloatValue() ?: return null
     return if (aspectRatio > 0f) aspectRatio else null
 }

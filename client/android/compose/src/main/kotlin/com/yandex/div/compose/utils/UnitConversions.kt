@@ -25,7 +25,8 @@ internal fun Double.toDp(): Dp {
 @Composable
 internal fun Float.toDp(unit: DivSizeUnit): Dp {
     return when (unit) {
-        DivSizeUnit.DP, DivSizeUnit.SP -> dp
+        DivSizeUnit.DP -> dp
+        DivSizeUnit.SP -> with(LocalDensity.current) { this@toDp.sp.toDp() }
         DivSizeUnit.PX -> with(LocalDensity.current) { this@toDp.toDp() }
     }
 }
