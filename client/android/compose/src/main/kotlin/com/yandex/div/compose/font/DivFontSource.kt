@@ -16,9 +16,11 @@ sealed class DivFontSource {
     data class Asset(val path: String) : DivFontSource()
 
     /**
-     * Font is provided as an already built [android.graphics.Typeface]. Variation
-     * settings cannot be applied to a pre-built typeface — use [Resource] or [Asset]
-     * for variable fonts that need runtime variation support.
+     * Font is provided as an already built [android.graphics.Typeface]. The requested
+     * weight is applied with [android.graphics.Typeface.create] on API 28+, keeping the
+     * italic style of the typeface. Variation settings cannot be applied to a pre-built
+     * typeface — use [Resource] or [Asset] for variable fonts that need runtime
+     * variation support.
      */
     data class Typeface(val typeface: android.graphics.Typeface) : DivFontSource()
 }

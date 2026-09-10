@@ -2,24 +2,32 @@ package com.yandex.div.compose.font
 
 import android.content.Context
 import android.graphics.Typeface
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.createFontFamilyResolver
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import org.junit.runner.RunWith
+import org.robolectric.annotation.GraphicsMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotSame
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
+// Typeface.create with a weight needs the native font stack; the legacy Robolectric shadows do not report the created weight.
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(AndroidJUnit4::class)
 class DivFontFamilyCacheTest {
 
-    private val assets = ApplicationProvider.getApplicationContext<Context>().assets
+    private val context = ApplicationProvider.getApplicationContext<Context>()
     private val reporter = TestReporter()
     private val source = DivFontSource.Typeface(Typeface.DEFAULT)
-    private val cache = DivFontFamilyCache(assets, reporter)
+    private val italicSource = DivFontSource.Typeface(Typeface.create(Typeface.SANS_SERIF, Typeface.ITALIC))
+    private val cache = DivFontFamilyCache(context.assets, reporter)
+    private val fontFamilyResolver = createFontFamilyResolver(context)
 
     @Test
     fun `cache returns same FontFamily instance for the same key`() {
@@ -82,7 +90,7 @@ class DivFontFamilyCacheTest {
 
     @Test
     fun `each DivFontFamilyCache instance has its own storage`() {
-        val otherCache = DivFontFamilyCache(assets, reporter)
+        val otherCache = DivFontFamilyCache(context.assets, reporter)
 
         val fromCache = cache.getOrCreate(source, FontWeight.Normal, null)
         val fromOtherCache = otherCache.getOrCreate(source, FontWeight.Normal, null)
@@ -103,4 +111,34 @@ class DivFontFamilyCacheTest {
             reporter.lastWarning
         )
     }
+
+    @Test
+    fun `Typeface source is built with the requested bold weight`() {
+        val family = cache.getOrCreate(source, FontWeight.Bold, null)
+
+        assertEquals(FontWeight.Bold.weight, nativeTypeface(family).weight)
+    }
+
+    @Test
+    fun `Typeface source is built with the requested light weight`() {
+        val family = cache.getOrCreate(source, FontWeight.Light, null)
+
+        assertEquals(FontWeight.Light.weight, nativeTypeface(family).weight)
+    }
+
+    @Test
+    fun `italic Typeface source is built with the requested bold weight`() {
+        val family = cache.getOrCreate(italicSource, FontWeight.Bold, null)
+
+        assertEquals(FontWeight.Bold.weight, nativeTypeface(family).weight)
+    }
+
+    @Test
+    fun `italic Typeface source stays italic when built with a bold weight`() {
+        val family = cache.getOrCreate(italicSource, FontWeight.Bold, null)
+
+        assertTrue(nativeTypeface(family).isItalic)
+    }
+
+    private fun nativeTypeface(family: FontFamily): Typeface = fontFamilyResolver.resolve(family).value as Typeface
 }

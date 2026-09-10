@@ -1,6 +1,8 @@
 package com.yandex.div.compose.font
 
 import android.content.res.AssetManager
+import android.graphics.Typeface
+import android.os.Build
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -47,7 +49,7 @@ internal class DivFontFamilyCache @Inject constructor(
                                 "Use DivFontSource.Resource or DivFontSource.Asset for variable fonts."
                     )
                 }
-                FontFamily(source.typeface)
+                FontFamily(source.typeface.withWeight(key.weight))
             }
         }
     }
@@ -57,4 +59,9 @@ internal class DivFontFamilyCache @Inject constructor(
         val weight: FontWeight,
         val variations: FontVariation.Settings?,
     )
+}
+
+private fun Typeface.withWeight(weight: FontWeight): Typeface {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return this
+    return Typeface.create(this, weight.weight, isItalic)
 }
