@@ -1,7 +1,6 @@
 package com.yandex.div.compose.views.tabs
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,8 +11,6 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.actions.DivActionSource
@@ -29,10 +26,10 @@ import com.yandex.div2.DivTabs
 
 @Composable
 internal fun TabTitleItem(
+    modifier: Modifier = Modifier,
     index: Int,
     item: DivTabs.Item,
     isSelected: Boolean,
-    background: Color,
     style: DivTabs.TabTitleStyle,
     titleDelimiter: DivTabs.TabTitleDelimiter?,
     itemSpacing: Dp,
@@ -47,6 +44,7 @@ internal fun TabTitleItem(
         onClick()
     }
     Row(
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(itemSpacing),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -55,8 +53,6 @@ internal fun TabTitleItem(
         }
         Box(
             modifier = Modifier
-                .clip(style.observeTabShape())
-                .background(background)
                 .clickable(interactionSource = null, indication = null, onClick = onTitleClick)
                 .padding(style.paddings.observeInsets()),
             contentAlignment = Alignment.Center,

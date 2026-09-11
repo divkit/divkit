@@ -1,11 +1,18 @@
 package com.yandex.div.compose.views.tabs
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.yandex.div2.DivTabs
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 @Composable
@@ -33,16 +40,78 @@ internal class DivTabsState(
         pageCount = { tabCount },
     )
 
+    private var titleTransition: TitleTransition? by mutableStateOf(null)
+
     internal val currentIndex: Int
         get() = pagerState.currentPage
 
-    internal suspend fun selectTab(index: Int, animated: Boolean = true) {
+    internal val selectedIndex: Int
+        get() = titleTransition?.to ?: pagerState.currentPage
+
+    internal val indicatorFromIndex: Int
+        get() = titleTransition?.from ?: pagerState.currentPage
+
+    internal val indicatorToIndex: Int
+        get() {
+            val transition = titleTransition
+            if (transition != null) return transition.to
+            val fraction = pagerState.currentPageOffsetFraction
+            return when {
+                fraction > 0f -> pagerState.currentPage + 1
+                fraction < 0f -> pagerState.currentPage - 1
+                else -> pagerState.currentPage
+            }
+        }
+
+    internal val indicatorProgress: Float
+        get() = titleTransition?.progress?.value ?: abs(pagerState.currentPageOffsetFraction)
+
+    internal suspend fun selectTab(index: Int, animation: TabTitleAnimation?) {
         if (tabCount <= 0) return
         val target = index.coerceIn(0, tabCount - 1)
-        if (animated) {
-            pagerState.animateScrollToPage(target)
-        } else {
+        if (animation == null) {
             pagerState.scrollToPage(target)
+            return
+        }
+        val from = selectedIndex
+        if (from == target) {
+            if (titleTransition == null) {
+                pagerState.animateScrollToPage(target)
+            }
+            return
+        }
+
+        val transition = TitleTransition(from = from, to = target)
+        titleTransition = transition
+        try {
+            coroutineScope {
+                launch { transition.run(animation) }
+                pagerState.animateScrollToPage(target)
+            }
+        } finally {
+            if (titleTransition === transition) {
+                titleTransition = null
+            }
+        }
+    }
+}
+
+internal data class TabTitleAnimation(
+    val type: DivTabs.TabTitleStyle.AnimationType,
+    val durationMillis: Int,
+)
+
+private class TitleTransition(val from: Int, val to: Int) {
+    val progress = Animatable(0f)
+
+    suspend fun run(animation: TabTitleAnimation) {
+        when (animation.type) {
+            DivTabs.TabTitleStyle.AnimationType.SLIDE,
+            DivTabs.TabTitleStyle.AnimationType.FADE -> progress.animateTo(
+                targetValue = 1f,
+                animationSpec = tween(animation.durationMillis, easing = FastOutSlowInEasing),
+            )
+            DivTabs.TabTitleStyle.AnimationType.NONE -> progress.snapTo(1f)
         }
     }
 }

@@ -55,16 +55,21 @@ internal fun DivTabsView(
         tabCount = items.size,
     )
 
-    val animated = animationsEnabled
+    val style = data.tabTitleStyle ?: DEFAULT_TAB_TITLE_STYLE
+    val animationType = style.animationType.observedValue()
+    val titleAnimation = if (animationsEnabled) {
+        TabTitleAnimation(type = animationType, durationMillis = style.animationDuration.observedIntValue())
+    } else {
+        null
+    }
     val externalSelected = data.selectedTab.observedIntValue().coerceIn(0, items.size - 1)
     LaunchedEffect(externalSelected) {
         if (state.currentIndex != externalSelected) {
-            state.selectTab(externalSelected, animated = animated)
+            state.selectTab(externalSelected, titleAnimation)
         }
     }
 
     val scope = rememberCoroutineScope()
-    val style = data.tabTitleStyle ?: DEFAULT_TAB_TITLE_STYLE
     val fixedWidth = (data.width as? DivSize.Fixed)?.value?.observedValue()
     val fixedHeight = (data.height as? DivSize.Fixed)?.value?.observedValue()
     val titlePaddings = data.titlePaddings.observeInsets()
@@ -83,12 +88,13 @@ internal fun DivTabsView(
     ) {
         TabTitlesView(
             items = items,
-            pagerState = state.pagerState,
+            state = state,
             style = style,
+            animationType = animationType,
             titleDelimiter = data.tabTitleDelimiter,
             titlePaddings = titlePaddings,
             onTabSelected = { index ->
-                scope.launch { state.selectTab(index, animated = animated) }
+                scope.launch { state.selectTab(index, titleAnimation) }
             },
         )
 
