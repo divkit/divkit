@@ -73,6 +73,7 @@ dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':backdrop-effect')
     implementation project(path: ':coil')
+    implementation project(path: ':coil-core')
     implementation project(path: ':compose')
     implementation project(path: ':compose-lottie')
     implementation project(path: ':compose-video-view-based')

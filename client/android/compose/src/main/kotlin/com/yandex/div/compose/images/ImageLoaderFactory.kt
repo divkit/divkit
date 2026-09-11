@@ -4,6 +4,7 @@ import android.content.Context
 import coil3.ImageLoader
 import coil3.request.allowHardware
 import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.internal.coil.GifDecoderFactory
 import com.yandex.div.internal.coil.svg.addSvgDecoderFactoryIfAvailable
 import javax.inject.Inject
 
@@ -19,7 +20,7 @@ internal class ImageLoaderFactory @Inject constructor(
             .components {
                 imageLoaderConfiguration.applyComponents(this)
                 add(DivkitAssetUriMapper())
-                add(gifDecoderFactory())
+                add(GifDecoderFactory)
                 addSvgDecoderFactoryIfAvailable(context)
             }
             .eventListener(imageLoaderConfiguration.eventListener)

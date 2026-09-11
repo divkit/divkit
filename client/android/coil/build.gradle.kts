@@ -17,7 +17,6 @@ dependencies {
 
     api(libs.coil)
 
-    implementation(libs.coil.gif)
     implementation(libs.coil.network)
     implementation(libs.coil.network.cachecontrol)
     implementation(libs.coil.svg)

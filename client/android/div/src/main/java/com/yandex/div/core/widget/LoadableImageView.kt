@@ -3,11 +3,9 @@ package com.yandex.div.core.widget
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Animatable
-import android.graphics.drawable.AnimatedImageDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.PictureDrawable
-import android.os.Build
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.View
@@ -184,7 +182,7 @@ open class LoadableImageView(
 
             this is PictureDrawable -> this.toScaleDrawable()
 
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && this is AnimatedImageDrawable -> this.toScaleDrawable()
+            this is Animatable -> this.toScaleDrawable()
 
             else -> this
         }

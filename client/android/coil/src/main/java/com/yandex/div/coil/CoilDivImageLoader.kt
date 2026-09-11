@@ -2,16 +2,11 @@ package com.yandex.div.coil
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.widget.ImageView
 import coil3.EventListener
 import coil3.ImageLoader
 import coil3.annotation.ExperimentalCoilApi
 import coil3.decode.DataSource
-import coil3.decode.Decoder
-import coil3.gif.AnimatedImageDecoder
-import coil3.gif.GifDecoder
 import coil3.load
 import coil3.network.cachecontrol.CacheControlCacheStrategy
 import coil3.network.okhttp.OkHttpNetworkFetcherFactory
@@ -27,6 +22,7 @@ import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoadError.Companion.toDivImageLoadError
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.internal.coil.GifDecoderFactory
 import com.yandex.div.internal.coil.asDivDrawable
 import com.yandex.div.internal.coil.svg.addSvgDecoderFactoryIfAvailable
 import okhttp3.OkHttpClient
@@ -79,18 +75,10 @@ class CoilDivImageLoader private constructor(
                     cacheStrategy = { CacheControlCacheStrategy() }
                 )
             )
+            add(GifDecoderFactory)
             addSvgDecoderFactoryIfAvailable(context)
-            add(gifDecoder())
         }
         .build()
-
-    private fun gifDecoder(): Decoder.Factory {
-        return if (SDK_INT >= Build.VERSION_CODES.P) {
-            AnimatedImageDecoder.Factory()
-        } else {
-            GifDecoder.Factory()
-        }
-    }
 
     @Deprecated("Is unused in DivKit, will be removed in future")
     override fun hasSvgSupport() = true

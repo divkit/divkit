@@ -17,6 +17,7 @@ android {
 dependencies {
     implementation(project(":div-core"))
     implementation(libs.coil.core)
+    implementation(libs.coil.gif)
 
     compileOnly(libs.androidsvg.aar)
     compileOnly(libs.coil.svg)

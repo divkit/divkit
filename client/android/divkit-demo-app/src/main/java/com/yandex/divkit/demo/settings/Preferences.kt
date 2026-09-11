@@ -20,7 +20,7 @@ class Preferences(context: Context) : DivkitDemoPreferences(context) {
         }
     }
 
-    var imageLoader by EnumPreference(ImageLoaderOption.PICASSO) { ImageLoaderOption.values() }
+    var imageLoader by EnumPreference(ImageLoaderOption.COIL) { ImageLoaderOption.values() }
 
     var useBackgroundBinding by BooleanPreference(false)
 

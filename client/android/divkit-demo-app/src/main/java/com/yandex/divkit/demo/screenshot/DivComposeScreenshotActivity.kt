@@ -20,9 +20,9 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.images.ImageLoaderConfiguration
-import com.yandex.div.compose.images.gifDecoderFactory
 import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.coil.GifDecoderFactory
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
@@ -151,7 +151,7 @@ private class TestImageLoaderConfiguration(
 ) : ImageLoaderConfiguration {
     override fun applyComponents(builder: ComponentRegistry.Builder) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            builder.add(gifDecoderFactory())
+            builder.add(GifDecoderFactory)
         } else {
             builder.add(GifFirstFrameDecoder.Factory())
         }
