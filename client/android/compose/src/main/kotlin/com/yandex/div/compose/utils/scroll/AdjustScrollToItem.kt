@@ -2,7 +2,7 @@ package com.yandex.div.compose.utils.scroll
 
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,25 +52,25 @@ internal fun AdjustScrollToItem(
 
 @Composable
 internal fun AdjustScrollToItem(
-    gridState: LazyGridState,
+    gridState: LazyStaggeredGridState,
     targetIndex: Int,
+    totalItemsCount: Int,
     isHorizontal: Boolean,
     restartKey: Any? = Unit,
     desiredOffset: (viewportSize: Int, itemSize: Int) -> Int,
 ) {
-    val initialTargetIndex = remember(gridState) { targetIndex }
     var lastAlignedPosition by rememberSaveable(gridState, stateSaver = AlignedScrollPosition.Saver) {
         mutableStateOf<AlignedScrollPosition?>(null)
     }
     val currentDesiredOffset by rememberUpdatedState(desiredOffset)
-    LaunchedEffect(gridState, targetIndex, isHorizontal, restartKey) {
+    LaunchedEffect(gridState, targetIndex, totalItemsCount, isHorizontal, restartKey) {
         val previousPosition = lastAlignedPosition
         if (gridState.isScrollInProgress ||
             previousPosition != null && previousPosition != gridState.scrollPosition
         ) return@LaunchedEffect
 
-        if (targetIndex != initialTargetIndex) {
-            gridState.scrollToItem(targetIndex)
+        if (!gridState.scrollForwardUntilItemIsVisible(targetIndex, totalItemsCount)) {
+            return@LaunchedEffect
         }
         gridState.adjustScrollToItem(
             item = {
@@ -90,6 +90,38 @@ internal fun AdjustScrollToItem(
         )
         lastAlignedPosition = gridState.scrollPosition
     }
+}
+
+private suspend fun LazyStaggeredGridState.scrollForwardUntilItemIsVisible(
+    targetIndex: Int,
+    expectedItemsCount: Int,
+): Boolean {
+    if (expectedItemsCount == 0 || targetIndex !in 0 until expectedItemsCount) return false
+
+    val initialPosition = scrollPosition
+    snapshotFlow { layoutInfo.totalItemsCount }.first { it == expectedItemsCount }
+    if (layoutInfo.visibleItemsInfo.any { it.index == targetIndex }) return true
+
+    if (targetIndex < firstVisibleItemIndex) {
+        scrollToItem(0)
+    }
+
+    scroll {
+        while (layoutInfo.visibleItemsInfo.none { it.index == targetIndex } && canScrollForward) {
+            val viewportSize = layoutInfo.run { viewportEndOffset - viewportStartOffset }
+            if (viewportSize <= 0) return@scroll
+            if (scrollBy(viewportSize.toFloat()) <= 0f) return@scroll
+        }
+    }
+    val targetIsVisible = layoutInfo.visibleItemsInfo.any { it.index == targetIndex }
+    if (!targetIsVisible) {
+        // Restoring the viewport on failure takes precedence over preserving lane history.
+        scrollToItem(
+            index = initialPosition.itemIndex.coerceAtMost(expectedItemsCount - 1),
+            scrollOffset = initialPosition.scrollOffset,
+        )
+    }
+    return targetIsVisible
 }
 
 private suspend fun ScrollableState.adjustScrollToItem(
@@ -113,7 +145,7 @@ private data class MeasuredScrollItem(
 private val LazyListState.scrollPosition: AlignedScrollPosition
     get() = AlignedScrollPosition(firstVisibleItemIndex, firstVisibleItemScrollOffset)
 
-private val LazyGridState.scrollPosition: AlignedScrollPosition
+private val LazyStaggeredGridState.scrollPosition: AlignedScrollPosition
     get() = AlignedScrollPosition(firstVisibleItemIndex, firstVisibleItemScrollOffset)
 
 private data class AlignedScrollPosition(
