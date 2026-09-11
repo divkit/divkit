@@ -13,10 +13,6 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
-import com.github.takahirom.roborazzi.LosslessWebPImageIoFormat
-import com.github.takahirom.roborazzi.RoborazziOptions
-import com.github.takahirom.roborazzi.RoborazziRule
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
@@ -31,7 +27,6 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
-import java.io.File
 import kotlin.test.Test
 
 /**
@@ -47,11 +42,7 @@ import kotlin.test.Test
  * ./gradlew :compose:verifyAndRecordRoborazziDebug --tests "*.RoborazziScreenshotTest"
  * ```
  *
- * Verify/record a single file (path relative to snapshot_test_data):
- * ```
- * ./gradlew :compose:verifyRoborazziDebug --tests "*.RoborazziScreenshotTest" -PdivkitTestFilter=div-text/font_weight.json
- * ./gradlew :compose:recordRoborazziDebug --tests "*.RoborazziScreenshotTest" -PdivkitTestFilter=div-text/font_weight.json
- * ```
+ * Use `-PdivkitTestFilter=div-text/font_weight.json` to select a single scenario.
  *
  * Goldens are stored in `src/test/screenshots/` and committed to the repository.
  */
@@ -62,11 +53,6 @@ class RoborazziScreenshotTest(
     parsingResult: ParsingResult<ScreenshotTestConfiguration>
 ) {
     private val configuration = parsingResult.getOrThrow()
-
-    private val goldenFile = File("src/test/screenshots/${configuration.name}.webp").apply {
-        parentFile?.mkdirs()
-    }
-
     private val painterTracker = ImagePainterTracker()
 
     private val divContext = DivContext(
@@ -85,24 +71,10 @@ class RoborazziScreenshotTest(
         registerIdlingResource(painterTracker)
     }
 
-    @OptIn(ExperimentalRoborazziApi::class)
     @get:Rule
     val rule: RuleChain = RuleChain
         .outerRule(composeRule)
-        .around(
-            RoborazziRule(
-                options = RoborazziRule.Options(
-                    roborazziOptions = RoborazziOptions(
-                        compareOptions = RoborazziOptions.CompareOptions(
-                            changeThreshold = 0.005f
-                        ),
-                        recordOptions = RoborazziOptions.RecordOptions(
-                            imageIoFormat = LosslessWebPImageIoFormat()
-                        )
-                    )
-                )
-            )
-        )
+        .around(createRoborazziRule())
 
     @Test
     fun test() {
@@ -132,17 +104,16 @@ class RoborazziScreenshotTest(
 
             waitForIdle()
 
-            onRoot().captureRoboImage(filePath = goldenFile.path)
+            onRoot().captureRoboImage(filePath = getScreenshotFilePath(configuration.name))
         }
     }
 
     companion object {
 
-        // Store parsed test cases to prevent multiple parsing by
-        // ParameterizedRobolectricTestRunner
-        private val cases: List<ParsingResult<ScreenshotTestConfiguration>> = run {
+        // Cache cases because ParameterizedRobolectricTestRunner calls the provider repeatedly.
+        private val cases =
             ParsingUtils.parseFiles("snapshot_test_data") { file, json ->
-                val fileName = file.relativeFileName
+                val fileName = file.getRelativeFileName("snapshot_test_data")
                 if (fileName in ignoredFiles) {
                     return@parseFiles emptyList()
                 }
@@ -152,7 +123,6 @@ class RoborazziScreenshotTest(
                 )
                 listOf(ParsingResult.Success(configuration))
             }
-        }
 
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
@@ -160,11 +130,6 @@ class RoborazziScreenshotTest(
         fun cases() = cases
     }
 }
-
-private val snapshotTestDataDir = File("../../../test_data/snapshot_test_data")
-
-private val File.relativeFileName: String
-    get() = relativeTo(snapshotTestDataDir).invariantSeparatorsPath
 
 private val ignoredFiles = setOf(
     // div-nine-patch-background not supported

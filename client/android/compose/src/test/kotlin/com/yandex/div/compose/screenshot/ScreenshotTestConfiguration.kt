@@ -8,15 +8,14 @@ import kotlin.test.fail
 
 class ScreenshotTestConfiguration(
     val name: String,
-    private val json: JSONObject
+    private val json: JSONObject,
+    private val configurationJson: JSONObject? = json.optJSONObject("configuration")
 ) {
-    private val configuration = json.optJSONObject("configuration")
-
-    val failOnParsingError = configuration?.optBoolean("fail_on_parsing_error", true) ?: true
+    val failOnParsingError = configurationJson?.optBoolean("fail_on_parsing_error", true) ?: true
 
     val layoutDirection: LayoutDirection
         get() {
-            return if (configuration?.optString("layout_direction") == "rtl") {
+            return if (configurationJson?.optString("layout_direction") == "rtl") {
                 LayoutDirection.Rtl
             } else {
                 LayoutDirection.Ltr
