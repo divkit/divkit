@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import android.view.View
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
@@ -16,6 +15,7 @@ import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.test.testContextThemeWrapper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,7 +28,6 @@ import org.mockito.kotlin.spy
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLooper
 import java.util.concurrent.CountDownLatch
@@ -41,9 +40,8 @@ class Div2ViewReleaseChildrenTest {
     private val testOtherData = UnitTestData(DIV_STATE_DIR, "state_list.json")
     private val tag = DivDataTag("tag")
 
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val backingContext = Div2Context(
-        baseContext = activity,
+        baseContext = testContextThemeWrapper(),
         configuration = DivConfiguration.Builder(mock()).build()
     )
     private val viewBinder = mock<DivBinder> {

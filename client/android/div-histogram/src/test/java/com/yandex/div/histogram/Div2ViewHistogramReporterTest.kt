@@ -2,8 +2,8 @@ package com.yandex.div.histogram
 
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.internal.util.Clock
-import org.junit.Test
-import org.junit.runner.RunWith
+import kotlin.test.AfterTest
+import kotlin.test.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.clearInvocations
 import org.mockito.kotlin.doReturn
@@ -12,9 +12,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 class Div2ViewHistogramReporterTest {
     private val renderConfig = RenderConfiguration(
         measureFilter = { true },
@@ -31,6 +29,11 @@ class Div2ViewHistogramReporterTest {
     ).also {
         Clock.setForTests(clock)
         it.component = TEST_COMPONENT
+    }
+
+    @AfterTest
+    fun tearDown() {
+        Clock.setForTests(null)
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
@@ -11,15 +10,14 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-
 
 private const val VARIABLE_A = "var_a"
 
@@ -51,9 +49,8 @@ class GlobalVariableScopesTest {
         }
 
         private val divImageLoader = mock<DivImageLoader>()
-        private val activity = Robolectric.buildActivity(Activity::class.java).get()
         private val div2Context = Div2Context(
-                baseContext = activity,
+                baseContext = testContextThemeWrapper(),
                 configuration = DivConfiguration.Builder(divImageLoader)
                         .divVariableController(variableController)
                         .build()

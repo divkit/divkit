@@ -1,11 +1,11 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
@@ -14,20 +14,17 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DivPatchApplyItemsTest {
     private val divImageLoader = mock<DivImageLoader>()
-    private val controller = Robolectric.buildActivity(Activity::class.java)
-    private val activity = controller.get()
     private val env = DivParsingEnvironment(
         logger = { Assert.fail("Parsing error: $it") }
     )
 
     private val div2Context = Div2Context(
-        activity,
+        testContextThemeWrapper(),
         DivConfiguration.Builder(divImageLoader).build()
     )
 

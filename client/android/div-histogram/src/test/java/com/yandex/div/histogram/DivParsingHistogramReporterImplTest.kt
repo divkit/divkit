@@ -3,18 +3,17 @@ package com.yandex.div.histogram
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.util.HistogramUtils
 import com.yandex.div.internal.util.Clock
+import java.util.concurrent.Executor
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
-import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.robolectric.RobolectricTestRunner
-import java.util.concurrent.Executor
 
-@RunWith(RobolectricTestRunner::class)
 class DivParsingHistogramReporterImplTest {
 
     private val histogramReporter = mock<HistogramReporter>()
@@ -22,8 +21,14 @@ class DivParsingHistogramReporterImplTest {
         DivParsingHistogramReporterImpl({ histogramReporter }) { Executor(Runnable::run) }
     private val clock = mock<Clock>()
 
-    init {
+    @BeforeTest
+    fun setUp() {
         Clock.setForTests(clock)
+    }
+
+    @AfterTest
+    fun tearDown() {
+        Clock.setForTests(null)
     }
 
     @Test

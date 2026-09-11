@@ -1,21 +1,20 @@
 package com.yandex.div.core.widget
 
-import android.app.Activity
 import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup.LayoutParams
+import com.yandex.div.test.testContextThemeWrapper
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class GridContainerTest {
 
-    private val context: Context = Robolectric.buildActivity(Activity::class.java).get()
+    private val context: Context = testContextThemeWrapper()
     private val cells = cells()
 
     @Test

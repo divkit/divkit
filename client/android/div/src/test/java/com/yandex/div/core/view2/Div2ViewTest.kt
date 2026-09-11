@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import android.graphics.Canvas
 import android.view.ViewGroup
 import com.yandex.div.DivDataTag
@@ -14,6 +13,7 @@ import com.yandex.div.core.path
 import com.yandex.div.core.view2.animations.DIV_STATE_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.state.DivStateSwitcher
+import com.yandex.div.test.testContextThemeWrapper
 import java.lang.reflect.Modifier
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -25,7 +25,6 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -35,9 +34,8 @@ class Div2ViewTest {
     }
 
     private val divImageLoader = mock<DivImageLoader>()
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val backingContext = Div2Context(
-        baseContext = activity,
+        baseContext = testContextThemeWrapper(),
         configuration = DivConfiguration.Builder(divImageLoader).build()
     )
     private val stateSwitcher = mock<DivStateSwitcher>()

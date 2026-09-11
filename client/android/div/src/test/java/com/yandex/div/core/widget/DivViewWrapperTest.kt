@@ -1,24 +1,23 @@
 package com.yandex.div.core.widget
 
-import android.app.Activity
 import android.content.Context
 import android.view.View
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivBorder
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DivViewWrapperTest {
-    private val context: Context = Robolectric.buildActivity(Activity::class.java).get()
+    private val context = testContextThemeWrapper()
     private val divView = mock<Div2View>()
     private val divBorder = DivBorder()
     private val viewWithBorder = object : DivBorderSupports, View(context) {

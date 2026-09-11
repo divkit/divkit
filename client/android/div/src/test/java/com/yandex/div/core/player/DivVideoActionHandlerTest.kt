@@ -1,6 +1,5 @@
 package com.yandex.div.core.player
 
-import android.app.Activity
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.Div2Context
@@ -15,6 +14,7 @@ import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.video
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.Div
 import com.yandex.div2.DivState
 import org.junit.Assert.assertEquals
@@ -23,7 +23,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 private const val VIDEO_ID = "video"
@@ -36,8 +35,7 @@ private const val DUPLICATE_STATE_ID = "duplicate"
 @RunWith(RobolectricTestRunner::class)
 class DivVideoActionHandlerTest {
 
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
-    private val context = Div2Context(activity, DivConfiguration.Builder(mock()).build())
+    private val context = Div2Context(testContextThemeWrapper(), DivConfiguration.Builder(mock()).build())
     private val underTest = DivVideoActionHandler()
 
     @Test

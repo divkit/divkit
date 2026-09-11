@@ -1,11 +1,11 @@
 package com.yandex.div.core.view2.items
 
-import android.app.Activity
 import android.content.res.Resources
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
+import com.yandex.div.test.testContextThemeWrapper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -14,7 +14,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -29,8 +28,7 @@ internal class DivViewWithItemsControllerTest {
 
     @Test
     fun `create controller when view is found`() {
-        val activity = Robolectric.buildActivity(Activity::class.java).get()
-        val context = Div2Context(activity, DivConfiguration.Builder(mock()).build())
+        val context = Div2Context(testContextThemeWrapper(), DivConfiguration.Builder(mock()).build())
         val res = mock<Resources> {
             on { displayMetrics } doReturn mock()
         }

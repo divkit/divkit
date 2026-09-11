@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import android.widget.TextView
 import com.yandex.div.BuildConfig
 import com.yandex.div.DivDataTag
@@ -9,6 +8,7 @@ import com.yandex.div.core.DivConfiguration
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.textString
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -17,16 +17,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import java.io.File
 
 @RunWith(RobolectricTestRunner::class)
 class SetVariableValueTest {
 
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val divContext = Div2Context(
-        baseContext = activity,
+        baseContext = testContextThemeWrapper(),
         lifecycleOwner = null,
         configuration = DivConfiguration.Builder(mock()).build()
     )

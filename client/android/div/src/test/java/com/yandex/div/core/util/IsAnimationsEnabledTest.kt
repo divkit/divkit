@@ -1,6 +1,5 @@
 package com.yandex.div.core.util
 
-import android.app.Activity
 import android.os.Build
 import android.provider.Settings
 import com.yandex.div.core.Div2Context
@@ -8,13 +7,13 @@ import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.test.testContextThemeWrapper
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
@@ -22,7 +21,7 @@ import org.robolectric.annotation.Config
 class IsAnimationsEnabledTest {
 
     private val imageLoader = mock<DivImageLoader>()
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
+    private val context = testContextThemeWrapper()
 
     private fun divViewWith(enabled: Boolean): Div2View {
         val provider = object : DivAnimationsEnabledProvider {
@@ -31,13 +30,13 @@ class IsAnimationsEnabledTest {
         val configuration = DivConfiguration.Builder(imageLoader)
             .animationsEnabledProvider(provider)
             .build()
-        return Div2View(Div2Context(baseContext = activity, configuration = configuration))
+        return Div2View(Div2Context(baseContext = context, configuration = configuration))
     }
 
     @Test
     fun `enabled by default`() {
         val configuration = DivConfiguration.Builder(imageLoader).build()
-        val div2View = Div2View(Div2Context(baseContext = activity, configuration = configuration))
+        val div2View = Div2View(Div2Context(baseContext = context, configuration = configuration))
 
         assertTrue(div2View.div2Component.animationsEnabledController.isEnabled())
     }
@@ -70,7 +69,7 @@ class IsAnimationsEnabledTest {
 
     private fun setSystemAnimatorScale(scale: Float) {
         Settings.Global.putFloat(
-            activity.contentResolver,
+            context.contentResolver,
             Settings.Global.ANIMATOR_DURATION_SCALE,
             scale,
         )

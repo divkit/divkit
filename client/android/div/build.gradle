@@ -79,3 +79,11 @@ dependencies {
     testImplementation libs.androidx.test.core
     testImplementation libs.json
 }
+
+tasks.withType(Test).configureEach {
+    // Measured to be faster than both the serial default (forks=1) and full parallelism
+    // (forks=availableProcessors()) for this module's Robolectric test suite: running every
+    // fork at once causes per-fork JVM/Robolectric startup to compete for the same CPU and
+    // heap, which outweighs the parallelism gain.
+    maxParallelForks = Math.max(1, (int) (Runtime.runtime.availableProcessors() / 2))
+}

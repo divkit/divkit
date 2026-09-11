@@ -1,18 +1,17 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.internal.widget.FrameContainerLayout
+import com.yandex.div.test.testContextThemeWrapper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 private const val ID = "id"
@@ -21,8 +20,7 @@ private const val SCOPE_ID = "scope"
 @RunWith(RobolectricTestRunner::class)
 class ViewLocatorTest {
 
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
-    private val context = Div2Context(activity, DivConfiguration.Builder(mock()).build())
+    private val context = Div2Context(testContextThemeWrapper(), DivConfiguration.Builder(mock()).build())
     private val divView = Div2View(context)
 
     @Test
@@ -73,7 +71,7 @@ class ViewLocatorTest {
         val scopeView2 = mock<ViewGroup> {
             on { tag } doReturn SCOPE_ID
         }
-        val container = FrameContainerLayout(activity)
+        val container = FrameContainerLayout(context)
         container.addView(scopeView1)
         divView.addView(container)
         divView.addView(scopeView2)
@@ -135,7 +133,7 @@ class ViewLocatorTest {
         val target2 = mock<ViewGroup> {
             on { tag } doReturn ID
         }
-        val scopeView = FrameContainerLayout(activity).apply {
+        val scopeView = FrameContainerLayout(context).apply {
             tag = SCOPE_ID
             addView(target1)
             addView(target2)
@@ -155,9 +153,9 @@ class ViewLocatorTest {
         val target2 = mock<ViewGroup> {
             on { tag } doReturn ID
         }
-        val container = FrameContainerLayout(activity)
+        val container = FrameContainerLayout(context)
         container.addView(target2)
-        val scopeView = FrameContainerLayout(activity).apply {
+        val scopeView = FrameContainerLayout(context).apply {
             tag = SCOPE_ID
             addView(target1)
             addView(container)
@@ -186,7 +184,7 @@ class ViewLocatorTest {
         val viewWithTag = mock<DivInputView> {
             on { tag } doReturn ID
         }
-        val scopeView = FrameContainerLayout(activity).apply {
+        val scopeView = FrameContainerLayout(context).apply {
             tag = SCOPE_ID
             addView(viewWithTag)
         }
@@ -205,7 +203,7 @@ class ViewLocatorTest {
         val targetOutsideScope = mock<DivInputView> {
             on { tag } doReturn ID
         }
-        val scopeView = FrameContainerLayout(activity).apply {
+        val scopeView = FrameContainerLayout(context).apply {
             tag = SCOPE_ID
             addView(targetInsideScope)
         }
@@ -222,7 +220,7 @@ class ViewLocatorTest {
         val targetOutsideScope = mock<DivInputView> {
             on { tag } doReturn ID
         }
-        val scopeView = FrameContainerLayout(activity).apply {
+        val scopeView = FrameContainerLayout(context).apply {
             tag = SCOPE_ID
         }
         divView.addView(targetOutsideScope)
@@ -263,7 +261,7 @@ class ViewLocatorTest {
         val viewWithTag = mock<DivInputView> {
             on { tag } doReturn ID
         }
-        val container = FrameContainerLayout(activity)
+        val container = FrameContainerLayout(context)
         container.addView(viewWithTag)
         divView.addView(container)
 
@@ -277,7 +275,7 @@ class ViewLocatorTest {
         val viewWithTag = mock<DivInputView> {
             on { tag } doReturn ID
         }
-        val container = FrameContainerLayout(activity).apply {
+        val container = FrameContainerLayout(context).apply {
             tag = ID
             addView(viewWithTag)
         }

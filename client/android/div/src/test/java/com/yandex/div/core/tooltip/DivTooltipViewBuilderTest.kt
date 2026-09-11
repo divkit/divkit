@@ -1,6 +1,5 @@
 package com.yandex.div.core.tooltip
 
-import android.app.Activity
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.DivLayoutParams
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.Div
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnitValue
@@ -22,7 +22,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 /**
@@ -31,7 +30,7 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DivTooltipViewBuilderTest {
 
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
+    private val context = testContextThemeWrapper()
 
     private val div = Div.Text(
         DivText(
@@ -43,7 +42,7 @@ class DivTooltipViewBuilderTest {
     )
 
     private val div2View = mock<Div2View> {
-        on { getContext() } doReturn activity
+        on { getContext() } doReturn context
     }
 
     val tooltipBlock = DivBlock.create(div, mock(), mock())
@@ -52,7 +51,7 @@ class DivTooltipViewBuilderTest {
         on { divView } doReturn div2View
     }
 
-    private val boundView = View(activity).apply {
+    private val boundView = View(context).apply {
         layoutParams = DivLayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
             maxWidth = MAX_WIDTH
             maxHeight = MAX_HEIGHT

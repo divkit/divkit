@@ -18,4 +18,6 @@ dependencies {
 
     implementation(libs.androidx.core)
     implementation(libs.yatagan.api.compiled)
+
+    testImplementation(libs.json)
 }

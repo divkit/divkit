@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import com.google.common.collect.Iterators
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
@@ -12,6 +11,7 @@ import com.yandex.div.core.view2.divs.CONTAINER_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.viewEquals
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -20,16 +20,14 @@ import org.junit.Assert.assertNull
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class Div2RebindTest {
     private val divImageLoader = mock<DivImageLoader>()
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val testData = UnitTestData("div-state", "state_tree.json")
     private val div2Context = Div2Context(
-        activity,
+        testContextThemeWrapper(),
         DivConfiguration.Builder(divImageLoader).build()
     )
 

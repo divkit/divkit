@@ -1,20 +1,19 @@
 package com.yandex.div.internal.widget
 
-import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class TransientViewTest {
 
-    private val context = Robolectric.buildActivity(Activity::class.java).get()
+    private val context = ApplicationProvider.getApplicationContext<Context>()
 
     @Test
     fun `transient view is not in transient hierarchy when it is not in transient state`() {

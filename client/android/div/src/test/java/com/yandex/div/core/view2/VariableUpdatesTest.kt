@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import android.widget.TextView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -15,6 +14,7 @@ import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.internal.util.textString
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
 import org.json.JSONObject
 import org.junit.Assert
@@ -22,7 +22,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 private const val VARIABLE_NAME = "variable"
@@ -73,7 +72,7 @@ class VariableUpdatesTest {
     private val parsingEnvironment = DivParsingEnvironment(ParsingErrorLogger.LOG)
     private val divImageLoader = mock<DivImageLoader>()
     private val div2Context = Div2Context(
-        baseContext = Robolectric.buildActivity(Activity::class.java).get(),
+        baseContext = testContextThemeWrapper(),
         configuration = DivConfiguration.Builder(divImageLoader).build(),
         lifecycleOwner = null
     )

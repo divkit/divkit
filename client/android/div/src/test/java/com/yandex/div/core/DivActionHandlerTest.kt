@@ -1,6 +1,5 @@
 package com.yandex.div.core
 
-import android.app.Activity
 import android.net.Uri
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.state.DivStatePath
@@ -12,6 +11,7 @@ import com.yandex.div.test.data.action
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.typedValue
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
@@ -26,7 +26,6 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -35,7 +34,7 @@ class DivActionHandlerTest {
     private val divView = spy(
         Div2View(
             Div2Context(
-                baseContext = Robolectric.buildActivity(Activity::class.java).get(),
+                baseContext = testContextThemeWrapper(),
                 configuration = DivConfiguration.Builder(mock()).build(),
                 lifecycleOwner = null
             )

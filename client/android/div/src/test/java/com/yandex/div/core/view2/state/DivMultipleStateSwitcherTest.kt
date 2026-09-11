@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.state
 
-import android.app.Activity
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
@@ -12,6 +11,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
 import org.junit.Assert
 import org.junit.Test
@@ -24,7 +24,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 /**
@@ -38,9 +37,8 @@ class DivMultipleStateSwitcherTest {
     private val divDataState = DivData.State(rootDiv, 0)
     private val rootStatePath = DivStatePath.fromState(divDataState)
 
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val div2Context = Div2Context(
-        baseContext = activity,
+        baseContext = testContextThemeWrapper(),
         configuration = DivConfiguration.Builder(mock())
             .build()
     )

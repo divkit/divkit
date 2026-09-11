@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.local
 
-import android.app.Activity
 import android.widget.EditText
 import android.widget.TextView
 import com.yandex.div.DivDataTag
@@ -12,6 +11,7 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.textString
 import com.yandex.div.test.data.action
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
@@ -20,7 +20,6 @@ import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 private const val LOCAL_VARIABLE_NAME = "text_variable"
@@ -30,9 +29,8 @@ private const val LOCAL_INPUT_MODIFIED_VALUE = "modified value"
 
 @RunWith(RobolectricTestRunner::class)
 class LocalVariablesTest {
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val div2Context = Div2Context(
-        baseContext = activity,
+        baseContext = testContextThemeWrapper(),
         lifecycleOwner = null,
         configuration = DivConfiguration.Builder(mock()).build()
     )

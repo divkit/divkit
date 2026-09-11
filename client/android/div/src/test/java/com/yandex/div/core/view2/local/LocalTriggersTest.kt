@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2.local
 
-import android.app.Activity
 import android.widget.TextView
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
@@ -10,13 +9,13 @@ import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.textString
 import com.yandex.div.test.data.action
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
 import org.json.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 private const val ACTIVE_TRIGGER_TEXT = "Trigger: activated"
@@ -26,9 +25,8 @@ private const val INACTIVE_TRIGGER_VARIABLE_VALUE = 10
 
 @RunWith(RobolectricTestRunner::class)
 class LocalTriggersTest {
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val div2Context = Div2Context(
-        baseContext = activity,
+        baseContext = testContextThemeWrapper(),
         lifecycleOwner = null,
         configuration = DivConfiguration.Builder(mock()).build()
     )

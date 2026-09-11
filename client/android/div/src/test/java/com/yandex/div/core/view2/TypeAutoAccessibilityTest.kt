@@ -1,6 +1,5 @@
 package com.yandex.div.core.view2
 
-import android.app.Activity
 import android.view.View
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
@@ -10,23 +9,22 @@ import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.divs.UnitTestData
+import com.yandex.div.test.testContextThemeWrapper
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class TypeAutoAccessibilityTest {
 
-    private val activity = Robolectric.buildActivity(Activity::class.java).get()
     private val imageLoader = mock<DivImageLoader> {
         on { loadImage(any(), any<DivImageDownloadCallback>()) } doReturn LoadReference { }
     }
-    private val divContext = Div2Context(activity, DivConfiguration.Builder(imageLoader).build())
+    private val divContext = Div2Context(testContextThemeWrapper(), DivConfiguration.Builder(imageLoader).build())
     private val data = UnitTestData("accessibility", "auto_types.json", "regression_test_data").dataWithTemplates
     private val divView: Div2View
 

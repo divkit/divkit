@@ -22,5 +22,6 @@ dependencies {
     implementation(libs.javax)
 
     testImplementation(libs.androidx.test.core)
+    testImplementation(libs.json)
     testImplementation(libs.kotlin.corountines.core)
 }
