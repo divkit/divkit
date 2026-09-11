@@ -50,12 +50,15 @@ class UnitConversionsTest {
     }
 
     @Test
-    fun `pixel conversion applies font scaling only to sp`() {
+    fun `size conversions apply font scaling only to sp`() {
         rule.setContent {
-            CompositionLocalProvider(LocalDensity provides Density(density = 2f, fontScale = 2f)) {
+            CompositionLocalProvider(LocalDensity provides Density(density = 2f, fontScale = 1.5f)) {
                 assertEquals(20f, 10f.toPx(DivSizeUnit.DP))
-                assertEquals(40f, 10f.toPx(DivSizeUnit.SP))
+                assertEquals(30f, 10f.toPx(DivSizeUnit.SP))
                 assertEquals(10f, 10f.toPx(DivSizeUnit.PX))
+                assertEquals(10.dp, 10f.toDp(DivSizeUnit.DP))
+                assertEquals(15.dp, 10f.toDp(DivSizeUnit.SP))
+                assertEquals(5.dp, 10f.toDp(DivSizeUnit.PX))
             }
         }
     }

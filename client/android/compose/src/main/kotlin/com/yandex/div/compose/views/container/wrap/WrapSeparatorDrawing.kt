@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.container.wrap
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.runtime.Composable
@@ -7,8 +8,12 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -18,9 +23,12 @@ import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.SeparatorVisibility
+import com.yandex.div.compose.views.container.observeSeparatorStroke
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivShape
+import kotlin.math.ceil
+import kotlin.math.min
 
 @Immutable
 internal data class SeparatorDrawInfo(
@@ -33,6 +41,7 @@ internal data class SeparatorDrawInfo(
     val marginTopDp: Dp,
     val marginBottomDp: Dp,
     val isCircle: Boolean,
+    val stroke: BorderStroke?,
 ) {
     val totalWidthDp: Dp get() = shapeWidthDp + marginStartDp + marginEndDp
     val totalHeightDp: Dp get() = shapeHeightDp + marginTopDp + marginBottomDp
@@ -54,6 +63,8 @@ internal data class SeparatorDrawInfoPx(
     val marginTop: Float,
     val marginBottom: Float,
     val isCircle: Boolean,
+    val strokeBrush: Brush?,
+    val strokeStyle: Stroke?,
 ) {
     val totalWidth: Float
         get() = shapeWidth + marginStart + marginEnd
@@ -72,6 +83,16 @@ internal fun SeparatorDrawInfo.toPx(density: Density): SeparatorDrawInfoPx = wit
         marginTop = marginTopDp.toPx(),
         marginBottom = marginBottomDp.toPx(),
         isCircle = isCircle,
+        strokeBrush = stroke?.brush,
+        strokeStyle = stroke?.let {
+            val width = if (isCircle) {
+                it.width.toPx()
+            } else {
+                ceil(it.width.toPx()).coerceAtLeast(1f)
+                    .coerceAtMost(ceil(min(shapeWidthDp.toPx(), shapeHeightDp.toPx()) / 2))
+            }
+            Stroke(width)
+        },
     )
 }
 
@@ -80,7 +101,6 @@ internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
     val sep = this ?: return null
     val style = sep.style as? DivDrawable.Shape ?: return null
     val shapeDrawable = style.value
-    val fallbackColor = shapeDrawable.color?.observedColorValue()
     val layoutDirection = LocalLayoutDirection.current
     val margins = sep.margins.observeInsets()
     val marginStartDp = margins.calculateStartPadding(layoutDirection)
@@ -91,7 +111,7 @@ internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
     return when (val shape = shapeDrawable.shape) {
         is DivShape.RoundedRectangle -> {
             val rect = shape.value
-            val color = rect.backgroundColor?.observedColorValue() ?: fallbackColor
+            val color = (rect.backgroundColor ?: shapeDrawable.color)?.observedColorValue()
             if (color == null) {
                 reportError("Separator color not defined")
                 return null
@@ -106,6 +126,7 @@ internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
                 marginTopDp = marginTopDp,
                 marginBottomDp = marginBottomDp,
                 isCircle = false,
+                stroke = (rect.stroke ?: shapeDrawable.stroke)?.observeSeparatorStroke(),
             )
         }
 
@@ -113,7 +134,7 @@ internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
             val circle = shape.value
             val radius = circle.radius.observedValue()
             val diameter = radius * 2
-            val color = circle.backgroundColor?.observedColorValue() ?: fallbackColor
+            val color = (circle.backgroundColor ?: shapeDrawable.color)?.observedColorValue()
             if (color == null) {
                 reportError("Separator color not defined")
                 return null
@@ -128,6 +149,7 @@ internal fun DivContainer.Separator?.resolveDrawInfo(): SeparatorDrawInfo? {
                 marginTopDp = marginTopDp,
                 marginBottomDp = marginBottomDp,
                 isCircle = true,
+                stroke = (circle.stroke ?: shapeDrawable.stroke)?.observeSeparatorStroke(),
             )
         }
     }
@@ -420,5 +442,52 @@ private fun DrawScope.drawSeparatorShape(
             size = Size(info.shapeWidth, info.shapeHeight),
             cornerRadius = CornerRadius(info.cornerRadius),
         )
+    }
+    val brush = info.strokeBrush ?: return
+    val stroke = info.strokeStyle ?: return
+    val minDimension = min(info.shapeWidth, info.shapeHeight)
+    if (minDimension <= 0f) return
+    if (info.isCircle) {
+        // Keep the stroke centered on the circle contour, as in the View drawable.
+        if (stroke.width >= info.shapeWidth) {
+            drawCircle(
+                brush = brush,
+                radius = (info.shapeWidth + stroke.width) / 2,
+                center = Offset(centerX, centerY),
+            )
+        } else {
+            drawCircle(
+                brush = brush,
+                radius = info.shapeWidth / 2,
+                center = Offset(centerX, centerY),
+                style = stroke,
+            )
+        }
+    } else {
+        val inset = stroke.width / 2
+        val fillArea = stroke.width * 2 >= minDimension
+        val topLeft = Offset(centerX - info.shapeWidth / 2, centerY - info.shapeHeight / 2)
+        val radius = min(info.cornerRadius, minDimension / 2)
+        when {
+            fillArea -> drawRoundRect(
+                brush, topLeft, Size(info.shapeWidth, info.shapeHeight), CornerRadius(radius),
+            )
+            radius < inset -> clipRect(
+                left = topLeft.x + stroke.width,
+                top = topLeft.y + stroke.width,
+                right = topLeft.x + info.shapeWidth - stroke.width,
+                bottom = topLeft.y + info.shapeHeight - stroke.width,
+                clipOp = ClipOp.Difference,
+            ) {
+                drawRoundRect(brush, topLeft, Size(info.shapeWidth, info.shapeHeight), CornerRadius(radius))
+            }
+            else -> drawRoundRect(
+                brush = brush,
+                topLeft = topLeft + Offset(inset, inset),
+                size = Size(info.shapeWidth - stroke.width, info.shapeHeight - stroke.width),
+                cornerRadius = CornerRadius(radius - inset),
+                style = stroke,
+            )
+        }
     }
 }
