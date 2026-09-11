@@ -12,6 +12,7 @@ import com.yandex.div.internal.parser.TYPE_HELPER_INT
 import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.internal.parser.TYPE_HELPER_URI
 import com.yandex.div.internal.util.mapNotNull
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import org.json.JSONObject
 
@@ -36,8 +37,9 @@ class LottieExtensionParamsParser(
             json,
             "is_playing",
             TYPE_HELPER_BOOLEAN,
-            ANY_TO_BOOLEAN
-        )
+            ANY_TO_BOOLEAN,
+            IS_PLAYING_DEFAULT_VALUE
+        ) ?: IS_PLAYING_DEFAULT_VALUE
         return LottieExtensionParams(
             data = data,
             isPlaying = isPlaying,
@@ -207,3 +209,5 @@ private fun parseLottieUrl(
         ANY_TO_URI,
     )?.evaluate(expressionResolver)
 }
+
+private val IS_PLAYING_DEFAULT_VALUE = Expression.constant(true)

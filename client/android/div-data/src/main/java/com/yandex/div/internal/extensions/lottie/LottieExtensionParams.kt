@@ -6,7 +6,7 @@ import com.yandex.div.json.expressions.Expression
 @InternalApi
 data class LottieExtensionParams(
     val data: LottieData,
-    val isPlaying: Expression<Boolean>?,
+    val isPlaying: Expression<Boolean>,
     val repeatCount: Int,
     val repeatMode: LottieRepeatMode,
     val repeats: List<LottieRepeat>,

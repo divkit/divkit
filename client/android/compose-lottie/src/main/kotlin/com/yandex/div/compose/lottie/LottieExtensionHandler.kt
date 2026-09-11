@@ -104,7 +104,7 @@ class LottieExtensionHandler private constructor(
             alignment = image.observedAlignment(),
             composition = composition,
             contentScale = image.observedContentScale(),
-            isPlaying = params.isPlaying.observedValue(true) && environment.animationsEnabled,
+            isPlaying = params.isPlaying.observedValue() && environment.animationsEnabled,
             iterations = params.iterations,
             restartOnPlay = false,
             reverseOnRepeat = params.repeatMode == LottieRepeatMode.REVERSE,

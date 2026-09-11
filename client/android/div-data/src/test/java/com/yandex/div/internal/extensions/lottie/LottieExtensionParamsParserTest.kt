@@ -1,18 +1,20 @@
 package com.yandex.div.internal.extensions.lottie
 
 import android.net.Uri
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.data.constant
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
-import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
+import kotlin.test.fail
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class LottieExtensionParamsParserTest {
     private val assetMap = mutableMapOf<String, String>()
     private val rawResMap = mutableMapOf<String, Int>()
@@ -43,7 +45,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Url("https://example.com/animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
@@ -63,7 +65,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Asset("mapped.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
@@ -91,7 +93,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Asset("divkit/local_animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
@@ -111,7 +113,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.RawRes(id = 123, url = "res://local_animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
@@ -139,7 +141,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Json("{\"key\":\"value\"}"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
@@ -158,7 +160,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Url("https://example.com/animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
@@ -178,7 +180,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Url("https://example.com/animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 4,
                 repeatMode = LottieRepeatMode.REVERSE,
                 repeats = emptyList(),
@@ -200,7 +202,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Url("https://example.com/animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
@@ -218,7 +220,39 @@ class LottieExtensionParamsParserTest {
 
         val params = parser.parse(json, expressionResolver)!!
 
-        assertTrue(params.isPlaying!!.evaluate(expressionResolver))
+        assertTrue(params.isPlaying.evaluate(expressionResolver))
+    }
+
+    @Test
+    fun `is playing defaults to true when omitted`() {
+        val json = JSONObject().put("lottie_url", "https://example.com/animation.json")
+
+        val params = parser.parse(json, expressionResolver)!!
+
+        assertTrue(params.isPlaying.evaluate(expressionResolver))
+    }
+
+    @Test
+    fun `is playing preserves explicit false`() {
+        val json = JSONObject()
+            .put("lottie_url", "https://example.com/animation.json")
+            .put("is_playing", false)
+
+        val params = parser.parse(json, expressionResolver)!!
+
+        assertFalse(params.isPlaying.evaluate(expressionResolver))
+    }
+
+    @Test
+    fun `is playing defaults to true when expression fails`() {
+        isErrorExpected = true
+        val json = JSONObject()
+            .put("lottie_url", "https://example.com/animation.json")
+            .put("is_playing", "@{missing}")
+
+        val params = parser.parse(json, expressionResolver)!!
+
+        assertTrue(params.isPlaying.evaluate(expressionResolver))
     }
 
     @Test
@@ -235,7 +269,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Url("https://example.com/animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = listOf(
@@ -266,7 +300,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Url("https://example.com/animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = listOf(
@@ -292,7 +326,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Url("https://example.com/animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),
@@ -311,7 +345,7 @@ class LottieExtensionParamsParserTest {
         assertEquals(
             LottieExtensionParams(
                 data = LottieData.Url("https://example.com/animation.json"),
-                isPlaying = null,
+                isPlaying = constant(true),
                 repeatCount = 1,
                 repeatMode = LottieRepeatMode.RESTART,
                 repeats = emptyList(),

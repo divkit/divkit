@@ -226,19 +226,17 @@ open class DivLottieExtensionHandler @JvmOverloads constructor(
         playbackStateController.overrideRepeatCount(getRepeatCount())
 
         val isPlaying = params.isPlaying
-        val startPlay = isPlaying?.evaluate(resolver) ?: true
+        val startPlay = isPlaying.evaluate(resolver)
         if (playbackStateController.canPlay() && startPlay && animationsEnabled()) {
             playAnimation()
         } else {
             pauseAnimationAt(progress = if (getRepeatMode() == LottieDrawable.REVERSE) 0f else 1f)
         }
 
-        isPlaying?.let { expression ->
-            addSubscription(expression.observe(resolver) { playOrPauseAnimation(it && animationsEnabled()) })
-        }
+        addSubscription(isPlaying.observe(resolver) { playOrPauseAnimation(it && animationsEnabled()) })
 
         subscribeToAnimationsEnabled(divView) {
-            playOrPauseAnimation((isPlaying?.evaluate(resolver) ?: true) && animationsEnabled())
+            playOrPauseAnimation(isPlaying.evaluate(resolver) && animationsEnabled())
         }
     }
 
