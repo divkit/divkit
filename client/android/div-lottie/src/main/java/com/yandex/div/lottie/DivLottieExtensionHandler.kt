@@ -29,21 +29,32 @@ import kotlinx.coroutines.withContext
  *
  * You can use this extension for `gif` element and not worry about backward compatibility, as this
  * extension inherit all [DivGifImage] attributes and use [DivGifImage.gifUrl] as fallback.
+ *
+ * @param preloadScope scope for preload coroutines. Provide your own scope and cancel it to stop
+ * preload work when the handler is no longer needed; the constructors that do not take it run
+ * preloads in an internal scope that lives as long as the handler.
  */
 open class DivLottieExtensionHandler @JvmOverloads constructor(
     private val rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
     private val logger: DivLottieLogger = DivLottieLogger.STUB,
     cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
-    preloadScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+    preloadScope: CoroutineScope,
     networkClient: DivNetworkClient? = null,
 ) : DivExtensionHandler, ExpressionSubscriber {
+
+    @JvmOverloads
+    public constructor(
+        rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
+        logger: DivLottieLogger = DivLottieLogger.STUB,
+        cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
+    ) : this(rawResProvider, logger, cache, defaultPreloadScope())
 
     public constructor(
         networkClient: DivNetworkClient,
         rawResProvider: DivLottieRawResProvider = DivLottieRawResProvider.STUB,
         logger: DivLottieLogger = DivLottieLogger.STUB,
         cache: DivLottieNetworkCache = DivLottieNetworkCache.STUB,
-    ) : this(rawResProvider, logger, cache, networkClient = networkClient)
+    ) : this(rawResProvider, logger, cache, defaultPreloadScope(), networkClient)
 
     private val parser = LottieExtensionParamsParser(
         assetMapper = rawResProvider::provideAssetFile,
@@ -246,6 +257,8 @@ open class DivLottieExtensionHandler @JvmOverloads constructor(
         release()
     }
 }
+
+private fun defaultPreloadScope() = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
 @LottieDrawable.RepeatMode
 private fun LottieRepeatMode.toLottieDrawableRepeatMode(): Int {
