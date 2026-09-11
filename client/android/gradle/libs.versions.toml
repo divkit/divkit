@@ -17,7 +17,7 @@ json = "20260719"
 jvm-toolchain = "17"
 kotlin = "2.3.21"
 kotlin-coroutines = "1.10.2"
-kotlinpoet = "2.3.0"
+kotlinpoet = "2.4.0"
 ksp = "2.3.11"
 lottie = "6.7.1"
 markwon = "4.6.2"
@@ -28,7 +28,7 @@ picasso = "2.8"
 protobuf = "4.35.1"
 rive = "10.3.1"
 robolectric = "4.16.1"
-roborazzi = "1.72.0"
+roborazzi = "1.74.0"
 stetho = "1.6.0"
 unmock = "0.11.0"
 webp-imageio = "0.3.3"
@@ -36,7 +36,7 @@ yatagan = "1.6.2"
 
 androidx-activity = "1.11.0"
 androidx-appcompat = "1.6.1"
-androidx-benchmark = "1.4.1"
+androidx-benchmark = "1.5.0"
 androidx-collection = "1.6.0"
 androidx-compose-bom = "2026.06.01"
 androidx-constraintlayout = "2.2.2"
@@ -88,7 +88,6 @@ androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
@@ -103,7 +102,6 @@ androidx-media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-da
 androidx-media3-exoplayer-hls = { module = "androidx.media3:media3-exoplayer-hls", version.ref = "androidx-media3" }
 androidx-media3-exoplayer-rtsp = { module = "androidx.media3:media3-exoplayer-rtsp", version.ref = "androidx-media3" }
 androidx-media3-exoplayer-smoothstreaming = { module = "androidx.media3:media3-exoplayer-smoothstreaming", version.ref = "androidx-media3" }
-androidx-media3-datasource-okhttp = { module = "androidx.media3:media3-datasource-okhttp", version.ref = "androidx-media3" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }
 
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
