@@ -854,6 +854,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/tabs/TabTitlesView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/tabs/TabTitlesView.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/tabs/Utils.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/tabs/Utils.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/DivTextView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/DivTextView.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/FontLineMetrics.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/FontLineMetrics.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/InlineImages.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/InlineImages.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/RangeDecorations.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/RangeDecorations.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/SpanStyle.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/SpanStyle.kt",

@@ -24,7 +24,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -66,44 +65,6 @@ internal data class InlineImageData(
     val accessibilityRole: Role?,
 )
 
-@Immutable
-private data class FontLineMetrics(
-    val ascent: TextUnit,
-    val descent: TextUnit,
-)
-
-@Composable
-private fun observeFontLineMetrics(
-    textStyle: TextStyle,
-    isRequired: Boolean,
-): FontLineMetrics? {
-    if (!isRequired) {
-        return null
-    }
-
-    val textMeasurer = rememberTextMeasurer()
-    val measuredStyle = remember(textStyle) {
-        textStyle.copy(
-            lineHeight = TextUnit.Unspecified,
-            lineHeightStyle = null,
-        )
-    }
-    val layout = remember(textMeasurer, measuredStyle) {
-        textMeasurer.measure(
-            text = "M",
-            style = measuredStyle,
-            maxLines = 1,
-        )
-    }
-    return with(LocalDensity.current) {
-        val baseline = layout.firstBaseline
-        FontLineMetrics(
-            ascent = (baseline - layout.getLineTop(0)).toSp(),
-            descent = (layout.getLineBottom(0) - baseline).toSp(),
-        )
-    }
-}
-
 @Composable
 internal fun DivText.observeInlineImages(
     text: String,
@@ -131,11 +92,9 @@ internal fun DivText.observeInlineImages(
         positionedImages.sortedWith(compareBy<PositionedImage> { it.position }.thenBy { it.sourceIndex })
     }
 
-    val lineHeight = textMetrics.lineHeight
-        ?.takeIf { it > 0 }
-        ?.toTextUnit(textMetrics.fontSizeUnit)
+    val lineHeight = textMetrics.lineHeight?.toTextUnit(textMetrics.fontSizeUnit)
     val fontSize = lineHeight?.let { baseFontSize.toTextUnit(textMetrics.fontSizeUnit) }
-    val fontLineMetrics = observeFontLineMetrics(
+    val fontLineMetrics = rememberFontLineMetrics(
         textStyle = textStyle,
         isRequired = lineHeight == null && sortedImages.any { it.image.baselineOffset != null },
     )
