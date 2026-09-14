@@ -2,6 +2,7 @@
 
 # Android Client:
 * Fixed cursor positioning in phone masked input.
+* Restored binary compatibility of the `DivLottieExtensionHandler` constructor that was broken in 32.61.3.
 
 
 ## 32.61.3
