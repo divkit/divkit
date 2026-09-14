@@ -8,7 +8,7 @@ class CompareScreenshotsTaskTest {
     @Test
     fun `partial selected case output remains required`() {
         val selectedPrefix =
-            "com.yandex.div.DivComposeInteractiveScreenshotTest/div-input/fixed_length_input_mask"
+            "com.yandex.div.Div2InteractiveScreenshotTest/div-input/fixed_length_input_mask"
         val skipped = (1..10).map { step ->
             "viewPixelCopy/$selectedPrefix/step$step.png"
         } + "viewPixelCopy/com.yandex.div.OtherTest/unrelated.png"

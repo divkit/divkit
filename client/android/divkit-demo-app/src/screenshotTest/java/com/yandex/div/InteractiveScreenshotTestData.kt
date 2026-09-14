@@ -8,7 +8,6 @@ import org.json.JSONObject
 import org.junit.Assert.fail
 
 class InteractiveScreenshotTestData(
-    val divJson: JSONObject,
     val steps: List<Step>
 ) {
     class Step(
@@ -21,7 +20,6 @@ class InteractiveScreenshotTestData(
 
         fun parse(json: JSONObject): InteractiveScreenshotTestData {
             return InteractiveScreenshotTestData(
-                divJson = json.getJSONObject("div_data"),
                 steps = parseSteps(json)
             )
         }
