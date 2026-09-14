@@ -18,6 +18,7 @@ extension Block {
     highlightedBackgroundColor: Color?? = nil,
     alpha: CGFloat? = nil,
     blurEffect: BlurEffect? = nil,
+    blurIntensity: CGFloat? = nil,
     actions: NonEmptyArray<UserInterfaceAction>? = nil,
     actionAnimation: ActionAnimation? = nil,
     doubleTapActions: NonEmptyArray<UserInterfaceAction>? = nil,
@@ -42,6 +43,7 @@ extension Block {
         || (backgroundColor != nil && backgroundColor?.alpha.isApproximatelyEqualTo(0) != true)
         || hasAlpha
         || blurEffect != nil
+        || blurIntensity != nil
         || actions != nil
         || doubleTapActions != nil
         || longTapActions != nil
@@ -82,6 +84,7 @@ extension Block {
         border: (border ?? block.border) as BlockBorder?,
         childAlpha: alpha.map { $0 * block.childAlpha },
         blurEffect: blurEffect ?? block.blurEffect,
+        blurIntensity: blurIntensity ?? block.blurIntensity,
         visibilityParams: visibilityParams ?? block.visibilityParams,
         tooltips: [tooltips, block.tooltips].compactMap { $0 }.flatMap { $0 },
         accessibilityElement: accessibilityElement,
@@ -116,6 +119,7 @@ extension Block {
       border: border,
       childAlpha: alpha ?? DecoratingBlock.defaultChildAlpha,
       blurEffect: blurEffect,
+      blurIntensity: blurIntensity ?? DecoratingBlock.defaultBlurIntensity,
       visibilityParams: visibilityParams,
       tooltips: tooltips ?? [],
       accessibilityElement: accessibilityElement,
@@ -141,6 +145,7 @@ extension Block {
     highlightedBackgroundColor: Color?? = nil,
     alpha: CGFloat? = nil,
     blurEffect: BlurEffect? = nil,
+    blurIntensity: CGFloat? = nil,
     actions: NonEmptyArray<UserInterfaceAction>? = nil,
     actionAnimation: ActionAnimation? = nil,
     doubleTapActions: NonEmptyArray<UserInterfaceAction>? = nil,
@@ -167,6 +172,7 @@ extension Block {
       highlightedBackgroundColor: highlightedBackgroundColor,
       alpha: alpha,
       blurEffect: blurEffect,
+      blurIntensity: blurIntensity,
       actions: actions,
       actionAnimation: actionAnimation,
       doubleTapActions: doubleTapActions,

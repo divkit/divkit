@@ -1,0 +1,312 @@
+{
+  "platforms": [
+    "ios"
+  ],
+  "card": {
+    "log_id": "blur_intensity_sample",
+    "variables": [
+      {
+        "name": "blur_percent",
+        "type": "integer",
+        "value": 18
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFF3F4F6"
+            }
+          ],
+          "paddings": {
+            "top": 16,
+            "left": 16,
+            "right": 16,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Blur intensity",
+              "font_size": 24,
+              "line_height": 30,
+              "font_weight": "bold",
+              "text_color": "#FF111827"
+            },
+            {
+              "type": "text",
+              "text": "Двигайте слайдер и сравнивайте системный UIKit blur прямо на фотографии",
+              "font_size": 14,
+              "line_height": 19,
+              "text_color": "#FF6B7280",
+              "margins": {
+                "top": 4,
+                "bottom": 14
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 430
+              },
+              "border": {
+                "corner_radius": 24
+              },
+              "items": [
+                {
+                  "type": "image",
+                  "image_url": "https://avatars.mds.yandex.net/get-smart-camera/5488218/example_futuris_27/preview_hw480_q70",
+                  "scale": "fill",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "Лучшее",
+                  "font_size": 12,
+                  "line_height": 16,
+                  "font_weight": "regular",
+                  "text_color": "#FFFFFFFF",
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 24
+                  },
+                  "margins": {
+                    "top": 12,
+                    "left": 12
+                  },
+                  "paddings": {
+                    "top": 4,
+                    "right": 8,
+                    "bottom": 4,
+                    "left": 8
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#2E000000"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 40
+                  },
+                  "extensions": [
+                    {
+                      "id": "blur",
+                      "params": {
+                        "intensity": "@{blur_percent / 100.0}"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "alignment_vertical": "bottom",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 82
+                  },
+                  "margins": {
+                    "right": 12,
+                    "bottom": 12,
+                    "left": 12
+                  },
+                  "paddings": {
+                    "top": 12,
+                    "right": 16,
+                    "bottom": 12,
+                    "left": 16
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#2E000000"
+                    }
+                  ],
+                  "border": {
+                    "corner_radius": 20
+                  },
+                  "extensions": [
+                    {
+                      "id": "blur",
+                      "params": {
+                        "intensity": "@{blur_percent / 100.0}"
+                      }
+                    }
+                  ],
+                  "items": [
+                    {
+                      "type": "text",
+                      "text": "Intensity @{blur_percent}%",
+                      "font_size": 20,
+                      "line_height": 25,
+                      "font_weight": "bold",
+                      "text_color": "#FFFFFFFF"
+                    },
+                    {
+                      "type": "text",
+                      "text": "regular blur · background: rgba(0, 0, 0, 0.18)",
+                      "font_size": 12,
+                      "line_height": 16,
+                      "text_color": "#E6FFFFFF",
+                      "margins": {
+                        "top": 3
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 18,
+                "bottom": 8
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Intensity",
+                  "font_size": 15,
+                  "line_height": 20,
+                  "font_weight": "medium",
+                  "text_color": "#FF111827"
+                },
+                {
+                  "type": "text",
+                  "text": "@{blur_percent}%",
+                  "font_size": 15,
+                  "line_height": 20,
+                  "font_weight": "bold",
+                  "text_color": "#FF111827",
+                  "text_alignment_horizontal": "right"
+                }
+              ]
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 44
+              },
+              "min_value": 0,
+              "max_value": 100,
+              "thumb_value_variable": "blur_percent",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#FFFFFFFF",
+                "stroke": {
+                  "color": "#22000000",
+                  "width": 1
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 28
+                  },
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 28
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 14
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#FF111827",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 3
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#FFD1D5DB",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 3
+                  }
+                }
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "match_parent"
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "0 — без blur",
+                  "font_size": 12,
+                  "line_height": 16,
+                  "text_color": "#FF6B7280"
+                },
+                {
+                  "type": "text",
+                  "text": "100 — полный blur",
+                  "font_size": 12,
+                  "line_height": 16,
+                  "text_color": "#FF6B7280",
+                  "text_alignment_horizontal": "right"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

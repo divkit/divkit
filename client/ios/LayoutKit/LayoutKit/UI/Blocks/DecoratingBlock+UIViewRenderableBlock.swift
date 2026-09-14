@@ -48,6 +48,7 @@ extension DecoratingBlock {
       border: border,
       childAlpha: childAlpha,
       blurEffect: blurEffect,
+      blurIntensity: blurIntensity,
       paddings: paddings,
       source: Variable { [weak self] in self },
       visibilityParams: visibilityParams,
@@ -128,6 +129,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       let border: BlockBorder?
       let childAlpha: CGFloat
       let blurEffect: BlurEffect?
+      let blurIntensity: CGFloat
       let paddings: EdgeInsets
       let source: Variable<AnyObject?>
       let visibilityParams: VisibilityParams?
@@ -154,6 +156,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         border: BlockBorder?,
         childAlpha: CGFloat,
         blurEffect: BlurEffect?,
+        blurIntensity: CGFloat,
         paddings: EdgeInsets,
         source: Variable<AnyObject?>,
         visibilityParams: VisibilityParams?,
@@ -179,6 +182,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         self.border = border
         self.childAlpha = childAlpha
         self.blurEffect = blurEffect
+        self.blurIntensity = blurIntensity
         self.paddings = paddings
         self.source = source
         self.visibilityParams = visibilityParams
@@ -208,6 +212,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     var border: BlockBorder? { box.border }
     var childAlpha: CGFloat { box.childAlpha }
     var blurEffect: BlurEffect? { box.blurEffect }
+    var blurIntensity: CGFloat { box.blurIntensity }
     var paddings: EdgeInsets { box.paddings }
     var source: Variable<AnyObject?> { box.source }
     var visibilityParams: VisibilityParams? { box.visibilityParams }
@@ -266,6 +271,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       border: BlockBorder?,
       childAlpha: CGFloat,
       blurEffect: BlurEffect?,
+      blurIntensity: CGFloat,
       paddings: EdgeInsets,
       source: Variable<AnyObject?>,
       visibilityParams: VisibilityParams?,
@@ -292,6 +298,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         border: border,
         childAlpha: childAlpha,
         blurEffect: blurEffect,
+        blurIntensity: blurIntensity,
         paddings: paddings,
         source: source,
         visibilityParams: visibilityParams,
@@ -388,7 +395,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  private var blurView: UIVisualEffectView? {
+  private var blurView: BlurEffectView? {
     didSet {
       oldValue?.removeFromSuperview()
       if let blurView {
@@ -577,7 +584,14 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
 
     if oldModel?.blurEffect != model.blurEffect {
-      blurView = model.blurEffect.map { UIVisualEffectView(effect: UIBlurEffect(style: $0.cast())) }
+      blurView = model.blurEffect.map {
+        BlurEffectView(
+          effect: UIBlurEffect(style: $0.cast()),
+          intensity: model.blurIntensity
+        )
+      }
+    } else if oldModel?.blurIntensity != model.blurIntensity {
+      blurView?.updateIntensity(model.blurIntensity)
     }
 
     backgroundColor = model.backgroundColor.systemColor
@@ -1022,6 +1036,47 @@ extension BlurEffect {
     case .systemThickMaterialDark: .systemThickMaterialDark
     case .systemChromeMaterialDark: .systemChromeMaterialDark
     }
+  }
+}
+
+private final class BlurEffectView: UIVisualEffectView {
+  private let blurEffect: UIBlurEffect
+  private var effectInterpolator: UIViewPropertyAnimator?
+
+  init(effect: UIBlurEffect, intensity: CGFloat) {
+    blurEffect = effect
+    let intensity = Self.normalizeIntensity(intensity)
+    super.init(effect: intensity == 1 ? effect : nil)
+
+    guard intensity > 0, intensity < 1 else { return }
+    updateIntensity(intensity)
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+  deinit {
+    if effectInterpolator?.state == .active {
+      effectInterpolator?.stopAnimation(true)
+    }
+  }
+
+  private static func normalizeIntensity(_ intensity: CGFloat) -> CGFloat {
+    guard intensity.isFinite else { return 1 }
+    return clamp(intensity, min: 0, max: 1)
+  }
+
+  func updateIntensity(_ intensity: CGFloat) {
+    let intensity = Self.normalizeIntensity(intensity)
+    if effectInterpolator == nil {
+      effect = nil
+      let blurEffect = self.blurEffect
+      let animator = UIViewPropertyAnimator(duration: 1, curve: .linear) { [weak self] in
+        self?.effect = blurEffect
+      }
+      effectInterpolator = animator
+    }
+    effectInterpolator?.fractionComplete = intensity
   }
 }
 

@@ -64,6 +64,7 @@ enum AppComponents {
         InputAutocorrectionExtensionHandler(),
         InputPropertiesExtensionHandler(),
         RasterizeExtensionHandler(),
+        BlurExtensionHandler(),
       ],
       flagsInfo: DivFlagsInfo(
         initializeTriggerOnSet: false,

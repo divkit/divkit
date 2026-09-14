@@ -1,6 +1,7 @@
 import DivKit
 import Foundation
 import LayoutKit
+import VGSL
 
 public final class BlurExtensionHandler: DivExtensionHandler {
   public let id = extensionID
@@ -12,26 +13,101 @@ public final class BlurExtensionHandler: DivExtensionHandler {
     div: DivBase,
     context: DivBlockModelingContext
   ) -> Block {
-    block.addingDecorations(blurEffect: div.resolveBlurEffect(context.expressionResolver))
+    let params: BlurExtensionParams
+    do {
+      guard let resolvedParams = try div.resolveBlurExtensionParams(
+        context.expressionResolver
+      ) else {
+        return block
+      }
+      params = resolvedParams
+    } catch {
+      context.addError(message: "Failed to resolve blur extension params: \(error)")
+      return block
+    }
+
+    return block.addingDecorations(
+      blurEffect: params.blurEffect,
+      blurIntensity: params.intensity
+    )
   }
 }
 
 extension DivBase {
-  fileprivate func resolveBlurEffect(
+  fileprivate func resolveBlurExtensionParams(
     _ expressionResolver: ExpressionResolver
-  ) -> BlurEffect? {
+  ) throws -> BlurExtensionParams? {
     guard
-      let blurThemeExtension = extensions?.first(where: { $0.id == extensionID }),
-      let styleExpression = blurThemeExtension.params?[styleKey] as? String
+      let blurExtension = extensions?.first(where: { $0.id == extensionID })
     else {
       return nil
     }
+    return try BlurExtensionParams(
+      params: blurExtension.params ?? [:],
+      expressionResolver: expressionResolver
+    )
+  }
+}
 
-    if let blur: InternalBlurEffect = expressionResolver.resolveEnum(styleExpression) {
-      return BlurEffect(internalBlurEffect: blur)
+struct BlurExtensionParams {
+  let blurEffect: BlurEffect
+  let intensity: CGFloat
+
+  init?(
+    params: [String: Any],
+    expressionResolver: ExpressionResolver
+  ) throws {
+    let hasStyle = params[styleKey] != nil
+    let hasIntensity = params[intensityKey] != nil
+    guard hasStyle != hasIntensity else {
+      throw BlurExtensionParamsError.exactlyOneParameterRequired
     }
 
-    return nil
+    if hasIntensity {
+      guard
+        let intensity = try params.getOptionalFloat(
+          intensityKey,
+          expressionResolver: expressionResolver
+        ),
+        intensity.isFinite
+      else {
+        throw BlurExtensionParamsError.invalidIntensity
+      }
+
+      blurEffect = .regular
+      self.intensity = clamp(intensity, min: 0, max: 1)
+      return
+    }
+
+    guard
+      let styleExpression = params[styleKey] as? String,
+      let internalBlurEffect: InternalBlurEffect = expressionResolver.resolveEnum(styleExpression)
+    else {
+      throw BlurExtensionParamsError.invalidStyle
+    }
+    guard let blurEffect = BlurEffect(internalBlurEffect: internalBlurEffect) else {
+      return nil
+    }
+
+    self.blurEffect = blurEffect
+    intensity = defaultIntensity
+  }
+}
+
+enum BlurExtensionParamsError: Error, CustomStringConvertible {
+  case exactlyOneParameterRequired
+  case invalidIntensity
+  case invalidStyle
+
+  var description: String {
+    switch self {
+    case .exactlyOneParameterRequired:
+      "Exactly one of 'style' or 'intensity' must be specified"
+    case .invalidIntensity:
+      "'intensity' must resolve to a finite number"
+    case .invalidStyle:
+      "'style' must resolve to a supported blur style"
+    }
   }
 }
 
@@ -109,4 +185,6 @@ extension BlurEffect {
 }
 
 private let styleKey = "style"
+private let intensityKey = "intensity"
+private let defaultIntensity: CGFloat = 1
 private let extensionID = "blur"

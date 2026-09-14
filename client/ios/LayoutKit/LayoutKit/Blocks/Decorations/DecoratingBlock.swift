@@ -5,6 +5,7 @@ import VGSL
 final class DecoratingBlock: WrapperBlock {
   static let defaultBoundary: BoundaryTrait = .clips
   static let defaultBackgroundColor: Color = .clear
+  static let defaultBlurIntensity: CGFloat = 1
   static let defaultChildAlpha: CGFloat = 1
   static let defaultHighlightedBackgroundColor: Color? = nil
   static let defaultCaptureFocusOnAction: Bool = true
@@ -24,6 +25,7 @@ final class DecoratingBlock: WrapperBlock {
   let border: BlockBorder?
   let childAlpha: CGFloat
   let blurEffect: BlurEffect?
+  let blurIntensity: CGFloat
   let paddings: EdgeInsets
   let visibilityParams: VisibilityParams?
   let tooltips: [BlockTooltip]
@@ -80,6 +82,7 @@ final class DecoratingBlock: WrapperBlock {
     border: BlockBorder? = nil,
     childAlpha: CGFloat = defaultChildAlpha,
     blurEffect: BlurEffect? = nil,
+    blurIntensity: CGFloat = defaultBlurIntensity,
     paddings: EdgeInsets = .zero,
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip] = [],
@@ -104,6 +107,7 @@ final class DecoratingBlock: WrapperBlock {
     self.border = border
     self.childAlpha = childAlpha
     self.blurEffect = blurEffect
+    self.blurIntensity = blurIntensity
     self.paddings = paddings
     self.visibilityParams = visibilityParams
     self.tooltips = tooltips
@@ -156,6 +160,7 @@ final class DecoratingBlock: WrapperBlock {
       && border == other.border
       && childAlpha == other.childAlpha
       && blurEffect == other.blurEffect
+      && blurIntensity == other.blurIntensity
       && paddings == other.paddings
       && child.equals(other.child)
       && visibilityParams == other.visibilityParams
@@ -194,6 +199,7 @@ extension DecoratingBlock {
     border: BlockBorder?? = nil,
     childAlpha: CGFloat? = nil,
     blurEffect: BlurEffect? = nil,
+    blurIntensity: CGFloat? = nil,
     paddings: EdgeInsets? = nil,
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
@@ -219,6 +225,7 @@ extension DecoratingBlock {
       border: border ?? self.border,
       childAlpha: childAlpha ?? self.childAlpha,
       blurEffect: blurEffect ?? self.blurEffect,
+      blurIntensity: blurIntensity ?? self.blurIntensity,
       paddings: paddings ?? self.paddings,
       visibilityParams: visibilityParams ?? self.visibilityParams,
       tooltips: tooltips ?? self.tooltips,
