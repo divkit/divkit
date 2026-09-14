@@ -19,7 +19,7 @@ extension UIView {
     for animationParam in animationsParams {
       let partialCompletion = accumulator.getPartialCompletion()
       if animated, window != nil {
-        UIView.animate(
+        UIView.animateTransition(
           withDuration: animationParam.duration,
           delay: animationParam.delay,
           options: animationParam.options,
@@ -46,9 +46,11 @@ extension UIView {
       return
     }
 
-    for kind in TransitioningAnimation.Kind.allCases {
-      if let firstOfKind = animations.first(where: { $0.kind == kind }) {
-        setValue(firstOfKind.start, for: kind)
+    UIView.performWithoutAnimation {
+      for kind in TransitioningAnimation.Kind.allCases {
+        if let firstOfKind = animations.first(where: { $0.kind == kind }) {
+          setValue(firstOfKind.start, for: kind)
+        }
       }
     }
     perform(animations, animated: true, completion: completion)
@@ -122,6 +124,55 @@ extension TimingFunction {
     case .easeOut: .curveEaseOut
     case .easeInEaseOut: .curveEaseInOut
     }
+  }
+}
+
+extension UIView {
+  /// Depth of `withoutInheritedAnimation` regions currently on the stack.
+  private static var inheritedAnimationSuppressionDepth = 0
+
+  /// Runs `body` with implicit animations disabled, so that the view changes
+  /// made inside it (a new subtree being built or laid out) do not inherit an
+  /// enclosing `UIView.animate` block. Explicit transition animations started
+  /// inside `body` go through `animateTransition`, which lifts the suppression
+  /// for its own animation only, so nested `div-state` switches and
+  /// `transition_in` of new views keep animating with their own parameters.
+  static func withoutInheritedAnimation(_ body: () -> Void) {
+    guard inheritedAnimationDuration > 0 else {
+      body()
+      return
+    }
+    inheritedAnimationSuppressionDepth += 1
+    defer { inheritedAnimationSuppressionDepth -= 1 }
+    performWithoutAnimation(body)
+  }
+
+  /// `UIView.animate` for an explicit transition: the transition keeps its own
+  /// duration and curve inside a host animation block, and still runs when it
+  /// is started from a `withoutInheritedAnimation` region.
+  static func animateTransition(
+    withDuration duration: TimeInterval,
+    delay: TimeInterval,
+    options: UIView.AnimationOptions,
+    animations: @escaping () -> Void,
+    completion: ((Bool) -> Void)? = nil
+  ) {
+    let liftsSuppression = inheritedAnimationSuppressionDepth > 0 && !areAnimationsEnabled
+    if liftsSuppression {
+      setAnimationsEnabled(true)
+    }
+    defer {
+      if liftsSuppression {
+        setAnimationsEnabled(false)
+      }
+    }
+    animate(
+      withDuration: duration,
+      delay: delay,
+      options: options.union([.overrideInheritedDuration, .overrideInheritedCurve]),
+      animations: animations,
+      completion: completion
+    )
   }
 }
 #endif

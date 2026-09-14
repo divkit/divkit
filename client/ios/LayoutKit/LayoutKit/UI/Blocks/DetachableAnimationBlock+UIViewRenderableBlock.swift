@@ -99,7 +99,20 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
       return
     }
 
-    childView?.frame = bounds
+    // A freshly created child receives its first geometry here. When this happens
+    // inside a host animation block (e.g. a tab bar hide/show animation that
+    // rebinds the card), the frame assignments of the whole new subtree would
+    // inherit that animation and animate from a zero frame. Apply the first
+    // layout without implicit animation; explicit transitions still start
+    // afterwards with their own parameters.
+    if isFirstChildLayout, UIView.inheritedAnimationDuration > 0 {
+      UIView.withoutInheritedAnimation {
+        childView?.frame = bounds
+        childView?.layoutIfNeeded()
+      }
+    } else {
+      childView?.frame = bounds
+    }
     if frame != .zero, isFirstChildLayout {
       isFirstChildLayout = false
       // The appearance animation may have been requested before the first layout pass
@@ -129,6 +142,13 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
 
     let finishFrame = convertFrame(to: container)
 
+    // A zero start frame means the source was never laid out: there is no
+    // geometry to fly from, so apply the change in place.
+    guard startFrame != .zero else {
+      applyChangeBoundsWithoutAnimation()
+      return
+    }
+
     guard finishFrame != startFrame else { return }
 
     self.childView = nil
@@ -145,24 +165,26 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     let transitionChangeAnimationContainer = UIView()
     self.transitionChangeAnimationContainer = transitionChangeAnimationContainer
 
-    transitionChangeAnimationContainer.frame = startFrameInParent
-    transitionChangeAnimationContainer.clipsToBounds = false
-    transitionChangeAnimationContainer.addSubview(childView)
-    // Seed the content with the source size. A layout pass before the animation
-    // may already have sized childView to the destination, which would make the
-    // in-animation size assignment a no-op (position would animate, size would
-    // snap). Starting from the source size gives its bounds a real delta to
-    // interpolate.
-    childView.frame = CGRect(origin: .zero, size: transitionChangeAnimationContainer.bounds.size)
-    self.isHidden = true
+    UIView.performWithoutAnimation {
+      transitionChangeAnimationContainer.frame = startFrameInParent
+      transitionChangeAnimationContainer.clipsToBounds = false
+      transitionChangeAnimationContainer.addSubview(childView)
+      // Seed the content with the source size. A layout pass before the animation
+      // may already have sized childView to the destination, which would make the
+      // in-animation size assignment a no-op (position would animate, size would
+      // snap). Starting from the source size gives its bounds a real delta to
+      // interpolate.
+      childView.frame = CGRect(origin: .zero, size: transitionChangeAnimationContainer.bounds.size)
+      self.isHidden = true
 
-    // Host the flight in the real structural parent at the element's own
-    // z-position, so decorations (action, border, ...) don't clip it while its
-    // sibling z-order is preserved.
-    animationParent.insertSubview(transitionChangeAnimationContainer, aboveSubview: anchorView)
+      // Host the flight in the real structural parent at the element's own
+      // z-position, so decorations (action, border, ...) don't clip it while its
+      // sibling z-order is preserved.
+      animationParent.insertSubview(transitionChangeAnimationContainer, aboveSubview: anchorView)
+    }
     animationParent.layoutIfNeeded()
 
-    UIView.animate(
+    UIView.animateTransition(
       withDuration: animationChange.duration,
       delay: animationChange.delay,
       options: [animationChange.timingFunction.cast()],
@@ -183,14 +205,29 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     )
   }
 
+  /// Consumes the pending change-bounds transition and puts the child at its
+  /// final geometry without a flight. `layoutSubviews` leaves the child alone
+  /// while a change-bounds transition is configured (the flight owns it), so a
+  /// suppressed flight has to settle the child explicitly. The assignment must
+  /// not inherit an ambient animation block either, or the child would fly from
+  /// its bogus frame through the host's animation instead.
+  func applyChangeBoundsWithoutAnimation() {
+    animationChange = nil
+    UIView.performWithoutAnimation {
+      childView?.frame = bounds
+    }
+  }
+
   func removeWithAnimation(in container: UIView) {
     guard let childView else {
       return
     }
 
-    childView.frame = convertFrame(to: container)
-    self.childView = nil
-    container.addSubview(childView)
+    UIView.performWithoutAnimation {
+      childView.frame = convertFrame(to: container)
+      self.childView = nil
+      container.addSubview(childView)
+    }
     childView.setInitialParamsAndAnimate(
       animations: animationOut?.map { animation in
         if animation.kind == .fade {
@@ -211,8 +248,9 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     }
 
     // Don't restart an appearance animation that is already running. A block can be reconfigured
-    // several times in quick succession (e.g. variable-driven rebuilds during initial load); without
-    // this guard the animation gets re-triggered mid-flight, producing a half-appear/hide/appear jank.
+    // several times in quick succession (e.g. variable-driven rebuilds during initial load);
+    // without this guard the animation gets re-triggered mid-flight, producing
+    // a half-appear/hide/appear jank.
     guard !isAnimatingIn else { return }
 
     // Only start once the view is laid out, so the transition is actually visible. addWithAnimation
@@ -266,9 +304,9 @@ final class DetachableAnimationBlockView: BlockView, DelayedVisibilityActionView
     )
     // Preserve a pending appearance animation across reconfigurations. During the first on-screen
     // load the block can be reconfigured several times in quick succession; a reconfigure with
-    // `animationIn == nil` would otherwise overwrite the freshly-attached appearance animation before
-    // it plays, swallowing the first-appearance transition. The play completion clears `animationIn`,
-    // so the animation still runs exactly once.
+    // `animationIn == nil` would otherwise overwrite the freshly-attached appearance animation
+    // before it plays, swallowing the first-appearance transition. The play completion clears
+    // `animationIn`, so the animation still runs exactly once.
     if animationIn != nil {
       self.animationIn = animationIn
     }
