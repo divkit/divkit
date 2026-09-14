@@ -138,6 +138,9 @@ private final class StateBlockView: BlockView {
   private var subviewStorage = SubviewStorage(wrappedRenderingDelegate: nil, ids: [])
   private var childView: BlockView?
   private var stateId: String?
+  private var hasCompletedLayout = false
+  private var hasPendingFirstChildLayout = false
+  private var hasPendingNonAnimatedRelayout = false
 
   private var parentBlock: StateBlock?
   private weak var observer: ElementStateObserver?
@@ -148,6 +151,23 @@ private final class StateBlockView: BlockView {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+    hasCompletedLayout = true
+
+    // See DetachableAnimationBlockView.layoutSubviews: a child view created by a
+    // state switch inside a host animation block must receive its first geometry
+    // without inheriting that animation. The same applies to the relayout that
+    // follows an early layout done with stale bounds (see `configure`).
+    if hasPendingFirstChildLayout || hasPendingNonAnimatedRelayout, bounds != .zero {
+      hasPendingFirstChildLayout = false
+      hasPendingNonAnimatedRelayout = false
+      if UIView.inheritedAnimationDuration > 0 {
+        UIView.withoutInheritedAnimation {
+          childView?.setNonTransformedFrame(bounds)
+          childView?.layoutIfNeeded()
+        }
+        return
+      }
+    }
 
     childView?.setNonTransformedFrame(bounds)
   }
@@ -184,6 +204,11 @@ private final class StateBlockView: BlockView {
       newIds: ids,
       container: self
     )
+    // Change-bounds flights need a real source geometry. Before the first
+    // layout pass, or while detached from a window, the captured frames are
+    // meaningless (zero or stale) and a flight from them starts at the screen
+    // corner. Such state changes are applied in place instead.
+    let canAnimateChangeBounds = window != nil && hasCompletedLayout
 
     let viewsToRemove = subviewStorage.getViewsToRemove(newIds: ids)
     if !viewsToRemove.isEmpty {
@@ -200,15 +225,46 @@ private final class StateBlockView: BlockView {
       ids: ids
     )
 
-    childView = child.reuse(
-      childView,
-      observer: observer,
-      overscrollDelegate: overscrollDelegate,
-      renderingDelegate: subviewStorage,
-      superview: self
-    )
+    // A state switch that runs inside a host animation block (e.g. a tab bar
+    // hide/show animation that rebinds the card) must not let the new subtree
+    // inherit that animation: plain containers created by the switch would
+    // otherwise animate from a zero frame and clip their content. Build and lay
+    // out the new state without implicit animations; the explicit change_bounds
+    // and transition_in animations (including those of nested state switches
+    // built here) still run with their own parameters.
+    let isInsideAmbientAnimation = UIView.inheritedAnimationDuration > 0
+    let previousChildView = childView
+    let reuseChild = {
+      self.childView = child.reuse(
+        self.childView,
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: self.subviewStorage,
+        superview: self
+      )
+    }
+    if isInsideAmbientAnimation {
+      UIView.withoutInheritedAnimation(reuseChild)
+    } else {
+      reuseChild()
+    }
+    if childView !== previousChildView {
+      hasPendingFirstChildLayout = true
+    }
 
     let viewsToAdd = subviewStorage.getViewsToAdd()
+
+    if isInsideAmbientAnimation, window != nil, hasFinalBounds(for: parentBlock) {
+      UIView.withoutInheritedAnimation {
+        forceLayout()
+      }
+      // The parent has not necessarily applied this view's new size yet, so the
+      // layout above may have used stale bounds. When the parent resizes the view
+      // during the same animation, the subtree must follow without inheriting it:
+      // otherwise children sized by the container (e.g. a match_parent button)
+      // would animate from the stale geometry to the right one.
+      hasPendingNonAnimatedRelayout = true
+    }
 
     if viewsToAdd.isEmpty, viewsToTransition.isEmpty {
       setNeedsLayout()
@@ -224,14 +280,41 @@ private final class StateBlockView: BlockView {
         removeViewsWithUnfinishedAnimations()
       }
 
-      changeBoundsWithAnimation(viewsToTransition)
+      if canAnimateChangeBounds {
+        changeBoundsWithAnimation(viewsToTransition)
+      } else {
+        settleWithoutAnimation(viewsToTransition)
+      }
       addWithAnimations(viewsToAdd)
     }
+  }
+
+  // The early, non-animated layout of a switch inside an ambient animation is only
+  // meaningful with the geometry the parent is going to keep. When the new state
+  // changes the intrinsic size, the parent is about to resize this view: laying
+  // out with the current bounds would produce a transient wrong geometry (e.g. a
+  // match_parent child sized by stale bounds) that the following relayout would
+  // animate from. In that case the regular parent-driven layout pass handles the
+  // switch, as it did before the protection existed.
+  private func hasFinalBounds(for block: StateBlock) -> Bool {
+    let width = block.isHorizontallyResizable
+      ? bounds.width
+      : block.widthOfHorizontallyNonResizableBlock
+    let height = block.isVerticallyResizable
+      ? bounds.height
+      : block.heightOfVerticallyNonResizableBlock(forWidth: width)
+    return abs(width - bounds.width) < 0.5 && abs(height - bounds.height) < 0.5
   }
 
   private func addWithAnimations(_ views: [DetachableAnimationBlockView]) {
     for view in views {
       view.addWithAnimation()
+    }
+  }
+
+  private func settleWithoutAnimation(_ views: [SubviewStorage.FrameWithID]) {
+    for (id, _) in views {
+      subviewStorage.getView(id)?.applyChangeBoundsWithoutAnimation()
     }
   }
 
