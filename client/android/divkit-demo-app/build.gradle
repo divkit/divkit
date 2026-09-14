@@ -63,10 +63,6 @@ android {
             kotlin.srcDirs += 'src/screenshotTest/java'
         }
     }
-
-    lint {
-        baseline = file("lint-baseline.xml")
-    }
 }
 
 dependencies {
@@ -92,7 +88,6 @@ dependencies {
     implementation project(path: ':fonts')
     implementation project(path: ':glide')
     implementation project(path: ':logging')
-    implementation project(path: ':picasso')
     implementation project(path: ':screenshot-test-runtime')
     implementation project(path: ':test-utils')
     implementation project(path: ':ui-test-common')

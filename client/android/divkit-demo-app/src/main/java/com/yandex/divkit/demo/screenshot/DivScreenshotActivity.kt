@@ -72,9 +72,8 @@ class DivScreenshotActivity : AppCompatActivity() {
 
     private fun setImageLoader() {
         val loader = when (imageLoaderName) {
-            IMAGE_LOADER_PICASSO -> Preferences.ImageLoaderOption.PICASSO
-            IMAGE_LOADER_GLIDE -> Preferences.ImageLoaderOption.GLIDE
             IMAGE_LOADER_COIL -> Preferences.ImageLoaderOption.COIL
+            IMAGE_LOADER_GLIDE -> Preferences.ImageLoaderOption.GLIDE
             else -> return
         }
         Container.imageLoaderOverride = Container.createImageLoader(loader)
@@ -129,7 +128,6 @@ class DivScreenshotActivity : AppCompatActivity() {
 
         const val SCREENSHOT_VIEW_TAG = "screenshot_view"
 
-        const val IMAGE_LOADER_PICASSO = "picasso"
         const val IMAGE_LOADER_GLIDE = "glide"
         const val IMAGE_LOADER_COIL = "coil"
     }

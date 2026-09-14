@@ -34,7 +34,7 @@ Telegram: [English-speaking chat](https://t.me/divkit_community_en) | [Чат н
 
 ### Build MVP and draw first DivView.
 To get started with drawing your first view, follow these three simple steps:
-- **Initialize the Configuration**: Begin by creating an instance of `DivConfiguration`. The only required parameter is `DivImageLoader`. You have the option to implement your own custom implementation of this interface or use one of our implementations: `PicassoDivImageLoader` or `GlideImageLoader`. For an example of how to create a `DivConfiguration` in our demo app, you can refer to [this link](https://github.com/divkit/divkit/blob/05a420e0861517e68a3fc68c853fb640af092df2/client/android/divkit-demo-app/src/main/java/com/yandex/divkit/demo/div/Div2Activity.kt#L98).
+- **Initialize the Configuration**: Begin by creating an instance of `DivConfiguration`. The only required parameter is `DivImageLoader`. You have the option to implement your own custom implementation of this interface or use one of our implementations: `CoilDivImageLoader` or `GlideDivImageLoader`. For an example of how to create a `DivConfiguration` in our demo app, you can refer to [this link](https://github.com/divkit/divkit/blob/05a420e0861517e68a3fc68c853fb640af092df2/client/android/divkit-demo-app/src/main/java/com/yandex/divkit/demo/div/Div2Activity.kt#L98).
    Each parameter of `DivConfiguration#builder` will be described below.
 - **JSON-layout parsing**: A div-layout comprises two crucial parts: `"templates"` and `"cards"`. In our example, both parts are contained within a single JSON-file. However, in your code, you are free to separate them if it suits your needs. Your card parsing method might resemble something along these lines:
 ```kotlin 

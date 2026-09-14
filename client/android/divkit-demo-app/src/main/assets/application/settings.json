@@ -501,10 +501,10 @@
                   "type": "slider_preset",
                   "id": "slider_default",
                   "min_value": 0,
-                  "max_value": 2,
+                  "max_value": 1,
                   "thumb_value_variable": "image_loader",
                   "accessibility": {
-                    "description": "Min - 0, max - 2"
+                    "description": "Min - 0, max - 1"
                   },
                   "tick_mark_active_style": {
                     "type": "shape_drawable",
@@ -564,15 +564,11 @@
                   "items": [
                     {
                       "type": "settings_item_subtitle",
-                      "text": "Picasso"
+                      "text": "Coil"
                     },
                     {
                       "type": "settings_item_subtitle",
                       "text": "Glide"
-                    },
-                    {
-                      "type": "settings_item_subtitle",
-                      "text": "Coil"
                     }
                   ]
                 }

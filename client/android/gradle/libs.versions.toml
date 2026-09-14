@@ -24,7 +24,6 @@ markwon = "4.6.2"
 metalava = "0.5.0"
 mockito-kotlin = "6.3.0"
 okhttp = "4.12.0"
-picasso = "2.8"
 protobuf = "4.35.1"
 rive = "10.3.1"
 robolectric = "4.16.1"
@@ -156,8 +155,6 @@ nexusPublishPlugin = { module = "io.github.gradle-nexus:publish-plugin", version
 nvWebsocket = { module = "com.neovisionaries:nv-websocket-client", version = "2.14" }
 
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-
-picasso = { module = "com.squareup.picasso:picasso", version.ref = "picasso" }
 
 protobuf = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
 

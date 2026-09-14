@@ -10,7 +10,6 @@ import com.yandex.div.glide.GlideDivImageLoader
 import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.RenderConfiguration
-import com.yandex.div.picasso.PicassoDivImageLoader
 import com.yandex.divkit.demo.div.DemoDivDownloaderWrapper
 import com.yandex.divkit.demo.div.DemoAnimationsEnabledProvider
 import com.yandex.divkit.demo.div.DemoDivImageLoaderWrapper
@@ -86,7 +85,6 @@ internal object Container {
 
     fun createImageLoader(loader: Preferences.ImageLoaderOption): DemoDivImageLoaderWrapper {
         val loader = when (loader) {
-            Preferences.ImageLoaderOption.PICASSO -> PicassoDivImageLoader(context, httpClientBuilder, preferences.limitImageBitmapSizeEnabled)
             Preferences.ImageLoaderOption.GLIDE -> GlideDivImageLoader(context, preferences.limitImageBitmapSizeEnabled)
             Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context, httpClientBuilder, preferences.limitImageBitmapSizeEnabled)
         }

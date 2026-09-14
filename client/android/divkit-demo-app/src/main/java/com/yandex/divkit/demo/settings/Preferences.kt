@@ -6,21 +6,20 @@ import com.yandex.divkit.demo.BuildConfig
 
 class Preferences(context: Context) : DivkitDemoPreferences(context) {
 
-    var enableScanNetworkChanges by BooleanPreference(false)
-
     var nightMode by IntPreference(AppCompatDelegate.MODE_NIGHT_NO)
 
     enum class ImageLoaderOption(val value: Int) {
-        PICASSO(0),
-        GLIDE(1),
-        COIL(2);
+        COIL(0),
+        GLIDE(1);
 
         companion object {
-            fun fromInt(value: Int) = ImageLoaderOption.values().first { it.value == value }
+            fun fromInt(value: Int) = entries.firstOrNull { it.value == value } ?: COIL
         }
     }
 
-    var imageLoader by EnumPreference(ImageLoaderOption.COIL) { ImageLoaderOption.values() }
+    var imageLoader by EnumPreference(ImageLoaderOption.COIL) {
+        ImageLoaderOption.entries.toTypedArray()
+    }
 
     var useBackgroundBinding by BooleanPreference(false)
 
