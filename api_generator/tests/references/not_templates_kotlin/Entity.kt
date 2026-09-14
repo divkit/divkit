@@ -37,6 +37,7 @@ sealed class Entity : JSONSerializable, Hashable {
     private var _propertiesHash: Int? = null 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun propertiesHash(): Int {
         _propertiesHash?.let {
             return it
@@ -66,6 +67,7 @@ sealed class Entity : JSONSerializable, Hashable {
        return propertiesHash
     }
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -95,6 +97,7 @@ sealed class Entity : JSONSerializable, Hashable {
        return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: Entity?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return when(this) {

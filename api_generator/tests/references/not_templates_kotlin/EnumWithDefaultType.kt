@@ -20,6 +20,7 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
     private var _propertiesHash: Int? = null 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun propertiesHash(): Int {
         _propertiesHash?.let {
             return it
@@ -32,6 +33,7 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
        return propertiesHash
     }
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -44,6 +46,7 @@ sealed class EnumWithDefaultType : JSONSerializable, Hashable {
        return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EnumWithDefaultType?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return when(this) {

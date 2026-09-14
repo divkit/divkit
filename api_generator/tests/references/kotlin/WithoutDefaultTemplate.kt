@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class WithoutDefaultTemplate() : JSONSerializable, JsonTemplate<WithoutDefault> {
+class WithoutDefaultTemplate @DivModelInternalApi constructor () : JSONSerializable, JsonTemplate<WithoutDefault> {
 
     constructor(
         env: ParsingEnvironment,
@@ -22,6 +22,7 @@ class WithoutDefaultTemplate() : JSONSerializable, JsonTemplate<WithoutDefault> 
         json: JSONObject
     ) : this()
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): WithoutDefault {
         return WithoutDefault()
     }

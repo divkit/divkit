@@ -82,6 +82,7 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
         }
     }
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): Entity {
         return when (this) {
             is WithArray -> Entity.WithArray(value.resolve(env, data))

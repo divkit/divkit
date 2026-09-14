@@ -42,6 +42,23 @@ TEMPLATE_PARSER_NAME = "TemplateParserImpl"
 TEMPLATE_RESOLVER_NAME = "TemplateResolverImpl"
 
 
+class InternalApiAnnotations:
+    def __init__(self, marker: Optional[str]):
+        self._marker = marker
+
+    @staticmethod
+    def disabled() -> InternalApiAnnotations:
+        return InternalApiAnnotations(None)
+
+    @property
+    def marker(self) -> Optional[str]:
+        return self._marker
+
+
+def internal_api_annotations(annotations: Config.KotlinAnnotations) -> InternalApiAnnotations:
+    return InternalApiAnnotations(annotations.internal_api_marker)
+
+
 def _number_validator_decl(type: str, constraint: Optional[str]) -> Optional[str]:
     if constraint is None:
         return None
@@ -61,6 +78,7 @@ def _kotlin_default_value_declaration_comment(p: Property) -> str:
 
 class KotlinEntity(Entity):
     errors_collector_enabled: bool = False
+    internal_api: InternalApiAnnotations = InternalApiAnnotations.disabled()
 
     def update_bases(self):
         Int.__bases__ = (KotlinPropertyType, PropertyType,)
@@ -132,6 +150,9 @@ class KotlinEntity(Entity):
     def eval_errors_collector_enabled(self, errors_collectors: List[str]):
         self.errors_collector_enabled = not self.generation_mode.is_template and self.original_name in errors_collectors
 
+    def eval_internal_api(self, kotlin_annotations: Config.KotlinAnnotations):
+        self.internal_api = internal_api_annotations(kotlin_annotations)
+
     def constructor_body(self, with_commas: bool, extra_properties: List[str] = None) -> Text:
         if extra_properties is None:
             extra_properties = []
@@ -150,8 +171,11 @@ class KotlinEntity(Entity):
         return result
 
     def value_resolving_declaration(self, generate_serializers: bool) -> Text:
+        result = Text()
+        if self.internal_api.marker:
+            result += self.internal_api.marker
         args = 'env: ParsingEnvironment, data: JSONObject'
-        result = Text(f'override fun resolve({args}): {self.resolved_prefixed_declaration} {{')
+        result += f'override fun resolve({args}): {self.resolved_prefixed_declaration} {{'
 
         if generate_serializers:
             result += f'    return builtInParserComponent.{self.template_resolver_name_declaration}'
@@ -241,9 +265,11 @@ class KotlinEntity(Entity):
             return text
 
         constructor_prefix = ''
-        if kotlin_annotations.constructors:
-            constructor_annotations = ', '.join(kotlin_annotations.constructors)
-            constructor_prefix = f' {constructor_annotations} constructor '
+        constructor_annotations = list(kotlin_annotations.constructors)
+        if self.internal_api.marker:
+            constructor_annotations.append(self.internal_api.marker)
+        if constructor_annotations:
+            constructor_prefix = f' {" ".join(constructor_annotations)} constructor '
         if not self.instance_properties:
             result += f'{prefix}{constructor_prefix}(){suffix}'
         else:
@@ -661,6 +687,8 @@ class KotlinEntity(Entity):
     @property
     def copy_declaration(self) -> Text:
         result = EMPTY
+        if self.internal_api.marker:
+            result += f'    {self.internal_api.marker}'
         decl = '    fun copy('
 
         method_params: List[str] = []
@@ -731,6 +759,8 @@ class KotlinEntity(Entity):
         result += '    private var _hash: Int? = null '
         if generate_properties:
             result += EMPTY
+            if self.internal_api.marker:
+                result += f'    {self.internal_api.marker}'
             result += '    override fun propertiesHash(): Int {'
             result += '        _propertiesHash?.let {'
             result += '            return it'
@@ -746,6 +776,8 @@ class KotlinEntity(Entity):
             result += '        return propertiesHash'
             result += '    }'
         result += EMPTY
+        if self.internal_api.marker:
+            result += f'    {self.internal_api.marker}'
         result += '    override fun hash(): Int {'
         result += '        _hash?.let {'
         result += '            return it'
@@ -774,6 +806,8 @@ class KotlinEntity(Entity):
         result += '    }'
         if with_calculation_flag:
             result += EMPTY
+            if self.internal_api.marker:
+                result += f'    {self.internal_api.marker}'
             result += '    fun isHashCalculated() = _hash != null'
         return result
 
@@ -808,6 +842,8 @@ class KotlinEntity(Entity):
             prop_filter.append('states')
 
         result = EMPTY
+        if self.internal_api.marker:
+            result += f'    {self.internal_api.marker}'
         result += f'    fun equals(other: {utils.capitalize_camel_case(self.name)}?, ' +\
                   'resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {'
 

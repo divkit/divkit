@@ -63,6 +63,7 @@ class Config:
             self.classes: List[str] = dictionary.get('classes') or []
             self.constructors: List[str] = dictionary.get('constructors') or []
             self.top_level_definitions: List[str] = dictionary.get('topLevelDefinitions') or []
+            self.internal_api_marker: Optional[str] = dictionary.get('internalApiMarker')
 
     class GenerationConfig:
         def __init__(self, dictionary):

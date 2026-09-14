@@ -13,13 +13,14 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayOfEnums(
+class EntityWithArrayOfEnums @DivModelInternalApi constructor (
     @JvmField val items: List<Item>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
     private var _propertiesHash: Int? = null 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun propertiesHash(): Int {
         _propertiesHash?.let {
             return it
@@ -29,6 +30,7 @@ class EntityWithArrayOfEnums(
         return propertiesHash
     }
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -40,11 +42,13 @@ class EntityWithArrayOfEnums(
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithArrayOfEnums?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return items.compareWith(other.items) { a, b -> a == b }
     }
 
+    @DivModelInternalApi
     fun copy(
         items: List<Item> = this.items,
     ) = EntityWithArrayOfEnums(
@@ -79,6 +83,7 @@ class EntityWithArrayOfEnums(
         FIRST("first"),
         SECOND("second");
 
+        @DivModelInternalApi
         companion object Converter {
 
             fun toString(obj: Item): String {

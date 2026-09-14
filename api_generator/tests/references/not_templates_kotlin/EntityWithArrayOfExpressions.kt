@@ -13,13 +13,14 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayOfExpressions(
+class EntityWithArrayOfExpressions @DivModelInternalApi constructor (
     @JvmField val items: ExpressionList<String>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
     private var _propertiesHash: Int? = null 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun propertiesHash(): Int {
         _propertiesHash?.let {
             return it
@@ -29,6 +30,7 @@ class EntityWithArrayOfExpressions(
         return propertiesHash
     }
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -40,11 +42,13 @@ class EntityWithArrayOfExpressions(
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithArrayOfExpressions?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return items.evaluate(resolver).compareWith(other.items.evaluate(otherResolver)) { a, b -> a == b }
     }
 
+    @DivModelInternalApi
     fun copy(
         items: ExpressionList<String> = this.items,
     ) = EntityWithArrayOfExpressions(

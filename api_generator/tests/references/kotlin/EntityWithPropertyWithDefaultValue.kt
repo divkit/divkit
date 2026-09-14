@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithPropertyWithDefaultValue(
+class EntityWithPropertyWithDefaultValue @DivModelInternalApi constructor (
     @JvmField val colorAarrggbb: Expression<Int> = COLOR_AARRGGBB_DEFAULT_VALUE, // default value: #80ff0000
     @JvmField val colorRrggbb: Expression<Int> = COLOR_RRGGBB_DEFAULT_VALUE, // default value: #ff0000
     @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
@@ -23,6 +23,7 @@ class EntityWithPropertyWithDefaultValue(
 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -38,6 +39,7 @@ class EntityWithPropertyWithDefaultValue(
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return colorAarrggbb.evaluate(resolver) == other.colorAarrggbb.evaluate(otherResolver) &&
@@ -47,6 +49,7 @@ class EntityWithPropertyWithDefaultValue(
             url.evaluate(resolver) == other.url.evaluate(otherResolver)
     }
 
+    @DivModelInternalApi
     fun copy(
         colorAarrggbb: Expression<Int> = this.colorAarrggbb,
         colorRrggbb: Expression<Int> = this.colorRrggbb,
@@ -99,7 +102,7 @@ class EntityWithPropertyWithDefaultValue(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValue(env, json = it) }
     }
 
-    class Nested(
+    class Nested @DivModelInternalApi constructor (
         @JvmField val int: Expression<Long> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
         @JvmField val nonOptional: Expression<String>,
         @JvmField val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
@@ -107,6 +110,7 @@ class EntityWithPropertyWithDefaultValue(
 
         private var _hash: Int? = null 
 
+        @DivModelInternalApi
         override fun hash(): Int {
             _hash?.let {
                 return it
@@ -120,6 +124,7 @@ class EntityWithPropertyWithDefaultValue(
             return hash
         }
 
+        @DivModelInternalApi
         fun equals(other: Nested?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
             other ?: return false
             return int.evaluate(resolver) == other.int.evaluate(otherResolver) &&
@@ -127,6 +132,7 @@ class EntityWithPropertyWithDefaultValue(
                 url.evaluate(resolver) == other.url.evaluate(otherResolver)
         }
 
+        @DivModelInternalApi
         fun copy(
             int: Expression<Long> = this.int,
             nonOptional: Expression<String> = this.nonOptional,

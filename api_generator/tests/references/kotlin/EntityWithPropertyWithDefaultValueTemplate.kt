@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithPropertyWithDefaultValueTemplate(
+class EntityWithPropertyWithDefaultValueTemplate @DivModelInternalApi constructor (
     @JvmField val colorAarrggbb: Field<Expression<Int>>,
     @JvmField val colorRrggbb: Field<Expression<Int>>,
     @JvmField val int: Field<Expression<Long>>,
@@ -34,6 +34,7 @@ class EntityWithPropertyWithDefaultValueTemplate(
         url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_URI)
     )
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue {
         return EntityWithPropertyWithDefaultValue(
             colorAarrggbb = this.colorAarrggbb.resolveOptional(env = env, key = "color_aarrggbb", data = data, reader = COLOR_AARRGGBB_READER) ?: COLOR_AARRGGBB_DEFAULT_VALUE,
@@ -78,7 +79,7 @@ class EntityWithPropertyWithDefaultValueTemplate(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValueTemplate(env, json = it) }
     }
 
-    class NestedTemplate(
+    class NestedTemplate @DivModelInternalApi constructor (
         @JvmField val int: Field<Expression<Long>>,
         @JvmField val nonOptional: Field<Expression<String>>,
         @JvmField val url: Field<Expression<Uri>>,
@@ -95,6 +96,7 @@ class EntityWithPropertyWithDefaultValueTemplate(
             url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, URL_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_URI)
         )
 
+        @DivModelInternalApi
         override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithPropertyWithDefaultValue.Nested {
             return EntityWithPropertyWithDefaultValue.Nested(
                 int = this.int.resolveOptional(env = env, key = "int", data = data, reader = INT_READER) ?: INT_DEFAULT_VALUE,

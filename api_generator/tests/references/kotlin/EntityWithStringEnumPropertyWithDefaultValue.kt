@@ -13,12 +13,13 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithStringEnumPropertyWithDefaultValue(
+class EntityWithStringEnumPropertyWithDefaultValue @DivModelInternalApi constructor (
     @JvmField val value: Expression<Value> = VALUE_DEFAULT_VALUE, // default value: second
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -30,11 +31,13 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithStringEnumPropertyWithDefaultValue?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return value.evaluate(resolver) == other.value.evaluate(otherResolver)
     }
 
+    @DivModelInternalApi
     fun copy(
         value: Expression<Value> = this.value,
     ) = EntityWithStringEnumPropertyWithDefaultValue(
@@ -72,6 +75,7 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         SECOND("second"),
         THIRD("third");
 
+        @DivModelInternalApi
         companion object Converter {
 
             fun toString(obj: Value): String {

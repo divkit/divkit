@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithSimplePropertiesTemplate(
+class EntityWithSimplePropertiesTemplate @DivModelInternalApi constructor (
     @JvmField val boolean: Field<Expression<Boolean>>,
     @JvmField val booleanInt: Field<Expression<Boolean>>,
     @JvmField val color: Field<Expression<Int>>,
@@ -42,6 +42,7 @@ class EntityWithSimplePropertiesTemplate(
         url = JsonTemplateParser.readOptionalFieldWithExpression(json, "url", topLevel, parent?.url, ANY_TO_URI, env.logger, env, TYPE_HELPER_URI)
     )
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithSimpleProperties {
         return EntityWithSimpleProperties(
             boolean = this.boolean.resolveOptional(env = env, key = "boolean", data = data, reader = BOOLEAN_READER),

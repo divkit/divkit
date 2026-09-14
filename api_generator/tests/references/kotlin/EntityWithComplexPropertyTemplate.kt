@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithComplexPropertyTemplate(
+class EntityWithComplexPropertyTemplate @DivModelInternalApi constructor (
     @JvmField val property: Field<ComplexPropertyTemplate>,
 ) : JSONSerializable, JsonTemplate<EntityWithComplexProperty> {
 
@@ -26,6 +26,7 @@ class EntityWithComplexPropertyTemplate(
         property = JsonTemplateParser.readField(json, "property", topLevel, parent?.property, ComplexPropertyTemplate.CREATOR, env.logger, env)
     )
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty {
         return EntityWithComplexProperty(
             property = this.property.resolveTemplate(env = env, key = "property", data = data, reader = PROPERTY_READER)
@@ -48,7 +49,7 @@ class EntityWithComplexPropertyTemplate(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyTemplate(env, json = it) }
     }
 
-    class ComplexPropertyTemplate(
+    class ComplexPropertyTemplate @DivModelInternalApi constructor (
         @JvmField val value: Field<Expression<Uri>>,
     ) : JSONSerializable, JsonTemplate<EntityWithComplexProperty.ComplexProperty> {
 
@@ -61,6 +62,7 @@ class EntityWithComplexPropertyTemplate(
             value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, ANY_TO_URI, env.logger, env, TYPE_HELPER_URI)
         )
 
+        @DivModelInternalApi
         override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexProperty.ComplexProperty {
             return EntityWithComplexProperty.ComplexProperty(
                 value = this.value.resolve(env = env, key = "value", data = data, reader = VALUE_READER)

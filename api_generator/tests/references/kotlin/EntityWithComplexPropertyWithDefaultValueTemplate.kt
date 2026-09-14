@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithComplexPropertyWithDefaultValueTemplate(
+class EntityWithComplexPropertyWithDefaultValueTemplate @DivModelInternalApi constructor (
     @JvmField val property: Field<ComplexPropertyTemplate>,
 ) : JSONSerializable, JsonTemplate<EntityWithComplexPropertyWithDefaultValue> {
 
@@ -26,6 +26,7 @@ class EntityWithComplexPropertyWithDefaultValueTemplate(
         property = JsonTemplateParser.readOptionalField(json, "property", topLevel, parent?.property, ComplexPropertyTemplate.CREATOR, env.logger, env)
     )
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexPropertyWithDefaultValue {
         return EntityWithComplexPropertyWithDefaultValue(
             property = this.property.resolveOptionalTemplate(env = env, key = "property", data = data, reader = PROPERTY_READER) ?: PROPERTY_DEFAULT_VALUE
@@ -50,7 +51,7 @@ class EntityWithComplexPropertyWithDefaultValueTemplate(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyWithDefaultValueTemplate(env, json = it) }
     }
 
-    class ComplexPropertyTemplate(
+    class ComplexPropertyTemplate @DivModelInternalApi constructor (
         @JvmField val value: Field<Expression<String>>,
     ) : JSONSerializable, JsonTemplate<EntityWithComplexPropertyWithDefaultValue.ComplexProperty> {
 
@@ -63,6 +64,7 @@ class EntityWithComplexPropertyWithDefaultValueTemplate(
             value = JsonTemplateParser.readFieldWithExpression(json, "value", topLevel, parent?.value, env.logger, env, TYPE_HELPER_STRING)
         )
 
+        @DivModelInternalApi
         override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithComplexPropertyWithDefaultValue.ComplexProperty {
             return EntityWithComplexPropertyWithDefaultValue.ComplexProperty(
                 value = this.value.resolve(env = env, key = "value", data = data, reader = VALUE_READER)

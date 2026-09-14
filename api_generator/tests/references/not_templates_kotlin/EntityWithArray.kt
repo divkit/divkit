@@ -13,12 +13,13 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArray(
+class EntityWithArray @DivModelInternalApi constructor (
     @JvmField val array: List<Entity>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -30,11 +31,13 @@ class EntityWithArray(
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithArray?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return array.compareWith(other.array) { a, b -> a.equals(b, resolver, otherResolver) }
     }
 
+    @DivModelInternalApi
     fun copy(
         array: List<Entity> = this.array,
     ) = EntityWithArray(

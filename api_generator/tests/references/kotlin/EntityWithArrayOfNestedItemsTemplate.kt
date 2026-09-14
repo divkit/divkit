@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayOfNestedItemsTemplate(
+class EntityWithArrayOfNestedItemsTemplate @DivModelInternalApi constructor (
     @JvmField val items: Field<List<ItemTemplate>>,
 ) : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems> {
 
@@ -26,6 +26,7 @@ class EntityWithArrayOfNestedItemsTemplate(
         items = JsonTemplateParser.readListField(json, "items", topLevel, parent?.items, ItemTemplate.CREATOR, ITEMS_TEMPLATE_VALIDATOR, env.logger, env)
     )
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfNestedItems {
         return EntityWithArrayOfNestedItems(
             items = this.items.resolveTemplateList(env = env, key = "items", data = data, ITEMS_VALIDATOR, reader = ITEMS_READER)
@@ -51,7 +52,7 @@ class EntityWithArrayOfNestedItemsTemplate(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItemsTemplate(env, json = it) }
     }
 
-    class ItemTemplate(
+    class ItemTemplate @DivModelInternalApi constructor (
         @JvmField val entity: Field<EntityTemplate>,
         @JvmField val property: Field<Expression<String>>,
     ) : JSONSerializable, JsonTemplate<EntityWithArrayOfNestedItems.Item> {
@@ -66,6 +67,7 @@ class EntityWithArrayOfNestedItemsTemplate(
             property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, env.logger, env, TYPE_HELPER_STRING)
         )
 
+        @DivModelInternalApi
         override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayOfNestedItems.Item {
             return EntityWithArrayOfNestedItems.Item(
                 entity = this.entity.resolveTemplate(env = env, key = "entity", data = data, reader = ENTITY_READER),

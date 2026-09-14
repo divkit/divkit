@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithStringEnumPropertyWithDefaultValueTemplate(
+class EntityWithStringEnumPropertyWithDefaultValueTemplate @DivModelInternalApi constructor (
     @JvmField val value: Field<Expression<EntityWithStringEnumPropertyWithDefaultValue.Value>>,
 ) : JSONSerializable, JsonTemplate<EntityWithStringEnumPropertyWithDefaultValue> {
 
@@ -26,6 +26,7 @@ class EntityWithStringEnumPropertyWithDefaultValueTemplate(
         value = JsonTemplateParser.readOptionalFieldWithExpression(json, "value", topLevel, parent?.value, EntityWithStringEnumPropertyWithDefaultValue.Value.FROM_STRING, env.logger, env, TYPE_HELPER_VALUE)
     )
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStringEnumPropertyWithDefaultValue {
         return EntityWithStringEnumPropertyWithDefaultValue(
             value = this.value.resolveOptional(env = env, key = "value", data = data, reader = VALUE_READER) ?: VALUE_DEFAULT_VALUE

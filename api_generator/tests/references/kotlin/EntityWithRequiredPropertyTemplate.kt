@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithRequiredPropertyTemplate(
+class EntityWithRequiredPropertyTemplate @DivModelInternalApi constructor (
     @JvmField val property: Field<Expression<String>>,
 ) : JSONSerializable, JsonTemplate<EntityWithRequiredProperty> {
 
@@ -26,6 +26,7 @@ class EntityWithRequiredPropertyTemplate(
         property = JsonTemplateParser.readFieldWithExpression(json, "property", topLevel, parent?.property, PROPERTY_TEMPLATE_VALIDATOR, env.logger, env, TYPE_HELPER_STRING)
     )
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithRequiredProperty {
         return EntityWithRequiredProperty(
             property = this.property.resolve(env = env, key = "property", data = data, reader = PROPERTY_READER)

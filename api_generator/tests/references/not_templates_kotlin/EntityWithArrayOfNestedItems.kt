@@ -13,13 +13,14 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithArrayOfNestedItems(
+class EntityWithArrayOfNestedItems @DivModelInternalApi constructor (
     @JvmField val items: List<Item>, // at least 1 elements
 ) : JSONSerializable, Hashable {
 
     private var _propertiesHash: Int? = null 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun propertiesHash(): Int {
         _propertiesHash?.let {
             return it
@@ -29,6 +30,7 @@ class EntityWithArrayOfNestedItems(
         return propertiesHash
     }
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -40,11 +42,13 @@ class EntityWithArrayOfNestedItems(
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithArrayOfNestedItems?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return items.compareWith(other.items) { a, b -> a.equals(b, resolver, otherResolver) }
     }
 
+    @DivModelInternalApi
     fun copy(
         items: List<Item> = this.items,
     ) = EntityWithArrayOfNestedItems(
@@ -75,13 +79,14 @@ class EntityWithArrayOfNestedItems(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayOfNestedItems(env, json = it) }
     }
 
-    class Item(
+    class Item @DivModelInternalApi constructor (
         @JvmField val entity: Entity,
         @JvmField val property: Expression<String>,
     ) : JSONSerializable, Hashable {
 
         private var _hash: Int? = null 
 
+        @DivModelInternalApi
         override fun hash(): Int {
             _hash?.let {
                 return it
@@ -94,12 +99,14 @@ class EntityWithArrayOfNestedItems(
             return hash
         }
 
+        @DivModelInternalApi
         fun equals(other: Item?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
             other ?: return false
             return entity.equals(other.entity, resolver, otherResolver) &&
                 property.evaluate(resolver) == other.property.evaluate(otherResolver)
         }
 
+        @DivModelInternalApi
         fun copy(
             entity: Entity = this.entity,
             property: Expression<String> = this.property,

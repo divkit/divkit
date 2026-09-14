@@ -31,6 +31,7 @@ sealed class EnumWithDefaultTypeTemplate : JSONSerializable, JsonTemplate<EnumWi
         }
     }
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EnumWithDefaultType {
         return when (this) {
             is WithDefaultCase -> EnumWithDefaultType.WithDefaultCase(value.resolve(env, data))

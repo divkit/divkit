@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithRawArrayTemplate(
+class EntityWithRawArrayTemplate @DivModelInternalApi constructor (
     @JvmField val array: Field<Expression<JSONArray>>,
 ) : JSONSerializable, JsonTemplate<EntityWithRawArray> {
 
@@ -26,6 +26,7 @@ class EntityWithRawArrayTemplate(
         array = JsonTemplateParser.readFieldWithExpression(json, "array", topLevel, parent?.array, env.logger, env, TYPE_HELPER_JSON_ARRAY)
     )
 
+    @DivModelInternalApi
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithRawArray {
         return EntityWithRawArray(
             array = this.array.resolve(env = env, key = "array", data = data, reader = ARRAY_READER)

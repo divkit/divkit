@@ -13,10 +13,11 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class WithoutDefault() : JSONSerializable, Hashable {
+class WithoutDefault @DivModelInternalApi constructor () : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -26,10 +27,12 @@ class WithoutDefault() : JSONSerializable, Hashable {
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: WithoutDefault?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         return other != null
     }
 
+    @DivModelInternalApi
     fun copy() = WithoutDefault()
 
     override fun writeToJSON(): JSONObject {

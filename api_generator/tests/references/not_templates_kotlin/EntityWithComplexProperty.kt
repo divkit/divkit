@@ -13,12 +13,13 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithComplexProperty(
+class EntityWithComplexProperty @DivModelInternalApi constructor (
     @JvmField val property: ComplexProperty,
 ) : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -30,11 +31,13 @@ class EntityWithComplexProperty(
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithComplexProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return property.equals(other.property, resolver, otherResolver)
     }
 
+    @DivModelInternalApi
     fun copy(
         property: ComplexProperty = this.property,
     ) = EntityWithComplexProperty(
@@ -63,12 +66,13 @@ class EntityWithComplexProperty(
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexProperty(env, json = it) }
     }
 
-    class ComplexProperty(
+    class ComplexProperty @DivModelInternalApi constructor (
         @JvmField val value: Expression<Uri>,
     ) : JSONSerializable, Hashable {
 
         private var _hash: Int? = null 
 
+        @DivModelInternalApi
         override fun hash(): Int {
             _hash?.let {
                 return it
@@ -80,11 +84,13 @@ class EntityWithComplexProperty(
             return hash
         }
 
+        @DivModelInternalApi
         fun equals(other: ComplexProperty?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
             other ?: return false
             return value.evaluate(resolver) == other.value.evaluate(otherResolver)
         }
 
+        @DivModelInternalApi
         fun copy(
             value: Expression<Uri> = this.value,
         ) = ComplexProperty(

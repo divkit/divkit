@@ -13,7 +13,7 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithSimpleProperties(
+class EntityWithSimpleProperties @DivModelInternalApi constructor (
     @JvmField val boolean: Expression<Boolean>? = null,
     @JvmField val booleanInt: Expression<Boolean>? = null,
     @JvmField val color: Expression<Int>? = null,
@@ -27,6 +27,7 @@ class EntityWithSimpleProperties(
 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -46,6 +47,7 @@ class EntityWithSimpleProperties(
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithSimpleProperties?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         other ?: return false
         return boolean?.evaluate(resolver) == other.boolean?.evaluate(otherResolver) &&
@@ -59,6 +61,7 @@ class EntityWithSimpleProperties(
             url?.evaluate(resolver) == other.url?.evaluate(otherResolver)
     }
 
+    @DivModelInternalApi
     fun copy(
         boolean: Expression<Boolean>? = this.boolean,
         booleanInt: Expression<Boolean>? = this.booleanInt,

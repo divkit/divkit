@@ -13,10 +13,11 @@ import com.yandex.div.json.schema.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-class EntityWithoutProperties() : JSONSerializable, Hashable {
+class EntityWithoutProperties @DivModelInternalApi constructor () : JSONSerializable, Hashable {
 
     private var _hash: Int? = null 
 
+    @DivModelInternalApi
     override fun hash(): Int {
         _hash?.let {
             return it
@@ -26,10 +27,12 @@ class EntityWithoutProperties() : JSONSerializable, Hashable {
         return hash
     }
 
+    @DivModelInternalApi
     fun equals(other: EntityWithoutProperties?, resolver: ExpressionResolver, otherResolver: ExpressionResolver): Boolean {
         return other != null
     }
 
+    @DivModelInternalApi
     fun copy() = EntityWithoutProperties()
 
     override fun writeToJSON(): JSONObject {

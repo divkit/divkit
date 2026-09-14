@@ -4,6 +4,8 @@ import os.path
 from .kotlin_entities import (
     KotlinEntity,
     KotlinEntityEnumeration,
+    InternalApiAnnotations,
+    internal_api_annotations,
     ENTITY_STATIC_CREATOR,
     ENTITY_PARSER_NAME,
     TEMPLATE_PARSER_NAME,
@@ -31,7 +33,7 @@ class KotlinGenerator(Generator):
         self.generate_serializers = config.generation.generate_serializers
         self._entity_generator = KotlinEntityGenerator(self)
         self._entity_template_generator = KotlinEntityTemplateGenerator(self)
-        self._string_enumeration_generator = KotlinStringEnumerationGenerator()
+        self._string_enumeration_generator = KotlinStringEnumerationGenerator(self)
         self._serializer_generator = KotlinSerializerGenerator(self)
 
     def generate(self, objects: List[Declarable]):
@@ -87,6 +89,7 @@ class KotlinGenerator(Generator):
         entity.__class__ = KotlinEntity
 
         entity.eval_errors_collector_enabled(self._error_collectors)
+        entity.eval_internal_api(self.kotlin_annotations)
         entity.update_bases()
 
         if entity.generation_mode.is_template:
@@ -162,6 +165,7 @@ class KotlinEntityGenerator:
         declaration_name = utils.capitalize_camel_case(entity_enumeration.name)
         entity_declarations = list(map(utils.capitalize_camel_case, entity_enumeration.entity_names))
         default_entity_decl = utils.capitalize_camel_case(str(entity_enumeration.default_entity_declaration))
+        internal_api = internal_api_annotations(self._kotlin_annotations)
         result = Text()
 
         for annotation in self._kotlin_annotations.classes:
@@ -186,11 +190,13 @@ class KotlinEntityGenerator:
             result += f'    private var _{hash_type}: Int? = null '
         for hash_type in hash_types:
             result += EMPTY
-            result += self._hash_enumeration_declaration(entity_enumeration, entity_declarations, hash_type)
+            result += self._hash_enumeration_declaration(entity_enumeration, entity_declarations, hash_type, internal_api)
         result += EMPTY
-        result += self._equals_resolved_enumeration_declaration(entity_enumeration, entity_declarations)
+        result += self._equals_resolved_enumeration_declaration(entity_enumeration, entity_declarations, internal_api)
         if self._generate_equality:
             result += EMPTY
+            if internal_api.marker:
+                result += f'    {internal_api.marker}'
             result += '    fun isHashCalculated() = _hash != null'
 
         result += EMPTY
@@ -290,9 +296,12 @@ class KotlinEntityGenerator:
     def _hash_enumeration_declaration(
             entity_enumeration: KotlinEntityEnumeration,
             entity_declarations: List[str],
-            hash_type: str
+            hash_type: str,
+            internal_api: InternalApiAnnotations
     ) -> Text:
         result = Text()
+        if internal_api.marker:
+            result += f'    {internal_api.marker}'
         result += f'    override fun {hash_type}(): Int {{'
         result += f'        _{hash_type}?.let {{'
         result += '            return it'
@@ -310,10 +319,13 @@ class KotlinEntityGenerator:
     @staticmethod
     def _equals_resolved_enumeration_declaration(
             entity_enumeration: KotlinEntityEnumeration,
-            entity_declarations: List[str]
+            entity_declarations: List[str],
+            internal_api: InternalApiAnnotations
     ) -> Text:
         result = Text()
         name = utils.capitalize_camel_case(entity_enumeration.name)
+        if internal_api.marker:
+            result += f'    {internal_api.marker}'
         result += f'    fun equals(other: {name}?, resolver: ExpressionResolver, otherResolver: ExpressionResolver)' +\
                   ': Boolean {'
         result += '        other ?: return false'
@@ -387,6 +399,7 @@ class KotlinEntityTemplateGenerator:
         declaration_name = utils.capitalize_camel_case(entity_enumeration.name)
         entity_declarations = list(map(utils.capitalize_camel_case, entity_enumeration.entity_names))
         default_entity_decl = utils.capitalize_camel_case(str(entity_enumeration.default_entity_declaration))
+        internal_api = internal_api_annotations(self._kotlin_annotations)
         result = Text()
 
         for annotation in self._kotlin_annotations.classes:
@@ -433,6 +446,8 @@ class KotlinEntityTemplateGenerator:
 
         self_name = entity_enumeration.resolved_prefixed_declaration
         result += EMPTY
+        if internal_api.marker:
+            result += f'    {internal_api.marker}'
         result += f'    override fun resolve(env: ParsingEnvironment, data: JSONObject): {self_name} {{'
         if self._generate_serializers:
             resolver_name = entity_enumeration.template_resolver_name_declaration
@@ -506,18 +521,27 @@ class KotlinEntityTemplateGenerator:
 
 
 class KotlinStringEnumerationGenerator:
+    def __init__(self, generator: KotlinGenerator):
+        self._kotlin_annotations = generator.kotlin_annotations
+
     def string_enumeration_declaration(self, string_enumeration: StringEnumeration) -> Text:
         declaration_name = utils.capitalize_camel_case(string_enumeration.name)
         cases_declarations = list(map(lambda s: Text(indent_width=16, init_lines=f'{s}.value -> {s}'),
                                       map(lambda s: utils.fixing_first_digit(utils.constant_upper_case(s[0])),
                                           string_enumeration.cases)))
-        result = Text(f'enum class {declaration_name}(private val value: String) {{')
+
+        internal_api = internal_api_annotations(self._kotlin_annotations)
+
+        result = Text()
+        result += f'enum class {declaration_name}(private val value: String) {{'
         for ind, case in enumerate(string_enumeration.cases):
             terminal = ',' if ind != (len(cases_declarations) - 1) else ';'
             name = utils.fixing_first_digit(utils.constant_upper_case(case[0]))
             value = case[1]
             result += Text(indent_width=4, init_lines=f'{name}("{value}"){terminal}')
         result += EMPTY
+        if internal_api.marker:
+            result += f'    {internal_api.marker}'
         result += '    companion object Converter {'
         result += EMPTY
         result += f'        fun toString(obj: {declaration_name}): String {{'
