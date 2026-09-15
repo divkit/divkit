@@ -20,11 +20,8 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.images.ImageLoaderConfiguration
-import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.coil.GifDecoderFactory
-import com.yandex.div.video.m3.ExoDivPlayerFactory
-import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import com.yandex.divkit.regression.utils.AssetReader
@@ -39,7 +36,6 @@ adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.D
 class DivComposeScreenshotActivity : ComponentActivity() {
 
     private lateinit var divContext: DivContext
-    private lateinit var data: DivData
 
     val imageLoadingTracker = ComposeImageLoadingTracker()
     val composeIdlingTracker = ComposeSnapshotIdlingResource()
@@ -55,13 +51,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
                 imageLoaderConfiguration = TestImageLoaderConfiguration(
                     eventListener = imageLoadingTracker
                 ),
-                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(this)),
                 reporter = FailingReporter(),
-                extensionHandlers = mapOf(
-                    // Compose has no markdown extension; this stand-in makes the shared
-                    // markdown is_enabled case visible on Compose (red when applied).
-                    "markdown" to TestSolidBackgroundComposeExtensionHandler(),
-                ),
             )
         )
 
@@ -76,7 +66,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         val environment = DivParsingEnvironment(configuration.parsingErrorLogger).apply {
             if (templatesJson != null) parseTemplates(templatesJson)
         }
-        data = DivData(environment, json.getJSONObject("card"))
+        val data = DivData(environment, json.getJSONObject("card"))
 
         val view = ComposeView(divContext).apply {
             tag = SCREENSHOT_VIEW_TAG
@@ -92,12 +82,6 @@ class DivComposeScreenshotActivity : ComponentActivity() {
                 addView(view)
             }
         )
-    }
-
-    fun performActions(actions: List<DivAction>) {
-        actions.forEach {
-            divContext.debugFeatures.performAction(data = data, action = it)
-        }
     }
 
     override fun onDestroy() {
