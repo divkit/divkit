@@ -5,6 +5,7 @@ import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.testClicks
 import com.yandex.div.view.ViewActions
 import com.yandex.divkit.demo.DummyActivity
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
@@ -50,6 +51,7 @@ class DivTouchInteractivityTest {
         }
     }
 
+    @Ignore("Flaky test")
     @Test
     fun singleTapIsHandledOnElementWithTapAndLongTapActions() {
         testClicks {

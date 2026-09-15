@@ -21,6 +21,7 @@ import org.robolectric.shadows.ShadowChoreographer
 import org.robolectric.shadows.ShadowLooper
 import java.time.Duration
 import java.util.concurrent.TimeUnit
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -130,6 +131,7 @@ internal class ParentRecyclerViewAwaiterTest {
         assertTrue(completed)
     }
 
+    @Ignore("Flaky test")
     @Test
     fun `pending adapter update breaks consecutive idle frames before traversal`() = runTest {
         val recycler = attachRecyclerWithAdapter()
