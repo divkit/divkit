@@ -2,6 +2,10 @@ import React from 'react';
 import { render as clientRender } from '@divkitframework/divkit/client-hydratable';
 import type { DivKitHandle, DivKitProps } from '../typings/divkit';
 
+// Must be a stable reference: React compares props by identity and re-applies
+// `dangerouslySetInnerHTML` on every update, wiping the DOM rendered by DivKit.
+const EMPTY_HTML = { __html: '' };
+
 export const DivKit = React.forwardRef<DivKitHandle, DivKitProps>(function DivKit(props, ref) {
     const containerRef = React.useRef<HTMLDivElement>(null);
     const instanceRef = React.useRef<ReturnType<typeof clientRender> | null>(null);
@@ -41,5 +45,5 @@ export const DivKit = React.forwardRef<DivKitHandle, DivKitProps>(function DivKi
         };
     }, [id, json]);
 
-    return <div ref={containerRef} suppressHydrationWarning dangerouslySetInnerHTML={{ __html: '' }} />;
+    return <div ref={containerRef} suppressHydrationWarning dangerouslySetInnerHTML={EMPTY_HTML} />;
 });

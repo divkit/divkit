@@ -1,6 +1,6 @@
 {
   "name": "@divkitframework/react",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "React binding for DivKit",
   "keywords": [
     "server-driven-ui",
