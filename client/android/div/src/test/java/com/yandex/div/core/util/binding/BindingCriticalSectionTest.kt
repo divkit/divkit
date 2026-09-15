@@ -1,5 +1,6 @@
 package com.yandex.div.core.util.binding
 
+import com.yandex.div.core.Disposable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -57,6 +58,34 @@ internal class BindingCriticalSectionTest {
     }
 
     @Test
+    fun `reentrant tryEnter consumes reservation for current thread`() {
+        val firstHandle = section.tryEnter()!!
+        section.reserveFor(Thread.currentThread())
+
+        val secondHandle = section.tryEnter()!!
+
+        assertFalse(section.isReserved)
+        section.exit(firstHandle)
+        section.exit(secondHandle)
+        assertFalse(section.isHeld)
+    }
+
+    @Test
+    fun `reentrant tryEnter preserves reservation for another thread`() {
+        val firstHandle = section.tryEnter()!!
+        val otherThread = Thread {}
+        section.reserveFor(otherThread)
+
+        val secondHandle = section.tryEnter()!!
+
+        assertTrue(section.isReservedFor(otherThread))
+        section.exit(firstHandle)
+        section.exit(secondHandle)
+        assertTrue(section.isReservedFor(otherThread))
+        section.cancelReservation()
+    }
+
+    @Test
     fun `tryEnter returns null when held by another thread`() {
         val acquired = CountDownLatch(1)
         val release = CountDownLatch(1)
@@ -102,6 +131,31 @@ internal class BindingCriticalSectionTest {
         // Reservation must be cleared on successful acquisition (matches enter() semantics).
         assertFalse(section.isReserved)
 
+        section.exit(handle!!)
+    }
+
+    @Test
+    fun `reentrant enter consumes reservation before main thread completion`() {
+        val handles = arrayOfNulls<Disposable>(2)
+        val worker = Thread {
+            section.reserveFor(Thread.currentThread())
+            handles[0] = section.enter()
+            section.reserveFor(Thread.currentThread())
+            handles[1] = section.enter()
+        }
+        worker.start()
+        worker.join(2_000)
+        assertFalse("Binding worker must finish both background phases", worker.isAlive)
+
+        section.transferToCurrentThread()
+        section.exit(handles[0]!!)
+        section.transferToCurrentThread()
+        section.exit(handles[1]!!)
+
+        assertFalse("Completed binding must not leave the idle worker's reservation", section.isReserved)
+        assertFalse(section.isHeld)
+        val handle = section.tryEnter()
+        assertNotNull("Main-thread binding must remain available after both completions", handle)
         section.exit(handle!!)
     }
 

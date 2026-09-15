@@ -195,6 +195,9 @@ internal class BindingCriticalSection @Inject constructor() {
                 }
 
                 thread -> {
+                    if (reserver === thread) {
+                        reserver = null
+                    }
                     entranceCounter++
                     return EntranceHandle(this)
                 }
@@ -229,6 +232,9 @@ internal class BindingCriticalSection @Inject constructor() {
                     }
 
                     thread -> {
+                        if (reserver === Thread.currentThread()) {
+                            reserver = null
+                        }
                         entranceCounter++
                         return EntranceHandle(this)
                     }

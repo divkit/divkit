@@ -33,6 +33,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivVideoViewState
 import com.yandex.div.core.view2.divs.widgets.DivVideoView
+import com.yandex.div.core.view2.divs.widgets.awaitParentRecyclersStableIdle
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
 import com.yandex.div.internal.core.DivBlock
@@ -76,41 +77,51 @@ internal class DivVideoBinder @Inject constructor(
         val source = div.createSource(resolver)
         val config = div.createConfig(resolver, path, divView)
         val preview = div.preview?.evaluate(resolver)
-        val bindingMode = if (deferredVideoPlayerCreationEnabled) {
-            VideoBindingMode.Deferred(div.scale.evaluate(resolver))
-        } else {
-            VideoBindingMode.Immediate
+
+        if (deferredVideoPlayerCreationEnabled) {
+            val initialScale = div.scale.evaluate(resolver)
+            divView.runMainThreadAction {
+                videoBindingController.invalidatePendingPreviewBindingIfChanged(preview, initialScale)
+                launchVideoBinding {
+                    awaitParentRecyclersStableIdle()
+
+                    val currentSource = if (div.hasDynamicSource()) div.createSource(resolver) else source
+                    if (currentSource.isEmpty() && div.playerSettingsPayload == null) {
+                        divView.logSourceError(div)
+                    }
+                    bindDeferredVideo(
+                        div,
+                        resolver,
+                        path,
+                        divView,
+                        currentSource,
+                        preview,
+                        initialScale,
+                        prepareVideoViews(),
+                    )
+                }
+            }
+            return
         }
 
         divView.runMainThreadAction {
+            cancelPendingVideoBinding()
             val currentSource = if (div.hasDynamicSource()) div.createSource(resolver) else source
             if (currentSource.isEmpty() && div.playerSettingsPayload == null) {
                 divView.logSourceError(div)
             }
 
             val videoViews = prepareVideoViews()
-            when (bindingMode) {
-                VideoBindingMode.Immediate -> bindImmediateVideo(
-                    div,
-                    resolver,
-                    path,
-                    divView,
-                    currentSource,
-                    if (div.hasDynamicConfig()) div.createConfig(resolver, path, divView) else config,
-                    preview,
-                    videoViews,
-                )
-                is VideoBindingMode.Deferred -> bindDeferredVideo(
-                    div,
-                    resolver,
-                    path,
-                    divView,
-                    currentSource,
-                    preview,
-                    bindingMode.initialScale,
-                    videoViews,
-                )
-            }
+            bindImmediateVideo(
+                div,
+                resolver,
+                path,
+                divView,
+                currentSource,
+                if (div.hasDynamicConfig()) div.createConfig(resolver, path, divView) else config,
+                preview,
+                videoViews,
+            )
         }
     }
 
@@ -172,7 +183,6 @@ internal class DivVideoBinder @Inject constructor(
         initialScale: DivVideoScale,
         videoViews: VideoViews,
     ) {
-        val bindingGeneration = videoBindingController.beginVideoBinding()
         val currentScale = observeScaleBeforePlayerCreation(
             div,
             resolver,
@@ -182,23 +192,17 @@ internal class DivVideoBinder @Inject constructor(
         )
         bindDeferredPreview(preview, currentScale, divView, videoViews)
 
-        videoBindingController.initializePlayerWhenIdle(bindingGeneration) {
-            val latestSource = if (div.hasDynamicSource()) div.createSource(resolver) else currentSource
-            if (latestSource.isEmpty() && currentSource.isNotEmpty() && div.playerSettingsPayload == null) {
-                divView.logSourceError(div)
-            }
-            initializePlayer(
-                div,
-                resolver,
-                path,
-                divView,
-                latestSource,
-                div.createConfig(resolver, path, divView),
-                videoViews,
-            )
-            if (!videoBindingController.isPreviewBindingPending()) {
-                videoViews.playerView.visibility = View.VISIBLE
-            }
+        initializePlayer(
+            div,
+            resolver,
+            path,
+            divView,
+            currentSource,
+            div.createConfig(resolver, path, divView),
+            videoViews,
+        )
+        if (!videoBindingController.isPreviewBindingPending()) {
+            videoViews.playerView.visibility = View.VISIBLE
         }
     }
 
@@ -226,30 +230,41 @@ internal class DivVideoBinder @Inject constructor(
         }
 
         applyPreview(preview) { decodedPreview ->
-            if (decodedPreview is ImageRepresentation.Error) {
-                if (videoBindingController.discardPreviewBinding(previewBindingGeneration)) {
-                    divView.logWarning(decodedPreview.value)
-                    if (videoViews.playerView.getAttachedPlayer() != null) {
-                        videoViews.playerView.visibility = View.VISIBLE
-                    }
-                }
-                return@applyPreview
-            }
-            if (!videoBindingController.completePreviewBinding(previewBindingGeneration)) {
-                return@applyPreview
-            }
-            decodedPreview ?: return@applyPreview
-
-            with(videoViews.previewView) {
-                when (decodedPreview) {
-                    is ImageRepresentation.PictureDrawable -> setImageDrawable(decodedPreview.value)
-                    is ImageRepresentation.Bitmap -> setImageBitmap(decodedPreview.value)
-                    is ImageRepresentation.Error -> Unit
-                }
-                visibility = View.VISIBLE
-            }
-            videoViews.playerView.visibility = View.VISIBLE
+            applyDeferredPreviewResult(decodedPreview, previewBindingGeneration, divView, videoViews)
         }
+    }
+
+    private fun DivVideoView.applyDeferredPreviewResult(
+        decodedPreview: ImageRepresentation?,
+        generation: Int,
+        divView: Div2View,
+        videoViews: VideoViews,
+    ) {
+        if (decodedPreview is ImageRepresentation.Error) {
+            if (videoBindingController.discardPreviewBinding(generation)) {
+                divView.logWarning(decodedPreview.value)
+                if (videoViews.playerView.getAttachedPlayer() != null) {
+                    videoViews.playerView.visibility = View.VISIBLE
+                }
+            }
+            return
+        }
+        if (!videoBindingController.completePreviewBinding(generation) || decodedPreview == null) {
+            return
+        }
+        videoViews.applyDecodedPreview(decodedPreview)
+    }
+
+    private fun VideoViews.applyDecodedPreview(decodedPreview: ImageRepresentation) {
+        with(previewView) {
+            when (decodedPreview) {
+                is ImageRepresentation.PictureDrawable -> setImageDrawable(decodedPreview.value)
+                is ImageRepresentation.Bitmap -> setImageBitmap(decodedPreview.value)
+                is ImageRepresentation.Error -> Unit
+            }
+            visibility = View.VISIBLE
+        }
+        playerView.visibility = View.VISIBLE
     }
 
     private fun DivVideoView.initializePlayer(
@@ -537,11 +552,6 @@ internal class DivVideoBinder @Inject constructor(
             !repeatable.isConstant() ||
             playerSettingsPayload?.isConstant() == false ||
             !playbackSpeed.isConstant()
-    }
-
-    private sealed class VideoBindingMode {
-        object Immediate : VideoBindingMode()
-        class Deferred(val initialScale: DivVideoScale) : VideoBindingMode()
     }
 
     private data class VideoViews(

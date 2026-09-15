@@ -29,6 +29,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoSource as Div2VideoSource
 import com.yandex.div2.DivVideoScale
+import kotlinx.coroutines.test.runTest
 import org.json.JSONObject
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -42,12 +43,18 @@ import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.LooperMode
+import org.robolectric.shadows.ShadowChoreographer
+import org.robolectric.shadows.ShadowLooper
+import java.time.Duration
 import java.util.concurrent.AbstractExecutorService
 import java.util.concurrent.CopyOnWriteArrayList
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertSame
 
 @RunWith(AndroidJUnit4::class)
@@ -306,7 +313,8 @@ internal class DivVideoBinderTest : DivBinderTest() {
 
         underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
 
-        assertEquals(View.INVISIBLE, playerView.visibility)
+        assertEquals(0, videoView.childCount)
+        verify(playerFactory, never()).makePlayerView(any())
         verify(playerFactory, never()).makePlayer(any(), any())
     }
 
@@ -315,9 +323,97 @@ internal class DivVideoBinderTest : DivBinderTest() {
         val recycler = attachToScrollingParent(videoView)
         underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
 
-        recycler.moveToIdle()
+        recycler.finishScrolling()
 
         assertEquals(player to View.VISIBLE, playerView.getAttachedPlayer() to playerView.visibility)
+    }
+
+    @Test
+    @LooperMode(LooperMode.Mode.PAUSED)
+    fun `scroll after idle check does not start delayed player creation`() {
+        assertNoPlayerCreatedAfterSecondFrame { recycler ->
+            recycler.dispatchScrolled(1, 0)
+        }
+    }
+
+    @Test
+    @LooperMode(LooperMode.Mode.PAUSED)
+    fun `detach after idle check does not start delayed player creation`() {
+        assertNoPlayerCreatedAfterSecondFrame { recycler ->
+            recycler.removeView(videoView)
+            assertEquals(false, videoView.isAttachedToWindow)
+        }
+    }
+
+    @Test
+    @LooperMode(LooperMode.Mode.PAUSED)
+    fun `scroll before second idle check prevents player creation in that frame`() {
+        assertNoPlayerCreatedAfterSecondFrame(actionBeforeIdleCheck = true) { recycler ->
+            recycler.dispatchScrolled(1, 0)
+        }
+    }
+
+    @Test
+    @LooperMode(LooperMode.Mode.PAUSED)
+    fun `detach before second idle check prevents player creation`() {
+        assertNoPlayerCreatedAfterSecondFrame(actionBeforeIdleCheck = true) { recycler ->
+            recycler.removeView(videoView)
+            assertEquals(false, videoView.isAttachedToWindow)
+        }
+    }
+
+    @Test
+    fun `new binding cancels player creation from pending binding`() {
+        val recycler = attachToScrollingParent(videoView)
+
+        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+        recycler.finishScrolling()
+
+        verify(playerFactory).makePlayerView(any())
+        verify(playerFactory).makePlayer(any(), any())
+    }
+
+    @Test
+    fun `new binding invalidates pending preview from previous binding`() {
+        val recycler = attachToScrollingParent(videoView)
+        recycler.moveToIdle()
+        underTest.loadVideo(
+            videoView,
+            createBlock(DivVideo(
+                videoSources = emptyList(),
+                preview = Expression.constant(VALID_PREVIEW),
+            )),
+            divView,
+        )
+        ShadowLooper.idleMainLooper()
+        recycler.moveToSettling()
+
+        underTest.loadVideo(
+            videoView,
+            createBlock(DivVideo(
+                videoSources = emptyList(),
+                preview = Expression.constant("replacement preview"),
+            )),
+            divView,
+        )
+        executorService.runNext()
+        shadowOf(Looper.getMainLooper()).runOneTask()
+
+        assertEquals(null, previewView(videoView).drawable)
+        videoView.releaseMedia()
+    }
+
+    @Test
+    fun `release cancels pending player creation`() {
+        val recycler = attachToScrollingParent(videoView)
+        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+
+        videoView.releaseMedia()
+        recycler.finishScrolling()
+
+        verify(playerFactory, never()).makePlayerView(any())
+        verify(playerFactory, never()).makePlayer(any(), any())
     }
 
     @Test
@@ -370,19 +466,35 @@ internal class DivVideoBinderTest : DivBinderTest() {
     }
 
     @Test
-    fun `deferred creation propagates player initialization failure`() {
+    fun `deferred creation propagates player initialization failure to uncaught handler`() {
         val expected = IllegalStateException("player creation failed")
-        val underTest = createBinder(true, failingPlayerFactory(expected))
+        val failingFactory = failingPlayerFactory(expected)
+        val underTest = createBinder(true, failingFactory)
         val recyclerView = attachToScrollingParent(videoView)
-        underTest.loadVideo(videoView, createBlock(DivVideo(videoSources = emptyList())), divView)
+        try {
+            val failure = assertFailsWith<IllegalStateException> {
+                runTest {
+                    underTest.loadVideo(
+                        videoView,
+                        createBlock(videoWithConstantSource()),
+                        divView,
+                    )
+                    verify(failingFactory, never()).makePlayer(any(), any())
 
-        val failure = runCatching { recyclerView.moveToIdle() }.exceptionOrNull()
+                    recyclerView.finishScrolling()
+                }
+            }
 
-        assertSame(expected, failure)
+            assertSame(expected, failure)
+            verify(divView, never()).logError(any())
+        } finally {
+            videoView.releaseMedia()
+        }
     }
 
     @Test
     fun `preview scale is applied during binding`() {
+        attach(videoView)
         val div = DivVideo(
             videoSources = emptyList(),
             scale = Expression.constant(DivVideoScale.NO_SCALE),
@@ -395,6 +507,7 @@ internal class DivVideoBinderTest : DivBinderTest() {
 
     @Test
     fun `deferred preview uses latest dynamic scale on main thread`() {
+        attach(videoView)
         val scale = MutableTestExpression(DivVideoScale.FIT)
         val div = DivVideo(
             videoSources = emptyList(),
@@ -433,6 +546,7 @@ internal class DivVideoBinderTest : DivBinderTest() {
 
     @Test
     fun `rebind keeps pending decode for unchanged preview`() {
+        attach(videoView)
         val div = DivVideo(
             videoSources = emptyList(),
             preview = Expression.constant("pending preview"),
@@ -473,6 +587,7 @@ internal class DivVideoBinderTest : DivBinderTest() {
 
     @Test
     fun `failed preview decode is retried on rebind`() {
+        attach(videoView)
         val div = DivVideo(
             videoSources = emptyList(),
             preview = Expression.constant(INVALID_PREVIEW),
@@ -501,7 +616,7 @@ internal class DivVideoBinderTest : DivBinderTest() {
 
         underTest.loadVideo(videoView, createBlock(div), divView)
         sourceUrl.value = Uri.parse("https://example.com/current.mp4")
-        recyclerView.moveToIdle()
+        recyclerView.finishScrolling()
 
         assertEquals(
             listOf(DivVideoSource(url = sourceUrl.value, mimeType = "video/mp4")),
@@ -517,7 +632,7 @@ internal class DivVideoBinderTest : DivBinderTest() {
 
         underTest.loadVideo(videoView, createBlock(div), divView)
         repeatable.value = true
-        recyclerView.moveToIdle()
+        recyclerView.finishScrolling()
 
         assertEquals(
             listOf(DivPlayerPlaybackConfig(repeatable = true)),
@@ -541,7 +656,7 @@ internal class DivVideoBinderTest : DivBinderTest() {
             DivVideoViewState(DivVideoPlaybackState.PAUSED),
         )
 
-        recyclerView.moveToIdle()
+        recyclerView.finishScrolling()
 
         assertEquals(
             listOf(DivPlayerPlaybackConfig(autoplay = false)),
@@ -553,6 +668,68 @@ internal class DivVideoBinderTest : DivBinderTest() {
 
     private fun attach(view: View) {
         Robolectric.buildActivity(Activity::class.java).setup().get().setContentView(view)
+        ShadowLooper.idleMainLooper()
+    }
+
+    private fun TestRecyclerView.finishScrolling() {
+        moveToIdle()
+        ShadowLooper.idleMainLooper()
+    }
+
+    private fun assertNoPlayerCreatedAfterSecondFrame(
+        actionBeforeIdleCheck: Boolean = false,
+        action: (TestRecyclerView) -> Unit,
+    ) {
+        val frameDelay = Duration.ofMillis(16)
+        ShadowChoreographer.setPaused(true)
+        ShadowChoreographer.setFrameDelay(frameDelay)
+        val recycler = object : TestRecyclerView(context, RecyclerView.SCROLL_STATE_IDLE) {
+            override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+                setMeasuredDimension(MeasureSpec.getSize(widthSpec), MeasureSpec.getSize(heightSpec))
+                videoView.measure(widthSpec, heightSpec)
+            }
+
+            override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+                videoView.layout(0, 0, right - left, bottom - top)
+            }
+        }.apply {
+            layoutManager = LinearLayoutManager(context)
+            addView(videoView)
+        }
+        attach(recycler)
+        ShadowLooper.idleMainLooper(100, TimeUnit.MILLISECONDS)
+        assertEquals(true, videoView.isAttachedToWindow)
+
+        var actionExecuted = false
+        val expectedCreations = if (actionBeforeIdleCheck) 0 else 1
+        val actionCallback = object : Runnable {
+            private var frame = 0
+
+            override fun run() {
+                if (++frame < 2) {
+                    verify(playerFactory, never()).makePlayer(any(), any())
+                    videoView.postOnAnimation(this)
+                } else {
+                    assertEquals(expectedCreations, createdSource.allValues.size)
+                    action(recycler)
+                    actionExecuted = true
+                }
+            }
+        }
+        if (actionBeforeIdleCheck) {
+            videoView.postOnAnimation(actionCallback)
+        }
+        underTest.loadVideo(videoView, createBlock(videoWithConstantSource()), divView)
+        if (!actionBeforeIdleCheck) {
+            videoView.postOnAnimation(actionCallback)
+        }
+        repeat(2) {
+            ShadowLooper.idleMainLooper(frameDelay.toMillis(), TimeUnit.MILLISECONDS)
+        }
+
+        assertEquals(true, actionExecuted)
+        assertEquals(expectedCreations, createdSource.allValues.size)
+        videoView.releaseMedia()
     }
 
     private fun attachToScrollingParent(view: DivVideoView): TestRecyclerView {
@@ -649,7 +826,7 @@ internal class DivVideoBinderTest : DivBinderTest() {
         override fun getAttachedPlayer(): DivPlayer? = player
     }
 
-    private class TestRecyclerView(
+    private open class TestRecyclerView(
         context: Context,
         private var state: Int,
     ) : RecyclerView(context) {
@@ -657,6 +834,9 @@ internal class DivVideoBinderTest : DivBinderTest() {
         private val listeners = linkedSetOf<OnScrollListener>()
 
         override fun getScrollState(): Int = state
+
+        // This fixture lays out manually without an adapter; adapter updates have separate coverage.
+        override fun hasPendingAdapterUpdates(): Boolean = false
 
         override fun addOnScrollListener(listener: OnScrollListener) {
             listeners += listener
@@ -666,8 +846,17 @@ internal class DivVideoBinderTest : DivBinderTest() {
             listeners -= listener
         }
 
+        fun dispatchScrolled(dx: Int, dy: Int) {
+            listeners.toList().forEach { it.onScrolled(this, dx, dy) }
+        }
+
         fun moveToIdle() {
             state = SCROLL_STATE_IDLE
+            listeners.toList().forEach { it.onScrollStateChanged(this, state) }
+        }
+
+        fun moveToSettling() {
+            state = SCROLL_STATE_SETTLING
             listeners.toList().forEach { it.onScrollStateChanged(this, state) }
         }
     }

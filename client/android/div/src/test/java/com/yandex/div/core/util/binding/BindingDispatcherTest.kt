@@ -292,6 +292,33 @@ internal class BindingDispatcherTest {
     }
 
     @Test(timeout = 5_000)
+    fun `overlapping async submissions leave main thread binding available`() {
+        val firstBackgroundPhaseFinished = CountDownLatch(1)
+        val queuedBackgroundTasksFinished = CountDownLatch(1)
+        val completions = CountDownLatch(2)
+
+        dispatcher.runOnBindingThread(onComplete = { completions.countDown() }) {
+            firstBackgroundPhaseFinished.countDown()
+        }
+        assertTrue(firstBackgroundPhaseFinished.await(2, TimeUnit.SECONDS))
+
+        dispatcher.runOnBindingThread(onComplete = { completions.countDown() }) {}
+        executor.execute { queuedBackgroundTasksFinished.countDown() }
+        assertTrue(queuedBackgroundTasksFinished.await(2, TimeUnit.SECONDS))
+
+        val deadline = System.currentTimeMillis() + 2_000
+        while (completions.count > 0 && System.currentTimeMillis() < deadline) {
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+            Thread.sleep(10)
+        }
+
+        assertEquals("Both async bindings must complete", 0L, completions.count)
+        assertFalse("Idle binding worker must not retain a reservation", criticalSection.isReserved)
+        assertFalse(criticalSection.isHeld)
+        assertEquals("bound", dispatcher.withLock(fallback = "dropped") { "bound" })
+    }
+
+    @Test(timeout = 5_000)
     fun `executor rejection drains queue iteratively and reports every error`() {
         val rejectedExecutor = mock<BindingThreadExecutor>()
         val rejectedDivView = mock<Div2View>()
