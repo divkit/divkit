@@ -13,7 +13,7 @@ internal fun rememberFilteredState(
     filters: List<DivInputFilter>?,
 ): MutableState<String> {
     if (filters.isNullOrEmpty()) return source
-    val filter = filters.buildFilter()
+    val filter = filters.observeFilter()
 
     val accepted = remember { mutableStateOf(source.value) }
     if (filter(source.value)) {
@@ -26,7 +26,7 @@ internal fun rememberFilteredState(
 }
 
 @Composable
-private fun List<DivInputFilter>.buildFilter(): (String) -> Boolean {
+internal fun List<DivInputFilter>.observeFilter(): (String) -> Boolean {
     val regexes = mutableListOf<Regex>()
     val conditions = mutableListOf<Boolean>()
     forEach { filter ->
