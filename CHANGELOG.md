@@ -1,3 +1,11 @@
+## 32.61.5
+
+# iOS Client:
+* Fixed `change_bounds` transitions starting from the screen corner when a state switch happens before the state's first layout pass or while it is detached from a window: such changes are now applied in place.
+* Fixed `transition_change` elements of a newly built `div-state` subtree animating from a zero frame when the state switch runs inside a host animation block (e.g. an animated tab bar hide/show that rebinds the card): the switch and the first layout of its new views no longer inherit the ambient animation.
+* Fixed transition animations started from inside a host's `UIView.animate` closure (e.g. during an animated tab bar hide/show): seeding of `change_bounds` / `transition_in` / `transition_out` no longer inherits the ambient animation (elements no longer fly in from wrong geometry), and the transitions keep their own duration and curve instead of inheriting the host's.
+
+
 ## 32.61.4
 
 # Android Client:
