@@ -38,11 +38,11 @@ internal fun DivIndicatorView(modifier: Modifier, data: DivIndicator) {
 }
 
 private fun IndicatorStyle.desiredSize(itemsCount: Int): Pair<Int, Int> {
-    val height = maxOf(activeShape.outerHeight, inactiveShape.outerHeight, minimumShape.outerHeight)
+    val height = maxOf(activeShape.layoutHeight, inactiveShape.layoutHeight, minimumShape.layoutHeight)
     val width = when {
         isStretch -> 0f
-        itemsCount > 0 -> spaceBetweenCenters * itemsCount + activeShape.outerWidth
-        else -> activeShape.outerWidth
+        itemsCount > 0 -> spaceBetweenCenters * itemsCount + activeShape.layoutWidth
+        else -> activeShape.layoutWidth
     }
     return width.toInt() to height.toInt()
 }

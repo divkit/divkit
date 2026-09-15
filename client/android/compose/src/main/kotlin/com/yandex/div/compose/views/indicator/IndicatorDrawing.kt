@@ -31,8 +31,8 @@ internal fun DrawScope.drawIndicators(style: IndicatorStyle, pagerState: DivPage
     if (style.isStretch) {
         maxVisible = style.maxVisibleItems.coerceIn(1, itemsCount)
         space = (viewportWidth + style.itemSpacing) / maxVisible
-        widthScale = if (style.activeShape.width > 0f) {
-            (space - style.itemSpacing) / style.activeShape.width
+        widthScale = if (style.activeShape.layoutWidth > 0f) {
+            (space - style.itemSpacing) / style.activeShape.layoutWidth
         } else 1f
     } else {
         space = style.spaceBetweenCenters
@@ -46,17 +46,17 @@ internal fun DrawScope.drawIndicators(style: IndicatorStyle, pagerState: DivPage
         val base = if (style.animation == DivIndicator.Animation.SCALE) {
             interpolateScaleShape(style, i, activePage, offset, itemsCount)
         } else {
-            style.inactiveShape
+            style.inactiveShapeWithStroke
         }
         if (widthScale != 1f && !base.isCircle) base.copy(width = base.width * widthScale) else base
     }
     val positions = FloatArray(itemsCount).apply {
-        this[0] = shapes[0].width / 2f
+        this[0] = shapes[0].layoutWidth / 2f
         for (i in 1 until itemsCount) this[i] = this[i - 1] + space
     }
 
     val shift = if (itemsCount <= maxVisible) {
-        (viewportWidth - positions.last() - shapes.last().width / 2f) / 2f
+        (viewportWidth - positions.last() - shapes.last().layoutWidth / 2f) / 2f
     } else {
         val activeCenter = positions[activePage.coerceIn(0, itemsCount - 1)]
         val evenAdjust = if (maxVisible % 2 == 0) space / 2f else 0f
@@ -67,11 +67,16 @@ internal fun DrawScope.drawIndicators(style: IndicatorStyle, pagerState: DivPage
     val visible = if (itemsCount <= maxVisible) {
         positions.indices.toList()
     } else {
-        clipAndScaleEdges(style, positions, shapes, itemsCount, space, viewportWidth, activePage, offset)
+        clipAndScaleEdges(style, positions, shapes, itemsCount, maxVisible, space, viewportWidth, activePage, offset)
     }
 
     for (i in visible) drawShape(positions[i], centerY, shapes[i])
-    drawSelectionOverlay(style, positions, activePage, offset, centerY, viewportWidth, itemsCount)
+    val selectionWidth = if (widthScale != 1f && !style.inactiveShape.isCircle) {
+        (style.inactiveShape.width + style.inactiveShape.strokeWidth) * widthScale
+    } else {
+        style.activeShape.layoutWidth
+    }
+    drawSelectionOverlay(style, positions, activePage, offset, centerY, viewportWidth, itemsCount, space, selectionWidth)
 }
 
 internal fun normalizePagerPosition(
@@ -96,13 +101,14 @@ private fun clipAndScaleEdges(
     positions: FloatArray,
     shapes: Array<ShapeParams>,
     itemsCount: Int,
+    maxVisible: Int,
     space: Float,
     viewportWidth: Float,
     activePage: Int,
     offset: Float,
 ): List<Int> {
-    val firstLeft = positions[0] - shapes[0].width / 2f
-    val lastRight = positions[itemsCount - 1] + shapes[itemsCount - 1].width / 2f
+    val firstLeft = positions[0] - shapes[0].layoutWidth / 2f
+    val lastRight = positions[itemsCount - 1] + shapes[itemsCount - 1].layoutWidth / 2f
     val extraShift = when {
         firstLeft in 0f..viewportWidth -> -firstLeft
         lastRight in 0f..viewportWidth -> viewportWidth - lastRight
@@ -116,7 +122,7 @@ private fun clipAndScaleEdges(
     if (visible.isEmpty()) return visible
 
     val isBoundaryPage = offset == 0f && (activePage == 0 || activePage == itemsCount - 1)
-    val preserveEdges = visible.size == 3 && !isBoundaryPage
+    val preserveEdges = maxVisible == 3 && !isBoundaryPage
 
     visible.forEachIndexed { index, page ->
         val isEdge = index == 0 || index == visible.lastIndex
@@ -135,8 +141,13 @@ private fun edgeScaleFraction(center: Float, viewportWidth: Float, space: Float)
 }
 
 private fun scaleEdgeItem(item: ShapeParams, minimum: ShapeParams, fraction: Float): ShapeParams {
-    val newWidth = item.width * fraction
-    if (newWidth <= minimum.width) return minimum
+    val newWidth = item.layoutWidth * fraction
+    if (newWidth <= minimum.layoutWidth) return item.copy(
+        width = minimum.width,
+        height = minimum.height,
+        cornerRadius = minimum.cornerRadius,
+    )
+    if (newWidth >= item.layoutWidth) return item
     if (item.isCircle) {
         return item.copy(width = newWidth, height = newWidth, cornerRadius = newWidth / 2f)
     }
@@ -158,8 +169,8 @@ private fun interpolateScaleShape(
         else -> 0f
     }.coerceIn(0f, 1f)
     return when (scale) {
-        0f -> style.inactiveShape
-        1f -> style.activeShape
+        0f -> style.inactiveShapeWithStroke
+        1f -> style.activeShapeWithStroke
         else -> lerpShape(style.inactiveShape, style.activeShape, scale)
     }
 }
@@ -182,14 +193,15 @@ private fun DrawScope.drawSelectionOverlay(
     centerY: Float,
     viewportWidth: Float,
     itemsCount: Int,
+    space: Float,
+    selectionWidth: Float,
 ) {
     if (style.animation == DivIndicator.Animation.SCALE) return
     if (activePosition !in 0 until itemsCount) return
 
     val active = style.activeShape
-    val halfWidth = active.width / 2f
+    val halfWidth = selectionWidth / 2f
     val anchor = positions[activePosition]
-    val space = style.spaceBetweenCenters
 
     val (leftEdge, rightEdge) = when (style.animation) {
         DivIndicator.Animation.WORM ->
@@ -207,11 +219,16 @@ private fun DrawScope.drawSelectionOverlay(
         left < 0f -> { right -= left; left = 0f }
         right > viewportWidth -> { left -= right - viewportWidth; right = viewportWidth }
     }
-    drawShape((left + right) / 2f, centerY, active.copy(width = right - left))
+    drawShape(
+        (left + right) / 2f,
+        centerY,
+        active.copy(width = right - left, height = active.layoutHeight),
+        insetStroke = false,
+    )
 }
 
-private fun DrawScope.drawShape(centerX: Float, centerY: Float, shape: ShapeParams) {
-    val shrink = shape.strokeWidth.coerceAtLeast(0f) / 2f
+private fun DrawScope.drawShape(centerX: Float, centerY: Float, shape: ShapeParams, insetStroke: Boolean = true) {
+    val shrink = if (insetStroke) shape.strokeWidth.coerceAtLeast(0f) / 2f else 0f
     val topLeft = Offset(
         x = centerX - shape.width / 2f + shrink,
         y = centerY - shape.height / 2f + shrink,

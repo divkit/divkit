@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.utils.observedPxValue
-import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toPx
 import com.yandex.div2.DivCircleShape
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivRoundedRectangleShape
 import com.yandex.div2.DivShape
+import kotlin.math.ceil
+import kotlin.math.roundToInt
 
 internal data class ShapeParams(
     val width: Float,
@@ -20,8 +20,13 @@ internal data class ShapeParams(
     val strokeWidth: Float = 0f,
     val strokeColor: Color = Color.Transparent,
 ) {
-    val outerWidth: Float get() = width + strokeWidth
-    val outerHeight: Float get() = height + strokeWidth
+    val layoutWidth: Float get() = ceil(width)
+    val layoutHeight: Float get() = ceil(height)
+
+    fun withStroke(): ShapeParams = if (strokeWidth == 0f) this else copy(
+        width = width + strokeWidth,
+        height = height + strokeWidth,
+    )
 
     fun scale(factor: Float): ShapeParams = copy(
         width = width * factor,
@@ -54,16 +59,16 @@ internal fun DivRoundedRectangleShape.toShapeParams(fallbackColor: Color): Shape
     val strokeWidthPx: Float
     val strokeColorPx: Color
     if (stroke != null) {
-        strokeWidthPx = stroke.width.observedPxValue(stroke.unit)
+        strokeWidthPx = stroke.width.observedPxValue(stroke.unit).roundToInt().toFloat()
         strokeColorPx = stroke.color.observedColorValue()
     } else {
         strokeWidthPx = 0f
         strokeColorPx = Color.Transparent
     }
     return ShapeParams(
-        width = itemWidth.observedValue().toPx(),
-        height = itemHeight.observedValue().toPx(),
-        cornerRadius = cornerRadius.observedValue().toPx(),
+        width = itemWidth.value.observedPxValue(itemWidth.unit),
+        height = itemHeight.value.observedPxValue(itemHeight.unit),
+        cornerRadius = cornerRadius.value.observedPxValue(cornerRadius.unit),
         color = backgroundColor?.observedColorValue() ?: fallbackColor,
         isCircle = false,
         strokeWidth = strokeWidthPx,
@@ -73,7 +78,7 @@ internal fun DivRoundedRectangleShape.toShapeParams(fallbackColor: Color): Shape
 
 @Composable
 private fun DivCircleShape.toShapeParams(fallbackColor: Color): ShapeParams {
-    val radiusPx = radius.observedValue().toPx()
+    val radiusPx = radius.value.observedPxValue(radius.unit)
     return ShapeParams(
         width = radiusPx * 2,
         height = radiusPx * 2,

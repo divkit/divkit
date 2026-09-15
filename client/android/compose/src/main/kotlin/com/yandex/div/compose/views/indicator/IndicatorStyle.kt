@@ -5,11 +5,11 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.compose.utils.toPx
+import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div2.DivDefaultIndicatorItemPlacement
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivIndicatorItemPlacement
+import kotlin.math.roundToInt
 
 internal data class IndicatorStyle(
     val activeShape: ShapeParams,
@@ -20,7 +20,10 @@ internal data class IndicatorStyle(
     val maxVisibleItems: Int,
     val isStretch: Boolean,
     val animation: DivIndicator.Animation,
-)
+) {
+    val activeShapeWithStroke: ShapeParams = activeShape.withStroke()
+    val inactiveShapeWithStroke: ShapeParams = inactiveShape.withStroke()
+}
 
 @Composable
 internal fun DivIndicator.observeIndicatorStyle(): IndicatorStyle {
@@ -43,7 +46,9 @@ internal fun DivIndicator.observeIndicatorStyle(): IndicatorStyle {
             activeShape = activeShape,
             inactiveShape = inactiveShape,
             minimumShape = minimumShape,
-            spaceBetweenCenters = placement.value.spaceBetweenCenters.observedValue().toPx(),
+            spaceBetweenCenters = with(placement.value.spaceBetweenCenters) {
+                value.observedPxValue(unit).roundToInt().toFloat()
+            },
             itemSpacing = 0f,
             maxVisibleItems = Int.MAX_VALUE,
             isStretch = false,
@@ -54,7 +59,9 @@ internal fun DivIndicator.observeIndicatorStyle(): IndicatorStyle {
             inactiveShape = inactiveShape,
             minimumShape = minimumShape,
             spaceBetweenCenters = 0f,
-            itemSpacing = placement.value.itemSpacing.observedValue().toPx(),
+            itemSpacing = with(placement.value.itemSpacing) {
+                value.observedPxValue(unit).roundToInt().toFloat()
+            },
             maxVisibleItems = placement.value.maxVisibleItems.observedIntValue(),
             isStretch = true,
             animation = animation.observedValue(),
