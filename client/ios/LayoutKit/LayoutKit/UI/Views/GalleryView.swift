@@ -222,6 +222,14 @@ public final class GalleryView: BlockView {
     }
   }
 
+  func reusingDefaultLayout(model: GalleryViewModel, boundsSize: CGSize) -> GalleryViewLayout {
+    if let layout = layout as? GalleryViewLayout,
+       layout.isEqual(to: model, boundsSize: boundsSize) {
+      return layout
+    }
+    return GalleryViewLayout(model: model, boundsSize: boundsSize)
+  }
+
   private func configureByNewModel(
     isLayoutDirectionChanged: Bool,
     isItemsNumberChanged: Bool

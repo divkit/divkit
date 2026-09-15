@@ -2,6 +2,11 @@ import Foundation
 import VGSL
 import XCTest
 
+#if os(iOS)
+@testable import LayoutKit
+import UIKit
+#endif
+
 public final class TestTimer: TimerType {
   public let timeInterval: TimeInterval
   public var fireDate: Date
@@ -94,3 +99,11 @@ public func XCTAssertThrowsError<T: Equatable & Error>(
     XCTAssertEqual(error as? T, expectedError)
   }
 }
+
+#if os(iOS)
+extension GalleryView {
+  var collectionViewForTesting: UICollectionView {
+    subviews.compactMap { $0 as? UICollectionView }.first!
+  }
+}
+#endif

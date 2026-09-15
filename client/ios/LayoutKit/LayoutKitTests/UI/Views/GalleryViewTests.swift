@@ -127,12 +127,6 @@ private func makeGalleryWithNestedGallery(
   return view
 }
 
-extension GalleryView {
-  fileprivate var collectionViewForTesting: UICollectionView {
-    subviews.compactMap { $0 as? UICollectionView }.first!
-  }
-}
-
 private let bounds = CGRect(x: 0, y: 0, width: 100, height: 100)
 private let metrics = GalleryViewMetrics(
   axialInsetMode: .fixed(values: .zero),

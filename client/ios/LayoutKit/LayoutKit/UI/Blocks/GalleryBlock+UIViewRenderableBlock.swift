@@ -18,6 +18,10 @@ extension GalleryBlock {
     galleryView.configure(
       model: model,
       state: state,
+      layoutFactory: { [weak galleryView] model, size in
+        galleryView?.reusingDefaultLayout(model: model, boundsSize: size)
+          ?? GalleryViewLayout(model: model, boundsSize: size)
+      },
       observer: observer,
       overscrollDelegate: overscrollDelegate,
       renderingDelegate: renderingDelegate
