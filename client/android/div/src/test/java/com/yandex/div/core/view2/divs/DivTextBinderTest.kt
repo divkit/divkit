@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.LinearGradient
-import android.os.Build
 import android.text.Layout
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivStatePath
@@ -22,7 +21,6 @@ import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 class DivTextBinderTest : DivBinderTest() {
@@ -57,7 +55,6 @@ class DivTextBinderTest : DivBinderTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
     fun `apply hyphenation for text with soft hyphens`() {
         val (divText, view) = createTestData("with_hyphenation.json")
 
@@ -67,7 +64,6 @@ class DivTextBinderTest : DivBinderTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
     fun `set hyphenation frequency to none if hyphenation is not supported`() {
         val binder = createBinder(isHyphenationEnabled = false)
         val (divText, view) = createTestData("with_hyphenation.json")
@@ -78,7 +74,6 @@ class DivTextBinderTest : DivBinderTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
     fun `apply hyphenation if text has ellipsis`() {
         val (divText, view) = createTestData("with_hyphenation_ellipsis.json")
 
@@ -88,7 +83,6 @@ class DivTextBinderTest : DivBinderTest() {
     }
 
     @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
     fun `reset hyphenation after text has no soft hyphens`() {
         val (divText, view) = createTestData("with_hyphenation.json")
 
