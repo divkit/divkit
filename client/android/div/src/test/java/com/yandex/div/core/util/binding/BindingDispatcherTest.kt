@@ -456,29 +456,30 @@ internal class BindingDispatcherTest {
         assertFalse(criticalSection.isReserved)
     }
 
-    @Test(timeout = 5_000)
+    @Test(timeout = 10_000)
     fun `coalescing keeps only the latest pending task`() {
-        val backgroundPhaseFinished = CountDownLatch(1)
-        dispatcher.runOnBindingThread<Unit>(onComplete = {}) {
-            backgroundPhaseFinished.countDown()
+        val blockerStarted = CountDownLatch(1)
+        val releaseBlocker = CountDownLatch(1)
+        dispatcher.runOnBindingThread<Unit> {
+            blockerStarted.countDown()
+            releaseBlocker.await()
         }
-        assertTrue(backgroundPhaseFinished.await(1, TimeUnit.SECONDS))
+        assertTrue(blockerStarted.await(3, TimeUnit.SECONDS))
 
         val runs = AtomicInteger()
         val latestValue = AtomicInteger(-1)
+        val latestTaskFinished = CountDownLatch(1)
         repeat(100) { value ->
             dispatcher.runWithinBindingContext(coalescingKey = "visibility") {
                 runs.incrementAndGet()
                 latestValue.set(value)
+                latestTaskFinished.countDown()
             }
         }
 
         assertEquals(0, runs.get())
-        val deadline = System.currentTimeMillis() + 1_000
-        while (runs.get() == 0 && System.currentTimeMillis() < deadline) {
-            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
-            Thread.sleep(10)
-        }
+        releaseBlocker.countDown()
+        assertTrue(latestTaskFinished.await(3, TimeUnit.SECONDS))
         assertEquals(1, runs.get())
         assertEquals(99, latestValue.get())
     }

@@ -3006,6 +3006,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewReleaseChildrenTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewReleaseChildrenTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewTypeCheckTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewTypeCheckTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/DivAccessibilityBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivAccessibilityBinderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/DivViewStateStoreImplTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivViewStateStoreImplTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityActionDispatcherTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityActionDispatcherTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityActionTrackerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityActionTrackerTest.kt",

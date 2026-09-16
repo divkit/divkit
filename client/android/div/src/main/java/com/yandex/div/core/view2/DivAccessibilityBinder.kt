@@ -9,21 +9,23 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
-import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.view.DivImageView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivCustom
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGifImage
+import com.yandex.div2.DivGrid
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
+import com.yandex.div2.DivPager
 import com.yandex.div2.DivSelect
 import com.yandex.div2.DivSlider
+import com.yandex.div2.DivState
 import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
@@ -164,8 +166,17 @@ internal class DivAccessibilityBinder @Inject constructor(
         if (newDescription.isConstantOrNull() && newHint.isConstantOrNull()) return
 
         val callback = { _: Any ->
-            applyDescriptionAndHint(newDescription?.evaluate(resolver), newHint?.evaluate(resolver))
-            applyMode(newDiv, newDiv.accessibility?.mode?.evaluate(resolver))
+            val description = newDescription?.evaluate(resolver)
+            val hint = newHint?.evaluate(resolver)
+            applyDescriptionAndHint(description, hint)
+            if (enabled) {
+                applyMode(
+                    newDiv,
+                    newDiv.accessibility?.mode?.evaluate(resolver),
+                    description,
+                    hint,
+                )
+            }
         }
         subscriber.addSubscription(newDescription?.observe(resolver, callback))
         subscriber.addSubscription(newHint?.observe(resolver, callback))
@@ -194,25 +205,44 @@ internal class DivAccessibilityBinder @Inject constructor(
 
         val newMode = newDiv.accessibility?.mode
         if (newMode.equalsToConstant(oldDiv?.accessibility?.mode) &&
-            newDiv.accessibility?.type == oldDiv?.accessibility?.type) {
+            newDiv.accessibility?.type == oldDiv?.accessibility?.type &&
+            newDiv.accessibility?.description.equalsToConstant(oldDiv?.accessibility?.description) &&
+            newDiv.accessibility?.hint.equalsToConstant(oldDiv?.accessibility?.hint)) {
             return
         }
 
-        applyMode(newDiv, newMode?.evaluate(resolver))
+        applyMode(
+            newDiv,
+            newMode?.evaluate(resolver),
+            newDiv.accessibility?.description?.evaluate(resolver),
+            newDiv.accessibility?.hint?.evaluate(resolver),
+        )
 
         if (newMode.isConstantOrNull()) return
 
-        subscriber.addSubscription(newMode?.observe(resolver) { applyMode(newDiv, it) })
+        subscriber.addSubscription(newMode?.observe(resolver) {
+            applyMode(
+                newDiv,
+                it,
+                newDiv.accessibility?.description?.evaluate(resolver),
+                newDiv.accessibility?.hint?.evaluate(resolver),
+            )
+        })
     }
 
-    private fun View.applyMode(div: DivBase, mode: DivAccessibility.Mode? = null) {
+    private fun View.applyMode(
+        div: DivBase,
+        mode: DivAccessibility.Mode? = null,
+        description: String? = null,
+        hint: String? = null,
+    ) {
         ViewCompat.setScreenReaderFocusable(this, mode == DivAccessibility.Mode.MERGE)
         importantForAccessibility = when {
             mode == DivAccessibility.Mode.EXCLUDE -> View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
             div.accessibility?.type == DivAccessibility.Type.HEADER -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
-            contentDescription.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+            description.isNullOrBlank() && hint.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
             mode == DivAccessibility.Mode.MERGE -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
-            this is DivImageView || this is DivGifImageView -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            !div.isAccessibilityContainer -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
             else -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
         }
     }
@@ -289,6 +319,18 @@ internal class DivAccessibilityBinder @Inject constructor(
         SWITCH,
     }
 }
+
+private val DivBase.isAccessibilityContainer: Boolean
+    get() = when (this) {
+        is DivContainer,
+        is DivGallery,
+        is DivGrid,
+        is DivPager,
+        is DivState,
+        is DivTabs -> true
+        is DivCustom -> !items.isNullOrEmpty()
+        else -> false
+    }
 
 private class ExtensiveAccessibilityDelegate(
     private val className: String,
