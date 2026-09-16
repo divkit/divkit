@@ -14979,6 +14979,7 @@
   "schema/div-action-dict-set-value.json":"divkit/public/schema/div-action-dict-set-value.json",
   "schema/div-action-download.json":"divkit/public/schema/div-action-download.json",
   "schema/div-action-focus-element.json":"divkit/public/schema/div-action-focus-element.json",
+  "schema/div-action-haptic.json":"divkit/public/schema/div-action-haptic.json",
   "schema/div-action-hide-tooltip.json":"divkit/public/schema/div-action-hide-tooltip.json",
   "schema/div-action-scroll-base.json":"divkit/public/schema/div-action-scroll-base.json",
   "schema/div-action-scroll-by.json":"divkit/public/schema/div-action-scroll-by.json",

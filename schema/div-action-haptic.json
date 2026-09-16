@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_haptic",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "haptic"
+      ]
+    },
+    "feedback": {
+      "$description": "translations.json#/div_action_haptic_feedback",
+      "type": "string",
+      "enum": [
+        "light",
+        "medium",
+        "heavy",
+        "success",
+        "error"
+      ],
+      "default_value": "light"
+    }
+  },
+  "platforms": [],
+  "required": [
+    "type"
+  ]
+}

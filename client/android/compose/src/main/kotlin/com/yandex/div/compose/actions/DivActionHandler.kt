@@ -135,6 +135,7 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.ArraySetValue ->
                 arrayActionsHandler.handle(context, action.value)
 
+            is DivActionTyped.Haptic -> notSupported("haptic")
             is DivActionTyped.ClearFocus -> notSupported(DivActionClearFocus.TYPE)
             is DivActionTyped.CopyToClipboard -> notSupported(DivActionCopyToClipboard.TYPE)
 

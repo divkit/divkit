@@ -31,6 +31,9 @@
       "$ref": "div-action-focus-element.json"
     },
     {
+      "$ref": "div-action-haptic.json"
+    },
+    {
       "$ref": "div-action-hide-tooltip.json"
     },
     {

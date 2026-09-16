@@ -1,4 +1,12 @@
 {
+  "div_action_haptic": {
+    "en": "Plays one haptic feedback effect when the action is executed. Respects system settings. If the effect is unavailable, it is skipped without stopping other actions.",
+    "ru": "Воспроизводит один тактильный отклик при выполнении действия с учётом системных настроек. Если эффект недоступен, он пропускается без остановки остальных действий."
+  },
+  "div_action_haptic_feedback": {
+    "en": "Feedback type: light, medium or heavy impact, or success or error notification. Defaults to light. The physical effect depends on the platform and device.",
+    "ru": "Тип отклика: лёгкий (light), средний (medium) или сильный (heavy) удар либо уведомление об успехе (success) или ошибке (error). По умолчанию light. Физический эффект зависит от платформы и устройства."
+  },
   "div_absolute_edge_insets": {
     "en": "Sets margins without regard to screen properties.",
     "ru": "Устанавливает отступы, без учета свойств экрана."
