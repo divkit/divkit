@@ -22,8 +22,11 @@ import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.Div
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTooltip
@@ -244,7 +247,7 @@ class DivTooltipViewControllerTest {
     }
 
     @Test
-    fun `onPopupShown positions bring to top view`() {
+    fun `onPopupShown positions and sizes bring to top view`() {
         val bringToTopView = mock<View> {
             on { tag } doReturn "bring_to_top"
             on { width } doReturn 40
@@ -262,7 +265,56 @@ class DivTooltipViewControllerTest {
 
         underTest.onPopupShown(tooltipData(substrateDiv = div, bringToTopId = "bring_to_top"))
 
-        verify(tooltipWrapper).setBringToTopPosition(10, 20)
+        verify(tooltipWrapper).setBringToTopPosition(10, 20, 40, 20)
+    }
+
+    @Test
+    fun `onPopupShown restores original bounds of an oversized bring to top copy`() {
+        val context = testContextThemeWrapper()
+        val highlightedCopy = View(context).apply {
+            layoutParams = DivLayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200)
+        }
+        val tooltip = View(context).apply {
+            layoutParams = DivLayoutParams(100, 50)
+        }
+        val container = DivTooltipContainer(context).apply {
+            setViews(
+                substrate = View(context),
+                bringToTop = highlightedCopy,
+                tooltip = tooltip,
+            )
+            measure(makeExactSpec(div2ViewWidth), makeExactSpec(div2ViewHeight))
+            layout(0, 0, div2ViewWidth, div2ViewHeight)
+        }
+        Assert.assertEquals(div2ViewWidth, highlightedCopy.width)
+        Assert.assertEquals(200, highlightedCopy.height)
+
+        val originalView = mock<View> {
+            on { tag } doReturn "bring_to_top"
+            on { width } doReturn 40
+            on { height } doReturn 20
+            on { getLocationOnScreen(any()) } doAnswer { inv ->
+                val location = inv.arguments[0] as IntArray
+                location[0] = 600
+                location[1] = 100
+                null
+            }
+        }
+        whenever(div2View.childCount).doReturn(1)
+        whenever(div2View.getChildAt(0)).doReturn(originalView)
+        whenever(popupWindow.contentView).doReturn(container)
+
+        underTest.onPopupShown(tooltipData(substrateDiv = div, bringToTopId = "bring_to_top"))
+        container.measure(makeExactSpec(div2ViewWidth), makeExactSpec(div2ViewHeight))
+        container.layout(0, 0, div2ViewWidth, div2ViewHeight)
+
+        val actualBounds = Rect(
+            highlightedCopy.left,
+            highlightedCopy.top,
+            highlightedCopy.right,
+            highlightedCopy.bottom,
+        )
+        Assert.assertEquals(Rect(600, 100, 640, 120), actualBounds)
     }
 
     @Test

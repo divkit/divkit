@@ -75,9 +75,8 @@ internal class DivTooltipContainer @JvmOverloads constructor(
     fun setTooltipPosition(x: Int, y: Int, width: Int, height: Int) =
         tooltipView?.setChildPosition(x, y, width, height)
 
-    fun setBringToTopPosition(x: Int, y: Int) {
-        bringToTopView?.let { it.setChildPosition(x, y, it.width, it.height) }
-    }
+    fun setBringToTopPosition(x: Int, y: Int, width: Int, height: Int) =
+        bringToTopView?.setChildPosition(x, y, width, height)
 
     private fun View.setChildPosition(x: Int, y: Int, width: Int, height: Int) =
         updateLayoutParams<DivLayoutParams> {
