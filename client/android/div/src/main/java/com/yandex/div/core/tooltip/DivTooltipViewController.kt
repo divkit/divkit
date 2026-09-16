@@ -179,7 +179,12 @@ internal class DivTooltipViewController @VisibleForTesting constructor(
         val bringToTopView = data.divView.findBringToTopView(bringToTopId) ?: return
         val locationArray = IntArray(2)
         bringToTopView.getLocationOnScreen(locationArray)
-        setBringToTopPosition(locationArray[0], locationArray[1])
+        setBringToTopPosition(
+            x = locationArray[0],
+            y = locationArray[1],
+            width = bringToTopView.width,
+            height = bringToTopView.height,
+        )
     }
 
     private fun View.sendAccessibilityEventUnchecked() {
