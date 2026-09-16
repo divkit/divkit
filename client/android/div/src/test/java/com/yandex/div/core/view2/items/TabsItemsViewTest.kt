@@ -2,16 +2,19 @@ package com.yandex.div.core.view2.items
 
 import android.content.res.Resources
 import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager.widget.ViewPager.SCROLL_STATE_DRAGGING
+import androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE
+import androidx.viewpager.widget.ViewPager.SCROLL_STATE_SETTLING
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
 import com.yandex.div.internal.widget.tabs.ScrollableViewPager
-import org.junit.Assert
-import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TabsItemsViewTest {
@@ -22,6 +25,7 @@ class TabsItemsViewTest {
     private val viewPager = mock<ScrollableViewPager> {
         on { adapter } doReturn adapter
         on { currentItem } doReturn CURRENT_ITEM
+        on { scrollState } doReturn SCROLL_STATE_IDLE
     }
     private val resources = mock<Resources> {
         on { displayMetrics } doReturn mock()
@@ -34,13 +38,48 @@ class TabsItemsViewTest {
 
     @Test
     fun `item count`() {
-        Assert.assertEquals(ITEM_COUNT, underTest.itemCount)
+        assertEquals(ITEM_COUNT, underTest.itemCount)
     }
 
     @Test
-    fun `set current item`() {
+    fun `set current item is animated when pager is idle`() {
         underTest.setCurrentItem(5, true)
+
         verify(viewPager).setCurrentItem(5, true)
+    }
+
+    @Test
+    fun `set current item is not animated when pager is settling`() {
+        whenever(viewPager.scrollState).thenReturn(SCROLL_STATE_SETTLING)
+
+        underTest.setCurrentItem(5, true)
+
+        verify(viewPager).setCurrentItem(5, false)
+    }
+
+    @Test
+    fun `set current item is not animated when pager is dragging`() {
+        whenever(viewPager.scrollState).thenReturn(SCROLL_STATE_DRAGGING)
+
+        underTest.setCurrentItem(5, true)
+
+        verify(viewPager).setCurrentItem(5, false)
+    }
+
+    @Test
+    fun `set current item stays not animated when pager is idle`() {
+        underTest.setCurrentItem(5, false)
+
+        verify(viewPager).setCurrentItem(5, false)
+    }
+
+    @Test
+    fun `scroll to end is not animated when pager is settling`() {
+        whenever(viewPager.scrollState).thenReturn(SCROLL_STATE_SETTLING)
+
+        underTest.scrollToTheEnd(true)
+
+        verify(viewPager).setCurrentItem(ITEM_COUNT - 1, false)
     }
 
     @Test

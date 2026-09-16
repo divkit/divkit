@@ -12,6 +12,9 @@ internal open class RtlViewPager(context: Context, attrs: AttributeSet?) : ViewP
 
     private val pageChangeListeners = hashMapOf<OnPageChangeListener, ReversingOnPageChangeListener>()
 
+    var scrollState = ViewPager.SCROLL_STATE_IDLE
+        private set
+
     override fun getCurrentItem(): Int {
         var item = super.getCurrentItem()
         val adapter = super.getAdapter()
@@ -87,6 +90,7 @@ internal open class RtlViewPager(context: Context, attrs: AttributeSet?) : ViewP
         }
 
         override fun onPageScrollStateChanged(state: Int) {
+            scrollState = state
             listener.onPageScrollStateChanged(state)
         }
     }

@@ -3089,6 +3089,7 @@
   "client/android/div/src/test/java/com/yandex/div/internal/widget/AutoEllipsizeHelperTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/internal/widget/AutoEllipsizeHelperTest.kt",
   "client/android/div/src/test/java/com/yandex/div/internal/widget/TransientViewTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/internal/widget/TransientViewTest.kt",
   "client/android/div/src/test/java/com/yandex/div/internal/widget/indicator/IndicatorStripDrawerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/internal/widget/indicator/IndicatorStripDrawerTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/internal/widget/tabs/RtlViewPagerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/internal/widget/tabs/RtlViewPagerTest.kt",
   "client/android/div/src/test/java/com/yandex/div/rule/LocaleRule.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/rule/LocaleRule.kt",
   "client/android/div/src/test/java/com/yandex/div/test/ContextUtils.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/test/ContextUtils.kt",
   "client/android/div/src/test/resources/robolectric.properties":"divkit/public/client/android/div/src/test/resources/robolectric.properties",
