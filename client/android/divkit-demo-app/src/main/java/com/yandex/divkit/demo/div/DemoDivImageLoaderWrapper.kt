@@ -1,12 +1,17 @@
 package com.yandex.divkit.demo.div
 
+import androidx.core.net.toUri
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.test.images.LocalImageLoader
 import com.yandex.divkit.demo.utils.DownloadList
 
-class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLoader {
+class DemoDivImageLoaderWrapper(
+    private val loader: DivImageLoader,
+    private val localImageLoader: LocalImageLoader? = null,
+) : DivImageLoader {
 
     private val targets = DownloadList<DivImageDownloadCallback>()
 
@@ -16,16 +21,22 @@ class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLo
 
     override fun loadImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
         targets.add(callback)
-        val loadReference = loader.loadImage(imageUrl, CallbackWrapper(callback))
+        val loadReference = loader.loadImage(resolveUrl(imageUrl), CallbackWrapper(callback))
         return LoadReference {
             loadReference.cancel()
             targets.remove(callback)
         }
     }
 
-    override fun loadAnimatedImage(imageUrl: String, callback: DivImageDownloadCallback): LoadReference {
+    override fun loadAnimatedImage(
+        imageUrl: String,
+        callback: DivImageDownloadCallback,
+    ): LoadReference {
         targets.add(callback)
-        val loadReference = loader.loadAnimatedImage(imageUrl, CallbackWrapper(callback))
+        val loadReference = loader.loadAnimatedImage(
+            resolveUrl(imageUrl),
+            CallbackWrapper(callback)
+        )
         return LoadReference {
             loadReference.cancel()
             targets.remove(callback)
@@ -38,7 +49,13 @@ class DemoDivImageLoaderWrapper(private val loader: DivImageLoader) : DivImageLo
         targets.clean()
     }
 
-    private inner class CallbackWrapper(private val callback: DivImageDownloadCallback) : DivImageDownloadCallback() {
+    private fun resolveUrl(imageUrl: String): String {
+        return localImageLoader?.resolve(imageUrl.toUri())?.toString() ?: imageUrl
+    }
+
+    private inner class CallbackWrapper(
+        private val callback: DivImageDownloadCallback
+    ) : DivImageDownloadCallback() {
 
         override fun onSuccess(cachedImage: DivCachedImage) {
             targets.remove(callback)

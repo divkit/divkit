@@ -72,11 +72,14 @@ class DivScreenshotActivity : AppCompatActivity() {
 
     private fun setImageLoader() {
         val loader = when (imageLoaderName) {
-            IMAGE_LOADER_COIL -> Preferences.ImageLoaderOption.COIL
+            IMAGE_LOADER_COIL, IMAGE_LOADER_LOCAL -> Preferences.ImageLoaderOption.COIL
             IMAGE_LOADER_GLIDE -> Preferences.ImageLoaderOption.GLIDE
             else -> return
         }
-        Container.imageLoaderOverride = Container.createImageLoader(loader)
+        Container.imageLoaderOverride = Container.createImageLoader(
+            loader = loader,
+            useOnlyLocalImages = imageLoaderName == IMAGE_LOADER_LOCAL,
+        )
     }
 
     fun getTestCaseJson(): JSONObject {
@@ -130,6 +133,7 @@ class DivScreenshotActivity : AppCompatActivity() {
 
         const val IMAGE_LOADER_GLIDE = "glide"
         const val IMAGE_LOADER_COIL = "coil"
+        const val IMAGE_LOADER_LOCAL = "local"
     }
 }
 

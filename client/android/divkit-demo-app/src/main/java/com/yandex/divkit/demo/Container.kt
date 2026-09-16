@@ -10,6 +10,7 @@ import com.yandex.div.glide.GlideDivImageLoader
 import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.RenderConfiguration
+import com.yandex.div.test.images.LocalImageLoader
 import com.yandex.divkit.demo.div.DemoDivDownloaderWrapper
 import com.yandex.divkit.demo.div.DemoAnimationsEnabledProvider
 import com.yandex.divkit.demo.div.DemoDivImageLoaderWrapper
@@ -83,12 +84,25 @@ internal object Container {
 
     private val defaultImageLoader by lazy { createImageLoader(preferences.imageLoader) }
 
-    fun createImageLoader(loader: Preferences.ImageLoaderOption): DemoDivImageLoaderWrapper {
+    fun createImageLoader(
+        loader: Preferences.ImageLoaderOption,
+        useOnlyLocalImages: Boolean = false,
+    ): DemoDivImageLoaderWrapper {
         val loader = when (loader) {
-            Preferences.ImageLoaderOption.GLIDE -> GlideDivImageLoader(context, preferences.limitImageBitmapSizeEnabled)
-            Preferences.ImageLoaderOption.COIL -> CoilDivImageLoader(context, httpClientBuilder, preferences.limitImageBitmapSizeEnabled)
+            Preferences.ImageLoaderOption.GLIDE ->
+                GlideDivImageLoader(context, preferences.limitImageBitmapSizeEnabled)
+
+            Preferences.ImageLoaderOption.COIL ->
+                CoilDivImageLoader(
+                    context,
+                    httpClientBuilder,
+                    preferences.limitImageBitmapSizeEnabled
+                )
         }
-        return DemoDivImageLoaderWrapper(loader)
+        return DemoDivImageLoaderWrapper(
+            loader = loader,
+            localImageLoader = if (useOnlyLocalImages) LocalImageLoader(context.assets) else null,
+        )
     }
 
     var imageLoaderOverride: DemoDivImageLoaderWrapper? = null
@@ -103,7 +117,10 @@ internal object Container {
         `Yatagan$RegressionComponent`.builder().create(
             context = context,
             div2ViewCreator = div2ViewCreator,
-            scenarioViewCreator = RegressionSwitchingViewCreator(div2ViewCreator, composeViewCreator),
+            scenarioViewCreator = RegressionSwitchingViewCreator(
+                div2ViewCreator,
+                composeViewCreator
+            ),
         )
     }
 

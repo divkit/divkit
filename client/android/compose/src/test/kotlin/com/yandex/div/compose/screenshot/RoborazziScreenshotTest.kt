@@ -59,7 +59,7 @@ class RoborazziScreenshotTest(
         baseContext = getApplicationContext(),
         configuration = DivConfiguration(
             fontSourceProvider = TestFontSourceProvider(),
-            imageLoaderConfiguration = LocalImageLoaderConfiguration(),
+            imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext()),
             reporter = TestReporter()
         ),
         debugConfiguration = DivDebugConfiguration(

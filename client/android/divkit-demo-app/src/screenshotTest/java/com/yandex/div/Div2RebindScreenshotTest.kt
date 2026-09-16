@@ -17,7 +17,8 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
 
     private val activityRule = ActivityParamsTestRule(
         DivScreenshotActivity::class.java,
-        DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to case
+        DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to case,
+        DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME to DivScreenshotActivity.IMAGE_LOADER_LOCAL,
     )
 
     @Rule

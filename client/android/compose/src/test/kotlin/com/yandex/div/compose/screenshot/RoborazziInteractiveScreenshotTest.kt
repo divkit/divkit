@@ -63,7 +63,7 @@ class RoborazziInteractiveScreenshotTest(
         configuration = DivConfiguration(
             extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler()),
             fontSourceProvider = TestFontSourceProvider(),
-            imageLoaderConfiguration = LocalImageLoaderConfiguration(),
+            imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext()),
             reporter = TestReporter(),
         ),
         debugConfiguration = DivDebugConfiguration(
