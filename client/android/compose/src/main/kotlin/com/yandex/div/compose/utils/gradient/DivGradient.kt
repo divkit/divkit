@@ -21,24 +21,26 @@ import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
 
 @Composable
-internal fun DivLinearGradient.observeLinearGradient(): Brush? {
+internal fun DivLinearGradient.observeLinearGradient(animationPhase: Float? = null): Brush? {
     val points = colorMap?.map { it.position.observedFloatValue() to it.color.observedColorValue() }
     val colorMap = observedColorMap(points, colors) ?: return null
     return LinearGradientBrush(
         angle = angle.observedIntValue(),
-        colorMap = colorMap
+        colorMap = colorMap,
+        animationPhase = animationPhase,
     )
 }
 
 @Composable
-internal fun DivRadialGradient.observeRadialGradient(): Brush? {
+internal fun DivRadialGradient.observeRadialGradient(animationPhase: Float? = null): Brush? {
     val points = colorMap?.map { it.position.observedFloatValue() to it.color.observedColorValue() }
     val colorMap = observedColorMap(points, colors) ?: return null
     return RadialGradientBrush(
         centerX = centerX.observeCenter(),
         centerY = centerY.observeCenter(),
         radius = radius.observeRadius(),
-        colorMap = colorMap
+        colorMap = colorMap,
+        animationPhase = animationPhase,
     )
 }
 

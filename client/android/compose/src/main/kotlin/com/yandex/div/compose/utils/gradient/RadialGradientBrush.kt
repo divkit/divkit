@@ -1,10 +1,12 @@
 package com.yandex.div.compose.utils.gradient
 
+import android.graphics.Matrix
 import android.graphics.RadialGradient
 import android.graphics.Shader
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ShaderBrush
+import com.yandex.div.core.util.AnimatedTextGradientMath
 import com.yandex.div2.DivRadialGradientRelativeRadius
 import kotlin.math.abs
 import kotlin.math.pow
@@ -15,7 +17,8 @@ internal data class RadialGradientBrush(
     private val centerX: Center,
     private val centerY: Center,
     private val radius: Radius,
-    private val colorMap: ColorMap
+    private val colorMap: ColorMap,
+    private val animationPhase: Float? = null,
 ) : ShaderBrush() {
 
     @Immutable
@@ -80,8 +83,14 @@ internal data class RadialGradientBrush(
             radius.coerceAtLeast(MIN_GRADIENT_RADIUS),
             colorMap.colors,
             colorMap.positions,
-            Shader.TileMode.CLAMP
-        )
+            Shader.TileMode.CLAMP,
+        ).apply {
+            animationPhase?.let { phase ->
+                setLocalMatrix(Matrix().apply {
+                    setTranslate(AnimatedTextGradientMath.radialTranslation(width, phase), 0f)
+                })
+            }
+        }
     }
 
     private fun distTo(centerX: Float, centerY: Float, x: Float, y: Float): Float {

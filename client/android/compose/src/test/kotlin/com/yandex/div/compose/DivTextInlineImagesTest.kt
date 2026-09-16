@@ -15,6 +15,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.animatedTextGradient
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.doubleExpression
@@ -30,6 +31,7 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
@@ -45,6 +47,29 @@ class DivTextInlineImagesTest {
         reporter = TestReporter(),
         variableController = variableController,
     )
+
+    @Test
+    fun `inline image keeps animated gradient on the surrounding text`() {
+        // Arrange
+        rule.mainClock.autoAdvance = false
+        val content = text(
+            id = "text",
+            text = "abc",
+            images = listOf(inlineImage(constant(1L))),
+            textGradient = animatedTextGradient(),
+        )
+
+        // Act
+        rule.setContent(configuration = configuration, data = data(content))
+
+        // Assert
+        val rendered = rule.onNodeWithTag("text")
+            .fetchSemanticsNode().config[SemanticsProperties.Text].single()
+        assertEquals("a\u2060\u2060bc", rendered.text)
+        val gradientSpan = rendered.spanStyles.single { it.item.brush != null }
+        assertEquals(0 until 5, gradientSpan.start until gradientSpan.end)
+        assertNotNull(gradientSpan.item.brush)
+    }
 
     @Test
     fun `image position changes when expression value changes`() {

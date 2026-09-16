@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.LinearGradient
 import android.os.Build
 import android.text.Layout
 import com.yandex.div.core.font.DivTypefaceProvider
@@ -10,6 +11,9 @@ import com.yandex.div.core.view2.spannable.SpannedTextBuilder
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.data.animatedTextGradient
+import com.yandex.div.test.data.text
+import com.yandex.div2.Div
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -97,12 +101,28 @@ class DivTextBinderTest : DivBinderTest() {
         Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NONE, newView.hyphenationFrequency)
     }
 
+    @Test
+    fun `animated gradient is applied by binder`() {
+        val (divText, view) = createTestData(
+            text(text = "ANIMATED GRADIENT", textGradient = animatedTextGradient())
+        )
+
+        binder.bindView(view, divText, divView)
+        view.text = "ANIMATED GRADIENT"
+        view.layout(0, 0, 300, 80)
+
+        Assert.assertTrue(view.paint.shader is LinearGradient)
+    }
 
     private fun createTestData(filename: String): Pair<DivBlock.Text, DivLineHeightTextView> {
-        val div = UnitTestData(TEXT_DIR, filename).div.toBlock(resolver, path) as DivBlock.Text
-        val view = viewCreator.create(div.div, ExpressionResolver.EMPTY) as DivLineHeightTextView
+        return createTestData(UnitTestData(TEXT_DIR, filename).div)
+    }
+
+    private fun createTestData(div: Div): Pair<DivBlock.Text, DivLineHeightTextView> {
+        val block = div.toBlock(resolver, path) as DivBlock.Text
+        val view = viewCreator.create(block.div, ExpressionResolver.EMPTY) as DivLineHeightTextView
         view.layoutParams = defaultLayoutParams()
-        return div to view
+        return block to view
     }
 
     private fun createBinder(isHyphenationEnabled: Boolean = true) = DivTextBinder(

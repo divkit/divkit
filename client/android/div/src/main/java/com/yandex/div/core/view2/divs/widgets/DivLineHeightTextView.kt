@@ -30,13 +30,46 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
     internal var animationStartDelay = 0L
     private var animationStarted = false
     private var particlesTicker: ParticlesTicker? = null
+    private var animatedTextGradientController: AnimatedTextGradientController? = null
 
     internal fun getParticlesTicker(): ParticlesTicker {
         return particlesTicker ?: ParticlesTicker(this).also { particlesTicker = it }
     }
+
+    internal fun setAnimatedTextGradient(data: AnimatedTextGradientData, animationsEnabled: Boolean) {
+        val controller = animatedTextGradientController
+            ?: AnimatedTextGradientController(this).also { animatedTextGradientController = it }
+        controller.update(data, animationsEnabled)
+    }
+
+    internal fun setTextGradientAnimationsEnabled(enabled: Boolean) {
+        animatedTextGradientController?.setAnimationsEnabled(enabled)
+    }
+
+    internal fun clearAnimatedTextGradient() {
+        animatedTextGradientController?.release()
+        animatedTextGradientController = null
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        animatedTextGradientController?.onAttachedToWindow()
+    }
+
+    override fun onVisibilityChanged(changedView: View, visibility: Int) {
+        super.onVisibilityChanged(changedView, visibility)
+        animatedTextGradientController?.onVisibilityChanged()
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         onBoundsChanged(w, h)
+        animatedTextGradientController?.invalidate()
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        animatedTextGradientController?.invalidate()
     }
 
     override fun draw(canvas: Canvas) {
@@ -72,11 +105,13 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
         } else {
             particlesTicker?.stop()
         }
+        animatedTextGradientController?.onVisibilityChanged()
     }
 
     override fun onDetachedFromWindow() {
         particlesTicker?.stop()
         particlesTicker = null
+        animatedTextGradientController?.onDetachedFromWindow()
         super.onDetachedFromWindow()
     }
 }

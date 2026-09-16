@@ -13,6 +13,7 @@ import com.yandex.div2.DivExtension
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTextGradient
 import com.yandex.div2.DivTextRangeBackground
 import com.yandex.div2.DivTextRangeBorder
 import com.yandex.div2.DivTextRangeMask
@@ -36,6 +37,7 @@ fun text(
     margins: DivEdgeInsets? = null,
     paddings: DivEdgeInsets? = null,
     text: String,
+    textGradient: DivTextGradient? = null,
     tooltips: List<DivTooltip>? = null,
     transform: DivTransform? = null,
     triggers: List<DivTrigger>? = null,
@@ -56,6 +58,7 @@ fun text(
         margins = margins,
         paddings = paddings,
         text = constant(text),
+        textGradient = textGradient,
         tooltips = tooltips,
         transform = transform,
         triggers = triggers,
@@ -87,6 +90,7 @@ fun text(
     selectable: Boolean = false,
     text: Expression<String>,
     textColor: Color? = null,
+    textGradient: DivTextGradient? = null,
     tooltips: List<DivTooltip>? = null,
     transform: DivTransform? = null,
     triggers: List<DivTrigger>? = null,
@@ -117,6 +121,7 @@ fun text(
             ranges = ranges,
             selectable = constant(selectable),
             text = text,
+            textGradient = textGradient,
             textColor = textColor?.let { constant(it.value) } ?: constant(0xFF000000.toInt()),
             tooltips = tooltips,
             transform = transform,

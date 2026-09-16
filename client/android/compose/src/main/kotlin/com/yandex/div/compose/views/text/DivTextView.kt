@@ -4,9 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -31,6 +36,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.observedEnabledActions
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
@@ -39,8 +45,11 @@ import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.toAlignment
+import com.yandex.div.core.util.AnimatedTextGradientMath
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAnimatedTextGradient
+import com.yandex.div2.DivStaticTextGradient
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
 
@@ -108,6 +117,23 @@ private fun BasicText(
         baseTextColorAlpha = textStyle.color.alpha,
         inlineImages = inlineImages
     )
+    TextContent(
+        text = text, textStyle = textStyle, annotatedText = annotatedText,
+        customEllipsis = customEllipsis, inlineImages = inlineImages,
+        overflow = overflow, maxLines = maxLines,
+    )
+}
+
+@Composable
+private fun TextContent(
+    text: String,
+    textStyle: TextStyle,
+    annotatedText: AnnotatedText?,
+    customEllipsis: AnnotatedText?,
+    inlineImages: List<InlineImageData>,
+    overflow: TextOverflow,
+    maxLines: Int,
+) {
     when {
         customEllipsis != null -> EllipsizedText(
             text = annotatedText ?: AnnotatedText(AnnotatedString(text), emptyList()),
@@ -123,32 +149,41 @@ private fun BasicText(
             maxLines = maxLines
         )
 
-        else -> {
-            if (annotatedText.decorations.isEmpty()) {
-                BasicText(
-                    text = annotatedText.text,
-                    inlineContent = rememberInlineContent(inlineImages),
-                    style = textStyle,
-                    overflow = overflow,
-                    maxLines = maxLines,
-                )
-            } else {
-                val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
-                val onTextLayout = remember { { result: TextLayoutResult -> layoutResult.value = result } }
-                BasicText(
-                    text = annotatedText.text,
-                    modifier = Modifier.drawTextRangeDecorations(
-                        layoutResult = layoutResult,
-                        decorations = annotatedText.decorations,
-                    ),
-                    inlineContent = rememberInlineContent(inlineImages),
-                    style = textStyle,
-                    overflow = overflow,
-                    maxLines = maxLines,
-                    onTextLayout = onTextLayout,
-                )
-            }
-        }
+        else -> AnnotatedTextContent(annotatedText, inlineImages, textStyle, overflow, maxLines)
+    }
+}
+
+@Composable
+private fun AnnotatedTextContent(
+    annotatedText: AnnotatedText,
+    inlineImages: List<InlineImageData>,
+    textStyle: TextStyle,
+    overflow: TextOverflow,
+    maxLines: Int,
+) {
+    if (annotatedText.decorations.isEmpty()) {
+        BasicText(
+            text = annotatedText.text,
+            inlineContent = rememberInlineContent(inlineImages),
+            style = textStyle,
+            overflow = overflow,
+            maxLines = maxLines,
+        )
+    } else {
+        val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+        val onTextLayout = remember { { result: TextLayoutResult -> layoutResult.value = result } }
+        BasicText(
+            text = annotatedText.text,
+            modifier = Modifier.drawTextRangeDecorations(
+                layoutResult = layoutResult,
+                decorations = annotatedText.decorations,
+            ),
+            inlineContent = rememberInlineContent(inlineImages),
+            style = textStyle,
+            overflow = overflow,
+            maxLines = maxLines,
+            onTextLayout = onTextLayout,
+        )
     }
 }
 
@@ -318,24 +353,48 @@ private fun buildAnnotatedText(
     val builder = AnnotatedString.Builder()
     val decorations = mutableListOf<TextRangeDecoration>()
     val offsets = builder.appendTextWithInlineImages(text, inlineImages)
-    if (gradientBrush != null) {
-        builder.addStyle(SpanStyle(brush = gradientBrush), 0, builder.length)
-    }
-    if (!actions.isNullOrEmpty() && length > 0) {
-        val enabledActions = actions.observedEnabledActions()
-        if (enabledActions.isNotEmpty()) {
-            builder.addLink(rememberActionsLink(enabledActions), 0, builder.length)
-        }
-    }
+    builder.addTextGradient(gradientBrush)
+    builder.addTextActions(actions, 0, builder.length)
+    builder.addTextRanges(ranges, length, offsets, baseFontSize, baseTextColorAlpha, decorations)
+    builder.maskDecoratedRanges(decorations)
+    return AnnotatedText(builder.toAnnotatedString(), decorations)
+}
 
+private fun AnnotatedString.Builder.addTextGradient(gradientBrush: Brush?) {
+    if (gradientBrush == null) return
+    addStyle(SpanStyle(brush = gradientBrush), 0, length)
+}
+
+@Composable
+private fun AnnotatedString.Builder.addTextActions(
+    actions: List<DivAction>?,
+    start: Int,
+    end: Int,
+) {
+    if (actions.isNullOrEmpty() || start >= end) return
+    val enabledActions = actions.observedEnabledActions()
+    if (enabledActions.isNotEmpty()) {
+        addLink(rememberActionsLink(enabledActions), start, end)
+    }
+}
+
+@Composable
+private fun AnnotatedString.Builder.addTextRanges(
+    ranges: List<DivText.Range>?,
+    textLength: Int,
+    offsets: OriginalTextOffsets,
+    baseFontSize: Int,
+    baseTextColorAlpha: Float,
+    decorations: MutableList<TextRangeDecoration>,
+) {
     ranges?.forEach { range ->
-        val start = range.start.observedIntValue().coerceIn(0, length)
-        val end = range.end.observedIntValue(length).coerceIn(start, length)
+        val start = range.start.observedIntValue().coerceIn(0, textLength)
+        val end = range.end.observedIntValue(textLength).coerceIn(start, textLength)
         if (start < end) {
             val decorationStart = offsets.rangeStart(start)
             val decorationEnd = offsets.rangeEnd(end)
             val decoration = range.observeDecoration(decorationStart, decorationEnd)
-            builder.addStyle(
+            addStyle(
                 style = range.observeSpanStyle(
                     baseFontSize,
                     baseTextColorAlpha,
@@ -350,25 +409,22 @@ private fun buildAnnotatedText(
                 // Added after the whole text link so that it wins the hit test: a tap reaches the
                 // topmost link only, like on iOS where the range actions replace the ones of the
                 // ellipsis. The View renderer instead runs every action span under the tap.
-                builder.addLink(
-                    rememberActionsLink(rangeActions),
-                    offsets.rangeStart(start),
-                    offsets.rangeEnd(end)
-                )
+                addLink(rememberActionsLink(rangeActions), decorationStart, decorationEnd)
             }
         }
     }
+}
 
+@Composable
+private fun AnnotatedString.Builder.maskDecoratedRanges(decorations: List<TextRangeDecoration>) {
     if (decorations.any(TextRangeDecoration::hidesText)) {
         val maskedSpanStyle = rememberMaskedSpanStyle()
         decorations.forEach { decoration ->
             if (decoration.hidesText) {
-                builder.addStyle(maskedSpanStyle, decoration.start, decoration.end)
+                addStyle(maskedSpanStyle, decoration.start, decoration.end)
             }
         }
     }
-
-    return AnnotatedText(builder.toAnnotatedString(), decorations)
 }
 
 // A link consumes the tap it receives, so the actions of the text element itself do not run under
@@ -420,10 +476,45 @@ private fun DivTextGradient.observedValue(): Brush? {
     return when (this) {
         is DivTextGradient.Linear -> value.observeLinearGradient()
         is DivTextGradient.Radial -> value.observeRadialGradient()
-        is DivTextGradient.Animated -> null
+        is DivTextGradient.Animated -> value.observedValue()
     }
+}
+
+@Composable
+private fun DivAnimatedTextGradient.observedValue(): Brush? {
+    val animationsEnabled = divContext.component
+        .animationConfiguration
+        .isEnabledAsState()
+    val duration = duration.observedValue()
+    val animationPhase = rememberAnimatedTextGradientPhase(this, duration, animationsEnabled && duration > 0L)
+    return when (val gradient = gradient) {
+        is DivStaticTextGradient.Linear -> gradient.value.observeLinearGradient(animationPhase)
+        is DivStaticTextGradient.Radial -> gradient.value.observeRadialGradient(animationPhase)
+    }
+}
+
+@Composable
+private fun rememberAnimatedTextGradientPhase(
+    animationKey: Any,
+    durationMillis: Long,
+    animationsEnabled: Boolean,
+): Float? {
+    var phase by remember(animationKey) { mutableFloatStateOf(STATIC_ANIMATION_PHASE) }
+    LaunchedEffect(animationKey, animationsEnabled, durationMillis) {
+        if (!animationsEnabled) {
+            phase = STATIC_ANIMATION_PHASE
+            return@LaunchedEffect
+        }
+        while (true) {
+            withFrameMillis { frameTimeMillis ->
+                phase = AnimatedTextGradientMath.phase(frameTimeMillis, durationMillis)
+            }
+        }
+    }
+    return phase.takeIf { animationsEnabled }
 }
 
 private const val ACTIONS_LINK_TAG = "div-action"
 private const val SOFT_HYPHEN = '\u00AD'
 private const val DEFAULT_ELLIPSIS = "\u2026"
+private const val STATIC_ANIMATION_PHASE = 0f

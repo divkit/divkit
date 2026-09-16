@@ -2806,7 +2806,9 @@
     },
     {
       "title": "Animated Text Gradient",
-      "platforms": [],
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "DivText",
         "text_gradient",

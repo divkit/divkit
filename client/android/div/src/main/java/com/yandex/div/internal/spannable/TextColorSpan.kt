@@ -6,6 +6,6 @@ import android.text.style.ForegroundColorSpan
 class TextColorSpan(color: Int) : ForegroundColorSpan(color) {
     override fun updateDrawState(textPaint: TextPaint) {
         super.updateDrawState(textPaint)
-        textPaint.shader = null
+        if (textPaint.shader != null) textPaint.shader = null
     }
 }

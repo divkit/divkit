@@ -1,10 +1,12 @@
 package com.yandex.div.compose.utils.gradient
 
 import android.graphics.LinearGradient
+import android.graphics.Matrix
 import android.graphics.Shader
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ShaderBrush
+import com.yandex.div.core.util.AnimatedTextGradientMath
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -12,7 +14,8 @@ import kotlin.math.sin
 @Immutable
 internal data class LinearGradientBrush(
     private val angle: Int,
-    private val colorMap: ColorMap
+    private val colorMap: ColorMap,
+    private val animationPhase: Float? = null,
 ) : ShaderBrush() {
 
     override fun createShader(size: Size): Shader {
@@ -32,8 +35,18 @@ internal data class LinearGradientBrush(
             halfHeight - heightDelta,
             colorMap.colors,
             colorMap.positions,
-            Shader.TileMode.CLAMP
-        )
+            Shader.TileMode.CLAMP,
+        ).apply {
+            animationPhase?.let { phase ->
+                val translation = AnimatedTextGradientMath.linearTranslation(
+                    angleDegrees = angle.toFloat(),
+                    width = width,
+                    height = height,
+                    phase = phase,
+                )
+                setLocalMatrix(Matrix().apply { setTranslate(translation.x, translation.y) })
+            }
+        }
     }
 
     private fun Float.snapToZero(sensitivity: Float = 0.0001f): Float {

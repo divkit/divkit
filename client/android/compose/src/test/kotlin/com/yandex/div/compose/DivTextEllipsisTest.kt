@@ -14,6 +14,7 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.animatedTextGradient
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -34,6 +35,7 @@ import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 // Truncation is driven by real text measurement, which the legacy Robolectric graphics
 // pipeline does not provide: without NATIVE the text always reports as fitting.
@@ -182,6 +184,32 @@ class DivTextEllipsisTest {
         )
 
         rule.onNodeWithTag("text").assertTextEquals("short… more")
+    }
+
+    @Test
+    fun `custom ellipsis shares animated gradient brush`() {
+        // Arrange
+        rule.mainClock.autoAdvance = false
+        val content = text(
+            id = "text",
+            text = constant("A very long text that does not fit into a single line"),
+            maxLines = 1,
+            ellipsis = ellipsis(constant("… more")),
+            width = fixed(constant(100)),
+            textGradient = animatedTextGradient(),
+        )
+
+        // Act
+        setContent(content)
+
+        // Assert
+        val rendered = rule.onNodeWithTag("text")
+            .fetchSemanticsNode()
+            .config[SemanticsProperties.Text]
+            .single()
+        val gradientSpan = rendered.spanStyles.single { span -> span.item.brush != null }
+        assertEquals(0, gradientSpan.start)
+        assertEquals(rendered.length, gradientSpan.end)
     }
 
     @Test

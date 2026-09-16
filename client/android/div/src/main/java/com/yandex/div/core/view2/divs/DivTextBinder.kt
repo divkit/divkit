@@ -12,15 +12,9 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.colorsEqualToConstant
-import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.isConstantOrNull
-import com.yandex.div.core.util.observeColorPoint
-import com.yandex.div.core.util.toColormap
 import com.yandex.div.core.util.toIntSafely
-import com.yandex.div.core.util.toRadialGradientDrawableCenter
-import com.yandex.div.core.util.toRadialGradientDrawableRadius
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
@@ -32,10 +26,6 @@ import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
-import com.yandex.div.internal.drawable.LinearGradientDrawable
-import com.yandex.div.internal.drawable.RadialGradientDrawable
-import com.yandex.div.internal.graphics.Colormap
-import com.yandex.div.internal.graphics.checkIsNotEmpty
 import com.yandex.div.internal.util.compareNullableWith
 import com.yandex.div.internal.widget.EllipsizedTextView
 import com.yandex.div.internal.widget.checkHyphenationSupported
@@ -46,12 +36,9 @@ import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivLineStyle
-import com.yandex.div2.DivLinearGradient
-import com.yandex.div2.DivRadialGradient
 import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
-import com.yandex.div2.DivTextGradient
 import com.yandex.div2.DivTextRangeMaskParticles
 import com.yandex.div2.DivTextRangeMaskSolid
 import javax.inject.Inject
@@ -106,7 +93,7 @@ internal class DivTextBinder @Inject constructor(
         bindText(div, oldDiv, expressionResolver, divBlock.path, divView)
         bindEllipsis(div, oldDiv, expressionResolver, divBlock.path, divView)
         bindEllipsize(div, oldDiv, expressionResolver)
-        bindTextGradient(divView, div, oldDiv, expressionResolver)
+        TextGradientBinder.bind(this, divView, div, oldDiv, expressionResolver)
         bindTextShadow(div, oldDiv, expressionResolver)
         bindSelectable(div, oldDiv, expressionResolver)
         bindTightenWidth(div, oldDiv, expressionResolver)
@@ -433,140 +420,6 @@ internal class DivTextBinder @Inject constructor(
     private fun DivLineHeightTextView.applyTightenWidth(tight: Boolean) {
         isTightenWidth = tight
     }
-
-    //endregion
-
-    //region Text Gradient
-
-    private fun DivLineHeightTextView.bindTextGradient(
-        divView: Div2View,
-        newDiv: DivText,
-        oldDiv: DivText?,
-        resolver: ExpressionResolver,
-    ) {
-        when (val textGradient = newDiv.textGradient) {
-            null -> paint.shader = null
-            is DivTextGradient.Linear -> bindLinearTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
-            is DivTextGradient.Radial -> bindRadialTextGradient(divView, textGradient.value, oldDiv?.textGradient, resolver)
-            is DivTextGradient.Animated -> paint.shader = null
-        }
-    }
-
-    private fun DivLineHeightTextView.bindLinearTextGradient(
-        divView: Div2View,
-        newTextGradient: DivLinearGradient,
-        oldTextGradient: DivTextGradient?,
-        resolver: ExpressionResolver,
-    ) {
-        if (oldTextGradient is DivTextGradient.Linear
-            && newTextGradient.angle.equalsToConstant(oldTextGradient.value.angle)
-            && newTextGradient.colorsEqualToConstant(oldTextGradient.value)) {
-            return
-        }
-
-        applyLinearTextGradientColor(
-            newTextGradient.angle.evaluate(resolver),
-            newTextGradient.toColormap(resolver).checkIsNotEmpty(divView)
-        )
-
-        if (newTextGradient.angle.isConstant()
-            && newTextGradient.colors.isConstantOrNull()
-            && newTextGradient.colorMap.isConstantOrNull()) {
-            return
-        }
-
-        val callback = { _: Any ->
-            applyLinearTextGradientColor(
-                newTextGradient.angle.evaluate(resolver),
-                newTextGradient.toColormap(resolver).checkIsNotEmpty(divView)
-            )
-        }
-        addSubscription(newTextGradient.angle.observe(resolver, callback))
-        addSubscription(newTextGradient.colors?.observe(resolver, callback))
-        newTextGradient.colorMap?.forEach { observeColorPoint(it, resolver, callback) }
-    }
-
-    private fun TextView.applyLinearTextGradientColor(
-        angle: Long,
-        colormap: Colormap
-    ) {
-        doOnActualLayout {
-            this.paint.shader = LinearGradientDrawable.createLinearGradient(
-                angle = angle.toFloat(),
-                colors = colormap.colors,
-                positions = colormap.positions,
-                width = realTextWidth,
-                height = height - paddingBottom - paddingTop
-            )
-            invalidate()
-        }
-    }
-
-    private fun DivLineHeightTextView.bindRadialTextGradient(
-        divView: Div2View,
-        newTextGradient: DivRadialGradient,
-        oldTextGradient: DivTextGradient?,
-        resolver: ExpressionResolver,
-    ) {
-        // TODO: compare radius and center in a proper way
-        if (oldTextGradient is DivTextGradient.Radial
-            && newTextGradient.radius == oldTextGradient.value.radius
-            && newTextGradient.centerX == oldTextGradient.value.centerX
-            && newTextGradient.centerY == oldTextGradient.value.centerY
-            && newTextGradient.colorsEqualToConstant(oldTextGradient.value)) {
-            return
-        }
-
-        val displayMetrics = resources.displayMetrics
-        applyRadialTextGradientColor(
-            newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
-            newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
-            newTextGradient.centerY.toRadialGradientDrawableCenter(displayMetrics, resolver),
-            newTextGradient.toColormap(resolver).checkIsNotEmpty(divView),
-        )
-
-        val colorMapConst = newTextGradient.colorMap.isConstantOrNull()
-        if (newTextGradient.colors.isConstantOrNull() && colorMapConst) {
-            return
-        }
-
-        val callback = { _: Any ->
-            applyRadialTextGradientColor(
-                radius = newTextGradient.radius.toRadialGradientDrawableRadius(displayMetrics, resolver),
-                centerX = newTextGradient.centerX.toRadialGradientDrawableCenter(displayMetrics, resolver),
-                centerY = newTextGradient.centerY.toRadialGradientDrawableCenter(displayMetrics, resolver),
-                colormap = newTextGradient.toColormap(resolver).checkIsNotEmpty(divView),
-            )
-        }
-        addSubscription(newTextGradient.colors?.observe(resolver, callback))
-        newTextGradient.colorMap?.forEach { observeColorPoint(it, resolver, callback) }
-    }
-
-    private fun TextView.applyRadialTextGradientColor(
-        radius: RadialGradientDrawable.Radius,
-        centerX: RadialGradientDrawable.Center,
-        centerY: RadialGradientDrawable.Center,
-        colormap: Colormap,
-    ) {
-        doOnActualLayout {
-            this.paint.shader = RadialGradientDrawable.createRadialGradient(
-                radius = radius,
-                centerX = centerX,
-                centerY = centerY,
-                colors = colormap.colors,
-                positions = colormap.positions,
-                width = realTextWidth,
-                height = height - paddingBottom - paddingTop
-            )
-            invalidate()
-        }
-    }
-
-    private val TextView.realTextWidth: Int
-        get() = minOf(
-            availableWidth,
-            paint.measureText(text.toString()).toInt()
-        )
 
     //endregion
 
