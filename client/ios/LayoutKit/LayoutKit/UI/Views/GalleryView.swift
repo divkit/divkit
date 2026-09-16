@@ -525,6 +525,29 @@ private final class GalleryDataSource: NSObject, UICollectionViewDataSource {
   }
 }
 
+extension GalleryDataSource: CollectionViewAccessibilityElementProviding {
+  func collectionView(
+    _: UICollectionView,
+    accessibilityElementFor cell: UICollectionViewCell,
+    at _: IndexPath
+  ) -> Any? {
+    let elements = topLevelAccessibilityViews(in: cell.contentView)
+    return elements.count == 1 ? elements[0] : nil
+  }
+
+  private func topLevelAccessibilityViews(in view: UIView) -> [UIView] {
+    guard !view.isHidden,
+          view.alpha > 0.01,
+          !view.accessibilityElementsHidden else {
+      return []
+    }
+    if view.isAccessibilityElement {
+      return [view]
+    }
+    return view.subviews.flatMap(topLevelAccessibilityViews(in:))
+  }
+}
+
 extension GalleryViewModel.ScrollMode {
   fileprivate var decelerationRate: UIScrollView.DecelerationRate {
     switch self {
