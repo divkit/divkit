@@ -1,0 +1,122 @@
+{
+  "description": "Tabs with wrap_content height limited by max_size wrap match_parent pages to the tallest page content",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "tabs",
+          "height": {
+            "type": "wrap_content",
+            "max_size": {
+              "value": 300
+            }
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#EEF1F6"
+            }
+          ],
+          "selected_tab": 1,
+          "items": [
+            {
+              "title": "Tall",
+              "div": {
+                "type": "container",
+                "height": {
+                  "type": "match_parent"
+                },
+                "paddings": {
+                  "left": 8,
+                  "top": 8,
+                  "right": 8,
+                  "bottom": 8
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#FFCC00"
+                  }
+                ],
+                "items": [
+                  {
+                    "type": "text",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 184
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "font_size": 16,
+                    "text_alignment_horizontal": "center",
+                    "text_alignment_vertical": "center",
+                    "text_color": "#1A1A1A",
+                    "text": "Tall page, 200 dp"
+                  }
+                ]
+              }
+            },
+            {
+              "title": "Short",
+              "div": {
+                "type": "container",
+                "height": {
+                  "type": "match_parent"
+                },
+                "paddings": {
+                  "left": 8,
+                  "top": 8,
+                  "right": 8,
+                  "bottom": 8
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#7FD1AE"
+                  }
+                ],
+                "items": [
+                  {
+                    "type": "text",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 84
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "font_size": 16,
+                    "text_alignment_horizontal": "center",
+                    "text_alignment_vertical": "center",
+                    "text_color": "#1A1A1A",
+                    "text": "Short page, 100 dp"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

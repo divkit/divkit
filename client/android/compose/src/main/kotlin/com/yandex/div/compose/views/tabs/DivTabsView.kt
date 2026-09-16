@@ -2,7 +2,6 @@ package com.yandex.div.compose.views.tabs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +19,7 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.yandex.div.compose.context.animationsEnabled
@@ -80,7 +80,7 @@ internal fun DivTabsView(
         contentPaddings.calculateTopPadding() +
         contentPaddings.calculateBottomPadding()
 
-    Column(
+    TabsColumn(
         modifier = Modifier
             .fixedIntrinsics(width = fixedWidth, height = fixedHeight ?: minIntrinsicHeight)
             .then(modifier)
@@ -155,12 +155,16 @@ private fun TabsContent(
             val size = if (measurable == null) {
                 IntSize.Zero
             } else {
-                val pageConstraints = if (constraints.hasBoundedHeight) {
-                    constraints
-                } else {
-                    constraints.copy(maxHeight = measurable.maxIntrinsicHeight(constraints.maxWidth))
+                // Pages are measured loosely; only their maximum mirrors the View renderer: an exact
+                // tabs height stretches match_parent pages, a bounded wrap_content height (max_size,
+                // constrained) lets them wrap up to the limit.
+                val maxHeight = when {
+                    !constraints.hasBoundedHeight -> measurable.maxIntrinsicHeight(constraints.maxWidth)
+                    constraints.hasFixedHeight -> constraints.maxHeight
+                    else -> minOf(constraints.maxHeight, measurable.maxIntrinsicHeight(constraints.maxWidth))
                 }
-                measurable.measure(pageConstraints).let { IntSize(it.width, it.height) }
+                val placeable = measurable.measure(constraints.copy(minHeight = 0, maxHeight = maxHeight))
+                IntSize(placeable.width, placeable.height)
             }
             measuredPages[index] = size
             return size
@@ -197,7 +201,7 @@ private fun TabsContent(
             }
         }.first().measure(Constraints.fixed(width, desiredHeight))
 
-        layout(pagerPlaceable.width, pagerPlaceable.height) {
+        layout(pagerPlaceable.width, constraints.constrainHeight(pagerPlaceable.height)) {
             pagerPlaceable.placeRelative(0, 0)
         }
     }
