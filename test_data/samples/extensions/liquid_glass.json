@@ -1,0 +1,300 @@
+{
+  "platforms": [
+    "ios"
+  ],
+  "templates": {
+    "glass_label": {
+      "type": "text",
+      "font_size": 15,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_color": "#FFFFFFFF",
+      "width": {
+        "type": "match_parent"
+      }
+    }
+  },
+  "card": {
+    "log_id": "liquid_glass_sample",
+    "variables": [
+      {
+        "name": "is_enabled",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "is_interactive",
+        "type": "boolean",
+        "value": true
+      },
+      {
+        "name": "ui_style",
+        "type": "string",
+        "value": "unknown"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "height": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "left": 16,
+            "right": 16,
+            "top": 24,
+            "bottom": 24
+          },
+          "background": [
+            {
+              "type": "gradient",
+              "angle": 45,
+              "colors": [
+                "#FFFF3D00",
+                "#FFFFD600",
+                "#FF00E676",
+                "#FF2979FF",
+                "#FFD500F9"
+              ]
+            }
+          ],
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "content_alignment_vertical": "center",
+              "height": {
+                "type": "fixed",
+                "value": 56
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 20,
+                "right": 20
+              },
+              "items": [
+                {
+                  "type": "glass_label",
+                  "text": "regular + capsule"
+                }
+              ],
+              "extensions": [
+                {
+                  "id": "liquid_glass",
+                  "params": {
+                    "style": "regular",
+                    "corner_style": {
+                      "type": "capsule"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "content_alignment_vertical": "center",
+              "height": {
+                "type": "fixed",
+                "value": 56
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 20,
+                "right": 20
+              },
+              "items": [
+                {
+                  "type": "glass_label",
+                  "text": "clear + tint_color"
+                }
+              ],
+              "extensions": [
+                {
+                  "id": "liquid_glass",
+                  "params": {
+                    "style": "clear",
+                    "tint_color": "#80FF1744",
+                    "corner_style": {
+                      "type": "capsule",
+                      "max_radius": 16
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "content_alignment_vertical": "center",
+              "height": {
+                "type": "fixed",
+                "value": 72
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 20,
+                "right": 20
+              },
+              "items": [
+                {
+                  "type": "glass_label",
+                  "text": "is_interactive = @{is_interactive}, corners 4/24/24/4"
+                }
+              ],
+              "extensions": [
+                {
+                  "id": "liquid_glass",
+                  "params": {
+                    "style": "regular",
+                    "is_interactive": "@{is_interactive}",
+                    "corner_style": {
+                      "type": "corners",
+                      "top_left": 4,
+                      "top_right": 24,
+                      "bottom_left": 24,
+                      "bottom_right": 4
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_vertical": "center",
+              "margins": {
+                "bottom": 8
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "is_enabled",
+                  "font_size": 15,
+                  "text_color": "#FFFFFFFF",
+                  "width": {
+                    "type": "wrap_content"
+                  }
+                },
+                {
+                  "type": "switch",
+                  "is_on_variable": "is_enabled",
+                  "margins": {
+                    "left": 12
+                  },
+                  "width": {
+                    "type": "wrap_content"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "content_alignment_vertical": "center",
+              "height": {
+                "type": "fixed",
+                "value": 56
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 20,
+                "right": 20
+              },
+              "items": [
+                {
+                  "type": "glass_label",
+                  "text": "is_enabled = @{is_enabled}"
+                }
+              ],
+              "extensions": [
+                {
+                  "id": "liquid_glass",
+                  "params": {
+                    "style": "regular",
+                    "is_enabled": "@{is_enabled}",
+                    "corner_style": {
+                      "type": "capsule"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "paddings": {
+                "left": 16,
+                "right": 16,
+                "top": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FF101010"
+                }
+              ],
+              "items": [
+                {
+                  "type": "container",
+                  "orientation": "vertical",
+                  "content_alignment_vertical": "center",
+                  "height": {
+                    "type": "fixed",
+                    "value": 56
+                  },
+                  "paddings": {
+                    "left": 20,
+                    "right": 20
+                  },
+                  "items": [
+                    {
+                      "type": "glass_label",
+                      "text": "over dark content"
+                    }
+                  ],
+                  "extensions": [
+                    {
+                      "id": "liquid_glass",
+                      "params": {
+                        "style": "regular",
+                        "ui_style_variable": "ui_style",
+                        "corner_style": {
+                          "type": "capsule"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": "ui_style = @{ui_style}",
+                  "font_size": 13,
+                  "text_color": "#FFFFFFFF",
+                  "margins": {
+                    "top": 8
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
