@@ -1,3 +1,38 @@
+## 33.4.0
+
+### Android Client
+* Added animated text gradients for the whole `DivText` block in View and Compose.
+* Added container separator strokes to the Compose renderer, including separators between wrapped lines.
+* Added support for `max_length` in Compose input fields without a mask.
+* Applied `font_weight` and `font_weight_value` to fonts supplied as a ready `Typeface` by the font source provider of the Compose renderer, including the default configuration; `active_font_weight_value` and `inactive_font_weight_value` of `div-tabs` now render with the requested weight.
+* Compose: `div-tabs` with `wrap_content` height limited by `max_size` now wraps `match_parent` pages to their content instead of stretching them to the limit, and `dynamic_height` follows the selected page under that limit, as in the View renderer.
+* Deferred `DivVideo` player creation and binding until parent RecyclerViews finish layout and remain idle, and fixed background binding stalls.
+* Fixed TalkBack skipping accessibility descriptions and hints for elements without actions or focus.
+* Fixed `div-switch` in the Compose renderer to toggle on a tap anywhere within the element area, including paddings, not only on the switch itself, while still respecting `is_enabled`.
+* Fixed default item alignment in multi-column Compose galleries when more items become visible.
+* Fixed delayed tooltip scale animations when start or end scale values are omitted.
+* Fixed font scaling for sizes specified in sp in the Compose renderer.
+* Fixed grid row and column sizes for items spanning multiple tracks.
+* Fixed incorrect sizing of animated images loaded with Coil when using `no_scale` or `wrap_content`.
+* Fixed incorrect sizing of the highlighted view in tooltips with `substrate_div` and `bring_to_top_id`: the copy now preserves the original view's width and height.
+* Fixed indicator shape sizes, strokes, and pixel rounding in the Compose renderer.
+* Fixed item placement in multi-column Compose galleries to use staggered lanes.
+* Fixed plain text line heights smaller than the font's natural height and line-height scaling in the Compose renderer.
+* Fixed scaling of dimensions specified in `sp` in the Compose renderer.
+* Fixed tabs scrolling getting stuck after frequent item actions.
+* Fixed zero text line height to use the font's natural height in the Compose renderer.
+* Removed the deprecated `picasso` module and `PicassoDivImageLoader`. Use `CoilDivImageLoader` or `GlideDivImageLoader` instead.
+* Supported `animation_type` and `animation_duration` of `tab_title_style` in `div-tabs` in the Compose renderer.
+* Utility methods in model classes are marked as internal.
+
+### iOS Client
+* Added adjustable intensity to `blur` extension.
+* Avoid redundant gallery layout calculations when only the scroll state changes.
+* Fixed VoiceOver navigation in galleries and pagers so that every item can receive accessibility focus.
+* Fixed `change_bounds` transitions starting from the screen corner when a state switch happens before the state's first layout pass or while it is detached from a window: such changes are now applied in place.
+* Fixed `transition_change` elements of a newly built `div-state` subtree animating from a zero frame when the state switch runs inside a host animation block (e.g. an animated tab bar hide/show that rebinds the card): the switch and the first layout of its new views no longer inherit the ambient animation.
+
+
 ## 33.3.0
 
 ### Android Client
