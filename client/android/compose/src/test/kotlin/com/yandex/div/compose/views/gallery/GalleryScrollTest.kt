@@ -38,6 +38,7 @@ import org.junit.runner.RunWith
 import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class GalleryScrollTest {
@@ -49,6 +50,7 @@ class GalleryScrollTest {
     private val alignment = Variable.StringVariable("alignment", "center")
     private val visibleItems = Variable.IntegerVariable("visible_items", 16)
     private val defaultItem = Variable.IntegerVariable("default_item", 8)
+    private val paging = Variable.StringVariable("scroll_mode", "default")
     private val startPadding = Variable.IntegerVariable("start_padding", 0)
     private val configuration = DivConfiguration(
         reporter = TestReporter(),
@@ -57,6 +59,7 @@ class GalleryScrollTest {
             declare(visibleItems)
             declare(defaultItem)
             declare(startPadding)
+            declare(paging)
         },
     )
 
@@ -245,27 +248,162 @@ class GalleryScrollTest {
         assertSnappedItemCentered()
     }
 
+    @Test
+    fun `grid paging drag centers an item with asymmetric padding`() {
+        startPadding.set(32)
+        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING)
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerLeft, endVelocity = 0f)
+        }
+
+        assertSnappedItemCentered()
+    }
+
+    @Test
+    fun `rtl grid paging drag centers an item with asymmetric padding`() {
+        startPadding.set(32)
+        setGalleryContent(
+            columnCount = 2,
+            scrollMode = DivGallery.ScrollMode.PAGING,
+            layoutDirection = LayoutDirection.Rtl,
+        )
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerRight, endVelocity = 0f)
+        }
+
+        assertSnappedItemCentered()
+    }
+
+    @Test
+    fun `vertical grid paging drag centers an item with asymmetric padding`() {
+        startPadding.set(32)
+        setGalleryContent(
+            columnCount = 2,
+            scrollMode = DivGallery.ScrollMode.PAGING,
+            orientation = DivGallery.Orientation.VERTICAL,
+        )
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = topCenter, endVelocity = 0f)
+        }
+
+        assertEquals(
+            galleryBounds().center.y,
+            itemBounds(10).center.y,
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `grid paging drag uses updated start alignment`() {
+        startPadding.set(32)
+        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING)
+        alignment.set("start")
+        composeRule.waitForIdle()
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerLeft, endVelocity = 0f)
+        }
+
+        assertEquals(
+            galleryBounds().left + 32f * composeRule.density.density,
+            itemBounds(10).left,
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `grid paging drag uses updated end alignment`() {
+        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING)
+        alignment.set("end")
+        composeRule.waitForIdle()
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerLeft, endVelocity = 0f)
+        }
+
+        assertEquals(galleryBounds().right, itemBounds(10).right, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `grid forward fling centers the last fully visible item`() {
+        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING)
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerLeft, endVelocity = 1000f)
+        }
+
+        assertEquals(galleryBounds().center.x, itemBounds(12).center.x, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `grid backward fling centers the first fully visible item`() {
+        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING)
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerRight, endVelocity = 1000f)
+        }
+
+        assertEquals(galleryBounds().center.x, itemBounds(4).center.x, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `grid starts snapping when scroll mode changes to paging`() {
+        setGalleryContent(columnCount = 2)
+        paging.set("paging")
+        composeRule.waitForIdle()
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerLeft, endVelocity = 0f)
+        }
+
+        assertSnappedItemCentered()
+    }
+
+    @Test
+    fun `grid stops snapping when scroll mode changes to default`() {
+        setGalleryContent(columnCount = 2, scrollMode = DivGallery.ScrollMode.PAGING)
+        paging.set("default")
+        composeRule.waitForIdle()
+
+        composeRule.onNode(hasScrollToIndexAction()).performTouchInput {
+            swipeWithVelocity(start = center, end = centerLeft, endVelocity = 0f)
+        }
+
+        assertTrue(abs(itemBounds(10).center.x - galleryBounds().center.x) > 1f)
+    }
+
     private fun setGalleryContent(
         columnCount: Long = 1,
         scrollMode: DivGallery.ScrollMode = DivGallery.ScrollMode.DEFAULT,
         layoutDirection: LayoutDirection = LayoutDirection.Ltr,
+        orientation: DivGallery.Orientation = DivGallery.Orientation.HORIZONTAL,
     ) {
+        paging.set(scrollMode.name.lowercase())
+        val isHorizontal = orientation == DivGallery.Orientation.HORIZONTAL
         val galleryData = data(
             gallery(
                 columnCount = constant(columnCount),
                 defaultItem = intExpression("@{default_item}"),
-                height = fixed(108),
+                height = fixed(if (isHorizontal) 108 else 300),
                 id = "gallery",
                 items = List(16) { index ->
                     text(
-                        height = fixed(50),
+                        height = fixed(if (isHorizontal) 50 else 100),
                         id = "item$index",
                         text = constant(index.toString()),
                         visibility = visibilityExpression("@{visible_items > $index ? 'visible' : 'gone'}"),
-                        width = fixed(100),
+                        width = fixed(if (isHorizontal) 100 else 50),
                     )
                 },
-                paddings = DivEdgeInsets(start = intExpression("@{start_padding}")),
+                orientation = constant(orientation),
+                paddings = if (isHorizontal) {
+                    DivEdgeInsets(start = intExpression("@{start_padding}"))
+                } else {
+                    DivEdgeInsets(top = intExpression("@{start_padding}"))
+                },
                 scrollContentAlignment = Expression.MutableExpression(
                     expressionKey = "test",
                     rawExpression = "@{alignment}",
@@ -276,8 +414,17 @@ class GalleryScrollTest {
                         it is DivGallery.ContentAlignment
                     },
                 ),
-                scrollMode = constant(scrollMode),
-                width = fixed(300),
+                scrollMode = Expression.MutableExpression(
+                    expressionKey = "test",
+                    rawExpression = "@{scroll_mode}",
+                    converter = DivGallery.ScrollMode::fromString,
+                    validator = { true },
+                    logger = throwingErrorLogger,
+                    typeHelper = TypeHelper.from(default = DivGallery.ScrollMode.DEFAULT) {
+                        it is DivGallery.ScrollMode
+                    },
+                ),
+                width = fixed(if (isHorizontal) 300 else 108),
             )
         )
         restorationTester.setContent {

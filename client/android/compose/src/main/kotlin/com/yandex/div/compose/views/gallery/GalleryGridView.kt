@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.gallery
 
+import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,6 +43,7 @@ internal fun GalleryGridView(
     scrollContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
     defaultItem: Int,
+    scrollMode: DivGallery.ScrollMode,
 ) {
     val initialDefaultItem = remember { defaultItem }
     val clampedDefaultItem = initialDefaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
@@ -76,6 +78,7 @@ internal fun GalleryGridView(
                 modifier = Modifier,
                 items = items,
                 gridState = gridState,
+                flingBehavior = rememberGalleryGridFlingBehavior(gridState, scrollMode, scrollContentAlignment),
                 columnCount = columnCount,
                 itemSpacing = itemSpacing,
                 crossSpacing = crossSpacing,
@@ -86,6 +89,7 @@ internal fun GalleryGridView(
                 modifier = Modifier,
                 items = items,
                 gridState = gridState,
+                flingBehavior = rememberGalleryGridFlingBehavior(gridState, scrollMode, scrollContentAlignment),
                 columnCount = columnCount,
                 itemSpacing = itemSpacing,
                 crossSpacing = crossSpacing,
@@ -264,6 +268,7 @@ private fun GalleryLazyHorizontalStaggeredGrid(
     modifier: Modifier,
     items: List<Div>,
     gridState: LazyStaggeredGridState,
+    flingBehavior: FlingBehavior,
     columnCount: Int,
     itemSpacing: Dp,
     crossSpacing: Dp,
@@ -274,6 +279,7 @@ private fun GalleryLazyHorizontalStaggeredGrid(
         rows = StaggeredGridCells.Fixed(columnCount),
         modifier = modifier,
         state = gridState,
+        flingBehavior = flingBehavior,
         contentPadding = contentPadding,
         horizontalItemSpacing = itemSpacing,
         verticalArrangement = Arrangement.spacedBy(crossSpacing),
@@ -294,6 +300,7 @@ private fun GalleryLazyVerticalStaggeredGrid(
     modifier: Modifier,
     items: List<Div>,
     gridState: LazyStaggeredGridState,
+    flingBehavior: FlingBehavior,
     columnCount: Int,
     itemSpacing: Dp,
     crossSpacing: Dp,
@@ -304,6 +311,7 @@ private fun GalleryLazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(columnCount),
         modifier = modifier,
         state = gridState,
+        flingBehavior = flingBehavior,
         contentPadding = contentPadding,
         verticalItemSpacing = itemSpacing,
         horizontalArrangement = Arrangement.spacedBy(crossSpacing),

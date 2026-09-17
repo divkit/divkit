@@ -28,8 +28,9 @@ internal fun DivGalleryView(
 
     val columnCount = data.columnCount.observedIntValue(1)
     if (columnCount > 1) {
+        val scrollMode = data.scrollMode.observedValue()
         val scrollContentAlignment = data.scrollContentAlignment?.observedValue()
-            ?: data.scrollMode.observedValue().defaultScrollContentAlignment()
+            ?: scrollMode.defaultScrollContentAlignment()
         GalleryGridView(
             modifier = modifier,
             items = items,
@@ -41,6 +42,7 @@ internal fun DivGalleryView(
             scrollContentAlignment = scrollContentAlignment,
             contentPadding = contentPadding,
             defaultItem = defaultItem,
+            scrollMode = scrollMode,
         )
     } else {
         val scrollMode = data.scrollMode.observedValue()
