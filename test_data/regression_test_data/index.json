@@ -2725,7 +2725,14 @@
         "web": "divkit-asset support is not expected"
       },
       "tags": [
-        "lottie"
+        "lottie",
+        "Animations"
+      ],
+      "steps": [
+        "Observe both animations for at least five full cycles."
+      ],
+      "expected_results": [
+        "Both animations play identically and smoothly. The central burgundy ball does not jerk or jump when a cycle restarts."
       ],
       "file": "animations/lottie/asset_lottie.json",
       "case_id": 475
