@@ -155,6 +155,8 @@ nexusPublishPlugin = { module = "io.github.gradle-nexus:publish-plugin", version
 nvWebsocket = { module = "com.neovisionaries:nv-websocket-client", version = "2.14" }
 
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
+okhttp-tls = { module = "com.squareup.okhttp3:okhttp-tls", version.ref = "okhttp" }
 
 protobuf = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
 
