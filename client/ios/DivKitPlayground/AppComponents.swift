@@ -65,6 +65,7 @@ enum AppComponents {
         InputPropertiesExtensionHandler(),
         RasterizeExtensionHandler(),
         BlurExtensionHandler(),
+        LiquidGlassExtensionHandler(),
       ],
       flagsInfo: DivFlagsInfo(
         initializeTriggerOnSet: false,
