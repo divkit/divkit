@@ -22,6 +22,7 @@ internal class ImageLoaderFactory @Inject constructor(
                 add(DivkitAssetUriMapper())
                 add(GifDecoderFactory)
                 addSvgDecoderFactoryIfAvailable(context)
+                add(UnthrottledImageDecoderFactory)
             }
             .eventListener(imageLoaderConfiguration.eventListener)
             .build()

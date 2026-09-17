@@ -34,6 +34,7 @@ internal fun DivImageView(
         placeholderColor = data.placeholderColor.observedColorValue(),
         transformations = data.filters.observedTransformations(),
         colorFilter = colorFilter,
+        highPriorityPreviewShow = data.highPriorityPreviewShow,
         preview = { data.preview?.observedValue(transform = previewDecoder::decodePreview) }
     )
 }

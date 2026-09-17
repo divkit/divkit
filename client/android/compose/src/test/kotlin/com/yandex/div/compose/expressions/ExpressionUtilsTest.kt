@@ -2,7 +2,9 @@ package com.yandex.div.compose.expressions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.RecomposeScope
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +22,7 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertSame
 
 @RunWith(AndroidJUnit4::class)
 class ExpressionUtilsTest {
@@ -161,6 +164,25 @@ class ExpressionUtilsTest {
         composeRule.waitForIdle()
 
         assertEquals("counter = 2", observedValue)
+    }
+
+    @Test
+    fun `transformed value is reused when composition is invalidated`() {
+        variableController.declare(Variable.IntegerVariable("counter", 1))
+        val expression = intExpression("@{counter}")
+        var observedValue: ByteArray? = null
+        lateinit var scope: RecomposeScope
+
+        setContent {
+            scope = currentRecomposeScope
+            observedValue = expression.observedValue { byteArrayOf(it.toByte()) }
+        }
+        val initialValue = observedValue
+
+        composeRule.runOnIdle { scope.invalidate() }
+        composeRule.waitForIdle()
+
+        assertSame(initialValue, observedValue)
     }
 
     @Test

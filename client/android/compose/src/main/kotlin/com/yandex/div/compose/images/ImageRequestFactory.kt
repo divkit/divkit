@@ -10,6 +10,7 @@ import coil3.size.Scale
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.dagger.DivContextScope
 import javax.inject.Inject
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.math.max
 
 @DivContextScope
@@ -25,6 +26,10 @@ internal class ImageRequestFactory @Inject constructor(
             .transformations(params.transformations)
             .listener(imageRequestListener)
             .apply {
+                if (params.synchronous) {
+                    extras[UnthrottledImageDecoderFactory.enabled] = true
+                    coroutineContext(EmptyCoroutineContext)
+                }
                 if (params.limitToDisplaySize) {
                     size(maxDisplaySize, maxDisplaySize)
                     scale(Scale.FIT)

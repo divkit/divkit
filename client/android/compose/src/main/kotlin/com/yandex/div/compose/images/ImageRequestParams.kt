@@ -8,4 +8,5 @@ internal data class ImageRequestParams(
     val data: Any,
     val transformations: List<Transformation> = emptyList(),
     val limitToDisplaySize: Boolean = false,
+    val synchronous: Boolean = false,
 )

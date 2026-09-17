@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,10 +20,12 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.transform.Transformation
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivBase
 
 @Composable
@@ -33,20 +38,35 @@ internal fun DivImageContent(
     placeholderColor: Color,
     transformations: List<Transformation> = emptyList(),
     colorFilter: ColorFilter? = null,
+    highPriorityPreviewShow: Expression<Boolean>? = null,
     preview: @Composable () -> Any?
 ) {
     val imageStateStorage = LocalDivViewContext.current.component.imageStateStorage
     val isImageLoaded = imageStateStorage.isLoaded(data)
+    // Match DivImageBinder.applyImage: a replacement preview is not high priority if the previous
+    // image was loaded. Capture that state before DisposableEffect resets it on a URL change.
+    val canShowHighPriorityPreview = remember(imageUrl) { mutableStateOf(!isImageLoaded) }
     val previewModel = if (isImageLoaded) null else preview()
     val previewRequest = if (previewModel == null) {
         null
     } else {
+        // Keep this preview's priority when SideEffect enables high priority for later previews.
+        val useHighPriority = remember(imageUrl, previewModel) { canShowHighPriorityPreview.value }
+        val synchronous = useHighPriority && highPriorityPreviewShow.observedValue(false)
         rememberImageRequest(
             ImageRequestParams(
                 data = previewModel,
-                transformations = transformations
+                transformations = transformations,
+                synchronous = synchronous
             )
         )
+    }
+    if (!isImageLoaded) {
+        SideEffect {
+            // Later preview changes while loading can use high priority, as in
+            // DivImageBinder.observePlaceholders.
+            canShowHighPriorityPreview.value = true
+        }
     }
 
     val backgroundModifier = if (!isImageLoaded && previewRequest == null) {

@@ -79,7 +79,10 @@ internal inline fun <reified T : Any, R> Expression<T>.observedValue(
                 transform(evaluate(expressionResolver))
             }
 
-        else -> transform(cachedObservedValue(this, T::class))
+        else -> {
+            val value = cachedObservedValue(this, T::class)
+            remember(value) { transform(value) }
+        }
     }
 }
 

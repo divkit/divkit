@@ -725,6 +725,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageRequestListener.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageRequestListener.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageRequestParams.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageRequestParams.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageStateStorage.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/ImageStateStorage.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/UnthrottledImageDecoderFactory.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/UnthrottledImageDecoderFactory.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/images/UriUtils.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/images/UriUtils.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/internal/DivDebugConfiguration.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/internal/DivDebugConfiguration.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/internal/DivDebugFeatures.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/internal/DivDebugFeatures.kt",
