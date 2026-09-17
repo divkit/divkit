@@ -1,6 +1,28 @@
 {
   "tests": [
     {
+      "title": "Haptic feedback",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "Actions"
+      ],
+      "steps": [
+        "Open on a physical device with haptic feedback enabled.",
+        "Tap Light, Medium, Heavy, Success and Error.",
+        "Tap Default (light), then Disabled (no feedback).",
+        "Disable system haptics and repeat the actions."
+      ],
+      "expected_results": [
+        "Each effect produces its corresponding feedback when supported by the device.",
+        "Default matches Light; Disabled produces no feedback.",
+        "Last action updates after every tap, including Disabled, without implying that physical feedback occurred.",
+        "With system haptics disabled, actions continue and Last action updates without feedback."
+      ],
+      "file": "actions/haptic.json"
+    },
+    {
       "title": "Transition animations with delay",
       "tags": [
         "Animations"

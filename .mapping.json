@@ -15613,6 +15613,7 @@
   "test_data/regression_test_data/actions/copy-to-clipboard.json":"divkit/public/test_data/regression_test_data/actions/copy-to-clipboard.json",
   "test_data/regression_test_data/actions/focus-element-mobile.json":"divkit/public/test_data/regression_test_data/actions/focus-element-mobile.json",
   "test_data/regression_test_data/actions/focus-element.json":"divkit/public/test_data/regression_test_data/actions/focus-element.json",
+  "test_data/regression_test_data/actions/haptic.json":"divkit/public/test_data/regression_test_data/actions/haptic.json",
   "test_data/regression_test_data/actions/hover-and-press.json":"divkit/public/test_data/regression_test_data/actions/hover-and-press.json",
   "test_data/regression_test_data/actions/is_enabled.json":"divkit/public/test_data/regression_test_data/actions/is_enabled.json",
   "test_data/regression_test_data/actions/menu.json":"divkit/public/test_data/regression_test_data/actions/menu.json",

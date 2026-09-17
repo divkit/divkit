@@ -1,0 +1,203 @@
+{
+  "templates": {
+    "haptic_button": {
+      "type": "text",
+      "font_size": 18,
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "top": 12,
+        "bottom": 12
+      },
+      "margins": {
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#E9E5FF"
+        }
+      ],
+      "border": {
+        "corner_radius": 12
+      }
+    }
+  },
+  "card": {
+    "log_id": "haptic_feedback_demo",
+    "variables": [
+      {
+        "name": "last_action",
+        "type": "string",
+        "value": "none"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "right": 16,
+            "top": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Haptic feedback",
+              "font_size": 24,
+              "font_weight": "bold",
+              "margins": {
+                "bottom": 8
+              }
+            },
+            {
+              "type": "text",
+              "text": "Try on a physical device with haptic feedback enabled. The simulator cannot reproduce the feedback.",
+              "font_size": 14,
+              "margins": {
+                "bottom": 16
+              }
+            },
+            {
+              "type": "haptic_button",
+              "id": "haptic_light",
+              "text": "Light",
+              "actions": [
+                {
+                  "log_id": "haptic_light",
+                  "typed": {
+                    "type": "haptic",
+                    "feedback": "light"
+                  }
+                },
+                {
+                  "log_id": "status_light",
+                  "url": "div-action://set_variable?name=last_action&value=light"
+                }
+              ]
+            },
+            {
+              "type": "haptic_button",
+              "id": "haptic_medium",
+              "text": "Medium",
+              "actions": [
+                {
+                  "log_id": "haptic_medium",
+                  "typed": {
+                    "type": "haptic",
+                    "feedback": "medium"
+                  }
+                },
+                {
+                  "log_id": "status_medium",
+                  "url": "div-action://set_variable?name=last_action&value=medium"
+                }
+              ]
+            },
+            {
+              "type": "haptic_button",
+              "id": "haptic_heavy",
+              "text": "Heavy",
+              "actions": [
+                {
+                  "log_id": "haptic_heavy",
+                  "typed": {
+                    "type": "haptic",
+                    "feedback": "heavy"
+                  }
+                },
+                {
+                  "log_id": "status_heavy",
+                  "url": "div-action://set_variable?name=last_action&value=heavy"
+                }
+              ]
+            },
+            {
+              "type": "haptic_button",
+              "id": "haptic_success",
+              "text": "Success",
+              "actions": [
+                {
+                  "log_id": "haptic_success",
+                  "typed": {
+                    "type": "haptic",
+                    "feedback": "success"
+                  }
+                },
+                {
+                  "log_id": "status_success",
+                  "url": "div-action://set_variable?name=last_action&value=success"
+                }
+              ]
+            },
+            {
+              "type": "haptic_button",
+              "id": "haptic_error",
+              "text": "Error",
+              "actions": [
+                {
+                  "log_id": "haptic_error",
+                  "typed": {
+                    "type": "haptic",
+                    "feedback": "error"
+                  }
+                },
+                {
+                  "log_id": "status_error",
+                  "url": "div-action://set_variable?name=last_action&value=error"
+                }
+              ]
+            },
+            {
+              "type": "haptic_button",
+              "id": "haptic_default",
+              "text": "Default (light)",
+              "actions": [
+                {
+                  "log_id": "haptic_default",
+                  "typed": {
+                    "type": "haptic"
+                  }
+                },
+                {
+                  "log_id": "status_default",
+                  "url": "div-action://set_variable?name=last_action&value=default"
+                }
+              ]
+            },
+            {
+              "type": "haptic_button",
+              "id": "haptic_disabled",
+              "text": "Disabled (no feedback)",
+              "actions": [
+                {
+                  "log_id": "haptic_disabled",
+                  "typed": {
+                    "type": "haptic"
+                  },
+                  "is_enabled": false
+                },
+                {
+                  "log_id": "status_disabled",
+                  "url": "div-action://set_variable?name=last_action&value=disabled"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "haptic_status",
+              "text": "Last action: @{last_action}",
+              "font_size": 14,
+              "margins": {
+                "top": 8
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
