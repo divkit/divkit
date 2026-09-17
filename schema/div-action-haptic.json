@@ -21,7 +21,9 @@
       "default_value": "light"
     }
   },
-  "platforms": [],
+  "platforms": [
+    "ios"
+  ],
   "required": [
     "type"
   ]

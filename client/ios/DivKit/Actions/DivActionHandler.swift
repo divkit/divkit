@@ -32,6 +32,7 @@ public final class DivActionHandler {
   private let dictSetValueActionHandler = DictSetValueActionHandler()
   private let downloadActionHandler: DownloadActionHandler
   private let focusElementActionHandler: FocusElementActionHandler
+  private let hapticActionHandler = HapticActionHandler()
   private let scrollActionHandler: ScrollActionHandler
   private let setCursorPositionActionHandler: SetCursorPositionActionHandler
   private let setStateActionHandler: SetStateActionHandler
@@ -264,6 +265,8 @@ public final class DivActionHandler {
       downloadActionHandler.handle(action, context: context)
     case let .divActionFocusElement(action):
       focusElementActionHandler.handle(action, context: context)
+    case let .divActionHaptic(action):
+      hapticActionHandler.handle(action, context: context)
     case let .divActionHideTooltip(action):
       tooltipActionHandler.handle(action, context: context)
     case let .divActionScrollBy(action):

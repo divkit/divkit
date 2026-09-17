@@ -1,6 +1,7 @@
 @testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
 import LayoutKit
+import Serialization
 import XCTest
 
 final class DivActionHandlerTests: XCTestCase {
@@ -36,6 +37,60 @@ final class DivActionHandlerTests: XCTestCase {
 
   private var handledUrl: URL?
   private var lastUpdateReason: DivCardUpdateReason?
+
+  func test_HapticVariantsAreParsedAndHandled() throws {
+    for feedback in DivActionHaptic.Feedback.allCases {
+      let action = try DivActionHaptic(
+        dictionary: ["type": "haptic", "feedback": feedback.rawValue],
+        context: ParsingContext()
+      )
+      XCTAssertEqual(action.feedback, .value(feedback))
+      handle(divAction(typed: .divActionHaptic(action), url: "https://some.url"))
+      XCTAssertNil(handledUrl)
+      XCTAssertNil(reporter.lastError)
+    }
+  }
+
+  func test_HapticMissingOrUnknownFeedbackDefaultsToLight() throws {
+    let dictionaries: [[String: Any]] = [
+      ["type": "haptic"],
+      ["type": "haptic", "feedback": "unknown"],
+    ]
+    for dictionary in dictionaries {
+      let action = try DivActionHaptic(dictionary: dictionary, context: ParsingContext())
+      XCTAssertEqual(action.feedback, .value(.light))
+      handle(.divActionHaptic(action))
+      XCTAssertNil(reporter.lastError)
+    }
+  }
+
+  func test_HapticResolvesFeedbackExpression() throws {
+    variablesStorage.set(cardId: cardId, variables: ["feedback": .string("heavy")])
+    let action = try DivActionTyped(
+      dictionary: ["type": "haptic", "feedback": "@{feedback}"], context: ParsingContext()
+    )
+    handle(action)
+    XCTAssertNil(reporter.lastError)
+  }
+
+  func test_DisabledHapticDoesNotEvaluateFeedback() throws {
+    let action = try DivActionTyped(
+      dictionary: ["type": "haptic", "feedback": "@{missing}"], context: ParsingContext()
+    )
+    handle(divAction(isEnabled: false, typed: action))
+    XCTAssertNil(reporter.lastError)
+  }
+
+  func test_InvalidHapticDoesNotPreventFollowingAction() throws {
+    variablesStorage.set(cardId: cardId, variables: ["feedback": .string("unknown")])
+    let action = try DivActionTyped(
+      dictionary: ["type": "haptic", "feedback": "@{feedback}"], context: ParsingContext()
+    )
+    handle(action)
+    XCTAssertNotNil(reporter.lastError)
+    handle(divAction(url: "https://some.url"))
+    XCTAssertEqual(url("https://some.url"), handledUrl)
+  }
 
   func test_UrlPassedToUrlHandler() {
     handle(

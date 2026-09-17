@@ -16,6 +16,7 @@ public enum DivActionTyped: Sendable {
   case divActionDictSetValue(DivActionDictSetValue)
   case divActionDownload(DivActionDownload)
   case divActionFocusElement(DivActionFocusElement)
+  case divActionHaptic(DivActionHaptic)
   case divActionHideTooltip(DivActionHideTooltip)
   case divActionScrollBy(DivActionScrollBy)
   case divActionScrollTo(DivActionScrollTo)
@@ -51,6 +52,8 @@ public enum DivActionTyped: Sendable {
     case let .divActionDownload(value):
       return value
     case let .divActionFocusElement(value):
+      return value
+    case let .divActionHaptic(value):
       return value
     case let .divActionHideTooltip(value):
       return value
@@ -107,6 +110,8 @@ extension DivActionTyped {
       self = .divActionDownload(try DivActionDownload(dictionary: dictionary, context: context))
     case DivActionFocusElement.type:
       self = .divActionFocusElement(try DivActionFocusElement(dictionary: dictionary, context: context))
+    case DivActionHaptic.type:
+      self = .divActionHaptic(try DivActionHaptic(dictionary: dictionary, context: context))
     case DivActionHideTooltip.type:
       self = .divActionHideTooltip(try DivActionHideTooltip(dictionary: dictionary, context: context))
     case DivActionScrollBy.type:
@@ -162,6 +167,8 @@ extension DivActionTyped: Equatable {
     case let (.divActionDownload(l), .divActionDownload(r)):
       return l == r
     case let (.divActionFocusElement(l), .divActionFocusElement(r)):
+      return l == r
+    case let (.divActionHaptic(l), .divActionHaptic(r)):
       return l == r
     case let (.divActionHideTooltip(l), .divActionHideTooltip(r)):
       return l == r

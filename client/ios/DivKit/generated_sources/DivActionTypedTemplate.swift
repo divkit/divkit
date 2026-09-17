@@ -16,6 +16,7 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
   case divActionDictSetValueTemplate(DivActionDictSetValueTemplate)
   case divActionDownloadTemplate(DivActionDownloadTemplate)
   case divActionFocusElementTemplate(DivActionFocusElementTemplate)
+  case divActionHapticTemplate(DivActionHapticTemplate)
   case divActionHideTooltipTemplate(DivActionHideTooltipTemplate)
   case divActionScrollByTemplate(DivActionScrollByTemplate)
   case divActionScrollToTemplate(DivActionScrollToTemplate)
@@ -51,6 +52,8 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
     case let .divActionDownloadTemplate(value):
       return value
     case let .divActionFocusElementTemplate(value):
+      return value
+    case let .divActionHapticTemplate(value):
       return value
     case let .divActionHideTooltipTemplate(value):
       return value
@@ -103,6 +106,8 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
       return .divActionDownloadTemplate(try value.resolveParent(templates: templates))
     case let .divActionFocusElementTemplate(value):
       return .divActionFocusElementTemplate(try value.resolveParent(templates: templates))
+    case let .divActionHapticTemplate(value):
+      return .divActionHapticTemplate(try value.resolveParent(templates: templates))
     case let .divActionHideTooltipTemplate(value):
       return .divActionHideTooltipTemplate(try value.resolveParent(templates: templates))
     case let .divActionScrollByTemplate(value):
@@ -248,6 +253,17 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
           switch result {
             case let .success(value): return .success(.divActionFocusElement(value))
             case let .partialSuccess(value, warnings): return .partialSuccess(.divActionFocusElement(value), warnings: warnings)
+            case let .failure(errors): return .failure(errors)
+            case .noValue: return .noValue
+          }
+        } else { return nil }
+      }()
+      result = result ?? {
+        if case let .divActionHapticTemplate(value) = parent {
+          let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+          switch result {
+            case let .success(value): return .success(.divActionHaptic(value))
+            case let .partialSuccess(value, warnings): return .partialSuccess(.divActionHaptic(value), warnings: warnings)
             case let .failure(errors): return .failure(errors)
             case .noValue: return .noValue
           }
@@ -497,6 +513,15 @@ public enum DivActionTypedTemplate: TemplateValue, Sendable {
       case .noValue: return .noValue
       }
     } else { return nil } }()
+    result = result ?? { if type == DivActionHaptic.type {
+      let result = { DivActionHapticTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
+      switch result {
+      case let .success(value): return .success(.divActionHaptic(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divActionHaptic(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    } else { return nil } }()
     result = result ?? { if type == DivActionHideTooltip.type {
       let result = { DivActionHideTooltipTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks) }()
       switch result {
@@ -644,6 +669,8 @@ extension DivActionTypedTemplate {
       self = .divActionDownloadTemplate(try DivActionDownloadTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionFocusElementTemplate.type:
       self = .divActionFocusElementTemplate(try DivActionFocusElementTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivActionHapticTemplate.type:
+      self = .divActionHapticTemplate(try DivActionHapticTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionHideTooltipTemplate.type:
       self = .divActionHideTooltipTemplate(try DivActionHideTooltipTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivActionScrollByTemplate.type:
