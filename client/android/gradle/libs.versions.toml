@@ -41,7 +41,6 @@ androidx-compose-bom = "2026.06.01"
 androidx-constraintlayout = "2.2.2"
 androidx-core = "1.16.0"
 androidx-espresso = "3.7.0"
-androidx-fragment = "1.8.9"
 androidx-lifecycle = "2.9.4"
 androidx-material = "1.14.0"
 androidx-media3 = "1.6.1"
@@ -72,7 +71,6 @@ androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstall
 androidx-collection = { module = "androidx.collection:collection", version.ref = "androidx-collection" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
-androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "androidx-fragment" }
 androidx-material = { module = "com.google.android.material:material", version.ref = "androidx-material" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx-recyclerview" }
 androidx-transition = { module = "androidx.transition:transition", version.ref = "androidx-transition" }
@@ -93,7 +91,6 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 androidx-espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "androidx-espresso" }
 androidx-espresso-intents = { module = "androidx.test.espresso:espresso-intents", version.ref = "androidx-espresso" }
 
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
