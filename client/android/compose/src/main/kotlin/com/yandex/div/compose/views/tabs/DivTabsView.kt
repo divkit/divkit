@@ -27,8 +27,10 @@ import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.utils.scroll.restrictParentScroll
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div2.DivSize
@@ -110,6 +112,7 @@ internal fun DivTabsView(
             pagerState = state.pagerState,
             isDynamicHeight = data.dynamicHeight.observedValue(),
             isSwipeEnabled = data.switchTabsByContentSwipeEnabled.observedValue(),
+            isParentScrollRestricted = data.restrictParentScroll.observedValue(),
         )
     }
 }
@@ -134,6 +137,7 @@ private fun TabsContent(
     pagerState: PagerState,
     isDynamicHeight: Boolean,
     isSwipeEnabled: Boolean,
+    isParentScrollRestricted: Boolean,
 ) {
     val pageContents = remember(items) {
         arrayOfNulls<@Composable () -> Unit>(items.size)
@@ -194,6 +198,7 @@ private fun TabsContent(
         val pagerPlaceable = subcompose(TabsPagerSlot) {
             HorizontalPager(
                 state = pagerState,
+                modifier = Modifier.applyIf(isParentScrollRestricted) { restrictParentScroll(isHorizontal = true) },
                 userScrollEnabled = isSwipeEnabled,
                 verticalAlignment = Alignment.Top,
             ) { page ->
