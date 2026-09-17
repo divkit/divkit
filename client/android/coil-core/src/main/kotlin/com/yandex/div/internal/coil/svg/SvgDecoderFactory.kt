@@ -28,10 +28,30 @@ private const val SVG_DEFAULT_SIZE = 512f
 
 @InternalApi
 fun ComponentRegistry.Builder.addSvgDecoderFactoryIfAvailable(context: Context) {
-    try {
-        val metrics = context.resources.displayMetrics
-        add(SvgDecoderFactory(max(metrics.widthPixels, metrics.heightPixels)))
-    } catch (_: LinkageError) {
+    val metrics = context.resources.displayMetrics
+    add(LazySvgDecoderFactory(max(metrics.widthPixels, metrics.heightPixels)))
+}
+
+private class LazySvgDecoderFactory(maxDisplaySize: Int) : Decoder.Factory {
+
+    private val delegate by lazy { SvgDecoderFactoryProvider.createIfAvailable(maxDisplaySize) }
+
+    override fun create(
+        result: SourceFetchResult,
+        options: Options,
+        imageLoader: ImageLoader,
+    ): Decoder? = delegate?.create(result, options, imageLoader)
+}
+
+// Keep this factory's initialization out of image-loader construction after R8 optimization.
+private object SvgDecoderFactoryProvider {
+
+    fun createIfAvailable(maxDisplaySize: Int): Decoder.Factory? {
+        return try {
+            SvgDecoderFactory(maxDisplaySize)
+        } catch (_: LinkageError) {
+            null
+        }
     }
 }
 
