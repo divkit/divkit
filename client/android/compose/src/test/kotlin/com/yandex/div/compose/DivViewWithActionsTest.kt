@@ -191,7 +191,7 @@ class DivViewWithActionsTest {
         rule.onNodeWithText("button").performClick()
 
         // action is triggered with a delay necessary to distinguish a single tap from a double tap
-        rule.waitUntil {
+        rule.mainClock.advanceTimeUntil {
             actionHandler.handledActions.isNotEmpty()
         }
 
