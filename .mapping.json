@@ -15645,7 +15645,6 @@
   "test_data/regression_test_data/animations/rive/rive_gallery.json":"divkit/public/test_data/regression_test_data/animations/rive/rive_gallery.json",
   "test_data/regression_test_data/animations/rive/rive_one_shot_loop.json":"divkit/public/test_data/regression_test_data/animations/rive/rive_one_shot_loop.json",
   "test_data/regression_test_data/animations/rive/rive_ping_pong_loop.json":"divkit/public/test_data/regression_test_data/animations/rive/rive_ping_pong_loop.json",
-  "test_data/regression_test_data/animations/rive/rive_restart_one_shot.json":"divkit/public/test_data/regression_test_data/animations/rive/rive_restart_one_shot.json",
   "test_data/regression_test_data/animations/tab_titles_animations.json":"divkit/public/test_data/regression_test_data/animations/tab_titles_animations.json",
   "test_data/regression_test_data/animations/transient_div_with_clip_and_shadow.json":"divkit/public/test_data/regression_test_data/animations/transient_div_with_clip_and_shadow.json",
   "test_data/regression_test_data/animations/transition-animations-with-delay.json":"divkit/public/test_data/regression_test_data/animations/transition-animations-with-delay.json",

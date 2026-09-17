@@ -2893,10 +2893,6 @@
         "android",
         "ios"
       ],
-      "steps": [
-        "Animation plays once then stops",
-        "Press Restart"
-      ],
       "expected_results": [
         "Animation plays once then stops"
       ],
