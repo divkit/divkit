@@ -2829,7 +2829,8 @@
         "Multiline text uses one gradient, custom ellipsis shares its phase, and disabled animations show the static nested gradient",
         "The animation restarts without stale state after reopening the scenario"
       ],
-      "file": "animated_text_gradient.json"
+      "file": "animated_text_gradient.json",
+      "case_id": 530
     },
     {
       "title": "Custom container",
