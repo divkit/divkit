@@ -27,6 +27,20 @@ extension DivImageHolderFactory {
       imageHolderFactory: self
     )
   }
+
+  /// Makes the factory safe for block modeling on a background thread.
+  ///
+  /// Holders created off the main thread keep only the URL and the placeholder and create the real
+  /// holder from this factory on the main thread on first use; holders created on the main thread
+  /// resolve it immediately. Pass the result to `DivKitComponents(imageHolderFactory:)` when
+  /// `DivKitComponents.makeContext` and `DivData.makeBlock(context:)` run on a background thread
+  /// (one thread per card at a time). `setCardData`, triggers, timers, pending actions and
+  /// rendering must stay on the main thread; custom block factories, extension handlers, reporters
+  /// and font providers used during modeling must be background-safe, and custom block factories
+  /// must return lazy view content (`GenericViewBlock(lazyContent:)`).
+  public func withBackgroundModeling() -> DivImageHolderFactory {
+    BackgroundModelingImageHolderFactory(wrapped: self)
+  }
 }
 
 extension DivImageHolderFactory {
