@@ -67,6 +67,12 @@ class PagerSelectedActionsDispatcherTest {
     }
 
     @Test
+    fun `no actions dispatched when selected page is outside current items`() {
+        underTest.whenPageSelected(divPager.items.orEmpty().size)
+        verify(divView, never()).bulkActions(any())
+    }
+
+    @Test
     fun `dispatch selected actions when page selected initially`() {
         underTest.whenPageSelected(0)
 

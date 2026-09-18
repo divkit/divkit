@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.view2.divs.drawShadow
+import com.yandex.div.core.view2.divs.pager.PagerMultiPageScrollHelper
 import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
 import com.yandex.div.core.view2.divs.performClickOnAncestors
 import com.yandex.div.core.view2.divs.performLongClickOnAncestors
@@ -80,6 +81,30 @@ internal class DivPagerView @JvmOverloads constructor(
         set(value) {
             getRecyclerView()?.clipChildren = value
         }
+
+    private var multiPageScrollHelper: PagerMultiPageScrollHelper? = null
+
+    /** `true` while a multi-page fling started by this pager is still running. */
+    internal val isMultiPageScrolling: Boolean
+        get() = multiPageScrollHelper?.isScrollingToTarget == true
+
+    /**
+     * While the property stays on, the helper is created once and then only re-attached, so a
+     * repeated value from an expression subscription can not re-install a snap helper in the
+     * middle of a gesture.
+     */
+    internal fun setMultiPageScrollEnabled(enabled: Boolean) {
+        if (!enabled) {
+            multiPageScrollHelper?.detach()
+            multiPageScrollHelper = null
+            return
+        }
+
+        val recyclerView = getRecyclerView() ?: return
+        val helper = multiPageScrollHelper
+            ?: PagerMultiPageScrollHelper(viewPager, recyclerView).also { multiPageScrollHelper = it }
+        helper.attach()
+    }
 
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
 

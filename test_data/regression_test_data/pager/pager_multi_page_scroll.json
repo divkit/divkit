@@ -24,6 +24,38 @@
           "text_color": "#333333"
         }
       ]
+    },
+    "wrap_item": {
+      "type": "container",
+      "$width": "item_width",
+      "$border": "border",
+      "height": {
+        "type": "fixed",
+        "value": 150
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFF3E0"
+        }
+      ],
+      "items": [
+        {
+          "type": "text",
+          "$text": "label",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "font_size": 16,
+          "font_weight": "medium",
+          "text_color": "#5D4037"
+        }
+      ]
     }
   },
   "card": {
@@ -36,6 +68,11 @@
       },
       {
         "name": "selected",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "wrap_selected",
         "type": "integer",
         "value": 0
       }
@@ -66,110 +103,93 @@
                 "type": "fixed",
                 "value": 16
               },
-              "items": [
-                {
-                  "type": "circle_item",
-                  "label": "1",
-                  "border": {
-                    "corner_radius": 44,
-                    "stroke": {
-                      "color": "@{selected == 0 ? '#2196F3' : '#00000000'}",
-                      "width": 2
+              "item_builder": {
+                "data": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+                "prototypes": [
+                  {
+                    "div": {
+                      "type": "circle_item",
+                      "label": "@{index + 1}",
+                      "border": {
+                        "corner_radius": 44,
+                        "stroke": {
+                          "color": "@{selected == index ? '#2196F3' : '#00000000'}",
+                          "width": 2
+                        }
+                      },
+                      "selected_actions": [
+                        {
+                          "log_id": "selected_@{index}",
+                          "url": "div-action://set_variable?name=selected&value=@{index}"
+                        }
+                      ]
                     }
-                  },
-                  "selected_actions": [
-                    {
-                      "log_id": "selected_0",
-                      "url": "div-action://set_variable?name=selected&value=0"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "text": "Wrap content · varying page widths",
+              "font_size": 16,
+              "font_weight": "bold",
+              "margins": {
+                "top": 28,
+                "bottom": 12,
+                "left": 16,
+                "right": 16
+              }
+            },
+            {
+              "type": "pager",
+              "id": "multi_page_scroll_wrap_pager",
+              "multi_page_scroll": "@{multi_page_scroll}",
+              "layout_mode": {
+                "type": "wrap_content"
+              },
+              "scroll_axis_alignment": "center",
+              "cross_axis_alignment": "center",
+              "height": {
+                "type": "fixed",
+                "value": 180
+              },
+              "item_spacing": {
+                "type": "fixed",
+                "value": 16
+              },
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "item_builder": {
+                "data": [{"width": 96}, {"width": 180}, {"width": 128}, {"width": 240}, {"width": 144}, {"width": 210}, {"width": 112}, {"width": 260}, {"width": 168}, {"width": 120}, {"width": 224}, {"width": 152}, {"width": 192}, {"width": 104}, {"width": 248}, {"width": 136}, {"width": 216}, {"width": 160}, {"width": 232}, {"width": 116}, {"width": 200}, {"width": 148}, {"width": 256}, {"width": 176}],
+                "data_element_name": "chip",
+                "prototypes": [
+                  {
+                    "div": {
+                      "type": "wrap_item",
+                      "label": "@{index + 1} · @{getIntegerFromDict(chip, 'width')}dp",
+                      "item_width": {
+                        "type": "fixed",
+                        "value": "@{getIntegerFromDict(chip, 'width')}"
+                      },
+                      "border": {
+                        "corner_radius": 28,
+                        "stroke": {
+                          "color": "@{wrap_selected == index ? '#FB8C00' : '#00000000'}",
+                          "width": 3
+                        }
+                      },
+                      "selected_actions": [
+                        {
+                          "log_id": "wrap_selected_@{index}",
+                          "url": "div-action://set_variable?name=wrap_selected&value=@{index}"
+                        }
+                      ]
                     }
-                  ]
-                },
-                {
-                  "type": "circle_item",
-                  "label": "2",
-                  "border": {
-                    "corner_radius": 44,
-                    "stroke": {
-                      "color": "@{selected == 1 ? '#2196F3' : '#00000000'}",
-                      "width": 2
-                    }
-                  },
-                  "selected_actions": [
-                    {
-                      "log_id": "selected_1",
-                      "url": "div-action://set_variable?name=selected&value=1"
-                    }
-                  ]
-                },
-                {
-                  "type": "circle_item",
-                  "label": "3",
-                  "border": {
-                    "corner_radius": 44,
-                    "stroke": {
-                      "color": "@{selected == 2 ? '#2196F3' : '#00000000'}",
-                      "width": 2
-                    }
-                  },
-                  "selected_actions": [
-                    {
-                      "log_id": "selected_2",
-                      "url": "div-action://set_variable?name=selected&value=2"
-                    }
-                  ]
-                },
-                {
-                  "type": "circle_item",
-                  "label": "4",
-                  "border": {
-                    "corner_radius": 44,
-                    "stroke": {
-                      "color": "@{selected == 3 ? '#2196F3' : '#00000000'}",
-                      "width": 2
-                    }
-                  },
-                  "selected_actions": [
-                    {
-                      "log_id": "selected_3",
-                      "url": "div-action://set_variable?name=selected&value=3"
-                    }
-                  ]
-                },
-                {
-                  "type": "circle_item",
-                  "label": "5",
-                  "border": {
-                    "corner_radius": 44,
-                    "stroke": {
-                      "color": "@{selected == 4 ? '#2196F3' : '#00000000'}",
-                      "width": 2
-                    }
-                  },
-                  "selected_actions": [
-                    {
-                      "log_id": "selected_4",
-                      "url": "div-action://set_variable?name=selected&value=4"
-                    }
-                  ]
-                },
-                {
-                  "type": "circle_item",
-                  "label": "6",
-                  "border": {
-                    "corner_radius": 44,
-                    "stroke": {
-                      "color": "@{selected == 5 ? '#2196F3' : '#00000000'}",
-                      "width": 2
-                    }
-                  },
-                  "selected_actions": [
-                    {
-                      "log_id": "selected_5",
-                      "url": "div-action://set_variable?name=selected&value=5"
-                    }
-                  ]
-                }
-              ]
+                  }
+                ]
+              }
             },
             {
               "type": "container",

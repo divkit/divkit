@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.Disposable
@@ -14,6 +15,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
 import com.yandex.div.core.util.AccessibilityStateProvider
+import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -87,7 +89,7 @@ internal class DivPagerBinder @Inject constructor(
         viewPager.adapter = adapter
         val errorCollector = divView.errorCollector
         adapter.registerAdapterDataObserver(ItemCountObserver(this, div, resolver, adapter, errorCollector))
-        bindInfiniteScroll(div, resolver, adapter)
+        bindScrollModes(div, resolver, adapter)
         notifyItemsUpdated(div, resolver, adapter, errorCollector)
         clipToPage = divView.div2Component.isPagerPageClipEnabled
 
@@ -165,18 +167,29 @@ internal class DivPagerBinder @Inject constructor(
         pagerOnItemsCountChange?.onItemsUpdated()
     }
 
-    private fun DivPagerView.bindInfiniteScroll(
+    private fun DivPagerView.bindScrollModes(
         div: DivPager,
         resolver: ExpressionResolver,
         adapter: DivPagerAdapter,
     ) {
         val recyclerView = viewPager.getChildAt(0) as RecyclerView
         var listener: RecyclerView.OnScrollListener? = null
-        addSubscription(div.multiPageScroll.observeAndGet(resolver) {
-            adapter.setVirtualItemCount(div.infiniteScroll.evaluate(resolver), it)
+        addSubscription(div.multiPageScroll.observeAndGet(resolver) { enabled: Boolean ->
+            adapter.setVirtualItemCount(
+                infiniteScrollEnabled = div.infiniteScroll.evaluate(resolver),
+                multiPageScrollEnabled = enabled,
+            )
+            setMultiPageScrollEnabled(enabled)
         })
+        var lastInfiniteScroll: Boolean? = null
         addSubscription(div.infiniteScroll.observeAndGet(resolver) { enabled: Boolean ->
-            adapter.setVirtualItemCount(enabled, div.multiPageScroll.evaluate(resolver))
+            adapter.setVirtualItemCount(
+                infiniteScrollEnabled = enabled,
+                multiPageScrollEnabled = div.multiPageScroll.evaluate(resolver),
+            )
+            // Re-adding the same listener on an unchanged value would make it run twice per scroll.
+            if (enabled == lastInfiniteScroll) return@observeAndGet
+            lastInfiniteScroll = enabled
             if (enabled) {
                 (listener ?: createInfiniteScrollListener().also { listener = it })
                     .let { recyclerView.addOnScrollListener(it) }
@@ -199,17 +212,62 @@ internal class DivPagerBinder @Inject constructor(
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager
             val adapter = viewPager.adapter as? DivPagerAdapter ?: return
-            val offset = adapter.virtualItemCount.takeIf { it > 0 } ?: return
-            val firstItemVisible = layoutManager.findFirstVisibleItemPosition()
-            val lastItemVisible = layoutManager.findLastVisibleItemPosition()
+            val virtualItemCount = adapter.virtualItemCount.takeIf { it > 0 } ?: return
             val scrollDelta = if (viewPager.orientation == ViewPager2.ORIENTATION_HORIZONTAL) dx else dy
-            if (firstItemVisible >= adapter.itemCount - offset && scrollDelta > 0) {
-                recyclerView.scrollToPosition(offset)
-            } else if (lastItemVisible <= offset - 1 && scrollDelta < 0) {
-                recyclerView.scrollToPosition(adapter.itemCount - 1 - offset)
-            }
+            val anchorPosition = loopAnchorPosition(
+                firstItemVisible = layoutManager.findFirstVisibleItemPosition(),
+                lastItemVisible = layoutManager.findLastVisibleItemPosition(),
+                scrollDelta = scrollDelta,
+                itemCount = adapter.itemCount,
+                virtualItemCount = virtualItemCount,
+            ) ?: return
+            loopToRealPosition(recyclerView, layoutManager, adapter, anchorPosition)
         }
     }
+
+    /**
+     * Moves the pager from a virtual item to the real item repeating the same content.
+     *
+     * The anchor is the item actually on screen rather than the loop edge, because a fast fling
+     * can advance past the seam within a single frame and a fixed target would then shift the
+     * content by the overshoot. `RecyclerView.scrollToPosition()` also stops any running scroll,
+     * which would cut a multi-page fling short at the seam, so while such a fling is running the
+     * anchor is scheduled on the layout manager together with its current pixel offset instead.
+     */
+    private fun DivPagerView.loopToRealPosition(
+        recyclerView: RecyclerView,
+        layoutManager: LinearLayoutManager,
+        adapter: DivPagerAdapter,
+        anchorPosition: Int,
+    ) {
+        val realPosition = adapter.getPosition(adapter.realItemPosition(anchorPosition))
+        if (realPosition == anchorPosition) return
+
+        val anchorView = layoutManager.findViewByPosition(anchorPosition)
+        if (!isMultiPageScrolling || anchorView == null) {
+            recyclerView.scrollToPosition(realPosition)
+            return
+        }
+
+        val helper = OrientationHelper.createOrientationHelper(layoutManager, layoutManager.orientation)
+        val offset = if (layoutManager.isLayoutReversed(recyclerView)) {
+            helper.endAfterPadding - helper.getDecoratedEnd(anchorView)
+        } else {
+            helper.getDecoratedStart(anchorView) - helper.startAfterPadding
+        }
+        layoutManager.scrollToPositionWithOffset(realPosition, offset)
+    }
+
+    /**
+     * Mirrors `LinearLayoutManager.resolveShouldLayoutReverse()`, which is not public. It decides
+     * whether `scrollToPositionWithOffset` measures its offset from the start or from the end.
+     */
+    private fun LinearLayoutManager.isLayoutReversed(recyclerView: RecyclerView): Boolean =
+        if (orientation == RecyclerView.HORIZONTAL) {
+            reverseLayout != recyclerView.isLayoutRtl()
+        } else {
+            reverseLayout
+        }
 
     private fun DivPagerView.applyDecorations(
         div: DivPager,
@@ -410,4 +468,25 @@ internal class DivPagerBinder @Inject constructor(
             pagerView.notifyItemsUpdated(div, resolver, adapter, errorCollector)
         }
     }
+}
+
+/**
+ * Picks the on-screen item a looping pager should re-anchor on, or `null` while it stays within
+ * the real items.
+ *
+ * The anchor is the item that is actually visible: a fast fling can cross the seam and land
+ * several items deep into the virtual range within one frame, and re-anchoring on the loop edge
+ * would then shift the content by that overshoot.
+ */
+internal fun loopAnchorPosition(
+    firstItemVisible: Int,
+    lastItemVisible: Int,
+    scrollDelta: Int,
+    itemCount: Int,
+    virtualItemCount: Int,
+): Int? = when {
+    firstItemVisible == RecyclerView.NO_POSITION || lastItemVisible == RecyclerView.NO_POSITION -> null
+    scrollDelta > 0 && firstItemVisible >= itemCount - virtualItemCount -> firstItemVisible
+    scrollDelta < 0 && lastItemVisible <= virtualItemCount - 1 -> lastItemVisible
+    else -> null
 }

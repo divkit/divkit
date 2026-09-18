@@ -62,8 +62,10 @@ internal class PagerSelectedActionsDispatcher(
         private fun trackSelectedPages() {
             while (selectedPages.isNotEmpty()) {
                 val page = selectedPages.removeFirst()
+                // A page may be gone after the item set shrank; the rest of the queue is still due.
+                val item = items.getOrNull(page) ?: continue
                 KLog.d(TAG) { "dispatch selected actions for page $page" }
-                dispatchSelectedActions(items[page])
+                dispatchSelectedActions(item)
             }
         }
     }

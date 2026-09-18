@@ -38,7 +38,10 @@ import org.mockito.kotlin.whenever
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNotSame
 import kotlin.test.assertNull
+import kotlin.test.assertSame
 
 @RunWith(AndroidJUnit4::class)
 class DivPagerBinderTest : DivBinderTest() {
@@ -279,6 +282,47 @@ class DivPagerBinderTest : DivBinderTest() {
         observer.firstValue(true)
 
         assertEquals(VIRTUAL_ITEM_COUNT_EXTENDED, adapter.virtualItemCount)
+    }
+
+    @Test
+    fun `repeated multi page scroll value keeps the same snap helper attached`() {
+        // observeAndGet() re-fires on any change of the variables an expression reads, even when
+        // the result is unchanged. Re-installing a snap helper then would snap under the finger.
+        val observer = argumentCaptor<(Boolean) -> Unit>()
+        val multiPageScroll = observableBoolean(initialValue = true, observer)
+        val div = Div.Pager(
+            div().value.copy(
+                infiniteScroll = true.asExpression(),
+                multiPageScroll = multiPageScroll,
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        val snapHelper = view.getRecyclerView()?.onFlingListener
+        assertNotNull(snapHelper)
+
+        observer.firstValue(true)
+
+        assertSame(snapHelper, view.getRecyclerView()?.onFlingListener)
+    }
+
+    @Test
+    fun `multi page scroll helper is detached when the property turns off`() {
+        val observer = argumentCaptor<(Boolean) -> Unit>()
+        val multiPageScroll = observableBoolean(initialValue = true, observer)
+        val div = Div.Pager(
+            div().value.copy(
+                infiniteScroll = true.asExpression(),
+                multiPageScroll = multiPageScroll,
+            )
+        )
+        val view = divPagerViewWithLayout(div)
+        underTest.bindView(view, div.toBlock(resolver, rootPath()) as DivBlock.Pager, divView)
+        val multiPageSnapHelper = view.getRecyclerView()?.onFlingListener
+
+        observer.firstValue(false)
+
+        assertNotSame(multiPageSnapHelper, view.getRecyclerView()?.onFlingListener)
     }
 
     @Test

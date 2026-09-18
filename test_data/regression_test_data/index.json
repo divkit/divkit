@@ -722,6 +722,7 @@
     {
       "title": "Pager with multi page scroll",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [

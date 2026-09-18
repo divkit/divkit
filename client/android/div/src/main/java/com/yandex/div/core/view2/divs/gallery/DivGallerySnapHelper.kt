@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.util.isLayoutRtl
+import com.yandex.div.core.view2.divs.utils.SnapPositions
+import com.yandex.div.core.view2.divs.utils.findDirectionalSnapPosition
+import com.yandex.div.core.view2.divs.utils.isForwardScroll
 import com.yandex.div2.DivGallery.ContentAlignment
 
 internal class DivGallerySnapHelper(private val view: RecyclerView) : PagerSnapHelper() {
@@ -29,49 +32,25 @@ internal class DivGallerySnapHelper(private val view: RecyclerView) : PagerSnapH
     private fun RecyclerView.LayoutManager.getOrientationHelper(): OrientationHelper =
         if (canScrollHorizontally()) getHorizontalHelper(this) else getVerticalHelper(this)
 
-    override fun findTargetSnapPosition(manager: RecyclerView.LayoutManager, velocityX: Int, velocityY: Int) =
-        (manager as DivGalleryItemHelper).findTargetSnapPosition(velocityX, velocityY, manager.itemCount)
+    override fun findTargetSnapPosition(manager: RecyclerView.LayoutManager, velocityX: Int, velocityY: Int): Int {
+        val helper = manager as DivGalleryItemHelper
+        val isVertical = helper.getLayoutManagerOrientation() == RecyclerView.VERTICAL
+        return findDirectionalSnapPosition(
+            forward = isForwardScroll(isVertical, velocityX, velocityY, view.isLayoutRtl()),
+            positions = helper.snapPositions(manager),
+        )
+    }
 
-    private fun DivGalleryItemHelper.findTargetSnapPosition(
-        velocityX: Int,
-        velocityY: Int,
-        itemCount: Int,
-    ): Int {
-        val velocity = when {
-            getLayoutManagerOrientation() == LinearLayoutManager.VERTICAL -> velocityY
-            view.isLayoutRtl() -> -velocityX
-            else -> velocityX
+    private fun DivGalleryItemHelper.snapPositions(manager: RecyclerView.LayoutManager): SnapPositions {
+        val helper = this
+        return object : SnapPositions {
+            override val itemCount get() = manager.itemCount
+            override val isLinearLayout get() = manager is LinearLayoutManager
+            override val firstCompletelyVisible get() = helper.firstCompletelyVisibleItemPosition()
+            override val lastCompletelyVisible get() = helper.lastCompletelyVisibleItemPosition()
+            override val firstVisible get() = helper.firstVisibleItemPosition()
+            override val lastVisible get() = helper.lastVisibleItemPosition()
         }
-
-        val firstVisibleItemPosition = firstVisibleItemPosition()
-        val lastVisibleItemPosition = lastVisibleItemPosition()
-        val isLinearLayout = toLayoutManager() is LinearLayoutManager
-        // Snap to a partially visible first item instead of moving away from the linear gallery edge.
-        if (isLinearLayout && velocity < 0 && firstVisibleItemPosition == 0) {
-            return firstVisibleItemPosition
-        }
-        val isLastItemVisible = itemCount > 0 && lastVisibleItemPosition == itemCount - 1
-        // Snap to a partially visible last item instead of moving away from the linear gallery edge.
-        if (isLinearLayout && velocity >= 0 && isLastItemVisible) {
-            return lastVisibleItemPosition
-        }
-
-        val nextCompletelyVisibleItemPosition = if (velocity < 0) {
-            firstCompletelyVisibleItemPosition()
-        } else {
-            lastCompletelyVisibleItemPosition()
-        }
-        if (nextCompletelyVisibleItemPosition != RecyclerView.NO_POSITION) {
-            return nextCompletelyVisibleItemPosition
-        }
-
-        // workaround for first/last position
-        if (lastVisibleItemPosition == firstVisibleItemPosition) {
-            return if (lastVisibleItemPosition != RecyclerView.NO_POSITION) lastVisibleItemPosition else 0
-        }
-
-        // have 2 items on screen and choose by direction
-        return if (velocity < 0) firstVisibleItemPosition else lastVisibleItemPosition
     }
 
     override fun calculateDistanceToFinalSnap(layoutManager: RecyclerView.LayoutManager, targetView: View): IntArray {
