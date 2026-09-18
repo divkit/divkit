@@ -72,6 +72,10 @@ final class ScrollHandler {
 
   var infiniteScrollLoopPerformed = false
 
+  var isUserInitiatedScroll: Bool {
+    state.isUserInitiatedScroll
+  }
+
   private var infiniteScroll: InfiniteScroll?
   private var contentPager: ScrollableContentPager?
 

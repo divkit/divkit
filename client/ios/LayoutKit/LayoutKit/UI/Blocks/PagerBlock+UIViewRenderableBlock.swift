@@ -86,6 +86,7 @@ private final class PagerView: BlockView {
       observer: self,
       overscrollDelegate: overscrollDelegate,
       renderingDelegate: renderingDelegate,
+      observerNotificationMode: .allStates,
       navigationDirection: state.navigationDirection
     )
 
@@ -130,7 +131,8 @@ private final class PagerView: BlockView {
 
 extension PagerView: ElementStateObserver {
   func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
-    guard let galleryState = state as? GalleryViewState,
+    guard path == model.path,
+          let galleryState = state as? GalleryViewState,
           let pageIndex = galleryState.contentPosition.pageIndex else {
       observer?.elementStateChanged(state, forPath: path)
       return

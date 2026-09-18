@@ -24,7 +24,8 @@ extension GalleryBlock {
       },
       observer: observer,
       overscrollDelegate: overscrollDelegate,
-      renderingDelegate: renderingDelegate
+      renderingDelegate: renderingDelegate,
+      observerNotificationMode: .suppressIntermediateScrollStates
     )
   }
 

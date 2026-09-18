@@ -7,6 +7,15 @@ private typealias CellType = GenericCollectionViewCell
 public final class GalleryView: BlockView {
   public typealias LayoutFactory = (GalleryViewModel, CGSize) -> GalleryViewLayouting
 
+  public enum ObserverNotificationMode: Equatable {
+    /// Publishes intermediate per-frame states and the final state.
+    case allStates
+
+    /// Suppresses intermediate per-frame states. Final and layout-driven states are still
+    /// published.
+    case suppressIntermediateScrollStates
+  }
+
   private enum DeferredStateSetting {
     case idle
     case pending(GalleryViewState)
@@ -48,6 +57,7 @@ public final class GalleryView: BlockView {
 
   private var deferredStateSetting = DeferredStateSetting.idle
   private var configurationInProgress = false
+  private var observerNotificationMode = ObserverNotificationMode.allStates
   private weak var overscrollDelegate: ScrollDelegate? {
     didSet {
       if let previousDelegate = oldValue {
@@ -155,6 +165,7 @@ public final class GalleryView: BlockView {
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?,
+    observerNotificationMode: ObserverNotificationMode = .allStates,
     navigationDirection: ScrollNavigationDirection = .none
   ) {
     guard !configurationInProgress else { return }
@@ -168,6 +179,7 @@ public final class GalleryView: BlockView {
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
     self.renderingDelegate = renderingDelegate
+    self.observerNotificationMode = observerNotificationMode
 
     let oldModel = self.model
     let oldState = self.state
@@ -183,8 +195,19 @@ public final class GalleryView: BlockView {
       layout.contentSize.height - bounds.height
     }
 
+    let stateToApply = if let oldState,
+                          let oldModel,
+                          oldModel.path == model.path,
+                          oldModel.direction == model.direction,
+                          oldModel.scrollMode == model.scrollMode,
+                          oldState.isScrolling,
+                          scrollHandler.isUserInitiatedScroll {
+      oldState
+    } else {
+      state
+    }
     setState(
-      state.resetToModelIfInconsistent(
+      stateToApply.resetToModelIfInconsistent(
         model,
         maxValidScrollRange: maxValidScrollRange
       ),
@@ -423,10 +446,7 @@ extension GalleryView: ScrollHandlerDelegate {
       animated: true
     )
 
-    // In default scroll mode, we skip notifying global observers on every frame
-    // to prevent heavy layout recalculations, as the state is only needed for restoration.
-    // Pager modes still notify, but PagerView filters them.
-    setState(newState, notifyingObservers: !model.scrollMode.isDefault)
+    setState(newState, notifyingObservers: observerNotificationMode == .allStates)
     updatesDelegate?.onContentOffsetChanged(offset, in: model)
     visibilityDelegate?.onGalleryVisibilityChanged()
   }
