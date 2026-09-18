@@ -2,6 +2,7 @@ package com.yandex.div.compose.views.modifiers
 
 import android.view.View
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.LayoutCoordinates
@@ -16,6 +17,7 @@ import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.core.annotations.InternalApi
 
 @Composable
+@ReadOnlyComposable
 @InternalApi
 fun Modifier.onDivVisibilityChanged(
     minFractionVisible: Float = 1f,

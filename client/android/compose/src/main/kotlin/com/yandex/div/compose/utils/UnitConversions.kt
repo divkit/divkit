@@ -1,6 +1,7 @@
 package com.yandex.div.compose.utils
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -23,6 +24,7 @@ internal fun Double.toDp(): Dp {
 }
 
 @Composable
+@ReadOnlyComposable
 internal fun Float.toDp(unit: DivSizeUnit): Dp {
     return when (unit) {
         DivSizeUnit.DP -> dp
@@ -32,11 +34,13 @@ internal fun Float.toDp(unit: DivSizeUnit): Dp {
 }
 
 @Composable
+@ReadOnlyComposable
 internal fun Long.toDp(unit: DivSizeUnit): Dp {
     return toFloat().toDp(unit)
 }
 
 @Composable
+@ReadOnlyComposable
 internal fun Float.toPx(unit: DivSizeUnit): Float {
     return when (unit) {
         DivSizeUnit.DP -> dp.toPx()
@@ -46,11 +50,13 @@ internal fun Float.toPx(unit: DivSizeUnit): Float {
 }
 
 @Composable
+@ReadOnlyComposable
 internal fun Long.toPx(unit: DivSizeUnit): Float {
     return toFloat().toPx(unit)
 }
 
 @Composable
+@ReadOnlyComposable
 internal fun Dp.toPx(): Float {
     return with(LocalDensity.current) {
         this@toPx.toPx()
@@ -58,6 +64,7 @@ internal fun Dp.toPx(): Float {
 }
 
 @Composable
+@ReadOnlyComposable
 internal fun Int.toTextUnit(unit: DivSizeUnit): TextUnit {
     return when (unit) {
         DivSizeUnit.SP -> sp

@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,10 +38,10 @@ import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toTextUnit
 import com.yandex.div.compose.views.image.toColorFilter
 import com.yandex.div2.DivFixedSize
-import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextAlignmentVertical
 
@@ -288,20 +289,12 @@ private fun DivFixedSize.observedImageSize(): ObservedImageSize {
     val unit = unit.observedValue()
     return ObservedImageSize(
         textUnit = value.toTextUnit(unit),
-        dp = value.toDp(unit),
+        dp = value.toFloat().toDp(unit),
     )
 }
 
 @Composable
-private fun Int.toDp(unit: DivSizeUnit): Dp {
-    return when (unit) {
-        DivSizeUnit.DP -> dp
-        DivSizeUnit.SP -> with(LocalDensity.current) { sp.toDp() }
-        DivSizeUnit.PX -> with(LocalDensity.current) { toDp() }
-    }
-}
-
-@Composable
+@ReadOnlyComposable
 private fun Float.toTextUnit(): TextUnit {
     return with(LocalDensity.current) { dp.toSp() }
 }
