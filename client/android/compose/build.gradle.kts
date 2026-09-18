@@ -38,7 +38,7 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
-    implementation(libs.yatagan.api.compiled)
+    implementation(libs.yatagan.api.public)
 
     ksp(libs.yatagan.processor.ksp)
 

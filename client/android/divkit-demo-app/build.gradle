@@ -110,6 +110,7 @@ dependencies {
     implementation libs.okhttp
     implementation libs.stetho.core
     implementation libs.stetho.okhttp3
+    implementation libs.yatagan.api.public
     implementation libs.zxing.embedded
     implementation libs.zxing.core
 

@@ -31,7 +31,7 @@ roborazzi = "1.74.0"
 stetho = "1.6.0"
 unmock = "0.11.0"
 webp-imageio = "0.3.3"
-yatagan = "1.6.2"
+yatagan = "2.0.0"
 
 androidx-activity = "1.11.0"
 androidx-appcompat = "1.6.1"
@@ -173,7 +173,7 @@ unmock-plugin = { module = "com.github.bjoernq:unmockplugin", version.ref = "unm
 
 webp-imageio = { module = "io.github.darkxanter:webp-imageio", version.ref = "webp-imageio" }
 
-yatagan-api-compiled = { module = "com.yandex.yatagan:api-compiled", version.ref = "yatagan" }
+yatagan-api-public = { module = "com.yandex.yatagan:api-public", version.ref = "yatagan" }
 yatagan-processor-ksp = { module = "com.yandex.yatagan:processor-ksp", version.ref = "yatagan" }
 
 zxing-core = { module = "com.google.zxing:core", version = "3.5.4" }

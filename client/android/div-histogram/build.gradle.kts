@@ -17,7 +17,7 @@ dependencies {
     implementation(project(":utils"))
 
     implementation(libs.androidx.core)
-    implementation(libs.yatagan.api.compiled)
+    implementation(libs.javax)
 
     testImplementation(libs.json)
 }

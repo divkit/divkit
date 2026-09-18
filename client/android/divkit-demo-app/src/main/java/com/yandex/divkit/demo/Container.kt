@@ -24,7 +24,7 @@ import com.yandex.divkit.demo.settings.FlagPreferenceProvider
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.connectivityManager
-import com.yandex.divkit.regression.di.`Yatagan$RegressionComponent`
+import com.yandex.divkit.regression.di.YataganRegressionComponent
 import okhttp3.OkHttpClient
 import okhttp3.internal.http2.Header
 import okhttp3.internal.toHeaderList
@@ -114,7 +114,7 @@ internal object Container {
     val regressionComponent by lazy {
         val div2ViewCreator = RegressionDiv2ViewCreator(context)
         val composeViewCreator = RegressionComposeViewCreator(context)
-        `Yatagan$RegressionComponent`.builder().create(
+        YataganRegressionComponent.builder().create(
             context = context,
             div2ViewCreator = div2ViewCreator,
             scenarioViewCreator = RegressionSwitchingViewCreator(

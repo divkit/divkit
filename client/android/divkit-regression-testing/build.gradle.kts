@@ -39,7 +39,7 @@ dependencies {
     implementation(libs.androidx.material)
     implementation(libs.androidx.recyclerview)
     implementation(libs.gson)
-    implementation(libs.yatagan.api.compiled)
+    implementation(libs.yatagan.api.public)
 
     ksp(libs.yatagan.processor.ksp)
 }

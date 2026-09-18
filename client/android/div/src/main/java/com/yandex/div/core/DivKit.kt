@@ -8,7 +8,7 @@ import com.yandex.android.beacon.SendBeaconManager
 import com.yandex.div.BuildConfig
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivKitComponent
-import com.yandex.div.core.dagger.`Yatagan$DivKitComponent`
+import com.yandex.div.core.dagger.YataganDivKitComponent
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
@@ -22,7 +22,7 @@ class DivKit @VisibleForTesting internal constructor(
     configuration: DivKitConfiguration
 ) {
 
-    internal val component: DivKitComponent = `Yatagan$DivKitComponent`.builder()
+    internal val component: DivKitComponent = YataganDivKitComponent.builder()
         .applicationContext(context.applicationContext)
         .configuration(configuration)
         .build()

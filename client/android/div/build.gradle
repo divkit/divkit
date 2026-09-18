@@ -58,7 +58,7 @@ dependencies {
     api project(path: ':div-states')
     api project(path: ':div-storage')
 
-    implementation libs.yatagan.api.compiled
+    implementation libs.yatagan.api.public
     ksp libs.yatagan.processor.ksp
 
     implementation(libs.androidx.appcompat) {

@@ -5,7 +5,7 @@ import android.content.ContextWrapper
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.dagger.DivContextComponent
-import com.yandex.div.compose.dagger.`Yatagan$DivContextComponent`
+import com.yandex.div.compose.dagger.YataganDivContextComponent
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.core.annotations.InternalApi
@@ -77,7 +77,7 @@ private fun createComponent(
     configuration: DivConfiguration,
     debugConfiguration: DivDebugConfiguration
 ): DivContextComponent {
-    return `Yatagan$DivContextComponent`.builder().build(
+    return YataganDivContextComponent.builder().build(
         baseContext = baseContext,
         configuration = configuration,
         debugConfiguration = debugConfiguration
