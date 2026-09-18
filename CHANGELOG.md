@@ -26,6 +26,7 @@
 * Utility methods in model classes are marked as internal.
 
 ### iOS Client
+* Added `liquid_glass` extension.
 * Added adjustable intensity to `blur` extension.
 * Avoid redundant gallery layout calculations when only the scroll state changes.
 * Fixed VoiceOver navigation in galleries and pagers so that every item can receive accessibility focus.
