@@ -3004,6 +3004,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/ViewLocatorTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/ViewLocatorTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/animations/DivComparatorTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/DivComparatorTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/animations/DivStateComparatorTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/DivStateComparatorTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/animations/ScaleTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/ScaleTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/animations/TransitionsTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/TransitionsTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/animations/TranslationYClipBoundsTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/TranslationYClipBoundsTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/animations/ViewComparatorTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/animations/ViewComparatorTest.kt",

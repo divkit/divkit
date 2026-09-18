@@ -93,7 +93,13 @@ internal class Scale(
 
         val overlayView = createOrGetVisualCopy(view, sceneRoot, this, position)
 
-        return createScaleAnimator(overlayView, startScaleX, startScaleY, endScaleX, endScaleY)
+        return createScaleAnimator(
+            overlayView,
+            startScaleX,
+            startScaleY,
+            endScaleX,
+            endScaleY
+        )?.also { overlayView.visibility = View.INVISIBLE }
     }
 
     override fun onDisappear(
@@ -111,7 +117,13 @@ internal class Scale(
 
         val viewForAnimate = getViewForAnimate(view, sceneRoot, startValues, PROPNAME_SCREEN_POSITION)
 
-        return createScaleAnimator(viewForAnimate, startScaleX, startScaleY, endScaleX, endScaleY)
+        return createScaleAnimator(
+            viewForAnimate,
+            startScaleX,
+            startScaleY,
+            endScaleX,
+            endScaleY
+        )
     }
 
     private fun getCapturedScaleX(transitionValues: TransitionValues?, fallbackValue: Float): Float {
@@ -127,19 +139,23 @@ internal class Scale(
         startScaleX: Float,
         startScaleY: Float,
         endScaleX: Float,
-        endScaleY: Float
+        endScaleY: Float,
     ): Animator? {
         if (startScaleX == endScaleX && startScaleY == endScaleY) {
             return null
         }
 
-        view.visibility = View.INVISIBLE
+        val nonTransitionScaleX = view.scaleX
+        val nonTransitionScaleY = view.scaleY
+        view.scaleX = startScaleX
+        view.scaleY = startScaleY
+
         return ObjectAnimator.ofPropertyValuesHolder(
             view,
             PropertyValuesHolder.ofFloat(View.SCALE_X, startScaleX, endScaleX),
             PropertyValuesHolder.ofFloat(View.SCALE_Y, startScaleY, endScaleY)
         ).apply {
-            addListener(ScaleAnimatorListener(view, view.scaleX, view.scaleY))
+            addListener(ScaleAnimatorListener(view, nonTransitionScaleX, nonTransitionScaleY))
         }
     }
 
