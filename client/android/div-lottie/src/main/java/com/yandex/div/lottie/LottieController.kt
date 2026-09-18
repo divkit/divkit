@@ -32,7 +32,7 @@ internal class LottieController(
 ) : DivViewDelegate {
 
     // LottieAnimationView fields
-    private val lottieDrawable = LottieDrawable()
+    private val lottieDrawable = MainThreadInvalidatingLottieDrawable()
     private var composition: LottieComposition? = null
     private var isInitialized: Boolean
     private var renderMode = RenderMode.AUTOMATIC
