@@ -5,13 +5,13 @@ import VGSL
 
 @available(iOS 26, *)
 extension LiquidGlassBlock {
-  static func makeBlockView() -> BlockView { LiquidGlassView() }
+  public static func makeBlockView() -> BlockView { LiquidGlassView() }
 
-  func canConfigureBlockView(_ view: BlockView) -> Bool {
+  public func canConfigureBlockView(_ view: BlockView) -> Bool {
     view is LiquidGlassView
   }
 
-  func configureBlockView(
+  public func configureBlockView(
     _ view: BlockView,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,

@@ -4,30 +4,34 @@ import Foundation
 import LayoutKit
 import VGSL
 
+/// Puts a block on the Liquid Glass material.
+///
+/// Cards use it through the `liquid_glass` extension. It is public for hosts that build LayoutKit
+/// blocks directly, without a DivKit card.
 @available(iOS 26, *)
-final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
-  /// Reports the interface style the glass material resolved for the content beneath it.
-  typealias UIStyleUpdater = (UserInterfaceStyle) -> Void
-
-  enum EffectStyle: String {
+public final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
+  public enum EffectStyle: String {
     case regular
     case clear
   }
 
-  enum CornerStyle: Equatable {
+  public enum CornerStyle: Equatable {
     case capsule(maximumRadius: Double?)
     case corners(topLeft: Double?, topRight: Double?, bottomLeft: Double?, bottomRight: Double?)
   }
 
-  let child: Block
-  let effectStyle: EffectStyle
-  let isInteractive: Bool?
-  let tintColor: Color?
-  let cornerStyle: CornerStyle?
-  let uiStyleVariableName: String?
-  let uiStyleUpdater: UIStyleUpdater?
+  /// Reports the interface style the glass material resolved for the content beneath it.
+  public typealias UIStyleUpdater = (UserInterfaceStyle) -> Void
 
-  init(
+  public let child: Block
+  public let effectStyle: EffectStyle
+  public let isInteractive: Bool?
+  public let tintColor: Color?
+  public let cornerStyle: CornerStyle?
+  public let uiStyleVariableName: String?
+  public let uiStyleUpdater: UIStyleUpdater?
+
+  public init(
     child: Block,
     effectStyle: EffectStyle,
     isInteractive: Bool? = nil,
@@ -45,7 +49,7 @@ final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
     self.uiStyleUpdater = uiStyleUpdater
   }
 
-  func makeCopy(wrapping block: Block) -> LiquidGlassBlock {
+  public func makeCopy(wrapping block: Block) -> LiquidGlassBlock {
     LiquidGlassBlock(
       child: block,
       effectStyle: effectStyle,
@@ -57,7 +61,7 @@ final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
     )
   }
 
-  func equals(_ other: Block) -> Bool {
+  public func equals(_ other: Block) -> Bool {
     guard let other = other as? LiquidGlassBlock else {
       return false
     }
@@ -67,7 +71,7 @@ final class LiquidGlassBlock: WrapperBlock, LayoutCachingDefaultImpl {
 
 @available(iOS 26, *)
 extension LiquidGlassBlock: Equatable {
-  static func ==(lhs: LiquidGlassBlock, rhs: LiquidGlassBlock) -> Bool {
+  public static func ==(lhs: LiquidGlassBlock, rhs: LiquidGlassBlock) -> Bool {
     lhs.child == rhs.child &&
       lhs.effectStyle == rhs.effectStyle &&
       lhs.isInteractive == rhs.isInteractive &&
@@ -79,7 +83,7 @@ extension LiquidGlassBlock: Equatable {
 
 @available(iOS 26, *)
 extension LiquidGlassBlock: CustomDebugStringConvertible {
-  var debugDescription: String {
+  public var debugDescription: String {
     "LiquidGlassBlock(style: \(effectStyle), child: \(child))"
   }
 }
