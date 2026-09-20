@@ -35,8 +35,11 @@ class TypeAutoAccessibilityTest {
     }
 
     @Test
-    fun `text is important for accessibility`() {
-        checkViewIsImportantForAccessibility("text")
+    fun `text has explicit accessibility importance`() {
+        Assert.assertEquals(
+            View.IMPORTANT_FOR_ACCESSIBILITY_YES,
+            divView.findViewWithTag<View>("text")?.importantForAccessibility,
+        )
     }
 
     @Test

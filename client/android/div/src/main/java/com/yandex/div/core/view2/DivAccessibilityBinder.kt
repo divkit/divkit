@@ -240,6 +240,8 @@ internal class DivAccessibilityBinder @Inject constructor(
         importantForAccessibility = when {
             mode == DivAccessibility.Mode.EXCLUDE -> View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
             div.accessibility?.type == DivAccessibility.Type.HEADER -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
+            div is DivText && div.accessibility?.type?.equals(DivAccessibility.Type.AUTO) != false ->
+                View.IMPORTANT_FOR_ACCESSIBILITY_YES
             description.isNullOrBlank() && hint.isNullOrBlank() -> View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
             mode == DivAccessibility.Mode.MERGE -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
             !div.isAccessibilityContainer -> View.IMPORTANT_FOR_ACCESSIBILITY_YES
