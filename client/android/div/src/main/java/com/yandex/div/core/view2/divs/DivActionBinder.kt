@@ -390,26 +390,29 @@ internal class DivActionBinder @Inject constructor(
         onPrepared(overflowMenuWrapper)
     }
 
-    private inner class MenuWrapperListener(
+    internal inner class MenuWrapperListener(
         private val items: List<DivAction.MenuItem>,
         private val expressionResolver: ExpressionResolver,
         private val divView: Div2View,
     ) : OverflowMenuWrapper.Listener.Simple() {
-
         override fun onMenuCreated(popupMenu: PopupMenu) {
             val menu = popupMenu.menu
             for (itemData in items) {
+                val actions = itemData.actions.takeUnless { it.isNullOrEmpty() }
+                    ?: itemData.action?.let(::listOf).orEmpty()
+                if (actions.isEmpty()) {
+                    divView.errorCollector.logError(
+                        IllegalArgumentException("Unable to bind menu item without actions")
+                    )
+                    continue
+                }
+                if (actions.none { it.isEnabled.evaluate(expressionResolver) }) continue
+
                 val itemPosition = menu.size
                 val menuItem = menu.add(itemData.text.evaluate(expressionResolver))
                 menuItem.setOnMenuItemClickListener {
                     var actionsHandled = false
                     divView.bulkActions {
-                        val actions = itemData.actions.takeUnless { it.isNullOrEmpty() }
-                            ?: itemData.action?.let(::listOf)
-                        if (actions.isNullOrEmpty()) {
-                            KAssert.fail { "Menu item does not have any action" }
-                            return@bulkActions
-                        }
                         actionPerformer.performMenuActions(divView, expressionResolver, actions, itemPosition, itemData)
                         actionsHandled = true
                     }
