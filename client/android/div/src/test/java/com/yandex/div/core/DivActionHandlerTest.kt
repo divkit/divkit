@@ -1,6 +1,7 @@
 package com.yandex.div.core
 
 import android.net.Uri
+import android.view.HapticFeedbackConstants
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
@@ -9,6 +10,7 @@ import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.container
+import com.yandex.div.test.data.hapticAction
 import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.typedValue
 import com.yandex.div.test.testContextThemeWrapper
@@ -16,6 +18,7 @@ import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
 import com.yandex.div2.DivActionDictSetValue
+import com.yandex.div2.DivActionHaptic
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivData
 import org.json.JSONArray
@@ -27,6 +30,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 class DivActionHandlerTest {
@@ -47,6 +51,63 @@ class DivActionHandlerTest {
     )
 
     private val underTest = DivActionHandler()
+
+    @Test
+    fun `haptic defaults to light`() {
+        val isHandled = handleTypedAction(DivActionTyped.Haptic(DivActionHaptic()))
+
+        verify(divView).performHapticFeedback(HapticFeedbackConstants.SEGMENT_FREQUENT_TICK)
+        Assert.assertTrue(isHandled)
+    }
+
+    @Test
+    fun `light haptic performs frequent tick`() {
+        val isHandled = handleTypedAction(hapticAction(DivActionHaptic.Feedback.LIGHT))
+
+        verify(divView).performHapticFeedback(HapticFeedbackConstants.SEGMENT_FREQUENT_TICK)
+        Assert.assertTrue(isHandled)
+    }
+
+    @Test
+    fun `medium haptic performs context click`() {
+        val isHandled = handleTypedAction(hapticAction(DivActionHaptic.Feedback.MEDIUM))
+
+        verify(divView).performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+        Assert.assertTrue(isHandled)
+    }
+
+    @Test
+    fun `heavy haptic performs long press`() {
+        val isHandled = handleTypedAction(hapticAction(DivActionHaptic.Feedback.HEAVY))
+
+        verify(divView).performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        Assert.assertTrue(isHandled)
+    }
+
+    @Test
+    fun `success haptic performs confirm`() {
+        val isHandled = handleTypedAction(hapticAction(DivActionHaptic.Feedback.SUCCESS))
+
+        verify(divView).performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+        Assert.assertTrue(isHandled)
+    }
+
+    @Test
+    fun `error haptic performs reject`() {
+        val isHandled = handleTypedAction(hapticAction(DivActionHaptic.Feedback.ERROR))
+
+        verify(divView).performHapticFeedback(HapticFeedbackConstants.REJECT)
+        Assert.assertTrue(isHandled)
+    }
+
+    @Test
+    @Config(sdk = [28])
+    fun `light haptic uses compat fallback on old Android`() {
+        val isHandled = handleTypedAction(hapticAction(DivActionHaptic.Feedback.LIGHT))
+
+        verify(divView).performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+        Assert.assertTrue(isHandled)
+    }
 
     @Test
     fun `uri with numeric state is handled`() {

@@ -22,6 +22,7 @@
     }
   },
   "platforms": [
+    "android",
     "ios"
   ],
   "required": [

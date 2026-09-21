@@ -1,13 +1,17 @@
 package com.yandex.div.compose.context
 
+import android.annotation.SuppressLint
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
+import com.yandex.div.compose.haptics.bind
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.state.DivStateStorage
-import com.yandex.div.compose.timers.TimerStorage
+import com.yandex.div.compose.timers.observe
+import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
@@ -30,9 +34,6 @@ internal class DivViewContext(
     val stateStorage: DivStateStorage
         get() = component.stateStorage
 
-    val timerStorage: TimerStorage
-        get() = component.timerStorage
-
     val videoPlayerStorage: VideoPlayerStorage
         get() = component.videoPlayerStorage
 
@@ -49,10 +50,18 @@ internal class DivViewContext(
             variables = data.variables.orEmpty()
         )
 
-        timerStorage.init(
+        component.timerStorage.init(
             timers = data.timers.orEmpty(),
             localComponent = rootLocalComponent
         )
+    }
+
+    @SuppressLint("ComposableNaming")
+    @Composable
+    fun onComposition() {
+        component.hapticFeedbackStorage.bind()
+        component.timerStorage.observe()
+        rootLocalComponent.triggerStorage.observe()
     }
 
     fun getLocalComponent(

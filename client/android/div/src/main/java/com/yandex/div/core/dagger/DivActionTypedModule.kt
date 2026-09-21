@@ -5,6 +5,7 @@ import com.yandex.div.core.actions.DivActionTypedClearFocusHandler
 import com.yandex.div.core.actions.DivActionTypedCopyToClipboardHandler
 import com.yandex.div.core.actions.DivActionTypedDictSetValueHandler
 import com.yandex.div.core.actions.DivActionTypedFocusElementHandler
+import com.yandex.div.core.actions.DivActionTypedHapticHandler
 import com.yandex.div.core.actions.DivActionTypedHandler
 import com.yandex.div.core.actions.DivActionTypedHideTooltipHandler
 import com.yandex.div.core.actions.DivActionTypedScrollHandler
@@ -24,6 +25,12 @@ import com.yandex.yatagan.Module
 
 @Module
 internal interface DivActionTypedModule {
+
+    @Binds
+    @IntoSet
+    fun provideHapticActionHandler(
+        impl: DivActionTypedHapticHandler
+    ): DivActionTypedHandler
 
     @Binds
     @IntoSet

@@ -9,6 +9,7 @@ import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
 import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
+import com.yandex.div2.DivActionHaptic
 import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivActionSetStoredValue
@@ -109,6 +110,12 @@ fun dictSetValueAction(
             value = value,
             variableName = constant(name)
         )
+    )
+}
+
+fun hapticAction(feedback: DivActionHaptic.Feedback = DivActionHaptic.Feedback.LIGHT): DivActionTyped {
+    return DivActionTyped.Haptic(
+        DivActionHaptic(feedback = constant(feedback))
     )
 }
 

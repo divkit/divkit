@@ -3,6 +3,7 @@
     {
       "title": "Haptic feedback",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -12,7 +13,8 @@
         "Open on a physical device with haptic feedback enabled.",
         "Tap Light, Medium, Heavy, Success and Error.",
         "Tap Default (light), then Disabled (no feedback).",
-        "Disable system haptics and repeat the actions."
+        "Disable system haptics and repeat the actions.",
+        "On Android, repeat with both View and Compose renderers."
       ],
       "expected_results": [
         "Each effect produces its corresponding feedback when supported by the device.",

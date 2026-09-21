@@ -28,6 +28,7 @@ internal class DivActionHandler @Inject constructor(
     private val actionMenuHolder: ActionMenuHolder,
     private val externalActionHandler: DivExternalActionHandler,
     private val reporter: DivReporter,
+    private val hapticActionHandler: HapticActionHandler,
     private val arrayActionsHandler: ArrayActionsHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
     private val setStateActionHandler: SetStateActionHandler,
@@ -135,7 +136,9 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.ArraySetValue ->
                 arrayActionsHandler.handle(context, action.value)
 
-            is DivActionTyped.Haptic -> notSupported("haptic")
+            is DivActionTyped.Haptic ->
+                hapticActionHandler.handle(context, action.value)
+
             is DivActionTyped.ClearFocus -> notSupported(DivActionClearFocus.TYPE)
             is DivActionTyped.CopyToClipboard -> notSupported(DivActionCopyToClipboard.TYPE)
 

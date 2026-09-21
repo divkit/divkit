@@ -4,6 +4,7 @@ import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.DivLocalComponentStorage
+import com.yandex.div.compose.haptics.HapticFeedbackStorage
 import com.yandex.div.compose.histogram.DivViewHistogramReporter
 import com.yandex.div.compose.images.ImageStateStorage
 import com.yandex.div.compose.pager.DivPagerStateStorage
@@ -25,6 +26,7 @@ internal interface DivViewComponent {
 
     val actionHandler: DivActionHandler
     val actionMenuHolder: ActionMenuHolder
+    val hapticFeedbackStorage: HapticFeedbackStorage
     val histogramReporter: DivViewHistogramReporter
     val imageStateStorage: ImageStateStorage
     val localComponentStorage: DivLocalComponentStorage

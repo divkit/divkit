@@ -55,7 +55,7 @@
             },
             {
               "type": "text",
-              "text": "Try on a physical device with haptic feedback enabled. The simulator cannot reproduce the feedback.",
+              "text": "Try on a physical device with haptic feedback enabled. Emulators and simulators cannot reproduce the feedback.",
               "font_size": 14,
               "margins": {
                 "bottom": 16
