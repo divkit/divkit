@@ -771,6 +771,7 @@ open class Div2View private constructor(
         stopLoadAndSubscriptions() // Depends on children, should be called before removing them
         if (removeChildren) {
             releaseAndRemoveChildren(this) // Removes children
+            div2Component.extensionController.releaseBindings(this)
         }
         errorCollector.cleanRuntimeWarningsAndErrors()
         dataComponent.layoutProviderBinder.release()

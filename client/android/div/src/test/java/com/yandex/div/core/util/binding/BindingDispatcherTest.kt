@@ -17,6 +17,8 @@ import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.android.util.concurrent.PausedExecutorService
+import org.robolectric.annotation.LooperMode
 import org.robolectric.shadows.ShadowLooper
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CountDownLatch
@@ -292,30 +294,45 @@ internal class BindingDispatcherTest {
     }
 
     @Test(timeout = 5_000)
+    @LooperMode(LooperMode.Mode.PAUSED)
     fun `overlapping async submissions leave main thread binding available`() {
-        val firstBackgroundPhaseFinished = CountDownLatch(1)
-        val queuedBackgroundTasksFinished = CountDownLatch(1)
-        val completions = CountDownLatch(2)
+        val pausedExecutor = PausedExecutorService()
+        try {
+            val workerThread = pausedExecutor.submit<Thread> { Thread.currentThread() }
+            assertTrue(pausedExecutor.runNext())
+            val bindingThread = workerThread.get()
+            assertTrue(bindingThread !== Thread.currentThread())
 
-        dispatcher.runOnBindingThread(onComplete = { completions.countDown() }) {
-            firstBackgroundPhaseFinished.countDown()
+            val queuedExecutor = mock<BindingThreadExecutor>()
+            whenever(queuedExecutor.ensureThreadCreated()).thenReturn(bindingThread)
+            whenever(queuedExecutor.bindingThread).thenReturn(bindingThread)
+            doAnswer { invocation ->
+                pausedExecutor.execute(invocation.getArgument<Runnable>(0))
+            }.whenever(queuedExecutor).execute(any())
+            val queuedDispatcher = BindingDispatcher(divView, criticalSection, queuedExecutor)
+            val completions = mutableListOf<Int>()
+
+            queuedDispatcher.runOnBindingThread(onComplete = { completions += 1 }) {}
+            assertTrue(pausedExecutor.runNext())
+            assertTrue(criticalSection.isHeldBy(bindingThread))
+            assertTrue(completions.isEmpty())
+
+            queuedDispatcher.runOnBindingThread(onComplete = { completions += 2 }) {}
+            assertFalse("Second binding must wait for the first main-thread completion", pausedExecutor.hasQueuedTasks())
+
+            ShadowLooper.idleMainLooper()
+            assertEquals(listOf(1), completions)
+            assertTrue(pausedExecutor.runNext())
+            ShadowLooper.idleMainLooper()
+
+            assertEquals(listOf(1, 2), completions)
+            assertFalse(pausedExecutor.hasQueuedTasks())
+            assertFalse("Idle binding worker must not retain a reservation", criticalSection.isReserved)
+            assertFalse(criticalSection.isHeld)
+            assertEquals("bound", queuedDispatcher.withLock(fallback = "dropped") { "bound" })
+        } finally {
+            pausedExecutor.shutdownNow()
         }
-        assertTrue(firstBackgroundPhaseFinished.await(2, TimeUnit.SECONDS))
-
-        dispatcher.runOnBindingThread(onComplete = { completions.countDown() }) {}
-        executor.execute { queuedBackgroundTasksFinished.countDown() }
-        assertTrue(queuedBackgroundTasksFinished.await(2, TimeUnit.SECONDS))
-
-        val deadline = System.currentTimeMillis() + 2_000
-        while (completions.count > 0 && System.currentTimeMillis() < deadline) {
-            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
-            Thread.sleep(10)
-        }
-
-        assertEquals("Both async bindings must complete", 0L, completions.count)
-        assertFalse("Idle binding worker must not retain a reservation", criticalSection.isReserved)
-        assertFalse(criticalSection.isHeld)
-        assertEquals("bound", dispatcher.withLock(fallback = "dropped") { "bound" })
     }
 
     @Test(timeout = 5_000)

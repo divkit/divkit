@@ -8,7 +8,6 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.releasableList
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.Releasable
-import com.yandex.div.internal.core.DivBlock
 import javax.inject.Inject
 
 @DivViewScope
@@ -18,7 +17,7 @@ internal class ReleaseViewVisitor @Inject constructor(
     private val divExtensionController: DivExtensionController,
 ) : DivViewVisitor() {
 
-    override fun defaultVisit(view: DivHolderView<*>) = releaseInternal(view as View, view.divBlock)
+    override fun defaultVisit(view: DivHolderView<*>) = releaseInternal(view as View)
 
     override fun visit(view: DivPagerView) {
         super.visit(view)
@@ -31,18 +30,19 @@ internal class ReleaseViewVisitor @Inject constructor(
     }
 
     override fun visit(view: DivCustomWrapper) {
+        divExtensionController.unbindView(view, divView)
         val divBlock = view.divBlock ?: return
         release(view)
         view.customView?.let {
-            divExtensionController.unbindView(it, divBlock, divView)
+            divExtensionController.unbindView(it, divView)
             divCustomContainerViewAdapter.release(it, divBlock.divValue)
         }
     }
 
     override fun visit(view: View) = release(view)
 
-    private fun releaseInternal(view: View, divBlock: DivBlock?) {
-        divBlock?.let { divExtensionController.unbindView(view, it, divView) }
+    private fun releaseInternal(view: View) {
+        divExtensionController.unbindView(view, divView)
         release(view)
     }
 

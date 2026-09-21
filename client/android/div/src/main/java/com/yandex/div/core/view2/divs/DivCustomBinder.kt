@@ -42,7 +42,7 @@ internal class DivCustomBinder @Inject constructor(
         }
 
         if (customView != null && oldDivBlock != null) {
-            extensionController.unbindView(customView, oldDivBlock, divView)
+            extensionController.unbindView(customView, divView)
         }
 
         baseBinder.bindView(view, divBlock, oldDivBlock, divView)
@@ -108,7 +108,7 @@ internal class DivCustomBinder @Inject constructor(
         }
         baseBinder.bindId(divView, customView, div.id)
 
-        extensionController.bindView(customView, divBlock, divView)
+        extensionController.bindCustomView(customView, previousWrapper, divBlock, divView)
     }
 
     private fun canReuseCustomView(old: DivBlock.Custom?, new: DivBlock.Custom): Boolean {

@@ -31,6 +31,7 @@
     <item name="div_transition_visibility_overridden" type="id"/>
 
     <item name="div_releasable_list" type="id"/>
+    <item name="div_extension_bindings" type="id"/>
 
     <item name="div_layout_provider_listener_id" type="id"/>
 </resources>

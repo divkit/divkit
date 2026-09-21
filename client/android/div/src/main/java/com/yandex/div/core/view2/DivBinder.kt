@@ -27,7 +27,6 @@ import com.yandex.div.core.view2.divs.tabs.DivTabsBinder
 import com.yandex.div.core.view2.divs.widgets.DivCustomWrapper
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
-import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
@@ -79,10 +78,6 @@ internal class DivBinder @Inject constructor(
         }
 
         extensionController.beforeBindView(view, divBlock, divView)
-
-        if (divBlock !is DivBlock.Custom) {
-            (view as DivHolderView<*>).divBlock?.let { extensionController.unbindView(view, it, divView) }
-        }
 
         return when (divBlock) {
             is DivBlock.Text -> bindText(view, divBlock, divView)

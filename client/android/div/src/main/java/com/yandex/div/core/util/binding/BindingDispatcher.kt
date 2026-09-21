@@ -24,6 +24,11 @@ internal class BindingDispatcher @Inject constructor(
             return criticalSection.isHeldBy(bindingThread) || criticalSection.isReservedFor(bindingThread)
         }
 
+    val isCollectingMainThreadActions: Boolean
+        get() = Thread.currentThread() === executor.bindingThread && deferMainThreadAction
+
+    val currentGeneration: Int get() = bindingGeneration.get()
+
     private var deferMainThreadAction = false
     private val mainThreadActions = mutableListOf<Action>()
     private val pendingTasksLock = Any()
@@ -96,17 +101,19 @@ internal class BindingDispatcher @Inject constructor(
                 } else {
                     UiThreadHandler.postOnMainThread {
                         criticalSection.transferToCurrentThread()
-                        val isCurrent = bindingGeneration.get() == generation
                         try {
-                            if (isCurrent) {
-                                deferredActions.forEach { action ->
-                                    action.invoke()
+                            for (action in deferredActions) {
+                                if (bindingGeneration.get() != generation) {
+                                    return@postOnMainThread
                                 }
+                                action.invoke()
+                            }
+                            if (bindingGeneration.get() == generation) {
                                 onComplete?.invoke(result)
                             }
                         } catch (e: Throwable) {
                             divView.logError(e)
-                            if (isCurrent) {
+                            if (bindingGeneration.get() == generation) {
                                 onError?.invoke(e)
                             }
                         } finally {
@@ -230,9 +237,9 @@ internal class BindingDispatcher @Inject constructor(
             deferMainThreadAction = true
             val result = block()
             val snapshot = mainThreadActions.toList()
-            mainThreadActions.clear()
             return result to snapshot
         } finally {
+            mainThreadActions.clear()
             deferMainThreadAction = false
         }
     }
