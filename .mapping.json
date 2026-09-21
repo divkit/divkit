@@ -8516,6 +8516,7 @@
   "client/ios/DivKitTests/IntegrationTests.swift":"divkit/public/client/ios/DivKitTests/IntegrationTests.swift",
   "client/ios/DivKitTests/LayoutProvider/DivBlockProviderTests.swift":"divkit/public/client/ios/DivKitTests/LayoutProvider/DivBlockProviderTests.swift",
   "client/ios/DivKitTests/LayoutProvider/DivLayoutProviderHandlerTests.swift":"divkit/public/client/ios/DivKitTests/LayoutProvider/DivLayoutProviderHandlerTests.swift",
+  "client/ios/DivKitTests/LayoutProvider/SizeProviderBlockViewTests.swift":"divkit/public/client/ios/DivKitTests/LayoutProvider/SizeProviderBlockViewTests.swift",
   "client/ios/DivKitTests/Platform.swift":"divkit/public/client/ios/DivKitTests/Platform.swift",
   "client/ios/DivKitTests/ResourcesPreloader/DivDataResourcesPreloaderTests.swift":"divkit/public/client/ios/DivKitTests/ResourcesPreloader/DivDataResourcesPreloaderTests.swift",
   "client/ios/DivKitTests/ResourcesPreloader/MockDivExtensionHandler.swift":"divkit/public/client/ios/DivKitTests/ResourcesPreloader/MockDivExtensionHandler.swift",
