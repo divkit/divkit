@@ -8,5 +8,5 @@ internal interface ImagePreloader {
         div: Div,
         resolver: ExpressionResolver,
         downloadAll: Boolean = false,
-    )
+    ): PreloadResult
 }

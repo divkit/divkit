@@ -20,6 +20,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.images.asImageBase
+import com.yandex.div.compose.preload.PreloadResult
 import com.yandex.div.internal.extensions.lottie.LottieData
 import com.yandex.div.internal.extensions.lottie.LottieExtensionParams
 import com.yandex.div.internal.extensions.lottie.LottieExtensionParamsParser
@@ -112,24 +113,35 @@ class LottieExtensionHandler private constructor(
         )
     }
 
+    @Deprecated(
+        message = "Use preloadWithResult instead.",
+        replaceWith = ReplaceWith("preloadWithResult(environment)"),
+    )
     override suspend fun preload(environment: DivExtensionEnvironment) {
-        val url = environment.extension.params?.let {
-            parseLottieUrl(
-                it,
-                environment.expressionResolver,
-                environment.reporter::reportError,
-            )
-        } ?: return
+        preloadWithResult(environment)
+    }
+
+    override suspend fun preloadWithResult(environment: DivExtensionEnvironment): PreloadResult {
+        val params = environment.extension.params ?: return PreloadResult(false)
+        val url = parseLottieUrl(
+            params,
+            environment.expressionResolver,
+            environment.reporter::reportError,
+        ) ?: return PreloadResult(params.optJSONObject("lottie_json") != null)
+        val urlString = url.toString()
         preloadResourceLoader?.let { loader ->
-            val urlString = url.toString()
             if (loader.canLoad(urlString)) {
-                getCachedComposition(urlString)?.let { return }
+                getCachedComposition(urlString)?.let { return PreloadResult(true) }
                 val result = cacheComposition(urlString, loader.loadComposition(urlString))
-                result.exception?.let { environment.reporter.reportError(it.loadErrorMessage(urlString)) }
-                return
+                result.exception?.let { error ->
+                    environment.reporter.reportError(error.loadErrorMessage(urlString))
+                    return PreloadResult(false)
+                }
+                return PreloadResult(true)
             }
         }
-        networkCache.save(url.toString())
+        networkCache.save(urlString)
+        return PreloadResult(true)
     }
 
     @Composable

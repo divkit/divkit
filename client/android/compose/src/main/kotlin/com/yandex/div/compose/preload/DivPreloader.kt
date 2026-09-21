@@ -14,8 +14,10 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import javax.inject.Inject
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 @DivContextScope
 internal class DivPreloader @Inject constructor(
@@ -28,8 +30,8 @@ internal class DivPreloader @Inject constructor(
     suspend fun preload(
         data: DivData,
         mode: PreloadMode = PreloadMode.REQUIRED_ONLY,
-    ) {
-        if (mode == PreloadMode.DISABLED) return
+    ): PreloadResult {
+        if (mode == PreloadMode.DISABLED) return PreloadResult(true)
 
         val activeStateOnly = mode == PreloadMode.ACTIVE_STATE_ONLY
         val downloadAll = mode == PreloadMode.ACTIVE_STATE_ONLY || mode == PreloadMode.ALL
@@ -40,7 +42,7 @@ internal class DivPreloader @Inject constructor(
         } else {
             data.states
         }
-        states.forEach { state ->
+        return states.map { state ->
             visitDiv(
                 div = state.div,
                 localComponent = viewContext.getLocalComponent(
@@ -52,7 +54,7 @@ internal class DivPreloader @Inject constructor(
                 activeStateOnly = activeStateOnly,
                 downloadAll = downloadAll,
             )
-        }
+        }.combineResults()
     }
 
     private suspend fun visitDiv(
@@ -62,37 +64,42 @@ internal class DivPreloader @Inject constructor(
         parentPath: DivStatePath,
         activeStateOnly: Boolean,
         downloadAll: Boolean,
-    ): Unit = coroutineScope {
+    ): PreloadResult = coroutineScope {
         val resolver = localComponent.expressionResolver
-
-        launch { imagePreloader.preloadImages(div, resolver, downloadAll) }
-        launch { extensionPreloader.preloadExtensions(div, resolver) }
-
+        val preloads = mutableListOf<Deferred<PreloadResult>>()
+        preloads += async { imagePreloader.preloadImages(div, resolver, downloadAll) }
+        preloads += async { extensionPreloader.preloadExtensions(div, resolver) }
         when (div) {
-            is Div.Video -> launch { preloadVideo(div, resolver, downloadAll) }
-            is Div.Custom -> launch { preloadCustom(div, resolver) }
-            else -> {}
+            is Div.Video -> preloads += async {
+                preloadVideo(div, resolver, downloadAll)
+            }
+            is Div.Custom -> preloads += async {
+                preloadCustom(div, resolver)
+            }
+            else -> Unit
         }
-
-        childrenOf(
-            div = div,
-            activeStateOnly = activeStateOnly,
-            resolver = resolver,
-            stateStorage = viewContext.stateStorage,
-            parentPath = parentPath,
-        ).forEach { (child, childPath) ->
-            visitDiv(
-                div = child,
-                localComponent = viewContext.getLocalComponent(
-                    data = child.value(),
-                    parentComponent = localComponent,
-                ),
-                viewContext = viewContext,
-                parentPath = childPath,
+        preloads += async {
+            childrenOf(
+                div = div,
                 activeStateOnly = activeStateOnly,
-                downloadAll = downloadAll,
-            )
+                resolver = resolver,
+                stateStorage = viewContext.stateStorage,
+                parentPath = parentPath,
+            ).map { (child, childPath) ->
+                visitDiv(
+                    div = child,
+                    localComponent = viewContext.getLocalComponent(
+                        data = child.value(),
+                        parentComponent = localComponent,
+                    ),
+                    viewContext = viewContext,
+                    parentPath = childPath,
+                    activeStateOnly = activeStateOnly,
+                    downloadAll = downloadAll,
+                )
+            }.combineResults()
         }
+        preloads.awaitAll().combineResults()
     }
 
     private fun childrenOf(
@@ -129,19 +136,20 @@ internal class DivPreloader @Inject constructor(
         div: Div.Video,
         resolver: ExpressionResolver,
         downloadAll: Boolean,
-    ) {
-        if (!downloadAll && !div.value.preloadRequired.evaluate(resolver)) return
-        val sources = div.value.videoSources?.map { it.url.evaluate(resolver) } ?: return
-        videoPreloader.preloadVideo(sources)
+    ): PreloadResult {
+        if (!downloadAll && !div.value.preloadRequired.evaluate(resolver)) return PreloadResult(true)
+        val sources = div.value.videoSources?.map { it.url.evaluate(resolver) }
+            ?: return PreloadResult(true)
+        return videoPreloader.preloadVideoWithResult(sources)
     }
 
-    private suspend fun preloadCustom(div: Div.Custom, resolver: ExpressionResolver) {
+    private suspend fun preloadCustom(div: Div.Custom, resolver: ExpressionResolver): PreloadResult {
         val environment = DivCustomEnvironment(
             data = div.value,
             expressionResolver = resolver,
             items = {},
             item = { _, _ -> },
         )
-        customPreloader.preload(environment)
+        return customPreloader.preload(environment)
     }
 }

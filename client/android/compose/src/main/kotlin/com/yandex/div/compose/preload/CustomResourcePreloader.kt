@@ -9,6 +9,6 @@ import javax.inject.Inject
 internal class CustomResourcePreloader @Inject constructor(
     private val factories: Map<String, @JvmSuppressWildcards DivCustomViewFactory>,
 ) {
-    suspend fun preload(environment: DivCustomEnvironment) =
-        factories[environment.data.customType]?.preload(environment)
+    suspend fun preload(environment: DivCustomEnvironment): PreloadResult =
+        factories[environment.data.customType]?.preloadWithResult(environment) ?: PreloadResult(true)
 }

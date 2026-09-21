@@ -3,6 +3,7 @@ package com.yandex.div.compose.custom
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.preload.PreloadResult
 
 /**
  * Factory for composing `div-custom` elements.
@@ -25,5 +26,20 @@ interface DivCustomViewFactory {
     /**
      * Preloads resources required by the custom element before it is shown.
      */
-    suspend fun preload(environment: DivCustomEnvironment) = Unit
+    @Deprecated(
+        message = "Use preloadWithResult instead.",
+        replaceWith = ReplaceWith("preloadWithResult(environment)"),
+    )
+    suspend fun preload(environment: DivCustomEnvironment): Unit = Unit
+
+    /**
+     * Preloads resources required by the custom element before it is shown.
+     *
+     * @return result of preloading required resources.
+     */
+    @Suppress("DEPRECATION")
+    suspend fun preloadWithResult(environment: DivCustomEnvironment): PreloadResult {
+        preload(environment)
+        return PreloadResult(true)
+    }
 }

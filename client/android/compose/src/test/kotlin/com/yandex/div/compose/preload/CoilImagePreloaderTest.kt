@@ -6,6 +6,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.ImageLoader
 import coil3.asImage
+import coil3.request.ErrorResult
+import coil3.request.ImageRequest
+import coil3.request.ImageResult
 import coil3.request.SuccessResult
 import com.yandex.div.compose.images.ImageRequestFactory
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -18,26 +21,28 @@ import com.yandex.div.test.data.separator
 import com.yandex.div.test.data.solidBackground
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.textImage
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class CoilImagePreloaderTest {
 
     private val context: Context = ApplicationProvider.getApplicationContext()
     private val capturedUrls = mutableSetOf<String>()
+    private var resultProvider: (ImageRequest) -> ImageResult = { request -> successResult(request) }
 
     private val imageLoader = ImageLoader.Builder(context)
         .components {
             add { chain ->
                 capturedUrls.add(chain.request.data.toString())
-                SuccessResult(
-                    image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888).asImage(),
-                    request = chain.request,
-                )
+                resultProvider(chain.request)
             }
         }
         .build()
@@ -55,7 +60,7 @@ class CoilImagePreloaderTest {
     @Test
     fun `preloads Image content when preloadRequired is true`() = runTest {
         val imageUrl = "https://example.com/img.jpg"
-        preloader.preloadImages(
+        val result = preloader.preloadImages(
             image(
                 imageUrl = imageUrl,
                 preloadRequired = true
@@ -63,7 +68,76 @@ class CoilImagePreloaderTest {
             resolver
         )
 
+        assertTrue(result.isSuccessful)
         assertEquals(imageUrl, capturedUrls.single())
+    }
+
+    @Test
+    fun `returns false for ErrorResult`() = runTest {
+        resultProvider = { request -> errorResult(request) }
+
+        val result = preloader.preloadImages(
+            image(
+                imageUrl = "https://example.com/img.jpg",
+                preloadRequired = true,
+            ),
+            resolver,
+        )
+
+        assertFalse(result.isSuccessful)
+    }
+
+    @Test
+    fun `loads every selected image when one result fails`() = runTest {
+        val failedUrl = "https://example.com/fail.jpg"
+        val successfulUrl = "https://example.com/success.jpg"
+        resultProvider = { request ->
+            if (request.data.toString() == failedUrl) errorResult(request) else successResult(request)
+        }
+
+        val result = preloader.preloadImages(
+            container(
+                backgrounds = listOf(
+                    imageBackground(failedUrl, preloadRequired = true),
+                    imageBackground(successfulUrl, preloadRequired = true),
+                )
+            ),
+            resolver,
+        )
+
+        assertFalse(result.isSuccessful)
+        assertEquals(setOf(failedUrl, successfulUrl), capturedUrls)
+    }
+
+    @Test
+    fun `returns true when no image is selected`() = runTest {
+        val result = preloader.preloadImages(
+            image(
+                imageUrl = "https://example.com/img.jpg",
+                preloadRequired = false,
+            ),
+            resolver,
+        )
+
+        assertTrue(result.isSuccessful)
+        assertEquals(emptySet(), capturedUrls)
+    }
+
+    @Test
+    fun `propagates image loading cancellation`() = runTest {
+        resultProvider = { throw CancellationException("cancelled") }
+
+        val error = assertFailsWith<CancellationException> {
+            preloader.preloadImages(
+                image(
+                    imageUrl = "https://example.com/img.jpg",
+                    preloadRequired = true,
+                ),
+                resolver,
+            )
+        }
+
+        assertEquals("cancelled", error.message)
     }
 
     @Test
@@ -76,6 +150,22 @@ class CoilImagePreloaderTest {
             resolver
         )
 
+        assertEquals(emptySet(), capturedUrls)
+    }
+
+    @Test
+    fun `returns true without loading when Image URL is absent`() = runTest {
+        val missingUrl: String? = null
+
+        val result = preloader.preloadImages(
+            image(
+                imageUrl = missingUrl,
+                preloadRequired = true,
+            ),
+            resolver,
+        )
+
+        assertTrue(result.isSuccessful)
         assertEquals(emptySet(), capturedUrls)
     }
 
@@ -187,7 +277,8 @@ class CoilImagePreloaderTest {
 
     @Test
     fun `other div types do not preload content`() = runTest {
-        preloader.preloadImages(separator(), resolver)
+        val result = preloader.preloadImages(separator(), resolver)
+        assertTrue(result.isSuccessful)
         assertEquals(emptySet(), capturedUrls)
     }
 
@@ -208,4 +299,18 @@ class CoilImagePreloaderTest {
 
         assertEquals(setOf(imageUrl, backgroundUrl), capturedUrls)
     }
+
+    private fun successResult(request: ImageRequest): SuccessResult = SuccessResult(
+        image = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888).asImage(),
+        request = request,
+    )
+
+    private fun errorResult(
+        request: ImageRequest,
+        throwable: Throwable = IllegalStateException("load failed"),
+    ): ErrorResult = ErrorResult(
+        image = null,
+        request = request,
+        throwable = throwable,
+    )
 }

@@ -8,6 +8,7 @@ import com.yandex.div.compose.dagger.DivContextComponent
 import com.yandex.div.compose.dagger.YataganDivContextComponent
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
+import com.yandex.div.compose.preload.PreloadResult
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div2.DivData
 
@@ -55,11 +56,12 @@ class DivContext private constructor(
      * Cancel the calling coroutine to stop preloading early.
      *
      * @param preloadMode how to preload resources for [data]. Defaults to [PreloadMode.REQUIRED_ONLY].
+     * @return aggregate result of preloading selected resources.
      */
     suspend fun preload(
         data: DivData,
         preloadMode: PreloadMode = PreloadMode.REQUIRED_ONLY,
-    ) = component.preloader.preload(data, preloadMode)
+    ): PreloadResult = component.preloader.preload(data, preloadMode)
 
     /**
      * Removes [DivView] context associated with the given [com.yandex.div2.DivData].

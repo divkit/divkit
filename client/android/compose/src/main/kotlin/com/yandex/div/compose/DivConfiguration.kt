@@ -14,6 +14,7 @@ import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.histogram.DisabledHistogramConfiguration
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
+import com.yandex.div.compose.preload.PreloadResult
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoPlayerFactory
@@ -102,7 +103,7 @@ private val defaultDivVideoPlayerFactory = DivVideoPlayerFactory {
 }
 
 private val defaultDivVideoPreloader = object : DivVideoPreloader {
-    override suspend fun preloadVideo(sources: List<Uri>) = Unit
+    override suspend fun preloadVideoWithResult(sources: List<Uri>) = PreloadResult(true)
 }
 
 private val defaultImageLoaderConfiguration = object : ImageLoaderConfiguration {}

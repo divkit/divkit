@@ -89,7 +89,7 @@ class LottieUrlChangeTest {
         val context = DivContext(baseContext, configuration)
         val data = lottieData(FIRST_URL)
 
-        context.preload(data)
+        Assert.assertTrue(context.preload(data).isSuccessful)
         Assert.assertEquals(listOf(FIRST_URL), loader.loadedUrls)
 
         rule.setContent {
@@ -99,6 +99,51 @@ class LottieUrlChangeTest {
 
         Assert.assertEquals(listOf(FIRST_URL), loader.loadedUrls)
     }
+
+    @Test
+    fun `preload returns false and reports resource loader failure`() = runTest {
+        val errors = mutableListOf<String>()
+        val loader = RecordingLoader { LottieResult(IllegalStateException("load failed")) }
+        val configuration = configuration(loader, errors)
+        val baseContext = ApplicationProvider.getApplicationContext<Context>()
+        val context = DivContext(baseContext, configuration)
+
+        val result = context.preload(lottieData(FIRST_URL))
+
+        Assert.assertFalse(result.isSuccessful)
+        Assert.assertEquals(
+            listOf("Failed to load Lottie composition from $FIRST_URL: load failed"),
+            errors,
+        )
+    }
+
+    @Test
+    fun `preload returns true for inline json without loading a URL`() = runTest {
+        val loader = RecordingLoader { LottieResult(composition()) }
+        val configuration = configuration(loader, mutableListOf())
+        val baseContext = ApplicationProvider.getApplicationContext<Context>()
+        val context = DivContext(baseContext, configuration)
+
+        val result = context.preload(lottieData(JSONObject().put("lottie_json", JSONObject(MINIMAL_LOTTIE))))
+
+        Assert.assertTrue(result.isSuccessful)
+        Assert.assertTrue(loader.loadedUrls.isEmpty())
+    }
+
+    @Test
+    fun `preload returns false for missing or malformed params`() = runTest {
+        val loader = RecordingLoader { LottieResult(composition()) }
+        val configuration = configuration(loader, mutableListOf())
+        val baseContext = ApplicationProvider.getApplicationContext<Context>()
+        val context = DivContext(baseContext, configuration)
+
+        Assert.assertFalse(context.preload(lottieData(null)).isSuccessful)
+        Assert.assertFalse(
+            context.preload(lottieData(JSONObject().put("lottie_json", "not an object"))).isSuccessful,
+        )
+        Assert.assertTrue(loader.loadedUrls.isEmpty())
+    }
+
 }
 
 private fun configuration(loader: DivLottieResourceLoader, errors: MutableList<String>) = DivConfiguration(
@@ -110,13 +155,17 @@ private fun configuration(loader: DivLottieResourceLoader, errors: MutableList<S
     },
 )
 
-private fun lottieData(url: String, isPlaying: Boolean? = null) = data(
+private fun lottieData(url: String, isPlaying: Boolean? = null) = lottieData(
+    JSONObject().put("lottie_url", url).apply {
+        isPlaying?.let { put("is_playing", it) }
+    },
+)
+
+private fun lottieData(params: JSONObject?) = data(
     Div.Image(DivImage(
         extensions = listOf(DivExtension(
             id = "lottie",
-            params = JSONObject().put("lottie_url", url).apply {
-                isPlaying?.let { put("is_playing", it) }
-            },
+            params = params,
         )),
     )),
 )

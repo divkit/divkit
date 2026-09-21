@@ -1,6 +1,7 @@
 package com.yandex.div.core.preload
 
 import android.net.Uri
+import com.yandex.div.core.annotations.InternalApi
 
 /**
  * Result of a preload.
@@ -23,7 +24,8 @@ class CompositeResult(
 ): PreloadResult
 
 
-internal fun PreloadResult.filterErrorResults(): Sequence<UriPreloadResult> {
+@InternalApi
+fun PreloadResult.filterErrorResults(): Sequence<UriPreloadResult> {
     val result = this
     return sequence {
         when (result) {

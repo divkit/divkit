@@ -740,6 +740,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/preload/DivPreloader.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/preload/DivPreloader.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/preload/ExtensionPreloader.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/preload/ExtensionPreloader.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/preload/ImagePreloader.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/preload/ImagePreloader.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/preload/PreloadResult.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/preload/PreloadResult.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/state/DivStateResolution.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/state/DivStateResolution.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/state/DivStateStorage.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/state/DivStateStorage.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/state/LocalDivStatePath.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/state/LocalDivStatePath.kt",
