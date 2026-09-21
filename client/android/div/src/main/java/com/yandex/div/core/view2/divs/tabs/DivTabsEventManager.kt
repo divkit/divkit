@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs.tabs
 import androidx.viewpager.widget.ViewPager
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionPerformer
+import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.DivTabsLayout
@@ -48,7 +49,11 @@ internal class DivTabsEventManager(
         val selectedTab = divBlock.divValue.items[position]
         visibilityActionTracker
             .startTrackingViewsHierarchy(tabLayout, selectedTab.div, divBlock.expressionResolver, divView)
-        divView.bindViewToDiv(tabLayout, selectedTab.div)
+        if (selectedTab.div.value().hasSightActions) {
+            divView.bindViewToDiv(tabLayout, selectedTab.div)
+        } else {
+            divView.unbindViewFromDiv(tabLayout)
+        }
 
         currentPagePosition = position
     }

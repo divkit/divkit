@@ -9,6 +9,7 @@ import androidx.core.view.marginStart
 import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
+import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.divBlock
@@ -235,7 +236,11 @@ internal interface DivGalleryItemHelper {
             val item = getItemDivBlock(position) ?: return
             divView.div2Component.visibilityActionTracker
                 .startTrackingViewsHierarchy(itemView, item.div, item.expressionResolver, divView)
-            divView.bindViewToDiv(itemView, item.div)
+            if (item.div.value().hasSightActions) {
+                divView.bindViewToDiv(itemView, item.div)
+            } else {
+                divView.unbindViewFromDiv(itemView)
+            }
         }
     }
 

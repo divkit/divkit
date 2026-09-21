@@ -21,6 +21,7 @@ import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.containsStateInnerTransitions
 import com.yandex.div.core.util.getDefaultState
+import com.yandex.div.core.util.hasSightActions
 import com.yandex.div.core.util.toAlignmentHorizontal
 import com.yandex.div.core.util.toAlignmentVertical
 import com.yandex.div.core.util.walk
@@ -244,7 +245,7 @@ internal class DivStateBinder @Inject constructor(
             }
         }
         if (incoming != null && newStateDivValue != null) {
-            if (newStateDivValue.visibilityAction != null || newStateDivValue.visibilityActions != null) {
+            if (newStateDivValue.hasSightActions) {
                 divView.bindViewToDiv(incoming, newStateDiv)
                 incoming.doOnNextLayout {
                     divVisibilityActionTracker.trackVisibilityActionsOf(divView, resolver, incoming, newStateDiv)
