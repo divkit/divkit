@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.images.BitmapSource
@@ -231,6 +232,18 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
+    fun `tint color applied when drawable loaded`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ffffff")
+        val imageUrl = divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString()
+
+        binder.bindView(view, divImage, divView)
+        whenDrawableLoaded(imageUrl)
+
+        Assert.assertNotNull(view.colorFilter)
+    }
+
+    @Test
     fun `tint color applied to image after rebind`() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(tintColor = "#ffffff")
@@ -269,6 +282,13 @@ class DivImageBinderTest : DivBinderTest() {
             on { bitmap } doReturn mock()
         }
         val cachedImage = DivCachedImage.Drawable(bitmapDrawable, BitmapSource.MEMORY)
+        imageDownloadCallbackCaptor.firstValue.onSuccess(cachedImage)
+    }
+
+    private fun whenDrawableLoaded(imageUrl: String) {
+        val imageDownloadCallbackCaptor = argumentCaptor<DivImageDownloadCallback>()
+        verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
+        val cachedImage = DivCachedImage.Drawable(ColorDrawable(Color.WHITE), BitmapSource.MEMORY)
         imageDownloadCallbackCaptor.firstValue.onSuccess(cachedImage)
     }
 

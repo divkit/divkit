@@ -389,6 +389,7 @@ internal class DivImageBinder @Inject constructor(
                     applyLoadingFade(div, resolver, source, animationsEnabledController.isEnabled())
 
                     imageLoaded()
+                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
                     invalidate()
                 }
 
