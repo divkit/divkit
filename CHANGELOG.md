@@ -26,6 +26,7 @@
 * Utility methods in model classes are marked as internal.
 
 ### iOS Client
+* Added `DivImageHolderFactory.withBackgroundModeling()` for hosts that build blocks on a background thread: the wrapped image holder factory is called on the main thread on first use of a holder.
 * Added `liquid_glass` extension.
 * Added adjustable intensity to `blur` extension.
 * Avoid redundant gallery layout calculations when only the scroll state changes.
