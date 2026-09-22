@@ -47,9 +47,8 @@ private fun List<Cell>.axisTracks(
     isColumn: Boolean,
     isWrapContent: Boolean,
 ): AxisTracks {
-    if (any { (if (isColumn) it.columnSpan else it.rowSpan) > 1 } &&
-        all { it.canResolveSpannedSize(isColumn) }
-    ) {
+    val hasSpans = any { (if (isColumn) it.columnSpan else it.rowSpan) > 1 }
+    if (hasSpans && all { it.canResolveSpannedSize(isColumn) }) {
         return rememberSpannedTracks(lineCount, isColumn, isWrapContent)
     }
     val weights = observeLineWeights(lineCount, isColumn)
@@ -95,6 +94,7 @@ private fun List<Cell>.axisTracks(
         when {
             weight > 0f && isWrapContent -> GridTrackSize.Fixed((weight * maxWeightRatio).dp)
             weight > 0f -> GridTrackSize.MinMax((weight * maxWeightRatio).dp, Fr(weight))
+            hasIntrinsicSizes[line] && (!hasSpans || !isLineSpanned(line, isColumn)) -> GridTrackSize.Auto
             !growableLines[line] && baseSize > 0f -> GridTrackSize.Fixed(baseSize.dp)
             else -> GridTrackSize.Auto
         }
@@ -331,6 +331,12 @@ private fun List<Cell>.hasIntrinsicSize(line: Int, isColumn: Boolean): Boolean =
     if (line !in start until start + span) return@any false
     val size = if (isColumn) cell.base.width else cell.base.height
     size is DivSize.WrapContent
+}
+
+private fun List<Cell>.isLineSpanned(line: Int, isColumn: Boolean): Boolean = any { cell ->
+    val span = if (isColumn) cell.columnSpan else cell.rowSpan
+    val start = if (isColumn) cell.columnIndex else cell.rowIndex
+    span > 1 && line in start until start + span
 }
 
 private fun List<Cell>.isLineGrowable(

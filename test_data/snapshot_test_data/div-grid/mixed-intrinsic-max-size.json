@@ -1,0 +1,72 @@
+{
+  "description": "Maximum width and height bound a wrap-content item in a column and row shared with fixed-size items",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 2,
+          "width": {
+            "type": "fixed",
+            "value": 240
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Maximum width and height limit the size of this text.",
+              "font_size": 20,
+              "width": {
+                "type": "wrap_content",
+                "constrained": true,
+                "max_size": {
+                  "value": 120
+                }
+              },
+              "height": {
+                "type": "wrap_content",
+                "max_size": {
+                  "value": 48
+                }
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#EEEEEE"
+                }
+              ]
+            },
+            {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 40
+              },
+              "height": {
+                "type": "fixed",
+                "value": 20
+              }
+            },
+            {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 40
+              },
+              "height": {
+                "type": "fixed",
+                "value": 20
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

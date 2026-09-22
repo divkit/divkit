@@ -1,0 +1,46 @@
+{
+  "description": "Constrained wrap-content text grows a grid column shared with a fixed-size item within the grid width",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 1,
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "A long line of text that wraps within the available width of the grid.",
+              "font_size": 20,
+              "width": {
+                "type": "wrap_content",
+                "constrained": true
+              }
+            },
+            {
+              "type": "separator",
+              "width": {
+                "type": "fixed",
+                "value": 60
+              },
+              "height": {
+                "type": "fixed",
+                "value": 20
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
