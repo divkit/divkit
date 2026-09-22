@@ -1,4 +1,5 @@
 @testable @_spi(Internal) import DivKit
+import DivKitSVG
 @testable import LayoutKit
 import Testing
 import UIKit
@@ -293,6 +294,15 @@ private final class TestImageHolderFactory: @MainActor DivImageHolderFactory {
   func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
     guard let url, url.absoluteString != "empty://" else {
       return placeholder?.toImageHolder() ?? NilImageHolder()
+    }
+
+    if url.pathExtension == "svg",
+       let asset = NSDataAsset(name: url.lastPathComponent, bundle: testBundle) {
+      guard let image = SVGDecoder().decode(data: asset.data) else {
+        Issue.record("Failed to decode SVG test asset: \(url.lastPathComponent)")
+        return UIImage()
+      }
+      return image
     }
 
     if let image = UIImage(named: url.lastPathComponent, in: testBundle, compatibleWith: nil) {

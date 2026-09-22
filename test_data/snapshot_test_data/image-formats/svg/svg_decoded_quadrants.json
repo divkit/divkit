@@ -1,0 +1,29 @@
+{
+  "description": "Decoded SVG preserves all four quadrants at a fixed display size",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/test/quadrant.svg",
+          "scale": "fit",
+          "width": {
+            "type": "fixed",
+            "value": 240
+          },
+          "height": {
+            "type": "fixed",
+            "value": 240
+          }
+        }
+      }
+    ]
+  }
+}

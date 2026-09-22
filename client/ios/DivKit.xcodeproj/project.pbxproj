@@ -262,6 +262,7 @@
 		E94B516328D0AC0300AFACEA /* interactive_snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */; };
 		E99F91822DF04A52003A8AF3 /* DivKitSVG in Frameworks */ = {isa = PBXBuildFile; productRef = E99F91812DF04A52003A8AF3 /* DivKitSVG */; };
 		E9E484C129AF434D00C803A8 /* RegressionFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E484C029AF434D00C803A8 /* RegressionFile.swift */; };
+		D10458010000000000000001 /* DivKitSVG in Frameworks */ = {isa = PBXBuildFile; productRef = D10458010000000000000002 /* DivKitSVG */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -684,6 +685,7 @@
 				8C0E7371288AE219009BEB3C /* DivKit in Frameworks */,
 				A1B2C3D42F4A000100000001 /* libDivKitTestsSupport.a in Frameworks */,
 				E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */,
+				D10458010000000000000001 /* DivKitSVG in Frameworks */,
 				52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1404,6 +1406,7 @@
 				8C0E7370288AE219009BEB3C /* DivKit */,
 				52184FD7296C68E400ECC0E9 /* DivKitExtensions */,
 				E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */,
+				D10458010000000000000002 /* DivKitSVG */,
 			);
 			productName = DivKitSnapshotTests;
 			productReference = 8C9284C5288ACCBA00BEA1FA /* DivKitSnapshotTests.xctest */;
@@ -3151,6 +3154,10 @@
 			productName = DivKitMarkdownExtension;
 		};
 		E99F91812DF04A52003A8AF3 /* DivKitSVG */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DivKitSVG;
+		};
+		D10458010000000000000002 /* DivKitSVG */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DivKitSVG;
 		};
