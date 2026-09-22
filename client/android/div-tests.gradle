@@ -2,6 +2,7 @@ android {
     testOptions {
         unitTests {
             all {
+                maxHeapSize = "4g"
                 testLogging {
                     events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
                 }

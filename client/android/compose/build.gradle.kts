@@ -68,10 +68,4 @@ tasks.withType<Test>().configureEach {
     providers.gradleProperty("divkitTestFilter").orNull?.let { filter ->
         systemProperty("divkit.test.filter", filter)
     }
-
-    // Measured to be faster than both the serial default (forks=1) and full parallelism
-    // (forks=availableProcessors()) for this module's Robolectric test suite: running every
-    // fork at once causes per-fork JVM/Robolectric startup to compete for the same CPU and
-    // heap, which outweighs the parallelism gain.
-    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
 }
