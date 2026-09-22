@@ -10,7 +10,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStopTemplate
 import com.yandex.div2.DivActionClearFocus
-import com.yandex.div2.DivActionCopyToClipboard
 import com.yandex.div2.DivActionDownload
 import com.yandex.div2.DivActionFocusElement
 import com.yandex.div2.DivActionScrollBy
@@ -30,6 +29,7 @@ internal class DivActionHandler @Inject constructor(
     private val reporter: DivReporter,
     private val hapticActionHandler: HapticActionHandler,
     private val arrayActionsHandler: ArrayActionsHandler,
+    private val copyToClipboardActionHandler: CopyToClipboardActionHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
     private val setStateActionHandler: SetStateActionHandler,
     private val setStoredValueActionHandler: SetStoredValueActionHandler,
@@ -140,7 +140,9 @@ internal class DivActionHandler @Inject constructor(
                 hapticActionHandler.handle(context, action.value)
 
             is DivActionTyped.ClearFocus -> notSupported(DivActionClearFocus.TYPE)
-            is DivActionTyped.CopyToClipboard -> notSupported(DivActionCopyToClipboard.TYPE)
+
+            is DivActionTyped.CopyToClipboard ->
+                copyToClipboardActionHandler.handle(context, action.value)
 
             is DivActionTyped.Custom ->
                 externalActionHandler.handleCustomAction(

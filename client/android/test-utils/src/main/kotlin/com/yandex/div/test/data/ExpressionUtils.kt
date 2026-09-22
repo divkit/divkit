@@ -16,13 +16,13 @@ import kotlin.test.fail
 
 fun <T : Any> constant(value: T) = Expression.ConstantExpression(value)
 
-fun expression(expression: String): Expression<String> {
+fun expression(expression: String, failOnError: Boolean = true): Expression<String> {
     return Expression.MutableExpression<String, String>(
         expressionKey = "test",
         rawExpression = expression,
         converter = null,
         validator = { true },
-        logger = throwingErrorLogger,
+        logger = { if (failOnError) fail(it.message) },
         typeHelper = TYPE_HELPER_STRING
     )
 }
@@ -74,13 +74,13 @@ fun intExpression(
     )
 }
 
-fun uriExpression(expression: String): Expression<Uri> {
+fun uriExpression(expression: String, failOnError: Boolean = true): Expression<Uri> {
     return Expression.MutableExpression(
         expressionKey = "test",
         rawExpression = expression,
         converter = STRING_TO_URI,
         validator = { true },
-        logger = throwingErrorLogger,
+        logger = { if (failOnError) fail(it.message) },
         typeHelper = TYPE_HELPER_URI,
     )
 }

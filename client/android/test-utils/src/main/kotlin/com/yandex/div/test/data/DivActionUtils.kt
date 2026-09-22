@@ -3,10 +3,14 @@ package com.yandex.div.test.data
 import android.net.Uri
 import androidx.core.net.toUri
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div2.ContentText
+import com.yandex.div2.ContentUrl
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
+import com.yandex.div2.DivActionCopyToClipboard
+import com.yandex.div2.DivActionCopyToClipboardContent
 import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
 import com.yandex.div2.DivActionHaptic
@@ -96,6 +100,23 @@ fun arraySetValueAction(
         )
     )
 }
+
+fun copyTextToClipboardAction(value: String): DivActionTyped =
+    copyTextToClipboardAction(constant(value))
+
+fun copyTextToClipboardAction(value: Expression<String>): DivActionTyped =
+    DivActionTyped.CopyToClipboard(
+        DivActionCopyToClipboard(
+            content = DivActionCopyToClipboardContent.ContentTextCase(ContentText(value = value))
+        )
+    )
+
+fun copyUrlToClipboardAction(value: Expression<Uri>): DivActionTyped =
+    DivActionTyped.CopyToClipboard(
+        DivActionCopyToClipboard(
+            content = DivActionCopyToClipboardContent.ContentUrlCase(ContentUrl(value = value))
+        )
+    )
 
 fun customAction(): DivActionTyped = DivActionTyped.Custom(DivActionCustom())
 
