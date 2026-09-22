@@ -12,10 +12,10 @@ Value = TypeVar('V')
 def enclosed_dict_for(keys: List[Key], dictionary: Dict[Key, any]) -> Dict[Key, any]:
     if not keys:
         return dictionary
-    d = deepcopy(dictionary)
+    d = dictionary
     for key in keys:
         d = d.get(key)
-    return d
+    return deepcopy(d)
 
 
 def get_value_with_optional_by_lang(key: str, lang: GeneratedLanguage, dictionary: Dict[str, any]) -> Optional[Value]:

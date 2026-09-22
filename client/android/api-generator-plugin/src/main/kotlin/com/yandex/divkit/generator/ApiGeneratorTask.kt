@@ -2,10 +2,13 @@ package com.yandex.divkit.generator
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -18,9 +21,16 @@ abstract class ApiGeneratorTask : DefaultTask() {
     @get:Inject
     abstract val exec: ExecOperations
 
-    @get:InputDirectory
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:Internal
     abstract val workingDirectory: DirectoryProperty
+
+    @get:InputFiles
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    val generatorSources: FileTree
+        get() = workingDirectory.dir("api_generator").get().asFileTree.matching {
+            include("**/*.py")
+            exclude("**/__pycache__/**")
+        }
 
     @get:InputFile
     @get:PathSensitive(PathSensitivity.RELATIVE)

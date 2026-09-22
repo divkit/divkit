@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Set
 
 from ...config import Config, GenerationMode
 from ..utils import is_list_of_type, is_dict_with_keys_of_type
@@ -76,8 +76,10 @@ def build_objects(schema_dir: SchemaDirectory, config: Config.GenerationConfig) 
 
     for _, entity in result:
         entity.resolve_dependencies(global_objects=__get_entities(result))
+    # Share the traversal across roots: schemas contain cycles and common dependencies.
+    visited: Set[Declarable] = set()
     for location, entity in result:
-        entity.check_dependencies_resolved(location=location, stack=[])
+        entity.check_dependencies_resolved(location=location, visited=visited)
 
     return __get_entities(result)
 

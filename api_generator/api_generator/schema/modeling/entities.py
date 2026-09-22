@@ -236,7 +236,7 @@ class Declarable(ABC):
         pass
 
     @abstractmethod
-    def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
+    def check_dependencies_resolved(self, location: ElementLocation, visited: Set[Declarable]) -> None:
         pass
 
     @abstractmethod
@@ -497,9 +497,10 @@ class Entity(Declarable):
                 and any(entities[0] in valid_names for entities in enumeration.entities)
             ]
 
-    def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
-        if self in stack:
+    def check_dependencies_resolved(self, location: ElementLocation, visited: Set[Declarable]) -> None:
+        if self in visited:
             return
+        visited.add(self)
         for p in self._properties:
             name: Optional[str] = None
             declarable: Optional[Declarable] = None
@@ -515,11 +516,8 @@ class Entity(Declarable):
                                                    object_name=self._name,
                                                    field_name=p.dict_field,
                                                    unresolved_typename=name)
-                if declarable is self:
-                    return
-
                 declarable.check_dependencies_resolved(location=location,
-                                                       stack=stack + [self])
+                                                       visited=visited)
 
     @property
     def type_is_optional(self) -> bool:
@@ -642,13 +640,14 @@ class EntityEnumeration(Declarable):
             new_entities.append((new_name, new_obj))
         self._entities = new_entities
 
-    def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
-        if self in stack:
+    def check_dependencies_resolved(self, location: ElementLocation, visited: Set[Declarable]) -> None:
+        if self in visited:
             return
+        visited.add(self)
         for _, entity in self._entities:
             if entity is not None:
                 entity.check_dependencies_resolved(location=location + self._name,
-                                                   stack=stack + [self])
+                                                   visited=visited)
 
     @property
     def as_json(self) -> Dict:
@@ -750,7 +749,7 @@ class StringEnumeration(Declarable):
     def resolve_dependencies(self, global_objects: List[Declarable]) -> None:
         pass
 
-    def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
+    def check_dependencies_resolved(self, location: ElementLocation, visited: Set[Declarable]) -> None:
         pass
 
     @property
