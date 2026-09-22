@@ -20,6 +20,7 @@ internal fun AdjustScrollToItem(
     listState: LazyListState,
     targetIndex: Int,
     restartKey: Any? = Unit,
+    onAdjusted: () -> Unit = {},
     desiredOffset: (viewportSize: Int, itemSize: Int) -> Int,
 ) {
     val initialTargetIndex = remember(listState) { targetIndex }
@@ -27,11 +28,15 @@ internal fun AdjustScrollToItem(
         mutableStateOf<AlignedScrollPosition?>(null)
     }
     val currentDesiredOffset by rememberUpdatedState(desiredOffset)
+    val currentOnAdjusted by rememberUpdatedState(onAdjusted)
     LaunchedEffect(listState, targetIndex, restartKey) {
         val previousPosition = lastAlignedPosition
         if (listState.isScrollInProgress ||
             previousPosition != null && previousPosition != listState.scrollPosition
-        ) return@LaunchedEffect
+        ) {
+            currentOnAdjusted()
+            return@LaunchedEffect
+        }
 
         if (targetIndex != initialTargetIndex) {
             listState.scrollToItem(targetIndex)
@@ -47,6 +52,7 @@ internal fun AdjustScrollToItem(
             desiredOffset = currentDesiredOffset,
         )
         lastAlignedPosition = listState.scrollPosition
+        currentOnAdjusted()
     }
 }
 

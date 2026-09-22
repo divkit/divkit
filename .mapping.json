@@ -852,6 +852,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/pager/PagerChildModifier.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/pager/PagerChildModifier.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/pager/PagerContent.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/pager/PagerContent.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/pager/PagerScrollPosition.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/pager/PagerScrollPosition.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/pager/SelectedActions.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/pager/SelectedActions.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/slider/DivSliderView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/slider/DivSliderView.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/slider/SliderDraw.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/slider/SliderDraw.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/slider/SliderState.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/slider/SliderState.kt",

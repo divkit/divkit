@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
@@ -93,12 +95,28 @@ internal fun PagerContent(
         listState, snapPosition, itemWindow, initialDefaultItem, startPadding, endPadding
     )
 
-    if (pageSize == null && snapPosition != SnapPosition.Start) {
-        AdjustScrollToItem(listState, rawDefaultItem, snapPosition, endPadding)
+    val needsInitialAlignment = pageSize == null && snapPosition != SnapPosition.Start
+    var initialPositionAdjusted by remember(listState, needsInitialAlignment) {
+        mutableStateOf(!needsInitialAlignment)
     }
+    if (needsInitialAlignment) {
+        AdjustScrollToItem(listState, rawDefaultItem, snapPosition, endPadding) {
+            initialPositionAdjusted = true
+        }
+    }
+    val selectedActionsHandler = rememberPagerSelectedActionsHandler(
+        items = items,
+        listState = listState,
+        snapPosition = snapPosition,
+        itemWindow = itemWindow,
+        enabled = !needsInitialAlignment || initialPositionAdjusted,
+    )
 
-    val snapProvider = remember(listState, snapPosition) {
-        SinglePageSnapLayoutInfoProvider(SnapLayoutInfoProvider(listState, snapPosition))
+    val snapProvider = remember(listState, snapPosition, selectedActionsHandler) {
+        SinglePageSnapLayoutInfoProvider(
+            delegate = SnapLayoutInfoProvider(listState, snapPosition),
+            onSnapOffsetCalculated = selectedActionsHandler::onSnapOffsetCalculated,
+        )
     }
     val childModifier = childModifier(
         isHorizontal, viewportSize, crossAxisBounded, listState,
@@ -114,7 +132,10 @@ internal fun PagerContent(
         crossAxisAlignment = crossAlignment,
         flingBehavior = rememberSnapFlingBehavior(snapProvider),
     ) {
-        items(count = itemWindow.itemCount) { index ->
+        items(
+            count = itemWindow.itemCount,
+            contentType = { itemWindow },
+        ) { index ->
             ScrollableChildItem(items[itemWindow.realIndex(index)], childModifier, isHorizontal, crossAlignment)
         }
     }
@@ -198,11 +219,13 @@ private fun AdjustScrollToItem(
     defaultItem: Int,
     snapPosition: SnapPosition,
     endPadding: Dp,
+    onAdjusted: () -> Unit,
 ) {
     val endPaddingPx = with(LocalDensity.current) { endPadding.roundToPx() }
     AdjustScrollToItem(
         listState = listState,
         targetIndex = defaultItem,
+        onAdjusted = onAdjusted,
         desiredOffset = { viewportSize, itemSize ->
             desiredSnapOffset(
                 snapPosition = snapPosition,
@@ -282,9 +305,20 @@ private fun DivPager.ItemAlignment.toSnapPosition(): SnapPosition =
         DivPager.ItemAlignment.END -> SnapPosition.End
     }
 
+/**
+ * Reports the snap target before settling to preserve ViewPager2's selection order for interrupted flings.
+ * This relies on SnapFlingBehavior calculating the final offset after the zero-length approach phase.
+ * The handler queues targets until idle and ignores repeated calculations selecting the same logical page.
+ */
 private class SinglePageSnapLayoutInfoProvider(
     private val delegate: SnapLayoutInfoProvider,
+    private val onSnapOffsetCalculated: (Float) -> Unit,
 ) : SnapLayoutInfoProvider {
-    override fun calculateSnapOffset(velocity: Float) = delegate.calculateSnapOffset(velocity)
+    override fun calculateSnapOffset(velocity: Float): Float {
+        val offset = delegate.calculateSnapOffset(velocity)
+        onSnapOffsetCalculated(offset)
+        return offset
+    }
+
     override fun calculateApproachOffset(velocity: Float, decayOffset: Float) = 0f
 }
