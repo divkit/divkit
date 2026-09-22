@@ -22,7 +22,8 @@
         "Last action updates after every tap, including Disabled, without implying that physical feedback occurred.",
         "With system haptics disabled, actions continue and Last action updates without feedback."
       ],
-      "file": "actions/haptic.json"
+      "file": "actions/haptic.json",
+      "case_id": 531
     },
     {
       "title": "Transition animations with delay",
