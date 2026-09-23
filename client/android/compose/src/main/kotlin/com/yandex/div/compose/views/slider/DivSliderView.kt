@@ -31,7 +31,15 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
     val coroutineScope = rememberCoroutineScope()
 
     val modifier = modifier
-        .sliderPointerInput(state, styles, isEnabled, isRtl, coroutineScope, animationsEnabled)
+        .sliderPointerInput(
+            state = state,
+            thumbWidth = styles.maxTickOrThumbWidth,
+            hasTickMarks = styles.hasTickMarks,
+            isEnabled = isEnabled,
+            isRtl = isRtl,
+            coroutineScope = coroutineScope,
+            animationsEnabled = animationsEnabled,
+        )
         .drawBehind { drawSlider(state, styles, isRtl = isRtl) }
 
     Layout(
@@ -57,7 +65,8 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
 
 private fun Modifier.sliderPointerInput(
     state: SliderState,
-    styles: SliderStyles,
+    thumbWidth: Float,
+    hasTickMarks: Boolean,
     isEnabled: Boolean,
     isRtl: Boolean,
     coroutineScope: CoroutineScope,
@@ -65,9 +74,7 @@ private fun Modifier.sliderPointerInput(
 ): Modifier {
     if (!isEnabled)
         return this
-    val thumbWidth = styles.maxTickOrThumbWidth
-    val hasTickMarks = styles.hasTickMarks
-    return pointerInput(state, styles, isRtl) {
+    return pointerInput(state, thumbWidth, hasTickMarks, isRtl) {
         awaitEachGesture {
             val down = awaitFirstDown()
             val trackLength = size.width - thumbWidth
