@@ -35,7 +35,10 @@ import static com.yandex.div.json.ParsingExceptionKt.typeMismatch;
  * This will only make parsing slower.
  */
 @SuppressWarnings({"unused", "unchecked"})
-@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
+@OptIn(markerClass = {
+        com.yandex.div.core.annotations.ExperimentalApi.class,
+        com.yandex.div.core.annotations.InternalApi.class
+})
 public class JsonExpressionParser {
 
     private static final ExpressionList<?> EMPTY_EXPRESSION_LIST = new ConstantExpressionList<>(Collections.emptyList());

@@ -11,6 +11,7 @@ import androidx.annotation.StyleRes;
 import com.yandex.div.core.DivCustomContainerViewAdapter;
 import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.DivViewDataPreloader;
+import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionController;
 import com.yandex.div.core.font.DivTypefaceProvider;
@@ -33,6 +34,8 @@ import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
 import com.yandex.yatagan.Binds;
 import com.yandex.yatagan.Module;
 import com.yandex.yatagan.Provides;
+
+import kotlin.OptIn;
 
 @Module
 abstract public class Div2Module {
@@ -97,6 +100,7 @@ abstract public class Div2Module {
     @Provides
     @DivScope
     @NonNull
+    @OptIn(markerClass = InternalApi.class)
     public static DivImageLoader provideDivImageLoader(
             @NonNull @Named(Names.UNWRAPPED_IMAGE_LOADER) DivImageLoader divImageLoader,
             @NonNull @Named(Names.CONTEXT) Context context,
@@ -141,6 +145,7 @@ abstract public class Div2Module {
     @Provides
     @DivScope
     @NonNull
+    @OptIn(markerClass = InternalApi.class)
     public static BitmapEffectHelper provideBitmapEffectHelper(
             @NonNull
             @Named(Names.CONTEXT)

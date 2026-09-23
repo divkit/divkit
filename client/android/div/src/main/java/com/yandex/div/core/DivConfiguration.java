@@ -32,6 +32,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import kotlin.OptIn;
+
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.
  * Create instance using {@link Builder} class.
@@ -370,6 +372,7 @@ public class DivConfiguration {
 
     @Provides
     @NonNull
+    @OptIn(markerClass = InternalApi.class)
     public DivDownloader getDivDownloader(@NonNull DivNetworkClientHolder networkClientHolder) {
         if (mDivDownloader != null) {
             return mDivDownloader;

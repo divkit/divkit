@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.yandex.div.core.actions.DivActionTypedHandlerProxy;
+import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.evaluation.DictEvaluator;
 import com.yandex.div.core.expression.evaluation.JSONObjectEvaluator;
@@ -31,6 +32,8 @@ import com.yandex.div2.DivSightAction;
 import com.yandex.div2.DivVisibilityAction;
 
 import org.json.JSONObject;
+
+import kotlin.OptIn;
 
 /**
  * Handles URIs and payloads, that are triggered by click events in {@link Div2View}.
@@ -402,6 +405,7 @@ public class DivActionHandler {
         return false;
     }
 
+    @OptIn(markerClass = InternalApi.class)
     private boolean handleActionInternal(
             @Nullable String scopeId,
             @NonNull Uri uri,
@@ -523,6 +527,7 @@ public class DivActionHandler {
     }
 
     @NonNull
+    @OptIn(markerClass = InternalApi.class)
     private ExpressionResolver getLocalResolver(
             @Nullable String scopeId,
             @NonNull DivViewFacade view,

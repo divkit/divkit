@@ -36,7 +36,10 @@ import static com.yandex.div.json.ParsingExceptionKt.typeMismatch;
  * NOTE! Please do not change Function1 and Function2 with readable java-interfaces.
  * This will only make parsing slower.
  */
-@OptIn(markerClass = com.yandex.div.core.annotations.ExperimentalApi.class)
+@OptIn(markerClass = {
+        com.yandex.div.core.annotations.ExperimentalApi.class,
+        com.yandex.div.core.annotations.InternalApi.class
+})
 public class JsonParser {
     @NonNull
     private static final ValueValidator<?> ALWAYS_VALID = (any) -> true;

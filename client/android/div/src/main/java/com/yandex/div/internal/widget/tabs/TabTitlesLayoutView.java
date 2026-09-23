@@ -7,6 +7,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
+import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.view2.divs.tabs.DivTabsBinderKt;
 import com.yandex.div.internal.core.ExpressionSubscriber;
@@ -18,6 +19,9 @@ import com.yandex.div2.DivTabs;
 
 import java.util.List;
 
+import kotlin.OptIn;
+
+@OptIn(markerClass = InternalApi.class)
 public class TabTitlesLayoutView<ACTION>
         extends BaseIndicatorTabLayout
         implements BaseDivTabbedCardUi.AbstractTabBar<ACTION> {
