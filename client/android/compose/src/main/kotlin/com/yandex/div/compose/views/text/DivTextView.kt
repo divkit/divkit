@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -366,6 +367,7 @@ private fun AnnotatedString.Builder.addTextGradient(gradientBrush: Brush?) {
 }
 
 @Composable
+@NonRestartableComposable
 private fun AnnotatedString.Builder.addTextActions(
     actions: List<DivAction>?,
     start: Int,
@@ -379,6 +381,7 @@ private fun AnnotatedString.Builder.addTextActions(
 }
 
 @Composable
+@NonRestartableComposable
 private fun AnnotatedString.Builder.addTextRanges(
     ranges: List<DivText.Range>?,
     textLength: Int,
@@ -416,6 +419,7 @@ private fun AnnotatedString.Builder.addTextRanges(
 }
 
 @Composable
+@NonRestartableComposable
 private fun AnnotatedString.Builder.maskDecoratedRanges(decorations: List<TextRangeDecoration>) {
     if (decorations.any(TextRangeDecoration::hidesText)) {
         val maskedSpanStyle = rememberMaskedSpanStyle()
