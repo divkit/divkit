@@ -15,12 +15,11 @@ import kotlin.coroutines.resume
  *
  * Usage:
  * ```
- * val factory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(context))
- * val configuration = DivConfiguration(
- *     playerFactory = factory,
- *     videoPreloader = factory.makePreloader(),
- *     ...
- * )
+ * val exoFactory = ExoDivPlayerFactory(context)
+ * val configuration = divConfiguration {
+ *     playerFactory = ViewBasedDivVideoPlayerFactory(exoFactory)
+ *     videoPreloader = ViewBasedDivVideoPreloader(exoFactory.makePreloader())
+ * }
  * ```
  */
 class ViewBasedDivVideoPreloader(

@@ -15,10 +15,9 @@ import com.yandex.div.core.player.DivPlayerFactory
  *
  * Usage:
  * ```
- * val configuration = DivConfiguration(
- *     playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(context)),
- *     ...
- * )
+ * val configuration = divConfiguration {
+ *     playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(context))
+ * }
  * ```
  */
 class ViewBasedDivVideoPlayerFactory(

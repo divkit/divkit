@@ -17,7 +17,7 @@ import com.yandex.div2.DivData
  *
  * Example usage:
  *
- *    val configuration = DivConfiguration()
+ *    val configuration = divConfiguration {}
  *    val divContext = DivContext(activity, configuration)
  */
 class DivContext private constructor(

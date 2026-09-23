@@ -5,8 +5,8 @@ import android.content.Context
 import android.view.View
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
@@ -39,8 +39,8 @@ class RegressionComposeViewCreator(context: Context) {
         val divData = mutableStateOf(parseDivData(templatesJson, cardJson))
         val divContext = DivContext(
             baseContext = activity,
-            configuration = DivConfiguration(
-                actionHandler = RegressionComposeActionHandler(assetReader, divData),
+            configuration = divConfiguration {
+                actionHandler = RegressionComposeActionHandler(assetReader, divData)
                 customViewFactories = mapOf(
                     "old_custom_card_1" to CustomTextViewFactory(text = "Hi! I'm old card!"),
                     "old_custom_card_2" to CustomTextViewFactory(text = "Hi! I'm old as well!"),
@@ -49,7 +49,7 @@ class RegressionComposeViewCreator(context: Context) {
                     "new_custom_card_2" to ChronometerViewFactory(),
                     "new_custom_container_1" to CustomContainerViewFactory(),
                     "nested_scroll_view" to NestedScrollViewFactory()
-                ),
+                )
                 extensionHandlers = mapOf(
                     "lottie" to LottieExtensionHandler(
                         resourceLoader = CompositeDivLottieResourceLoader(
@@ -59,12 +59,12 @@ class RegressionComposeViewCreator(context: Context) {
                     ),
                     "shimmer" to ShimmerExtensionHandler(),
                     "pinch-to-zoom" to PinchToZoomExtensionHandler(),
-                ),
-                fontSourceProvider = ComposeFontSourceProvider(),
-                histogramConfiguration = DemoHistogramConfiguration,
-                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity)),
+                )
+                fontSourceProvider = ComposeFontSourceProvider()
+                histogramConfiguration = DemoHistogramConfiguration
+                playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity))
                 animationsEnabledProvider = Container.animationsEnabledProvider
-            )
+            }
         )
         val view = ComposeView(divContext).apply {
             setContent {

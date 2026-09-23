@@ -19,8 +19,8 @@ import com.yandex.div2.DivData
  * The simplest way to achieve this is to use [DivContext] as the context for
  * [androidx.compose.ui.platform.ComposeView]:
  *
- *    val configuration = DivConfiguration()
- *    val divContext = configuration.createContext(baseContext = activity)
+ *    val configuration = divConfiguration {}
+ *    val divContext = DivContext(activity, configuration)
  *    ComposeView(divContext).setContent {
  *        DivView(data = data)
  *    }

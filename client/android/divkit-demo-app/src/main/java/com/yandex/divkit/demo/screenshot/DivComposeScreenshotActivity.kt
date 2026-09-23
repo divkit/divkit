@@ -15,10 +15,10 @@ import coil3.decode.Decoder
 import coil3.decode.ImageSource
 import coil3.fetch.SourceFetchResult
 import coil3.request.Options
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.coil.GifDecoderFactory
@@ -46,13 +46,13 @@ class DivComposeScreenshotActivity : ComponentActivity() {
 
         divContext = DivContext(
             baseContext = this,
-            configuration = DivConfiguration(
-                fontSourceProvider = ComposeFontSourceProvider(),
+            configuration = divConfiguration {
+                fontSourceProvider = ComposeFontSourceProvider()
                 imageLoaderConfiguration = TestImageLoaderConfiguration(
                     eventListener = imageLoadingTracker
-                ),
-                reporter = FailingReporter(),
-            )
+                )
+                reporter = FailingReporter()
+            }
         )
 
         intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {

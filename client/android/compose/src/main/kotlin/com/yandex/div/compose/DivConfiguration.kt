@@ -32,16 +32,19 @@ import javax.inject.Named
  *
  * Example usage:
  *
- *    val configuration = DivConfiguration(
+ *    val configuration = divConfiguration {
  *        reporter = MyReporter()
- *    )
+ *    }
  *    val divContext = DivContext(baseContext = activity, configuration = configuration)
  *    ComposeView(divContext).setContent {
  *        DivView(data = data)
  *    }
  */
 @Module
-class DivConfiguration(
+class DivConfiguration @Deprecated(
+    message = "Use divConfiguration { ... } or DivConfiguration.Builder instead.",
+    level = DeprecationLevel.WARNING,
+) constructor(
     @get:Provides
     val actionHandler: DivExternalActionHandler = defaultActionHandler,
 
@@ -75,7 +78,41 @@ class DivConfiguration(
 
     @get:Provides
     val videoPreloader: DivVideoPreloader = defaultDivVideoPreloader,
-)
+) {
+    /** Configures a [DivConfiguration] using the same defaults as its constructor. */
+    class Builder {
+        var actionHandler: DivExternalActionHandler = defaultActionHandler
+        var customViewFactories: Map<String, DivCustomViewFactory> = emptyMap()
+        var extensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
+        var fontSourceProvider: DivFontSourceProvider = defaultFontSourceProvider
+        var histogramConfiguration: DivHistogramConfiguration = DisabledHistogramConfiguration
+        var imageLoaderConfiguration: ImageLoaderConfiguration = defaultImageLoaderConfiguration
+        var playerFactory: DivVideoPlayerFactory = defaultDivVideoPlayerFactory
+        var reporter: DivReporter = DivReporter()
+        var animationsEnabledProvider: DivAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT
+        var variableController: DivVariableController = DivVariableController()
+        var videoPreloader: DivVideoPreloader = defaultDivVideoPreloader
+
+        @Suppress("DEPRECATION")
+        fun build(): DivConfiguration = DivConfiguration(
+            actionHandler = actionHandler,
+            customViewFactories = customViewFactories,
+            extensionHandlers = extensionHandlers,
+            fontSourceProvider = fontSourceProvider,
+            histogramConfiguration = histogramConfiguration,
+            imageLoaderConfiguration = imageLoaderConfiguration,
+            playerFactory = playerFactory,
+            reporter = reporter,
+            animationsEnabledProvider = animationsEnabledProvider,
+            variableController = variableController,
+            videoPreloader = videoPreloader,
+        )
+    }
+}
+
+/** Creates a [DivConfiguration] using a [DivConfiguration.Builder] block. */
+fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfiguration =
+    DivConfiguration.Builder().apply(block).build()
 
 private val defaultActionHandler = object : DivExternalActionHandler {}
 
