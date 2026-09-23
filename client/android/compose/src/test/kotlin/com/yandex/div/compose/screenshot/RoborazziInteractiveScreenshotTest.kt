@@ -12,7 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -23,7 +26,7 @@ import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.internal.DivDebugConfiguration
-import com.yandex.div.compose.screenshot.InteractiveScreenshotTestConfiguration.Step
+import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import org.junit.Rule
@@ -117,6 +120,12 @@ class RoborazziInteractiveScreenshotTest(
                         )
 
                 is Step.Wait -> Unit
+
+                is Step.VerifyText ->
+                    composeRule
+                        .onNodeWithTag(step.id)
+                        .assertTextEquals(step.text)
+                        .assertIsDisplayed()
             }
 
             isViewEmpty = false
@@ -160,6 +169,7 @@ class RoborazziInteractiveScreenshotTest(
 
 private val selectedFiles = setOf(
     "div-action/base.json",
+    "div-action/set-state-no-screenshot.json",
     "div-action/set-variable.json",
     "div-container/base-properties.json",
     "div-container/visibility.json",

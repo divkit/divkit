@@ -1,12 +1,8 @@
 {
   "description": "div-action://set_state switches one state to another and back",
   "platforms": [
-    "ios",
-    "web"
+    "android"
   ],
-  "unsupported_platforms": {
-    "android": "Supported as set-state-no-screenshot"
-  },
   "div_data": {
     "card": {
       "log_id": "sample_card",
@@ -21,6 +17,7 @@
                 "state_id": "first",
                 "div": {
                   "type": "text",
+                  "id": "text",
                   "text": "first state"
                 }
               },
@@ -28,6 +25,7 @@
                 "state_id": "second",
                 "div": {
                   "type": "text",
+                  "id": "text",
                   "text": "second state"
                 }
               }
@@ -39,10 +37,6 @@
   },
   "steps": [
     {
-      "type": "verify_snapshot",
-      "name": "step0"
-    },
-    {
       "type": "div_action",
       "action": {
         "url": "div-action://set_state?state_id=0/sample/second",
@@ -50,8 +44,12 @@
       }
     },
     {
-      "type": "verify_snapshot",
-      "name": "step1"
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "text"
+      },
+      "text": "second state"
     },
     {
       "type": "div_action",
@@ -61,8 +59,12 @@
       }
     },
     {
-      "type": "verify_snapshot",
-      "name": "step0"
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "text"
+      },
+      "text": "first state"
     }
   ]
 }
