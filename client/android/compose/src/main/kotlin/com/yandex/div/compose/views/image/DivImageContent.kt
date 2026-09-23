@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,11 +42,39 @@ internal fun DivImageContent(
     highPriorityPreviewShow: Expression<Boolean>? = null,
     preview: @Composable () -> Any?
 ) {
+    val component = divContext.component
+    val imageLoader = component.imageLoader
+    val painterStateListener = component.debugConfiguration.imagePainterStateListener
     val imageStateStorage = LocalDivViewContext.current.component.imageStateStorage
-    val isImageLoaded = imageStateStorage.isLoaded(data)
+    val imageRequestParams = if (imageUrl?.isValidImageUri() == true) {
+        ImageRequestParams(
+            data = imageUrl,
+            transformations = transformations
+        )
+    } else {
+        null
+    }
+    val imagePainter = imageRequestParams?.let {
+        rememberAsyncImagePainter(
+            model = rememberImageRequest(it),
+            imageLoader = imageLoader,
+            onState = painterStateListener
+        )
+    }
+    val imagePainterState = imagePainter?.state?.collectAsState()?.value
+    val isPainterLoaded = imagePainterState is AsyncImagePainter.State.Success
+    val isStoredImageLoaded = imageStateStorage.isLoaded(data)
+    val isImageLoaded = isPainterLoaded || isStoredImageLoaded
+
+    if (isPainterLoaded && !isStoredImageLoaded) {
+        SideEffect {
+            imageStateStorage.setIsLoaded(data, true)
+        }
+    }
+
     // Match DivImageBinder.applyImage: a replacement preview is not high priority if the previous
     // image was loaded. Capture that state before DisposableEffect resets it on a URL change.
-    val canShowHighPriorityPreview = remember(imageUrl) { mutableStateOf(!isImageLoaded) }
+    val canShowHighPriorityPreview = remember(imageUrl) { mutableStateOf(!isStoredImageLoaded) }
     val previewModel = if (isImageLoaded) null else preview()
     val previewRequest = if (previewModel == null) {
         null
@@ -76,9 +105,6 @@ internal fun DivImageContent(
     }
 
     Box(modifier = backgroundModifier) {
-        val component = divContext.component
-        val imageLoader = component.imageLoader
-        val painterStateListener = component.debugConfiguration.imagePainterStateListener
         if (!isImageLoaded && previewRequest != null) {
             Image(
                 modifier = Modifier.fillMaxSize(),
@@ -94,21 +120,7 @@ internal fun DivImageContent(
             )
         }
 
-        if (imageUrl?.isValidImageUri() == true) {
-            val imageRequestParams = ImageRequestParams(
-                data = imageUrl,
-                transformations = transformations
-            )
-            val imagePainter = rememberAsyncImagePainter(
-                model = rememberImageRequest(imageRequestParams),
-                imageLoader = imageLoader,
-                onState = { state ->
-                    if (state is AsyncImagePainter.State.Success) {
-                        imageStateStorage.setIsLoaded(data, true)
-                    }
-                    painterStateListener?.invoke(state)
-                }
-            )
+        if (imagePainter != null) {
             imagePainter.observeNetworkRestoration()
             Image(
                 modifier = Modifier.fillMaxSize(),
@@ -118,7 +130,7 @@ internal fun DivImageContent(
                 alignment = alignment,
                 colorFilter = colorFilter
             )
-            DisposableEffect(imageRequestParams) {
+            DisposableEffect(imageStateStorage, data, imageRequestParams) {
                 onDispose {
                     imageStateStorage.setIsLoaded(data, false)
                 }
