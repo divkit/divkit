@@ -96,6 +96,14 @@ subprojects {
         exclude group: "io.appmetrica.analytics", module: "analytics-local-socket"
     }
 
+    plugins.withId('com.android.library') {
+        androidComponents.beforeVariants(androidComponents.selector().all()) { variant ->
+            if (!file('src/androidTest').isDirectory()) {
+                variant.enableAndroidTest = false
+            }
+        }
+    }
+
     plugins.withId('me.tylerbwong.gradle.metalava') {
         metalavaGenerateSignature.configure {
             dependsOn tasks.matching {
