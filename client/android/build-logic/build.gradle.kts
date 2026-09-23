@@ -7,5 +7,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(libs.agp.gradle)
+    implementation(libs.kotlin.gradle)
     implementation(libs.metalava)
 }
