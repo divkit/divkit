@@ -12,11 +12,11 @@
         "div": {
           "height": {
             "type": "fixed",
-            "value": 100
+            "value": 128
           },
           "width": {
             "type": "fixed",
-            "value": 150
+            "value": 178
           },
           "type": "container",
           "orientation": "horizontal",
