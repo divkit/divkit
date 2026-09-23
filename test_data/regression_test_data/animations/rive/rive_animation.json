@@ -1,13 +1,17 @@
 {
   "templates": {
-    "rive_grid": {
-      "type": "grid",
+    "rive_gallery": {
+      "type": "gallery",
+      "height": {
+        "type": "match_parent"
+      },
       "paddings": {
         "left": 8,
         "top": 8,
         "right": 8,
         "bottom": 8
       },
+      "orientation": "vertical",
       "column_count": 2
     },
     "rive_custom": {
@@ -92,8 +96,8 @@
       {
         "state_id": 0,
         "div": {
-          "id": "rive_grid",
-          "type": "rive_grid",
+          "id": "rive_gallery",
+          "type": "rive_gallery",
           "items": [
             {
               "type": "rive_animation_card",
