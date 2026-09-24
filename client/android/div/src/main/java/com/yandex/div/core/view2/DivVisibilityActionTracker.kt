@@ -51,7 +51,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
     )
 
     private val visibleActions = WeakHashMap<View, Div>()
-    private val enqueuedVisibilityActions = WeakHashMap<View, Div>()
+    private val enqueuedVisibilityActions = WeakHashMap<View, Any>()
     private val previousVisibilityIsFull = WeakHashMap<View, Boolean>()
 
     private val divWithWaitingDisappearActions = SynchronizedWeakHashMap<View, Div>()
@@ -96,10 +96,12 @@ internal class DivVisibilityActionTracker @Inject constructor(
         if (view != null) {
             if (enqueuedVisibilityActions.containsKey(view)) return
 
+            val enqueueToken = Any()
+            var wasEnqueued = false
             view.doOnHierarchyLayout(
                 action = {
-                    // Prevent visibility tracking when data has changed
-                    if (scope.dataTag == originalDataTag) {
+                    val isCurrentEnqueue = !wasEnqueued || enqueuedVisibilityActions[view] === enqueueToken
+                    if (scope.dataTag == originalDataTag && isCurrentEnqueue) {
                         isEnabledObserver.observe(view, scope, resolver, div, visibilityActions)
                         trackVisibilityActions(
                             scope,
@@ -111,10 +113,13 @@ internal class DivVisibilityActionTracker @Inject constructor(
                         )
                     }
 
-                    enqueuedVisibilityActions.remove(view)
+                    if (enqueuedVisibilityActions[view] === enqueueToken) {
+                        enqueuedVisibilityActions.remove(view)
+                    }
                 },
                 onEnqueuedAction = {
-                    enqueuedVisibilityActions[view] = div
+                    wasEnqueued = true
+                    enqueuedVisibilityActions[view] = enqueueToken
                 }
             )
         } else {
@@ -136,14 +141,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
         divView: Div2View,
     ) {
         val actions = div.value().disappearActions ?: return
-        trackVisibilityActions(
-            divView,
-            resolver,
-            view,
-            div,
-            emptyList(),
-            actions.filterEnabled(resolver)
-        )
+        val enabledActions = actions.filterEnabled(resolver)
+        trackVisibilityActions(divView, resolver, view, div, emptyList(), enabledActions)
     }
 
     /**
@@ -193,6 +192,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
     ) {
         trackViewsHierarchy(root, div, divView) { currentView, currentDiv ->
             previousVisibilityIsFull.remove(currentView)
+            // Invalidate a pending deferred layout callback for this view.
+            enqueuedVisibilityActions.remove(currentView)
             currentDiv?.let {
                 val childResolver = currentView.divBlock?.expressionResolver ?: resolver
                 trackVisibilityActionsOf(divView, childResolver, null, it)
@@ -244,6 +245,9 @@ internal class DivVisibilityActionTracker @Inject constructor(
         disappearActions.groupBy { action ->
             action.duration.evaluate(resolver)
         }.forEach { (delayMs, actions) ->
+            val actionsToTrack = actions.filterTo(ArrayList(actions.size)) { action ->
+                shouldTrackVisibilityAction(scope, resolver, view, action, visibilityPercentage, disappearTrackedTokens)
+            }
             var haveWaitingDisappearActions = false
             actions.forEach {
                 val actionVisibilityPercentage = it.visibilityPercentage.evaluate(resolver)
@@ -257,9 +261,6 @@ internal class DivVisibilityActionTracker @Inject constructor(
                 divWithWaitingDisappearActions[view] = div
             }
 
-            val actionsToTrack = actions.filterTo(ArrayList(actions.size)) { action ->
-                shouldTrackVisibilityAction(scope, resolver, view, action, visibilityPercentage, disappearTrackedTokens)
-            }
             if (actionsToTrack.isNotEmpty()) {
                 startTracking(scope, resolver, view, actionsToTrack, delayMs, disappearTrackedTokens)
             }

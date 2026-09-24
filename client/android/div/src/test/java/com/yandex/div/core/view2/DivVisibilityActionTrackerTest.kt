@@ -2,9 +2,12 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import com.yandex.div.DivDataTag
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.dagger.DivDataComponent
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.data.disappearAction
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivDisappearAction
@@ -53,10 +56,13 @@ class DivVisibilityActionTrackerTest {
     private val view3 = mockView()
     private val view4 = mockView()
     private val view5 = mockView()
+    private val view6 = mockView()
     private val action1 = DivVisibilityAction(logId = "visibility_action".asExpression())
     private val action2 = DivVisibilityAction(logId = "visibility_action2".asExpression())
     private val action3 = DivVisibilityAction(logId = "visibility_action3".asExpression())
     private val disappearAction1 = DivDisappearAction(logId = "visibility_action".asExpression())
+    private val disappearAction50 = disappearAction(id = "disappear_50", percentage = 50)
+    private val disappearAction90 = disappearAction(id = "disappear_90", percentage = 90)
     private val lottaActions = listOf(action1, action2, action3)
     private val actionsWithThreeDifferentDelays = Array(6) {
         val delay: Long = when {
@@ -75,6 +81,7 @@ class DivVisibilityActionTrackerTest {
     private val div3 = text(text = "test3", visibilityActions = lottaActions)
     private val div4 = text(text = "test4", visibilityActions = actionsWithThreeDifferentDelays)
     private val div5 = text(text = "test5", visibilityActions = listOf(action1), disappearActions = listOf(disappearAction1))
+    private val div6 = text(text = "test6", disappearActions = listOf(disappearAction50))
 
     private val visibilityActionTracker = DivVisibilityActionTracker(viewVisibilityCalculator)
 
@@ -395,6 +402,140 @@ class DivVisibilityActionTrackerTest {
         // The originally scheduled delayed dispatch must have been cancelled, so it must not fire again.
         Robolectric.getForegroundThreadScheduler().advanceBy(1000L, TimeUnit.MILLISECONDS)
         verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+    }
+
+    @Test
+    fun `trackDetachedView fires disappear action when view is recycled and calculateVisibilityPercentage returns 0`() {
+        trackVisibilityAction(view6, div6, 100)
+        Robolectric.flushForegroundThreadScheduler()
+
+        updateViewVisibility(view6, 0)
+        visibilityActionTracker.trackDetachedView(view6, div6, resolver, scope)
+        Robolectric.flushForegroundThreadScheduler()
+
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view6),
+            argThat { this.contains(disappearAction50) && this.size == 1 }
+        )
+    }
+
+    @Test
+    fun `trackDetachedView updates visibility when disappear action becomes disabled`() {
+        var isEnabled = true
+        val isEnabledExpression = mock<Expression<Boolean>> {
+            onGeneric { evaluate(resolver) } doAnswer { isEnabled }
+            onGeneric { observe(eq(resolver), any()) } doReturn Disposable.NULL
+        }
+        val action = disappearAction(id = "dynamic_disappear", percentage = 50).copy(
+            isEnabled = isEnabledExpression
+        )
+        val div = text(text = "test", disappearActions = listOf(action))
+        trackVisibilityAction(view6, div, 100)
+        Robolectric.flushForegroundThreadScheduler()
+        clearInvocations(visibilityActionDispatcher)
+
+        isEnabled = false
+        updateViewVisibility(view6, 0)
+        visibilityActionTracker.trackDetachedView(view6, div, resolver, scope)
+        Robolectric.flushForegroundThreadScheduler()
+
+        assertTrue(visibleDivsChangedCaptor.lastValue.isEmpty())
+        verify(visibilityActionDispatcher, never()).dispatchActions(any(), any(), any(), any())
+    }
+
+    @Test
+    fun `detached view dispatches only disappear actions that crossed threshold`() {
+        val div = text(
+            text = "test",
+            disappearActions = listOf(disappearAction50, disappearAction90)
+        )
+        trackVisibilityAction(view6, div, 60)
+        Robolectric.flushForegroundThreadScheduler()
+
+        updateViewVisibility(view6, 0)
+        visibilityActionTracker.trackDetachedView(view6, div, resolver, scope)
+        Robolectric.flushForegroundThreadScheduler()
+
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view6),
+            argThat { this.contains(disappearAction50) && this.size == 1 }
+        )
+    }
+
+    @Test
+    fun `repeated detached tracking preserves disappear action deadline`() {
+        val action = disappearAction(id = "delayed_disappear", delayMs = 100, percentage = 50)
+        val div = text(text = "test", disappearActions = listOf(action))
+        trackVisibilityAction(view6, div, 100)
+        Robolectric.flushForegroundThreadScheduler()
+
+        updateViewVisibility(view6, 0)
+        visibilityActionTracker.trackDetachedView(view6, div, resolver, scope)
+        Robolectric.getForegroundThreadScheduler().advanceBy(50, TimeUnit.MILLISECONDS)
+        visibilityActionTracker.trackDetachedView(view6, div, resolver, scope)
+        Robolectric.getForegroundThreadScheduler().advanceBy(51, TimeUnit.MILLISECONDS)
+
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view6),
+            argThat { this.contains(action) && this.size == 1 }
+        )
+    }
+
+    @Test
+    fun `disappear action is dispatched after reappearing and detaching`() {
+        trackVisibilityAction(view6, div6, 100)
+        Robolectric.flushForegroundThreadScheduler()
+        trackVisibilityAction(view6, div6, 0)
+        Robolectric.flushForegroundThreadScheduler()
+        clearInvocations(visibilityActionDispatcher)
+
+        trackVisibilityAction(view6, div6, 100)
+        Robolectric.flushForegroundThreadScheduler()
+        updateViewVisibility(view6, 0)
+        visibilityActionTracker.trackDetachedView(view6, div6, resolver, scope)
+        Robolectric.flushForegroundThreadScheduler()
+
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view6),
+            argThat { this.contains(disappearAction50) && this.size == 1 }
+        )
+    }
+
+    @Test
+    fun `stale layout callback does not replace tracking for a new enqueue`() {
+        val view = mock<View>()
+        val listenerCaptor = argumentCaptor<View.OnLayoutChangeListener>()
+        updateViewVisibility(view, 100)
+        visibilityActionTracker.trackVisibilityActionsOf(scope, resolver, view, div1)
+        visibilityActionTracker.cancelTrackingViewsHierarchy(view, div1, resolver, scope)
+        visibilityActionTracker.trackVisibilityActionsOf(scope, resolver, view, div2)
+        verify(view, times(2)).addOnLayoutChangeListener(listenerCaptor.capture())
+
+        listenerCaptor.allValues.forEach {
+            it.onLayoutChange(view, 0, 0, 0, 0, 0, 0, 0, 0)
+        }
+        Robolectric.flushForegroundThreadScheduler()
+
+        verify(visibilityActionDispatcher, never()).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view),
+            argThat { this.contains(action1) }
+        )
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view),
+            argThat { this.contains(action2) && this.size == 1 }
+        )
     }
 
     private fun trackVisibilityAction(view: View, div: Div, visibilityPercentage: Int) {

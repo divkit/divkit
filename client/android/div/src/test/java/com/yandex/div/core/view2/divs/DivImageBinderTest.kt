@@ -240,6 +240,7 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(tintColor = "#ffffff")
         binder.bindView(view, divImage, divView)
+        Assert.assertNull(view.colorFilter)
         whenDrawableLoaded(divImage)
 
         Assert.assertNotNull(view.colorFilter)
