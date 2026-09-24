@@ -68,12 +68,12 @@ internal fun DivText.observeTextStyle(
 
 @Composable
 private fun rememberExactLineHeight(textStyle: TextStyle): TextStyle {
-    val fontMetrics = rememberFontLineMetrics(
+    val lineMetrics = getLineMetrics(
         textStyle = textStyle,
         isRequired = textStyle.lineHeight.isSpecified,
     ) ?: return textStyle
     val density = LocalDensity.current
-    return remember(textStyle, fontMetrics, density) {
+    return remember(textStyle, lineMetrics, density) {
         val lineHeightPx = with(density) { textStyle.lineHeight.toPx() }
         val fontSizePx = with(density) { textStyle.fontSize.toPx() }
         val lineHeight = if (density.fontScale > 1f && fontSizePx > 0) {
@@ -90,7 +90,7 @@ private fun rememberExactLineHeight(textStyle: TextStyle): TextStyle {
             lineHeight = lineHeight,
             lineHeightStyle = LineHeightStyle(
                 alignment = LineHeightStyle.Alignment.Center,
-                trim = if (lineHeightPx < fontMetrics.heightPx) {
+                trim = if (lineHeightPx < lineMetrics.heightPx) {
                     LineHeightStyle.Trim.Both
                 } else {
                     LineHeightStyle.Trim.None

@@ -95,7 +95,7 @@ internal fun DivText.observeInlineImages(
 
     val lineHeight = textMetrics.lineHeight?.toTextUnit(textMetrics.fontSizeUnit)
     val fontSize = lineHeight?.let { baseFontSize.toTextUnit(textMetrics.fontSizeUnit) }
-    val fontLineMetrics = rememberFontLineMetrics(
+    val lineMetrics = getLineMetrics(
         textStyle = textStyle,
         isRequired = lineHeight == null && sortedImages.any { it.image.baselineOffset != null },
     )
@@ -117,9 +117,9 @@ internal fun DivText.observeInlineImages(
         val baselineOffsetTextUnit = baselineOffset?.toTextUnit()
         val isLineHeightConstrained = lineHeight?.let { it < height.textUnit } == true
         val placeholderHeight = when {
-            baselineOffsetTextUnit != null && lineHeight == null && fontLineMetrics != null ->
+            baselineOffsetTextUnit != null && lineHeight == null && lineMetrics != null ->
                 maxTextUnit(
-                    fontLineMetrics.ascent,
+                    lineMetrics.ascent,
                     addTextUnits(height.textUnit, baselineOffsetTextUnit),
                 )
             !isLineHeightConstrained -> height.textUnit
@@ -133,14 +133,14 @@ internal fun DivText.observeInlineImages(
             else -> verticalAlignment
         }
         val descentPlaceholderHeight = if (baselineOffsetTextUnit != null &&
-            lineHeight == null && fontLineMetrics != null
+            lineHeight == null && lineMetrics != null
         ) {
             val requiredDescent = maxTextUnit(
-                fontLineMetrics.descent,
+                lineMetrics.descent,
                 negateTextUnit(baselineOffsetTextUnit),
             )
-            if (requiredDescent.value > fontLineMetrics.descent.value) {
-                addTextUnits(fontLineMetrics.ascent, requiredDescent)
+            if (requiredDescent.value > lineMetrics.descent.value) {
+                addTextUnits(lineMetrics.ascent, requiredDescent)
             } else {
                 null
             }
