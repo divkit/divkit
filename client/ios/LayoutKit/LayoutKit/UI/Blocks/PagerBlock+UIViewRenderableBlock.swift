@@ -111,9 +111,14 @@ private final class PagerView: BlockView {
     selectedActions: [[UserInterfaceAction]]
   ) {
     if lastState?.0 != path || lastState?.1 != state {
+      let previousState = lastState
       lastState = (path, state)
 
       observer?.elementStateChanged(state, forPath: path)
+
+      guard previousState?.0 != path || previousState?.1.isSamePageState(as: state) != true else {
+        return
+      }
 
       let pageIndex = Int(round(state.currentPage))
 
@@ -126,6 +131,15 @@ private final class PagerView: BlockView {
         selectedActions[pageIndex].perform(sendingFrom: self)
       }
     }
+  }
+}
+
+extension PagerViewState {
+  fileprivate func isSamePageState(as other: PagerViewState) -> Bool {
+    numberOfPages == other.numberOfPages &&
+      currentPage == other.currentPage &&
+      animated == other.animated &&
+      isInfiniteScrollable == other.isInfiniteScrollable
   }
 }
 
@@ -148,7 +162,8 @@ extension PagerView: ElementStateObserver {
         numberOfPages: model.itemsCountWithoutInfinite,
         currentPage: currentPageNormalized,
         animated: galleryState.animated,
-        isInfiniteScrollable: model.infiniteScroll
+        isInfiniteScrollable: model.infiniteScroll,
+        isScrolling: galleryState.isScrolling
       ),
       selectedActions: selectedActions
     )
@@ -180,7 +195,7 @@ private func makeGalleryViewState(
   return GalleryViewState(
     contentPosition: position,
     itemsCount: model.items.count,
-    isScrolling: oldState?.isScrolling ?? false,
+    isScrolling: oldState?.isScrolling ?? state.isScrolling,
     scrollRange: oldState?.scrollRange,
     animated: state.animated
   ).resetToModelIfInconsistent(model)

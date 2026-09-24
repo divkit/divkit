@@ -144,9 +144,28 @@ public final class DivBlockStateStorage {
   }
 }
 
+extension DivBlockStateStorage {
+  private func pausePlayingVideos(underPath path: UIElementPath) {
+    let playingVideoPaths = states.compactMap { videoPath, videoState -> UIElementPath? in
+      guard let videoBlockState = videoState as? VideoBlockViewState,
+            videoBlockState.state == .playing,
+            videoPath.starts(with: path) else {
+        return nil
+      }
+      return videoPath
+    }
+    for videoPath in playingVideoPaths {
+      setState(path: videoPath, state: VideoBlockViewState(state: .paused))
+    }
+  }
+}
+
 extension DivBlockStateStorage: ElementStateObserver {
   public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     setState(path: path, state: state)
+    if let pagerState = state as? PagerViewState, pagerState.isScrolling {
+      pausePlayingVideos(underPath: path)
+    }
   }
 
   public func focusedElementChanged(

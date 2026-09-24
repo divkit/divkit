@@ -19,6 +19,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
   public let currentPage: CGFloat
   public let animated: Bool
   public let isInfiniteScrollable: Bool
+  public let isScrolling: Bool
   public let navigationDirection: ScrollNavigationDirection
 
   public init(
@@ -26,12 +27,14 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     currentPage: Int,
     animated: Bool,
     isInfiniteScrollable: Bool = false,
+    isScrolling: Bool = false,
     navigationDirection: ScrollNavigationDirection = .none
   ) {
     self.numberOfPages = numberOfPages
     self.currentPage = CGFloat(currentPage)
     self.animated = animated
     self.isInfiniteScrollable = isInfiniteScrollable
+    self.isScrolling = isScrolling
     self.navigationDirection = navigationDirection
   }
 
@@ -41,6 +44,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     self.currentPage = floatCurrentPage
     self.animated = true
     self.isInfiniteScrollable = false
+    self.isScrolling = false
     self.navigationDirection = .none
   }
   #endif
@@ -50,12 +54,14 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     currentPageValue: CGFloat,
     animated: Bool,
     isInfiniteScrollable: Bool,
+    isScrolling: Bool,
     navigationDirection: ScrollNavigationDirection
   ) {
     self.numberOfPages = numberOfPages
     self.currentPage = currentPageValue
     self.animated = animated
     self.isInfiniteScrollable = isInfiniteScrollable
+    self.isScrolling = isScrolling
     self.navigationDirection = navigationDirection
   }
 
@@ -64,6 +70,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
       && lhs.currentPage == rhs.currentPage
       && lhs.animated == rhs.animated
       && lhs.isInfiniteScrollable == rhs.isInfiniteScrollable
+      && lhs.isScrolling == rhs.isScrolling
   }
 
   public func withNavigationDirection(_ direction: ScrollNavigationDirection) -> PagerViewState {
@@ -72,6 +79,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
       currentPageValue: currentPage,
       animated: animated,
       isInfiniteScrollable: isInfiniteScrollable,
+      isScrolling: isScrolling,
       navigationDirection: direction
     )
   }
@@ -94,6 +102,7 @@ extension PagerViewState {
       currentPageValue: currentPageValue,
       animated: animated,
       isInfiniteScrollable: isInfiniteScrollable,
+      isScrolling: isScrolling,
       navigationDirection: navigationDirection
     )
   }

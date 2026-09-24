@@ -1,5 +1,6 @@
 @testable import DivKit
-import LayoutKit
+@testable import LayoutKit
+import UIKit
 import VGSL
 import XCTest
 
@@ -220,6 +221,62 @@ final class DivBlockStateStorageTests: XCTestCase {
     storage.clearFocus()
     XCTAssertFalse(storage.isFocused(path: path(cardId: "card_id", path: "0/id")))
   }
+
+  func test_ElementStateChanged_WhenRealPagerScrolls_PausesPlayingVideo() {
+    let pagerPath = path(cardId: "card_id", path: "0/pager")
+    let firstVideoPath = path(cardId: "card_id", path: "0/pager/video1")
+    let secondVideoPath = path(cardId: "card_id", path: "0/pager/video2")
+    let otherVideoPath = path(cardId: "card_id", path: "0/other/video")
+    storage.setState(path: firstVideoPath, state: VideoBlockViewState(state: .playing))
+    storage.setState(path: secondVideoPath, state: VideoBlockViewState(state: .playing))
+    storage.setState(path: otherVideoPath, state: VideoBlockViewState(state: .playing))
+
+    let pager = makePagerBlock(path: pagerPath)
+    let pagerView = PagerBlock.makeBlockView()
+    pager.configureBlockView(
+      pagerView,
+      observer: storage,
+      overscrollDelegate: nil,
+      renderingDelegate: nil
+    )
+    let galleryView = pagerView.subviews.compactMap { $0 as? GalleryView }.first!
+    galleryView.updateGalleryState(.paging(index: 0.1), offset: 10)
+    galleryView.finishScrolling(scrollStartOffset: 0)
+    storage.setState(path: firstVideoPath, state: VideoBlockViewState(state: .playing))
+    storage.setState(path: secondVideoPath, state: VideoBlockViewState(state: .playing))
+    galleryView.updateGalleryState(.paging(index: 0.1), offset: 10)
+
+    let firstVideoState: VideoBlockViewState? = storage.getState(firstVideoPath)
+    let secondVideoState: VideoBlockViewState? = storage.getState(secondVideoPath)
+    let otherVideoState: VideoBlockViewState? = storage.getState(otherVideoPath)
+    let pagerState: PagerViewState? = storage.getState(pagerPath)
+    XCTAssertEqual(firstVideoState?.state, .paused)
+    XCTAssertEqual(secondVideoState?.state, .paused)
+    XCTAssertEqual(otherVideoState?.state, .playing)
+    XCTAssertEqual(pagerState?.isScrolling, true)
+  }
+
+  func test_ElementStateChanged_WhenPagingGalleryScrollIsCancelled_KeepsVideoPlaying() {
+    let galleryPath = path(cardId: "card_id", path: "0/gallery")
+    let videoPath = path(cardId: "card_id", path: "0/gallery/video")
+    storage.setState(path: videoPath, state: VideoBlockViewState(state: .playing))
+
+    let model = makePagingGalleryModel(path: galleryPath)
+    let galleryView = GalleryView(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    galleryView.configure(
+      model: model,
+      state: GalleryViewState(contentPageIndex: 0, itemsCount: model.items.count, animated: false),
+      observer: storage,
+      overscrollDelegate: nil,
+      renderingDelegate: nil
+    )
+    galleryView.updateGalleryState(.paging(index: 0.1), offset: 10)
+    galleryView.updateGalleryState(.paging(index: 0), offset: 0)
+    galleryView.finishScrolling(scrollStartOffset: 0)
+
+    let result: VideoBlockViewState? = storage.getState(videoPath)
+    XCTAssertEqual(result?.state, .playing)
+  }
 }
 
 private let state1 = State(name: "State 1")
@@ -227,6 +284,36 @@ private let state2 = State(name: "State 2")
 
 private struct State: ElementState, Equatable {
   public let name: String
+}
+
+private func makePagerBlock(path: UIElementPath) -> PagerBlock {
+  let model = makePagingGalleryModel(path: path)
+  return try! PagerBlock(
+    pagerPath: nil,
+    layoutMode: .neighbourPageSize(0),
+    gallery: model,
+    selectedActions: Array(repeating: [], count: model.items.count),
+    state: PagerViewState(numberOfPages: model.items.count, currentPage: 0, animated: false),
+    widthTrait: .fixed(100),
+    heightTrait: .fixed(100)
+  )
+}
+
+private func makePagingGalleryModel(path: UIElementPath) -> GalleryViewModel {
+  GalleryViewModel(
+    blocks: [makeGalleryItem(), makeGalleryItem()],
+    metrics: GalleryViewMetrics(gaps: [0, 0, 0]),
+    scrollMode: .autoPaging(inertionEnabled: true),
+    path: path
+  )
+}
+
+private func makeGalleryItem() -> Block {
+  TextBlock(
+    widthTrait: .fixed(100),
+    heightTrait: .fixed(100),
+    text: NSAttributedString(string: "")
+  )
 }
 
 private func path(cardId: String, path: String) -> UIElementPath {
