@@ -1,5 +1,8 @@
 package com.yandex.div.core.view2.divs
 
+import android.view.View
+import android.widget.FrameLayout
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
 import com.yandex.div.core.state.DivPathUtils.append
 import com.yandex.div.core.state.DivPathUtils.fromRootDiv
@@ -13,10 +16,6 @@ import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.check
@@ -30,9 +29,14 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class DivStateBinderTest: DivBinderTest() {
 
     private val viewBinder = mock<DivBinder>()
@@ -149,6 +153,61 @@ class DivStateBinderTest: DivBinderTest() {
 
         val expectedStateDiv = divState.states[1].div!!
         assertStateBound(pathToState("second"), expectedStateDiv)
+    }
+
+    @Test
+    fun `focus remains on root when state changes`() {
+        bindFocusableRoots()
+        stateBinder.bindView(stateLayout, divBlock, divView)
+        assertTrue(stateLayout.getChildAt(0).requestFocus())
+
+        switchToState("second")
+        stateBinder.bindView(stateLayout, divBlock, divView)
+
+        assertTrue(stateLayout.getChildAt(0).isFocused)
+    }
+
+    @Test
+    fun `unfocused state does not capture focus when state changes`() {
+        bindFocusableRoots()
+        stateBinder.bindView(stateLayout, divBlock, divView)
+
+        switchToState("second")
+        stateBinder.bindView(stateLayout, divBlock, divView)
+
+        assertFalse(stateLayout.getChildAt(0).isFocused)
+    }
+
+    @Test
+    fun `focus remains on matching descendant when state changes`() {
+        stateBinder.bindView(stateLayout, divBlock, divView)
+        val outgoing = stateViewWithFocusableChild(FOCUSED_CHILD_ID)
+        stateLayout.removeAllViews()
+        stateLayout.addView(outgoing.first)
+        assertTrue(outgoing.second.requestFocus())
+        val incoming = stateViewWithFocusableChild(FOCUSED_CHILD_ID)
+        useIncomingView(incoming.first)
+
+        switchToState("second")
+        stateBinder.bindView(stateLayout, divBlock, divView)
+
+        assertTrue(incoming.second.isFocused)
+    }
+
+    @Test
+    fun `unmatched descendant does not capture focus when state changes`() {
+        stateBinder.bindView(stateLayout, divBlock, divView)
+        val outgoing = stateViewWithFocusableChild(FOCUSED_CHILD_ID)
+        stateLayout.removeAllViews()
+        stateLayout.addView(outgoing.first)
+        assertTrue(outgoing.second.requestFocus())
+        val incoming = stateViewWithFocusableChild(OTHER_CHILD_ID)
+        useIncomingView(incoming.first)
+
+        switchToState("second")
+        stateBinder.bindView(stateLayout, divBlock, divView)
+
+        assertFalse(incoming.second.isFocused)
     }
 
     @Test
@@ -315,6 +374,32 @@ class DivStateBinderTest: DivBinderTest() {
         whenever(stateManager.getState(div.value, resolver, path = "0/state_container")).thenReturn(stateId)
     }
 
+    private fun bindFocusableRoots() {
+        doAnswer {
+            it.getArgument<View>(0).apply {
+                id = FOCUSED_ROOT_ID
+                isFocusableInTouchMode = true
+            }
+        }.whenever(viewBinder).bind(any(), any(), any())
+    }
+
+    private fun stateViewWithFocusableChild(childId: Int): Pair<FrameLayout, View> {
+        val child = View(context).apply {
+            id = childId
+            isFocusableInTouchMode = true
+        }
+        val root = FrameLayout(context).apply {
+            layoutParams = defaultLayoutParams()
+            addView(child)
+        }
+        return root to child
+    }
+
+    private fun useIncomingView(incoming: View) {
+        val targetDiv = divState.states[1].div!!
+        doReturn(incoming).whenever(viewCreator).create(eq(targetDiv), any())
+    }
+
     private fun pathToState(stateId: String): DivStatePath {
         return rootPath.append(divId = "state_container", state = null, stateIdFallback = stateId)
     }
@@ -343,6 +428,9 @@ class DivStateBinderTest: DivBinderTest() {
     private val UnitTestData.asDivState get() = div as Div.State
 
     companion object {
+        private const val FOCUSED_ROOT_ID = 50
+        private const val FOCUSED_CHILD_ID = 100
+        private const val OTHER_CHILD_ID = 200
         private const val STATE_DIR = "div-state"
         private const val STATE_DIR_AUTOANIMATIONS = "div-state/autoanimations"
     }

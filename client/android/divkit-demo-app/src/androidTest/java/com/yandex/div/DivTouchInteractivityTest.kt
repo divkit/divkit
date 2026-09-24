@@ -89,6 +89,7 @@ class DivTouchInteractivityTest {
     @Test
     fun clickOnChildIsNotPassedToParentWithAction() {
         testClicks {
+            testAsset = "ui_test_data/actions/click_propagation.json"
             activityTestRule.buildContainer()
             click("Button 7")
 

@@ -17110,6 +17110,7 @@
   "test_data/tutorials/counter.json":"divkit/public/test_data/tutorials/counter.json",
   "test_data/tutorials/stateful_card.json":"divkit/public/test_data/tutorials/stateful_card.json",
   "test_data/tutorials/ticking_timer.json":"divkit/public/test_data/tutorials/ticking_timer.json",
+  "test_data/ui_test_data/actions/click_propagation.json":"divkit/public/test_data/ui_test_data/actions/click_propagation.json",
   "test_data/ui_test_data/actions/scoped_actions.json":"divkit/public/test_data/ui_test_data/actions/scoped_actions.json",
   "test_data/ui_test_data/actions/scoped_actions_ambiguous_scope.json":"divkit/public/test_data/ui_test_data/actions/scoped_actions_ambiguous_scope.json",
   "test_data/ui_test_data/actions/scoped_actions_nested_scope.json":"divkit/public/test_data/ui_test_data/actions/scoped_actions_nested_scope.json",

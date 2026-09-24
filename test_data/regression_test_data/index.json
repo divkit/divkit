@@ -917,12 +917,14 @@
         "android"
       ],
       "steps": [
-        "Tap the buttons",
-        "Tap the buttons again"
+        "Tap 'Left' once",
+        "Tap 'Left' again",
+        "Use Tab (FORWARD) and D-pad or arrow keys (UP, DOWN, LEFT, RIGHT) to move focus; tap a button to switch it to tapped and repeat FORWARD"
       ],
       "expected_results": [
-        "The text on the buttons becomes bold",
-        "The bold text style is removed"
+        "Left switches from not_tapped to tapped: its text becomes bold and its focused background is blue (#4183d7). Focus remains on Left; Up is not highlighted with the coral focused background",
+        "Left switches back to not_tapped: its text becomes light and its focused background is coral (#ff7f50). Focus remains on Left; Up is not highlighted",
+        "For not_tapped buttons FORWARD follows Left - Right - Up - Down - Left. A tapped button changes its own next FORWARD target: Left - Down, Up - Right, Right - Left, Down - Up. Each directional key moves focus to the button with the corresponding name"
       ],
       "file": "focus.json",
       "case_id": 444

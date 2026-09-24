@@ -267,6 +267,18 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
+    fun `tint color applied to drawable after loading`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ffffff")
+
+        binder.bindView(view, divImage, divView)
+        Assert.assertNull(view.colorFilter)
+        whenDrawableLoaded(divImage.divValue.imageUrl?.evaluate(ExpressionResolver.EMPTY).toString())
+
+        Assert.assertNotNull(view.colorFilter)
+    }
+
+    @Test
     fun `tint color applied to preview`() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(preview = PREVIEW, tintColor = "#ffffff")
@@ -341,6 +353,13 @@ class DivImageBinderTest : DivBinderTest() {
         val imageDownloadCallbackCaptor = argumentCaptor<DivImageDownloadCallback>()
         verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
         val cachedImage = DivCachedImage.Drawable(drawable, BitmapSource.MEMORY)
+        imageDownloadCallbackCaptor.firstValue.onSuccess(cachedImage)
+    }
+
+    private fun whenDrawableLoaded(imageUrl: String) {
+        val imageDownloadCallbackCaptor = argumentCaptor<DivImageDownloadCallback>()
+        verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
+        val cachedImage = DivCachedImage.Drawable(ColorDrawable(Color.BLACK), BitmapSource.MEMORY)
         imageDownloadCallbackCaptor.firstValue.onSuccess(cachedImage)
     }
 

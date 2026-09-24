@@ -53,7 +53,7 @@
           "items": [
             {
               "type": "text",
-              "text": "Button is inactive - background is red.\n\nButton is active - background is blue.\n\nFORWARD - enumeration Left - Right - Up - Down (if button is active, it changes the directions).\nUP, DOWN, LEFT, RIGHT - set button.",
+              "text": "Tap toggles a button between not_tapped and tapped.\n\nA focused not_tapped button has light text and a coral background (#ff7f50). A focused tapped button has bold text and a blue background (#4183d7). Focus stays on the button after the state changes.\n\nFORWARD (Tab) for not_tapped buttons follows Left - Right - Up - Down - Left. A tapped button changes its own next FORWARD target: Left - Down, Up - Right, Right - Left, Down - Up.\n\nUP, DOWN, LEFT, RIGHT (D-pad or arrow keys) move focus to the button with that name.",
               "text_color": "#000000",
               "margins": {
                 "top": 8,

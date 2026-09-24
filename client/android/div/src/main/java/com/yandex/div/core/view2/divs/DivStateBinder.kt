@@ -172,6 +172,7 @@ internal class DivStateBinder @Inject constructor(
         val newStateDivBlock = newStateDiv?.let { DivBlock.create(it, resolver, currentPath) }
 
         val outgoing = if (isNotEmpty()) getChildAt(0) else null
+        val focusTarget = outgoing?.getFocusTarget()
         val incoming: View?
         val reusableIncomingView = newStateDiv?.let {
             divView.currentRebindReusableList?.getUniqueView(newStateDiv)
@@ -210,6 +211,7 @@ internal class DivStateBinder @Inject constructor(
             incoming?.let {
                 addView(incoming)
                 newStateDivBlock?.let { viewBinder.get().bind(incoming, it, divView) }
+                focusTarget?.restoreOn(incoming)
             }
             if (outgoing != null) {
                 divView.viewComponent.transitionHandler.runTransitions(root = sceneRoot, endTransitions = false)
@@ -223,8 +225,11 @@ internal class DivStateBinder @Inject constructor(
                 releaseAndRemoveChildren(divView)
                 addView(incoming)
             }
-            if (incoming != null && newStateDivBlock!= null) {
+            if (newStateDivBlock != null) {
                 viewBinder.get().bind(incoming, newStateDivBlock, divView)
+            }
+            if (!areDivsReplaceable) {
+                focusTarget?.restoreOn(incoming)
             }
         } else {
             releaseAndRemoveChildren(divView)
@@ -281,6 +286,22 @@ internal class DivStateBinder @Inject constructor(
 
     private fun getIncomingView(reusableIncomingView: View?, div: Div, resolver: ExpressionResolver) =
         reusableIncomingView ?: viewCreator.create(div, resolver).apply { createLayoutParams() }
+
+    private fun View.getFocusTarget(): FocusTarget? {
+        val focusedView = findFocus() ?: return null
+        return when {
+            focusedView === this -> FocusTarget(isRoot = true)
+            focusedView.id != View.NO_ID -> FocusTarget(isRoot = false, id = focusedView.id)
+            else -> null
+        }
+    }
+
+    private fun FocusTarget.restoreOn(incoming: View) {
+        val target = if (isRoot) incoming else incoming.findViewById<View>(id)
+        if (target?.isFocusable == true) {
+            target.requestFocus()
+        }
+    }
 
     private fun DivStateLayout.fixAlignment(
         div: DivState,
@@ -488,6 +509,8 @@ internal class DivStateBinder @Inject constructor(
         return null
     }
 }
+
+private data class FocusTarget(val isRoot: Boolean, val id: Int = View.NO_ID)
 
 private fun DivAnimation.toTransition(incoming: Boolean, resolver: ExpressionResolver): Transition? {
     return when(this.name.evaluate(resolver)) {
