@@ -186,6 +186,15 @@
           "version_added": "25.0.0"
         }
       }
+    },
+    {
+      "id": "input_allow_suggestions_bar",
+      "name": "input <code>allow_suggestions_bar</code> property",
+      "compat": {
+        "ios": {
+          "version_added": "33.0.0"
+        }
+      }
     }
   ]
 }

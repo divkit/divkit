@@ -134,13 +134,25 @@
       "name": "Pager property <code>item_count_variable</code>",
       "compat": {
         "android": {
-          "version_added": "32.62.0"
+          "version_added": "33.0.0"
         },
         "ios": {
-          "version_added": "32.62.0"
+          "version_added": "33.0.0"
         },
         "web": {
           "version_added": "32.55.0"
+        }
+      }
+    },
+    {
+      "id": "pager_multi_page_scroll",
+      "name": "Pager property <code>multi_page_scroll</code>",
+      "compat": {
+        "android": {
+          "version_added": "33.5.0"
+        },
+        "ios": {
+          "version_added": "33.1.0"
         }
       }
     }
