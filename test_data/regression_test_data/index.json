@@ -1926,6 +1926,7 @@
       "title": "Disappear actions in gallery",
       "case_id": 54,
       "automated": [
+        "android",
         "web"
       ],
       "platforms": [
@@ -1942,8 +1943,8 @@
       ],
       "expected_results": [
         "Gallery data was opened",
-        "The text changes along with the item that disappeared",
-        "Items disappearing logged, for example 'logViewShown(cardId = ..., id = item/01)'"
+        "After an item stays at no more than 50% visibility for 200 ms, 'Last dissapered item' changes to that item's number",
+        "Items disappearing logged, for example 'logViewDisappeared(cardId = ..., id = item/01)'"
       ],
       "file": "gallery/gallery_swipe_disappear_action.json"
     },

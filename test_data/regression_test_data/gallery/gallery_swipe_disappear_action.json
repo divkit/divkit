@@ -53,7 +53,7 @@
           "$log_id": "item_log_id",
           "log_limit": 0,
           "disappear_duration": 200,
-          "visibility_percentage": 20,
+          "visibility_percentage": 50,
           "$url": "disappear_action_url"
         }
       ],

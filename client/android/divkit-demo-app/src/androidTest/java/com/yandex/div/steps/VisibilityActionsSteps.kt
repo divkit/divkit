@@ -6,6 +6,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.yandex.div.view.ViewActions.waitForView
 import com.yandex.divkit.demo.div.DemoDiv2Logger
 import com.yandex.test.idling.SimpleIdlingResource
 import com.yandex.test.idling.register
@@ -24,6 +25,11 @@ class VisibilityActionsSteps {
         val log = "logViewShown\\(cardId = $cardId, id = $actionId"
         VisibilityActionsIdlingResource(log, pollingIntervalMs = 200L).register().use { Espresso.onIdle() }
     }
+
+    fun awaitViewShownWithText(text: String): Unit =
+        step("Wait for view shown with text $text") {
+            waitForView(withText(text)).check(matches(ViewMatchers.isDisplayed()))
+        }
 
     fun click(text: String): Unit = step("Click on view with text='$text'") {
         onView(withText(text)).perform(ViewActions.click())

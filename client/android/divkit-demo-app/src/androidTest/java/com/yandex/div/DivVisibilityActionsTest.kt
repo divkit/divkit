@@ -61,6 +61,35 @@ class VisibilityActionsTest {
     }
 
     @Test
+    fun galleryDisappearActionsLogPreviousItem() {
+        gallery {
+            testAsset = "regression_test_data/gallery/gallery_swipe_disappear_action.json"
+            activityRule.buildContainer()
+        }
+        visibilityActions { awaitViewShownWithText("Last dissapered item: None") }
+
+        gallery {
+            scrollItemToVisibility(
+                position = 0,
+                visibilityPercentage = VISIBILITY_BELOW_DISAPPEAR_THRESHOLD_PERCENTAGE,
+            )
+        }
+        visibilityActions {
+            awaitViewShownWithText("Last dissapered item: Item_1")
+        }
+
+        gallery {
+            scrollItemToVisibility(
+                position = 1,
+                visibilityPercentage = VISIBILITY_BELOW_DISAPPEAR_THRESHOLD_PERCENTAGE,
+            )
+        }
+        visibilityActions {
+            awaitViewShownWithText("Last dissapered item: Item_2")
+        }
+    }
+
+    @Test
     fun pagerVisibilityActionsLog() {
         pager {
             testAsset = "regression_test_data/visibility_actions/pager.json"
@@ -221,5 +250,12 @@ class VisibilityActionsTest {
                 }
             }
         }
+    }
+
+    private companion object {
+        const val DISAPPEAR_ACTION_VISIBILITY_THRESHOLD_PERCENTAGE = 50
+        const val VISIBILITY_THRESHOLD_TOLERANCE_PERCENTAGE = 10
+        const val VISIBILITY_BELOW_DISAPPEAR_THRESHOLD_PERCENTAGE =
+            DISAPPEAR_ACTION_VISIBILITY_THRESHOLD_PERCENTAGE - VISIBILITY_THRESHOLD_TOLERANCE_PERCENTAGE
     }
 }
