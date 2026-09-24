@@ -1,3 +1,38 @@
+## 33.5.0
+
+### Android Client
+* Added Compose support for `high_priority_preview_show` to display image previews from the first frame.
+* Added `DivConfiguration.Builder` and the `divConfiguration { ... }` DSL for Compose; deprecated the existing constructor.
+* Added `preloadWithResult()` and `preloadVideoWithResult()` for extension, custom-view, and video integrations to report preload results.
+* Added paging support for Compose galleries with multiple rows or columns.
+* Added selected actions for Compose pager items, including swipe navigation and cyclic paging.
+* Added support for copying text and URLs to the clipboard in the Compose renderer.
+* Added support for haptic feedback actions in Views and Compose.
+* Deferred extension binding to the main-thread apply phase during asynchronous binding, preserving cleanup of prepared and bound extensions.
+* Deprecated the legacy `preload()` and `preloadVideo()` integration hooks.
+* Fixed a crash in `lottie` extension: with async frame updates enabled Lottie invalidated the view from a background thread, which corrupted the traversal sync barrier of `ViewRootImpl`.
+* Fixed an issue where image placeholders remained visible after replacing DivData with the same image in the Compose renderer.
+* Fixed disabled action menu items being shown in the Android View renderer.
+* Fixed elements briefly disappearing before delayed scale-out transitions.
+* Fixed grid row and column sizes when fixed-size and wrap-content items share a row or column without spanning items in the Compose renderer.
+* Fixed image tinting for animated images loaded asynchronously.
+* Fixed pager page sizes and aspect-ratio heights during initial measurement, rebind, and resize while preserving wrap-content sizing for neighbouring pages.
+* Fixed screen readers skipping text elements with automatic accessibility.
+* Fixed sliders in the Compose renderer requiring a second drag before moving normally.
+* Fixed unnecessary image preview reloads in Compose.
+* Implemented the `multi_page_scroll` pager property.
+* Optimized Android visibility action tracking by binding only views with sight actions.
+* Reduced initialization overhead when first displaying images in Compose.
+* Supported `restrict_parent_scroll` in `div-tabs` in the Compose renderer.
+* Updated Compose `DivContext.preload()` to return an aggregate `PreloadResult` while preserving coroutine cancellation.
+* Updated Yatagan to version 2.0.0.
+
+### iOS Client
+* Added support for haptic feedback actions.
+* Fixed paging galleries triggering unnecessary relayouts during scrolling.
+* Fixed press animations remaining active after dragging a finger away from elements with a layout provider.
+
+
 ## 33.4.0
 
 ### Android Client
