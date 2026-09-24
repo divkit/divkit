@@ -1,0 +1,3 @@
+// Baseline format: 1.0
+ChangedValue: com.yandex.div.BuildConfig#VERSION_NAME:
+    VERSION_NAME changes between builds.

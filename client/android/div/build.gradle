@@ -40,6 +40,12 @@ androidComponents.onVariants(androidComponents.selector().all()) {
     buildConfigFields.put("VERSION_NAME", new BuildConfigField("String", JsonOutput.toJson(versionName), null))
 }
 
+metalava {
+    arguments.add(
+        "--baseline:compatibility:released=${file("metalava-compatibility-baseline.txt")}",
+    )
+}
+
 unMock {
     keep "android.net.Uri"
 }
