@@ -5,7 +5,6 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import com.yandex.div2.DivBase
 import javax.inject.Provider
 
 internal interface RuntimeStore {
@@ -13,8 +12,6 @@ internal interface RuntimeStore {
     val rootRuntime: ExpressionsRuntime
 
     val viewProvider: Provider<Div2View?>
-
-    fun showWarningIfNeeded(child: DivBase) = Unit
 
     /**
      * Returns runtime if it have been stored before, otherwise creates new runtime using

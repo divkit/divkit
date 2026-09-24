@@ -35,7 +35,6 @@ internal abstract class DivCollectionViewHolder(
         oldDivBlock = divBlock
 
         divBinder.bind(childView, divBlock, divView)
-        divView.runtimeStore.showWarningIfNeeded(divBlock.div.value())
     }
 
     private fun createChildView(divBlock: DivBlock, divView: Div2View): View {

@@ -9,15 +9,11 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import java.lang.ref.WeakReference
 import javax.inject.Provider
 
 internal const val ERROR_PARENT_RUNTIME_NOT_STORED = "Parent runtime for path '%s' is not stored."
-private const val WARNING_LOCAL_USING_LOCAL_VARIABLES =
-    "You are using local variables. Please ensure that all elements that use local variables " +
-    "and all of their parents recursively have an 'id' attribute."
 
 internal class RuntimeStoreImpl(
     data: DivData,
@@ -26,7 +22,6 @@ internal class RuntimeStoreImpl(
     private val errorCollector: ErrorCollector,
 ) : RuntimeStore {
 
-    private var warningShown = false
     private val resolverToRuntime = mutableMapOf<ExpressionResolver, ExpressionsRuntime>()
     private val pathToRuntime = mutableMapOf<String, ExpressionsRuntime>()
     private val allRuntimes = ObserverList<ExpressionsRuntime>()
@@ -43,13 +38,6 @@ internal class RuntimeStoreImpl(
 
     fun attachView(view: Div2View) {
         viewRef = WeakReference(view)
-    }
-
-    override fun showWarningIfNeeded(child: DivBase) {
-        if (!warningShown && child.variables != null) {
-            warningShown = true
-            errorCollector.logWarning(Throwable(WARNING_LOCAL_USING_LOCAL_VARIABLES))
-        }
     }
 
     /**
@@ -134,7 +122,6 @@ internal class RuntimeStoreImpl(
     }
 
     override fun cleanupRuntimes(divView: Div2View) {
-        warningShown = false
         allRuntimes.forEach { it.cleanup(divView) }
     }
 

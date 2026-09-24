@@ -70,7 +70,6 @@ class DivCustomContainerChildFactory @Inject internal constructor() {
         val childPath = divStatePath.appendDiv(div.value().getChildPathUnit(childIndex))
         val divBlock = DivBlock.create(div, expressionResolver, childPath)
         divView.div2Component.divBinder.bind(childView, divBlock, divView)
-        divView.runtimeStore.showWarningIfNeeded(div.value())
     }
 
     private fun DivBase.getChildPathUnit(index: Int) =
