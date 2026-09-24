@@ -107,6 +107,28 @@ object BlankEnumValue : EnumValue("_blank"),
     Action.Target
 
 @Generated
+object LightEnumValue : EnumValue("light"),
+    ActionHaptic.Feedback,
+    FontWeight
+
+@Generated
+object MediumEnumValue : EnumValue("medium"),
+    ActionHaptic.Feedback,
+    FontWeight
+
+@Generated
+object HeavyEnumValue : EnumValue("heavy"),
+    ActionHaptic.Feedback
+
+@Generated
+object SuccessEnumValue : EnumValue("success"),
+    ActionHaptic.Feedback
+
+@Generated
+object ErrorEnumValue : EnumValue("error"),
+    ActionHaptic.Feedback
+
+@Generated
 object ClampEnumValue : EnumValue("clamp"),
     ActionScrollBy.Overflow
 
@@ -406,14 +428,6 @@ object ArrayEnumValue : EnumValue("array"),
     EvaluableType
 
 @Generated
-object LightEnumValue : EnumValue("light"),
-    FontWeight
-
-@Generated
-object MediumEnumValue : EnumValue("medium"),
-    FontWeight
-
-@Generated
 object RegularEnumValue : EnumValue("regular"),
     FontWeight
 
@@ -687,6 +701,26 @@ val DivScope.blank: BlankEnumValue
     get() = BlankEnumValue
 
 @Generated
+val DivScope.light: LightEnumValue
+    get() = LightEnumValue
+
+@Generated
+val DivScope.medium: MediumEnumValue
+    get() = MediumEnumValue
+
+@Generated
+val DivScope.heavy: HeavyEnumValue
+    get() = HeavyEnumValue
+
+@Generated
+val DivScope.success: SuccessEnumValue
+    get() = SuccessEnumValue
+
+@Generated
+val DivScope.error: ErrorEnumValue
+    get() = ErrorEnumValue
+
+@Generated
 val DivScope.clamp: ClampEnumValue
     get() = ClampEnumValue
 
@@ -937,14 +971,6 @@ val DivScope.dict: DictEnumValue
 @Generated
 val DivScope.array: ArrayEnumValue
     get() = ArrayEnumValue
-
-@Generated
-val DivScope.light: LightEnumValue
-    get() = LightEnumValue
-
-@Generated
-val DivScope.medium: MediumEnumValue
-    get() = MediumEnumValue
 
 @Generated
 val DivScope.regular: RegularEnumValue
