@@ -1,6 +1,7 @@
 package com.yandex.div.internal.util
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.evaluable.types.Color
@@ -51,7 +52,7 @@ object ParsingValueUtils {
 
     fun String.parseAsUri(): Uri {
         return try {
-            Uri.parse(this)
+            toUri()
         } catch (e: IllegalArgumentException) {
             throw VariableMutationException(cause = e)
         }

@@ -11,6 +11,8 @@ import android.view.View
 import android.widget.EditText
 import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -263,13 +265,13 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .setView(editText)
             .setPositiveButton("Apply") { _, _ ->
                 val fieldValue = editText.text.toString()
-                preferences.edit().putString(KEY_DIV2_DIV_JSON, fieldValue).apply()
+                preferences.edit { putString(KEY_DIV2_DIV_JSON, fieldValue) }
 
                 lifecycleScope.launch {
                     val divData: DivData = try {
                         if (!fieldValue.trimStart().startsWith('{')) {
                             withContext(Dispatchers.IO) {
-                                loadJson(Uri.parse(fieldValue))
+                                loadJson(fieldValue.toUri())
                             }
                         } else {
                             JSONObject(fieldValue)
@@ -298,7 +300,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         }
 
         json?.let {
-            preferences.edit().putString(DIV2_KEY_URL, json).apply()
+            preferences.edit { putString(DIV2_KEY_URL, json) }
             coroutineScope.launch {
                 editorPresenter.parseDivDataList(JSONObject(it))
             }
@@ -313,7 +315,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         setError("")
 
         if (editorPresenter.subscribe(loadUrl) || editorPresenter.load(loadUrl) || editorPresenter.readAsset(loadUrl)) {
-            preferences.edit().putString(DIV2_KEY_URL, url).apply()
+            preferences.edit { putString(DIV2_KEY_URL, url) }
         } else {
             setError(getString(R.string.unhandled_uri_error))
         }
@@ -327,7 +329,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .setView(editText)
             .setPositiveButton("Perform action") { _, _ ->
                 val action = editText.text.toString()
-                preferences.edit().putString(KEY_DIV2_ACTION_URL, action).apply()
+                preferences.edit { putString(KEY_DIV2_ACTION_URL, action) }
                 divEditorUi.performAction(action)
             }
         adb.create().show()
@@ -341,12 +343,12 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .setView(editText)
             .setPositiveButton("Load variables") { _, _ ->
                 val data = editText.text.toString()
-                preferences.edit().putString(KEY_DIV2_VARIABLES_URL, data).apply()
+                preferences.edit { putString(KEY_DIV2_VARIABLES_URL, data) }
                 lifecycleScope.launch {
                     val json = if (data.trimStart().startsWith('{')) {
                         JSONObject(data)
                     } else {
-                        val url = Uri.parse(data)
+                        val url = data.toUri()
                         withContext(Dispatchers.IO) { loadJson(url) }
                     }
                     globalVariableController.updateVariables(json, errorLogger)
@@ -362,13 +364,13 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .setView(editText)
             .setPositiveButton("Apply") { _, _ ->
                 val fieldValue = editText.text.toString()
-                preferences.edit().putString(KEY_DIV2_PATCH_URL, fieldValue).apply()
+                preferences.edit { putString(KEY_DIV2_PATCH_URL, fieldValue) }
 
                 lifecycleScope.launch {
                     val divPatch = try {
                         if (!fieldValue.trimStart().startsWith('{')) {
                             withContext(Dispatchers.IO) {
-                                loadJson(Uri.parse(fieldValue))
+                                loadJson(fieldValue.toUri())
                             }
                         } else {
                             JSONObject(fieldValue)

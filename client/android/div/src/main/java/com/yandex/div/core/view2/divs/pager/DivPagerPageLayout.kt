@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.view.View
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.widget.DivViewWrapper
@@ -25,7 +26,7 @@ internal class DivPagerPageLayout(
         // When the page cross size is equal to MATCH_PARENT or WRAP_CONTENT_CONSTRAINED,
         // the page must be the size of a pager minus padding,
         // otherwise the page size should be enough for its own content regardless of the current pager height
-        if (childCount == 0) return super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        if (isEmpty()) return super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val lp = getChildAt(0).layoutParams
         val isHorizontal = isHorizontal()
         if (isHorizontal) {

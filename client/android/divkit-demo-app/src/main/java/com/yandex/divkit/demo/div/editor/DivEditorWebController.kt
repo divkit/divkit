@@ -3,6 +3,7 @@ package com.yandex.divkit.demo.div.editor
 import android.net.Uri
 import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
+import androidx.core.net.toUri
 import com.neovisionaries.ws.client.WebSocket
 import com.neovisionaries.ws.client.WebSocketFactory
 import com.yandex.divkit.demo.Container
@@ -47,7 +48,7 @@ class DivEditorWebController(
     fun connect(url: String) {
         // User input like:
         // https://divview-test.in.yandex.net/api/json?uuid=3fa06f2e-2cd9-44b1-ada8-baaaaff0166b
-        val uri = Uri.parse(url)
+        val uri = url.toUri()
         if (!uri.isValid()) {
             throw IllegalArgumentException("$url is not valid address")
         }

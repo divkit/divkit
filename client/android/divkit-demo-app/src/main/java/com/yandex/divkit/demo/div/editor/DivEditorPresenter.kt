@@ -2,10 +2,11 @@ package com.yandex.divkit.demo.div.editor
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.net.Uri
 import android.util.Base64
 import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
+import androidx.core.graphics.scale
+import androidx.core.net.toUri
 import com.neovisionaries.ws.client.WebSocketException
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.R
@@ -70,7 +71,7 @@ class DivEditorPresenter(
             withContext(Dispatchers.IO) {
                 try {
                     webController.connect(userInput)
-                    val uuid: String = Uri.parse(userInput).getQueryParameter("uuid")
+                    val uuid: String = userInput.toUri().getQueryParameter("uuid")
                         ?: throw IllegalArgumentException("failed to retrieve uuid from $userInput")
                     val listenPayload = JSONObject()
                         .put("uuid", uuid)
@@ -99,7 +100,7 @@ class DivEditorPresenter(
             return false
         }
 
-        val uri = Uri.parse(userInput)
+        val uri = userInput.toUri()
         if (uri.scheme != "http" && uri.scheme != "https") {
             return false
         }
@@ -127,7 +128,7 @@ class DivEditorPresenter(
             return false
         }
 
-        val uri = Uri.parse(userInput)
+        val uri = userInput.toUri()
         if (uri.scheme != "asset") {
             return false
         }
@@ -268,6 +269,6 @@ fun Bitmap.scaleDown(context: Context): Bitmap {
     } else {
         val width = (width / scale).roundToInt()
         val height = (height / scale).roundToInt()
-        Bitmap.createScaledBitmap(this, width, height, true)
+        scale(width, height, filter = true)
     }
 }

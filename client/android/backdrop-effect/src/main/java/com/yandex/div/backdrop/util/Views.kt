@@ -4,6 +4,7 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Size
+import androidx.core.view.isVisible
 
 /**
  * Collects the visible views painted after [this] anywhere between it and the window root, i.e.
@@ -47,7 +48,7 @@ private fun ViewGroup.collectChildrenAbove(child: View, result: MutableList<View
 
     for (position in childPosition + 1 until drawOrder.size) {
         val sibling = drawOrder[position]
-        if (sibling.visibility == View.VISIBLE) {
+        if (sibling.isVisible) {
             result += sibling
         }
     }

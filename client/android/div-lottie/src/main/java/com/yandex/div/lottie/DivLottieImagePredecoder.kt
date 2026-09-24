@@ -3,6 +3,7 @@ package com.yandex.div.lottie
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
+import androidx.core.graphics.scale
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieImageAsset
 
@@ -68,7 +69,7 @@ private fun resizeBitmapIfNeeded(bitmap: Bitmap, width: Int, height: Int): Bitma
     if (bitmap.width == width && bitmap.height == height) {
         return bitmap
     }
-    val resizedBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true)
+    val resizedBitmap = bitmap.scale(width, height, filter = true)
     bitmap.recycle()
     return resizedBitmap
 }

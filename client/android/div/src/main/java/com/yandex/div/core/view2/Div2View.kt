@@ -1108,11 +1108,11 @@ open class Div2View private constructor(
     }
 
     fun startDivAnimation(): Unit = bindingDispatcher.runWithinBindingContext {
-        if (childCount > 0) (getChildAt(0) as? DivAnimator)?.startDivAnimation()
+        if (isNotEmpty()) (getChildAt(0) as? DivAnimator)?.startDivAnimation()
     }
 
     fun stopDivAnimation(): Unit = bindingDispatcher.runWithinBindingContext {
-        if (childCount > 0) (getChildAt(0) as? DivAnimator)?.stopDivAnimation()
+        if (isNotEmpty()) (getChildAt(0) as? DivAnimator)?.stopDivAnimation()
     }
 
     @JvmOverloads

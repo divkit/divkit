@@ -8,6 +8,7 @@ import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import androidx.core.view.isEmpty
 import com.yandex.div.R
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.internal.KLog
@@ -461,7 +462,7 @@ internal open class GridContainer @JvmOverloads constructor(
         }
 
         private fun distributeCells(): CellList {
-            if (childCount == 0) return CellList.empty()
+            if (isEmpty()) return CellList.empty()
 
             val columnCount = columnCount
             val cells = ArrayList<Cell>(childCount)

@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.NinePatch
 import android.graphics.Paint
 import android.graphics.drawable.shapes.RoundRectShape
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.scale
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
@@ -64,7 +65,7 @@ internal object ShadowCache {
         val bitmapWidth = ((rectWidth + (blur * 2)) * scale).toInt()
         val bitmapHeight = ((rectHeight + (blur * 2)) * scale).toInt()
 
-        val inBitmap = Bitmap.createBitmap(
+        val inBitmap = createBitmap(
             bitmapWidth,
             bitmapHeight,
             Bitmap.Config.ALPHA_8

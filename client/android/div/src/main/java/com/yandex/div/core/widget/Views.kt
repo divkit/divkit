@@ -2,6 +2,7 @@ package com.yandex.div.core.widget
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -63,7 +64,7 @@ internal inline fun ViewGroup.forEach(significantOnly: Boolean = false, action: 
     val childCount = childCount
     for (i in 0 until childCount) {
         val child = getChildAt(i)
-        if (significantOnly && child.visibility == View.GONE) continue
+        if (significantOnly && child.isGone) continue
         action(child)
     }
 }
@@ -72,7 +73,7 @@ internal inline fun ViewGroup.forEachIndexed(significantOnly: Boolean = false, a
     val childCount = childCount
     for (i in 0 until childCount) {
         val child = getChildAt(i)
-        if (significantOnly && child.visibility == View.GONE) continue
+        if (significantOnly && child.isGone) continue
         action(child, i)
     }
 }

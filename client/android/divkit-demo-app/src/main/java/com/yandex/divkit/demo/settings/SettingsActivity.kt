@@ -1,12 +1,12 @@
 package com.yandex.divkit.demo.settings
 
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.net.toUri
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.Expression
@@ -122,7 +122,7 @@ class SettingsActivity : AppCompatActivity() {
         div2View.handleActionWithResult(
             DivAction(
                 logId = Expression.constant("init preferences"),
-                url = Expression.constant(Uri.parse(url))
+                url = Expression.constant(url.toUri())
             )
         )
     }

@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.view.isEmpty
 
 internal class TabTitleDelimitersController(
     private val context: Context,
@@ -28,7 +29,7 @@ internal class TabTitleDelimitersController(
     fun tabRemoved(index: Int) {
         when {
             !hasTabDelimiters -> return
-            indicators.childCount == 0 -> return
+            indicators.isEmpty() -> return
             index == 0 -> indicators.removeViewAt(0)
             else -> indicators.removeViewAt(index - 1)
         }

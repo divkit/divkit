@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.widget.CheckBox
+import androidx.core.content.edit
 import androidx.core.view.doOnAttach
 import com.yandex.div.core.util.SafeAlertDialog
 import com.yandex.div.core.util.SafeAlertDialogBuilder
@@ -44,9 +45,9 @@ class VisualAssertionErrorHandler(private val application: Application) : Assert
             text = ASSERT_DIALOG_SUPPRESS
             setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    suppressed.edit().putBoolean(assertionError.key(), true).apply()
+                    suppressed.edit { putBoolean(assertionError.key(), true) }
                 } else {
-                    suppressed.edit().remove(assertionError.key()).apply()
+                    suppressed.edit { remove(assertionError.key()) }
                 }
             }
         }

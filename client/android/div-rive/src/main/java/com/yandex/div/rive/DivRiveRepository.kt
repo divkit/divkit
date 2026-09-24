@@ -1,9 +1,9 @@
 package com.yandex.div.rive
 
 import android.content.Context
-import android.net.Uri
 import android.util.LruCache
 import androidx.annotation.WorkerThread
+import androidx.core.net.toUri
 
 internal class DivRiveRepository(
     maxCacheSize: Int,
@@ -32,7 +32,7 @@ internal class DivRiveRepository(
     @WorkerThread
     fun receiveRiveAnimation(url: String): RiveResult {
         return try {
-            when (Uri.parse(url).scheme) {
+            when (url.toUri().scheme) {
                 HTTP_SCHEME, HTTPS_SCHEME -> {
                     val cached = getCached(key = url)
                     val responseBytes: ByteArray

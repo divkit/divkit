@@ -10,6 +10,7 @@ import android.view.View
 import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.createBitmap
 import java.lang.Exception
 
 object DivEditorScreenshot {
@@ -18,7 +19,7 @@ object DivEditorScreenshot {
         tookScreenshotCallback: (bitmap: Bitmap) -> Unit
     ) {
         val rootView: View = window.decorView.rootView
-        val bitmap = Bitmap.createBitmap(rootView.width, rootView.height, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(rootView.width, rootView.height, Bitmap.Config.ARGB_8888)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             window.pixelCopy(bitmap, tookScreenshotCallback)
         } else {

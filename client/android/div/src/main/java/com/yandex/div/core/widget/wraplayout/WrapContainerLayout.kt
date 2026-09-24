@@ -10,6 +10,7 @@ import androidx.annotation.Px
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
+import androidx.core.view.isGone
 import com.yandex.div.core.util.getIndices
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.widget.AspectView
@@ -304,7 +305,7 @@ internal open class WrapContainerLayout(context: Context) : DivViewGroup(context
     private fun showSeparatorAtEnd(@ShowSeparatorsMode mode: Int) =
         (mode and ShowSeparatorsMode.SHOW_AT_END) != 0
 
-    private val View.isHidden get() = visibility == View.GONE || hasIncorrectSize
+    private val View.isHidden get() = isGone || hasIncorrectSize
 
     private val View.hasIncorrectSize get() = if (isRowDirection) {
         layoutParams?.height.isIncorrectForCrossAxis

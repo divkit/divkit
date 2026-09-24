@@ -2,6 +2,7 @@ package com.yandex.divkit.demo.div.editor
 
 import android.content.Context
 import android.view.Surface
+import androidx.core.content.edit
 import com.yandex.divkit.demo.BuildConfig
 import com.yandex.divkit.demo.utils.windowManager
 import org.json.JSONArray
@@ -62,9 +63,9 @@ object DivEditorMessageUtils {
     private fun Context.getFingerprint(): String {
         val prefs = getSharedPreferences(DIV_EDITOR_PREFS, Context.MODE_PRIVATE)
         if (!prefs.contains(DIV_EDITOR_FINGERPRINT_KEY)) {
-            prefs.edit()
-                .putString(DIV_EDITOR_FINGERPRINT_KEY, UUID.randomUUID().toString())
-                .apply()
+            prefs.edit {
+                putString(DIV_EDITOR_FINGERPRINT_KEY, UUID.randomUUID().toString())
+            }
         }
         return prefs.getString(DIV_EDITOR_FINGERPRINT_KEY, "") as String
     }

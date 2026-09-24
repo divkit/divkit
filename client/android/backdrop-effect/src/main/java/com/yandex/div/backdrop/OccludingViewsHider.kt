@@ -1,6 +1,7 @@
 package com.yandex.div.backdrop
 
 import android.view.View
+import androidx.core.view.isInvisible
 
 /**
  * Hides the views painted above a decorated element for the duration of a backdrop capture, so that
@@ -47,7 +48,7 @@ internal class OccludingViewsHider {
      */
     fun restore() {
         hiddenViews.forEachIndexed { index, view ->
-            if (view.visibility == View.INVISIBLE) {
+            if (view.isInvisible) {
                 view.visibility = restoredVisibilities[index]
             }
 

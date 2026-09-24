@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.math.MathUtils
 import androidx.core.view.GestureDetectorCompat
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
@@ -110,7 +111,7 @@ internal class DivStateLayout @JvmOverloads constructor(
     private inner class SwipeListener : GestureDetector.SimpleOnGestureListener() {
 
         private val view: View?
-            get() = if (childCount > 0) getChildAt(0) else null
+            get() = if (isNotEmpty()) getChildAt(0) else null
         val inScroll: Boolean
             get() = (view?.translationX ?: 0f) != 0f
 

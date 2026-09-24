@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.GravityCompat
+import androidx.core.view.isEmpty
+import androidx.core.view.isNotEmpty
 import com.yandex.div.core.ObserverList
 import com.yandex.div.internal.KLog
 import kotlin.math.max
@@ -22,14 +24,14 @@ class ProfilingLayout @JvmOverloads constructor(
     private val listeners = ObserverList<FrameMetricsListener>()
 
     private val childView: View?
-        get() = if (childCount == 0) null else getChildAt(0)
+        get() = if (isEmpty()) null else getChildAt(0)
 
     init {
         listeners.addObserver(LogcatFrameMetricsListener())
     }
 
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
-        if (childCount > 0) throw IllegalStateException("ProfilingLayout can host only one direct child")
+        if (isNotEmpty()) throw IllegalStateException("ProfilingLayout can host only one direct child")
         super.addView(child, index, params)
         frameMetrics.reset()
     }

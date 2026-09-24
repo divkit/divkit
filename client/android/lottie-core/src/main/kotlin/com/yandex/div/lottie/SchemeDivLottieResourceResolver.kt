@@ -1,7 +1,7 @@
 package com.yandex.div.lottie
 
-import android.net.Uri
 import android.util.LruCache
+import androidx.core.net.toUri
 
 internal class SchemeDivLottieResourceResolver<T : Any>(
     private val scheme: String,
@@ -30,6 +30,6 @@ internal class SchemeDivLottieResourceResolver<T : Any>(
 }
 
 private fun String.hasScheme(expected: String): Boolean =
-    Uri.parse(this).scheme.equals(expected, ignoreCase = true)
+    toUri().scheme.equals(expected, ignoreCase = true)
 
 private const val RESOLVED_RESOURCE_CACHE_SIZE = 100
