@@ -22,12 +22,12 @@ ksp = "2.3.11"
 lottie = "6.7.1"
 markwon = "4.6.2"
 metalava = "0.5.0"
-mockito-kotlin = "6.3.0"
+mockito-kotlin = "6.4.0"
 okhttp = "4.12.0"
 protobuf = "4.35.1"
 rive = "10.3.1"
-robolectric = "4.16.1"
-roborazzi = "1.74.0"
+robolectric = "4.17"
+roborazzi = "1.75.0"
 stetho = "1.6.0"
 unmock = "0.11.0"
 webp-imageio = "0.3.3"
@@ -47,7 +47,7 @@ androidx-media3 = "1.6.1"
 androidx-profileinstaller = "1.4.1"
 androidx-recyclerview = "1.3.0"
 androidx-test = "1.7.0"
-androidx-test-ext = "1.1.5"
+androidx-test-ext-junit = "1.3.0"
 androidx-test-services = "1.6.0"
 androidx-transition = "1.6.0"
 androidx-uiautomator = "2.4.0"
@@ -102,7 +102,7 @@ androidx-media3-exoplayer-smoothstreaming = { module = "androidx.media3:media3-e
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }
 
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
-androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext" }
+androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-ext-junit" }
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
 androidx-test-services = { module = "androidx.test.services:test-services", version.ref = "androidx-test-services" }
