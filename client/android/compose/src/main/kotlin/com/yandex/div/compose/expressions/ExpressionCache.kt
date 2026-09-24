@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateOf
 import com.yandex.div.compose.dagger.DivLocalScope
-import com.yandex.div.core.Disposable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import javax.inject.Inject
@@ -35,7 +34,7 @@ internal class ExpressionCache @Inject constructor(
         initialValue: T
     ) {
         val state: MutableState<T> = mutableStateOf(initialValue)
-        var subscription: Disposable? = null
+        var subscription: AutoCloseable? = null
         var pendingRefCount: Int = 0
         var refCount: Int = 0
     }

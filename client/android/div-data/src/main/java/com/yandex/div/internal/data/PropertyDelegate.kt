@@ -1,6 +1,5 @@
 package com.yandex.div.internal.data
 
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.evaluable.types.Color
@@ -30,7 +29,7 @@ class PropertyDelegate(
     private val executor: PropertyVariableExecutor,
 ) {
 
-    private var subscription: Disposable? = null
+    private var subscription: AutoCloseable? = null
 
     fun get() = executor.evaluate(getExpression)
 

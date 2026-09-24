@@ -14,7 +14,6 @@ import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.RenderMode
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.DivViewDelegate
@@ -46,7 +45,7 @@ internal class LottieController(
     // Div Lottie Extension fields
     var data: LottieData? = null
 
-    private var animationsEnabledSubscription: Disposable? = null
+    private var animationsEnabledSubscription: AutoCloseable? = null
 
     private val onEndListeners = ObserverList<() -> Unit>()
 

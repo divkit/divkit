@@ -5,7 +5,6 @@ import android.view.View
 import androidx.test.espresso.Espresso.onIdle
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.IdlingResource
-import com.yandex.div.core.Disposable
 import java.io.Closeable
 
 private const val TAG = "IdlingResources"
@@ -18,11 +17,11 @@ fun waitForView(tag: String): View {
 
 fun waitForIdlingResource(res: IdlingResource) = res.register().use { onIdle() }
 
-fun IdlingResource.register(): Disposable = IdlingResourceRegistration(this)
+fun IdlingResource.register(): AutoCloseable = IdlingResourceRegistration(this)
 
 private class IdlingResourceRegistration(
     private val resource: IdlingResource
-) : Disposable {
+) : AutoCloseable {
 
     init {
         IdlingRegistry.getInstance().register(resource)

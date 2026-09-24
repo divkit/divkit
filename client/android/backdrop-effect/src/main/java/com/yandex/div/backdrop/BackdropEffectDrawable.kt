@@ -18,14 +18,13 @@ import com.yandex.div.backdrop.graphics.CanvasBackdropLayer
 import com.yandex.div.backdrop.graphics.PlainRimHighlightLayer
 import com.yandex.div.backdrop.graphics.ReflectionRimHighlightLayer
 import com.yandex.div.backdrop.graphics.RenderNodeBackdropLayer
-import com.yandex.div.core.Disposable
 import com.yandex.div.internal.view.onPreDrawListener
 
 internal class BackdropEffectDrawable(
     private val view: View,
     private val backdropViewProvider: BackdropViewProvider,
     private val backdropWatcher: BackdropWatcher,
-) : Drawable(), Disposable {
+) : Drawable() {
 
     val density: Float
         get() = view.resources.displayMetrics.density
@@ -184,7 +183,7 @@ internal class BackdropEffectDrawable(
         backdropLayer.recycle()
     }
 
-    override fun close() {
+    fun close() {
         detachFromViews()
         backdropLayer.close()
     }

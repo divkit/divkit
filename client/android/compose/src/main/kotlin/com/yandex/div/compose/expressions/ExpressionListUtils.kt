@@ -5,7 +5,6 @@ import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.yandex.div.compose.context.expressionResolver
-import com.yandex.div.core.Disposable
 import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -33,7 +32,7 @@ private class ExpressionListObserver<T : Any>(
 ) : RememberObserver {
     private val state = mutableStateOf(expressionList.evaluate(expressionResolver))
 
-    private var subscription: Disposable? = null
+    private var subscription: AutoCloseable? = null
 
     val value: List<T> get() = state.value
 

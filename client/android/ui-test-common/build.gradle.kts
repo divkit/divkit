@@ -9,8 +9,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":div-core"))
-
     api(libs.androidx.appcompat)
     api(libs.androidx.core)
     api(libs.androidx.espresso.core)

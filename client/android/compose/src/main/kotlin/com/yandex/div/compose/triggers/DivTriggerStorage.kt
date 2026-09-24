@@ -6,7 +6,6 @@ import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.dagger.DivLocalScope
-import com.yandex.div.core.Disposable
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
@@ -28,7 +27,7 @@ internal class DivTriggerStorage @Inject constructor(
         private val mode = trigger.mode.evaluate(expressionResolver)
 
         private var lastCondition: Boolean = false
-        private var conditionSubscription: Disposable? = null
+        private var conditionSubscription: AutoCloseable? = null
 
         private fun onConditionChanged(condition: Boolean) {
             when (mode) {

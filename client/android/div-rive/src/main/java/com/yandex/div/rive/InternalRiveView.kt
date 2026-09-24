@@ -14,7 +14,6 @@ import app.rive.runtime.kotlin.core.Loop
 import app.rive.runtime.kotlin.core.Rive
 import app.rive.runtime.kotlin.renderers.Renderer
 import app.rive.runtime.kotlin.renderers.RiveArtboardRenderer
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.Div2View
 
 /**
@@ -33,7 +32,7 @@ internal class DivRiveContainer @JvmOverloads constructor(
 
     var animationsEnabled: () -> Boolean = { true }
 
-    private var animationsEnabledSubscription: Disposable? = null
+    private var animationsEnabledSubscription: AutoCloseable? = null
 
     fun observeAnimationsEnabled(divView: Div2View) {
         animationsEnabledSubscription?.close()
