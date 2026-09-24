@@ -1,7 +1,5 @@
 package com.yandex.div.compose.views.gallery
 
-import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -92,18 +90,12 @@ private fun ScrollableGalleryView(
 ) {
     val initialDefaultItem = remember { defaultItem }
     val clampedDefaultItem = initialDefaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
-    val isPaging = scrollMode == DivGallery.ScrollMode.PAGING
 
     val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = clampedDefaultItem
     )
 
-    val flingBehavior = if (isPaging) {
-        val snapPosition = remember(scrollContentAlignment) { scrollContentAlignment.toSnapPosition() }
-        rememberSnapFlingBehavior(lazyListState = listState, snapPosition = snapPosition)
-    } else {
-        ScrollableDefaults.flingBehavior()
-    }
+    val flingBehavior = rememberGalleryListFlingBehavior(listState, scrollMode, scrollContentAlignment)
 
     if (initialDefaultItem > 0) {
         AdjustDefaultItemAlignment(

@@ -2,6 +2,8 @@ package com.yandex.div.core.view2.divs.utils
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.internal.scroll.SnapPositions
+import com.yandex.div.internal.scroll.findDirectionalSnapPosition
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
