@@ -73,35 +73,53 @@ final class SnapshotTestRunner {
     ))
 
     if let steps = try loadSteps(dictionary: jsonDict) {
-      for (index, step) in steps.enumerated() {
-        step.actions?.forEach { action in
-          divKitComponents.actionHandler.handle(
-            action,
-            path: testCardId.path,
-            source: .tap,
-            sender: nil
-          )
-        }
-        divKitComponents.flushUpdateActions()
-        view.forceLayout()
-
-        let check: CheckAction = { additionalView in
-          try await self.checkSnapshots(
-            view: view,
-            caseName: caseName,
-            stepName: step.name ?? "step\(index)",
-            additionalView: additionalView
-          )
-        }
-
-        let tooltipManager = divKitComponents.tooltipManager as! DefaultTooltipManager
-        try await tooltipsTestStepRun(
-          manager: tooltipManager,
-          check: check
-        )
+      for step in steps {
+        try await run(step, in: view, components: divKitComponents, caseName: caseName)
       }
     } else {
       try await checkSnapshots(view: view, caseName: caseName)
+    }
+  }
+
+  private func run(
+    _ step: TestStep,
+    in view: DivView,
+    components: DivKitComponents,
+    caseName: String
+  ) async throws {
+    switch step {
+    case let .action(action):
+      components.actionHandler.handle(
+        action,
+        path: testCardId.path,
+        source: .tap,
+        sender: nil
+      )
+    case let .wait(durationMs):
+      try await Task.sleep(nanoseconds: durationMs * 1_000_000)
+    case .verifyText, .verifySnapshot:
+      break
+    }
+
+    components.flushUpdateActions()
+    view.forceLayout()
+
+    switch step {
+    case let .verifyText(targetId, expectedText):
+      try verifyText(expectedText, of: targetId, in: view)
+    case let .verifySnapshot(name):
+      let check: CheckAction = { additionalView in
+        try await self.checkSnapshots(
+          view: view,
+          caseName: caseName,
+          stepName: name,
+          additionalView: additionalView
+        )
+      }
+      let tooltipManager = components.tooltipManager as! DefaultTooltipManager
+      try await tooltipsTestStepRun(manager: tooltipManager, check: check)
+    case .action, .wait:
+      break
     }
   }
 
@@ -111,6 +129,27 @@ final class SnapshotTestRunner {
   ) async throws {
     let tooltip = await manager.currentTooltipView()
     return try await check(tooltip)
+  }
+
+  private func verifyText(_ expectedText: String, of targetId: String, in view: UIView) throws {
+    let targetView = try #require(
+      findView(withId: targetId, in: view),
+      "No view with id '\(targetId)'"
+    )
+    let actualText = targetView.accessibilityLabel ?? (targetView as? UILabel)?.text
+    #expect(actualText == expectedText, "Text mismatch for id '\(targetId)'")
+  }
+
+  private func findView(withId id: String, in view: UIView) -> UIView? {
+    if view.accessibilityIdentifier == id {
+      return view
+    }
+    for subview in view.subviews {
+      if let found = findView(withId: id, in: subview) {
+        return found
+      }
+    }
+    return nil
   }
 
   private func getLayoutDirection(
@@ -138,7 +177,6 @@ final class SnapshotTestRunner {
     }
 
     let stepDictionaries: [[String: any Sendable]] = try dictionary.getField("steps")
-    var actions: [DivActionBase] = []
     var steps: [TestStep] = []
 
     for stepDictionary in stepDictionaries {
@@ -151,22 +189,30 @@ final class SnapshotTestRunner {
           type: DivActionTemplate.self,
           from: actionDictionary
         ).unwrap()
-        actions.append(action)
+        steps.append(.action(action))
       case "wait":
-        // Keep the existing iOS behavior: delays are ignored by the snapshot runner.
-        break
+        let durationMs: Int64 = try stepDictionary.getField("duration_ms")
+        guard durationMs >= 0, durationMs <= Int64.max / 1_000_000 else {
+          throw TestStepParsingError.invalidWaitDuration(durationMs)
+        }
+        steps.append(.wait(UInt64(durationMs)))
       case "verify_snapshot":
         let name: String = try stepDictionary.getField("name")
-        steps.append(TestStep(name: name, actions: actions))
-        actions.removeAll()
+        steps.append(.verifySnapshot(name: name))
+      case "verify_text":
+        let target: [String: any Sendable] = try stepDictionary.getField("target")
+        let targetType: String = try target.getField("type")
+        guard targetType == "div_id" else {
+          throw TestStepParsingError.unsupportedTargetType(targetType)
+        }
+        let targetId: String = try target.getField("id")
+        let expectedText: String = try stepDictionary.getField("text")
+        steps.append(.verifyText(targetId: targetId, expectedText: expectedText))
       default:
         throw TestStepParsingError.unsupportedType(type)
       }
     }
 
-    guard actions.isEmpty else {
-      throw TestStepParsingError.actionsWithoutSnapshot
-    }
     return steps
   }
 
@@ -321,18 +367,16 @@ private final class TestImageHolderFactory: @MainActor DivImageHolderFactory {
   }
 }
 
-private struct TestStep: Sendable {
-  let name: String?
-  let actions: [DivActionBase]?
-
-  init(name: String, actions: [DivActionBase]) {
-    self.name = name
-    self.actions = actions
-  }
+private enum TestStep: Sendable {
+  case action(DivActionBase)
+  case wait(UInt64)
+  case verifyText(targetId: String, expectedText: String)
+  case verifySnapshot(name: String)
 }
 
 private enum TestStepParsingError: Error {
-  case actionsWithoutSnapshot
+  case invalidWaitDuration(Int64)
+  case unsupportedTargetType(String)
   case unsupportedType(String)
 }
 

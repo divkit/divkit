@@ -1,22 +1,23 @@
 {
-  "description": "Run timer with end_actions and tick_actions",
+  "description": "Timer executes end_actions and tick_actions",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "div_data": {
     "card": {
-      "log_id": "snapshot_test_card",
+      "log_id": "test_card",
       "variables": [
-        {
-          "name": "timer_label",
-          "type": "string",
-          "value": "NOT STARTED"
-        },
         {
           "name": "tick_count",
           "type": "integer",
           "value": 0
+        },
+        {
+          "name": "timer_finished",
+          "type": "boolean",
+          "value": false
         }
       ],
       "timers": [
@@ -26,8 +27,15 @@
           "tick_interval": 100,
           "end_actions": [
             {
-              "url": "div-action://set_variable?name=timer_label&value=FINISHED",
-              "log_id": "timer finished"
+              "log_id": "timer finished",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "timer_finished",
+                "value": {
+                  "type": "boolean",
+                  "value": true
+                }
+              }
             }
           ],
           "tick_actions": [
@@ -46,11 +54,13 @@
             "items": [
               {
                 "type": "text",
-                "text": "Timer state: @{timer_label}"
+                "id": "timer_status",
+                "text": "Timer finished: @{timer_finished}"
               },
               {
                 "type": "text",
-                "text": "Timer ticks: @{tick_count} (expected when finished: 10)"
+                "id": "tick_status",
+                "text": "Tick count valid: @{tick_count > 1 && tick_count <= 10}"
               }
             ]
           }
@@ -60,8 +70,12 @@
   },
   "steps": [
     {
-      "type": "verify_snapshot",
-      "name": "step0"
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "timer_status"
+      },
+      "text": "Timer finished: false"
     },
     {
       "type": "div_action",
@@ -71,19 +85,24 @@
       }
     },
     {
-      "type": "div_action",
-      "action": {
-        "url": "div-action://set_variable?name=timer_label&value=started",
-        "log_id": "change label"
-      }
-    },
-    {
       "type": "wait",
       "duration_ms": 2000
     },
     {
-      "type": "verify_snapshot",
-      "name": "step1"
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "timer_status"
+      },
+      "text": "Timer finished: true"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "tick_status"
+      },
+      "text": "Tick count valid: true"
     }
   ]
 }

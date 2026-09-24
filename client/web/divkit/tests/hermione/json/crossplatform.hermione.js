@@ -64,6 +64,19 @@ function createInteractiveTestCase(testCase, testPath) {
                 }, step.action);
             } else if (step.type === 'wait') {
                 await this.browser.pause(step.duration_ms);
+            } else if (step.type === 'verify_text') {
+                if (!step.target || step.target.type !== 'div_id') {
+                    throw new Error(`Unsupported verify_text target type: ${step.target?.type}`);
+                }
+                const actualText = await this.browser.execute(id => {
+                    const element = [...document.querySelectorAll('[data-test-id]')]
+                        .find(candidate => candidate.getAttribute('data-test-id') === id);
+                    return element ? element.innerText : null;
+                }, step.target.id);
+                if (actualText === null) {
+                    throw new Error(`No view with id '${step.target.id}'`);
+                }
+                actualText.should.equal(step.text, `Text mismatch for id '${step.target.id}'`);
             } else if (step.type === 'verify_snapshot') {
                 await this.browser.pause(300);
                 await this.browser.assertView(`step${snapshotIndex}`, '#root');
