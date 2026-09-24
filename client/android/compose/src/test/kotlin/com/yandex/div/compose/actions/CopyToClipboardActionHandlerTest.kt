@@ -26,6 +26,7 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class CopyToClipboardActionHandlerTest {
@@ -66,9 +67,10 @@ class CopyToClipboardActionHandlerTest {
         val clip = assertNotNull(clipboard.primaryClip)
         assertEquals("Copied url", clip.description.label)
         assertEquals("text/uri-list", clip.description.getMimeType(0))
+        assertTrue(clip.description.hasMimeType("text/plain"))
         assertEquals(1, clip.itemCount)
         assertEquals("https://divkit.tech/path?q=1".toUri(), clip.getItemAt(0).uri)
-        assertNull(clip.getItemAt(0).text)
+        assertEquals("https://divkit.tech/path?q=1", clip.getItemAt(0).text)
     }
 
     @Test

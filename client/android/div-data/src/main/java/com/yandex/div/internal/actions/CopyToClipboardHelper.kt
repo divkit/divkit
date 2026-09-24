@@ -15,9 +15,12 @@ fun DivActionCopyToClipboardContent.resolveClipData(resolver: ExpressionResolver
             ClipData.Item(value.value.evaluate(resolver))
         )
 
-        is DivActionCopyToClipboardContent.ContentUrlCase -> ClipData(
-            "Copied url",
-            arrayOf(ClipDescription.MIMETYPE_TEXT_URILIST),
-            ClipData.Item(value.value.evaluate(resolver))
-        )
+        is DivActionCopyToClipboardContent.ContentUrlCase -> {
+            val uri = value.value.evaluate(resolver)
+            ClipData(
+                "Copied url",
+                arrayOf(ClipDescription.MIMETYPE_TEXT_URILIST, ClipDescription.MIMETYPE_TEXT_PLAIN),
+                ClipData.Item(uri.toString(), null, uri)
+            )
+        }
     }
