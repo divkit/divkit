@@ -1,0 +1,198 @@
+{
+  "description": "Changing truncate_policy recomputes single-line and multiline text truncation.",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "truncate_policy",
+      "variables": [
+        {
+          "name": "policy",
+          "type": "string",
+          "value": "word"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+              "type": "fixed",
+              "value": 320
+            },
+            "paddings": {
+              "left": 8,
+              "right": 8,
+              "top": 8,
+              "bottom": 8
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "Current truncate_policy: @{policy}",
+                "font_size": 13,
+                "font_family": "text",
+                "text_color": "#FF111111",
+                "margins": {
+                  "bottom": 8
+                }
+              },
+              {
+                "type": "text",
+                "text": "Single line / standard ellipsis",
+                "font_size": 11,
+                "font_family": "text",
+                "text_color": "#555555"
+              },
+              {
+                "type": "text",
+                "text": "Alpha beta gamma delta epsilon zeta eta theta iota",
+                "font_size": 18,
+                "font_family": "text",
+                "text_color": "#111111",
+                "max_lines": 1,
+                "width": {
+                  "type": "fixed",
+                  "value": 190
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#EAF1F8"
+                  }
+                ],
+                "truncate_policy": "@{policy}",
+                "margins": {
+                  "bottom": 8
+                }
+              },
+              {
+                "type": "text",
+                "text": "Single line / custom ellipsis",
+                "font_size": 11,
+                "font_family": "text",
+                "text_color": "#555555"
+              },
+              {
+                "type": "text",
+                "text": "Alpha beta gamma delta epsilon zeta eta theta iota",
+                "font_size": 18,
+                "font_family": "text",
+                "text_color": "#111111",
+                "max_lines": 1,
+                "width": {
+                  "type": "fixed",
+                  "value": 190
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#EAF1F8"
+                  }
+                ],
+                "truncate_policy": "@{policy}",
+                "ellipsis": {
+                  "text": "… more"
+                },
+                "margins": {
+                  "bottom": 8
+                }
+              },
+              {
+                "type": "text",
+                "text": "Two lines / standard ellipsis",
+                "font_size": 11,
+                "font_family": "text",
+                "text_color": "#555555"
+              },
+              {
+                "type": "text",
+                "text": "Alpha beta gamma delta epsilon zeta eta theta iota",
+                "font_size": 18,
+                "font_family": "text",
+                "text_color": "#111111",
+                "max_lines": 2,
+                "width": {
+                  "type": "fixed",
+                  "value": 175
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#EAF1F8"
+                  }
+                ],
+                "truncate_policy": "@{policy}",
+                "margins": {
+                  "bottom": 8
+                }
+              },
+              {
+                "type": "text",
+                "text": "Two lines / custom ellipsis",
+                "font_size": 11,
+                "font_family": "text",
+                "text_color": "#555555"
+              },
+              {
+                "type": "text",
+                "text": "Alpha beta gamma delta epsilon zeta eta theta iota",
+                "font_size": 18,
+                "font_family": "text",
+                "text_color": "#111111",
+                "max_lines": 2,
+                "width": {
+                  "type": "fixed",
+                  "value": 175
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#EAF1F8"
+                  }
+                ],
+                "truncate_policy": "@{policy}",
+                "ellipsis": {
+                  "text": "… more"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_snapshot",
+      "name": "word"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "set_grapheme_policy",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "policy",
+          "value": {
+            "type": "string",
+            "value": "grapheme"
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "grapheme"
+    }
+  ]
+}

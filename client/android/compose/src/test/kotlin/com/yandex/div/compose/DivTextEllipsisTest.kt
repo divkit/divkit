@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -87,6 +88,127 @@ class DivTextEllipsisTest {
     }
 
     @Test
+    fun `custom ellipsis wider than line renders empty text`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("Text"),
+                maxLines = 1,
+                ellipsis = ellipsis(constant("… more")),
+                width = fixed(1)
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("")
+    }
+
+    @Test
+    fun `custom ellipsis renders empty text when height allows zero visible lines`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("Text"),
+                maxLines = 1,
+                ellipsis = ellipsis(constant("… more")),
+                height = fixed(0),
+                width = fixed(100),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("")
+    }
+
+    @Test
+    fun `custom ellipsis does not split an inline image at the truncation boundary`() {
+        // Arrange
+        val content = text(
+            id = "text",
+            text = constant("AAAAAA"),
+            fontSize = 20,
+            maxLines = 1,
+            ellipsis = ellipsis(constant("...")),
+            images = listOf(
+                textImage(
+                    url = "https://divkit.tech/image.png",
+                    start = 2,
+                )
+            ),
+            width = fixed(70),
+        )
+
+        // Act
+        setContent(content)
+
+        // Assert
+        val rendered = rule.onNodeWithTag("text")
+            .fetchSemanticsNode()
+            .config[SemanticsProperties.Text]
+            .single()
+        val imageAnnotations = rendered.getStringAnnotations(0, rendered.length)
+            .filter { annotation -> annotation.item == "inline-image-0" }
+        assertTrue(rendered.text.startsWith("AA"))
+        assertTrue(rendered.text.endsWith("..."))
+        assertTrue(
+            imageAnnotations.isEmpty() || imageAnnotations.single().let { annotation ->
+                annotation.end - annotation.start == 1 &&
+                    rendered.text.substring(annotation.start, annotation.end) == "\u2060"
+            }
+        )
+    }
+
+    @Test
+    fun `standard ellipsis keeps native rendering before emoji grapheme`() {
+        // Arrange
+        val sourceText = "prefix 👨‍👩‍👧‍👦 suffix"
+
+        // Act
+        setContent(
+            text(
+                id = "text",
+                text = constant(sourceText),
+                fontSize = 20,
+                maxLines = 1,
+                width = fixed(75)
+            )
+        )
+
+        // Assert
+        rule.onNodeWithTag("text").assertTextEquals(sourceText)
+    }
+
+    @Test
+    fun `standard word ellipsis renders the configured suffix`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("A long text that does not fit"),
+                truncatePolicy = DivText.TruncatePolicy.WORD,
+                maxLines = 1,
+                width = fixed(100)
+            )
+        )
+
+        rule.onNodeWithTag("text")
+            .assert(textEndsWith("…"))
+    }
+
+    @Test
+    fun `word ellipsis exposes full source text to accessibility`() {
+        val sourceText = "A long text that does not fit"
+        setContent(
+            text(
+                id = "text",
+                text = constant(sourceText),
+                truncatePolicy = DivText.TruncatePolicy.WORD,
+                maxLines = 1,
+                width = fixed(100),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertContentDescriptionEquals(sourceText)
+    }
+
+    @Test
     @OptIn(ExperimentalRoborazziApi::class)
     fun `range in hidden tail does not draw a background over end ellipsis`() {
         setContent(
@@ -148,6 +270,43 @@ class DivTextEllipsisTest {
     }
 
     @Test
+    fun `standard ellipsis switches to custom rendering when its variable changes`() {
+        val variable = Variable.StringVariable("suffix", "…")
+        variableController.declare(variable)
+        setContent(text(
+            id = "text",
+            text = constant("A very long text that does not fit into a single line"),
+            maxLines = 1,
+            ellipsis = ellipsis(expression("@{suffix}")),
+            width = fixed(100),
+        ))
+        rule.waitForIdle()
+
+        variable.set("… more")
+
+        rule.onNodeWithTag("text").assert(textEndsWith("… more"))
+    }
+
+    @Test
+    fun `custom ellipsis switches to native rendering when its variable changes`() {
+        val variable = Variable.StringVariable("suffix", "… more")
+        variableController.declare(variable)
+        val sourceText = "A very long text that does not fit into a single line"
+        setContent(text(
+            id = "text",
+            text = constant(sourceText),
+            maxLines = 1,
+            ellipsis = ellipsis(expression("@{suffix}")),
+            width = fixed(100),
+        ))
+        rule.waitForIdle()
+
+        variable.set("…")
+
+        rule.onNodeWithTag("text").assertTextEquals(sourceText)
+    }
+
+    @Test
     fun `ellipsized text keeps the intrinsic width of the untruncated text`() {
         setContent(
             container(
@@ -184,6 +343,22 @@ class DivTextEllipsisTest {
         )
 
         rule.onNodeWithTag("text").assertTextEquals("short… more")
+    }
+
+    @Test
+    fun `custom ellipsis keeps text before hard line break`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                maxLines = 2,
+                ellipsis = ellipsis(constant("… more")),
+                width = fixed(200),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("first\nsecond… more")
     }
 
     @Test

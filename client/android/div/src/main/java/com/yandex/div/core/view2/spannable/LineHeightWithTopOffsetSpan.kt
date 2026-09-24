@@ -26,6 +26,19 @@ internal class LineHeightWithTopOffsetSpan(
     private var savedDescent: Int = NOT_SET
     private var savedBottom: Int = NOT_SET
 
+    /**
+     * Creates a copy whose source [topOffsetStart] and [topOffsetEnd] are converted by [mapOffset].
+     * The mapper must return each offset in the transformed text that will own the copied span.
+     */
+    fun withMappedOffsets(mapOffset: (Int) -> Int): LineHeightWithTopOffsetSpan {
+        return LineHeightWithTopOffsetSpan(
+            topOffset = topOffset,
+            lineHeight = lineHeight,
+            topOffsetStart = mapOffset(topOffsetStart),
+            topOffsetEnd = mapOffset(topOffsetEnd),
+        )
+    }
+
     override fun chooseHeight(
         text: CharSequence?,
         start: Int,

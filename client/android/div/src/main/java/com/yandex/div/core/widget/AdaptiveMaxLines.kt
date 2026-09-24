@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import com.yandex.div.internal.view.DrawingPassOverrideStrategy
 import com.yandex.div.internal.view.onPreDrawListener
+import com.yandex.div.internal.widget.EllipsizedTextView
 
 /**
  * Adjust [TextView] max lines based on [Params].
@@ -77,8 +78,13 @@ internal class AdaptiveMaxLines(
                 return@onPreDrawListener true
             }
 
-            val maxLines =
-                Int.MAX_VALUE.takeIf { textView.lineCount <= params.totalVisibleLines } ?: params.maxLines
+            val ellipsizedTextView = textView as? EllipsizedTextView
+            val sourceLineCount = if (ellipsizedTextView != null && !ellipsizedTextView.isUsingNativeEllipsis) {
+                ellipsizedTextView.untruncatedLineCount
+            } else {
+                textView.lineCount
+            }
+            val maxLines = Int.MAX_VALUE.takeIf { sourceLineCount <= params.totalVisibleLines } ?: params.maxLines
             return@onPreDrawListener if (maxLines != textView.maxLines) {
                 textView.maxLines = maxLines
                 isAdaptLinesRequested = true

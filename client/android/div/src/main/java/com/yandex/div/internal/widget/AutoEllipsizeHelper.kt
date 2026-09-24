@@ -14,10 +14,21 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
      * If auto ellipsize is enabled.
      */
     var isEnabled = false
+        set(value) {
+            if (field == value) {
+                return
+            }
+            field = value
+            lastMeasurementInputs = null
+            if (!value) {
+                removeListener()
+            }
+        }
 
     var drawingPassOverrideStrategy: DrawingPassOverrideStrategy = DrawingPassOverrideStrategy.Safe
 
     private var preDrawListener: ViewTreeObserver.OnPreDrawListener? = null
+    private var lastMeasurementInputs: MeasurementInputs? = null
 
     /**
      * Called when [textView] is attached to window.
@@ -35,6 +46,27 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
         removeListener()
     }
 
+    fun onViewMeasured(textRevision: Int) {
+        if (!isEnabled || !textView.isAttachedToWindow) {
+            return
+        }
+
+        val measurementInputs = MeasurementInputs(
+            measuredWidth = textView.measuredWidth,
+            measuredHeight = textView.measuredHeight,
+            maxLines = textView.maxLines,
+            sourceLineCount = textView.untruncatedLineCount,
+            layoutHeight = textView.layout?.height,
+            textRevision = textRevision,
+        )
+        if (measurementInputs == lastMeasurementInputs) {
+            return
+        }
+
+        lastMeasurementInputs = measurementInputs
+        addListener()
+    }
+
     private fun addListener() {
         if (preDrawListener != null) {
             return
@@ -48,7 +80,11 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
                 val lastVisibleLine = lineAt(textHeight)
                 if (textHeight >= textHeight(lastVisibleLine + 1)) lastVisibleLine + 1 else lastVisibleLine
             }
-            if (visibleLineCount > 0 && visibleLineCount < textView.lineCount) {
+            val maxLines = textView.maxLines
+            val canReduceMaxLines = maxLines < 0 || visibleLineCount < maxLines
+            if (visibleLineCount > 0 && visibleLineCount < textView.untruncatedLineCount &&
+                canReduceMaxLines
+            ) {
                 KLog.d(TAG) { "Trying to set new max lines $visibleLineCount. Current drawing pass is canceled. " }
                 textView.maxLines = visibleLineCount
                 false
@@ -70,4 +106,13 @@ internal class AutoEllipsizeHelper(private val textView: EllipsizedTextView) {
     private companion object {
         const val TAG = "AutoEllipsizeHelper"
     }
+
+    private data class MeasurementInputs(
+        val measuredWidth: Int,
+        val measuredHeight: Int,
+        val maxLines: Int,
+        val sourceLineCount: Int,
+        val layoutHeight: Int?,
+        val textRevision: Int,
+    )
 }

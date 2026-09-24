@@ -182,4 +182,5 @@ private val selectedFiles = setOf(
     "div-switch/base-properties.json",
     "div-switch/switch-properties.json",
     "div-text/text-properties.json",
+    "div-text/truncate-policy.json",
 )

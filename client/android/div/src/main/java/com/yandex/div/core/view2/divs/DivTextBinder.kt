@@ -796,20 +796,26 @@ internal class DivTextBinder @Inject constructor(
         resolver: ExpressionResolver
     ) {
         if (newDiv.autoEllipsize.equalsToConstant(oldDiv?.autoEllipsize) &&
-            newDiv.truncate.equalsToConstant(oldDiv?.truncate)) {
+            newDiv.truncate.equalsToConstant(oldDiv?.truncate) &&
+            newDiv.truncatePolicy.equalsToConstant(oldDiv?.truncatePolicy)) {
             return
         }
 
         applyEllipsize(newDiv, resolver)
 
-        if (newDiv.autoEllipsize.isConstantOrNull() && newDiv.truncate.isConstant()) return
+        if (newDiv.autoEllipsize.isConstantOrNull() && newDiv.truncate.isConstant() &&
+            newDiv.truncatePolicy.isConstant()) {
+            return
+        }
 
         val callback = { _: Any -> applyEllipsize(newDiv, resolver) }
         newDiv.autoEllipsize?.let { addSubscription(it.observe(resolver, callback))}
         addSubscription(newDiv.truncate.observe(resolver, callback))
+        addSubscription(newDiv.truncatePolicy.observe(resolver, callback))
     }
 
     private fun DivLineHeightTextView.applyEllipsize(div: DivText, resolver: ExpressionResolver) {
+        truncatePolicy = div.truncatePolicy.evaluate(resolver)
         val location = div.truncate.evaluate(resolver)
         ellipsisLocation = when (location) {
             DivText.Truncate.NONE -> null

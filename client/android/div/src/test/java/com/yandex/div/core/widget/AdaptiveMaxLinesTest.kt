@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.TextView
 import com.yandex.div.internal.view.DrawingPassOverrideStrategy
+import com.yandex.div.internal.widget.EllipsizedTextView
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -72,6 +73,52 @@ class AdaptiveMaxLinesTest {
     }
 
     @Test
+    fun `native ellipsis uses rendered line count for adaptive max lines`() {
+        // Arrange
+        val ellipsizedTextView = mock<EllipsizedTextView> {
+            on { isUsingNativeEllipsis } doReturn true
+            on { text } doReturn TEST_TEXT
+            on { lineCount } doReturn 2
+            on { untruncatedLineCount } doReturn 8
+            on { viewTreeObserver } doReturn viewTreeObserver
+        }
+        val adaptiveMaxLines = AdaptiveMaxLines(ellipsizedTextView, DrawingPassOverrideStrategy.NoOp)
+        adaptiveMaxLines.apply(TEST_PARAMS)
+        whenViewAttachedToWindow(ellipsizedTextView)
+        whenPreDrawListenerAdded()
+
+        // Act
+        val proceed = preDrawListenerCaptor.firstValue.onPreDraw()
+
+        // Assert
+        Assert.assertFalse(proceed)
+        verify(ellipsizedTextView).maxLines = Int.MAX_VALUE
+    }
+
+    @Test
+    fun `manual ellipsis uses untruncated line count for adaptive max lines`() {
+        // Arrange
+        val ellipsizedTextView = mock<EllipsizedTextView> {
+            on { isUsingNativeEllipsis } doReturn false
+            on { text } doReturn TEST_TEXT
+            on { lineCount } doReturn 2
+            on { untruncatedLineCount } doReturn 8
+            on { viewTreeObserver } doReturn viewTreeObserver
+        }
+        val adaptiveMaxLines = AdaptiveMaxLines(ellipsizedTextView, DrawingPassOverrideStrategy.NoOp)
+        adaptiveMaxLines.apply(TEST_PARAMS)
+        whenViewAttachedToWindow(ellipsizedTextView)
+        whenPreDrawListenerAdded()
+
+        // Act
+        val proceed = preDrawListenerCaptor.firstValue.onPreDraw()
+
+        // Assert
+        Assert.assertFalse(proceed)
+        verify(ellipsizedTextView).maxLines = TEST_PARAMS.maxLines
+    }
+
+    @Test
     fun `wait until text set`() {
         underTest.apply(TEST_PARAMS)
         whenViewAttachedToWindow()
@@ -110,7 +157,7 @@ class AdaptiveMaxLinesTest {
         verify(viewTreeObserver).removeOnPreDrawListener(preDrawListenerCaptor.firstValue)
     }
 
-    private fun whenViewAttachedToWindow() {
+    private fun whenViewAttachedToWindow(textView: TextView = this.textView) {
         verify(textView).addOnAttachStateChangeListener(attachStateChangeListenerCaptor.capture())
         attachStateChangeListenerCaptor.firstValue.onViewAttachedToWindow(textView)
     }
