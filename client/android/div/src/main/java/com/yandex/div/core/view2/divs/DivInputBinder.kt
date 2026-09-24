@@ -434,7 +434,13 @@ internal class DivInputBinder @Inject constructor(
                     setTextRestoringSelection(formatted)
                 }
                 setSecondVariable(formatted)
-                valueUpdater(rawValue.replace(',', '.'))
+                val rawValueToStore = if (this is CurrencyInputMask) {
+                    // A comma can be a decimal separator here, but a literal character in other masks.
+                    rawValue.replace(',', '.')
+                } else {
+                    rawValue
+                }
+                valueUpdater(rawValueToStore)
                 return
             }
 

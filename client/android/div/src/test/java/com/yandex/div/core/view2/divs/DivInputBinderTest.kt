@@ -172,14 +172,39 @@ class DivInputBinderTest : DivBinderTest() {
         assertEquals(16, view.selectionStart)
     }
 
-    private fun DivInputView.startListeningToTextChanges() {
-        val captor = argumentCaptor<TwoWayStringVariableBinder.Callbacks>()
-        verify(variableBinder, atLeastOnce()).bindVariable(any(), any(), any(), captor.capture())
-        captor.lastValue.setViewStateChangeListener { }
+    @Test
+    fun `fixed length mask preserves commas in raw variable`() {
+        val (div, view) = createDivAndView(INPUT_FIXED_LENGTH_MASK_WITH_COMMAS)
+        underTest.bindView(view, div, divView)
+        var updatedRawValue = ""
+        view.startListeningToTextChanges { updatedRawValue = it }
+
+        view.type("a,b,c")
+
+        assertEquals("a,b,c", view.text.toString())
+        assertEquals("a,b,c", updatedRawValue)
     }
 
-    private fun DivInputView.type(digits: String) = digits.forEach { digit ->
-        editableText.insert(selectionStart, digit.toString())
+    @Test
+    fun `currency mask normalizes decimal comma in raw variable`() {
+        val (div, view) = createDivAndView(INPUT_CURRENCY_MASK)
+        underTest.bindView(view, div, divView)
+        var updatedRawValue = ""
+        view.startListeningToTextChanges { updatedRawValue = it }
+
+        view.type("1,5")
+
+        assertEquals("1.5", updatedRawValue)
+    }
+
+    private fun DivInputView.startListeningToTextChanges(onRawValueChanged: (String) -> Unit = {}) {
+        val captor = argumentCaptor<TwoWayStringVariableBinder.Callbacks>()
+        verify(variableBinder, atLeastOnce()).bindVariable(any(), any(), any(), captor.capture())
+        captor.lastValue.setViewStateChangeListener(onRawValueChanged)
+    }
+
+    private fun DivInputView.type(text: String) = text.forEach { character ->
+        editableText.insert(selectionStart, character.toString())
     }
 
     private fun DivInputView.invokeEditorAction(actionId: Int): Boolean {
@@ -199,6 +224,39 @@ class DivInputBinderTest : DivBinderTest() {
     }
 
     companion object {
+        private val INPUT_FIXED_LENGTH_MASK_WITH_COMMAS = """
+            {
+              "type": "input",
+              "width": { "type": "match_parent" },
+              "height": { "type": "wrap_content" },
+              "text_variable": "formatted_value",
+              "keyboard_type": "single_line_text",
+              "mask": {
+                "type": "fixed_length",
+                "pattern": "####################",
+                "pattern_elements": [
+                  { "key": "#", "placeholder": "_", "regex": "^[а-яА-ЯёЁa-zA-Z0-9 .,]*$" }
+                ],
+                "raw_text_variable": "raw_value"
+              }
+            }
+        """.trimIndent()
+
+        private val INPUT_CURRENCY_MASK = """
+            {
+              "type": "input",
+              "width": { "type": "match_parent" },
+              "height": { "type": "wrap_content" },
+              "text_variable": "formatted_value",
+              "keyboard_type": "number",
+              "mask": {
+                "type": "currency",
+                "locale": "ru-RU",
+                "raw_text_variable": "raw_value"
+              }
+            }
+        """.trimIndent()
+
         private val INPUT_PHONE_MASK = """
             {
               "type": "input",
