@@ -2,26 +2,33 @@ import Foundation
 import XCTest
 
 final class DivKitRegressionUITests: XCTestCase {
-  private let app = XCUIApplication()
-
   override class var defaultTestSuite: XCTestSuite {
     let suite = XCTestSuite(forTestCaseClass: self)
 
     do {
-      for scenario in try loadAutomatedScenarios(from: Bundle(for: self)) {
+      let scenarios = try loadAutomatedScenarios(from: Bundle(for: self))
+      try validateTestNames(scenarios)
+
+      for scenario in scenarios {
         addTest(
           named: testName(for: scenario),
           to: suite
         ) { testCase in
           do {
-            try testCase.app.openRegressionCase(scenario.caseID)
+            let connection = try await UITestConnection()
+            defer { connection.close() }
+            let launchArguments: [UITestLaunchArgument] = [
+              .scenarioPath(scenario.relativePath),
+              .connectionPort(connection.port),
+            ]
+            testCase.app.launch(launchArguments: launchArguments)
             try testCase.app.waitUntilRunning()
             let root = try testCase.app.waitForRootDivView()
-            try RunnerExecutor(root: root).execute(scenario.steps)
+            try await RunnerExecutor(root: root, connection: connection).execute(scenario.steps)
           } catch {
             testCase.attachDiagnostics()
             XCTFail(
-              "Case \(scenario.caseID) (\(scenario.relativePath)): "
+              "\(scenario.relativePath): "
                 + error.localizedDescription
             )
           }
@@ -36,9 +43,12 @@ final class DivKitRegressionUITests: XCTestCase {
     return suite
   }
 
+  private let app = XCUIApplication()
+
   override func setUpWithError() throws {
     try super.setUpWithError()
     continueAfterFailure = false
+    executionTimeAllowance = 120
   }
 
   override func tearDownWithError() throws {
@@ -51,18 +61,39 @@ final class DivKitRegressionUITests: XCTestCase {
   private static func addTest(
     named name: String,
     to suite: XCTestSuite,
-    body: @escaping (DivKitRegressionUITests) -> Void
+    body: @escaping @MainActor (DivKitRegressionUITests) async -> Void
   ) {
     let block: @convention(block) (XCTestCase) -> Void = { testCase in
       guard let testCase = testCase as? DivKitRegressionUITests else {
         XCTFail("Unexpected test case type: \(type(of: testCase))")
         return
       }
-      body(testCase)
+      let completion = XCTestExpectation(description: name)
+      Task { @MainActor in
+        await body(testCase)
+        completion.fulfill()
+      }
+      let result = XCTWaiter().wait(for: [completion])
+      XCTAssertEqual(result, .completed, "Scenario \(name) did not finish")
     }
     let selector = NSSelectorFromString(name)
     class_addMethod(self, selector, imp_implementationWithBlock(block), "v@:")
     suite.addTest(self.init(selector: selector))
+  }
+
+  private static func validateTestNames(_ scenarios: [RunnerScenario]) throws {
+    var pathsByName: [String: String] = [:]
+    for scenario in scenarios {
+      let name = testName(for: scenario)
+      if let previousPath = pathsByName[name] {
+        throw TestRegistrationError.duplicateName(
+          name: name,
+          firstPath: previousPath,
+          secondPath: scenario.relativePath
+        )
+      }
+      pathsByName[name] = scenario.relativePath
+    }
   }
 
   private static func testName(for scenario: RunnerScenario) -> String {
@@ -70,7 +101,7 @@ final class DivKitRegressionUITests: XCTestCase {
       .components(separatedBy: CharacterSet.alphanumerics.inverted)
       .filter { !$0.isEmpty }
       .joined(separator: "_")
-    return "testCase_\(scenario.caseID)_\(path)"
+    return "test_\(path)"
   }
 
   private func attachDiagnostics() {
@@ -91,51 +122,64 @@ final class DivKitRegressionUITests: XCTestCase {
 }
 
 extension XCUIApplication {
+  fileprivate func launch(launchArguments: [UITestLaunchArgument]) {
+    self.launchArguments += launchArguments.map(\.rawValue)
+    launch()
+  }
+
   fileprivate func waitUntilRunning() throws {
     guard wait(for: .runningForeground, timeout: 10) else {
       throw AppError.appDidNotReachForeground
     }
   }
 
-  fileprivate func openRegressionCase(_ caseID: Int) throws {
-    var components = URLComponents()
-    components.scheme = "playground"
-    components.host = "test"
-    components.queryItems = [URLQueryItem(name: "id", value: String(caseID))]
-
-    guard let url = components.url else {
-      throw AppError.invalidDeepLink(caseID: caseID)
-    }
-
-    open(url)
-  }
-
   fileprivate func waitForRootDivView() throws -> XCUIElement {
     let element = windows.element(boundBy: 0)
       .descendants(matching: .any)
-      .matching(identifier: "baseDivView")
+      .matching(identifier: "rootDivView")
       .firstMatch
 
-    guard element.waitForExistence(timeout: 5) else {
-      throw AppError.rootDivViewDidNotAppear
-    }
+    try waitForCardOrLoadingError(root: element)
     return element
+  }
+
+  private func waitForCardOrLoadingError(root: XCUIElement) throws {
+    let loadingError = staticTexts["uiTestLoadError"]
+    let predicate = NSPredicate { _, _ in root.exists || loadingError.exists }
+    let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
+    guard XCTWaiter.wait(for: [expectation], timeout: 5) == .completed else {
+      throw AppError.cardLoadingTimedOut
+    }
+    if loadingError.exists {
+      throw AppError.cardLoadingFailed(loadingError.label)
+    }
+  }
+}
+
+private enum TestRegistrationError: LocalizedError {
+  case duplicateName(name: String, firstPath: String, secondPath: String)
+
+  var errorDescription: String? {
+    switch self {
+    case let .duplicateName(name, firstPath, secondPath):
+      "Duplicate test name: \(name)\nConflicting scenarios:\n- \(firstPath)\n- \(secondPath)"
+    }
   }
 }
 
 private enum AppError: LocalizedError {
   case appDidNotReachForeground
-  case rootDivViewDidNotAppear
-  case invalidDeepLink(caseID: Int)
+  case cardLoadingTimedOut
+  case cardLoadingFailed(String)
 
   var errorDescription: String? {
     switch self {
     case .appDidNotReachForeground:
       "App did not reach foreground"
-    case .rootDivViewDidNotAppear:
-      "Root DivView did not appear"
-    case let .invalidDeepLink(caseID):
-      "Could not create a deep link for case \(caseID)"
+    case .cardLoadingTimedOut:
+      "Neither the card nor a loading error appeared within 5 seconds"
+    case let .cardLoadingFailed(message):
+      message
     }
   }
 }

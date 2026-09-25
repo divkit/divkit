@@ -1,0 +1,23 @@
+{
+  "configurations": [
+    {
+      "id": "1A3EBF05-8A77-4BCE-AF6C-31039DF6B3A4",
+      "name": "Default",
+      "options": {}
+    }
+  ],
+  "defaultOptions": {
+    "codeCoverage": false,
+    "testTimeoutsEnabled": true
+  },
+  "testTargets": [
+    {
+      "target": {
+        "containerPath": "container:DivKit.xcodeproj",
+        "identifier": "D97630000000000000000001",
+        "name": "DivKitRegressionUITests"
+      }
+    }
+  ],
+  "version": 1
+}

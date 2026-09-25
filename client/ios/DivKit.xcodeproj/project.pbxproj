@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D97635000000000000000002 /* UITestConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97635000000000000000001 /* UITestConnection.swift */; };
 		D10459000000000100000001 /* SizeProviderBlockViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10459000000000200000001 /* SizeProviderBlockViewTests.swift */; };
 		0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9A9A9F28CB1A9200D1D810 /* Lottie */; };
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
@@ -263,6 +264,18 @@
 		E99F91822DF04A52003A8AF3 /* DivKitSVG in Frameworks */ = {isa = PBXBuildFile; productRef = E99F91812DF04A52003A8AF3 /* DivKitSVG */; };
 		E9E484C129AF434D00C803A8 /* RegressionFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E484C029AF434D00C803A8 /* RegressionFile.swift */; };
 		D10458010000000000000001 /* DivKitSVG in Frameworks */ = {isa = PBXBuildFile; productRef = D10458010000000000000002 /* DivKitSVG */; };
+		D97631000000000000000006 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = D97631000000000000000007 /* DivKit */; };
+		D9763200000000000000000B /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = D9763200000000000000000A /* DivKit */; };
+		D9763200000000000000000E /* SnapshotFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0E7380288AE9BB009BEB3C /* SnapshotFontProvider.swift */; };
+		D97632000000000000000015 /* automated in Resources */ = {isa = PBXBuildFile; fileRef = D97630000000000000000016 /* automated */; };
+		D9763200000000000000000F /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = D97632000000000000000014 /* Fonts */; };
+		D9763300000000000000000E /* UITestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97633000000000000000008 /* UITestMessage.swift */; };
+		D9763300000000000000000F /* UITestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97633000000000000000008 /* UITestMessage.swift */; };
+		D97633000000000000000012 /* UITestConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9763300000000000000000A /* UITestConnectionTests.swift */; };
+		D97634000000000000000005 /* UITestAppClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97634000000000000000002 /* UITestAppClient.swift */; };
+		D97634000000000000000006 /* UITestLaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97634000000000000000003 /* UITestLaunchArgument.swift */; };
+		D97634000000000000000007 /* UITestLaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97634000000000000000003 /* UITestLaunchArgument.swift */; };
+		D97636000000000000000002 /* UITestRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97636000000000000000001 /* UITestRequestHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -319,8 +332,8 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 8C4409EC2864C4D200EF4175;
-			remoteInfo = DivKitPlayground;
+			remoteGlobalIDString = D97632000000000000000001;
+			remoteInfo = DivKitUITestsHostApp;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -357,6 +370,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D97635000000000000000001 /* UITestConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestConnection.swift; sourceTree = "<group>"; };
 		D10459000000000200000001 /* SizeProviderBlockViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeProviderBlockViewTests.swift; sourceTree = "<group>"; };
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
 		0C1B9FDF2DDE1D6B00F69371 /* DivDataResourcesPreloaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivDataResourcesPreloaderTests.swift; sourceTree = "<group>"; };
@@ -605,6 +619,13 @@
 		E945FC45293E1CA80066C3EA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interactive_snapshot_test_data; path = ../../../test_data/interactive_snapshot_test_data; sourceTree = "<group>"; };
 		E9E484C029AF434D00C803A8 /* RegressionFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegressionFile.swift; sourceTree = "<group>"; };
+		D97632000000000000000002 /* DivKitUITestsHostApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DivKitUITestsHostApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D97632000000000000000014 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = SnapshotTestsHostApp/Fonts; sourceTree = SOURCE_ROOT; };
+		D97633000000000000000008 /* UITestMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestMessage.swift; sourceTree = "<group>"; };
+		D9763300000000000000000A /* UITestConnectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestConnectionTests.swift; sourceTree = "<group>"; };
+		D97634000000000000000002 /* UITestAppClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAppClient.swift; sourceTree = "<group>"; };
+		D97634000000000000000003 /* UITestLaunchArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestLaunchArgument.swift; sourceTree = "<group>"; };
+		D97636000000000000000001 /* UITestRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestRequestHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -615,6 +636,7 @@
 			);
 			target = 8C9284F6288ADEEA00BEA1FA /* SnapshotTestsHostApp */;
 		};
+		D9763200000000000000000C /* Exceptions for DivKitUITestsHostApp */ = {isa = PBXFileSystemSynchronizedBuildFileExceptionSet; membershipExceptions = (Info.plist, ); target = D97632000000000000000001 /* DivKitUITestsHostApp */; };
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -625,6 +647,7 @@
 		8C58953F2F34C87A00AFF80D /* LayoutKitSnapshotTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = LayoutKitSnapshotTests; sourceTree = "<group>"; };
 		8C5A449C2F34CA0600287316 /* SnapshotTestsHostApp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8C5A449F2F34CA3E00287316 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = SnapshotTestsHostApp; sourceTree = "<group>"; };
 		D97630000000000000000008 /* DivKitRegressionUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = DivKitRegressionUITests; sourceTree = "<group>"; };
+		D97632000000000000000003 /* DivKitUITestsHostApp */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (D9763200000000000000000C /* Exceptions for DivKitUITestsHostApp */, ); explicitFileTypes = {}; explicitFolders = (); path = DivKitUITestsHostApp; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -726,6 +749,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D97631000000000000000006 /* DivKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D97632000000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9763200000000000000000B /* DivKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -933,6 +965,7 @@
 				52DED04729F7346900D64519 /* DivKitExtensionsTests.xctest */,
 				7E2DFA8F2C7C7ED40095775C /* LayoutKitPlayground.framework */,
 				986F57972CD68E8400990A2A /* DivKitUITests.xctest */,
+				D97632000000000000000002 /* DivKitUITestsHostApp.app */,
 				D97630000000000000000002 /* DivKitRegressionUITests.xctest */,
 				9FE7D3042CF7526C00BAF071 /* libDivKitTestsSupport.a */,
 			);
@@ -1200,7 +1233,9 @@
 				8C7B1B1B2865BFF10036EF4C /* DivKitTests */,
 				8C5894B02F34BE4300AFF80D /* DivKitTestsSupport */,
 				8C5894CE2F34C63A00AFF80D /* DivKitUITests */,
+				D97632000000000000000003 /* DivKitUITestsHostApp */,
 				D97630000000000000000008 /* DivKitRegressionUITests */,
+				D97631000000000000000008 /* UITestSupport */,
 				D97630000000000000000016 /* automated */,
 				7E3B99872C6E4FB100FC633E /* LayoutKitPlayground */,
 				8C58953F2F34C87A00AFF80D /* LayoutKitSnapshotTests */,
@@ -1255,6 +1290,36 @@
 				8C9D63662E79BE0900403E3C /* XCTest.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D97631000000000000000008 /* UITestSupport */ = {
+			isa = PBXGroup;
+			children = (
+				D97634000000000000000003 /* UITestLaunchArgument.swift */,
+				D97633000000000000000001 /* Connection */,
+				D97632000000000000000014 /* Fonts */,
+			);
+			path = UITestSupport;
+			sourceTree = "<group>";
+		};
+		D97633000000000000000001 /* Connection */ = {
+			isa = PBXGroup;
+			children = (
+				D97635000000000000000001 /* UITestConnection.swift */,
+				D97633000000000000000008 /* UITestMessage.swift */,
+				D97634000000000000000002 /* UITestAppClient.swift */,
+				D97636000000000000000001 /* UITestRequestHandler.swift */,
+				D97633000000000000000004 /* Tests */,
+			);
+			path = Connection;
+			sourceTree = "<group>";
+		};
+		D97633000000000000000004 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				D9763300000000000000000A /* UITestConnectionTests.swift */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1520,10 +1585,26 @@
 			fileSystemSynchronizedGroups = (
 				D97630000000000000000008 /* DivKitRegressionUITests */,
 			);
+			packageProductDependencies = (
+				D97631000000000000000007 /* DivKit */,
+			);
 			name = DivKitRegressionUITests;
 			productName = DivKitRegressionUITests;
 			productReference = D97630000000000000000002 /* DivKitRegressionUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		D97632000000000000000001 /* DivKitUITestsHostApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D97632000000000000000007 /* Build configuration list for PBXNativeTarget "DivKitUITestsHostApp" */;
+			buildPhases = (D97632000000000000000004 /* Sources */, D97632000000000000000005 /* Frameworks */, D97632000000000000000006 /* Resources */, );
+			buildRules = ();
+			dependencies = ();
+			fileSystemSynchronizedGroups = (D97632000000000000000003 /* DivKitUITestsHostApp */, );
+			name = DivKitUITestsHostApp;
+			packageProductDependencies = (D9763200000000000000000A /* DivKit */, );
+			productName = DivKitUITestsHostApp;
+			productReference = D97632000000000000000002 /* DivKitUITestsHostApp.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -1574,7 +1655,7 @@
 					};
 					D97630000000000000000001 = {
 						CreatedOnToolsVersion = 26.0;
-						TestTargetID = 8C4409EC2864C4D200EF4175;
+						TestTargetID = D97632000000000000000001;
 					};
 				};
 				textSettings = {
@@ -1607,6 +1688,7 @@
 				8C7B1B192865BFF10036EF4C /* DivKitTests */,
 				9FE7D3032CF7526C00BAF071 /* DivKitTestsSupport */,
 				986F57962CD68E8400990A2A /* DivKitUITests */,
+				D97632000000000000000001 /* DivKitUITestsHostApp */,
 				D97630000000000000000001 /* DivKitRegressionUITests */,
 				7E2DFA8E2C7C7ED40095775C /* LayoutKitPlayground */,
 				8C6E40B028AAA47B0038E107 /* LayoutKitSnapshotTests */,
@@ -1704,6 +1786,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9763000000000000000000C /* automated in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D97632000000000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9763200000000000000000F /* Fonts in Resources */,
+				D97632000000000000000015 /* automated in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2021,6 +2112,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D97635000000000000000002 /* UITestConnection.swift in Sources */,
+				D97634000000000000000007 /* UITestLaunchArgument.swift in Sources */,
+				D9763300000000000000000F /* UITestMessage.swift in Sources */,
+				D97633000000000000000012 /* UITestConnectionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D97632000000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D97634000000000000000005 /* UITestAppClient.swift in Sources */,
+				D97636000000000000000002 /* UITestRequestHandler.swift in Sources */,
+				D97634000000000000000006 /* UITestLaunchArgument.swift in Sources */,
+				D9763300000000000000000E /* UITestMessage.swift in Sources */,
+				D9763200000000000000000E /* SnapshotFontProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2100,7 +2207,7 @@
 		};
 		D97630000000000000000007 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 8C4409EC2864C4D200EF4175 /* DivKitPlayground */;
+			target = D97632000000000000000001 /* DivKitUITestsHostApp */;
 			targetProxy = D97630000000000000000006 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -2874,8 +2981,8 @@
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "tech.divkit.playground.regression-uitests";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.divkit.regression-uitests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2883,7 +2990,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = DivKitPlayground;
+				TEST_TARGET_NAME = DivKitUITestsHostApp;
 			};
 			name = Debug;
 		};
@@ -2892,8 +2999,8 @@
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "tech.divkit.playground.regression-uitests";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "tech.divkit.regression-uitests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2901,7 +3008,39 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_STRICT_CONCURRENCY = targeted;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = DivKitPlayground;
+				TEST_TARGET_NAME = DivKitUITestsHostApp;
+			};
+			name = Release;
+		};
+		D97632000000000000000008 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = DivKitUITestsHostApp/Info.plist;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", );
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.UITestsHostApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D97632000000000000000009 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				INFOPLIST_FILE = DivKitUITestsHostApp/Info.plist;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = ("$(inherited)", "@executable_path/Frameworks", );
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.UITestsHostApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -3016,6 +3155,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		D97632000000000000000007 /* Build configuration list for PBXNativeTarget "DivKitUITestsHostApp" */ = {isa = XCConfigurationList; buildConfigurations = (D97632000000000000000008 /* Debug */, D97632000000000000000009 /* Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
@@ -3161,6 +3301,11 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = DivKitSVG;
 		};
+		D97631000000000000000007 /* DivKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DivKit;
+		};
+		D9763200000000000000000A /* DivKit */ = {isa = XCSwiftPackageProductDependency; productName = DivKit; };
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8C9844F32864C2CC001ED5F3 /* Project object */;

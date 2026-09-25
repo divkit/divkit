@@ -43,6 +43,9 @@ Use `UnitTests` scheme to run all unit tests.
 
 Use `SnapshotTests` scheme to run snapshot tests.
 
+Use `DivKitRegressionUITests` scheme to run automated UI scenarios in `DivKitUITestsHostApp`.
+The host shows a single card and provides the test connection for `div_action`.
+
 ## Sample Projects
 
 `Samples/UIKitIntegration/DivKitSample.xcodeproj` – sample project with simple DivKit integration using Swift Package Manager and UIKit.

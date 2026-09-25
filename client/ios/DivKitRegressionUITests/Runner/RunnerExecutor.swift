@@ -1,16 +1,14 @@
 import XCTest
 
+@MainActor
 struct RunnerExecutor {
   let root: XCUIElement
+  let connection: UITestConnection
 
-  init(root: XCUIElement) {
-    self.root = root
-  }
-
-  func execute(_ steps: [RunnerStep]) throws {
+  func execute(_ steps: [RunnerStep]) async throws {
     for (index, step) in steps.enumerated() {
       do {
-        try execute(step)
+        try await execute(step)
       } catch {
         throw StepExecutionError(
           number: index + 1,
@@ -21,7 +19,7 @@ struct RunnerExecutor {
     }
   }
 
-  private func execute(_ step: RunnerStep) throws {
+  private func execute(_ step: RunnerStep) async throws {
     switch step {
     case let .tap(step):
       try execute(step)
@@ -31,6 +29,8 @@ struct RunnerExecutor {
       try execute(step)
     case let .verifyText(step):
       try execute(step)
+    case let .divAction(step):
+      try await execute(step)
     }
   }
 }

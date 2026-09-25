@@ -17,7 +17,7 @@ func loadAutomatedScenarios(from bundle: Bundle) throws -> [RunnerScenario] {
     throw ScenarioLoadingError.noIOSScenarios
   }
 
-  return scenarios.sorted { $0.caseID < $1.caseID }
+  return scenarios
 }
 
 private func scenarioPaths(in directoryURL: URL) throws -> [String] {

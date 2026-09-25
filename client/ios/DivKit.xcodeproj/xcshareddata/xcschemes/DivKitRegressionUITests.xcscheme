@@ -4,17 +4,11 @@
    version = "1.3">
    <TestAction
       buildConfiguration = "Debug">
-      <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D97630000000000000000001"
-               BuildableName = "DivKitRegressionUITests.xctest"
-               BlueprintName = "DivKitRegressionUITests"
-               ReferencedContainer = "container:DivKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:DivKitRegressionUITests.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+      </TestPlans>
    </TestAction>
 </Scheme>
