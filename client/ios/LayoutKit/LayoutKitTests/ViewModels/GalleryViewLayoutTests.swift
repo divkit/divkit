@@ -210,6 +210,30 @@ struct GalleryViewLayoutTests {
   }
 
   @Test
+  func whenHasVerticalDirection_andSeveralColumns_producesContentHeightOfLongestColumn() {
+    let model = MultiColumnGalleryFixtures.makeModel(direction: .vertical)
+    let layout = GalleryViewLayout(model: model)
+    #expect(layout.contentSize.height == 100)
+  }
+
+  @Test
+  func whenHasHorizontalDirection_andSeveralRows_producesContentWidthOfLongestRow() {
+    let model = MultiColumnGalleryFixtures.makeModel(direction: .horizontal)
+    let layout = GalleryViewLayout(model: model)
+    #expect(layout.contentSize.width == 100)
+  }
+
+  @Test(arguments: [ScrollDirection.horizontal, .vertical])
+  func whenHasSeveralColumns_lastPageEndsAtLongestColumnEnd(direction: ScrollDirection) throws {
+    let layout = GalleryViewLayout(
+      model: MultiColumnGalleryFixtures.makeModel(direction: direction),
+      boundsSize: CGSize(width: 50, height: 50)
+    )
+    let lastPage = try #require(layout.blockPages.last)
+    #expect(lastPage.origin + lastPage.size == 100)
+  }
+
+  @Test
   func whenHasResizableAxialInsets_andHorizontalDirection_calculatesContentSizeFittingProvidedSize(
   ) {
     let model = Blocks.horizontalResizableModel
@@ -666,6 +690,31 @@ private enum Blocks {
       path: UIElementPath("model"),
       direction: direction,
       scrollAlignment: scrollAlignment
+    )
+  }
+}
+
+private enum MultiColumnGalleryFixtures {
+  static func makeModel(direction: ScrollDirection) -> GalleryViewModel {
+    let blocks: [Block] = [100, 10, 10].map {
+      TextBlock(
+        widthTrait: .fixed(direction.isHorizontal ? $0 : 10),
+        heightTrait: .fixed(direction.isHorizontal ? 10 : $0),
+        text: NSAttributedString(string: "x"),
+        accessibilityElement: nil
+      )
+    }
+    return GalleryViewModel(
+      blocks: blocks,
+      metrics: GalleryViewMetrics(
+        axialInsetMode: .fixed(values: .zero),
+        crossInsetMode: .fixed(values: .zero),
+        spacings: [0, 0],
+        crossSpacing: 0
+      ),
+      path: UIElementPath("model"),
+      direction: direction,
+      columnCount: 2
     )
   }
 }

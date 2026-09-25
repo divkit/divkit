@@ -63,8 +63,10 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
   public init(model: GalleryViewModel, boundsSize: CGSize? = nil) {
     self.model = model
     blockFrames = model.frames(fitting: boundsSize)
+    let contentSize = model.contentSize(for: blockFrames, fitting: boundsSize)
     blockPages = model.pages(
       for: blockFrames,
+      contentSize: contentSize,
       fitting: boundsSize
     )
 
@@ -74,7 +76,6 @@ public struct GalleryViewLayout: GalleryViewLayouting, Equatable {
       }
     }
 
-    let contentSize = model.contentSize(for: blockFrames, fitting: boundsSize)
     self.contentSize = contentSize
     self.boundsSize = boundsSize ?? contentSize
   }
@@ -134,15 +135,17 @@ extension GalleryViewModel {
     }
   }
 
-  fileprivate func pages(for frames: [CGRect], fitting size: CGSize?) -> [GalleryViewLayout.Page] {
-    guard let firstFrame = frames.first, let lastFrame = frames.last else {
+  fileprivate func pages(
+    for frames: [CGRect],
+    contentSize: CGSize,
+    fitting size: CGSize?
+  ) -> [GalleryViewLayout.Page] {
+    guard let firstFrame = frames.first else {
       return []
     }
 
     let firstFrameOrigin = firstFrame.origin.dimension(in: direction)
-    let lastFrameOrigin = lastFrame.origin.dimension(in: direction)
-    let lastFrameSize = lastFrame.size.dimension(in: direction)
-    let lastEdge = lastFrameOrigin + lastFrameSize + lastGap(forSize: size)
+    let lastEdge = contentSize.dimension(in: direction)
     let pageSize = self.pageSize(fitting: size)
 
     let originsWithIndex: [(CGFloat, Int)] =
@@ -183,21 +186,21 @@ extension GalleryViewModel {
   }
 
   fileprivate func contentSize(for frames: [CGRect], fitting size: CGSize?) -> CGSize {
-    guard let lastFrame = frames.last else {
+    guard !frames.isEmpty else {
       return .zero
     }
     switch direction {
     case .horizontal:
       let rightGap = lastGap(forSize: size)
       let bottomGap = crossInsets(forSize: size).trailing
-      let width = lastFrame.maxX + rightGap
+      let width = frames.map(\.maxX).max()! + rightGap
       let maxHeight = frames.map(\.maxY).max()! + bottomGap
       return CGSize(width: width, height: maxHeight)
     case .vertical:
       let rightGap = crossInsets(forSize: size).trailing
       let bottomGap = lastGap(forSize: size)
       let maxWidth = frames.map(\.maxX).max()! + rightGap
-      let height = lastFrame.maxY + bottomGap
+      let height = frames.map(\.maxY).max()! + bottomGap
       return CGSize(width: maxWidth, height: height)
     }
   }
