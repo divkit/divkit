@@ -26,6 +26,7 @@ import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
 import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div.compose.views.modifiers.image.imageContentSize
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivBase
 
@@ -98,21 +99,32 @@ internal fun DivImageContent(
         }
     }
 
-    val backgroundModifier = if (!isImageLoaded && previewRequest == null) {
+    val hasPlaceholder = !isImageLoaded && previewRequest == null
+    val backgroundModifier = if (hasPlaceholder) {
         modifier.background(placeholderColor)
     } else {
         modifier
     }
 
-    Box(modifier = backgroundModifier) {
-        if (!isImageLoaded && previewRequest != null) {
+    val previewPainter = if (!isImageLoaded && previewRequest != null) {
+        rememberAsyncImagePainter(
+            model = previewRequest,
+            imageLoader = imageLoader,
+            onState = painterStateListener
+        )
+    } else {
+        null
+    }
+
+    Box(
+        modifier = backgroundModifier.imageContentSize(
+            data, imagePainter, previewPainter, contentScale, hasPlaceholder,
+        )
+    ) {
+        if (previewPainter != null) {
             Image(
                 modifier = Modifier.fillMaxSize(),
-                painter = rememberAsyncImagePainter(
-                    model = previewRequest,
-                    imageLoader = imageLoader,
-                    onState = painterStateListener
-                ),
+                painter = previewPainter,
                 contentDescription = null,
                 contentScale = contentScale,
                 alignment = alignment,

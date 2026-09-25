@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivSize
+import com.yandex.div2.DivSizeUnitValue
 
 internal val DivSize.isWrapContent: Boolean
     get() = this is DivSize.WrapContent
@@ -26,4 +27,9 @@ internal fun DivFixedSize.observedValue(): Dp {
 @Composable
 internal fun DivFixedSize.observedPxValue(): Float {
     return value.observedPxValue(unit)
+}
+
+@Composable
+internal fun DivSizeUnitValue.observedValue(): Dp {
+    return value.observedDpValue(unit)
 }

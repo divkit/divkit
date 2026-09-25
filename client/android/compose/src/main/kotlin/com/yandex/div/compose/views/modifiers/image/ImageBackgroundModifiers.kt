@@ -1,4 +1,4 @@
-package com.yandex.div.compose.views.modifiers
+package com.yandex.div.compose.views.modifiers.image
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

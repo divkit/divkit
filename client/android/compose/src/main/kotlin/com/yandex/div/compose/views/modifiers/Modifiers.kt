@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.LayoutDirection
@@ -26,6 +27,8 @@ internal fun Modifier.apply(
     visibility: DivVisibility,
     fillMatchParentWidth: Boolean = true,
     fillMatchParentHeight: Boolean = true,
+    defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
 ): Modifier {
     val divBase = div.value()
     return this
@@ -34,6 +37,8 @@ internal fun Modifier.apply(
             div,
             fillMatchParentWidth = fillMatchParentWidth,
             fillMatchParentHeight = fillMatchParentHeight,
+            defaultHorizontalAlignment = defaultHorizontalAlignment,
+            defaultVerticalAlignment = defaultVerticalAlignment,
         )
         .visibilityActions(divBase)
         .applyIfNotNull(divBase.transform) { transform(it) }

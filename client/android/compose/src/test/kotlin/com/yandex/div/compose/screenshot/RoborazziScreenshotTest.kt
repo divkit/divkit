@@ -190,16 +190,6 @@ private val ignoredFiles = setOf(
     "div-pager/vertical-pager-wrap-content-size-mode-alignment-start.json",
     "div-pager/vertical-pager-wrap-content-size-mode-with-item-spacing.json",
 
-    // div-image.aspect not supported
-    "div-image/aspect-wrap_content.json",
-    "div-image/wrap-content-aspect-zero-constraints.json",
-    "div-image/wrap-content-image-with-aspect-in-horizontal-match-parent-container.json",
-    "div-image/wrap-content-image-with-aspect-in-horizontal-wrap-content-container.json",
-    "div-image/wrap-content-image-with-aspect-in-overlap-match-parent-container.json",
-    "div-image/wrap-content-image-with-aspect-in-overlap-wrap-content-container.json",
-    "div-image/wrap-content-image-with-aspect-in-vertical-match-parent-container.json",
-    "div-image/wrap-content-image-with-aspect-in-vertical-wrap-content-container.json",
-
     // label_image_preview extension not supported
     "div-image/custom-preview.json",
 

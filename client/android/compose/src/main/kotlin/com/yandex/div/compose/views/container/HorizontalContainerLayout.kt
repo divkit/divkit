@@ -32,7 +32,9 @@ import com.yandex.div2.DivSize
 @Composable
 internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
+    val defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
+    val defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment()
     val itemSpacing = data.itemSpacing.observedValue()
     val separator = data.separator
     val separatorVisibility = separator.resolveSeparatorVisibility()
@@ -74,7 +76,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
         horizontalArrangement = horizontalAlignment.toHorizontalArrangement(
             separatorVisibility.effectiveItemSpacing(itemSpacing),
         ),
-        verticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment(),
+        verticalAlignment = defaultVerticalAlignment,
     ) {
         LinearContainer(
             items = visibleItems,
@@ -98,6 +100,8 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
                     childDiv.value().height.isMatchParent,
                 hasWeightedChildren,
                 weightedChildrenMargins,
+                defaultHorizontalAlignment = defaultHorizontalAlignment,
+                defaultVerticalAlignment = defaultVerticalAlignment,
             )
         }
     }
@@ -110,7 +114,9 @@ private fun RowScope.HorizontalChildItem(
     alignByBaseline: Boolean,
     excludeCrossAxisFromIntrinsics: Boolean,
     hasWeightedChildren: Boolean,
-    weightedChildrenMargins: Dp
+    weightedChildrenMargins: Dp,
+    defaultHorizontalAlignment: Alignment.Horizontal,
+    defaultVerticalAlignment: Alignment.Vertical,
 ) {
     val divBase = item.value()
     val isWeightedChild = divBase.width.isMatchParent && !containerMainSize.isWrapContent
@@ -137,13 +143,17 @@ private fun RowScope.HorizontalChildItem(
         DivBlockView(
             data = item,
             modifier = modifier,
-            applyMargins = false
+            applyMargins = false,
+            defaultHorizontalAlignment = defaultHorizontalAlignment,
+            defaultVerticalAlignment = defaultVerticalAlignment,
         )
         if (endMargin > 0.dp) Spacer(Modifier.width(endMargin))
     } else {
         DivBlockView(
             data = item,
-            modifier = modifier
+            modifier = modifier,
+            defaultHorizontalAlignment = defaultHorizontalAlignment,
+            defaultVerticalAlignment = defaultVerticalAlignment,
         )
     }
 }

@@ -2,6 +2,7 @@ package com.yandex.div.compose.utils.scroll
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.DivBlockView
@@ -25,6 +26,18 @@ internal fun ScrollableChildItem(
         modifier = modifier,
         contentAlignment = childCrossAlignment.toBoxAlignment(isHorizontal),
     ) {
-        DivBlockView(data = data)
+        DivBlockView(
+            data = data,
+            defaultHorizontalAlignment = if (isHorizontal) {
+                Alignment.Start
+            } else {
+                childCrossAlignment.toHorizontalAlignment()
+            },
+            defaultVerticalAlignment = if (isHorizontal) {
+                childCrossAlignment.toVerticalAlignment()
+            } else {
+                Alignment.Top
+            },
+        )
     }
 }

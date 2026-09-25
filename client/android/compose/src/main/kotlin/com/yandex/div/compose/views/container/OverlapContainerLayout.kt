@@ -42,9 +42,11 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
     val items = data.items.orEmpty()
+    val defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment()
+    val defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment()
     val defaultAlignment = combineAlignment(
-        horizontalAlignment.toCrossAxisHorizontalAlignment(),
-        verticalAlignment.toCrossAxisVerticalAlignment(),
+        defaultHorizontalAlignment,
+        defaultVerticalAlignment,
     )
     val containerModifier = modifier.adaptiveContainerPadding(
         data.paddings,
@@ -65,6 +67,8 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
             data.visibleItems().forEach { item ->
                 DivBlockView(
                     data = item,
+                    defaultHorizontalAlignment = defaultHorizontalAlignment,
+                    defaultVerticalAlignment = defaultVerticalAlignment,
                     modifier = Modifier.align(
                         item.resolveOverlapChildAlignment(
                             defaultHorizontal = horizontalAlignment,
@@ -185,6 +189,8 @@ private fun MatchParentOverlapChild(
                 visibility = visibility,
                 fillMatchParentWidth = !(isWidthWrapContent && matchParentWidth),
                 fillMatchParentHeight = !(isHeightWrapContent && matchParentHeight),
+                defaultHorizontalAlignment = defaultHorizontal.toCrossAxisHorizontalAlignment(),
+                defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment(),
             )
         }
     }

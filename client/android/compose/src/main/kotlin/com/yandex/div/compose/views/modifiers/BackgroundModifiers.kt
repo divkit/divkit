@@ -7,6 +7,7 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
 import com.yandex.div.compose.utils.reportError
+import com.yandex.div.compose.views.modifiers.image.imageBackground
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivNinePatchBackground

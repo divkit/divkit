@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.context.divContext
@@ -33,13 +34,19 @@ import com.yandex.div2.DivVisibility
 internal fun DivBlockView(
     data: Div,
     modifier: Modifier = Modifier,
-    applyMargins: Boolean = true
+    applyMargins: Boolean = true,
+    defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
 ) {
     val divBase = data.value()
     WithLocalComponent(divBase) {
         val visibility = divBase.visibility.observedValue()
         if (visibility == DivVisibility.GONE) return@WithLocalComponent
-        VisibleDivBlockView(data, modifier, applyMargins, visibility)
+        VisibleDivBlockView(
+            data, modifier, applyMargins, visibility,
+            defaultHorizontalAlignment = defaultHorizontalAlignment,
+            defaultVerticalAlignment = defaultVerticalAlignment,
+        )
     }
 }
 
@@ -51,6 +58,8 @@ internal fun VisibleDivBlockView(
     visibility: DivVisibility,
     fillMatchParentWidth: Boolean = true,
     fillMatchParentHeight: Boolean = true,
+    defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
 ) {
     val divBase = data.value()
     val actions = data.observedActions()
@@ -67,6 +76,8 @@ internal fun VisibleDivBlockView(
                 visibility = visibility,
                 fillMatchParentWidth = fillMatchParentWidth,
                 fillMatchParentHeight = fillMatchParentHeight,
+                defaultHorizontalAlignment = defaultHorizontalAlignment,
+                defaultVerticalAlignment = defaultVerticalAlignment,
             )
         )
     }

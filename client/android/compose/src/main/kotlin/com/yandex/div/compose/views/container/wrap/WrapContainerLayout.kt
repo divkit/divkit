@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Rect
@@ -35,6 +36,7 @@ import com.yandex.div.compose.views.container.toHorizontalArrangement
 import com.yandex.div.compose.views.container.toVerticalArrangement
 import com.yandex.div.compose.views.container.visibleItems
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -72,10 +74,18 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
         // DivKit keeps laying out children outside a constrained cross axis.
         overflow = FlowRowOverflow.Visible,
     ) {
+        val defaultHorizontalAlignment = when (horizontalAlignment) {
+            DivContentAlignmentHorizontal.SPACE_AROUND,
+            DivContentAlignmentHorizontal.SPACE_EVENLY -> Alignment.CenterHorizontally
+            else -> horizontalAlignment.toCrossAxisHorizontalAlignment()
+        }
         val defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment()
         visibleItems.forEachIndexed { index, item ->
             DivBlockView(
                 data = item,
+                // Match View's horizontal line gravity. Wrap children do not inherit the
+                // container's vertical content alignment.
+                defaultHorizontalAlignment = defaultHorizontalAlignment,
                 modifier = observeVerticalChildModifier(
                     item = item,
                     defaultAlignment = defaultVerticalAlignment,
@@ -121,9 +131,17 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
         overflow = FlowColumnOverflow.Visible,
     ) {
         val defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment()
+        val defaultVerticalAlignment = when (verticalAlignment) {
+            DivContentAlignmentVertical.SPACE_AROUND,
+            DivContentAlignmentVertical.SPACE_EVENLY -> Alignment.CenterVertically
+            else -> verticalAlignment.toCrossAxisVerticalAlignment()
+        }
         visibleItems.forEachIndexed { index, item ->
             DivBlockView(
                 data = item,
+                // Match View's vertical line gravity. Wrap children do not inherit the
+                // container's horizontal content alignment.
+                defaultVerticalAlignment = defaultVerticalAlignment,
                 modifier = Modifier
                     .align(item.observeHorizontalChildAlignment() ?: defaultHorizontalAlignment)
                     .trackChildPlacement(separatorGeometry, index),
