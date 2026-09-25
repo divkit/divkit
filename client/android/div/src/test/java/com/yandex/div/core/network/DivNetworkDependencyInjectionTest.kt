@@ -11,6 +11,7 @@ import com.yandex.div.core.images.DivImageLoader
 import org.junit.After
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -19,8 +20,13 @@ import org.robolectric.RobolectricTestRunner
 @RunWith(RobolectricTestRunner::class)
 class DivNetworkDependencyInjectionTest {
 
+    @Before
+    fun resetSingletonBeforeTest() {
+        DivKit.resetSingletonForTesting()
+    }
+
     @After
-    fun resetSingleton() {
+    fun resetSingletonAfterTest() {
         DivKit.resetSingletonForTesting()
     }
 

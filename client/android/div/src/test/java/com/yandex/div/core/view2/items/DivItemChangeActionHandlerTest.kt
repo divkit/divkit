@@ -2,10 +2,12 @@ package com.yandex.div.core.view2.items
 
 import android.net.Uri
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.util.EnableAssertsRule
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
@@ -15,23 +17,23 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
 
-private typealias DivKitAssert = com.yandex.div.internal.Assert
-
 @RunWith(RobolectricTestRunner::class)
 @Config(shadows = [DivItemChangeActionHandlerTest.ShadowDivViewWithItemsControllerCompanion::class])
 class DivItemChangeActionHandlerTest {
 
     private val view = mock<DivViewFacade>()
 
+    @get:Rule
+    val disableAsserts = EnableAssertsRule(enable = false)
+
     @Before
     fun `setup mock`() {
-        DivKitAssert.isEnabled = false
         controller = mock<DivViewWithItemsController>()
     }
 
     @After
     fun `cleanup mock`() {
-        DivKitAssert.isEnabled = true
+        controller = null
     }
 
     @Test
