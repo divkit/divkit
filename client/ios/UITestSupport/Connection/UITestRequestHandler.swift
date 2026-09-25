@@ -18,7 +18,7 @@ struct UITestRequestHandler {
 
   private func performDivAction(_ dictionary: JSONDictionary) throws {
     let parsed = DivTemplates.empty.parseValue(
-      type: DivActionTemplate.self,
+      type: DivAction.self,
       from: dictionary.untypedJSON()
     )
     if let action = parsed.value {
