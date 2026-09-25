@@ -66,7 +66,7 @@ final class DivSeparatorExtensionsTests: XCTestCase {
 }
 
 private func makeBlock(fromFile filename: String) throws -> Block {
-  try DivSeparatorTemplate.make(
+  try DivSeparator.make(
     fromFile: filename,
     subdirectory: "div-separator",
     context: .default

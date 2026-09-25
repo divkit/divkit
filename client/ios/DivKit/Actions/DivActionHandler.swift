@@ -155,11 +155,11 @@ public final class DivActionHandler {
   ) {
     let action: DivActionBase? = switch params.source {
     case .visibility:
-      parseAction(type: DivVisibilityActionTemplate.self, json: params.action)
+      parseAction(type: DivVisibilityAction.self, json: params.action)
     case .disappear:
-      parseAction(type: DivDisappearActionTemplate.self, json: params.action)
+      parseAction(type: DivDisappearAction.self, json: params.action)
     default:
-      parseAction(type: DivActionTemplate.self, json: params.action)
+      parseAction(type: DivAction.self, json: params.action)
     }
     guard let action else {
       return
@@ -433,10 +433,10 @@ public final class DivActionHandler {
     urlHandler.handle(url, info: info, sender: sender)
   }
 
-  private func parseAction<T: TemplateValue>(
+  private func parseAction<T: ContextDeserializable>(
     type _: T.Type,
     json: JSONObject
-  ) -> T.ResolvedValue? {
+  ) -> T? {
     try? DivTemplates.empty.parseValue(
       type: T.self,
       from: json.makeDictionary() ?? [:]

@@ -56,7 +56,7 @@ final class ArrayOfNestedItemsTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithArrayOfNestedItems? {
   try readEntity(
-    EntityWithArrayOfNestedItemsTemplate.self,
+    EntityWithArrayOfNestedItems.self,
     fileName: "array_of_nested_items/\(fileName)"
   )
 }

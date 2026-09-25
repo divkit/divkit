@@ -35,7 +35,7 @@ final class DivTabsExtensionsTests: XCTestCase {
 }
 
 private func makeBlock(fromFile filename: String) throws -> Block {
-  try DivTabsTemplate.make(
+  try DivTabs.make(
     fromFile: filename,
     subdirectory: "div-tabs",
     context: .default

@@ -57,6 +57,10 @@ public protocol Deserializable {
   init(dictionary: [String: Any]) throws
 }
 
+public protocol ContextDeserializable {
+  init(dictionary: [String: Any], context: ParsingContext) throws
+}
+
 extension Deserializable {
   public init(JSONString: String) throws {
     guard let data = JSONString.data(using: .utf8) else {

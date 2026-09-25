@@ -126,7 +126,7 @@ final class ArrayTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithArray? {
   try readEntity(
-    EntityWithArrayTemplate.self,
+    EntityWithArray.self,
     fileName: "array/\(fileName)"
   )
 }

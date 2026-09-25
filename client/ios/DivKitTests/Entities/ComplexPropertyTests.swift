@@ -72,7 +72,7 @@ final class ComplexPropertyTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithComplexProperty? {
   try readEntity(
-    EntityWithComplexPropertyTemplate.self,
+    EntityWithComplexProperty.self,
     fileName: "complex_property/\(fileName)"
   )
 }

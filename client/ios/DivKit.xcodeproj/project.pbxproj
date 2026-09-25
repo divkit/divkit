@@ -89,56 +89,32 @@
 		8C1A378D28B5146C00A047C8 /* PlaygroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */; };
 		8C1A383228B61A2B00A047C8 /* AppComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A383128B61A2B00A047C8 /* AppComponents.swift */; };
 		8C1DEBCE2A2F8277009237F1 /* DivStateManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */; };
-		8C22BBB82B037BA20076BAEB /* EnumWithDefaultTypeTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBAE2B037BA10076BAEB /* EnumWithDefaultTypeTemplate.swift */; };
-		8C22BBB92B037BA20076BAEB /* EntityWithJsonPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBAF2B037BA10076BAEB /* EntityWithJsonPropertyTemplate.swift */; };
-		8C22BBBA2B037BA20076BAEB /* WithoutDefaultTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBB02B037BA10076BAEB /* WithoutDefaultTemplate.swift */; };
 		8C22BBBB2B037BA20076BAEB /* EnumWithDefaultType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBB12B037BA10076BAEB /* EnumWithDefaultType.swift */; };
-		8C22BBBC2B037BA20076BAEB /* WithDefaultTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBB22B037BA10076BAEB /* WithDefaultTemplate.swift */; };
 		8C22BBBD2B037BA20076BAEB /* EntityWithJsonProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBB32B037BA10076BAEB /* EntityWithJsonProperty.swift */; };
-		8C22BBBE2B037BA20076BAEB /* EntityWithRawArrayTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBB42B037BA10076BAEB /* EntityWithRawArrayTemplate.swift */; };
 		8C22BBBF2B037BA20076BAEB /* EntityWithRawArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBB52B037BA20076BAEB /* EntityWithRawArray.swift */; };
 		8C22BBC02B037BA20076BAEB /* WithDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBB62B037BA20076BAEB /* WithDefault.swift */; };
 		8C22BBC12B037BA20076BAEB /* WithoutDefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C22BBB72B037BA20076BAEB /* WithoutDefault.swift */; };
 		8C23F3C729DDB2120069F3F7 /* TemplateToTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3B329DDB2120069F3F7 /* TemplateToTypeTests.swift */; };
 		8C23F3D329DDB2440069F3F7 /* template_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C23F3D229DDB2440069F3F7 /* template_test_data */; };
 		8C23F41129DDB3810069F3F7 /* Entity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3D829DDB3810069F3F7 /* Entity.swift */; };
-		8C23F41229DDB3810069F3F7 /* EntityTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3D929DDB3810069F3F7 /* EntityTemplate.swift */; };
 		8C23F41329DDB3810069F3F7 /* EntityWithArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3DA29DDB3810069F3F7 /* EntityWithArray.swift */; };
 		8C23F41429DDB3810069F3F7 /* EntityWithArrayOfEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3DB29DDB3810069F3F7 /* EntityWithArrayOfEnums.swift */; };
-		8C23F41529DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3DC29DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift */; };
 		8C23F41629DDB3810069F3F7 /* EntityWithArrayOfExpressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3DD29DDB3810069F3F7 /* EntityWithArrayOfExpressions.swift */; };
-		8C23F41729DDB3810069F3F7 /* EntityWithArrayOfExpressionsTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3DE29DDB3810069F3F7 /* EntityWithArrayOfExpressionsTemplate.swift */; };
 		8C23F41829DDB3810069F3F7 /* EntityWithArrayOfNestedItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3DF29DDB3810069F3F7 /* EntityWithArrayOfNestedItems.swift */; };
-		8C23F41929DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E029DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift */; };
-		8C23F41A29DDB3810069F3F7 /* EntityWithArrayTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E129DDB3810069F3F7 /* EntityWithArrayTemplate.swift */; };
 		8C23F41B29DDB3810069F3F7 /* EntityWithArrayWithTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E229DDB3810069F3F7 /* EntityWithArrayWithTransform.swift */; };
-		8C23F41C29DDB3810069F3F7 /* EntityWithArrayWithTransformTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E329DDB3810069F3F7 /* EntityWithArrayWithTransformTemplate.swift */; };
 		8C23F41D29DDB3810069F3F7 /* EntityWithComplexProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E429DDB3810069F3F7 /* EntityWithComplexProperty.swift */; };
-		8C23F41E29DDB3810069F3F7 /* EntityWithComplexPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E529DDB3810069F3F7 /* EntityWithComplexPropertyTemplate.swift */; };
 		8C23F41F29DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E629DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValue.swift */; };
-		8C23F42029DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E729DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift */; };
 		8C23F42129DDB3810069F3F7 /* EntityWithEntityProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E829DDB3810069F3F7 /* EntityWithEntityProperty.swift */; };
-		8C23F42229DDB3810069F3F7 /* EntityWithEntityPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3E929DDB3810069F3F7 /* EntityWithEntityPropertyTemplate.swift */; };
 		8C23F42329DDB3810069F3F7 /* EntityWithOptionalComplexProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3EA29DDB3810069F3F7 /* EntityWithOptionalComplexProperty.swift */; };
-		8C23F42429DDB3810069F3F7 /* EntityWithOptionalComplexPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3EB29DDB3810069F3F7 /* EntityWithOptionalComplexPropertyTemplate.swift */; };
 		8C23F42529DDB3810069F3F7 /* EntityWithOptionalProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3EC29DDB3810069F3F7 /* EntityWithOptionalProperty.swift */; };
-		8C23F42629DDB3810069F3F7 /* EntityWithOptionalPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3ED29DDB3810069F3F7 /* EntityWithOptionalPropertyTemplate.swift */; };
 		8C23F42729DDB3810069F3F7 /* EntityWithOptionalStringEnumProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3EE29DDB3810069F3F7 /* EntityWithOptionalStringEnumProperty.swift */; };
-		8C23F42829DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3EF29DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift */; };
 		8C23F42929DDB3810069F3F7 /* EntityWithPropertyWithDefaultValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F029DDB3810069F3F7 /* EntityWithPropertyWithDefaultValue.swift */; };
-		8C23F42A29DDB3810069F3F7 /* EntityWithPropertyWithDefaultValueTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F129DDB3810069F3F7 /* EntityWithPropertyWithDefaultValueTemplate.swift */; };
 		8C23F42B29DDB3810069F3F7 /* EntityWithRequiredProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F229DDB3810069F3F7 /* EntityWithRequiredProperty.swift */; };
-		8C23F42C29DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F329DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift */; };
 		8C23F42D29DDB3810069F3F7 /* EntityWithSimpleProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F429DDB3810069F3F7 /* EntityWithSimpleProperties.swift */; };
-		8C23F42E29DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F529DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift */; };
 		8C23F43129DDB3810069F3F7 /* EntityWithStringArrayProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F829DDB3810069F3F7 /* EntityWithStringArrayProperty.swift */; };
-		8C23F43229DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3F929DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift */; };
 		8C23F43329DDB3810069F3F7 /* EntityWithStringEnumProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3FA29DDB3810069F3F7 /* EntityWithStringEnumProperty.swift */; };
-		8C23F43429DDB3810069F3F7 /* EntityWithStringEnumPropertyTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3FB29DDB3810069F3F7 /* EntityWithStringEnumPropertyTemplate.swift */; };
 		8C23F43529DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3FC29DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValue.swift */; };
-		8C23F43629DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValueTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3FD29DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValueTemplate.swift */; };
 		8C23F43729DDB3810069F3F7 /* EntityWithoutProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3FE29DDB3810069F3F7 /* EntityWithoutProperties.swift */; };
-		8C23F43829DDB3810069F3F7 /* EntityWithoutPropertiesTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F3FF29DDB3810069F3F7 /* EntityWithoutPropertiesTemplate.swift */; };
 		8C23F43929DDB3810069F3F7 /* ArrayOfEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F40029DDB3810069F3F7 /* ArrayOfEnums.swift */; };
 		8C23F43A29DDB3810069F3F7 /* ArrayOfNestedItemsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F40129DDB3810069F3F7 /* ArrayOfNestedItemsTests.swift */; };
 		8C23F43B29DDB3810069F3F7 /* ArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C23F40229DDB3810069F3F7 /* ArrayTests.swift */; };
@@ -227,7 +203,6 @@
 		8CFD4C9E2B2C5B780092814C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CFD4C9D2B2C5B780092814C /* Theme.swift */; };
 		8D9283372F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */; };
 		983406132E85C3A4004B1AA3 /* DivTemplatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */; };
-		983406152E85C3A4004B1AA3 /* DivTemplatesRawModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 983406142E85C39C004B1AA3 /* DivTemplatesRawModeTests.swift */; };
 		98730C102EDF3C8B00016117 /* DivSystemPropertyManagersTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */; };
 		989DF7F72FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DF7F62FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift */; };
 		989DF7F82FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 989DF7F52FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift */; };
@@ -438,56 +413,32 @@
 		8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundView.swift; sourceTree = "<group>"; };
 		8C1A383128B61A2B00A047C8 /* AppComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponents.swift; sourceTree = "<group>"; };
 		8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivStateManagementTests.swift; sourceTree = "<group>"; };
-		8C22BBAE2B037BA10076BAEB /* EnumWithDefaultTypeTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumWithDefaultTypeTemplate.swift; sourceTree = "<group>"; };
-		8C22BBAF2B037BA10076BAEB /* EntityWithJsonPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithJsonPropertyTemplate.swift; sourceTree = "<group>"; };
-		8C22BBB02B037BA10076BAEB /* WithoutDefaultTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithoutDefaultTemplate.swift; sourceTree = "<group>"; };
 		8C22BBB12B037BA10076BAEB /* EnumWithDefaultType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnumWithDefaultType.swift; sourceTree = "<group>"; };
-		8C22BBB22B037BA10076BAEB /* WithDefaultTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithDefaultTemplate.swift; sourceTree = "<group>"; };
 		8C22BBB32B037BA10076BAEB /* EntityWithJsonProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithJsonProperty.swift; sourceTree = "<group>"; };
-		8C22BBB42B037BA10076BAEB /* EntityWithRawArrayTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithRawArrayTemplate.swift; sourceTree = "<group>"; };
 		8C22BBB52B037BA20076BAEB /* EntityWithRawArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithRawArray.swift; sourceTree = "<group>"; };
 		8C22BBB62B037BA20076BAEB /* WithDefault.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithDefault.swift; sourceTree = "<group>"; };
 		8C22BBB72B037BA20076BAEB /* WithoutDefault.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WithoutDefault.swift; sourceTree = "<group>"; };
 		8C23F3B329DDB2120069F3F7 /* TemplateToTypeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateToTypeTests.swift; sourceTree = "<group>"; };
 		8C23F3D229DDB2440069F3F7 /* template_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = template_test_data; path = ../../../test_data/template_test_data; sourceTree = "<group>"; };
 		8C23F3D829DDB3810069F3F7 /* Entity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entity.swift; sourceTree = "<group>"; };
-		8C23F3D929DDB3810069F3F7 /* EntityTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityTemplate.swift; sourceTree = "<group>"; };
 		8C23F3DA29DDB3810069F3F7 /* EntityWithArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArray.swift; sourceTree = "<group>"; };
 		8C23F3DB29DDB3810069F3F7 /* EntityWithArrayOfEnums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfEnums.swift; sourceTree = "<group>"; };
-		8C23F3DC29DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfEnumsTemplate.swift; sourceTree = "<group>"; };
 		8C23F3DD29DDB3810069F3F7 /* EntityWithArrayOfExpressions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfExpressions.swift; sourceTree = "<group>"; };
-		8C23F3DE29DDB3810069F3F7 /* EntityWithArrayOfExpressionsTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfExpressionsTemplate.swift; sourceTree = "<group>"; };
 		8C23F3DF29DDB3810069F3F7 /* EntityWithArrayOfNestedItems.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfNestedItems.swift; sourceTree = "<group>"; };
-		8C23F3E029DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfNestedItemsTemplate.swift; sourceTree = "<group>"; };
-		8C23F3E129DDB3810069F3F7 /* EntityWithArrayTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayTemplate.swift; sourceTree = "<group>"; };
 		8C23F3E229DDB3810069F3F7 /* EntityWithArrayWithTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayWithTransform.swift; sourceTree = "<group>"; };
-		8C23F3E329DDB3810069F3F7 /* EntityWithArrayWithTransformTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayWithTransformTemplate.swift; sourceTree = "<group>"; };
 		8C23F3E429DDB3810069F3F7 /* EntityWithComplexProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithComplexProperty.swift; sourceTree = "<group>"; };
-		8C23F3E529DDB3810069F3F7 /* EntityWithComplexPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithComplexPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3E629DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithComplexPropertyWithDefaultValue.swift; sourceTree = "<group>"; };
-		8C23F3E729DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithComplexPropertyWithDefaultValueTemplate.swift; sourceTree = "<group>"; };
 		8C23F3E829DDB3810069F3F7 /* EntityWithEntityProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithEntityProperty.swift; sourceTree = "<group>"; };
-		8C23F3E929DDB3810069F3F7 /* EntityWithEntityPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithEntityPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3EA29DDB3810069F3F7 /* EntityWithOptionalComplexProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithOptionalComplexProperty.swift; sourceTree = "<group>"; };
-		8C23F3EB29DDB3810069F3F7 /* EntityWithOptionalComplexPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithOptionalComplexPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3EC29DDB3810069F3F7 /* EntityWithOptionalProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithOptionalProperty.swift; sourceTree = "<group>"; };
-		8C23F3ED29DDB3810069F3F7 /* EntityWithOptionalPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithOptionalPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3EE29DDB3810069F3F7 /* EntityWithOptionalStringEnumProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithOptionalStringEnumProperty.swift; sourceTree = "<group>"; };
-		8C23F3EF29DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithOptionalStringEnumPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3F029DDB3810069F3F7 /* EntityWithPropertyWithDefaultValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithPropertyWithDefaultValue.swift; sourceTree = "<group>"; };
-		8C23F3F129DDB3810069F3F7 /* EntityWithPropertyWithDefaultValueTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithPropertyWithDefaultValueTemplate.swift; sourceTree = "<group>"; };
 		8C23F3F229DDB3810069F3F7 /* EntityWithRequiredProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithRequiredProperty.swift; sourceTree = "<group>"; };
-		8C23F3F329DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithRequiredPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3F429DDB3810069F3F7 /* EntityWithSimpleProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithSimpleProperties.swift; sourceTree = "<group>"; };
-		8C23F3F529DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithSimplePropertiesTemplate.swift; sourceTree = "<group>"; };
 		8C23F3F829DDB3810069F3F7 /* EntityWithStringArrayProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringArrayProperty.swift; sourceTree = "<group>"; };
-		8C23F3F929DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringArrayPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3FA29DDB3810069F3F7 /* EntityWithStringEnumProperty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringEnumProperty.swift; sourceTree = "<group>"; };
-		8C23F3FB29DDB3810069F3F7 /* EntityWithStringEnumPropertyTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringEnumPropertyTemplate.swift; sourceTree = "<group>"; };
 		8C23F3FC29DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringEnumPropertyWithDefaultValue.swift; sourceTree = "<group>"; };
-		8C23F3FD29DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValueTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithStringEnumPropertyWithDefaultValueTemplate.swift; sourceTree = "<group>"; };
 		8C23F3FE29DDB3810069F3F7 /* EntityWithoutProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithoutProperties.swift; sourceTree = "<group>"; };
-		8C23F3FF29DDB3810069F3F7 /* EntityWithoutPropertiesTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithoutPropertiesTemplate.swift; sourceTree = "<group>"; };
 		8C23F40029DDB3810069F3F7 /* ArrayOfEnums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayOfEnums.swift; sourceTree = "<group>"; };
 		8C23F40129DDB3810069F3F7 /* ArrayOfNestedItemsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayOfNestedItemsTests.swift; sourceTree = "<group>"; };
 		8C23F40229DDB3810069F3F7 /* ArrayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayTests.swift; sourceTree = "<group>"; };
@@ -592,7 +543,6 @@
 		8CFD4C9D2B2C5B780092814C /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCursorPositionActionHandlerTests.swift; sourceTree = "<group>"; };
 		983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTemplatesTests.swift; sourceTree = "<group>"; };
-		983406142E85C39C004B1AA3 /* DivTemplatesRawModeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTemplatesRawModeTests.swift; sourceTree = "<group>"; };
 		986F57972CD68E8400990A2A /* DivKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98730C0F2EDF3C8700016117 /* DivSystemPropertyManagersTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivSystemPropertyManagersTests.swift; sourceTree = "<group>"; };
 		989DF7F52FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusElementActionHandlerTests.swift; sourceTree = "<group>"; };
@@ -885,53 +835,29 @@
 			isa = PBXGroup;
 			children = (
 				8C23F3D829DDB3810069F3F7 /* Entity.swift */,
-				8C23F3D929DDB3810069F3F7 /* EntityTemplate.swift */,
 				8C23F3DA29DDB3810069F3F7 /* EntityWithArray.swift */,
 				8C23F3DB29DDB3810069F3F7 /* EntityWithArrayOfEnums.swift */,
-				8C23F3DC29DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift */,
 				8C23F3DD29DDB3810069F3F7 /* EntityWithArrayOfExpressions.swift */,
-				8C23F3DE29DDB3810069F3F7 /* EntityWithArrayOfExpressionsTemplate.swift */,
 				8C23F3DF29DDB3810069F3F7 /* EntityWithArrayOfNestedItems.swift */,
-				8C23F3E029DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift */,
-				8C23F3E129DDB3810069F3F7 /* EntityWithArrayTemplate.swift */,
 				8C23F3E229DDB3810069F3F7 /* EntityWithArrayWithTransform.swift */,
-				8C23F3E329DDB3810069F3F7 /* EntityWithArrayWithTransformTemplate.swift */,
 				8C23F3E429DDB3810069F3F7 /* EntityWithComplexProperty.swift */,
-				8C23F3E529DDB3810069F3F7 /* EntityWithComplexPropertyTemplate.swift */,
 				8C23F3E629DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValue.swift */,
-				8C23F3E729DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift */,
 				8C23F3E829DDB3810069F3F7 /* EntityWithEntityProperty.swift */,
-				8C23F3E929DDB3810069F3F7 /* EntityWithEntityPropertyTemplate.swift */,
 				8C22BBB32B037BA10076BAEB /* EntityWithJsonProperty.swift */,
-				8C22BBAF2B037BA10076BAEB /* EntityWithJsonPropertyTemplate.swift */,
 				8C23F3EA29DDB3810069F3F7 /* EntityWithOptionalComplexProperty.swift */,
-				8C23F3EB29DDB3810069F3F7 /* EntityWithOptionalComplexPropertyTemplate.swift */,
 				8C23F3EC29DDB3810069F3F7 /* EntityWithOptionalProperty.swift */,
-				8C23F3ED29DDB3810069F3F7 /* EntityWithOptionalPropertyTemplate.swift */,
 				8C23F3EE29DDB3810069F3F7 /* EntityWithOptionalStringEnumProperty.swift */,
-				8C23F3EF29DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift */,
 				8C23F3FE29DDB3810069F3F7 /* EntityWithoutProperties.swift */,
-				8C23F3FF29DDB3810069F3F7 /* EntityWithoutPropertiesTemplate.swift */,
 				8C23F3F029DDB3810069F3F7 /* EntityWithPropertyWithDefaultValue.swift */,
-				8C23F3F129DDB3810069F3F7 /* EntityWithPropertyWithDefaultValueTemplate.swift */,
 				8C22BBB52B037BA20076BAEB /* EntityWithRawArray.swift */,
-				8C22BBB42B037BA10076BAEB /* EntityWithRawArrayTemplate.swift */,
 				8C23F3F229DDB3810069F3F7 /* EntityWithRequiredProperty.swift */,
-				8C23F3F329DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift */,
 				8C23F3F429DDB3810069F3F7 /* EntityWithSimpleProperties.swift */,
-				8C23F3F529DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift */,
 				8C23F3F829DDB3810069F3F7 /* EntityWithStringArrayProperty.swift */,
-				8C23F3F929DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift */,
 				8C23F3FA29DDB3810069F3F7 /* EntityWithStringEnumProperty.swift */,
-				8C23F3FB29DDB3810069F3F7 /* EntityWithStringEnumPropertyTemplate.swift */,
 				8C23F3FC29DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValue.swift */,
-				8C23F3FD29DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValueTemplate.swift */,
 				8C22BBB12B037BA10076BAEB /* EnumWithDefaultType.swift */,
-				8C22BBAE2B037BA10076BAEB /* EnumWithDefaultTypeTemplate.swift */,
 				8C22BBB62B037BA20076BAEB /* WithDefault.swift */,
-				8C22BBB22B037BA10076BAEB /* WithDefaultTemplate.swift */,
 				8C22BBB72B037BA20076BAEB /* WithoutDefault.swift */,
-				8C22BBB02B037BA10076BAEB /* WithoutDefaultTemplate.swift */,
 			);
 			path = generated_sources;
 			sourceTree = "<group>";
@@ -1165,7 +1091,6 @@
 			children = (
 				8C23F3B329DDB2120069F3F7 /* TemplateToTypeTests.swift */,
 				983406122E85C39C004B1AA3 /* DivTemplatesTests.swift */,
-				983406142E85C39C004B1AA3 /* DivTemplatesRawModeTests.swift */,
 			);
 			path = Templates;
 			sourceTree = "<group>";
@@ -1919,26 +1844,19 @@
 			files = (
 				D10459000000000100000001 /* SizeProviderBlockViewTests.swift in Sources */,
 				8D9283372F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift in Sources */,
-				8C23F42229DDB3810069F3F7 /* EntityWithEntityPropertyTemplate.swift in Sources */,
 				8C80DB312D22C64F0029C683 /* DivTooltipExtensionsTests.swift in Sources */,
 				8C23F41329DDB3810069F3F7 /* EntityWithArray.swift in Sources */,
-				8C23F42829DDB3810069F3F7 /* EntityWithOptionalStringEnumPropertyTemplate.swift in Sources */,
 				8C7B1BF52865C01C0036EF4C /* DivGalleryExtensionsTests.swift in Sources */,
 				D967000101010002DEADBEEF /* DivPagerExtensionsTests.swift in Sources */,
 				8C7B1BFF2865C01C0036EF4C /* DivActionIntentTests.swift in Sources */,
 				8CBE33012BD699CC00CFFDF5 /* DivVariablesStorageTests.swift in Sources */,
 				983406132E85C3A4004B1AA3 /* DivTemplatesTests.swift in Sources */,
-				983406152E85C3A4004B1AA3 /* DivTemplatesRawModeTests.swift in Sources */,
-				8C23F42029DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift in Sources */,
 				8C7B1BF72865C01C0036EF4C /* DivContainerExtensionsTests.swift in Sources */,
 				8C0662302D09A43500B30CE3 /* SetStoredValueActionHandlerTests.swift in Sources */,
 				8C23F43A29DDB3810069F3F7 /* ArrayOfNestedItemsTests.swift in Sources */,
 				98D560C22ECCF6C600D01478 /* VisibleBoundsTracking+VisibilityHierarchyDepth.swift in Sources */,
-				8C22BBBC2B037BA20076BAEB /* WithDefaultTemplate.swift in Sources */,
-				8C23F41529DDB3810069F3F7 /* EntityWithArrayOfEnumsTemplate.swift in Sources */,
 				8C22BBC12B037BA20076BAEB /* WithoutDefault.swift in Sources */,
 				8CA1B7A62B289BA3003734C2 /* ExpressionTests.swift in Sources */,
-				8C23F43229DDB3810069F3F7 /* EntityWithStringArrayPropertyTemplate.swift in Sources */,
 				8C23F44829DDB3810069F3F7 /* StringEnumPropertyTests.swift in Sources */,
 				8CD234922AD81A9D00F83288 /* DivVariableStorageWithOuterStorageTests.swift in Sources */,
 				52CD806B2A7172B400B828B0 /* XCTestCase+ViewVisibilityCallCount.swift in Sources */,
@@ -1946,13 +1864,11 @@
 				8C22BBC02B037BA20076BAEB /* WithDefault.swift in Sources */,
 				8C23F43B29DDB3810069F3F7 /* ArrayTests.swift in Sources */,
 				8CEA0FDB2D4BD39D007812B8 /* DivTimerStorageTest.swift in Sources */,
-				8C22BBBA2B037BA20076BAEB /* WithoutDefaultTemplate.swift in Sources */,
 				7EE2ED6E2C984E6600E4E9BD /* DivBaseExtensions+AccessibilityElementsStorageTests.swift in Sources */,
 				8CC357F92BFE24B4001C2CFE /* FontFeatureSettingsParserTests.swift in Sources */,
 				0C03FD082DF2E9BA002746DA /* DivDataResourcesPreloaderTests.swift in Sources */,
 				8C23F43129DDB3810069F3F7 /* EntityWithStringArrayProperty.swift in Sources */,
 				5219194D297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift in Sources */,
-				8C22BBB82B037BA20076BAEB /* EnumWithDefaultTypeTemplate.swift in Sources */,
 				7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */,
 				0C9BB8802DF02ECF001C4E72 /* MockDivExtensionHandler.swift in Sources */,
 				8CBE33022BD699CC00CFFDF5 /* DivVariableStorageTests.swift in Sources */,
@@ -1961,7 +1877,6 @@
 				8C40BA022ABB3B5C008405AD /* DivActionHandlerTests.swift in Sources */,
 				E945FC46293E1CA80066C3EA /* Utils.swift in Sources */,
 				52907F662A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift in Sources */,
-				8C23F41729DDB3810069F3F7 /* EntityWithArrayOfExpressionsTemplate.swift in Sources */,
 				8C23F41D29DDB3810069F3F7 /* EntityWithComplexProperty.swift in Sources */,
 				8CB960E628883B8E00D16E47 /* Platform.swift in Sources */,
 				8C23F41829DDB3810069F3F7 /* EntityWithArrayOfNestedItems.swift in Sources */,
@@ -1971,15 +1886,12 @@
 				8C23F44629DDB3810069F3F7 /* SimplePropertiesTests.swift in Sources */,
 				8CB74F032B6D456D00397DCF /* DivInputExtentionsTests.swift in Sources */,
 				8C23F43E29DDB3810069F3F7 /* DefaultValueTests.swift in Sources */,
-				8C23F41E29DDB3810069F3F7 /* EntityWithComplexPropertyTemplate.swift in Sources */,
 				8C23F41629DDB3810069F3F7 /* EntityWithArrayOfExpressions.swift in Sources */,
 				9DD0C78A2D74ABB4009EA1AF /* SubmitActionHandlerTests.swift in Sources */,
-				8C23F42629DDB3810069F3F7 /* EntityWithOptionalPropertyTemplate.swift in Sources */,
 				8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */,
 				8C23F44429DDB3810069F3F7 /* OptionalStringEnumPropertyTests.swift in Sources */,
 				891672372A5F6F9300121131 /* DivPersistentValuesStorageTests.swift in Sources */,
 				891672382A5F6F9300121132 /* DivKitComponentsResetTests.swift in Sources */,
-				8C22BBBE2B037BA20076BAEB /* EntityWithRawArrayTemplate.swift in Sources */,
 				8CE488662B76F6BA00BDDAB9 /* DivDataParsingTests.swift in Sources */,
 				52CD80672A7122AA00B828B0 /* DivBaseExtensionsTests.swift in Sources */,
 				8C23F43F29DDB3810069F3F7 /* EntityProtocol.swift in Sources */,
@@ -1988,14 +1900,10 @@
 				8C23F42729DDB3810069F3F7 /* EntityWithOptionalStringEnumProperty.swift in Sources */,
 				8C7B1CA92865C01E0036EF4C /* DivStateManagerTests.swift in Sources */,
 				8C7B1BFD2865C01C0036EF4C /* DivSeparatorExtensionsTests.swift in Sources */,
-				8C23F41229DDB3810069F3F7 /* EntityTemplate.swift in Sources */,
 				431CF8582B7BC47E005A2E61 /* DivActionURLHandlerTests.swift in Sources */,
-				8C23F43629DDB3810069F3F7 /* EntityWithStringEnumPropertyWithDefaultValueTemplate.swift in Sources */,
 				8CF91B042D0AE4ED0082FDC1 /* MockDivActionHandler.swift in Sources */,
-				8C23F41C29DDB3810069F3F7 /* EntityWithArrayWithTransformTemplate.swift in Sources */,
 				98D560C02ECB4DAC00D01478 /* SkipRunLoopCycles.swift in Sources */,
 				8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */,
-				8C23F43829DDB3810069F3F7 /* EntityWithoutPropertiesTemplate.swift in Sources */,
 				E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */,
 				D97082000000000300000001 /* DivLayoutProviderHandlerTests.swift in Sources */,
 				D97082000000000400000001 /* DivBlockProviderTests.swift in Sources */,
@@ -2003,16 +1911,12 @@
 				8C1233AB2C32F08600F534DC /* DivFontProviderTests.swift in Sources */,
 				8C7B1BF62865C01C0036EF4C /* DivTextExtensionsTests.swift in Sources */,
 				9D5AE8362DFC680500D58B81 /* FilesProvider.swift in Sources */,
-				8C23F41A29DDB3810069F3F7 /* EntityWithArrayTemplate.swift in Sources */,
 				8C84C2232D0870F400A574AC /* ScrollActionHandlerTests.swift in Sources */,
-				8C23F41929DDB3810069F3F7 /* EntityWithArrayOfNestedItemsTemplate.swift in Sources */,
 				8C23F41B29DDB3810069F3F7 /* EntityWithArrayWithTransform.swift in Sources */,
-				8C23F42A29DDB3810069F3F7 /* EntityWithPropertyWithDefaultValueTemplate.swift in Sources */,
 				8C23F42929DDB3810069F3F7 /* EntityWithPropertyWithDefaultValue.swift in Sources */,
 				8C23F44229DDB3810069F3F7 /* OptionalComplexPropertyTests.swift in Sources */,
 				8C09E9D82B349B8D0096D5CC /* DivContainerAccessibilityDescriptionTests.swift in Sources */,
 				8C23F44929DDB3810069F3F7 /* EntityUtils.swift in Sources */,
-				8C23F42E29DDB3810069F3F7 /* EntityWithSimplePropertiesTemplate.swift in Sources */,
 				8C7B1BF82865C01C0036EF4C /* DivGifImageExtensionsTests.swift in Sources */,
 				8C7B1BFE2865C01C0036EF4C /* DivSerializationTests.swift in Sources */,
 				98730C102EDF3C8B00016117 /* DivSystemPropertyManagersTests.swift in Sources */,
@@ -2020,8 +1924,6 @@
 				989DF7F72FEDE24A004E8BF8 /* TooltipActionHandlerTests.swift in Sources */,
 				989DF7F82FEDE24A004E8BF8 /* FocusElementActionHandlerTests.swift in Sources */,
 				8C23F43C29DDB3810069F3F7 /* ArrayWithTransformTests.swift in Sources */,
-				8C22BBB92B037BA20076BAEB /* EntityWithJsonPropertyTemplate.swift in Sources */,
-				8C23F43429DDB3810069F3F7 /* EntityWithStringEnumPropertyTemplate.swift in Sources */,
 				8C4DC3E82892946F000C0963 /* RuntimeTestCase.swift in Sources */,
 				8C23F42D29DDB3810069F3F7 /* EntityWithSimpleProperties.swift in Sources */,
 				8C23F42B29DDB3810069F3F7 /* EntityWithRequiredProperty.swift in Sources */,
@@ -2031,7 +1933,6 @@
 				8C7B1BFA2865C01C0036EF4C /* DivDataExtensionsTests.swift in Sources */,
 				8C23F41429DDB3810069F3F7 /* EntityWithArrayOfEnums.swift in Sources */,
 				8C0688652B347A1B00CD953E /* DivAccessibilityExtensionsTests.swift in Sources */,
-				8C23F42429DDB3810069F3F7 /* EntityWithOptionalComplexPropertyTemplate.swift in Sources */,
 				8C23F42129DDB3810069F3F7 /* EntityWithEntityProperty.swift in Sources */,
 				8C23F41129DDB3810069F3F7 /* Entity.swift in Sources */,
 				8CBE33002BD699CC00CFFDF5 /* DivTriggersStorageTests.swift in Sources */,
@@ -2050,7 +1951,6 @@
 				8C7B1BFB2865C01C0036EF4C /* DivDataPatchExtensionsTests.swift in Sources */,
 				8C23F41F29DDB3810069F3F7 /* EntityWithComplexPropertyWithDefaultValue.swift in Sources */,
 				8C23F42329DDB3810069F3F7 /* EntityWithOptionalComplexProperty.swift in Sources */,
-				8C23F42C29DDB3810069F3F7 /* EntityWithRequiredPropertyTemplate.swift in Sources */,
 				8C7B1BF42865C01C0036EF4C /* DivGridExtensionsTests.swift in Sources */,
 				8CB9911B2B7EB74500577193 /* DivViewTests.swift in Sources */,
 				8C23F43D29DDB3810069F3F7 /* ComplexPropertyTests.swift in Sources */,

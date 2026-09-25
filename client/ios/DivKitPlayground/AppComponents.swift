@@ -67,10 +67,7 @@ enum AppComponents {
         BlurExtensionHandler(),
         LiquidGlassExtensionHandler(),
       ],
-      flagsInfo: DivFlagsInfo(
-        initializeTriggerOnSet: false,
-        useUntypedTemplateResolver: true
-      ),
+      flagsInfo: DivFlagsInfo(initializeTriggerOnSet: false),
       fontProvider: fontProvider,
       imageHolderFactory: holderFactory
         .withInMemoryCache(imageCountLimit: 20),

@@ -235,25 +235,10 @@ private struct IntegrationTest: Decodable, @unchecked Sendable {
     let card = divDataJson["card"] as! [String: Any]
     let templates = divDataJson["templates"] as? [String: Any] ?? [:]
 
-    let typedResult = DivData.resolve(
-      card: card,
-      templates: templates,
-      flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: false)
-    )
-    let untypedResult = DivData.resolve(
-      card: card,
-      templates: templates,
-      flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
-    )
-    XCTAssertEqual(typedResult.value, untypedResult.value)
-    XCTAssertEqual(
-      typedResult.errorsOrWarnings?.count ?? 0,
-      untypedResult.errorsOrWarnings?.count ?? 0
-    )
-
-    let errors = typedResult.errorsOrWarnings?.asArray() ?? []
+    let result = DivData.resolve(card: card, templates: templates)
+    let errors = result.errorsOrWarnings?.asArray() ?? []
     self.deserializationErrorMessages = errors.map(\.errorMessage)
-    self.divData = try? typedResult.unwrap()
+    self.divData = try? result.unwrap()
     self.cases = try! JSONDecoder().decode(
       [IntegrationTestCase].self,
       from: try JSONSerialization.data(withJSONObject: casesJson)
@@ -321,14 +306,14 @@ private struct IntegrationTestCase: Decodable {
   }
 }
 
-private extension DivData {
-  var containsVideo: Bool {
+extension DivData {
+  fileprivate var containsVideo: Bool {
     states.contains { $0.div.containsVideo }
   }
 }
 
-private extension Div {
-  var containsVideo: Bool {
+extension Div {
+  fileprivate var containsVideo: Bool {
     if case .divVideo = self {
       return true
     }
@@ -369,8 +354,8 @@ private enum Expected: Decodable {
 
 extension DivAction: Swift.Decodable {
   public convenience init(from decoder: Decoder) throws {
-    let action = try DivTemplates(dictionary: [:]).parseValue(
-      type: DivActionTemplate.self,
+    let action = try DivTemplates.empty.parseValue(
+      type: DivAction.self,
       from: JSONDictionary(from: decoder).untypedJSON()
     ).unwrap()
 
@@ -391,8 +376,8 @@ extension DivAction: Swift.Decodable {
 
 extension DivData: Swift.Decodable {
   public convenience init(from decoder: Decoder) throws {
-    let divData = try DivTemplates(dictionary: [:]).parseValue(
-      type: DivDataTemplate.self,
+    let divData = try DivTemplates.empty.parseValue(
+      type: DivData.self,
       from: JSONDictionary(from: decoder).untypedJSON()
     ).unwrap()
 

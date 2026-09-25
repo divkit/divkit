@@ -53,12 +53,8 @@ public struct DivFlagsInfo: Encodable, Equatable, Sendable {
   /// `font_weight_value` is specified.
   public let variationFontWeightOverrideEnabled: Bool
 
-  /// Enables untyped template resolving pipeline for card parsing.
-  ///
-  /// `false` - typed template resolving is used (`*Template.swift` entities).
-  ///
-  /// `true` - templates are resolved by untyped resolver and then parsed with generated
-  /// non-template deserializers.
+  /// No effect: templates are always resolved by the untyped resolver.
+  /// Kept for source compatibility.
   public let useUntypedTemplateResolver: Bool
 
   /// Creates an instance of `DivFlagsInfo`.

@@ -313,8 +313,8 @@ enum ExpectedValue: Decodable {
 
 extension DivVariable: Swift.Decodable {
   public init(from decoder: Decoder) throws {
-    self = try DivTemplates(dictionary: [:]).parseValue(
-      type: DivVariableTemplate.self,
+    self = try DivTemplates.empty.parseValue(
+      type: DivVariable.self,
       from: JSONDictionary(from: decoder).untypedJSON()
     ).unwrap()
   }

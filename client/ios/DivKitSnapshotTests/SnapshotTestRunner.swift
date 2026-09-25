@@ -186,7 +186,7 @@ final class SnapshotTestRunner {
       case "div_action":
         let actionDictionary: [String: any Sendable] = try stepDictionary.getField("action")
         let action = try DivTemplates.empty.parseValue(
-          type: DivActionTemplate.self,
+          type: DivAction.self,
           from: actionDictionary
         ).unwrap()
         steps.append(.action(action))

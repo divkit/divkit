@@ -34,7 +34,7 @@ public final class InputAccessoryViewExtensionHandler: DivExtensionHandler {
         let action = DivTemplates
           .empty
           .parseValue(
-            type: DivActionTemplate.self, from: $0
+            type: DivAction.self, from: $0
           ).value?.uiAction(context: context)
         if case let .divAction(params) = action?.payload {
           return { [weak self] in

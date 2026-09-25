@@ -1,4 +1,5 @@
 {
   "lang": "swift",
-  "header": "// Generated code. Do not modify.\n\n@testable import DivKit\nimport Foundation\nimport Serialization\nimport VGSL\n\nimport enum DivKit.Expression\n"
+  "header": "// Generated code. Do not modify.\n\n@testable import DivKit\nimport Foundation\nimport Serialization\nimport VGSL\n\nimport enum DivKit.Expression\n",
+  "generateTemplates": false
 }

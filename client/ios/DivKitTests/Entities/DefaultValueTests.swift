@@ -16,7 +16,7 @@ final class DefaultValueTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithPropertyWithDefaultValue? {
   try readEntity(
-    EntityWithPropertyWithDefaultValueTemplate.self,
+    EntityWithPropertyWithDefaultValue.self,
     fileName: "default_value/\(fileName)"
   )
 }

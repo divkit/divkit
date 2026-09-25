@@ -289,7 +289,7 @@ private func makeBlock(
   fromFile filename: String,
   context: DivBlockModelingContext = .default
 ) throws -> Block {
-  try DivStateTemplate.make(
+  try DivState.make(
     fromFile: filename,
     subdirectory: "div-state",
     context: context

@@ -95,16 +95,19 @@ final class PropertyTests: XCTestCase {
     }
   }
 
-  func test_TemplateTypeIsUnknown_ThrowsError() throws {
-    XCTAssertThrowsError(
-      try readEntity("test_property_template_unknown_type")
+  func test_TemplateTypeIsUnknown_ReturnsError() throws {
+    let result = try readEntityWithResult(
+      fileName: "property/test_property_template_unknown_type"
     )
+
+    XCTAssertNil(result.value)
+    XCTAssertNotNil(result.errors)
   }
 }
 
 private func readEntity(_ fileName: String) throws -> EntityWithRequiredProperty? {
   try readEntity(
-    EntityWithRequiredPropertyTemplate.self,
+    EntityWithRequiredProperty.self,
     fileName: "property/\(fileName)"
   )
 }

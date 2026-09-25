@@ -40,7 +40,7 @@ final class OptionalOptionalStringEnumPropertyTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithOptionalStringEnumProperty? {
   try readEntity(
-    EntityWithOptionalStringEnumPropertyTemplate.self,
+    EntityWithOptionalStringEnumProperty.self,
     fileName: "optional_string_enum_property/\(fileName)"
   )
 }

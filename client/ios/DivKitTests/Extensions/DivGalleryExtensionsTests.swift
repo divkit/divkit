@@ -103,7 +103,7 @@ private func makeBlock(
   fromFile filename: String,
   context: DivBlockModelingContext = .default
 ) throws -> Block {
-  try DivGalleryTemplate.make(
+  try DivGallery.make(
     fromFile: filename,
     subdirectory: "div-gallery",
     context: context

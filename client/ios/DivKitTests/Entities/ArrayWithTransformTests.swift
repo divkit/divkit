@@ -28,7 +28,7 @@ final class ArrayWithTransformTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithArrayWithTransform? {
   try readEntity(
-    EntityWithArrayWithTransformTemplate.self,
+    EntityWithArrayWithTransform.self,
     fileName: "array_with_transform/\(fileName)"
   )
 }

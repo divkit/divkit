@@ -65,7 +65,7 @@ final class OptionalOptionalComplexPropertyTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithOptionalComplexProperty? {
   try readEntity(
-    EntityWithOptionalComplexPropertyTemplate.self,
+    EntityWithOptionalComplexProperty.self,
     fileName: "optional_complex_property/\(fileName)"
   )
 }

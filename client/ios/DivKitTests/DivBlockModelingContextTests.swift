@@ -137,7 +137,7 @@ final class DivBlockModelingContextTests: XCTestCase {
   func test_WhenHasNoExtensionHandler_AddsErrorToErrorStorage() throws {
     let context = DivBlockModelingContext()
 
-    _ = try DivDataTemplate.make(
+    _ = try DivData.make(
       fromFile: "div-with-extension-handler",
       subdirectory: "div-context",
       context: context

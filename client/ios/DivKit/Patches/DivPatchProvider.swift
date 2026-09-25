@@ -53,7 +53,7 @@ public func parseDivPatch(_ data: Data) throws -> DivPatch {
     dictionary: dataJson["templates"] as? JsonDictionary ?? [:]
   )
   return try templates.parseValue(
-    type: DivPatchTemplate.self,
+    type: DivPatch.self,
     from: dataJson["patch"] as? JsonDictionary ?? [:]
   ).unwrap()
 }

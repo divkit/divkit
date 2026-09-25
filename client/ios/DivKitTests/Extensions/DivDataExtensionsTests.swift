@@ -123,7 +123,7 @@ private func makeBlock(
   fromFile filename: String,
   context: DivBlockModelingContext = .default
 ) throws -> Block {
-  try DivDataTemplate.make(
+  try DivData.make(
     fromFile: filename,
     subdirectory: "div-data",
     context: context

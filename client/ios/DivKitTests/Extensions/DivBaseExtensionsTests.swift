@@ -1,6 +1,7 @@
 @testable import DivKit
 import DivKitTestsSupport
 @testable import LayoutKit
+import Serialization
 import VGSL
 import XCTest
 
@@ -700,7 +701,7 @@ final class DivBaseExtensionsTests: XCTestCase {
   }
 
   func test_WithPagerItemsReuseIds() throws {
-    let block = try DivPagerTemplate.makeBlock(
+    let block = try DivPager.makeBlock(
       fromFile: "div-reuse-id-pager-items",
       context: DivBlockModelingContext()
     ) as! DecoratingBlock
@@ -749,7 +750,7 @@ private func makeBlock(
   fromFile filename: String,
   context: DivBlockModelingContext
 ) throws -> Block {
-  try DivTextTemplate.makeBlock(fromFile: filename, context: context)
+  try DivText.makeBlock(fromFile: filename, context: context)
 }
 
 private func assertEqual(_ actual: [DivError], _ expected: [DivError]) {
@@ -759,7 +760,7 @@ private func assertEqual(_ actual: [DivError], _ expected: [DivError]) {
   )
 }
 
-extension TemplateValue where ResolvedValue: DivBlockModeling {
+extension ContextDeserializable where Self: DivBlockModeling {
   fileprivate static func makeBlock(
     fromFile filename: String,
     context: DivBlockModelingContext

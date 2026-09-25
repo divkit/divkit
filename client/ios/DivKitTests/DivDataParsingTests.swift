@@ -9,36 +9,10 @@ final class DivDataParsingTests: XCTestCase {
 }
 
 private func runTest(_ data: TestData) {
-  let typedResult = DivData.resolve(
-    card: data.card,
-    templates: data.templates,
-    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: false)
-  )
-  let divTemplates = DivTemplates(dictionary: data.templates)
-  let preParsedTemplatesResult = DivData.resolve(
-    card: data.card,
-    templates: divTemplates,
-    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: false)
-  )
-  let untypedResult = DivData.resolve(
-    card: data.card,
-    templates: data.templates,
-    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
-  )
-  let rawTemplates = DivTemplates(
-    dictionary: data.templates,
-    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
-  )
-  let sharedTemplatesColdResult = DivData.resolve(
-    card: data.card,
-    templates: rawTemplates,
-    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
-  )
-  let sharedTemplatesWarmResult = DivData.resolve(
-    card: data.card,
-    templates: rawTemplates,
-    flagsInfo: DivFlagsInfo(useUntypedTemplateResolver: true)
-  )
+  let untypedResult = DivData.resolve(card: data.card, templates: data.templates)
+  let sharedTemplates = DivTemplates(dictionary: data.templates)
+  let sharedTemplatesColdResult = DivData.resolve(card: data.card, templates: sharedTemplates)
+  let sharedTemplatesWarmResult = DivData.resolve(card: data.card, templates: sharedTemplates)
   let expectedResult = DivData.resolve(card: data.expectedCard, templates: [:])
 
   XCTAssertNil(
@@ -46,36 +20,24 @@ private func runTest(_ data: TestData) {
     "Test data corrupted: expected result contains errors"
   )
 
-  assertEqual(typedResult.value, expectedResult.value)
-  assertEqual(preParsedTemplatesResult.value, expectedResult.value)
   assertEqual(untypedResult.value, expectedResult.value)
-  assertEqual(sharedTemplatesColdResult.value, expectedResult.value)
-  assertEqual(sharedTemplatesWarmResult.value, expectedResult.value)
+  assertEqual(sharedTemplatesColdResult.value, untypedResult.value)
+  assertEqual(sharedTemplatesWarmResult.value, untypedResult.value)
 
   XCTAssertEqual(
-    typedResult.errorsOrWarnings?.count ?? 0,
+    untypedResult.errorsOrWarnings?.count ?? 0,
     data.expectedErrorCount,
     "Expected error count does not match actual result"
   )
   XCTAssertEqual(
-    preParsedTemplatesResult.errorsOrWarnings?.count ?? 0,
-    typedResult.errorsOrWarnings?.count ?? 0,
-    "Pre-parsed typed templates should produce the same number of warnings/errors"
-  )
-  XCTAssertEqual(
-    untypedResult.errorsOrWarnings?.count ?? 0,
-    typedResult.errorsOrWarnings?.count ?? 0,
-    "Untyped pipeline should produce same number of warnings/errors as typed"
-  )
-  XCTAssertEqual(
     sharedTemplatesColdResult.errorsOrWarnings?.count ?? 0,
-    typedResult.errorsOrWarnings?.count ?? 0,
-    "Shared untyped templates should produce the same number of warnings/errors (cold cache)"
+    untypedResult.errorsOrWarnings?.count ?? 0,
+    "Shared templates should produce the same number of warnings/errors (cold cache)"
   )
   XCTAssertEqual(
     sharedTemplatesWarmResult.errorsOrWarnings?.count ?? 0,
-    typedResult.errorsOrWarnings?.count ?? 0,
-    "Shared untyped templates should produce the same number of warnings/errors (warm cache)"
+    untypedResult.errorsOrWarnings?.count ?? 0,
+    "Shared templates should produce the same number of warnings/errors (warm cache)"
   )
 }
 

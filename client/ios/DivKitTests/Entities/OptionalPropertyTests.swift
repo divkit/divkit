@@ -46,7 +46,7 @@ final class OptionalPropertyTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithOptionalProperty? {
   try readEntity(
-    EntityWithOptionalPropertyTemplate.self,
+    EntityWithOptionalProperty.self,
     fileName: "optional_property/\(fileName)"
   )
 }

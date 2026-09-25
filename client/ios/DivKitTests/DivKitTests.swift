@@ -33,7 +33,7 @@ final class DivKitTests: XCTestCase {
   }
 }
 
-extension TemplateValue where ResolvedValue: DivBlockModeling {
+extension ContextDeserializable where Self: DivBlockModeling {
   static func make(
     fromFile filename: String,
     subdirectory: String? = nil,
@@ -44,8 +44,7 @@ extension TemplateValue where ResolvedValue: DivBlockModeling {
       subdirectory: "unit_test_data/" + (subdirectory ?? "")
     )
     let templatesDict = (dict["templates"] as? [String: Any]) ?? [:]
-    let templates = DivTemplates(dictionary: templatesDict)
-    let div = templates.parseValue(type: Self.self, from: dict)
+    let div = DivTemplates(dictionary: templatesDict).parseValue(type: Self.self, from: dict)
     return try div.value!.makeBlock(context: context)
   }
 }

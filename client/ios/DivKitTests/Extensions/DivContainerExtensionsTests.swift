@@ -799,7 +799,7 @@ final class DivContainerExtensionsTests: XCTestCase {
 }
 
 private func makeBlock(fromFile filename: String) throws -> Block {
-  try DivContainerTemplate.make(
+  try DivContainer.make(
     fromFile: filename,
     subdirectory: "div-container",
     context: .default

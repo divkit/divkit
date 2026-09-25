@@ -26,7 +26,7 @@ final class SimplePropertiesTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithSimpleProperties? {
   try readEntity(
-    EntityWithSimplePropertiesTemplate.self,
+    EntityWithSimpleProperties.self,
     fileName: "simple_properties/\(fileName)"
   )
 }

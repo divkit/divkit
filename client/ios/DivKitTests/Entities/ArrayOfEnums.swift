@@ -45,7 +45,7 @@ final class ArrayOfEnumsTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithArrayOfEnums? {
   try readEntity(
-    EntityWithArrayOfEnumsTemplate.self,
+    EntityWithArrayOfEnums.self,
     fileName: "array_of_enums/\(fileName)"
   )
 }

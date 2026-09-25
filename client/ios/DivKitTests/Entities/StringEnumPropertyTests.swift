@@ -40,7 +40,7 @@ final class StringEnumPropertyTests: XCTestCase {
 
 private func readEntity(_ fileName: String) throws -> EntityWithStringEnumProperty? {
   try readEntity(
-    EntityWithStringEnumPropertyTemplate.self,
+    EntityWithStringEnumProperty.self,
     fileName: "string_enum_property/\(fileName)"
   )
 }

@@ -68,7 +68,7 @@ final class DivPagerExtensionsTests: XCTestCase {
   }
 
   private func makePagerBlock() throws -> PagerBlock {
-    let block = try DivPagerTemplate.make(
+    let block = try DivPager.make(
       fromFile: "pager_gone_with_infinite_scroll",
       subdirectory: "div-pager",
       context: DivBlockModelingContext()
