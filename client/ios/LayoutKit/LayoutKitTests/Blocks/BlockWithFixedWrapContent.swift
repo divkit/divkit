@@ -10,6 +10,8 @@ final class BlockWithFixedWrapContent: BlockWithTraits {
 
   var heightTrait: LayoutTrait
 
+  var intrinsicHeightForWidth: ((CGFloat) -> CGFloat)?
+
   var intrinsicContentWidth: CGFloat {
     width
   }
@@ -18,10 +20,12 @@ final class BlockWithFixedWrapContent: BlockWithTraits {
     width: CGFloat = 0,
     height: CGFloat = 0,
     constrainedHorizontally: Bool = false,
-    constrainedVertically: Bool = false
+    constrainedVertically: Bool = false,
+    intrinsicHeightForWidth: ((CGFloat) -> CGFloat)? = nil
   ) {
     self.width = width
     self.height = height
+    self.intrinsicHeightForWidth = intrinsicHeightForWidth
     self.widthTrait = .intrinsic(
       constrained: constrainedHorizontally,
       minSize: 0,
@@ -34,8 +38,8 @@ final class BlockWithFixedWrapContent: BlockWithTraits {
     )
   }
 
-  func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
-    height
+  func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
+    intrinsicHeightForWidth?(width) ?? height
   }
 }
 

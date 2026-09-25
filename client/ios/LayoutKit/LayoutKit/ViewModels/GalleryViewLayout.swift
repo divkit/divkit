@@ -223,9 +223,17 @@ extension GalleryViewModel {
     }
     let crossInsets = self.crossInsets(forSize: size)
     let crossSpacing = metrics.crossSpacing
-    let maxItemHeight: CGFloat = if let size {
-      (size.height - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
-        CGFloat(columnCount)
+    let boundedCrossAxis: CGFloat? = if let size {
+      max(
+        0,
+        (size.height - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
+          CGFloat(columnCount)
+      )
+    } else {
+      nil
+    }
+    let maxItemHeight: CGFloat = if let boundedCrossAxis {
+      boundedCrossAxis
     } else if let maxNonResizableHeight = blocks
       .maxHeightOfVerticallyNonResizableBlocks(for: widths) {
       maxNonResizableHeight
@@ -237,9 +245,12 @@ extension GalleryViewModel {
     var currentColumnIndex = 0
     return zip3(items, widths, gaps.dropFirst()).map { item, width, gap in
       let block = item.content
-      let height = block.isVerticallyResizable
-        ? clamp(maxItemHeight, min: block.minHeight, max: block.maxHeight)
-        : block.heightOfVerticallyNonResizableBlock(forWidth: width)
+      let height = GalleryCrossAxisSizing.layoutHeight(
+        for: block,
+        maxCrossAxisSize: maxItemHeight,
+        boundedCrossAxis: boundedCrossAxis,
+        width: width
+      )
       let minY = crossInsets.leading + (maxItemHeight + crossSpacing) * CGFloat(currentColumnIndex)
       let maxY = minY + maxItemHeight
       let frame = CGRect(
@@ -260,17 +271,19 @@ extension GalleryViewModel {
   private func verticallyOrientedFrames(fitting size: CGSize?) -> [CGRect] {
     let crossInsets = self.crossInsets(forSize: size)
     let crossSpacing = metrics.crossSpacing
-    let maxItemWidth: CGFloat
-    if let size {
-      maxItemWidth = (size.width - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
-        CGFloat(columnCount)
+    let boundedCrossAxis: CGFloat? = if let size {
+      max(
+        0,
+        (size.width - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
+          CGFloat(columnCount)
+      )
     } else {
-      let blocks = items.map(\.content)
-      if let maxNonResizebleWidth = blocks.maxWidthOfHorizontallyNonResizableBlocks {
-        maxItemWidth = maxNonResizebleWidth
-      } else {
-        maxItemWidth = 0
-      }
+      nil
+    }
+    let maxItemWidth: CGFloat = if let boundedCrossAxis {
+      boundedCrossAxis
+    } else {
+      items.map(\.content).maxWidthOfHorizontallyNonResizableBlocks ?? 0
     }
 
     let gaps = self.gaps(forSize: size)
@@ -279,9 +292,11 @@ extension GalleryViewModel {
     var currentColumnIndex = 0
     return zip(items, gaps.dropFirst()).map { item, gap in
       let block = item.content
-      let width = block.isHorizontallyResizable
-        ? clamp(maxItemWidth, min: block.minWidth, max: block.maxWidth)
-        : block.widthOfHorizontallyNonResizableBlock
+      let width = GalleryCrossAxisSizing.layoutWidth(
+        for: block,
+        maxCrossAxisSize: maxItemWidth,
+        boundedCrossAxis: boundedCrossAxis
+      )
       let height = block.isVerticallyResizable
         ? clamp(max((size?.height ?? 0) - paddings, 0), min: block.minHeight, max: block.maxHeight)
         : block.heightOfVerticallyNonResizableBlock(forWidth: width)
@@ -303,7 +318,12 @@ extension GalleryViewModel {
   }
 
   private func crossInsets(forSize size: CGSize?) -> SideInsets {
-    metrics.crossInsetMode.insets(forSize: size?.dimension(in: direction) ?? 0)
+    metrics.crossInsetMode.insets(forSize: crossAxisViewportSize(forSize: size))
+  }
+
+  private func crossAxisViewportSize(forSize size: CGSize?) -> CGFloat {
+    guard let size else { return 0 }
+    return direction.isHorizontal ? size.height : size.width
   }
 
   private func lastGap(forSize size: CGSize?) -> CGFloat {

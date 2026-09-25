@@ -84,6 +84,107 @@ struct GalleryViewLayoutTests {
   }
 
   @Test
+  func horizontalGallery_constrainedCrossAxisHeight_respectsCrossInsets() throws {
+    let galleryWidth: CGFloat = 300
+    let galleryHeight: CGFloat = 100
+    let crossPadding: CGFloat = 10
+    let availableCrossAxisHeight = galleryHeight - crossPadding * 2
+
+    let model = GalleryViewModel(
+      items: [
+        GalleryViewModel.Item(
+          crossAlignment: .leading,
+          content: BlockWithFixedWrapContent(
+            width: 120,
+            height: ConstrainedCrossAxisGalleryFixtures.tallIntrinsicCrossAxisSize,
+            constrainedVertically: true
+          )
+        ),
+      ],
+      metrics: ConstrainedCrossAxisGalleryFixtures.galleryMetrics(crossPadding: crossPadding),
+      path: UIElementPath("horizontal-gallery-constrained-height"),
+      direction: .horizontal
+    )
+
+    let layout = GalleryViewLayout(
+      model: model,
+      boundsSize: CGSize(width: galleryWidth, height: galleryHeight)
+    )
+
+    let firstFrame = try #require(layout.blockFrames.first)
+
+    #expect(firstFrame.minY == crossPadding)
+    #expect(firstFrame.height == availableCrossAxisHeight)
+    #expect(firstFrame.maxY == galleryHeight - crossPadding)
+  }
+
+  @Test
+  func horizontalGallery_degenerateBoundedCrossAxis_clampsCrossAxisViewportToZero() throws {
+    let galleryWidth: CGFloat = 300
+    let galleryHeight: CGFloat = 8
+    let crossPadding: CGFloat = 10
+    let itemHeight: CGFloat = 20
+
+    let model = GalleryViewModel(
+      items: [
+        GalleryViewModel.Item(
+          crossAlignment: .center,
+          content: BlockWithFixedWrapContent(width: 120, height: itemHeight)
+        ),
+      ],
+      metrics: ConstrainedCrossAxisGalleryFixtures.galleryMetrics(crossPadding: crossPadding),
+      path: UIElementPath("horizontal-gallery-degenerate-cross-axis-viewport"),
+      direction: .horizontal
+    )
+
+    let layout = GalleryViewLayout(
+      model: model,
+      boundsSize: CGSize(width: galleryWidth, height: galleryHeight)
+    )
+
+    let firstFrame = try #require(layout.blockFrames.first)
+
+    #expect(galleryHeight < crossPadding * 2)
+    #expect(firstFrame.height == itemHeight)
+    #expect(firstFrame.minY == 0)
+  }
+
+  @Test
+  func verticalGallery_constrainedCrossAxisWidth_respectsCrossInsets() throws {
+    let galleryWidth: CGFloat = 300
+    let galleryHeight: CGFloat = 100
+    let crossPadding: CGFloat = 10
+    let availableCrossAxisWidth = galleryWidth - crossPadding * 2
+
+    let model = GalleryViewModel(
+      items: [
+        GalleryViewModel.Item(
+          crossAlignment: .leading,
+          content: BlockWithFixedWrapContent(
+            width: ConstrainedCrossAxisGalleryFixtures.wideIntrinsicCrossAxisSize,
+            height: 60,
+            constrainedHorizontally: true
+          )
+        ),
+      ],
+      metrics: ConstrainedCrossAxisGalleryFixtures.galleryMetrics(crossPadding: crossPadding),
+      path: UIElementPath("vertical-gallery-constrained-width"),
+      direction: .vertical
+    )
+
+    let layout = GalleryViewLayout(
+      model: model,
+      boundsSize: CGSize(width: galleryWidth, height: galleryHeight)
+    )
+
+    let firstFrame = try #require(layout.blockFrames.first)
+
+    #expect(firstFrame.minX == crossPadding)
+    #expect(firstFrame.width == availableCrossAxisWidth)
+    #expect(firstFrame.maxX == galleryWidth - crossPadding)
+  }
+
+  @Test
   func whenHasVerticalDirection_producesSummaryHeightAndBlockMaximumWidthContentSizePlusCrossInsets(
   ) {
     let layout = GalleryViewLayout(model: Blocks.verticalCenterModel)
@@ -571,6 +672,22 @@ private enum Blocks {
 
 private let boundsSize = CGSize(width: 64, height: 64)
 private let accuracy: CGFloat = 1e-4
+
+private enum ConstrainedCrossAxisGalleryFixtures {
+  static let wideIntrinsicCrossAxisSize: CGFloat = 400
+  static let tallIntrinsicCrossAxisSize: CGFloat = 150
+
+  static func galleryMetrics(crossPadding: CGFloat) -> GalleryViewMetrics {
+    GalleryViewMetrics(
+      axialInsetMode: .fixed(values: .zero),
+      crossInsetMode: .fixed(
+        values: SideInsets(leading: crossPadding, trailing: crossPadding)
+      ),
+      spacings: [],
+      crossSpacing: 0
+    )
+  }
+}
 
 extension GalleryViewMetrics {
   fileprivate static let spacings = [CGFloat](

@@ -189,6 +189,366 @@ struct PagerViewLayoutTests {
   }
 
   @Test
+  func verticalPager_constrainedCrossAxisWidth_respectsCrossInsets() throws {
+    let pagerWidth: CGFloat = 300
+    let pagerHeight: CGFloat = 70
+    let crossPadding: CGFloat = 10
+    let pageHeight = pagerHeight * 0.9
+    let availableCrossAxisWidth = pagerWidth - crossPadding * 2
+
+    let model = GalleryViewModel(
+      items: [
+        ConstrainedCrossAxisPagerFixtures.verticalPageItem(
+          intrinsicCrossAxisWidth: ConstrainedCrossAxisPagerFixtures.wideIntrinsicCrossAxisSize
+        ),
+        ConstrainedCrossAxisPagerFixtures.verticalPageItem(intrinsicCrossAxisWidth: 100),
+      ],
+      metrics: ConstrainedCrossAxisPagerFixtures.verticalPagerMetrics(
+        crossPadding: crossPadding,
+        itemCount: 2
+      ),
+      path: UIElementPath("vertical-pager-constrained-width"),
+      direction: .vertical
+    )
+
+    let layout = PagerViewLayout(
+      model: model,
+      layoutMode: .pageSize(RelativeValue(rawValue: 0.9)),
+      boundsSize: CGSize(width: pagerWidth, height: pagerHeight)
+    )
+
+    #expect(layout.blockFrames.count == 2)
+    let firstFrame = try #require(layout.blockFrames.first)
+
+    #expect(firstFrame.minX == crossPadding)
+    #expect(firstFrame.width == availableCrossAxisWidth)
+    #expect(firstFrame.height == pageHeight)
+
+    let secondFrame = layout.blockFrames[1]
+    #expect(secondFrame.minX == crossPadding)
+    #expect(secondFrame.width == 100)
+  }
+
+  @Test
+  func horizontalPager_constrainedCrossAxisHeight_respectsCrossInsets() throws {
+    let pagerWidth: CGFloat = 300
+    let pagerHeight: CGFloat = 100
+    let crossPadding: CGFloat = 10
+    let pageWidth = pagerWidth * 0.9
+    let availableCrossAxisHeight = pagerHeight - crossPadding * 2
+
+    let model = GalleryViewModel(
+      items: [
+        ConstrainedCrossAxisPagerFixtures.horizontalPageItem(
+          intrinsicCrossAxisHeight: ConstrainedCrossAxisPagerFixtures.tallIntrinsicCrossAxisSize
+        ),
+        ConstrainedCrossAxisPagerFixtures.horizontalPageItem(intrinsicCrossAxisHeight: 40),
+      ],
+      metrics: ConstrainedCrossAxisPagerFixtures.horizontalPagerMetrics(
+        crossPadding: crossPadding,
+        itemCount: 2
+      ),
+      path: UIElementPath("horizontal-pager-constrained-height"),
+      direction: .horizontal
+    )
+
+    let layout = PagerViewLayout(
+      model: model,
+      layoutMode: .pageSize(RelativeValue(rawValue: 0.9)),
+      boundsSize: CGSize(width: pagerWidth, height: pagerHeight)
+    )
+
+    #expect(layout.blockFrames.count == 2)
+    let firstFrame = try #require(layout.blockFrames.first)
+
+    #expect(firstFrame.minY == crossPadding)
+    #expect(firstFrame.height == availableCrossAxisHeight)
+    #expect(firstFrame.width == pageWidth)
+
+    let secondFrame = layout.blockFrames[1]
+    #expect(secondFrame.minY == crossPadding)
+    #expect(secondFrame.height == 40)
+  }
+
+  @Test
+  func verticalPager_constrainedCrossAxisWidth_withZeroBounds_doesNotCrash() {
+    let crossPadding: CGFloat = 10
+    let model = GalleryViewModel(
+      items: [
+        ConstrainedCrossAxisPagerFixtures.verticalPageItem(
+          intrinsicCrossAxisWidth: ConstrainedCrossAxisPagerFixtures.wideIntrinsicCrossAxisSize
+        ),
+      ],
+      metrics: ConstrainedCrossAxisPagerFixtures.verticalPagerMetrics(
+        crossPadding: crossPadding,
+        itemCount: 1
+      ),
+      path: UIElementPath("vertical-pager-zero-bounds"),
+      direction: .vertical
+    )
+
+    let layout = PagerViewLayout(
+      model: model,
+      layoutMode: .pageSize(RelativeValue(rawValue: 0.9)),
+      boundsSize: .zero
+    )
+
+    #expect(layout.blockFrames.isEmpty)
+    #expect(layout.blockPages.isEmpty)
+    #expect(layout.contentSize == .zero)
+  }
+
+  @Test
+  func verticalPager_pageContentSize_withZeroCrossAxis_measuresHeightAtClampedCrossAxisWidth() {
+    let scrollAxisSize: CGFloat = 200
+    let crossAxisSize: CGFloat = 0
+    let crossPadding: CGFloat = 10
+    let crossInsetSum = crossPadding * 2
+    let expectedHeight: CGFloat = 42
+
+    let pageBlock = BlockWithFixedWrapContent(
+      width: 120,
+      height: expectedHeight,
+      constrainedHorizontally: true,
+      intrinsicHeightForWidth: { width in
+        width == 0 ? expectedHeight : 999
+      }
+    )
+
+    let model = GalleryViewModel(
+      items: [
+        GalleryViewModel.Item(crossAlignment: .leading, content: pageBlock),
+      ],
+      metrics: GalleryViewMetrics(
+        axialInsetMode: .fixed(values: .zero),
+        crossInsetMode: .fixed(
+          values: SideInsets(leading: crossPadding, trailing: crossPadding)
+        ),
+        spacings: [],
+        crossSpacing: 0
+      ),
+      path: UIElementPath("vertical-pager-zero-cross-axis-page-content-size"),
+      direction: .vertical
+    )
+    let layoutMode = PagerBlock.LayoutMode.pageContentSize
+
+    let frames = model.frames(
+      fitting: PagerFittingSize(scrollAxis: scrollAxisSize, crossAxis: crossAxisSize),
+      layoutMode: layoutMode
+    )
+
+    #expect(crossAxisSize < crossInsetSum)
+    #expect(frames.first?.height == expectedHeight)
+  }
+
+  @Test
+  func verticalPager_pageContentSize_measuresHeightAtLayoutWidth() throws {
+    let pagerWidth: CGFloat = 200
+    let crossPadding: CGFloat = 10
+    let scrollAxisSize: CGFloat = 500
+    let availableCrossAxisWidth = pagerWidth - crossPadding * 2
+    let pageWidth: CGFloat = 300
+
+    let pageText = TextBlock(
+      widthTrait: .fixed(pageWidth),
+      heightTrait: .intrinsic(constrained: false, minSize: 0, maxSize: .infinity),
+      text: NSAttributedString(
+        string: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+      ),
+      accessibilityElement: nil
+    )
+
+    let model = GalleryViewModel(
+      items: [
+        GalleryViewModel.Item(crossAlignment: .leading, content: pageText),
+      ],
+      metrics: GalleryViewMetrics(
+        axialInsetMode: .fixed(values: .zero),
+        crossInsetMode: .fixed(
+          values: SideInsets(leading: crossPadding, trailing: crossPadding)
+        ),
+        spacings: [],
+        crossSpacing: 0
+      ),
+      path: UIElementPath("vertical-pager-page-content-size-layout-width"),
+      direction: .vertical
+    )
+
+    let frames = model.frames(
+      fitting: PagerFittingSize(scrollAxis: scrollAxisSize, crossAxis: pagerWidth),
+      layoutMode: .pageContentSize
+    )
+
+    let firstFrame = try #require(frames.first)
+
+    let expectedHeight = pageText.intrinsicContentHeight(forWidth: pageWidth)
+    let heightAtViewportWidth = pageText.intrinsicContentHeight(forWidth: availableCrossAxisWidth)
+
+    #expect(firstFrame.width == pageWidth)
+    #expect(firstFrame.width > availableCrossAxisWidth)
+    #expect(heightAtViewportWidth > expectedHeight)
+    #expect(firstFrame.height == expectedHeight)
+  }
+
+  @Test
+  func verticalPager_resizableCrossInsets_useCrossAxisViewportSize() throws {
+    let pagerWidth: CGFloat = 300
+    let pagerHeight: CGFloat = 70
+    let resizableInsets = InsetMode.Resizable(minValue: 10, maxViewportSize: 14)
+    let expectedCrossInset = (pagerWidth - resizableInsets.maxViewportSize) / 2
+    let availableCrossAxisWidth = pagerWidth - expectedCrossInset * 2
+
+    let model = GalleryViewModel(
+      items: [
+        ConstrainedCrossAxisPagerFixtures.verticalPageItem(
+          intrinsicCrossAxisWidth: ConstrainedCrossAxisPagerFixtures.wideIntrinsicCrossAxisSize
+        ),
+      ],
+      metrics: ConstrainedCrossAxisPagerFixtures.resizableCrossAxisPagerMetrics(
+        resizableInsets: resizableInsets,
+        itemCount: 1
+      ),
+      path: UIElementPath("vertical-pager-resizable-cross-insets"),
+      direction: .vertical
+    )
+
+    let layout = PagerViewLayout(
+      model: model,
+      layoutMode: .pageSize(RelativeValue(rawValue: 0.9)),
+      boundsSize: CGSize(width: pagerWidth, height: pagerHeight)
+    )
+
+    let firstFrame = try #require(layout.blockFrames.first)
+
+    #expect(firstFrame.minX == expectedCrossInset)
+    #expect(firstFrame.width == availableCrossAxisWidth)
+    #expect(firstFrame.maxX == pagerWidth - expectedCrossInset)
+  }
+
+  @Test
+  func horizontalPager_resizableCrossInsets_useCrossAxisViewportSize() throws {
+    let pagerWidth: CGFloat = 300
+    let pagerHeight: CGFloat = 100
+    let resizableInsets = InsetMode.Resizable(minValue: 10, maxViewportSize: 14)
+    let expectedCrossInset = (pagerHeight - resizableInsets.maxViewportSize) / 2
+    let availableCrossAxisHeight = pagerHeight - expectedCrossInset * 2
+
+    let model = GalleryViewModel(
+      items: [
+        ConstrainedCrossAxisPagerFixtures.horizontalPageItem(
+          intrinsicCrossAxisHeight: ConstrainedCrossAxisPagerFixtures.tallIntrinsicCrossAxisSize
+        ),
+      ],
+      metrics: ConstrainedCrossAxisPagerFixtures.resizableCrossAxisPagerMetrics(
+        resizableInsets: resizableInsets,
+        itemCount: 1
+      ),
+      path: UIElementPath("horizontal-pager-resizable-cross-insets"),
+      direction: .horizontal
+    )
+
+    let layout = PagerViewLayout(
+      model: model,
+      layoutMode: .pageSize(RelativeValue(rawValue: 0.9)),
+      boundsSize: CGSize(width: pagerWidth, height: pagerHeight)
+    )
+
+    let firstFrame = try #require(layout.blockFrames.first)
+
+    #expect(firstFrame.minY == expectedCrossInset)
+    #expect(firstFrame.height == availableCrossAxisHeight)
+    #expect(firstFrame.maxY == pagerHeight - expectedCrossInset)
+  }
+
+  @Test
+  func horizontalPager_constrainedCrossAxisHeight_withIndefiniteCrossAxis_usesIntrinsicHeight(
+  ) throws {
+    let pagerWidth: CGFloat = 300
+    let crossPadding: CGFloat = 10
+    let childHeight: CGFloat = 60
+    let layoutMode = PagerBlock.LayoutMode.pageSize(RelativeValue(rawValue: 0.9))
+
+    let model = GalleryViewModel(
+      items: [
+        ConstrainedCrossAxisPagerFixtures.horizontalPageItem(intrinsicCrossAxisHeight: childHeight),
+      ],
+      metrics: ConstrainedCrossAxisPagerFixtures.horizontalPagerMetrics(
+        crossPadding: crossPadding,
+        itemCount: 1
+      ),
+      path: UIElementPath("horizontal-pager-indefinite-cross-axis-height"),
+      direction: .horizontal
+    )
+
+    let fittingSize = PagerFittingSize(scrollAxis: pagerWidth, crossAxis: nil)
+    let frames = model.frames(fitting: fittingSize, layoutMode: layoutMode)
+
+    let firstFrame = try #require(frames.first)
+
+    #expect(firstFrame.height == childHeight)
+    #expect(model.intrinsicPagerSize(forWidth: pagerWidth, layoutMode: layoutMode).height
+      == crossPadding * 2 + childHeight
+    )
+  }
+
+  @Test
+  func horizontalPager_constrainedCrossAxisHeight_withZeroCrossAxis_clampsToZero() {
+    let pagerWidth: CGFloat = 300
+    let crossPadding: CGFloat = 10
+    let childHeight: CGFloat = 60
+    let layoutMode = PagerBlock.LayoutMode.pageSize(RelativeValue(rawValue: 0.9))
+
+    let model = GalleryViewModel(
+      items: [
+        ConstrainedCrossAxisPagerFixtures.horizontalPageItem(intrinsicCrossAxisHeight: childHeight),
+      ],
+      metrics: ConstrainedCrossAxisPagerFixtures.horizontalPagerMetrics(
+        crossPadding: crossPadding,
+        itemCount: 1
+      ),
+      path: UIElementPath("horizontal-pager-zero-cross-axis-height"),
+      direction: .horizontal
+    )
+
+    let frames = model.frames(
+      fitting: PagerFittingSize(scrollAxis: pagerWidth, crossAxis: 0),
+      layoutMode: layoutMode
+    )
+
+    #expect(frames.first?.height == 0)
+  }
+
+  @Test
+  func verticalPager_constrainedCrossAxisWidth_withIndefiniteCrossAxis_usesIntrinsicWidth() throws {
+    let pagerHeight: CGFloat = 70
+    let crossPadding: CGFloat = 10
+    let childWidth: CGFloat = 250
+    let layoutMode = PagerBlock.LayoutMode.pageSize(RelativeValue(rawValue: 0.9))
+
+    let model = GalleryViewModel(
+      items: [
+        ConstrainedCrossAxisPagerFixtures.verticalPageItem(intrinsicCrossAxisWidth: childWidth),
+      ],
+      metrics: ConstrainedCrossAxisPagerFixtures.verticalPagerMetrics(
+        crossPadding: crossPadding,
+        itemCount: 1
+      ),
+      path: UIElementPath("vertical-pager-indefinite-cross-axis-width"),
+      direction: .vertical
+    )
+
+    let fittingSize = PagerFittingSize(scrollAxis: pagerHeight, crossAxis: nil)
+    let frames = model.frames(fitting: fittingSize, layoutMode: layoutMode)
+
+    let firstFrame = try #require(frames.first)
+
+    #expect(firstFrame.width == childWidth)
+    #expect(model.intrinsicPagerSize(forWidth: nil, layoutMode: layoutMode).width
+      == crossPadding * 2 + childWidth
+    )
+  }
+
+  @Test
   func verticalNeighbouredLayout_centerAlignment() {
     let viewportHeight: CGFloat = 390
     let neighbourPageHeight: CGFloat = 10
@@ -415,6 +775,46 @@ struct PagerViewLayoutTests {
     )
     #expect(intrinsicFrames[0].height == fixedPageHeight)
     #expect(intrinsicFrames[1].height == fixedPageHeight)
+  }
+
+  @Test
+  func horizontalPager_degenerateBoundedCrossAxis_clampsCrossAxisViewportToZero() {
+    let scrollAxisSize: CGFloat = 300
+    let crossAxisSize: CGFloat = 8
+    let crossPadding: CGFloat = 10
+
+    let model = GalleryViewModel(
+      items: [
+        GalleryViewModel.Item(
+          crossAlignment: .center,
+          content: TextBlock(
+            widthTrait: .fixed(120),
+            heightTrait: .weighted(.default),
+            text: NSAttributedString(string: "page"),
+            accessibilityElement: nil
+          )
+        ),
+      ],
+      metrics: GalleryViewMetrics(
+        axialInsetMode: .fixed(values: .zero),
+        crossInsetMode: .fixed(
+          values: SideInsets(leading: crossPadding, trailing: crossPadding)
+        ),
+        spacings: [],
+        crossSpacing: 0
+      ),
+      path: UIElementPath("horizontal-pager-degenerate-cross-axis-viewport"),
+      direction: .horizontal
+    )
+
+    let frames = model.frames(
+      fitting: PagerFittingSize(scrollAxis: scrollAxisSize, crossAxis: crossAxisSize),
+      layoutMode: .pageSize(RelativeValue(rawValue: 0.9))
+    )
+
+    #expect(crossAxisSize < crossPadding * 2)
+    #expect(frames.first?.height == 0)
+    #expect(frames.first?.minY == crossPadding)
   }
 
   @Test
@@ -795,4 +1195,69 @@ private func galleryModel(
     alignment: alignment,
     direction: direction
   )
+}
+
+private enum ConstrainedCrossAxisPagerFixtures {
+  static let wideIntrinsicCrossAxisSize: CGFloat = 400
+  static let tallIntrinsicCrossAxisSize: CGFloat = 150
+
+  static func verticalPagerMetrics(
+    crossPadding: CGFloat,
+    itemCount: Int
+  ) -> GalleryViewMetrics {
+    pagerMetrics(crossPadding: crossPadding, itemCount: itemCount)
+  }
+
+  static func horizontalPagerMetrics(
+    crossPadding: CGFloat,
+    itemCount: Int
+  ) -> GalleryViewMetrics {
+    pagerMetrics(crossPadding: crossPadding, itemCount: itemCount)
+  }
+
+  static func resizableCrossAxisPagerMetrics(
+    resizableInsets: InsetMode.Resizable,
+    itemCount: Int
+  ) -> GalleryViewMetrics {
+    GalleryViewMetrics(
+      axialInsetMode: .fixed(values: .zero),
+      crossInsetMode: .resizable(params: resizableInsets),
+      spacings: [CGFloat](repeating: 0, times: UInt(max(0, itemCount - 1))),
+      crossSpacing: 0
+    )
+  }
+
+  static func verticalPageItem(intrinsicCrossAxisWidth: CGFloat) -> GalleryViewModel.Item {
+    GalleryViewModel.Item(
+      crossAlignment: .leading,
+      content: BlockWithFixedWrapContent(
+        width: intrinsicCrossAxisWidth,
+        constrainedHorizontally: true
+      )
+    )
+  }
+
+  static func horizontalPageItem(intrinsicCrossAxisHeight: CGFloat) -> GalleryViewModel.Item {
+    GalleryViewModel.Item(
+      crossAlignment: .leading,
+      content: BlockWithFixedWrapContent(
+        height: intrinsicCrossAxisHeight,
+        constrainedVertically: true
+      )
+    )
+  }
+
+  private static func pagerMetrics(
+    crossPadding: CGFloat,
+    itemCount: Int
+  ) -> GalleryViewMetrics {
+    GalleryViewMetrics(
+      axialInsetMode: .fixed(values: .zero),
+      crossInsetMode: .fixed(
+        values: SideInsets(leading: crossPadding, trailing: crossPadding)
+      ),
+      spacings: [CGFloat](repeating: 0, times: UInt(max(0, itemCount - 1))),
+      crossSpacing: 0
+    )
+  }
 }

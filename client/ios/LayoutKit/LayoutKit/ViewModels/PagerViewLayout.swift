@@ -311,8 +311,12 @@ extension GalleryViewModel {
     }
 
     let crossInsets = crossInsets(forFitting: fittingSize)
-    let maxElementHeight: CGFloat = if let crossAxis = fittingSize.crossAxis {
-      max(0, crossAxis - crossInsets.sum)
+    let boundedCrossAxis = GalleryCrossAxisSizing.boundedCrossAxisSize(
+      crossAxis: fittingSize.crossAxis,
+      crossInsets: crossInsets
+    )
+    let maxElementHeight: CGFloat = if let boundedCrossAxis {
+      boundedCrossAxis
     } else {
       blocks.maxHeightOfVerticallyNonResizableBlocks(for: pageWidths) ?? 0
     }
@@ -321,9 +325,12 @@ extension GalleryViewModel {
     var x = gaps[0]
     return zip3(items, pageWidths, gaps.dropFirst()).map { item, width, gap in
       let block = item.content
-      let height = block.isVerticallyResizable ?
-        clamp(maxElementHeight, min: block.minHeight, max: block.maxHeight) :
-        block.heightOfVerticallyNonResizableBlock(forWidth: width)
+      let height = GalleryCrossAxisSizing.layoutHeight(
+        for: block,
+        maxCrossAxisSize: maxElementHeight,
+        boundedCrossAxis: boundedCrossAxis,
+        width: width
+      )
       let frame = CGRect(
         x: x,
         y: item.crossAlignment.origin(of: height, minimum: minY, maximum: minY + maxElementHeight),
@@ -339,10 +346,18 @@ extension GalleryViewModel {
     fitting fittingSize: PagerFittingSize,
     layoutMode: PagerBlock.LayoutMode
   ) -> [CGRect] {
+    if let scrollAxis = fittingSize.scrollAxis, scrollAxis <= 0 {
+      return []
+    }
+
     let crossInsets = self.crossInsets(forFitting: fittingSize)
     let blocks = items.map(\.content)
-    let maxWidth: CGFloat = if let crossAxis = fittingSize.crossAxis {
-      max(0, crossAxis - crossInsets.sum)
+    let boundedCrossAxis = GalleryCrossAxisSizing.boundedCrossAxisSize(
+      crossAxis: fittingSize.crossAxis,
+      crossInsets: crossInsets
+    )
+    let maxWidth: CGFloat = if let boundedCrossAxis {
+      boundedCrossAxis
     } else {
       blocks.maxWidthOfHorizontallyNonResizableBlocks ?? 0
     }
@@ -351,11 +366,18 @@ extension GalleryViewModel {
 
     let axialInsets = self.axialInsets(forFitting: fittingSize)
     let itemSpacing = metrics.spacings.first ?? 0
-    let heights = blocks.map { block in
+    let layoutWidths = blocks.map {
+      GalleryCrossAxisSizing.layoutWidth(
+        for: $0,
+        maxCrossAxisSize: maxWidth,
+        boundedCrossAxis: boundedCrossAxis
+      )
+    }
+    let heights = zip(blocks, layoutWidths).map { block, layoutWidth in
       pageSize(
         for: block,
         fitting: fittingSize,
-        crossAxisReferenceSize: maxWidth,
+        crossAxisReferenceSize: layoutWidth,
         layoutMode: layoutMode,
         axialInsets: axialInsets,
         itemSpacing: itemSpacing
@@ -365,12 +387,8 @@ extension GalleryViewModel {
     let gaps = self.gaps(forFitting: fittingSize, elementMainAxisSize: heights.first)
     var y = gaps[0]
 
-    return zip3(items, heights, gaps.dropFirst()).map { item, height, gap in
-      let block = item.content
-      let width = block.isHorizontallyResizable ?
-        clamp(maxWidth, min: block.minWidth, max: block.maxWidth) :
-        block.widthOfHorizontallyNonResizableBlock
-
+    return zip3(zip(items, layoutWidths), heights, gaps.dropFirst()).map { pair, height, gap in
+      let (item, width) = pair
       let frame = CGRect(
         x: item.crossAlignment.origin(of: width, minimum: minX, maximum: minX + maxWidth),
         y: y,
@@ -384,7 +402,7 @@ extension GalleryViewModel {
   }
 
   private func crossInsets(forFitting fittingSize: PagerFittingSize) -> SideInsets {
-    metrics.crossInsetMode.insets(forSize: fittingSize.scrollAxis ?? 0)
+    metrics.crossInsetMode.insets(forSize: fittingSize.crossAxis ?? 0)
   }
 
   private func axialInsets(forFitting fittingSize: PagerFittingSize) -> SideInsets {

@@ -2,6 +2,7 @@
   "description": "Horizontal pager with paddings and items which are higher than pager",
   "platforms": [
     "android",
+    "ios",
     "web",
     "flutter"
   ],
