@@ -13,6 +13,12 @@ public final class DivText: DivBase, @unchecked Sendable {
     case middle = "middle"
   }
 
+  @frozen
+  public enum TruncatePolicy: String, CaseIterable, Sendable {
+    case grapheme = "grapheme"
+    case word = "word"
+  }
+
   public final class Ellipsis: Sendable {
     public let actions: [DivAction]?
     public let imageBuilder: ImageBuilder?
@@ -545,6 +551,7 @@ public final class DivText: DivBase, @unchecked Sendable {
   public let transitionOut: DivAppearanceTransition?
   public let transitionTriggers: [DivTransitionTrigger]? // at least 1 elements
   public let truncate: Expression<Truncate> // default value: end
+  public let truncatePolicy: Expression<TruncatePolicy> // default value: grapheme
   public let underline: Expression<DivLineStyle> // default value: none
   public let variableTriggers: [DivTrigger]?
   public let variables: [DivVariable]?
@@ -665,6 +672,10 @@ public final class DivText: DivBase, @unchecked Sendable {
     resolver.resolveEnum(truncate) ?? Truncate.end
   }
 
+  public func resolveTruncatePolicy(_ resolver: ExpressionResolver) -> TruncatePolicy {
+    resolver.resolveEnum(truncatePolicy) ?? TruncatePolicy.grapheme
+  }
+
   public func resolveUnderline(_ resolver: ExpressionResolver) -> DivLineStyle {
     resolver.resolveEnum(underline) ?? DivLineStyle.none
   }
@@ -767,6 +778,7 @@ public final class DivText: DivBase, @unchecked Sendable {
       transitionOut: try dictionary.getOptionalField("transition_out", transform: { (dict: [String: Any]) in try DivAppearanceTransition(dictionary: dict, context: context) }),
       transitionTriggers: try dictionary.getOptionalArray("transition_triggers", validator: Self.transitionTriggersValidator, context: context),
       truncate: try dictionary.getOptionalExpressionField("truncate", context: context),
+      truncatePolicy: try dictionary.getOptionalExpressionField("truncate_policy", context: context),
       underline: try dictionary.getOptionalExpressionField("underline", context: context),
       variableTriggers: try dictionary.getOptionalArray("variable_triggers", transform: { (dict: [String: Any]) in try? DivTrigger(dictionary: dict, context: context) }),
       variables: try dictionary.getOptionalArray("variables", transform: { (dict: [String: Any]) in try? DivVariable(dictionary: dict, context: context) }),
@@ -843,6 +855,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     transitionOut: DivAppearanceTransition? = nil,
     transitionTriggers: [DivTransitionTrigger]? = nil,
     truncate: Expression<Truncate>? = nil,
+    truncatePolicy: Expression<TruncatePolicy>? = nil,
     underline: Expression<DivLineStyle>? = nil,
     variableTriggers: [DivTrigger]? = nil,
     variables: [DivVariable]? = nil,
@@ -916,6 +929,7 @@ public final class DivText: DivBase, @unchecked Sendable {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.truncate = truncate ?? .value(.end)
+    self.truncatePolicy = truncatePolicy ?? .value(.grapheme)
     self.underline = underline ?? .value(.none)
     self.variableTriggers = variableTriggers
     self.variables = variables
@@ -1079,19 +1093,20 @@ extension DivText: Equatable {
     }
     guard
       lhs.truncate == rhs.truncate,
-      lhs.underline == rhs.underline,
-      lhs.variableTriggers == rhs.variableTriggers
+      lhs.truncatePolicy == rhs.truncatePolicy,
+      lhs.underline == rhs.underline
     else {
       return false
     }
     guard
+      lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -1172,6 +1187,7 @@ extension DivText: Serializable {
     result["transition_out"] = transitionOut?.toDictionary()
     result["transition_triggers"] = transitionTriggers?.map { $0.rawValue }
     result["truncate"] = truncate.toValidSerializationValue()
+    result["truncate_policy"] = truncatePolicy.toValidSerializationValue()
     result["underline"] = underline.toValidSerializationValue()
     result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }

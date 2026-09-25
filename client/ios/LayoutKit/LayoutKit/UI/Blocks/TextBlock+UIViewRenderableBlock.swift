@@ -33,6 +33,7 @@ extension TextBlock {
       source: Variable { [weak self] in self },
       accessibility: accessibilityElement,
       truncationToken: truncationToken,
+      truncationPolicy: truncationPolicy,
       canSelect: canSelect,
       additionalTextInsets: additionalTextInsets,
       intrinsicHeight: intrinsicHeight,
@@ -178,6 +179,7 @@ private final class TextBlockView: UIView {
     let source: Variable<AnyObject?>
     let accessibility: AccessibilityElement?
     let truncationToken: NSAttributedString?
+    let truncationPolicy: TextTruncationPolicy
     let canSelect: Bool
     let additionalTextInsets: EdgeInsets
     let intrinsicHeight: GetIntrinsicTextHeight?
@@ -298,6 +300,7 @@ private final class TextBlockView: UIView {
       rect: rect,
       textInsets: model.additionalTextInsets,
       truncationToken: model.truncationToken,
+      truncationPolicy: model.truncationPolicy,
       actionKey: RunWithBoundsAttribute.Key,
       backgroundKey: BackgroundAttribute.Key,
       borderKey: BorderAttribute.Key,
@@ -651,6 +654,7 @@ extension TextBlockView.Model {
       source: source,
       accessibility: accessibility,
       truncationToken: truncationToken,
+      truncationPolicy: truncationPolicy,
       canSelect: canSelect,
       additionalTextInsets: additionalTextInsets,
       intrinsicHeight: intrinsicHeight,

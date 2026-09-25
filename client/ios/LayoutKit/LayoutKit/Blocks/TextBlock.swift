@@ -59,6 +59,7 @@ public final class TextBlock: BlockWithTraits {
   public let tightenWidth: Bool
   public let additionalTextInsets: EdgeInsets
   public let truncationToken: NSAttributedString?
+  public let truncationPolicy: TextTruncationPolicy
   public let truncationImages: [InlineImage]
   public let autoEllipsize: Bool
   public let path: UIElementPath?
@@ -113,6 +114,7 @@ public final class TextBlock: BlockWithTraits {
     images: [InlineImage] = [],
     accessibilityElement: AccessibilityElement?,
     truncationToken: NSAttributedString? = nil,
+    truncationPolicy: TextTruncationPolicy = .grapheme,
     truncationImages: [TextBlock.InlineImage] = [],
     additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
@@ -132,6 +134,7 @@ public final class TextBlock: BlockWithTraits {
     self.accessibilityElement = accessibilityElement
     self.canSelect = canSelect
     self.tightenWidth = tightenWidth
+    self.truncationPolicy = truncationPolicy
     self.truncationImages = truncationImages
     if let truncationToken {
       (self.truncationToken, self.truncationAttachments) = setImagePlaceholders(
@@ -157,6 +160,7 @@ public final class TextBlock: BlockWithTraits {
     minNumberOfHiddenLines: Int = 0,
     images: [InlineImage] = [],
     truncationToken: NSAttributedString? = nil,
+    truncationPolicy: TextTruncationPolicy = .grapheme,
     truncationImages: [TextBlock.InlineImage] = [],
     additionalTextInsets: EdgeInsets? = nil,
     canSelect: Bool = false,
@@ -176,6 +180,7 @@ public final class TextBlock: BlockWithTraits {
       images: images,
       accessibilityElement: .staticText(label: text.string),
       truncationToken: truncationToken,
+      truncationPolicy: truncationPolicy,
       truncationImages: truncationImages,
       additionalTextInsets: additionalTextInsets,
       canSelect: canSelect,
@@ -196,6 +201,7 @@ public final class TextBlock: BlockWithTraits {
       && lhs.images == rhs.images
       && lhs.accessibilityElement == rhs.accessibilityElement
       && lhs.tightenWidth == rhs.tightenWidth
+      && lhs.truncationPolicy == rhs.truncationPolicy
       && lhs.autoEllipsize == rhs.autoEllipsize
       && lhs.path == rhs.path
   }
@@ -244,7 +250,8 @@ public final class TextBlock: BlockWithTraits {
         width,
         maxNumberOfLines: maxIntrinsicNumberOfLines,
         minNumberOfHiddenLines: minNumberOfHiddenLines,
-        truncationToken: truncationToken
+        truncationToken: truncationToken,
+        truncationPolicy: truncationPolicy
       ) + additionalTextInsets.vertical.sum
     )
     cachedIntrinsicHeight = (width: width, height: height)
@@ -279,6 +286,7 @@ extension TextBlock: ElementStateUpdatingDefaultImpl {
       images: images,
       accessibilityElement: accessibilityElement,
       truncationToken: truncationToken,
+      truncationPolicy: truncationPolicy,
       truncationImages: truncationImages,
       additionalTextInsets: additionalTextInsets,
       canSelect: canSelect,

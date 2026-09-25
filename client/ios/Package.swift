@@ -4,7 +4,7 @@ import Foundation
 import PackageDescription
 
 let vgsl = {
-  let vgslLow = Version("7.25.1-0")
+  let vgslLow = Version("8.3.0")
   let vgslHigh = Version("9.0.0-0")
   return (
     package: Package.Dependency.package(

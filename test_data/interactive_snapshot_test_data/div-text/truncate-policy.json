@@ -1,7 +1,8 @@
 {
   "description": "Changing truncate_policy recomputes single-line and multiline text truncation.",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "div_data": {
     "card": {

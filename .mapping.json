@@ -10291,6 +10291,8 @@
   "client/ios/Tests/reference_snapshots/div-text/text_range_without_bound_414@3x_step1.png":"divkit/public/client/ios/Tests/reference_snapshots/div-text/text_range_without_bound_414@3x_step1.png",
   "client/ios/Tests/reference_snapshots/div-text/text_with_cloud_background_alignment_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-text/text_with_cloud_background_alignment_414@3x.png",
   "client/ios/Tests/reference_snapshots/div-text/text_with_cloud_background_padding_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-text/text_with_cloud_background_padding_414@3x.png",
+  "client/ios/Tests/reference_snapshots/div-text/truncate-policy_414@3x_grapheme.png":"divkit/public/client/ios/Tests/reference_snapshots/div-text/truncate-policy_414@3x_grapheme.png",
+  "client/ios/Tests/reference_snapshots/div-text/truncate-policy_414@3x_word.png":"divkit/public/client/ios/Tests/reference_snapshots/div-text/truncate-policy_414@3x_word.png",
   "client/ios/Tests/reference_snapshots/div-text/truncate_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-text/truncate_414@3x.png",
   "client/ios/Tests/reference_snapshots/div-text/underline_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-text/underline_414@3x.png",
   "client/ios/Tests/reference_snapshots/div-text/variables-rendering_414@3x.png":"divkit/public/client/ios/Tests/reference_snapshots/div-text/variables-rendering_414@3x.png",

@@ -21,6 +21,7 @@ extension TextBlock {
       minNumberOfHiddenLines: block.minNumberOfHiddenLines,
       images: block.images,
       truncationToken: nil,
+      truncationPolicy: block.truncationPolicy,
       additionalTextInsets: block.additionalTextInsets,
       canSelect: block.canSelect,
       autoEllipsize: block.autoEllipsize,

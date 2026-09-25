@@ -1620,6 +1620,8 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
 
   public typealias Truncate = DivText.Truncate
 
+  public typealias TruncatePolicy = DivText.TruncatePolicy
+
   public static let type: String = "text"
   public let parent: String?
   public let accessibility: Field<DivAccessibilityTemplate>?
@@ -1687,6 +1689,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
   public let transitionOut: Field<DivAppearanceTransitionTemplate>?
   public let transitionTriggers: Field<[DivTransitionTrigger]>? // at least 1 elements
   public let truncate: Field<Expression<Truncate>>? // default value: end
+  public let truncatePolicy: Field<Expression<TruncatePolicy>>? // default value: grapheme
   public let underline: Field<Expression<DivLineStyle>>? // default value: none
   public let variableTriggers: Field<[DivTriggerTemplate]>?
   public let variables: Field<[DivVariableTemplate]>?
@@ -1763,6 +1766,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       transitionOut: dictionary.getOptionalField("transition_out", templateToType: templateToType),
       transitionTriggers: dictionary.getOptionalArray("transition_triggers"),
       truncate: dictionary.getOptionalExpressionField("truncate"),
+      truncatePolicy: dictionary.getOptionalExpressionField("truncate_policy"),
       underline: dictionary.getOptionalExpressionField("underline"),
       variableTriggers: dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
       variables: dictionary.getOptionalArray("variables", templateToType: templateToType),
@@ -1840,6 +1844,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     transitionOut: Field<DivAppearanceTransitionTemplate>? = nil,
     transitionTriggers: Field<[DivTransitionTrigger]>? = nil,
     truncate: Field<Expression<Truncate>>? = nil,
+    truncatePolicy: Field<Expression<TruncatePolicy>>? = nil,
     underline: Field<Expression<DivLineStyle>>? = nil,
     variableTriggers: Field<[DivTriggerTemplate]>? = nil,
     variables: Field<[DivVariableTemplate]>? = nil,
@@ -1914,6 +1919,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     self.transitionOut = transitionOut
     self.transitionTriggers = transitionTriggers
     self.truncate = truncate
+    self.truncatePolicy = truncatePolicy
     self.underline = underline
     self.variableTriggers = variableTriggers
     self.variables = variables
@@ -1989,6 +1995,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     let transitionOutValue = { parent?.transitionOut?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let transitionTriggersValue = { parent?.transitionTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionTriggersValidator) ?? .noValue }()
     let truncateValue = { parent?.truncate?.resolveOptionalValue(context: context) ?? .noValue }()
+    let truncatePolicyValue = { parent?.truncatePolicy?.resolveOptionalValue(context: context) ?? .noValue }()
     let underlineValue = { parent?.underline?.resolveOptionalValue(context: context) ?? .noValue }()
     let variableTriggersValue = { parent?.variableTriggers?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
     let variablesValue = { parent?.variables?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue }()
@@ -2062,6 +2069,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
       truncateValue.errorsOrWarnings?.map { .nestedObjectError(field: "truncate", error: $0) },
+      truncatePolicyValue.errorsOrWarnings?.map { .nestedObjectError(field: "truncate_policy", error: $0) },
       underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) },
       variableTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_triggers", error: $0) },
       variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
@@ -2144,6 +2152,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       transitionOut: { transitionOutValue.value }(),
       transitionTriggers: { transitionTriggersValue.value }(),
       truncate: { truncateValue.value }(),
+      truncatePolicy: { truncatePolicyValue.value }(),
       underline: { underlineValue.value }(),
       variableTriggers: { variableTriggersValue.value }(),
       variables: { variablesValue.value }(),
@@ -2224,6 +2233,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
     var transitionOutValue: DeserializationResult<DivAppearanceTransition> = .noValue
     var transitionTriggersValue: DeserializationResult<[DivTransitionTrigger]> = { parent?.transitionTriggers?.value(validatedBy: ResolvedValue.transitionTriggersValidator) ?? .noValue }()
     var truncateValue: DeserializationResult<Expression<DivText.Truncate>> = { parent?.truncate?.value() ?? .noValue }()
+    var truncatePolicyValue: DeserializationResult<Expression<DivText.TruncatePolicy>> = { parent?.truncatePolicy?.value() ?? .noValue }()
     var underlineValue: DeserializationResult<Expression<DivLineStyle>> = { parent?.underline?.value() ?? .noValue }()
     var variableTriggersValue: DeserializationResult<[DivTrigger]> = .noValue
     var variablesValue: DeserializationResult<[DivVariable]> = .noValue
@@ -2559,6 +2569,11 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
         _ = {
           if key == "truncate" {
            truncateValue = deserialize(__dictValue).merged(with: truncateValue)
+          }
+        }()
+        _ = {
+          if key == "truncate_policy" {
+           truncatePolicyValue = deserialize(__dictValue).merged(with: truncatePolicyValue)
           }
         }()
         _ = {
@@ -2922,6 +2937,11 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
           }
         }()
         _ = {
+         if key == parent?.truncatePolicy?.link, context.templateData["truncate_policy"] == nil {
+           truncatePolicyValue = deserialize(__dictValue).orFallback(truncatePolicyValue)
+          }
+        }()
+        _ = {
          if key == parent?.underline?.link, context.templateData["underline"] == nil {
            underlineValue = deserialize(__dictValue).orFallback(underlineValue)
           }
@@ -3066,6 +3086,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
       transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
       truncateValue.errorsOrWarnings?.map { .nestedObjectError(field: "truncate", error: $0) },
+      truncatePolicyValue.errorsOrWarnings?.map { .nestedObjectError(field: "truncate_policy", error: $0) },
       underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) },
       variableTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "variable_triggers", error: $0) },
       variablesValue.errorsOrWarnings?.map { .nestedObjectError(field: "variables", error: $0) },
@@ -3148,6 +3169,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       transitionOut: { transitionOutValue.value }(),
       transitionTriggers: { transitionTriggersValue.value }(),
       truncate: { truncateValue.value }(),
+      truncatePolicy: { truncatePolicyValue.value }(),
       underline: { underlineValue.value }(),
       variableTriggers: { variableTriggersValue.value }(),
       variables: { variablesValue.value }(),
@@ -3233,6 +3255,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       transitionOut: transitionOut ?? mergedParent.transitionOut,
       transitionTriggers: transitionTriggers ?? mergedParent.transitionTriggers,
       truncate: truncate ?? mergedParent.truncate,
+      truncatePolicy: truncatePolicy ?? mergedParent.truncatePolicy,
       underline: underline ?? mergedParent.underline,
       variableTriggers: variableTriggers ?? mergedParent.variableTriggers,
       variables: variables ?? mergedParent.variables,
@@ -3313,6 +3336,7 @@ public final class DivTextTemplate: TemplateValue, @unchecked Sendable {
       transitionOut: merged.transitionOut?.tryResolveParent(templates: templates),
       transitionTriggers: merged.transitionTriggers,
       truncate: merged.truncate,
+      truncatePolicy: merged.truncatePolicy,
       underline: merged.underline,
       variableTriggers: merged.variableTriggers?.tryResolveParent(templates: templates),
       variables: merged.variables?.tryResolveParent(templates: templates),

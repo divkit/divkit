@@ -86,6 +86,16 @@ extension DivText: DivBlockModeling {
     if let lineBreakMode {
       typo = typo.with(lineBreakMode: lineBreakMode)
     }
+    let truncationPolicy: TextTruncationPolicy = if truncateMode == .end {
+      switch resolveTruncatePolicy(expressionResolver) {
+      case .grapheme:
+        .grapheme
+      case .word:
+        .word
+      }
+    } else {
+      .grapheme
+    }
 
     let resolvedRanges = makeRanges(ranges, rangeBuilder: rangeBuilder, context: context)
     let makeAttributedStringWithTypo: (Typo) -> NSAttributedString = {
@@ -147,6 +157,7 @@ extension DivText: DivBlockModeling {
       images: images,
       accessibilityElement: nil,
       truncationToken: truncationToken,
+      truncationPolicy: truncationPolicy,
       truncationImages: truncationImages,
       additionalTextInsets: additionalTextInsets,
       canSelect: resolveSelectable(expressionResolver),

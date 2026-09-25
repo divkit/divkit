@@ -169,6 +169,51 @@ final class DivTextExtensionsTests: XCTestCase {
 
     assertEqual(path, expectedPath)
   }
+
+  func test_TruncationPolicy_Word() throws {
+    let textBlock = try makeTextBlock(
+      truncatePolicy: .value(.word)
+    )
+
+    XCTAssertEqual(textBlock.truncationPolicy, TextTruncationPolicy.word)
+  }
+
+  func test_TruncationPolicy_WordSurvivesFocusUpdate() throws {
+    let textBlock = try makeTextBlock(
+      truncatePolicy: .value(.word)
+    )
+
+    let focusedBlock = try textBlock.updated(path: defaultPath, isFocused: true)
+
+    XCTAssertTrue(focusedBlock.isFocused)
+    XCTAssertEqual(focusedBlock.truncationPolicy, TextTruncationPolicy.word)
+  }
+
+  func test_TruncationPolicy_Default() throws {
+    let textBlock = try makeTextBlock()
+
+    XCTAssertEqual(textBlock.truncationPolicy, TextTruncationPolicy.grapheme)
+  }
+
+  func test_TruncationPolicy_WordIsIgnoredForMiddleTruncation() throws {
+    let textBlock = try makeTextBlock(
+      truncate: .value(.middle),
+      truncatePolicy: .value(.word)
+    )
+
+    XCTAssertEqual(textBlock.truncationPolicy, TextTruncationPolicy.grapheme)
+  }
+
+  private func makeTextBlock(
+    truncate: DivKit.Expression<DivText.Truncate>? = nil,
+    truncatePolicy: DivKit.Expression<DivText.TruncatePolicy>? = nil
+  ) throws -> TextBlock {
+    try makeBlock(.divText(DivText(
+      text: .value("Text"),
+      truncate: truncate,
+      truncatePolicy: truncatePolicy
+    ))).child.unwrap()
+  }
 }
 
 private let defaultPath = UIElementPath.root + 0 + "text"

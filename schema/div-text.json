@@ -601,7 +601,8 @@
           "default_value": "grapheme",
           "$description": "translations.json#/div_text_truncate_policy",
           "platforms": [
-            "android"
+            "android",
+            "ios"
           ]
         },
         "text_shadow": {
