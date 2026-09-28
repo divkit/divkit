@@ -3,10 +3,9 @@ import java.lang.Boolean.parseBoolean
 
 plugins {
     id("divkit.convention.library-kmp")
+    id("divkit.convention.publishing-module-kmp")
     alias(libs.plugins.buildkonfig)
 }
-
-apply(from = "../publish-kmp.gradle")
 
 kotlin {
     android {
