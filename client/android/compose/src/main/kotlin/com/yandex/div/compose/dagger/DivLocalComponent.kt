@@ -51,8 +51,16 @@ internal interface DivLocalComponent {
     }
 }
 
-internal fun DivLocalComponent.handleActions(actions: List<DivAction>, source: DivActionSource) {
-    actionHandler.handle(actionHandlingContext, actions, source)
+internal fun DivLocalComponent.handleActions(
+    actions: List<DivAction>,
+    source: DivActionSource,
+    includeLogUrl: Boolean = false,
+) {
+    actionHandler.handle(actionHandlingContext, actions, source, includeLogUrl)
+}
+
+internal fun DivLocalComponent.handleTapActions(actions: List<DivAction>, source: DivActionSource) {
+    actionHandler.handleTapActions(actionHandlingContext, actions, source)
 }
 
 internal val LocalComponent = staticCompositionLocalOf<DivLocalComponent> {

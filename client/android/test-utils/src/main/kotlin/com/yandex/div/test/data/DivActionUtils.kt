@@ -32,12 +32,16 @@ fun action(
     payload: JSONObject? = null,
     typed: DivActionTyped? = null,
     url: String? = null,
+    logUrl: String? = null,
+    referer: String? = null,
 ): DivAction {
     return DivAction(
         isEnabled = constant(isEnabled),
         logId = id?.let { constant(it) },
+        logUrl = logUrl?.let { constant(it.toUri()) },
         menuItems = menuItems,
         payload = payload,
+        referer = referer?.let { constant(it.toUri()) },
         typed = typed,
         url = url?.let { constant(it.toUri()) }
     )
@@ -50,12 +54,16 @@ fun action(
     payload: JSONObject? = null,
     typed: DivActionTyped? = null,
     url: Expression<Uri>,
+    logUrl: String? = null,
+    referer: String? = null,
 ): DivAction {
     return DivAction(
         isEnabled = constant(isEnabled),
         logId = id?.let { constant(it) },
+        logUrl = logUrl?.let { constant(it.toUri()) },
         menuItems = menuItems,
         payload = payload,
+        referer = referer?.let { constant(it.toUri()) },
         typed = typed,
         url = url
     )

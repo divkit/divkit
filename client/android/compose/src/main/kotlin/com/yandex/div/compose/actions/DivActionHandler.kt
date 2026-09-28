@@ -24,6 +24,7 @@ import javax.inject.Inject
 
 @DivViewScope
 internal class DivActionHandler @Inject constructor(
+    private val actionLogger: DivActionLogger,
     private val actionMenuHolder: ActionMenuHolder,
     private val externalActionHandler: DivExternalActionHandler,
     private val reporter: DivReporter,
@@ -40,30 +41,54 @@ internal class DivActionHandler @Inject constructor(
     private val videoActionHandler: VideoActionHandler
 ) {
 
+    fun handleTapActions(
+        context: DivActionHandlingContext,
+        actions: List<DivAction>,
+        source: DivActionSource,
+    ) {
+        val menuActionIndex = actions.indexOfFirst { !it.menuItems.isNullOrEmpty() }
+        actions.forEachIndexed { index, action ->
+            handle(
+                context = context,
+                action = action,
+                source = source,
+                includeLogUrl = menuActionIndex < 0 || index == menuActionIndex,
+            )
+        }
+    }
+
     fun handle(
         context: DivActionHandlingContext,
         actions: List<DivAction>,
-        source: DivActionSource
+        source: DivActionSource,
+        includeLogUrl: Boolean = false,
     ) {
-        actions.forEach { handle(context = context, action = it, source = source) }
+        actions.forEach { handle(context = context, action = it, source = source, includeLogUrl = includeLogUrl) }
     }
 
-    fun handle(context: DivActionHandlingContext, action: DivAction, source: DivActionSource) {
+    fun handle(
+        context: DivActionHandlingContext,
+        action: DivAction,
+        source: DivActionSource,
+        includeLogUrl: Boolean = false,
+    ) {
         if (action.scopeId != null) {
             reporter.reportError("div-action.scope_id not supported")
         }
 
-        actionMenuHolder.showIfNeeded(action, expressionResolver = context.expressionResolver)
         handle(
             context = context,
             action = DivActionBase(
                 isEnabled = action.isEnabled,
                 logId = action.logId,
+                logUrl = if (includeLogUrl) action.logUrl else null,
                 payload = action.payload,
+                referer = action.referer,
                 source = source,
                 typed = action.typed,
                 url = action.url
-            )
+            ),
+            menuAction = action,
         )
     }
 
@@ -77,7 +102,9 @@ internal class DivActionHandler @Inject constructor(
             action = DivActionBase(
                 isEnabled = action.isEnabled,
                 logId = action.logId,
+                logUrl = null,
                 payload = action.payload,
+                referer = action.referer,
                 source = if (action is DivDisappearAction) {
                     DivActionSource.DISAPPEAR
                 } else {
@@ -89,18 +116,43 @@ internal class DivActionHandler @Inject constructor(
         )
     }
 
-    private fun handle(context: DivActionHandlingContext, action: DivActionBase) {
+    private fun handle(
+        context: DivActionHandlingContext,
+        action: DivActionBase,
+        menuAction: DivAction? = null,
+    ) {
         val expressionResolver = context.expressionResolver
         if (!action.isEnabled.evaluate(expressionResolver)) {
             return
         }
 
+        val logUrl = action.logUrl?.evaluate(expressionResolver)?.let { url ->
+            if (url.scheme == "http" || url.scheme == "https") {
+                url
+            } else {
+                reporter.reportWarning("Unsupported beacon URL: '$url'")
+                null
+            }
+        }
+        val event = DivActionEvent(
+            id = action.logId?.evaluate(expressionResolver),
+            payload = action.payload,
+            source = action.source,
+            url = if (action.typed == null) action.url?.evaluate(expressionResolver) else null,
+            typed = action.typed,
+            logUrl = logUrl,
+            referer = action.referer?.evaluate(expressionResolver),
+        )
+        actionLogger.logAction(context, event)
+
+        menuAction?.let { actionMenuHolder.showIfNeeded(it, expressionResolver) }
+
         action.typed?.let {
-            handle(context = context, action = it, baseAction = action)
+            handle(context = context, action = it, event = event)
             return
         }
 
-        val url = action.url?.evaluate(expressionResolver)
+        val url = event.url
         if (url?.isDivAction == true) {
             DivUntypedAction.parse(url)?.let {
                 handle(context = context, action = it)
@@ -109,9 +161,9 @@ internal class DivActionHandler @Inject constructor(
             externalActionHandler.handle(
                 context = context,
                 action = DivActionData(
-                    id = action.logId?.evaluate(expressionResolver),
-                    payload = action.payload,
-                    source = action.source,
+                    id = event.id,
+                    payload = event.payload,
+                    source = event.source,
                     url = url
                 )
             )
@@ -121,7 +173,7 @@ internal class DivActionHandler @Inject constructor(
     private fun handle(
         context: DivActionHandlingContext,
         action: DivActionTyped,
-        baseAction: DivActionBase
+        event: DivActionEvent
     ) {
         when (action) {
             is DivActionTyped.AnimatorStart -> notSupported(DivActionAnimatorStart.TYPE)
@@ -148,9 +200,9 @@ internal class DivActionHandler @Inject constructor(
                 externalActionHandler.handleCustomAction(
                     context = context,
                     action = DivCustomActionData(
-                        id = baseAction.logId?.evaluate(context.expressionResolver),
-                        payload = baseAction.payload,
-                        source = baseAction.source
+                        id = event.id,
+                        payload = event.payload,
+                        source = event.source
                     )
                 )
 
@@ -228,7 +280,9 @@ internal class DivActionHandler @Inject constructor(
 private class DivActionBase(
     val isEnabled: Expression<Boolean>,
     val logId: Expression<String>?,
+    val logUrl: Expression<Uri>?,
     val payload: JSONObject?,
+    val referer: Expression<Uri>?,
     val source: DivActionSource,
     val typed: DivActionTyped?,
     val url: Expression<Uri>?,

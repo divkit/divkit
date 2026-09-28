@@ -17,6 +17,7 @@ import kotlinx.coroutines.test.TestScope
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -34,7 +35,7 @@ class TimerStorageTest {
     }
 
     private val actionHandler = mock<DivActionHandler> {
-        on { handle(context = any(), actions = any(), source = any()) } doAnswer {
+        on { handle(context = any(), actions = any(), source = any(), includeLogUrl = eq(false)) } doAnswer {
             assertEquals(DivActionSource.TIMER, it.arguments[2])
             handledActions.addAll(it.arguments[1] as Collection<DivAction>)
             Unit

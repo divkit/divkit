@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.Constraints
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.observedEnabledActions
 import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.dagger.handleTapActions
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.reportError
@@ -493,7 +493,9 @@ private fun rememberActionsLink(actions: List<DivAction>): LinkAnnotation.Clicka
     return remember(actions) {
         LinkAnnotation.Clickable(
             tag = ACTIONS_LINK_TAG,
-            linkInteractionListener = { localComponent.handleActions(actions, DivActionSource.TAP) }
+            linkInteractionListener = {
+                localComponent.handleTapActions(actions, DivActionSource.TAP)
+            }
         )
     }
 }
