@@ -37,7 +37,7 @@
             },
             {
               "type": "text",
-              "text": "Expected: Three images match reference frames (100×67, 100×133, 100×100)",
+              "text": "Expected: Three images match reference frames (96×64, 96×128, 96×96)",
               "font_size": 10,
               "text_color": "#FF666666",
               "width": {
@@ -61,7 +61,7 @@
                     "type": "wrap_content",
                     "max_size": {
                       "type": "fixed",
-                      "value": 100
+                      "value": 96
                     }
                   },
                   "height": {
@@ -90,11 +90,11 @@
                   "type": "container",
                   "width": {
                     "type": "fixed",
-                    "value": 100
+                    "value": 96
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 67
+                    "value": 64
                   },
                   "border": {
                     "stroke": {
@@ -111,7 +111,7 @@
                   "items": [
                     {
                       "type": "text",
-                      "text": "100×67",
+                      "text": "96×64",
                       "font_size": 12,
                       "text_color": "#FF00AA00",
                       "text_alignment_horizontal": "center",
@@ -144,7 +144,7 @@
                     "type": "wrap_content",
                     "max_size": {
                       "type": "fixed",
-                      "value": 100
+                      "value": 96
                     }
                   },
                   "height": {
@@ -173,11 +173,11 @@
                   "type": "container",
                   "width": {
                     "type": "fixed",
-                    "value": 100
+                    "value": 96
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 133
+                    "value": 128
                   },
                   "border": {
                     "stroke": {
@@ -194,7 +194,7 @@
                   "items": [
                     {
                       "type": "text",
-                      "text": "100×133",
+                      "text": "96×128",
                       "font_size": 12,
                       "text_color": "#FF00AA00",
                       "text_alignment_horizontal": "center",
@@ -227,7 +227,7 @@
                     "type": "wrap_content",
                     "max_size": {
                       "type": "fixed",
-                      "value": 100
+                      "value": 96
                     }
                   },
                   "height": {
@@ -256,11 +256,11 @@
                   "type": "container",
                   "width": {
                     "type": "fixed",
-                    "value": 100
+                    "value": 96
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 100
+                    "value": 96
                   },
                   "border": {
                     "stroke": {
@@ -277,7 +277,7 @@
                   "items": [
                     {
                       "type": "text",
-                      "text": "100×100",
+                      "text": "96×96",
                       "font_size": 12,
                       "text_color": "#FF00AA00",
                       "text_alignment_horizontal": "center",
