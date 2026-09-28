@@ -66,6 +66,28 @@ class DivAccessibilityBinderTest {
     }
 
     @Test
+    fun `radio exposes checked state when accessibility is forced`() {
+        AccessibilityStateProvider.touchExplorationEnabled = false
+        val forcedBinder = DivAccessibilityBinder(
+            enabled = true,
+            accessibilityStateProvider = AccessibilityStateProvider(
+                a11yConfigurationEnabled = false,
+                forceAccessibilityEnable = true,
+            ),
+        )
+
+        bind(
+            accessibility = accessibility(isChecked = true, type = DivAccessibility.Type.RADIO),
+            targetBinder = forcedBinder,
+        )
+
+        val nodeInfo = view.createAccessibilityNodeInfo()
+        assertEquals("android.widget.RadioButton", nodeInfo.className)
+        assertTrue(nodeInfo.isCheckable)
+        assertTrue(nodeInfo.isChecked)
+    }
+
+    @Test
     fun `hint makes view important for accessibility`() {
         bind(accessibility(hint = "Activate button"))
 
@@ -268,8 +290,12 @@ class DivAccessibilityBinderTest {
         assertFalse(ViewCompat.isScreenReaderFocusable(view))
     }
 
-    private fun bind(accessibility: DivAccessibility, oldDiv: DivText? = null) {
-        bind(div(accessibility), oldDiv)
+    private fun bind(
+        accessibility: DivAccessibility,
+        oldDiv: DivText? = null,
+        targetBinder: DivAccessibilityBinder = binder,
+    ) {
+        bind(div(accessibility), oldDiv, targetBinder = targetBinder)
     }
 
     private fun bind(

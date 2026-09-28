@@ -9,4 +9,5 @@ internal object Names {
     const val HAS_DEFAULTS = "has_defaults"
     const val UNWRAPPED_IMAGE_LOADER = "unwrapped_image_loader"
     const val DATA_TAG = "data_tag"
+    const val FORCE_ACCESSIBILITY_ENABLE = "force_accessibility_enable"
 }

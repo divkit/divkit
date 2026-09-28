@@ -92,6 +92,7 @@ public class DivConfiguration {
     private final boolean mVisualErrors;
     private final boolean mSupportHyphenation;
     private final boolean mAccessibilityEnabled;
+    private final boolean mForceAccessibilityEnable;
     private boolean mViewPoolEnabled;
     private boolean mViewPoolProfilingEnabled;
     private boolean mViewPoolOptimizationDebug;
@@ -136,6 +137,7 @@ public class DivConfiguration {
             boolean visualErrors,
             boolean supportHyphenation,
             boolean accessibilityEnabled,
+            boolean forceAccessibilityEnable,
             boolean viewPoolEnabled,
             boolean viewPoolProfilingEnabled,
             boolean viewPoolOptimizationDebug,
@@ -177,6 +179,7 @@ public class DivConfiguration {
         mVisualErrors = visualErrors;
         mSupportHyphenation = supportHyphenation;
         mAccessibilityEnabled = accessibilityEnabled;
+        mForceAccessibilityEnable = forceAccessibilityEnable;
         mViewPoolEnabled = viewPoolEnabled;
         mViewPreCreationProfile = viewPreCreationProfile;
         mViewPoolProfilingEnabled = viewPoolProfilingEnabled;
@@ -421,6 +424,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @Named(Names.FORCE_ACCESSIBILITY_ENABLE)
+    public boolean getForceAccessibilityEnable() {
+        return mForceAccessibilityEnable;
+    }
+
+    @Provides
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
     public boolean isBindOnAttachEnabled() {
         return mBindOnAttachEnabled;
@@ -516,6 +525,7 @@ public class DivConfiguration {
         private boolean mSupportHyphenation = Experiment.HYPHENATION_SUPPORT_ENABLED.getDefaultValue();
         private boolean mVisualErrors = Experiment.VISUAL_ERRORS_ENABLED.getDefaultValue();
         private boolean mAccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
+        private boolean mForceAccessibilityEnable;
         private boolean mViewPoolEnabled = Experiment.VIEW_POOL_ENABLED.getDefaultValue();
         private boolean mViewPoolProfilingEnabled = Experiment.VIEW_POOL_PROFILING_ENABLED.getDefaultValue();
         private boolean mViewPoolOptimizationDebug = Experiment.VIEW_POOL_OPTIMIZATION_DEBUG.getDefaultValue();
@@ -710,6 +720,16 @@ public class DivConfiguration {
             return this;
         }
 
+        /**
+         * Forces accessibility metadata binding when touch exploration is disabled.
+         * Intended for UI automation builds.
+         */
+        @NonNull
+        public Builder forceAccessibilityEnable(boolean enable) {
+            mForceAccessibilityEnable = enable;
+            return this;
+        }
+
         @NonNull
         public Builder enableViewPool(boolean enable) {
             mViewPoolEnabled = enable;
@@ -847,6 +867,7 @@ public class DivConfiguration {
                     mVisualErrors,
                     mSupportHyphenation,
                     mAccessibilityEnabled,
+                    mForceAccessibilityEnable,
                     mViewPoolEnabled,
                     mViewPoolProfilingEnabled,
                     mViewPoolOptimizationDebug,

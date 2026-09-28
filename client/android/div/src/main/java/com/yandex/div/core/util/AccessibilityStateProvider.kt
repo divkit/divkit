@@ -4,15 +4,19 @@ import android.content.Context
 import android.view.accessibility.AccessibilityManager
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
+import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.experiments.Experiment
 import javax.inject.Inject
+import javax.inject.Named
 
 @DivScope
 internal class AccessibilityStateProvider @Inject constructor(
     @ExperimentFlag(Experiment.ACCESSIBILITY_ENABLED) val a11yConfigurationEnabled: Boolean,
+    @Named(Names.FORCE_ACCESSIBILITY_ENABLE) private val forceAccessibilityEnable: Boolean = false,
 ) {
     fun isAccessibilityEnabled(context: Context): Boolean {
         return when {
+            forceAccessibilityEnable -> true
             !a11yConfigurationEnabled -> false
             touchExplorationEnabled != null -> touchExplorationEnabled!!
             else -> {
