@@ -3,12 +3,12 @@ package com.yandex.div.internal
 /**
  * Kotlin wrapper for [Assert] using inline [Assert.isEnabled] checks.
  */
-object KAssert {
+public object KAssert {
 
     /**
      * @see [Assert.fail]
      */
-    inline fun fail(message: () -> String) {
+    public inline fun fail(message: () -> String) {
         if (Assert.isEnabled) {
             Assert.fail(message())
         }
@@ -17,7 +17,7 @@ object KAssert {
     /**
      * @see [Assert.fail]
      */
-    inline fun fail(cause: Throwable?, message: () -> String = { "" }) {
+    public inline fun fail(cause: Throwable?, message: () -> String = { "" }) {
         if (Assert.isEnabled) {
             Assert.fail(message(), cause)
         }
@@ -26,7 +26,7 @@ object KAssert {
     /**
      * @see [Assert.assertEquals]
      */
-    inline fun assertEquals(expected: Any?, actual: Any?, message: () -> String = { "" }) {
+    public inline fun assertEquals(expected: Any?, actual: Any?, message: () -> String = { "" }) {
         if (Assert.isEnabled) {
             Assert.assertEquals(message(), expected, actual)
         }

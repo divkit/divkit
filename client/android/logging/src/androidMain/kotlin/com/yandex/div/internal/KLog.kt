@@ -5,72 +5,72 @@ import com.yandex.div.logging.Severity
 /**
  * Kotlin wrapper for [Log] using inline [Log.isEnabled] checks.
  */
-object KLog {
+public object KLog {
 
     private val listeners = mutableListOf<LogListener>()
 
-    inline fun d(tag: String, message: () -> String) {
+    public inline fun d(tag: String, message: () -> String) {
         if (isAtLeast(Severity.DEBUG)) {
             print(android.util.Log.DEBUG, tag, message())
         }
     }
 
-    inline fun d(tag: String, th: Throwable, message: () -> String) {
+    public inline fun d(tag: String, th: Throwable, message: () -> String) {
         if (isAtLeast(Severity.DEBUG)) {
             android.util.Log.d(tag, message(), th)
         }
     }
 
-    inline fun w(tag: String, message: () -> String) {
+    public inline fun w(tag: String, message: () -> String) {
         if (isAtLeast(Severity.WARNING)) {
             print(android.util.Log.WARN, tag, message())
         }
     }
 
-    inline fun w(tag: String, th: Throwable, message: () -> String) {
+    public inline fun w(tag: String, th: Throwable, message: () -> String) {
         if (isAtLeast(Severity.WARNING)) {
             android.util.Log.w(tag, message(), th)
         }
     }
 
-    inline fun i(tag: String, message: () -> String) {
+    public inline fun i(tag: String, message: () -> String) {
         if (isAtLeast(Severity.INFO)) {
             print(android.util.Log.INFO, tag, message())
         }
     }
 
-    inline fun i(tag: String, th: Throwable, message: () -> String) {
+    public inline fun i(tag: String, th: Throwable, message: () -> String) {
         if (isAtLeast(Severity.INFO)) {
             android.util.Log.i(tag, message(), th)
         }
     }
 
-    inline fun e(tag: String, message: () -> String) {
+    public inline fun e(tag: String, message: () -> String) {
         if (isAtLeast(Severity.ERROR)) {
             print(android.util.Log.ERROR, tag, message())
         }
     }
 
-    inline fun e(tag: String, th: Throwable?, message: () -> String = { "" }) {
+    public inline fun e(tag: String, th: Throwable?, message: () -> String = { "" }) {
         if (isAtLeast(Severity.ERROR)) {
             android.util.Log.e(tag, message(), th)
         }
     }
 
-    fun addListener(listener: LogListener) {
+    public fun addListener(listener: LogListener) {
         synchronized(listeners) {
             listeners.add(listener)
         }
     }
 
-    fun removeListener(listener: LogListener) {
+    public fun removeListener(listener: LogListener) {
         synchronized(listeners) {
             listeners.remove(listener)
         }
     }
 
     @PublishedApi
-    internal fun isAtLeast(minLevel: Severity) = Log.isAtLeast(minLevel)
+    internal fun isAtLeast(minLevel: Severity): Boolean = Log.isAtLeast(minLevel)
 
     @PublishedApi
     internal fun print(priority: Int, tag: String, message: String) {
@@ -83,6 +83,6 @@ object KLog {
     }
 }
 
-interface LogListener {
-    fun onNewMessage(priority: Int, tag: String, message: String)
+public interface LogListener {
+    public fun onNewMessage(priority: Int, tag: String, message: String)
 }

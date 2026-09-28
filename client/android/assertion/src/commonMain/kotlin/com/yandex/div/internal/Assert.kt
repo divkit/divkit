@@ -4,7 +4,7 @@ package com.yandex.div.internal
  * Contains methods to make assertions that help capture programming errors. Should be disabled in the production environment.
  * Disabled by default.
  */
-object Assert {
+public object Assert {
 
     private var _assertionErrorHandler = AssertionErrorHandler { throw it }
 
@@ -15,7 +15,7 @@ object Assert {
      * Returns value indicating if assertions are enabled. This class won't throw any [AssertionError], if disabled.
      */
     @JvmStatic
-    var isEnabled: Boolean
+    public var isEnabled: Boolean
         get() {
             if (BuildKonfig.DISABLE_ASSERTS) {
                 return false
@@ -30,7 +30,7 @@ object Assert {
      * Asserts that a condition is true. If it isn't it throws an [AssertionError] with the given message.
      */
     @JvmStatic
-    fun assertTrue(message: String?, condition: Boolean) {
+    public fun assertTrue(message: String?, condition: Boolean) {
         if (!condition) {
             fail(message)
         }
@@ -40,7 +40,7 @@ object Assert {
      * Asserts that a condition is true. If it isn't it throws an [AssertionError] without a message.
      */
     @JvmStatic
-    fun assertTrue(condition: Boolean) {
+    public fun assertTrue(condition: Boolean) {
         assertTrue(null, condition)
     }
 
@@ -48,7 +48,7 @@ object Assert {
      * Asserts that a condition is false. If it isn't it throws an [AssertionError] without a message.
      */
     @JvmStatic
-    fun assertFalse(condition: Boolean) {
+    public fun assertFalse(condition: Boolean) {
         assertTrue(null, !condition)
     }
 
@@ -57,7 +57,7 @@ object Assert {
      */
     @JvmOverloads
     @JvmStatic
-    fun fail(message: String? = null) {
+    public fun fail(message: String? = null) {
         if (isEnabled) {
             performFail(AssertionError(message ?: ""))
         }
@@ -67,7 +67,7 @@ object Assert {
      * Fails with the given message and throwable that caused the failure.
      */
     @JvmStatic
-    fun fail(message: String?, cause: Throwable?) {
+    public fun fail(message: String?, cause: Throwable?) {
         if (isEnabled) {
             val assertionError: java.lang.AssertionError = java.lang.AssertionError(message)
             assertionError.initCause(cause)
@@ -78,7 +78,7 @@ object Assert {
     /**
      * Set custom [AssertionErrorHandler] to override on fail behavior
      */
-    fun setAssertPerformer(assertionErrorHandler: AssertionErrorHandler) {
+    public fun setAssertPerformer(assertionErrorHandler: AssertionErrorHandler) {
         _assertionErrorHandler = assertionErrorHandler
     }
 
@@ -90,7 +90,7 @@ object Assert {
      * @param expected expected value
      * @param actual   actual value
      */
-    fun assertEquals(message: String?, expected: Any?, actual: Any?) {
+    public fun assertEquals(message: String?, expected: Any?, actual: Any?) {
         if (expected == null && actual == null) {
             return
         }
@@ -110,7 +110,7 @@ object Assert {
      * @param expected expected long value.
      * @param actual   actual long value
      */
-    fun assertEquals(expected: Int, actual: Int) {
+    public fun assertEquals(expected: Int, actual: Int) {
         Assert.assertEquals(null, expected.toLong(), actual.toLong())
     }
 
@@ -121,7 +121,7 @@ object Assert {
      * @param expected long expected value.
      * @param actual   long actual value
      */
-    fun assertEquals(message: String?, expected: Long, actual: Long) {
+    public fun assertEquals(message: String?, expected: Long, actual: Long) {
         assertEquals(message, expected as Long?, actual as Long?)
     }
 
@@ -132,7 +132,7 @@ object Assert {
      * @param obj  Object to check or `null`
      */
     @JvmStatic
-    fun assertNotNull(message: String?, obj: Any?) {
+    public fun assertNotNull(message: String?, obj: Any?) {
         assertTrue(message, obj != null)
     }
 
@@ -141,7 +141,7 @@ object Assert {
      *
      * @param obj Object to check or `null`
      */
-    fun assertNotNull(obj: Any?) {
+    public fun assertNotNull(obj: Any?) {
         assertNotNull(null, obj)
     }
 
@@ -151,7 +151,7 @@ object Assert {
      * @param obj Object to check or `null`
      */
     @JvmStatic
-    fun assertNull(obj: Any?) {
+    public fun assertNull(obj: Any?) {
         assertTrue(null, obj == null)
     }
 

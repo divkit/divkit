@@ -4,6 +4,7 @@ import java.lang.Boolean.parseBoolean
 plugins {
     id("divkit.convention.library-kmp")
     id("divkit.convention.publishing-module-kmp")
+    id("divkit.convention.stub-aar")
     alias(libs.plugins.buildkonfig)
 }
 

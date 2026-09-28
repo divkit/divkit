@@ -1,13 +1,17 @@
 package divkit.convention
 
+import org.gradle.accessors.dm.LibrariesForLibs
+
 plugins {
     id("com.android.kotlin.multiplatform.library")
     id("org.jetbrains.kotlin.multiplatform")
     id("divkit.convention.abi-validation")
-    id("divkit.convention.stub-aar")
 }
 
-val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+val libs = the<LibrariesForLibs>()
+val jvmToolchainVersion = libs.versions.jvm.toolchain.map(String::toInt)
+val androidCompileSdk = libs.versions.android.compileSdk.map(String::toInt)
+val androidMinSdk = libs.versions.android.minSdk.map(String::toInt)
 
 // TODO(gulevsky): remove withGroovyBuilder once com.yandex.div.gradle.Version class becomes available
 val divkitVersion: Any by rootProject.extra
@@ -16,9 +20,13 @@ version = divkitVersion.withGroovyBuilder {
 }
 
 kotlin {
+    jvmToolchain(jvmToolchainVersion.get())
+
+    explicitApi()
+
     android {
-        compileSdk = libs.findVersion("android-compileSdk").get().requiredVersion.toInt()
-        minSdk = libs.findVersion("android-minSdk").get().requiredVersion.toInt()
+        compileSdk = androidCompileSdk.get()
+        minSdk = androidMinSdk.get()
     }
 }
 

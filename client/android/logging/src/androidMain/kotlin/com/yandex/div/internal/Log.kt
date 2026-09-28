@@ -3,7 +3,7 @@ package com.yandex.div.internal;
 import com.yandex.div.logging.BuildKonfig
 import com.yandex.div.logging.Severity
 
-object Log {
+public object Log {
 
     @Volatile
     private var _isEnabled = false
@@ -12,7 +12,7 @@ object Log {
     private var _severity = Severity.VERBOSE
 
     @JvmStatic
-    val isEnabled: Boolean
+    public val isEnabled: Boolean
         get() {
             if (BuildKonfig.DISABLE_LOGS) {
                 return false
@@ -20,57 +20,57 @@ object Log {
             return _isEnabled
         }
 
-    var severity: Severity
+    public var severity: Severity
         get() = _severity
         set(value) {
             _severity = value
         }
 
     @JvmStatic
-    fun setEnabled(enabled: Boolean?) {
+    public fun setEnabled(enabled: Boolean?) {
         _isEnabled = enabled ?: false
     }
 
     @JvmStatic
-    fun d(tag: String, message: String) {
+    public fun d(tag: String, message: String) {
         if (isAtLeast(Severity.DEBUG)) {
             android.util.Log.d(tag, message);
         }
     }
 
-    fun w(tag: String, message: String) {
+    public fun w(tag: String, message: String) {
         if (isAtLeast(Severity.WARNING)) {
             android.util.Log.w(tag, message);
         }
     }
 
-    fun w(tag: String, th: Throwable) {
+    public fun w(tag: String, th: Throwable) {
         if (isAtLeast(Severity.WARNING)) {
             android.util.Log.w(tag, th);
         }
     }
 
-    fun w(tag: String, message: String, th: Throwable) {
+    public fun w(tag: String, message: String, th: Throwable) {
         if (isAtLeast(Severity.WARNING)) {
             android.util.Log.w(tag, message, th);
         }
     }
 
-    fun i(tag: String, message: String) {
+    public fun i(tag: String, message: String) {
         if (isAtLeast(Severity.INFO)) {
             android.util.Log.i(tag, message);
         }
     }
 
     @JvmStatic
-    fun e(tag: String, message: String) {
+    public fun e(tag: String, message: String) {
         if (isAtLeast(Severity.ERROR)) {
             android.util.Log.e(tag, message);
         }
     }
 
     @JvmStatic
-    fun e(tag: String, message: String, th: Throwable) {
+    public fun e(tag: String, message: String, th: Throwable) {
         if (isAtLeast(Severity.ERROR)) {
             android.util.Log.e(tag, message, th);
         }

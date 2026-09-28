@@ -4,16 +4,17 @@ import com.yandex.div.gradle.aar.UnpackedStubAarTask
 import com.yandex.div.gradle.aar.ZipStubAarTask
 import com.yandex.div.gradle.multiplatform.PlatformIdentifier
 import com.yandex.div.gradle.multiplatform.configureDefaultKmpDependencies
+import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
     `maven-publish`
 }
 
-val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-val minSdk = libs.findVersion("android-minSdk").get().requiredVersion.toInt()
+val libs = the<LibrariesForLibs>()
+val minSdk = libs.versions.android.minSdk.map(String::toInt)
 
 val unpackedStubAarTask = tasks.register<UnpackedStubAarTask>("unpackedStubAar") {
-    description = ""
+    description = "Generates a stub AAR manifest with the module package name and minimum Android SDK version."
     aarPackage.set(provider {
         val groupNamespace = project.group.toString().replace(':', '.')
         val moduleNamespace = project.name.replace('-', '.')
@@ -24,7 +25,7 @@ val unpackedStubAarTask = tasks.register<UnpackedStubAarTask>("unpackedStubAar")
 }
 
 val stubAarTask = tasks.register<ZipStubAarTask>("stubAar") {
-    description = ""
+    description = "Packages the stub AAR for the Kotlin Multiplatform publication."
     from(unpackedStubAarTask.flatMap { it.outputDir })
     destinationDirectory.set(layout.buildDirectory.dir("outputs"))
     archiveExtension.set("aar")

@@ -1,6 +1,6 @@
 package com.yandex.div.internal
 
-fun interface AssertionErrorHandler {
+public fun interface AssertionErrorHandler {
 
-    fun handleError(assertionError: AssertionError)
+    public fun handleError(assertionError: AssertionError)
 }
