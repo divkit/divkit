@@ -79,6 +79,7 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
 import com.yandex.div.internal.util.toMapSafe
@@ -125,6 +126,7 @@ open class Div2View private constructor(
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
     private val persistentDivDataObservers = ObserverList<PersistentDivDataObserver>()
     private val viewToDivBindings = WeakHashMap<View, Div>()
+    private var visibilityTrackingBatch: VisibilityTrackingBatch? = null
     private var oldRuntimeStore: RuntimeStore? = null
     internal val oldExpressionResolver: ExpressionResolver
         get() = oldRuntimeStore.resolver
@@ -578,12 +580,15 @@ open class Div2View private constructor(
      * but haven't fired yet are dispatched instead of just being discarded, e.g. on [cleanup].
      * */
     @JvmOverloads
-    fun discardVisibilityTracking(dispatchDisappearActions: Boolean = false): Unit = bindingDispatcher.runWithinBindingContext(
-        VisibilityTrackingOperation.DISCARD
-    ) {
-        val state = divData?.states?.firstOrNull { it.stateId == stateId }
-        state?.let { discardStateVisibility(it, dispatchDisappearActions) }
-        discardChildrenVisibility(dispatchDisappearActions)
+    fun discardVisibilityTracking(dispatchDisappearActions: Boolean = false) {
+        if (UiThreadHandler.get().isMainThread()) {
+            visibilityTrackingBatch?.pending = false
+        }
+        bindingDispatcher.runWithinBindingContext(VisibilityTrackingOperation.DISCARD) {
+            val state = divData?.states?.firstOrNull { it.stateId == stateId }
+            state?.let { discardStateVisibility(it, dispatchDisappearActions) }
+            discardChildrenVisibility(dispatchDisappearActions)
+        }
     }
 
     private fun trackStateVisibility(state: DivData.State) {
@@ -603,10 +608,57 @@ open class Div2View private constructor(
         )
     }
 
-    fun trackChildrenVisibility(): Unit = bindingDispatcher.runWithinBindingContext(
+    internal fun <T> withBatchedVisibilityTracking(block: () -> T): T {
+        if (!UiThreadHandler.get().isMainThread()) {
+            return block()
+        }
+        if (visibilityTrackingBatch?.matchesData() == true) {
+            return block()
+        }
+        val batch = VisibilityTrackingBatch(divData, dataTag)
+        visibilityTrackingBatch = batch
+        try {
+            val result = block()
+            if (visibilityTrackingBatch === batch) {
+                visibilityTrackingBatch = null
+                if (batch.pending && batch.matchesData()) {
+                    suppressExpressionErrors { trackChildrenVisibilityNow() }
+                }
+            }
+            return result
+        } finally {
+            if (visibilityTrackingBatch === batch) {
+                visibilityTrackingBatch = null
+            }
+        }
+    }
+
+    fun trackChildrenVisibility() {
+        if (UiThreadHandler.get().isMainThread()) {
+            visibilityTrackingBatch?.let {
+                if (it.matchesData()) {
+                    it.pending = true
+                    return
+                }
+            }
+        }
+        trackChildrenVisibilityNow()
+    }
+
+    private fun trackChildrenVisibilityNow(): Unit = bindingDispatcher.runWithinBindingContext(
         VisibilityTrackingOperation.TRACK_CHILDREN
     ) {
         trackChildrenVisibilityInternal()
+    }
+
+    private fun VisibilityTrackingBatch.matchesData(): Boolean =
+        data === divData && tag == dataTag
+
+    private class VisibilityTrackingBatch(
+        val data: DivData?,
+        val tag: DivDataTag,
+    ) {
+        var pending = false
     }
 
     private fun trackChildrenVisibilityInternal() {
@@ -755,6 +807,9 @@ open class Div2View private constructor(
     }
 
     final override fun cleanup() {
+        if (UiThreadHandler.get().isMainThread()) {
+            visibilityTrackingBatch = null
+        }
         bindingDispatcher.cancelPendingTasks()
         bindingDispatcher.runWithinBindingContext {
             cleanup(removeChildren = true)

@@ -85,8 +85,10 @@ internal class DivGridBinder @Inject constructor(
             replaceWithReuse(divView, divViewCreator, oldItems, newItems)
         }
 
-        dispatchBinding(newItems, divView)
-        trackVisibilityActions(divView, newItems, oldItems)
+        divView.withBatchedVisibilityTracking {
+            dispatchBinding(newItems, divView)
+            trackVisibilityActions(divView, newItems, oldItems)
+        }
     }
 
     private fun DivGridLayout.observeContentAlignment(

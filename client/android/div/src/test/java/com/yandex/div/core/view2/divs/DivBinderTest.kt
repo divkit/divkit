@@ -79,6 +79,9 @@ open class DivBinderTest {
         on { errorCollector } doReturn mock()
         on { viewStateStore } doReturn DivViewStateStore.EMPTY
         on { viewComponent } doReturn viewComponent
+        on { withBatchedVisibilityTracking<Unit>(any()) } doAnswer {
+            it.getArgument<() -> Unit>(0).invoke()
+        }
     }
 
     internal val visitor: ReleaseViewVisitor = spy(

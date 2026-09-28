@@ -181,7 +181,7 @@ internal class DivContainerBinder @Inject constructor(
         items: List<DivBlock>,
         oldItems: List<DivBlock>?,
         divView: Div2View,
-    ) {
+    ) = divView.withBatchedVisibilityTracking {
         items.forEachIndexed { index, item ->
             getChildAt(index).bindChild(item, parent, oldParent, divView)
         }

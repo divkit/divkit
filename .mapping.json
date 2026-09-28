@@ -3061,6 +3061,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/DivViewStateStoreImplTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivViewStateStoreImplTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityActionDispatcherTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityActionDispatcherTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityActionTrackerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityActionTrackerTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityBindingBatchTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivVisibilityBindingBatchTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/GlobalVariableScopesTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/GlobalVariableScopesTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/PatchErrorsReportingTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/PatchErrorsReportingTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/SetVariableValueTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/SetVariableValueTest.kt",
