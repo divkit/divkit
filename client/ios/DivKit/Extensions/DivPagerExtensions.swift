@@ -23,11 +23,11 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
         pagerId: $0
       )
     }
-    let items = nonNilItems
     let scrollDirection = resolveOrientation(expressionResolver).direction
     let alignment = resolveScrollAxisAlignment(expressionResolver).system
     let crossAlignment = resolveCrossAxisAlignment(expressionResolver).system
     let layoutMode = layoutMode.resolve(expressionResolver)
+    var selectedActions: [[UserInterfaceAction]] = []
     let gallery = try makeGalleryModel(
       context: context,
       direction: resolveOrientation(expressionResolver).direction,
@@ -43,7 +43,12 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       transformation: pageTransformation?.resolve(
         expressionResolver,
         scrollDirection: scrollDirection
-      )
+      ),
+      onItem: { div, block, itemContext in
+        if !block.isEmpty {
+          selectedActions.append(div.value.makeSelectedActions(context: itemContext))
+        }
+      }
     )
     if let itemCountVariable {
       context.variablesStorage.update(
@@ -56,8 +61,12 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       pagerPath: pagerPath,
       layoutMode: layoutMode,
       gallery: gallery,
-      selectedActions: items.map { $0.value.makeSelectedActions(context: context) },
-      state: getState(context: context, path: context.path, numberOfPages: items.count),
+      selectedActions: selectedActions,
+      state: getState(
+        context: context,
+        path: context.path,
+        numberOfPages: gallery.itemsCountWithoutInfinite
+      ),
       widthTrait: resolveWidthTrait(context),
       heightTrait: resolveHeightTrait(context)
     )
@@ -131,7 +140,7 @@ extension DivBase {
   fileprivate func makeSelectedActions(
     context: DivBlockModelingContext
   ) -> [UserInterfaceAction] {
-    selectedActions?.uiActions(context: context) ?? []
+    selectedActions?.uiActions(context: modifiedContextParentPath(context)) ?? []
   }
 }
 

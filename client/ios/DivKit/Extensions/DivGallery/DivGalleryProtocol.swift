@@ -26,22 +26,27 @@ extension DivGalleryProtocol {
     layoutMode: PagerBlock.LayoutMode? = nil,
     scrollbar: GalleryViewModel.Scrollbar = .none,
     transformation: ElementsTransformation? = nil,
-    scrollAlignment: Alignment? = nil
+    scrollAlignment: Alignment? = nil,
+    onItem: (Div, Block, DivBlockModelingContext) -> Void = { _, _, _ in }
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
     var children: [GalleryViewModel.Item]
-    let blockMapper: (Div, Block, DivBlockModelingContext) -> GalleryViewModel
-      .Item = { div, block, _ in
-        GalleryViewModel.Item(
-          crossAlignment: (
-            direction.isHorizontal
-              ? div.value.resolveAlignmentVertical(expressionResolver)?.alignment
-              : div.value.resolveAlignmentHorizontal(expressionResolver)?
-              .alignment(isRTLLayout: context.layoutDirection == .rightToLeft)
-          ) ?? defaultCrossAlignment,
-          content: block
-        )
-      }
+    func blockMapper(
+      _ div: Div,
+      _ block: Block,
+      _ itemContext: DivBlockModelingContext
+    ) -> GalleryViewModel.Item {
+      onItem(div, block, itemContext)
+      return GalleryViewModel.Item(
+        crossAlignment: (
+          direction.isHorizontal
+            ? div.value.resolveAlignmentVertical(expressionResolver)?.alignment
+            : div.value.resolveAlignmentHorizontal(expressionResolver)?
+            .alignment(isRTLLayout: context.layoutDirection == .rightToLeft)
+        ) ?? defaultCrossAlignment,
+        content: block
+      )
+    }
 
     children = if let itemBuilder {
       itemBuilder.makeBlocks(context: context, mappedBy: blockMapper)
