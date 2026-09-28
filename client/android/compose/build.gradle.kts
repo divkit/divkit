@@ -1,3 +1,5 @@
+import dev.detekt.gradle.Detekt
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
@@ -58,6 +60,38 @@ dependencies {
 
     // SVG is optional for Compose consumers; enable it here to test SVG rendering.
     testImplementation(libs.coil.svg)
+}
+
+// Measurement entry point for ai/scripts/code_complexity: the same engine with
+// zeroed thresholds, so the checkstyle report lists every function with its cognitive
+// complexity and length. The scorer points it at an export of the revision it measures
+// and reads the report back, one invocation per side.
+val metricsInput = providers.gradleProperty("detektMetricsInput")
+    .getOrElse("src/main/kotlin")
+val metricsReport = providers.gradleProperty("detektMetricsReport")
+    .getOrElse("build/reports/detekt/metrics.xml")
+
+tasks.register<Detekt>("detektMetrics") {
+    group = "verification"
+    description = "Reports cognitive complexity and length for every function in " +
+        "-PdetektMetricsInput (default src/main/kotlin)."
+    buildUponDefaultConfig = true
+    config.setFrom(rootProject.file("config/detekt/detekt-metrics.yml"))
+    // A baseline would hide exactly the functions this task exists to measure.
+    baseline.set(null as java.io.File?)
+    ignoreFailures = true
+    val inputDir = projectDir.resolve(metricsInput)
+    setSource(inputDir)
+    // Report the paths relative to the measured root instead of to this module, so the
+    // scorer gets back exactly the paths it exported.
+    basePath = inputDir.absolutePath
+    reports {
+        checkstyle.required = true
+        checkstyle.outputLocation.set(projectDir.resolve(metricsReport))
+        sarif.required = false
+        html.required = false
+        markdown.required = false
+    }
 }
 
 roborazzi {

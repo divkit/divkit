@@ -1,0 +1,40 @@
+# detekt configuration shared by every Android module (applied from the root build.gradle).
+#
+# All built-in rule sets run at detekt's defaults; only the `complexity` set is tuned
+# here, because it is the metric the complexity gate and ai/scripts/code_complexity
+# are built on. Thresholds are derived from the Compose module's own distribution; see
+# ai/skills/divkit-complexity-gate/SKILL.md.
+#
+# Existing debt lives in each module's detekt-baseline.xml, so `./gradlew detekt` is
+# green on trunk and fails only on new findings.
+
+complexity:
+  active: true
+  CognitiveComplexMethod:
+    # Off by default in detekt; this is the metric the gate is built on.
+    active: true
+    allowedComplexity: 15
+  CyclomaticComplexMethod:
+    # Cognitive complexity is the metric we score. Cyclomatic counts every `when` entry
+    # separately, so a wide but flat `when` over div properties would raise two findings
+    # for one function without adding information.
+    active: false
+  LargeClass:
+    # detekt's default is 600; 500 was agreed in review (DIVKIT-10457).
+    active: true
+    allowedLines: 500
+  LongMethod:
+    active: true
+    allowedLines: 60
+  LongParameterList:
+    active: true
+    allowedFunctionParameters: 6
+    allowedConstructorParameters: 7
+  NestedBlockDepth:
+    active: true
+    allowedDepth: 4
+
+naming:
+  FunctionNaming:
+    # Composables are PascalCase by convention.
+    ignoreAnnotated: ['Composable']

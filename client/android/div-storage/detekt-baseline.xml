@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:TemplatesContainer.kt:TemplatesContainer$@WorkerThread fun explainMissingTemplate: ErrorExplanation</ID>
+    <ID>EmptyFunctionBlock:DatabaseOpenHelper.kt:DatabaseOpenHelper${}</ID>
+    <ID>ForbiddenComment:DivStorageImpl.kt:DivStorageImpl$// TODO: ticket for make a private pls</ID>
+    <ID>MagicNumber:StorageStatements.kt:StorageStatements.&lt;no name provided&gt;$3</ID>
+    <ID>MagicNumber:StorageStatements.kt:StorageStatements.&lt;no name provided&gt;$4</ID>
+    <ID>MagicNumber:TemplatesContainer.kt:TemplatesContainer$16</ID>
+    <ID>MaxLineLength:DB.kt:TemplateUsageQueries$const val DELETE_TEMPLATE_USAGE_BY_CARD_ID_QUERY_TEMPLATE = "DELETE FROM $TEMPLATE_USAGES_TABLE WHERE $TEMPLATE_USAGES_CARD_ID = ?"</ID>
+    <ID>MaxLineLength:DB.kt:TemplateUsageQueries$const val INSERT_TEMPLATE_USAGE_QUERY_TEMPLATE = "INSERT OR IGNORE INTO `$TEMPLATE_USAGES_TABLE` (`$TEMPLATE_USAGES_CARD_ID`,`$TEMPLATE_ID`) VALUES (?,?)"</ID>
+    <ID>ReturnCount:DivDataRepositoryImpl.kt:DivDataRepositoryImpl$@AnyThread override fun get: DivDataRepositoryResult</ID>
+    <ID>ReturnCount:DivStorageImpl.kt:DivStorageImpl$private fun Cursor.getRestoredRawData: DivStorage.RestoredRawData?</ID>
+    <ID>ReturnCount:RawJsonRepositoryImpl.kt:RawJsonRepositoryImpl$override fun get: RawJsonRepositoryResult</ID>
+    <ID>ReturnCount:TemplateCardErrorTransformer.kt:TemplateCardErrorTransformer$override fun tryTransformAndLog: Boolean</ID>
+    <ID>ReturnCount:TemplateCardErrorTransformer.kt:TemplateCardErrorTransformer.Companion$@VisibleForTesting internal fun extractMissingTemplateException: ParsingException?</ID>
+    <ID>TooGenericExceptionThrown:ReadState.kt:ReadState$throw RuntimeException("Cursor should be called only once")</ID>
+    <ID>TooManyFunctions:DivDataRepositoryImpl.kt:DivDataRepositoryImpl : DivDataRepository</ID>
+    <ID>TooManyFunctions:DivStorage.kt:DivStorage</ID>
+    <ID>TooManyFunctions:DivStorageImpl.kt:DivStorageImpl : DivStorage</ID>
+    <ID>TooManyFunctions:StorageStatements.kt:StorageStatements</ID>
+  </CurrentIssues>
+</SmellBaseline>

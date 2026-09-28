@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:ExoDivPlayer.kt:ExoDivPlayer$1000</ID>
+    <ID>ReturnCount:DivNetworkDataSource.kt:DivNetworkDataSource$override fun read: Int</ID>
+    <ID>ReturnCount:ExoDivPlayerView.kt:ExoDivPlayerView$private fun getAttributeSet: AttributeSet?</ID>
+    <ID>ThrowsCount:DivNetworkDataSource.kt:DivNetworkDataSource$private fun skipFully</ID>
+    <ID>TooGenericExceptionCaught:DivNetworkDataSource.kt:DivNetworkDataSource$error: Throwable</ID>
+    <ID>TooManyFunctions:DivNetworkDataSource.kt:DivNetworkDataSource : BaseDataSource</ID>
+    <ID>TooManyFunctions:ExoDivPlayer.kt:ExoDivPlayer : DivPlayer</ID>
+  </CurrentIssues>
+</SmellBaseline>

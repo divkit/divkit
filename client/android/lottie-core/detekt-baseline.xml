@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ReturnCount:SchemeDivLottieResourceResolver.kt:SchemeDivLottieResourceResolver$@Synchronized fun resolve: Result&lt;T&gt;</ID>
+    <ID>TooGenericExceptionCaught:DivLottieResourceLoader.kt:error: Exception</ID>
+  </CurrentIssues>
+</SmellBaseline>

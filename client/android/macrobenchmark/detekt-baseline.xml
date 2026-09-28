@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:ComposeMacrobenchmark.kt:ComposeMacrobenchmark$15_000</ID>
+    <ID>MagicNumber:HistogramMetric.kt:HistogramMetric$1_000.0</ID>
+  </CurrentIssues>
+</SmellBaseline>

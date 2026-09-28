@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:LottieController.kt:LottieController$buildDrawingCacheDepth == 1 &amp;&amp; gifImageView.width &gt; 0 &amp;&amp; gifImageView.height &gt; 0 &amp;&amp; gifImageView.layerType == LAYER_TYPE_SOFTWARE &amp;&amp; gifImageView.getDrawingCache(autoScale) == null</ID>
+    <ID>LoopWithTooManyJumpStatements:DivLottieImagePredecoder.kt:for</ID>
+    <ID>MagicNumber:DivLottieCompositionRepository.kt:&lt;no name provided&gt;$0xff</ID>
+    <ID>MagicNumber:LottieController.kt:LottieController$4</ID>
+    <ID>MaxLineLength:DivLottieCompositionRepository.kt:DivLottieCompositionRepository$"Lottie preloading works unstable. Implement DivLottieNetworkCache.cacheComposition(String, onComplete)."</ID>
+    <ID>MaxLineLength:LottieController.kt:LottieController$// This is necessary because lottieDrawable will get unscheduled and canceled when the drawable is set to null.</ID>
+    <ID>MaxLineLength:LottieController.kt:LottieController$if</ID>
+    <ID>MaxLineLength:LottieController.kt:LottieController$}</ID>
+    <ID>ReturnCount:DivLottieCompositionRepository.kt:DivLottieCompositionRepository$internal fun preloadLottieComposition</ID>
+    <ID>ReturnCount:DivLottieCompositionRepository.kt:DivLottieCompositionRepository$private suspend fun getCompositionAsync: LottieResult&lt;LottieComposition&gt;</ID>
+    <ID>ReturnCount:DivLottieExtensionHandler.kt:DivLottieExtensionHandler$override fun bindView</ID>
+    <ID>ReturnCount:DivLottieExtensionHandler.kt:DivLottieExtensionHandler$private fun preprocessInternal</ID>
+    <ID>ReturnCount:DivLottieImagePredecoder.kt:private fun decodeBase64Image: Bitmap?</ID>
+    <ID>TooGenericExceptionCaught:DivLottieCompositionRepository.kt:DivLottieCompositionRepository$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:DivLottieImagePredecoder.kt:e: Exception</ID>
+    <ID>TooManyFunctions:DivLottieCompositionRepository.kt:DivLottieCompositionRepository</ID>
+    <ID>TooManyFunctions:LottieController.kt:LottieController : DivViewDelegate</ID>
+  </CurrentIssues>
+</SmellBaseline>

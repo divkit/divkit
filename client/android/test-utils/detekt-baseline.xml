@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ThrowsCount:InteractiveScreenshotTestData.kt:InteractiveScreenshotTestData.Companion$private fun parseStep: Step</ID>
+    <ID>TooGenericExceptionThrown:ParsingResult.kt:ParsingResult.Error$throw Exception( "Test case parsing failed: $fileName, $json", error )</ID>
+    <ID>TooGenericExceptionThrown:ParsingResult.kt:ParsingResult.Error$throw Exception("$fileName parsing failed", error)</ID>
+  </CurrentIssues>
+</SmellBaseline>

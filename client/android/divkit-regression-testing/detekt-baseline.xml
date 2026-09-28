@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ConstructorParameterNaming:Scenario.kt:Scenario$var case_id: Int? = null</ID>
+    <ID>ConstructorParameterNaming:Scenario.kt:Scenario$var expected_results: List&lt;String&gt; = emptyList()</ID>
+    <ID>LongMethod:SliderActivity.kt:SliderActivity$override fun onCreate</ID>
+    <ID>MagicNumber:ScenarioActivity.kt:ScenarioActivity$10</ID>
+    <ID>MagicNumber:SliderActivity.kt:SliderActivity$10f</ID>
+    <ID>MagicNumber:SliderActivity.kt:SliderActivity$3f</ID>
+    <ID>MagicNumber:SliderActivity.kt:SliderActivity$7f</ID>
+    <ID>ReturnCount:PlaygroundDeepLink.kt:PlaygroundDeepLink$fun parseTest: TestQuery?</ID>
+    <ID>TooManyFunctions:ScenarioActivity.kt:ScenarioActivity : AppCompatActivityScenarioHost</ID>
+  </CurrentIssues>
+</SmellBaseline>

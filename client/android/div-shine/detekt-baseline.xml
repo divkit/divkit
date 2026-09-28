@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>LongMethod:ShineData.kt:ShineData.Companion$fun fromJson: ShineData</ID>
+    <ID>MagicNumber:ShineDrawable.kt:ShineDrawable$135</ID>
+    <ID>MagicNumber:ShineDrawable.kt:ShineDrawable$180</ID>
+    <ID>MagicNumber:ShineDrawable.kt:ShineDrawable$225</ID>
+    <ID>MagicNumber:ShineDrawable.kt:ShineDrawable$270</ID>
+    <ID>MagicNumber:ShineDrawable.kt:ShineDrawable$315</ID>
+    <ID>MagicNumber:ShineDrawable.kt:ShineDrawable$360</ID>
+    <ID>MagicNumber:ShineDrawable.kt:ShineDrawable$45</ID>
+    <ID>MagicNumber:ShineDrawable.kt:ShineDrawable$90</ID>
+    <ID>NewLineAtEndOfFile:DivShineLogger.kt:com.yandex.div.shine.DivShineLogger.kt</ID>
+    <ID>NewLineAtEndOfFile:PauseShineObserver.kt:com.yandex.div.shine.PauseShineObserver.kt</ID>
+    <ID>NewLineAtEndOfFile:ShineImageTransformer.kt:com.yandex.div.shine.ShineImageTransformer.kt</ID>
+    <ID>ReturnCount:ShineDrawable.kt:ShineDrawable$override fun start</ID>
+    <ID>ReturnCount:ShineDrawable.kt:ShineDrawable$private fun updateShader</ID>
+    <ID>TooManyFunctions:ShineDrawable.kt:ShineDrawable : DrawableAnimatable</ID>
+  </CurrentIssues>
+</SmellBaseline>

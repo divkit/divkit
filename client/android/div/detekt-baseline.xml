@@ -1,0 +1,442 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:AdaptiveMaxLines.kt:AdaptiveMaxLines$private fun addPreDrawListener</ID>
+    <ID>CognitiveComplexMethod:BindingDispatcher.kt:BindingDispatcher$inline fun &lt;T&gt; runOnBindingThread</ID>
+    <ID>CognitiveComplexMethod:CurrencyInputMask.kt:CurrencyInputMask$private fun String.toValidFormat: String</ID>
+    <ID>CognitiveComplexMethod:DivBaseBinder.kt:DivBaseBinder$private fun View.applyVisibility</ID>
+    <ID>CognitiveComplexMethod:DivGridLayoutManager.kt:DivGridLayoutManager$override fun instantScrollToPosition</ID>
+    <ID>CognitiveComplexMethod:DivPatchApply.kt:DivPatchApply$private fun pathToChildWithId: List&lt;Div&gt;</ID>
+    <ID>CognitiveComplexMethod:DivRecyclerView.kt:DivRecyclerView$override fun onInterceptTouchEvent: Boolean</ID>
+    <ID>CognitiveComplexMethod:DivRecyclerView.kt:DivRecyclerView$override fun onMeasure</ID>
+    <ID>CognitiveComplexMethod:DivSliderBinder.kt:DivSliderBinder$private fun DivSliderView.checkSliderTicks</ID>
+    <ID>CognitiveComplexMethod:DivStateBinder.kt:DivStateBinder$private fun DivStateLayout.bindState</ID>
+    <ID>CognitiveComplexMethod:DivStateBinder.kt:DivStateBinder$private fun setupAnimation: Transition?</ID>
+    <ID>CognitiveComplexMethod:DivStateBinder.kt:private fun DivAnimation.toTransition: Transition?</ID>
+    <ID>CognitiveComplexMethod:DivVideoBinder.kt:DivVideoBinder$private fun DivVideoView.applyVideo</ID>
+    <ID>CognitiveComplexMethod:DivVisitor.kt:DivVisitor$protected fun visit: T</ID>
+    <ID>CognitiveComplexMethod:FrameContainerLayout.kt:FrameContainerLayout$private fun considerMatchParentChildrenInMaxSize</ID>
+    <ID>CognitiveComplexMethod:IndicatorsStripDrawer.kt:IndicatorsStripDrawer.IndicatorsRibbon$private fun downscaleAndDisperse</ID>
+    <ID>CognitiveComplexMethod:LinearContainerLayout.kt:LinearContainerLayout$private fun calculateMatchParentSizes</ID>
+    <ID>CognitiveComplexMethod:LinearContainerLayout.kt:LinearContainerLayout$private fun layoutHorizontal</ID>
+    <ID>CognitiveComplexMethod:PaddingItemDecoration.kt:PaddingItemDecoration$override fun getItemOffsets</ID>
+    <ID>CognitiveComplexMethod:SpannedTextBuilder.kt:SpannedTextBuilder$private fun addSpan</ID>
+    <ID>CognitiveComplexMethod:SpannedTextBuilder.kt:SpannedTextBuilder$private fun preprocessSpans: List&lt;SpanData&gt;</ID>
+    <ID>CognitiveComplexMethod:Utils.kt:private fun DivAnimation.toAnimation: Animation?</ID>
+    <ID>CognitiveComplexMethod:WrapContainerLayout.kt:WrapContainerLayout$private fun calculateLines</ID>
+    <ID>CognitiveComplexMethod:WrapContainerLayout.kt:WrapContainerLayout$private fun drawSeparatorsHorizontal</ID>
+    <ID>CognitiveComplexMethod:WrapContainerLayout.kt:WrapContainerLayout$private fun drawSeparatorsVertical</ID>
+    <ID>CognitiveComplexMethod:WrapContainerLayout.kt:WrapContainerLayout$private fun layoutHorizontal</ID>
+    <ID>CognitiveComplexMethod:WrapContainerLayout.kt:WrapContainerLayout$private fun layoutVertical</ID>
+    <ID>ComplexCondition:AspectImageView.kt:AspectImageView$(imageMatrix == null || imageMatrix == transformMatrix) &amp;&amp; isMatrixInvalidated &amp;&amp; width &gt; 0 &amp;&amp; height &gt; 0</ID>
+    <ID>ComplexCondition:BaseDivViewExtensions.kt:lp.leftMargin != leftMargin || lp.topMargin != topMargin || lp.rightMargin != rightMargin || lp.bottomMargin != bottomMargin || (startMargin != null &amp;&amp; lp.marginStart != startMargin) || (endMargin != null &amp;&amp; lp.marginEnd != endMargin)</ID>
+    <ID>ComplexCondition:CurrencyInputMask.kt:CurrencyInputMask$canInsertSeparator &amp;&amp; char == separatorChar &amp;&amp; (separatorOutOfDiffIndex == index || separatorOutOfDiffIndex == -1)</ID>
+    <ID>ComplexCondition:DivAccessibilityBinder.kt:DivAccessibilityBinder$newMode.equalsToConstant(oldDiv?.accessibility?.mode) &amp;&amp; newDiv.accessibility?.type == oldDiv?.accessibility?.type &amp;&amp; newDiv.accessibility?.description.equalsToConstant(oldDiv?.accessibility?.description) &amp;&amp; newDiv.accessibility?.hint.equalsToConstant(oldDiv?.accessibility?.hint)</ID>
+    <ID>ComplexCondition:DivBackgroundBinder.kt:DivBackgroundBinder$newBackground.compareWith(oldBackground) { left, right -&gt; left.equalsToConstant(right) } &amp;&amp; newFocusedBackground.compareWith(oldFocusedBackground) { left, right -&gt; left.equalsToConstant(right) } &amp;&amp; underlay == oldUnderlay &amp;&amp; overlay == oldOverlay</ID>
+    <ID>ComplexCondition:DivBaseBinder.kt:DivBaseBinder$checkEquality &amp;&amp; underlay == boundBackgroundUnderlay &amp;&amp; newBackground.compareWith(oldBackground) { left, right -&gt; left.equalsToConstant(right) } &amp;&amp; newFocusBackground.compareWith(oldFocusBackground) { left, right -&gt; left.equalsToConstant(right) }</ID>
+    <ID>ComplexCondition:DivComparator.kt:DivComparator$old.id != null &amp;&amp; new.id != null &amp;&amp; old.id != new.id &amp;&amp; (old.hasTransitions() || new.hasTransitions())</ID>
+    <ID>ComplexCondition:DivContainerBinder.kt:DivContainerBinder$!divView.complexRebindInProgress &amp;&amp; oldChild != null &amp;&amp; contentAlignmentHorizontal.equalsToConstant(oldDivBlock?.divValue?.contentAlignmentHorizontal) &amp;&amp; contentAlignmentVertical.equalsToConstant(oldDivBlock?.divValue?.contentAlignmentVertical) &amp;&amp; childAlignmentHorizontal.equalsToConstant(oldChild.div.value().alignmentHorizontal) &amp;&amp; childAlignmentVertical.equalsToConstant(oldChild.div.value().alignmentVertical)</ID>
+    <ID>ComplexCondition:DivContainerBinder.kt:DivContainerBinder$contentAlignmentHorizontal.isConstant() &amp;&amp; contentAlignmentVertical.isConstant() &amp;&amp; childAlignmentHorizontal.isConstantOrNull() &amp;&amp; childAlignmentVertical.isConstantOrNull()</ID>
+    <ID>ComplexCondition:DivExtensionController.kt:DivExtensionController$getBindings(divView)?.get(view) !== binding || binding.releasing || binding.request != request || dispatcher.currentGeneration != generation</ID>
+    <ID>ComplexCondition:DivGifImageBinder.kt:DivGifImageBinder$preview != null || newPreviewUrl == null || isImageLoaded || (isImagePreview &amp;&amp; previewUrl == newPreviewUrl)</ID>
+    <ID>ComplexCondition:DivImageBinder.kt:DivImageBinder$!(isImageLoaded &amp;&amp; newDiv.imageUrl.equalsToConstant(oldDiv?.imageUrl)) &amp;&amp; !(isImagePreview &amp;&amp; newDiv.preview.equalsToConstant(oldDiv?.preview))</ID>
+    <ID>ComplexCondition:DivPagerPaddingsHolder.kt:DivPagerPaddingsHolder$!isHorizontal || (alignment == ItemAlignment.START &amp;&amp; !parent.isLayoutRtl()) || (alignment == ItemAlignment.END &amp;&amp; parent.isLayoutRtl())</ID>
+    <ID>ComplexCondition:DivPagerPaddingsHolder.kt:DivPagerPaddingsHolder$!isHorizontal || (alignment == ItemAlignment.START &amp;&amp; parent.isLayoutRtl()) || (alignment == ItemAlignment.END &amp;&amp; !parent.isLayoutRtl())</ID>
+    <ID>ComplexCondition:DivStateLayout.kt:DivStateLayout.SwipeListener$x &gt;= child.left &amp;&amp; x &lt; child.right &amp;&amp; y &gt;= child.top &amp;&amp; y &lt; child.bottom &amp;&amp; canScroll(child, x - child.left, y - child.top, dir)</ID>
+    <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$ellipsis?.ranges == null &amp;&amp; ellipsis?.rangeBuilder == null &amp;&amp; ellipsis?.images == null &amp;&amp; ellipsis?.imageBuilder == null &amp;&amp; ellipsis?.actions == null</ID>
+    <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$newDiv.ranges == null &amp;&amp; newDiv.rangeBuilder == null &amp;&amp; newDiv.images == null &amp;&amp; newDiv.imageBuilder == null</ID>
+    <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$newDiv.text.equalsToConstant(oldDiv?.text) &amp;&amp; newDiv.lineHeight.equalsToConstant(oldDiv?.lineHeight) &amp;&amp; newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit) &amp;&amp; newDiv.extensions.compareNullableWith(oldDiv?.extensions) { new, old -&gt; new.id == old.id }</ID>
+    <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$newDiv.textShadow?.alpha.equalsToConstant(oldDiv?.textShadow?.alpha) &amp;&amp; newDiv.textShadow?.blur.equalsToConstant(oldDiv?.textShadow?.blur) &amp;&amp; newDiv.textShadow?.color.equalsToConstant(oldDiv?.textShadow?.color) &amp;&amp; newDiv.textShadow?.offset?.x?.value.equalsToConstant(oldDiv?.textShadow?.offset?.x?.value) &amp;&amp; newDiv.textShadow?.offset?.x?.unit.equalsToConstant(oldDiv?.textShadow?.offset?.x?.unit) &amp;&amp; newDiv.textShadow?.offset?.y?.value.equalsToConstant(oldDiv?.textShadow?.offset?.y?.value) &amp;&amp; newDiv.textShadow?.offset?.y?.unit.equalsToConstant(oldDiv?.textShadow?.offset?.y?.unit)</ID>
+    <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$newDiv.textShadow?.alpha.isConstantOrNull() &amp;&amp; newDiv.textShadow?.blur.isConstantOrNull() &amp;&amp; newDiv.textShadow?.color.isConstantOrNull() &amp;&amp; newDiv.textShadow?.offset?.x?.value.isConstantOrNull() &amp;&amp; newDiv.textShadow?.offset?.x?.unit.isConstantOrNull() &amp;&amp; newDiv.textShadow?.offset?.y?.value.isConstantOrNull() &amp;&amp; newDiv.textShadow?.offset?.y?.unit.isConstantOrNull()</ID>
+    <ID>ComplexCondition:FrameContainerLayout.kt:FrameContainerLayout$skippedMatchParentChildren.contains(child) &amp;&amp; ((lp.width == MATCH_PARENT &amp;&amp; needMeasureWidth) || (lp.height == MATCH_PARENT &amp;&amp; needMeasureHeight))</ID>
+    <ID>ComplexCondition:RebindTask.kt:RebindTaskImpl$id != null &amp;&amp; existingIdToken != null &amp;&amp; existingIdToken.div.javaClass == newToken.div.javaClass &amp;&amp; DivComparator.areValuesReplaceable(existingIdToken.item, newToken.item)</ID>
+    <ID>ComplexCondition:SliderView.kt:SliderView$animated &amp;&amp; animationsEnabledProvider() &amp;&amp; thumbSecondaryValue != null &amp;&amp; newValue != null</ID>
+    <ID>ComplexCondition:SpannedTextBuilder.kt:SpannedTextBuilder$supportFontVariations &amp;&amp; typefaceProvider.isVariable &amp;&amp; (span.fontWeight != null || span.fontWeightValue != null || span.fontVariationSettings != null)</ID>
+    <ID>ComplexCondition:TextGradientBinder.kt:TextGradientBinder$oldTextGradient is DivTextGradient.Radial &amp;&amp; newTextGradient.radius == oldTextGradient.value.radius &amp;&amp; newTextGradient.centerX == oldTextGradient.value.centerX &amp;&amp; newTextGradient.centerY == oldTextGradient.value.centerY &amp;&amp; newTextGradient.colorsEqualToConstant(oldTextGradient.value)</ID>
+    <ID>ComplexCondition:TextViewExtensions.kt:oldDiv != null &amp;&amp; newFontFamily.equalsToConstant(oldFontFamily) &amp;&amp; newFontWeight.equalsToConstant(oldFontWeight) &amp;&amp; newFontWeightValue.equalsToConstant(oldFontWeightValue) &amp;&amp; (!supportFontVariations || newFontVariationSettings.equalsToConstant(oldFontVariationSettings))</ID>
+    <ID>ComplexCondition:TooltipAnchorTracker.kt:TooltipAnchorTracker$location[0] == lastX &amp;&amp; location[1] == lastY &amp;&amp; width == lastWidth &amp;&amp; height == lastHeight</ID>
+    <ID>EmptyDefaultConstructor:DivTextRangesBackgroundRenderer.kt:DivTextRangesBackgroundRenderer</ID>
+    <ID>EmptyFunctionBlock:DivTooltipAnimation.kt:&lt;no name provided&gt;${}</ID>
+    <ID>ForbiddenComment:DivTextBinder.kt:DivTextBinder$// TODO: use static constant</ID>
+    <ID>ForbiddenComment:TextGradientBinder.kt:TextGradientBinder$// TODO: compare radius and center in a proper way</ID>
+    <ID>IteratorNotThrowingNoSuchElementException:SparseArrays.kt:SparseArrayIterator&lt;T&gt; : Iterator</ID>
+    <ID>LargeClass:Div2View.kt:Div2View : FrameContainerLayoutDivViewFacade</ID>
+    <ID>LargeClass:DivContainerBinder.kt:DivContainerBinder : DivViewBinder</ID>
+    <ID>LargeClass:DivInputBinder.kt:DivInputBinder : DivViewBinder</ID>
+    <ID>LargeClass:DivTextBinder.kt:DivTextBinder : DivViewBinder</ID>
+    <ID>LargeClass:LinearContainerLayout.kt:LinearContainerLayout : DivViewGroupAspectView</ID>
+    <ID>LargeClass:SpannedTextBuilder.kt:SpannedTextBuilder</ID>
+    <ID>LargeClass:WrapContainerLayout.kt:WrapContainerLayout : DivViewGroupAspectView</ID>
+    <ID>LongMethod:BindingDispatcher.kt:BindingDispatcher$inline fun &lt;T&gt; runOnBindingThread</ID>
+    <ID>LongMethod:CurrencyInputMask.kt:CurrencyInputMask$private fun String.toValidFormat: String</ID>
+    <ID>LongMethod:DivGalleryBinder.kt:DivGalleryBinder$private fun DivRecyclerView.updateDecorations</ID>
+    <ID>LongMethod:DivInputBinder.kt:DivInputBinder$private fun DivInputView.observeMask</ID>
+    <ID>LongMethod:DivPagerBinder.kt:DivPagerBinder$private fun DivPagerView.applyDecorations</ID>
+    <ID>LongMethod:DivPagerBinder.kt:DivPagerBinder$private fun DivPagerView.bind</ID>
+    <ID>LongMethod:DivPatchApply.kt:DivPatchApply$private fun getPatchedTreeByPath: Div</ID>
+    <ID>LongMethod:DivStateBinder.kt:DivStateBinder$private fun DivStateLayout.bindState</ID>
+    <ID>LongMethod:DivTabsBinder.kt:internal fun TabView.observeStyle</ID>
+    <ID>LongMethod:DivViewGroup.kt:DivViewGroup.Companion$fun getChildMeasureSpec: Int</ID>
+    <ID>LongMethod:SliderView.kt:SliderView$override fun onDraw</ID>
+    <ID>LongMethod:SpannedTextBuilder.kt:SpannedTextBuilder$private fun addSpan</ID>
+    <ID>LongMethod:SpannedTextBuilder.kt:SpannedTextBuilder$private fun buildText: Spanned</ID>
+    <ID>LongMethod:WrapContainerLayout.kt:WrapContainerLayout$private fun calculateLines</ID>
+    <ID>LoopWithTooManyJumpStatements:DivActionBinder.kt:DivActionBinder.MenuWrapperListener$for</ID>
+    <ID>LoopWithTooManyJumpStatements:DivLinearLayoutManager.kt:DivLinearLayoutManager$for</ID>
+    <ID>MagicNumber:BaseDivViewExtensions.kt:100f</ID>
+    <ID>MagicNumber:DebugViewModelProvider.kt:DebugViewModelProvider$4</ID>
+    <ID>MagicNumber:DivBackgroundState.kt:DivBackgroundState.Image$255</ID>
+    <ID>MagicNumber:DivBorderDrawer.kt:DivBorderDrawer.BorderParams$8</ID>
+    <ID>MagicNumber:DivBorderDrawer.kt:DivBorderDrawer.BorderParams$8.0</ID>
+    <ID>MagicNumber:DivBorderDrawer.kt:DivBorderDrawer.ShadowParams$255</ID>
+    <ID>MagicNumber:DivBorderDrawer.kt:DivBorderDrawer.ShadowParams$255f</ID>
+    <ID>MagicNumber:DivTabsBinder.kt:DivTabsBinder$12</ID>
+    <ID>MagicNumber:DivTextRangesBackgroundRenderer.kt:BackgroundDrawer$3</ID>
+    <ID>MagicNumber:DivTextRangesBackgroundRenderer.kt:BackgroundDrawer$4</ID>
+    <ID>MagicNumber:DivTextRangesBackgroundRenderer.kt:BackgroundDrawer$5</ID>
+    <ID>MagicNumber:DivTextRangesBackgroundRenderer.kt:BackgroundDrawer$6</ID>
+    <ID>MagicNumber:DivTextRangesBackgroundRenderer.kt:BackgroundDrawer$7</ID>
+    <ID>MagicNumber:DivTextRangesBackgroundRenderer.kt:BackgroundDrawer$8</ID>
+    <ID>MagicNumber:DivTooltipAnimation.kt:0.5f</ID>
+    <ID>MagicNumber:GridContainer.kt:GridContainer$31</ID>
+    <ID>MagicNumber:HotReloadController.kt:HotReloadController$250L</ID>
+    <ID>MagicNumber:LineMetricsSpan.kt:LineMetricsSpan$4.0f</ID>
+    <ID>MagicNumber:LineMetricsSpan.kt:LineMetricsSpan$8.0f</ID>
+    <ID>MagicNumber:LinearGradientDrawable.kt:LinearGradientDrawable.Companion$180f</ID>
+    <ID>MagicNumber:ProfilingSession.kt:ProfilingSession.Companion$1000L</ID>
+    <ID>MagicNumber:SwitchView.kt:SwitchView$0.1f</ID>
+    <ID>MagicNumber:SwitchView.kt:SwitchView$0.3f</ID>
+    <ID>MagicNumber:SwitchView.kt:SwitchView$0.5f</ID>
+    <ID>MagicNumber:SwitchView.kt:SwitchView$255</ID>
+    <ID>MagicNumber:VariableMonitorView.kt:VariableMonitorView$50</ID>
+    <ID>MagicNumber:ViewPreCreationProfile.kt:ViewPreCreationProfile$12</ID>
+    <ID>MagicNumber:ViewPreCreationProfile.kt:ViewPreCreationProfile$20</ID>
+    <ID>MagicNumber:ViewPreCreationProfile.kt:ViewPreCreationProfile$3</ID>
+    <ID>MagicNumber:ViewPreCreationProfile.kt:ViewPreCreationProfile$4</ID>
+    <ID>MagicNumber:ViewPreCreationProfile.kt:ViewPreCreationProfile$6</ID>
+    <ID>MagicNumber:ViewPreCreationProfile.kt:ViewPreCreationProfile$8</ID>
+    <ID>MagicNumber:ViewVisibilityCalculator.kt:ViewVisibilityCalculator$100</ID>
+    <ID>MagicNumber:WormIndicatorAnimator.kt:WormIndicatorAnimator$0.5f</ID>
+    <ID>MagicNumber:WrapContainerLayout.kt:WrapContainerLayout$3</ID>
+    <ID>MagicNumber:WrapContentPageSizeOffScreenPagesController.kt:WrapContentPageSizeOffScreenPagesController$3</ID>
+    <ID>MatchingDeclarationName:DivTextImageBuilderExtensions.kt:DivTextImageResult</ID>
+    <ID>MatchingDeclarationName:DivTextRangeBuilderExtensions.kt:DivTextRangeResult</ID>
+    <ID>MaxLineLength:BaseInputMask.kt:BaseInputMask$while</ID>
+    <ID>MaxLineLength:BindingDispatcher.kt:BindingDispatcher.Companion$const val MESSAGE_LOCK_FAIL_WITH_ASSERTS_OFF = "Looks like asserts are turned off, so your call received default return value."</ID>
+    <ID>MaxLineLength:BindingThread.kt:BindingThread$*</ID>
+    <ID>MaxLineLength:Colormap.kt:IllegalStateException("Colors for linear gradient are not provided. Please check if 'colors' or 'color_map' properties are defined")</ID>
+    <ID>MaxLineLength:CurrencyInputMask.kt:CurrencyInputMask$}</ID>
+    <ID>MaxLineLength:Div2View.kt:Div2View$fun</ID>
+    <ID>MaxLineLength:DivActionBinder.kt:DivActionBinder$gestureListener.onSingleTapListener = null</ID>
+    <ID>MaxLineLength:DivBaseBinder.kt:DivBaseBinder$bindNextFocusId</ID>
+    <ID>MaxLineLength:DivBorderDrawer.kt:DivBorderDrawer.Companion$KLog.w("DivBorderDrawer") { "Corner radius $cornerRadius is greater than half of the smallest side $maxCornerRadius" }</ID>
+    <ID>MaxLineLength:DivDataExtensions.kt:&amp;&amp;</ID>
+    <ID>MaxLineLength:DivDownloadActionHandler.kt:DivDownloadActionHandler$fun</ID>
+    <ID>MaxLineLength:DivDownloadActionHandler.kt:DivDownloadActionHandler$return executeDownload(downloadUrl, downloadCallbacks?.onSuccessActions, downloadCallbacks?.onFailActions, view, resolver)</ID>
+    <ID>MaxLineLength:DivInputBinder.kt:DivInputBinder$val exception = IllegalArgumentException("Original locale tag '$evaluatedLocaleTag' is not equals to final one '$finalLanguageTag'")</ID>
+    <ID>MaxLineLength:DivPatchApply.kt:DivPatchApply.Companion$private const val PATH_FOLLOWING_ERROR = "Unable to find the next child to patch by following a precalculated path"</ID>
+    <ID>MaxLineLength:DivPatchDownloadCallback.kt:DivPatchDownloadCallback$* Call when patch successfully loaded. {@link com.yandex.div2.DownloadCallbacks.onSuccessActions} will be called after.</ID>
+    <ID>MaxLineLength:DivStateBinder.kt:DivStateBinder$view.bindState(divValue, oldDivBlock?.divValue, newState, oldState, oldDivStateBlock, path, resolver, id, divView)</ID>
+    <ID>MaxLineLength:DivTextRangesBackgroundRenderer.kt:SingleLineRenderer$val borderDrawer = BackgroundDrawer(view.resources.displayMetrics, span.border, span.background, canvas, resolver)</ID>
+    <ID>MaxLineLength:DivVideoBinder.kt:PreviewImageView$layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)</ID>
+    <ID>MaxLineLength:DivViewWithItemsController.kt:DivViewWithItemsController.Companion$return DivViewWithItemsController(viewWithItems, divView.div2Component.animationsEnabledController.isEnabled())</ID>
+    <ID>MaxLineLength:DivVisibilityActionTracker.kt:DivVisibilityActionTracker$is DivDisappearAction -&gt; shouldTrackVisibilityAction(scope, resolver, null, action, 0, disappearTrackedTokens)</ID>
+    <ID>MaxLineLength:DivVisibilityActionTracker.kt:DivVisibilityActionTracker$is DivVisibilityAction -&gt; shouldTrackVisibilityAction(scope, resolver, null, action, 0, appearTrackedTokens)</ID>
+    <ID>MaxLineLength:DivVisibilityActionTracker.kt:DivVisibilityActionTracker$is DivVisibilityAction -&gt; trackVisibilityActions(scope, resolver, view, div, listOf(action), emptyList())</ID>
+    <ID>MaxLineLength:DivVisibilityActionTracker.kt:DivVisibilityActionTracker$view != null &amp;&amp; originalLogId != null &amp;&amp; !trackable -&gt; cancelTracking(originalLogId, view, action, trackedTokens)</ID>
+    <ID>MaxLineLength:EllipsizedTextView.kt:EllipsizedTextView$private</ID>
+    <ID>MaxLineLength:EllipsizedTextView.kt:EllipsizedTextView$val direction = TextViewCompat.getTextMetricsParams(this).textDirection ?: TextDirectionHeuristics.FIRSTSTRONG_LTR</ID>
+    <ID>MaxLineLength:ExistingToken.kt:ExistingToken$is Div.Tabs -&gt; throw RebindTask.UnsupportedElementException(div::class.java)</ID>
+    <ID>MaxLineLength:ExpressionSubscribers.kt:linearGradientBackground.colorMap?.forEach { colorPoint -&gt; observeColorPoint(colorPoint, resolver, callback) }</ID>
+    <ID>MaxLineLength:LinearContainerLayout.kt:LinearContainerLayout$crossMatchParentChildren.forEach { maxCrossSize = max(maxCrossSize, it.minimumWidth + it.lp.horizontalMargins) }</ID>
+    <ID>MaxLineLength:PerformanceDependentSessionProfiler.kt:PerformanceDependentSessionProfiler$KLog.e(TAG) { "PerformanceDependentSessionProfiler.end() needs to be called after PerformanceDependentSessionProfiler.start()" }</ID>
+    <ID>MaxLineLength:PerformanceDependentSessionProfiler.kt:PerformanceDependentSessionProfiler$KLog.w(TAG) { "PerformanceDependentSessionProfiler.start() was called, but session recording was already in progress, ignoring previous session" }</ID>
+    <ID>MaxLineLength:RtlViewPager.kt:RtlViewPager.ReversingOnPageChangeListener$inner</ID>
+    <ID>MaxLineLength:ScaleIndicatorAnimator.kt:ScaleIndicatorAnimator$override fun getSelectedItemRect: RectF?</ID>
+    <ID>MaxLineLength:SliderIndicatorAnimator.kt:SliderIndicatorAnimator$itemRect.left = xOffset - (spaceBetweenCenters * selectedPositionOffset).coerceAtMost(spaceBetweenCenters) - itemWidth / 2f</ID>
+    <ID>MaxLineLength:SliderIndicatorAnimator.kt:SliderIndicatorAnimator$itemRect.right = xOffset + (spaceBetweenCenters * selectedPositionOffset).coerceAtMost(spaceBetweenCenters) + itemWidth / 2f</ID>
+    <ID>MaxLineLength:SliderIndicatorAnimator.kt:SliderIndicatorAnimator$override</ID>
+    <ID>MaxLineLength:SliderView.kt:SliderView$it.endPosition &lt; startPosition || it.startPosition &gt; endPosition -&gt; drawTrackPart(it.inactiveTrackDrawable)</ID>
+    <ID>MaxLineLength:SliderView.kt:SliderView$it.startPosition &gt;= startPosition &amp;&amp; it.endPosition &lt;= endPosition -&gt; drawTrackPart(it.activeTrackDrawable)</ID>
+    <ID>MaxLineLength:SpanData.kt:SpanData$baselineOffset = if (span.baselineOffset == DEFAULT_BASELINE_OFFSET) baselineOffset else span.baselineOffset</ID>
+    <ID>MaxLineLength:SpannedTextBuilder.kt:SpannedTextBuilder$if (mask.isEnabled) spannedText.setSpan(MaskSpan(mask, textView as? DivLineHeightTextView), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)</ID>
+    <ID>MaxLineLength:ViewGroups.kt:&amp;&amp;</ID>
+    <ID>MaxLineLength:ViewPager2Wrapper.kt:ViewPager2Wrapper$return viewPager.getChildAt(0) as? RecyclerView</ID>
+    <ID>MaxLineLength:WormIndicatorAnimator.kt:WormIndicatorAnimator$itemRect.left = xOffset + (spaceBetweenCenters * (selectedPositionOffset - 0.5f) * 2f).coerceAtLeast(0f) - itemWidth / 2f</ID>
+    <ID>MaxLineLength:WormIndicatorAnimator.kt:WormIndicatorAnimator$itemRect.left = xOffset - (spaceBetweenCenters * selectedPositionOffset * 2f).coerceAtMost(spaceBetweenCenters) - itemWidth / 2f</ID>
+    <ID>MaxLineLength:WormIndicatorAnimator.kt:WormIndicatorAnimator$itemRect.right = xOffset + (spaceBetweenCenters * selectedPositionOffset * 2f).coerceAtMost(spaceBetweenCenters) + itemWidth / 2f</ID>
+    <ID>MaxLineLength:WormIndicatorAnimator.kt:WormIndicatorAnimator$itemRect.right = xOffset - (spaceBetweenCenters * (selectedPositionOffset - 0.5f) * 2f).coerceAtLeast(0f) + itemWidth / 2f</ID>
+    <ID>MaxLineLength:WormIndicatorAnimator.kt:WormIndicatorAnimator$override</ID>
+    <ID>NestedBlockDepth:Utils.kt:private fun DivAnimation.toAnimation: Animation?</ID>
+    <ID>NewLineAtEndOfFile:DivTimerEventDispatcherProvider.kt:com.yandex.div.core.timer.DivTimerEventDispatcherProvider.kt</ID>
+    <ID>NewLineAtEndOfFile:VerticalAlignmentSpan.kt:com.yandex.div.core.view2.spannable.VerticalAlignmentSpan.kt</ID>
+    <ID>ReturnCount:AnimatedTextGradientController.kt:AnimatedTextGradientController$private fun updateShader</ID>
+    <ID>ReturnCount:BackKeyPressedHelper.kt:BackKeyPressedHelper$fun onKeyAction: Boolean</ID>
+    <ID>ReturnCount:BaseDivViewExtensions.kt:internal fun View.bindAspectRatio</ID>
+    <ID>ReturnCount:BaseDivViewExtensions.kt:internal fun View.performClickOnAncestors: Boolean</ID>
+    <ID>ReturnCount:BaseDivViewExtensions.kt:internal fun View.performLongClickOnAncestors: Boolean</ID>
+    <ID>ReturnCount:BindingCriticalSection.kt:BindingCriticalSection$@AnyThread fun tryEnter: Disposable?</ID>
+    <ID>ReturnCount:BindingDispatcher.kt:BindingDispatcher$inline fun &lt;T&gt; withLock: T</ID>
+    <ID>ReturnCount:ContainerFinder.kt:ContainerFinder$fun findContainer: DivBlock?</ID>
+    <ID>ReturnCount:DebugViewModelProvider.kt:DebugViewModelProvider$fun tryRenderErrorsAndWarnings: DebugViewModel?</ID>
+    <ID>ReturnCount:DebugViewModelProvider.kt:DebugViewModelProvider$private fun pasteToClipBoard: Result&lt;Unit&gt;</ID>
+    <ID>ReturnCount:DebugViewModelProvider.kt:DebugViewModelProvider$private fun toViewModel: DebugViewModel</ID>
+    <ID>ReturnCount:Div2View.kt:Div2View$private fun forceSwitchToState: Boolean</ID>
+    <ID>ReturnCount:Div2View.kt:Div2View$private fun prepareTransition: Transition?</ID>
+    <ID>ReturnCount:Div2View.kt:Div2View$private fun rebind</ID>
+    <ID>ReturnCount:Div2View.kt:Div2View$private fun tryApplyPatch: Boolean</ID>
+    <ID>ReturnCount:Div2View.kt:Div2View$private fun updateNow: Boolean</ID>
+    <ID>ReturnCount:DivAccessibilityBinder.kt:DivAccessibilityBinder$private fun View.bindMode</ID>
+    <ID>ReturnCount:DivAccessibilityBinder.kt:DivAccessibilityBinder$private fun getAccessibilityDelegate: AccessibilityDelegateCompat?</ID>
+    <ID>ReturnCount:DivActionBeaconSender.kt:DivActionBeaconSender$fun sendSwipeOutActionBeacon</ID>
+    <ID>ReturnCount:DivActionBeaconSender.kt:DivActionBeaconSender$fun sendTapActionBeacon</ID>
+    <ID>ReturnCount:DivActionBeaconSender.kt:DivActionBeaconSender$fun sendVisibilityActionBeacon</ID>
+    <ID>ReturnCount:DivActionTypedDictSetValueHandler.kt:DivActionTypedDictSetValueHandler$private fun Variable.mutate</ID>
+    <ID>ReturnCount:DivActionTypedHandlerProxy.kt:DivActionTypedHandlerProxy$private fun handleAction: Boolean</ID>
+    <ID>ReturnCount:DivActionTypedSetCursorPositionHandler.kt:DivActionTypedSetCursorPositionHandler$private fun handleSetCursorPosition</ID>
+    <ID>ReturnCount:DivActionTypedSubmitHandler.kt:DivActionTypedSubmitHandler$override fun handleAction: Boolean</ID>
+    <ID>ReturnCount:DivAnimatorController.kt:DivAnimatorController$private fun findAnimator: DivAnimator?</ID>
+    <ID>ReturnCount:DivAnimatorTypedActionHandler.kt:DivAnimatorTypedActionHandler$override fun handleAction: Boolean</ID>
+    <ID>ReturnCount:DivCollectionExtensions.kt:private fun DivCollectionItemBuilder.buildItem: DivBlock?</ID>
+    <ID>ReturnCount:DivCollectionExtensions.kt:private fun getItemResolverAndPath: Pair&lt;ExpressionResolver, DivStatePath&gt;?</ID>
+    <ID>ReturnCount:DivComparator.kt:DivComparator$fun areDivsReplaceable: Boolean</ID>
+    <ID>ReturnCount:DivComparator.kt:DivComparator$fun areValuesReplaceable: Boolean</ID>
+    <ID>ReturnCount:DivComparator.kt:DivComparator$fun isDivDataReplaceable: Boolean</ID>
+    <ID>ReturnCount:DivDownloadActionHandler.kt:DivDownloadActionHandler$@JvmStatic fun canHandle: Boolean</ID>
+    <ID>ReturnCount:DivExtensionController.kt:DivExtensionController$fun beforeBindView</ID>
+    <ID>ReturnCount:DivExtensionController.kt:DivExtensionController$fun bindCustomView</ID>
+    <ID>ReturnCount:DivExtensionController.kt:DivExtensionController$fun unbindView</ID>
+    <ID>ReturnCount:DivFocusBinder.kt:DivFocusBinder$private fun DivBorder?.isConstantlyEmpty: Boolean</ID>
+    <ID>ReturnCount:DivGalleryItemHelper.kt:DivGalleryItemHelper$fun trackVisibilityAction</ID>
+    <ID>ReturnCount:DivGallerySnapHelper.kt:DivGallerySnapHelper$fun getAnchor: Int</ID>
+    <ID>ReturnCount:DivGifImageBinder.kt:DivGifImageBinder.LoadDrawableOnPostPTask$override fun doInBackground: Drawable?</ID>
+    <ID>ReturnCount:DivImageBinder.kt:DivImageBinder$private fun DivImageView.applyFiltersAndSetBitmap</ID>
+    <ID>ReturnCount:DivImageBinder.kt:DivImageBinder$private fun DivImageView.applyImage: Boolean</ID>
+    <ID>ReturnCount:DivImageBinder.kt:DivImageBinder$private fun DivImageView.bindFilters</ID>
+    <ID>ReturnCount:DivIndicatorBinder.kt:DivIndicatorBinder$fun DivIndicator.Animation.convert: IndicatorParams.Animation</ID>
+    <ID>ReturnCount:DivInputBinder.kt:DivInputBinder.&lt;no name provided&gt;$override fun onVariableChanged</ID>
+    <ID>ReturnCount:DivInputBinder.kt:DivInputBinder.&lt;no name provided&gt;$private fun applyMaskOrFilters</ID>
+    <ID>ReturnCount:DivInputView.kt:DivInputView$override fun onCreateInputConnection: InputConnection?</ID>
+    <ID>ReturnCount:DivItemChangeActionHandler.kt:DivItemChangeActionHandler$@JvmStatic fun handleAction: Boolean</ID>
+    <ID>ReturnCount:DivItemChangeActionHandler.kt:DivItemChangeActionHandler$private fun handleScrollToItemId: Boolean</ID>
+    <ID>ReturnCount:DivItemChangeActionHandler.kt:DivItemChangeActionHandler$private fun handleSetCurrentItem: Boolean</ID>
+    <ID>ReturnCount:DivJoinedStateSwitcher.kt:DivJoinedStateSwitcher$private fun findCommonPath: DivStatePath</ID>
+    <ID>ReturnCount:DivKit.kt:DivKit.Companion$@JvmStatic @AnyThread fun getInstance: DivKit</ID>
+    <ID>ReturnCount:DivLayoutParamsBinder.kt:DivLayoutParamsBinder$private fun DivSize.checkConstraints</ID>
+    <ID>ReturnCount:DivLayoutParamsBinder.kt:DivLayoutParamsBinder$private fun View.applyHorizontalWeightValue: Boolean</ID>
+    <ID>ReturnCount:DivLayoutParamsBinder.kt:DivLayoutParamsBinder$private fun View.applyVerticalWeightValue: Boolean</ID>
+    <ID>ReturnCount:DivLayoutProviderBinder.kt:DivLayoutProviderBinder$private fun updateSizeVariable</ID>
+    <ID>ReturnCount:DivPagerBinder.kt:DivPagerBinder.&lt;no name provided&gt;$override fun onScrolled</ID>
+    <ID>ReturnCount:DivPagerPageOffsetProvider.kt:DivPagerPageOffsetProvider$private fun contentIsSmallerThanPager: Boolean</ID>
+    <ID>ReturnCount:DivPagerPageOffsetProvider.kt:DivPagerPageOffsetProvider$private fun getEndOffset: Float</ID>
+    <ID>ReturnCount:DivPagerPageOffsetProvider.kt:DivPagerPageOffsetProvider$private fun getInitialOffset: Float</ID>
+    <ID>ReturnCount:DivPagerPageOffsetProvider.kt:DivPagerPageOffsetProvider$private fun getInitialStartOffset: Float</ID>
+    <ID>ReturnCount:DivPagerPageOffsetProvider.kt:DivPagerPageOffsetProvider$private fun getOffsetForSmallContent: Float</ID>
+    <ID>ReturnCount:DivPagerPageOffsetProvider.kt:DivPagerPageOffsetProvider$private fun getOnePositionOffset: Float</ID>
+    <ID>ReturnCount:DivPagerPageOffsetProvider.kt:DivPagerPageOffsetProvider$private fun getStartOffset: Float</ID>
+    <ID>ReturnCount:DivPagerView.kt:DivPagerView$fun getPageView: View?</ID>
+    <ID>ReturnCount:DivPagerView.kt:DivPagerView$private fun findViewWithPropertyAt: Boolean</ID>
+    <ID>ReturnCount:DivPagerView.kt:DivPagerView$private fun getWrapperFor: View?</ID>
+    <ID>ReturnCount:DivPagerView.kt:DivPagerView.&lt;no name provided&gt;$override fun onSingleTapUp: Boolean</ID>
+    <ID>ReturnCount:DivPagerView.kt:DivPagerView.&lt;no name provided&gt;$private fun performActionIfNeeded</ID>
+    <ID>ReturnCount:DivPatchApply.kt:DivPatchApply$fun applyPatch: List&lt;DivData.State&gt;?</ID>
+    <ID>ReturnCount:DivPatchApply.kt:DivPatchApply$private fun Div.applyPatchForSingleDiv: List&lt;Div&gt;</ID>
+    <ID>ReturnCount:DivPatchApply.kt:DivPatchApply$private fun List&lt;Div&gt;.pathToChildWithId: List&lt;Div&gt;</ID>
+    <ID>ReturnCount:DivPatchApply.kt:DivPatchApply$private fun findPatchedRecyclerViewAndNotifyChange: View?</ID>
+    <ID>ReturnCount:DivPatchApply.kt:DivPatchApply$private fun getPatchedDivCollection: Div</ID>
+    <ID>ReturnCount:DivPatchApply.kt:DivPatchApply$private fun getPatchedTreeByPath: Div</ID>
+    <ID>ReturnCount:DivPatchApply.kt:DivPatchApply$private fun pathToChildWithId: List&lt;Div&gt;</ID>
+    <ID>ReturnCount:DivPathUtils.kt:DivPathUtils$@Throws(StateConflictException::class) internal fun View.findStateLayout: DivStateLayout?</ID>
+    <ID>ReturnCount:DivPathUtils.kt:DivPathUtils$@Throws(StateConflictException::class) internal fun View.tryFindStateDivAndLayout: Pair&lt;DivStateLayout?, Div.State&gt;?</ID>
+    <ID>ReturnCount:DivPathUtils.kt:DivPathUtils$internal fun Div.findDivState: Div?</ID>
+    <ID>ReturnCount:DivRecyclerView.kt:DivRecyclerView$@SuppressLint("ClickableViewAccessibility") override fun onTouchEvent: Boolean</ID>
+    <ID>ReturnCount:DivRecyclerView.kt:DivRecyclerView$override fun onInterceptTouchEvent: Boolean</ID>
+    <ID>ReturnCount:DivRecyclerView.kt:DivRecyclerView$private fun getItemsIfNeeded: List&lt;DivBlock&gt;?</ID>
+    <ID>ReturnCount:DivRecyclerView.kt:DivRecyclerView$private fun getMaxSizeSpec: Int</ID>
+    <ID>ReturnCount:DivStateBinder.kt:DivStateBinder$private fun View.extractParentContentAlignmentHorizontal: DivContentAlignmentHorizontal?</ID>
+    <ID>ReturnCount:DivStateBinder.kt:DivStateBinder$private fun View.extractParentContentAlignmentVertical: DivContentAlignmentVertical?</ID>
+    <ID>ReturnCount:DivStateBinder.kt:DivStateBinder$private fun ViewGroup.findTopWrapContentParent: Pair&lt;ViewGroup, Sequence&lt;TransitionData&gt;?&gt;</ID>
+    <ID>ReturnCount:DivStateBinder.kt:DivStateBinder$private fun replaceViewsAnimated: Transition?</ID>
+    <ID>ReturnCount:DivStateLayout.kt:DivStateLayout$override fun canScrollHorizontally: Boolean</ID>
+    <ID>ReturnCount:DivStateLayout.kt:DivStateLayout.SwipeListener$override fun onScroll: Boolean</ID>
+    <ID>ReturnCount:DivTextImageBuilderExtensions.kt:private fun DivText.ImageBuilder.buildItem: DivTextImageResult?</ID>
+    <ID>ReturnCount:DivTextRangeBuilderExtensions.kt:private fun DivText.RangeBuilder.buildItem: DivTextRangeResult?</ID>
+    <ID>ReturnCount:DivTooltipController.kt:DivTooltipController.Companion$fun View.findChildWithTooltip: Pair&lt;DivTooltip, View&gt;?</ID>
+    <ID>ReturnCount:DivTooltipViewController.kt:DivTooltipViewController$fun startAnchorPositionTracking</ID>
+    <ID>ReturnCount:DivTooltipViewController.kt:DivTooltipViewController$private fun locatePopupWindow</ID>
+    <ID>ReturnCount:DivTooltipViewController.kt:DivTooltipViewController.Companion$private fun View.findBringToTopView: View?</ID>
+    <ID>ReturnCount:DivTooltipVisibilityController.kt:DivTooltipVisibilityController$fun hideTooltip</ID>
+    <ID>ReturnCount:DivTooltipVisibilityController.kt:DivTooltipVisibilityController$fun onDismiss</ID>
+    <ID>ReturnCount:DivTooltipVisibilityController.kt:DivTooltipVisibilityController$private fun tryShowTooltip</ID>
+    <ID>ReturnCount:DivTransitionHandler.kt:DivTransitionHandler$fun getLastChange: ChangeType.Visibility?</ID>
+    <ID>ReturnCount:DivTreeVisitor.kt:DivTreeVisitor$protected open fun defaultVisitCollection: T</ID>
+    <ID>ReturnCount:DivTreeWalk.kt:DivTreeWalk.BranchNode$override fun step: DivBlock?</ID>
+    <ID>ReturnCount:DivUtil.kt:internal fun Div.canBeReused: Boolean</ID>
+    <ID>ReturnCount:DivUtil.kt:internal fun DivShapeDrawable.toDrawable: Drawable?</ID>
+    <ID>ReturnCount:DivVideoActionHandler.kt:DivVideoActionHandler$fun handleAction: Boolean</ID>
+    <ID>ReturnCount:DivVideoActionHandler.kt:private fun Div2View.findVideoPath: Result&lt;DivStatePath&gt;</ID>
+    <ID>ReturnCount:DivVideoBinder.kt:DivVideoBinder$private fun DivVideo.observeSource: Disposable</ID>
+    <ID>ReturnCount:DivVideoView.kt:DivVideoView$fun getPlayerView: DivPlayerView?</ID>
+    <ID>ReturnCount:DivVideoView.kt:DivVideoView$private fun releaseCurrentPlayer</ID>
+    <ID>ReturnCount:DivViewWithItemsController.kt:DivViewWithItemsController.Companion$fun create: DivViewWithItemsController?</ID>
+    <ID>ReturnCount:EllipsizedTextView.kt:EllipsizedTextView$private fun calculateFittedSymbols: Int</ID>
+    <ID>ReturnCount:EllipsizedTextView.kt:EllipsizedTextView$private fun ellipsize: CharSequence?</ID>
+    <ID>ReturnCount:EllipsizedTextView.kt:EllipsizedTextView$private fun ellipsizeEnd: CharSequence?</ID>
+    <ID>ReturnCount:EllipsizedTextView.kt:EllipsizedTextView$private fun ellipsizeUnsafeNativeBoundary: CharSequence?</ID>
+    <ID>ReturnCount:EllipsizedTextView.kt:EllipsizedTextView$private fun truncatedEndText: CharSequence</ID>
+    <ID>ReturnCount:ErrorVisualMonitor.kt:ErrorVisualMonitor$private fun canShowDebugView: Boolean</ID>
+    <ID>ReturnCount:ExistingToken.kt:ExistingToken$private fun DivCustom.itemsToExistingTokenList: List&lt;ExistingToken&gt;</ID>
+    <ID>ReturnCount:ExistingToken.kt:ExistingToken$private fun DivPager.itemsToExistingTokenList: List&lt;ExistingToken&gt;</ID>
+    <ID>ReturnCount:FixedPageSizeOffScreenPagesController.kt:FixedPageSizeOffScreenPagesController$private fun setOffScreenPages</ID>
+    <ID>ReturnCount:FrameContainerLayout.kt:FrameContainerLayout$private fun considerMatchParentChildrenInMaxSize</ID>
+    <ID>ReturnCount:FrameContainerLayout.kt:FrameContainerLayout$private fun getDynamicHeight: Int</ID>
+    <ID>ReturnCount:HighApiBitmapEffectHelper.kt:HighApiBitmapEffectHelper$@RequiresApi(Build.VERSION_CODES.S) private fun blur: Bitmap</ID>
+    <ID>ReturnCount:IndicatorsStripDrawer.kt:IndicatorsStripDrawer.IndicatorsRibbon$private fun downscaleAndDisperse</ID>
+    <ID>ReturnCount:IndicatorsStripDrawer.kt:IndicatorsStripDrawer.IndicatorsRibbon$private fun scaleItem: Indicator</ID>
+    <ID>ReturnCount:JSONObjectEvaluator.kt:JSONObjectEvaluator$private fun transformObject: Result&lt;Map&lt;String, Any?&gt;&gt;</ID>
+    <ID>ReturnCount:LinearContainerLayout.kt:LinearContainerLayout$override fun getBaseline: Int</ID>
+    <ID>ReturnCount:LinearContainerLayout.kt:LinearContainerLayout$private fun measureMatchParentHeightChildFirstTime</ID>
+    <ID>ReturnCount:LookupTableInterpolator.kt:LookupTableInterpolator$override fun getInterpolation: Float</ID>
+    <ID>ReturnCount:MaskSpan.kt:MaskSpan$internal fun onFrame: Boolean</ID>
+    <ID>ReturnCount:PagerMultiPageScrollHelper.kt:PagerMultiPageScrollHelper$override fun findSnapView: View?</ID>
+    <ID>ReturnCount:PagerMultiPageScrollHelper.kt:PagerMultiPageScrollHelper$override fun onFling: Boolean</ID>
+    <ID>ReturnCount:PagerMultiPageScrollHelper.kt:PagerMultiPageScrollHelper$private fun LinearLayoutManager.snap: Boolean</ID>
+    <ID>ReturnCount:PagerMultiPageScrollHelper.kt:PagerMultiPageScrollHelper$private fun distanceToTarget: Int?</ID>
+    <ID>ReturnCount:ParentRecyclerViewAwaiter.kt:ParentRecyclerViewAwaiter$private fun onFrame</ID>
+    <ID>ReturnCount:ParticlesTicker.kt:ParticlesTicker$override fun doFrame</ID>
+    <ID>ReturnCount:PlayerViewsVisibilityChangeListener.kt:PlayerViewsVisibilityChangeListener$private fun findPlayerView: DivPlayerView?</ID>
+    <ID>ReturnCount:PopupWindowTouchListener.kt:PopupWindowTouchListener$override fun onTouch: Boolean</ID>
+    <ID>ReturnCount:ProfilingSession.kt:ProfilingSession$fun hasLongEvents: Boolean</ID>
+    <ID>ReturnCount:RebindTask.kt:RebindTaskImpl$private fun calculateDiff: Boolean</ID>
+    <ID>ReturnCount:RuntimeStoreImpl.kt:RuntimeStoreImpl$override fun getOrCreateRuntime: ExpressionsRuntime</ID>
+    <ID>ReturnCount:RuntimeStoreImpl.kt:RuntimeStoreImpl$override fun resolveRuntimeWith: ExpressionsRuntime?</ID>
+    <ID>ReturnCount:SafeAreaTopMarginController.kt:SafeAreaTopMarginController$private fun isStatusBarOverlappingActivityWindow: Boolean</ID>
+    <ID>ReturnCount:SafeDrawingPassOverrideStrategy.kt:SafeDrawingPassOverrideStrategy$override fun overrideDrawingPass: Boolean</ID>
+    <ID>ReturnCount:SearchUtil.kt:internal inline fun &lt;reified T: DivBase&gt; findNearest: T?</ID>
+    <ID>ReturnCount:SliderAccessibilityHelper.kt:SliderAccessibilityHelper$override fun onPerformActionForVirtualView: Boolean</ID>
+    <ID>ReturnCount:SliderView.kt:SliderView$@SuppressLint("ClickableViewAccessibility") override fun onTouchEvent: Boolean</ID>
+    <ID>ReturnCount:SpannedTextBuilder.kt:SpannedTextBuilder$private fun preprocessSpans: List&lt;SpanData&gt;</ID>
+    <ID>ReturnCount:StoredValuesActionHandler.kt:StoredValuesActionHandler$@JvmStatic fun handleAction</ID>
+    <ID>ReturnCount:StoredValuesController.kt:StoredValuesController$fun getStoredValue: StoredValue?</ID>
+    <ID>ReturnCount:TextGradientBinder.kt:TextGradientBinder$private fun DivAnimatedTextGradient.resolveGradientData: AnimatedTextGradientData?</ID>
+    <ID>ReturnCount:TextViewWithAccessibleSpans.kt:TextViewWithAccessibleSpans.SpanHelper$override fun onPerformActionForVirtualView: Boolean</ID>
+    <ID>ReturnCount:TransientView.kt:internal fun View.isInTransientHierarchy: Boolean</ID>
+    <ID>ReturnCount:Transitions.kt:internal inline fun DivBlock.toTransitionData: TransitionData?</ID>
+    <ID>ReturnCount:TriggersController.kt:TriggerExecutor$private fun conditionSatisfied: Boolean</ID>
+    <ID>ReturnCount:VariableControllerImpl.kt:VariableControllerImpl$override fun getMutableVariable: Variable?</ID>
+    <ID>ReturnCount:VariableMutationHandler.kt:VariableMutationHandler$fun &lt;T : Variable&gt; setVariable: VariableMutationException?</ID>
+    <ID>ReturnCount:VariableMutationHandler.kt:VariableMutationHandler$fun setVariable: VariableMutationException?</ID>
+    <ID>ReturnCount:VerticalAlignmentSpan.kt:VerticalAlignmentSpan$override fun updateDrawState</ID>
+    <ID>ReturnCount:ViewComparator.kt:ViewComparator$fun View.structureEquals: Boolean</ID>
+    <ID>ReturnCount:ViewGroups.kt:internal fun ViewGroup.hasScrollableChildUnder: Boolean</ID>
+    <ID>ReturnCount:ViewGroups.kt:private fun RecyclerView.canScrollMore: Boolean</ID>
+    <ID>ReturnCount:ViewGroups.kt:private fun ViewPager.canScrollMore: Boolean</ID>
+    <ID>ReturnCount:ViewGroups.kt:private fun ViewPager.isScrollableViewPagerUnder: Boolean</ID>
+    <ID>ReturnCount:ViewLocator.kt:ViewLocator$inline fun &lt;reified T&gt; findSingleViewWithTag: Result&lt;T&gt;</ID>
+    <ID>ReturnCount:ViewPagerFixedSizeLayout.kt:ViewPagerFixedSizeLayout$fun shouldRequestLayoutOnScroll: Boolean</ID>
+    <ID>ReturnCount:ViewVisibilityCalculator.kt:ViewVisibilityCalculator$@MainThread @IntRange(from = 0L, to = 100L) fun calculateVisibilityPercentage: Int</ID>
+    <ID>ReturnCount:WrapContainerLayout.kt:WrapContainerLayout$private fun determineCrossSize</ID>
+    <ID>ReturnCount:WrapContentPageSizeOffScreenPagesController.kt:WrapContentPageSizeOffScreenPagesController$private fun calcSidePagesCount: Int</ID>
+    <ID>SwallowedException:DivTooltipWindow.kt:DivTooltipWindow$e: IllegalArgumentException</ID>
+    <ID>SwallowedException:DivTooltipWindow.kt:DivTooltipWindow$e: IllegalStateException</ID>
+    <ID>SwallowedException:VariableMonitor.kt:VariableMonitor$e: Exception</ID>
+    <ID>ThrowingExceptionsWithoutMessageOrCause:ConditionPart.kt:State.End$IllegalStateException()</ID>
+    <ID>ThrowingExceptionsWithoutMessageOrCause:RuntimeStore.kt:RuntimeStore.Companion.&lt;no name provided&gt;$IllegalStateException()</ID>
+    <ID>ThrowsCount:DivNetworkDivDownloader.kt:DivNetworkDivDownloader$override fun downloadPatch: LoadReference</ID>
+    <ID>ThrowsCount:ExpressionResolverImpl.kt:ExpressionResolverImpl$private fun &lt;R : Any, T : Any&gt; tryResolve: T</ID>
+    <ID>TooGenericExceptionCaught:BindingDispatcher.kt:BindingDispatcher$e: Throwable</ID>
+    <ID>TooGenericExceptionCaught:BindingDispatcher.kt:BindingDispatcher$error: Throwable</ID>
+    <ID>TooGenericExceptionCaught:DataStorage.kt:DataStorage$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:DebugViewModelProvider.kt:DebugViewModelProvider$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:DecodeBase64ImageTask.kt:DecodeBase64ImageTask$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:Div2View.kt:Div2View$error: Exception</ID>
+    <ID>TooGenericExceptionCaught:DivActionTypedScrollHandler.kt:DivActionTypedScrollHandler$e: RuntimeException</ID>
+    <ID>TooGenericExceptionCaught:DivItemChangeActionHandler.kt:DivItemChangeActionHandler$e: RuntimeException</ID>
+    <ID>TooGenericExceptionCaught:ExpressionResolverImpl.kt:ExpressionResolverImpl$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:TriggersController.kt:TriggerExecutor$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:VariableMonitor.kt:VariableMonitor$e: Exception</ID>
+    <ID>TooGenericExceptionThrown:DivViewWithItemsController.kt:DivViewWithItemsController$throw RuntimeException("Failed to scroll to item with id.", it)</ID>
+    <ID>TooManyFunctions:AnimatedTextGradientController.kt:AnimatedTextGradientController : FrameCallback</ID>
+    <ID>TooManyFunctions:BaseDivViewExtensions.kt:com.yandex.div.core.view2.divs.BaseDivViewExtensions.kt</ID>
+    <ID>TooManyFunctions:BaseInputMask.kt:BaseInputMask</ID>
+    <ID>TooManyFunctions:BatchBlockingQueue.kt:BatchBlockingQueue&lt;E&gt; : AbstractQueueBlockingQueue</ID>
+    <ID>TooManyFunctions:BindingDispatcher.kt:BindingDispatcher</ID>
+    <ID>TooManyFunctions:BindingEventReporterImpl.kt:BindingEventReporterImpl : EventMessageBuilderBindingEventReporter</ID>
+    <ID>TooManyFunctions:DebugViewModelProvider.kt:DebugViewModelProvider</ID>
+    <ID>TooManyFunctions:Div2View.kt:Div2View : FrameContainerLayoutDivViewFacade</ID>
+    <ID>TooManyFunctions:DivAccessibilityBinder.kt:DivAccessibilityBinder</ID>
+    <ID>TooManyFunctions:DivActionBinder.kt:DivActionBinder</ID>
+    <ID>TooManyFunctions:DivActionTypedModule.kt:DivActionTypedModule</ID>
+    <ID>TooManyFunctions:DivBaseBinder.kt:DivBaseBinder</ID>
+    <ID>TooManyFunctions:DivBinder.kt:DivBinder</ID>
+    <ID>TooManyFunctions:DivBorderDrawer.kt:DivBorderDrawer : ExpressionSubscriber</ID>
+    <ID>TooManyFunctions:DivCollectionExtensions.kt:com.yandex.div.internal.core.DivCollectionExtensions.kt</ID>
+    <ID>TooManyFunctions:DivContainerBinder.kt:DivContainerBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivDataExtensions.kt:com.yandex.div.core.util.DivDataExtensions.kt</ID>
+    <ID>TooManyFunctions:DivExtensionController.kt:DivExtensionController</ID>
+    <ID>TooManyFunctions:DivGalleryItemHelper.kt:DivGalleryItemHelper</ID>
+    <ID>TooManyFunctions:DivGallerySnapHelper.kt:DivGallerySnapHelper : PagerSnapHelper</ID>
+    <ID>TooManyFunctions:DivGradientExtensions.kt:com.yandex.div.core.util.DivGradientExtensions.kt</ID>
+    <ID>TooManyFunctions:DivGridLayoutManager.kt:DivGridLayoutManager : StaggeredGridLayoutManagerDivGalleryItemHelper</ID>
+    <ID>TooManyFunctions:DivImageBinder.kt:DivImageBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivInputBinder.kt:DivInputBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivInputView.kt:DivInputView : SuperLineHeightEditTextDivHolderViewDivAnimator</ID>
+    <ID>TooManyFunctions:DivItemChangeActionHandler.kt:DivItemChangeActionHandler</ID>
+    <ID>TooManyFunctions:DivLayoutParamsBinder.kt:DivLayoutParamsBinder</ID>
+    <ID>TooManyFunctions:DivLineHeightTextView.kt:DivLineHeightTextView : TextViewWithAccessibleSpansDivHolderViewDivAnimator</ID>
+    <ID>TooManyFunctions:DivLinearLayoutManager.kt:DivLinearLayoutManager : LinearLayoutManagerDivGalleryItemHelper</ID>
+    <ID>TooManyFunctions:DivPagerAdapter.kt:DivPagerAdapter : DivCollectionAdapter</ID>
+    <ID>TooManyFunctions:DivPagerBinder.kt:DivPagerBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivPagerView.kt:DivPagerView : ViewPager2WrapperDivHolderViewOnInterceptTouchEventListenerHostDivScrollActionHolder</ID>
+    <ID>TooManyFunctions:DivPatchApply.kt:DivPatchApply</ID>
+    <ID>TooManyFunctions:DivPathUtils.kt:DivPathUtils</ID>
+    <ID>TooManyFunctions:DivPreloader.kt:DivPreloader$DownloadCallback : DivImageDownloadCallbackPreloadingRegistry</ID>
+    <ID>TooManyFunctions:DivRecyclerView.kt:DivRecyclerView : BackHandlingRecyclerViewDivHolderViewOnInterceptTouchEventListenerHostDivScrollActionHolder</ID>
+    <ID>TooManyFunctions:DivRuntimeVisitor.kt:DivRuntimeVisitor</ID>
+    <ID>TooManyFunctions:DivSliderBinder.kt:DivSliderBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivStateBinder.kt:DivStateBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivTabsBinder.kt:DivTabsBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivTextBinder.kt:DivTextBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivTooltipAnimation.kt:com.yandex.div.core.tooltip.DivTooltipAnimation.kt</ID>
+    <ID>TooManyFunctions:DivTooltipController.kt:DivTooltipController</ID>
+    <ID>TooManyFunctions:DivTreeVisitor.kt:DivTreeVisitor&lt;T&gt;</ID>
+    <ID>TooManyFunctions:DivUtil.kt:com.yandex.div.core.util.DivUtil.kt</ID>
+    <ID>TooManyFunctions:DivVideoBinder.kt:DivVideoBinder : DivViewBinder</ID>
+    <ID>TooManyFunctions:DivVideoView.kt:DivVideoView : FrameContainerLayoutDivHolderViewDivExtensionViewReleasableMediaReleasable</ID>
+    <ID>TooManyFunctions:DivViewVisitor.kt:DivViewVisitor</ID>
+    <ID>TooManyFunctions:DivVisibilityActionTracker.kt:DivVisibilityActionTracker</ID>
+    <ID>TooManyFunctions:DivVisitor.kt:DivVisitor&lt;T&gt;</ID>
+    <ID>TooManyFunctions:EllipsizedTextView.kt:EllipsizedTextView : SuperLineHeightTextView</ID>
+    <ID>TooManyFunctions:ExpressionResolverImpl.kt:ExpressionResolverImpl : ExpressionResolver</ID>
+    <ID>TooManyFunctions:ExpressionSubscribers.kt:com.yandex.div.core.util.ExpressionSubscribers.kt</ID>
+    <ID>TooManyFunctions:FrameContainerLayout.kt:FrameContainerLayout : DivViewGroupAspectView</ID>
+    <ID>TooManyFunctions:GridContainer.kt:GridContainer : DivViewGroup</ID>
+    <ID>TooManyFunctions:LinearContainerLayout.kt:LinearContainerLayout : DivViewGroupAspectView</ID>
+    <ID>TooManyFunctions:LoadableImageView.kt:LoadableImageView : AspectImageViewLoadableImageDivExtendableViewReleasable</ID>
+    <ID>TooManyFunctions:ResourcesWrapper.kt:ResourcesWrapper : Resources</ID>
+    <ID>TooManyFunctions:ReusableTokenList.kt:ReusableTokenList</ID>
+    <ID>TooManyFunctions:RuntimeStoreFiller.kt:RuntimeStoreFiller</ID>
+    <ID>TooManyFunctions:RuntimeStoreImpl.kt:RuntimeStoreImpl : RuntimeStore</ID>
+    <ID>TooManyFunctions:SafeAlertDialogBuilder.kt:SafeAlertDialogBuilder</ID>
+    <ID>TooManyFunctions:ScaleDrawable.kt:ScaleDrawable : DrawableCallbackAnimatable</ID>
+    <ID>TooManyFunctions:ScaleIndicatorAnimator.kt:ScaleIndicatorAnimator : IndicatorAnimator</ID>
+    <ID>TooManyFunctions:SizeUnitUtils.kt:com.yandex.div.core.view2.divs.SizeUnitUtils.kt</ID>
+    <ID>TooManyFunctions:SliderView.kt:SliderView : View</ID>
+    <ID>TooManyFunctions:SpannedTextBuilder.kt:SpannedTextBuilder</ID>
+    <ID>TooManyFunctions:SwitchView.kt:SwitchView : FrameLayout</ID>
+    <ID>TooManyFunctions:TextViewExtensions.kt:com.yandex.div.core.view2.divs.TextViewExtensions.kt</ID>
+    <ID>TooManyFunctions:Ticker.kt:Ticker</ID>
+    <ID>TooManyFunctions:VariableControllerImpl.kt:VariableControllerImpl : VariableController</ID>
+    <ID>TooManyFunctions:VisibilityAwareAdapter.kt:VisibilityAwareAdapter&lt;VH : RecyclerView.ViewHolder&gt; : AdapterExpressionSubscriber</ID>
+    <ID>TooManyFunctions:WrapContainerLayout.kt:WrapContainerLayout : DivViewGroupAspectView</ID>
+    <ID>UnusedParameter:Div2View.kt:Div2View$expressionResolver: ExpressionResolver = getExpressionResolver()</ID>
+    <ID>UnusedParameter:Div2View.kt:Div2View$withAnimations: Boolean</ID>
+    <ID>UnusedParameter:DivBorderDrawer.kt:DivBorderDrawer$height: Int</ID>
+    <ID>UnusedParameter:DivBorderDrawer.kt:DivBorderDrawer$width: Int</ID>
+    <ID>UnusedParameter:RebindTask.kt:RebindTaskImpl$path: DivStatePath</ID>
+    <ID>UnusedParameter:StoredValuesController.kt:StoredValuesController$errorCollector: ErrorCollector</ID>
+    <ID>UnusedParameter:TimerController.kt:TimerController$time: Long</ID>
+    <ID>WildcardImport:ResourcesWrapper.kt:import android.content.res.*</ID>
+  </CurrentIssues>
+</SmellBaseline>

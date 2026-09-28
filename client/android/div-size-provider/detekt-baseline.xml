@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ReturnCount:DivSizeProviderExtensionHandler.kt:DivSizeProviderExtensionHandler$override fun bindView</ID>
+    <ID>ReturnCount:DivSizeProviderExtensionHandler.kt:DivSizeProviderExtensionHandler$private fun updateVariable</ID>
+    <ID>TooManyFunctions:DivSizeProviderVariablesHolder.kt:DivSizeProviderVariablesHolder : DivVisitorExpressionSubscriber</ID>
+  </CurrentIssues>
+</SmellBaseline>

@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$135</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$180</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$225</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$270</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$3</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$315</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$360</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$4</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$45</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$5</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$6</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$7</ID>
+    <ID>MagicNumber:ShimmerDrawable.kt:ShimmerDrawable$90</ID>
+    <ID>TooManyFunctions:ShimmerDrawable.kt:ShimmerDrawable : DrawableAnimatable</ID>
+  </CurrentIssues>
+</SmellBaseline>

@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:DivEditorPresenter.kt:DivEditorPresenter$fun subscribe: Boolean</ID>
+    <ID>EmptyFunctionBlock:NaiveSSLContext.kt:NaiveSSLContext.NaiveTrustManager${}</ID>
+    <ID>EmptyFunctionBlock:SocketListener.kt:SocketEventListener${}</ID>
+    <ID>EmptyFunctionBlock:SocketListener.kt:SocketListener${}</ID>
+    <ID>ExplicitItLambdaMultipleParameters:Div2Activity.kt:Div2Activity${ acc, it -&gt; acc &amp;&amp; it }</ID>
+    <ID>ExplicitItLambdaMultipleParameters:DivActivity.kt:DivActivity${ acc, it -&gt; acc &amp;&amp; it}</ID>
+    <ID>LongMethod:Div2ScenarioActivity.kt:Div2ScenarioActivity$override fun onCreate</ID>
+    <ID>MagicNumber:DemoComposeCustomViewFactory.kt:ChronometerViewFactory$20f</ID>
+    <ID>MagicNumber:DemoComposeCustomViewFactory.kt:ChronometerViewFactory$30</ID>
+    <ID>MagicNumber:DemoCustomContainerAdapter.kt:DemoCustomContainerAdapter$20f</ID>
+    <ID>MagicNumber:DemoCustomContainerAdapter.kt:DemoCustomContainerAdapter$30</ID>
+    <ID>MagicNumber:DivActivity.kt:DivActivity.&lt;no name provided&gt;$500</ID>
+    <ID>MatchingDeclarationName:DivEditorMessageType.kt:MessageType</ID>
+    <ID>MatchingDeclarationName:DivViewFactory.kt:Div2ViewFactory</ID>
+    <ID>MaxLineLength:DemoCustomContainerAdapter.kt:DemoCustomContainerAdapter$throw IllegalStateException("Custom view childCount not equal to div child count! Div type is ${div.customType}")</ID>
+    <ID>MaxLineLength:DemoDiv2Logger.kt:DemoDiv2Logger$"logGalleryCompleteScroll(cardId = ${divView.logId}, firstVisibleItem = $firstVisibleItem, lastVisibleItem = $lastVisibleItem, scrollDirection = $scrollDirection)"</ID>
+    <ID>MaxLineLength:DemoDiv2Logger.kt:DemoDiv2Logger$"logPagerChangePage(cardId = ${divView.logId}, currentPageIndex = $currentPageIndex), scrollDirection = $scrollDirection)"</ID>
+    <ID>MaxLineLength:DemoDiv2Logger.kt:DemoDiv2Logger$"logViewDisappeared(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(resolver)}), referer = ${action.referer?.evaluate(resolver)})"</ID>
+    <ID>MaxLineLength:DemoDiv2Logger.kt:DemoDiv2Logger$"logViewShown(cardId = ${divView.logId}, id = $actionLogId, url = ${action.url?.evaluate(resolver)}), referer = ${action.referer?.evaluate(resolver)})"</ID>
+    <ID>MaxLineLength:DemoDiv2Logger.kt:DemoDiv2Logger$override</ID>
+    <ID>MaxLineLength:DemoNestedScrollView.kt:DemoNestedScrollView$override</ID>
+    <ID>MaxLineLength:Div2MetadataBottomSheet.kt:Div2MetadataBottomSheet$sb.append("• ", renderingTimeMessages[DIV_PARSING_DATA].toString().removePrefix("$DEMO_ACTIVITY_COMPONENT_NAME."), '\n')</ID>
+    <ID>MaxLineLength:Div2MetadataBottomSheet.kt:Div2MetadataBottomSheet$sb.append("• ", renderingTimeMessages[DIV_PARSING_TEMPLATES].toString().removePrefix("$DEMO_ACTIVITY_COMPONENT_NAME."))</ID>
+    <ID>MaxLineLength:Div2MetadataBottomSheet.kt:Div2MetadataBottomSheet$sb.append("• ", renderingTimeMessages[DIV_RENDER_TOTAL].toString().removePrefix("$DEMO_ACTIVITY_COMPONENT_NAME."), '\n')</ID>
+    <ID>MaxLineLength:DivActivity.kt:DivActivity$DivkitDemoPermissionHelper.requestReadExternalStoragePermission(this, R.string.permission_rationale_read_external_storage)</ID>
+    <ID>MaxLineLength:DivScreenshotActivity.kt:DivScreenshotActivity$-e DivScreenshotActivity.EXTRA_SUITE_NAME com.yandex.morda.div.Div2InteractiveScreenshotTest/div-container/base-properties</ID>
+    <ID>MaxLineLength:DivUtils.kt:fun</ID>
+    <ID>MaxLineLength:DivUtils.kt:private</ID>
+    <ID>MaxLineLength:DivViewHolder.kt:DivViewHolder$override fun hasScrollableViewUnder</ID>
+    <ID>MaxLineLength:SettingsActionHandler.kt:SettingsActionHandler$COMPLEX_REBIND -&gt; setPreferencesBooleanFlag(Experiment.COMPLEX_REBIND_ENABLED, valueInt.toBooleanOrException())</ID>
+    <ID>MaxLineLength:SettingsActionHandler.kt:SettingsActionHandler$DIV2_DEMO_SHOW_RENDERING_TIME -&gt; setPreferencesBooleanFlag(Experiment.SHOW_RENDERING_TIME, valueInt.toBooleanOrException())</ID>
+    <ID>MaxLineLength:SettingsActionHandler.kt:SettingsActionHandler$DIV2_MULTIPLE_STATE_CHANGE -&gt; setPreferencesBooleanFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED, valueInt.toBooleanOrException())</ID>
+    <ID>MaxLineLength:SettingsActionHandler.kt:SettingsActionHandler$DIV2_VIEW_POOL_PROFILING -&gt; setPreferencesBooleanFlag(Experiment.VIEW_POOL_PROFILING_ENABLED, valueInt.toBooleanOrException())</ID>
+    <ID>MaxLineLength:SettingsActionHandler.kt:SettingsActionHandler$LIMIT_IMAGE_BITMAP_SIZE_ENABLED -&gt; Container.preferences.limitImageBitmapSizeEnabled = valueInt.toBooleanOrException()</ID>
+    <ID>MaxLineLength:SettingsActionHandler.kt:SettingsActionHandler$PERMANENT_DEBUG_PANEL -&gt; setPreferencesBooleanFlag(Experiment.PERMANENT_DEBUG_PANEL_ENABLED, valueInt.toBooleanOrException())</ID>
+    <ID>MaxLineLength:SettingsActionHandler.kt:SettingsActionHandler$RENDER_EFFECT_ENABLED -&gt; setPreferencesBooleanFlag(Experiment.RENDER_EFFECT_ENABLED, valueInt.toBooleanOrException())</ID>
+    <ID>MaxLineLength:SettingsActionHandler.kt:SettingsActionHandler$VISUAL_ASSERTION_HANDLER -&gt; Container.preferences.visualAssertionHandlerEnabled = valueInt.toBooleanOrException()</ID>
+    <ID>NewLineAtEndOfFile:CheckBoundsExtensionHandler.kt:com.yandex.divkit.demo.div.CheckBoundsExtensionHandler.kt</ID>
+    <ID>NewLineAtEndOfFile:ContextUtils.kt:com.yandex.divkit.demo.utils.ContextUtils.kt</ID>
+    <ID>NewLineAtEndOfFile:DebounceOnViewDrawObserver.kt:com.yandex.divkit.demo.div.editor.DebounceOnViewDrawObserver.kt</ID>
+    <ID>NewLineAtEndOfFile:DivEditorActivityStateKeeper.kt:com.yandex.divkit.demo.div.editor.DivEditorActivityStateKeeper.kt</ID>
+    <ID>NewLineAtEndOfFile:DivEditorItem.kt:com.yandex.divkit.demo.div.editor.list.DivEditorItem.kt</ID>
+    <ID>NewLineAtEndOfFile:DivItem.kt:com.yandex.divkit.demo.div.DivItem.kt</ID>
+    <ID>NewLineAtEndOfFile:NaiveSSLContext.kt:com.yandex.divkit.demo.div.editor.NaiveSSLContext.kt</ID>
+    <ID>PrintStackTrace:Div2Activity.kt:Div2Activity$ignored</ID>
+    <ID>PrintStackTrace:Div2ScenarioActivity.kt:Div2ScenarioActivity$e</ID>
+    <ID>ReturnCount:Div2Activity.kt:Div2Activity.Div2ActionHandler$private fun handleDemoActionUrl: Boolean</ID>
+    <ID>ReturnCount:Div2ScenarioActivity.kt:Div2ScenarioActivity.TransitionActionHandler$override fun handleAction: Boolean</ID>
+    <ID>ReturnCount:DivEditorPresenter.kt:DivEditorPresenter$fun load: Boolean</ID>
+    <ID>ReturnCount:DivEditorPresenter.kt:DivEditorPresenter$fun readAsset: Boolean</ID>
+    <ID>ReturnCount:DivEditorWebController.kt:DivEditorWebController$private fun Uri.isValid: Boolean</ID>
+    <ID>ReturnCount:DivUtils.kt:DemoDivActionHandler$override fun handleCustomTypedAction</ID>
+    <ID>ReturnCount:RegressionComposeActionHandler.kt:RegressionComposeActionHandler$override fun handle</ID>
+    <ID>ReturnCount:RegressionDivActionHandler.kt:RegressionDivActionHandler$override fun handleAction: Boolean</ID>
+    <ID>ReturnCount:ScenarioJson.kt:internal fun parseSetDataPath: String?</ID>
+    <ID>ReturnCount:SettingsActionHandler.kt:SettingsActionHandler$fun handleActionUrl: Boolean</ID>
+    <ID>ReturnCount:UIDiv2ActionHandler.kt:UIDiv2ActionHandler$private fun handleActivityActionUrl: Boolean</ID>
+    <ID>SwallowedException:Div2Activity.kt:Div2Activity$e: ActivityNotFoundException</ID>
+    <ID>TooGenericExceptionCaught:Div2Activity.kt:Div2Activity$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:Div2ScenarioActivity.kt:Div2ScenarioActivity$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:DivActivity.kt:DivActivity$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:DivEditorPresenter.kt:DivEditorPresenter$e: Exception</ID>
+    <ID>TooGenericExceptionThrown:ComposeFontSourceProvider.kt:ComposeFontSourceProvider$throw RuntimeException("Invalid font_family: $fontFamilyName")</ID>
+    <ID>TooGenericExceptionThrown:DivComposeScreenshotActivity.kt:FailingReporter$throw RuntimeException(message)</ID>
+    <ID>TooGenericExceptionThrown:NaiveSSLContext.kt:NaiveSSLContext$throw RuntimeException("Failed to initialize an SSLContext.", e)</ID>
+    <ID>TooManyFunctions:DemoDiv2Logger.kt:DemoDiv2Logger : Div2Logger</ID>
+    <ID>TooManyFunctions:Div2ScenarioActivity.kt:Div2ScenarioActivity : AppCompatActivityMetadataHost</ID>
+    <ID>TooManyFunctions:DivActivity.kt:DivActivity : AppCompatActivity</ID>
+    <ID>TooManyFunctions:DivEditorUi.kt:DivEditorUi</ID>
+    <ID>TooManyFunctions:DivUtils.kt:com.yandex.divkit.demo.div.DivUtils.kt</ID>
+    <ID>TooManyFunctions:DivViewAdapter.kt:DivViewAdapter : Adapter</ID>
+    <ID>TooManyFunctions:MetricaUtils.kt:MetricaUtils$NoOpReporter : IReporter</ID>
+    <ID>TooManyFunctions:SocketListener.kt:SocketEventListener : SocketListener</ID>
+    <ID>TooManyFunctions:SocketListener.kt:SocketListener : WebSocketListener</ID>
+  </CurrentIssues>
+</SmellBaseline>

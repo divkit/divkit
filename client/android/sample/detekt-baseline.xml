@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MatchingDeclarationName:DivViewFactory.kt:Div2ViewFactory</ID>
+  </CurrentIssues>
+</SmellBaseline>

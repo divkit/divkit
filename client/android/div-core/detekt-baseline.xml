@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>ComplexCondition:TextTruncation.kt:TextTruncation$end &gt; lineStart &amp;&amp; graphemeBoundaries.isBoundary(end) &amp;&amp; isSafeBoundary(end) &amp;&amp; fits(end)</ID>
+    <ID>ComplexCondition:TextTruncation.kt:TextTruncation$type == Character.NON_SPACING_MARK.toInt() || type == Character.COMBINING_SPACING_MARK.toInt() || type == Character.ENCLOSING_MARK.toInt() || next == ZERO_WIDTH_JOINER || previous == ZERO_WIDTH_JOINER || next in VARIATION_SELECTORS || next in SUPPLEMENTARY_VARIATION_SELECTORS || next in EMOJI_MODIFIERS || next in TAG_CHARACTERS</ID>
+    <ID>MaxLineLength:InternalApi.kt:InternalApi$message = "This API is for internal use only. It shouldn't be used as it may be changed or removed without notice and will cause a compilation error in a future release."</ID>
+    <ID>ReturnCount:DivNetworkResponse.kt:ByteArrayResponseBody$override fun read: Int</ID>
+    <ID>ReturnCount:DivStatePath.kt:DivStatePath$public fun isAncestorOf: Boolean</ID>
+    <ID>ReturnCount:DivStatePath.kt:DivStatePath$public fun parentState: DivStatePath</ID>
+    <ID>ReturnCount:DivStatePath.kt:DivStatePath.Companion$private fun List&lt;String&gt;.findState: Int</ID>
+    <ID>ReturnCount:TextTruncation.kt:TextTruncation$private fun isSafeBoundary: Boolean</ID>
+    <ID>ReturnCount:TextTruncation.kt:TextTruncation$public fun findOffset: Int?</ID>
+  </CurrentIssues>
+</SmellBaseline>

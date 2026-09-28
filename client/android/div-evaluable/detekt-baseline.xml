@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:Evaluator.kt:Evaluator.Companion$internal fun evalFactor: Any</ID>
+    <ID>CognitiveComplexMethod:FunctionValidator.kt:private fun Function.conflictsWith: Boolean</ID>
+    <ID>CognitiveComplexMethod:Tokenizer.kt:Tokenizer$private fun processExpression: Boolean</ID>
+    <ID>CognitiveComplexMethod:Tokenizer.kt:Tokenizer$private fun processIdentifier</ID>
+    <ID>CognitiveComplexMethod:Tokenizer.kt:Tokenizer$private fun processNumber</ID>
+    <ID>CognitiveComplexMethod:Tokenizer.kt:Tokenizer$private fun processStringTemplate</ID>
+    <ID>ComplexCondition:Evaluator.kt:Evaluator.Companion$abs(left) or abs(right) ushr 31 == 0L || (right == 0L || result / right == left) &amp;&amp; (left != Long.MIN_VALUE || right != -1L)</ID>
+    <ID>ForEachOnRange:StringFunctions.kt:0 until length</ID>
+    <ID>FunctionNaming:Parser.kt:Parser$private fun `try`: Evaluable</ID>
+    <ID>LongMethod:BuiltinFunctionProviderGenerator.kt:BuiltinFunctionProviderGenerator$private fun prepareGetFunction: FunSpec</ID>
+    <ID>LongMethod:Tokenizer.kt:Tokenizer$private fun processExpression: Boolean</ID>
+    <ID>MagicNumber:Color.kt:Color$0xFF</ID>
+    <ID>MagicNumber:Color.kt:Color$16</ID>
+    <ID>MagicNumber:Color.kt:Color$24</ID>
+    <ID>MagicNumber:Color.kt:Color$8</ID>
+    <ID>MagicNumber:Color.kt:Color.Companion$0xff</ID>
+    <ID>MagicNumber:Color.kt:Color.Companion$16</ID>
+    <ID>MagicNumber:Color.kt:Color.Companion$24</ID>
+    <ID>MagicNumber:Color.kt:Color.Companion$8</ID>
+    <ID>MagicNumber:ColorFunctions.kt:0.5f</ID>
+    <ID>MagicNumber:ColorFunctions.kt:0xFF</ID>
+    <ID>MagicNumber:ColorFunctions.kt:255</ID>
+    <ID>MagicNumber:ColorFunctions.kt:255f</ID>
+    <ID>MagicNumber:ColorFunctions.kt:ColorRgb$255</ID>
+    <ID>MagicNumber:DateTimeFunctions.kt:GetDayOfWeek$7L</ID>
+    <ID>MagicNumber:DateTimeFunctions.kt:SetHours$23</ID>
+    <ID>MagicNumber:DateTimeFunctions.kt:SetMillis$999</ID>
+    <ID>MagicNumber:DateTimeFunctions.kt:SetMinutes$59</ID>
+    <ID>MagicNumber:DateTimeFunctions.kt:SetMonth$12</ID>
+    <ID>MagicNumber:DateTimeFunctions.kt:SetSeconds$59</ID>
+    <ID>MagicNumber:Evaluator.kt:Evaluator.Companion$31</ID>
+    <ID>MagicNumber:NumberArithmeticFunctions.kt:DoubleRound$0.5</ID>
+    <ID>MaxLineLength:ArrayFunctions.kt:ArrayUrl$return (result as? String)?.safeConvertToUrl() ?: throwArrayWrongTypeException(name, args, resultType, result, isMethod)</ID>
+    <ID>MaxLineLength:ArrayFunctions.kt:internal</ID>
+    <ID>MaxLineLength:DictFunctions.kt:internal</ID>
+    <ID>MaxLineLength:DictFunctions.kt:private</ID>
+    <ID>MaxLineLength:Evaluator.kt:Evaluator$throwExceptionOnEvaluationFailed(ternary.rawExpr, "${ternary.token} was incorrectly parsed as a ternary operator.")</ID>
+    <ID>MaxLineLength:FunctionValidator.kt:internal</ID>
+    <ID>MaxLineLength:FunctionValidator.kt:return EvaluableException("Method has no matching overload for given argument types: ${args.subList(1, args.size).toMessageFormat()}.")</ID>
+    <ID>MaxLineLength:FunctionValidator.kt:throw EvaluableException("${if (hasVarArg) "At least" else "Exactly"} ${result.expected} argument(s) expected.")</ID>
+    <ID>MaxLineLength:IntervalFunctions.kt:GetIntervalHours$throw EvaluableException("Failed to evaluate [getIntervalHours(-1)]. Expecting non-negative number of milliseconds.")</ID>
+    <ID>MaxLineLength:IntervalFunctions.kt:GetIntervalMinutes$throw EvaluableException("Failed to evaluate [getIntervalMinutes(-1)]. Expecting non-negative number of milliseconds.")</ID>
+    <ID>MaxLineLength:IntervalFunctions.kt:GetIntervalSeconds$throw EvaluableException("Failed to evaluate [getIntervalSeconds(-1)]. Expecting non-negative number of milliseconds.")</ID>
+    <ID>MaxLineLength:IntervalFunctions.kt:GetIntervalTotalDays$throw EvaluableException("Failed to evaluate [getIntervalTotalDays(-1)]. Expecting non-negative number of milliseconds.")</ID>
+    <ID>MaxLineLength:IntervalFunctions.kt:GetIntervalTotalHours$throw EvaluableException("Failed to evaluate [getIntervalTotalHours(-1)]. Expecting non-negative number of milliseconds.")</ID>
+    <ID>MaxLineLength:IntervalFunctions.kt:GetIntervalTotalMinutes$throw EvaluableException("Failed to evaluate [getIntervalTotalMinutes(-1)]. Expecting non-negative number of milliseconds.")</ID>
+    <ID>MaxLineLength:IntervalFunctions.kt:GetIntervalTotalSeconds$throw EvaluableException("Failed to evaluate [getIntervalTotalSeconds(-1)]. Expecting non-negative number of milliseconds.")</ID>
+    <ID>MaxLineLength:IntervalFunctions.kt:GetIntervalTotalWeeks$throw EvaluableException("Failed to evaluate [getIntervalTotalWeeks(-1)]. Expecting non-negative number of milliseconds.")</ID>
+    <ID>MaxLineLength:LiteralsEscaper.kt:LiteralsEscaper$throw EvaluableException("Error tokenizing '$string'.", TokenizingException("Alone backslash at ${index - 1}"))</ID>
+    <ID>MaxLineLength:StoredValueFunctions.kt:GetStoredComplexValue$private</ID>
+    <ID>MaxLineLength:Tokenizer.kt:Tokenizer$state.currentChar().isDecimal(state.prevChar(), state.nextChar()) -&gt; processNumber(state, tokens)</ID>
+    <ID>ReturnCount:DictFunctions.kt:internal fun evaluateSafe: Any?</ID>
+    <ID>ReturnCount:Evaluator.kt:Evaluator$private fun evalComparison: Any</ID>
+    <ID>ReturnCount:Evaluator.kt:Evaluator$private fun evalLogical: Any</ID>
+    <ID>ReturnCount:Function.kt:Function$private fun matchesArguments: MatchResult</ID>
+    <ID>ReturnCount:FunctionRegistry.kt:FunctionRegistry$private fun get: Function</ID>
+    <ID>ReturnCount:FunctionValidator.kt:internal fun getFunctionArgumentsException: Exception</ID>
+    <ID>ReturnCount:FunctionValidator.kt:private fun Function.conflictsWith: Boolean</ID>
+    <ID>ReturnCount:IntegerArithmeticFunctions.kt:IntegerCopySign$override fun evaluate: Any</ID>
+    <ID>ReturnCount:Tokenizer.kt:Tokenizer$private fun processStringTemplate</ID>
+    <ID>SwallowedException:ColorFunctions.kt:ColorArgb$e: IllegalArgumentException</ID>
+    <ID>SwallowedException:ColorFunctions.kt:ColorComponentSetter$e: IllegalArgumentException</ID>
+    <ID>SwallowedException:ColorFunctions.kt:ColorRgb$e: IllegalArgumentException</ID>
+    <ID>SwallowedException:StringFunctions.kt:TestRegex$e: PatternSyntaxException</ID>
+    <ID>SwallowedException:Tokenizer.kt:Tokenizer$e: Exception</ID>
+    <ID>ThrowingExceptionsWithoutMessageOrCause:ColorFunctions.kt:IllegalArgumentException()</ID>
+    <ID>ThrowsCount:FunctionRegistry.kt:FunctionRegistry$fun ensureRegistered</ID>
+    <ID>ThrowsCount:FunctionRegistry.kt:FunctionRegistry$private fun get: Function</ID>
+    <ID>ThrowsCount:Parser.kt:Parser$private fun call: Evaluable</ID>
+    <ID>ThrowsCount:Tokenizer.kt:Tokenizer$private fun processExpression: Boolean</ID>
+    <ID>TooGenericExceptionCaught:Evaluator.kt:Evaluator$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:StringFunctions.kt:AbsDecimalFormat$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:Tokenizer.kt:Tokenizer$e: Exception</ID>
+    <ID>TooManyFunctions:Evaluator.kt:Evaluator</ID>
+    <ID>TooManyFunctions:Parser.kt:Parser</ID>
+    <ID>TooManyFunctions:Tokenizer.kt:Tokenizer</ID>
+    <ID>UnusedParameter:FunctionValidator.kt:name: String</ID>
+  </CurrentIssues>
+</SmellBaseline>

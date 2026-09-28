@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FunctionNaming:JSONUtf8BytesCalculator.kt:JSONUtf8BytesCalculator$private fun `object`: JSONUtf8BytesCalculator</ID>
+    <ID>MagicNumber:HistogramUtils.kt:HistogramUtils$0x10000</ID>
+    <ID>MagicNumber:HistogramUtils.kt:HistogramUtils$0x80</ID>
+    <ID>MagicNumber:HistogramUtils.kt:HistogramUtils$0x800</ID>
+    <ID>MagicNumber:HistogramUtils.kt:HistogramUtils$3</ID>
+    <ID>MagicNumber:HistogramUtils.kt:HistogramUtils$4</ID>
+    <ID>MaxLineLength:Div2ViewHistogramReporter.kt:Div2ViewHistogramReporter$reportHistogram(DIV_BINDING_HISTOGRAM, bindingStartedTime, bindingPausedTime, bindingResumedTime, renderMetrics::binding)</ID>
+    <ID>ReturnCount:HistogramCallTypeProvider.kt:HistogramCallTypeProvider$@HistogramCallType fun getHistogramCallType: String</ID>
+    <ID>ReturnCount:JSONUtf8BytesCalculator.kt:JSONUtf8BytesCalculator$private fun value: JSONUtf8BytesCalculator</ID>
+    <ID>TooManyFunctions:Div2ViewHistogramReporter.kt:Div2ViewHistogramReporter</ID>
+  </CurrentIssues>
+</SmellBaseline>

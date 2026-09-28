@@ -29,6 +29,7 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.detekt) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
 }
@@ -101,6 +102,33 @@ subprojects {
             if (!file('src/androidTest').isDirectory()) {
                 variant.enableAndroidTest = false
             }
+        }
+    }
+
+    // Static analysis and complexity gate: the same detekt rules for every module,
+    // production sources only, with one baseline per module so that only new findings
+    // fail `./gradlew detekt` (run by the "Android Detekt" CI flow).
+    // See ai/skills/divkit-complexity-gate/SKILL.md.
+    apply plugin: 'dev.detekt'
+
+    detekt {
+        buildUponDefaultConfig = true
+        config.setFrom(rootProject.file('config/detekt/detekt.yml'))
+        baseline = file('detekt-baseline.xml')
+        // Every non-test source set: main, the KMP ones (commonMain, androidMain),
+        // build types, flavors and div-evaluable's generator. Test source sets are out.
+        source.setFrom(fileTree('src') {
+            include '*/java/**/*.kt', '*/kotlin/**/*.kt'
+            exclude 'test/**', 'test*/**', '*Test/**'
+        })
+    }
+
+    tasks.withType(dev.detekt.gradle.Detekt).configureEach {
+        reports {
+            checkstyle.required = true
+            sarif.required = true
+            html.required = false
+            markdown.required = false
         }
     }
 

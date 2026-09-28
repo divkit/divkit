@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>PrintStackTrace:ClosePopupsRule.kt:ClosePopupsRule$e</ID>
+    <ID>TooGenericExceptionThrown:ActivityParamsTestRule.kt:throw RuntimeException("Intent extra ${it.first} has wrong type ${value.javaClass.name}")</ID>
+  </CurrentIssues>
+</SmellBaseline>

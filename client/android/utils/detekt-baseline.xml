@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>EmptyCatchBlock:Collections.kt:{ }</ID>
+    <ID>MaxLineLength:UiThreadHandler.kt:UiThreadHandler.Companion$*</ID>
+    <ID>ReturnCount:Collections.kt:@InternalApi public inline fun &lt;T&gt; List&lt;T&gt;.compareWith: Boolean</ID>
+    <ID>ReturnCount:Collections.kt:@InternalApi public inline fun &lt;T&gt; List&lt;T&gt;?.compareNullableWith: Boolean</ID>
+    <ID>SwallowedException:Collections.kt:e: NoSuchElementException</ID>
+    <ID>TooGenericExceptionCaught:SingleThreadExecutor.kt:SingleThreadExecutor.Worker$e: RuntimeException</ID>
+  </CurrentIssues>
+</SmellBaseline>

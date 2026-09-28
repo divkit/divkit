@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>EmptyFunctionBlock:DivStateDbOpenHelper.kt:DivStateDbOpenHelper${}</ID>
+    <ID>MagicNumber:DivStateDaoImpl.kt:DivStateDaoImpl$3</ID>
+    <ID>MagicNumber:DivStateDaoImpl.kt:DivStateDaoImpl$4</ID>
+    <ID>NewLineAtEndOfFile:DivStateDbOpenHelper.kt:com.yandex.div.state.db.DivStateDbOpenHelper.kt</ID>
+    <ID>TooManyFunctions:DivStateDaoImpl.kt:DivStateDaoImpl : DivStateDao</ID>
+  </CurrentIssues>
+</SmellBaseline>

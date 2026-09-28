@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:ZoomTouchListener.kt:ZoomTouchListener$@SuppressLint("ClickableViewAccessibility") override fun onTouch: Boolean</ID>
+    <ID>ReturnCount:ZoomTouchListener.kt:ZoomTouchListener$@SuppressLint("ClickableViewAccessibility") override fun onTouch: Boolean</ID>
+    <ID>ReturnCount:ZoomTouchListener.kt:ZoomTouchListener$private fun View.tryDispatchGesture: Boolean</ID>
+  </CurrentIssues>
+</SmellBaseline>

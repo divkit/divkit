@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:GridItemMeasurement.kt:private fun applySpansToLines</ID>
+    <ID>CognitiveComplexMethod:TextRangeCloudBackground.kt:TextRangeCloudBackground$private fun coalesceCloseBounds</ID>
+    <ID>ComplexCondition:Expressions.kt:this == null || !this.isConstant() || other == null || !other.isConstant()</ID>
+    <ID>ComplexCondition:TextRangeCloudBackground.kt:TextRangeCloudBackground$isStable &amp;&amp; index != 0 &amp;&amp; previousDelta &lt; 0 &amp;&amp; abs(previousDelta) &lt; minDelta</ID>
+    <ID>ComplexCondition:TextRangeCloudBackground.kt:TextRangeCloudBackground$isStable &amp;&amp; index != bounds.lastIndex &amp;&amp; nextDelta &lt; 0 &amp;&amp; abs(nextDelta) &lt; minDelta</ID>
+    <ID>ForbiddenComment:Expression.kt:Expression$// TODO: set internal after TriggersController fix</ID>
+    <ID>LongMethod:TextRangeCloudBackground.kt:TextRangeCloudBackground$private fun PathSink.addComponent</ID>
+    <ID>MagicNumber:ParsingException.kt:3</ID>
+    <ID>MagicNumber:StoredValuesStorage.kt:StoredValuesStorage$1000L</ID>
+    <ID>MagicNumber:TextRangeCloudBackground.kt:TextRangeCloudBackground$0.1f</ID>
+    <ID>MagicNumber:TextRangeCloudBackground.kt:TextRangeCloudBackground$0.9f</ID>
+    <ID>MagicNumber:TextRangeParticleSystem.kt:JavaRandom$24</ID>
+    <ID>MagicNumber:TextRangeParticleSystem.kt:JavaRandom$48</ID>
+    <ID>MagicNumber:TextRangeParticleSystem.kt:TextRangeParticleSystem$0.5f</ID>
+    <ID>MagicNumber:TextRangeParticleSystem.kt:TextRangeParticleSystem$1_000f</ID>
+    <ID>MagicNumber:TextRangeParticleSystem.kt:TextRangeParticleSystem$6_000f</ID>
+    <ID>MatchingDeclarationName:TypeHelpers.kt:TypeHelper&lt;T&gt;</ID>
+    <ID>MaxLineLength:DivTypedValueUtils.kt:is DivTypedValue.Color -&gt; com.yandex.div.evaluable.types.Color(value.value.evaluate(expressionResolver)).toString()</ID>
+    <ID>MaxLineLength:ExpressionResolver.kt:ExpressionResolver$*</ID>
+    <ID>MaxLineLength:Serializers.kt:internal</ID>
+    <ID>MaxLineLength:Variable.kt:Variable$throw VariableMutationException("Unable to set value with type ${newValue.javaClass} to ${describeVariable(this)}")</ID>
+    <ID>ReturnCount:CachingTemplateProvider.kt:CachingTemplateProvider$override fun get: T?</ID>
+    <ID>ReturnCount:DivUntypedAction.kt:DivUntypedAction.Companion$@JvmStatic fun parse: DivUntypedAction?</ID>
+    <ID>ReturnCount:DivVariableUtils.kt:@InternalApi fun PropertyVariable.parseGet: Expression&lt;*&gt;?</ID>
+    <ID>ReturnCount:DivVariableUtils.kt:private fun Expression&lt;*&gt;.hasCycle: Boolean</ID>
+    <ID>ReturnCount:Expression.kt:Expression.MutableExpression$override fun observe: Disposable</ID>
+    <ID>ReturnCount:Expression.kt:Expression.MutableExpression$private fun tryResolveOrUseLast: T</ID>
+    <ID>ReturnCount:Expressions.kt:fun &lt;T : Any&gt; Expression&lt;T&gt;?.equalsToConstant: Boolean</ID>
+    <ID>ReturnCount:JsonParser.kt:fun &lt;R, T : Any&gt; JSONObject.readOptional: T?</ID>
+    <ID>ReturnCount:JsonParser.kt:fun &lt;T : Any&gt; JSONObject.readOptional: T?</ID>
+    <ID>ReturnCount:JsonTemplateParser.kt:@JvmName("readSerializableOptionalField") fun &lt;T : JSONSerializable&gt; JSONObject.readOptionalField: Field&lt;T&gt;</ID>
+    <ID>ReturnCount:JsonTemplateParser.kt:@JvmName("readSerializableOptionalListField") fun &lt;T : JSONSerializable&gt; JSONObject.readOptionalListField: Field&lt;List&lt;T&gt;&gt;</ID>
+    <ID>ReturnCount:JsonTemplateParser.kt:@PublishedApi internal fun &lt;T&gt; referenceOrFallback: Field&lt;T&gt;?</ID>
+    <ID>ReturnCount:JsonTemplateParser.kt:fun &lt;R, T : Any&gt; JSONObject.readOptionalField: Field&lt;T&gt;</ID>
+    <ID>ReturnCount:JsonTemplateParser.kt:fun &lt;R, T : Any&gt; JSONObject.readOptionalListField: Field&lt;List&lt;T&gt;&gt;</ID>
+    <ID>ReturnCount:JsonTemplateParser.kt:fun &lt;T : Any&gt; JSONObject.readOptionalField: Field&lt;T&gt;</ID>
+    <ID>ReturnCount:JsonTemplateParser.kt:fun &lt;T : Any&gt; JSONObject.readOptionalListField: Field&lt;List&lt;T&gt;&gt;</ID>
+    <ID>ReturnCount:LottieExtensionParamsParser.kt:LottieExtensionParamsParser$private fun parseData: LottieData?</ID>
+    <ID>ReturnCount:Serializers.kt:@ExperimentalApi fun &lt;V&gt; Serializer&lt;JSONObject, V&gt;.serialize: JSONArray?</ID>
+    <ID>ReturnCount:SnapPositions.kt:@InternalApi fun findDirectionalSnapPosition: Int</ID>
+    <ID>ReturnCount:StoredValuesStorage.kt:StoredValuesStorage$@Throws(StoredValueException::class) fun getValue: StoredValue?</ID>
+    <ID>ReturnCount:UpdateStructureHelper.kt:UpdateStructureHelper$private fun findStructureElement: Structure?</ID>
+    <ID>ReturnCount:UpdateStructureHelper.kt:UpdateStructureHelper$private fun setValue: Boolean</ID>
+    <ID>ReturnCount:Variable.kt:private fun Any?.isJsonValueEqualTo: Boolean</ID>
+    <ID>ReturnCount:Variable.kt:private fun JSONArray.isStructurallyEqualTo: Boolean</ID>
+    <ID>ReturnCount:Variable.kt:private fun JSONObject.isStructurallyEqualTo: Boolean</ID>
+    <ID>SafeCast:JsonUtils.kt:if (value is String) value else null</ID>
+    <ID>SwallowedException:Expression.kt:Expression$e: ParsingException</ID>
+    <ID>SwallowedException:JsonParser.kt:e: Exception</ID>
+    <ID>SwallowedException:ParsingConverters.kt:e: Exception</ID>
+    <ID>SwallowedException:StoredValuesStorage.kt:StoredValuesStorage$e: JSONException</ID>
+    <ID>ThrowingExceptionsWithoutMessageOrCause:UpdateStructureHelper.kt:Structure.Array$IndexOutOfBoundsException()</ID>
+    <ID>ThrowsCount:JsonParser.kt:fun &lt;R, T : Any&gt; JSONObject.readStrictList: List&lt;T&gt;</ID>
+    <ID>ThrowsCount:JsonParser.kt:fun &lt;T : Any&gt; JSONObject.read: T</ID>
+    <ID>ThrowsCount:JsonParser.kt:fun &lt;T : Any&gt; JSONObject.readStrictList: List&lt;T&gt;</ID>
+    <ID>ThrowsCount:JsonParser.kt:inline fun &lt;reified R, reified T : Any&gt; JSONObject.read: T</ID>
+    <ID>TooGenericExceptionCaught:DivKitJsonParser.kt:DivKitJsonParser$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:Expression.kt:Expression.MutableExpression$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:JsonParser.kt:e: Exception</ID>
+    <ID>TooGenericExceptionCaught:ParsingConverters.kt:e: Exception</ID>
+    <ID>TooGenericExceptionCaught:TemplateParsingEnvironment.kt:TemplateParsingEnvironment$e: Exception</ID>
+    <ID>TooManyFunctions:DivVariableController.kt:DivVariableController</ID>
+    <ID>TooManyFunctions:Expression.kt:Expression$MutableExpression&lt;R, T : Any&gt; : Expression</ID>
+    <ID>TooManyFunctions:Field.kt:com.yandex.div.internal.template.Field.kt</ID>
+    <ID>TooManyFunctions:JsonParser.kt:com.yandex.div.internal.parser.JsonParser.kt</ID>
+    <ID>TooManyFunctions:JsonTemplateParser.kt:com.yandex.div.internal.parser.JsonTemplateParser.kt</ID>
+    <ID>TooManyFunctions:JsonUtils.kt:com.yandex.div.internal.util.JsonUtils.kt</ID>
+    <ID>TooManyFunctions:ParsingException.kt:com.yandex.div.json.ParsingException.kt</ID>
+    <ID>UnusedParameter:JsonParserInternals.kt:logger: ParsingErrorLogger</ID>
+    <ID>WildcardImport:StoredValueParser.kt:import com.yandex.div.data.StoredValue.*</ID>
+  </CurrentIssues>
+</SmellBaseline>

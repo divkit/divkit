@@ -1,0 +1,146 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CognitiveComplexMethod:AdjustScrollToItem.kt:private suspend fun LazyStaggeredGridState.scrollForwardUntilItemIsVisible: Boolean</ID>
+    <ID>CognitiveComplexMethod:CoilImagePreloader.kt:CoilImagePreloader$override suspend fun preloadImages: PreloadResult</ID>
+    <ID>CognitiveComplexMethod:ContainerAlignment.kt:internal fun DivContentAlignmentHorizontal.toHorizontalArrangement: Arrangement.Horizontal</ID>
+    <ID>CognitiveComplexMethod:DivImageContent.kt:@Composable internal fun DivImageContent</ID>
+    <ID>CognitiveComplexMethod:DivSliderView.kt:private fun Modifier.sliderPointerInput: Modifier</ID>
+    <ID>CognitiveComplexMethod:GalleryFlingBehavior.kt:GallerySnapLayoutInfoProvider$override fun calculateSnapOffset: Float</ID>
+    <ID>CognitiveComplexMethod:GalleryGridView.kt:private fun MeasureScope.measureNonScrollableStaggeredGrid: MeasureResult</ID>
+    <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.observeItemBaseSizes: FloatArray</ID>
+    <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.rememberSpannedTracks: AxisTracks</ID>
+    <ID>CognitiveComplexMethod:GridTracks.kt:@OptIn(ExperimentalGridApi::class) @Composable private fun List&lt;Cell&gt;.axisTracks: AxisTracks</ID>
+    <ID>CognitiveComplexMethod:GridTracks.kt:private fun List&lt;Cell&gt;.lineBaseSize: Float</ID>
+    <ID>CognitiveComplexMethod:HorizontalContainerLayout.kt:@Composable internal fun ContainerHorizontalView</ID>
+    <ID>CognitiveComplexMethod:ImageContentSizeModifier.kt:ImageContentSizeNode$private fun Density.resolveSize: IntSize</ID>
+    <ID>CognitiveComplexMethod:ImageFilters.kt:@Composable internal fun List&lt;DivFilter&gt;?.observedTransformations: List&lt;Transformation&gt;</ID>
+    <ID>CognitiveComplexMethod:IndicatorDrawing.kt:internal fun DrawScope.drawIndicators</ID>
+    <ID>CognitiveComplexMethod:IndicatorDrawing.kt:private fun clipAndScaleEdges: List&lt;Int&gt;</ID>
+    <ID>CognitiveComplexMethod:InlineImages.kt:@Composable internal fun DivText.observeInlineImages: List&lt;InlineImageData&gt;</ID>
+    <ID>CognitiveComplexMethod:LengthLimitedInputView.kt:@Composable internal fun LengthLimitedInputView</ID>
+    <ID>CognitiveComplexMethod:OverlapContainerLayout.kt:@Composable private fun MatchParentOverlapChild</ID>
+    <ID>CognitiveComplexMethod:OverlapContainerLayout.kt:private fun overlapMeasurePolicy</ID>
+    <ID>CognitiveComplexMethod:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$@Composable override fun Content</ID>
+    <ID>CognitiveComplexMethod:RangeDecorations.kt:private fun List&lt;RangeLine&gt;.toCloudPath: Path</ID>
+    <ID>CognitiveComplexMethod:RangeDecorations.kt:private fun TextLayoutResult.lineRects: List&lt;RangeLine&gt;</ID>
+    <ID>CognitiveComplexMethod:SelectedActions.kt:@Composable internal fun rememberPagerSelectedActionsHandler: PagerSelectedActionsHandler</ID>
+    <ID>CognitiveComplexMethod:TimerController.kt:TimerController$private fun scheduleNextTick</ID>
+    <ID>CognitiveComplexMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawHorizontalWrapSeparators</ID>
+    <ID>CognitiveComplexMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawVerticalWrapSeparators</ID>
+    <ID>ComplexCondition:DivTextView.kt:ellipsis != null &amp;&amp; ellipsisText != null &amp;&amp; (!ellipsis.isPlain() || ellipsisText != DEFAULT_ELLIPSIS)</ID>
+    <ID>ComplexCondition:DivTextView.kt:gradientBrush == null &amp;&amp; ranges.isNullOrEmpty() &amp;&amp; actions.isNullOrEmpty() &amp;&amp; inlineImages.isEmpty()</ID>
+    <ID>ComplexCondition:GridTracks.kt:ConfiguredAxisTracks$isWrapContent || availableSize == Constraints.Infinity || !canResolveConstrainedWeights || weights.none { it &gt; 0f }</ID>
+    <ID>ForbiddenComment:HorizontalContainerLayout.kt:// TODO: Needs warning match_parent child and wrap_content container.</ID>
+    <ID>ForbiddenComment:VerticalContainerLayout.kt:// TODO: Needs warning match_parent child and wrap_content container.</ID>
+    <ID>LongMethod:DivActions.kt:@Composable internal fun Div.observedActions: DivActions?</ID>
+    <ID>LongMethod:DivImageContent.kt:@Composable internal fun DivImageContent</ID>
+    <ID>LongMethod:DivTabsView.kt:@Composable internal fun DivTabsView</ID>
+    <ID>LongMethod:GridTracks.kt:@OptIn(ExperimentalGridApi::class) @Composable private fun List&lt;Cell&gt;.axisTracks: AxisTracks</ID>
+    <ID>LongMethod:HorizontalContainerLayout.kt:@Composable internal fun ContainerHorizontalView</ID>
+    <ID>LongMethod:IndicatorDrawing.kt:internal fun DrawScope.drawIndicators</ID>
+    <ID>LongMethod:InlineImages.kt:@Composable internal fun DivText.observeInlineImages: List&lt;InlineImageData&gt;</ID>
+    <ID>LongMethod:OverlapContainerLayout.kt:@Composable private fun MatchParentOverlapChild</ID>
+    <ID>LongMethod:OverlapContainerLayout.kt:private fun overlapMeasurePolicy</ID>
+    <ID>LongMethod:PagerContent.kt:@Composable internal fun PagerContent</ID>
+    <ID>LongMethod:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$@Composable override fun Content</ID>
+    <ID>LongMethod:ShimmerExtensionHandler.kt:private fun ShimmerConfig.toDrawingConfig: ShimmerDrawingConfig?</ID>
+    <ID>LongMethod:VerticalContainerLayout.kt:@Composable internal fun ContainerVerticalView</ID>
+    <ID>LongMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawHorizontalWrapSeparators</ID>
+    <ID>LongMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawVerticalWrapSeparators</ID>
+    <ID>LongMethod:WrapSeparatorDrawing.kt:private fun DrawScope.drawSeparatorShape</ID>
+    <ID>LoopWithTooManyJumpStatements:DivSliderView.kt:while</ID>
+    <ID>LoopWithTooManyJumpStatements:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$while</ID>
+    <ID>MagicNumber:BlurTransformation.kt:BlurTransformation$0.1f</ID>
+    <ID>MagicNumber:BlurTransformation.kt:BlurTransformation$25f</ID>
+    <ID>MagicNumber:CurrencyVisualTransformation.kt:CurrencyMaskParams$3</ID>
+    <ID>MagicNumber:FontFamily.kt:1000</ID>
+    <ID>MagicNumber:FontFamily.kt:300</ID>
+    <ID>MagicNumber:FontFamily.kt:400</ID>
+    <ID>MagicNumber:FontFamily.kt:500</ID>
+    <ID>MagicNumber:FontFamily.kt:700</ID>
+    <ID>MagicNumber:ImageContentSizeModifier.kt:ImageContentSizeNode$0.0000001f</ID>
+    <ID>MagicNumber:IndicatorDrawing.kt:0.5f</ID>
+    <ID>MagicNumber:PagerContent.kt:100f</ID>
+    <ID>MagicNumber:ShimmerExtensionHandler.kt:135</ID>
+    <ID>MagicNumber:ShimmerExtensionHandler.kt:180</ID>
+    <ID>MagicNumber:ShimmerExtensionHandler.kt:225</ID>
+    <ID>MagicNumber:ShimmerExtensionHandler.kt:270</ID>
+    <ID>MagicNumber:ShimmerExtensionHandler.kt:315</ID>
+    <ID>MagicNumber:ShimmerExtensionHandler.kt:45</ID>
+    <ID>MagicNumber:ShimmerExtensionHandler.kt:90</ID>
+    <ID>MagicNumber:TabTitlesView.kt:TitleBounds$0xFFFFFFFFL</ID>
+    <ID>MagicNumber:TabTitlesView.kt:TitleBounds$32</ID>
+    <ID>MagicNumber:TextStyle.kt:1000</ID>
+    <ID>MagicNumber:TransformModifiers.kt:100f</ID>
+    <ID>MagicNumber:TransformModifiers.kt:Pivot$0.5f</ID>
+    <ID>MatchingDeclarationName:GridCell.kt:Cell</ID>
+    <ID>MatchingDeclarationName:IndicatorShape.kt:ShapeParams</ID>
+    <ID>MatchingDeclarationName:PagerScrollPosition.kt:InitialScroll</ID>
+    <ID>MatchingDeclarationName:ScrollAlignment.kt:CrossAxisAlignment</ID>
+    <ID>MatchingDeclarationName:SelectedActions.kt:PagerSelectedActionsHandler</ID>
+    <ID>MatchingDeclarationName:TextStyle.kt:ObservedTextMetrics</ID>
+    <ID>MaxLineLength:ImageContentSizeModifier.kt:ImageContentSizeNode$?:</ID>
+    <ID>MaxLineLength:ImageContentSizeModifier.kt:ImageContentSizeNode$val</ID>
+    <ID>MaxLineLength:ImageFilters.kt:"The maximum supported blur radius is 25. Values exceeding this limit will be automatically downscaled"</ID>
+    <ID>MaxLineLength:IndicatorDrawing.kt:drawSelectionOverlay(style, positions, activePage, offset, centerY, viewportWidth, itemsCount, space, selectionWidth)</ID>
+    <ID>MaxLineLength:PagerChildModifier.kt:(paddings.calculateStartPadding(layoutDirection) + paddings.calculateEndPadding(layoutDirection)).roundToPx()</ID>
+    <ID>MaxLineLength:PagerChildModifier.kt:private</ID>
+    <ID>MaxLineLength:RangeDecorations.kt:merged[merged.lastIndex] = Rect(previous.left, previous.top, max(previous.right, rect.right), previous.bottom)</ID>
+    <ID>MaxLineLength:TabTitlesView.kt:LazyRowTitles$val item = listState.layoutInfo.visibleItemsInfo.firstOrNull { it.index == index } ?: return TitleBounds.NotPlaced</ID>
+    <ID>MaxLineLength:TabTitlesView.kt:drawTitleBackground(placedTitles.boundsOf(index), inactiveBackground, tabShape, layoutDirection, density)</ID>
+    <ID>NewLineAtEndOfFile:DivFontSourceProvider.kt:com.yandex.div.compose.font.DivFontSourceProvider.kt</ID>
+    <ID>ReturnCount:AccessibilityModifiers.kt:@Composable internal fun Modifier.accessibility: Modifier</ID>
+    <ID>ReturnCount:AdjustScrollToItem.kt:private suspend fun LazyStaggeredGridState.scrollForwardUntilItemIsVisible: Boolean</ID>
+    <ID>ReturnCount:ArrayActionsHandler.kt:ArrayActionsHandler$private fun getArrayVariable: VariableWithValue?</ID>
+    <ID>ReturnCount:BackgroundModifiers.kt:@Composable private fun Modifier.background: Modifier</ID>
+    <ID>ReturnCount:BlurTransformation.kt:BlurTransformation$override suspend fun transform: Bitmap</ID>
+    <ID>ReturnCount:BorderModifiers.kt:@Composable internal fun Modifier.borderShadow: Modifier</ID>
+    <ID>ReturnCount:BorderModifiers.kt:@Composable internal fun Modifier.borderStrokeAndClip: Modifier</ID>
+    <ID>ReturnCount:ContainerLayoutUtils.kt:@Composable internal fun DivContainer.Separator?.resolveSeparatorVisibility: SeparatorVisibility</ID>
+    <ID>ReturnCount:DivEdgeInsets.kt:@Composable private fun DivEdgeInsets?.observeHorizontalInsets: Pair&lt;Dp, Dp&gt;</ID>
+    <ID>ReturnCount:DivGradient.kt:@Composable private fun observedColorMap: ColorMap?</ID>
+    <ID>ReturnCount:DivInputValidator.kt:@Composable private fun DivInputValidator.Regex.isValid: Boolean</ID>
+    <ID>ReturnCount:DivPagerState.kt:private fun pagerPosition: Pair&lt;Int, Float&gt;</ID>
+    <ID>ReturnCount:DivPreloader.kt:DivPreloader$private fun childrenOf: List&lt;Pair&lt;Div, DivStatePath&gt;&gt;</ID>
+    <ID>ReturnCount:DivPreloader.kt:DivPreloader$private suspend fun preloadVideo: PreloadResult</ID>
+    <ID>ReturnCount:DivTabsState.kt:DivTabsState$internal suspend fun selectTab</ID>
+    <ID>ReturnCount:DivTextView.kt:@Composable private fun shouldMeasureEndEllipsis: Boolean</ID>
+    <ID>ReturnCount:FontFamily.kt:private fun buildFontVariationSettings: FontVariation.Settings?</ID>
+    <ID>ReturnCount:GridTracks.kt:private fun Cell.canResolveSpannedSize: Boolean</ID>
+    <ID>ReturnCount:GridTracks.kt:private fun List&lt;Cell&gt;.lineShareOfBase: Float</ID>
+    <ID>ReturnCount:IndicatorDrawing.kt:private fun DrawScope.drawSelectionOverlay</ID>
+    <ID>ReturnCount:IndicatorDrawing.kt:private fun scaleEdgeItem: ShapeParams</ID>
+    <ID>ReturnCount:IndicatorShape.kt:@Composable internal fun DivIndicator.observeInactiveShape: ShapeParams</ID>
+    <ID>ReturnCount:InlineImages.kt:@Composable internal fun DivText.observeInlineImages: List&lt;InlineImageData&gt;</ID>
+    <ID>ReturnCount:PagerWindowState.kt:PagerWindowState$fun update: Int?</ID>
+    <ID>ReturnCount:RangeDecorations.kt:@Composable internal fun DivText.Range.observeDecoration: TextRangeDecoration?</ID>
+    <ID>ReturnCount:RangeDecorations.kt:@Composable private fun DivTextRangeMask.observeMask: RangeMask?</ID>
+    <ID>ReturnCount:RangeDecorations.kt:private fun TextLayoutResult.lineRects: List&lt;RangeLine&gt;</ID>
+    <ID>ReturnCount:SelectedActions.kt:private fun LazyListState.selectedPage: Int?</ID>
+    <ID>ReturnCount:SetStateActionHandler.kt:SetStateActionHandler$private fun setState</ID>
+    <ID>ReturnCount:ShimmerExtensionHandler.kt:private fun ShimmerConfig.toDrawingConfig: ShimmerDrawingConfig?</ID>
+    <ID>ReturnCount:SizeModifiers.kt:@Composable private fun Modifier.applySizeBounds: Modifier</ID>
+    <ID>ReturnCount:SliderStyles.kt:@Composable internal fun DivSlider.observeSliderStyles: SliderStyles?</ID>
+    <ID>ReturnCount:TextEllipsis.kt:EndTextEllipsizer$fun ellipsize: TextEllipsisResult</ID>
+    <ID>ReturnCount:TextEllipsis.kt:EndTextEllipsizer$private fun buildTruncatedText: AnnotatedText</ID>
+    <ID>ReturnCount:TextEllipsis.kt:EndTextEllipsizer$private fun calculateVisibleLineCount: Int</ID>
+    <ID>ReturnCount:TextEllipsis.kt:EndTextEllipsizer$private fun ellipsizeAtNativeBoundary: TextEllipsisResult</ID>
+    <ID>ReturnCount:TextEllipsis.kt:EndTextEllipsizer$private fun ellipsizeManually: TextEllipsisResult</ID>
+    <ID>ReturnCount:TimerController.kt:TimerController$private fun getValueVariable: Variable.IntegerVariable?</ID>
+    <ID>ReturnCount:VisibilityTrackingNode.kt:VisibilityTrackingNode$private fun calculateVisibilityFraction: Float</ID>
+    <ID>ReturnCount:WrapSeparatorDrawing.kt:@Composable internal fun DivContainer.Separator?.resolveDrawInfo: SeparatorDrawInfo?</ID>
+    <ID>ReturnCount:WrapSeparatorDrawing.kt:private fun DrawScope.drawSeparatorShape</ID>
+    <ID>ThrowsCount:DivComposeExpressionResolver.kt:DivComposeExpressionResolver$private fun &lt;R : Any, T : Any&gt; tryResolve: T</ID>
+    <ID>TooGenericExceptionCaught:DivComposeExpressionResolver.kt:DivComposeExpressionResolver$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:DivVariableMutableState.kt:e: Exception</ID>
+    <ID>TooGenericExceptionCaught:SetVariableActionHandler.kt:SetVariableActionHandler$e: Exception</ID>
+    <ID>TooManyFunctions:DivTextView.kt:com.yandex.div.compose.views.text.DivTextView.kt</ID>
+    <ID>TooManyFunctions:GridTracks.kt:com.yandex.div.compose.views.grid.GridTracks.kt</ID>
+    <ID>TooManyFunctions:InlineImages.kt:com.yandex.div.compose.views.text.InlineImages.kt</ID>
+    <ID>TooManyFunctions:RangeDecorations.kt:com.yandex.div.compose.views.text.RangeDecorations.kt</ID>
+    <ID>TooManyFunctions:TabTitlesView.kt:com.yandex.div.compose.views.tabs.TabTitlesView.kt</ID>
+    <ID>TopLevelPropertyNaming:DivViewHistogramReporter.kt:private const val bucketCount = 50</ID>
+  </CurrentIssues>
+</SmellBaseline>

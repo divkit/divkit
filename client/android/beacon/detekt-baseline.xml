@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:DivNetworkSendBeaconRequestExecutor.kt:DivNetworkSendBeaconRequestExecutor.&lt;no name provided&gt;$200</ID>
+    <ID>MagicNumber:DivNetworkSendBeaconRequestExecutor.kt:DivNetworkSendBeaconRequestExecutor.&lt;no name provided&gt;$299</ID>
+    <ID>MagicNumber:SendBeaconDb.kt:SendBeaconDb$3</ID>
+    <ID>MagicNumber:SendBeaconDb.kt:SendBeaconDb$4</ID>
+    <ID>MagicNumber:SendBeaconWorkerImpl.kt:SendBeaconWorkerImpl.ImplThread$100</ID>
+    <ID>MagicNumber:SendBeaconWorkerImpl.kt:SendBeaconWorkerImpl.ImplThread$5</ID>
+    <ID>ReturnCount:Serialization.kt:internal fun String?.deserializeMap: Map&lt;String, String&gt;</ID>
+    <ID>TooGenericExceptionCaught:DivNetworkSendBeaconRequestExecutor.kt:DivNetworkSendBeaconRequestExecutor$error: Exception</ID>
+  </CurrentIssues>
+</SmellBaseline>

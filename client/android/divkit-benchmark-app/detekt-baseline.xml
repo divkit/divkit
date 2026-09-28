@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>EmptyFunctionBlock:NaiveSSLContext.kt:NaiveSSLContext.NaiveTrustManager${}</ID>
+    <ID>MagicNumber:DemoCustomContainerAdapter.kt:DemoCustomContainerAdapter$20f</ID>
+    <ID>MagicNumber:DemoCustomContainerAdapter.kt:DemoCustomContainerAdapter$30</ID>
+    <ID>MagicNumber:DemoHistogramConfiguration.kt:LoggingHistogramBridge$1000</ID>
+    <ID>MagicNumber:Div2BenchmarkViewController.kt:Div2BenchmarkViewController$24.0f</ID>
+    <ID>MagicNumber:Div2FeedBenchmarkViewController.kt:Div2FeedBenchmarkViewController$24.0f</ID>
+    <ID>MagicNumber:DivComposeBenchmarkActivity.kt:DivComposeBenchmarkActivity$24f</ID>
+    <ID>MagicNumber:DivComposeMacrobenchmarkActivity.kt:DivComposeMacrobenchmarkActivity$29</ID>
+    <ID>MagicNumber:DivStorageBenchmarkViewController.kt:DivStorageBenchmarkViewController$24.0f</ID>
+    <ID>MagicNumber:MacrobenchmarkHistogramBridge.kt:MacrobenchmarkHistogramBridge$29</ID>
+    <ID>MatchingDeclarationName:Profiler.kt:BlockMetrics&lt;T&gt;</ID>
+    <ID>MaxLineLength:DemoCustomContainerAdapter.kt:DemoCustomContainerAdapter$throw IllegalStateException("Custom view childCount not equal to div child count! Div type is ${div.customType}")</ID>
+    <ID>MaxLineLength:Div2FeedBenchmark.kt:Div2FeedBenchmark$metricsObserver</ID>
+    <ID>MaxLineLength:DivComposeBenchmarkActivity.kt:DivComposeBenchmarkActivity$*</ID>
+    <ID>MaxLineLength:ProfilingLayout.kt:ProfilingLayout$Gravity.CENTER_HORIZONTAL -&gt; (layoutLeft + layoutRight - childWidth) / 2 + lp.leftMargin - lp.rightMargin</ID>
+    <ID>MaxLineLength:ProfilingLayout.kt:ProfilingLayout$private</ID>
+    <ID>NewLineAtEndOfFile:PerfMetricReporter.kt:com.yandex.divkit.benchmark.perf.PerfMetricReporter.kt</ID>
+    <ID>TooGenericExceptionThrown:Div2Benchmark.kt:Div2Benchmark$throw RuntimeException( "Benchmark expects div templates without errors! Please fix them first!", e )</ID>
+    <ID>TooGenericExceptionThrown:Div2Benchmark.kt:Div2Benchmark$throw RuntimeException( "Benchmark expects divs without errors! Please fix them first!", e )</ID>
+    <ID>TooGenericExceptionThrown:Div2StateBenchmark.kt:Div2StateBenchmark$throw RuntimeException( "Benchmark expects div templates without errors! Please fix them first!", e )</ID>
+    <ID>TooGenericExceptionThrown:Div2StateBenchmark.kt:Div2StateBenchmark$throw RuntimeException( "Benchmark expects divs without errors! Please fix them first!", e )</ID>
+    <ID>TooGenericExceptionThrown:DivComposeBenchmarkActivity.kt:DivComposeBenchmarkActivity$throw RuntimeException("Extra is required: $EXTRA_ASSET_NAME")</ID>
+    <ID>TooGenericExceptionThrown:DivComposeBenchmarkActivity.kt:DivComposeBenchmarkActivity$throw RuntimeException("Extra is required: warm_render_mode")</ID>
+    <ID>TooGenericExceptionThrown:DivComposeBenchmarkActivity.kt:FailingReporter$throw RuntimeException(e.message)</ID>
+    <ID>TooGenericExceptionThrown:DivComposeBenchmarkActivity.kt:FailingReporter$throw RuntimeException(message)</ID>
+    <ID>TooGenericExceptionThrown:DivComposeMacrobenchmarkActivity.kt:MacrobenchmarkReporter$throw RuntimeException(e)</ID>
+    <ID>TooGenericExceptionThrown:NaiveSSLContext.kt:NaiveSSLContext$throw RuntimeException("Failed to initialize an SSLContext.", e)</ID>
+    <ID>TooManyFunctions:Div2Benchmark.kt:Div2Benchmark</ID>
+    <ID>TooManyFunctions:Div2StateBenchmark.kt:Div2StateBenchmark</ID>
+    <ID>TooManyFunctions:ProfilingLayout.kt:ProfilingLayout : FrameLayout</ID>
+  </CurrentIssues>
+</SmellBaseline>

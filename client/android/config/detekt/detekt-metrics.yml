@@ -1,0 +1,75 @@
+# Measurement config for ai/scripts/code_complexity.
+#
+# The thresholds here are zero on purpose: with `allowedComplexity: 0` and
+# `allowedLines: 0` detekt reports *every* function, so the checkstyle report becomes a
+# per-function metric table (cognitive complexity and length) instead of a list of
+# violations. Nesting stays at the real limit because NestedBlockDepth does not print a
+# number — it is read as a flag.
+#
+# This config never fails a build: the `detektMetrics` task runs with ignoreFailures.
+# The gate itself uses detekt.yml in this directory.
+
+comments:
+  active: false
+
+complexity:
+  active: true
+  CognitiveComplexMethod:
+    active: true
+    allowedComplexity: 0
+  ComplexCondition:
+    active: false
+  ComplexInterface:
+    active: false
+  CyclomaticComplexMethod:
+    active: false
+  LabeledExpression:
+    active: false
+  LargeClass:
+    # Same limit as the gate; the scorer reads functions, so this entry only shows up
+    # in the raw report.
+    active: true
+    allowedLines: 500
+  LongMethod:
+    active: true
+    allowedLines: 0
+  LongParameterList:
+    active: true
+    allowedFunctionParameters: 6
+    allowedConstructorParameters: 7
+  MethodOverloading:
+    active: false
+  NamedArguments:
+    active: false
+  NestedBlockDepth:
+    active: true
+    allowedDepth: 4
+  NestedScopeFunctions:
+    active: false
+  ReplaceSafeCallChainWithRun:
+    active: false
+  StringLiteralDuplication:
+    active: false
+  TooManyFunctions:
+    active: false
+
+coroutines:
+  active: false
+
+empty-blocks:
+  active: false
+
+exceptions:
+  active: false
+
+naming:
+  active: false
+
+performance:
+  active: false
+
+potential-bugs:
+  active: false
+
+style:
+  active: false

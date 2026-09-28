@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>EmptyFunctionBlock:InternalRiveView.kt:InternalRiveView${}</ID>
+    <ID>MagicNumber:RiveCustomViewAdapter.kt:RiveCustomViewAdapter.Builder$4</ID>
+    <ID>NewLineAtEndOfFile:DivRiveCustomProps.kt:com.yandex.div.rive.DivRiveCustomProps.kt</ID>
+    <ID>TooGenericExceptionCaught:DivRiveRepository.kt:DivRiveRepository$throwable: Throwable</ID>
+  </CurrentIssues>
+</SmellBaseline>

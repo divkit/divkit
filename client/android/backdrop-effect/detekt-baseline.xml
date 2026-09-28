@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>LongMethod:RenderNodeBackdropLayer.kt:RenderNodeBackdropLayer$override fun capture</ID>
+    <ID>MagicNumber:Graphics.kt:255</ID>
+    <ID>MagicNumber:Graphics.kt:255.0f</ID>
+    <ID>MagicNumber:Math.kt:180.0f</ID>
+    <ID>MagicNumber:Math.kt:360.0f</ID>
+    <ID>MagicNumber:PlainRimHighlightLayer.kt:PlainRimHighlightLayer$255</ID>
+    <ID>MagicNumber:ReflectionRimHighlightLayer.kt:ReflectionRimHighlightLayer$255</ID>
+    <ID>MagicNumber:Shaders.kt:Shaders$255</ID>
+    <ID>MaxLineLength:Shaders.kt:Shaders$private val roundedRectRefractionWithDispersionShader by lazy { RuntimeShader(ROUNDED_RECT_REFRACTION_WITH_DISPERSION_SHADER) }</ID>
+    <ID>ReturnCount:CanvasBackdropLayer.kt:CanvasBackdropLayer$private fun getBackdropBitmap: Bitmap?</ID>
+    <ID>ReturnCount:RenderNodeBackdropLayer.kt:RenderNodeBackdropLayer$override fun capture</ID>
+    <ID>ReturnCount:RenderNodeBackdropLayer.kt:RenderNodeBackdropLayer$private fun getImageReader: ImageReader?</ID>
+    <ID>TooManyFunctions:BackdropEffectDrawable.kt:BackdropEffectDrawable : Drawable</ID>
+    <ID>TooManyFunctions:RenderNodeBackdropLayer.kt:RenderNodeBackdropLayer : BackdropLayer</ID>
+  </CurrentIssues>
+</SmellBaseline>
