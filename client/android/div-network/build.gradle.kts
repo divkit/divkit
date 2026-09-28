@@ -13,6 +13,6 @@ android {
 dependencies {
     implementation(project(":div"))
 
-    implementation(libs.kotlin.corountines.core)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.okhttp)
 }

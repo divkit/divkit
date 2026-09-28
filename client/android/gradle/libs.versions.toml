@@ -17,8 +17,8 @@ javax = "1"
 json = "20260719"
 jvm-toolchain = "17"
 kotlin = "2.3.21"
-kotlin-coroutines = "1.10.2"
 kotlinpoet = "2.4.0"
+kotlinx-coroutines = "1.10.2"
 ksp = "2.3.11"
 lottie = "6.7.1"
 markwon = "4.6.2"
@@ -134,13 +134,14 @@ hamcrest = { module = "org.hamcrest:hamcrest", version = "2.2" }
 javax = { module = "javax.inject:javax.inject", version.ref = "javax" }
 json = { module = "org.json:json", version.ref = "json" }
 
-kotlin-corountines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
-kotlin-corountines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
-kotlin-corountines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
+
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
 
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }

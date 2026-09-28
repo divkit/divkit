@@ -20,7 +20,7 @@ dependencies {
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
-    implementation(libs.kotlin.corountines.core)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.lottie.compose)
 
     testImplementation(libs.androidx.test.core)

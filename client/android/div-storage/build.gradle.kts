@@ -23,5 +23,5 @@ dependencies {
 
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.json)
-    testImplementation(libs.kotlin.corountines.core)
+    testImplementation(libs.kotlinx.coroutines.core)
 }

@@ -12,6 +12,6 @@ dependencies {
     implementation(project(":ui-test-common"))
 
     implementation(libs.androidx.test.uiautomator)
-    implementation(libs.kotlin.corountines.android)
-    implementation(libs.kotlin.corountines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
 }

@@ -14,7 +14,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core)
-    implementation(libs.kotlin.corountines.core)
+    implementation(libs.kotlinx.coroutines.core)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

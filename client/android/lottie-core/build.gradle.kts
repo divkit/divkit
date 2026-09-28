@@ -14,7 +14,7 @@ dependencies {
     api(libs.lottie) {
         exclude(group = "androidx.fragment", module = "fragment")
     }
-    implementation(libs.kotlin.corountines.core)
+    implementation(libs.kotlinx.coroutines.core)
 
     testImplementation(libs.androidx.test.core)
 }

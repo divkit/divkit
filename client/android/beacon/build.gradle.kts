@@ -18,5 +18,5 @@ dependencies {
     implementation(project(":utils"))
 
     implementation(libs.androidx.collection)
-    implementation(libs.kotlin.corountines.core)
+    implementation(libs.kotlinx.coroutines.core)
 }
