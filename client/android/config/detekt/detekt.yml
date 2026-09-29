@@ -1,12 +1,4 @@
-# detekt configuration shared by every Android module (applied from the root build.gradle).
-#
-# All built-in rule sets run at detekt's defaults; only the `complexity` set is tuned
-# here, because it is the metric the complexity gate and ai/scripts/code_complexity
-# are built on. Thresholds are derived from the Compose module's own distribution; see
-# ai/skills/divkit-complexity-gate/SKILL.md.
-#
-# Existing debt lives in each module's detekt-baseline.xml, so `./gradlew detekt` is
-# green on trunk and fails only on new findings.
+# Comments are written only for the rules themselves, not in this header.
 
 complexity:
   active: true
@@ -20,7 +12,7 @@ complexity:
     # for one function without adding information.
     active: false
   LargeClass:
-    # detekt's default is 600; 500 was agreed in review (DIVKIT-10457).
+    # detekt's default is 600; 500 was agreed in review.
     active: true
     allowedLines: 500
   LongMethod:
@@ -38,3 +30,8 @@ naming:
   FunctionNaming:
     # Composables are PascalCase by convention.
     ignoreAnnotated: ['Composable']
+
+style:
+  ReturnCount:
+    # Guard clauses with early returns are an intentional style.
+    active: false
