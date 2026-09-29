@@ -328,6 +328,179 @@ class TestTemplateValidator(unittest.TestCase):
                       "with 'match_parent' width. child_id='test_card'. id='test_container'.", output)
         self.assertNotIn("NO_ID", output)
 
+    def run_main_with_nested_state(self, state_div, templates=None):
+        data = {
+            "card": {
+                "states": [
+                    {
+                        "state_id": 0,
+                        "div": {
+                            "type": "container",
+                            "items": [
+                                state_div,
+                                {
+                                    "type": "text",
+                                    "text": "text"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+        if templates is not None:
+            data["templates"] = templates
+        self.run_main_with_json(data)
+        return self.held_output.getvalue()
+
+    def single_item_container(self):
+        return {
+            "type": "container",
+            "items": [
+                {
+                    "type": "text",
+                    "text": "text"
+                }
+            ]
+        }
+
+    def test_nested_state_is_validated(self):
+        output = self.run_main_with_nested_state({
+            "type": "state",
+            "id": "switcher",
+            "states": [
+                {
+                    "state_id": "first",
+                    "div": self.single_item_container()
+                },
+                {
+                    "state_id": "second",
+                    "div": self.single_item_container()
+                }
+            ]
+        })
+        print(f"test_nested_state_is_validated output:\n{output}")
+        self.assertIn("Warning: container with only one element. Please avoid unnecessary "
+                      "nesting. path='.state_id=0.id=switcher.state_id=first'.", output)
+        self.assertIn("Warning: container with only one element. Please avoid unnecessary "
+                      "nesting. path='.state_id=0.id=switcher.state_id=second'.", output)
+        self.assertNotIn("state_id=first.state_id=second", output)
+
+    def test_nested_state_without_div(self):
+        output = self.run_main_with_nested_state({
+            "type": "state",
+            "id": "switcher",
+            "states": [
+                {
+                    # div is optional in div-state states
+                    "state_id": "hidden"
+                },
+                {
+                    "state_id": "shown",
+                    "div": self.single_item_container()
+                }
+            ]
+        })
+        print(f"test_nested_state_without_div output:\n{output}")
+        self.assertNotIn("ERROR", output)
+        self.assertIn("Warning: container with only one element. Please avoid unnecessary "
+                      "nesting. path='.state_id=0.id=switcher.state_id=shown'.", output)
+
+    def test_templated_state_is_validated(self):
+        output = self.run_main_with_nested_state(
+            {
+                "type": "switcher",
+                "id": "switcher",
+                "states": [
+                    {
+                        "state_id": "first",
+                        "div": self.single_item_container()
+                    }
+                ]
+            },
+            templates={
+                "switcher": {
+                    "type": "state"
+                }
+            }
+        )
+        print(f"test_templated_state_is_validated output:\n{output}")
+        self.assertIn("Warning: container with only one element. Please avoid unnecessary "
+                      "nesting. path='.state_id=0.id=switcher.state_id=first'.", output)
+
+    def run_main_with_two_instances(self, templates):
+        data = {
+            "card": {
+                "states": [
+                    {
+                        "state_id": 0,
+                        "div": {
+                            "type": "container",
+                            "items": [
+                                {
+                                    "type": "block",
+                                    "id": "first"
+                                },
+                                {
+                                    "type": "block",
+                                    "id": "second"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "templates": templates
+        }
+        self.run_main_with_json(data)
+        return self.held_output.getvalue()
+
+    def test_inherited_states_are_not_shared_between_instances(self):
+        output = self.run_main_with_two_instances({
+            "label": {
+                "type": "text",
+                "$text": "content"
+            },
+            "block": {
+                "type": "state",
+                "states": [
+                    {
+                        "state_id": "shown",
+                        "div": {
+                            "type": "label",
+                            "content": "hello"
+                        }
+                    }
+                ]
+            }
+        })
+        print(f"test_inherited_states_are_not_shared_between_instances output:\n{output}")
+        self.assertNotIn("Unnecessary substitution", output)
+        self.assertNotIn("is never used", output)
+
+    def test_inherited_items_are_not_shared_between_instances(self):
+        output = self.run_main_with_two_instances({
+            "label": {
+                "type": "text",
+                "$text": "content"
+            },
+            "block": {
+                "type": "container",
+                "items": [
+                    {
+                        "type": "label",
+                        "content": "first line"
+                    },
+                    {
+                        "type": "label",
+                        "content": "second line"
+                    }
+                ]
+            }
+        })
+        print(f"test_inherited_items_are_not_shared_between_instances output:\n{output}")
+        self.assertNotIn("Unnecessary substitution", output)
+
 
 if __name__ == '__main__':
     unittest.main()

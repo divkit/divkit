@@ -1,4 +1,5 @@
 import argparse
+import copy
 import json
 import re
 
@@ -223,13 +224,15 @@ def process_item(div, templates_map, path):
 
         for key, value in template.items():
             if key not in div and key != used_to_build_card_template_field:
-                div[key] = value
+                # copy, so that processing this item does not modify the template
+                div[key] = copy.deepcopy(value)
             if key == 'type':
                 div[key] = value
         substitute_fields(type, template, div, div, path)
 
-    if type == 'state':
-        process_state(type, templates_map, path)
+    # templates are merged at this point, so div['type'] is the base type
+    if div['type'] == 'state':
+        process_state(div.get('states', []), templates_map, path)
     elif 'items' in div:
         process_container(div, templates_map, path)
 
@@ -265,8 +268,9 @@ def process_state(states, templates_map, path):
             print_error("state_id not specified", path=path)
             return
 
-        path = f"{path}.state_id={state_id}"
-        process_item(state['div'], templates_map, path)
+        # div is optional in div-state states
+        if 'div' in state:
+            process_item(state['div'], templates_map, f"{path}.state_id={state_id}")
 
 
 def process_card(card, templates_map):
