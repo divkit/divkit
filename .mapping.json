@@ -855,6 +855,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/BackgroundModifiers.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/BackgroundModifiers.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/BorderModifiers.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/BorderModifiers.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/LayoutModifiers.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/LayoutModifiers.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/MatchParentIntrinsicsModifier.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/MatchParentIntrinsicsModifier.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/Modifiers.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/Modifiers.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/SizeModifiers.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/SizeModifiers.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/TransformModifiers.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/modifiers/TransformModifiers.kt",

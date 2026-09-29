@@ -13,12 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
-import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
-import com.yandex.div.compose.utils.aspect
 import com.yandex.div.compose.utils.combineAlignment
+import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
@@ -39,7 +38,7 @@ internal fun Modifier.size(
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
 ): Modifier {
     val data = div.value()
-    val aspectRatio = div.observedAspectRatio()
+    val aspectRatio = data.observedAspectRatio()
     val horizontalAlignment = data.alignmentHorizontal?.observedValue()
     val width = data.width
     val isImage = div is Div.Image || div is Div.GifImage
@@ -75,13 +74,6 @@ internal fun Modifier.size(
                 fillMatchParent = fillMatchParentHeight,
             )
         }
-}
-
-@Composable
-private fun Div.observedAspectRatio(): Float? {
-    val aspect = value().aspect
-    val aspectRatio = aspect?.ratio?.observedFloatValue() ?: return null
-    return if (aspectRatio > 0f) aspectRatio else null
 }
 
 @Composable
@@ -156,4 +148,3 @@ private fun Modifier.applySizeBounds(
         heightIn(min = min ?: Dp.Unspecified, max = max ?: Dp.Unspecified)
     }
 }
-

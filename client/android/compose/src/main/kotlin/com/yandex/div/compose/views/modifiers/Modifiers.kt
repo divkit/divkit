@@ -29,10 +29,12 @@ internal fun Modifier.apply(
     fillMatchParentHeight: Boolean = true,
     defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
+    suppressMatchParentIntrinsics: Boolean = false,
 ): Modifier {
     val divBase = div.value()
     return this
         .applyIf(applyMargins) { padding(divBase.margins) }
+        .applyIf(suppressMatchParentIntrinsics) { suppressMatchParentIntrinsics(divBase) }
         .size(
             div,
             fillMatchParentWidth = fillMatchParentWidth,

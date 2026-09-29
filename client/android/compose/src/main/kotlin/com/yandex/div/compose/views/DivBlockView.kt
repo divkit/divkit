@@ -37,15 +37,20 @@ internal fun DivBlockView(
     applyMargins: Boolean = true,
     defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
+    suppressMatchParentIntrinsics: Boolean = false,
 ) {
     val divBase = data.value()
     WithLocalComponent(divBase) {
         val visibility = divBase.visibility.observedValue()
         if (visibility == DivVisibility.GONE) return@WithLocalComponent
         VisibleDivBlockView(
-            data, modifier, applyMargins, visibility,
+            data = data,
+            modifier = modifier,
+            applyMargins = applyMargins,
+            visibility = visibility,
             defaultHorizontalAlignment = defaultHorizontalAlignment,
             defaultVerticalAlignment = defaultVerticalAlignment,
+            suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
         )
     }
 }
@@ -60,6 +65,7 @@ internal fun VisibleDivBlockView(
     fillMatchParentHeight: Boolean = true,
     defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
+    suppressMatchParentIntrinsics: Boolean = false,
 ) {
     val divBase = data.value()
     val actions = data.observedActions()
@@ -78,6 +84,7 @@ internal fun VisibleDivBlockView(
                 fillMatchParentHeight = fillMatchParentHeight,
                 defaultHorizontalAlignment = defaultHorizontalAlignment,
                 defaultVerticalAlignment = defaultVerticalAlignment,
+                suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
             )
         )
     }

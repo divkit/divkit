@@ -66,7 +66,8 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
                             columnSpan = columnSpan,
                             rowSpan = rowSpan,
                             alignment = divBase.toGridItemAlignment()
-                        )
+                        ),
+                    suppressMatchParentIntrinsics = true,
                 )
             }
         }
