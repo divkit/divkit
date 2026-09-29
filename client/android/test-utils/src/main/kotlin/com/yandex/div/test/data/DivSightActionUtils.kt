@@ -13,11 +13,13 @@ fun visibilityAction(
     percentage: Int = 50,
     typed: DivActionTyped? = null,
     url: String? = null,
+    referer: String? = null,
 ): DivVisibilityAction {
     return DivVisibilityAction(
         isEnabled = constant(isEnabled),
         logId = id?.let { constant(it) },
         logLimit = constant(limit.toLong()),
+        referer = referer?.let { constant(it.toUri()) },
         typed = typed,
         url = url?.let { constant(it.toUri()) },
         visibilityDuration = constant(delayMs),
@@ -33,12 +35,14 @@ fun disappearAction(
     percentage: Int = 0,
     typed: DivActionTyped? = null,
     url: String? = null,
+    referer: String? = null,
 ): DivDisappearAction {
     return DivDisappearAction(
         disappearDuration = constant(delayMs),
         isEnabled = constant(isEnabled),
         logId = id?.let { constant(it) },
         logLimit = constant(limit.toLong()),
+        referer = referer?.let { constant(it.toUri()) },
         typed = typed,
         url = url?.let { constant(it.toUri()) },
         visibilityPercentage = constant(percentage.toLong())

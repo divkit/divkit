@@ -17,7 +17,7 @@ import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.dagger.handleTapActions
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -125,6 +125,6 @@ private class ClickHandler(
         if (actions.isEmpty()) {
             return null
         }
-        return { localComponent.handleActions(actions, source) }
+        return { localComponent.handleTapActions(actions, source) }
     }
 }

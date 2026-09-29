@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import com.yandex.div.compose.actions.DivActionLogger
 import com.yandex.div.compose.actions.DivExternalActionHandler
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.dagger.Names
@@ -40,43 +41,115 @@ import javax.inject.Named
  *    }
  */
 @Module
-class DivConfiguration(
+class DivConfiguration private constructor(
     @get:Provides
-    val actionHandler: DivExternalActionHandler = defaultActionHandler,
+    val actionHandler: DivExternalActionHandler,
 
     @get:Provides
-    val customViewFactories: Map<String, DivCustomViewFactory> = emptyMap(),
+    val actionLogger: DivActionLogger,
 
     @get:Provides
-    val extensionHandlers: Map<String, DivExtensionHandler> = emptyMap(),
+    val customViewFactories: Map<String, DivCustomViewFactory>,
 
     @get:Provides
-    val fontSourceProvider: DivFontSourceProvider = defaultFontSourceProvider,
+    val extensionHandlers: Map<String, DivExtensionHandler>,
 
     @get:Provides
-    val histogramConfiguration: DivHistogramConfiguration = DisabledHistogramConfiguration,
+    val fontSourceProvider: DivFontSourceProvider,
 
     @get:Provides
-    val imageLoaderConfiguration: ImageLoaderConfiguration = defaultImageLoaderConfiguration,
+    val histogramConfiguration: DivHistogramConfiguration,
 
     @get:Provides
-    val playerFactory: DivVideoPlayerFactory = defaultDivVideoPlayerFactory,
+    val imageLoaderConfiguration: ImageLoaderConfiguration,
 
     @get:Provides
-    val reporter: DivReporter = DivReporter(),
+    val playerFactory: DivVideoPlayerFactory,
 
     @get:Provides
-    val animationsEnabledProvider: DivAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT,
+    val reporter: DivReporter,
+
+    @get:Provides
+    val animationsEnabledProvider: DivAnimationsEnabledProvider,
 
     @get:Provides
     @get:Named(Names.HOST_VARIABLES)
-    val variableController: DivVariableController = DivVariableController(),
+    val variableController: DivVariableController,
 
     @get:Provides
-    val videoPreloader: DivVideoPreloader = defaultDivVideoPreloader,
-)
+    val videoPreloader: DivVideoPreloader,
+) {
+    @Deprecated(
+        message = "Use divConfiguration { ... } or DivConfiguration.Builder instead.",
+        level = DeprecationLevel.WARNING,
+    )
+    @JvmOverloads
+    constructor(
+        actionHandler: DivExternalActionHandler = defaultActionHandler,
+        customViewFactories: Map<String, DivCustomViewFactory> = emptyMap(),
+        extensionHandlers: Map<String, DivExtensionHandler> = emptyMap(),
+        fontSourceProvider: DivFontSourceProvider = defaultFontSourceProvider,
+        histogramConfiguration: DivHistogramConfiguration = DisabledHistogramConfiguration,
+        imageLoaderConfiguration: ImageLoaderConfiguration = defaultImageLoaderConfiguration,
+        playerFactory: DivVideoPlayerFactory = defaultDivVideoPlayerFactory,
+        reporter: DivReporter = DivReporter(),
+        animationsEnabledProvider: DivAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT,
+        variableController: DivVariableController = DivVariableController(),
+        videoPreloader: DivVideoPreloader = defaultDivVideoPreloader,
+    ) : this(
+        actionHandler = actionHandler,
+        actionLogger = defaultActionLogger,
+        customViewFactories = customViewFactories,
+        extensionHandlers = extensionHandlers,
+        fontSourceProvider = fontSourceProvider,
+        histogramConfiguration = histogramConfiguration,
+        imageLoaderConfiguration = imageLoaderConfiguration,
+        playerFactory = playerFactory,
+        reporter = reporter,
+        animationsEnabledProvider = animationsEnabledProvider,
+        variableController = variableController,
+        videoPreloader = videoPreloader,
+    )
+
+    /** Configures a [DivConfiguration] using the same defaults as its constructor. */
+    class Builder {
+        var actionHandler: DivExternalActionHandler = defaultActionHandler
+        var actionLogger: DivActionLogger = defaultActionLogger
+        var customViewFactories: Map<String, DivCustomViewFactory> = emptyMap()
+        var extensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
+        var fontSourceProvider: DivFontSourceProvider = defaultFontSourceProvider
+        var histogramConfiguration: DivHistogramConfiguration = DisabledHistogramConfiguration
+        var imageLoaderConfiguration: ImageLoaderConfiguration = defaultImageLoaderConfiguration
+        var playerFactory: DivVideoPlayerFactory = defaultDivVideoPlayerFactory
+        var reporter: DivReporter = DivReporter()
+        var animationsEnabledProvider: DivAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT
+        var variableController: DivVariableController = DivVariableController()
+        var videoPreloader: DivVideoPreloader = defaultDivVideoPreloader
+
+        fun build(): DivConfiguration = DivConfiguration(
+            actionHandler = actionHandler,
+            actionLogger = actionLogger,
+            customViewFactories = customViewFactories,
+            extensionHandlers = extensionHandlers,
+            fontSourceProvider = fontSourceProvider,
+            histogramConfiguration = histogramConfiguration,
+            imageLoaderConfiguration = imageLoaderConfiguration,
+            playerFactory = playerFactory,
+            reporter = reporter,
+            animationsEnabledProvider = animationsEnabledProvider,
+            variableController = variableController,
+            videoPreloader = videoPreloader,
+        )
+    }
+}
+
+/** Creates a [DivConfiguration] using a [DivConfiguration.Builder] block. */
+fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfiguration =
+    DivConfiguration.Builder().apply(block).build()
 
 private val defaultActionHandler = object : DivExternalActionHandler {}
+
+private val defaultActionLogger = DivActionLogger { _, _ -> }
 
 private val defaultFontSourceProvider = object : DivFontSourceProvider {
     override fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource {

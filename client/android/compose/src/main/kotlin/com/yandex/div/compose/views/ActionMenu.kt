@@ -46,7 +46,8 @@ private fun ActionMenu(menuHolder: ActionMenuHolder) {
                     menuHolder.dismiss()
                     localComponent.handleActions(
                         actions = item.actions ?: item.action?.let { listOf(it) } ?: emptyList(),
-                        source = DivActionSource.TAP
+                        source = DivActionSource.TAP,
+                        includeLogUrl = true,
                     )
                 }
             )
@@ -63,4 +64,3 @@ private fun DivActions.hasMenuAction(action: DivAction): Boolean {
 private fun List<DivAction>?.hasMenuAction(action: DivAction): Boolean {
     return this?.contains(action) ?: false
 }
-

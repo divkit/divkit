@@ -25,6 +25,7 @@ internal class ActionHandlerEnvironment {
 
     fun init(
         externalActionHandler: DivExternalActionHandler = mock(),
+        actionLogger: DivActionLogger = mock(),
         arrayActionsHandler: ArrayActionsHandler = mock(),
         dictSetValueActionHandler: DictSetValueActionHandler = mock(),
         setStateActionHandler: SetStateActionHandler = mock(),
@@ -33,10 +34,12 @@ internal class ActionHandlerEnvironment {
         timerActionHandler: TimerActionHandler = mock(),
         tooltipActionHandler: TooltipActionHandler = mock(),
         updateStructureActionHandler: UpdateStructureActionHandler = mock(),
-        videoActionHandler: VideoActionHandler = mock()
+        videoActionHandler: VideoActionHandler = mock(),
+        actionMenuHolder: ActionMenuHolder = mock()
     ) {
         actionHandler = DivActionHandler(
-            actionMenuHolder = mock(),
+            actionMenuHolder = actionMenuHolder,
+            actionLogger = actionLogger,
             externalActionHandler = externalActionHandler,
             reporter = reporter,
             arrayActionsHandler = arrayActionsHandler,
@@ -55,7 +58,11 @@ internal class ActionHandlerEnvironment {
         actionHandler.handle(context = context, action = action)
     }
 
-    fun handle(action: DivAction, source: DivActionSource = DivActionSource.EXTERNAL) {
-        actionHandler.handle(context = context, action = action, source = source)
+    fun handle(
+        action: DivAction,
+        source: DivActionSource = DivActionSource.EXTERNAL,
+        includeLogUrl: Boolean = false,
+    ) {
+        actionHandler.handle(context = context, action = action, source = source, includeLogUrl = includeLogUrl)
     }
 }
