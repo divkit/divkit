@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D97639000000000000000002 /* TestImageHolderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97639000000000000000001 /* TestImageHolderFactory.swift */; };
+		D97639000000000000000003 /* TestImageHolderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97639000000000000000001 /* TestImageHolderFactory.swift */; };
+		D97639000000000000000004 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C035199288EC5AB0016A747 /* Images.xcassets */; };
+		D97639000000000000000005 /* DivKitSVG in Frameworks */ = {isa = PBXBuildFile; productRef = D97639000000000000000006 /* DivKitSVG */; };
 		D97635000000000000000002 /* UITestConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97635000000000000000001 /* UITestConnection.swift */; };
 		D10459000000000100000001 /* SizeProviderBlockViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10459000000000200000001 /* SizeProviderBlockViewTests.swift */; };
 		0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9A9A9F28CB1A9200D1D810 /* Lottie */; };
@@ -230,6 +234,7 @@
 		D967000101010002DEADBEEF /* DivPagerExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D967000101010001DEADBEEF /* DivPagerExtensionsTests.swift */; };
 		D97082000000000300000001 /* DivLayoutProviderHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97082000000000200000001 /* DivLayoutProviderHandlerTests.swift */; };
 		D97082000000000400000001 /* DivBlockProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97082000000000500000001 /* DivBlockProviderTests.swift */; };
+		D97637000000000000000001 /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284CF288ACCE400BEA1FA /* Diff.swift */; };
 		D9763000000000000000000C /* automated in Resources */ = {isa = PBXBuildFile; fileRef = D97630000000000000000016 /* automated */; };
 		E91B558D2C89D78400DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */; };
 		E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */; };
@@ -345,6 +350,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D97639000000000000000001 /* TestImageHolderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestImageHolderFactory.swift; sourceTree = "<group>"; };
 		D97635000000000000000001 /* UITestConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestConnection.swift; sourceTree = "<group>"; };
 		D10459000000000200000001 /* SizeProviderBlockViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SizeProviderBlockViewTests.swift; sourceTree = "<group>"; };
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
@@ -708,6 +714,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9763200000000000000000B /* DivKit in Frameworks */,
+				D97639000000000000000005 /* DivKitSVG in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1132,6 +1139,7 @@
 				8C9284D6288ACCE400BEA1FA /* SnapshotTestRunner.swift */,
 				43D05A9B2BA336CD003290AD /* TestingFiles.swift */,
 				8C0E7380288AE9BB009BEB3C /* SnapshotFontProvider.swift */,
+				D97639000000000000000001 /* TestImageHolderFactory.swift */,
 				8C035199288EC5AB0016A747 /* Images.xcassets */,
 			);
 			path = DivKitSnapshotTests;
@@ -1526,7 +1534,10 @@
 			dependencies = ();
 			fileSystemSynchronizedGroups = (D97632000000000000000003 /* DivKitUITestsHostApp */, );
 			name = DivKitUITestsHostApp;
-			packageProductDependencies = (D9763200000000000000000A /* DivKit */, );
+			packageProductDependencies = (
+				D9763200000000000000000A /* DivKit */,
+				D97639000000000000000006 /* DivKitSVG */,
+			);
 			productName = DivKitUITestsHostApp;
 			productReference = D97632000000000000000002 /* DivKitUITestsHostApp.app */;
 			productType = "com.apple.product-type.application";
@@ -1719,6 +1730,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9763200000000000000000F /* Fonts in Resources */,
+				D97639000000000000000004 /* Images.xcassets in Resources */,
 				D97632000000000000000015 /* automated in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1976,6 +1988,7 @@
 				43BF1CD02B9FD7B500198EAF /* SnapshotTestRunner.swift in Sources */,
 				43BF1CD32B9FD7B500198EAF /* ReferenceSet.swift in Sources */,
 				43BF1CD52B9FD7B500198EAF /* SnapshotFontProvider.swift in Sources */,
+				D97639000000000000000002 /* TestImageHolderFactory.swift in Sources */,
 				43D05A9C2BA336CD003290AD /* TestingFiles.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2013,6 +2026,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D97635000000000000000002 /* UITestConnection.swift in Sources */,
+				D97637000000000000000001 /* Diff.swift in Sources */,
 				D97634000000000000000007 /* UITestLaunchArgument.swift in Sources */,
 				D9763300000000000000000F /* UITestMessage.swift in Sources */,
 				D97633000000000000000012 /* UITestConnectionTests.swift in Sources */,
@@ -2028,6 +2042,7 @@
 				D97634000000000000000006 /* UITestLaunchArgument.swift in Sources */,
 				D9763300000000000000000E /* UITestMessage.swift in Sources */,
 				D9763200000000000000000E /* SnapshotFontProvider.swift in Sources */,
+				D97639000000000000000003 /* TestImageHolderFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2881,6 +2896,7 @@
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = UITestSupport/RegressionUITestsInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "tech.divkit.regression-uitests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2899,6 +2915,7 @@
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = UITestSupport/RegressionUITestsInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "tech.divkit.regression-uitests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3086,6 +3103,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D97639000000000000000006 /* DivKitSVG */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DivKitSVG;
+		};
 		0A9A9A9F28CB1A9200D1D810 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 0A9A9A9E28CB1A9200D1D810 /* XCRemoteSwiftPackageReference "lottie-ios" */;

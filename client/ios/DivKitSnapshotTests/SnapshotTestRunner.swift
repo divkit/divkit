@@ -1,5 +1,4 @@
 @testable @_spi(Internal) import DivKit
-import DivKitSVG
 @testable import LayoutKit
 import Testing
 import UIKit
@@ -46,7 +45,7 @@ final class SnapshotTestRunner {
       customActionHandler: customActionHandler,
       extensionHandlers: extensions,
       fontProvider: SnapshotFontProvider(),
-      imageHolderFactory: TestImageHolderFactory(),
+      imageHolderFactory: TestImageHolderFactory { Issue.record(Comment(rawValue: $0)) },
       layoutDirection: getLayoutDirection(jsonDict),
       reporter: failOnParsingError ? SnapshotTestReporter() : nil
     )
@@ -330,41 +329,6 @@ private func readJson(path: String) -> [String: any Sendable]? {
     return nil
   }
   return (try? JSONSerialization.jsonObject(with: data)) as? [String: any Sendable]
-}
-
-private final class TestImageHolderFactory: @MainActor DivImageHolderFactory {
-  private var reportedUrls = Set<String>()
-  private let testBundle = Bundle(for: SnapshotTestRunner.self)
-
-  @MainActor
-  func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder {
-    guard let url, url.absoluteString != "empty://" else {
-      return placeholder?.toImageHolder() ?? NilImageHolder()
-    }
-
-    if url.pathExtension == "svg",
-       let asset = NSDataAsset(name: url.lastPathComponent, bundle: testBundle) {
-      guard let image = SVGDecoder().decode(data: asset.data) else {
-        Issue.record("Failed to decode SVG test asset: \(url.lastPathComponent)")
-        return UIImage()
-      }
-      return image
-    }
-
-    if let image = UIImage(named: url.lastPathComponent, in: testBundle, compatibleWith: nil) {
-      return image
-    }
-
-    let urlString = url.absoluteString
-    if !reportedUrls.contains(urlString) {
-      Issue.record(
-        "Loading images from network is prohibited in tests. You need to load image from \(urlString) and add it to Images.xcassets in testing bundle"
-      )
-      reportedUrls.insert(urlString)
-    }
-
-    return UIImage()
-  }
 }
 
 private enum TestStep: Sendable {

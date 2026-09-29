@@ -20,6 +20,7 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
   var window: UIWindow?
 
   private var client: UITestAppClient?
+  private var controller: UITestCardViewController?
 
   func scene(
     _ scene: UIScene,
@@ -38,16 +39,24 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
         initializeTriggerOnSet: false,
         useUntypedTemplateResolver: true
       ),
-      fontProvider: SnapshotFontProvider()
+      fontProvider: SnapshotFontProvider(),
+      imageHolderFactory: TestImageHolderFactory { [weak self] message in
+        self?.controller?.showError(message)
+      }
     )
     let controller = UITestCardViewController(divKitComponents: components)
+    self.controller = controller
     let window = UIWindow(windowScene: windowScene)
     window.rootViewController = controller
     window.makeKeyAndVisible()
     self.window = window
 
     let cardId: DivCardID = "ui_test_card"
-    let handler = UITestRequestHandler(components: components, cardId: cardId)
+    let handler = UITestRequestHandler(
+      components: components,
+      cardId: cardId,
+      rootView: controller.view
+    )
     client = UITestAppClient(
       port: configuration.connectionPort,
       handleRequest: handler.handle

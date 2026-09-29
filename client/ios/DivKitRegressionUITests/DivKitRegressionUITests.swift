@@ -24,7 +24,11 @@ final class DivKitRegressionUITests: XCTestCase {
             testCase.app.launch(launchArguments: launchArguments)
             try testCase.app.waitUntilRunning()
             let root = try testCase.app.waitForRootDivView()
-            try await RunnerExecutor(root: root, connection: connection).execute(scenario.steps)
+            try await RunnerExecutor(
+              root: root,
+              connection: connection,
+              verifySnapshotPerformer: VerifySnapshotPerformer(scenarioPath: scenario.relativePath)
+            ).execute(scenario.steps)
           } catch {
             testCase.attachDiagnostics()
             XCTFail(

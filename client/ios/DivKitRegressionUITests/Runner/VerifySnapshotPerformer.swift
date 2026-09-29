@@ -1,0 +1,136 @@
+import UIKit
+import XCTest
+
+@MainActor
+final class VerifySnapshotPerformer {
+  private enum Mode {
+    case verify
+    case record
+  }
+
+  private let scenarioPath: String
+  private let mode: Mode = ProcessInfo.processInfo.arguments.contains("UPDATE_SNAPSHOTS")
+    ? .record : .verify
+  private var hasRecordedSnapshots = false
+
+  init(scenarioPath: String) {
+    self.scenarioPath = scenarioPath
+  }
+
+  func perform(name: String, on root: XCUIElement) throws {
+    try XCTContext.runActivity(named: "verify_snapshot: \(name)") { activity in
+      guard root.waitForExistence(timeout: 3) else {
+        throw SnapshotError.rootViewDidNotAppear
+      }
+      let screenshot = root.screenshot()
+      let image = screenshot.image
+      do {
+        let referenceURL = try snapshotReferenceURL(name: name, scale: image.scale)
+        let reference: UIImage?
+        do {
+          let data = try Data(contentsOf: referenceURL)
+          reference = UIImage(data: data, scale: image.scale)
+        } catch {
+          if mode == .verify {
+            throw error
+          }
+          reference = nil
+        }
+        if let reference, image.compare(with: reference) {
+          return
+        }
+
+        if mode == .record {
+          try FileManager.default.createDirectory(
+            at: referenceURL.deletingLastPathComponent(),
+            withIntermediateDirectories: true
+          )
+          try screenshot.pngRepresentation.write(to: referenceURL, options: .atomic)
+          hasRecordedSnapshots = true
+          return
+        }
+
+        guard let reference else {
+          throw SnapshotError.invalidReference(referenceURL)
+        }
+
+        let expected = XCTAttachment(image: reference)
+        expected.name = "\(name)_reference.png"
+        expected.lifetime = .keepAlways
+        activity.add(expected)
+        let diff = XCTAttachment(image: image.makeDiff(with: reference))
+        diff.name = "\(name)_diff.png"
+        diff.lifetime = .keepAlways
+        activity.add(diff)
+        throw SnapshotError.mismatch(referenceURL)
+      } catch {
+        let actual = XCTAttachment(screenshot: screenshot)
+        actual.name = "\(name)_actual.png"
+        actual.lifetime = .keepAlways
+        activity.add(actual)
+        throw error
+      }
+    }
+  }
+
+  func validateExecutionResult() throws {
+    if hasRecordedSnapshots {
+      throw SnapshotError.snapshotsRecorded
+    }
+  }
+
+  private func snapshotReferenceURL(name: String, scale: CGFloat) throws -> URL {
+    guard !name.isEmpty, ![".", ".."].contains(name),
+          (name as NSString).lastPathComponent == name else {
+      throw SnapshotError.invalidName(name)
+    }
+    let bundle = Bundle(for: DivKitRegressionUITests.self)
+    guard let plistURL = bundle.url(forResource: "Info", withExtension: "plist") else {
+      throw SnapshotError.missingInfoPlist
+    }
+    let plistContents = try PropertyListDecoder().decode(
+      PlistContents.self,
+      from: Data(contentsOf: plistURL)
+    )
+    let caseURL = URL(fileURLWithPath: plistContents.referenceSnapshotsPath, isDirectory: true)
+      .appendingPathComponent(scenarioPath)
+      .deletingPathExtension()
+    let width = Int(AppMainWindow.shared.frame.width)
+    let filename = "\(caseURL.lastPathComponent)_\(width)@\(Int(scale))x_\(name).png"
+    return caseURL.deletingLastPathComponent().appendingPathComponent(filename)
+  }
+}
+
+private struct PlistContents: Decodable {
+  enum CodingKeys: String, CodingKey {
+    case referenceSnapshotsPath = "REFERENCE_SNAPSHOTS_PATH"
+  }
+
+  let referenceSnapshotsPath: String
+}
+
+private enum SnapshotError: LocalizedError {
+  case snapshotsRecorded
+  case rootViewDidNotAppear
+  case invalidName(String)
+  case missingInfoPlist
+  case invalidReference(URL)
+  case mismatch(URL)
+
+  var errorDescription: String? {
+    switch self {
+    case .snapshotsRecorded:
+      "Snapshots recorded. Run without UPDATE_SNAPSHOTS to verify them."
+    case .rootViewDidNotAppear:
+      "Root DivView did not appear before taking a snapshot"
+    case let .invalidName(name):
+      "Invalid snapshot name: \(name)"
+    case .missingInfoPlist:
+      "Info.plist is missing from the UI test bundle"
+    case let .invalidReference(url):
+      "Cannot decode snapshot reference: \(url.path)"
+    case let .mismatch(url):
+      "Actual snapshot is not equal to the reference: \(url.path)"
+    }
+  }
+}

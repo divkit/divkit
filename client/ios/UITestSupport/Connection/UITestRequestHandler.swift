@@ -1,12 +1,14 @@
 @_spi(Internal) import DivKit
 import Foundation
 import LayoutKit
+import UIKit
 import VGSL
 
 @MainActor
 struct UITestRequestHandler {
   let components: DivKitComponents
   let cardId: DivCardID
+  let rootView: UIView
 
   func handle(_ request: UITestRequest) throws -> UITestResponse {
     switch request {
@@ -29,6 +31,8 @@ struct UITestRequestHandler {
         sender: nil
       )
       components.flushUpdateActions()
+      rootView.setNeedsLayout()
+      rootView.layoutIfNeeded()
     } else {
       throw RequestHandlingError.invalidDivAction(
         parsed.errorsOrWarnings?.map(\.description).joined(separator: "\n") ?? ""

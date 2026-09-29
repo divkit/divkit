@@ -4,6 +4,7 @@ import XCTest
 struct RunnerExecutor {
   let root: XCUIElement
   let connection: UITestConnection
+  let verifySnapshotPerformer: VerifySnapshotPerformer
 
   func execute(_ steps: [RunnerStep]) async throws {
     for (index, step) in steps.enumerated() {
@@ -17,6 +18,7 @@ struct RunnerExecutor {
         )
       }
     }
+    try verifySnapshotPerformer.validateExecutionResult()
   }
 
   private func execute(_ step: RunnerStep) async throws {
@@ -28,6 +30,8 @@ struct RunnerExecutor {
     case let .doubleTap(step):
       try execute(step)
     case let .verifyText(step):
+      try execute(step)
+    case let .verifySnapshot(step):
       try execute(step)
     case let .divAction(step):
       try await execute(step)
