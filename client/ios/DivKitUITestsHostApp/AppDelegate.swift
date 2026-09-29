@@ -1,4 +1,5 @@
 import DivKit
+import DivKitMarkdownExtension
 import UIKit
 
 @main
@@ -34,7 +35,46 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
     } catch {
       fatalError("Invalid UI test launch arguments: \(error.localizedDescription)")
     }
-    let components = DivKitComponents(
+    let window = UIWindow(windowScene: windowScene)
+    let controller = UITestCardViewController()
+    self.controller = controller
+    window.rootViewController = controller
+    do {
+      let scenario = try readScenario(path: configuration.scenarioPath)
+      let components = makeComponents(configuration: scenario.configuration)
+      let card = try parseCard(scenario: scenario, flagsInfo: components.flagsInfo)
+      let cardId: DivCardID = "ui_test_card"
+      let handler = UITestRequestHandler(
+        components: components,
+        cardId: cardId,
+        rootView: controller.view
+      )
+      client = UITestAppClient(
+        port: configuration.connectionPort,
+        handleRequest: handler.handle
+      )
+
+      Task {
+        await controller.load(card, cardId: cardId, divKitComponents: components)
+      }
+    } catch {
+      controller.showError(error.localizedDescription)
+    }
+    window.makeKeyAndVisible()
+    self.window = window
+  }
+
+  private func readScenario(path: String) throws -> UITestScenario {
+    guard let url = Bundle.main.url(forResource: path, withExtension: nil) else {
+      throw LaunchError.scenarioNotFound(path)
+    }
+    let data = try Data(contentsOf: url)
+    return try UITestScenario(data: data)
+  }
+
+  private func makeComponents(configuration: UITestScenario.Configuration) -> DivKitComponents {
+    DivKitComponents(
+      extensionHandlers: [MarkdownExtensionHandler()],
       flagsInfo: DivFlagsInfo(
         initializeTriggerOnSet: false,
         useUntypedTemplateResolver: true
@@ -42,51 +82,23 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
       fontProvider: SnapshotFontProvider(),
       imageHolderFactory: TestImageHolderFactory { [weak self] message in
         self?.controller?.showError(message)
-      }
+      },
+      layoutDirection: configuration.layoutDirection
     )
-    let controller = UITestCardViewController(divKitComponents: components)
-    self.controller = controller
-    let window = UIWindow(windowScene: windowScene)
-    window.rootViewController = controller
-    window.makeKeyAndVisible()
-    self.window = window
-
-    let cardId: DivCardID = "ui_test_card"
-    let handler = UITestRequestHandler(
-      components: components,
-      cardId: cardId,
-      rootView: controller.view
-    )
-    client = UITestAppClient(
-      port: configuration.connectionPort,
-      handleRequest: handler.handle
-    )
-
-    Task {
-      do {
-        let card = try loadCard(path: configuration.scenarioPath, flagsInfo: components.flagsInfo)
-        await controller.load(card, cardId: cardId)
-      } catch {
-        controller.showError(error.localizedDescription)
-      }
-    }
   }
 
-  private func loadCard(path: String, flagsInfo: DivFlagsInfo) throws -> DivData {
-    guard let url = Bundle.main.url(forResource: path, withExtension: nil) else {
-      throw LaunchError.scenarioNotFound(path)
-    }
-    let data = try Data(contentsOf: url)
-    guard let scenario = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-          let card = scenario["div_data"] as? [String: Any] else {
-      throw LaunchError.invalidCard("Expected div_data to be a JSON object")
-    }
-    let rawCard = try RawDivData(dictionary: card)
+  private func parseCard(
+    scenario: UITestScenario,
+    flagsInfo: DivFlagsInfo
+  ) throws -> DivData {
     let parsed = DivData.resolve(
-      card: rawCard.card,
-      templates: rawCard.templates,
+      card: scenario.rawCard.card,
+      templates: scenario.rawCard.templates,
       flagsInfo: flagsInfo
     )
+    if scenario.configuration.failOnParsingError, let errors = parsed.errorsOrWarnings {
+      throw LaunchError.invalidCard(errors.map(\.description).joined(separator: "\n"))
+    }
     if let divData = parsed.value {
       return divData
     }

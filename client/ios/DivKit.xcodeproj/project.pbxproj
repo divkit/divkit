@@ -235,6 +235,7 @@
 		D97082000000000300000001 /* DivLayoutProviderHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97082000000000200000001 /* DivLayoutProviderHandlerTests.swift */; };
 		D97082000000000400000001 /* DivBlockProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97082000000000500000001 /* DivBlockProviderTests.swift */; };
 		D97637000000000000000001 /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284CF288ACCE400BEA1FA /* Diff.swift */; };
+		D97638000000000000000001 /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = D97638000000000000000002 /* DivKitMarkdownExtension */; };
 		D9763000000000000000000C /* automated in Resources */ = {isa = PBXBuildFile; fileRef = D97630000000000000000016 /* automated */; };
 		E91B558D2C89D78400DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */; };
 		E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */; };
@@ -715,6 +716,7 @@
 			files = (
 				D9763200000000000000000B /* DivKit in Frameworks */,
 				D97639000000000000000005 /* DivKitSVG in Frameworks */,
+				D97638000000000000000001 /* DivKitMarkdownExtension in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1537,6 +1539,7 @@
 			packageProductDependencies = (
 				D9763200000000000000000A /* DivKit */,
 				D97639000000000000000006 /* DivKitSVG */,
+				D97638000000000000000002 /* DivKitMarkdownExtension */,
 			);
 			productName = DivKitUITestsHostApp;
 			productReference = D97632000000000000000002 /* DivKitUITestsHostApp.app */;
@@ -3207,6 +3210,10 @@
 			productName = DivKit;
 		};
 		E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DivKitMarkdownExtension;
+		};
+		D97638000000000000000002 /* DivKitMarkdownExtension */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DivKitMarkdownExtension;
 		};

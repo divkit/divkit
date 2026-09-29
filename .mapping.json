@@ -8434,6 +8434,7 @@
   "client/ios/DivKitUITestsHostApp/Info.plist":"divkit/public/client/ios/DivKitUITestsHostApp/Info.plist",
   "client/ios/DivKitUITestsHostApp/UITestCardViewController.swift":"divkit/public/client/ios/DivKitUITestsHostApp/UITestCardViewController.swift",
   "client/ios/DivKitUITestsHostApp/UITestLaunchConfiguration.swift":"divkit/public/client/ios/DivKitUITestsHostApp/UITestLaunchConfiguration.swift",
+  "client/ios/DivKitUITestsHostApp/UITestScenario.swift":"divkit/public/client/ios/DivKitUITestsHostApp/UITestScenario.swift",
   "client/ios/LayoutKit/Interface/CommonHandler.swift":"divkit/public/client/ios/LayoutKit/Interface/CommonHandler.swift",
   "client/ios/LayoutKit/Interface/Menu.swift":"divkit/public/client/ios/LayoutKit/Interface/Menu.swift",
   "client/ios/LayoutKit/Interface/RunWithBoundsAttribute.swift":"divkit/public/client/ios/LayoutKit/Interface/RunWithBoundsAttribute.swift",

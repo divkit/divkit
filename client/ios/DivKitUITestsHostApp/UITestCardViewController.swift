@@ -4,13 +4,12 @@ import VGSL
 
 @MainActor
 final class UITestCardViewController: UIViewController, UIScrollViewDelegate {
-  private let divView: DivView
+  private var divView: DivView?
   private let scrollView = UIScrollView()
   private let loadingErrorLabel = UILabel()
   private var sizeChangedSubscription: Disposable?
 
-  init(divKitComponents: DivKitComponents) {
-    divView = DivView(divKitComponents: divKitComponents)
+  init() {
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -27,16 +26,13 @@ final class UITestCardViewController: UIViewController, UIScrollViewDelegate {
     view.addSubview(scrollView)
     scrollView.contentInsetAdjustmentBehavior = .never
     scrollView.delegate = self
-    scrollView.addSubview(divView)
-    sizeChangedSubscription = divView.addObserver { [weak self] _ in
-      self?.view.setNeedsLayout()
-    }
   }
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     scrollView.frame = view.safeAreaLayoutGuide.layoutFrame
     loadingErrorLabel.frame = view.safeAreaLayoutGuide.layoutFrame
+    guard let divView else { return }
     let size = divView.cardSize?.sizeFor(parentViewSize: scrollView.bounds.size) ?? .zero
     divView.frame = CGRect(origin: .zero, size: size)
     scrollView.contentSize = size
@@ -47,8 +43,14 @@ final class UITestCardViewController: UIViewController, UIScrollViewDelegate {
     updateVisibleBounds()
   }
 
-  func load(_ data: DivData, cardId: DivCardID) async {
+  func load(_ data: DivData, cardId: DivCardID, divKitComponents: DivKitComponents) async {
     loadViewIfNeeded()
+    let divView = DivView(divKitComponents: divKitComponents)
+    self.divView = divView
+    scrollView.addSubview(divView)
+    sizeChangedSubscription = divView.addObserver { [weak self] _ in
+      self?.view.setNeedsLayout()
+    }
     await divView.setSource(DivViewSource(kind: .divData(data), cardId: cardId))
     divView.setParentScrollView(scrollView)
     view.setNeedsLayout()
@@ -66,7 +68,7 @@ final class UITestCardViewController: UIViewController, UIScrollViewDelegate {
   }
 
   private func updateVisibleBounds() {
-    guard scrollView.superview != nil else { return }
+    guard let divView, scrollView.superview != nil else { return }
     divView.onVisibleBoundsChanged(to: scrollView.bounds.intersection(divView.frame))
   }
 }
