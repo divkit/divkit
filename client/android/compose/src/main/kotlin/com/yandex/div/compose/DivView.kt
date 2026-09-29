@@ -42,7 +42,7 @@ fun DivView(
             LocalDivViewContext provides viewContext,
             LocalComponent provides localComponent
         ) {
-            val states = data.states
+            val states = viewContext.states
             if (states.size > 1) {
                 reportError("Multiple root states not supported")
             }

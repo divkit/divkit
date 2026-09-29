@@ -1,7 +1,7 @@
 package com.yandex.div.core.util
 
-import com.yandex.div.core.downloader.DivPatchApply
-import com.yandex.div.core.downloader.DivPatchMap
+import com.yandex.div.internal.patch.DivPatchApply
+import com.yandex.div.internal.patch.DivPatchMap
 import com.yandex.div.internal.util.compareWith
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant

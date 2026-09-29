@@ -1,18 +1,22 @@
 package com.yandex.div.compose.dagger
 
+import androidx.compose.runtime.MutableState
 import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
+import com.yandex.div.compose.context.CompositionKeyStorage
 import com.yandex.div.compose.context.DivLocalComponentStorage
 import com.yandex.div.compose.haptics.HapticFeedbackStorage
 import com.yandex.div.compose.histogram.DivViewHistogramReporter
 import com.yandex.div.compose.images.ImageStateStorage
 import com.yandex.div.compose.pager.DivPagerStateStorage
+import com.yandex.div.compose.patch.DivPatchCoordinator
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.compose.tooltips.TooltipStateStorage
 import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div2.DivData
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
 import javax.inject.Named
@@ -26,11 +30,14 @@ internal interface DivViewComponent {
 
     val actionHandler: DivActionHandler
     val actionMenuHolder: ActionMenuHolder
+    val compositionKeyStorage: CompositionKeyStorage
     val hapticFeedbackStorage: HapticFeedbackStorage
     val histogramReporter: DivViewHistogramReporter
     val imageStateStorage: ImageStateStorage
     val localComponentStorage: DivLocalComponentStorage
     val pagerStateStorage: DivPagerStateStorage
+    val patchCoordinator: DivPatchCoordinator
+    val states: MutableState<List<DivData.State>>
     val stateStorage: DivStateStorage
     val timerStorage: TimerStorage
     val tooltipStateStorage: TooltipStateStorage
@@ -45,7 +52,7 @@ internal interface DivViewComponent {
     @Component.Builder
     interface Builder {
         fun build(
-            @BindsInstance @Named(Names.CARD_ID) cardId: String
+            @BindsInstance data: DivData
         ): DivViewComponent
     }
 }

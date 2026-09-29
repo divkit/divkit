@@ -4,6 +4,8 @@ import androidx.collection.ArrayMap
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.patch.DivPatchApply
+import com.yandex.div.internal.patch.DivPatchMap
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch

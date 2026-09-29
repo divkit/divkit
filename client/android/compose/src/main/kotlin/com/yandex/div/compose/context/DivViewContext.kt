@@ -9,6 +9,8 @@ import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
 import com.yandex.div.compose.haptics.bind
 import com.yandex.div.compose.pager.DivPagerStateStorage
+import com.yandex.div.compose.patch.DivPatchCoordinator
+import com.yandex.div.compose.patch.observe
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.timers.observe
 import com.yandex.div.compose.triggers.observe
@@ -26,10 +28,19 @@ internal class DivViewContext(
     data: DivData,
     internal val component: DivViewComponent
 ) {
+    val states: List<DivData.State>
+        get() = component.states.value
+
     val rootLocalComponent: DivLocalComponent
+
+    val compositionKeyStorage: CompositionKeyStorage
+        get() = component.compositionKeyStorage
 
     val pagerStateStorage: DivPagerStateStorage
         get() = component.pagerStateStorage
+
+    val patchCoordinator: DivPatchCoordinator
+        get() = component.patchCoordinator
 
     val stateStorage: DivStateStorage
         get() = component.stateStorage
@@ -60,6 +71,7 @@ internal class DivViewContext(
     @Composable
     fun onComposition() {
         component.hapticFeedbackStorage.bind()
+        patchCoordinator.observe()
         component.timerStorage.observe()
         rootLocalComponent.triggerStorage.observe()
     }

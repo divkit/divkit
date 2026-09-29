@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.pager.PagerItemWindow
@@ -56,6 +57,8 @@ internal fun PagerContent(
     crossAxisBounded: Boolean,
     stateStorage: DivPagerStateStorage
 ) {
+    val viewContext = LocalDivViewContext.current
+    val itemKeys = remember(items) { items.map { viewContext.compositionKeyStorage.get(it.value()) } }
     val initialDefaultItem = remember { defaultItem }
     val density = LocalDensity.current
     val snapPosition = scrollAxisAlignment.toSnapPosition()
@@ -92,7 +95,7 @@ internal fun PagerContent(
     )
 
     PreservePageAcrossWindowChanges(
-        listState, snapPosition, itemWindow, initialDefaultItem, startPadding, endPadding
+        listState, snapPosition, itemWindow, itemKeys, initialDefaultItem, startPadding, endPadding
     )
 
     val needsInitialAlignment = pageSize == null && snapPosition != SnapPosition.Start
@@ -106,6 +109,7 @@ internal fun PagerContent(
     }
     val selectedActionsHandler = rememberPagerSelectedActionsHandler(
         items = items,
+        itemKeys = itemKeys,
         listState = listState,
         snapPosition = snapPosition,
         itemWindow = itemWindow,
@@ -134,6 +138,15 @@ internal fun PagerContent(
     ) {
         items(
             count = itemWindow.itemCount,
+            key = { index ->
+                val itemKey = itemKeys[itemWindow.realIndex(index)]
+                if (infiniteScroll) {
+                    val cycle = (index - itemWindow.edgeItemCount).floorDiv(items.size)
+                    "$itemKey:$cycle"
+                } else {
+                    itemKey
+                }
+            },
             contentType = { itemWindow },
         ) { index ->
             ScrollableChildItem(items[itemWindow.realIndex(index)], childModifier, isHorizontal, crossAlignment)
@@ -146,6 +159,7 @@ private fun PreservePageAcrossWindowChanges(
     listState: LazyListState,
     snapPosition: SnapPosition,
     itemWindow: PagerItemWindow,
+    itemKeys: List<Long>,
     defaultItem: Int,
     startPadding: Dp,
     endPadding: Dp,
@@ -160,16 +174,17 @@ private fun PreservePageAcrossWindowChanges(
         PagerWindowState(
             initialItemWindow = itemWindow,
             initialRealPage = defaultItem,
+            initialItemKeys = itemKeys,
         )
     }
 
     LaunchedEffect(
-        listState, itemWindow, snapPosition, isPositionAvailable, startPaddingPx, endPaddingPx
+        listState, itemWindow, itemKeys, snapPosition, isPositionAvailable, startPaddingPx, endPaddingPx
     ) {
         if (!isPositionAvailable) return@LaunchedEffect
 
         val rawPage = listState.pagerPosition(snapPosition).first
-        val targetRawPage = state.update(itemWindow, rawPage, isPositionAvailable)
+        val targetRawPage = state.update(itemWindow, rawPage, isPositionAvailable, itemKeys)
 
         if (targetRawPage != null) {
             listState.scrollToSnappedPage(
@@ -183,6 +198,7 @@ private fun PreservePageAcrossWindowChanges(
                     itemWindow = itemWindow,
                     rawPage = page,
                     isPositionAvailable = listState.layoutInfo.visibleItemsInfo.isNotEmpty(),
+                    itemKeys = itemKeys,
                 )
             }
     }

@@ -239,11 +239,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 true
             }
             R.id.div2_download_patch -> {
-                if (divEditorUi.useComposeRenderer) {
-                    showToast("Patches are not supported in Compose renderer")
-                } else {
-                    showDownloadDialog()
-                }
+                showDownloadDialog()
                 true
             }
             R.id.div2_load_div_json -> {

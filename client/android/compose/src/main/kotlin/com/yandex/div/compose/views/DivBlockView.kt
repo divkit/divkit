@@ -1,9 +1,11 @@
 package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.actions.observedActions
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.dagger.LocalComponent
@@ -31,7 +33,7 @@ import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVisibility
 
 @Composable
-internal fun DivBlockView(
+internal inline fun DivBlockView(
     data: Div,
     modifier: Modifier = Modifier,
     applyMargins: Boolean = true,
@@ -39,19 +41,21 @@ internal fun DivBlockView(
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
     suppressMatchParentIntrinsics: Boolean = false,
 ) {
-    val divBase = data.value()
-    WithLocalComponent(divBase) {
-        val visibility = divBase.visibility.observedValue()
-        if (visibility == DivVisibility.GONE) return@WithLocalComponent
-        VisibleDivBlockView(
-            data = data,
-            modifier = modifier,
-            applyMargins = applyMargins,
-            visibility = visibility,
-            defaultHorizontalAlignment = defaultHorizontalAlignment,
-            defaultVerticalAlignment = defaultVerticalAlignment,
-            suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
-        )
+    key(LocalDivViewContext.current.compositionKeyStorage.get(data.value())) {
+        val divBase = data.value()
+        WithLocalComponent(divBase) {
+            val visibility = divBase.visibility.observedValue()
+            if (visibility == DivVisibility.GONE) return@WithLocalComponent
+            VisibleDivBlockView(
+                data = data,
+                modifier = modifier,
+                applyMargins = applyMargins,
+                visibility = visibility,
+                defaultHorizontalAlignment = defaultHorizontalAlignment,
+                defaultVerticalAlignment = defaultVerticalAlignment,
+                suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
+            )
+        }
     }
 }
 

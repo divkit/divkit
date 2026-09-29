@@ -145,7 +145,9 @@ private fun TabsContent(
     SubcomposeLayout { constraints ->
         fun subcomposePage(index: Int): List<Measurable> {
             val content = pageContents[index] ?: run {
-                val newContent: @Composable () -> Unit = { DivBlockView(items[index].div) }
+                val newContent: @Composable () -> Unit = {
+                    DivBlockView(items[index].div)
+                }
                 pageContents[index] = newContent
                 newContent
             }

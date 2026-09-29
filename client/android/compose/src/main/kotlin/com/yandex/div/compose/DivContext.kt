@@ -8,7 +8,9 @@ import com.yandex.div.compose.dagger.DivContextComponent
 import com.yandex.div.compose.dagger.YataganDivContextComponent
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
+import com.yandex.div.compose.patch.DivPatcher
 import com.yandex.div.compose.preload.PreloadResult
+import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div2.DivData
 
@@ -49,11 +51,17 @@ class DivContext private constructor(
     val debugFeatures: DivDebugFeatures
         get() = component.debugFeatures
 
+    /** Applies patches to this context's cards. */
+    @ExperimentalApi
+    val patcher: DivPatcher
+        get() = component.patcher
+
     /**
      * Starts preloading resources for the given [DivData] and suspends until complete.
      *
      * Can be called before showing [DivView] to warm up the cache.
      * Cancel the calling coroutine to stop preloading early.
+     * Preloads the layout present at the start of this call. Later patches do not restart it.
      *
      * @param preloadMode how to preload resources for [data]. Defaults to [PreloadMode.REQUIRED_ONLY].
      * @return aggregate result of preloading selected resources.

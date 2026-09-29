@@ -63,6 +63,7 @@
     <ID>TooGenericExceptionCaught:JsonParser.kt:e: Exception</ID>
     <ID>TooGenericExceptionCaught:ParsingConverters.kt:e: Exception</ID>
     <ID>TooGenericExceptionCaught:TemplateParsingEnvironment.kt:TemplateParsingEnvironment$e: Exception</ID>
+    <ID>TooManyFunctions:DivPatchApply.kt:DivPatchApply</ID>
     <ID>TooManyFunctions:DivVariableController.kt:DivVariableController</ID>
     <ID>TooManyFunctions:Expression.kt:Expression$MutableExpression&lt;R, T : Any&gt; : Expression</ID>
     <ID>TooManyFunctions:Field.kt:com.yandex.div.internal.template.Field.kt</ID>

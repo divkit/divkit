@@ -16,6 +16,7 @@ import com.yandex.div.compose.images.ImagePreviewDecoder
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.animation.AnimationConfiguration
+import com.yandex.div.compose.patch.DivPatcher
 import com.yandex.div.compose.preload.DivPreloader
 import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -47,6 +48,7 @@ internal interface DivContextComponent {
     val imageRequestFactory: ImageRequestFactory
     val imageRequestListener: ImageRequestListener
     val lineMetricsCache: LineMetricsCache
+    val patcher: DivPatcher
     val playerFactory: DivVideoPlayerFactory
     val preloader: DivPreloader
     val viewContextFactory: DivViewContextFactory

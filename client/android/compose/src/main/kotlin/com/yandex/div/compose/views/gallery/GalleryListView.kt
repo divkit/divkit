@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
@@ -109,6 +110,7 @@ private fun ScrollableGalleryView(
 
     val crossAlignment = crossContentAlignment.toCrossAxisAlignment()
 
+    val viewContext = LocalDivViewContext.current
     OrientedLazyList(
         isHorizontal = isHorizontal,
         modifier = Modifier,
@@ -118,7 +120,7 @@ private fun ScrollableGalleryView(
         crossAxisAlignment = crossAlignment,
         flingBehavior = flingBehavior,
     ) {
-        items(count = items.size) { index ->
+        items(count = items.size, key = { viewContext.compositionKeyStorage.get(items[it].value()) }) { index ->
             ScrollableChildItem(
                 data = items[index],
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal),

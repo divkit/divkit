@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.context.WithDivKey
 import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.aspect
@@ -107,13 +108,15 @@ private fun MatchParentOverlapLayout(
         modifier = modifier,
         content = {
             items.forEach { item ->
-                MatchParentOverlapChild(
-                    item = item,
-                    isWidthWrapContent = isWidthWrapContent,
-                    isHeightWrapContent = isHeightWrapContent,
-                    defaultHorizontal = defaultHorizontal,
-                    defaultVertical = defaultVertical,
-                )
+                WithDivKey(item) {
+                    MatchParentOverlapChild(
+                        item = item,
+                        isWidthWrapContent = isWidthWrapContent,
+                        isHeightWrapContent = isHeightWrapContent,
+                        defaultHorizontal = defaultHorizontal,
+                        defaultVertical = defaultVertical,
+                    )
+                }
             }
         },
         measurePolicy = overlapMeasurePolicy(

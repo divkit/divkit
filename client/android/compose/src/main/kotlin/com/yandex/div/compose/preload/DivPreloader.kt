@@ -37,12 +37,13 @@ internal class DivPreloader @Inject constructor(
         val downloadAll = mode == PreloadMode.ACTIVE_STATE_ONLY || mode == PreloadMode.ALL
 
         val viewContext = viewContextFactory.getOrCreate(data)
-        val states = if (activeStateOnly) {
-            listOfNotNull(data.states.firstOrNull())
+        val states = viewContext.states
+        val statesToPreload = if (activeStateOnly) {
+            listOfNotNull(states.firstOrNull())
         } else {
-            data.states
+            states
         }
-        return states.map { state ->
+        return statesToPreload.map { state ->
             visitDiv(
                 div = state.div,
                 localComponent = viewContext.getLocalComponent(

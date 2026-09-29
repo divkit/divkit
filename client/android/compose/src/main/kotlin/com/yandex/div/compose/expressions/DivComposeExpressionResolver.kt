@@ -121,6 +121,14 @@ internal class DivComposeExpressionResolver private constructor(
         return variableController.get(name)
     }
 
+    fun clearObservers() {
+        varToExpressions.keys.forEach { name ->
+            variableController.get(name)?.removeObserver(::onVariableChanged)
+        }
+        expressionObservers.clear()
+        varToExpressions.clear()
+    }
+
     private fun onVariableChanged(variable: Variable) {
         varToExpressions[variable.name]?.forEach { expression ->
             expressionObservers[expression]?.forEach { observer ->

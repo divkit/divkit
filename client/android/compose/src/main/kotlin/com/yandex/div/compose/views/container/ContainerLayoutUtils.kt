@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.context.WithDivKey
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
@@ -111,7 +112,10 @@ internal inline fun LinearContainer(
     }
 
     items.forEachIndexed { index, childDiv ->
-        renderItem(childDiv)
+        // The child slot includes layout wrappers and spacers outside DivBlockView.
+        WithDivKey(childDiv) {
+            renderItem(childDiv)
+        }
 
         val isNotLastItem = index < items.lastIndex
         if (isNotLastItem) {

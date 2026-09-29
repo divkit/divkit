@@ -9,6 +9,7 @@ import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.expressions.ExpressionCache
 import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.triggers.DivTriggerStorage
@@ -16,7 +17,6 @@ import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.variables.DivVariableAdapter
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
 import com.yandex.yatagan.BindsInstance
@@ -34,7 +34,7 @@ internal interface DivLocalComponent {
     val actionHandler: DivActionHandler
     val actionHandlingContext: DivActionHandlingContext
     val expressionCache: ExpressionCache
-    val expressionResolver: ExpressionResolver
+    val expressionResolver: DivComposeExpressionResolver
     val functionProvider: FunctionProviderDecorator
     val networkRestorationController: NetworkRestorationController
     val reporter: DivReporter

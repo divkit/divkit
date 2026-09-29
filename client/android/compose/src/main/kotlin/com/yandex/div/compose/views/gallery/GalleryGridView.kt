@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
@@ -275,6 +276,7 @@ private fun GalleryLazyHorizontalStaggeredGrid(
     crossContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
 ) {
+    val viewContext = LocalDivViewContext.current
     LazyHorizontalStaggeredGrid(
         rows = StaggeredGridCells.Fixed(columnCount),
         modifier = modifier,
@@ -284,7 +286,7 @@ private fun GalleryLazyHorizontalStaggeredGrid(
         horizontalItemSpacing = itemSpacing,
         verticalArrangement = Arrangement.spacedBy(crossSpacing),
     ) {
-        items(count = items.size) { index ->
+        items(count = items.size, key = { viewContext.compositionKeyStorage.get(items[it].value()) }) { index ->
             ScrollableChildItem(
                 data = items[index],
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = true),
@@ -307,6 +309,7 @@ private fun GalleryLazyVerticalStaggeredGrid(
     crossContentAlignment: DivGallery.ContentAlignment,
     contentPadding: PaddingValues,
 ) {
+    val viewContext = LocalDivViewContext.current
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(columnCount),
         modifier = modifier,
@@ -316,7 +319,7 @@ private fun GalleryLazyVerticalStaggeredGrid(
         verticalItemSpacing = itemSpacing,
         horizontalArrangement = Arrangement.spacedBy(crossSpacing),
     ) {
-        items(count = items.size) { index ->
+        items(count = items.size, key = { viewContext.compositionKeyStorage.get(items[it].value()) }) { index ->
             ScrollableChildItem(
                 data = items[index],
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = false),

@@ -35,7 +35,7 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.downloader.DivDataChangedObserver
-import com.yandex.div.core.downloader.DivPatchApply
+import com.yandex.div.internal.patch.DivPatchApply
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.local.RuntimeStoreImpl

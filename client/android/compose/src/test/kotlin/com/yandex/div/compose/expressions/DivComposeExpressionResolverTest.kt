@@ -11,14 +11,14 @@ import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.property
 import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div2.DivEvaluableType
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @RunWith(AndroidJUnit4::class)
 class DivComposeExpressionResolverTest {
@@ -157,6 +157,20 @@ class DivComposeExpressionResolverTest {
 
         assertEquals("new value", expression.evaluate(expressionResolverWithNewValue))
         assertEquals("initial value", expression.evaluate(expressionResolver))
+    }
+
+    @Test
+    fun `clearObservers removes variable observers`() {
+        val variable = Variable.IntegerVariable("value", 10)
+        variableController.declare(variable)
+        var value: String? = null
+        expression("value = @{value}").observeAndGet(expressionResolver) { value = it }
+        assertEquals("value = 10", value)
+
+        expressionResolver.clearObservers()
+
+        variable.set(20)
+        assertEquals("value = 10", value)
     }
 
     private fun evaluate(expression: String): String {

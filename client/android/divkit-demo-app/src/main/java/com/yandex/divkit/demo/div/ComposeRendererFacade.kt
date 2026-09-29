@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.net.toUri
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.yandex.div.DivDataTag
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
@@ -21,6 +23,7 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import com.yandex.div.compose.DivContext as ComposeDivContext
@@ -92,8 +95,13 @@ class ComposeRendererFacade(
     }
 
     override fun applyPatch(divPatch: DivPatch, errorCallback: () -> Unit): Boolean {
-        // Not supported yet
-        return false
+        val data = divData.value ?: return false
+        val scope = composeView.findViewTreeLifecycleOwner()?.lifecycleScope ?: return false
+        scope.launch {
+            if (divData.value !== data) return@launch
+            if (!divContext.patcher.applyPatch(data, divPatch)) errorCallback()
+        }
+        return true
     }
 
     override fun dismissTooltips() {

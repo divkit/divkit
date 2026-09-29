@@ -389,7 +389,6 @@
     <ID>TooManyFunctions:DivPagerAdapter.kt:DivPagerAdapter : DivCollectionAdapter</ID>
     <ID>TooManyFunctions:DivPagerBinder.kt:DivPagerBinder : DivViewBinder</ID>
     <ID>TooManyFunctions:DivPagerView.kt:DivPagerView : ViewPager2WrapperDivHolderViewOnInterceptTouchEventListenerHostDivScrollActionHolder</ID>
-    <ID>TooManyFunctions:DivPatchApply.kt:DivPatchApply</ID>
     <ID>TooManyFunctions:DivPathUtils.kt:DivPathUtils</ID>
     <ID>TooManyFunctions:DivPreloader.kt:DivPreloader$DownloadCallback : DivImageDownloadCallbackPreloadingRegistry</ID>
     <ID>TooManyFunctions:DivRecyclerView.kt:DivRecyclerView : BackHandlingRecyclerViewDivHolderViewOnInterceptTouchEventListenerHostDivScrollActionHolder</ID>

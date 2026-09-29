@@ -8,6 +8,7 @@ enum class DivActionSource {
     DOUBLE_TAP,
     EXTERNAL,
     LONG_TAP,
+    PATCH,
     PROPERTY,
     SELECTION,
     TAP,

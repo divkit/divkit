@@ -27,6 +27,7 @@ internal fun interface PagerSelectedActionsHandler {
 @Composable
 internal fun rememberPagerSelectedActionsHandler(
     items: List<Div>,
+    itemKeys: List<Long>,
     listState: LazyListState,
     snapPosition: SnapPosition,
     itemWindow: PagerItemWindow,
@@ -37,7 +38,7 @@ internal fun rememberPagerSelectedActionsHandler(
     val isDragged = listState.interactionSource.collectIsDraggedAsState()
     val selection = remember(listState) { PageSelection() }
 
-    LaunchedEffect(items, listState, snapPosition, itemWindow, viewContext, parentComponent, enabled) {
+    LaunchedEffect(items, itemKeys, listState, snapPosition, itemWindow, viewContext, parentComponent, enabled) {
         if (!enabled) return@LaunchedEffect
 
         snapshotFlow {
@@ -47,7 +48,7 @@ internal fun rememberPagerSelectedActionsHandler(
                 listState.selectedPage(snapPosition, itemWindow, 0f)
             }
         }.filterNotNull().collect { page ->
-            selection.select(page, items[page])
+            selection.select(itemKeys[page], items[page])
             while (selection.pendingItems.isNotEmpty()) {
                 val item = selection.pendingItems.removeFirst().value()
                 val actions = item.selectedActions
@@ -68,7 +69,7 @@ internal fun rememberPagerSelectedActionsHandler(
     val onSnapOffsetCalculated = rememberUpdatedState<(Float) -> Unit> { snapOffset ->
         if (enabled) {
             listState.selectedPage(snapPosition, itemWindow, snapOffset)?.let { page ->
-                selection.select(page, items[page])
+                selection.select(itemKeys[page], items[page])
             }
         }
     }
@@ -78,13 +79,13 @@ internal fun rememberPagerSelectedActionsHandler(
 }
 
 private class PageSelection {
-    private var currentPage = -1
+    private var currentItemKey: Long? = null
     val pendingItems = ArrayDeque<Div>()
 
-    fun select(page: Int, item: Div) {
-        if (page == currentPage) return
+    fun select(itemKey: Long, item: Div) {
+        if (itemKey == currentItemKey) return
         pendingItems.addLast(item)
-        currentPage = page
+        currentItemKey = itemKey
     }
 }
 
