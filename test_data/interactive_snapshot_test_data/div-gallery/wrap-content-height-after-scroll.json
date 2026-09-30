@@ -368,10 +368,6 @@
       }
     },
     {
-      "type": "wait",
-      "duration_ms": 500
-    },
-    {
       "type": "verify_snapshot",
       "name": "step1"
     }
