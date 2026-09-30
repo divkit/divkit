@@ -10,19 +10,21 @@ import android.os.Looper
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
+import android.util.Log
 import android.view.PixelCopy
 import android.view.View
 import android.view.Window
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.createBitmap
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-import androidx.core.graphics.createBitmap
 
 internal object ViewRasterizer {
 
+    private const val TAG = "ViewRasterizer"
     private const val EMPTY_VIEW_WIDTH = 192
     private const val EMPTY_VIEW_HEIGHT = 48
     private const val EMPTY_VIEW_TEXT = "<empty view>"
@@ -52,7 +54,9 @@ internal object ViewRasterizer {
         get() = backgroundThread.looper
 
     fun rasterize(view: View): Bitmap {
-        if (!view.isRenderable) return emptyViewBitmap()
+        if (!view.isRenderable) {
+            return emptyViewBitmap(view)
+        }
 
         val bitmap = createBitmap(view.width, view.height)
         val canvas = Canvas(bitmap)
@@ -62,7 +66,9 @@ internal object ViewRasterizer {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun pixelCopy(window: Window, view: View): Bitmap {
-        if (!view.isRenderable) return emptyViewBitmap()
+        if (!view.isRenderable) {
+            return emptyViewBitmap(view)
+        }
 
         val viewRect = view.rectInWindow().apply {
             val elevationInset = -view.elevation.toInt()
@@ -84,7 +90,13 @@ internal object ViewRasterizer {
         }
     }
 
-    private fun emptyViewBitmap(): Bitmap {
+    private fun emptyViewBitmap(view: View): Bitmap {
+        Log.w(
+            TAG,
+            "View is not renderable: width=${view.width}, height=${view.height}, " +
+                "isLayoutRequested=${view.isLayoutRequested}, " +
+                "isAttachedToWindow=${view.isAttachedToWindow}"
+        )
         val bitmap = createBitmap(EMPTY_VIEW_WIDTH, EMPTY_VIEW_HEIGHT)
         val canvas = Canvas(bitmap)
         emptyViewTextLayout.draw(canvas)

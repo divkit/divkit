@@ -13,7 +13,8 @@ class ViewIdlingResource(private val viewTag: String) : SimpleIdlingResource() {
         get() = WeakReference(getCurrentActivity())
 
     override fun checkIdle(): Boolean {
-        return view?.visibility == View.VISIBLE
+        val view = view ?: return false
+        return view.visibility == View.VISIBLE && !view.isLayoutRequested
     }
 
     override fun getName() = "ViewIdlingResource"
