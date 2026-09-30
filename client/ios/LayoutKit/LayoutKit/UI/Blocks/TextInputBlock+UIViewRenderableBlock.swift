@@ -801,6 +801,12 @@ extension TextInputBlockView: UITextFieldDelegate {
 
   @objc private func textFieldDidChange() {
     inputViewDidChange(singleLineInput)
+    if maskedViewModel != nil {
+      let end = singleLineInput.endOfDocument
+      if singleLineInput.selectedTextRange?.end != end {
+        singleLineInput.selectedTextRange = singleLineInput.textRange(from: end, to: end)
+      }
+    }
   }
 
   func textFieldDidEndEditing(_ textField: UITextField) {

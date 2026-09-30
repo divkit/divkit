@@ -4806,6 +4806,23 @@
       "case_id": 510
     },
     {
+      "title": "Masked input autocomplete cursor position",
+      "case_id": 532,
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Observe the pre-filled phone number in the input field"
+      ],
+      "expected_results": [
+        "The cursor is positioned at the end of the formatted text after autocomplete fills the masked phone input"
+      ],
+      "file": "input/masked_input_autocomplete_cursor.json"
+    },
+    {
       "title": "Submit action test",
       "case_id": 221,
       "platforms": [

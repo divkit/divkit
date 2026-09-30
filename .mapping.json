@@ -15683,6 +15683,7 @@
   "test_data/regression_test_data/input/input_search.json":"divkit/public/test_data/regression_test_data/input/input_search.json",
   "test_data/regression_test_data/input/input_set_cursor_position.json":"divkit/public/test_data/regression_test_data/input/input_set_cursor_position.json",
   "test_data/regression_test_data/input/input_single_line.json":"divkit/public/test_data/regression_test_data/input/input_single_line.json",
+  "test_data/regression_test_data/input/masked_input_autocomplete_cursor.json":"divkit/public/test_data/regression_test_data/input/masked_input_autocomplete_cursor.json",
   "test_data/regression_test_data/input/masked_input_set_cursor_position.json":"divkit/public/test_data/regression_test_data/input/masked_input_set_cursor_position.json",
   "test_data/regression_test_data/input/phone_input_mask.json":"divkit/public/test_data/regression_test_data/input/phone_input_mask.json",
   "test_data/regression_test_data/input/regex_input_filter.json":"divkit/public/test_data/regression_test_data/input/regex_input_filter.json",

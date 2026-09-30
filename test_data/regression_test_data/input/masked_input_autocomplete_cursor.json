@@ -1,0 +1,94 @@
+{
+  "description": "DIVKIT-9723: Verify cursor position stays at end of formatted text after autocomplete fills a masked phone input",
+  "platforms": [
+    "ios"
+  ],
+  "templates": {
+    "input_field": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 4,
+        "right": 16,
+        "bottom": 4
+      },
+      "paddings": {
+        "left": 16,
+        "top": 12,
+        "right": 16,
+        "bottom": 12
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_color": "#000000",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#ccd0d5",
+          "width": 1
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "masked_input_autocomplete_cursor",
+    "variables": [
+      {
+        "name": "phone",
+        "type": "string",
+        "value": "+7 (900) 123-45-67"
+      },
+      {
+        "name": "phone_raw",
+        "type": "string",
+        "value": "9001234567"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 24,
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "input_field",
+              "id": "phone_input",
+              "text_variable": "phone",
+              "keyboard_type": "phone",
+              "mask": {
+                "type": "fixed_length",
+                "pattern": "+7 (###) ###-##-##",
+                "raw_text_variable": "phone_raw",
+                "pattern_elements": [
+                  {
+                    "key": "#",
+                    "regex": "\\d",
+                    "placeholder": "_"
+                  }
+                ],
+                "always_visible": false
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
