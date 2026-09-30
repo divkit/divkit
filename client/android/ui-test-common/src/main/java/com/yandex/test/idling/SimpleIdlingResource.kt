@@ -6,11 +6,13 @@ import android.os.Looper
 import android.util.Log
 import androidx.test.espresso.IdlingPolicies
 import androidx.test.espresso.IdlingResource
+import com.yandex.test.util.runOnMainSync
+import java.io.Closeable
 
 abstract class SimpleIdlingResource(
     private val pollingIntervalMillis: Long = 1_000L,
     val description: String? = null
-) : IdlingResource {
+) : IdlingResource, Closeable {
 
     private lateinit var resourceCallback: IdlingResource.ResourceCallback
     private lateinit var handler: Handler
@@ -44,4 +46,12 @@ abstract class SimpleIdlingResource(
     }
 
     override fun getName() = description ?: toString()
+
+    override fun close() {
+        runOnMainSync {
+            if (::handler.isInitialized) {
+                handler.removeCallbacksAndMessages(null)
+            }
+        }
+    }
 }

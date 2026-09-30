@@ -88,16 +88,16 @@ dependencies {
     implementation project(path: ':fonts')
     implementation project(path: ':glide')
     implementation project(path: ':logging')
-    implementation project(path: ':screenshot-test-runtime')
     implementation project(path: ':test-utils')
-    implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
 
     implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.compose.foundation
     implementation libs.androidx.compose.ui
     implementation libs.androidx.constraintlayout
-    implementation libs.androidx.test.uiautomator
+    implementation libs.androidx.material
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.transition
     implementation libs.androidx.work
 
     implementation(libs.appmetrica.lib) {
@@ -116,8 +116,11 @@ dependencies {
 
     androidTestUtil libs.androidx.test.services
     androidTestImplementation platform(libs.androidx.compose.bom)
+    androidTestImplementation project(path: ':screenshot-test-runtime')
+    androidTestImplementation project(path: ':ui-test-common')
     androidTestImplementation libs.androidx.compose.ui.test.junit4
     androidTestImplementation libs.androidx.lifecycle.viewmodel
+    androidTestImplementation libs.androidx.test.uiautomator
     androidTestImplementation libs.androidx.viewpager2
     androidTestImplementation libs.hamcrest
 }

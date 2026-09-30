@@ -38,11 +38,9 @@ class DivComposeScreenshotActivity : ComponentActivity() {
     private lateinit var divContext: DivContext
 
     val imageLoadingTracker = ComposeImageLoadingTracker()
-    val composeIdlingTracker = ComposeSnapshotIdlingResource()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        composeIdlingTracker.start()
 
         divContext = DivContext(
             baseContext = this,
@@ -82,11 +80,6 @@ class DivComposeScreenshotActivity : ComponentActivity() {
                 addView(view)
             }
         )
-    }
-
-    override fun onDestroy() {
-        composeIdlingTracker.close()
-        super.onDestroy()
     }
 
     companion object {
