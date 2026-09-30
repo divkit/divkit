@@ -17,6 +17,6 @@ internal class DivViewContextStorage @Inject constructor() {
     }
 
     fun remove(data: DivData) {
-        items.remove(data)
+        items.remove(data)?.component?.patchDownloadManager?.cancel()
     }
 }

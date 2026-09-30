@@ -13,6 +13,7 @@ import com.yandex.div2.DivActionCopyToClipboard
 import com.yandex.div2.DivActionCopyToClipboardContent
 import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
+import com.yandex.div2.DivActionDownload
 import com.yandex.div2.DivActionHaptic
 import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionSetState
@@ -23,6 +24,7 @@ import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivActionUpdateStructure
 import com.yandex.div2.DivTypedValue
+import com.yandex.div2.DivDownloadCallbacks
 import org.json.JSONObject
 
 fun action(
@@ -34,9 +36,11 @@ fun action(
     url: String? = null,
     logUrl: String? = null,
     referer: String? = null,
+    downloadCallbacks: DivDownloadCallbacks? = null,
 ): DivAction {
     return DivAction(
         isEnabled = constant(isEnabled),
+        downloadCallbacks = downloadCallbacks,
         logId = id?.let { constant(it) },
         logUrl = logUrl?.let { constant(it.toUri()) },
         menuItems = menuItems,
@@ -56,9 +60,11 @@ fun action(
     url: Expression<Uri>,
     logUrl: String? = null,
     referer: String? = null,
+    downloadCallbacks: DivDownloadCallbacks? = null,
 ): DivAction {
     return DivAction(
         isEnabled = constant(isEnabled),
+        downloadCallbacks = downloadCallbacks,
         logId = id?.let { constant(it) },
         logUrl = logUrl?.let { constant(it.toUri()) },
         menuItems = menuItems,
@@ -127,6 +133,18 @@ fun copyUrlToClipboardAction(value: Expression<Uri>): DivActionTyped =
     )
 
 fun customAction(): DivActionTyped = DivActionTyped.Custom(DivActionCustom())
+
+fun downloadAction(
+    url: String,
+    onSuccessActions: List<DivAction>? = null,
+    onFailActions: List<DivAction>? = null
+): DivActionTyped = DivActionTyped.Download(
+    DivActionDownload(
+        url = constant(url.toUri()),
+        onSuccessActions = onSuccessActions,
+        onFailActions = onFailActions
+    )
+)
 
 fun dictSetValueAction(
     name: String,

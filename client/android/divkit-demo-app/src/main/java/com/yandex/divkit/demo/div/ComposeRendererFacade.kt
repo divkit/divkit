@@ -44,6 +44,7 @@ class ComposeRendererFacade(
             playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context))
             this.variableController = hostVariableController
             animationsEnabledProvider = Container.animationsEnabledProvider
+            patchDownloader = ComposePatchDownloader(Container.httpClient)
             extensionHandlers = mapOf(
                 "lottie" to LottieExtensionHandler(),
                 "shimmer" to ShimmerExtensionHandler(),

@@ -18,6 +18,7 @@ import com.yandex.div.lottie.DivLottieRawResResourceLoader
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.ChronometerViewFactory
+import com.yandex.divkit.demo.div.ComposePatchDownloader
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
 import com.yandex.divkit.demo.div.DemoDivLottieRawResProvider
@@ -41,6 +42,7 @@ class RegressionComposeViewCreator(context: Context) {
             baseContext = activity,
             configuration = divConfiguration {
                 actionHandler = RegressionComposeActionHandler(assetReader, divData)
+                patchDownloader = ComposePatchDownloader(Container.httpClient)
                 customViewFactories = mapOf(
                     "old_custom_card_1" to CustomTextViewFactory(text = "Hi! I'm old card!"),
                     "old_custom_card_2" to CustomTextViewFactory(text = "Hi! I'm old as well!"),

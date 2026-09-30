@@ -15,6 +15,7 @@ import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.histogram.DisabledHistogramConfiguration
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
+import com.yandex.div.compose.patch.DivPatchDownloader
 import com.yandex.div.compose.preload.PreloadResult
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
@@ -79,6 +80,9 @@ class DivConfiguration private constructor(
 
     @get:Provides
     val videoPreloader: DivVideoPreloader,
+
+    @get:Provides
+    val patchDownloader: DivPatchDownloader,
 ) {
     @Deprecated(
         message = "Use divConfiguration { ... } or DivConfiguration.Builder instead.",
@@ -110,6 +114,7 @@ class DivConfiguration private constructor(
         animationsEnabledProvider = animationsEnabledProvider,
         variableController = variableController,
         videoPreloader = videoPreloader,
+        patchDownloader = defaultPatchDownloader,
     )
 
     /** Configures a [DivConfiguration] using the same defaults as its constructor. */
@@ -126,6 +131,7 @@ class DivConfiguration private constructor(
         var animationsEnabledProvider: DivAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT
         var variableController: DivVariableController = DivVariableController()
         var videoPreloader: DivVideoPreloader = defaultDivVideoPreloader
+        var patchDownloader: DivPatchDownloader = defaultPatchDownloader
 
         fun build(): DivConfiguration = DivConfiguration(
             actionHandler = actionHandler,
@@ -140,6 +146,7 @@ class DivConfiguration private constructor(
             animationsEnabledProvider = animationsEnabledProvider,
             variableController = variableController,
             videoPreloader = videoPreloader,
+            patchDownloader = patchDownloader,
         )
     }
 }
@@ -151,6 +158,10 @@ fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfigurati
 private val defaultActionHandler = object : DivExternalActionHandler {}
 
 private val defaultActionLogger = DivActionLogger { _, _ -> }
+
+private val defaultPatchDownloader = DivPatchDownloader {
+    throw UnsupportedOperationException("DivPatchDownloader is not configured")
+}
 
 private val defaultFontSourceProvider = object : DivFontSourceProvider {
     override fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource {

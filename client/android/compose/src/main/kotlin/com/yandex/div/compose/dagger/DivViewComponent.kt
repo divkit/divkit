@@ -11,6 +11,7 @@ import com.yandex.div.compose.histogram.DivViewHistogramReporter
 import com.yandex.div.compose.images.ImageStateStorage
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.patch.DivPatchCoordinator
+import com.yandex.div.compose.patch.DivPatchDownloadManager
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.compose.tooltips.TooltipStateStorage
@@ -37,6 +38,7 @@ internal interface DivViewComponent {
     val localComponentStorage: DivLocalComponentStorage
     val pagerStateStorage: DivPagerStateStorage
     val patchCoordinator: DivPatchCoordinator
+    val patchDownloadManager: DivPatchDownloadManager
     val states: MutableState<List<DivData.State>>
     val stateStorage: DivStateStorage
     val timerStorage: TimerStorage

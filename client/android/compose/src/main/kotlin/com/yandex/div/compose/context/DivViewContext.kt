@@ -21,7 +21,6 @@ import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
-import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 
 internal class DivViewContext(
@@ -57,20 +56,24 @@ internal class DivViewContext(
         rootLocalComponent = createLocalComponent(
             variableController = DivVariableController(component.variableController),
             functionProvider = baseFunctionProvider + functions,
-            triggers = data.variableTriggers.orEmpty(),
             variables = data.variables.orEmpty()
         )
 
+        component.patchDownloadManager.init { patch, onApplied ->
+            patchCoordinator.applyPatch(patch, rootLocalComponent, onApplied)
+        }
         component.timerStorage.init(
             timers = data.timers.orEmpty(),
             localComponent = rootLocalComponent
         )
+        data.variableTriggers.orEmpty().forEach(rootLocalComponent.triggerStorage::add)
     }
 
     @SuppressLint("ComposableNaming")
     @Composable
     fun onComposition() {
         component.hapticFeedbackStorage.bind()
+        component.patchDownloadManager.observe()
         patchCoordinator.observe()
         component.timerStorage.observe()
         rootLocalComponent.triggerStorage.observe()
@@ -93,17 +96,16 @@ internal class DivViewContext(
                 DivVariableController(parentComponent.variableController)
             },
             functionProvider = parentComponent.functionProvider + functions,
-            triggers = data.variableTriggers.orEmpty(),
             variables = variables
-        ).also {
-            component.localComponentStorage.put(data, it)
+        ).also { localComponent ->
+            component.localComponentStorage.put(data, localComponent)
+            data.variableTriggers.orEmpty().forEach(localComponent.triggerStorage::add)
         }
     }
 
     private fun createLocalComponent(
         variableController: DivVariableController,
         functionProvider: FunctionProviderDecorator,
-        triggers: List<DivTrigger>,
         variables: List<DivVariable>,
     ): DivLocalComponent {
         val localComponent = component.localComponent().build(
@@ -115,10 +117,6 @@ internal class DivViewContext(
             localComponent.variableAdapter.convert(variableData)?.let {
                 variableController.declare(it)
             }
-        }
-
-        triggers.forEach {
-            localComponent.triggerStorage.add(it)
         }
 
         return localComponent

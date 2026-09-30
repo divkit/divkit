@@ -5,6 +5,7 @@ import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.Assert
+import com.yandex.div.internal.actions.DivDownloadActionParser
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionDownload
@@ -12,27 +13,20 @@ import com.yandex.div2.DivDownloadCallbacks
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivSightAction
 
-private const val PARAM_URL = "url"
-private const val AUTHORITY_DOWNLOAD = "download"
-
 internal object DivDownloadActionHandler {
 
     @JvmStatic
     fun canHandle(uri: Uri?, divViewFacade: DivViewFacade): Boolean {
-        val authority = uri?.authority ?: return false
-        if (AUTHORITY_DOWNLOAD == authority) {
-            val url = uri.getQueryParameter(PARAM_URL)
-            if (url == null) {
-                Assert.fail("$PARAM_URL param is required!")
-                return false
-            }
-            if (divViewFacade !is Div2View) {
-                Assert.fail("Div2View should be used!")
-                return false
-            }
-            return true
+        if (uri == null || !DivDownloadActionParser.matches(uri)) return false
+        if (DivDownloadActionParser.parseUrl(uri) == null) {
+            Assert.fail("url param is required!")
+            return false
         }
-        return false
+        if (divViewFacade !is Div2View) {
+            Assert.fail("Div2View should be used!")
+            return false
+        }
+        return true
     }
 
     @JvmStatic
@@ -61,7 +55,7 @@ internal object DivDownloadActionHandler {
         view: Div2View,
         resolver: ExpressionResolver,
     ): Boolean {
-        val downloadUrl = uri.getQueryParameter(PARAM_URL) ?: return false
+        val downloadUrl = DivDownloadActionParser.parseUrl(uri) ?: return false
         return executeDownload(downloadUrl, downloadCallbacks?.onSuccessActions, downloadCallbacks?.onFailActions, view, resolver)
     }
 

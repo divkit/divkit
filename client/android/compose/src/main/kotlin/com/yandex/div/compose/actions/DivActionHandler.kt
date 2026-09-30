@@ -3,6 +3,8 @@ package com.yandex.div.compose.actions
 import android.net.Uri
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.patch.DivPatchDownloadManager
+import com.yandex.div.internal.actions.DivDownloadActionParser
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.actions.isDivAction
 import com.yandex.div.json.expressions.Expression
@@ -10,7 +12,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStopTemplate
 import com.yandex.div2.DivActionClearFocus
-import com.yandex.div2.DivActionDownload
 import com.yandex.div2.DivActionFocusElement
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollTo
@@ -18,6 +19,7 @@ import com.yandex.div2.DivActionSetCursorPosition
 import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivDisappearAction
+import com.yandex.div2.DivDownloadCallbacks
 import com.yandex.div2.DivSightAction
 import org.json.JSONObject
 import javax.inject.Inject
@@ -32,6 +34,7 @@ internal class DivActionHandler @Inject constructor(
     private val arrayActionsHandler: ArrayActionsHandler,
     private val copyToClipboardActionHandler: CopyToClipboardActionHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
+    private val patchDownloadManager: DivPatchDownloadManager,
     private val setStateActionHandler: SetStateActionHandler,
     private val setStoredValueActionHandler: SetStoredValueActionHandler,
     private val setVariableActionHandler: SetVariableActionHandler,
@@ -80,6 +83,7 @@ internal class DivActionHandler @Inject constructor(
             context = context,
             action = DivActionBase(
                 isEnabled = action.isEnabled,
+                downloadCallbacks = action.downloadCallbacks,
                 logId = action.logId,
                 logUrl = if (includeLogUrl) action.logUrl else null,
                 payload = action.payload,
@@ -101,6 +105,7 @@ internal class DivActionHandler @Inject constructor(
             context = context,
             action = DivActionBase(
                 isEnabled = action.isEnabled,
+                downloadCallbacks = action.downloadCallbacks,
                 logId = action.logId,
                 logUrl = null,
                 payload = action.payload,
@@ -148,12 +153,16 @@ internal class DivActionHandler @Inject constructor(
         menuAction?.let { actionMenuHolder.showIfNeeded(it, expressionResolver) }
 
         action.typed?.let {
-            handle(context = context, action = it, event = event)
+            handle(context = context, action = it, event = event, downloadCallbacks = action.downloadCallbacks)
             return
         }
 
         val url = event.url
         if (url?.isDivAction == true) {
+            if (DivDownloadActionParser.matches(url)) {
+                handleDownload(context, url, action.downloadCallbacks)
+                return
+            }
             DivUntypedAction.parse(url)?.let {
                 handle(context = context, action = it)
             }
@@ -173,7 +182,8 @@ internal class DivActionHandler @Inject constructor(
     private fun handle(
         context: DivActionHandlingContext,
         action: DivActionTyped,
-        event: DivActionEvent
+        event: DivActionEvent,
+        downloadCallbacks: DivDownloadCallbacks?
     ) {
         when (action) {
             is DivActionTyped.AnimatorStart -> notSupported(DivActionAnimatorStart.TYPE)
@@ -209,7 +219,12 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.DictSetValue ->
                 dictSetValueActionHandler.handle(context, action.value)
 
-            is DivActionTyped.Download -> notSupported(DivActionDownload.TYPE)
+            is DivActionTyped.Download -> handleDownload(
+                context,
+                action.value.url.evaluate(context.expressionResolver),
+                action.value.onSuccessActions ?: downloadCallbacks?.onSuccessActions,
+                action.value.onFailActions ?: downloadCallbacks?.onFailActions
+            )
             is DivActionTyped.FocusElement -> notSupported(DivActionFocusElement.TYPE)
 
             is DivActionTyped.HideTooltip ->
@@ -272,6 +287,32 @@ internal class DivActionHandler @Inject constructor(
         }
     }
 
+    private fun handleDownload(
+        context: DivActionHandlingContext,
+        uri: Uri,
+        callbacks: DivDownloadCallbacks?
+    ) {
+        val downloadUrl = DivDownloadActionParser.parseUrl(uri)
+        if (downloadUrl == null) {
+            reporter.reportError("url param is required for download action")
+            return
+        }
+        handleDownload(context, Uri.parse(downloadUrl), callbacks?.onSuccessActions, callbacks?.onFailActions)
+    }
+
+    private fun handleDownload(
+        context: DivActionHandlingContext,
+        url: Uri,
+        onSuccess: List<DivAction>?,
+        onFail: List<DivAction>?
+    ) {
+        patchDownloadManager.download(
+            url,
+            onSuccess = { handle(context, onSuccess.orEmpty(), DivActionSource.PATCH) },
+            onFail = { handle(context, onFail.orEmpty(), DivActionSource.PATCH) }
+        )
+    }
+
     private fun notSupported(name: String) {
         reporter.reportError("Action not supported: $name")
     }
@@ -279,6 +320,7 @@ internal class DivActionHandler @Inject constructor(
 
 private class DivActionBase(
     val isEnabled: Expression<Boolean>,
+    val downloadCallbacks: DivDownloadCallbacks?,
     val logId: Expression<String>?,
     val logUrl: Expression<Uri>?,
     val payload: JSONObject?,

@@ -38,7 +38,7 @@ internal class DivPatchCoordinator @Inject constructor(
 
     private class PendingAction(val revision: Long, val divs: Set<DivBase>, val run: () -> Unit)
 
-    fun applyPatch(patch: DivPatch, rootLocalComponent: DivLocalComponent): Boolean {
+    fun applyPatch(patch: DivPatch, rootLocalComponent: DivLocalComponent, onApplied: () -> Unit = {}): Boolean {
         val patchApply = DivPatchApply(
             patch = DivPatchMap(patch),
             errorLogger = { rootLocalComponent.reporter.reportError(it) },
@@ -60,6 +60,7 @@ internal class DivPatchCoordinator @Inject constructor(
         revision++
         pendingActions.addLast(PendingAction(revision, retainedDivs) {
             rootLocalComponent.handleActions(patch.onAppliedActions.orEmpty(), DivActionSource.PATCH)
+            onApplied()
         })
         return true
     }
