@@ -1,3 +1,36 @@
+## 33.6.0
+
+### Android Client
+* Added Compose support for DivPatch, including partial and transactional updates and success/failure actions.
+* Added Compose support for downloading patches through URL and typed actions, including download callbacks.
+* Added `truncate_policy` support to View and Compose text renderers.
+* Added action logging in the Compose renderer, with tap beacon URLs exposed for the same interactions as in the Android View renderer.
+* Added the `forceAccessibilityEnable` configuration option to expose accessibility metadata, including checked state, when touch exploration is disabled.
+* Fixed Android input masks changing commas to periods in `raw_text_variable`. Fixed-length and phone masks now preserve commas; currency masks still normalize decimal commas.
+* Fixed `div-video` in a gallery not pausing when scrolling backward past the disappear threshold.
+* Fixed focus moving to another element after tapping a focused element that changes its `div-state`.
+* Fixed gallery paging after short and fast swipes in the Compose renderer.
+* Fixed grid cells with `match_parent` sizing expanding rows and columns to fit their content in the Compose renderer.
+* Fixed intrinsic sizing and alignment of images and GIFs with `wrap_content` and `aspect` in the Compose renderer.
+* Fixed tint not being applied to drawable-backed images during initial binding.
+* Reduced repeated visibility tracking while binding container and grid children.
+* Sped up Compose composition of text with a `line_height` by caching the font's natural line metrics per DivContext instead of laying out a probe text for every text node.
+
+### iOS Client
+* Added `ContextDeserializable` and `DivTemplates.parseValue(type:from:)` for model types. `DivData`, `Div`, all `Div` element types (`DivImage`, `DivGifImage`, `DivText`, `DivSeparator`, `DivContainer`, `DivGrid`, `DivGallery`, `DivPager`, `DivTabs`, `DivState`, `DivCustom`, `DivIndicator`, `DivSlider`, `DivSwitch`, `DivInput`, `DivSelect`, `DivVideo`), `DivAction`, `DivVisibilityAction`, `DivDisappearAction`, `DivVariable`, `DivPatch`, `DivTimer`, `DivTrigger` and `DivFunction` conform to `ContextDeserializable`. Other generated types can be parsed with `init(dictionary:context:)`.
+* Fixed `selected_actions` of `pager` pages created with `item_builder` not being performed, and `selected_actions` being shifted when the pager has `gone` items.
+* Fixed incorrect cursor position after autocomplete suggestion in masked input.
+* Fixed pager and gallery cross axis size calculation for items with constrained size.
+* Fixed size calculation of galleries with multiple columns: scrollable content and wrap_content size now include the longest column instead of ending at the last item.
+* Fixed the `animated` parameter being ignored in URL scroll actions.
+* Fixed two videos playing simultaneously when scrolling a pager while keeping a finger on the screen.
+* Parsing errors and warnings: paths and counts differ from the typed pipeline; parsed values are unchanged.
+* Removed the generated `*Template` types, `TemplatesContext` and the `DivTemplates.init(templates:templatesToType:)`, `DivTemplates.init(templatesToResolve:allTemplates:)` and `DivTemplates.init(dictionary:flagsInfo:)` initializers. Use `DivTemplates.init(dictionary:)` and `DivTemplates.parseValue(type:from:)` with the model type. `DivActionTemplate`, `DivVariableTemplate`, `DivTextTemplate`, `Field`, the `TemplateValue` protocol and the `DivTemplates.parseValue<T: TemplateValue>(type:from:)` overload remain as deprecated source-compatibility shims.
+* Supported word-boundary text truncation with `div-text.truncate_policy`.
+* Templates are always resolved by the untyped resolver. `DivFlagsInfo.useUntypedTemplateResolver` has no effect.
+* `DivTemplates.templates` now holds flattened template dictionaries instead of `*Template` objects.
+
+
 ## 33.5.0
 
 ### Android Client
