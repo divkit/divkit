@@ -21,17 +21,17 @@ class Div2ImageLoaderScreenshotTest(private val case: String, escapedCase: Strin
     )
 
     @get:Rule
-    val rule = baseRule(case, activityRule)
+    val rule = baseRule(case, TEST_CASES_PATH, activityRule)
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    fun divScreenshotGlide() {
+    fun testGlide() {
         launchActivityWith(IMAGE_LOADER_GLIDE)
     }
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    fun divScreenshotCoil() {
+    fun testCoil() {
         launchActivityWith(IMAGE_LOADER_COIL)
     }
 

@@ -1,5 +1,6 @@
 package com.yandex.div
 
+import com.yandex.div.Div2ScreenshotTest.Companion.TEST_CASES_PATH
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.composeScreenshotRule
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
@@ -20,7 +21,7 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
     )
 
     @get:Rule
-    val rule = composeScreenshotRule(case, activityRule, case.relativePath)
+    val rule = composeScreenshotRule(case, TEST_CASES_PATH, activityRule, case.relativePath)
 
     @Screenshot(viewTag = DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
@@ -32,10 +33,10 @@ class DivComposeScreenshotTest(case: String, escapedCase: String) {
         @Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
             val enumerator = AssetEnumerator()
-            return enumerator.enumerate("snapshot_test_data")
+            return enumerator.enumerate(TEST_CASES_PATH)
                 .filter { includedFiles.contains(it) }
                 .let(enumerator::requireSelectedCase)
-                .withEscapedParameter(prefix = "snapshot_test_data/")
+                .withEscapedParameter(prefix = "$TEST_CASES_PATH/")
         }
     }
 }

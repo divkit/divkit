@@ -11,6 +11,7 @@ android {
 dependencies {
     implementation(project(":ui-test-common"))
 
+    implementation(libs.allure.commons)
     implementation(libs.androidx.test.uiautomator)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)

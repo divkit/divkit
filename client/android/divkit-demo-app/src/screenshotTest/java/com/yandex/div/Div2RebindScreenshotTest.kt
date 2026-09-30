@@ -1,6 +1,7 @@
 package com.yandex.div
 
 import androidx.test.platform.app.InstrumentationRegistry
+import com.yandex.div.Div2ScreenshotTest.Companion.TEST_CASES_PATH
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
@@ -23,7 +24,7 @@ class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
 
     @Rule
     @JvmField
-    val rule = screenshotRule(case, activityRule, case.relativePath, expectedSuite)
+    val rule = screenshotRule(case, TEST_CASES_PATH, activityRule, case.relativePath, expectedSuite)
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test

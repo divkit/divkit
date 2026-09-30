@@ -13,23 +13,22 @@ internal class ImageComparator(private val logger: Logger) {
     fun compareImages(lhs: File, rhs: File, imagePath: String): Boolean {
         return try {
             logger.i("Comparing $imagePath")
-            compareImagesImpl(lhs, rhs)
-            logger.i("Comparison passed")
-            true
+            val successful = compareImagesImpl(lhs, rhs)
+            if (successful) logger.i("Comparison passed")
+            successful
         } catch (e: Exception) {
-            logger.e("Comparison failed", e)
+            logger.e("Failed to compare $imagePath: actual=$lhs, expected=$rhs", e)
             false
         }
     }
 
-    private fun compareImagesImpl(lhs: File, rhs: File) {
+    private fun compareImagesImpl(lhs: File, rhs: File): Boolean {
         val lhsImage = ImageIO.read(lhs)
         val rhsImage = ImageIO.read(rhs)
 
         if (lhsImage.width != rhsImage.width || lhsImage.height != rhsImage.height) {
-            throw RuntimeException(
-                "Images has different size: left(${lhsImage.size()}), right(${rhsImage.size()})"
-            )
+            logger.e("Images have different size: actual(${lhsImage.size()}), expected(${rhsImage.size()})")
+            return false
         }
 
         val width = lhsImage.width
@@ -46,10 +45,9 @@ internal class ImageComparator(private val logger: Logger) {
         val actualDifference = geometricDistanceSum / width / height
 
         if (actualDifference > THRESHOLD) {
-            throw RuntimeException(
-                "Difference exceeds threshold: actual: $actualDifference, threshold: $THRESHOLD"
-            )
+            logger.e("Difference exceeds threshold: actual: $actualDifference, threshold: $THRESHOLD")
         }
+        return actualDifference <= THRESHOLD
     }
 
     private fun geometricDistance(rgb1: Int, rgb2: Int): Double {
@@ -74,7 +72,7 @@ internal class ImageComparator(private val logger: Logger) {
             createDiffImpl(lhs, rhs, diff)
             logger.i("Diff saved to ${diff.absolutePath}")
         } catch (e: Exception) {
-            logger.e("l: $lhs r: $rhs d: $diff d.canWrite: ${diff.canWrite()}", e)
+            logger.e("Failed to create diff for $imagePath: actual=$lhs, expected=$rhs, diff=$diff", e)
         }
     }
 

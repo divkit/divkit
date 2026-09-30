@@ -23,11 +23,11 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
 
     @Rule
     @JvmField
-    val rule = baseRule(case, activityRule)
+    val rule = baseRule(case, TEST_CASES_PATH, activityRule)
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    fun divScreenshot() {
+    fun test() {
         interactiveScreenshot {
             runSteps(activityRule.activity, case, artifactsDir(case))
         }

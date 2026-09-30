@@ -1,5 +1,6 @@
 [versions]
 agp = "9.1.1"
+allure = "2.4.0"
 android-lint = "32.1.1"  # agp + "23.0.0"
 android-compileSdk = "36"
 android-minSdk = "23"
@@ -19,6 +20,7 @@ jvm-toolchain = "17"
 kotlin = "2.3.21"
 kotlinpoet = "2.4.0"
 kotlinx-coroutines = "1.10.2"
+kotlinx-serialization = "1.11.0"
 ksp = "2.3.11"
 lottie = "6.7.1"
 markwon = "4.6.2"
@@ -64,6 +66,9 @@ android-lint = { module = "com.android.tools.lint:lint", version.ref = "android-
 android-lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "android-lint" }
 
 androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
+
+allure-android = { module = "io.qameta.allure:allure-kotlin-android", version.ref = "allure" }
+allure-commons = { module = "io.qameta.allure:allure-kotlin-commons", version.ref = "allure" }
 
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -142,6 +147,7 @@ kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }

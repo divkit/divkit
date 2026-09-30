@@ -20,14 +20,14 @@ class Div2InputHighlightScreenshotTest(case: String, escapedCase: String) {
     )
 
     @get:Rule
-    val rule = screenshotRule(case, activityRule)
+    val rule = screenshotRule(case, TEST_CASES_PATH, activityRule)
 
     @Test
     @Screenshot(
         viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG,
         name = "highlight_color_initial"
     )
-    fun divScreenshotInitialColor() {
+    fun testInitialColor() {
         divFocus { clickOnTopInput() }
     }
 
@@ -36,18 +36,20 @@ class Div2InputHighlightScreenshotTest(case: String, escapedCase: String) {
         viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG,
         name = "highlight_color_changed"
     )
-    fun divScreenshotChangedColor() {
+    fun testChangedColor() {
         divInput { clickOnActionButton() }
         divFocus { clickOnTopInput() }
     }
 
     companion object {
 
+        private const val TEST_CASES_PATH = "ui_test_data/input"
+
         @JvmStatic
         @Parameterized.Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
             return AssetEnumerator()
-                .enumerate("ui_test_data/input")
+                .enumerate(TEST_CASES_PATH)
                 .filter { filename -> filename.endsWith("/div_input_highlight.json") }
                 .withEscapedParameter()
         }

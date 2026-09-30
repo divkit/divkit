@@ -15,8 +15,9 @@ import com.yandex.test.screenshot.ScreenshotRule
 import com.yandex.test.util.chain
 import org.junit.rules.TestRule
 
-fun baseRule(casePath: String, innerRule: TestRule): TestRule {
-    return CheckCaseRule(casePath)
+fun baseRule(casePath: String, caseRoot: String, innerRule: TestRule): TestRule {
+    return AllureMetadataRule(casePath, caseRoot)
+        .chain(CheckCaseRule(casePath))
         .chain(NoAnimationsRule())
         .chain(ClosePopupsRule())
         .chain(innerRule)
@@ -24,29 +25,32 @@ fun baseRule(casePath: String, innerRule: TestRule): TestRule {
 
 fun screenshotRule(
     casePath: String,
+    caseRoot: String,
     activityRule: ActivityParamsTestRule<out Activity>,
     relativePath: String = "",
     expectedSuite: String = "",
 ): TestRule {
-    return screenshotRule(casePath, activityRule, relativePath, expectedSuite) {
+    return screenshotRule(casePath, caseRoot, activityRule, relativePath, expectedSuite) {
         waitForLoadings()
     }
 }
 
 fun composeScreenshotRule(
     casePath: String,
+    caseRoot: String,
     activityRule: ActivityParamsTestRule<DivComposeScreenshotActivity>,
     relativePath: String = "",
 ): TestRule {
     val compareWithView = InstrumentationRegistry.getArguments().getString("compareComposeWithView") == "true"
     val expectedSuite = if (compareWithView) Div2ScreenshotTest::class.qualifiedName ?: "" else ""
-    return screenshotRule(casePath, activityRule, relativePath, expectedSuite) {
+    return screenshotRule(casePath, caseRoot, activityRule, relativePath, expectedSuite) {
         waitForIdlingResource(ComposeIdlingResource(activityRule.activity.imageLoadingTracker))
     }
 }
 
 private fun screenshotRule(
     casePath: String,
+    caseRoot: String,
     activityRule: ActivityParamsTestRule<out Activity>,
     relativePath: String,
     expectedSuite: String,
@@ -54,6 +58,6 @@ private fun screenshotRule(
 ): TestRule {
     val screenshotRule = ScreenshotRule(casePath, relativePath, expectedSuite)
     screenshotRule.beforeScreenshotTaken(waitForImages)
-    return baseRule(casePath, activityRule)
+    return baseRule(casePath, caseRoot, activityRule)
         .chain(screenshotRule)
 }

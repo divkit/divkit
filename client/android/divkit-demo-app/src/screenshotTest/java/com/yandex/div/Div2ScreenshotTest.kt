@@ -22,7 +22,7 @@ class Div2ScreenshotTest(case: String, escapedCase: String) {
 
     @Rule
     @JvmField
-    val rule = screenshotRule(case, activityRule, case.relativePath)
+    val rule = screenshotRule(case, TEST_CASES_PATH, activityRule, case.relativePath)
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test

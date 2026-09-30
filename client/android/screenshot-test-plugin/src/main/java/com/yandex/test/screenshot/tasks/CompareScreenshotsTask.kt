@@ -48,16 +48,24 @@ abstract class CompareScreenshotsTask : DefaultTask() {
     abstract val strictComparison: Property<Boolean>
 
     @get:Input
+    abstract val ignoreFailures: Property<Boolean>
+
+    @get:Input
     abstract val selectedReferencePrefix: Property<String>
 
     @get:Internal
     abstract val reportDir: DirectoryProperty
 
     @get:OutputDirectory
+    abstract val allureResultsDir: DirectoryProperty
+
+    @get:OutputDirectory
     abstract val comparisonDir: DirectoryProperty
 
     @get:OutputDirectory
     abstract val collectedDir: DirectoryProperty
+
+    private lateinit var allureResults: ScreenshotAllureResults
 
     private val logger: Logger by lazy {
         val logFile = reportDir.file("screenshot-comparison.log").get().asFile.apply { delete() }
@@ -74,12 +82,33 @@ abstract class CompareScreenshotsTask : DefaultTask() {
         screenshotDir.asFile.get().listFiles()?.forEach { it.copyRecursively(collectedDir.asFile.get()) }
 
         comparisonDir.asFile.get().deleteRecursively()
+        allureResultsDir.asFile.get().apply {
+            deleteRecursively()
+            mkdirs()
+        }
 
         val screenshotDirs = screenshotDir.asFile.get().listFiles { file -> file.isDirectory }!!
         screenshotDirs.forEach { screenshotDirFile ->
             val device = screenshotDirFile.toPath().last().name
-            val deviceReferenceDir =
-                referencesDir.dir(deviceDescription(screenshotDirFile)).get().asFile
+            val properties = if (File(screenshotDirFile, "device.properties").isFile) {
+                readDeviceProperties(screenshotDirFile)
+            } else {
+                null
+            }
+            val apiLevel = properties?.getProperty("apiLevel")
+            allureResults = ScreenshotAllureResults(screenshotDirFile, allureResultsDir.get().asFile, apiLevel)
+            val testFailures = allureResults.failedTests
+            testFailures.forEach { result ->
+                logger.e("${result.fullName ?: result.name}: ${result.statusDetails?.message.orEmpty()}")
+            }
+            if (properties == null) {
+                allureResults.write()
+                val message = "No screenshots were produced for $device"
+                logger.e(message)
+                if (!ignoreFailures.get()) throw GradleException(message)
+                return@forEach
+            }
+            val deviceReferenceDir = referencesDir.dir(deviceDescription(properties)).get().asFile
 
             logger.i("Screenshots comparison for $device started")
             logger.i("\tscreenshots from: $screenshotDirFile")
@@ -91,6 +120,7 @@ abstract class CompareScreenshotsTask : DefaultTask() {
             loadExplicitScreenshotMatchMap(referenceOverrides)
 
             val successful = listOf(
+                testFailures.isEmpty(),
                 processNewScreenshots(
                     referenceOverrides,
                     screenshotDirFile,
@@ -111,10 +141,11 @@ abstract class CompareScreenshotsTask : DefaultTask() {
                 )
             ).all { it }
 
-            if (!successful) {
+            allureResults.write()
+            if (!successful && !ignoreFailures.get()) {
                 throw GradleException("error processing images, see log messages above")
             }
-            logger.i("Screenshot comparison for $device finished successfully")
+            logger.i("Screenshot comparison for $device finished: successful=$successful")
         }
     }
 
@@ -145,6 +176,7 @@ abstract class CompareScreenshotsTask : DefaultTask() {
 
         newScreenshots.forEach { image ->
             File(screenshotDir, image).copyIfExists(File(newScreenshotDir, image))
+            allureResults.addMissingReference(image, File(screenshotDir, image))
         }
 
         if (newScreenshots.isNotEmpty()) {
@@ -173,21 +205,21 @@ abstract class CompareScreenshotsTask : DefaultTask() {
             }
         }
 
+        val requiredReferences = requiredSkippedReferences(skippedScreenshots, selectedReferencePrefix.get())
+        requiredReferences.forEach { image ->
+            File(referenceDir, image).copyIfExists(File(skippedScreenshotDir, image))
+        }
         skippedScreenshots.forEach { image ->
-            File(screenshotDir, image).copyIfExists(File(skippedScreenshotDir, image))
+            allureResults.addMissingScreenshot(image, required = image in requiredReferences)
         }
 
         if (skippedScreenshots.isNotEmpty()) {
-            logger.w("${skippedScreenshots.size} skipped references:\n\t${skippedScreenshots.joinToString("\n\t")}")
-            val requiredReferences = requiredSkippedReferences(
-                skippedScreenshots,
-                selectedReferencePrefix.get(),
-            )
-            if (strictComparison.get() && requiredReferences.isNotEmpty()) {
-                logger.w(
-                    "${requiredReferences.size} required references were not produced:\n\t" +
-                        requiredReferences.joinToString("\n\t")
-                )
+            logger.w("${skippedScreenshots.size} skipped references")
+        }
+        if (requiredReferences.isNotEmpty()) {
+            logger.w("${requiredReferences.size} required references were not produced:\n\t" +
+                requiredReferences.joinToString("\n\t"))
+            if (strictComparison.get()) {
                 return false
             }
         }
@@ -206,7 +238,6 @@ abstract class CompareScreenshotsTask : DefaultTask() {
         val differentScreenshots = mutableListOf<ScreenshotPair>()
         val referenceMap = mutableMapOf<ActualPath, ReferencePath>()
         val actualScreenshotPaths = mutableSetOf<String>()
-        val statusLogger = TestCaseStatuses(screenshotDir)
 
         categories.forEach { category ->
             val categoryImages = enumerateImagesRelative(File(screenshotDir, category))
@@ -227,20 +258,23 @@ abstract class CompareScreenshotsTask : DefaultTask() {
             if (!comparator.compareImages(actualFile, referenceFile, pair.actual)) {
                 // compare failed
                 differentScreenshots += pair
-                statusLogger.notifyFailed(pair.actual)
             } else {
                 // compare success
-                statusLogger.notifyPassed(pair.actual)
+                allureResults.addMatch(pair.actual)
             }
         }
-
-        PassedTestCasesWriter(screenshotDir).log(statusLogger.getPassedCases())
 
         differentScreenshots.forEach { pair ->
             val actualFile = File(screenshotDir, pair.actual)
             val expectedFile = File(referenceDir, pair.reference)
 
             createDiff(comparator, actualFile, expectedFile, differentScreenshotDir, pair.actual)
+            allureResults.addDifference(
+                pair.actual,
+                actualFile,
+                expectedFile,
+                File(differentScreenshotDir, pair.actual.withSuffix("_diff"))
+            )
         }
 
         if (differentScreenshots.isNotEmpty()) {
@@ -288,18 +322,22 @@ abstract class CompareScreenshotsTask : DefaultTask() {
             .toSet()
     }
 
-    private fun deviceDescription(
+    private fun deviceDescription(properties: Properties): String {
+        val apiLevel = properties.getProperty("apiLevel")
+        val displayWidth = properties.getProperty("displayWidth")
+        val displayHeight = properties.getProperty("displayHeight")
+        val displayDensity = properties.getProperty("displayDensity")
+        return "API${apiLevel}_${displayDensity}_${displayWidth}x${displayHeight}"
+    }
+
+    private fun readDeviceProperties(
         screenshotDir: File
-    ): String {
+    ): Properties {
         val propertiesFile = File(screenshotDir, "device.properties")
         try {
             val properties = Properties()
-            properties.load(propertiesFile.bufferedReader())
-            val apiLevel = properties.getProperty("apiLevel")
-            val displayWidth = properties.getProperty("displayWidth")
-            val displayHeight = properties.getProperty("displayHeight")
-            val displayDensity = properties.getProperty("displayDensity")
-            return "API${apiLevel}_${displayDensity}_${displayWidth}x${displayHeight}"
+            propertiesFile.bufferedReader().use { properties.load(it) }
+            return properties
         } catch (e: IOException) {
             throw GradleException("Failed to read $propertiesFile", e)
         }
@@ -343,11 +381,13 @@ abstract class CompareScreenshotsTask : DefaultTask() {
                 it.referencesDir.set(project.file(extension.referencesDir))
                 it.comparableCategories.set(extension.comparableCategories)
                 it.strictComparison.set(extension.strictComparison)
+                it.ignoreFailures.set(extension.ignoreFailures)
                 it.selectedReferencePrefix.set(extension.selectedReferencePrefix)
                 it.screenshotDir.set(
                     project.layout.buildDirectory.dir(additionalTestOutputDir(variant))
                 )
                 it.reportDir.set(project.reportDir)
+                it.allureResultsDir.set(project.layout.buildDirectory.dir("allure-comparison-results"))
                 it.comparisonDir.set(project.reportDir.map { it.dir(extension.comparisonDir.get()) })
                 it.collectedDir.set(project.reportDir.map { it.dir(extension.collectedDir.get()) })
 
@@ -375,6 +415,6 @@ private class ScreenshotPair(
     val reference: String,
 ) {
     override fun toString(): String {
-        return if (actual == reference) "" else "$actual (from $reference)"
+        return if (actual == reference) actual else "$actual (from $reference)"
     }
 }

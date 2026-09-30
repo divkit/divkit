@@ -14,8 +14,8 @@ import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.screenshot.captureScreenshots
-import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
+import io.qameta.allure.kotlin.Allure.step
 import org.hamcrest.Matchers.equalTo
 
 private const val TAG = "InteractiveTestStepsPerformer"
@@ -33,19 +33,23 @@ internal class InteractiveScreenshotSteps {
     ) = step("Run interactive screenshot steps") {
         val testData = InteractiveScreenshotTestData.parse(activity.getTestCaseJson())
         var snapshotIndex = 0
-        testData.steps.forEach { step ->
+        testData.steps.forEachIndexed { index, step ->
             when (step) {
-                is Step.Action -> {
+                is Step.Action -> step("Step $index: Action ${step.action.writeToJSON()}") {
                     InstrumentationRegistry.getInstrumentation().runOnMainSync {
                         handleAction(activity.divView, step.action)
                     }
                 }
 
-                is Step.Wait -> Thread.sleep(step.delay)
+                is Step.Wait -> step("Step $index: Wait ${step.delay} ms") {
+                    Thread.sleep(step.delay)
+                }
 
-                is Step.VerifyText -> verifyText(step)
+                is Step.VerifyText -> step("Step $index: Verify text '${step.text}' in div '${step.id}'") {
+                    verifyText(step)
+                }
 
-                is Step.VerifySnapshot -> {
+                is Step.VerifySnapshot -> step("Step $index: Verify screenshot step$snapshotIndex") {
                     waitForLoadings()
                     Espresso.onIdle()
                     Thread.sleep(1000)
@@ -69,10 +73,9 @@ internal class InteractiveScreenshotSteps {
         }
     }
 
-    private fun verifyText(verification: Step.VerifyText): Unit =
-        step("Verify text '${verification.text}' in div '${verification.id}'") {
-            onView(withTagValue(equalTo(verification.id)))
-                .check(matches(withText(verification.text)))
-                .checkIsDisplayed()
-        }
+    private fun verifyText(verification: Step.VerifyText) {
+        onView(withTagValue(equalTo(verification.id)))
+            .check(matches(withText(verification.text)))
+            .checkIsDisplayed()
+    }
 }

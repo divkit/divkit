@@ -19,31 +19,33 @@ class Div2FocusScreenshotTest(case: String, escapedCase: String) {
     )
 
     @get:Rule
-    val rule = screenshotRule(case, activityRule)
+    val rule = screenshotRule(case, TEST_CASES_PATH, activityRule)
 
     @Screenshot(
         viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG,
         relativePath = "not_focused"
     )
     @Test
-    fun divScreenshotNotFocused() = Unit
+    fun testNotFocused() = Unit
 
     @Screenshot(
         viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG,
         relativePath = "focused"
     )
     @Test
-    fun divScreenshotFocused() {
+    fun testFocused() {
         divFocus { clickOnTopInput() }
     }
 
     companion object {
 
+        private const val TEST_CASES_PATH = "ui_test_data/focus"
+
         @JvmStatic
         @Parameterized.Parameters(name = "{1}")
         fun cases(): List<Array<String>> {
             return AssetEnumerator()
-                .enumerate("ui_test_data/focus")
+                .enumerate(TEST_CASES_PATH)
                 .filter { filename -> filename.contains("snapshot") }
                 .withEscapedParameter()
         }

@@ -13,7 +13,7 @@ class InteractiveScreenshotTestConfiguration(
         configurationJson = json.optJSONObject("configuration"),
     )
 
-    val steps = InteractiveScreenshotTestData.parse(json).steps
+    val steps by lazy { InteractiveScreenshotTestData.parse(json).steps }
 
     override fun toString() = baseConfiguration.name
 }
