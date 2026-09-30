@@ -2851,19 +2851,20 @@
         "animation"
       ],
       "steps": [
+        "Verify that system animations are enabled on the device",
         "Observe the linear and radial animated gradients",
         "Tap the radial gradient and observe its increased speed",
         "Observe multiline text, range overrides, decorations, inline image and ellipsis",
         "Focus the focus-color sample",
-        "Disable global animations, then leave the scenario and open it again"
+        "Disable system animations on the device, then reopen the scenario"
       ],
       "expected_results": [
         "Default-duration linear and expression-duration radial gradients move continuously through the whole text block",
         "The radial gradient speeds up after the tap, while the duration-zero gradient stays visible without movement",
         "The animated gradients paint only text glyphs and have priority over text_color and focused_text_color",
         "Range text color and mask replace the gradient locally; inline image, background, border, decorations and shadow stay static",
-        "Multiline text uses one gradient, custom ellipsis shares its phase, and disabled animations show the static nested gradient",
-        "The animation restarts without stale state after reopening the scenario"
+        "Multiline text uses one gradient, and custom ellipsis shares its phase",
+        "With system animations disabled, the gradient remains visible but static"
       ],
       "file": "animated_text_gradient.json",
       "case_id": 530
