@@ -10,7 +10,7 @@ func resolveTarget(
   }
 
   let element = query.firstMatch
-  guard element.waitForExistence(timeout: runnerDefaultTimeout) else {
+  guard element.wait(timeout: runnerDefaultTimeout, condition: { $0.exists }) else {
     throw TargetResolutionError.didNotAppear(target: target)
   }
 

@@ -35,10 +35,14 @@ extension XCUIElement {
     )
   }
 
-  private func wait(
+  func wait(
     timeout: TimeInterval,
     condition: @escaping (XCUIElement) -> Bool
   ) -> Bool {
+    if condition(self) {
+      return true
+    }
+
     let predicate = NSPredicate { object, _ in
       guard let element = object as? XCUIElement else {
         return false

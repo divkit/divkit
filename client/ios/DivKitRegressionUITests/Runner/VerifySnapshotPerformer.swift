@@ -8,19 +8,21 @@ final class VerifySnapshotPerformer {
     case record
   }
 
+  private let referenceSnapshotsDirectoryURL: URL
   private let scenarioPath: String
   private let mode: Mode = ProcessInfo.processInfo.arguments.contains("UPDATE_SNAPSHOTS")
     ? .record : .verify
   private var hasRecordedSnapshots = false
 
-  init(scenarioPath: String) {
+  init(referenceSnapshotsDirectoryURL: URL, scenarioPath: String) {
+    self.referenceSnapshotsDirectoryURL = referenceSnapshotsDirectoryURL
     self.scenarioPath = scenarioPath
   }
 
   func perform(name: String, on root: XCUIElement) throws {
     try XCTContext.runActivity(named: "verify_snapshot: \(name)") { activity in
-      guard root.waitForExistence(timeout: 3) else {
-        throw SnapshotError.rootViewDidNotAppear
+      guard root.wait(timeout: 3, condition: { $0.exists }) else {
+        throw SnapshotError.rootViewDoesNotExist
       }
       let screenshot = root.screenshot()
       let image = screenshot.image
@@ -84,15 +86,7 @@ final class VerifySnapshotPerformer {
           (name as NSString).lastPathComponent == name else {
       throw SnapshotError.invalidName(name)
     }
-    let bundle = Bundle(for: DivKitRegressionUITests.self)
-    guard let plistURL = bundle.url(forResource: "Info", withExtension: "plist") else {
-      throw SnapshotError.missingInfoPlist
-    }
-    let plistContents = try PropertyListDecoder().decode(
-      PlistContents.self,
-      from: Data(contentsOf: plistURL)
-    )
-    let caseURL = URL(fileURLWithPath: plistContents.referenceSnapshotsPath, isDirectory: true)
+    let caseURL = referenceSnapshotsDirectoryURL
       .appendingPathComponent(scenarioPath)
       .deletingPathExtension()
     let width = Int(AppMainWindow.shared.frame.width)
@@ -101,19 +95,10 @@ final class VerifySnapshotPerformer {
   }
 }
 
-private struct PlistContents: Decodable {
-  enum CodingKeys: String, CodingKey {
-    case referenceSnapshotsPath = "REFERENCE_SNAPSHOTS_PATH"
-  }
-
-  let referenceSnapshotsPath: String
-}
-
 private enum SnapshotError: LocalizedError {
   case snapshotsRecorded
-  case rootViewDidNotAppear
+  case rootViewDoesNotExist
   case invalidName(String)
-  case missingInfoPlist
   case invalidReference(URL)
   case mismatch(URL)
 
@@ -121,12 +106,10 @@ private enum SnapshotError: LocalizedError {
     switch self {
     case .snapshotsRecorded:
       "Snapshots recorded. Run without UPDATE_SNAPSHOTS to verify them."
-    case .rootViewDidNotAppear:
-      "Root DivView did not appear before taking a snapshot"
+    case .rootViewDoesNotExist:
+      "Root DivView does not exist in the accessibility hierarchy"
     case let .invalidName(name):
       "Invalid snapshot name: \(name)"
-    case .missingInfoPlist:
-      "Info.plist is missing from the UI test bundle"
     case let .invalidReference(url):
       "Cannot decode snapshot reference: \(url.path)"
     case let .mismatch(url):

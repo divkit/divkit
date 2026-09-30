@@ -35,6 +35,8 @@ struct RunnerExecutor {
       try execute(step)
     case let .divAction(step):
       try await execute(step)
+    case .wait:
+      break
     }
   }
 }

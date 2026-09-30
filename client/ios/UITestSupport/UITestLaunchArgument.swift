@@ -1,31 +1,53 @@
 enum UITestLaunchArgument: RawRepresentable {
   case scenarioPath(String)
   case connectionPort(UInt16)
+  case snapshotTesting
+
+  private enum Key: String {
+    case scenarioPath = "--divkit-ui-scenario"
+    case connectionPort = "--divkit-ui-port"
+    case snapshotTesting = "SNAPSHOTS_TESTING"
+  }
 
   var rawValue: String {
-    switch self {
+    let key = self.key.rawValue
+    return switch self {
     case let .scenarioPath(path):
-      "--divkit-ui-scenario=\(path)"
+      "\(key)=\(path)"
     case let .connectionPort(port):
-      "--divkit-ui-port=\(port)"
+      "\(key)=\(port)"
+    case .snapshotTesting:
+      key
+    }
+  }
+
+  private var key: Key {
+    switch self {
+    case .scenarioPath:
+      .scenarioPath
+    case .connectionPort:
+      .connectionPort
+    case .snapshotTesting:
+      .snapshotTesting
     }
   }
 
   init?(rawValue: String) {
     let parts = rawValue.split(separator: "=", maxSplits: 1, omittingEmptySubsequences: false)
-    guard parts.count == 2 else {
+    guard let name = parts.first, let key = Key(rawValue: String(name)) else {
       return nil
     }
-    switch parts[0] {
-    case "--divkit-ui-scenario":
-      self = .scenarioPath(String(parts[1]))
-    case "--divkit-ui-port":
-      guard let port = UInt16(parts[1]) else {
+    let value = String(parts.dropFirst().first ?? "")
+    switch key {
+    case .scenarioPath:
+      self = .scenarioPath(value)
+    case .connectionPort:
+      guard let port = UInt16(value) else {
         return nil
       }
       self = .connectionPort(port)
-    default:
-      return nil
+    case .snapshotTesting:
+      self = .snapshotTesting
     }
   }
 }

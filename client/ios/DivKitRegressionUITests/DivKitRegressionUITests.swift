@@ -6,20 +6,23 @@ final class DivKitRegressionUITests: XCTestCase {
     let suite = XCTestSuite(forTestCaseClass: self)
 
     do {
-      let scenarios = try loadAutomatedScenarios(from: Bundle(for: self))
-      try validateTestNames(scenarios)
+      let configuration = try UITestConfiguration()
+      let scenarios = try loadScenarios(from: configuration.scenariosDirectoryURL)
+      try validateTestNames(scenarios, configuration: configuration)
 
       for scenario in scenarios {
+        let resourcePath = configuration.scenarioResourcePath(for: scenario.relativePath)
         addTest(
-          named: testName(for: scenario),
+          named: testName(for: resourcePath),
           to: suite
         ) { testCase in
           do {
             let connection = try await UITestConnection()
             defer { connection.close() }
             let launchArguments: [UITestLaunchArgument] = [
-              .scenarioPath(scenario.relativePath),
+              .scenarioPath(resourcePath),
               .connectionPort(connection.port),
+              .snapshotTesting,
             ]
             testCase.app.launch(launchArguments: launchArguments)
             try testCase.app.waitUntilRunning()
@@ -27,7 +30,10 @@ final class DivKitRegressionUITests: XCTestCase {
             try await RunnerExecutor(
               root: root,
               connection: connection,
-              verifySnapshotPerformer: VerifySnapshotPerformer(scenarioPath: scenario.relativePath)
+              verifySnapshotPerformer: VerifySnapshotPerformer(
+                referenceSnapshotsDirectoryURL: configuration.referenceSnapshotsDirectoryURL,
+                scenarioPath: scenario.relativePath
+              )
             ).execute(scenario.steps)
           } catch {
             testCase.attachDiagnostics()
@@ -40,7 +46,7 @@ final class DivKitRegressionUITests: XCTestCase {
       }
     } catch {
       addTest(named: "testScenarioLoading", to: suite) { _ in
-        XCTFail("Failed to load automated regression scenarios: \(error.localizedDescription)")
+        XCTFail("Failed to load UI scenarios: \(error.localizedDescription)")
       }
     }
 
@@ -85,10 +91,14 @@ final class DivKitRegressionUITests: XCTestCase {
     suite.addTest(self.init(selector: selector))
   }
 
-  private static func validateTestNames(_ scenarios: [RunnerScenario]) throws {
+  private static func validateTestNames(
+    _ scenarios: [RunnerScenario],
+    configuration: UITestConfiguration
+  ) throws {
     var pathsByName: [String: String] = [:]
     for scenario in scenarios {
-      let name = testName(for: scenario)
+      let resourcePath = configuration.scenarioResourcePath(for: scenario.relativePath)
+      let name = testName(for: resourcePath)
       if let previousPath = pathsByName[name] {
         throw TestRegistrationError.duplicateName(
           name: name,
@@ -100,8 +110,8 @@ final class DivKitRegressionUITests: XCTestCase {
     }
   }
 
-  private static func testName(for scenario: RunnerScenario) -> String {
-    let path = scenario.relativePath
+  private static func testName(for resourcePath: String) -> String {
+    let path = resourcePath
       .components(separatedBy: CharacterSet.alphanumerics.inverted)
       .filter { !$0.isEmpty }
       .joined(separator: "_")
@@ -149,9 +159,7 @@ extension XCUIApplication {
 
   private func waitForCardOrLoadingError(root: XCUIElement) throws {
     let loadingError = staticTexts["uiTestLoadError"]
-    let predicate = NSPredicate { _, _ in root.exists || loadingError.exists }
-    let expectation = XCTNSPredicateExpectation(predicate: predicate, object: nil)
-    guard XCTWaiter.wait(for: [expectation], timeout: 5) == .completed else {
+    guard root.wait(timeout: 5, condition: { $0.exists || loadingError.exists }) else {
       throw AppError.cardLoadingTimedOut
     }
     if loadingError.exists {

@@ -8267,6 +8267,7 @@
   "client/ios/DivKitRegressionUITests/Runner/VerifySnapshotPerformer.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/VerifySnapshotPerformer.swift",
   "client/ios/DivKitRegressionUITests/Runner/XCUIElement+RunnerInteraction.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/XCUIElement+RunnerInteraction.swift",
   "client/ios/DivKitRegressionUITests/Runner/XCUIElement+Visibility.swift":"divkit/public/client/ios/DivKitRegressionUITests/Runner/XCUIElement+Visibility.swift",
+  "client/ios/DivKitRegressionUITests/UITestConfiguration.swift":"divkit/public/client/ios/DivKitRegressionUITests/UITestConfiguration.swift",
   "client/ios/DivKitSVG/SVGDecoder.swift":"divkit/public/client/ios/DivKitSVG/SVGDecoder.swift",
   "client/ios/DivKitSVG/SVGImageHolderFactory.swift":"divkit/public/client/ios/DivKitSVG/SVGImageHolderFactory.swift",
   "client/ios/DivKitSnapshotTests/DivKitSnapshotTests.swift":"divkit/public/client/ios/DivKitSnapshotTests/DivKitSnapshotTests.swift",

@@ -1,15 +1,9 @@
 import Foundation
 
-func loadAutomatedScenarios(from bundle: Bundle) throws -> [RunnerScenario] {
-  guard let dataDirectoryURL = bundle.url(
-    forResource: dataDirectoryName,
-    withExtension: nil
-  ) else {
-    throw ScenarioLoadingError.dataDirectoryNotFound
-  }
-  let paths = try scenarioPaths(in: dataDirectoryURL)
+func loadScenarios(from directoryURL: URL) throws -> [RunnerScenario] {
+  let paths = try scenarioPaths(in: directoryURL)
   let scenarios = try paths.compactMap { relativePath in
-    let url = dataDirectoryURL.appendingPathComponent(relativePath)
+    let url = directoryURL.appendingPathComponent(relativePath)
     return try decodeScenario(at: url, relativePath: relativePath)
   }
 
@@ -22,7 +16,7 @@ func loadAutomatedScenarios(from bundle: Bundle) throws -> [RunnerScenario] {
 
 private func scenarioPaths(in directoryURL: URL) throws -> [String] {
   guard let enumerator = FileManager.default.enumerator(atPath: directoryURL.path) else {
-    throw ScenarioLoadingError.dataDirectoryNotReadable
+    throw ScenarioLoadingError.dataDirectoryNotReadable(for: directoryURL)
   }
 
   return enumerator
@@ -44,38 +38,33 @@ private func decodeScenario(
       return nil
     }
 
-    let scenario = try decoder.decode(RunnerScenario.self, from: data)
-    return RunnerScenario(
-      decoded: scenario,
-      relativePath: "\(dataDirectoryName)/\(relativePath)"
+    return try RunnerScenario(
+      data: data,
+      relativePath: relativePath
     )
   } catch {
     throw ScenarioLoadingError.invalidScenario(
-      file: relativePath,
+      file: url.path,
       underlyingError: error
     )
   }
 }
 
-private let dataDirectoryName = "automated"
 private let iosPlatform = "ios"
 
 private enum ScenarioLoadingError: LocalizedError {
-  case dataDirectoryNotFound
-  case dataDirectoryNotReadable
+  case dataDirectoryNotReadable(for: URL)
   case invalidScenario(file: String, underlyingError: Error)
   case noIOSScenarios
 
   var errorDescription: String? {
     switch self {
-    case .dataDirectoryNotFound:
-      "Automated regression test data is missing from the test bundle"
-    case .dataDirectoryNotReadable:
-      "Automated regression test data cannot be read"
+    case let .dataDirectoryNotReadable(url):
+      "\(url.path) cannot be read"
     case let .invalidScenario(file, underlyingError):
-      "Failed to decode automated/\(file): \(underlyingError.localizedDescription)"
+      "Failed to decode \(file): \(underlyingError.localizedDescription)"
     case .noIOSScenarios:
-      "No iOS automated regression scenarios found"
+      "No iOS scenarios found"
     }
   }
 }

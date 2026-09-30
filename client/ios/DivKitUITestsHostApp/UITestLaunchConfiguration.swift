@@ -13,6 +13,8 @@ struct UITestLaunchConfiguration {
         scenarioPath = path
       case let .connectionPort(port):
         connectionPort = port
+      case .snapshotTesting:
+        break
       }
     }
     if let scenarioPath, !scenarioPath.isEmpty {
