@@ -14,9 +14,9 @@ android {
 
 dependencies {
     api(project(":lottie-core"))
+    
     implementation(project(":compose"))
     implementation(project(":div-core"))
-    implementation(project(":div-data"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)

@@ -14,7 +14,6 @@ android {
 dependencies {
     implementation(project(":compose"))
     implementation(project(":div"))
-    implementation(project(":div-data"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)

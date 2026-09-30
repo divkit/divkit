@@ -26,9 +26,10 @@ android {
 }
 
 dependencies {
+    api(project(":div-data"))
+
     implementation(project(":coil-core"))
     implementation(project(":div-core"))
-    implementation(project(":div-data"))
     implementation(project(":div-evaluable"))
     implementation(project(":div-histogram"))
     implementation(project(":div-storage"))
