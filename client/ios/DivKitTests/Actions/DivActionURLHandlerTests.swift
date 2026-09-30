@@ -265,6 +265,59 @@ struct DivActionURLHandlerTests {
     )
   }
 
+  @Test
+  func scrollAction_GalleryWithoutAnimation() {
+    let cases: [(SetItemAction.Mode, GalleryViewState.Position)] = [
+      (.current(2), .paging(index: 2)),
+      (.next(step: 1, overflow: .clamp), .paging(index: 2)),
+      (.previous(step: 1, overflow: .clamp), .paging(index: 0)),
+      (.forward(10, .clamp), .offset(20)),
+      (.backward(10, .clamp), .offset(0)),
+      (.position(5), .offset(5)),
+      (.start, .offset(0)),
+      (.end, .offset(20)),
+    ]
+    for (mode, position) in cases {
+      setItemTestCase(
+        beforeState: GalleryViewState(
+          contentPosition: .offset(10, firstVisibleItemIndex: 1),
+          itemsCount: 3,
+          isScrolling: false,
+          scrollRange: 20,
+          animated: true
+        ),
+        afterState: GalleryViewState(
+          contentPosition: position,
+          itemsCount: 3,
+          isScrolling: false,
+          scrollRange: 20,
+          animated: false
+        ),
+        mode: mode,
+        animated: false
+      )
+    }
+  }
+
+  @Test
+  func scrollAction_PagerWithoutAnimation() {
+    let cases: [(SetItemAction.Mode, Int)] = [
+      (.current(2), 2),
+      (.next(step: 1, overflow: .clamp), 2),
+      (.previous(step: 1, overflow: .clamp), 0),
+      (.start, 0),
+      (.end, 2),
+    ]
+    for (mode, page) in cases {
+      setItemTestCase(
+        beforeState: PagerViewState(numberOfPages: 3, currentPage: 1, animated: true),
+        afterState: PagerViewState(numberOfPages: 3, currentPage: page, animated: false),
+        mode: mode,
+        animated: false
+      )
+    }
+  }
+
   private func setItemTestCases(
     beforeStates: [ElementState],
     afterState: [ElementState],
@@ -287,11 +340,12 @@ struct DivActionURLHandlerTests {
   private func setItemTestCase<State: ElementState & Equatable>(
     beforeState: State,
     afterState: State,
-    mode: SetItemAction.Mode
+    mode: SetItemAction.Mode,
+    animated: Bool? = nil
   ) {
     blockStateStorage.setState(path: elementPath, state: beforeState)
     actionHandler.handle(
-      divAction(logId: "test", url: SetItemAction.makeURL(mode: mode)),
+      divAction(logId: "test", url: SetItemAction.makeURL(mode: mode, animated: animated)),
       path: cardId.path,
       source: .tap,
       sender: nil
@@ -389,33 +443,36 @@ private enum SetItemAction {
     ),
   ]
 
-  static func makeURL(mode: Mode) -> String {
+  static func makeURL(mode: Mode, animated: Bool? = nil) -> String {
+    var url: String
     switch mode {
     case let .next(step, overflow):
-      let url = "div-action://set_next_item?id=\(elementId)&overflow=\(overflow)"
+      url = "div-action://set_next_item?id=\(elementId)&overflow=\(overflow)"
       if let step {
-        return url + "&step=\(step)"
+        url += "&step=\(step)"
       }
-      return url
     case let .previous(step, overflow):
-      let url = "div-action://set_previous_item?id=\(elementId)&overflow=\(overflow)"
+      url = "div-action://set_previous_item?id=\(elementId)&overflow=\(overflow)"
       if let step {
-        return url + "&step=\(step)"
+        url += "&step=\(step)"
       }
-      return url
     case let .current(item):
-      return "div-action://set_current_item?id=\(elementId)&item=\(item)"
+      url = "div-action://set_current_item?id=\(elementId)&item=\(item)"
     case let .forward(step, overflow):
-      return "div-action://scroll_forward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
+      url = "div-action://scroll_forward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
     case let .backward(step, overflow):
-      return "div-action://scroll_backward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
+      url = "div-action://scroll_backward?id=\(elementId)&step=\(Int(step))&overflow=\(overflow)"
     case let .position(step):
-      return "div-action://scroll_to_position?id=\(elementId)&step=\(Int(step))"
+      url = "div-action://scroll_to_position?id=\(elementId)&step=\(Int(step))"
     case .start:
-      return "div-action://scroll_to_start?id=\(elementId)"
+      url = "div-action://scroll_to_start?id=\(elementId)"
     case .end:
-      return "div-action://scroll_to_end?id=\(elementId)"
+      url = "div-action://scroll_to_end?id=\(elementId)"
     }
+    if let animated {
+      url += "&animated=\(animated)"
+    }
+    return url
   }
 }
 

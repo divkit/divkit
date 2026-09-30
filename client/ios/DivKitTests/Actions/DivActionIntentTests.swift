@@ -89,7 +89,7 @@ struct DivActionIntentTests {
   func setCurrentItem() {
     #expect(
       intent("div-action://set_current_item?id=div_id&item=10") ==
-        DivActionIntent.scrollAction(id: "div_id", .setCurrentItem(index: 10))
+        DivActionIntent.scrollAction(id: "div_id", .setCurrentItem(index: 10), animated: true)
     )
   }
 
@@ -102,7 +102,11 @@ struct DivActionIntentTests {
   func setNextItem() {
     #expect(
       intent("div-action://set_next_item?id=div_id&step=3&overflow=ring") ==
-        DivActionIntent.scrollAction(id: "div_id", .setNextItem(step: 3, overflow: .ring))
+        DivActionIntent.scrollAction(
+          id: "div_id",
+          .setNextItem(step: 3, overflow: .ring),
+          animated: true
+        )
     )
   }
 
@@ -110,8 +114,37 @@ struct DivActionIntentTests {
   func setPreviousItem() {
     #expect(
       intent("div-action://set_previous_item?id=div_id&step=3&overflow=clamp") ==
-        DivActionIntent.scrollAction(id: "div_id", .setPreviousItem(step: 3, overflow: .clamp))
+        DivActionIntent.scrollAction(
+          id: "div_id",
+          .setPreviousItem(step: 3, overflow: .clamp),
+          animated: true
+        )
     )
+  }
+
+  @Test
+  func scrollAction_DefaultAnimated() {
+    scrollActionTestCases(animated: nil, expectedAnimated: true)
+  }
+
+  @Test
+  func scrollAction_AnimatedIsTrue() {
+    scrollActionTestCases(animated: "true", expectedAnimated: true)
+  }
+
+  @Test
+  func scrollAction_AnimatedIsFalse() {
+    scrollActionTestCases(animated: "false", expectedAnimated: false)
+  }
+
+  @Test
+  func scrollAction_InvalidAnimatedUsesDefault() {
+    for animated in ["", "0", "1", "False", "invalid"] {
+      #expect(
+        intent("div-action://set_current_item?id=div_id&item=2&animated=\(animated)") ==
+          .scrollAction(id: "div_id", .setCurrentItem(index: 2), animated: true)
+      )
+    }
   }
 
   @Test
@@ -190,6 +223,37 @@ struct DivActionIntentTests {
           .card
         )
     )
+  }
+
+  private func scrollActionTestCases(animated: String?, expectedAnimated: Bool) {
+    let cases: [(String, DivActionIntent.Scroll)] = [
+      ("div-action://set_current_item?id=div_id&item=2", .setCurrentItem(index: 2)),
+      ("div-action://set_next_item?id=div_id&step=2", .setNextItem(step: 2, overflow: .clamp)),
+      (
+        "div-action://set_previous_item?id=div_id&step=2",
+        .setPreviousItem(step: 2, overflow: .clamp)
+      ),
+      (
+        "div-action://scroll_forward?id=div_id&step=10",
+        .scroll(mode: .forward(10, overflow: .clamp))
+      ),
+      (
+        "div-action://scroll_backward?id=div_id&step=10",
+        .scroll(mode: .backward(10, overflow: .clamp))
+      ),
+      ("div-action://scroll_to_position?id=div_id&step=10", .scroll(mode: .position(10))),
+      ("div-action://scroll_to_start?id=div_id", .scroll(mode: .start)),
+      ("div-action://scroll_to_end?id=div_id", .scroll(mode: .end)),
+    ]
+    for (actionURL, expectedScroll) in cases {
+      var url = actionURL
+      if let animated {
+        url += "&animated=\(animated)"
+      }
+      #expect(
+        intent(url) == .scrollAction(id: "div_id", expectedScroll, animated: expectedAnimated)
+      )
+    }
   }
 }
 

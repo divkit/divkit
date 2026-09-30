@@ -123,7 +123,8 @@ final class ScrollActionHandler {
   func handleScrollAction(
     context: DivActionHandlingContext,
     id: String,
-    scrollAction: DivActionIntent.Scroll
+    scrollAction: DivActionIntent.Scroll,
+    animated: Bool
   ) {
     pathResolver.resolve(
       id: id,
@@ -136,7 +137,7 @@ final class ScrollActionHandler {
           context: context,
           path: path,
           index: index,
-          animated: true
+          animated: animated
         )
       case let .setNextItem(step, overflow):
         scrollToNextItem(
@@ -144,7 +145,7 @@ final class ScrollActionHandler {
           path: path,
           step: step,
           overflow: overflow,
-          animated: true
+          animated: animated
         )
       case let .setPreviousItem(step, overflow):
         scrollToNextItem(
@@ -152,7 +153,7 @@ final class ScrollActionHandler {
           path: path,
           step: -step,
           overflow: overflow,
-          animated: true
+          animated: animated
         )
       case let .scroll(mode):
         switch mode {
@@ -160,13 +161,13 @@ final class ScrollActionHandler {
           scrollToStart(
             context: context,
             path: path,
-            animated: true
+            animated: animated
           )
         case .end:
           scrollToEnd(
             context: context,
             path: path,
-            animated: true
+            animated: animated
           )
         case let .forward(offset, overflow):
           scrollToOffset(
@@ -175,7 +176,7 @@ final class ScrollActionHandler {
             offset: offset,
             isRelative: true,
             overflow: overflow,
-            animated: true
+            animated: animated
           )
         case let .backward(offset, overflow):
           scrollToOffset(
@@ -184,14 +185,14 @@ final class ScrollActionHandler {
             offset: -offset,
             isRelative: true,
             overflow: overflow,
-            animated: true
+            animated: animated
           )
         case let .position(position):
           scrollToOffset(
             context: context,
             path: path,
             offset: position,
-            animated: true
+            animated: animated
           )
         }
       }

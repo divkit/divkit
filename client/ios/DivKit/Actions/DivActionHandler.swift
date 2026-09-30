@@ -403,11 +403,12 @@ public final class DivActionHandler {
           name: DivVariableName(rawValue: name),
           value: value
         )
-      case let .scrollAction(id, scrollAction):
+      case let .scrollAction(id, scrollAction, animated):
         scrollActionHandler.handleScrollAction(
           context: context,
           id: id,
-          scrollAction: scrollAction
+          scrollAction: scrollAction,
+          animated: animated
         )
       case let .video(id: id, action: action):
         videoActionHandler.handle(
