@@ -29,6 +29,7 @@ import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 
@@ -45,6 +46,7 @@ internal fun GalleryGridView(
     contentPadding: PaddingValues,
     defaultItem: Int,
     scrollMode: DivGallery.ScrollMode,
+    scrollbar: Expression<DivGallery.Scrollbar>,
 ) {
     val initialDefaultItem = remember { defaultItem }
     val clampedDefaultItem = initialDefaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
@@ -76,7 +78,7 @@ internal fun GalleryGridView(
                 contentPadding = contentPadding,
             )
             isHorizontal -> GalleryLazyHorizontalStaggeredGrid(
-                modifier = Modifier,
+                scrollbar = scrollbar,
                 items = items,
                 gridState = gridState,
                 flingBehavior = rememberGalleryGridFlingBehavior(gridState, scrollMode, scrollContentAlignment),
@@ -87,7 +89,7 @@ internal fun GalleryGridView(
                 contentPadding = contentPadding,
             )
             else -> GalleryLazyVerticalStaggeredGrid(
-                modifier = Modifier,
+                scrollbar = scrollbar,
                 items = items,
                 gridState = gridState,
                 flingBehavior = rememberGalleryGridFlingBehavior(gridState, scrollMode, scrollContentAlignment),
@@ -266,7 +268,7 @@ private fun staggeredGridItemConstraints(
 
 @Composable
 private fun GalleryLazyHorizontalStaggeredGrid(
-    modifier: Modifier,
+    scrollbar: Expression<DivGallery.Scrollbar>,
     items: List<Div>,
     gridState: LazyStaggeredGridState,
     flingBehavior: FlingBehavior,
@@ -279,7 +281,12 @@ private fun GalleryLazyHorizontalStaggeredGrid(
     val viewContext = LocalDivViewContext.current
     LazyHorizontalStaggeredGrid(
         rows = StaggeredGridCells.Fixed(columnCount),
-        modifier = modifier,
+        modifier = Modifier.galleryScrollbar(
+            scrollbar = scrollbar,
+            scrollState = gridState,
+            isHorizontal = true,
+            contentPadding = contentPadding,
+        ),
         state = gridState,
         flingBehavior = flingBehavior,
         contentPadding = contentPadding,
@@ -299,7 +306,7 @@ private fun GalleryLazyHorizontalStaggeredGrid(
 
 @Composable
 private fun GalleryLazyVerticalStaggeredGrid(
-    modifier: Modifier,
+    scrollbar: Expression<DivGallery.Scrollbar>,
     items: List<Div>,
     gridState: LazyStaggeredGridState,
     flingBehavior: FlingBehavior,
@@ -312,7 +319,12 @@ private fun GalleryLazyVerticalStaggeredGrid(
     val viewContext = LocalDivViewContext.current
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(columnCount),
-        modifier = modifier,
+        modifier = Modifier.galleryScrollbar(
+            scrollbar = scrollbar,
+            scrollState = gridState,
+            isHorizontal = false,
+            contentPadding = contentPadding,
+        ),
         state = gridState,
         flingBehavior = flingBehavior,
         contentPadding = contentPadding,

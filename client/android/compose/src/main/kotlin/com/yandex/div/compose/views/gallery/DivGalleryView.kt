@@ -43,6 +43,7 @@ internal fun DivGalleryView(
             contentPadding = contentPadding,
             defaultItem = defaultItem,
             scrollMode = scrollMode,
+            scrollbar = data.scrollbar,
         )
     } else {
         val scrollMode = data.scrollMode.observedValue()
@@ -58,6 +59,7 @@ internal fun DivGalleryView(
             contentPadding = contentPadding,
             defaultItem = defaultItem,
             scrollMode = scrollMode,
+            scrollbar = data.scrollbar,
             isScrollable = data.isScrollable(orientation)
         )
     }

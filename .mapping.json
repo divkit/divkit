@@ -828,6 +828,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryFlingBehavior.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryFlingBehavior.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryGridView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryGridView.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryListView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryListView.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryScrollbar.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/gallery/GalleryScrollbar.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/grid/DivGridView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/grid/DivGridView.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/grid/GridCell.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/grid/GridCell.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/grid/GridTracks.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/grid/GridTracks.kt",

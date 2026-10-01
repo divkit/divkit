@@ -3,6 +3,7 @@ package com.yandex.divkit.demo.screenshot
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.widget.LinearLayout
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
@@ -23,6 +24,7 @@ import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.coil.GifDecoderFactory
 import com.yandex.div2.DivData
+import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import com.yandex.divkit.regression.utils.AssetReader
 import okio.ByteString.Companion.encodeUtf8
@@ -43,7 +45,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         divContext = DivContext(
-            baseContext = this,
+            baseContext = ContextThemeWrapper(this, R.style.Div_Theme_Demo),
             configuration = divConfiguration {
                 fontSourceProvider = ComposeFontSourceProvider()
                 imageLoaderConfiguration = TestImageLoaderConfiguration(

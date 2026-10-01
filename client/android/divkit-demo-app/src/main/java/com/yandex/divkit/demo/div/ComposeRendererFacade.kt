@@ -1,5 +1,6 @@
 package com.yandex.divkit.demo.div
 
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +23,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
+import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import kotlinx.coroutines.launch
 import org.json.JSONException
@@ -38,7 +40,7 @@ class ComposeRendererFacade(
     private val hostVariableController = variableController
 
     private val divContext = ComposeDivContext(
-        baseContext = container.context,
+        baseContext = ContextThemeWrapper(container.context, R.style.Div_Theme_Demo),
         configuration = divConfiguration {
             fontSourceProvider = ComposeFontSourceProvider()
             playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context))

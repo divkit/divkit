@@ -2,6 +2,7 @@ package com.yandex.divkit.demo.regression
 
 import android.app.Activity
 import android.content.Context
+import android.view.ContextThemeWrapper
 import android.view.View
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
@@ -17,6 +18,7 @@ import com.yandex.div.lottie.DivLottieAssetResourceLoader
 import com.yandex.div.lottie.DivLottieRawResResourceLoader
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.divkit.demo.Container
+import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.ChronometerViewFactory
 import com.yandex.divkit.demo.div.ComposePatchDownloader
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
@@ -39,7 +41,7 @@ class RegressionComposeViewCreator(context: Context) {
         val (templatesJson, cardJson) = assetReader.readScenarioJson(scenarioPath)
         val divData = mutableStateOf(parseDivData(templatesJson, cardJson))
         val divContext = DivContext(
-            baseContext = activity,
+            baseContext = ContextThemeWrapper(activity, R.style.Div_Theme_Demo),
             configuration = divConfiguration {
                 actionHandler = RegressionComposeActionHandler(assetReader, divData)
                 patchDownloader = ComposePatchDownloader(Container.httpClient)

@@ -20,6 +20,7 @@ import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 
@@ -34,6 +35,7 @@ internal fun GalleryListView(
     contentPadding: PaddingValues,
     defaultItem: Int,
     scrollMode: DivGallery.ScrollMode,
+    scrollbar: Expression<DivGallery.Scrollbar>,
     isScrollable: Boolean,
 ) {
     if (isScrollable) {
@@ -54,6 +56,7 @@ internal fun GalleryListView(
                     contentPadding = contentPadding,
                     defaultItem = defaultItem,
                     scrollMode = scrollMode,
+                    scrollbar = scrollbar,
                 )
             } else {
                 NonScrollableGalleryView(
@@ -88,6 +91,7 @@ private fun ScrollableGalleryView(
     contentPadding: PaddingValues,
     defaultItem: Int,
     scrollMode: DivGallery.ScrollMode,
+    scrollbar: Expression<DivGallery.Scrollbar>,
 ) {
     val initialDefaultItem = remember { defaultItem }
     val clampedDefaultItem = initialDefaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
@@ -113,7 +117,12 @@ private fun ScrollableGalleryView(
     val viewContext = LocalDivViewContext.current
     OrientedLazyList(
         isHorizontal = isHorizontal,
-        modifier = Modifier,
+        modifier = Modifier.galleryScrollbar(
+            scrollbar = scrollbar,
+            scrollState = listState,
+            isHorizontal = isHorizontal,
+            contentPadding = contentPadding,
+        ),
         listState = listState,
         contentPadding = contentPadding,
         itemSpacing = itemSpacing,
