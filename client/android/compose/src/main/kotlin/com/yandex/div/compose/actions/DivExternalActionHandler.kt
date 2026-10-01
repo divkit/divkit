@@ -1,7 +1,7 @@
 package com.yandex.div.compose.actions
 
 /**
- * Handler for actions that DivKit does not handle internally.
+ * Handles application-specific actions and observes all enabled actions.
  *
  * Implement this interface to handle application-specific actions.
  *
@@ -21,4 +21,9 @@ interface DivExternalActionHandler {
      * Called when a custom action (action with `"type": "custom"`) is triggered.
      */
     fun handleCustomAction(context: DivActionHandlingContext, action: DivCustomActionData) = Unit
+
+    /**
+     * Called for every enabled action before DivKit or the application handles it.
+     */
+    fun onActionTriggered(context: DivActionHandlingContext, action: DivActionData) = Unit
 }

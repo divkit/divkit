@@ -23,10 +23,10 @@ import com.yandex.div2.DivDownloadCallbacks
 import com.yandex.div2.DivSightAction
 import org.json.JSONObject
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @DivViewScope
 internal class DivActionHandler @Inject constructor(
-    private val actionLogger: DivActionLogger,
     private val actionMenuHolder: ActionMenuHolder,
     private val externalActionHandler: DivExternalActionHandler,
     private val reporter: DivReporter,
@@ -44,36 +44,20 @@ internal class DivActionHandler @Inject constructor(
     private val videoActionHandler: VideoActionHandler
 ) {
 
-    fun handleTapActions(
-        context: DivActionHandlingContext,
-        actions: List<DivAction>,
-        source: DivActionSource,
-    ) {
-        val menuActionIndex = actions.indexOfFirst { !it.menuItems.isNullOrEmpty() }
-        actions.forEachIndexed { index, action ->
-            handle(
-                context = context,
-                action = action,
-                source = source,
-                includeLogUrl = menuActionIndex < 0 || index == menuActionIndex,
-            )
-        }
-    }
-
     fun handle(
         context: DivActionHandlingContext,
         actions: List<DivAction>,
         source: DivActionSource,
-        includeLogUrl: Boolean = false,
     ) {
-        actions.forEach { handle(context = context, action = it, source = source, includeLogUrl = includeLogUrl) }
+        actions.forEach {
+            handle(context = context, action = it, source = source)
+        }
     }
 
     fun handle(
         context: DivActionHandlingContext,
         action: DivAction,
         source: DivActionSource,
-        includeLogUrl: Boolean = false,
     ) {
         if (action.scopeId != null) {
             reporter.reportError("div-action.scope_id not supported")
@@ -85,7 +69,7 @@ internal class DivActionHandler @Inject constructor(
                 isEnabled = action.isEnabled,
                 downloadCallbacks = action.downloadCallbacks,
                 logId = action.logId,
-                logUrl = if (includeLogUrl) action.logUrl else null,
+                logUrl = action.logUrl,
                 payload = action.payload,
                 referer = action.referer,
                 source = source,
@@ -131,33 +115,29 @@ internal class DivActionHandler @Inject constructor(
             return
         }
 
-        val logUrl = action.logUrl?.evaluate(expressionResolver)?.let { url ->
-            if (url.scheme == "http" || url.scheme == "https") {
-                url
-            } else {
-                reporter.reportWarning("Unsupported beacon URL: '$url'")
-                null
-            }
-        }
-        val event = DivActionEvent(
+        val actionData = DivActionData(
             id = action.logId?.evaluate(expressionResolver),
             payload = action.payload,
             source = action.source,
             url = if (action.typed == null) action.url?.evaluate(expressionResolver) else null,
-            typed = action.typed,
-            logUrl = logUrl,
+            logUrl = action.logUrl?.evaluate(expressionResolver),
             referer = action.referer?.evaluate(expressionResolver),
         )
-        actionLogger.logAction(context, event)
+        externalActionHandler.onActionTriggered(context, actionData)
 
         menuAction?.let { actionMenuHolder.showIfNeeded(it, expressionResolver) }
 
         action.typed?.let {
-            handle(context = context, action = it, event = event, downloadCallbacks = action.downloadCallbacks)
+            handle(
+                context = context,
+                action = it,
+                actionData = actionData,
+                downloadCallbacks = action.downloadCallbacks
+            )
             return
         }
 
-        val url = event.url
+        val url = actionData.url
         if (url?.isDivAction == true) {
             if (DivDownloadActionParser.matches(url)) {
                 handleDownload(context, url, action.downloadCallbacks)
@@ -169,12 +149,7 @@ internal class DivActionHandler @Inject constructor(
         } else {
             externalActionHandler.handle(
                 context = context,
-                action = DivActionData(
-                    id = event.id,
-                    payload = event.payload,
-                    source = event.source,
-                    url = url
-                )
+                action = actionData
             )
         }
     }
@@ -182,7 +157,7 @@ internal class DivActionHandler @Inject constructor(
     private fun handle(
         context: DivActionHandlingContext,
         action: DivActionTyped,
-        event: DivActionEvent,
+        actionData: DivActionData,
         downloadCallbacks: DivDownloadCallbacks?
     ) {
         when (action) {
@@ -210,9 +185,9 @@ internal class DivActionHandler @Inject constructor(
                 externalActionHandler.handleCustomAction(
                     context = context,
                     action = DivCustomActionData(
-                        id = event.id,
-                        payload = event.payload,
-                        source = event.source
+                        id = actionData.id,
+                        payload = actionData.payload,
+                        source = actionData.source
                     )
                 )
 
@@ -297,7 +272,12 @@ internal class DivActionHandler @Inject constructor(
             reporter.reportError("url param is required for download action")
             return
         }
-        handleDownload(context, Uri.parse(downloadUrl), callbacks?.onSuccessActions, callbacks?.onFailActions)
+        handleDownload(
+            context = context,
+            url = downloadUrl.toUri(),
+            onSuccess = callbacks?.onSuccessActions,
+            onFail = callbacks?.onFailActions
+        )
     }
 
     private fun handleDownload(
