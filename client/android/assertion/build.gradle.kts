@@ -1,5 +1,5 @@
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
-import java.lang.Boolean.parseBoolean
+import com.yandex.div.gradle.disableAsserts
 
 plugins {
     id("divkit.convention.library-kmp")
@@ -18,7 +18,7 @@ buildkonfig {
     packageName = "com.yandex.div.internal"
 
     defaultConfigs {
-        buildConfigField(BOOLEAN, "DISABLE_ASSERTS", "${providers.gradleProperty("disableAssertsInBuild").map(::parseBoolean).get()}")
+        buildConfigField(BOOLEAN, "DISABLE_ASSERTS", disableAsserts().toString())
     }
 }
 

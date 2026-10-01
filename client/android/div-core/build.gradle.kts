@@ -13,6 +13,8 @@ android {
 }
 
 dependencies {
+    api(project(":core"))
+
     implementation(libs.androidx.core)
     implementation(libs.kotlinx.coroutines.core)
 }

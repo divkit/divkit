@@ -1,85 +1,75 @@
-package com.yandex.div.internal;
+package com.yandex.div.internal
 
-import com.yandex.div.logging.BuildKonfig
 import com.yandex.div.logging.Severity
+import com.yandex.div.logging.toCoreSeverity
+import com.yandex.div.logging.toSeverity
+import com.yandex.div.core.log.Log as CoreLog
 
 public object Log {
-
-    @Volatile
-    private var _isEnabled = false
-
-    @Volatile
-    private var _severity = Severity.VERBOSE
 
     @JvmStatic
     public val isEnabled: Boolean
         get() {
-            if (BuildKonfig.DISABLE_LOGS) {
-                return false
-            }
-            return _isEnabled
+            return CoreLog.isEnabled
         }
 
     public var severity: Severity
-        get() = _severity
+        get() = CoreLog.severity.toSeverity()
         set(value) {
-            _severity = value
+            CoreLog.severity = value.toCoreSeverity()
         }
 
     @JvmStatic
     public fun setEnabled(enabled: Boolean?) {
-        _isEnabled = enabled ?: false
+        CoreLog.setEnabled(enabled ?: false)
     }
 
     @JvmStatic
     public fun d(tag: String, message: String) {
         if (isAtLeast(Severity.DEBUG)) {
-            android.util.Log.d(tag, message);
+            CoreLog.d(tag, message)
         }
     }
 
     public fun w(tag: String, message: String) {
         if (isAtLeast(Severity.WARNING)) {
-            android.util.Log.w(tag, message);
+            CoreLog.w(tag, message)
         }
     }
 
     public fun w(tag: String, th: Throwable) {
         if (isAtLeast(Severity.WARNING)) {
-            android.util.Log.w(tag, th);
+            CoreLog.w(tag, "", th)
         }
     }
 
     public fun w(tag: String, message: String, th: Throwable) {
         if (isAtLeast(Severity.WARNING)) {
-            android.util.Log.w(tag, message, th);
+            CoreLog.w(tag, message, th)
         }
     }
 
     public fun i(tag: String, message: String) {
         if (isAtLeast(Severity.INFO)) {
-            android.util.Log.i(tag, message);
+            CoreLog.i(tag, message)
         }
     }
 
     @JvmStatic
     public fun e(tag: String, message: String) {
         if (isAtLeast(Severity.ERROR)) {
-            android.util.Log.e(tag, message);
+            CoreLog.e(tag, message)
         }
     }
 
     @JvmStatic
     public fun e(tag: String, message: String, th: Throwable) {
         if (isAtLeast(Severity.ERROR)) {
-            android.util.Log.e(tag, message, th);
+            CoreLog.e(tag, message, th)
         }
     }
 
     internal fun isAtLeast(minLevel: Severity): Boolean {
-        if (!isEnabled) {
-            return false
-        }
-        return _severity.isAtLeast(minLevel)
+        return isEnabled && severity.isAtLeast(minLevel)
     }
 }

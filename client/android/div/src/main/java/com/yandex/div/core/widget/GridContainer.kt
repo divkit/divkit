@@ -10,7 +10,6 @@ import android.view.Gravity
 import android.view.View
 import androidx.core.view.isEmpty
 import com.yandex.div.R
-import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.GridItemMeasurement
 import com.yandex.div.internal.core.resolveGridTrackSizes

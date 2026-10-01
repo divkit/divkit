@@ -1,6 +1,5 @@
 package com.yandex.div.core.state
 
-import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.annotations.InternalApi
 import kotlin.math.min
 
@@ -14,7 +13,7 @@ import kotlin.math.min
  * **Note:** after integer top_level_state_id goes pairs of ```id->state_id``` of nested DivState's
  * ignoring other Divs.
  */
-public data class DivStatePath @VisibleForTesting @InternalApi constructor(
+public data class DivStatePath @InternalApi constructor(
     public val topLevelStateId: Long,
     private val states: List<Pair<String, String>> = listOf(),
     internal val path: List<String> = listOf(topLevelStateId.toString()),

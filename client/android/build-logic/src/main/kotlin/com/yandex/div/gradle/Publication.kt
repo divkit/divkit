@@ -12,6 +12,7 @@ import org.gradle.kotlin.dsl.withGroovyBuilder
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
 
+// TODO(gulevsky): remove withGroovyBuilder once com.yandex.div.gradle.Version class becomes available.
 fun Project.releaseLibraryVersion(): String {
     val divkitVersion = requireNotNull(rootProject.extra["divkitVersion"])
     return divkitVersion.withGroovyBuilder {
@@ -19,7 +20,7 @@ fun Project.releaseLibraryVersion(): String {
     }
 }
 
-fun Project.configurePublication() {
+fun Project.mavenPublication() {
     group = "com.yandex.div"
 
     val publicationType = providers.gradleProperty("publicationType").orNull

@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+      <ID>ReturnCount:DivStatePath.kt:DivStatePath$public fun isAncestorOf: Boolean</ID>
+      <ID>ReturnCount:DivStatePath.kt:DivStatePath$public fun parentState: DivStatePath</ID>
+      <ID>ReturnCount:DivStatePath.kt:DivStatePath.Companion$private fun List&lt;String&gt;.findState: Int</ID>
+  </CurrentIssues>
+</SmellBaseline>
