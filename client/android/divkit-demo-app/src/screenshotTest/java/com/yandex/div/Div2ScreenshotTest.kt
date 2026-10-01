@@ -2,6 +2,7 @@ package com.yandex.div
 
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
+import com.yandex.divkit.demo.screenshot.viewRoborazziScreenshotCases
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
 import org.junit.Rule
@@ -43,6 +44,7 @@ class Div2ScreenshotTest(case: String, escapedCase: String) {
             val enumerator = AssetEnumerator()
             return enumerator.enumerate(TEST_CASES_PATH)
                 .filter { !ignoredCases.contains(it) }
+                .filter { it.removePrefix("$TEST_CASES_PATH/") !in viewRoborazziScreenshotCases }
                 .let(enumerator::requireSelectedCase)
                 .withEscapedParameter()
         }

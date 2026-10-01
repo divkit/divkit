@@ -39,7 +39,7 @@ class DivScreenshotActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setImageLoader()
-        divContext = divContext(activity = this) {
+        divContext = divContext(activity = this, isRiveEnabled = false) {
             animationsEnabledProvider(DisabledAnimationsProvider)
         }
         super.onCreate(savedInstanceState)

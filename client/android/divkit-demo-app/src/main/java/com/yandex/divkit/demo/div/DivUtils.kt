@@ -57,13 +57,16 @@ import org.json.JSONObject
 
 fun divConfiguration(
     activity: Activity,
-    logDelegate: ScenarioLogDelegate = ScenarioLogDelegate.Stub
+    logDelegate: ScenarioLogDelegate = ScenarioLogDelegate.Stub,
+    isRiveEnabled: Boolean = true,
 ): DivConfiguration.Builder {
     val reporter = MetricaUtils.getReporter(activity)
     val flagPreferenceProvider = Container.flagPreferenceProvider
     return DivConfiguration.Builder(Container.imageLoader)
         .actionHandler(DemoDivActionHandler(Container.uriHandler))
-        .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity))
+        .divCustomContainerViewAdapter(
+            DemoDivCustomViewAdapter(activity, isRiveEnabled)
+        )
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
         .enableAccessibility(true)
@@ -133,11 +136,12 @@ fun createDivShineExtensionHandler(): DivShineExtensionHandler {
 fun divContext(
     activity: Activity,
     forceDisableLogs: Boolean = false,
+    isRiveEnabled: Boolean = true,
     configBuilder: DivConfiguration.Builder.() -> DivConfiguration.Builder = { this },
 ): Div2Context {
     if (forceDisableLogs) DivKit.enableLogging(false)
 
-    val configuration = divConfiguration(activity)
+    val configuration = divConfiguration(activity, isRiveEnabled = isRiveEnabled)
         .configBuilder()
         .build()
 

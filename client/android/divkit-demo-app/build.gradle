@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.screenshotTestPlugin)
+    alias(libs.plugins.roborazzi)
 }
 
 apply from: "${project.projectDir}/../div-common.gradle"
@@ -16,6 +17,10 @@ repositories {
 
 android {
     namespace = 'com.yandex.divkit.demo'
+
+    testOptions.unitTests.all {
+        systemProperty 'robolectric.pixelCopyRenderMode', 'hardware'
+    }
 
     buildFeatures {
         buildConfig = true
@@ -56,10 +61,12 @@ android {
         }
 
         test {
+            kotlin.srcDirs += 'src/sharedTest/java'
             resources.srcDirs += 'src/main/assets' // needed to access assets in unit tests.
         }
 
         androidTest {
+            kotlin.srcDirs += 'src/sharedTest/java'
             kotlin.srcDirs += 'src/screenshotTest/java'
         }
     }
@@ -124,6 +131,25 @@ dependencies {
     androidTestImplementation libs.androidx.test.uiautomator
     androidTestImplementation libs.androidx.viewpager2
     androidTestImplementation libs.hamcrest
+
+    testImplementation libs.androidx.test.core
+    testImplementation libs.androidx.espresso.core
+    testImplementation libs.json
+    testImplementation libs.roborazzi
+    testImplementation libs.roborazzi.junit.rule
+    testImplementation libs.webp.imageio
+}
+
+roborazzi {
+    outputDir = file(
+            'src/test/screenshots/com.yandex.divkit.demo.screenshot.ViewRoborazziScreenshotTest'
+    )
+}
+
+tasks.withType(Test).configureEach {
+    providers.gradleProperty('divkitTestFilter').orNull?.with { filter ->
+        systemProperty 'divkit.test.filter', filter
+    }
 }
 
 screenshotTests {

@@ -17,12 +17,22 @@ private const val TAG = "DivCustomViewAdapter"
 
 class DemoDivCustomViewAdapter(
     baseContext: Context,
+    isRiveEnabled: Boolean,
 ): DivCustomContainerViewAdapter {
 
     private val demoCustomContainerAdapter: DemoCustomContainerAdapter = DemoCustomContainerAdapter()
-    private val divRiveAdapter =
-        RiveCustomViewAdapter.Builder(baseContext, OkHttpDivRiveNetworkDelegate(OkHttpClient.Builder().build())).build()
-    private val adapters = listOf(divRiveAdapter, demoCustomContainerAdapter)
+    private val adapters = buildList {
+        if (isRiveEnabled) {
+            add(
+                RiveCustomViewAdapter.Builder(
+                    baseContext,
+                    OkHttpDivRiveNetworkDelegate(OkHttpClient.Builder().build()),
+                ).build()
+            )
+        }
+        add(demoCustomContainerAdapter)
+    }
+
     override fun preload(
         div: DivCustom,
         callBack: DivPreloader.Callback

@@ -10,7 +10,6 @@ import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.state.DivStateDatabase
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
-import com.yandex.divkit.demo.div.DemoDivCustomViewAdapter
 import com.yandex.divkit.demo.div.DemoDivLottieRawResProvider
 import com.yandex.divkit.demo.div.Div2Activity
 import com.yandex.divkit.demo.div.divConfiguration
@@ -71,7 +70,6 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
                     )
                 )
                 .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider))
-                .divCustomContainerViewAdapter(DemoDivCustomViewAdapter(activity))
                 .divStateChangeListener(transitionScheduler)
                 .divDataChangeListener(transitionScheduler)
                 .divStateCache(divStateStorage.cache)
