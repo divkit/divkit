@@ -131,7 +131,7 @@ class ViewRoborazziScreenshotTest(parsingResult: ParsingResult<String>) {
 
 private fun awaitScreenshotReady() {
     onView(isRoot()).perform(object : ViewAction {
-        override fun getDescription() = "wait for the bound card, local images and layout"
+        override fun getDescription() = "wait for the bound card, local images, inline previews and layout"
 
         override fun getConstraints(): Matcher<View> = isRoot()
 
@@ -141,11 +141,13 @@ private fun awaitScreenshotReady() {
                 // Advance Android's event loop so posted layout and image callbacks can finish.
                 uiController.loopMainThreadForAtLeast(16)
                 val card = view.findViewWithTag<View>(DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
-                if (card != null && card.isLaidOut && !card.isLayoutRequested && Container.imageLoader.isIdle) {
+                if (card != null && card.isLaidOut && !card.isLayoutRequested &&
+                    Container.imageLoader.isIdle && !card.hasPendingImageDecoding()
+                ) {
                     return
                 }
             } while (System.nanoTime() < deadline)
-            error("Screenshot card did not finish binding, image loading and layout")
+            error("Screenshot card did not finish binding, image loading, inline preview decoding and layout")
         }
     })
 }

@@ -50,7 +50,7 @@ internal class InteractiveScreenshotSteps {
                 }
 
                 is Step.VerifySnapshot -> step("Step $index: Verify screenshot step$snapshotIndex") {
-                    waitForLoadings()
+                    waitForLoadings(activity.divView)
                     Espresso.onIdle()
                     Thread.sleep(1000)
 

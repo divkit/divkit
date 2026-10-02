@@ -7,7 +7,9 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.Div2ScreenshotTest
 import com.yandex.div.steps.waitForLoadings
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
+import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.idling.waitForIdlingResource
+import com.yandex.test.idling.waitForView
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.rules.ClosePopupsRule
 import com.yandex.test.rules.NoAnimationsRule
@@ -31,7 +33,7 @@ fun screenshotRule(
     expectedSuite: String = "",
 ): TestRule {
     return screenshotRule(casePath, caseRoot, activityRule, relativePath, expectedSuite) {
-        waitForLoadings()
+        waitForLoadings(waitForView(DivScreenshotActivity.SCREENSHOT_VIEW_TAG))
     }
 }
 
