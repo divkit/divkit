@@ -17,6 +17,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.yandex.div.compose.DivConfiguration
@@ -120,6 +121,11 @@ class RoborazziInteractiveScreenshotTest(
                         )
 
                 is Step.Wait -> Unit
+
+                is Step.Tap ->
+                    composeRule
+                        .onNodeWithTag(step.id)
+                        .performClick()
 
                 is Step.VerifyText ->
                     composeRule

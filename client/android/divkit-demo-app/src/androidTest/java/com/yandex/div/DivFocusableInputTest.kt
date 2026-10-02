@@ -3,7 +3,6 @@ package com.yandex.div
 import androidx.test.rule.ActivityTestRule
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.divFocusableInput
-import com.yandex.div.steps.divInput
 import com.yandex.divkit.demo.DummyActivity
 import org.junit.Rule
 import org.junit.Test

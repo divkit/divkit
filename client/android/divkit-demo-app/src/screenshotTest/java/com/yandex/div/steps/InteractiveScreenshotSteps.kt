@@ -5,16 +5,17 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
+import com.yandex.div.view.ViewActions.tapWithRetries
 import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.screenshot.captureScreenshots
 import com.yandex.test.util.StepsDsl
+import com.yandex.test.util.runOnMainSync
 import io.qameta.allure.kotlin.Allure.step
 import org.hamcrest.Matchers.equalTo
 
@@ -36,9 +37,11 @@ internal class InteractiveScreenshotSteps {
         testData.steps.forEachIndexed { index, step ->
             when (step) {
                 is Step.Action -> step("Step $index: Action ${step.action.writeToJSON()}") {
-                    InstrumentationRegistry.getInstrumentation().runOnMainSync {
-                        handleAction(activity.divView, step.action)
-                    }
+                    runOnMainSync { handleAction(activity.divView, step.action) }
+                }
+
+                is Step.Tap -> step("Tap div '${step.id}'") {
+                    tap(step)
                 }
 
                 is Step.Wait -> step("Step $index: Wait ${step.delay} ms") {
@@ -72,6 +75,8 @@ internal class InteractiveScreenshotSteps {
             KLog.e(TAG) { "Failed to handle action: ${divAction.writeToJSON()}" }
         }
     }
+
+    private fun tap(tap: Step.Tap) = onView(withTagValue(equalTo(tap.id))).perform(tapWithRetries())
 
     private fun verifyText(verification: Step.VerifyText) {
         onView(withTagValue(equalTo(verification.id)))

@@ -13,6 +13,8 @@ class InteractiveScreenshotTestData(
     sealed class Step {
         class Action(val action: DivAction) : Step()
 
+        class Tap(val id: String) : Step()
+
         class Wait(val delay: Long) : Step()
 
         class VerifySnapshot(val name: String) : Step()
@@ -41,6 +43,8 @@ class InteractiveScreenshotTestData(
                     )
                 }
 
+                "tap" -> Step.Tap(parseTargetId(step))
+
                 "wait" -> {
                     val delay = step.getLong("duration_ms")
                     if (delay <= 0) {
@@ -57,16 +61,19 @@ class InteractiveScreenshotTestData(
                     Step.VerifySnapshot(name)
                 }
 
-                "verify_text" -> {
-                    val target = step.getJSONObject("target")
-                    val targetType = target.getString("type")
-                    if (targetType != "div_id") {
-                        throw JSONException("Unsupported verify_text target type: $targetType")
-                    }
-                    Step.VerifyText(target.getString("id"), step.getString("text"))
-                }
+                "verify_text" -> Step.VerifyText(parseTargetId(step), step.getString("text"))
+
                 else -> throw JSONException("Unknown interactive step type: $type")
             }
+        }
+
+        private fun parseTargetId(step: JSONObject): String {
+            val target = step.getJSONObject("target")
+            val targetType = target.getString("type")
+            if (targetType != "div_id") {
+                throw JSONException("Unsupported ${step.getString("type")} target type: $targetType")
+            }
+            return target.getString("id")
         }
     }
 }
