@@ -16,7 +16,7 @@ interface HistogramBridge : com.yandex.div.core.histogram.HistogramBridge {
      * @param name name of the histogram
      * @param sample sample to be recorded, either true or false
      */
-    abstract override fun recordBooleanHistogram(name: String, sample: Boolean)
+    override fun recordBooleanHistogram(name: String, sample: Boolean)
 
     /**
      * Records a sample in an enumerated histogram.
@@ -26,7 +26,7 @@ interface HistogramBridge : com.yandex.div.core.histogram.HistogramBridge {
      * @param sample sample to be recorded, at least 0 and at most |boundary| - 1
      * @param boundary upper bound for legal sample values - all sample values have to be strictly lower than |boundary|
      */
-    abstract override fun recordEnumeratedHistogram(name: String, sample: Int, boundary: Int)
+    override fun recordEnumeratedHistogram(name: String, sample: Int, boundary: Int)
 
     /**
      * Records a sample in a linear histogram.
@@ -38,7 +38,7 @@ interface HistogramBridge : com.yandex.div.core.histogram.HistogramBridge {
      * @param max upper bounds for expected sample values
      * @param bucketCount the number of buckets
      */
-    abstract override fun recordLinearCountHistogram(name: String, sample: Int, min: Int, max: Int, bucketCount: Int)
+    override fun recordLinearCountHistogram(name: String, sample: Int, min: Int, max: Int, bucketCount: Int)
 
     /**
      * Records a sample in a count histogram.
@@ -50,7 +50,7 @@ interface HistogramBridge : com.yandex.div.core.histogram.HistogramBridge {
      * @param max upper bounds for expected sample values
      * @param bucketCount the number of buckets
      */
-    abstract override fun recordCountHistogram(name: String, sample: Int, min: Int, max: Int, bucketCount: Int)
+    override fun recordCountHistogram(name: String, sample: Int, min: Int, max: Int, bucketCount: Int)
 
     /**
      * Records a sample in a histogram of times.
@@ -94,5 +94,5 @@ interface HistogramBridge : com.yandex.div.core.histogram.HistogramBridge {
      * @param name name of the histogram
      * @param sample sample to be recorded. All values of |sample| are valid, including negative values.
      */
-    abstract override fun recordSparseSlowlyHistogram(name: String, sample: Int)
+    override fun recordSparseSlowlyHistogram(name: String, sample: Int)
 }
