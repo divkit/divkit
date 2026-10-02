@@ -47,7 +47,6 @@ private fun ActionMenu(menuHolder: ActionMenuHolder) {
                     localComponent.handleActions(
                         actions = item.actions ?: item.action?.let { listOf(it) } ?: emptyList(),
                         source = DivActionSource.TAP,
-                        includeLogUrl = true,
                     )
                 }
             )

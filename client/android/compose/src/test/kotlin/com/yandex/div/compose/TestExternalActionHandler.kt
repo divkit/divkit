@@ -56,12 +56,16 @@ fun actionData(
     id: String? = null,
     payload: JSONObject? = null,
     source: DivActionSource = DivActionSource.TAP,
-    url: String? = null
+    url: String? = null,
+    logUrl: String? = null,
+    referer: String? = null,
 ): DivActionData {
     return DivActionData(
         id = id,
         payload = payload,
         source = source,
-        url = url?.toUri()
+        url = url?.toUri(),
+        logUrl = logUrl?.toUri(),
+        referer = referer?.toUri(),
     )
 }

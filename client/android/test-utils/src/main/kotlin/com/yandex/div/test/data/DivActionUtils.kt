@@ -239,7 +239,7 @@ fun updateStructureAction(
 }
 
 fun menuItem(
-    action: DivAction,
+    action: DivAction? = null,
     text: String
 ): DivAction.MenuItem {
     return DivAction.MenuItem(

@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.yandex.div.compose.actions.DivActionLogger
 import com.yandex.div.compose.actions.DivExternalActionHandler
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.dagger.Names
@@ -46,9 +45,6 @@ import javax.inject.Named
 class DivConfiguration private constructor(
     @get:Provides
     val actionHandler: DivExternalActionHandler,
-
-    @get:Provides
-    val actionLogger: DivActionLogger,
 
     @get:Provides
     val customViewFactories: Map<String, DivCustomViewFactory>,
@@ -103,7 +99,6 @@ class DivConfiguration private constructor(
         videoPreloader: DivVideoPreloader = defaultDivVideoPreloader,
     ) : this(
         actionHandler = actionHandler,
-        actionLogger = defaultActionLogger,
         customViewFactories = customViewFactories,
         extensionHandlers = extensionHandlers,
         fontSourceProvider = fontSourceProvider,
@@ -120,7 +115,6 @@ class DivConfiguration private constructor(
     /** Configures a [DivConfiguration] using the same defaults as its constructor. */
     class Builder {
         var actionHandler: DivExternalActionHandler = defaultActionHandler
-        var actionLogger: DivActionLogger = defaultActionLogger
         var customViewFactories: Map<String, DivCustomViewFactory> = emptyMap()
         var extensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
         var fontSourceProvider: DivFontSourceProvider = defaultFontSourceProvider
@@ -135,7 +129,6 @@ class DivConfiguration private constructor(
 
         fun build(): DivConfiguration = DivConfiguration(
             actionHandler = actionHandler,
-            actionLogger = actionLogger,
             customViewFactories = customViewFactories,
             extensionHandlers = extensionHandlers,
             fontSourceProvider = fontSourceProvider,
@@ -156,8 +149,6 @@ fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfigurati
     DivConfiguration.Builder().apply(block).build()
 
 private val defaultActionHandler = object : DivExternalActionHandler {}
-
-private val defaultActionLogger = DivActionLogger { _, _ -> }
 
 private val defaultPatchDownloader = DivPatchDownloader {
     throw UnsupportedOperationException("DivPatchDownloader is not configured")

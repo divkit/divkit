@@ -28,7 +28,6 @@ internal class ActionHandlerEnvironment {
 
     fun init(
         externalActionHandler: DivExternalActionHandler = mock(),
-        actionLogger: DivActionLogger = mock(),
         arrayActionsHandler: ArrayActionsHandler = mock(),
         copyToClipboardActionHandler: CopyToClipboardActionHandler = mock(),
         dictSetValueActionHandler: DictSetValueActionHandler = mock(),
@@ -45,7 +44,6 @@ internal class ActionHandlerEnvironment {
     ) {
         actionHandler = DivActionHandler(
             actionMenuHolder = actionMenuHolder,
-            actionLogger = actionLogger,
             externalActionHandler = externalActionHandler,
             reporter = reporter,
             arrayActionsHandler = arrayActionsHandler,
@@ -75,8 +73,7 @@ internal class ActionHandlerEnvironment {
     fun handle(
         action: DivAction,
         source: DivActionSource = DivActionSource.EXTERNAL,
-        includeLogUrl: Boolean = false,
     ) {
-        actionHandler.handle(context = context, action = action, source = source, includeLogUrl = includeLogUrl)
+        actionHandler.handle(context = context, action = action, source = source)
     }
 }
