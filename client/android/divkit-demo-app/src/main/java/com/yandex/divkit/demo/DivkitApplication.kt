@@ -63,7 +63,7 @@ class DivkitApplication : Application(), HasRegressionTesting {
         Assert.setAssertPerformer(VisualAssertionErrorHandler(this))
         DivKit.apply {
             enableLogging(true)
-            enableAssertions(BuildConfig.THROW_ASSERTS)
+            enableAssertions(true)
         }
         val okHttpClient = OkHttpClient()
         DivKit.configure(

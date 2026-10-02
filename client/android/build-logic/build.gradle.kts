@@ -12,6 +12,7 @@ dependencies {
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 
     implementation(libs.agp.gradle)
+    implementation(libs.google.testing.platform.proto)
     implementation(libs.kotlin.gradle)
     implementation(libs.metalava)
     implementation(libs.nexusPublishPlugin)

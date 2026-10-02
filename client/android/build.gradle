@@ -21,6 +21,10 @@ buildscript {
         classpath libs.nexusPublishPlugin
         classpath libs.protobuf
         classpath libs.unmock.plugin
+
+        if (gradle.ext.screenshotComparisonEnabled) {
+            classpath libs.screenshot.test.plugin
+        }
     }
 }
 

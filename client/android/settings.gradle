@@ -6,6 +6,15 @@ pluginManagement {
     }
     includeBuild('build-logic')
     includeBuild('api-generator-plugin')
+}
+
+gradle.ext.screenshotComparisonEnabled = gradle.startParameter.taskNames.any {
+    it.endsWith('compareDebugScreenshots') || it.endsWith('compareReleaseScreenshots')
+}
+gradle.ext.screenshotTestsEnabled = providers.gradleProperty("screenshot-tests").isPresent() ||
+        gradle.ext.screenshotComparisonEnabled
+
+if (gradle.ext.screenshotComparisonEnabled) {
     includeBuild('screenshot-test-plugin')
 }
 

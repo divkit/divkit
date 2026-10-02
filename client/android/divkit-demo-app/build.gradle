@@ -4,8 +4,8 @@ import groovy.json.JsonOutput
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.screenshotTestPlugin)
     alias(libs.plugins.roborazzi)
+    id 'divkit.convention.instrumentation-test-validation'
 }
 
 apply from: "${project.projectDir}/../div-common.gradle"
@@ -31,7 +31,6 @@ android {
         versionCode = divkitVersion.versionCode + divkitVersion.buildNumber
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
         buildConfigField "String", "METRICA_API_KEY", JsonOutput.toJson(providers.gradleProperty("metricaApiKey").getOrElse(""))
-        buildConfigField "boolean", "THROW_ASSERTS", "${!providers.gradleProperty("screenshot-tests").isPresent()}"
         buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(providers.gradleProperty("httpHeaders").getOrElse("{}"))
 
         testInstrumentationRunner "io.qameta.allure.android.runners.AllureAndroidJUnitRunner"
@@ -152,15 +151,25 @@ tasks.withType(Test).configureEach {
     }
 }
 
-screenshotTests {
+androidComponents.finalizeDsl { config ->
     def isInIde = providers.systemProperty("idea.active").map(Boolean::parseBoolean).getOrElse(false)
-    enabled = providers.gradleProperty("screenshot-tests").isPresent() || isInIde
-    enableComparison = !providers.gradleProperty("disable-screenshot-comparison").isPresent()
-    strictComparison = providers.gradleProperty("screenshot-strict-comparison").isPresent()
-    ignoreFailures = providers.gradleProperty("screenshot-ignore-failures").isPresent()
-    selectedReferencePrefix = providers.gradleProperty("screenshot-selected-reference-prefix").getOrElse("")
-    testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
-    referencesDir = "src/screenshotTest/screenshots"
+
+    def filter = gradle.ext.screenshotTestsEnabled || isInIde ? "annotation" : "notAnnotation"
+    def runnerArguments = config.defaultConfig.testInstrumentationRunnerArguments
+    def annotations = runnerArguments[filter]?.split(",")?.toList() ?: []
+    runnerArguments[filter] = (annotations + "com.yandex.test.screenshot.Screenshot").join(",")
+}
+
+if (gradle.ext.screenshotComparisonEnabled) {
+    apply plugin: 'com.yandex.test.screenshot-test-plugin'
+
+    screenshotTests {
+        enableComparison = !providers.gradleProperty("disable-screenshot-comparison").isPresent()
+        strictComparison = providers.gradleProperty("screenshot-strict-comparison").isPresent()
+        ignoreFailures = providers.gradleProperty("screenshot-ignore-failures").isPresent()
+        selectedReferencePrefix = providers.gradleProperty("screenshot-selected-reference-prefix").getOrElse("")
+        referencesDir = "src/screenshotTest/screenshots"
+    }
 }
 
 base {

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivAnimationsEnabledProvider
+import com.yandex.div.core.DivKit
 import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.divContext
@@ -28,6 +29,7 @@ class DivScreenshotActivity : AppCompatActivity() {
 
     private val assetReader = AssetReader(this)
     private lateinit var divContext: Div2Context
+    private var assertionsEnabled = false
 
     private var cardAssetName: String? = null
 
@@ -38,6 +40,8 @@ class DivScreenshotActivity : AppCompatActivity() {
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        assertionsEnabled = DivKit.isAssertionsEnabled()
+        DivKit.enableAssertions(false)
         setImageLoader()
         divContext = divContext(activity = this, isRiveEnabled = false) {
             animationsEnabledProvider(DisabledAnimationsProvider)
@@ -68,6 +72,7 @@ class DivScreenshotActivity : AppCompatActivity() {
     override fun onDestroy() {
         Container.imageLoaderOverride = null
         super.onDestroy()
+        DivKit.enableAssertions(assertionsEnabled)
     }
 
     private fun setImageLoader() {

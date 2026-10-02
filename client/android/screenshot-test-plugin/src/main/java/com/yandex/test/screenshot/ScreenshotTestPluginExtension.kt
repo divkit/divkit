@@ -10,13 +10,10 @@ open class ScreenshotTestPluginExtension @Inject constructor(
     objects: ObjectFactory,
 ) {
 
-    val enabled: Property<Boolean> = objects.property(Boolean::class.java).convention(true)
     var enableComparison: Property<Boolean> = objects.property(Boolean::class.java).convention(true)
     val strictComparison: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
     val ignoreFailures: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
     val selectedReferencePrefix: Property<String> = objects.property(String::class.java).convention("")
-    val testAnnotations: ListProperty<String> = objects.listProperty(String::class.java)
-        .convention(emptyList())
     val hostDir: Property<String> = objects.property(String::class.java)
         .convention("screenshots")
     val referencesDir: Property<String> = objects.property(String::class.java)

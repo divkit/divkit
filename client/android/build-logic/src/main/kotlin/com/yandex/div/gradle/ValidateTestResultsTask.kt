@@ -1,17 +1,11 @@
-package com.yandex.test.screenshot.tasks
+package com.yandex.div.gradle
 
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.builder.core.BuilderConstants
 import com.google.protobuf.TextFormat
 import com.google.testing.platform.proto.api.core.TestResultProto.TestResult
 import com.google.testing.platform.proto.api.core.TestStatusProto.TestStatus
 import com.google.testing.platform.proto.api.core.TestSuiteResultProto.TestSuiteResult
-import com.yandex.test.util.FileOutput
-import com.yandex.test.util.Logger
-import com.yandex.test.util.StreamOutput
-import com.yandex.test.util.android
-import com.yandex.test.util.filterKeysIn
-import com.yandex.test.util.filterKeysNotIn
-import com.yandex.test.util.reportDir
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -36,9 +30,8 @@ abstract class ValidateTestResultsTask : DefaultTask() {
     @get:Internal
     abstract val reportDir: DirectoryProperty
 
-    private val logger: Logger by lazy {
-        val logFile = reportDir.file(LOG_FILENAME).get().asFile.apply { delete() }
-        Logger(TAG, StreamOutput(), FileOutput(logFile))
+    private val logFile by lazy {
+        reportDir.file(LOG_FILENAME).get().asFile.apply { delete() }
     }
 
     init {
@@ -52,7 +45,7 @@ abstract class ValidateTestResultsTask : DefaultTask() {
         validateTestResults(testSuiteResults.flatMap { it.testResultList })
         validateTestSuitResults(testSuiteResults)
 
-        logger.i("Test validation passed.")
+        log("I", "Test validation passed.")
     }
 
     private fun parseTestSuiteResults(): List<TestSuiteResult> {
@@ -74,11 +67,11 @@ abstract class ValidateTestResultsTask : DefaultTask() {
 
         val grouped = testResults.groupBy { it.testStatus }
 
-        val passed = grouped.filterKeysIn(TestStatus.PASSED).flatten()
-        val ignored = grouped.filterKeysIn(TestStatus.IGNORED, TestStatus.SKIPPED).flatten()
+        val passed = grouped.filterKeys { it == TestStatus.PASSED }.values.flatten()
+        val ignored = grouped.filterKeys { it in listOf(TestStatus.IGNORED, TestStatus.SKIPPED) }.values.flatten()
         val other =
-            grouped.filterKeysNotIn(TestStatus.PASSED, TestStatus.IGNORED, TestStatus.SKIPPED)
-                .flatten()
+            grouped.filterKeys { it !in listOf(TestStatus.PASSED, TestStatus.IGNORED, TestStatus.SKIPPED) }
+                .values.flatten()
 
         logTestResults(passed = passed, ignored = ignored, failed = other)
 
@@ -94,16 +87,16 @@ abstract class ValidateTestResultsTask : DefaultTask() {
         ignored: List<TestResult>,
         failed: List<TestResult>
     ) {
-        passed.forEach { logger.i(it.toReportString()) }
-        ignored.forEach { logger.w(it.toReportString()) }
-        failed.forEach { logger.e(it.toReportString()) }
+        passed.forEach { log("I", it.toReportString()) }
+        ignored.forEach { log("W", it.toReportString()) }
+        failed.forEach { log("E", it.toReportString()) }
     }
 
     private fun validateTestSuitResults(testSuiteResults: List<TestSuiteResult>) {
         val issueMessages = testSuiteResults.flatMap { it.issueList }.map { it.message }
 
         if (issueMessages.isNotEmpty()) {
-            issueMessages.forEach { logger.e(it) }
+            issueMessages.forEach { log("E", it) }
 
             throw GradleException("There were issues:\n${issueMessages.joinToString(separator = "\n")}")
         }
@@ -118,6 +111,12 @@ abstract class ValidateTestResultsTask : DefaultTask() {
         ) {
             throw GradleException("Something is wrong with test suits, check $TEST_SUITE_RESULT_FILENAME and logs for more info.")
         }
+    }
+
+    private fun log(level: String, message: String) {
+        val line = "$level/$TAG: $message"
+        println(line)
+        logFile.appendText("$line\n")
     }
 
     companion object {
@@ -135,13 +134,14 @@ abstract class ValidateTestResultsTask : DefaultTask() {
             "validateTestResults",
             ValidateTestResultsTask::class.java
         ) {
-            it.testResultsDir.from(project.androidTestResultsDir)
-            it.reportDir.set(project.reportDir)
+            testResultsDir.from(project.androidTestResultsDir)
+            reportDir.set(project.layout.buildDirectory.dir("reports"))
         }
 
         private val Project.androidTestResultsDir: Directory
             get() {
                 layout.run {
+                    val android = extensions.getByType(ApplicationExtension::class.java)
                     val customDir = android.testOptions.resultsDir?.let {
                         projectDirectory.dir(it)
                     }
