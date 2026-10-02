@@ -13,6 +13,7 @@
 * Fixed grid cells with `match_parent` sizing expanding rows and columns to fit their content in the Compose renderer.
 * Fixed intrinsic sizing and alignment of images and GIFs with `wrap_content` and `aspect` in the Compose renderer.
 * Fixed tint not being applied to drawable-backed images during initial binding.
+* Moved action logging from `DivActionLogger` to `DivExternalActionHandler`, replacing `DivActionEvent` with `DivActionData`.
 * Reduced repeated visibility tracking while binding container and grid children.
 * Sped up Compose composition of text with a `line_height` by caching the font's natural line metrics per DivContext instead of laying out a probe text for every text node.
 
