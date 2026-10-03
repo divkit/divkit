@@ -1,9 +1,12 @@
 package com.yandex.div.test.data
 
 import android.graphics.Color
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
+import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivCircleShape
 import com.yandex.div2.DivDrawable
+import com.yandex.div2.DivFocus
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSize
@@ -16,6 +19,9 @@ fun slider(
     thumbValueVariable: String? = null,
     hasTickMarks: Boolean = false,
     width: DivSize = fixed(constant(200L)),
+    focus: DivFocus? = null,
+    isEnabled: Expression<Boolean> = constant(true),
+    accessibility: DivAccessibility? = null,
 ): Div {
     val drawable =
         DivDrawable.Shape(
@@ -27,7 +33,10 @@ fun slider(
     val tickMark = drawable.takeIf { hasTickMarks }
     return Div.Slider(
         DivSlider(
+            accessibility = accessibility,
             id = id,
+            focus = focus,
+            isEnabled = isEnabled,
             maxValue = constant(maxValue),
             minValue = constant(minValue),
             thumbStyle = drawable,

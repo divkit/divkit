@@ -9,13 +9,12 @@ import com.yandex.div.compose.utils.gradient.observeRadialGradient
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.modifiers.image.imageBackground
 import com.yandex.div2.DivBackground
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivNinePatchBackground
 
 @Composable
-internal fun Modifier.background(data: DivBase): Modifier {
+internal fun Modifier.background(backgrounds: List<DivBackground>?): Modifier {
     var modifier = this
-    data.background.orEmpty().forEach {
+    backgrounds.orEmpty().forEach {
         modifier = modifier.background(it)
     }
     return modifier

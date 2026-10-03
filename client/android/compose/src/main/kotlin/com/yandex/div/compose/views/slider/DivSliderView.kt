@@ -1,17 +1,22 @@
 package com.yandex.div.compose.views.slider
 
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div2.DivSlider
 import kotlinx.coroutines.CoroutineScope
 import kotlin.math.roundToInt
@@ -29,8 +34,10 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
     val isEnabled = data.isEnabled.observedValue()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val coroutineScope = rememberCoroutineScope()
+    val focusRequester = if (data.focus != null) remember { FocusRequester() } else null
 
     val modifier = modifier
+        .applyIfNotNull(focusRequester) { focusRequester(it).focusable(enabled = isEnabled) }
         .sliderPointerInput(
             state = state,
             thumbWidth = styles.maxTickOrThumbWidth,
@@ -39,6 +46,7 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
             isRtl = isRtl,
             coroutineScope = coroutineScope,
             animationsEnabled = animationsEnabled,
+            focusRequester = focusRequester,
         )
         .drawBehind { drawSlider(state, styles, isRtl = isRtl) }
 
@@ -71,14 +79,17 @@ private fun Modifier.sliderPointerInput(
     isRtl: Boolean,
     coroutineScope: CoroutineScope,
     animationsEnabled: Boolean,
+    focusRequester: FocusRequester?,
 ): Modifier {
     if (!isEnabled)
         return this
-    return pointerInput(state, thumbWidth, hasTickMarks, isRtl) {
+    return pointerInput(state, thumbWidth, hasTickMarks, isRtl, focusRequester) {
         awaitEachGesture {
             val down = awaitFirstDown()
             val trackLength = size.width - thumbWidth
             if (trackLength <= 0f) return@awaitEachGesture
+
+            focusRequester?.requestFocus()
 
             val activeThumb = state.closestThumb(
                 position = down.position.x - thumbWidth / 2f,

@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.graphicsLayer
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivActions
@@ -21,23 +23,19 @@ import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
 
 @Composable
-internal fun Modifier.actions(actions: DivActions): Modifier {
-    if (actions.tapActions.isEmpty()
-        && actions.doubleTapActions.isEmpty()
-        && actions.longTapActions.isEmpty()
-    ) {
-        return this
-    }
-
+internal fun Modifier.actions(actions: DivActions, isFocusable: Boolean): Modifier {
+    val focusRequester = if (isFocusable) remember { FocusRequester() } else null
     val localComponent = LocalComponent.current
-    val clickHandler = remember(actions) {
-        ClickHandler(actions, localComponent)
+    val clickHandler = remember(actions, localComponent, focusRequester) {
+        ClickHandler(actions, localComponent, focusRequester)
     }
+    val modifier = applyIfNotNull(focusRequester) { focusRequester(it) }
 
     val animation = actions.animation
     val animationName = if (animationsEnabled) {
@@ -47,23 +45,23 @@ internal fun Modifier.actions(actions: DivActions): Modifier {
     }
     return when (animationName) {
         DivAnimation.Name.FADE ->
-            clickableWithFade(clickHandler = clickHandler, animation = animation)
+            modifier.clickableWithFade(clickHandler = clickHandler, animation = animation)
 
         DivAnimation.Name.NATIVE ->
-            clickable(
+            modifier.clickable(
                 clickHandler = clickHandler,
                 indication = ripple(),
                 interactionSource = remember { MutableInteractionSource() }
             )
 
         DivAnimation.Name.NO_ANIMATION ->
-            clickable(clickHandler)
+            modifier.clickable(clickHandler)
 
         DivAnimation.Name.SCALE,
         DivAnimation.Name.SET,
         DivAnimation.Name.TRANSLATE -> {
             reportError("Animation not supported: $animationName")
-            clickable(clickHandler)
+            modifier.clickable(clickHandler)
         }
     }
 }
@@ -104,11 +102,13 @@ private fun Modifier.clickableWithFade(
 
 private class ClickHandler(
     private val actions: DivActions,
-    private val localComponent: DivLocalComponent
+    private val localComponent: DivLocalComponent,
+    private val focusRequester: FocusRequester?,
 ) {
     val onClick: (() -> Unit) = createHandler(
         actions = actions.tapActions,
-        source = DivActionSource.TAP
+        source = DivActionSource.TAP,
+        requestFocus = actions.tapActions.isNotEmpty() || actions.doubleTapActions == null,
     ) ?: {}
 
     val onDoubleClick: (() -> Unit)? = createHandler(
@@ -121,10 +121,21 @@ private class ClickHandler(
         source = DivActionSource.LONG_TAP
     )
 
-    private fun createHandler(actions: List<DivAction>, source: DivActionSource): (() -> Unit)? {
-        if (actions.isEmpty()) {
+    private fun createHandler(
+        actions: List<DivAction>?,
+        source: DivActionSource,
+        requestFocus: Boolean = true,
+    ): (() -> Unit)? {
+        if (actions == null) {
             return null
         }
-        return { localComponent.handleActions(actions, source) }
+        return {
+            if (requestFocus && focusRequester != null &&
+                this.actions.captureFocusOnAction.evaluate(localComponent.expressionResolver)
+            ) {
+                focusRequester.requestFocus()
+            }
+            localComponent.handleActions(actions, source)
+        }
     }
 }

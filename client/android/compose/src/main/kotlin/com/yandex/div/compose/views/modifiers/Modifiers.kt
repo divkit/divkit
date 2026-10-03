@@ -15,6 +15,8 @@ import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
+import com.yandex.div.compose.views.divVisibility
+import com.yandex.div.internal.util.isConstantlyEmpty
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivVisibility
@@ -32,7 +34,12 @@ internal fun Modifier.apply(
     suppressMatchParentIntrinsics: Boolean = false,
 ): Modifier {
     val divBase = div.value()
+    val focusState = rememberFocusState(divBase)
+    val isFocused = focusState?.value == true
+    val border = divBase.focus?.border?.takeIf { isFocused && !it.isConstantlyEmpty() } ?: divBase.border
+    val background = divBase.focus?.background?.takeIf { isFocused && it.isNotEmpty() } ?: divBase.background
     return this
+        .divVisibility(visibility)
         .applyIf(applyMargins) { padding(divBase.margins) }
         .applyIf(suppressMatchParentIntrinsics) { suppressMatchParentIntrinsics(divBase) }
         .size(
@@ -43,14 +50,15 @@ internal fun Modifier.apply(
             defaultVerticalAlignment = defaultVerticalAlignment,
         )
         .visibilityActions(divBase)
+        .focus(div, focusState, hasActions = actions != null)
         .applyIfNotNull(divBase.transform) { transform(it) }
-        .appearance(divBase, visibility)
+        .appearance(divBase, visibility, border)
         // The actions must be applied AFTER the transformations and the border clipping in order
         // to have correct touch and animation area.
         // The actions must be applied BEFORE the background so that the action animation is applied
         // to the background.
-        .applyIfNotNull(actions) { actions(it) }
-        .background(divBase)
+        .applyIfNotNull(actions) { actions(it, isFocusable = divBase.focus != null) }
+        .background(background)
         .applyIfNotNull(divBase.id) { testTag(it) }
         .accessibility(divBase)
         .tooltipAnchors(divBase.tooltips)

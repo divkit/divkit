@@ -10,6 +10,7 @@ import com.yandex.div2.DivBackground
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivExtension
+import com.yandex.div2.DivFocus
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivText
@@ -28,9 +29,11 @@ fun text(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
     backgrounds: List<DivBackground>? = null,
+    captureFocusOnAction: Expression<Boolean> = constant(true),
     disappearActions: List<DivDisappearAction>? = null,
     doubleTapActions: List<DivAction>? = null,
     extensions: List<DivExtension>? = null,
+    focus: DivFocus? = null,
     id: String? = null,
     images: List<DivText.Image>? = null,
     longTapActions: List<DivAction>? = null,
@@ -50,9 +53,11 @@ fun text(
         accessibility = accessibility,
         action = action,
         backgrounds = backgrounds,
+        captureFocusOnAction = captureFocusOnAction,
         disappearActions = disappearActions,
         doubleTapActions = doubleTapActions,
         extensions = extensions,
+        focus = focus,
         id = id,
         images = images,
         longTapActions = longTapActions,
@@ -75,10 +80,12 @@ fun text(
     action: DivAction? = null,
     actions: List<DivAction>? = null,
     backgrounds: List<DivBackground>? = null,
+    captureFocusOnAction: Expression<Boolean> = constant(true),
     disappearActions: List<DivDisappearAction>? = null,
     doubleTapActions: List<DivAction>? = null,
     ellipsis: DivText.Ellipsis? = null,
     extensions: List<DivExtension>? = null,
+    focus: DivFocus? = null,
     fontSize: Long = 12,
     functions: List<DivFunction>? = null,
     height: DivSize = wrapContent(),
@@ -110,10 +117,12 @@ fun text(
             action = action,
             actions = actions,
             background = backgrounds,
+            captureFocusOnAction = captureFocusOnAction,
             disappearActions = disappearActions,
             doubletapActions = doubleTapActions,
             ellipsis = ellipsis,
             extensions = extensions,
+            focus = focus,
             functions = functions,
             fontSize = constant(fontSize),
             height = height,

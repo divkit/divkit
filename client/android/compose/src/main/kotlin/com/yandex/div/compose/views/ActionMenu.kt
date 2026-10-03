@@ -21,7 +21,9 @@ internal fun WithActionMenu(
 ) {
     val menuHolder = LocalDivViewContext.current.component.actionMenuHolder
     val menuAction = menuHolder.expandedMenuAction
-    if (menuAction != null && actions != null && actions.hasMenuAction(menuAction)) {
+    if (menuAction != null && actions?.hasMenuAction(menuAction) == true
+        && menuAction.isEnabled.observedValue()
+    ) {
         Box {
             content()
             ActionMenu(menuHolder)

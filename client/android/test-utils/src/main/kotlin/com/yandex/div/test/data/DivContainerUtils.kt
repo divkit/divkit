@@ -1,5 +1,6 @@
 package com.yandex.div.test.data
 
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
@@ -7,15 +8,18 @@ import com.yandex.div2.DivBackground
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivExtension
+import com.yandex.div2.DivFocus
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivVariable
+import com.yandex.div2.DivVisibility
 
 fun container(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
     backgrounds: List<DivBackground>? = null,
     extensions: List<DivExtension>? = null,
+    focus: DivFocus? = null,
     functions: List<DivFunction>? = null,
     height: DivSize = wrapContent(),
     id: String? = null,
@@ -23,6 +27,7 @@ fun container(
     margins: DivEdgeInsets? = null,
     paddings: DivEdgeInsets? = null,
     variables: List<DivVariable>? = null,
+    visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
     width: DivSize = matchParent()
 ): Div {
     return Div.Container(
@@ -31,6 +36,7 @@ fun container(
             action = action,
             background = backgrounds,
             extensions = extensions,
+            focus = focus,
             functions = functions,
             height = height,
             id = id,
@@ -38,6 +44,7 @@ fun container(
             margins = margins,
             paddings = paddings,
             variables = variables,
+            visibility = visibility,
             width = width
         )
     )

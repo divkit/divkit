@@ -21,6 +21,7 @@ import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSelect
+import com.yandex.div2.DivSlider
 import com.yandex.div2.DivSwitch
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
@@ -90,7 +91,7 @@ private fun DivAccessibility.hasSemantics(type: Type, role: Role?, isMerge: Bool
 
 /** Controls without nested elements: merging must not clear the control's own semantics. */
 private val DivBase.keepsControlSemanticsOnMerge: Boolean
-    get() = this is DivSwitch
+    get() = this is DivSwitch || this is DivSlider
 
 private val DivBase.defaultRole: Role?
     get() = when (this) {

@@ -9,7 +9,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.internal.util.allIsNullOrEmpty
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.util.isConstantlyEmpty
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBorder
@@ -66,15 +66,6 @@ internal class DivFocusBinder @Inject constructor(private val actionPerformer: D
             border.shadow != null -> DivBorderDrawer.NO_ELEVATION
             else -> resources.getDimension(R.dimen.div_shadow_elevation)
         }
-    }
-
-    private fun DivBorder?.isConstantlyEmpty(): Boolean {
-        this ?: return true
-        if (cornerRadius != null) return false
-        if (cornersRadius != null) return false
-        if (hasShadow != Expression.constant(false)) return false
-        if (shadow != null) return false
-        return stroke == null
     }
 
     fun bindDivFocusActions(
