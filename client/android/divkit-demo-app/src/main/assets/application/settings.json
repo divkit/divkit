@@ -65,35 +65,19 @@
         "corner_radius": 16
       }
     },
-    "setting_switch_state": {
+    "setting_toggle_item": {
       "type": "state",
       "width": {
-        "type": "fixed",
-        "value": 34
+        "type": "match_parent"
       },
       "height": {
-        "type": "fixed",
-        "value": 20
+        "type": "wrap_content"
       },
-      "alignment_vertical": "center",
       "states": [
         {
           "state_id": "active",
           "div": {
-            "type": "setting_switch",
-            "content_alignment_horizontal": "right",
-            "background": [
-              {
-                "type": "solid",
-                "color": "#5A43E3"
-              }
-            ],
-            "items": [
-              {
-                "type": "switch_pointer",
-                "id": "pointer"
-              }
-            ],
+            "type": "settings_item",
             "actions": [
               {
                 "$log_id": "active_click_log_id",
@@ -103,26 +87,35 @@
                 "$log_id": "active_click_log_id",
                 "$url": "active_click_change_state_url"
               }
+            ],
+            "items": [
+              {
+                "type": "settings_item_title",
+                "$text": "title"
+              },
+              {
+                "type": "setting_switch",
+                "content_alignment_horizontal": "right",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#5A43E3"
+                  }
+                ],
+                "items": [
+                  {
+                    "type": "switch_pointer",
+                    "id": "pointer"
+                  }
+                ]
+              }
             ]
           }
         },
         {
           "state_id": "inactive",
           "div": {
-            "type": "setting_switch",
-            "background": [
-              {
-                "type": "solid",
-                "color": "#1D000000"
-              }
-            ],
-            "items": [
-              {
-                "type": "switch_pointer",
-                "id": "pointer"
-              }
-            ],
-            "content_alignment_horizontal": "left",
+            "type": "settings_item",
             "actions": [
               {
                 "$log_id": "inactive_click_log_id",
@@ -131,6 +124,28 @@
               {
                 "$log_id": "inactive_click_log_id",
                 "$url": "inactive_click_change_state_url"
+              }
+            ],
+            "items": [
+              {
+                "type": "settings_item_title",
+                "$text": "title"
+              },
+              {
+                "type": "setting_switch",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#1D000000"
+                  }
+                ],
+                "items": [
+                  {
+                    "type": "switch_pointer",
+                    "id": "pointer"
+                  }
+                ],
+                "content_alignment_horizontal": "left"
               }
             ]
           }
@@ -332,7 +347,7 @@
             "type": "match_parent"
           },
           "height": {
-            "type": "match_parent"
+            "type": "wrap_content"
           },
           "paddings": {
             "top": 12,
@@ -353,141 +368,148 @@
           },
           "items": [
             {
+              "type": "text",
+              "text": "@{app_version}",
+              "font_size": 16,
+              "font_weight": "regular",
+              "line_height": 24,
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "top": 15,
+                "bottom": 7
+              },
+              "text_color": "#88000000"
+            },
+            {
+              "type": "settings_category",
+              "text": "Demo Activity"
+            },
+            {
+              "type": "setting_toggle_item",
+              "id": "demo_activity_rendering_time",
+              "title": "Show rendering time",
+              "active_click_log_id": "demo_activity_rendering_time_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/demo_activity_rendering_time/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=demo_activity_rendering_time&value=0",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/demo_activity_rendering_time/active",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=demo_activity_rendering_time&value=1",
+              "inactive_click_log_id": "demo_activity_rendering_time_enabled"
+            },
+            {
+              "type": "setting_toggle_item",
+              "id": "visual_assertion_handler",
+              "title": "Show assertion dialog",
+              "active_click_log_id": "set_visual_assertion_handler_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/visual_assertion_handler/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=visual_assertion_handler&value=0",
+              "inactive_click_log_id": "set_visual_assertion_handler_enabled",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=visual_assertion_handler&value=1",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/visual_assertion_handler/active"
+            },
+            {
+              "type": "setting_toggle_item",
+              "id": "compose_renderer",
+              "title": "Compose Renderer (Demo and testing)",
+              "active_click_log_id": "set_compose_renderer_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/compose_renderer/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=compose_renderer&value=0",
+              "inactive_click_log_id": "set_compose_renderer_enabled",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=compose_renderer&value=1",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/compose_renderer/active"
+            },
+            {
+              "type": "setting_toggle_item",
+              "id": "disable_animations",
+              "title": "Disable animations (DivKit)",
+              "active_click_log_id": "set_disable_animations_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/disable_animations/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=disable_animations&value=0",
+              "inactive_click_log_id": "set_disable_animations_enabled",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=disable_animations&value=1",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/disable_animations/active"
+            },
+            {
               "type": "settings_category",
               "text": "Div"
             },
             {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Complex Rebind enabled"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "complex_rebind",
-                  "active_click_log_id": "set_complex_rebind_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/complex_rebind/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=complex_rebind&value=0",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/complex_rebind/active",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=complex_rebind&value=1",
-                  "inactive_click_log_id": "set_complex_rebind_enabled"
-                }
-              ]
+              "type": "setting_toggle_item",
+              "id": "complex_rebind",
+              "title": "Complex Rebind enabled",
+              "active_click_log_id": "set_complex_rebind_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/complex_rebind/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=complex_rebind&value=0",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/complex_rebind/active",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=complex_rebind&value=1",
+              "inactive_click_log_id": "set_complex_rebind_enabled"
             },
             {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Permanent Debug Panel enabled"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "permanent_debug_panel",
-                  "active_click_log_id": "set_permanent_debug_panel_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/permanent_debug_panel/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=permanent_debug_panel&value=0",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/permanent_debug_panel/active",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=permanent_debug_panel&value=1",
-                  "inactive_click_log_id": "set_permanent_debug_panel_enabled"
-                }
-              ]
+              "type": "setting_toggle_item",
+              "id": "permanent_debug_panel",
+              "title": "Permanent Debug Panel enabled",
+              "active_click_log_id": "set_permanent_debug_panel_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/permanent_debug_panel/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=permanent_debug_panel&value=0",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/permanent_debug_panel/active",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=permanent_debug_panel&value=1",
+              "inactive_click_log_id": "set_permanent_debug_panel_enabled"
             },
             {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "View Pool enabled"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "div2_view_pool",
-                  "active_click_log_id": "set_div2_view_pool_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool&value=0",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool/active",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool&value=1",
-                  "inactive_click_log_id": "set_div2_view_pool_enabled"
-                }
-              ]
+              "type": "setting_toggle_item",
+              "id": "div2_view_pool",
+              "title": "View Pool enabled",
+              "active_click_log_id": "set_div2_view_pool_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool&value=0",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool/active",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool&value=1",
+              "inactive_click_log_id": "set_div2_view_pool_enabled"
             },
             {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "View Pool profiling enabled"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "div2_view_pool_profiling",
-                  "active_click_log_id": "set_div2_view_pool_profilingl_disabled",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool_profiling&value=0",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool_profiling/inactive",
-                  "inactive_click_log_id": "set_div2_view_pool_profiling",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool_profiling/active",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool_profiling&value=1"
-                }
-              ]
+              "type": "setting_toggle_item",
+              "id": "div2_view_pool_profiling",
+              "title": "View Pool profiling enabled",
+              "active_click_log_id": "set_div2_view_pool_profilingl_disabled",
+              "active_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool_profiling&value=0",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool_profiling/inactive",
+              "inactive_click_log_id": "set_div2_view_pool_profiling",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/div2_view_pool_profiling/active",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=div2_view_pool_profiling&value=1"
             },
             {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Multiple state change enabled"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "multiple_state_change",
-                  "active_click_log_id": "set_multiple_state_change_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/multiple_state_change/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=multiple_state_change&value=0",
-                  "inactive_click_log_id": "set_multiple_state_change",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=multiple_state_change&value=1",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/multiple_state_change/active"
-                }
-              ]
+              "type": "setting_toggle_item",
+              "id": "multiple_state_change",
+              "title": "Multiple state change enabled",
+              "active_click_log_id": "set_multiple_state_change_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/multiple_state_change/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=multiple_state_change&value=0",
+              "inactive_click_log_id": "set_multiple_state_change",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=multiple_state_change&value=1",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/multiple_state_change/active"
             },
             {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Background binding enabled"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "background_binding",
-                  "active_click_log_id": "set_background_binding_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/background_binding/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=background_binding&value=0",
-                  "inactive_click_log_id": "set_background_binding",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=background_binding&value=1",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/background_binding/active"
-                }
-              ]
+              "type": "setting_toggle_item",
+              "id": "background_binding",
+              "title": "Background binding enabled",
+              "active_click_log_id": "set_background_binding_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/background_binding/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=background_binding&value=0",
+              "inactive_click_log_id": "set_background_binding",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=background_binding&value=1",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/background_binding/active"
             },
             {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "RenderEffect enabled"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "render_effect_enabled",
-                  "active_click_log_id": "set_render_effect_enabled_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/render_effect_enabled/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=render_effect_enabled&value=0",
-                  "inactive_click_log_id": "set_render_effect_enabled",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=render_effect_enabled&value=1",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/render_effect_enabled/active"
-                }
-              ]
+              "type": "setting_toggle_item",
+              "id": "render_effect_enabled",
+              "title": "RenderEffect enabled",
+              "active_click_log_id": "set_render_effect_enabled_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/render_effect_enabled/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=render_effect_enabled&value=0",
+              "inactive_click_log_id": "set_render_effect_enabled",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=render_effect_enabled&value=1",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/render_effect_enabled/active"
             },
             {
               "type": "settings_item",
@@ -575,23 +597,15 @@
               ]
             },
             {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Limit image bitmap size enabled"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "limit_image_bitmap_size_enabled",
-                  "active_click_log_id": "set_limit_image_bitmap_size_enabled_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/limit_image_bitmap_size_enabled/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=limit_image_bitmap_size_enabled&value=0",
-                  "inactive_click_log_id": "set_limit_image_bitmap_size_enabled",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=limit_image_bitmap_size_enabled&value=1",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/limit_image_bitmap_size_enabled/active"
-                }
-              ]
+              "type": "setting_toggle_item",
+              "id": "limit_image_bitmap_size_enabled",
+              "title": "Limit image bitmap size enabled",
+              "active_click_log_id": "set_limit_image_bitmap_size_enabled_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/limit_image_bitmap_size_enabled/inactive",
+              "active_click_change_settings_url": "div-action://set_preferences?name=limit_image_bitmap_size_enabled&value=0",
+              "inactive_click_log_id": "set_limit_image_bitmap_size_enabled",
+              "inactive_click_change_settings_url": "div-action://set_preferences?name=limit_image_bitmap_size_enabled&value=1",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/limit_image_bitmap_size_enabled/active"
             },
             {
               "type": "settings_category",
@@ -679,101 +693,6 @@
                   }
                 }
               ]
-            },
-            {
-              "type": "settings_category",
-              "text": "Demo Activity"
-            },
-            {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Show rendering time"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "demo_activity_rendering_time",
-                  "active_click_log_id": "demo_activity_rendering_time_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/demo_activity_rendering_time/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=demo_activity_rendering_time&value=0",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/demo_activity_rendering_time/active",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=demo_activity_rendering_time&value=1",
-                  "inactive_click_log_id": "demo_activity_rendering_time_enabled"
-                }
-              ]
-            },
-            {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Show assertion dialog"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "visual_assertion_handler",
-                  "active_click_log_id": "set_visual_assertion_handler_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/visual_assertion_handler/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=visual_assertion_handler&value=0",
-                  "inactive_click_log_id": "set_visual_assertion_handler_enabled",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=visual_assertion_handler&value=1",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/visual_assertion_handler/active"
-                }
-              ]
-            },
-            {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Compose Renderer (Demo and testing)"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "compose_renderer",
-                  "active_click_log_id": "set_compose_renderer_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/compose_renderer/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=compose_renderer&value=0",
-                  "inactive_click_log_id": "set_compose_renderer_enabled",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=compose_renderer&value=1",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/compose_renderer/active"
-                }
-              ]
-            },
-            {
-              "type": "settings_item",
-              "items": [
-                {
-                  "type": "settings_item_title",
-                  "text": "Disable animations (DivKit)"
-                },
-                {
-                  "type": "setting_switch_state",
-                  "id": "disable_animations",
-                  "active_click_log_id": "set_disable_animations_disabled",
-                  "active_click_change_state_url": "div-action://set_state?state_id=0/disable_animations/inactive",
-                  "active_click_change_settings_url": "div-action://set_preferences?name=disable_animations&value=0",
-                  "inactive_click_log_id": "set_disable_animations_enabled",
-                  "inactive_click_change_settings_url": "div-action://set_preferences?name=disable_animations&value=1",
-                  "inactive_click_change_state_url": "div-action://set_state?state_id=0/disable_animations/active"
-                }
-              ]
-            },
-            {
-              "type": "text",
-              "text": "@{app_version}",
-              "font_size": 16,
-              "font_weight": "regular",
-              "line_height": 24,
-              "width": {
-                "type": "match_parent"
-              },
-              "margins": {
-                "top": 15,
-                "bottom": 7
-              },
-              "text_color": "#88000000"
             }
           ]
         }
