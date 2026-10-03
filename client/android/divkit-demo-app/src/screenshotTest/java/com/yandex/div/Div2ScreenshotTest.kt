@@ -1,8 +1,11 @@
 package com.yandex.div
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.demo.screenshot.viewRoborazziScreenshotCases
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
 import org.junit.Rule
@@ -13,17 +16,16 @@ import org.junit.runners.Parameterized.Parameters
 import java.io.File
 
 @RunWith(Parameterized::class)
-class Div2ScreenshotTest(case: String, escapedCase: String) {
+class Div2ScreenshotTest(casePath: String, escapedCase: String) {
 
+    private val testCase = assetReader.readJson(casePath)
     private val activityRule = ActivityParamsTestRule(
         DivScreenshotActivity::class.java,
-        DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to case,
         DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME to DivScreenshotActivity.IMAGE_LOADER_LOCAL,
     )
 
-    @Rule
-    @JvmField
-    val rule = screenshotRule(case, TEST_CASES_PATH, activityRule, case.relativePath)
+    @get:Rule
+    val rule = screenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule, casePath.relativePath)
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
@@ -32,6 +34,9 @@ class Div2ScreenshotTest(case: String, escapedCase: String) {
     companion object {
 
         const val TEST_CASES_PATH = "snapshot_test_data"
+
+        private val context: Context = ApplicationProvider.getApplicationContext()
+        private val assetReader = AssetReader(context)
 
         private val ignoredCases = listOf(
             "snapshot_test_data/div-text/all_attributes.json",

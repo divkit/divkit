@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivAnimationsEnabledProvider
@@ -15,23 +14,13 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.settings.Preferences
-import com.yandex.divkit.regression.utils.AssetReader
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.json.JSONObject
 
-/**
- * Run:
-adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.DivScreenshotActivity \
--e DivScreenshotActivity.EXTRA_DIV_ASSET_NAME interactive_snapshot_test_data/div-container/base-properties.json \
--e DivScreenshotActivity.EXTRA_SUITE_NAME com.yandex.morda.div.Div2InteractiveScreenshotTest/div-container/base-properties
- */
-class DivScreenshotActivity : AppCompatActivity() {
+class DivScreenshotActivity : DivDataScreenshotActivity() {
 
-    private val assetReader = AssetReader(this)
     private lateinit var divContext: Div2Context
     private var assertionsEnabled = false
-
-    private var cardAssetName: String? = null
 
     private val imageLoaderName: String?
         get() = intent?.extras?.getString(EXTRA_DIV_IMAGE_LOADER_NAME)
@@ -50,15 +39,9 @@ class DivScreenshotActivity : AppCompatActivity() {
 
         divView = Div2View(divContext)
         setContentView(divView)
-        intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {
-            setDivData(it)
-        }
     }
 
-    fun setDivData(card: String) {
-        cardAssetName = card
-
-        val json = getTestCaseJson()
+    override fun setDivData(json: JSONObject) {
         val configuration = ScreenshotTestConfiguration.from(json)
         val divJson = json.optJSONObject("div_data") ?: json
         val cardJson = divJson.getJSONObject("card")
@@ -66,7 +49,7 @@ class DivScreenshotActivity : AppCompatActivity() {
             context = divContext,
             templatesJson = divJson.optJSONObject("templates"),
             parsingErrorLogger = configuration.parsingErrorLogger,
-        ).bindViewByConfig(divView, cardJson) { it.onBound() }
+        ).bindViewByConfig(divView, cardJson) { it.onBound(json) }
     }
 
     override fun onDestroy() {
@@ -87,13 +70,7 @@ class DivScreenshotActivity : AppCompatActivity() {
         )
     }
 
-    fun getTestCaseJson(): JSONObject {
-        return cardAssetName
-            ?.let { assetReader.readJson(it) }
-            ?: throw IllegalArgumentException("Missing div asset name")
-    }
-
-    private fun Div2View.onBound() {
+    private fun Div2View.onBound(testCase: JSONObject) {
         val matchParentWidth = getChildAt(0)?.layoutParams?.width == LayoutParams.MATCH_PARENT
         layoutParams?.width = if (matchParentWidth) {
             LayoutParams.MATCH_PARENT
@@ -111,8 +88,8 @@ class DivScreenshotActivity : AppCompatActivity() {
         tag = SCREENSHOT_VIEW_TAG
         removeAutofocusForOldApis()
         hideCursor()
+        applyConfiguration(testCase)
         requestLayout()
-        applyConfiguration()
     }
 
     private fun ViewGroup.hideCursor() {
@@ -126,12 +103,11 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
     }
 
-    private fun View.applyConfiguration() {
-        ScreenshotTestConfiguration.from(getTestCaseJson()).applyTo(this)
+    private fun View.applyConfiguration(testCase: JSONObject) {
+        ScreenshotTestConfiguration.from(testCase).applyTo(this)
     }
 
     companion object {
-        const val EXTRA_DIV_ASSET_NAME = "DivScreenshotActivity.EXTRA_DIV_ASSET_NAME"
         const val EXTRA_DIV_IMAGE_LOADER_NAME = "DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME"
 
         const val SCREENSHOT_VIEW_TAG = "screenshot_view"

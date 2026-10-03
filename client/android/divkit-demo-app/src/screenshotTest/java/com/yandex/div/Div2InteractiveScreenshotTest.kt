@@ -1,10 +1,15 @@
 package com.yandex.div
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
+import com.yandex.div.rule.SetDataRule
 import com.yandex.div.rule.baseRule
 import com.yandex.div.steps.interactiveScreenshot
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
+import com.yandex.test.util.chain
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,28 +18,32 @@ import org.junit.runners.Parameterized.Parameters
 import java.io.File
 
 @RunWith(Parameterized::class)
-class Div2InteractiveScreenshotTest(private val case: String, escapedCase: String) {
+class Div2InteractiveScreenshotTest(private val casePath: String, escapedCase: String) {
 
+    private val testCase = assetReader.readJson(casePath)
     private val activityRule = ActivityParamsTestRule(
         DivScreenshotActivity::class.java,
-        DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to case,
         DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME to DivScreenshotActivity.IMAGE_LOADER_LOCAL,
     )
 
     @Rule
     @JvmField
-    val rule = baseRule(case, TEST_CASES_PATH, activityRule)
+    val rule = baseRule(casePath, TEST_CASES_PATH, testCase, activityRule)
+        .chain(SetDataRule(testCase, activityRule))
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun test() {
         interactiveScreenshot {
-            runSteps(activityRule.activity, case, artifactsDir(case))
+            runSteps(activityRule.activity, casePath, testCase, artifactsDir(casePath))
         }
     }
 
     companion object {
         private const val TEST_CASES_PATH = "interactive_snapshot_test_data"
+
+        private val context: Context = ApplicationProvider.getApplicationContext()
+        private val assetReader = AssetReader(context)
 
         /**
          * Transforms "interactive_snapshot_test_data/div-text/smoke.json" into

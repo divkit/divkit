@@ -1,9 +1,12 @@
 package com.yandex.div
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.Div2ScreenshotTest.Companion.TEST_CASES_PATH
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.composeScreenshotRule
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
 import org.junit.Rule
@@ -13,21 +16,22 @@ import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 
 @RunWith(Parameterized::class)
-class DivComposeScreenshotTest(case: String, escapedCase: String) {
+class DivComposeScreenshotTest(casePath: String, escapedCase: String) {
 
-    private val activityRule = ActivityParamsTestRule(
-        DivComposeScreenshotActivity::class.java,
-        DivComposeScreenshotActivity.EXTRA_DIV_ASSET_NAME to case
-    )
+    private val testCase = assetReader.readJson(casePath)
+    private val activityRule = ActivityParamsTestRule(DivComposeScreenshotActivity::class.java)
 
     @get:Rule
-    val rule = composeScreenshotRule(case, TEST_CASES_PATH, activityRule, case.relativePath)
+    val rule = composeScreenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule, casePath.relativePath)
 
     @Screenshot(viewTag = DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun test() = Unit
 
     companion object {
+
+        private val context: Context = ApplicationProvider.getApplicationContext()
+        private val assetReader = AssetReader(context)
 
         @JvmStatic
         @Parameters(name = "{1}")

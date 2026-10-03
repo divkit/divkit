@@ -7,6 +7,7 @@ import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.captureScreenshots
 import com.yandex.test.util.StepsDsl
+import org.json.JSONObject
 
 internal fun imageLoaderScreenshot(f: ImageLoaderScreenshotSteps.() -> Unit) = f(ImageLoaderScreenshotSteps())
 
@@ -18,6 +19,7 @@ internal class ImageLoaderScreenshotSteps {
     fun runTest(
         activityRule: ActivityParamsTestRule<DivScreenshotActivity>,
         casePath: String,
+        testCase: JSONObject,
         loaderName: String,
     ) {
         val params = Bundle()
@@ -25,7 +27,7 @@ internal class ImageLoaderScreenshotSteps {
         activityRule.launchActivity(params)
 
         val activity = activityRule.activity
-        InstrumentationRegistry.getInstrumentation().runOnMainSync { activity.setDivData(casePath) }
+        InstrumentationRegistry.getInstrumentation().runOnMainSync { activity.setDivData(testCase) }
 
         waitForLoadings(activity.divView)
         captureScreenshots(activity.divView, "$artifactsRelativePath/$loaderName", casePath)

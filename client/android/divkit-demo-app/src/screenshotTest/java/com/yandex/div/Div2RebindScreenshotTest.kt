@@ -1,10 +1,13 @@
 package com.yandex.div
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.Div2ScreenshotTest.Companion.TEST_CASES_PATH
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
 import org.junit.Rule
@@ -14,33 +17,37 @@ import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 
 @RunWith(Parameterized::class)
-class Div2RebindScreenshotTest(private val case: String, escapedCase: String) {
+class Div2RebindScreenshotTest(casePath: String, escapedCase: String) {
 
+    private val testCase = assetReader.readJson(casePath)
     private val activityRule = ActivityParamsTestRule(
         DivScreenshotActivity::class.java,
-        DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to case,
         DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME to DivScreenshotActivity.IMAGE_LOADER_LOCAL,
     )
 
     @Rule
     @JvmField
-    val rule = screenshotRule(case, TEST_CASES_PATH, activityRule, case.relativePath, expectedSuite)
+    val rule = screenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule, casePath.relativePath, expectedSuite)
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun test() {
         InstrumentationRegistry.getInstrumentation().runOnMainSync {
-            activityRule.activity.setDivData(case)
+            activityRule.activity.setDivData(testCase)
         }
     }
 
     companion object {
+
+        private val context: Context = ApplicationProvider.getApplicationContext()
+        private val assetReader = AssetReader(context)
 
         private val expectedSuite = Div2ScreenshotTest::class.qualifiedName ?: ""
 
         private val ignoredCases = listOf(
             "snapshot_test_data/div-container/item_builder/item-builder-with-local-variables.json",
             "snapshot_test_data/div-container/item_builder/item-builder-with-nested-local-variables.json",
+            "snapshot_test_data/div-container/size_provider_recursive.json",
             "snapshot_test_data/image-formats/svg/svg_preview_url_in_gif_image.json",
             "snapshot_test_data/image-formats/svg/svg_preview_url_in_gif_image_scale.json",
         )

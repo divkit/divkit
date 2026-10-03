@@ -1,9 +1,6 @@
 package com.yandex.div.rule
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.internal.util.asList
-import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.SimpleStatement
 import org.json.JSONArray
 import org.json.JSONObject
@@ -13,16 +10,13 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-class CheckCaseRule(private val casePath: String) : TestRule {
-    private val context: Context = ApplicationProvider.getApplicationContext()
+class CheckCaseRule(private val case: JSONObject) : TestRule {
 
     override fun apply(base: Statement, description: Description): Statement = SimpleStatement {
-        val json = AssetReader(context).readJson(casePath)
+        case.checkField<String>(DESCRIPTION_FIELD)
+        case.checkField<JSONArray>(PLATFORMS_FIELD)
 
-        json.checkField<String>(DESCRIPTION_FIELD)
-        json.checkField<JSONArray>(PLATFORMS_FIELD)
-
-        checkPlatformSupported(json)
+        checkPlatformSupported(case)
 
         base.evaluate()
     }

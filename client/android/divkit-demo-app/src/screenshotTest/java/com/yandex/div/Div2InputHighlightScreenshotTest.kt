@@ -1,9 +1,12 @@
 package com.yandex.div
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
 import com.yandex.div.steps.divInput
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
+import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
 import org.junit.Rule
@@ -12,15 +15,13 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class Div2InputHighlightScreenshotTest(case: String, escapedCase: String) {
+class Div2InputHighlightScreenshotTest(casePath: String, escapedCase: String) {
 
-    private val activityRule = ActivityParamsTestRule(
-        DivScreenshotActivity::class.java,
-        DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to case
-    )
+    private val testCase = assetReader.readJson(casePath)
+    private val activityRule = ActivityParamsTestRule(DivScreenshotActivity::class.java)
 
     @get:Rule
-    val rule = screenshotRule(case, TEST_CASES_PATH, activityRule)
+    val rule = screenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule)
 
     @Test
     @Screenshot(
@@ -44,6 +45,9 @@ class Div2InputHighlightScreenshotTest(case: String, escapedCase: String) {
     companion object {
 
         private const val TEST_CASES_PATH = "ui_test_data/input"
+
+        private val context: Context = ApplicationProvider.getApplicationContext()
+        private val assetReader = AssetReader(context)
 
         @JvmStatic
         @Parameterized.Parameters(name = "{1}")

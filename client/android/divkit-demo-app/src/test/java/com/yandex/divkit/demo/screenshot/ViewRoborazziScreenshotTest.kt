@@ -21,6 +21,7 @@ import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import com.yandex.divkit.demo.Container
 import org.hamcrest.Matcher
+import org.json.JSONObject
 import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
@@ -40,9 +41,7 @@ import java.util.concurrent.TimeUnit
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @OptIn(ExperimentalRoborazziApi::class)
-class ViewRoborazziScreenshotTest(parsingResult: ParsingResult<String>) {
-    private val case = parsingResult.getOrThrow()
-    private val assetPath = "snapshot_test_data/$case"
+class ViewRoborazziScreenshotTest(private val case: String, private val testCase: JSONObject) {
 
     @get:Rule
     val screenshotRule = RoborazziRule(
@@ -63,6 +62,7 @@ class ViewRoborazziScreenshotTest(parsingResult: ParsingResult<String>) {
         assumeTrue(provideRoborazziContext().options.taskType.isEnabled())
         // Act: use the same Activity, fonts, extensions and local images as instrumented View tests.
         ActivityScenario.launch<DivScreenshotActivity>(createIntent()).use { scenario ->
+            scenario.onActivity { activity -> activity.setDivData(testCase) }
             awaitScreenshotReady()
 
             // Assert: Roborazzi compares the rendered card with its own JVM reference.
@@ -75,12 +75,13 @@ class ViewRoborazziScreenshotTest(parsingResult: ParsingResult<String>) {
         // Arrange: bind the card once, as in the instrumented rebind suite.
         assumeTrue(provideRoborazziContext().options.taskType.isEnabled())
         ActivityScenario.launch<DivScreenshotActivity>(createIntent()).use { scenario ->
+            scenario.onActivity { activity -> activity.setDivData(testCase) }
             awaitScreenshotReady()
 
             // Act: bind the same JSON to the existing Div2View.
             scenario.onActivity { activity ->
                 activity.divView.tag = null
-                activity.setDivData(assetPath)
+                activity.setDivData(testCase)
             }
             awaitScreenshotReady()
 
@@ -91,7 +92,6 @@ class ViewRoborazziScreenshotTest(parsingResult: ParsingResult<String>) {
 
     private fun createIntent(): Intent {
         return Intent(getApplicationContext(), DivScreenshotActivity::class.java)
-            .putExtra(DivScreenshotActivity.EXTRA_DIV_ASSET_NAME, assetPath)
             .putExtra(DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME, DivScreenshotActivity.IMAGE_LOADER_LOCAL)
     }
 
@@ -107,16 +107,16 @@ class ViewRoborazziScreenshotTest(parsingResult: ParsingResult<String>) {
     }
 
     companion object {
-        private val cases = ParsingUtils.parseFiles("snapshot_test_data") { file, _ ->
+        private val cases = ParsingUtils.parseFiles("snapshot_test_data") { file, json ->
             val name = file.relativeTo(File("../../../test_data/snapshot_test_data")).invariantSeparatorsPath
             if (name !in viewRoborazziScreenshotCases) {
                 return@parseFiles emptyList()
             }
-            listOf(ParsingResult.Success(name))
-        }.also { cases ->
+            listOf(ParsingResult.Success(arrayOf(name, json)))
+        }.map { it.getOrThrow() }.also { cases ->
             require(cases.isNotEmpty()) { "No View Roborazzi cases selected" }
             if (System.getProperty("divkit.test.filter").isNullOrBlank()) {
-                val discoveredCases = cases.map { it.getOrThrow() }.toSet()
+                val discoveredCases = cases.map { it[0] }.toSet()
                 require(discoveredCases == viewRoborazziScreenshotCases) {
                     "Missing View Roborazzi cases: ${viewRoborazziScreenshotCases - discoveredCases}"
                 }

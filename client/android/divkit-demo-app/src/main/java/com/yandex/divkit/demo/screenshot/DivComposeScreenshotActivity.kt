@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.widget.LinearLayout
-import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.ComposeView
 import coil3.ComponentRegistry
 import coil3.EventListener
@@ -35,7 +34,7 @@ import org.json.JSONObject
 adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity \
 -e DivComposeScreenshotActivity.EXTRA_DIV_ASSET_NAME snapshot_test_data/div-text/all_attributes.json
  */
-class DivComposeScreenshotActivity : ComponentActivity() {
+class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
 
     private lateinit var divContext: DivContext
 
@@ -60,7 +59,7 @@ class DivComposeScreenshotActivity : ComponentActivity() {
         }
     }
 
-    fun setDivData(json: JSONObject) {
+    override fun setDivData(json: JSONObject) {
         val configuration = ScreenshotTestConfiguration.from(json)
         val templatesJson = json.optJSONObject("templates")
         val environment = DivParsingEnvironment(configuration.parsingErrorLogger).apply {

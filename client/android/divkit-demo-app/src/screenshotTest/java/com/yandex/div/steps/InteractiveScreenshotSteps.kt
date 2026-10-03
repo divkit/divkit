@@ -18,6 +18,7 @@ import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.runOnMainSync
 import io.qameta.allure.kotlin.Allure.step
 import org.hamcrest.Matchers.equalTo
+import org.json.JSONObject
 
 private const val TAG = "InteractiveTestStepsPerformer"
 
@@ -30,9 +31,10 @@ internal class InteractiveScreenshotSteps {
     fun runSteps(
         activity: DivScreenshotActivity,
         casePath: String,
+        testCase: JSONObject,
         artifactsRelativePath: String
     ) = step("Run interactive screenshot steps") {
-        val testData = InteractiveScreenshotTestData.parse(activity.getTestCaseJson())
+        val testData = InteractiveScreenshotTestData.parse(testCase)
         var snapshotIndex = 0
         testData.steps.forEachIndexed { index, step ->
             when (step) {
