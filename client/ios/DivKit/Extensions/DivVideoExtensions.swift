@@ -35,6 +35,11 @@ extension DivVideo: DivBlockModeling {
     let repeatable = resolveRepeatable(resolver)
     let muted = resolveMuted(resolver)
     let autostart = resolveAutostart(resolver)
+    context.blockStateStorage.registerVideo(
+      path: context.path,
+      pagerPath: context.videoPagerPath,
+      initialState: .init(state: autostart == true ? .playing : .paused)
+    )
     let elapsedTime: Binding<Int>? = elapsedTimeVariable.flatMap {
       context.makeBinding(variableName: $0, defaultValue: 0)
     }

@@ -10,6 +10,7 @@ public final class DivBlockStateStorage {
 
   private var _states: BlocksState
   private var _pendingStates: BlocksState = [:]
+  private var videoPagerPaths: [UIElementPath: UIElementPath] = [:]
   private var _isInputFocused = false
 
   private var _focusedElement: UIElementPath? {
@@ -59,19 +60,12 @@ public final class DivBlockStateStorage {
   }
 
   public func setState(path: UIElementPath, state: ElementState) {
-    var shouldUpdatePipe = true
-
-    lock.withLock {
-      if let existingState = _states.updateValue(state, forKey: path),
-         !state.isDifferent(from: existingState) {
-        shouldUpdatePipe = false
-      }
+    let updates = lock.withLock {
+      updateState(path: path, state: state)
     }
 
-    if shouldUpdatePipe {
-      stateUpdatesPipe.send(
-        ChangeEvent(path: path, state: state)
-      )
+    for update in updates {
+      stateUpdatesPipe.send(update)
     }
   }
 
@@ -104,6 +98,7 @@ public final class DivBlockStateStorage {
     lock.withLock {
       _states = [:]
       _pendingStates = [:]
+      videoPagerPaths = [:]
       _focusedElement = nil
     }
   }
@@ -112,9 +107,27 @@ public final class DivBlockStateStorage {
     lock.withLock {
       _states = _states.filter { $0.key.cardId != cardId }
       _pendingStates = _pendingStates.filter { $0.key.cardId != cardId }
+      videoPagerPaths = videoPagerPaths.filter { $0.key.cardId != cardId }
       if _focusedElement?.cardId == cardId {
         _focusedElement = nil
       }
+    }
+  }
+
+  func registerVideo(
+    path: UIElementPath,
+    pagerPath: UIElementPath?,
+    initialState: VideoBlockViewState
+  ) {
+    let updates: [ChangeEvent] = lock.withLock {
+      videoPagerPaths[path] = pagerPath
+      guard pagerPath != nil, initialState.state == .playing, _states[path] == nil else {
+        return []
+      }
+      return updateState(path: path, state: initialState)
+    }
+    for update in updates {
+      stateUpdatesPipe.send(update)
     }
   }
 
@@ -142,30 +155,40 @@ public final class DivBlockStateStorage {
       _isInputFocused = true
     }
   }
-}
 
-extension DivBlockStateStorage {
-  private func pausePlayingVideos(underPath path: UIElementPath) {
-    let playingVideoPaths = states.compactMap { videoPath, videoState -> UIElementPath? in
-      guard let videoBlockState = videoState as? VideoBlockViewState,
-            videoBlockState.state == .playing,
-            videoPath.starts(with: path) else {
-        return nil
+  private func updateState(path: UIElementPath, state: ElementState) -> [ChangeEvent] {
+    lock.precondition(.owner)
+    var updates: [ChangeEvent] = []
+    if let videoState = state as? VideoBlockViewState,
+       videoState.state == .playing,
+       let pagerPath = videoPagerPaths[path] {
+      let otherPlayingVideos = _states.compactMap { videoPath, storedState -> UIElementPath? in
+        guard videoPath != path,
+              videoPagerPaths[videoPath] == pagerPath,
+              let storedVideoState = storedState as? VideoBlockViewState,
+              storedVideoState.state == .playing else {
+          return nil
+        }
+        return videoPath
       }
-      return videoPath
+      for videoPath in otherPlayingVideos {
+        let paused = VideoBlockViewState(state: .paused)
+        _states[videoPath] = paused
+        updates.append(ChangeEvent(path: videoPath, state: paused))
+      }
     }
-    for videoPath in playingVideoPaths {
-      setState(path: videoPath, state: VideoBlockViewState(state: .paused))
+    let existingState = _states.updateValue(state, forKey: path)
+    let shouldNotify = existingState.map { state.isDifferent(from: $0) } ?? true
+    if shouldNotify {
+      updates.append(ChangeEvent(path: path, state: state))
     }
+    return updates
   }
 }
 
 extension DivBlockStateStorage: ElementStateObserver {
   public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     setState(path: path, state: state)
-    if let pagerState = state as? PagerViewState, pagerState.isScrolling {
-      pausePlayingVideos(underPath: path)
-    }
   }
 
   public func focusedElementChanged(

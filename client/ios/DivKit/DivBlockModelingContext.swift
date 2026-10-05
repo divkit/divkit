@@ -26,6 +26,7 @@ public struct DivBlockModelingContext {
   private(set) var cardLogId: String?
   private(set) var parentDivStatePath: DivStatePath?
   private(set) var parentVisibility: DivVisibility = .visible
+  private(set) var videoPagerPath: UIElementPath?
   let stateManager: DivStateManager
   let visibilityCounter: DivVisibilityCounter
   let lastVisibleBoundsCache: DivLastVisibleBoundsCache
@@ -301,11 +302,18 @@ public struct DivBlockModelingContext {
     return context
   }
 
+  func withVideoPager(path: UIElementPath) -> Self {
+    var context = self
+    context.videoPagerPath = path
+    return context
+  }
+
   func cloneForTooltip(tooltipId: String) -> Self {
     var context = self
     let viewId = DivViewId(cardId: cardId, additionalId: tooltipId)
     context.viewId = DivViewId(cardId: cardId, additionalId: tooltipId)
     context.path = makePath(viewId: viewId)
+    context.videoPagerPath = nil
     return context
   }
 }

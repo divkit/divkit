@@ -48,7 +48,10 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   var state: VideoBlockViewState = .init(state: .playing) {
     didSet {
-      guard oldValue != state else { return }
+      guard oldValue != state else {
+        return
+      }
+      playbackGeneration.withLock { $0 = UUID() }
       switch state.state {
       case .playing:
         player?.play()
@@ -68,6 +71,7 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
   private var playerSignal: Disposable?
   private var previousTime: Int = 0
   private var pendingSeek: PendingSeek?
+  private let playbackGeneration = AllocatedUnfairLock(initialState: UUID())
 
   private lazy var player: Player? = {
     let player = playerFactory?.makePlayer(
@@ -77,8 +81,18 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
     playerSignal = player?.signal.addObserver { [weak self] event in
       guard let self else { return }
+      let generation = self.playbackGeneration.withLock { $0 }
 
       let action = {
+        switch event {
+        case .play, .pause:
+          // A newer playback command or video source supersedes queued player events.
+          guard self.playbackGeneration.withLock({ $0 == generation }) else {
+            return
+          }
+        default:
+          break
+        }
         switch event {
         case let .currentTimeUpdate(time):
           if let pendingSeek = self.pendingSeek {
@@ -178,6 +192,9 @@ private final class VideoBlockView: BlockView, VisibleBoundsTrackingContainer {
 
   func configure(with model: VideoBlockViewModel) {
     let oldValue = self.model
+    if model.path != oldValue.path || !model.hasEqualVideoData(to: oldValue) {
+      playbackGeneration.withLock { $0 = UUID() }
+    }
     self.model = model
 
     if model.scale != oldValue.scale {

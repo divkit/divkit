@@ -16,6 +16,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
+    let context = context.withVideoPager(path: context.path)
     let expressionResolver = context.expressionResolver
     let pagerPath = id.map {
       PagerPath(

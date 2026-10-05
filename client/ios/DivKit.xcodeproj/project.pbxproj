@@ -189,6 +189,7 @@
 		8CB960E628883B8E00D16E47 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E528883B8E00D16E47 /* Platform.swift */; };
 		8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */; };
 		8CB9911B2B7EB74500577193 /* DivViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB9911A2B7EB74500577193 /* DivViewTests.swift */; };
+		CAD5168A0000000000000001 /* VideoPagerPlaybackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD5168A0000000000000002 /* VideoPagerPlaybackTests.swift */; };
 		8CBE33002BD699CC00CFFDF5 /* DivTriggersStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBE32FD2BD699CC00CFFDF5 /* DivTriggersStorageTests.swift */; };
 		8CBE33012BD699CC00CFFDF5 /* DivVariablesStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBE32FE2BD699CC00CFFDF5 /* DivVariablesStorageTests.swift */; };
 		8CBE33022BD699CC00CFFDF5 /* DivVariableStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CBE32FF2BD699CC00CFFDF5 /* DivVariableStorageTests.swift */; };
@@ -532,6 +533,7 @@
 		8CB960E528883B8E00D16E47 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionSignaturesTests.swift; sourceTree = "<group>"; };
 		8CB9911A2B7EB74500577193 /* DivViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivViewTests.swift; sourceTree = "<group>"; };
+		CAD5168A0000000000000002 /* VideoPagerPlaybackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPagerPlaybackTests.swift; sourceTree = "<group>"; };
 		8CBE32FD2BD699CC00CFFDF5 /* DivTriggersStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTriggersStorageTests.swift; sourceTree = "<group>"; };
 		8CBE32FE2BD699CC00CFFDF5 /* DivVariablesStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivVariablesStorageTests.swift; sourceTree = "<group>"; };
 		8CBE32FF2BD699CC00CFFDF5 /* DivVariableStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivVariableStorageTests.swift; sourceTree = "<group>"; };
@@ -1031,6 +1033,7 @@
 				8C1DEBCD2A2F8277009237F1 /* DivStateManagementTests.swift */,
 				8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */,
 				8CB9911A2B7EB74500577193 /* DivViewTests.swift */,
+				CAD5168A0000000000000002 /* VideoPagerPlaybackTests.swift */,
 				9D08688E2DCE3C0400C5B2CC /* IntegrationTests.swift */,
 				8CB960E528883B8E00D16E47 /* Platform.swift */,
 				5219194C297B3974007DD5F4 /* RunLoopCardUpdateAggregatorTests.swift */,
@@ -1968,6 +1971,7 @@
 				8C23F42329DDB3810069F3F7 /* EntityWithOptionalComplexProperty.swift in Sources */,
 				8C7B1BF42865C01C0036EF4C /* DivGridExtensionsTests.swift in Sources */,
 				8CB9911B2B7EB74500577193 /* DivViewTests.swift in Sources */,
+				CAD5168A0000000000000001 /* VideoPagerPlaybackTests.swift in Sources */,
 				8C23F43D29DDB3810069F3F7 /* ComplexPropertyTests.swift in Sources */,
 				8C37AE3D2BEA9E220027E11C /* ExpressionResolverAnyTests.swift in Sources */,
 				AB0000040000000000000001 /* AppLogger.swift in Sources */,

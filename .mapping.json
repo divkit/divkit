@@ -8445,6 +8445,7 @@
   "client/ios/DivKitTests/Variables/DivVariableStorageWithOuterStorageTests.swift":"divkit/public/client/ios/DivKitTests/Variables/DivVariableStorageWithOuterStorageTests.swift",
   "client/ios/DivKitTests/Variables/DivVariableTrackerTests.swift":"divkit/public/client/ios/DivKitTests/Variables/DivVariableTrackerTests.swift",
   "client/ios/DivKitTests/Variables/DivVariablesStorageTests.swift":"divkit/public/client/ios/DivKitTests/Variables/DivVariablesStorageTests.swift",
+  "client/ios/DivKitTests/VideoPagerPlaybackTests.swift":"divkit/public/client/ios/DivKitTests/VideoPagerPlaybackTests.swift",
   "client/ios/DivKitTests/ViewSizeTests.swift":"divkit/public/client/ios/DivKitTests/ViewSizeTests.swift",
   "client/ios/DivKitTestsSupport/Assert.swift":"divkit/public/client/ios/DivKitTestsSupport/Assert.swift",
   "client/ios/DivKitTestsSupport/BlockModelingUtils.swift":"divkit/public/client/ios/DivKitTestsSupport/BlockModelingUtils.swift",
