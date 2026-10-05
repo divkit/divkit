@@ -142,6 +142,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     layoutReporter?.willLayoutSubviews()
     multiLineInput.frame = bounds
     multiLineInput.textContainerInset = paddings
+    multiLineInput.layoutIfNeeded()
     updateScrollOnMultilineChange()
     updateMultiLineOffset()
 
