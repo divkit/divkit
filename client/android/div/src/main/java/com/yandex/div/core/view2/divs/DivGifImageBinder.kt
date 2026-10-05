@@ -336,7 +336,9 @@ internal class DivGifImageBinder @Inject constructor(
 
         private fun DivGifImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
             divView.runMainThreadAction {
-                setPlaceholder(drawable)
+                if (!isImageLoaded && !isImagePreview) {
+                    setPlaceholder(drawable)
+                }
             }
         }
 
@@ -362,9 +364,7 @@ internal class DivGifImageBinder @Inject constructor(
 
         private fun DivGifImageView.setImage(divView: Div2View, drawable: Drawable?) {
             divView.runMainThreadAction {
-                if (!isImageLoaded && !isImagePreview) {
-                    setImage(drawable)
-                }
+                setImage(drawable)
             }
         }
     }

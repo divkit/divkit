@@ -1,9 +1,13 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.images.BitmapSource
+import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.DivPlaceholderLoader
@@ -14,6 +18,8 @@ import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivGifImage
+import org.junit.Assert.assertSame
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -107,9 +113,30 @@ class DivGifImageBinderTest : DivBinderTest() {
         verify(drawable).stop()
     }
 
-    private fun createTestDiv(): DivBlock.GifImage {
+    @Test
+    fun `animated image replaces preview loaded from preview url`() {
+        val previewCallback = argumentCaptor<DivImageDownloadCallback>()
+        val gifCallback = argumentCaptor<DivImageDownloadCallback>()
+        whenever(imageLoader.loadImage(any(), previewCallback.capture())).thenReturn(mock())
+        whenever(imageLoader.loadAnimatedImage(any(), gifCallback.capture())).thenReturn(mock())
+        val view = DivGifImageView(context)
+        val gifDrawable = ColorDrawable()
+
+        binder.bindView(view, createTestDiv(previewUrl = "https://foo.bar/preview.png"), divView)
+        val preview = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        previewCallback.firstValue.onSuccess(DivCachedImage.Bitmap(preview, BitmapSource.NETWORK))
+        gifCallback.firstValue.onSuccess(DivCachedImage.Drawable(gifDrawable, BitmapSource.NETWORK))
+
+        assertSame(gifDrawable, view.drawable)
+        assertTrue(view.isImageLoaded)
+    }
+
+    private fun createTestDiv(previewUrl: String? = null): DivBlock.GifImage {
         return Div.GifImage(
-            DivGifImage(gifUrl = Uri.parse("https://foo.bar/animated.webp").asExpression()),
+            DivGifImage(
+                gifUrl = Uri.parse("https://foo.bar/animated.webp").asExpression(),
+                previewUrl = previewUrl?.let { Uri.parse(it).asExpression() },
+            ),
         ).toBlock(ExpressionResolver.EMPTY, DivStatePath.fromState(0)) as DivBlock.GifImage
     }
 }
