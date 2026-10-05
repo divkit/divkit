@@ -1743,7 +1743,8 @@
         "Stop rewinds the marker to the left edge and leaves it stationary. Repeated Stop keeps it stopped.",
         "Start after Stop plays the animation again from the left edge."
       ],
-      "file": "animations/lottie/extension_action_start.json"
+      "file": "animations/lottie/extension_action_start.json",
+      "case_id": 532
     },
     {
       "title": "Lottie params",
