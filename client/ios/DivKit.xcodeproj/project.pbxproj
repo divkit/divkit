@@ -236,20 +236,20 @@
 		D97082000000000300000001 /* DivLayoutProviderHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97082000000000200000001 /* DivLayoutProviderHandlerTests.swift */; };
 		D97082000000000400000001 /* DivBlockProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97082000000000500000001 /* DivBlockProviderTests.swift */; };
 		D97637000000000000000001 /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284CF288ACCE400BEA1FA /* Diff.swift */; };
+		D97640000000000000000001 /* ProcessInfo+TestArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97640000000000000000002 /* ProcessInfo+TestArguments.swift */; };
 		D97638000000000000000001 /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = D97638000000000000000002 /* DivKitMarkdownExtension */; };
-		D9763000000000000000000C /* automated in Resources */ = {isa = PBXBuildFile; fileRef = D97630000000000000000016 /* automated */; };
+		D9763000000000000000000C /* interactive_snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */; };
 		E91B558D2C89D78400DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558C2C89D78400DDFEBD /* DivKitMarkdownExtension */; };
 		E91B558F2C89D81600DDFEBD /* DivKitMarkdownExtension in Frameworks */ = {isa = PBXBuildFile; productRef = E91B558E2C89D81600DDFEBD /* DivKitMarkdownExtension */; };
 		E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */; };
 		E945FC46293E1CA80066C3EA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC45293E1CA80066C3EA /* Utils.swift */; };
-		E94B516328D0AC0300AFACEA /* interactive_snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */; };
 		E99F91822DF04A52003A8AF3 /* DivKitSVG in Frameworks */ = {isa = PBXBuildFile; productRef = E99F91812DF04A52003A8AF3 /* DivKitSVG */; };
 		E9E484C129AF434D00C803A8 /* RegressionFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E484C029AF434D00C803A8 /* RegressionFile.swift */; };
 		D10458010000000000000001 /* DivKitSVG in Frameworks */ = {isa = PBXBuildFile; productRef = D10458010000000000000002 /* DivKitSVG */; };
 		D97631000000000000000006 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = D97631000000000000000007 /* DivKit */; };
 		D9763200000000000000000B /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = D9763200000000000000000A /* DivKit */; };
 		D9763200000000000000000E /* SnapshotFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0E7380288AE9BB009BEB3C /* SnapshotFontProvider.swift */; };
-		D97632000000000000000015 /* automated in Resources */ = {isa = PBXBuildFile; fileRef = D97630000000000000000016 /* automated */; };
+		D97632000000000000000015 /* interactive_snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */; };
 		D9763200000000000000000F /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = D97632000000000000000014 /* Fonts */; };
 		D9763300000000000000000E /* UITestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97633000000000000000008 /* UITestMessage.swift */; };
 		D9763300000000000000000F /* UITestMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97633000000000000000008 /* UITestMessage.swift */; };
@@ -573,10 +573,10 @@
 		D97082000000000200000001 /* DivLayoutProviderHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivLayoutProviderHandlerTests.swift; sourceTree = "<group>"; };
 		D97082000000000500000001 /* DivBlockProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBlockProviderTests.swift; sourceTree = "<group>"; };
 		D97630000000000000000002 /* DivKitRegressionUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitRegressionUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D97630000000000000000016 /* automated */ = {isa = PBXFileReference; lastKnownFileType = folder; name = automated; path = ../../test_data/regression_test_data/automated; sourceTree = "<group>"; };
+		D97640000000000000000002 /* ProcessInfo+TestArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ProcessInfo+TestArguments.swift"; path = "DivKitTestsSupport/ProcessInfo+TestArguments.swift"; sourceTree = SOURCE_ROOT; };
 		E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTimerControllerTests.swift; sourceTree = "<group>"; };
 		E945FC45293E1CA80066C3EA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interactive_snapshot_test_data; path = ../../../test_data/interactive_snapshot_test_data; sourceTree = "<group>"; };
+		E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interactive_snapshot_test_data; path = ../../test_data/interactive_snapshot_test_data; sourceTree = "<group>"; };
 		E9E484C029AF434D00C803A8 /* RegressionFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegressionFile.swift; sourceTree = "<group>"; };
 		D97632000000000000000002 /* DivKitUITestsHostApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DivKitUITestsHostApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D97632000000000000000014 /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = SnapshotTestsHostApp/Fonts; sourceTree = SOURCE_ROOT; };
@@ -1134,7 +1134,6 @@
 		8C9284C6288ACCBA00BEA1FA /* DivKitSnapshotTests */ = {
 			isa = PBXGroup;
 			children = (
-				E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */,
 				8C0E7372288AE563009BEB3C /* snapshot_test_data */,
 				43BF1CDC2BA063B400198EAF /* FilesPreprocessing */,
 				8C9284CE288ACCE400BEA1FA /* SnapshotTestKit */,
@@ -1174,7 +1173,7 @@
 				D97632000000000000000003 /* DivKitUITestsHostApp */,
 				D97630000000000000000008 /* DivKitRegressionUITests */,
 				D97631000000000000000008 /* UITestSupport */,
-				D97630000000000000000016 /* automated */,
+				E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */,
 				7E3B99872C6E4FB100FC633E /* LayoutKitPlayground */,
 				8C58953F2F34C87A00AFF80D /* LayoutKitSnapshotTests */,
 				8C5895072F34C72500AFF80D /* LayoutKitTests */,
@@ -1233,6 +1232,7 @@
 		D97631000000000000000008 /* UITestSupport */ = {
 			isa = PBXGroup;
 			children = (
+				D97640000000000000000002 /* ProcessInfo+TestArguments.swift */,
 				D97634000000000000000003 /* UITestLaunchArgument.swift */,
 				D97633000000000000000001 /* Connection */,
 				D97632000000000000000014 /* Fonts */,
@@ -1696,7 +1696,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E94B516328D0AC0300AFACEA /* interactive_snapshot_test_data in Resources */,
 				8C0E7373288AE563009BEB3C /* snapshot_test_data in Resources */,
 				8C03519A288EC5AB0016A747 /* Images.xcassets in Resources */,
 			);
@@ -1727,7 +1726,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D9763000000000000000000C /* automated in Resources */,
+				D9763000000000000000000C /* interactive_snapshot_test_data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1737,7 +1736,7 @@
 			files = (
 				D9763200000000000000000F /* Fonts in Resources */,
 				D97639000000000000000004 /* Images.xcassets in Resources */,
-				D97632000000000000000015 /* automated in Resources */,
+				D97632000000000000000015 /* interactive_snapshot_test_data in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1754,7 +1753,6 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/../../test_data/snapshot_test_data",
-				"$(SRCROOT)/../../test_data/interactive_snapshot_test_data",
 			);
 			name = "Generate Run Script";
 			outputFileListPaths = (
@@ -1764,7 +1762,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "xcrun -sdk macosx swiftc DivKitSnapshotTests/FilesPreprocessing/FilesPreprocessing.swift\n./FilesPreprocessing $SCRIPT_INPUT_FILE_0 snapshotTestsFiles > $SCRIPT_OUTPUT_FILE_0\n./FilesPreprocessing $SCRIPT_INPUT_FILE_1 interactiveSnapshotTestsFiles >> $SCRIPT_OUTPUT_FILE_0\nrm -rf FilesPreprocessing\n";
+			shellScript = "xcrun -sdk macosx swiftc DivKitSnapshotTests/FilesPreprocessing/FilesPreprocessing.swift\n./FilesPreprocessing $SCRIPT_INPUT_FILE_0 snapshotTestsFiles > $SCRIPT_OUTPUT_FILE_0\nrm -rf FilesPreprocessing\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2032,6 +2030,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D97640000000000000000001 /* ProcessInfo+TestArguments.swift in Sources */,
 				D97635000000000000000002 /* UITestConnection.swift in Sources */,
 				D97637000000000000000001 /* Diff.swift in Sources */,
 				D97634000000000000000007 /* UITestLaunchArgument.swift in Sources */,

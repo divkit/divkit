@@ -7,7 +7,10 @@ final class DivKitRegressionUITests: XCTestCase {
 
     do {
       let configuration = try UITestConfiguration()
-      let scenarios = try loadScenarios(from: configuration.scenariosDirectoryURL)
+      let scenarios = try selectedScenarios(
+        loadScenarios(from: configuration.scenariosDirectoryURL),
+        configuration: configuration
+      )
       try validateTestNames(scenarios, configuration: configuration)
 
       for scenario in scenarios {
@@ -91,6 +94,23 @@ final class DivKitRegressionUITests: XCTestCase {
     suite.addTest(self.init(selector: selector))
   }
 
+  private static func selectedScenarios(
+    _ scenarios: [RunnerScenario],
+    configuration: UITestConfiguration
+  ) throws -> [RunnerScenario] {
+    guard let selector = configuration.scenarioFilter else {
+      return scenarios
+    }
+
+    let selected = scenarios.filter {
+      configuration.scenarioResourcePath(for: $0.relativePath) == selector
+    }
+    guard !selected.isEmpty else {
+      throw TestRegistrationError.noMatchingScenario(selector)
+    }
+    return selected
+  }
+
   private static func validateTestNames(
     _ scenarios: [RunnerScenario],
     configuration: UITestConfiguration
@@ -169,10 +189,13 @@ extension XCUIApplication {
 }
 
 private enum TestRegistrationError: LocalizedError {
+  case noMatchingScenario(String)
   case duplicateName(name: String, firstPath: String, secondPath: String)
 
   var errorDescription: String? {
     switch self {
+    case let .noMatchingScenario(selector):
+      "No iOS UI scenario matches: \(selector)"
     case let .duplicateName(name, firstPath, secondPath):
       "Duplicate test name: \(name)\nConflicting scenarios:\n- \(firstPath)\n- \(secondPath)"
     }

@@ -115,7 +115,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_next_item?id=test_gallery",
+        "url": "div-action://set_next_item?id=test_gallery&animated=false",
         "log_id": "second item"
       }
     },
@@ -126,7 +126,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_gallery",
+        "url": "div-action://set_previous_item?id=test_gallery&animated=false",
         "log_id": "first item"
       }
     },
@@ -137,7 +137,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_gallery&overflow=clamp",
+        "url": "div-action://set_previous_item?id=test_gallery&overflow=clamp&animated=false",
         "log_id": "first item"
       }
     },
@@ -148,7 +148,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_gallery&overflow=ring",
+        "url": "div-action://set_previous_item?id=test_gallery&overflow=ring&animated=false",
         "log_id": "last item"
       }
     },
@@ -159,7 +159,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_next_item?id=test_gallery&overflow=clamp",
+        "url": "div-action://set_next_item?id=test_gallery&overflow=clamp&animated=false",
         "log_id": "last item"
       }
     },
@@ -170,7 +170,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_next_item?id=test_gallery&overflow=ring",
+        "url": "div-action://set_next_item?id=test_gallery&overflow=ring&animated=false",
         "log_id": "first item"
       }
     },
@@ -181,7 +181,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_current_item?id=test_gallery&item=2",
+        "url": "div-action://set_current_item?id=test_gallery&item=2&animated=false",
         "log_id": "middle item"
       }
     },
@@ -203,7 +203,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_next_item?id=test_gallery&step=2",
+        "url": "div-action://set_next_item?id=test_gallery&step=2&animated=false",
         "log_id": "last item"
       }
     },
@@ -214,7 +214,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_gallery&step=3",
+        "url": "div-action://set_previous_item?id=test_gallery&step=3&animated=false",
         "log_id": "second item"
       }
     },
@@ -225,7 +225,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_current_item?id=test_gallery&item=0",
+        "url": "div-action://set_current_item?id=test_gallery&item=0&animated=false",
         "log_id": "first item"
       }
     },

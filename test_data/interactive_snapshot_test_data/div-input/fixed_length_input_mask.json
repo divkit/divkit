@@ -1,6 +1,7 @@
 {
   "description": "Fixed length input mask",
   "platforms": [
+    "ios",
     "android",
     "web"
   ],

@@ -188,7 +188,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_next_item?id=test_pager",
+        "url": "div-action://set_next_item?id=test_pager&animated=false",
         "log_id": "next"
       }
     },
@@ -199,14 +199,14 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_pager",
+        "url": "div-action://set_previous_item?id=test_pager&animated=false",
         "log_id": "prev_wrap"
       }
     },
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_pager",
+        "url": "div-action://set_previous_item?id=test_pager&animated=false",
         "log_id": "prev_to_last"
       }
     },

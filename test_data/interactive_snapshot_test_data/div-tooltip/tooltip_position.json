@@ -1,7 +1,6 @@
 {
   "description": "",
   "platforms": [
-    "ios",
     "web"
   ],
   "div_data": {

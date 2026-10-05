@@ -26,7 +26,7 @@ JSON data for framework testing inside `DivKit Playground` apps. Theese test cas
 
 ## Automated UI scenarios
 
-Executable scenarios are stored in the `automated` subdirectory. The iOS runner reads a self-contained card from `div_data` and displays it in `DivKitUITestsHostApp`.
+Executable scenarios are stored in [`interactive_snapshot_test_data`](../interactive_snapshot_test_data). The iOS runner reads a self-contained card from `div_data` and displays it in `DivKitUITestsHostApp`.
 
 The common scenario fields are:
 

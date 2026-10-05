@@ -128,7 +128,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_next_item?id=test_pager",
+        "url": "div-action://set_next_item?id=test_pager&animated=false",
         "log_id": "second item"
       }
     },
@@ -139,7 +139,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_pager",
+        "url": "div-action://set_previous_item?id=test_pager&animated=false",
         "log_id": "first item"
       }
     },
@@ -150,7 +150,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_pager&overflow=clamp",
+        "url": "div-action://set_previous_item?id=test_pager&overflow=clamp&animated=false",
         "log_id": "first item"
       }
     },
@@ -161,7 +161,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_previous_item?id=test_pager&overflow=ring",
+        "url": "div-action://set_previous_item?id=test_pager&overflow=ring&animated=false",
         "log_id": "last item"
       }
     },
@@ -172,7 +172,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_next_item?id=test_pager&overflow=clamp",
+        "url": "div-action://set_next_item?id=test_pager&overflow=clamp&animated=false",
         "log_id": "last item"
       }
     },
@@ -183,7 +183,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_next_item?id=test_pager&overflow=ring",
+        "url": "div-action://set_next_item?id=test_pager&overflow=ring&animated=false",
         "log_id": "first item"
       }
     },
@@ -194,7 +194,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_current_item?id=test_pager&item=2",
+        "url": "div-action://set_current_item?id=test_pager&item=2&animated=false",
         "log_id": "middle item"
       }
     },
@@ -216,7 +216,7 @@
     {
       "type": "div_action",
       "action": {
-        "url": "div-action://set_current_item?id=test_pager&item=0",
+        "url": "div-action://set_current_item?id=test_pager&item=0&animated=false",
         "log_id": "first item"
       }
     },

@@ -20,16 +20,6 @@ struct DivKitSnapshotTests {
     try await doTest(jsonFile)
   }
 
-  @Test(
-    "Interactive Snapshots",
-    .serialized,
-    .timeLimit(.minutes(1)),
-    arguments: selectedInteractiveSnapshotTestsFiles
-  )
-  func interactiveSnapshotTest(jsonFile: JsonFile) async throws {
-    try await doTest(jsonFile)
-  }
-
   private func doTest(_ file: JsonFile) async throws {
     let test = SnapshotTestRunner(file: file)
 
@@ -63,12 +53,6 @@ private let selectedSnapshotTestsFiles = selectedJsonFiles(
   snapshotTestsFiles,
   kind: "snapshot-json",
   prefix: "snapshot_test_data/"
-)
-
-private let selectedInteractiveSnapshotTestsFiles = selectedJsonFiles(
-  interactiveSnapshotTestsFiles,
-  kind: "interactive-snapshot-json",
-  prefix: "interactive_snapshot_test_data/"
 )
 
 private func selectedJsonFiles(

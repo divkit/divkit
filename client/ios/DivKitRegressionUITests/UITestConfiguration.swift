@@ -12,10 +12,11 @@ struct UITestConfiguration {
   let scenariosResourceDirectory: String
   let scenariosDirectoryURL: URL
   let referenceSnapshotsDirectoryURL: URL
+  let scenarioFilter: String?
 
   init() throws {
     let bundle = Bundle(for: DivKitRegressionUITests.self)
-    let scenariosResourceDirectory = "automated"
+    let scenariosResourceDirectory = "interactive_snapshot_test_data"
     guard let scenariosDirectoryURL = bundle.url(
       forResource: scenariosResourceDirectory,
       withExtension: nil
@@ -35,6 +36,13 @@ struct UITestConfiguration {
       fileURLWithPath: plistContents.referenceSnapshotsPath,
       isDirectory: true
     )
+
+    if let filter = ProcessInfo.processInfo.testArgument("divkit-test-filter"),
+       !filter.isEmpty {
+      scenarioFilter = filter
+    } else {
+      scenarioFilter = nil
+    }
   }
 
   func scenarioResourcePath(for relativePath: String) -> String {
