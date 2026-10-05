@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeIsConstrained
+import com.yandex.div.compose.utils.scroll.restrictParentScroll
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGallery.Orientation
@@ -17,6 +19,9 @@ internal fun DivGalleryView(
     data: DivGallery
 ) {
     val orientation = data.orientation.observedValue()
+    val modifier = modifier.applyIf(data.restrictParentScroll.observedValue()) {
+        restrictParentScroll(isHorizontal = orientation == Orientation.HORIZONTAL)
+    }
     val itemSpacing = data.itemSpacing.observedValue().toDp()
     val crossContentAlignment = data.crossContentAlignment.observedValue()
     val defaultItem = data.defaultItem.observedIntValue()
