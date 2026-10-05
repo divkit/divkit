@@ -1,6 +1,7 @@
 {
   "description": "Actions is_enabled",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

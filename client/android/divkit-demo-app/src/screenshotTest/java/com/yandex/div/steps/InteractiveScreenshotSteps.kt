@@ -2,6 +2,7 @@ package com.yandex.div.steps
 
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -9,6 +10,8 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
+import com.yandex.div.view.ViewActions.doubleTapWithRetries
+import com.yandex.div.view.ViewActions.longTapWithRetries
 import com.yandex.div.view.ViewActions.tapWithRetries
 import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div2.DivAction
@@ -43,7 +46,15 @@ internal class InteractiveScreenshotSteps {
                 }
 
                 is Step.Tap -> step("Tap div '${step.id}'") {
-                    tap(step)
+                    tap(step.id, tapWithRetries())
+                }
+
+                is Step.DoubleTap -> step("Double tap div '${step.id}'") {
+                    tap(step.id, doubleTapWithRetries())
+                }
+
+                is Step.LongTap -> step("Long tap div '${step.id}'") {
+                    tap(step.id, longTapWithRetries())
                 }
 
                 is Step.Wait -> step("Step $index: Wait ${step.delay} ms") {
@@ -78,7 +89,7 @@ internal class InteractiveScreenshotSteps {
         }
     }
 
-    private fun tap(tap: Step.Tap) = onView(withTagValue(equalTo(tap.id))).perform(tapWithRetries())
+    private fun tap(id: String, action: ViewAction) = onView(withTagValue(equalTo(id))).perform(action)
 
     private fun verifyText(verification: Step.VerifyText) {
         onView(withTagValue(equalTo(verification.id)))

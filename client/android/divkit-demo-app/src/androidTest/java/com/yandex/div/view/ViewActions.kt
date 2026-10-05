@@ -31,16 +31,22 @@ object ViewActions {
 
     private const val TAP_RETRIES = 3
 
-    fun tapWithRetries(): ViewAction = actionWithAssertions(object : ViewAction {
+    fun tapWithRetries(): ViewAction = tapWithRetries(Tap.SINGLE, "tap")
+
+    fun doubleTapWithRetries(): ViewAction = tapWithRetries(Tap.DOUBLE, "double tap")
+
+    fun longTapWithRetries(): ViewAction = tapWithRetries(Tap.LONG, "long tap")
+
+    private fun tapWithRetries(tap: Tap, gesture: String): ViewAction = actionWithAssertions(object : ViewAction {
 
         override fun getConstraints(): Matcher<View> = isDisplayingAtLeast(90)
 
-        override fun getDescription() = "tap with up to $TAP_RETRIES retries"
+        override fun getDescription() = "$gesture with up to $TAP_RETRIES retries"
 
         override fun perform(uiController: UiController, view: View) {
             var status = Tapper.Status.FAILURE
             repeat(TAP_RETRIES + 1) {
-                status = Tap.SINGLE.sendTap(
+                status = tap.sendTap(
                     uiController,
                     GeneralLocation.VISIBLE_CENTER.calculateCoordinates(view),
                     Press.FINGER.describePrecision(),
@@ -53,7 +59,7 @@ object ViewActions {
             throw PerformException.Builder()
                 .withActionDescription(description)
                 .withViewDescription(HumanReadables.describe(view))
-                .withCause(AssertionError("Tap failed after ${TAP_RETRIES + 1} attempts: $status"))
+                .withCause(AssertionError("$gesture failed after ${TAP_RETRIES + 1} attempts: $status"))
                 .build()
         }
     })

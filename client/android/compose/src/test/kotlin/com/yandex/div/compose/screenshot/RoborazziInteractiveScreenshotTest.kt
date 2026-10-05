@@ -12,12 +12,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalViewConfiguration
+import androidx.compose.ui.platform.ViewConfiguration
+import androidx.compose.ui.test.TouchInjectionScope
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.yandex.div.compose.DivConfiguration
@@ -84,6 +90,8 @@ class RoborazziInteractiveScreenshotTest(
         .outerRule(composeRule)
         .around(createRoborazziRule())
 
+    private lateinit var viewConfiguration: ViewConfiguration
+
     @Test
     fun test() {
         val data = configuration.baseConfiguration.parseDivData()
@@ -94,6 +102,7 @@ class RoborazziInteractiveScreenshotTest(
                 LocalContext provides divContext,
                 LocalLayoutDirection provides configuration.baseConfiguration.layoutDirection
             ) {
+                viewConfiguration = LocalViewConfiguration.current
                 if (isViewEmpty) {
                     Text("<Empty>")
                 } else {
@@ -122,10 +131,14 @@ class RoborazziInteractiveScreenshotTest(
 
                 is Step.Wait -> Unit
 
-                is Step.Tap ->
-                    composeRule
-                        .onNodeWithTag(step.id)
-                        .performClick()
+                is Step.Tap -> {
+                    tap(step.id) { click() }
+                    composeRule.mainClock.advanceTimeBy(viewConfiguration.doubleTapTimeoutMillis)
+                }
+
+                is Step.DoubleTap -> tap(step.id) { doubleClick() }
+
+                is Step.LongTap -> tap(step.id) { longClick() }
 
                 is Step.VerifyText ->
                     composeRule
@@ -137,6 +150,9 @@ class RoborazziInteractiveScreenshotTest(
             isViewEmpty = false
         }
     }
+
+    private fun tap(id: String, gesture: TouchInjectionScope.() -> Unit) =
+        composeRule.onNodeWithTag(id).performTouchInput(gesture)
 
     private class SolidBackgroundExtensionHandler : DivExtensionHandler {
         @Composable
@@ -175,6 +191,7 @@ class RoborazziInteractiveScreenshotTest(
 
 private val selectedFiles = setOf(
     "div-action/base.json",
+    "div-action/is-enabled.json",
     "div-action/set-state-no-screenshot.json",
     "div-action/set-variable.json",
     "div-container/base-properties.json",

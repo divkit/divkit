@@ -1,6 +1,7 @@
 {
   "description": "Multiple state switching with different root state",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

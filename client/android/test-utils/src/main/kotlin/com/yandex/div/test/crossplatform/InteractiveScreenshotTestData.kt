@@ -15,6 +15,10 @@ class InteractiveScreenshotTestData(
 
         class Tap(val id: String) : Step()
 
+        class DoubleTap(val id: String) : Step()
+
+        class LongTap(val id: String) : Step()
+
         class Wait(val delay: Long) : Step()
 
         class VerifySnapshot(val name: String) : Step()
@@ -44,6 +48,10 @@ class InteractiveScreenshotTestData(
                 }
 
                 "tap" -> Step.Tap(parseTargetId(step))
+
+                "double_tap" -> Step.DoubleTap(parseTargetId(step))
+
+                "long_tap" -> Step.LongTap(parseTargetId(step))
 
                 "wait" -> {
                     val delay = step.getLong("duration_ms")
