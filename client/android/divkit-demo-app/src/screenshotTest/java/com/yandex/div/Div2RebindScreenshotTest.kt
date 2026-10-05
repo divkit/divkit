@@ -44,16 +44,8 @@ class Div2RebindScreenshotTest(casePath: String, escapedCase: String) {
 
         private val expectedSuite = Div2ScreenshotTest::class.qualifiedName ?: ""
 
-        private val ignoredCases = listOf(
-            "snapshot_test_data/div-container/item_builder/item-builder-with-local-variables.json",
-            "snapshot_test_data/div-container/item_builder/item-builder-with-nested-local-variables.json",
-            "snapshot_test_data/div-container/size_provider_recursive.json",
-            "snapshot_test_data/image-formats/svg/svg_preview_url_in_gif_image.json",
-            "snapshot_test_data/image-formats/svg/svg_preview_url_in_gif_image_scale.json",
-        )
-
         @JvmStatic
         @Parameters(name = "{1}")
-        fun cases() = Div2ScreenshotTest.cases().filter { !ignoredCases.contains(it[0]) }
+        fun cases() = Div2ScreenshotTest.cases()
     }
 }

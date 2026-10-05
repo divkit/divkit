@@ -109,18 +109,12 @@ class ViewRoborazziScreenshotTest(private val case: String, private val testCase
     companion object {
         private val cases = ParsingUtils.parseFiles("snapshot_test_data") { file, json ->
             val name = file.relativeTo(File("../../../test_data/snapshot_test_data")).invariantSeparatorsPath
-            if (name !in viewRoborazziScreenshotCases) {
+            if (name in viewDeviceScreenshotCases) {
                 return@parseFiles emptyList()
             }
             listOf(ParsingResult.Success(arrayOf(name, json)))
         }.map { it.getOrThrow() }.also { cases ->
             require(cases.isNotEmpty()) { "No View Roborazzi cases selected" }
-            if (System.getProperty("divkit.test.filter").isNullOrBlank()) {
-                val discoveredCases = cases.map { it[0] }.toSet()
-                require(discoveredCases == viewRoborazziScreenshotCases) {
-                    "Missing View Roborazzi cases: ${viewRoborazziScreenshotCases - discoveredCases}"
-                }
-            }
         }
 
         @JvmStatic

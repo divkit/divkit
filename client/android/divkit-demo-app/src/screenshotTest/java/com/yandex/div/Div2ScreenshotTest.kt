@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
-import com.yandex.divkit.demo.screenshot.viewRoborazziScreenshotCases
+import com.yandex.divkit.demo.screenshot.viewDeviceScreenshotCases
 import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
@@ -49,7 +49,7 @@ class Div2ScreenshotTest(casePath: String, escapedCase: String) {
             val enumerator = AssetEnumerator()
             return enumerator.enumerate(TEST_CASES_PATH)
                 .filter { !ignoredCases.contains(it) }
-                .filter { it.removePrefix("$TEST_CASES_PATH/") !in viewRoborazziScreenshotCases }
+                .filter { it.removePrefix("$TEST_CASES_PATH/") in viewDeviceScreenshotCases }
                 .let(enumerator::requireSelectedCase)
                 .withEscapedParameter()
         }
