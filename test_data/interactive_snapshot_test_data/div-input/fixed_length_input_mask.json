@@ -1,7 +1,6 @@
 {
   "description": "Fixed length input mask",
   "platforms": [
-    "ios",
     "android",
     "web"
   ],
@@ -69,6 +68,7 @@
             "items": [
               {
                 "type": "text",
+                "id": "formatted_value",
                 "text": "Formatted value: '@{input}'"
               },
               {
@@ -142,6 +142,14 @@
       }
     },
     {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: 'Test'"
+    },
+    {
       "type": "verify_snapshot",
       "name": "step1"
     },
@@ -151,6 +159,14 @@
         "log_id": "show_placeholders",
         "url": "div-action://set_variable?name=always_visible&value=true"
       }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: 'Test_ _____'"
     },
     {
       "type": "verify_snapshot",
@@ -164,6 +180,14 @@
       }
     },
     {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: 'Test'"
+    },
+    {
       "type": "verify_snapshot",
       "name": "step3"
     },
@@ -173,6 +197,14 @@
         "url": "div-action://set_variable?name=raw_input&value=ALotSymbolsToOverflow",
         "log_id": "changing_text_to_overflow"
       }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: 'ALotS ymbol'"
     },
     {
       "type": "verify_snapshot",
@@ -186,6 +218,14 @@
       }
     },
     {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: ''"
+    },
+    {
       "type": "verify_snapshot",
       "name": "step5"
     },
@@ -195,6 +235,14 @@
         "url": "div-action://set_variable?name=raw_input&value=%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82%D0%9C%D0%B8%D1%80",
         "log_id": "input_cyrillic"
       }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: 'Приве тМир'"
     },
     {
       "type": "verify_snapshot",
@@ -208,6 +256,14 @@
       }
     },
     {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: '😀😃'"
+    },
+    {
       "type": "verify_snapshot",
       "name": "step7"
     },
@@ -217,6 +273,14 @@
         "url": "div-action://set_variable?name=raw_input&value=Hi123%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82",
         "log_id": "input_mixed"
       }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: 'Hi123 Приве'"
     },
     {
       "type": "verify_snapshot",
@@ -230,6 +294,14 @@
       }
     },
     {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: '!@#$% ^'"
+    },
+    {
       "type": "verify_snapshot",
       "name": "step9"
     },
@@ -239,6 +311,14 @@
         "url": "div-action://set_variable?name=raw_input&value=1234567890",
         "log_id": "input_numbers"
       }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "formatted_value"
+      },
+      "text": "Formatted value: '12345 67890'"
     },
     {
       "type": "verify_snapshot",

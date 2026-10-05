@@ -101,6 +101,10 @@ private class FixedLengthMaskParams(
         return sb.toString()
     }
 
-    fun format(raw: String): String =
-        buildMaskedText(raw, pattern, ::isDynamic, placeholderForPosition = null).text.text
+    fun format(raw: String): String = buildMaskedText(
+        raw = raw,
+        pattern = pattern,
+        isDynamic = ::isDynamic,
+        placeholderForPosition = if (alwaysVisible) ::placeholderAt else null,
+    ).text.text
 }

@@ -97,7 +97,7 @@ class FixedLengthMaskTest {
     }
 
     @Test
-    fun `alwaysVisible placeholders rendered in BasicTextField only, not stored in display variable`() {
+    fun `alwaysVisible placeholders are included in display variable`() {
         var state: DivInputState? = null
         setContent { state = digitsInput(alwaysVisible = true).rememberDivInputState() }
 
@@ -105,7 +105,7 @@ class FixedLengthMaskTest {
         composeRule.waitForIdle()
 
         assertEquals("(12_) ___-____", state!!.formattedDisplay())
-        assertEquals("(12", displayVar.getValue())
+        assertEquals("(12_) ___-____", displayVar.getValue())
     }
 
     @Test
@@ -117,7 +117,7 @@ class FixedLengthMaskTest {
         composeRule.waitForIdle()
 
         assertEquals("555", state!!.text.text)
-        assertEquals("(555) ", displayVar.getValue())
+        assertEquals("(555) ___-____", displayVar.getValue())
         assertEquals("(555) ___-____", state!!.formattedDisplay())
     }
 
