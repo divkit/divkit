@@ -4,12 +4,21 @@ import UIKit
 import VGSL
 
 public final class TooltipContainerView: UIView, UIActionEventPerforming {
+  private enum State {
+    case notAppeared
+    case appearing
+    case waitingForAnimatedClose
+    case visible
+    case closing
+    case closed
+  }
+
   private let tooltip: DefaultTooltipManager.Tooltip
   private let handleAction: (LayoutKit.UIActionEvent) -> Void
   private let onCloseAction: Action
   private let getViewById: (BlockViewID) -> BlockView?
 
-  private var isClosing = false
+  private var state = State.notAppeared
   private var lastNonZeroBounds: CGRect?
   private var onVisibleBoundsChanged: Action?
 
@@ -20,13 +29,24 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     guard isModal, tooltip.params.closeByTapOutside else { return nil }
 
     let backgroundElement = ActivatableAccessibilityElement(
-      activateAction: weakify(self, in: type(of: self).performTapOutsideActions),
+      activateAction: { [weak self] in
+        self?.performTapOutsideActions() ?? false
+      },
       accessibilityContainer: self
     )
     backgroundElement.accessibilityLabel = tooltip.params.backgroundAccessibilityDescription
     backgroundElement.accessibilityTraits = .button
     return backgroundElement
   }()
+
+  private var acceptsInteraction: Bool {
+    switch state {
+    case .notAppeared, .appearing, .visible:
+      true
+    case .waitingForAnimatedClose, .closing, .closed:
+      false
+    }
+  }
 
   var isModal: Bool {
     tooltip.params.mode == .modal
@@ -82,6 +102,8 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   }
 
   public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    guard acceptsInteraction else { return isModal ? self : nil }
+
     if !isPointInsideTooltip(point, event: event), !isModal {
       if tooltip.params.closeByTapOutside {
         DispatchQueue.main.async {
@@ -130,8 +152,82 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
   }
 
   public func close(animated: Bool) {
-    guard !isClosing else { return }
-    isClosing = true
+    accessibilityElements = nil
+
+    switch state {
+    case .appearing:
+      if animated, tooltip.params.animationIn?.isEmpty == false {
+        state = .waitingForAnimatedClose
+      } else {
+        performClose(animated: animated)
+      }
+    case .waitingForAnimatedClose:
+      if !animated {
+        performClose(animated: false)
+      }
+    case .notAppeared, .visible:
+      performClose(animated: animated)
+    case .closing, .closed:
+      break
+    }
+  }
+
+  func animateAppear() {
+    guard case .notAppeared = state else { return }
+
+    let animationIn = tooltip.params.animationIn.flatMap { $0.isEmpty ? nil : $0 }
+    state = animationIn != nil ? .appearing : .visible
+
+    if let substrateView = tooltip.substrateView {
+      let duration = animationIn?.map(\.duration).max() ?? defaultAnimationDuration
+      let animation = TransitioningAnimation(
+        kind: .fade,
+        start: 0,
+        end: 1,
+        duration: duration,
+        delay: 0,
+        timingFunction: .easeInEaseOut
+      )
+      substrateView.setInitialParamsAndAnimate(animations: [animation]) { [weak self] in
+        if animationIn == nil {
+          self?.completeAppear()
+        }
+      }
+    }
+
+    if let animationIn {
+      setInitialParamsAndAnimate(animations: animationIn) { [weak self] in
+        self?.completeAppear()
+      }
+    }
+  }
+
+  private func completeAppear() {
+    switch state {
+    case .appearing:
+      state = .visible
+    case .waitingForAnimatedClose:
+      performClose(animated: true)
+    case .notAppeared,
+         .visible,
+         .closing,
+         .closed:
+      break
+    }
+  }
+
+  private func performClose(animated: Bool) {
+    let isAppearing = if case .appearing = state { true } else { false }
+    let substrateStartOpacity: CGFloat? = if let substrateView = tooltip.substrateView {
+      Self.substrateStartOpacity(
+        presentationOpacity: substrateView.layer.presentation()?.opacity,
+        modelOpacity: substrateView.alpha,
+        isAppearing: isAppearing
+      )
+    } else {
+      nil
+    }
+    state = .closing
     highlightObserver = nil
     tooltip.view.onVisibleBoundsChanged(from: tooltip.view.bounds, to: .zero)
     tooltip.view.layoutIfNeeded()
@@ -149,7 +245,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
           .max() ?? defaultAnimationDuration
         let animation = TransitioningAnimation(
           kind: .fade,
-          start: 1,
+          start: substrateStartOpacity ?? substrateView.alpha,
           end: 0,
           duration: duration,
           delay: 0,
@@ -162,47 +258,45 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 
       if let animationOut = tooltip.params.animationOut {
         setInitialParamsAndAnimate(animations: animationOut) {
-          self.removeFromSuperview()
-          self.onCloseAction()
+          self.completeClose()
         }
       } else {
         removeFromParentAnimated {
-          self.onCloseAction()
+          self.completeClose()
         }
       }
     } else {
-      removeFromSuperview()
-      onCloseAction()
+      completeClose()
     }
   }
 
-  func animateAppear() {
-    if let substrateView = tooltip.substrateView {
-      let duration = tooltip.params.animationIn?.map(\.duration).max() ?? defaultAnimationDuration
-      let animation = TransitioningAnimation(
-        kind: .fade,
-        start: 0,
-        end: 1,
-        duration: duration,
-        delay: 0,
-        timingFunction: .easeInEaseOut
-      )
-      substrateView.setInitialParamsAndAnimate(animations: [animation])
-    }
+  private func completeClose() {
+    guard case .closing = state else { return }
+    state = .closed
+    removeFromSuperview()
+    onCloseAction()
+  }
 
-    if let animationIn = tooltip.params.animationIn {
-      setInitialParamsAndAnimate(animations: animationIn)
-    }
+  static func substrateStartOpacity(
+    presentationOpacity: Float?,
+    modelOpacity: CGFloat,
+    isAppearing: Bool
+  ) -> CGFloat {
+    CGFloat(presentationOpacity ?? (isAppearing ? 0 : Float(modelOpacity)))
   }
 
   @objc private func handleTap(_ sender: UITapGestureRecognizer) {
+    guard acceptsInteraction else { return }
+
     let point = sender.location(in: self)
     if !isPointInsideTooltip(point) {
-      performTapOutsideActions()
+      _ = performTapOutsideActions()
     }
   }
 
-  private func performTapOutsideActions() {
+  private func performTapOutsideActions() -> Bool {
+    guard acceptsInteraction else { return false }
+
     let uiActionEvents = tooltip.params.tapOutsideActions.map {
       UIActionEvent(uiAction: $0, originalSender: self)
     }
@@ -211,6 +305,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     if tooltip.params.closeByTapOutside {
       close(animated: true)
     }
+    return true
   }
 
   private func isPointInsideTooltip(_ point: CGPoint, event: UIEvent? = nil) -> Bool {
@@ -243,10 +338,10 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
 }
 
 private final class ActivatableAccessibilityElement: UIAccessibilityElement {
-  private let activateAction: Action
+  private let activateAction: () -> Bool
 
   init(
-    activateAction: @escaping Action,
+    activateAction: @escaping () -> Bool,
     accessibilityContainer container: Any
   ) {
     self.activateAction = activateAction
@@ -255,12 +350,10 @@ private final class ActivatableAccessibilityElement: UIAccessibilityElement {
 
   override func accessibilityActivate() -> Bool {
     activateAction()
-    return true
   }
 
   override func accessibilityPerformEscape() -> Bool {
     activateAction()
-    return true
   }
 }
 

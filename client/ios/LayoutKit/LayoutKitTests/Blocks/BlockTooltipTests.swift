@@ -80,6 +80,129 @@ final class BlockTooltipTests: XCTestCase {
     wait(for: [expectSuperviewChange], timeout: 2)
   }
 
+  func test_CloseRequestedDuringAppear_BlocksInteraction() throws {
+    var handledActionCount = 0
+    var closeCallCount = 0
+    let contentView = TestView(frame: CGRect(x: 20, y: 20, width: 100, height: 100))
+    let outsideActions = [
+      UserInterfaceAction(path: UIElementPath("outside_1")),
+      UserInterfaceAction(path: UIElementPath("outside_2")),
+    ]
+    var tooltipView: TooltipContainerView!
+    tooltipView = makeTooltipContainer(
+      view: contentView,
+      tapOutsideActions: outsideActions,
+      animationIn: [makeAnimation(kind: .fade, start: 0, end: 1, duration: 1)],
+      handleAction: { _ in
+        handledActionCount += 1
+        if handledActionCount == 1 {
+          tooltipView.close(animated: true)
+        }
+      }
+    ) {
+      closeCallCount += 1
+    }
+    let (window, previousKeyWindow) = addToWindow(tooltipView)
+    defer {
+      tooltipView.close(animated: false)
+      window.isHidden = true
+      previousKeyWindow?.makeKeyAndVisible()
+    }
+    tooltipView.layoutIfNeeded()
+
+    tooltipView.animateAppear()
+    let backgroundElement = try XCTUnwrap(
+      tooltipView.accessibilityElements?.last as? UIAccessibilityElement
+    )
+    _ = backgroundElement.accessibilityActivate()
+    XCTAssertEqual(handledActionCount, 2)
+    XCTAssertNil(tooltipView.accessibilityElements)
+
+    let pointOutsideContent = CGPoint(
+      x: contentView.frame.minX - 1,
+      y: contentView.frame.minY - 1
+    )
+    XCTAssertTrue(tooltipView.hitTest(pointOutsideContent, with: nil) === tooltipView)
+    tooltipView.perform(
+      uiActionEvent: UIActionEvent(
+        uiAction: UserInterfaceAction(path: UIElementPath("test")),
+        originalSender: contentView
+      ),
+      from: contentView
+    )
+    XCTAssertEqual(handledActionCount, 3)
+
+    tooltipView.close(animated: false)
+    XCTAssertNil(tooltipView.superview)
+    XCTAssertEqual(closeCallCount, 1)
+  }
+
+  func test_AnimatedCloseWithSubstrate_CompletesSynchronouslyOutsideWindow() {
+    var closeCallCount = 0
+    let contentView = TestView(frame: CGRect(x: 20, y: 20, width: 100, height: 100))
+    let substrateView = TestView()
+    let tooltipView = makeTooltipContainer(
+      view: contentView,
+      substrateView: substrateView,
+      animationOut: [makeAnimation(kind: .fade, start: 1, end: 0, duration: 1)]
+    ) {
+      closeCallCount += 1
+    }
+    let parentView = UIView()
+    parentView.addSubview(tooltipView)
+    layout(tooltipView)
+
+    tooltipView.animateAppear()
+    tooltipView.close(animated: true)
+
+    XCTAssertEqual(contentView.closeVisibilityChangeCount, 1)
+    XCTAssertEqual(substrateView.closeVisibilityChangeCount, 1)
+    XCTAssertNil(tooltipView.superview)
+    XCTAssertEqual(closeCallCount, 1)
+  }
+
+  func test_SubstrateCloseOpacity_UsesCurrentPresentationValueWhileAppearing() {
+    XCTAssertEqual(
+      TooltipContainerView.substrateStartOpacity(
+        presentationOpacity: 0.42,
+        modelOpacity: 1,
+        isAppearing: true
+      ),
+      0.42,
+      accuracy: 0.001
+    )
+  }
+
+  func test_SubstrateCloseOpacity_DoesNotJumpToModelValueBeforePresentationStarts() {
+    XCTAssertEqual(
+      TooltipContainerView.substrateStartOpacity(
+        presentationOpacity: nil,
+        modelOpacity: 1,
+        isAppearing: true
+      ),
+      0
+    )
+  }
+
+  func test_NonModalTooltip_CloseRequestedDuringAppear_DoesNotConsumeTouches() {
+    let tooltipView = makeTooltipContainer(
+      mode: .nonModal,
+      view: TestView(frame: CGRect(x: 20, y: 20, width: 100, height: 100)),
+      animationIn: [makeAnimation(kind: .fade, start: 0, end: 1, duration: 1)]
+    ) {}
+    let (window, previousKeyWindow) = addToWindow(tooltipView)
+    defer {
+      tooltipView.close(animated: false)
+      window.isHidden = true
+      previousKeyWindow?.makeKeyAndVisible()
+    }
+
+    tooltipView.animateAppear()
+    tooltipView.close(animated: true)
+
+    XCTAssertNil(tooltipView.hitTest(CGPoint(x: 5, y: 5), with: nil))
+  }
+
   func test_TooltipWithSubstrateView() {
     let substrateView = TestView()
     let tooltipView = TooltipContainerView(
@@ -410,8 +533,75 @@ fileprivate func makeTooltipContainerView(
   )
 }
 
+fileprivate func makeTooltipContainer(
+  mode: BlockTooltip.Mode = .modal,
+  view: TestView = TestView(),
+  substrateView: TestView? = nil,
+  tapOutsideActions: [UserInterfaceAction] = [],
+  animationIn: [TransitioningAnimation]? = nil,
+  animationOut: [TransitioningAnimation]? = nil,
+  handleAction: @escaping (UIActionEvent) -> Void = { _ in },
+  onCloseAction: @escaping () -> Void
+) -> TooltipContainerView {
+  TooltipContainerView(
+    tooltip: DefaultTooltipManager.Tooltip(
+      params: BlockTooltipParams(
+        id: "tooltip",
+        mode: mode,
+        duration: 0,
+        closeByTapOutside: true,
+        tapOutsideActions: tapOutsideActions,
+        animationIn: animationIn,
+        animationOut: animationOut
+      ),
+      view: view,
+      substrateView: substrateView,
+      bringToTopId: nil
+    ),
+    handleAction: handleAction,
+    onCloseAction: onCloseAction,
+    getViewById: { _ in nil }
+  )
+}
+
+fileprivate func makeAnimation(
+  kind: TransitioningAnimation.Kind,
+  start: Double,
+  end: Double,
+  duration: TimeInterval
+) -> TransitioningAnimation {
+  TransitioningAnimation(
+    kind: kind,
+    start: start,
+    end: end,
+    duration: duration,
+    delay: 0,
+    timingFunction: .linear
+  )
+}
+
+@discardableResult
+fileprivate func addToWindow(_ tooltipView: TooltipContainerView) -> (UIWindow, UIWindow?) {
+  let previousKeyWindow = UIApplication.shared.connectedScenes
+    .compactMap { $0 as? UIWindowScene }
+    .flatMap(\.windows)
+    .first(where: \.isKeyWindow)
+  let window = UIWindow(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
+  tooltipView.frame = window.bounds
+  window.addSubview(tooltipView)
+  window.makeKeyAndVisible()
+  return (window, previousKeyWindow)
+}
+
 fileprivate class TestView: UIView, BlockViewProtocol {
   var effectiveBackgroundColor: UIColor?
+  var visibleBoundsChanges: [(from: CGRect, to: CGRect)] = []
 
-  func onVisibleBoundsChanged(from _: CGRect, to _: CGRect) {}
+  var closeVisibilityChangeCount: Int {
+    visibleBoundsChanges.filter { $0.from != .zero && $0.to == .zero }.count
+  }
+
+  func onVisibleBoundsChanged(from: CGRect, to: CGRect) {
+    visibleBoundsChanges.append((from: from, to: to))
+  }
 }
