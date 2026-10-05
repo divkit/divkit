@@ -85,9 +85,9 @@ fun Project.configurePublication() {
     }
 
     if (publishToMavenCentral) {
-        extra["signing.keyId"] = providers.gradleProperty("signingKeyId").orNull
-        extra["signing.password"] = providers.gradleProperty("signingPassword").orNull
-        extra["signing.secretKeyRingFile"] = providers.gradleProperty("signingSecretKeyRingFile").orNull
+        extra["signing.keyId"] = providers.gradleProperty("signing.keyId").orNull
+        extra["signing.password"] = providers.gradleProperty("signing.password").orNull
+        extra["signing.secretKeyRingFile"] = providers.gradleProperty("signing.secretKeyRingFile").orNull
         extensions.configure<SigningExtension> {
             sign(publishing.publications)
             sign(configurations.getByName("archives"))
