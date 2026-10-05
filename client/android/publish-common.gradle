@@ -8,10 +8,6 @@ group = 'com.yandex.div'
 
 ext {
     publicationType = PublicationType.fromString(providers.gradleProperty("publicationType").orNull)
-
-    signingKeyId = providers.gradleProperty("signingKeyId").orNull
-    signingPassword = providers.gradleProperty("signingPassword").orNull
-    signingSecretKeyRingFile = providers.gradleProperty("signingSecretKeyRingFile").orNull
 }
 
 publicationType.configureForProject(project)
@@ -21,13 +17,9 @@ def publishToMavenCentral = rootProject.ext.has("publishToMavenCentral")
         && !projectDir.path.contains("internal/android/libs")
 
 if (publishToMavenCentral) {
-    rootProject.ext {
-        signing {
-            keyId = signingKeyId
-            password = signingPassword
-            secretKeyRingFile = signingSecretKeyRingFile
-        }
-    }
+    ext["signing.keyId"] = providers.gradleProperty("signing.keyId").orNull
+    ext["signing.password"] = providers.gradleProperty("signing.password").orNull
+    ext["signing.secretKeyRingFile"] = providers.gradleProperty("signing.secretKeyRingFile").orNull
 }
 
 afterEvaluate {
