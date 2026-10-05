@@ -70,6 +70,9 @@
       "$ref": "div-action-custom.json"
     },
     {
+      "$ref": "div-action-extension-action.json"
+    },
+    {
       "$ref": "div-action-set-cursor-position.json"
     }
   ]

@@ -1,0 +1,322 @@
+{
+  "card": {
+    "log_id": "lottie_extension_action",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "left": 16,
+            "right": 16,
+            "top": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Start: rewind and play.\nStop: rewind and stay stopped.\nThe marker moves left to right in 4 seconds.",
+              "font_size": 16,
+              "text_alignment_horizontal": "center"
+            },
+            {
+              "type": "gif",
+              "id": "target_animation",
+              "width": {
+                "type": "fixed",
+                "value": 240
+              },
+              "height": {
+                "type": "fixed",
+                "value": 160
+              },
+              "alignment_horizontal": "center",
+              "extensions": [
+                {
+                  "id": "lottie",
+                  "params": {
+                    "lottie_json": {
+                      "v": "5.5.7",
+                      "fr": 30,
+                      "ip": 0,
+                      "op": 120,
+                      "w": 240,
+                      "h": 160,
+                      "nm": "Start and Stop marker",
+                      "ddd": 0,
+                      "assets": [],
+                      "layers": [
+                        {
+                          "ddd": 0,
+                          "ind": 1,
+                          "ty": 4,
+                          "nm": "Marker",
+                          "sr": 1,
+                          "ks": {
+                            "o": {
+                              "a": 0,
+                              "k": 100
+                            },
+                            "r": {
+                              "a": 0,
+                              "k": 0
+                            },
+                            "p": {
+                              "a": 1,
+                              "k": [
+                                {
+                                  "t": 0,
+                                  "s": [
+                                    30,
+                                    80,
+                                    0
+                                  ],
+                                  "e": [
+                                    210,
+                                    80,
+                                    0
+                                  ],
+                                  "i": {
+                                    "x": 1,
+                                    "y": 1
+                                  },
+                                  "o": {
+                                    "x": 0,
+                                    "y": 0
+                                  }
+                                },
+                                {
+                                  "t": 120,
+                                  "s": [
+                                    210,
+                                    80,
+                                    0
+                                  ]
+                                }
+                              ]
+                            },
+                            "a": {
+                              "a": 0,
+                              "k": [
+                                0,
+                                0,
+                                0
+                              ]
+                            },
+                            "s": {
+                              "a": 0,
+                              "k": [
+                                100,
+                                100,
+                                100
+                              ]
+                            }
+                          },
+                          "shapes": [
+                            {
+                              "ty": "el",
+                              "p": {
+                                "a": 0,
+                                "k": [
+                                  0,
+                                  0
+                                ]
+                              },
+                              "s": {
+                                "a": 0,
+                                "k": [
+                                  28,
+                                  28
+                                ]
+                              },
+                              "d": 1
+                            },
+                            {
+                              "ty": "fl",
+                              "c": {
+                                "a": 0,
+                                "k": [
+                                  0.48,
+                                  0.3,
+                                  0.9,
+                                  1
+                                ]
+                              },
+                              "o": {
+                                "a": 0,
+                                "k": 100
+                              },
+                              "r": 1
+                            }
+                          ],
+                          "ip": 0,
+                          "op": 120,
+                          "st": 0,
+                          "bm": 0
+                        },
+                        {
+                          "ddd": 0,
+                          "ind": 2,
+                          "ty": 4,
+                          "nm": "Track",
+                          "sr": 1,
+                          "ks": {
+                            "o": {
+                              "a": 0,
+                              "k": 100
+                            },
+                            "r": {
+                              "a": 0,
+                              "k": 0
+                            },
+                            "p": {
+                              "a": 0,
+                              "k": [
+                                120,
+                                80,
+                                0
+                              ]
+                            },
+                            "a": {
+                              "a": 0,
+                              "k": [
+                                0,
+                                0,
+                                0
+                              ]
+                            },
+                            "s": {
+                              "a": 0,
+                              "k": [
+                                100,
+                                100,
+                                100
+                              ]
+                            }
+                          },
+                          "shapes": [
+                            {
+                              "ty": "rc",
+                              "p": {
+                                "a": 0,
+                                "k": [
+                                  0,
+                                  0
+                                ]
+                              },
+                              "s": {
+                                "a": 0,
+                                "k": [
+                                  180,
+                                  4
+                                ]
+                              },
+                              "r": {
+                                "a": 0,
+                                "k": 2
+                              }
+                            },
+                            {
+                              "ty": "fl",
+                              "c": {
+                                "a": 0,
+                                "k": [
+                                  0.82,
+                                  0.8,
+                                  0.9,
+                                  1
+                                ]
+                              },
+                              "o": {
+                                "a": 0,
+                                "k": 100
+                              },
+                              "r": 1
+                            }
+                          ],
+                          "ip": 0,
+                          "op": 120,
+                          "st": 0,
+                          "bm": 0
+                        }
+                      ]
+                    },
+                    "repeat_count": -1,
+                    "is_playing": false
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "start_button",
+              "text": "Start",
+              "font_size": 18,
+              "text_alignment_horizontal": "center",
+              "paddings": {
+                "top": 12,
+                "bottom": 12
+              },
+              "margins": {
+                "top": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#E9E5FF"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "lottie_start",
+                  "typed": {
+                    "type": "extension_action",
+                    "extension_id": "lottie",
+                    "div_id": "target_animation"
+                  },
+                  "payload": {
+                    "type": "start"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "stop_button",
+              "text": "Stop",
+              "font_size": 18,
+              "text_alignment_horizontal": "center",
+              "paddings": {
+                "top": 12,
+                "bottom": 12
+              },
+              "margins": {
+                "top": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#E9E5FF"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "lottie_stop",
+                  "typed": {
+                    "type": "extension_action",
+                    "extension_id": "lottie",
+                    "div_id": "target_animation"
+                  },
+                  "payload": {
+                    "type": "stop"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -15,7 +15,6 @@ import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.RenderMode
 import com.yandex.div.core.ObserverList
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.DivViewDelegate
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.internal.extensions.lottie.LottieData
@@ -45,16 +44,26 @@ internal class LottieController(
     // Div Lottie Extension fields
     var data: LottieData? = null
 
-    private var animationsEnabledSubscription: AutoCloseable? = null
-
     private val onEndListeners = ObserverList<() -> Unit>()
 
     private val animatorListener = object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator) = Unit
-        override fun onAnimationEnd(animation: Animator) {
-            onEndListeners.forEach { it.invoke() }
+        private var cancelled = false
+
+        override fun onAnimationStart(animation: Animator) {
+            cancelled = false
         }
-        override fun onAnimationCancel(animation: Animator) = Unit
+
+        override fun onAnimationEnd(animation: Animator) {
+            if (!cancelled) {
+                onEndListeners.forEach { it.invoke() }
+            }
+            cancelled = false
+        }
+
+        override fun onAnimationCancel(animation: Animator) {
+            cancelled = true
+        }
+
         override fun onAnimationRepeat(animation: Animator) = Unit
     }
 
@@ -89,17 +98,6 @@ internal class LottieController(
 
     fun clearPlaybackEndListeners() {
         onEndListeners.clear()
-    }
-
-    fun subscribeToAnimationsEnabled(divView: Div2View, onChange: () -> Unit) {
-        animationsEnabledSubscription?.close()
-        animationsEnabledSubscription =
-            divView.div2Component.animationsEnabledController.observe(divView, onChange)
-    }
-
-    fun clearAnimationsEnabledSubscription() {
-        animationsEnabledSubscription?.close()
-        animationsEnabledSubscription = null
     }
 
     override fun onVisibilityChanged(changedView: View, visibility: Int): Boolean {
@@ -216,12 +214,8 @@ internal class LottieController(
         lottieDrawable.repeatMode = mode
     }
 
-    fun setMinFrame(minFrame: Int) {
-        lottieDrawable.setMinFrame(minFrame)
-    }
-
-    fun setMaxFrame(maxFrame: Int) {
-        lottieDrawable.setMaxFrame(maxFrame)
+    fun setFrameRange(minFrame: Int, maxFrame: Int) {
+        lottieDrawable.setMinAndMaxFrame(minFrame, maxFrame)
     }
 
     @LottieDrawable.RepeatMode
@@ -266,10 +260,8 @@ internal class LottieController(
 
     @MainThread
     fun pauseAnimationAt(progress: Float) {
-        lottieDrawable.pauseAnimation()
+        pauseAnimation()
         lottieDrawable.progress = progress
-
-        enableOrDisableHardwareLayer()
     }
 
     fun setRenderMode(renderMode: RenderMode) {

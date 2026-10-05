@@ -14,6 +14,12 @@ android {
     namespace = "com.yandex.div.data"
 }
 
+metalava {
+    // The extension action adds one variant to each generated sealed action model.
+    // Keep only these two intentional exhaustiveness changes in the compatibility baseline.
+    arguments.add("--baseline:compatibility:released=metalava-compatibility-baseline.txt")
+}
+
 dependencies {
     implementation(project(":assertion"))
     implementation(project(":div-core"))

@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_action_extension_action",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "extension_action"
+      ]
+    },
+    "extension_id": {
+      "type": "string",
+      "$description": "translations.json#/div_action_extension_action_extension_id"
+    },
+    "div_id": {
+      "type": "string",
+      "$description": "translations.json#/div_action_extension_action_div_id"
+    }
+  },
+  "platforms": [
+    "android"
+  ],
+  "required": [
+    "type",
+    "extension_id",
+    "div_id"
+  ]
+}

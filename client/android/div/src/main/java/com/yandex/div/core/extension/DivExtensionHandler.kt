@@ -34,4 +34,7 @@ interface DivExtensionHandler {
     fun loadMedia(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) = Unit
 
     fun releaseMedia(divView: Div2View, expressionResolver: ExpressionResolver, view: View, div: DivBase) = Unit
+
+    val actionHandler: DivExtensionActionHandler?
+        get() = null
 }

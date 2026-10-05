@@ -135,6 +135,18 @@
     "en": "Link for receiving changes.",
     "ru": "Ссылка для получения изменений."
   },
+  "div_action_extension_action": {
+    "en": "Runs an action for an extension declared on the target element. The action payload is passed to the extension handler.",
+    "ru": "Выполняет действие для расширения, объявленного на целевом элементе. Payload действия передаётся обработчику расширения."
+  },
+  "div_action_extension_action_div_id": {
+    "en": "ID of the target element.",
+    "ru": "Идентификатор целевого элемента."
+  },
+  "div_action_extension_action_extension_id": {
+    "en": "ID of the extension that handles the action.",
+    "ru": "Идентификатор расширения, которое обрабатывает действие."
+  },
   "div_action_focus_element": {
     "en": "Requests focus for an element. May require a user action on the web.",
     "ru": "Запрашивает фокус для элемента. В вебе может требовать действие пользователя."

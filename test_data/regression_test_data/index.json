@@ -1722,6 +1722,30 @@
       "case_id": 464
     },
     {
+      "title": "Lottie typed extension action: Start and Stop",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "Animations",
+        "lottie",
+        "DivAction"
+      ],
+      "steps": [
+        "Open the card and wait for the Lottie animation to load.",
+        "Tap Start. While the marker is in the middle of the track, tap Start again.",
+        "While the marker is in the middle of the track, tap Stop. Wait and tap Stop again.",
+        "Tap Start after Stop."
+      ],
+      "expected_results": [
+        "The card loads without parsing or runtime errors. The animation stays stopped until Start is tapped.",
+        "Each Start rewinds the marker to the left edge and plays the animation from the beginning.",
+        "Stop rewinds the marker to the left edge and leaves it stationary. Repeated Stop keeps it stopped.",
+        "Start after Stop plays the animation again from the left edge."
+      ],
+      "file": "animations/lottie/extension_action_start.json"
+    },
+    {
       "title": "Lottie params",
       "case_id": 190,
       "platforms": [

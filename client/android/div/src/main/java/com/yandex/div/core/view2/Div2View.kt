@@ -1353,7 +1353,7 @@ open class Div2View private constructor(
         expressionResolver: ExpressionResolver = getExpressionResolver(),
         scopeId: String? = null,
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
-        return div2Component.divVideoActionHandler.handleAction(this, divId, scopeId, command)
+        return div2Component.divVideoActionHandler.handleAction(this, divId, scopeId, command, expressionResolver)
     }
 
     internal fun unbindViewFromDiv(view: View): Div? = synchronized(viewToDivBindings) {

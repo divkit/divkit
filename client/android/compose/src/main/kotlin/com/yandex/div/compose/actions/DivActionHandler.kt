@@ -12,6 +12,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStopTemplate
 import com.yandex.div2.DivActionClearFocus
+import com.yandex.div2.DivActionExtensionAction
 import com.yandex.div2.DivActionFocusElement
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollTo
@@ -200,6 +201,7 @@ internal class DivActionHandler @Inject constructor(
                 action.value.onSuccessActions ?: downloadCallbacks?.onSuccessActions,
                 action.value.onFailActions ?: downloadCallbacks?.onFailActions
             )
+            is DivActionTyped.ExtensionAction -> notSupported(DivActionExtensionAction.TYPE)
             is DivActionTyped.FocusElement -> notSupported(DivActionFocusElement.TYPE)
 
             is DivActionTyped.HideTooltip ->

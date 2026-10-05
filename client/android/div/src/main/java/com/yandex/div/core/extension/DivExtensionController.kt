@@ -4,6 +4,10 @@ import android.view.View
 import com.yandex.div.R
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.actions.actionTargetBlockLocator
+import com.yandex.div.core.actions.logActionError
+import com.yandex.div.core.actions.logWarning
+import com.yandex.div.core.expression.evaluation.DictEvaluator
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
@@ -101,14 +105,7 @@ internal class DivExtensionController @Inject constructor(
         }
         val request = ++binding.request
         val bind = {
-            for ((index, handler) in binding.handlers.withIndex()) {
-                if (getBindings(divView)?.get(view) !== binding || binding.releasing || binding.request != request ||
-                    dispatcher.currentGeneration != generation) {
-                    break
-                }
-                binding.enteredHandlerCount = maxOf(binding.enteredHandlerCount, index + 1)
-                handler.bindView(divView, divBlock.expressionResolver, view, divBlock.div.value())
-            }
+            bindExtensionHandlers(divView, view, binding, request, generation)
         }
         if (dispatcher.isCollectingMainThreadActions) {
             divView.runMainThreadAction {
@@ -116,6 +113,31 @@ internal class DivExtensionController @Inject constructor(
             }
         } else {
             executeOnMainThreadBlocking { bind() }
+        }
+    }
+
+    private fun bindExtensionHandlers(
+        divView: Div2View,
+        view: View,
+        binding: Binding,
+        request: Int,
+        generation: Int,
+    ) {
+        val divBlock = binding.divBlock
+        var index = 0
+        while (index < binding.handlers.size && !shouldStopBinding(divView, view, binding, request, generation)) {
+            val handler = binding.handlers[index]
+            binding.enteredHandlerCount = maxOf(binding.enteredHandlerCount, index + 1)
+            handler.bindView(divView, divBlock.expressionResolver, view, divBlock.div.value())
+            // bindView may synchronously rebind or unbind the view and change this binding.
+            if (!shouldStopBinding(divView, view, binding, request, generation)) {
+                val actionHandler = handler.actionHandler
+                if (actionHandler != null && handler !in binding.boundActionStateHandlers) {
+                    binding.boundActionStateHandlers[handler] = actionHandler
+                    actionHandler.onViewBind(divView, divBlock.path, view)
+                }
+            }
+            index++
         }
     }
 
@@ -132,6 +154,8 @@ internal class DivExtensionController @Inject constructor(
             try {
                 while (binding.releasedHandlerCount < binding.enteredHandlerCount) {
                     val handler = binding.handlers[binding.releasedHandlerCount++]
+                    binding.boundActionStateHandlers.remove(handler)
+                        ?.onViewUnbind(divView, divBlock.path, view)
                     handler.unbindView(divView, divBlock.expressionResolver, view, divBlock.div.value())
                 }
             } finally {
@@ -145,6 +169,17 @@ internal class DivExtensionController @Inject constructor(
     fun releaseBindings(divView: Div2View) {
         val views = getBindings(divView)?.keys?.toList() ?: return
         views.forEach { unbindView(it, divView) }
+    }
+
+    private fun shouldStopBinding(
+        divView: Div2View,
+        view: View,
+        binding: Binding,
+        request: Int,
+        generation: Int,
+    ): Boolean {
+        return getBindings(divView)?.get(view) !== binding || binding.releasing ||
+            binding.request != request || divView.viewComponent.bindingDispatcher.currentGeneration != generation
     }
 
     private fun createBinding(view: View, divBlock: DivBlock, divView: Div2View): Binding {
@@ -172,6 +207,32 @@ internal class DivExtensionController @Inject constructor(
         var releasedHandlerCount = 0
         var request = 0
         var releasing = false
+        val boundActionStateHandlers = mutableMapOf<DivExtensionHandler, DivExtensionActionHandler>()
+    }
+
+    fun handleAction(
+        divView: Div2View,
+        extensionId: String,
+        divId: String,
+        scopeId: String?,
+        payload: DictEvaluator?,
+        resolver: ExpressionResolver,
+    ): Boolean {
+        val target = divView.actionTargetBlockLocator()?.findTarget(
+            divId = divId,
+            scopeId = scopeId,
+            actionResolver = resolver,
+            matches = { block ->
+                block.div.value().extensions.orEmpty().any { it.id == extensionId }
+            },
+            reportWarning = divView::logWarning,
+        )?.onFailure {
+            divView.logActionError("extension_action", it)
+        }?.getOrNull() ?: return false
+        return extensionHandlers.asSequence()
+            .filter { it.matches(target.div.value()) }
+            .mapNotNull { it.actionHandler }
+            .any { it.handleAction(divView, target.path, payload, resolver) }
     }
 
     fun loadMedia(view: View, divBlock: DivBlock, divView: Div2View) {
