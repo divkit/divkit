@@ -101,7 +101,7 @@ function solidUnique(opts: {
     };
 }
 
-function colorMapToList(colorMap: MaybeMissing<GradientColorPoint[]>): string | undefined {
+function colorMapToList(colorMap: MaybeMissing<GradientColorPoint[]>, offset?: string): string | undefined {
     if (!colorMap.every(it => it.color && typeof it.position === 'number' && it.position >= 0 && it.position <= 1)) {
         return;
     }
@@ -111,7 +111,7 @@ function colorMapToList(colorMap: MaybeMissing<GradientColorPoint[]>): string | 
         position: number;
     }[];
 
-    const sortedColors = colors.sort((a, b) => {
+    const sortedColors = [...colors].sort((a, b) => {
         if (Math.abs(a.position - b.position) < 1e-6) {
             return 0;
         }
@@ -119,56 +119,49 @@ function colorMapToList(colorMap: MaybeMissing<GradientColorPoint[]>): string | 
     });
 
     return sortedColors
-        .map(color => `${correctColor(color.color)} ${(color.position * 100).toFixed(2)}%`)
+        .map(color => `${correctColor(color.color)} ${offsetGradientStop((color.position * 100).toFixed(2), offset)}`)
         .join(',');
+}
+
+function offsetGradientStop(position: string, offset?: string): string {
+    return offset ? `calc(${position}% + ${offset})` : `${position}%`;
+}
+
+function createGradientColorList(
+    bg: MaybeMissing<GradientBackground | RadialBackground>, offset?: string
+): string | undefined {
+    if (!Array.isArray(bg.colors) && !Array.isArray(bg.color_map)) {
+        return;
+    }
+
+    if (bg.color_map) {
+        return colorMapToList(bg.color_map, offset);
+    }
+
+    const colors = bg.colors?.filter(Truthy);
+    return colors?.map((color, index) => {
+        const stop = offset ? ` ${offsetGradientStop(String(index * 100 / Math.max(1, colors.length - 1)), offset)}` : '';
+        return correctColor(color) + stop;
+    }).join(',');
 }
 
 function gradient(opts: {
     bg: MaybeMissing<GradientBackground>;
+    offset?: string;
 }): {
     size: string | undefined;
     pos: string | undefined;
     image: string;
 } | undefined {
-    if (!Array.isArray(opts.bg?.colors) && !Array.isArray(opts.bg?.color_map)) {
+    const list = createGradientColorList(opts.bg, opts.offset);
+    if (!list) {
         return;
-    }
-
-    const colors = opts.bg.colors?.filter(Truthy);
-    if (!colors?.length && !opts.bg?.color_map) {
-        return;
-    }
-
-    let image: string;
-    if (opts.bg.color_map) {
-        const list = colorMapToList(opts.bg.color_map);
-        if (!list) {
-            return;
-        }
-
-        image = 'linear-gradient(' +
-            (90 - Number(opts.bg.angle || 0) + 'deg') +
-            ',' +
-            list +
-            ')';
-    } else {
-        if (!colors) {
-            return;
-        }
-
-        image = 'linear-gradient(' +
-            (90 - Number(opts.bg.angle || 0) + 'deg') +
-            ',' +
-            colors
-                .map(color => correctColor(color))
-                .join(',') +
-            ')';
     }
 
     return {
         size: undefined,
         pos: undefined,
-        image
+        image: `linear-gradient(${90 - Number(opts.bg.angle || 0)}deg,${list})`
     };
 }
 
@@ -193,28 +186,14 @@ function radialCenterToCss(center: MaybeMissing<RadialGradientCenter> | undefine
 
 function radial(opts: {
     bg: MaybeMissing<RadialBackground>;
+    offset?: string;
+    radius?: string;
 }): {
     size: string | undefined;
     pos: string | undefined;
     image: string;
 } | undefined {
-    if (!Array.isArray(opts.bg?.colors) && !Array.isArray(opts.bg?.color_map)) {
-        return;
-    }
-
-    const colors = opts.bg.colors?.filter(Truthy);
-    if (!colors?.length && !opts.bg?.color_map) {
-        return;
-    }
-
-    let list;
-    if (opts.bg.color_map) {
-        list = colorMapToList(opts.bg.color_map);
-    } else if (colors) {
-        list = colors
-            .map(color => correctColor(color))
-            .join(',');
-    }
+    const list = createGradientColorList(opts.bg);
     if (!list) {
         return;
     }
@@ -229,7 +208,8 @@ function radial(opts: {
         }
     }
 
-    const centerX = radialCenterToCss(opts.bg.center_x);
+    const staticCenterX = radialCenterToCss(opts.bg.center_x);
+    const centerX = opts.offset ? `calc(${staticCenterX} + ${opts.offset})` : staticCenterX;
     const centerY = radialCenterToCss(opts.bg.center_y);
 
     return {
@@ -237,11 +217,23 @@ function radial(opts: {
         pos: undefined,
         image:
             'radial-gradient(' +
-            `circle ${size || 'farthest-corner'} at ${centerX} ${centerY}` +
+            `circle ${opts.radius || size || 'farthest-corner'} at ${centerX} ${centerY}` +
             ',' +
             list +
             ')'
     };
+}
+
+export function getAnimatedGradientBackground(
+    bg: MaybeMissing<GradientBackground | RadialBackground>
+): string | undefined {
+    const offset = 'var(--divkit-text-gradient-offset)';
+    if (bg.type === 'gradient') {
+        return gradient({ bg, offset })?.image;
+    }
+    if (bg.type === 'radial_gradient') {
+        return radial({ bg, offset, radius: 'var(--divkit-text-gradient-radius)' })?.image;
+    }
 }
 
 function image(opts: {

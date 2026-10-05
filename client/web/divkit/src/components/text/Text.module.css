@@ -91,6 +91,27 @@
 .text__inner_gradient {
     color: transparent;
     background-clip: text;
+    background-image: var(--divkit-text-gradient-image);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .text__inner_gradient-animated[data-gradient-animation] {
+        background-image: var(--divkit-text-gradient-animated-image);
+    }
+
+    .text__inner_gradient-animated[data-gradient-animation="css"] {
+        animation: divkit-text-gradient var(--divkit-text-gradient-animation-duration) linear infinite;
+    }
+}
+
+@keyframes divkit-text-gradient {
+    from {
+        --divkit-text-gradient-offset: -100%;
+    }
+
+    to {
+        --divkit-text-gradient-offset: 100%;
+    }
 }
 
 .text__image-wrapper {

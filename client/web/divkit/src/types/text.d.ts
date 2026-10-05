@@ -3,7 +3,7 @@ import type { DivActionableData } from './actionable';
 import type { Action } from '../../typings/common';
 import type { FixedSize } from './sizes';
 import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
-import type { GradientBackground, SolidBackground } from './background';
+import type { GradientBackground, RadialBackground, SolidBackground } from './background';
 import type { BooleanInt } from '../../typings/common';
 import type { TintMode } from './image';
 import type { Shadow, Stroke } from './border';
@@ -130,6 +130,16 @@ export interface ImageBuilder {
     data_element_name?: string;
 }
 
+export type StaticTextGradient = GradientBackground | RadialBackground;
+
+export interface AnimatedTextGradient {
+    type: 'animated';
+    gradient: StaticTextGradient;
+    duration?: number;
+}
+
+export type TextGradient = StaticTextGradient | AnimatedTextGradient;
+
 export interface DivTextData extends DivBaseData, DivActionableData, TextStyles {
     type: 'text';
     // font_size_unit;
@@ -139,7 +149,7 @@ export interface DivTextData extends DivBaseData, DivActionableData, TextStyles 
     text_alignment_horizontal?: AlignmentHorizontal;
     text_alignment_vertical?: AlignmentVertical;
     focused_text_color?: string;
-    text_gradient?: GradientBackground;
+    text_gradient?: TextGradient;
     text: string;
     ranges?: TextRange[];
     range_builder?: RangeBuilder;

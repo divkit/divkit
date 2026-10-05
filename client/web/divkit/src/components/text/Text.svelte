@@ -18,7 +18,6 @@
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm } from '../../utils/pxToEm';
     import { genClassName } from '../../utils/genClassName';
-    import { getBackground } from '../../utils/background';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
@@ -29,12 +28,15 @@
     import { correctTintMode } from '../../utils/correctTintMode';
     import { filterEnabledActions } from '../../utils/filterEnabledActions';
     import { autoEllipsize } from '../../use/autoEllipsize';
+    import { animateTextGradient } from '../../use/animatedTextGradient';
+    import { applyTextStyle } from '../../use/applyTextStyle';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { edgeInsertsMultiply } from '../../utils/edgeInsetsMultiply';
     import { wrapError } from '../../utils/wrapError';
     import { constStore } from '../../utils/constStore';
     import { getElementsFromItemBuilder } from '../../utils/itemBuilder';
+    import { resolveTextGradient, type ResolvedTextGradient } from '../../utils/textGradient';
 
     export let componentContext: ComponentContext<DivTextData>;
     export let layoutParams: LayoutParams | undefined = undefined;
@@ -55,7 +57,7 @@
     let valign: AlignmentVerticalMapped = 'start';
     let rootTextColor = '';
     let focusTextColor = '';
-    let gradient = '';
+    let resolvedTextGradient: ResolvedTextGradient | undefined;
     let selectable = false;
 
     interface RenderItemText {
@@ -100,7 +102,7 @@
         halign = 'start';
         valign = 'start';
         rootTextColor = '';
-        gradient = '';
+        resolvedTextGradient = undefined;
         selectable = false;
     }
 
@@ -158,7 +160,7 @@
     }
 
     $: {
-        rootTextStyles = gradient ? {
+        rootTextStyles = resolvedTextGradient ? {
             ...$jsonRootTextStyles,
             text_color: ''
         } : $jsonRootTextStyles;
@@ -224,7 +226,7 @@
         );
 
 
-    $: isOnlyOneColorDefined = Boolean(!gradient && $jsonTextColor) !==
+    $: isOnlyOneColorDefined = Boolean(!resolvedTextGradient && $jsonTextColor) !==
         Boolean($jsonRanges && $jsonRanges[0] && $jsonRanges[0].text_color);
 
     $: {
@@ -248,18 +250,7 @@
 
     $: truncate = $jsonTruncate === 'none' ? 'none' : '';
 
-    $: {
-        let newGradient = '';
-
-        if ($jsonTextGradient) {
-            const bg = getBackground([$jsonTextGradient], $direction);
-            if (bg.image) {
-                newGradient = bg.image;
-            }
-        }
-
-        gradient = newGradient;
-    }
+    $: resolvedTextGradient = resolveTextGradient($jsonTextGradient, $direction);
 
     $: {
         selectable = correctBooleanInt($jsonSelectable, selectable);
@@ -513,11 +504,12 @@
         halign,
         valign,
         truncate,
-        'has-focus-color': Boolean(focusTextColor)
+        'has-focus-color': Boolean(focusTextColor && !resolvedTextGradient)
     };
 
     $: innerMods = {
-        gradient: Boolean(gradient),
+        gradient: Boolean(resolvedTextGradient),
+        'gradient-animated': Boolean(resolvedTextGradient?.animation),
         'has-cloud-bg': hasCloudBg
     };
 
@@ -527,7 +519,11 @@
         'max-height': maxHeight,
         '-webkit-line-clamp': lineClamp,
         color: rootTextColor,
-        'background-image': gradient,
+        '--divkit-text-gradient-image': resolvedTextGradient?.backgroundImage,
+        '--divkit-text-gradient-animated-image': resolvedTextGradient?.animation?.backgroundImage,
+        '--divkit-text-gradient-animation-duration': resolvedTextGradient?.animation === undefined ?
+            undefined :
+            `${resolvedTextGradient.animation.duration}ms`,
         '--divkit-text-focus-color': focusTextColor
     };
 
@@ -535,6 +531,13 @@
         edgeInsertsMultiply(correctEdgeInsertsObject($jsonPaddings, {}) || {}, 10 / fontSize),
         $direction
     );
+
+    $: cloudStyle = {
+        ...style,
+        padding: cloudPadding,
+        filter: wholeTextCloudBgId ? `url(#${wholeTextCloudBgId})` : undefined,
+        opacity: wholeTextCloudBgOpacity
+    };
 
     function onImgError(event: Event): void {
         if (event.target && 'classList' in event.target) {
@@ -560,12 +563,8 @@
                 ...innerMods,
                 'cloud-bg': true
             })}
-            style={makeStyle({
-                ...style,
-                padding: cloudPadding,
-                filter: wholeTextCloudBgId ? `url(#${wholeTextCloudBgId})` : undefined,
-                opacity: wholeTextCloudBgOpacity
-            })}
+            use:applyTextStyle={cloudStyle}
+            use:animateTextGradient={{ animation: resolvedTextGradient?.animation, fontSize }}
         >
             {#each renderList as item}
                 {#if 'text' in item}
@@ -596,7 +595,8 @@
     {/if}
     <span
         class={genClassName('text__inner', css, innerMods)}
-        style={makeStyle(style)}
+        use:applyTextStyle={style}
+        use:animateTextGradient={{ animation: resolvedTextGradient?.animation, fontSize }}
         use:autoEllipsize={{
             enabled: $jsonAutoEllipsize,
             lineClamp: typeof lineClamp === 'number' ? lineClamp : undefined,
