@@ -1,5 +1,5 @@
 {
-  "description": "Image with wrap_content height, aspect ratio 2.0, and max_width constraint of 150",
+  "description": "Image with wrap_content height, aspect ratio 2.0, and max_width constraint of 160",
   "platforms": [
     "android",
     "ios",
@@ -27,7 +27,7 @@
           "items": [
             {
               "type": "text",
-              "text": "Test: wrap_content height + aspect 2.0 + max_width 150",
+              "text": "Test: wrap_content height + aspect 2.0 + max_width 160",
               "font_size": 11,
               "text_color": "#FF000000",
               "margins": {
@@ -36,7 +36,7 @@
             },
             {
               "type": "text",
-              "text": "Expected: Image matches reference frame (150×75)",
+              "text": "Expected: Image matches reference frame (160×80)",
               "font_size": 10,
               "text_color": "#FF666666",
               "margins": {
@@ -60,7 +60,7 @@
                     "type": "wrap_content",
                     "max_size": {
                       "type": "fixed",
-                      "value": 150
+                      "value": 160
                     }
                   },
                   "height": {
@@ -89,11 +89,11 @@
                   "type": "container",
                   "width": {
                     "type": "fixed",
-                    "value": 150
+                    "value": 160
                   },
                   "height": {
                     "type": "fixed",
-                    "value": 75
+                    "value": 80
                   },
                   "border": {
                     "stroke": {
@@ -110,7 +110,7 @@
                   "items": [
                     {
                       "type": "text",
-                      "text": "150×75",
+                      "text": "160×80",
                       "font_size": 12,
                       "text_color": "#FF00AA00",
                       "text_alignment_horizontal": "center",
