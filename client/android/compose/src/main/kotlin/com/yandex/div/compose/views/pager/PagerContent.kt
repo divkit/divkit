@@ -36,6 +36,7 @@ import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.desiredSnapOffset
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div2.Div
+import com.yandex.div2.DivPageTransformation
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
 import kotlinx.coroutines.flow.first
@@ -53,6 +54,7 @@ internal fun PagerContent(
     layoutDirection: LayoutDirection,
     defaultItem: Int,
     infiniteScroll: Boolean,
+    pageTransformation: DivPageTransformation?,
     viewportSize: Dp,
     crossAxisBounded: Boolean,
     stateStorage: DivPagerStateStorage
@@ -126,10 +128,23 @@ internal fun PagerContent(
         isHorizontal, viewportSize, crossAxisBounded, listState,
         paddings, pageSize, startPadding, endPadding, layoutDirection, density
     )
+    val transformation = observePageTransformation(pageTransformation)
+    val overlap = transformation?.overlap == true
+    // Transformed pages of different sizes and overlapped pages need their neighbours outside the viewport.
+    val neighbourSizes = rememberPagerNeighbourSizes(
+        listState, itemKeys, enabled = transformation != null && (pageSize == null || overlap)
+    )
+    val pageSizePx = pageSize?.let { with(density) { it.roundToPx() } }
+    val neighbourSize: (Int) -> Int? = remember(neighbourSizes, pageSizePx) {
+        { index -> neighbourSizes?.get(index) ?: pageSizePx }
+    }
+    val transformationPosition = rememberPageTransformationPosition(
+        listState, snapPosition, rawDefaultItem, neighbourSize
+    )
 
     OrientedLazyList(
         isHorizontal = isHorizontal,
-        modifier = IntrinsicSizeBarrier.fillMaxSize().clipToBounds(),
+        modifier = IntrinsicSizeBarrier.fillMaxSize().clipToBounds().trackPagerViewport(neighbourSizes),
         listState = listState,
         contentPadding = paddings,
         itemSpacing = itemSpacing,
@@ -149,7 +164,16 @@ internal fun PagerContent(
             },
             contentType = { itemWindow },
         ) { index ->
-            ScrollableChildItem(items[itemWindow.realIndex(index)], childModifier, isHorizontal, crossAlignment)
+            ScrollableChildItem(
+                items[itemWindow.realIndex(index)],
+                childModifier
+                    .trackPagerPageSize(neighbourSizes, index, isHorizontal)
+                    .pageTransformation(
+                        transformation, transformationPosition, index, listState, isHorizontal, layoutDirection
+                    ),
+                isHorizontal,
+                crossAlignment,
+            )
         }
     }
 }

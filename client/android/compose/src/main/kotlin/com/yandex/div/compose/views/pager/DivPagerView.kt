@@ -98,6 +98,7 @@ private fun PagerView(
             layoutDirection = LocalLayoutDirection.current,
             defaultItem = defaultItem,
             infiniteScroll = infiniteScroll,
+            pageTransformation = data.pageTransformation,
             viewportSize = viewportSize,
             crossAxisBounded = crossAxisBounded.value,
             stateStorage = stateStorage
