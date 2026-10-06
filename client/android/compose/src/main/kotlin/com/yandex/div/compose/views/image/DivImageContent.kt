@@ -24,8 +24,8 @@ import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
-import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div.compose.images.rememberNetworkRestoringImagePainter
 import com.yandex.div.compose.views.modifiers.image.imageContentSize
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivBase
@@ -56,7 +56,7 @@ internal fun DivImageContent(
         null
     }
     val imagePainter = imageRequestParams?.let {
-        rememberAsyncImagePainter(
+        rememberNetworkRestoringImagePainter(
             model = rememberImageRequest(it),
             imageLoader = imageLoader,
             onState = painterStateListener
@@ -133,7 +133,6 @@ internal fun DivImageContent(
         }
 
         if (imagePainter != null) {
-            imagePainter.observeNetworkRestoration()
             Image(
                 modifier = Modifier.fillMaxSize(),
                 painter = imagePainter,

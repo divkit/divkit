@@ -8,14 +8,13 @@ import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.unit.IntSize
-import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
-import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.observedContentScale
 import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div.compose.images.rememberNetworkRestoringImagePainter
 import com.yandex.div.compose.utils.observedAlignment
 import com.yandex.div.compose.views.image.observedTransformations
 import com.yandex.div2.DivImageBackground
@@ -32,7 +31,7 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
     )
 
     val component = divContext.component
-    val painter = rememberAsyncImagePainter(
+    val painter = rememberNetworkRestoringImagePainter(
         model = rememberImageRequest(
             ImageRequestParams(
                 data = data.imageUrl.observedValue(),
@@ -42,7 +41,6 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
         imageLoader = component.imageLoader,
         onState = component.debugConfiguration.imagePainterStateListener
     )
-    painter.observeNetworkRestoration()
 
     return drawBehind {
         val srcSize = painter.intrinsicSize

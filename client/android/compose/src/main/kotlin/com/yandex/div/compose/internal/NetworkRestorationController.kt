@@ -5,45 +5,96 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import androidx.annotation.MainThread
 import com.yandex.div.compose.dagger.DivContextScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 /**
- * Listens to system connectivity events and exposes a hot stream of "network restored" pulses.
+ * Shares one system callback per DivContext and retries only consumers waiting after an error.
+ * Obtains the connectivity manager and subscribes on the first pending retry.
  *
- * Exists as a process-wide bus so consumers (image painters, video players, etc.) don't have to
- * each register their own [ConnectivityManager.NetworkCallback]. Subscribers decide locally whether
- * to react.
+ * A `SharedFlow` collected by every painter would require a `LaunchedEffect` and a coroutine even
+ * for successful or loading images. Keeping only failed requests here avoids those per-painter
+ * subscriptions.
+ *
+ * Each network event retries consumers waiting when its coroutine runs. Consumers remove their
+ * retry on state changes and when leaving composition; tokens reject attempts replaced during
+ * batch processing.
  */
 @DivContextScope
-internal class NetworkRestorationController @Inject constructor(context: Context) {
+internal class NetworkRestorationController @Inject constructor(
+    context: Context,
+    private val coroutineScope: CoroutineScope,
+) {
+    private val connectivityManager by lazy {
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
 
-    private val _networkRestored = MutableSharedFlow<Unit>(
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST,
-    )
-    val networkRestored: SharedFlow<Unit> = _networkRestored.asSharedFlow()
+    private val pendingRetries = mutableMapOf<() -> Unit, Any>()
 
-    private val callback = object : ConnectivityManager.NetworkCallback() {
-        override fun onAvailable(network: Network) {
-            _networkRestored.tryEmit(Unit)
+    private var isObserving = false
+
+    @MainThread
+    fun addPendingRetry(retry: () -> Unit) {
+        pendingRetries.getOrPut(retry) { Any() }
+        startObservingNetwork()
+    }
+
+    @MainThread
+    fun removePendingRetry(retry: () -> Unit) {
+        pendingRetries.remove(retry)
+    }
+
+    @MainThread
+    private fun startObservingNetwork() {
+        if (isObserving) {
+            return
+        }
+
+        try {
+            val request = NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build()
+            // Take a one-time baseline before subscribing, not a snapshot from inside a callback.
+            @Suppress("DEPRECATION")
+            val initialNetworks = connectivityManager.allNetworks
+                .filterTo(mutableSetOf()) { network ->
+                    connectivityManager.getNetworkCapabilities(network)
+                        ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+                }
+            connectivityManager.registerNetworkCallback(
+                request,
+                createNetworkCallback(initialNetworks)
+            )
+            isObserving = true
+        } catch (_: Throwable) {
         }
     }
 
-    init {
-        val connectivityManager = context.getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-        try {
-            val request: NetworkRequest = NetworkRequest.Builder()
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                .build()
+    private fun createNetworkCallback(initialNetworks: MutableSet<Network>) =
+        object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                // Registration also reports networks that were already available.
+                if (initialNetworks.remove(network)) {
+                    return
+                }
 
-            connectivityManager.registerNetworkCallback(request, callback)
-        } catch (_: Throwable) { }
-    }
+                coroutineScope.launch {
+                    pendingRetries.toList().forEach { (retry, token) ->
+                        // Another retry may have replaced this consumer's pending attempt.
+                        if (pendingRetries[retry] !== token) {
+                            return@forEach
+                        }
+                        pendingRetries.remove(retry)
+                        retry()
+                    }
+                }
+            }
+
+            override fun onLost(network: Network) {
+                initialNetworks.remove(network)
+            }
+        }
 }

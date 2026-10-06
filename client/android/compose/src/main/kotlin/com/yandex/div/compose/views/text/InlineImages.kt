@@ -29,15 +29,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
-import com.yandex.div.compose.images.observeNetworkRestoration
 import com.yandex.div.compose.images.rememberImageRequest
+import com.yandex.div.compose.images.rememberNetworkRestoringImagePainter
 import com.yandex.div.compose.utils.toDp
 import com.yandex.div.compose.utils.toTextUnit
 import com.yandex.div.compose.views.image.toColorFilter
@@ -249,7 +248,7 @@ private fun InlineImage(image: InlineImageData) {
     }
 
     val component = divContext.component
-    val painter = rememberAsyncImagePainter(
+    val painter = rememberNetworkRestoringImagePainter(
         model = rememberImageRequest(
             ImageRequestParams(
                 data = image.url,
@@ -259,7 +258,6 @@ private fun InlineImage(image: InlineImageData) {
         imageLoader = component.imageLoader,
         onState = component.debugConfiguration.imagePainterStateListener,
     )
-    painter.observeNetworkRestoration()
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             modifier = Modifier

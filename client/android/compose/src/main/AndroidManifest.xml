@@ -3,7 +3,7 @@
 
     <!--
         Required by:
-          * com.yandex.div.compose.views.image.observeNetworkRestoration —
+          * com.yandex.div.compose.internal.NetworkRestorationController —
             registers a ConnectivityManager.NetworkCallback to re-issue failed
             image requests when connectivity is restored.
           * coil3.network.ConnectivityChecker — used by Coil's NetworkFetcher
