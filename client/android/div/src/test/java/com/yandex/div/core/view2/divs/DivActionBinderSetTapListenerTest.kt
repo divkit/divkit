@@ -4,6 +4,7 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.accessibility.AccessibilityNodeInfo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.view2.animations.DEFAULT_CLICK_ANIMATION
@@ -16,10 +17,12 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.only
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.verifyNoInteractions
 import org.robolectric.Shadows.shadowOf
 import java.time.Duration
 import kotlin.test.Test
 import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivActionBinderSetTapListenerTest : DivBinderTest() {
@@ -75,6 +78,45 @@ class DivActionBinderSetTapListenerTest : DivBinderTest() {
         dispatchTaps(0L, 100L)
 
         verifyAction(doubleTapActions, DivActionReason.DOUBLE_CLICK)
+    }
+
+    @Test
+    fun `accessibility activation invokes single tap action when double tap is present`() {
+        bind(tapActions = tapActions, doubleTapActions = doubleTapActions)
+
+        assertTrue(view.performAccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, null))
+
+        verifyAction(tapActions, DivActionReason.CLICK)
+    }
+
+    @Test
+    fun `accessibility activation does not invoke actions on a disabled view`() {
+        bind(tapActions = tapActions, doubleTapActions = doubleTapActions)
+        view.isEnabled = false
+
+        view.performAccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, null)
+
+        verifyNoInteractions(actionPerformer)
+    }
+
+    @Test
+    fun `rebind without double tap replaces the accessibility action with the new click listener`() {
+        bind(tapActions = oldTapActions, doubleTapActions = doubleTapActions)
+        bind(tapActions = tapActions)
+
+        assertTrue(view.performAccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, null))
+
+        verifyAction(tapActions, DivActionReason.CLICK)
+    }
+
+    @Test
+    fun `removing actions on rebind clears accessibility activation`() {
+        bind(tapActions = tapActions, doubleTapActions = doubleTapActions)
+        bind()
+
+        assertFalse(view.performAccessibilityAction(AccessibilityNodeInfo.ACTION_CLICK, null))
+
+        verifyNoInteractions(actionPerformer)
     }
 
     @Test

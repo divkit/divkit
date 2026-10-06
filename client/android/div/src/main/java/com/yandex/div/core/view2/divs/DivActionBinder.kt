@@ -6,6 +6,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat
 import androidx.core.view.size
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
@@ -143,6 +145,7 @@ internal class DivActionBinder @Inject constructor(
                     it.clearFocusIfNeeded(captureFocusOnAction, divView.inputFocusTracker, resolver)
                 }
             } else {
+                ViewCompat.removeAccessibilityAction(target, AccessibilityActionCompat.ACTION_CLICK.id)
                 divGestureListener.onSingleTapListener = null
                 target.setOnClickListener(null)
                 target.isClickable = false
@@ -180,7 +183,14 @@ internal class DivActionBinder @Inject constructor(
         if (gestureListener.onDoubleTapListener != null) {
             setOnClickListener(null)  // clear stale click listener to prevent double firing during view reuse
             gestureListener.onSingleTapListener = { listener.onClick(this) }
+            // Accessibility activation bypasses the gesture detector.
+            ViewCompat.replaceAccessibilityAction(this, AccessibilityActionCompat.ACTION_CLICK, null) { view, _ ->
+                if (!view.isEnabled) return@replaceAccessibilityAction false
+                listener.onClick(view)
+                true
+            }
         } else {
+            ViewCompat.removeAccessibilityAction(this, AccessibilityActionCompat.ACTION_CLICK.id)
             gestureListener.onSingleTapListener = null  // clear stale gesture listener to prevent double firing during view reuse
             setOnClickListener(listener)
         }
