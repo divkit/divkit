@@ -17,6 +17,9 @@ import kotlin.time.TimeSource
 @InternalApi
 @OptIn(ExperimentalTime::class)
 class DivDebugConfiguration(
+    /**
+    * Overrides the main coroutine scope for debugging and testing.
+    */
     val coroutineScope: CoroutineScope? = null,
 
     /**

@@ -7,7 +7,9 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.annotation.MainThread
 import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.dagger.Names
 import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -26,7 +28,8 @@ import kotlinx.coroutines.launch
 @DivContextScope
 internal class NetworkRestorationController @Inject constructor(
     context: Context,
-    private val coroutineScope: CoroutineScope,
+    @Named(Names.MAIN_COROUTINE_SCOPE)
+    private val mainCoroutineScope: CoroutineScope,
 ) {
     private val connectivityManager by lazy {
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -81,7 +84,7 @@ internal class NetworkRestorationController @Inject constructor(
                     return
                 }
 
-                coroutineScope.launch {
+                mainCoroutineScope.launch {
                     pendingRetries.toList().forEach { (retry, token) ->
                         // Another retry may have replaced this consumer's pending attempt.
                         if (pendingRetries[retry] !== token) {

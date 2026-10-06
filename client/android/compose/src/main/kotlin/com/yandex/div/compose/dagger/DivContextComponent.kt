@@ -36,7 +36,6 @@ internal interface DivContextComponent {
 
     val animationConfiguration: AnimationConfiguration
     val baseContext: Context
-    val coroutineScope: CoroutineScope
     val customViewFactories: Map<String, DivCustomViewFactory>
     val debugConfiguration: DivDebugConfiguration
     val debugFeatures: DivDebugFeatures
@@ -53,6 +52,9 @@ internal interface DivContextComponent {
     val preloader: DivPreloader
     val viewContextFactory: DivViewContextFactory
     val viewContextStorage: DivViewContextStorage
+
+    @get:Named(Names.MAIN_COROUTINE_SCOPE)
+    val mainCoroutineScope: CoroutineScope
 
     @get:Named(Names.HOST_VARIABLES)
     val variableController: DivVariableController

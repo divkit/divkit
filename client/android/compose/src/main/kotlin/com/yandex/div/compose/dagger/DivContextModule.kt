@@ -18,6 +18,7 @@ import com.yandex.div.storage.storedvalues.StoredValuesRepositoryImpl
 import com.yandex.yatagan.Binds
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
+import javax.inject.Named
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource
@@ -43,7 +44,8 @@ internal interface DivContextModule {
 
         @DivContextScope
         @Provides
-        fun provideCoroutineScope(
+        @Named(Names.MAIN_COROUTINE_SCOPE)
+        fun provideMainCoroutineScope(
             context: Context,
             debugConfiguration: DivDebugConfiguration
         ): CoroutineScope {

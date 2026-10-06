@@ -51,7 +51,7 @@ class ImageNetworkRestorationTest {
     private val localComponent = mockLocalComponent(
         networkRestorationController = NetworkRestorationController(
             context = context,
-            coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main),
+            mainCoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main),
         )
     )
 

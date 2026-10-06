@@ -1,6 +1,7 @@
 package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.dagger.Names
 import com.yandex.div.internal.util.duration
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction
@@ -10,11 +11,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Named
 
 @DivViewScope
 internal class VisibilityActionTracker @Inject constructor(
     private val actionHandler: DivActionHandler,
-    private val coroutineScope: CoroutineScope
+    @Named(Names.MAIN_COROUTINE_SCOPE)
+    private val mainCoroutineScope: CoroutineScope
 ) {
     private val counter = mutableMapOf<DivSightAction, Int>()
     private val pendingActions = mutableMapOf<DivSightAction, Job>()
@@ -65,7 +68,7 @@ internal class VisibilityActionTracker @Inject constructor(
         action: DivSightAction
     ) {
         cancelAction(action)
-        pendingActions[action] = coroutineScope.launch {
+        pendingActions[action] = mainCoroutineScope.launch {
             delay(action.duration.evaluate(context.expressionResolver))
             pendingActions.remove(action)
             triggerIfNeeded(context, action)

@@ -637,7 +637,7 @@ class TimerStorageTest {
     private fun init(vararg timers: DivTimer) {
         timerStorage = TimerStorage(
             actionHandler = { actionHandler },
-            coroutineScope = testScope,
+            mainCoroutineScope = testScope,
             reporter = reporter,
             timeSource = testScope.testScheduler.timeSource
         ).apply {

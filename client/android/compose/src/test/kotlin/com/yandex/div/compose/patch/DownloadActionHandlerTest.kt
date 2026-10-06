@@ -29,14 +29,16 @@ class DownloadActionHandlerTest {
     private val scope = TestScope()
     private val response = CompletableDeferred<DivPatch>()
     private val requestedUrls = mutableListOf<Uri>()
+
     private val manager = DivPatchDownloadManager(
         downloader = DivPatchDownloader {
             requestedUrls.add(it)
             response.await()
         },
-        coroutineScope = scope,
+        mainCoroutineScope = scope,
         reporter = environment.reporter
     )
+
     private val legacyCallbacks = DivDownloadCallbacks(
         onSuccessActions = listOf(action(id = "legacy-success")),
         onFailActions = listOf(action(id = "legacy-failure"))

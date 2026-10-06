@@ -76,7 +76,7 @@ class DivViewHost(
     ) {
         cancelPreload()
         if (preloadMode != PreloadMode.DISABLED) {
-            preloadJob = divContext.component.coroutineScope.launch {
+            preloadJob = divContext.component.mainCoroutineScope.launch {
                 divContext.component.preloader.preload(data, preloadMode)
             }
         }

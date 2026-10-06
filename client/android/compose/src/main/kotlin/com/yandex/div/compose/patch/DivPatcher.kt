@@ -3,10 +3,12 @@ package com.yandex.div.compose.patch
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.context.DivViewContextFactory
 import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.dagger.Names
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.withContext
@@ -15,7 +17,8 @@ import kotlinx.coroutines.withContext
 @ExperimentalApi
 @DivContextScope
 class DivPatcher @Inject internal constructor(
-    private val coroutineScope: CoroutineScope,
+    @Named(Names.MAIN_COROUTINE_SCOPE)
+    private val mainCoroutineScope: CoroutineScope,
     private val viewContextFactory: DivViewContextFactory,
 ) {
     /**
@@ -32,7 +35,7 @@ class DivPatcher @Inject internal constructor(
      *    val applied = divContext.patcher.applyPatch(data, patch)
      */
     suspend fun applyPatch(data: DivData, patch: DivPatch): Boolean {
-        return withContext(coroutineScope.coroutineContext.minusKey(Job)) {
+        return withContext(mainCoroutineScope.coroutineContext.minusKey(Job)) {
             val viewContext = viewContextFactory.getOrCreate(data)
             viewContext.patchCoordinator.applyPatch(patch, viewContext.rootLocalComponent)
         }

@@ -23,8 +23,8 @@ internal class TimerController(
     private val timer: DivTimer,
     private val actionHandler: DivActionHandler,
     private val actionHandlingContext: DivActionHandlingContext,
-    private val coroutineScope: CoroutineScope,
     private val expressionResolver: ExpressionResolver,
+    private val mainCoroutineScope: CoroutineScope,
     private val reporter: DivReporter,
     private val timeSource: TimeSource,
     private val variableController: DivVariableController
@@ -166,7 +166,7 @@ internal class TimerController(
         }
 
         currentTickMark = timeSource.markNow()
-        nextTickJob = coroutineScope.launch {
+        nextTickJob = mainCoroutineScope.launch {
             delay(nextTickDuration)
             elapsedDuration += nextTickDuration
 

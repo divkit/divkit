@@ -31,7 +31,7 @@ class VisibilityActionTrackerTest {
 
     private val tracker = VisibilityActionTracker(
         actionHandler = actionHandler,
-        coroutineScope = testScope
+        mainCoroutineScope = testScope
     )
 
     @Test

@@ -6,10 +6,12 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.dagger.Names
 import com.yandex.div2.DivTimer
 import com.yandex.yatagan.Lazy
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
+import javax.inject.Named
 import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource
 
@@ -17,7 +19,8 @@ import kotlin.time.TimeSource
 @OptIn(ExperimentalTime::class)
 internal class TimerStorage @Inject constructor(
     private val actionHandler: Lazy<DivActionHandler>,
-    private val coroutineScope: CoroutineScope,
+    @Named(Names.MAIN_COROUTINE_SCOPE)
+    private val mainCoroutineScope: CoroutineScope,
     private val reporter: DivReporter,
     private val timeSource: TimeSource
 ) {
@@ -46,8 +49,8 @@ internal class TimerStorage @Inject constructor(
                 timer = timer,
                 actionHandler = actionHandler.get(),
                 actionHandlingContext = localComponent.actionHandlingContext,
-                coroutineScope = coroutineScope,
                 expressionResolver = localComponent.expressionResolver,
+                mainCoroutineScope = mainCoroutineScope,
                 reporter = reporter,
                 timeSource = timeSource,
                 variableController = localComponent.variableController
