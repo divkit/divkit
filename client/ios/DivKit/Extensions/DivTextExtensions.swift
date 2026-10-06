@@ -3,6 +3,26 @@ import Foundation
 import LayoutKit
 import VGSL
 
+private struct TextBlockContent {
+  let text: NSAttributedString
+  let gradientModel: TextBlock.GradientModel?
+  let images: [TextBlock.InlineImage]
+  let truncationToken: NSAttributedString?
+  let truncationPolicy: TextTruncationPolicy
+  let truncationImages: [TextBlock.InlineImage]
+  let additionalTextInsets: EdgeInsets
+}
+
+private struct BaseTextStyle {
+  let typo: Typo
+  let truncationPolicy: TextTruncationPolicy
+}
+
+private struct TruncationContent {
+  let token: NSAttributedString?
+  let images: [TextBlock.InlineImage]
+}
+
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     let context = modifiedContextParentPath(context)
@@ -27,8 +47,57 @@ extension DivText: DivBlockModeling {
     text: Lazy<String>
   ) throws -> Block {
     let expressionResolver = context.expressionResolver
-
     let fontParams = resolveFontParams(expressionResolver)
+    let isFocused = context.blockStateStorage.isFocused(path: context.path)
+    let textStyle = makeBaseTextStyle(
+      context: context,
+      fontParams: fontParams,
+      isFocused: isFocused
+    )
+    let content = makeTextBlockContent(
+      context: context,
+      text: text,
+      typo: textStyle.typo,
+      fontParams: fontParams,
+      truncationPolicy: textStyle.truncationPolicy
+    )
+
+    if context.currentDivId != nil {
+      context.blockStateStorage.setState(
+        path: context.path,
+        state: TextBlockViewState(text: content.text.string)
+      )
+    }
+
+    return TextBlock(
+      widthTrait: resolveContentWidthTrait(context),
+      heightTrait: resolveContentHeightTrait(context),
+      text: content.text,
+      gradientModel: content.gradientModel,
+      verticalAlignment: resolveTextAlignmentVertical(expressionResolver).alignment,
+      maxIntrinsicNumberOfLines: resolveMaxLines(expressionResolver) ?? .max,
+      minNumberOfHiddenLines: resolveMinHiddenLines(expressionResolver) ?? 0,
+      images: content.images,
+      accessibilityElement: nil,
+      truncationToken: content.truncationToken,
+      truncationPolicy: content.truncationPolicy,
+      truncationImages: content.truncationImages,
+      additionalTextInsets: content.additionalTextInsets,
+      canSelect: resolveSelectable(expressionResolver),
+      tightenWidth: resolveTightenWidth(expressionResolver),
+      autoEllipsize: resolveAutoEllipsize(expressionResolver)
+        ?? context.flagsInfo.defaultTextAutoEllipsize,
+      path: context.path,
+      isFocused: isFocused
+    )
+  }
+
+  private func makeBaseTextStyle(
+    context: DivBlockModelingContext,
+    fontParams: FontParams,
+    isFocused: Bool
+  ) -> BaseTextStyle {
+    let expressionResolver = context.expressionResolver
     var typo = Typo(font: context.font(fontParams))
 
     let alignment = resolveTextAlignmentHorizontal(expressionResolver)
@@ -41,8 +110,6 @@ extension DivText: DivBlockModeling {
     if !kern.isApproximatelyEqualTo(0) {
       typo = typo.kerned(kern)
     }
-
-    let isFocused = context.blockStateStorage.isFocused(path: context.path)
 
     let resolvedColor = if isFocused,
                            let focusedTextColor = resolveFocusedTextColor(expressionResolver) {
@@ -59,20 +126,36 @@ extension DivText: DivBlockModeling {
       typo = typo.with(height: CGFloat(lineHeight))
     }
 
-    switch resolveStrike(expressionResolver) {
+    typo = applyDecorations(to: typo, resolver: expressionResolver)
+    let truncation = resolveTruncation(resolver: expressionResolver)
+    if let lineBreakMode = truncation.lineBreakMode {
+      typo = typo.with(lineBreakMode: lineBreakMode)
+    }
+
+    return BaseTextStyle(typo: typo, truncationPolicy: truncation.policy)
+  }
+
+  private func applyDecorations(to baseTypo: Typo, resolver: ExpressionResolver) -> Typo {
+    var typo = baseTypo
+    switch resolveStrike(resolver) {
     case .none: break
     case .single: typo = typo.struckThrough(.single)
     }
 
-    switch resolveUnderline(expressionResolver) {
+    switch resolveUnderline(resolver) {
     case .none: break
     case .single: typo = typo.underlined(.single)
     }
-    if let textShadow = textShadow?.resolve(expressionResolver) {
+    if let textShadow = textShadow?.resolve(resolver) {
       typo = typo.shaded(textShadow.typoShadow)
     }
+    return typo
+  }
 
-    let truncateMode = resolveTruncate(expressionResolver)
+  private func resolveTruncation(
+    resolver: ExpressionResolver
+  ) -> (lineBreakMode: LineBreakMode?, policy: TextTruncationPolicy) {
+    let truncateMode = resolveTruncate(resolver)
     let lineBreakMode: LineBreakMode? = switch truncateMode {
     case .none:
       .byClipping
@@ -83,11 +166,8 @@ extension DivText: DivBlockModeling {
     case .middle:
       .byTruncatingMiddle
     }
-    if let lineBreakMode {
-      typo = typo.with(lineBreakMode: lineBreakMode)
-    }
     let truncationPolicy: TextTruncationPolicy = if truncateMode == .end {
-      switch resolveTruncatePolicy(expressionResolver) {
+      switch resolveTruncatePolicy(resolver) {
       case .grapheme:
         .grapheme
       case .word:
@@ -96,7 +176,16 @@ extension DivText: DivBlockModeling {
     } else {
       .grapheme
     }
+    return (lineBreakMode, truncationPolicy)
+  }
 
+  private func makeTextBlockContent(
+    context: DivBlockModelingContext,
+    text: Lazy<String>,
+    typo: Typo,
+    fontParams: FontParams,
+    truncationPolicy: TextTruncationPolicy
+  ) -> TextBlockContent {
     let resolvedRanges = makeRanges(ranges, rangeBuilder: rangeBuilder, context: context)
     let makeAttributedStringWithTypo: (Typo) -> NSAttributedString = {
       self.makeAttributedString(
@@ -109,21 +198,40 @@ extension DivText: DivBlockModeling {
     }
 
     let attributedString = makeAttributedStringWithTypo(typo)
-    let gradientModel: TextBlock.GradientModel? = if let gradient = resolveGradient(context) {
-      TextBlock.GradientModel(
-        gradient: gradient,
-        rangedTextWithColor: makeAttributedStringWithTypo(typo.with(color: .clear))
-      )
-    } else {
-      nil
-    }
+    let gradientModel = makeGradientModel(
+      context: context,
+      attributedString: attributedString,
+      transparentString: { makeAttributedStringWithTypo(typo.with(color: .clear)) }
+    )
 
     let images = makeInlineImages(
       images: makeImages(self.images, imageBuilder: imageBuilder, context: context),
       text: attributedString
     )
+    let truncation = makeTruncationContent(
+      context: context,
+      typo: typo,
+      fontParams: fontParams
+    )
 
-    let truncationToken = ellipsis.map {
+    return TextBlockContent(
+      text: attributedString,
+      gradientModel: gradientModel,
+      images: images,
+      truncationToken: truncation.token,
+      truncationPolicy: truncationPolicy,
+      truncationImages: truncation.images,
+      additionalTextInsets: additionalTextInsets(ranges: resolvedRanges)
+    )
+  }
+
+  private func makeTruncationContent(
+    context: DivBlockModelingContext,
+    typo: Typo,
+    fontParams: FontParams
+  ) -> TruncationContent {
+    let expressionResolver = context.expressionResolver
+    let token = ellipsis.map {
       makeAttributedString(
         text: ($0.resolveText(expressionResolver) ?? "") as CFString,
         typo: typo,
@@ -132,40 +240,29 @@ extension DivText: DivBlockModeling {
         fontParams: fontParams
       )
     }
-    let truncationImages = makeInlineImages(
+    let images = makeInlineImages(
       images: makeImages(ellipsis?.images, imageBuilder: ellipsis?.imageBuilder, context: context),
-      text: truncationToken
+      text: token
     )
+    return TruncationContent(token: token, images: images)
+  }
 
-    if context.currentDivId != nil {
-      context.blockStateStorage.setState(
-        path: context.path,
-        state: TextBlockViewState(text: attributedString.string)
+  private func makeGradientModel(
+    context: DivBlockModelingContext,
+    attributedString: NSAttributedString,
+    transparentString: () -> NSAttributedString
+  ) -> TextBlock.GradientModel? {
+    guard let gradient = resolveGradient(context) else { return nil }
+    if let animation = resolveGradientAnimation(context.expressionResolver) {
+      return TextBlock.GradientModel(
+        gradient: gradient,
+        rangedTextWithColor: attributedString,
+        animation: animation
       )
     }
-
-    let additionalTextInsets = additionalTextInsets(ranges: resolvedRanges)
-
-    return TextBlock(
-      widthTrait: resolveContentWidthTrait(context),
-      heightTrait: resolveContentHeightTrait(context),
-      text: attributedString,
-      gradientModel: gradientModel,
-      verticalAlignment: resolveTextAlignmentVertical(expressionResolver).alignment,
-      maxIntrinsicNumberOfLines: resolveMaxLines(expressionResolver) ?? .max,
-      minNumberOfHiddenLines: resolveMinHiddenLines(expressionResolver) ?? 0,
-      images: images,
-      accessibilityElement: nil,
-      truncationToken: truncationToken,
-      truncationPolicy: truncationPolicy,
-      truncationImages: truncationImages,
-      additionalTextInsets: additionalTextInsets,
-      canSelect: resolveSelectable(expressionResolver),
-      tightenWidth: resolveTightenWidth(expressionResolver),
-      autoEllipsize: resolveAutoEllipsize(expressionResolver)
-        ?? context.flagsInfo.defaultTextAutoEllipsize,
-      path: context.path,
-      isFocused: isFocused
+    return TextBlock.GradientModel(
+      gradient: gradient,
+      rangedTextWithColor: transparentString()
     )
   }
 
@@ -182,6 +279,13 @@ extension DivText: DivBlockModeling {
     CFAttributedStringReplaceString(attributedString, CFRange(), text)
     let fullRange = CFRange(location: 0, length: length)
     typo.apply(to: attributedString, at: fullRange)
+    if case .divAnimatedTextGradient = textGradient {
+      CFAttributedStringSetAttribute(
+        attributedString, fullRange,
+        NSAttributedString.Key.animatedTextGradient.rawValue as CFString,
+        kCFBooleanTrue
+      )
+    }
     attributedString.apply(actions: actions, mask: nil, at: fullRange)
     for (range, rangeContext) in ranges {
       apply(range, to: attributedString, context: rangeContext, fontParams: fontParams)
@@ -225,49 +329,19 @@ extension DivText: DivBlockModeling {
     let cfRange = CFRange(location: start, length: actualEnd - start)
     let mask = range.makeMask(range: cfRange, resolver: expressionResolver)
 
-    let rangeVariationSettings = range.resolveFontVariationSettings(expressionResolver)?
-      .mapValues { $0 as? NSNumber }.filteringNilValues()
-    let rangeFontParams = FontParams(
-      family: range.resolveFontFamily(expressionResolver) ?? fontParams.family,
-      weight: range.resolveFontWeightValue(expressionResolver)
-        ?? range.resolveFontWeight(expressionResolver)?.toInt()
-        ?? fontParams.weight,
-      size: range.resolveFontSize(expressionResolver) ?? fontParams.size,
-      unit: range.resolveFontSizeUnit(expressionResolver),
-      featureSettings: range.resolveFontFeatureSettings(expressionResolver)
-        ?? fontParams.featureSettings,
-      variationSettings: rangeVariationSettings ?? fontParams.variationSettings
+    let rangeColor = range.resolveTextColor(expressionResolver)
+    if mask?.isEnabled == true || rangeColor != nil {
+      CFAttributedStringRemoveAttribute(
+        string, cfRange, NSAttributedString.Key.animatedTextGradient.rawValue as CFString
+      )
+    }
+    let typos = makeRangeTypos(
+      range,
+      context: context,
+      fontParams: fontParams,
+      mask: mask,
+      color: rangeColor
     )
-    let fontTypo = rangeFontParams == fontParams
-      ? nil
-      : Typo(font: context.font(rangeFontParams))
-    let colorTypo = mask?.isEnabled == true
-      ? Typo(color: .black.withAlphaComponent(0))
-      : range.resolveTextColor(expressionResolver).map { Typo(color: $0) }
-    let heightTypo = range.resolveLineHeight(expressionResolver)
-      .map { Typo(height: CGFloat($0)) }
-    let spacingTypo = range.resolveLetterSpacing(expressionResolver)
-      .map { Typo(kern: CGFloat($0)) }
-    let strikethroughTypo = range.resolveStrike(expressionResolver)
-      .map { Typo(strikethrough: $0.underlineStyle) }
-    let underlineTypo = range.resolveUnderline(expressionResolver)
-      .map { Typo(underline: $0.underlineStyle) }
-    let baselineOffset = range.resolveBaselineOffset(expressionResolver)
-    let baselineOffsetTypo = Typo(
-      baselineOffset: baselineOffset.isApproximatelyEqualTo(0) ? nil : baselineOffset
-    )
-    let blockShadow = range.textShadow?.resolve(expressionResolver).typoShadow
-    let shadowTypo = blockShadow.map { Typo(shadow: $0) }
-    let typos = [
-      fontTypo,
-      colorTypo,
-      heightTypo,
-      spacingTypo,
-      strikethroughTypo,
-      underlineTypo,
-      baselineOffsetTypo,
-      shadowTypo,
-    ].compactMap { $0 }
     let actions = range.actions?.uiActions(context: context)
     if typos.isEmpty, actions == nil, range.background == nil, range.border == nil,
        range.mask == nil {
@@ -285,6 +359,42 @@ extension DivText: DivBlockModeling {
     }
   }
 
+  private func makeRangeTypos(
+    _ range: DivText.Range,
+    context: DivBlockModelingContext,
+    fontParams: FontParams,
+    mask: TextMask?,
+    color: Color?
+  ) -> [Typo] {
+    let resolver = context.expressionResolver
+    let variationSettings = range.resolveFontVariationSettings(resolver)?
+      .mapValues { $0 as? NSNumber }.filteringNilValues()
+    let resolvedFont = FontParams(
+      family: range.resolveFontFamily(resolver) ?? fontParams.family,
+      weight: range.resolveFontWeightValue(resolver)
+        ?? range.resolveFontWeight(resolver)?.toInt()
+        ?? fontParams.weight,
+      size: range.resolveFontSize(resolver) ?? fontParams.size,
+      unit: range.resolveFontSizeUnit(resolver),
+      featureSettings: range.resolveFontFeatureSettings(resolver) ?? fontParams.featureSettings,
+      variationSettings: variationSettings ?? fontParams.variationSettings
+    )
+    let baselineOffset = range.resolveBaselineOffset(resolver)
+    return [
+      resolvedFont == fontParams ? nil : Typo(font: context.font(resolvedFont)),
+      mask?.isEnabled == true ? Typo(color: .black.withAlphaComponent(0))
+        : color.map { Typo(color: $0) },
+      range.resolveLineHeight(resolver).map { Typo(height: CGFloat($0)) },
+      range.resolveLetterSpacing(resolver).map { Typo(kern: CGFloat($0)) },
+      range.resolveStrike(resolver).map { Typo(strikethrough: $0.underlineStyle) },
+      range.resolveUnderline(resolver).map { Typo(underline: $0.underlineStyle) },
+      Typo(baselineOffset: baselineOffset.isApproximatelyEqualTo(0) ? nil : baselineOffset),
+      range.textShadow
+        .flatMap { $0.resolve(resolver) }
+        .map { Typo(shadow: $0.typoShadow) },
+    ].compactMap { $0 }
+  }
+
   private func resolveGradient(_ context: DivBlockModelingContext) -> Gradient? {
     guard let textGradient else {
       return nil
@@ -294,7 +404,23 @@ extension DivText: DivBlockModeling {
       return gradient.makeBlockLinearGradient(context).map { .linear($0) }
     case let .divRadialGradient(gradient):
       return gradient.makeBlockRadialGradient(context).map { .radial($0) }
+    case let .divAnimatedTextGradient(animated):
+      switch animated.gradient {
+      case let .divLinearGradient(gradient):
+        return gradient.makeBlockLinearGradient(context).map { .linear($0) }
+      case let .divRadialGradient(gradient):
+        return gradient.makeBlockRadialGradient(context).map { .radial($0) }
+      }
     }
+  }
+
+  private func resolveGradientAnimation(
+    _ resolver: ExpressionResolver
+  ) -> TextBlock.GradientModel.Animation? {
+    guard case let .divAnimatedTextGradient(animated) = textGradient else {
+      return nil
+    }
+    return .init(duration: animated.resolveDuration(resolver))
   }
 
   private func additionalTextInsets(

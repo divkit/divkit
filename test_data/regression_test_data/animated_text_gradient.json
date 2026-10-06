@@ -53,6 +53,7 @@
               "text": "TAP TO SPEED UP RADIAL",
               "font_size": 24,
               "font_weight": "bold",
+              "height": { "type": "fixed", "value": 44 },
               "action": {
                 "log_id": "update_gradient_duration",
                 "url": "div-action://set_variable?name=gradient_duration&value=800"
@@ -85,6 +86,7 @@
               "id": "animated-focus",
               "text": "GRADIENT WINS FOCUS COLOR",
               "font_size": 20,
+              "height": { "type": "fixed", "value": 44 },
               "focused_text_color": "#FF00FF00",
               "action": {
                 "log_id": "focus"

@@ -5,10 +5,9 @@ import Serialization
 import VGSL
 
 @frozen
-public enum DivTextGradient: Sendable {
+public enum DivStaticTextGradient: Sendable {
   case divLinearGradient(DivLinearGradient)
   case divRadialGradient(DivRadialGradient)
-  case divAnimatedTextGradient(DivAnimatedTextGradient)
 
   public var value: Serializable {
     switch self {
@@ -16,13 +15,11 @@ public enum DivTextGradient: Sendable {
       return value
     case let .divRadialGradient(value):
       return value
-    case let .divAnimatedTextGradient(value):
-      return value
     }
   }
 }
 
-extension DivTextGradient {
+extension DivStaticTextGradient {
   public init(dictionary: [String: Any], context: ParsingContext) throws {
     let dictionary = context.templateResolver?(dictionary) ?? dictionary
     let blockType = try dictionary.getField("type") as String
@@ -31,8 +28,6 @@ extension DivTextGradient {
       self = .divLinearGradient(try DivLinearGradient(dictionary: dictionary, context: context))
     case DivRadialGradient.type:
       self = .divRadialGradient(try DivRadialGradient(dictionary: dictionary, context: context))
-    case DivAnimatedTextGradient.type:
-      self = .divAnimatedTextGradient(try DivAnimatedTextGradient(dictionary: dictionary, context: context))
     default:
       throw DeserializationError.requiredFieldIsMissing(field: "type")
     }
@@ -40,14 +35,12 @@ extension DivTextGradient {
 }
 
 #if DEBUG
-extension DivTextGradient: Equatable {
-  public static func ==(lhs: DivTextGradient, rhs: DivTextGradient) -> Bool {
+extension DivStaticTextGradient: Equatable {
+  public static func ==(lhs: DivStaticTextGradient, rhs: DivStaticTextGradient) -> Bool {
     switch (lhs, rhs) {
     case let (.divLinearGradient(l), .divLinearGradient(r)):
       return l == r
     case let (.divRadialGradient(l), .divRadialGradient(r)):
-      return l == r
-    case let (.divAnimatedTextGradient(l), .divAnimatedTextGradient(r)):
       return l == r
     default:
       return false
@@ -56,7 +49,7 @@ extension DivTextGradient: Equatable {
 }
 #endif
 
-extension DivTextGradient: Serializable {
+extension DivStaticTextGradient: Serializable {
   @_optimize(size)
   public func toDictionary() -> [String: ValidSerializationValue] {
     return value.toDictionary()

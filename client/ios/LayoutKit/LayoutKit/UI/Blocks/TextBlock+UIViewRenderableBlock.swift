@@ -54,7 +54,12 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
         return
       }
 
-      gradientContainerView = GradientContainerView(model: textGradientModel, mask: textBlockView)
+      let isAnimated = textGradientModel?.animation != nil
+      textBlockView.animatedGradientModel = isAnimated ? textGradientModel : nil
+      textBlockView.animatedGradientView?.isWithinVisibleBounds = isTextVisible
+      gradientContainerView = GradientContainerView(
+        model: isAnimated ? nil : textGradientModel, mask: textBlockView
+      )
       currentView = gradientContainerView ?? textBlockView
     }
   }
@@ -73,6 +78,7 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
 
   private let textBlockView = TextBlockView()
   private var gradientContainerView: GradientContainerView?
+  private var isTextVisible = true
 
   private var currentView: UIView? {
     didSet {
@@ -121,56 +127,16 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
     gradientContainerView?.frame = textFrame
     layoutReporter?.didLayoutSubviews()
   }
-}
 
-private class GradientContainerView: UIView {
-  let gradientView: UIView
-
-  private var maskingView: UIView?
-
-  private let model: TextBlock.GradientModel
-  private let rangedTextWithColorTextBlockView: TextBlockView
-
-  init?(model: TextBlock.GradientModel?, mask: UIView) {
-    guard let model else {
-      return nil
-    }
-    self.model = model
-    self.maskingView = mask
-    gradientView = model.gradient.uiView
-
-    rangedTextWithColorTextBlockView = TextBlockView()
-
-    super.init(frame: .zero)
-
-    gradientView.addSubview(rangedTextWithColorTextBlockView)
-    addSubview(gradientView)
-  }
-
-  @available(*, unavailable)
-  required init(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    gradientView.frame = bounds
-    if let maskingView {
-      gradientView.mask = maskingView
-      self.maskingView = nil
-    }
-    rangedTextWithColorTextBlockView.frame = bounds
-  }
-
-  func configureRangedTextColor(textBlockViewModel: TextBlockView.Model) {
-    rangedTextWithColorTextBlockView.model = textBlockViewModel
-      .updated(with: model.rangedTextWithColor)
+  func onVisibleBoundsChanged(from _: CGRect, to: CGRect) {
+    isTextVisible = !to.isEmpty
+    textBlockView.animatedGradientView?.isWithinVisibleBounds = isTextVisible
   }
 }
 
-private typealias GetIntrinsicTextHeight = (CGFloat) -> CGFloat?
+typealias GetIntrinsicTextHeight = (CGFloat) -> CGFloat?
 
-private final class TextBlockView: UIView {
+final class TextBlockView: UIView {
   struct Model: ReferenceEquatable {
     let images: [TextBlock.InlineImage]
     let attachments: [TextAttachment]
@@ -211,22 +177,57 @@ private final class TextBlockView: UIView {
 
       configureRecognizers()
       selection = nil
-
+      if model.text != oldValue?.text || model.truncationToken != oldValue?.truncationToken
+        || model.verticalPosition != oldValue?.verticalPosition
+        || model.additionalTextInsets != oldValue?.additionalTextInsets {
+        animatedTextImage = nil
+      }
+      if animatedGradientView != nil {
+        setNeedsLayout()
+      }
       setNeedsDisplay()
     }
   }
 
-  private var lastElementIndex: Int?
-
-  private var masksLayer: TextMasksLayer?
-
-  private var selection: TextSelection? {
+  var animatedGradientModel: TextBlock.GradientModel? {
     didSet {
+      guard animatedGradientModel != oldValue else {
+        return
+      }
+      if let gradientModel = animatedGradientModel {
+        if let animatedGradientView {
+          animatedGradientView.model = gradientModel
+        } else {
+          animatedTextImage = nil
+          let view = AnimatedTextGradientView(model: gradientModel)
+          animatedGradientView = view
+          addSubview(view)
+          addSubview(selectionOverlayView)
+        }
+      } else {
+        animatedGradientView?.removeFromSuperview()
+        animatedGradientView = nil
+        selectionOverlayView.removeFromSuperview()
+      }
+      setNeedsDisplay()
+      setNeedsLayout()
+    }
+  }
+
+  var animatedGradientView: AnimatedTextGradientView?
+
+  var animatedTextImage: UIImage?
+  var renderedBounds: CGRect = .zero
+  var renderedScale: CGFloat = 0
+
+  var selection: TextSelection? {
+    didSet {
+      selectionOverlayView.selection = selection
       setNeedsDisplay()
     }
   }
 
-  private var textLayout: StringLayout? {
+  var textLayout: StringLayout? {
     didSet {
       let runsWithMasks = textLayout?.runsWithMasks ?? []
       if oldValue?.runsWithMasks != runsWithMasks {
@@ -234,6 +235,12 @@ private final class TextBlockView: UIView {
       }
     }
   }
+
+  private let selectionOverlayView = TextSelectionOverlayView()
+
+  private var lastElementIndex: Int?
+
+  private var masksLayer: TextMasksLayer?
 
   private var tapRecognizer: UITapGestureRecognizer? {
     didSet {
@@ -292,23 +299,38 @@ private final class TextBlockView: UIView {
   @available(*, unavailable)
   required init?(coder _: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
-  override func draw(_ rect: CGRect) {
-    guard let model else { return }
-    self.textLayout = model.text.drawAndGetLayout(
-      inContext: UIGraphicsGetCurrentContext()!,
-      verticalPosition: model.verticalPosition,
-      rect: rect,
-      textInsets: model.additionalTextInsets,
-      truncationToken: model.truncationToken,
-      truncationPolicy: model.truncationPolicy,
-      actionKey: RunWithBoundsAttribute.Key,
-      backgroundKey: BackgroundAttribute.Key,
-      borderKey: BorderAttribute.Key,
-      rangeVerticalAlignmentKey: RangeVerticalAlignmentAttribute.Key,
-      selectedRange: selection?.range
-    )
+  override func didMoveToWindow() {
+    super.didMoveToWindow()
+    if renderedScale != contentScaleFactor {
+      animatedTextImage = nil
+      setNeedsLayout()
+      setNeedsDisplay()
+    }
+  }
 
-    self.selection?.draw(rect)
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    animatedGradientView?.frame = bounds
+    selectionOverlayView.frame = bounds
+    if renderedBounds != bounds || renderedScale != contentScaleFactor {
+      animatedTextImage = nil
+      renderedBounds = bounds
+      renderedScale = contentScaleFactor
+    }
+    prepareAnimatedTextIfNeeded()
+  }
+
+  override func draw(_ rect: CGRect) {
+    guard model != nil, let context = UIGraphicsGetCurrentContext() else {
+      return
+    }
+    if animatedGradientView != nil {
+      prepareAnimatedTextIfNeeded()
+      animatedTextImage?.draw(in: bounds)
+    } else {
+      textLayout = drawText(in: context, rect: rect, glyphRenderer: nil)
+      selection?.draw(rect)
+    }
   }
 
   override func point(inside point: CGPoint, with _: UIEvent?) -> Bool {
@@ -371,6 +393,25 @@ private final class TextBlockView: UIView {
       selector: #selector(resetSelecting),
       name: UIMenuController.willHideMenuNotification,
       object: nil
+    )
+  }
+
+  func drawText(
+    in context: CGContext, rect: CGRect, glyphRenderer: GlyphRenderer?
+  ) -> StringLayout {
+    model.text.drawAndGetLayout(
+      inContext: context,
+      verticalPosition: model.verticalPosition,
+      rect: rect,
+      textInsets: model.additionalTextInsets,
+      truncationToken: model.truncationToken,
+      truncationPolicy: model.truncationPolicy,
+      actionKey: RunWithBoundsAttribute.Key,
+      backgroundKey: BackgroundAttribute.Key,
+      borderKey: BorderAttribute.Key,
+      rangeVerticalAlignmentKey: RangeVerticalAlignmentAttribute.Key,
+      selectedRange: selection?.range,
+      glyphRenderer: glyphRenderer
     )
   }
 
@@ -471,13 +512,15 @@ private final class TextBlockView: UIView {
   }
 
   @objc private func handleSelectionPan(_ gesture: UIPanGestureRecognizer) {
-    let point = gesture.location(in: gesture.view)
+    updateSelection(forPanAt: gesture.location(in: gesture.view), state: gesture.state)
+  }
 
+  func updateSelection(forPanAt point: CGPoint, state: UIGestureRecognizer.State) {
     let selectionPoint = TextSelection.Point(
       point: point,
       viewBounds: bounds
     )
-    switch gesture.state {
+    switch state {
     case .began:
       guard let selection else {
         return
@@ -494,6 +537,7 @@ private final class TextBlockView: UIView {
 
       lastElementIndex = elementIndex
       selection.moveSelection(elementIndex)
+      selectionOverlayView.setNeedsDisplay()
     case .ended, .cancelled, .failed:
       lastElementIndex = nil
       selection?.showMenu(from: self)
@@ -522,6 +566,10 @@ private final class TextBlockView: UIView {
 
       strongSelf.model.attachments[index].image = tintedImage
       strongSelf.imagesReferences[index] = image
+      strongSelf.animatedTextImage = nil
+      if strongSelf.animatedGradientView != nil {
+        strongSelf.setNeedsLayout()
+      }
       strongSelf.setNeedsDisplay()
     }
   }
@@ -627,25 +675,12 @@ extension NSAttributedString {
   }
 }
 
-extension Gradient {
-  fileprivate var uiView: UIView {
-    switch self {
-    case let .linear(gradient):
-      LinearGradientView(gradient)
-    case let .radial(gradient):
-      RadialGradientView(gradient)
-    case let .box(color):
-      BoxShadowView(shadowColor: color)
-    }
-  }
-}
-
 extension TextBlockView.Model {
   fileprivate var isUserInteractionEnabled: Bool {
     canSelect || text.hasActions || truncationToken?.hasActions == true
   }
 
-  fileprivate func updated(with newText: NSAttributedString) -> Self {
+  func updated(with newText: NSAttributedString) -> Self {
     .init(
       images: images,
       attachments: attachments,

@@ -2869,6 +2869,7 @@
       "title": "Animated Text Gradient",
       "platforms": [
         "android",
+        "ios",
         "web"
       ],
       "tags": [

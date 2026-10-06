@@ -37,12 +37,32 @@ public final class TextBlock: BlockWithTraits {
   }
 
   public struct GradientModel: Equatable {
+    public struct Animation: Equatable {
+      public let duration: Int
+
+      public init(duration: Int = 1600) {
+        self.duration = max(0, duration)
+      }
+    }
+
     let gradient: Gradient
     let rangedTextWithColor: NSAttributedString
+    let animation: Animation?
 
     public init(gradient: Gradient, rangedTextWithColor: NSAttributedString) {
       self.gradient = gradient
       self.rangedTextWithColor = rangedTextWithColor
+      self.animation = nil
+    }
+
+    public init(
+      gradient: Gradient,
+      rangedTextWithColor: NSAttributedString,
+      animation: Animation
+    ) {
+      self.gradient = gradient
+      self.rangedTextWithColor = rangedTextWithColor
+      self.animation = animation
     }
   }
 
@@ -195,7 +215,7 @@ public final class TextBlock: BlockWithTraits {
     lhs.widthTrait == rhs.widthTrait
       && lhs.heightTrait == rhs.heightTrait
       && lhs.text == rhs.text
-      && lhs.gradientModel?.gradient == rhs.gradientModel?.gradient
+      && lhs.gradientModel == rhs.gradientModel
       && lhs.maxIntrinsicNumberOfLines == rhs.maxIntrinsicNumberOfLines
       && lhs.minNumberOfHiddenLines == rhs.minNumberOfHiddenLines
       && lhs.images == rhs.images
