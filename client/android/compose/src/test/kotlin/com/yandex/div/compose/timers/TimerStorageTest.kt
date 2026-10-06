@@ -20,9 +20,8 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalTime::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 class TimerStorageTest {
     private val reporter = TestReporter()

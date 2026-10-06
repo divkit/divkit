@@ -25,9 +25,7 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalTime::class)
 @RunWith(AndroidJUnit4::class)
 class DivViewWithTimersTest {
 

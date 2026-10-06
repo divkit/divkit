@@ -3,7 +3,6 @@ package com.yandex.div.compose.internal
 import coil3.compose.AsyncImagePainter
 import com.yandex.div.core.annotations.InternalApi
 import kotlinx.coroutines.CoroutineScope
-import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource
 
 /**
@@ -15,7 +14,6 @@ import kotlin.time.TimeSource
  * @see com.yandex.div.compose.DivContext
  */
 @InternalApi
-@OptIn(ExperimentalTime::class)
 class DivDebugConfiguration(
     /**
     * Overrides the main coroutine scope for debugging and testing.

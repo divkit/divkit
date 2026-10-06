@@ -85,7 +85,6 @@ internal interface DivContextModule {
         }
 
         @DivContextScope
-        @OptIn(ExperimentalTime::class)
         @Provides
         fun provideTimeSource(
             debugConfiguration: DivDebugConfiguration

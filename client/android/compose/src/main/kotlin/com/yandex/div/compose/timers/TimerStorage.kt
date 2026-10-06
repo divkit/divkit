@@ -12,11 +12,9 @@ import com.yandex.yatagan.Lazy
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 import javax.inject.Named
-import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource
 
 @DivViewScope
-@OptIn(ExperimentalTime::class)
 internal class TimerStorage @Inject constructor(
     private val actionHandler: Lazy<DivActionHandler>,
     @Named(Names.MAIN_COROUTINE_SCOPE)

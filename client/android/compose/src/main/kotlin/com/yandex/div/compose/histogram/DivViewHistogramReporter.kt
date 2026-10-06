@@ -13,12 +13,10 @@ import com.yandex.div.compose.dagger.DivViewScope
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
 @DivViewScope
-@OptIn(ExperimentalTime::class)
 internal class DivViewHistogramReporter @Inject constructor(
     private val configuration: DivHistogramConfiguration
 ) {
