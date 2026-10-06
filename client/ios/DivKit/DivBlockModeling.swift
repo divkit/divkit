@@ -10,10 +10,16 @@ extension DivBlockModeling {
   func modifiedContextParentPath(_ parentContext: DivBlockModelingContext)
     -> DivBlockModelingContext {
     let currentDivId = parentContext.overridenId ?? id
-    return parentContext.modifying(
+    let context = parentContext.modifying(
       currentDivId: currentDivId,
       currentDivType: Self.type,
       pathSuffix: currentDivId ?? Self.type
     )
+    if let currentDivId, currentDivId.hasPrefix(DivViewId.tooltipMarker) {
+      context.addWarning(
+        message: "Element id '\(currentDivId)' starts with reserved prefix '\(DivViewId.tooltipMarker)'"
+      )
+    }
+    return context
   }
 }

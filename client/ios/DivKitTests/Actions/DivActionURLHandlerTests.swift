@@ -10,7 +10,7 @@ struct DivActionURLHandlerTests {
 
   init() {
     let idToPath = IdToPath()
-    idToPath.add(elementPath, forId: cardId.path + elementId)
+    idToPath.add(elementPath, forId: elementId, viewId: hostViewId)
     actionHandler = DivActionHandler(
       blockStateStorage: blockStateStorage,
       idToPath: idToPath
@@ -477,5 +477,6 @@ private enum SetItemAction {
 }
 
 private let cardId: DivCardID = "cardId"
+private let hostViewId = DivViewId(cardId: cardId)
 private let elementId: String = "element"
 private let elementPath = cardId.path + elementId

@@ -10,8 +10,9 @@ final class DivTriggerTests: XCTestCase {
 
   private lazy var actionHandler = DivActionHandler(
     persistentValuesStorage: persistentValuesStorage,
-    urlHandler: DivUrlHandlerDelegate { [unowned self] _, _ in
+    urlHandler: DivUrlHandlerDelegate { [unowned self] url, _ in
       self.triggersCount += 1
+      self.firedUrls.append(url.absoluteString)
     },
     variablesStorage: variablesStorage
   )
@@ -28,6 +29,7 @@ final class DivTriggerTests: XCTestCase {
   )
 
   private var triggersCount = 0
+  private var firedUrls = [String]()
 
   func test_set_DoesNoTrigger_WhenConditionHasNoVariables() throws {
     let trigger = DivTrigger(
@@ -237,7 +239,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger], viewId: hostViewId)
 
     variablesStorage.append(variables: ["should_trigger": .bool(true)], for: "card_id")
     XCTAssertEqual(triggersCount, 1)
@@ -256,7 +258,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: parentPath, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: parentPath, triggers: [trigger], viewId: hostViewId)
 
     variablesStorage.update(path: childPath, name: "should_trigger", value: .bool(true))
 
@@ -278,7 +280,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: childPath, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: childPath, triggers: [trigger], viewId: hostViewId)
 
     variablesStorage.update(path: parentPath, name: "should_trigger", value: .bool(true))
 
@@ -297,7 +299,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger], viewId: hostViewId)
 
     variablesStorage.update(path: path, name: "should_trigger", value: .bool(true))
 
@@ -317,7 +319,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger], viewId: hostViewId)
 
     variablesStorage.update(
       path: UIElementPath(cardID.rawValue),
@@ -346,7 +348,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: childPath, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: childPath, triggers: [trigger], viewId: hostViewId)
 
     variablesStorage.update(path: parentPath, name: "should_trigger", value: .bool(true))
 
@@ -367,7 +369,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger], viewId: hostViewId)
 
     variablesStorage.update(path: path, name: "should_trigger", value: .bool(true))
 
@@ -390,7 +392,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger], viewId: hostViewId)
     triggerStorage.disableTriggers(path: path)
 
     variablesStorage.update(path: path, name: "should_trigger", value: .bool(true))
@@ -411,7 +413,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger], viewId: hostViewId)
     triggerStorage.reset(elementId: elementId)
 
     variablesStorage.update(path: path, name: "should_trigger", value: .bool(true))
@@ -436,8 +438,8 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: pathState1, triggers: [trigger])
-    triggerStorage.setIfNeeded(path: pathState2, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: pathState1, triggers: [trigger], viewId: hostViewId)
+    triggerStorage.setIfNeeded(path: pathState2, triggers: [trigger], viewId: hostViewId)
     triggerStorage.reset(elementId: elementId)
 
     variablesStorage.update(path: pathState1, name: "should_trigger", value: .bool(true))
@@ -459,7 +461,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: tabPath, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: tabPath, triggers: [trigger], viewId: hostViewId)
     blockStateStorage.setState(
       path: tabsPath,
       state: TabViewState(selectedPageIndex: 0, countOfPages: 2)
@@ -482,7 +484,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: tabPath, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: tabPath, triggers: [trigger], viewId: hostViewId)
     blockStateStorage.setState(
       path: tabsPath,
       state: TabViewState(selectedPageIndex: 1, countOfPages: 2)
@@ -505,7 +507,7 @@ final class DivTriggerTests: XCTestCase {
       condition: expression("@{should_trigger}"),
       mode: .value(.onCondition)
     )
-    triggerStorage.setIfNeeded(path: path, triggers: [trigger])
+    triggerStorage.setIfNeeded(path: path, triggers: [trigger], viewId: hostViewId)
     blockStateStorage.setState(
       path: tabsPath,
       state: TabViewState(selectedPageIndex: 1, countOfPages: 2)
@@ -513,6 +515,69 @@ final class DivTriggerTests: XCTestCase {
 
     variablesStorage.update(path: path, name: "should_trigger", value: .bool(true))
     XCTAssertEqual(triggersCount, 0)
+  }
+
+  func test_resetViewId_host_leavesTooltipAndOtherCardTriggers() {
+    registerHostTooltipAndOtherCardTriggers()
+
+    triggerStorage.reset(viewId: hostViewId)
+    fireAllTriggers()
+
+    XCTAssertEqual(Set(firedUrls), ["action://tooltip", "action://other"])
+  }
+
+  func test_resetViewId_tooltip_leavesHostAndOtherCardTriggers() {
+    registerHostTooltipAndOtherCardTriggers()
+
+    triggerStorage.reset(viewId: tooltipViewId)
+    fireAllTriggers()
+
+    XCTAssertEqual(Set(firedUrls), ["action://host", "action://other"])
+  }
+
+  func test_resetCardId_dropsHostAndTooltipTriggers_leavesOtherCard() {
+    registerHostTooltipAndOtherCardTriggers()
+
+    triggerStorage.reset(cardId: "card_id")
+    fireAllTriggers()
+
+    XCTAssertEqual(firedUrls, ["action://other"])
+  }
+
+  func test_set_ReplacesHostTriggers_KeepsOpenTooltipTriggers() {
+    registerHostTooltipAndOtherCardTriggers()
+
+    // A new DivData of the host: its triggers are replaced, the open tooltip's keep running.
+    triggerStorage.set(cardId: "card_id", triggers: [])
+    fireAllTriggers()
+
+    XCTAssertEqual(Set(firedUrls), ["action://tooltip", "action://other"])
+  }
+
+  private func registerHostTooltipAndOtherCardTriggers() {
+    let hostPath = UIElementPath("card_id")
+    let tooltipPath = tooltipViewId.path
+    let otherPath = UIElementPath("other_card")
+    for path in [hostPath, otherPath] {
+      variablesStorage.initializeIfNeeded(path: path, variables: ["should_trigger": .bool(false)])
+    }
+    for (path, viewId, url) in [
+      (hostPath, hostViewId, "action://host"),
+      (tooltipPath, tooltipViewId, "action://tooltip"),
+      (otherPath, otherViewId, "action://other"),
+    ] {
+      let trigger = DivTrigger(
+        actions: [divAction(logId: url, url: url)],
+        condition: expression("@{should_trigger}"),
+        mode: .value(.onCondition)
+      )
+      triggerStorage.setIfNeeded(path: path, triggers: [trigger], viewId: viewId)
+    }
+  }
+
+  private func fireAllTriggers() {
+    variablesStorage.append(variables: ["should_trigger": .bool(true)], for: "card_id")
+    variablesStorage.append(variables: ["should_trigger": .bool(true)], for: "other_card")
   }
 
   private func setVariable(_ name: DivVariableName, _ value: Bool) {
@@ -525,3 +590,9 @@ final class DivTriggerTests: XCTestCase {
 }
 
 private let action = divAction(logId: "1", url: "action://host")
+private let hostViewId = DivViewId(cardId: "card_id")
+private let otherViewId = DivViewId(cardId: "other_card")
+private let tooltipViewId = DivViewId(
+  cardId: "card_id",
+  tooltip: DivViewId.Tooltip(id: "hint", anchorPath: UIElementPath("card_id") + "anchor")
+)

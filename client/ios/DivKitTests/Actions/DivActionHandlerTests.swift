@@ -20,7 +20,7 @@ final class DivActionHandlerTests: XCTestCase {
 
   private lazy var actionHandler: DivActionHandler! = {
     let idToPath = IdToPath()
-    idToPath.add(cardId.path + "element_id", forId: cardId.path + "element_id")
+    idToPath.add(cardId.path + "element_id", forId: "element_id", viewId: hostViewId)
     return DivActionHandler(
       flags: flags,
       idToPath: idToPath,
@@ -549,7 +549,7 @@ final class DivActionHandlerTests: XCTestCase {
           stateId: .value("0/div_state/state1")
         ))
       ),
-      path: cardId.path + "tooltip" + "element_id"
+      path: tooltipViewId.path + "element_id"
     )
 
     let item = stateManagement
@@ -565,12 +565,16 @@ final class DivActionHandlerTests: XCTestCase {
           stateId: .value("div_state_in_tooltip/state1")
         ))
       ),
-      path: cardId.path + "tooltip" + "element_id"
+      path: tooltipViewId.path + "element_id"
     )
 
     let item = stateManagement
       .getStateManagerForCard(cardId: cardId)
-      .get(stateBlockPath: .makeDivStatePath(from: "tooltip/0/div_state_in_tooltip"))
+      .get(
+        stateBlockPath: DivStatePath.tooltipRoot(id: "tooltip")
+          + DivStateID(rawValue: "0")
+          + DivStateID(rawValue: "div_state_in_tooltip")
+      )
     XCTAssertEqual("state1", item?.currentStateID)
   }
 
@@ -792,10 +796,10 @@ final class DivActionHandlerTests: XCTestCase {
     firstVideoPath: UIElementPath,
     secondVideoPath: UIElementPath
   ) {
-    idToPath.add(firstVideoPath, forId: cardId.path + "bears_video")
-    idToPath.add(secondVideoPath, forId: cardId.path + "bears_video")
-    idToPath.add(firstContainerPath, forId: cardId.path + "first")
-    idToPath.add(secondContainerPath, forId: cardId.path + "second")
+    idToPath.add(firstVideoPath, forId: "bears_video", viewId: hostViewId)
+    idToPath.add(secondVideoPath, forId: "bears_video", viewId: hostViewId)
+    idToPath.add(firstContainerPath, forId: "first", viewId: hostViewId)
+    idToPath.add(secondContainerPath, forId: "second", viewId: hostViewId)
   }
 }
 
@@ -812,3 +816,10 @@ private func dictValue(_ value: [String: Any]) -> DivTypedValue {
 }
 
 private let cardId: DivCardID = "test_card"
+private let hostViewId = DivViewId(cardId: cardId)
+/// Anchor path is arbitrary here - these tests only care that the view is a tooltip named
+/// "tooltip", since that is what derives its `tooltip#tooltip` DivStatePath root.
+private let tooltipViewId = DivViewId(
+  cardId: cardId,
+  tooltip: DivViewId.Tooltip(id: "tooltip", anchorPath: cardId.path + "anchor")
+)

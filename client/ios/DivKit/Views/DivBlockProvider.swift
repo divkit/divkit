@@ -48,6 +48,7 @@ final class DivBlockProvider {
 
   private var debugParams = DebugParams()
   private var dataErrors = [DeserializationError]()
+  private var isInvalidated = false
   private var updateInProgress = false
 
   private let measurements = DebugParams.Measurements(
@@ -80,6 +81,7 @@ final class DivBlockProvider {
     _ source: DivViewSource,
     debugParams: DebugParams
   ) {
+    guard !isInvalidated else { return }
     id = source.id
     self.debugParams = debugParams
 
@@ -97,6 +99,7 @@ final class DivBlockProvider {
     _ source: DivViewSource,
     debugParams: DebugParams
   ) async {
+    guard !isInvalidated else { return }
     id = source.id
     self.debugParams = debugParams
 
@@ -111,6 +114,7 @@ final class DivBlockProvider {
   }
 
   func update(reasons: [DivCardUpdateReason]) {
+    guard !isInvalidated else { return }
     guard var divData else {
       block = debugParams.isDebugInfoEnabled ? makeErrorsBlock(dataErrors) : noDataBlock
       return
@@ -148,7 +152,7 @@ final class DivBlockProvider {
 
     shouldRecalculateVisibility = true
     dataErrors.forEach { context.errorsStorage.add($0) }
-    divKitComponents.resetIdToPath(cardId: cardId)
+    divKitComponents.resetIdToPath(viewId: id)
     do {
       block = try measurements.renderTime.updateMeasure {
         try divData.makeBlock(
@@ -156,8 +160,6 @@ final class DivBlockProvider {
         )
       }
       accessibilityElementsStorage = context.accessibilityElementsStorage
-      // idToPath is now repopulated for this card by makeBlock above.
-      divKitComponents.applyPendingActions(cardId: cardId)
       debugParams.processMeasurements((cardId: cardId, measurements: measurements))
       for error in context.errorsStorage.errors {
         divKitComponents.reporter.reportError(cardId: cardId, error: error)
@@ -172,6 +174,10 @@ final class DivBlockProvider {
       )
       block = handleError(error: error, context: context)
     }
+  }
+
+  func invalidate() {
+    isInvalidated = true
   }
 
   func update(withStates blockStates: BlocksState) {
@@ -300,8 +306,7 @@ final class DivBlockProvider {
 
   private func makeCurrentContext() -> DivBlockModelingContext {
     divKitComponents.makeContext(
-      cardId: cardId,
-      additionalId: id.additionalId,
+      viewId: id,
       cachedImageHolders: block.getImageHolders(),
       debugParams: debugParams,
       parentScrollView: parentScrollView

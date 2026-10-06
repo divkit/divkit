@@ -14,7 +14,7 @@ struct SetCursorPositionActionHandlerTests {
   }
 
   init() {
-    idToPath.add(cardId.path + inputId, forId: cardId.path + inputId)
+    idToPath.add(cardId.path + inputId, forId: inputId, viewId: hostViewId)
     handler = DivActionHandler(
       blockStateStorage: blockStateStorage,
       idToPath: idToPath,
@@ -170,10 +170,10 @@ struct SetCursorPositionActionHandlerTests {
     let firstInputPath = firstScopePath + "0" + "input"
     let secondInputPath = secondScopePath + "0" + "input"
 
-    idToPath.add(firstScopePath, forId: cardId.path + "first")
-    idToPath.add(secondScopePath, forId: cardId.path + "second")
-    idToPath.add(firstInputPath, forId: cardId.path + "input")
-    idToPath.add(secondInputPath, forId: cardId.path + "input")
+    idToPath.add(firstScopePath, forId: "first", viewId: hostViewId)
+    idToPath.add(secondScopePath, forId: "second", viewId: hostViewId)
+    idToPath.add(firstInputPath, forId: "input", viewId: hostViewId)
+    idToPath.add(secondInputPath, forId: "input", viewId: hostViewId)
 
     let reporter = MockReporter()
     let handler = DivActionHandler(
@@ -216,6 +216,7 @@ struct SetCursorPositionActionHandlerTests {
 }
 
 private let cardId = DivBlockModelingContext.testCardId
+private let hostViewId = DivViewId(cardId: cardId)
 private let inputId = "input_1"
 
 private struct ScopedSetCursorPositionLayout {

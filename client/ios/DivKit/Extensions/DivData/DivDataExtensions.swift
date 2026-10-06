@@ -30,7 +30,7 @@ extension DivData: DivBlockModeling {
     let stateBlockPath: DivStatePath
     let parentDivStatePath: DivStatePath
     if let tooltipId = context.viewId.additionalId {
-      stateBlockPath = DivStatePath(rawValue: UIElementPath(tooltipId))
+      stateBlockPath = .tooltipRoot(id: tooltipId)
       parentDivStatePath = stateBlockPath + stateId
     } else {
       stateBlockPath = DivData.rootPath

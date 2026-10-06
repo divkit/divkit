@@ -89,6 +89,7 @@ public func divInput(
   extensions: [DivExtension]? = nil,
   allowSuggestionsBar: Bool? = nil,
   allowSuggestionsBarExpression: String? = nil,
+  id: String? = nil,
   keyboardType: DivInput.KeyboardType? = nil,
   textVariable: String
 ) -> Div {
@@ -102,6 +103,7 @@ public func divInput(
     accessibility: accessibility,
     allowSuggestionsBar: allowSuggestionsBarValue,
     extensions: extensions,
+    id: id,
     keyboardType: keyboardType.map { .value($0) },
     textVariable: textVariable
   ))
@@ -221,14 +223,18 @@ public func divContainer(
   id: String? = nil,
   accessibility: DivAccessibility? = nil,
   actions: [DivAction]? = nil,
+  animators: [DivAnimator]? = nil,
   clipToBounds: Bool = true,
   extensions: [DivExtension]? = nil,
+  functions: [DivFunction]? = nil,
   height: DivSize? = nil,
   itemBuilder: DivCollectionItemBuilder? = nil,
   items: [Div]? = nil,
   layoutMode: DivContainer.LayoutMode? = nil,
   width: DivSize? = nil,
-  background: [DivBackground]? = nil
+  background: [DivBackground]? = nil,
+  variableTriggers: [DivTrigger]? = nil,
+  visibility: Expression<DivVisibility>? = nil
 ) -> Div {
   .divContainer(DivContainer(
     accessibility: accessibility,
@@ -238,7 +244,7 @@ public func divContainer(
     alignmentHorizontal: nil,
     alignmentVertical: nil,
     alpha: nil,
-    animators: nil,
+    animators: animators,
     aspect: nil,
     background: background,
     border: nil,
@@ -251,7 +257,7 @@ public func divContainer(
     doubletapActions: nil,
     extensions: extensions,
     focus: nil,
-    functions: nil,
+    functions: functions,
     height: height,
     hoverEndActions: nil,
     hoverStartActions: nil,
@@ -280,9 +286,9 @@ public func divContainer(
     transitionIn: nil,
     transitionOut: nil,
     transitionTriggers: nil,
-    variableTriggers: nil,
+    variableTriggers: variableTriggers,
     variables: nil,
-    visibility: nil,
+    visibility: visibility,
     visibilityAction: nil,
     visibilityActions: nil,
     width: width

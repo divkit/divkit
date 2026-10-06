@@ -238,6 +238,7 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
         to: .zero
       )
     }
+    tooltip.notifyContentDidClose()
 
     if animated {
       if let substrateView = tooltip.substrateView {
@@ -334,6 +335,13 @@ public final class TooltipContainerView: UIView, UIActionEventPerforming {
     snapshotView.accessibilityTraits = view.accessibilityTraits
     snapshotView.accessibilityValue = view.accessibilityValue
     return snapshotView
+  }
+}
+
+extension DefaultTooltipManager.Tooltip {
+  func notifyContentDidClose() {
+    (view as? TooltipContentClosing)?.tooltipDidClose()
+    (substrateView as? TooltipContentClosing)?.tooltipDidClose()
   }
 }
 

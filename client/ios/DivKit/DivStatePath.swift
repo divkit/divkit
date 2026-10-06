@@ -11,8 +11,14 @@ public enum DivBlockPathTag {}
 public typealias DivBlockPath = Tagged<DivBlockPathTag, UIElementPath>
 
 extension Tagged where Tag == DivStatePathTag, RawValue == UIElementPath {
+  static let tooltipRootPrefix = "tooltip#"
+
   public static func makeDivStatePath(from string: String) -> Self {
     DivStatePath(rawValue: UIElementPath.parse(string))
+  }
+
+  static func tooltipRoot(id: String) -> Self {
+    DivStatePath(rawValue: UIElementPath("\(tooltipRootPrefix)\(id)"))
   }
 
   public var stateId: DivDataStateID? {

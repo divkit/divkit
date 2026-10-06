@@ -14,10 +14,12 @@ public final class DivTriggersStorage {
     }
 
     let triggers: [Trigger]
+    let viewId: DivViewId
     var active = true
 
-    init(_ triggers: [Trigger]) {
+    init(_ triggers: [Trigger], viewId: DivViewId) {
       self.triggers = triggers
+      self.viewId = viewId
     }
   }
 
@@ -58,20 +60,26 @@ public final class DivTriggersStorage {
     cardId: DivCardID,
     triggers: [DivTrigger]
   ) {
-    reset(cardId: cardId)
-    setIfNeeded(path: cardId.path, triggers: triggers)
+    let viewId = DivViewId(cardId: cardId)
+    reset(viewId: viewId)
+    setIfNeeded(
+      path: cardId.path,
+      triggers: triggers,
+      viewId: viewId
+    )
   }
 
   func setIfNeeded(
     path: UIElementPath,
-    triggers: [DivTrigger]
+    triggers: [DivTrigger],
+    viewId: DivViewId
   ) {
     lock.withLock {
       guard triggersByPath[path] == nil else {
         return
       }
 
-      let newItem = Item(triggers.map { Item.Trigger($0) })
+      let newItem = Item(triggers.map { Item.Trigger($0) }, viewId: viewId)
       if !newItem.triggers.isEmpty {
         triggersByPath[path] = newItem
         if flagsInfo.initializeTriggerOnSet {
@@ -105,6 +113,17 @@ public final class DivTriggersStorage {
           triggersByPath.removeValue(forKey: path)
           disposablesByPath.removeValue(forKey: path)
         }
+      }
+    }
+  }
+
+  /// Drops the triggers registered by one view, so that neither a closed tooltip keeps running
+  /// actions nor its next show keeps a stale set - `setIfNeeded` never replaces an existing path.
+  func reset(viewId: DivViewId) {
+    lock.withLock {
+      for (path, item) in triggersByPath where item.viewId == viewId {
+        triggersByPath.removeValue(forKey: path)
+        disposablesByPath.removeValue(forKey: path)
       }
     }
   }

@@ -47,6 +47,8 @@ public final class DivView: VisibleBoundsTrackingView {
   private var blockSubscription: Disposable?
   private var shouldRecalculateVisibilitySubscription: Disposable?
 
+  private var tooltipSession: DivTooltipViewSession?
+
   private var shouldRecalculateVisibility = true
   private var shouldTrackFocusChanges = true
 
@@ -375,6 +377,67 @@ extension DivView {
     func updatePreviousBounds() {
       previousBounds = lastVisibleBounds
     }
+  }
+}
+
+@MainActor
+private final class DivTooltipViewSession {
+  private(set) var isClosed = false
+
+  private let viewId: DivViewId
+  private let registry: DivTooltipViewRegistry
+
+  init(viewId: DivViewId, registry: DivTooltipViewRegistry) {
+    self.viewId = viewId
+    self.registry = registry
+    registry.open(viewId: viewId)
+  }
+
+  deinit {
+    guard !isClosed else { return }
+    DivKitLogger.error("Tooltip view \(viewId) was released without tooltipDidClose()")
+    let registry = registry
+    let viewId = viewId
+    onMainThread {
+      registry.close(viewId: viewId)
+    }
+  }
+
+  func close() {
+    guard !isClosed else { return }
+    isClosed = true
+    registry.close(viewId: viewId)
+  }
+}
+
+extension DivView: TooltipContentSizeProviding {
+  public func tooltipContentSize(
+    constrainedBy size: CGSize,
+    useLegacyWidth: Bool
+  ) -> CGSize? {
+    guard let block = blockProvider?.block else {
+      return nil
+    }
+
+    return useLegacyWidth
+      ? block.intrinsicSize
+      : block.size(forResizableBlockSize: size)
+  }
+}
+
+extension DivView: TooltipContentClosing {
+  func openAsTooltip(viewId: DivViewId, registry: DivTooltipViewRegistry) {
+    guard tooltipSession == nil else {
+      DivKitLogger.error("Tooltip view \(viewId) is already open as a tooltip")
+      return
+    }
+    tooltipSession = DivTooltipViewSession(viewId: viewId, registry: registry)
+  }
+
+  public func tooltipDidClose() {
+    guard let tooltipSession, !tooltipSession.isClosed else { return }
+    blockProvider?.invalidate()
+    tooltipSession.close()
   }
 }
 

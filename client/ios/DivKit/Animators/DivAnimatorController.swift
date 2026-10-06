@@ -2,6 +2,10 @@ import Foundation
 import LayoutKit
 import VGSL
 
+/// Stores animator registrations.
+///
+/// The lock protects only `entries`. Animator methods are always called after releasing it:
+/// `stop()` may synchronously execute actions that enter this controller again.
 final class DivAnimatorController {
   enum ActionResult {
     case success
@@ -18,9 +22,12 @@ final class DivAnimatorController {
   private let lock = AllocatedUnfairLock()
 
   deinit {
-    lock.withLock {
-      entries.values.forEach { $0.animator.stop() }
+    let dropped = lock.withLock {
+      let dropped = Array(entries.values)
+      entries.removeAll()
+      return dropped
     }
+    dropped.filter(\.animator.isRunning).forEach { $0.animator.stop() }
   }
 
   @discardableResult
@@ -35,36 +42,36 @@ final class DivAnimatorController {
     progressInterpolator: ProgressInterpolator?,
     repeatCount: RepeatCount?
   ) -> ActionResult {
-    lock.withLock {
+    let resolution = lock.withLock { () -> (result: ActionResult, animator: Animator?) in
       let matchedEntries = getEntries(path: path, id: id)
       guard matchedEntries.count == 1, let entry = matchedEntries.first else {
-        return matchedEntries.isEmpty ? .notFound : .ambiguousId
+        return (matchedEntries.isEmpty ? .notFound : .ambiguousId, nil)
       }
-
-      entry.animator.start(
-        startValue: startValue,
-        endValue: endValue,
-        duration: duration,
-        startDelay: startDelay,
-        direction: direction,
-        progressInterpolator: progressInterpolator,
-        repeatCount: repeatCount
-      )
-      return .success
+      return (.success, entry.animator)
     }
+    resolution.animator?.start(
+      startValue: startValue,
+      endValue: endValue,
+      duration: duration,
+      startDelay: startDelay,
+      direction: direction,
+      progressInterpolator: progressInterpolator,
+      repeatCount: repeatCount
+    )
+    return resolution.result
   }
 
   @discardableResult
   func stopAnimator(path: UIElementPath, id: String) -> ActionResult {
-    lock.withLock {
+    let resolution = lock.withLock { () -> (result: ActionResult, animator: Animator?) in
       let matchedEntries = getEntries(path: path, id: id)
       guard matchedEntries.count == 1, let entry = matchedEntries.first else {
-        return matchedEntries.isEmpty ? .notFound : .ambiguousId
+        return (matchedEntries.isEmpty ? .notFound : .ambiguousId, nil)
       }
-
-      entry.animator.stop()
-      return .success
+      return (.success, entry.animator)
     }
+    resolution.animator?.stop()
+    return resolution.result
   }
 
   func definition(path: UIElementPath, id: String) -> DivAnimator? {
@@ -98,21 +105,42 @@ final class DivAnimatorController {
   }
 
   func reset() {
-    lock.withLock {
-      entries.values.forEach { $0.animator.stop() }
+    let dropped = lock.withLock {
+      let dropped = Array(entries.values)
       entries.removeAll()
+      return dropped
     }
+    dropped.filter(\.animator.isRunning).forEach { $0.animator.stop() }
   }
 
+  /// Stops and removes every entry of the card: the host's and all of its tooltips'.
   func reset(cardId: DivCardID) {
-    lock.withLock {
-      entries = entries.filter {
-        if $0.key.cardId == cardId {
-          $0.value.animator.stop()
+    reset { $0.cardId == cardId }
+  }
+
+  /// Stops and removes only the entries defined by `viewId`'s own elements.
+  func reset(viewId: DivViewId) {
+    reset { $0.viewId == viewId }
+  }
+
+  /// `matches` receives the path of the element that defines the animator, not the entry key:
+  /// the key ends with the animator's `id`, which is free-form and may even start with the
+  /// reserved `tooltip#` prefix.
+  private func reset(where matches: (UIElementPath) -> Bool) {
+    let dropped = lock.withLock {
+      let partitioned = entries.reduce(
+        into: (dropped: [Entry](), kept: [UIElementPath: Entry]())
+      ) { result, item in
+        if let elementPath = item.key.parent, matches(elementPath) {
+          result.dropped.append(item.value)
+        } else {
+          result.kept[item.key] = item.value
         }
-        return $0.key.cardId != cardId
       }
+      entries = partitioned.kept
+      return partitioned.dropped
     }
+    dropped.filter(\.animator.isRunning).forEach { $0.animator.stop() }
   }
 
   private func getEntries(path: UIElementPath, id: String) -> [Entry] {

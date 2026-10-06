@@ -3,13 +3,10 @@ import VGSL
 
 extension BlockTooltip {
   public func calculateFrame(
+    size: CGSize,
     targeting targetRect: CGRect,
-    constrainedBy bounds: CGRect,
-    useLegacyWidth: Bool = true
+    constrainedBy bounds: CGRect
   ) -> CGRect {
-    let size = useLegacyWidth
-      ? block.intrinsicSize
-      : block.size(forResizableBlockSize: bounds.size)
     var result = CGRect(
       coordinate: targetRect.coordinate(of: position),
       ofPosition: position.opposite,

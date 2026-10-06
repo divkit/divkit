@@ -22,8 +22,13 @@ public final class DivFunctionsStorage {
     self.reporter = reporter
   }
 
+  /// Replaces the host's function storages for new card data. Storages of tooltips that are open
+  /// at this moment are left as they are, together with their link to the host storages they were
+  /// modeled with: an open tooltip keeps evaluating against the functions of the DivData its
+  /// content came from, and picks up the new ones when it is shown again (its storages are dropped
+  /// on close by `DivTooltipViewRegistry`).
   func set(cardId: DivCardID, functions: [DivFunction]) {
-    reset(cardId: cardId)
+    reset(viewId: DivViewId(cardId: cardId))
     setIfNeeded(path: cardId.path, functions: functions)
   }
 
@@ -89,6 +94,18 @@ public final class DivFunctionsStorage {
         .filter { $0.root == cardId.rawValue }
         .forEach { storages[$0] = nil }
       functionNamesByCard[cardId] = nil
+    }
+  }
+
+  /// Drops the storages registered by one view. `functionNamesByCard` is deliberately left
+  /// alone: it is only a pre-filter in `getStorage`, so a stale name is harmless, while clearing
+  /// it would make another view's functions of the same card unfindable - `setIfNeeded` skips
+  /// existing paths and would never add their names back.
+  func reset(viewId: DivViewId) {
+    lock.withLock {
+      storages.keys
+        .filter { $0.viewId == viewId }
+        .forEach { storages[$0] = nil }
     }
   }
 

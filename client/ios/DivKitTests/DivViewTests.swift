@@ -15,6 +15,45 @@ struct DivViewTests {
   }
 
   @Test
+  func tooltipContentSize_matchesBlockSizing() async throws {
+    let constraint = CGSize(width: 240, height: 320)
+    let divs = [
+      divContainer(
+        height: .divFixedSize(DivFixedSize(value: .value(40))),
+        width: .divFixedSize(DivFixedSize(value: .value(80)))
+      ),
+      divContainer(
+        height: .divFixedSize(DivFixedSize(value: .value(40))),
+        width: .divMatchParentSize(DivMatchParentSize())
+      ),
+      divText(
+        text: "Tooltip",
+        width: .divWrapContentSize(DivWrapContentSize()),
+        height: .divWrapContentSize(DivWrapContentSize())
+      ),
+    ]
+
+    for (index, div) in divs.enumerated() {
+      let cardId = DivCardID(rawValue: "tooltip_size_\(index)")
+      let data = divData(div)
+      let block = try data.makeBlock(
+        context: components.makeContext(cardId: cardId, cachedImageHolders: [])
+      )
+      let view = DivView(divKitComponents: components)
+      await view.setSource(.init(kind: .divData(data), cardId: cardId))
+
+      #expect(
+        view.tooltipContentSize(constrainedBy: constraint, useLegacyWidth: true)
+          == block.intrinsicSize
+      )
+      #expect(
+        view.tooltipContentSize(constrainedBy: constraint, useLegacyWidth: false)
+          == block.size(forResizableBlockSize: constraint)
+      )
+    }
+  }
+
+  @Test
   func visibilityActions_afterZeroFrame() async {
     await divView.setData(appearTestData)
 

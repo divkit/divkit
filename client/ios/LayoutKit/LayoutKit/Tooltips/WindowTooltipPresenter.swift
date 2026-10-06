@@ -7,6 +7,12 @@ final class WindowTooltipPresenter: TooltipPresenter {
 
   private var proxyVCs: [String: UIViewController] = [:]
 
+  /// `tooltipWindowManager` is looked up from the active window scene on first use; passing one
+  /// in is for tests, which run without a scene.
+  init(tooltipWindowManager: TooltipWindowManager? = nil) {
+    self.tooltipWindowManager = tooltipWindowManager
+  }
+
   func prepare() -> (constraint: CGRect, coordinateSpace: UIView?)? {
     setupIfNeeded()
     guard let tooltipWindowManager else { return nil }
@@ -58,6 +64,10 @@ final class WindowTooltipPresenter: TooltipPresenter {
     proxyVCs.removeValue(forKey: tooltipID)?.removeFromParent()
     if !hasRemainingModals {
       tooltipWindowManager?.hideModalWindow()
+      // A hidden window still owns its root view controller, and through it the closed
+      // tooltip's view. Let go of it so the tooltip's content goes away with the tooltip
+      // instead of lingering until the next modal replaces it.
+      tooltipWindowManager?.modalWindow.rootViewController = nil
     }
   }
 

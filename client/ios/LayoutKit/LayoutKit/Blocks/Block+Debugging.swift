@@ -412,7 +412,7 @@ extension DecoratingBlock: CustomDebugStringConvertible {
     if !tooltips.isEmpty {
       var tooltipsDescription = "Tooltips:\n"
       for tooltip in tooltips {
-        tooltipsDescription += "   \(tooltip.debugDescription.indented())\n"
+        tooltipsDescription += "   \(tooltip.tooltip.debugDescription.indented())\n"
       }
       decorations.append(tooltipsDescription)
     }
@@ -465,13 +465,19 @@ extension TransitioningBlock: CustomDebugStringConvertible {
 
 extension BlockTooltip: CustomDebugStringConvertible {
   public var debugDescription: String {
-    """
+    let contentDescription = switch viewSource {
+    case let .block(block):
+      block.debugDescription.indented()
+    case .factory:
+      "factory"
+    }
+    return """
     BlockTooltip {
       id: \(id)
       duration: \(params.duration)
       offset: \(offset.x) x \(offset.y)
       position: \(position.rawValue)
-      block: \(block.debugDescription.indented())
+      block: \(contentDescription)
     }
     """
   }

@@ -134,7 +134,7 @@ public final class DivViewPreloader {
       return blockProvider
     } else {
       let blockProvider = DivBlockProvider(
-        id: DivViewId(cardId: cardId, additionalId: nil),
+        id: DivViewId(cardId: cardId),
         divKitComponents: divKitComponents
       ) { [weak self] in
         self?.changeEventsPipe.send(DivViewSizeChange(cardId: $0, estimatedSize: $1))

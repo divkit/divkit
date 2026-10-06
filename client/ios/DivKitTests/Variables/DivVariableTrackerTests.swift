@@ -1,4 +1,5 @@
 @testable import DivKit
+import LayoutKit
 import XCTest
 
 final class DivVariableTrackerTests: XCTestCase {
@@ -70,6 +71,9 @@ final class DivVariableTrackerTests: XCTestCase {
   }
 }
 
-private let id1 = DivViewId(cardId: "card1", additionalId: nil)
-private let id1a1 = DivViewId(cardId: "card1", additionalId: "1")
-private let id2 = DivViewId(cardId: "card2", additionalId: nil)
+private let id1 = DivViewId(cardId: "card1")
+private let id1a1 = DivViewId(
+  cardId: "card1",
+  tooltip: DivViewId.Tooltip(id: "1", anchorPath: UIElementPath("card1") + "0" + "anchor")
+)
+private let id2 = DivViewId(cardId: "card2")

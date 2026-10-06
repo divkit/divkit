@@ -1,33 +1,29 @@
 import Foundation
-import LayoutKit
+@_spi(Internal) import LayoutKit
 import VGSL
 
 extension DivTooltip {
   fileprivate func makeTooltip(
-    context: DivBlockModelingContext
-  ) throws -> BlockTooltip? {
+    context: DivBlockModelingContext,
+    anchorPath: UIElementPath
+  ) throws -> TooltipContentHolder? {
     let expressionResolver = context.expressionResolver
     guard let position = resolvePosition(expressionResolver)?.cast() else {
       return nil
     }
 
-    let tooltipViewFactory: TooltipViewFactory = { [weak self] in
-      guard let self, let tooltipViewFactory = context.tooltipViewFactory else {
+    let tooltipRef = DivViewId.Tooltip(id: id, anchorPath: anchorPath)
+
+    let substrateViewFactory: TooltipViewFactory? = {
+      guard let substrateDiv,
+            let factory = context.tooltipViewFactory else {
         return nil
       }
-      return await tooltipViewFactory.makeView(div: self.div, tooltipId: self.id)
-    }
 
-    let substrateViewFactory: TooltipViewFactory? = if let substrateDiv = self.substrateDiv {
-      { [weak self] in
-        guard let self, let tooltipViewFactory = context.tooltipViewFactory else {
-          return nil
-        }
-        return await tooltipViewFactory.makeSubstrateView(div: substrateDiv, tooltipId: self.id)
+      return {
+        await factory.makeSubstrateView(div: substrateDiv, tooltip: tooltipRef)
       }
-    } else {
-      nil
-    }
+    }()
 
     let mode: BlockTooltip.Mode = switch mode {
     case .divTooltipModeModal:
@@ -36,9 +32,16 @@ extension DivTooltip {
       .nonModal
     }
 
-    return try BlockTooltip(
-      // Legacy behavior. Views should be created with tooltipViewFactory.
-      block: div.value.makeBlock(context: context),
+    let viewSource: BlockTooltip.ViewSource = if let factory = context.tooltipViewFactory {
+      .factory { [div] in
+        await factory.makeView(div: div, tooltip: tooltipRef)
+      }
+    } else {
+      try .block(div.value.makeBlock(context: context))
+    }
+
+    let tooltip = BlockTooltip(
+      viewSource: viewSource,
       params: BlockTooltipParams(
         id: id,
         mode: mode,
@@ -61,9 +64,12 @@ extension DivTooltip {
       position: position,
       useLegacyWidth: context.flagsInfo.useTooltipLegacyWidth,
       bringToTopId: bringToTopId,
-      tooltipViewFactory: tooltipViewFactory,
       substrateViewFactory: substrateViewFactory
     )
+
+    // Reusing the holder keeps its identity stable across remodels, so refreshing the
+    // tooltip's content never makes the host's DecoratingBlock.equals see a change.
+    return context.tooltipContentStorage.holder(for: context.viewId) { tooltip }
   }
 }
 
@@ -86,7 +92,7 @@ extension DivTooltip.Position {
 extension [DivTooltip]? {
   func makeTooltips(
     context: DivBlockModelingContext
-  ) throws -> [BlockTooltip] {
+  ) throws -> [TooltipContentHolder] {
     let items = self ?? []
     if !items.isEmpty, context.viewId.isTooltip {
       context.errorsStorage.add(
@@ -98,9 +104,10 @@ extension [DivTooltip]? {
       return []
     }
 
+    let anchorPath = context.path
     return try items.compactMap {
       let tooltipContext = context.cloneForTooltip(tooltipId: $0.id)
-      return try $0.makeTooltip(context: tooltipContext)
+      return try $0.makeTooltip(context: tooltipContext, anchorPath: anchorPath)
     }
   }
 }

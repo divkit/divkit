@@ -38,10 +38,18 @@ public final class DivKitComponents {
 
   let persistentValuesStorageInternal = DivPersistentValuesStorage()
 
+  @MainActor private(set) lazy var tooltipViewRegistry = DivTooltipViewRegistry(
+    idToPath: idToPath,
+    animatorController: animatorController,
+    triggersStorage: triggersStorage,
+    functionsStorage: functionsStorage
+  )
+
   private let animatorController = DivAnimatorController()
   private let disposePool = AutodisposePool()
   private let idToPath = IdToPath()
-  private let pendingActions = PendingActionsStorage()
+  private let tooltipContentStorage = DivTooltipContentStorage()
+  private let pendingActions: PendingActionsStorage
   private let functionsStorage: DivFunctionsStorage
   private let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
   private let layoutProviderHandler: DivLayoutProviderHandler
@@ -113,6 +121,8 @@ public final class DivKitComponents {
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
     self.persistentValuesStorage = persistentValuesStorageInternal
+    let pendingActions = PendingActionsStorage()
+    self.pendingActions = pendingActions
 
     self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()
     self.extensionHandlers = extensionHandlers
@@ -131,7 +141,12 @@ public final class DivKitComponents {
 
     layoutProviderHandler = DivLayoutProviderHandler(variablesStorage: variablesStorage)
 
-    updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardPipe.send)
+    weak var weakActionHandler: DivActionHandler?
+    updateAggregator = RunLoopCardUpdateAggregator { reasons in
+      let actions = pendingActions.take()
+      updateCardPipe.send(reasons)
+      weakActionHandler?.processPendingActions(actions)
+    }
     updateCard = updateAggregator.aggregate(_:)
 
     let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
@@ -169,6 +184,7 @@ public final class DivKitComponents {
       animatorController: animatorController,
       flags: flagsInfo
     )
+    weakActionHandler = actionHandler
 
     triggersStorage = DivTriggersStorage(
       variablesStorage: variablesStorage,
@@ -222,6 +238,7 @@ public final class DivKitComponents {
     idToPath.reset()
     pendingActions.reset()
     animatorController.reset()
+    tooltipContentStorage.reset()
     debugErrorCollectors = [:]
   }
 
@@ -237,6 +254,7 @@ public final class DivKitComponents {
     idToPath.reset(cardId: cardId)
     pendingActions.reset(cardId: cardId)
     animatorController.reset(cardId: cardId)
+    tooltipContentStorage.reset(cardId: cardId)
     debugErrorCollectors[cardId] = nil
   }
 
@@ -292,6 +310,10 @@ public final class DivKitComponents {
     return try parseDivDataWithTemplates(jsonDict, cardId: cardId)
   }
 
+  /// - Parameter additionalId: When `nil`, the host card context. Otherwise, an additional card
+  ///   view whose path root is `card/tooltip#<additionalId>` (internal path layout; state roots
+  ///   use `tooltip#<additionalId>`). Registrations owned by that view (ids, triggers, animators,
+  ///   functions) are dropped by ``reset(cardId:)``.
   public func makeContext(
     cardId: DivCardID,
     additionalId: String? = nil,
@@ -299,46 +321,11 @@ public final class DivKitComponents {
     debugParams: DebugParams = DebugParams(),
     parentScrollView: ScrollView? = nil
   ) -> DivBlockModelingContext {
-    let viewId = DivViewId(cardId: cardId, additionalId: additionalId)
-    variableTracker.onModelingStarted(id: viewId)
-
-    let errorsStorage = DivErrorsStorage(errors: [])
-    return DivBlockModelingContext(
-      viewId: viewId,
-      stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
-      actionHandler: actionHandler,
-      blockStateStorage: blockStateStorage,
-      visibilityCounter: visibilityCounter,
-      lastVisibleBoundsCache: lastVisibleBoundsCache,
-      imageHolderFactory: imageHolderFactory
-        .withCache(cachedImageHolders),
-      divCustomBlockFactory: divCustomBlockFactory,
-      fontProvider: fontProvider,
-      flagsInfo: flagsInfo,
-      extensionHandlers: extensionHandlers.dictionary,
-      functionsStorage: functionsStorage,
-      variablesStorage: variablesStorage,
-      triggersStorage: triggersStorage,
-      playerFactory: playerFactory,
+    makeContext(
+      viewId: DivViewId(cardId: cardId, additionalId: additionalId),
+      cachedImageHolders: cachedImageHolders,
       debugParams: debugParams,
-      scheduler: nil,
-      parentScrollView: parentScrollView,
-      errorsStorage: errorsStorage,
-      debugErrorCollector: debugErrorCollector(
-        for: cardId,
-        debugParams: debugParams,
-        errorsStorage: errorsStorage
-      ),
-      layoutDirection: layoutDirection,
-      variableTracker: variableTracker,
-      persistentValuesStorage: persistentValuesStorageInternal,
-      tooltipViewFactory: DivTooltipViewFactory(
-        divKitComponents: self,
-        cardId: cardId
-      ),
-      layoutProviderHandler: layoutProviderHandler,
-      idToPath: idToPath,
-      animatorController: animatorController
+      parentScrollView: parentScrollView
     )
   }
 
@@ -379,6 +366,11 @@ public final class DivKitComponents {
         triggers: divData.variableTriggers ?? []
       )
     }
+    // A trigger initialized synchronously above can enqueue an action while update aggregation
+    // is disabled. Restore the otherwise guaranteed update tick for such an action.
+    if pendingActions.contains(cardId: cardId) {
+      updateCard(.state(cardId))
+    }
   }
 
   public func setTimers(divData: DivData, cardId: DivCardID) {
@@ -405,12 +397,58 @@ public final class DivKitComponents {
   }
   #endif
 
-  func resetIdToPath(cardId: DivCardID) {
-    idToPath.reset(cardId: cardId)
+  func makeContext(
+    viewId: DivViewId,
+    cachedImageHolders: [ImageHolder],
+    debugParams: DebugParams = DebugParams(),
+    parentScrollView: ScrollView? = nil
+  ) -> DivBlockModelingContext {
+    let cardId = viewId.cardId
+    variableTracker.onModelingStarted(id: viewId)
+
+    let errorsStorage = DivErrorsStorage(errors: [])
+    return DivBlockModelingContext(
+      viewId: viewId,
+      stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
+      actionHandler: actionHandler,
+      blockStateStorage: blockStateStorage,
+      visibilityCounter: visibilityCounter,
+      lastVisibleBoundsCache: lastVisibleBoundsCache,
+      imageHolderFactory: imageHolderFactory
+        .withCache(cachedImageHolders),
+      divCustomBlockFactory: divCustomBlockFactory,
+      fontProvider: fontProvider,
+      flagsInfo: flagsInfo,
+      extensionHandlers: extensionHandlers.dictionary,
+      functionsStorage: functionsStorage,
+      variablesStorage: variablesStorage,
+      triggersStorage: triggersStorage,
+      playerFactory: playerFactory,
+      debugParams: debugParams,
+      scheduler: nil,
+      parentScrollView: parentScrollView,
+      errorsStorage: errorsStorage,
+      debugErrorCollector: debugErrorCollector(
+        for: cardId,
+        debugParams: debugParams,
+        errorsStorage: errorsStorage
+      ),
+      layoutDirection: layoutDirection,
+      variableTracker: variableTracker,
+      persistentValuesStorage: persistentValuesStorageInternal,
+      tooltipViewFactory: DivTooltipViewFactory(
+        divKitComponents: self,
+        cardId: cardId
+      ),
+      layoutProviderHandler: layoutProviderHandler,
+      idToPath: idToPath,
+      animatorController: animatorController,
+      tooltipContentStorage: tooltipContentStorage
+    )
   }
 
-  func applyPendingActions(cardId: DivCardID) {
-    actionHandler.applyPendingActions(cardId: cardId)
+  func resetIdToPath(viewId: DivViewId) {
+    idToPath.reset(viewId: viewId)
   }
 
   private func debugErrorCollector(

@@ -4,6 +4,7 @@ public final class MockReporter: DivReporter {
   public private(set) var lastCardId: DivCardID?
   public private(set) var lastActionInfo: DivActionInfo?
   public private(set) var lastError: DivError?
+  public private(set) var errors: [DivError] = []
 
   public init() {}
 
@@ -15,5 +16,6 @@ public final class MockReporter: DivReporter {
   public func reportError(cardId: DivCardID, error: DivError) {
     lastCardId = cardId
     lastError = error
+    errors.append(error)
   }
 }

@@ -106,7 +106,7 @@ extension LongTapActions {
 }
 
 private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsTrackingContainer,
-  TooltipProtocol, DecoratingViewProtocol {
+  DecoratingViewProtocol {
   enum HighlightState {
     case normal
     case highlighted
@@ -133,7 +133,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       let paddings: EdgeInsets
       let source: Variable<AnyObject?>
       let visibilityParams: VisibilityParams?
-      let tooltips: [BlockTooltip]
+      let tooltips: [TooltipContentHolder]
       let accessibility: AccessibilityElement?
       let reuseId: String?
       let path: UIElementPath?
@@ -160,7 +160,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         paddings: EdgeInsets,
         source: Variable<AnyObject?>,
         visibilityParams: VisibilityParams?,
-        tooltips: [BlockTooltip],
+        tooltips: [TooltipContentHolder],
         accessibility: AccessibilityElement?,
         reuseId: String?,
         path: UIElementPath?,
@@ -216,7 +216,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     var paddings: EdgeInsets { box.paddings }
     var source: Variable<AnyObject?> { box.source }
     var visibilityParams: VisibilityParams? { box.visibilityParams }
-    var tooltips: [BlockTooltip] { box.tooltips }
+    var tooltips: [TooltipContentHolder] { box.tooltips }
     var accessibility: AccessibilityElement? { box.accessibility }
     var reuseId: String? { box.reuseId }
     var path: UIElementPath? { box.path }
@@ -275,7 +275,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       paddings: EdgeInsets,
       source: Variable<AnyObject?>,
       visibilityParams: VisibilityParams?,
-      tooltips: [BlockTooltip],
+      tooltips: [TooltipContentHolder],
       accessibility: AccessibilityElement?,
       reuseId: String?,
       path: UIElementPath?,
@@ -653,24 +653,6 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     }
   }
 
-  func makeTooltipEvent(with info: TooltipInfo) -> TooltipEvent? {
-    guard let tooltipModel = model.tooltips.first(where: { $0.id == info.id }), let window else {
-      return nil
-    }
-    let tooltipView = tooltipModel.block.makeBlockView()
-    tooltipView.frame = tooltipModel.calculateFrame(
-      targeting: convert(bounds, to: nil),
-      constrainedBy: window.bounds,
-      useLegacyWidth: tooltipModel.useLegacyWidth
-    )
-    return TooltipEvent(
-      info: info,
-      params: tooltipModel.params,
-      tooltipView: tooltipView,
-      tooltipAnchorView: self
-    )
-  }
-
   /// Reuses the border layer and its clip mask across layout passes, updating
   /// them in place only when the size, border or boundary has changed. The
   /// mask shares the stroke's path: `cornerRadius` clips with a slightly
@@ -964,7 +946,7 @@ extension DecoratingView {
 }
 
 extension DecoratingView: TooltipAnchorView {
-  var tooltips: [BlockTooltip] { model.tooltips }
+  var tooltips: [BlockTooltip] { model.tooltips.map(\.tooltip) }
   var path: UIElementPath? { model.path }
 }
 

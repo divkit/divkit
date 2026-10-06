@@ -162,13 +162,15 @@ extension DivBase {
     let path = context.path
     context.triggersStorage?.setIfNeeded(
       path: path,
-      triggers: variableTriggers ?? []
+      triggers: variableTriggers ?? [],
+      viewId: context.viewId
     )
 
     if let id = context.currentDivId {
       context.idToPath.add(
         path,
-        forId: path.cardId.path + id,
+        forId: id,
+        viewId: context.viewId,
         divType: context.currentDivType
       )
     }

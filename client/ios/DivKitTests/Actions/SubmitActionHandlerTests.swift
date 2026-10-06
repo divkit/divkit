@@ -12,7 +12,7 @@ struct SubmitActionHandlerTests {
   private let handler: DivActionHandler
 
   init() {
-    idToPath.add(cardId.path + containerId, forId: cardId.path + containerId)
+    idToPath.add(cardId.path + containerId, forId: containerId, viewId: hostViewId)
     handler = DivActionHandler(
       idToPath: idToPath,
       submitter: submitter,
@@ -83,11 +83,13 @@ struct SubmitActionHandlerTests {
     let duplicateIdToPath = IdToPath()
     duplicateIdToPath.add(
       cardId.path + "container_1" + containerId,
-      forId: cardId.path + containerId
+      forId: containerId,
+      viewId: hostViewId
     )
     duplicateIdToPath.add(
       cardId.path + "container_2" + containerId,
-      forId: cardId.path + containerId
+      forId: containerId,
+      viewId: hostViewId
     )
     let duplicateHandler = DivActionHandler(
       idToPath: duplicateIdToPath,
@@ -160,10 +162,10 @@ struct SubmitActionHandlerTests {
     let secondContainerPath = secondScopePath + containerId
 
     let scopedIdToPath = IdToPath()
-    scopedIdToPath.add(firstScopePath, forId: cardId.path + firstScopeId)
-    scopedIdToPath.add(secondScopePath, forId: cardId.path + secondScopeId)
-    scopedIdToPath.add(firstContainerPath, forId: cardId.path + containerId)
-    scopedIdToPath.add(secondContainerPath, forId: cardId.path + containerId)
+    scopedIdToPath.add(firstScopePath, forId: firstScopeId, viewId: hostViewId)
+    scopedIdToPath.add(secondScopePath, forId: secondScopeId, viewId: hostViewId)
+    scopedIdToPath.add(firstContainerPath, forId: containerId, viewId: hostViewId)
+    scopedIdToPath.add(secondContainerPath, forId: containerId, viewId: hostViewId)
 
     variablesStorage.initializeIfNeeded(
       path: firstContainerPath,
@@ -224,6 +226,7 @@ private final class MockSubmitter: DivSubmitter {
 
 private let testUrl = URL(string: "https://example.com")!
 private let cardId = DivBlockModelingContext.testCardId
+private let hostViewId = DivViewId(cardId: cardId)
 private let containerId = "container_id"
 private let firstScopeId = "first_scope"
 private let secondScopeId = "second_scope"

@@ -28,7 +28,7 @@ final class DecoratingBlock: WrapperBlock {
   let blurIntensity: CGFloat
   let paddings: EdgeInsets
   let visibilityParams: VisibilityParams?
-  let tooltips: [BlockTooltip]
+  let tooltips: [TooltipContentHolder]
   let accessibilityElement: AccessibilityElement?
   let reuseId: String
   let path: UIElementPath?
@@ -85,7 +85,7 @@ final class DecoratingBlock: WrapperBlock {
     blurIntensity: CGFloat = defaultBlurIntensity,
     paddings: EdgeInsets = .zero,
     visibilityParams: VisibilityParams? = nil,
-    tooltips: [BlockTooltip] = [],
+    tooltips: [TooltipContentHolder] = [],
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String? = nil,
     path: UIElementPath? = nil,
@@ -202,7 +202,7 @@ extension DecoratingBlock {
     blurIntensity: CGFloat? = nil,
     paddings: EdgeInsets? = nil,
     visibilityParams: VisibilityParams? = nil,
-    tooltips: [BlockTooltip]? = nil,
+    tooltips: [TooltipContentHolder]? = nil,
     accessibilityElement: AccessibilityElement? = nil,
     reuseId: String? = nil,
     path: UIElementPath? = nil,

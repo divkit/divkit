@@ -5,8 +5,9 @@ import VGSL
 /// element was not modeled yet (e.g. it was inside a `gone` subtree and is being
 /// revealed by a preceding action in the same batch).
 ///
-/// Such actions are parked here and re-attempted after the next successful card
-/// re-model, once `IdToPath` has been repopulated. See `DivActionHandler.applyPendingActions`.
+/// Such actions are parked here and processed in the next card-update tick, after all
+/// synchronously subscribed views have been re-modeled and `IdToPath` has been repopulated.
+/// See `DivActionHandler.processPendingActions`.
 final class PendingActionsStorage {
   struct PendingAction {
     let id: String
@@ -17,20 +18,26 @@ final class PendingActionsStorage {
     let apply: (UIElementPath) -> Void
   }
 
-  private var storage = [DivCardID: [PendingAction]]()
+  private var storage: [PendingAction] = []
   private let lock = AllocatedUnfairLock()
 
   func enqueue(_ action: PendingAction) {
     lock.withLock {
-      storage[action.cardId, default: []].append(action)
+      storage.append(action)
     }
   }
 
-  func take(cardId: DivCardID) -> [PendingAction] {
+  func take() -> [PendingAction] {
     lock.withLock {
-      let actions = storage[cardId] ?? []
-      storage[cardId] = nil
+      let actions = storage
+      storage = []
       return actions
+    }
+  }
+
+  func contains(cardId: DivCardID) -> Bool {
+    lock.withLock {
+      storage.contains { $0.cardId == cardId }
     }
   }
 
@@ -42,7 +49,7 @@ final class PendingActionsStorage {
 
   func reset(cardId: DivCardID) {
     lock.withLock {
-      storage[cardId] = nil
+      storage.removeAll { $0.cardId == cardId }
     }
   }
 }

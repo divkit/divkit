@@ -1,4 +1,4 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
 import LayoutKit
 import XCTest
@@ -11,12 +11,17 @@ final class DivBlockModelingContextTests: XCTestCase {
   }
 
   func test_parentPath_ContainsAdditionalId() {
-    let context = DivBlockModelingContext(
-      cardId: "card_id",
-      additionalId: "additional_id"
+    let cardId = DivCardID(rawValue: "card_id")
+    let context = DivKitComponents().makeContext(
+      cardId: cardId,
+      additionalId: "additional_id",
+      cachedImageHolders: []
     )
 
-    XCTAssertEqual(UIElementPath("card_id") + "additional_id", context.path)
+    XCTAssertEqual(
+      context.path,
+      UIElementPath("card_id") + "tooltip#additional_id"
+    )
   }
 
   func test_modifying_cardLogId() {
@@ -117,21 +122,39 @@ final class DivBlockModelingContextTests: XCTestCase {
   }
 
   func test_cloneForTooltip() {
+    let anchorPath = UIElementPath("card_id") + "0" + "element_id"
     let context = DivBlockModelingContext(cardId: "card_id")
       .modifying(pathSuffix: "0")
       .modifying(pathSuffix: "element_id")
 
     let tooltipContext = context.cloneForTooltip(tooltipId: "tooltip_id")
 
+    // The anchor is part of the identity, not just of the path: two elements may declare
+    // tooltips sharing an id, and only the anchor tells those views apart.
     XCTAssertEqual(
-      DivViewId(cardId: "card_id", additionalId: "tooltip_id"),
+      DivViewId(
+        cardId: "card_id",
+        tooltip: DivViewId.Tooltip(id: "tooltip_id", anchorPath: anchorPath)
+      ),
       tooltipContext.viewId
     )
 
     XCTAssertEqual(
-      UIElementPath("card_id") + "tooltip_id",
+      anchorPath + "tooltip#tooltip_id",
       tooltipContext.path
     )
+  }
+
+  func test_cloneForTooltip_SameIdOnDifferentAnchors_GivesDistinctViewIds() {
+    let context = DivBlockModelingContext(cardId: "card_id").modifying(pathSuffix: "0")
+
+    let first = context.modifying(pathSuffix: "anchor_a").cloneForTooltip(tooltipId: "hint")
+    let second = context.modifying(pathSuffix: "anchor_b").cloneForTooltip(tooltipId: "hint")
+
+    // div_tooltip_id is only required to be unique among one element's tooltips, so this is a
+    // layout the contract allows - the two views must not collapse into one identity.
+    XCTAssertNotEqual(first.viewId, second.viewId)
+    XCTAssertNotEqual(first.path, second.path)
   }
 
   func test_WhenHasNoExtensionHandler_AddsErrorToErrorStorage() throws {
@@ -179,6 +202,19 @@ final class DivBlockModelingContextTests: XCTestCase {
 
     XCTAssertNil(childContext.overridenId)
     XCTAssertNil(childContext.currentDivId)
+  }
+
+  func test_elementIdWithTooltipPrefix_addsWarning() {
+    let context = DivBlockModelingContext()
+    _ = makeBlock(
+      divSeparator(id: "\(DivViewId.tooltipMarker)button"),
+      context: context,
+      ignoreErrors: true
+    )
+
+    let warnings = context.errorsStorage.errors.filter { $0.level == .warning }
+    XCTAssertEqual(warnings.count, 1)
+    XCTAssertTrue(warnings[0].message.contains(DivViewId.tooltipMarker))
   }
 }
 

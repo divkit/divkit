@@ -27,6 +27,7 @@ final class BlockTooltipTests: XCTestCase {
       )
 
       let resultRect = tooltip.calculateFrame(
+        size: tooltipSize,
         targeting: targetRect,
         constrainedBy: boundsRect
       )
@@ -495,7 +496,7 @@ extension CGRect {
 
 fileprivate func makeTooltip(offset: CGPoint, block: Block) -> BlockTooltip {
   BlockTooltip(
-    block: block,
+    viewSource: .block(block),
     params: BlockTooltipParams(
       id: "tooltip",
       mode: .modal,

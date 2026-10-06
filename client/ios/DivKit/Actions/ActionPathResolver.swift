@@ -25,8 +25,8 @@ struct ActionPathResolver {
 
   /// Resolves `id` and performs the action. If the element is not modeled yet
   /// (e.g. it lives in a `gone` subtree that a preceding action in the same batch
-  /// is revealing), the action is parked and retried after the next re-model — see
-  /// `DivActionHandler.applyPendingActions`. Ambiguity is reported immediately.
+  /// is revealing), the action is parked and retried after all views have been
+  /// re-modeled in the next card-update tick. Ambiguity is reported immediately.
   ///
   /// `divTypes` restricts the lookup to elements of the given div types, so an
   /// action targeting a specific element kind (e.g. video) is not confused by

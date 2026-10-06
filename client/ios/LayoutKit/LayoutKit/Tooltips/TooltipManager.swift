@@ -1,3 +1,4 @@
+import CoreGraphics
 import VGSL
 
 #if os(iOS)
@@ -26,6 +27,9 @@ public protocol TooltipActionPerformer {
   /// The returned value resolves once the tooltip is on screen or the attempt is provably done
   /// (no presenter, no matching anchor view, or a tooltip with the same id is already showing).
   /// The `duration`-based auto-hide, if any, runs independently and does not delay the result.
+  ///
+  /// A request made while the tooltip is being hidden waits for that and then starts anew; it
+  /// returns `false` if it was cancelled by a hide or reset meanwhile.
   ///
   /// - Parameter info: The `TooltipInfo` containing the necessary information to display the
   /// tooltip.
@@ -62,6 +66,10 @@ extension TooltipActionPerformer {
 /// added to the view hieararchy.
 /// - `tooltipAnchorViewRemoved(anchorView:)`: Notifies the manager when a tooltip anchor view is
 /// removed from the view hieararchy.
+///
+/// An implementation must call ``TooltipContentClosing/tooltipDidClose()`` for content created by
+/// a ``BlockTooltip/ViewSource/factory(_:)`` when the tooltip closes or when the created view is
+/// discarded without being shown.
 public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDelegate {
   /// Notifies the manager when a tooltip anchor view is added to the view hieararchy.
   ///
@@ -94,9 +102,55 @@ public class DefaultTooltipManager: TooltipManager {
     public let bringToTopId: String?
   }
 
+  /// Show state per tooltip identity. Invariant: at most one show is in progress per identity.
+  /// `show`, `hide` and `reset` during a show only change the desired state, and the show applies
+  /// it when it finishes. `r` is the request held by `hiding(next: r)`, started anew afterwards.
+  ///
+  /// | event         | no record | showing     | hiding(nil) | hiding(r) | visible |
+  /// |---------------|-----------|-------------|-------------|-----------|---------|
+  /// | show          | start     | rejected    | queue as r  | rejected  | rejected|
+  /// | hide / reset  | -         | hiding(nil) | -           | cancel r  | close   |
+  /// | returned view | -         | display     | discard     | discard, r| -       |
+  /// | failed        | -         | none        | none        | start r   | -       |
+  ///
+  /// Each transition is one operation under the lock; UI calls are left to the caller.
   class TooltipStates {
-    enum State {
-      case pending
+    struct ShowRequest {
+      /// Called exactly once: with the result of its show, or `false` if rejected or cancelled.
+      let info: TooltipInfo
+      let completion: (Bool) -> Void
+    }
+
+    enum ShowDecision {
+      case start
+      case queued
+      case rejected
+    }
+
+    struct HideOutcome {
+      var view: TooltipContainerView?
+      var cancelledRequest: ShowRequest?
+    }
+
+    struct ResetOutcome {
+      var views: [TooltipContainerView] = []
+      var cancelledRequests: [ShowRequest] = []
+    }
+
+    enum ShowResolution {
+      case display
+      case discard(next: ShowRequest?)
+    }
+
+    enum Phase: Equatable {
+      case showing
+      case hiding(hasNext: Bool)
+      case visible
+    }
+
+    private enum State {
+      case showing
+      case hiding(next: ShowRequest?)
       case visible(TooltipContainerView)
     }
 
@@ -115,65 +169,143 @@ public class DefaultTooltipManager: TooltipManager {
       }
     }
 
-    func tryReserve(_ identity: TooltipIdentity) -> Bool {
+    func phase(of identity: TooltipIdentity) -> Phase? {
       lock.withLock {
-        guard !tooltips.keys.contains(identity) else {
-          return false
+        switch tooltips[identity] {
+        case nil: nil
+        case .showing: .showing
+        case let .hiding(next): .hiding(hasNext: next != nil)
+        case .visible: .visible
         }
-
-        tooltips[identity] = .pending
-        return true
       }
     }
 
-    func isReserved(_ identity: TooltipIdentity) -> Bool {
-      lock.withLock {
-        tooltips.keys.contains(identity)
+    func requestShow(_ request: ShowRequest) -> ShowDecision {
+      let identity = request.info.identity
+      return lock.withLock {
+        switch tooltips[identity] {
+        case nil:
+          tooltips[identity] = .showing
+          return .start
+        case .hiding(nil):
+          tooltips[identity] = .hiding(next: request)
+          return .queued
+        case .showing, .hiding, .visible:
+          return .rejected
+        }
       }
     }
 
-    func addVisible(_ identity: TooltipIdentity, view: TooltipContainerView) {
+    func requestHide(_ identity: TooltipIdentity) -> HideOutcome {
       lock.withLock {
-        tooltips[identity] = .visible(view)
-      }
-    }
-
-    func removePending(_ identity: TooltipIdentity) {
-      lock.withLock {
-        if case .pending = tooltips[identity] {
+        switch tooltips[identity] {
+        case nil:
+          return HideOutcome()
+        case .showing:
+          tooltips[identity] = .hiding(next: nil)
+          return HideOutcome()
+        case let .hiding(next):
+          tooltips[identity] = .hiding(next: nil)
+          return HideOutcome(cancelledRequest: next)
+        case let .visible(view):
           tooltips[identity] = nil
+          return HideOutcome(view: view)
         }
       }
     }
 
+    /// Decides what a show that returned content does. The record stays `showing` for `.display`
+    /// until the caller has the container and calls `markVisible`.
+    func finishShow(_ identity: TooltipIdentity) -> ShowResolution {
+      lock.withLock {
+        if case .showing = tooltips[identity] {
+          return .display
+        }
+        return discardLocked(identity)
+      }
+    }
+
+    /// `showing` → `visible(view)`. Anything else means the show is no longer wanted.
+    func markVisible(_ identity: TooltipIdentity, view: TooltipContainerView) -> ShowResolution {
+      lock.withLock {
+        if case .showing = tooltips[identity] {
+          tooltips[identity] = .visible(view)
+          return .display
+        }
+        return discardLocked(identity)
+      }
+    }
+
+    func failShow(_ identity: TooltipIdentity) -> ShowRequest? {
+      lock.withLock {
+        switch tooltips[identity] {
+        case .showing:
+          tooltips[identity] = nil
+          return nil
+        case let .hiding(next):
+          tooltips[identity] = next == nil ? nil : .showing
+          return next
+        case .visible, nil:
+          return nil
+        }
+      }
+    }
+
+    /// Removes the view only if it is still the visible one. With no record or a show in progress
+    /// returns `expectedView` and changes nothing, so a closing view never affects a newer show.
     @discardableResult
     func remove(
-      _ identity: TooltipIdentity
+      _ identity: TooltipIdentity,
+      ifShowing expectedView: TooltipContainerView
     ) -> TooltipContainerView? {
       lock.withLock {
-        defer { tooltips[identity] = nil }
-        return if case let .visible(view) = tooltips[identity] {
-          view
-        } else {
-          nil
+        switch tooltips[identity] {
+        case nil, .showing, .hiding:
+          return expectedView
+        case let .visible(currentView) where currentView !== expectedView:
+          return nil
+        case let .visible(view):
+          tooltips[identity] = nil
+          return view
         }
+      }
+    }
+
+    func beginReset() -> ResetOutcome {
+      lock.withLock {
+        var outcome = ResetOutcome()
+        for (identity, state) in tooltips {
+          switch state {
+          case .showing:
+            tooltips[identity] = .hiding(next: nil)
+          case let .hiding(next):
+            tooltips[identity] = .hiding(next: nil)
+            next.map { outcome.cancelledRequests.append($0) }
+          case let .visible(view):
+            tooltips[identity] = nil
+            outcome.views.append(view)
+          }
+        }
+        return outcome
       }
     }
 
     func reset() {
-      let viewsToClose: [TooltipContainerView] = lock.withLock {
-        let views = tooltips.values.reduce(into: [TooltipContainerView]()) {
-          if case let .visible(view) = $1 {
-            $0.append(view)
-          }
-        }
-        tooltips.removeAll()
-        return views
-      }
+      let outcome = beginReset()
+      outcome.cancelledRequests.forEach { $0.completion(false) }
+      outcome.views.forEach { $0.close(animated: false) }
+    }
 
-      viewsToClose.forEach { $0.close(animated: false) }
+    private func discardLocked(_ identity: TooltipIdentity) -> ShowResolution {
+      guard case let .hiding(next) = tooltips[identity] else {
+        return .discard(next: nil)
+      }
+      tooltips[identity] = next == nil ? nil : .showing
+      return .discard(next: next)
     }
   }
+
+  private typealias ShowOutcome = (shown: Bool, next: TooltipStates.ShowRequest?)
 
   private struct WeakBlockView {
     weak var view: BlockView?
@@ -195,13 +327,25 @@ public class DefaultTooltipManager: TooltipManager {
   private let lock = AllocatedUnfairLock()
   private let presenter: TooltipPresenter
 
-  public init(
+  public convenience init(
     shownTooltips: Property<Set<String>> = Property(),
     handleAction: @escaping (UIActionEvent) -> Void = { _ in },
     externalView: TooltipHostView? = nil
   ) {
-    self.presenter = externalView.map { ViewTooltipPresenter(containerView: $0) }
-      ?? WindowTooltipPresenter()
+    self.init(
+      shownTooltips: shownTooltips,
+      handleAction: handleAction,
+      presenter: externalView.map { ViewTooltipPresenter(containerView: $0) }
+        ?? WindowTooltipPresenter()
+    )
+  }
+
+  init(
+    shownTooltips: Property<Set<String>> = Property(),
+    handleAction: @escaping (UIActionEvent) -> Void = { _ in },
+    presenter: TooltipPresenter
+  ) {
+    self.presenter = presenter
     self.handleAction = handleAction
     self.shownTooltips = shownTooltips
 
@@ -219,41 +363,33 @@ public class DefaultTooltipManager: TooltipManager {
       name: UIDevice.orientationDidChangeNotification,
       object: nil
     )
+    let stateStore = stateStore
+    onMainThread {
+      stateStore.reset()
+    }
   }
 
   public func showTooltip(info: TooltipInfo) {
-    guard stateStore.tryReserve(info.identity) else {
-      return
-    }
-    guard let anchorView = findAnchorView(for: info),
-          let prep = presenter.prepare() else {
-      stateStore.removePending(info.identity)
-      return
-    }
-    Task {
-      @MainActor in _ = await performShow(
-        info: info,
-        anchorView: anchorView,
-        prep: prep
+    requestShow(TooltipStates.ShowRequest(info: info, completion: { _ in }))
+  }
+
+  /// A queued request waits through a `CheckedContinuation` resumed by its own completion.
+  @MainActor
+  public func showTooltip(info: TooltipInfo) async -> Bool {
+    await withCheckedContinuation { continuation in
+      requestShow(
+        TooltipStates.ShowRequest(
+          info: info,
+          completion: { continuation.resume(returning: $0) }
+        )
       )
     }
   }
 
-  @MainActor
-  public func showTooltip(info: TooltipInfo) async -> Bool {
-    guard stateStore.tryReserve(info.identity) else { return false }
-
-    guard let anchorView = findAnchorView(for: info),
-          let prep = presenter.prepare() else {
-      stateStore.removePending(info.identity)
-      return false
-    }
-
-    return await performShow(info: info, anchorView: anchorView, prep: prep)
-  }
-
   public func hideTooltip(identity: TooltipIdentity) {
-    stateStore.remove(identity)?.close(animated: true)
+    let outcome = stateStore.requestHide(identity)
+    outcome.cancelledRequest?.completion(false)
+    outcome.view?.close(animated: true)
   }
 
   public func tooltipAnchorViewAdded(anchorView: TooltipAnchorView) {
@@ -318,37 +454,82 @@ public class DefaultTooltipManager: TooltipManager {
     }
   }
 
+  private func requestShow(_ request: TooltipStates.ShowRequest) {
+    switch stateStore.requestShow(request) {
+    case .start:
+      startShow(request)
+    case .queued:
+      break
+    case .rejected:
+      request.completion(false)
+    }
+  }
+
+  private func startShow(_ request: TooltipStates.ShowRequest) {
+    let info = request.info
+    guard let anchorView = findAnchorView(for: info),
+          let prep = presenter.prepare() else {
+      finish(request, shown: false, next: stateStore.failShow(info.identity))
+      return
+    }
+    Task { @MainActor [self] in
+      let result = await performShow(info: info, anchorView: anchorView, prep: prep)
+      finish(request, shown: result.shown, next: result.next)
+    }
+  }
+
+  private func finish(
+    _ request: TooltipStates.ShowRequest,
+    shown: Bool,
+    next: TooltipStates.ShowRequest?
+  ) {
+    request.completion(shown)
+    if let next {
+      startShow(next)
+    }
+  }
+
   @MainActor
   private func performShow(
     info: TooltipInfo,
     anchorView: TooltipAnchorView,
     prep: (constraint: CGRect, coordinateSpace: UIView?)
-  ) async -> Bool {
-    defer {
-      stateStore.removePending(info.identity)
-    }
-
+  ) async -> ShowOutcome {
     guard let tooltip = await anchorView.makeTooltip(
       id: info.id,
       scopePath: info.scopePath,
       in: prep.constraint,
-      relativeTo: prep.coordinateSpace
-    ) else { return false }
-    return await displayTooltip(tooltip, info: info)
+      relativeTo: prep.coordinateSpace,
+      onError: info.onError
+    ) else {
+      return (false, stateStore.failShow(info.identity))
+    }
+    return displayTooltip(tooltip, info: info)
   }
 
   @MainActor
-  private func displayTooltip(_ tooltip: Tooltip, info: TooltipInfo) async -> Bool {
+  private func displayTooltip(
+    _ tooltip: Tooltip,
+    info: TooltipInfo
+  ) -> ShowOutcome {
     let key = info.identity
 
-    guard stateStore.isReserved(key) else { return false }
+    func discard(_ next: TooltipStates.ShowRequest?) -> ShowOutcome {
+      tooltip.notifyContentDidClose()
+      return (false, next)
+    }
 
+    if case let .discard(next) = stateStore.finishShow(key) {
+      return discard(next)
+    }
+
+    weak var weakView: TooltipContainerView?
     let view = TooltipContainerView(
       tooltip: tooltip,
       handleAction: handleAction,
       onCloseAction: { [weak self] in
-        guard let self else { return }
-        stateStore.remove(key)
+        guard let self, let view = weakView else { return }
+        guard stateStore.remove(key, ifShowing: view) != nil else { return }
         presenter.onClosed(
           tooltipID: tooltip.params.id,
           hasRemainingModals: stateStore.hasOpenModals
@@ -358,19 +539,29 @@ public class DefaultTooltipManager: TooltipManager {
         self?.viewsById[$0]?.view
       }
     )
+    weakView = view
+
+    if case let .discard(next) = stateStore.markVisible(key, view: view) {
+      return discard(next)
+    }
 
     presenter.present(view, for: tooltip)
     view.animateAppear()
     UIAccessibility.postDelayed(notification: .screenChanged, argument: view)
-    stateStore.addVisible(key, view: view)
 
     let duration = tooltip.params.duration
     if !duration.isZero {
-      try? await Task.sleep(nanoseconds: UInt64(duration.nanoseconds))
-      stateStore.remove(key)?.close(animated: true)
+      Task { @MainActor [weak self, weak view] in
+        do {
+          try await Task.sleep(nanoseconds: UInt64(duration.nanoseconds))
+        } catch {
+          return
+        }
+        guard let self, let view else { return }
+        stateStore.remove(key, ifShowing: view)?.close(animated: true)
+      }
     }
-
-    return true
+    return (true, nil)
   }
 }
 
@@ -389,22 +580,52 @@ extension TooltipAnchorView {
     id: String,
     scopePath: UIElementPath?,
     in constraint: CGRect,
-    relativeTo containerView: UIView? = nil
+    relativeTo containerView: UIView? = nil,
+    onError: ((String) -> Void)? = nil
   ) async -> Tooltip? {
     guard let tooltip = firstMatchingTooltip(id: id, scopePath: scopePath) else {
       return nil
     }
 
-    let tooltipView = await tooltip.tooltipViewFactory?() ?? tooltip.block.makeBlockView()
+    let tooltipView: VisibleBoundsTrackingView
+    let contentSize: CGSize
+
+    switch tooltip.viewSource {
+    case let .block(block):
+      tooltipView = block.makeBlockView()
+      contentSize = block.tooltipContentSize(
+        constrainedBy: constraint.size,
+        useLegacyWidth: tooltip.useLegacyWidth
+      )
+    case let .factory(factory):
+      let view = await factory()
+      guard let sizeProvider = view as? TooltipContentSizeProviding else {
+        (view as? TooltipContentClosing)?.tooltipDidClose()
+        onError?(
+          "Tooltip view does not implement TooltipContentSizeProviding (tooltip id: '\(tooltip.id)')"
+        )
+        return nil
+      }
+      guard let size = sizeProvider.tooltipContentSize(
+        constrainedBy: constraint.size,
+        useLegacyWidth: tooltip.useLegacyWidth
+      ) else {
+        (view as? TooltipContentClosing)?.tooltipDidClose()
+        onError?("Tooltip content size is not available (tooltip id: '\(tooltip.id)')")
+        return nil
+      }
+      tooltipView = view
+      contentSize = size
+    }
 
     let targetRect = window != nil ?
       convert(bounds, to: containerView) :
       frame
 
     tooltipView.frame = tooltip.calculateFrame(
+      size: contentSize,
       targeting: targetRect,
-      constrainedBy: constraint,
-      useLegacyWidth: tooltip.useLegacyWidth
+      constrainedBy: constraint
     )
 
     let substrateView = await tooltip.substrateViewFactory?()
@@ -447,4 +668,10 @@ public final class DefaultTooltipManager: TooltipManager {
 extension TooltipManager {
   public func mapView(_: any BlockView, to _: BlockViewID) {}
   public func reset() {}
+}
+
+extension Block {
+  fileprivate func tooltipContentSize(constrainedBy size: CGSize, useLegacyWidth: Bool) -> CGSize {
+    useLegacyWidth ? intrinsicSize : self.size(forResizableBlockSize: size)
+  }
 }

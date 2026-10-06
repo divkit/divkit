@@ -174,6 +174,9 @@ public final class DivActionHandler {
     )
   }
 
+  /// Handles an action. The originating view is taken from `path`: DivKit marks a tooltip's
+  /// structural root with `tooltip#<id>` after the anchor path, so an action modeled inside a
+  /// tooltip is recognized by that marker. A path without it belongs to the host card.
   @_spi(Internal)
   public func handle(
     _ action: DivActionBase,
@@ -208,13 +211,13 @@ public final class DivActionHandler {
     let scopeId = action.resolveScopeId(expressionResolver)
 
     let scopePaths: [UIElementPath] = scopeId.map { scopeId in
-      idToPath[path.cardId.path + scopeId]
+      idToPath.paths(forId: scopeId, cardId: cardId)
     } ?? []
 
     if let scopeId {
       if scopePaths.isEmpty {
         reporter.reportError(
-          cardId: path.cardId,
+          cardId: cardId,
           error: DivUnknownWarning(
             "Scope with id '\(scopeId)' not found",
             path: path
@@ -222,7 +225,7 @@ public final class DivActionHandler {
         )
       } else if scopePaths.count > 1 {
         reporter.reportError(
-          cardId: path.cardId,
+          cardId: cardId,
           error: DivUnknownError(
             message: "Scope with id '\(scopeId)' is ambiguous",
             path: path
@@ -308,8 +311,8 @@ public final class DivActionHandler {
   }
 
   /// Parks an action whose target element is not modeled yet and schedules a
-  /// card re-model so it gets a chance to be resolved. The pending action is
-  /// re-attempted from `applyPendingActions(cardId:)` once the element appears.
+  /// card-update tick so it gets a chance to be resolved. The pending action is
+  /// processed after all views subscribed to that tick have been re-modeled.
   func enqueuePendingAction(
     id: String,
     divTypes: Set<String>? = nil,
@@ -334,13 +337,13 @@ public final class DivActionHandler {
     updateCard(.state(cardId))
   }
 
-  /// Re-attempts the actions parked for `cardId`. Must be called after a
-  /// successful re-model, when `IdToPath` has been repopulated.
-  func applyPendingActions(cardId: DivCardID) {
-    for action in pendingActions.take(cardId: cardId) {
+  /// Resolves actions captured at the start of a card-update tick. Must be called after
+  /// all synchronously subscribed views have been re-modeled, when `IdToPath` is up to date.
+  func processPendingActions(_ actions: [PendingActionsStorage.PendingAction]) {
+    for action in actions {
       switch actionPathResolver.resolvePath(
         id: action.id,
-        cardId: cardId,
+        cardId: action.cardId,
         scopePath: action.scopePath,
         divTypes: action.divTypes
       ) {
@@ -349,14 +352,14 @@ public final class DivActionHandler {
       case .notFound:
         actionPathResolver.reportNotFound(
           id: action.id,
-          cardId: cardId,
+          cardId: action.cardId,
           scopePath: action.scopePath,
           sourcePath: action.sourcePath
         )
       case .ambiguous:
         actionPathResolver.reportAmbiguous(
           id: action.id,
-          cardId: cardId,
+          cardId: action.cardId,
           scopePath: action.scopePath,
           sourcePath: action.sourcePath
         )

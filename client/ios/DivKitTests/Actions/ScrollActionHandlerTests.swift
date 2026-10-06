@@ -15,7 +15,7 @@ final class ScrollActionHandlerTests: XCTestCase {
 
   override func setUp() {
     let idToPath = IdToPath()
-    idToPath.add(elementPath, forId: cardId.path + "element_id")
+    idToPath.add(elementPath, forId: "element_id", viewId: hostViewId)
     handler = DivActionHandler(
       blockStateStorage: blockStateStorage,
       idToPath: idToPath,
@@ -666,10 +666,10 @@ final class ScrollActionHandlerTests: XCTestCase {
     let firstGalleryPath = firstScopePath + "0" + "gallery"
     let secondGalleryPath = secondScopePath + "0" + "gallery"
 
-    idToPath.add(firstScopePath, forId: cardId.path + "first")
-    idToPath.add(secondScopePath, forId: cardId.path + "second")
-    idToPath.add(firstGalleryPath, forId: cardId.path + "gallery")
-    idToPath.add(secondGalleryPath, forId: cardId.path + "gallery")
+    idToPath.add(firstScopePath, forId: "first", viewId: hostViewId)
+    idToPath.add(secondScopePath, forId: "second", viewId: hostViewId)
+    idToPath.add(firstGalleryPath, forId: "gallery", viewId: hostViewId)
+    idToPath.add(secondGalleryPath, forId: "gallery", viewId: hostViewId)
 
     blockStateStorage.setState(path: firstGalleryPath, state: initialState)
     blockStateStorage.setState(path: secondGalleryPath, state: initialState)
@@ -750,6 +750,7 @@ final class ScrollActionHandlerTests: XCTestCase {
 }
 
 private let cardId = DivBlockModelingContext.testCardId
+private let hostViewId = DivViewId(cardId: cardId)
 
 private let end = DivActionScrollDestination.endDestination(EndDestination())
 private let start = DivActionScrollDestination.startDestination(StartDestination())

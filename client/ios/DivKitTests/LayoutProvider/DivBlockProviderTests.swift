@@ -30,7 +30,7 @@ struct DivBlockProviderTests {
     )
     components = DivKitComponents(variablesStorage: variablesStorage)
     provider = DivBlockProvider(
-      id: DivViewId(cardId: "test_card", additionalId: nil),
+      id: DivViewId(cardId: "test_card"),
       divKitComponents: components,
       onCardSizeChanged: { _, _ in }
     )
