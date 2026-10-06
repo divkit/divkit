@@ -12,6 +12,7 @@ import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.binding.BindingDispatcher
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
@@ -103,10 +104,13 @@ internal class TestComponent(
 internal class TestViewComponentBuilder(
     private val wrapped: Div2ViewComponent.Builder,
     private val releaseViewVisitor: ReleaseViewVisitor? = null,
-    private val stateSwitcher: DivStateSwitcher? = null
+    private val stateSwitcher: DivStateSwitcher? = null,
+    private val bindingDispatcher: ((Div2View) -> BindingDispatcher)? = null,
 ) : Div2ViewComponent.Builder {
+    private lateinit var divView: Div2View
 
     override fun divView(divView: Div2View): Div2ViewComponent.Builder {
+        this.divView = divView
         wrapped.divView(divView)
         return this
     }
@@ -116,7 +120,8 @@ internal class TestViewComponentBuilder(
         return TestViewComponent(
             wrappedViewComponent,
             releaseViewVisitor ?: wrappedViewComponent.releaseViewVisitor,
-            stateSwitcher ?: wrappedViewComponent.stateSwitcher
+            stateSwitcher ?: wrappedViewComponent.stateSwitcher,
+            bindingDispatcher?.invoke(divView) ?: wrappedViewComponent.bindingDispatcher,
         )
     }
 }
@@ -124,7 +129,8 @@ internal class TestViewComponentBuilder(
 internal class TestViewComponent(
     private val wrapped: Div2ViewComponent,
     override val releaseViewVisitor: ReleaseViewVisitor = wrapped.releaseViewVisitor,
-    override val stateSwitcher: DivStateSwitcher = wrapped.stateSwitcher
+    override val stateSwitcher: DivStateSwitcher = wrapped.stateSwitcher,
+    override val bindingDispatcher: BindingDispatcher = wrapped.bindingDispatcher,
 ) : Div2ViewComponent by wrapped
 
 internal fun <T: Any> T.asExpression(): Expression<T> {

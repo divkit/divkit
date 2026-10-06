@@ -253,30 +253,12 @@ internal class BindingDispatcher @Inject constructor(
     }
 
     fun postMainThreadAction(action: Action) {
-        if (deferMainThreadAction) {
+        if (isCollectingMainThreadActions) {
             mainThreadActions.add(action)
         } else {
-            postToMainThread(action)
-        }
-    }
-
-    private fun postToMainThread(action: Action) {
-        val handle = criticalSection.enter()
-        var posted = false
-
-        try {
-            UiThreadHandler.postOnMainThread {
-                criticalSection.transferToCurrentThread()
-                try {
-                    action()
-                } finally {
-                    criticalSection.exit(handle)
-                }
-            }
-            posted = true
-        } finally {
-            if (!posted) {
-                criticalSection.exit(handle)
+            // Other owners and threads must use this owner's FIFO, without borrowing its lock handle.
+            runOnBindingThread {
+                mainThreadActions.add(action)
             }
         }
     }
