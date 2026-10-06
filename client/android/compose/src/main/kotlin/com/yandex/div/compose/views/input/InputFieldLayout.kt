@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.focus.trackInputFocus
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivInput
 
@@ -55,7 +56,7 @@ internal fun InputFieldLayout(
         )
     }
 
-    Box(modifier = modifier, contentAlignment = contentAlignment) {
+    Box(modifier = modifier.trackInputFocus(), contentAlignment = contentAlignment) {
         content(singleLine, maxLines, enabled, options, decorator)
     }
 }

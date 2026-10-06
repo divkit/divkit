@@ -7,6 +7,7 @@ import com.yandex.div.compose.context.DivViewContextFactory
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.compose.focus.InputFocus
 import com.yandex.div.compose.font.DivFontFamilyCache
 import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.font.LineMetricsCache
@@ -46,6 +47,7 @@ internal interface DivContextComponent {
     val imagePreviewDecoder: ImagePreviewDecoder
     val imageRequestFactory: ImageRequestFactory
     val imageRequestListener: ImageRequestListener
+    val inputFocus: InputFocus
     val lineMetricsCache: LineMetricsCache
     val patcher: DivPatcher
     val playerFactory: DivVideoPlayerFactory

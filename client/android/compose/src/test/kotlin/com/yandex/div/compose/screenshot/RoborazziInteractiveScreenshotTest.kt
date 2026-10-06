@@ -1,6 +1,7 @@
 package com.yandex.div.compose.screenshot
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -106,11 +107,12 @@ class RoborazziInteractiveScreenshotTest(
                 if (isViewEmpty) {
                     Text("<Empty>")
                 } else {
-                    DivView(
+                    Box(
                         modifier = Modifier
                             .onSizeChanged { isViewEmpty = it.width == 0 || it.height == 0 },
-                        data = data,
-                    )
+                    ) {
+                        DivView(data = data)
+                    }
                 }
             }
         }
@@ -211,6 +213,7 @@ private val selectedFiles = setOf(
     "div-input/focus/focused-background.json",
     "div-input/focus/focused-border.json",
     "div-input/phone_input_mask.json",
+    "div-select/visibility.json",
     "div-switch/base-properties.json",
     "div-switch/switch-properties.json",
     "div-text/text-properties.json",

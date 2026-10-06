@@ -13,7 +13,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.input.InputMode
+import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalInputModeManager
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -69,10 +78,37 @@ private fun SelectView(
     options: List<Option>
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var isVisible by remember { mutableStateOf(true) }
+    var isFocused by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+    val inputFocus = divContext.component.inputFocus
+    val inputModeManager = LocalInputModeManager.current
 
-    val modifier = modifier.clickable(indication = null, interactionSource = null) {
+    val openPopup = {
+        if (inputModeManager.inputMode == InputMode.Touch) inputFocus.clear()
         expanded = true
     }
+
+    val modifier = modifier
+        .modifierLocalConsumer {
+            isVisible = LocalDivVisibilityModifier.current
+            if (!isVisible) expanded = false
+        }
+        .focusRequester(focusRequester)
+        .onFocusChanged { isFocused = it.isFocused }
+        // Accessibility clicks open the popup at once, as performClick() of the View select does.
+        .semantics {
+            onClick {
+                if (isVisible) openPopup()
+                isVisible
+            }
+        }
+        .clickable(enabled = isVisible, indication = null, interactionSource = null) {
+            // As in a View focusable in touch mode, the first tap only focuses a select with focus settings.
+            val shouldRequestFocus = inputModeManager.inputMode == InputMode.Touch && !isFocused
+            if (shouldRequestFocus && focusRequester.requestFocus()) return@clickable
+            openPopup()
+        }
 
     Box(modifier) {
         BasicText(
