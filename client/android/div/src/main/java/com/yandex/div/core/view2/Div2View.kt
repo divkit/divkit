@@ -204,11 +204,12 @@ open class Div2View private constructor(
         dataComponent = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
         runtimeStore = dataComponent.runtimeStoreProvider.getOrCreate(data)
         viewStateStore = dataComponent.viewStateStore
-        runtimeStore.updateSubscriptions()
         if (oldRuntimeStore != runtimeStore) {
             oldDataComponent.viewConnector.detach(this)
             dataComponent.viewConnector.attach(this)
         }
+        // Replay subscriptions through the current owner, after detach has finished cleaning up runtimes.
+        runtimeStore.updateSubscriptions()
         dataComponent.stateManager.collectStateVariables(data, expressionResolver)
         dataTag = tag
     }

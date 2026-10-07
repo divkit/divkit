@@ -3127,6 +3127,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewDisappearActionsOnCleanupTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewDisappearActionsOnCleanupTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewMainActionOrderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewMainActionOrderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewReleaseChildrenTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewReleaseChildrenTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewRuntimeOwnershipTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewRuntimeOwnershipTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewTypeCheckTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewTypeCheckTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/DivAccessibilityBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/DivAccessibilityBinderTest.kt",
