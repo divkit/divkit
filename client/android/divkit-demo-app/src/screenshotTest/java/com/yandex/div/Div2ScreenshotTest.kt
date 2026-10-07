@@ -19,10 +19,7 @@ import java.io.File
 class Div2ScreenshotTest(casePath: String, escapedCase: String) {
 
     private val testCase = assetReader.readJson(casePath)
-    private val activityRule = ActivityParamsTestRule(
-        DivScreenshotActivity::class.java,
-        DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME to DivScreenshotActivity.IMAGE_LOADER_LOCAL,
-    )
+    private val activityRule = ActivityParamsTestRule(DivScreenshotActivity::class.java)
 
     @get:Rule
     val rule = screenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule, casePath.relativePath)

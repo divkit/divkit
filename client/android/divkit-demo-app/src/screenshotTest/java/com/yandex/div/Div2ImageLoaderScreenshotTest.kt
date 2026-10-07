@@ -19,10 +19,7 @@ import org.junit.runners.Parameterized
 class Div2ImageLoaderScreenshotTest(private val casePath: String, escapedCase: String) {
 
     private val testCase = assetReader.readJson(casePath)
-    private val activityRule = ActivityParamsTestRule(
-        activityClass = DivScreenshotActivity::class.java,
-        launchActivity = false,
-    )
+    private val activityRule = ActivityParamsTestRule(DivScreenshotActivity::class.java)
 
     @get:Rule
     val rule = baseRule(casePath, TEST_CASES_PATH, testCase, activityRule)

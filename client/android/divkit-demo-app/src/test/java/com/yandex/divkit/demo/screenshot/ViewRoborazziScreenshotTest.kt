@@ -65,7 +65,10 @@ class ViewRoborazziScreenshotTest(private val case: String, private val testCase
         assumeTrue(provideRoborazziContext().options.taskType.isEnabled())
         // Act: use the same Activity, fonts, extensions and local images as instrumented View tests.
         ActivityScenario.launch<DivScreenshotActivity>(createIntent()).use { scenario ->
-            scenario.onActivity { activity -> activity.setDivData(testCase) }
+            scenario.onActivity { activity ->
+                activity.prepare()
+                activity.setDivData(testCase)
+            }
             awaitScreenshotReady()
 
             // Assert: Roborazzi compares the rendered card with its own JVM reference.
@@ -78,7 +81,10 @@ class ViewRoborazziScreenshotTest(private val case: String, private val testCase
         // Arrange: bind the card once, as in the instrumented rebind suite.
         assumeTrue(provideRoborazziContext().options.taskType.isEnabled())
         ActivityScenario.launch<DivScreenshotActivity>(createIntent()).use { scenario ->
-            scenario.onActivity { activity -> activity.setDivData(testCase) }
+            scenario.onActivity { activity ->
+                activity.prepare()
+                activity.setDivData(testCase)
+            }
             awaitScreenshotReady()
 
             // Act: bind the same JSON to the existing Div2View.
@@ -93,10 +99,7 @@ class ViewRoborazziScreenshotTest(private val case: String, private val testCase
         }
     }
 
-    private fun createIntent(): Intent {
-        return Intent(getApplicationContext(), DivScreenshotActivity::class.java)
-            .putExtra(DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME, DivScreenshotActivity.IMAGE_LOADER_LOCAL)
-    }
+    private fun createIntent() = Intent(getApplicationContext(), DivScreenshotActivity::class.java)
 
     private fun captureScreenshot(view: View) {
         if (view.width == 0 || view.height == 0) {

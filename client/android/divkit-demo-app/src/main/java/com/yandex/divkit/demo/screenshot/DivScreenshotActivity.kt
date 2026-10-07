@@ -1,6 +1,5 @@
 package com.yandex.divkit.demo.screenshot
 
-import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
@@ -22,21 +21,18 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
     private lateinit var divContext: Div2Context
     private var assertionsEnabled = false
 
-    private val imageLoaderName: String?
-        get() = intent?.extras?.getString(EXTRA_DIV_IMAGE_LOADER_NAME)
+    var imageLoaderName = IMAGE_LOADER_LOCAL
 
     lateinit var divView: Div2View
         private set
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun prepare() {
         assertionsEnabled = DivKit.isAssertionsEnabled()
         DivKit.enableAssertions(false)
         setImageLoader()
         divContext = divContext(activity = this, isRiveEnabled = false) {
             animationsEnabledProvider(DisabledAnimationsProvider)
         }
-        super.onCreate(savedInstanceState)
-
         divView = Div2View(divContext)
         setContentView(divView)
     }
@@ -108,8 +104,6 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
     }
 
     companion object {
-        const val EXTRA_DIV_IMAGE_LOADER_NAME = "DivScreenshotActivity.EXTRA_DIV_IMAGE_LOADER_NAME"
-
         const val SCREENSHOT_VIEW_TAG = "screenshot_view"
 
         const val IMAGE_LOADER_GLIDE = "glide"

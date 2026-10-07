@@ -2,8 +2,8 @@ package com.yandex.divkit.demo.screenshot
 
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.os.Bundle
 import android.view.ContextThemeWrapper
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.compose.ui.platform.ComposeView
 import coil3.ComponentRegistry
@@ -25,7 +25,6 @@ import com.yandex.div.internal.coil.GifDecoderFactory
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
-import com.yandex.divkit.regression.utils.AssetReader
 import okio.ByteString.Companion.encodeUtf8
 import org.json.JSONObject
 
@@ -37,12 +36,11 @@ adb shell am start -n com.yandex.divkit.demo/com.yandex.divkit.demo.screenshot.D
 class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
 
     private lateinit var divContext: DivContext
+    private lateinit var container: ViewGroup
 
     val imageLoadingTracker = ComposeImageLoadingTracker()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun prepare() {
         divContext = DivContext(
             baseContext = ContextThemeWrapper(this, R.style.Div_Theme_Demo),
             configuration = divConfiguration {
@@ -54,9 +52,8 @@ class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
             }
         )
 
-        intent.extras?.getString(EXTRA_DIV_ASSET_NAME)?.let {
-            setDivData(AssetReader(this).readJson(it))
-        }
+        container = LinearLayout(divContext)
+        setContentView(container)
     }
 
     override fun setDivData(json: JSONObject) {
@@ -73,18 +70,13 @@ class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
             setContent {
                 DivView(data = data)
             }
+            removeAutofocusForOldApis()
         }
-
-        setContentView(
-            LinearLayout(divContext).apply {
-                view.removeAutofocusForOldApis()
-                addView(view)
-            }
-        )
+        container.removeAllViews()
+        container.addView(view)
     }
 
     companion object {
-        const val EXTRA_DIV_ASSET_NAME = "DivComposeScreenshotActivity.EXTRA_DIV_ASSET_NAME"
         const val SCREENSHOT_VIEW_TAG = "screenshot_view"
     }
 }
