@@ -1,3 +1,46 @@
+## 33.7.0
+
+### Android Client
+* Added `LottieDynamicPropertiesProvider` to configure dynamic properties of Lottie animations rendered by DivKit Compose.
+* Added bounded background prebinding for gallery and pager items with cancellation and media lifecycle support.
+* Added focus backgrounds, borders, and focus/blur actions in the Compose renderer.
+* Added slide and overlap page transformations with configurable opacity, scale, interpolation, and stacking order in the Compose renderer.
+* Added support for gallery scrollbars in the Compose renderer.
+* Added the core Kotlin Multiplatform module.
+* Added typed `extension_action` dispatch for Android View extensions, including Lottie Start and Stop commands that survive view rebinding. Start rewinds and plays the animation; Stop rewinds and leaves it stopped. Natural completion keeps the final frame.
+* Aligned pager drag sensitivity, paging touch slop, and settling animations in the Compose renderer with the View renderer.
+* Exposed `div-data` through the `compose` module.
+* Fixed TalkBack activation for views with double-tap actions.
+* Fixed `div-gif-image` with `preview_url` showing only the preview after the animated image was loaded.
+* Fixed accessibility role, selected-value announcements, and popup activation for `div-select` in the Compose renderer.
+* Fixed input focus handling when opening select menus and dismissed menus when their element or parent becomes hidden in the Compose renderer.
+* Fixed runtime subscription dispatch when a cached runtime is attached to another view.
+* Fixed slider focus on touch in the Compose renderer.
+* Fixed unwanted focus changes for actions with focus capture disabled in the Compose renderer.
+* Limited each pager swipe to one adjacent page in the Compose renderer.
+* Optimized network monitoring for image loading in the Compose renderer.
+* Preserved main-thread action order during asynchronous binding to prevent binding stalls.
+* Stopped recomposing pager content on every scroll frame in the Compose renderer.
+* Supported `appearance_animation` for images in the Compose renderer.
+* Supported `restrict_parent_scroll` for galleries in the Compose renderer.
+
+### iOS Client
+* A custom LayoutKit `TooltipManager` must now support `.factory` tooltip content: the view provides its size via `TooltipContentSizeProviding`, and the manager calls `TooltipContentClosing.tooltipDidClose()` when the tooltip closes or the view is discarded without being shown. `DefaultTooltipManager.showTooltip(info:) async` now returns without waiting for `duration`.
+* Added support for animated linear and radial text gradients on iOS, including ranges and custom ellipsis.
+* Changed the tooltip API of LayoutKit. `BlockTooltip` now describes its content with `viewSource` (`.block(_:)` or `.factory(_:)`) instead of `block` and `tooltipViewFactory`, decorations take tooltips as `TooltipContentHolder`, and `calculateFrame` takes the content `size`. Removed the unused `TooltipProtocol`, `makeTooltip(with:rootView:)`, `TooltipEventPerforming` and `TooltipEvent`.
+* Fixed actions that target an element by id revealed in another view of the card (host or tooltip) in the same action batch being reported as not found.
+* Fixed actions, triggers and animators with `scope_id` sometimes resolving against the wrong view once a tooltip of the card had been shown: for example, `animator_start` silently doing nothing.
+* Fixed tooltips declared on different elements under the same `div_tooltip_id` being treated as one view: a tooltip's identity and element paths now include its anchor.
+* Fixed tooltips flashing before their closing animation when dismissed during the opening animation.
+* Fixed variable triggers and animators of a tooltip's content running while the tooltip is not shown. Triggers inside a tooltip now live as long as it is shown, so an `on_condition` trigger whose condition already holds fires on every show.
+* Fixed videos stopping during pager scrolling. Starting a video now pauses other playing videos in the same pager.
+* Tooltip content is now modeled when the tooltip is shown, in a scope nested under its anchor: it sees the anchor's local variables and functions, and `DivExtensionHandler`s see its elements only at that moment.
+* Tooltip state paths now start with `tooltip#<id>`, and the `tooltip#` prefix is reserved in element ids (DivKit reports a warning). Existing `set_state` addresses keep working.
+
+### Web Client
+* Added support for animated linear and radial text gradients.
+
+
 ## 33.6.0
 
 ### Android Client

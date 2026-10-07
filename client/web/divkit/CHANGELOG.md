@@ -1,3 +1,8 @@
+## 33.7.0 (October 12, 2026)
+
+* Added support for animated linear and radial text gradients.
+
+
 ## 33.2.0 (September 7, 2026)
 
 * Fixed incorrect scrolling of the `pager` if it is inside the scale transformation.
