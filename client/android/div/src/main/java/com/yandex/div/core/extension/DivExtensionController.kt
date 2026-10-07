@@ -141,7 +141,7 @@ internal class DivExtensionController @Inject constructor(
         }
     }
 
-    fun unbindView(view: View, divView: Div2View) {
+    fun unbindView(view: View, divView: Div2View, onError: ((Throwable) -> Unit)? = null) {
         val bindings = getBindings(divView) ?: return
         val binding = bindings[view] ?: return
         binding.releasing = true
@@ -154,15 +154,27 @@ internal class DivExtensionController @Inject constructor(
             try {
                 while (binding.releasedHandlerCount < binding.enteredHandlerCount) {
                     val handler = binding.handlers[binding.releasedHandlerCount++]
-                    binding.boundActionStateHandlers.remove(handler)
-                        ?.onViewUnbind(divView, divBlock.path, view)
-                    handler.unbindView(divView, divBlock.expressionResolver, view, divBlock.div.value())
+                    performUnbind(onError) {
+                        binding.boundActionStateHandlers.remove(handler)
+                            ?.onViewUnbind(divView, divBlock.path, view)
+                    }
+                    performUnbind(onError) {
+                        handler.unbindView(divView, divBlock.expressionResolver, view, divBlock.div.value())
+                    }
                 }
             } finally {
                 if (binding.releasedHandlerCount == binding.enteredHandlerCount && bindings[view] === binding) {
                     bindings.remove(view)
                 }
             }
+        }
+    }
+
+    private inline fun performUnbind(noinline onError: ((Throwable) -> Unit)?, action: () -> Unit) {
+        if (onError == null) {
+            action()
+        } else {
+            runCatching(action).onFailure(onError)
         }
     }
 

@@ -1,8 +1,10 @@
 package com.yandex.div.core.util.binding
 
 import androidx.annotation.MainThread
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.PreparedCollectionViewHoldersPool
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.UiThreadHandler
 import java.util.ArrayDeque
@@ -29,6 +31,8 @@ internal class BindingDispatcher @Inject constructor(
 
     val currentGeneration: Int get() = bindingGeneration.get()
 
+    val preparedViewHoldersPool = PreparedCollectionViewHoldersPool()
+
     private var deferMainThreadAction = false
     private val mainThreadActions = mutableListOf<Action>()
     private val pendingTasksLock = Any()
@@ -45,6 +49,7 @@ internal class BindingDispatcher @Inject constructor(
     @MainThread
     fun cancelPendingTasks() {
         bindingGeneration.incrementAndGet()
+        preparedViewHoldersPool.invalidate(divView::logError)
         synchronized(pendingTasksLock) {
             pendingTasks.clear()
             pendingCoalescingTasks.clear()
@@ -91,40 +96,31 @@ internal class BindingDispatcher @Inject constructor(
                 completeTask(task)
                 return@Runnable
             }
+            val preparedHolders = PreparedCollectionViewHoldersPool.BindingBatch(
+                collectionId = System.identityHashCode(divView),
+                generation = generation,
+            )
             try {
                 val (result, deferredActions) = collectMainThreadAction {
-                    block()
+                    preparedViewHoldersPool.collect(preparedHolders) { block() }
                 }
                 if (deferredActions.isEmpty() && onComplete == null) {
-                    criticalSection.exit(handle)
-                    completeTask(task)
+                    finishBindingTask(task, handle, preparedHolders)
                 } else {
                     UiThreadHandler.postOnMainThread {
                         criticalSection.transferToCurrentThread()
+                        var applied = false
                         try {
-                            for (action in deferredActions) {
-                                if (bindingGeneration.get() != generation) {
-                                    return@postOnMainThread
-                                }
-                                action.invoke()
-                            }
-                            if (bindingGeneration.get() == generation) {
+                            applied = applyMainThreadBinding(generation, deferredActions, onError) {
                                 onComplete?.invoke(result)
                             }
-                        } catch (e: Throwable) {
-                            divView.logError(e)
-                            if (bindingGeneration.get() == generation) {
-                                onError?.invoke(e)
-                            }
                         } finally {
-                            criticalSection.exit(handle)
-                            completeTask(task)
+                            finishBindingTask(task, handle, if (applied) null else preparedHolders)
                         }
                     }
                 }
             } catch (e: Throwable) {
-                criticalSection.exit(handle)
-                completeTask(task)
+                finishBindingTask(task, handle, preparedHolders)
                 UiThreadHandler.postOnMainThread {
                     divView.logError(e)
                     if (bindingGeneration.get() == generation) {
@@ -134,6 +130,41 @@ internal class BindingDispatcher @Inject constructor(
             }
         }
         enqueueTask(task, onError, coalescingKey)
+    }
+
+    private fun applyMainThreadBinding(
+        generation: Int,
+        actions: List<Action>,
+        onError: ((Throwable) -> Unit)?,
+        onComplete: () -> Unit,
+    ): Boolean {
+        try {
+            for (action in actions) {
+                if (bindingGeneration.get() != generation) return false
+                action()
+            }
+            if (bindingGeneration.get() != generation) return false
+            onComplete()
+            return true
+        } catch (error: Throwable) {
+            divView.logError(error)
+            if (bindingGeneration.get() == generation) onError?.invoke(error)
+            return false
+        }
+    }
+
+    private fun finishBindingTask(
+        task: Runnable,
+        handle: Disposable,
+        discardedHolders: PreparedCollectionViewHoldersPool.BindingBatch?,
+    ) {
+        try {
+            discardedHolders?.release(divView::logError)
+        } finally {
+            // Holder cleanup invokes host extensions; even a failure must unblock the next binding.
+            criticalSection.exit(handle)
+            completeTask(task)
+        }
     }
 
     private fun enqueueTask(
@@ -241,6 +272,7 @@ internal class BindingDispatcher @Inject constructor(
         } finally {
             mainThreadActions.clear()
             deferMainThreadAction = false
+            divView.inMiddleOfBind = false
         }
     }
 

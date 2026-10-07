@@ -3,22 +3,28 @@ package com.yandex.div.core.view2.divs.pager
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.annotation.IntRange
-import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.DivBinder
-import com.yandex.div.core.view2.DivViewCreator
+import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.view2.divs.CollectionItemBinding
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.DivBlock
 
 internal class DivPagerAdapter(
     items: List<DivBlock>,
-    private val divView: Div2View,
-    private val divBinder: DivBinder,
+    private val itemBinding: CollectionItemBinding<DivPagerViewHolder>,
     private val pageTranslations: SparseArray<Float>,
-    private val viewCreator: DivViewCreator,
     private val pagerView: DivPagerView,
 ) : DivCollectionAdapter<DivPagerViewHolder>(items) {
+
+    override fun getItemViewType(position: Int): Int =
+        itemBinding.viewType(position, super.getItemViewType(realItemPosition(position)))
+
+    fun releasePreparedPages() = itemBinding.clear()
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        itemBinding.clear()
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
 
     val itemsToShow = object : AbstractList<DivBlock>() {
         override val size get() = visibleItems.size + virtualItemCount * 2
@@ -31,6 +37,7 @@ internal class DivPagerAdapter(
         set(@IntRange(from = 0) value) {
             if (field == value) return
 
+            itemBinding.clear()
             field = value
             val offset = updateVirtualItemCount()
             if (offset == 0) return
@@ -60,24 +67,20 @@ internal class DivPagerAdapter(
 
     fun getRealPosition(rawPosition: Int) = rawPosition - virtualItemCount
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder {
-        val orientationProvider = { pagerView.orientation == ViewPager2.ORIENTATION_HORIZONTAL }
-        val view = DivPagerPageLayout(divView.context, orientationProvider)
-        return DivPagerViewHolder(view, divBinder, viewCreator, divView, orientationProvider) {
-            pagerView.crossAxisAlignment
-        }
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivPagerViewHolder =
+        itemBinding.create(parent, viewType)
 
     override fun getItemCount() = itemsToShow.size
 
     override fun onBindViewHolder(holder: DivPagerViewHolder, position: Int) {
-        super.onBindViewHolder(holder, realItemPosition(position))
+        itemBinding.bind(holder, itemsToShow[position], position)
         pageTranslations[position]?.let { holder.applyTranslation(it) }
     }
 
     private var removedItems = 0
 
     override fun setItems(newItems: List<DivBlock>) {
+        itemBinding.clear()
         val oldSize = items.size
         removedItems = 0
         val oldCurrentItem = pagerView.currentItem
@@ -88,6 +91,7 @@ internal class DivPagerAdapter(
     }
 
     override fun notifyRawItemRemoved(position: Int) {
+        itemBinding.clear()
         removedItems++
         val offset = -updateVirtualItemCount()
 
@@ -105,6 +109,7 @@ internal class DivPagerAdapter(
     }
 
     override fun notifyRawItemsInserted(position: Int, count: Int) {
+        itemBinding.clear()
         val offset = updateVirtualItemCount()
 
         if (offset == 0) {
@@ -126,6 +131,7 @@ internal class DivPagerAdapter(
     }
 
     override fun notifyRawItemChanged(position: Int) {
+        itemBinding.clear()
         notifyItemChanged(position + virtualItemCount)
         notifyVirtualItemsChanged()
     }

@@ -84,8 +84,9 @@ internal class DivPagerBinder @Inject constructor(
         val pageTranslations = SparseArray<Float>()
         val a11yEnabled = accessibilityStateProvider.isAccessibilityEnabled(context)
         setRecycledViewPool(ReleasingViewPool(divView.viewComponent.releaseViewVisitor))
-        val adapter =
-            DivPagerAdapter(divBlock.buildItems(), divView, divBinder.get(), pageTranslations, viewCreator, this)
+        val itemBinding =
+            PagerItemBinding(divBlock.buildItems(), this, divView, divBinder.get(), viewCreator, pageTranslations)
+        val adapter = itemBinding.adapter
         viewPager.adapter = adapter
         val errorCollector = divView.errorCollector
         adapter.registerAdapterDataObserver(ItemCountObserver(this, div, resolver, adapter, errorCollector))
@@ -152,6 +153,11 @@ internal class DivPagerBinder @Inject constructor(
         bindItemBuilder(div, resolver, divBlock.path, errorCollector)
         if (a11yEnabled) {
             enableAccessibility()
+        }
+
+        if (divView.viewComponent.bindingDispatcher.isCollectingMainThreadActions && !isAttachedToWindow) {
+            addSubscription(Disposable { adapter.releasePreparedPages() })
+            itemBinding.prepare()
         }
     }
 

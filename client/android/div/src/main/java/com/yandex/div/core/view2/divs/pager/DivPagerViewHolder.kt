@@ -32,6 +32,10 @@ internal class DivPagerViewHolder(
 
     override fun bind(divBlock: DivBlock, position: Int) {
         super.bind(divBlock, position)
+        updatePageLayout(divBlock)
+    }
+
+    fun updatePageLayout(divBlock: DivBlock) {
         (pageLayout.child?.layoutParams as? DivLayoutParams)?.setCrossAxisAlignment(divBlock)
     }
 

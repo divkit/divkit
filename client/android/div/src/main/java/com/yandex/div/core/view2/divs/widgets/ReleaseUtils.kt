@@ -12,6 +12,24 @@ internal object ReleaseUtils {
         removeAllViews()
     }
 
+    internal fun ViewGroup.releaseAndRemovePreparedChildren(divView: Div2View): Unit = executeOnMainThreadBlocking {
+        var releaseError: Throwable? = null
+        val visitor = divView.viewComponent.releaseViewVisitor.withErrorHandler { error ->
+            val previousError = releaseError
+            if (previousError == null) {
+                releaseError = error
+            } else if (previousError !== error) {
+                previousError.addSuppressed(error)
+            }
+        }
+        try {
+            children.forEach { visitor.visitViewTree(it) }
+        } finally {
+            removeAllViews()
+        }
+        releaseError?.let { throw it }
+    }
+
     internal fun ViewGroup.releaseChildren(divView: Div2View) {
         children.forEach {
             divView.viewComponent.releaseViewVisitor.visitViewTree(it)
@@ -19,6 +37,9 @@ internal object ReleaseUtils {
     }
 
     internal fun ViewGroup.releaseMedia(divView: Div2View) {
+        if (this === divView) {
+            divView.viewComponent.bindingDispatcher.preparedViewHoldersPool.invalidate(divView::logError)
+        }
         children.forEach {
             divView.viewComponent.mediaReleaseViewVisitor.visitViewTree(it)
         }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.core.view.doOnNextLayout
 import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
@@ -60,8 +61,9 @@ internal class DivGalleryBinder @Inject constructor(
     private fun DivRecyclerView.bind(divBlock: DivBlock.Gallery, divView: Div2View) {
         val div = divBlock.divValue
         val resolver = divBlock.expressionResolver
-        val galleryAdapter = DivGalleryAdapter(divBlock.buildItems(), divView, divBinder.get(), viewCreator)
-        val reusableObserver = { _: Any -> updateDecorations(div, galleryAdapter, resolver, divView) }
+        val itemBinding = GalleryItemBinding(divBlock.buildItems(), this, divView, divBinder.get(), viewCreator)
+        val galleryAdapter = itemBinding.adapter
+        val reusableObserver: (Any) -> Unit = { updateDecorations(div, galleryAdapter, resolver, divView) }
         addSubscription(div.orientation.observe(resolver, reusableObserver))
         addSubscription(div.scrollbar.observe(resolver, reusableObserver))
         addSubscription(div.scrollMode.observe(resolver, reusableObserver))
@@ -78,7 +80,11 @@ internal class DivGalleryBinder @Inject constructor(
         adapter = galleryAdapter
         bindItemBuilder(div, resolver, divBlock.path, divView)
         resetAnimatorAndRestoreOnLayout()
-        updateDecorations(div, galleryAdapter, resolver, divView)
+        val initialPosition = updateDecorations(div, galleryAdapter, resolver, divView)
+        if (divView.viewComponent.bindingDispatcher.isCollectingMainThreadActions && !isAttachedToWindow) {
+            addSubscription(Disposable { galleryAdapter.releasePreparedItems() })
+            itemBinding.prepare(initialPosition)
+        }
     }
 
     private fun DivRecyclerView.updateDecorations(
@@ -86,7 +92,8 @@ internal class DivGalleryBinder @Inject constructor(
         adapter: DivGalleryAdapter,
         resolver: ExpressionResolver,
         divView: Div2View,
-    ) {
+    ): Int {
+        adapter.releasePreparedItems()
         resetCrossAxisRemeasure()
         val metrics = resources.displayMetrics
         val divOrientation = div.orientation.evaluate(resolver)
@@ -97,10 +104,7 @@ internal class DivGalleryBinder @Inject constructor(
         }
 
         adapter.orientation = orientation
-        val scrollbarEnabled = div.scrollbar.evaluate(resolver) == DivGallery.Scrollbar.AUTO
-        isVerticalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.VERTICAL
-        isHorizontalScrollBarEnabled = scrollbarEnabled && orientation == RecyclerView.HORIZONTAL
-        isScrollbarFadingEnabled = false
+        updateScrollbars(div.scrollbar.evaluate(resolver), orientation = orientation)
 
         val columnCount = div.columnCount?.evaluate(resolver)?.toIntSafely() ?: 1
 
@@ -153,19 +157,39 @@ internal class DivGalleryBinder @Inject constructor(
         }
         layoutManager = itemHelper.toLayoutManager()
 
+        return bindScrolling(div, adapter, resolver, divView, itemHelper)
+    }
+
+    private fun DivRecyclerView.updateScrollbars(scrollbar: DivGallery.Scrollbar, orientation: Int) {
+        val enabled = scrollbar == DivGallery.Scrollbar.AUTO
+        isVerticalScrollBarEnabled = enabled && orientation == RecyclerView.VERTICAL
+        isHorizontalScrollBarEnabled = enabled && orientation == RecyclerView.HORIZONTAL
+        isScrollbarFadingEnabled = false
+    }
+
+    private fun DivRecyclerView.bindScrolling(
+        div: DivGallery,
+        adapter: DivGalleryAdapter,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+        itemHelper: DivGalleryItemHelper,
+    ): Int {
         scrollInterceptionAngle = recyclerScrollInterceptionAngle
         clearOnScrollListeners()
+        var initialPosition = 0
         divView.currentState?.let { state ->
             val itemCount = adapter.itemCount.takeIf { it > 1 } ?: return@let
             val id = div.id ?: div.hashCode().toString()
             val (position, offset) = state.getPositionAndOffset(id)
-                ?: getPositionAndOffset(div, resolver, orientation)
-            itemHelper.instantScrollToPosition(position.coerceAtMost(itemCount - 1), offset)
+                ?: getPositionAndOffset(div, resolver, adapter.orientation)
+            initialPosition = position.coerceIn(0, itemCount - 1)
+            itemHelper.instantScrollToPosition(initialPosition, offset)
             addOnScrollListener(UpdateStateScrollListener(id, state, itemHelper))
         }
         addOnScrollListener(DivGalleryScrollListener(this, itemHelper, div, resolver, divView))
         onInterceptTouchEventListener =
             if (div.restrictParentScroll.evaluate(resolver)) ParentScrollRestrictor else null
+        return initialPosition
     }
 
     private fun DivRecyclerView.resetAnimatorAndRestoreOnLayout() {

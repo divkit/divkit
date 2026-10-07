@@ -26,5 +26,18 @@ internal class DivGalleryViewHolder(
 
     companion object {
         const val TAG = "DivGalleryViewHolder"
+
+        fun create(
+            adapter: DivGalleryAdapter,
+            divView: Div2View,
+            divBinder: DivBinder,
+            viewCreator: DivViewCreator,
+        ): DivGalleryViewHolder {
+            val view = DivGalleryItemLayout(divView.context)
+            view.orientation = { adapter.orientation }
+            view.columnCount = { adapter.columnCount }
+            view.crossSpacing = { adapter.crossSpacing }
+            return DivGalleryViewHolder(view, divBinder, viewCreator, divView)
+        }
     }
 }

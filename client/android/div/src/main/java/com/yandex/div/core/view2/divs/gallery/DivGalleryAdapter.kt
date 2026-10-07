@@ -2,74 +2,64 @@ package com.yandex.div.core.view2.divs.gallery
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.DivBinder
-import com.yandex.div.core.view2.DivViewCreator
+import com.yandex.div.core.view2.divs.CollectionItemBinding
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.internal.core.DivBlock
-import java.util.WeakHashMap
 
 internal class DivGalleryAdapter(
     items: List<DivBlock>,
-    private val divView: Div2View,
-    private val divBinder: DivBinder,
-    private val viewCreator: DivViewCreator,
+    private val itemBinding: CollectionItemBinding<DivGalleryViewHolder>,
 ) : DivCollectionAdapter<DivGalleryViewHolder>(items) {
 
     var orientation = RecyclerView.HORIZONTAL
     var columnCount = 1
     var crossSpacing = 0f
 
-    private val internalIds = WeakHashMap<DivBlock, Long>()
-    private var lastItemId = 0L
+    private val internalIds = GalleryItemIds()
+    private val edgeDecorations = GalleryEdgeDecorationUpdater(::notifyRawItemChanged)
 
     init {
         setHasStableIds(true)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryViewHolder {
-        val view = DivGalleryItemLayout(divView.context)
-        view.orientation = { orientation }
-        view.columnCount = { columnCount }
-        view.crossSpacing = { crossSpacing }
-        return DivGalleryViewHolder(view, divBinder, viewCreator, divView)
+    override fun getItemViewType(position: Int): Int =
+        itemBinding.viewType(position, super.getItemViewType(position))
+
+    fun releasePreparedItems() = itemBinding.clear()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DivGalleryViewHolder =
+        itemBinding.create(parent, viewType)
+
+    override fun onBindViewHolder(holder: DivGalleryViewHolder, position: Int) {
+        itemBinding.bind(holder, visibleItems[position], position)
     }
 
-    override fun getItemId(position: Int): Long {
-        val item = visibleItems[position]
-        return internalIds[item] ?: (lastItemId++).also { internalIds[item] = it }
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        itemBinding.clear()
+        super.onDetachedFromRecyclerView(recyclerView)
     }
+
+    override fun setItems(newItems: List<DivBlock>) {
+        itemBinding.clear()
+        super.setItems(newItems)
+    }
+
+    override fun notifyRawItemChanged(position: Int) {
+        itemBinding.clear()
+        super.notifyRawItemChanged(position)
+    }
+
+    override fun getItemId(position: Int): Long = internalIds.get(visibleItems[position])
 
     override fun notifyRawItemRemoved(position: Int) {
+        itemBinding.clear()
         notifyItemRemoved(position)
-        if (columnCount == 1) {
-            notifyEdgeDecorationUpdateOnRemove(position)
-        }
+        edgeDecorations.onRemoved(position = position, itemCount = itemCount, columnCount = columnCount)
     }
 
     override fun notifyRawItemsInserted(position: Int, count: Int) {
+        itemBinding.clear()
         notifyItemRangeInserted(position, count)
-        if (columnCount == 1) {
-            notifyEdgeDecorationUpdateOnInsert(position, count)
-        }
-    }
-
-    /**
-     * [PaddingItemDecoration] applies different offsets to the first and last items in a
-     * single-column gallery. When an edge item is inserted or removed, the adjacent item must
-     * be rebound so its decoration offsets are recalculated.
-     */
-    private fun notifyEdgeDecorationUpdateOnRemove(removedPosition: Int) {
-        when {
-            removedPosition == 0 && itemCount > 0 -> notifyRawItemChanged(0)
-            removedPosition == itemCount -> notifyRawItemChanged(removedPosition - 1)
-        }
-    }
-
-    private fun notifyEdgeDecorationUpdateOnInsert(position: Int, count: Int) {
-        when {
-            position == 0 && itemCount > count -> notifyRawItemChanged(count)
-            position + count == itemCount && position > 0 -> notifyRawItemChanged(position - 1)
-        }
+        edgeDecorations.onInserted(position = position, count = count, itemCount = itemCount, columnCount = columnCount)
     }
 }

@@ -2,16 +2,23 @@ package com.yandex.div.core.view2.divs.gallery
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.core.Div2Context
+import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.DefaultCollectionItemBinding
 import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.container
+import com.yandex.div.test.testContextThemeWrapper
 import org.junit.runner.RunWith
 import org.mockito.kotlin.inOrder
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
+import org.mockito.kotlin.doReturn
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class DivGalleryAdapterTest {
@@ -75,11 +82,42 @@ class DivGalleryAdapterTest {
         verifyNoMoreInteractions(observer)
     }
 
+    @Test
+    fun `holder reads current adapter orientation`() {
+        val adapter = adapter(itemCount = 0)
+        val layout = holderLayout(adapter)
+        adapter.orientation = RecyclerView.VERTICAL
+
+        assertEquals(RecyclerView.VERTICAL, layout.orientation())
+    }
+
+    @Test
+    fun `holder reads current adapter column count`() {
+        val adapter = adapter(itemCount = 0)
+        val layout = holderLayout(adapter)
+        adapter.columnCount = 3
+
+        assertEquals(3, layout.columnCount())
+    }
+
+    @Test
+    fun `holder reads current adapter cross spacing`() {
+        val adapter = adapter(itemCount = 0)
+        val layout = holderLayout(adapter)
+        adapter.crossSpacing = 12f
+
+        assertEquals(12f, layout.crossSpacing())
+    }
+
+    private fun holderLayout(adapter: DivGalleryAdapter): DivGalleryItemLayout {
+        val context = Div2Context(testContextThemeWrapper(), DivConfiguration.Builder(mock()).build())
+        val divView = mock<Div2View> { on { this.context } doReturn context }
+        return DivGalleryViewHolder.create(adapter, divView, mock(), mock()).itemView as DivGalleryItemLayout
+    }
+
     private fun adapter(itemCount: Int) = DivGalleryAdapter(
         items = List(itemCount) { item() },
-        divView = mock(),
-        divBinder = mock(),
-        viewCreator = mock(),
+        itemBinding = DefaultCollectionItemBinding(createHolder = { mock() }),
     ).apply {
         registerAdapterDataObserver(observer)
     }

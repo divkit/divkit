@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.divs.DefaultCollectionItemBinding
 import com.yandex.div.core.view2.divs.pager.DivPagerBinder.Companion.VIRTUAL_ITEM_COUNT
 import com.yandex.div.core.view2.divs.pager.DivPagerBinder.Companion.VIRTUAL_ITEM_COUNT_EXTENDED
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
@@ -300,10 +301,8 @@ class DivPagerAdapterTest {
 
     private fun adapter(items: List<DivBlock>) = DivPagerAdapter(
         items = items,
-        divView = mock(),
-        divBinder = mock(),
+        itemBinding = DefaultCollectionItemBinding(createHolder = { mock() }),
         pageTranslations = SparseArray(),
-        viewCreator = mock(),
         pagerView = pagerView,
     ).apply {
         registerAdapterDataObserver(observer)
