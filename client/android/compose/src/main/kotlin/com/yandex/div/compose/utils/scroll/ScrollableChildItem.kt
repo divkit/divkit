@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.context.WithDivKey
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.DivBlockView
@@ -22,7 +23,7 @@ internal inline fun ScrollableChildItem(
         val childCrossAlignment = if (isHorizontal) {
             divBase.alignmentVertical?.observedValue()?.toCrossAxisAlignment()
         } else {
-            divBase.alignmentHorizontal?.observedValue()?.toCrossAxisAlignment()
+            divBase.alignmentHorizontal?.observedValue()?.toCrossAxisAlignment(LocalLayoutDirection.current)
         } ?: crossAxisAlignment
 
         Box(
