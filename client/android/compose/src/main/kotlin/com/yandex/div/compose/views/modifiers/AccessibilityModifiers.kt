@@ -91,7 +91,7 @@ private fun DivAccessibility.hasSemantics(type: Type, role: Role?, isMerge: Bool
 
 /** Controls without nested elements: merging must not clear the control's own semantics. */
 private val DivBase.keepsControlSemanticsOnMerge: Boolean
-    get() = this is DivSwitch || this is DivSlider
+    get() = this is DivSwitch || this is DivSlider || this is DivSelect
 
 private val DivBase.defaultRole: Role?
     get() = when (this) {

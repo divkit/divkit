@@ -19,7 +19,9 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.InputMode
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalInputModeManager
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import com.yandex.div.compose.context.divContext
@@ -27,6 +29,7 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.text.observeBaseTextStyle
+import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.variables.mutableStateFromVariable
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivSelect
@@ -61,7 +64,9 @@ internal fun DivSelectView(
     val color = if (showHint) hintColor else textStyle.color
 
     SelectView(
-        modifier = modifier,
+        modifier = modifier.applyIf(data.accessibility == null) {
+            semantics { role = Role.DropdownList }
+        },
         valueState = valueState,
         text = text,
         textStyle = textStyle.copy(color = color),
