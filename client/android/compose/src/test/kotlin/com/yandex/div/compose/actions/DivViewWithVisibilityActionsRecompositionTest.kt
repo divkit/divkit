@@ -1,4 +1,4 @@
-package com.yandex.div.compose
+package com.yandex.div.compose.actions
 
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -7,6 +7,10 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.DivView
+import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable

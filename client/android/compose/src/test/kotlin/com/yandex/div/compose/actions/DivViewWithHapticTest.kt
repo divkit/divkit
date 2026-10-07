@@ -1,4 +1,4 @@
-package com.yandex.div.compose
+package com.yandex.div.compose.actions
 
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
@@ -10,6 +10,10 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.DivView
+import com.yandex.div.compose.TestReporter
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.hapticAction

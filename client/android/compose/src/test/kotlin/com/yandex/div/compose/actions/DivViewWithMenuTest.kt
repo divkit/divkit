@@ -1,4 +1,4 @@
-package com.yandex.div.compose
+package com.yandex.div.compose.actions
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -9,6 +9,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.TestExternalActionHandler
+import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.actionData
+import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.menuItem

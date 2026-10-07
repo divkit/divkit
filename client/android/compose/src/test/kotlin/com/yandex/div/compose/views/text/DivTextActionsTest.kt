@@ -1,4 +1,4 @@
-package com.yandex.div.compose
+package com.yandex.div.compose.views.text
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.click
@@ -8,6 +8,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performFirstLinkClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.TestExternalActionHandler
+import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.actionData
+import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data

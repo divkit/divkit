@@ -1,4 +1,4 @@
-package com.yandex.div.compose
+package com.yandex.div.compose.views.text
 
 import android.graphics.Matrix
 import androidx.compose.ui.geometry.Size
@@ -6,6 +6,8 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.setContent
 import com.yandex.div.compose.utils.gradient.LinearGradientBrush
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.util.AnimatedTextGradientMath

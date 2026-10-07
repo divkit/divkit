@@ -1,4 +1,4 @@
-package com.yandex.div.compose
+package com.yandex.div.compose.triggers
 
 import android.view.View
 import androidx.activity.ComponentActivity
@@ -7,6 +7,10 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.DivView
+import com.yandex.div.compose.TestReporter
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action

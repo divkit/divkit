@@ -1,4 +1,4 @@
-package com.yandex.div.compose
+package com.yandex.div.compose.views.tabs
 
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -11,6 +11,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.TestExternalActionHandler
+import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.actionData
+import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.insets
