@@ -8,6 +8,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.geometry.Size
@@ -182,6 +183,17 @@ internal fun Modifier.borderShadow(data: DivBorder, contentAlpha: Float): Modifi
 }
 
 @Composable
+internal fun Modifier.borderShadow(data: DivBorder, contentAlpha: () -> Float): Modifier {
+    if (!data.hasShadow.observedValue()) return this
+    val shadow = data.shadow.observedShadow(alpha = data.shadow.observedAlpha())
+    return dropShadow(data.toShape()) {
+        radius = shadow.radius.toPx()
+        color = shadow.color.copy(alpha = shadow.color.alpha * contentAlpha())
+        offset = Offset(shadow.offset.x.toPx(), shadow.offset.y.toPx())
+    }
+}
+
+@Composable
 private fun DivBorder.toShape(): Shape {
     return observedRoundedCornerShape(cornerRadius, cornersRadius) ?: RectangleShape
 }
@@ -192,21 +204,27 @@ private fun Modifier.shadow(
     shape: Shape,
     contentAlpha: Float
 ): Modifier {
-    val alpha = (shadow?.alpha?.observedFloatValue() ?: DEFAULT_SHADOW_ALPHA) * contentAlpha
+    val alpha = shadow.observedAlpha() * contentAlpha
     if (alpha <= 0f) return this
+    return dropShadow(shape = shape, shadow = shadow.observedShadow(alpha))
+}
 
-    val color = shadow?.color?.observedColorValue() ?: DEFAULT_SHADOW_COLOR
-    val radius = shadow?.blur?.observedValue()?.toDp() ?: DEFAULT_SHADOW_ELEVATION
-    val offsetX = shadow?.offset?.x?.observedDpValue() ?: DEFAULT_SHADOW_OFFSET_X
-    val offsetY = shadow?.offset?.y?.observedDpValue() ?: DEFAULT_SHADOW_OFFSET_Y
+@Composable
+private fun DivShadow?.observedAlpha(): Float {
+    return this?.alpha?.observedFloatValue() ?: DEFAULT_SHADOW_ALPHA
+}
 
-    return dropShadow(
-        shape = shape,
-        shadow = Shadow(
-            radius = radius,
-            color = color.copy(alpha = color.alpha * alpha),
-            offset = DpOffset(offsetX, offsetY),
-        )
+@Composable
+private fun DivShadow?.observedShadow(alpha: Float): Shadow {
+    val color = this?.color?.observedColorValue() ?: DEFAULT_SHADOW_COLOR
+    val radius = this?.blur?.observedValue()?.toDp() ?: DEFAULT_SHADOW_ELEVATION
+    val offsetX = this?.offset?.x?.observedDpValue() ?: DEFAULT_SHADOW_OFFSET_X
+    val offsetY = this?.offset?.y?.observedDpValue() ?: DEFAULT_SHADOW_OFFSET_Y
+
+    return Shadow(
+        radius = radius,
+        color = color.copy(alpha = color.alpha * alpha),
+        offset = DpOffset(offsetX, offsetY),
     )
 }
 

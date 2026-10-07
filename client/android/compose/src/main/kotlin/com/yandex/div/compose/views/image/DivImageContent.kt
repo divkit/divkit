@@ -11,6 +11,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +22,7 @@ import coil3.compose.rememberAsyncImagePainter
 import coil3.transform.Transformation
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
@@ -29,6 +31,7 @@ import com.yandex.div.compose.images.rememberNetworkRestoringImagePainter
 import com.yandex.div.compose.views.modifiers.image.imageContentSize
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivImage
 
 @Composable
 internal fun DivImageContent(
@@ -45,7 +48,7 @@ internal fun DivImageContent(
 ) {
     val component = divContext.component
     val imageLoader = component.imageLoader
-    val painterStateListener = component.debugConfiguration.imagePainterStateListener
+    val imageStateListener = rememberImageStateListener(data)
     val imageStateStorage = LocalDivViewContext.current.component.imageStateStorage
     val imageRequestParams = if (imageUrl?.isValidImageUri() == true) {
         ImageRequestParams(
@@ -59,7 +62,7 @@ internal fun DivImageContent(
         rememberNetworkRestoringImagePainter(
             model = rememberImageRequest(it),
             imageLoader = imageLoader,
-            onState = painterStateListener
+            onState = imageStateListener
         )
     }
     val imagePainterState = imagePainter?.state?.collectAsState()?.value
@@ -110,7 +113,7 @@ internal fun DivImageContent(
         rememberAsyncImagePainter(
             model = previewRequest,
             imageLoader = imageLoader,
-            onState = painterStateListener
+            onState = component.debugConfiguration.imagePainterStateListener
         )
     } else {
         null
@@ -146,6 +149,32 @@ internal fun DivImageContent(
                     imageStateStorage.setIsLoaded(data, false)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun rememberImageStateListener(data: DivBase): ((AsyncImagePainter.State) -> Unit)? {
+    val component = divContext.component
+    val painterStateListener = component.debugConfiguration.imagePainterStateListener
+    val animation = (data as? DivImage)?.appearanceAnimation ?: return painterStateListener
+    val appearanceAnimation = LocalDivViewContext.current.component.imageStateStorage
+        .getAppearanceAnimation(data)
+    val resolver = expressionResolver
+    val scope = rememberCoroutineScope()
+    DisposableEffect(appearanceAnimation) {
+        onDispose { appearanceAnimation.stop() }
+    }
+    return { state ->
+        painterStateListener?.invoke(state)
+        if (state is AsyncImagePainter.State.Success) {
+            appearanceAnimation.onImageLoaded(
+                dataSource = state.result.dataSource,
+                animation = animation,
+                resolver = resolver,
+                animationsEnabled = component.animationConfiguration.isEnabled,
+                scope = scope,
+            )
         }
     }
 }

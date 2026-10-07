@@ -13,10 +13,14 @@ import javax.inject.Inject
  * Reads happen during composition via [isLoaded] and are reactive: when an entry
  * flips from `false` to `true`, any composable that previously read it will be
  * invalidated and recomposed.
+ *
+ * Also holds the [ImageAppearanceAnimation] of each `DivImage` with `appearance_animation`,
+ * shared by the element modifiers and the image content.
  */
 @DivViewScope
 internal class ImageStateStorage @Inject constructor() {
     private val loadedElements = mutableStateSetOf<DivBase>()
+    private val appearanceAnimations = mutableMapOf<DivBase, ImageAppearanceAnimation>()
 
     fun isLoaded(data: DivBase): Boolean {
         return loadedElements.contains(data)
@@ -28,5 +32,9 @@ internal class ImageStateStorage @Inject constructor() {
         } else {
             loadedElements.remove(data)
         }
+    }
+
+    fun getAppearanceAnimation(data: DivBase): ImageAppearanceAnimation {
+        return appearanceAnimations.getOrPut(data) { ImageAppearanceAnimation() }
     }
 }
