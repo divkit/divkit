@@ -34,10 +34,12 @@ import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.test.ScreenshotTests
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import org.junit.Rule
+import org.junit.experimental.categories.Category
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -48,12 +50,12 @@ import kotlin.test.Test
 /**
  * Verify interactive screenshots:
  * ```
- * ./gradlew :compose:verifyRoborazziDebug --tests "*.RoborazziInteractiveScreenshotTest"
+ * ./gradlew :compose:verifyRoborazziDebug -Proborazzi-tests --tests "*.RoborazziInteractiveScreenshotTest"
  * ```
  *
  * Record golden screenshots:
  * ```
- * ./gradlew :compose:verifyAndRecordRoborazziDebug --tests "*.RoborazziInteractiveScreenshotTest"
+ * ./gradlew :compose:verifyAndRecordRoborazziDebug -Proborazzi-tests --tests "*.RoborazziInteractiveScreenshotTest"
  * ```
  *
  * Use `-PdivkitTestFilter=div-action/base.json` to select a single scenario.
@@ -61,6 +63,7 @@ import kotlin.test.Test
  * Goldens are stored in `src/test/screenshots/interactive/`.
  */
 @Config(qualifiers = "w360dp-h728dp-xxhdpi")
+@Category(ScreenshotTests::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RoborazziInteractiveScreenshotTest(

@@ -19,9 +19,11 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.test.ScreenshotTests
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import org.junit.Rule
+import org.junit.experimental.categories.Category
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
@@ -34,12 +36,12 @@ import kotlin.test.Test
  *
  * Verify against goldens:
  * ```
- * ./gradlew :compose:verifyRoborazziDebug --tests "*.RoborazziScreenshotTest"
+ * ./gradlew :compose:verifyRoborazziDebug -Proborazzi-tests --tests "*.RoborazziScreenshotTest"
  * ```
  *
  * Record golden screenshots:
  * ```
- * ./gradlew :compose:verifyAndRecordRoborazziDebug --tests "*.RoborazziScreenshotTest"
+ * ./gradlew :compose:verifyAndRecordRoborazziDebug -Proborazzi-tests --tests "*.RoborazziScreenshotTest"
  * ```
  *
  * Use `-PdivkitTestFilter=div-text/font_weight.json` to select a single scenario.
@@ -47,6 +49,7 @@ import kotlin.test.Test
  * Goldens are stored in `src/test/screenshots/` and committed to the repository.
  */
 @Config(qualifiers = "w360dp-h728dp-xxhdpi")
+@Category(ScreenshotTests::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RoborazziScreenshotTest(

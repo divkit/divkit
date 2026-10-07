@@ -12,6 +12,24 @@ android {
     }
 }
 
+// Roborazzi shares Android's unit-test tasks. Select screenshots explicitly
+// with -Proborazzi-tests; ordinary unit runs exclude the same JUnit category.
+if (plugins.hasPlugin('io.github.takahirom.roborazzi')) {
+    def screenshotRun = providers.gradleProperty('roborazzi-tests').isPresent()
+
+    tasks.withType(Test).configureEach {
+        useJUnit {
+            if (screenshotRun) {
+                includeCategories 'com.yandex.div.test.ScreenshotTests'
+            } else {
+                excludeCategories 'com.yandex.div.test.ScreenshotTests'
+            }
+        }
+        // Ordinary unit runs may be empty in modules containing only screenshots.
+        failOnNoDiscoveredTests = screenshotRun
+    }
+}
+
 dependencies {
     testImplementation libs.androidx.test.ext.junit
     testImplementation libs.kotlin.test

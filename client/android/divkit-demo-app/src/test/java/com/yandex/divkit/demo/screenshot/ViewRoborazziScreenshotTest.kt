@@ -17,6 +17,7 @@ import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziRule
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.provideRoborazziContext
+import com.yandex.div.test.ScreenshotTests
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import com.yandex.divkit.demo.Container
@@ -25,6 +26,7 @@ import org.json.JSONObject
 import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test
+import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -38,6 +40,7 @@ import java.util.concurrent.TimeUnit
     sdk = [35],
     qualifiers = "w360dp-h728dp-xxhdpi",
 )
+@Category(ScreenshotTests::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @OptIn(ExperimentalRoborazziApi::class)
