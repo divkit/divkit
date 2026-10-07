@@ -1,4 +1,5 @@
 import DivKit
+import DivKitExtensions
 import DivKitMarkdownExtension
 import UIKit
 
@@ -74,7 +75,7 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
 
   private func makeComponents(configuration: UITestScenario.Configuration) -> DivKitComponents {
     DivKitComponents(
-      extensionHandlers: [MarkdownExtensionHandler()],
+      extensionHandlers: [GestureExtensionHandler(), MarkdownExtensionHandler()],
       flagsInfo: DivFlagsInfo(
         initializeTriggerOnSet: false,
         useUntypedTemplateResolver: true

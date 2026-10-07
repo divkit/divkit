@@ -2,6 +2,7 @@ enum RunnerStep: Decodable {
   case tap(Tap)
   case longTap(LongTap)
   case doubleTap(DoubleTap)
+  case swipe(Swipe)
   case verifyText(VerifyText)
   case verifySnapshot(VerifySnapshot)
   case divAction(DivAction)
@@ -11,6 +12,7 @@ enum RunnerStep: Decodable {
     case tap
     case longTap = "long_tap"
     case doubleTap = "double_tap"
+    case swipe
     case verifyText = "verify_text"
     case verifySnapshot = "verify_snapshot"
     case divAction = "div_action"
@@ -26,6 +28,7 @@ enum RunnerStep: Decodable {
     case .tap: .tap
     case .longTap: .longTap
     case .doubleTap: .doubleTap
+    case .swipe: .swipe
     case .verifyText: .verifyText
     case .verifySnapshot: .verifySnapshot
     case .divAction: .divAction
@@ -44,6 +47,8 @@ enum RunnerStep: Decodable {
       self = try .longTap(LongTap(from: decoder))
     case .doubleTap:
       self = try .doubleTap(DoubleTap(from: decoder))
+    case .swipe:
+      self = try .swipe(Swipe(from: decoder))
     case .verifyText:
       self = try .verifyText(VerifyText(from: decoder))
     case .verifySnapshot:

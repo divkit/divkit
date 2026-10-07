@@ -1,11 +1,13 @@
 extension RunnerStep {
   struct VerifySnapshot: Decodable {
     let name: String
+    let target: RunnerTarget?
   }
 }
 
 extension RunnerExecutor {
   func execute(_ step: RunnerStep.VerifySnapshot) throws {
-    try verifySnapshotPerformer.perform(name: step.name, on: root)
+    let element = try step.target.map { try resolveTarget($0, in: root) } ?? root
+    try verifySnapshotPerformer.perform(name: step.name, on: element)
   }
 }

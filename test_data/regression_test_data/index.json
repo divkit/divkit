@@ -610,6 +610,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "ios"
+      ],
       "steps": [
         "Horizontal swipe to left",
         "Horizontal swipe to right"
@@ -726,6 +729,9 @@
       "title": "Pager with multi page scroll",
       "platforms": [
         "android",
+        "ios"
+      ],
+      "automated": [
         "ios"
       ],
       "tags": [
@@ -2269,6 +2275,9 @@
         "ios",
         "web",
         "android"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivPager"
@@ -4323,6 +4332,9 @@
         "android",
         "ios",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "extensions"

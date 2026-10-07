@@ -1,0 +1,319 @@
+{
+  "description": "Pager with multi page scroll",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "circle_item": {
+        "type": "container",
+        "$border": "border",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#F0F0F0"
+          }
+        ],
+        "items": [
+          {
+            "type": "text",
+            "$text": "label",
+            "height": {
+              "type": "fixed",
+              "value": 150
+            },
+            "text_alignment_horizontal": "center",
+            "text_alignment_vertical": "center",
+            "font_size": 18,
+            "font_weight": "medium",
+            "text_color": "#333333"
+          }
+        ]
+      },
+      "wrap_item": {
+        "type": "container",
+        "$width": "item_width",
+        "$border": "border",
+        "height": {
+          "type": "fixed",
+          "value": 150
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#FFF3E0"
+          }
+        ],
+        "items": [
+          {
+            "type": "text",
+            "$text": "label",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "text_alignment_horizontal": "center",
+            "text_alignment_vertical": "center",
+            "font_size": 16,
+            "font_weight": "medium",
+            "text_color": "#5D4037"
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "pager_multi_page_scroll",
+      "variables": [
+        {
+          "name": "multi_page_scroll",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "selected",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "wrap_selected",
+          "type": "integer",
+          "value": 0
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "margins": {
+              "top": 24,
+              "bottom": 24
+            },
+            "items": [
+              {
+                "type": "pager",
+                "id": "multi_page_scroll_pager",
+                "infinite_scroll": true,
+                "multi_page_scroll": "@{multi_page_scroll}",
+                "layout_mode": {
+                  "type": "fixed",
+                  "neighbour_page_width": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                },
+                "item_spacing": {
+                  "type": "fixed",
+                  "value": 16
+                },
+                "item_builder": {
+                  "data": [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+                  "prototypes": [
+                    {
+                      "div": {
+                        "type": "circle_item",
+                        "label": "@{index + 1}",
+                        "border": {
+                          "corner_radius": 44,
+                          "stroke": {
+                            "color": "@{selected == index ? '#2196F3' : '#00000000'}",
+                            "width": 2
+                          }
+                        },
+                        "selected_actions": [
+                          {
+                            "log_id": "selected_@{index}",
+                            "url": "div-action://set_variable?name=selected&value=@{index}"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "text",
+                "text": "Wrap content · varying page widths",
+                "font_size": 16,
+                "font_weight": "bold",
+                "margins": {
+                  "top": 28,
+                  "bottom": 12,
+                  "left": 16,
+                  "right": 16
+                }
+              },
+              {
+                "type": "pager",
+                "id": "multi_page_scroll_wrap_pager",
+                "multi_page_scroll": "@{multi_page_scroll}",
+                "layout_mode": {
+                  "type": "wrap_content"
+                },
+                "scroll_axis_alignment": "center",
+                "cross_axis_alignment": "center",
+                "height": {
+                  "type": "fixed",
+                  "value": 180
+                },
+                "item_spacing": {
+                  "type": "fixed",
+                  "value": 16
+                },
+                "paddings": {
+                  "left": 16,
+                  "right": 16
+                },
+                "item_builder": {
+                  "data": [{"width": 96}, {"width": 180}, {"width": 128}, {"width": 240}, {"width": 144}, {"width": 210}, {"width": 112}, {"width": 260}, {"width": 168}, {"width": 120}, {"width": 224}, {"width": 152}, {"width": 192}, {"width": 104}, {"width": 248}, {"width": 136}, {"width": 216}, {"width": 160}, {"width": 232}, {"width": 116}, {"width": 200}, {"width": 148}, {"width": 256}, {"width": 176}],
+                  "data_element_name": "chip",
+                  "prototypes": [
+                    {
+                      "div": {
+                        "type": "wrap_item",
+                        "label": "@{index + 1} · @{getIntegerFromDict(chip, 'width')}dp",
+                        "item_width": {
+                          "type": "fixed",
+                          "value": "@{getIntegerFromDict(chip, 'width')}"
+                        },
+                        "border": {
+                          "corner_radius": 28,
+                          "stroke": {
+                            "color": "@{wrap_selected == index ? '#FB8C00' : '#00000000'}",
+                            "width": 3
+                          }
+                        },
+                        "selected_actions": [
+                          {
+                            "log_id": "wrap_selected_@{index}",
+                            "url": "div-action://set_variable?name=wrap_selected&value=@{index}"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "content_alignment_vertical": "center",
+                "margins": {
+                  "top": 32,
+                  "right": 16,
+                  "left": 16
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "Multipage scroll: ",
+                    "font_weight": "bold",
+                    "font_size": 16,
+                    "margins": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "width": {
+                      "type": "wrap_content"
+                    }
+                  },
+                  {
+                    "type": "switch",
+                    "id": "multi_page_scroll_switch",
+                    "is_on_variable": "multi_page_scroll",
+                    "width": {
+                      "type": "wrap_content"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_snapshot",
+      "name": "initial"
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "multi_page_scroll_pager"
+      },
+      "from": {
+        "x": 0.85,
+        "y": 0.5
+      },
+      "to": {
+        "x": 0.15,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "multi_page_scroll_wrap_pager"
+      },
+      "from": {
+        "x": 0.85,
+        "y": 0.5
+      },
+      "to": {
+        "x": 0.15,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "single_page"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "multi_page_scroll_switch"
+      }
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "multi_page_scroll_pager"
+      },
+      "from": {
+        "x": 0.85,
+        "y": 0.5
+      },
+      "to": {
+        "x": 0.15,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "multi_page_scroll_wrap_pager"
+      },
+      "from": {
+        "x": 0.85,
+        "y": 0.5
+      },
+      "to": {
+        "x": 0.15,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "multi_page"
+    }
+  ]
+}

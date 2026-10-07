@@ -266,6 +266,7 @@
 		D97634000000000000000006 /* UITestLaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97634000000000000000003 /* UITestLaunchArgument.swift */; };
 		D97634000000000000000007 /* UITestLaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97634000000000000000003 /* UITestLaunchArgument.swift */; };
 		D97636000000000000000002 /* UITestRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97636000000000000000001 /* UITestRequestHandler.swift */; };
+		90AD3E8C0F214FBC80E21F13 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 25C4B997383348A4A73C4875 /* DivKitExtensions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -735,6 +736,7 @@
 				D9763200000000000000000B /* DivKit in Frameworks */,
 				D97639000000000000000005 /* DivKitSVG in Frameworks */,
 				D97638000000000000000001 /* DivKitMarkdownExtension in Frameworks */,
+				90AD3E8C0F214FBC80E21F13 /* DivKitExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1575,6 +1577,7 @@
 				D9763200000000000000000A /* DivKit */,
 				D97639000000000000000006 /* DivKitSVG */,
 				D97638000000000000000002 /* DivKitMarkdownExtension */,
+				25C4B997383348A4A73C4875 /* DivKitExtensions */,
 			);
 			productName = DivKitUITestsHostApp;
 			productReference = D97632000000000000000002 /* DivKitUITestsHostApp.app */;
@@ -3277,6 +3280,10 @@
 			productName = DivKit;
 		};
 		D9763200000000000000000A /* DivKit */ = {isa = XCSwiftPackageProductDependency; productName = DivKit; };
+		25C4B997383348A4A73C4875 /* DivKitExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DivKitExtensions;
+		};
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8C9844F32864C2CC001ED5F3 /* Project object */;

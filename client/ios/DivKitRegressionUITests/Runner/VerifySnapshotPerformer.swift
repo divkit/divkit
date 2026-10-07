@@ -19,12 +19,12 @@ final class VerifySnapshotPerformer {
     self.scenarioPath = scenarioPath
   }
 
-  func perform(name: String, on root: XCUIElement) throws {
+  func perform(name: String, on element: XCUIElement) throws {
     try XCTContext.runActivity(named: "verify_snapshot: \(name)") { activity in
-      guard root.wait(timeout: 3, condition: { $0.exists }) else {
-        throw SnapshotError.rootViewDoesNotExist
+      guard element.wait(timeout: 3, condition: { $0.exists }) else {
+        throw SnapshotError.elementDoesNotExist
       }
-      let screenshot = root.screenshot()
+      let screenshot = element.screenshot()
       let image = screenshot.image
       do {
         let referenceURL = try snapshotReferenceURL(name: name, scale: image.scale)
@@ -97,7 +97,7 @@ final class VerifySnapshotPerformer {
 
 private enum SnapshotError: LocalizedError {
   case snapshotsRecorded
-  case rootViewDoesNotExist
+  case elementDoesNotExist
   case invalidName(String)
   case invalidReference(URL)
   case mismatch(URL)
@@ -106,8 +106,8 @@ private enum SnapshotError: LocalizedError {
     switch self {
     case .snapshotsRecorded:
       "Snapshots recorded. Run without UPDATE_SNAPSHOTS to verify them."
-    case .rootViewDoesNotExist:
-      "Root DivView does not exist in the accessibility hierarchy"
+    case .elementDoesNotExist:
+      "Snapshot element does not exist in the accessibility hierarchy"
     case let .invalidName(name):
       "Invalid snapshot name: \(name)"
     case let .invalidReference(url):
