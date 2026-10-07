@@ -42,6 +42,7 @@ class LottieExtensionHandler private constructor(
     private val resourceLoaderFactory: (Context) -> DivLottieResourceLoader,
     private val networkCache: LottieNetworkCache,
     private val preloadResourceLoader: DivLottieResourceLoader?,
+    private val dynamicPropertiesProvider: LottieDynamicPropertiesProvider?,
 ) : DivExtensionHandler {
 
     private val resourceLoaders = WeakHashMap<Context, DivLottieResourceLoader>()
@@ -62,6 +63,22 @@ class LottieExtensionHandler private constructor(
         { resourceLoader },
         networkCache,
         resourceLoader,
+        null,
+    )
+
+    /**
+     * Creates a Lottie extension handler with a host-provided [resourceLoader] and
+     * [dynamicPropertiesProvider].
+     */
+    constructor(
+        resourceLoader: DivLottieResourceLoader,
+        dynamicPropertiesProvider: LottieDynamicPropertiesProvider,
+        networkCache: LottieNetworkCache = LottieNetworkCache.STUB,
+    ) : this(
+        { resourceLoader },
+        networkCache,
+        resourceLoader,
+        dynamicPropertiesProvider,
     )
 
     /**
@@ -81,6 +98,28 @@ class LottieExtensionHandler private constructor(
         },
         networkCache,
         null,
+        null,
+    )
+
+    /**
+     * Creates a Lottie extension handler with a host-provided [dynamicPropertiesProvider] and
+     * legacy asset and raw-resource mappers.
+     */
+    constructor(
+        dynamicPropertiesProvider: LottieDynamicPropertiesProvider,
+        assetMapper: (String) -> String? = { null },
+        rawResMapper: (String) -> Int? = { null },
+        networkCache: LottieNetworkCache = LottieNetworkCache.STUB,
+    ) : this(
+        { context ->
+            CompositeDivLottieResourceLoader(
+                DivLottieAssetResourceLoader(context, assetMapper),
+                DivLottieRawResResourceLoader(context, rawResMapper),
+            )
+        },
+        networkCache,
+        null,
+        dynamicPropertiesProvider,
     )
 
     @Composable
@@ -100,11 +139,24 @@ class LottieExtensionHandler private constructor(
         val paramsJson = environment.extension.params
         val params = remember(paramsJson, loader) { parseParams(paramsJson, environment, loader) } ?: return
         val composition = rememberComposition(params.data, environment, loader)
+        val provider = dynamicPropertiesProvider
+        val dynamicProperties = if (provider != null && composition != null) {
+            provider.getDynamicProperties(
+                LottieDynamicPropertiesContext(
+                    environment = environment,
+                    composition = composition,
+                )
+            )
+        } else {
+            null
+        }
+
         LottieAnimation(
             modifier = modifier,
             alignment = image.observedAlignment(),
             composition = composition,
             contentScale = image.observedContentScale(),
+            dynamicProperties = dynamicProperties,
             isPlaying = params.isPlaying.observedValue() && environment.animationsEnabled,
             iterations = params.iterations,
             restartOnPlay = false,

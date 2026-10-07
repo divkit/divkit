@@ -21,7 +21,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.lottie.compose)
+    api(libs.lottie.compose)
 
     testImplementation(libs.androidx.test.core)
     testImplementation(project(":test-utils"))
