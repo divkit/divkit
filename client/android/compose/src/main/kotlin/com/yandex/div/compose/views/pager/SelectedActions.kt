@@ -1,9 +1,7 @@
 package com.yandex.div.compose.views.pager
 
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
-import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -98,24 +96,6 @@ private fun LazyListState.selectedPage(
     if (itemWindow.realItemCount == 0 || info.totalItemsCount != itemWindow.itemCount) return null
     // Different cyclic windows can have the same virtual item count.
     if (info.visibleItemsInfo.any { it.contentType != itemWindow }) return null
-    return info.snapTargetPage(snapPosition, snapOffset)?.let(itemWindow::realIndex)
-}
-
-private fun LazyListLayoutInfo.snapTargetPage(snapPosition: SnapPosition, snapOffset: Float): Int? {
-    val layoutSize = if (orientation == Orientation.Horizontal) {
-        viewportSize.width
-    } else {
-        viewportSize.height
-    }
-    return visibleItemsInfo.minByOrNull { item ->
-        val desiredOffset = snapPosition.position(
-            layoutSize = layoutSize,
-            itemSize = item.size,
-            beforeContentPadding = beforeContentPadding,
-            afterContentPadding = afterContentPadding,
-            itemIndex = item.index,
-            itemCount = totalItemsCount,
-        )
-        abs(item.offset - desiredOffset - snapOffset)
-    }?.index
+    val page = info.visibleItemsInfo.minByOrNull { abs(info.snapOffset(it, snapPosition) - snapOffset) }
+    return page?.index?.let(itemWindow::realIndex)
 }

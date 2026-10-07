@@ -10,13 +10,22 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.constrainHeight
+import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 
+@Composable
 internal fun childModifier(
     isHorizontal: Boolean,
     viewportSize: Dp,
@@ -29,11 +38,12 @@ internal fun childModifier(
     layoutDirection: LayoutDirection,
     density: Density,
 ): Modifier {
+    val measuredViewportSize = remember(listState) { derivedStateOf { listState.layoutInfo.viewportSize } }
     val scrollAxisModifier = scrollAxisSizeModifier(pageSize, isHorizontal, viewportSize, startPadding, endPadding)
     val crossModifier = crossAxisSizeModifier(
         isHorizontal = isHorizontal,
         crossAxisBounded = crossAxisBounded,
-        viewportSize = listState.layoutInfo.viewportSize.crossAxisSize(isHorizontal),
+        viewportSize = measuredViewportSize,
         paddings = paddings,
         layoutDirection = layoutDirection,
         density = density,
@@ -44,12 +54,12 @@ internal fun childModifier(
 private fun crossAxisSizeModifier(
     isHorizontal: Boolean,
     crossAxisBounded: Boolean,
-    viewportSize: Int,
+    viewportSize: State<IntSize>,
     paddings: PaddingValues,
     layoutDirection: LayoutDirection,
     density: Density,
 ): Modifier {
-    if (crossAxisBounded || viewportSize <= 0) {
+    if (crossAxisBounded) {
         return if (isHorizontal) Modifier.fillMaxHeight() else Modifier.fillMaxWidth()
     }
 
@@ -61,9 +71,15 @@ private fun crossAxisSizeModifier(
         }
     }
 
-    val contentSizePx = (viewportSize - crossAxisPaddingPx).coerceAtLeast(0)
-    return with(density) {
-        if (isHorizontal) Modifier.height(contentSizePx.toDp()) else Modifier.width(contentSizePx.toDp())
+    return Modifier.layout { measurable, constraints ->
+        val crossAxisSize = viewportSize.value.crossAxisSize(isHorizontal)
+        val childConstraints = if (crossAxisSize > 0) {
+            constraints.withCrossAxisSize((crossAxisSize - crossAxisPaddingPx).coerceAtLeast(0), isHorizontal)
+        } else {
+            constraints
+        }
+        val placeable = measurable.measure(childConstraints)
+        layout(placeable.width, placeable.height) { placeable.placeRelative(0, 0) }
     }
 }
 
@@ -77,3 +93,11 @@ private fun scrollAxisSizeModifier(pageSize: Dp?, isHorizontal: Boolean, viewpor
 
 private fun IntSize.crossAxisSize(isHorizontal: Boolean): Int =
     if (isHorizontal) height else width
+
+private fun Constraints.withCrossAxisSize(size: Int, isHorizontal: Boolean): Constraints = if (isHorizontal) {
+    val height = constrainHeight(size)
+    copy(minHeight = height, maxHeight = height)
+} else {
+    val width = constrainWidth(size)
+    copy(minWidth = width, maxWidth = width)
+}

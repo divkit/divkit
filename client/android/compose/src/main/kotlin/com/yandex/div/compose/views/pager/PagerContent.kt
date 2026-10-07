@@ -1,13 +1,12 @@
 package com.yandex.div.compose.views.pager
 
-import androidx.compose.foundation.gestures.snapping.SnapLayoutInfoProvider
 import androidx.compose.foundation.gestures.snapping.SnapPosition
-import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -17,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -118,21 +118,15 @@ internal fun PagerContent(
         enabled = !needsInitialAlignment || initialPositionAdjusted,
     )
 
-    val snapProvider = remember(listState, snapPosition, selectedActionsHandler) {
-        SinglePageSnapLayoutInfoProvider(
-            delegate = SnapLayoutInfoProvider(listState, snapPosition),
-            onSnapOffsetCalculated = selectedActionsHandler::onSnapOffsetCalculated,
-        )
-    }
     val childModifier = childModifier(
         isHorizontal, viewportSize, crossAxisBounded, listState,
         paddings, pageSize, startPadding, endPadding, layoutDirection, density
     )
     val transformation = observePageTransformation(pageTransformation)
     val overlap = transformation?.overlap == true
-    // Transformed pages of different sizes and overlapped pages need their neighbours outside the viewport.
+    // Pages of different sizes and overlapped pages need their neighbours outside the viewport.
     val neighbourSizes = rememberPagerNeighbourSizes(
-        listState, itemKeys, enabled = transformation != null && (pageSize == null || overlap)
+        listState, itemKeys, enabled = pageSize == null || overlap
     )
     val pageSizePx = pageSize?.let { with(density) { it.roundToPx() } }
     val neighbourSize: (Int) -> Int? = remember(neighbourSizes, pageSizePx) {
@@ -141,39 +135,53 @@ internal fun PagerContent(
     val transformationPosition = rememberPageTransformationPosition(
         listState, snapPosition, rawDefaultItem, neighbourSize
     )
+    val swipeLimiter = remember(listState, snapPosition, itemKeys, neighbourSize, layoutDirection) {
+        PagerSwipeLimiter(
+            listState, snapPosition, neighbourSize, layoutDirection, selectedActionsHandler::onSnapOffsetCalculated
+        )
+    }
 
-    OrientedLazyList(
-        isHorizontal = isHorizontal,
-        modifier = IntrinsicSizeBarrier.fillMaxSize().clipToBounds().trackPagerViewport(neighbourSizes),
-        listState = listState,
-        contentPadding = paddings,
-        itemSpacing = itemSpacing,
-        crossAxisAlignment = crossAlignment,
-        flingBehavior = rememberSnapFlingBehavior(snapProvider),
-    ) {
-        items(
-            count = itemWindow.itemCount,
-            key = { index ->
-                val itemKey = itemKeys[itemWindow.realIndex(index)]
-                if (infiniteScroll) {
-                    val cycle = (index - itemWindow.edgeItemCount).floorDiv(items.size)
-                    "$itemKey:$cycle"
-                } else {
-                    itemKey
+    // The list starts a page drag after the paging touch slop, as ViewPager2 does,
+    // while the page content keeps the default touch slop for its own gestures.
+    val viewConfiguration = LocalViewConfiguration.current
+    val pagerViewConfiguration = rememberPagerViewConfiguration(viewConfiguration)
+    CompositionLocalProvider(LocalViewConfiguration provides pagerViewConfiguration) {
+        OrientedLazyList(
+            isHorizontal = isHorizontal,
+            modifier = IntrinsicSizeBarrier.fillMaxSize().clipToBounds().trackPagerViewport(neighbourSizes)
+                .pagerSwipe(swipeLimiter),
+            listState = listState,
+            contentPadding = paddings,
+            itemSpacing = itemSpacing,
+            crossAxisAlignment = crossAlignment,
+            flingBehavior = rememberPagerFlingBehavior(swipeLimiter),
+        ) {
+            items(
+                count = itemWindow.itemCount,
+                key = { index ->
+                    val itemKey = itemKeys[itemWindow.realIndex(index)]
+                    if (infiniteScroll) {
+                        val cycle = (index - itemWindow.edgeItemCount).floorDiv(items.size)
+                        "$itemKey:$cycle"
+                    } else {
+                        itemKey
+                    }
+                },
+                contentType = { itemWindow },
+            ) { index ->
+                CompositionLocalProvider(LocalViewConfiguration provides viewConfiguration) {
+                    ScrollableChildItem(
+                        items[itemWindow.realIndex(index)],
+                        childModifier
+                            .trackPagerPageSize(neighbourSizes, index, isHorizontal)
+                            .pageTransformation(
+                                transformation, transformationPosition, index, listState, isHorizontal, layoutDirection
+                            ),
+                        isHorizontal,
+                        crossAlignment,
+                    )
                 }
-            },
-            contentType = { itemWindow },
-        ) { index ->
-            ScrollableChildItem(
-                items[itemWindow.realIndex(index)],
-                childModifier
-                    .trackPagerPageSize(neighbourSizes, index, isHorizontal)
-                    .pageTransformation(
-                        transformation, transformationPosition, index, listState, isHorizontal, layoutDirection
-                    ),
-                isHorizontal,
-                crossAlignment,
-            )
+            }
         }
     }
 }
@@ -344,21 +352,3 @@ private fun DivPager.ItemAlignment.toSnapPosition(): SnapPosition =
         DivPager.ItemAlignment.START -> SnapPosition.Start
         DivPager.ItemAlignment.END -> SnapPosition.End
     }
-
-/**
- * Reports the snap target before settling to preserve ViewPager2's selection order for interrupted flings.
- * This relies on SnapFlingBehavior calculating the final offset after the zero-length approach phase.
- * The handler queues targets until idle and ignores repeated calculations selecting the same logical page.
- */
-private class SinglePageSnapLayoutInfoProvider(
-    private val delegate: SnapLayoutInfoProvider,
-    private val onSnapOffsetCalculated: (Float) -> Unit,
-) : SnapLayoutInfoProvider {
-    override fun calculateSnapOffset(velocity: Float): Float {
-        val offset = delegate.calculateSnapOffset(velocity)
-        onSnapOffsetCalculated(offset)
-        return offset
-    }
-
-    override fun calculateApproachOffset(velocity: Float, decayOffset: Float) = 0f
-}
