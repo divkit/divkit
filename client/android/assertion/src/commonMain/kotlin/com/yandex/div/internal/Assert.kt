@@ -8,23 +8,12 @@ public object Assert {
 
     private var _assertionErrorHandler = AssertionErrorHandler { throw it }
 
-    @Volatile
-    private var _isEnabled = false
-
     /**
      * Returns value indicating if assertions are enabled. This class won't throw any [AssertionError], if disabled.
      */
     @JvmStatic
-    public var isEnabled: Boolean
-        get() {
-            if (BuildKonfig.DISABLE_ASSERTS) {
-                return false
-            }
-            return _isEnabled
-        }
-        set(value) {
-            _isEnabled = value
-        }
+    @Volatile
+    public var isEnabled: Boolean = false
 
     /**
      * Asserts that a condition is true. If it isn't it throws an [AssertionError] with the given message.

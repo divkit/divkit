@@ -1,6 +1,5 @@
 package com.yandex.div.core.log
 
-import com.yandex.div.core.BuildKonfig
 import com.yandex.div.core.annotations.InternalApi
 
 @Suppress("TooManyFunctions")
@@ -11,7 +10,6 @@ public object Log {
     @field:Volatile
     public var isEnabled: Boolean = false
         private set
-        get() = !BuildKonfig.DISABLE_LOGS && field
 
     @field:Volatile
     public var severity: Severity = Severity.VERBOSE

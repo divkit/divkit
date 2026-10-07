@@ -1,11 +1,7 @@
-import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
-import com.yandex.div.gradle.disableLogs
-
 plugins {
     id("divkit.convention.library-kmp")
     id("divkit.convention.publishing-module-kmp")
     id("divkit.convention.stub-aar")
-    alias(libs.plugins.buildkonfig)
 }
 
 kotlin {
@@ -17,20 +13,4 @@ kotlin {
             implementation(project(":core"))
         }
     }
-}
-
-buildkonfig {
-    packageName = "com.yandex.div.logging"
-
-    defaultConfigs {
-        buildConfigField(BOOLEAN, "DISABLE_LOGS", disableLogs().toString())
-    }
-}
-
-tasks.named("metalavaGenerateSignature") {
-    dependsOn("generateBuildKonfig")
-}
-
-tasks.named("metalavaCheckCompatibility") {
-    dependsOn("generateBuildKonfig")
 }

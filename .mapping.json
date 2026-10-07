@@ -620,7 +620,6 @@
   "client/android/build-logic/build.gradle.kts":"divkit/public/client/android/build-logic/build.gradle.kts",
   "client/android/build-logic/settings.gradle.kts":"divkit/public/client/android/build-logic/settings.gradle.kts",
   "client/android/build-logic/src/main/kotlin/abi-validation.gradle.kts":"divkit/public/client/android/build-logic/src/main/kotlin/abi-validation.gradle.kts",
-  "client/android/build-logic/src/main/kotlin/com/yandex/div/gradle/BuildConfiguration.kt":"divkit/public/client/android/build-logic/src/main/kotlin/com/yandex/div/gradle/BuildConfiguration.kt",
   "client/android/build-logic/src/main/kotlin/com/yandex/div/gradle/Publication.kt":"divkit/public/client/android/build-logic/src/main/kotlin/com/yandex/div/gradle/Publication.kt",
   "client/android/build-logic/src/main/kotlin/com/yandex/div/gradle/ValidateTestResultsTask.kt":"divkit/public/client/android/build-logic/src/main/kotlin/com/yandex/div/gradle/ValidateTestResultsTask.kt",
   "client/android/build-logic/src/main/kotlin/com/yandex/div/gradle/XmlUtils.kt":"divkit/public/client/android/build-logic/src/main/kotlin/com/yandex/div/gradle/XmlUtils.kt",
