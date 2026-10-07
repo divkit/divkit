@@ -13550,6 +13550,7 @@
   "json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionCustom.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionCustom.kt",
   "json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionDictSetValue.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionDictSetValue.kt",
   "json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionDownload.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionDownload.kt",
+  "json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionExtensionAction.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionExtensionAction.kt",
   "json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionFocusElement.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionFocusElement.kt",
   "json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionHaptic.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionHaptic.kt",
   "json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionHideTooltip.kt":"divkit/public/json-builder/kotlin/divan-dsl/src/generated/kotlin/divkit/dsl/ActionHideTooltip.kt",
