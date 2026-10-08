@@ -2,10 +2,10 @@ package com.yandex.div.compose.views.container
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.container.wrap.ContainerWrapHorizontalView
 import com.yandex.div.compose.views.container.wrap.ContainerWrapVerticalView
+import com.yandex.div.compose.views.modifiers.clipToBounds
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContainer.LayoutMode
 import com.yandex.div2.DivContainer.Orientation
@@ -16,7 +16,7 @@ internal fun DivContainerView(
     data: DivContainer
 ) {
     val modifier = if (data.clipToBounds.observedValue()) {
-        modifier.clipToBounds()
+        modifier.clipToBounds(data)
     } else {
         modifier
     }

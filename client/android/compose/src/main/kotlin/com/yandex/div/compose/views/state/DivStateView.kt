@@ -6,7 +6,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.expressions.observedValue
@@ -15,6 +14,7 @@ import com.yandex.div.compose.state.findState
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.variables.mutableStateFromStringVariable
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.compose.views.modifiers.clipToBounds
 import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div2.DivState
@@ -25,7 +25,7 @@ internal fun DivStateView(
     data: DivState
 ) {
     val modifier = if (data.clipToBounds.observedValue()) {
-        modifier.clipToBounds()
+        modifier.clipToBounds(data)
     } else {
         modifier
     }

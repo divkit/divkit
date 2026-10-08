@@ -5,6 +5,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBackground
+import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivExtension
@@ -18,6 +19,8 @@ fun container(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
     backgrounds: List<DivBackground>? = null,
+    border: DivBorder? = null,
+    clipToBounds: Expression<Boolean> = constant(true),
     extensions: List<DivExtension>? = null,
     focus: DivFocus? = null,
     functions: List<DivFunction>? = null,
@@ -35,6 +38,8 @@ fun container(
             accessibility = accessibility,
             action = action,
             background = backgrounds,
+            border = border,
+            clipToBounds = clipToBounds,
             extensions = extensions,
             focus = focus,
             functions = functions,
