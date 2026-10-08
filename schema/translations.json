@@ -179,6 +179,10 @@
     "en": "Enables scrolling animation.",
     "ru": "Включает анимацию пролистывания."
   },
+  "div_action_scroll_duration": {
+    "en": "Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.",
+    "ru": "Длительность анимации скролла в миллисекундах. Если не задана, используется стандартное поведение скролла на платформе. Значение `0` означает мгновенный скролл. Игнорируется, если `animated` равен `false` или анимации глобально отключены."
+  },
   "div_action_scroll_by": {
     "en": "Scrolls the container by `item_count` or `offset` starting from the current position. If both values are specified, the action will be combined. For scrolling back, use negative values.",
     "ru": "Пролистывает контейнер со скроллом от текущей позиции на `item_count` или `offset`. Если заданы оба значения, действие будет скомбинированным. Отрицательные значения пролистывают назад."
