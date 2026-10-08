@@ -1,8 +1,10 @@
 package com.yandex.div
 
+import android.content.res.Configuration
 import androidx.test.rule.ActivityTestRule
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.tooltipDiv
+import com.yandex.div.steps.tooltipRotation
 import com.yandex.div2.DivTooltip.Position
 import com.yandex.divkit.demo.DummyActivity
 import com.yandex.test.util.Report.step
@@ -119,6 +121,56 @@ class DivTooltipTest {
             assert {
                 nonModalButtonClickedIsTrue()
                 noTooltipsDisplayed()
+            }
+        }
+    }
+
+    @Test
+    fun tooltipLayoutIsUpdatedAfterRotation() {
+        tooltipRotation {
+            // Arrange
+            activityRule.rotateTo(Configuration.ORIENTATION_PORTRAIT)
+            activityRule.buildRotationContainer()
+            showRotationTooltip()
+
+            assertRotation {
+                hostIsNotRecreated()
+                orientationIs(Configuration.ORIENTATION_PORTRAIT)
+                tooltipIsShownAtBottomCenter(Configuration.ORIENTATION_PORTRAIT)
+            }
+
+            // Act
+            activityRule.rotateTo(Configuration.ORIENTATION_LANDSCAPE)
+
+            // Assert
+            assertRotation {
+                hostIsNotRecreated()
+                orientationIs(Configuration.ORIENTATION_LANDSCAPE)
+                tooltipIsShownAtBottomCenter(Configuration.ORIENTATION_LANDSCAPE)
+            }
+        }
+    }
+
+    @Test
+    fun tooltipLayoutIsRestoredAfterReturningToPortrait() {
+        tooltipRotation {
+            // Arrange
+            activityRule.rotateTo(Configuration.ORIENTATION_PORTRAIT)
+            activityRule.buildRotationContainer()
+            showRotationTooltip()
+            activityRule.rotateTo(Configuration.ORIENTATION_LANDSCAPE)
+            assertRotation {
+                tooltipIsShownAtBottomCenter(Configuration.ORIENTATION_LANDSCAPE)
+            }
+
+            // Act
+            activityRule.rotateTo(Configuration.ORIENTATION_PORTRAIT)
+
+            // Assert
+            assertRotation {
+                hostIsNotRecreated()
+                orientationIs(Configuration.ORIENTATION_PORTRAIT)
+                tooltipIsShownAtBottomCenter(Configuration.ORIENTATION_PORTRAIT)
             }
         }
     }

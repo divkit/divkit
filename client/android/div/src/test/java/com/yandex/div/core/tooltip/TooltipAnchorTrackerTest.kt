@@ -4,7 +4,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.ViewTreeObserver
-import com.yandex.div.core.util.SafePopupWindow
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,7 +11,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLooper
 import java.util.concurrent.TimeUnit
@@ -60,24 +58,15 @@ class TooltipAnchorTrackerTest {
         }
     }
 
-    private val popupWindow = mock<SafePopupWindow> {
-        on { isShowing } doReturn true
-    }
-
-    private val tooltipData = mock<TooltipData> {
-        on { anchor } doReturn anchor
-        on { popupWindow } doReturn popupWindow
-    }
-
     private val handler = Handler(Looper.getMainLooper())
     private val positionChangedCount = AtomicInteger(0)
     private val onAnchorPositionChanged = { positionChangedCount.incrementAndGet(); Unit }
 
-    private val underTest = TooltipAnchorTracker(tooltipData, handler, onAnchorPositionChanged)
+    private val underTest = TooltipAnchorTracker(anchor, handler, onAnchorPositionChanged)
 
     @Test
-    fun `notifies on initial position`() {
-        Assert.assertEquals(1, positionChangedCount.get())
+    fun `retains initial position without notifying`() {
+        Assert.assertEquals(0, positionChangedCount.get())
     }
 
     @Test
@@ -104,28 +93,6 @@ class TooltipAnchorTrackerTest {
     fun `does not notify when position and size are unchanged`() {
         positionChangedCount.set(0)
 
-        notifyLayoutChanged()
-
-        Assert.assertEquals(0, positionChangedCount.get())
-    }
-
-    @Test
-    fun `does not notify when tooltip is dismissed`() {
-        positionChangedCount.set(0)
-        whenever(tooltipData.dismissed).doReturn(true)
-
-        locationX.set(150)
-        notifyLayoutChanged()
-
-        Assert.assertEquals(0, positionChangedCount.get())
-    }
-
-    @Test
-    fun `does not notify when popup is not showing`() {
-        positionChangedCount.set(0)
-        whenever(popupWindow.isShowing).doReturn(false)
-
-        locationX.set(150)
         notifyLayoutChanged()
 
         Assert.assertEquals(0, positionChangedCount.get())

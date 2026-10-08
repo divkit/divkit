@@ -1,0 +1,154 @@
+{
+  "templates": {
+    "omnibox": {
+      "type": "text",
+      "$id": "omnibox_id",
+      "text": "Search or enter address",
+      "width": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFFFF"
+        }
+      ],
+      "border": {
+        "corner_radius": 24
+      },
+      "paddings": {
+        "left": 20,
+        "top": 16,
+        "right": 20,
+        "bottom": 16
+      },
+      "text_alignment_horizontal": "center",
+      "text_color": "#808080"
+    }
+  },
+  "card": {
+    "log_id": "tooltip_rotation",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F0F0F0"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "Show rotation tooltip",
+              "alignment_horizontal": "center",
+              "alignment_vertical": "top",
+              "margins": {
+                "top": 24
+              },
+              "paddings": {
+                "left": 20,
+                "top": 12,
+                "right": 20,
+                "bottom": 12
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#DDDDDD"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "show_rotation_tooltip",
+                  "url": "div-action://show_tooltip?id=rotation_tooltip"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "rotation_anchor",
+              "orientation": "vertical",
+              "width": {
+                "type": "match_parent"
+              },
+              "alignment_vertical": "bottom",
+              "margins": {
+                "left": 24,
+                "right": 24,
+                "bottom": 24
+              },
+              "items": [
+                {
+                  "type": "omnibox",
+                  "omnibox_id": "rotation_source_omnibox"
+                }
+              ],
+              "tooltips": [
+                {
+                  "id": "rotation_tooltip",
+                  "position": "top",
+                  "duration": 0,
+                  "close_by_tap_outside": false,
+                  "bring_to_top_id": "rotation_source_omnibox",
+                  "mode": {
+                    "type": "non_modal"
+                  },
+                  "substrate_div": {
+                    "type": "container",
+                    "id": "rotation_popup_root",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#66000000"
+                      }
+                    ]
+                  },
+                  "div": {
+                    "type": "text",
+                    "id": "rotation_tooltip_bubble",
+                    "text": "Tooltip follows current layout",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "paddings": {
+                      "left": 20,
+                      "top": 12,
+                      "right": 20,
+                      "bottom": 12
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#7137FF"
+                      }
+                    ],
+                    "border": {
+                      "corner_radius": 16
+                    },
+                    "text_color": "#FFFFFF"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

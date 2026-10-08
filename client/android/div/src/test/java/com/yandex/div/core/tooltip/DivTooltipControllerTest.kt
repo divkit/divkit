@@ -2,15 +2,15 @@ package com.yandex.div.core.tooltip
 
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.R
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.internal.core.DivBlock
@@ -18,8 +18,12 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTooltip
-import org.junit.Assert
-import org.junit.Test
+import kotlin.test.AfterTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
@@ -33,438 +37,622 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLooper
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class DivTooltipControllerTest {
 
-    private val div = Div.Text(DivText(text = "test1".asExpression()))
-    private val tooltips = mutableListOf<DivTooltip>()
-    private val anchorBlock = DivBlock.Text(mock<Div.Text>(), ExpressionResolver.EMPTY, DivStatePath.fromState(0))
+    private val div = Div.Text(DivText(text = "test".asExpression()))
+    private val divTooltips = mutableListOf<DivTooltip>()
+    private val anchorBlock = DivBlock.Text(
+        div,
+        ExpressionResolver.EMPTY,
+        DivStatePath.fromState(0),
+    )
+    private val anchorViewTreeObserver = mock<ViewTreeObserver> {
+        on { isAlive } doReturn true
+    }
+    private val anchorLayoutListener = argumentCaptor<View.OnLayoutChangeListener>()
     private val anchor = mock<DivLineHeightTextView> {
-        on { getTag(R.id.div_tooltips_tag) } doReturn tooltips
+        on { getTag(R.id.div_tooltips_tag) } doReturn divTooltips
         on { isAttachedToWindow } doReturn true
         on { isLayoutRequested } doReturn false
         on { width } doReturn 300
         on { height } doReturn 100
         on { divBlock } doReturn anchorBlock
+        on { viewTreeObserver } doReturn anchorViewTreeObserver
+        on { addOnLayoutChangeListener(anchorLayoutListener.capture()) } doAnswer { }
     }
-
+    private val rootView = mock<View>()
     private val runtimeStore = mock<RuntimeStore> {
         on { getOrCreateRuntime(any(), any(), any()) } doReturn ExpressionsRuntime(mock())
     }
-    private val div2View = mock<Div2View> {
+    private val divView = mock<Div2View> {
         on { getChildAt(0) } doReturn anchor
         on { childCount } doReturn 1
         on { runtimeStore } doReturn runtimeStore
+        on { rootView } doReturn rootView
     }
-
-    private val tooltipShownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
+    private val shownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
     private val tooltipRestrictor = mock<DivTooltipRestrictor> {
         on { canShowTooltip(any(), any(), any(), any(), anyOrNull()) } doReturn true
-        on { tooltipShownCallback } doReturn tooltipShownCallback
+        on { tooltipShownCallback } doReturn shownCallback
     }
-
-    private val preloadCallbackCaptor = argumentCaptor<DivPreloader.Callback>()
+    private val preloadCallback = argumentCaptor<DivPreloader.Callback>()
     private val divPreloader = mock<DivPreloader> {
-        on { preload(any<Div>(), any(), preloadCallbackCaptor.capture()) } doReturn mock()
+        on { preload(any<Div>(), any(), preloadCallback.capture()) } doReturn mock()
     }
-
-    private val tooltipWrapper = mock<DivTooltipContainer> {
-        on { tooltipView } doReturn mock()
-    }
-
-    private val onShownCaptor = argumentCaptor<() -> Unit>()
-
-    private val viewController = mock<DivTooltipViewController>()
-    private val visibilityController = mock<DivTooltipVisibilityController> {
-        on { showTooltip(any(), onShownCaptor.capture()) } doAnswer { }
-    }
-
-    private val underTest = DivTooltipController(tooltipRestrictor, divPreloader, viewController, visibilityController)
-
-    init {
-        whenever(viewController.createPopupWindow(any(), any(), any())).doAnswer { inv ->
-            val data = inv.arguments[0] as TooltipData
-            data.popupWindow = mock<SafePopupWindow> {
-                on { contentView } doReturn tooltipWrapper
-                on { isShowing } doReturn true
-            }
+    private val createdViews = mutableListOf<DivTooltipView>()
+    private val shownCallbacks = mutableListOf<() -> Unit>()
+    private val dismissedCallback = argumentCaptor<(DivTooltipView) -> Unit>()
+    private val touchOutsideCallback = argumentCaptor<() -> Unit>()
+    private var completeViewShowImmediately = true
+    private var completeViewDismissImmediately = true
+    private val viewFactory = mock<DivTooltipViewFactory> {
+        on { create(any(), touchOutsideCallback.capture(), dismissedCallback.capture()) } doAnswer {
+            val onDismissed = dismissedCallback.lastValue
+            val view = mock<DivTooltipView>()
+            doAnswer { showInvocation ->
+                val onShown = showInvocation.getArgument<() -> Unit>(0)
+                shownCallbacks += onShown
+                if (completeViewShowImmediately) {
+                    onShown()
+                }
+            }.whenever(view).show(any())
+            doAnswer {
+                if (completeViewDismissImmediately) {
+                    onDismissed(view)
+                }
+            }.whenever(view).dismiss()
+            createdViews += view
+            view
         }
     }
+    private val underTest = DivTooltipController(
+        activeTooltipFactory = ActiveTooltipFactory(
+            tooltipRestrictor = tooltipRestrictor,
+            divPreloader = divPreloader,
+            viewFactory = viewFactory,
+        ),
+    )
 
-    @Test
-    fun `tooltip is shown`() {
-        showTooltip()
-        verify(visibilityController).showTooltip(any(), any())
-    }
-
-    @Test
-    fun `hideTooltip delegates to visibility controller`() {
-        showTooltip()
-        underTest.hideTooltip("tooltip_id")
-        verify(visibilityController).hideTooltip(any())
-    }
-
-    @Test
-    fun `onDismiss callback removes tooltip and notifies`() {
-        val dismissCaptor = argumentCaptor<() -> Unit>()
-        showTooltip()
-        verify(viewController).createPopupWindow(any(), any(), dismissCaptor.capture())
-
-        dismissCaptor.lastValue.invoke()
-
-        verify(visibilityController).onDismiss(any())
-        verify(tooltipShownCallback).onDivTooltipDismissed(div2View, anchor, tooltips[0])
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
-    }
-
-    @Test
-    fun `onTouchOutside callback hides tooltip`() {
-        val touchOutsideCaptor = argumentCaptor<() -> Unit>()
-        showTooltip()
-        verify(viewController).createPopupWindow(any(), touchOutsideCaptor.capture(), any())
-
-        touchOutsideCaptor.lastValue.invoke()
-
-        verify(visibilityController).hideTooltip(any())
-    }
-
-    @Test
-    fun `clear dismisses popup and clears registry`() {
-        showTooltip()
-        val popupWindow = underTest.captureCurrentTooltips().first().popupWindow as SafePopupWindow
-        val tracking = mock<Disposable>()
-        currentTooltip().anchorTrackingDisposable = tracking
-
+    @AfterTest
+    fun tearDown() {
         underTest.clear()
-
-        verify(popupWindow).dismiss()
-        verify(tracking).close()
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
     }
 
     @Test
-    fun `tooltip is dismissed after timeout`() {
-        showTooltip(duration = 1000)
-        onShownCaptor.lastValue.invoke()
+    fun `successful preload shows tooltip and reports it once`() {
+        showTooltip()
 
+        verify(createdViews.single()).show(any())
+        verify(shownCallback).onDivTooltipShown(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `shown callback and duration wait for actual tooltip layout`() {
+        completeViewShowImmediately = false
+        showTooltip(duration = 1_000L)
+
+        verify(shownCallback, never()).onDivTooltipShown(any(), any(), any())
         ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        verify(createdViews.single(), never()).dismiss()
 
-        verify(visibilityController).hideTooltip(any())
+        shownCallbacks.single().invoke()
+
+        verify(shownCallback).onDivTooltipShown(divView, anchor, divTooltips.single())
     }
 
     @Test
-    fun `tooltip is not dismissed after timeout when duration is zero`() {
-        showTooltip()
-        onShownCaptor.lastValue.invoke()
-
-        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
-
-        verify(visibilityController, never()).hideTooltip(any())
-    }
-
-    @Test
-    fun `auto hide is canceled on cleanup`() {
-        showTooltip(duration = 1000)
-        onShownCaptor.lastValue.invoke()
-        underTest.clear()
-
-        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
-
-        verify(visibilityController, never()).hideTooltip(any())
-    }
-
-    @Test
-    fun `onPopupShown is called when tooltip becomes visible`() {
-        showTooltip()
-        onShownCaptor.lastValue.invoke()
-        verify(viewController).onPopupShown(any())
-    }
-
-    @Test
-    fun `tooltip not present at shown tooltips before restriction-check`() {
-        val wasEmptyOnRestrictorCheck = mutableListOf<Boolean>()
-        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull())).doAnswer {
-            wasEmptyOnRestrictorCheck += underTest.captureCurrentTooltips().isEmpty()
-            true
-        }
-        showTooltip()
-
-        onShownCaptor.lastValue.invoke()
-
-        Assert.assertTrue(wasEmptyOnRestrictorCheck.first())
-        verify(tooltipShownCallback).onDivTooltipShown(div2View, anchor, tooltips[0])
-    }
-
-    @Test
-    fun `tooltip show restriction works`() {
-        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull())).doReturn(false)
-        showTooltip()
-        verify(divPreloader, never()).preload(any<Div>(), any(), any())
-    }
-
-    @Test
-    fun `when preload completes with failures tooltip is removed`() {
+    fun `preload failure discards tooltip without dismissed callback`() {
         showTooltip(completePreload = false)
 
-        preloadCallbackCaptor.lastValue.finish(true)
+        preloadCallback.lastValue.finish(true)
 
-        verify(visibilityController, never()).showTooltip(any(), any())
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(createdViews.single()).dismiss()
+        verify(shownCallback, never()).onDivTooltipDismissed(any(), any(), any())
     }
 
     @Test
-    fun `handleConfigurationChange delegates anchor tracking to view controller`() {
+    fun `synchronous preload failure does not retain tooltip`() {
+        whenever(divPreloader.preload(any<Div>(), any(), any())).doAnswer { invocation ->
+            invocation.getArgument<DivPreloader.Callback>(2).finish(true)
+            mock<DivPreloader.Ticket>()
+        }
+
+        showTooltip(completePreload = false)
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+    }
+
+    @Test
+    fun `successful callback from canceled preload does not show replacement tooltip`() {
+        showTooltip(completePreload = false)
+        underTest.hideTooltip("tooltip_id")
+        underTest.showTooltip("tooltip_id", divView)
+        val replacementView = createdViews.last()
+
+        preloadCallback.firstValue.finish(false)
+
+        assertEquals(1, underTest.captureCurrentTooltips().size)
+        verify(replacementView, never()).show(any())
+
+        preloadCallback.lastValue.finish(false)
+
+        verify(replacementView).show(any())
+    }
+
+    @Test
+    fun `failed callback from canceled preload does not discard replacement tooltip`() {
+        showTooltip(completePreload = false)
+        underTest.hideTooltip("tooltip_id")
+        underTest.showTooltip("tooltip_id", divView)
+        val replacementView = createdViews.last()
+
+        preloadCallback.firstValue.finish(true)
+
+        assertEquals(1, underTest.captureCurrentTooltips().size)
+        verify(replacementView, never()).dismiss()
+    }
+
+    @Test
+    fun `late touch outside from disposed tooltip leaves replacement active`() {
         showTooltip()
-        underTest.handleConfigurationChange(div2View)
-        verify(viewController).startAnchorPositionTracking(eq(currentTooltip()), eq(div2View), any())
+        underTest.cancelTooltips(divView)
+        showTooltip()
+        val replacementData = underTest.captureCurrentTooltips().single()
+
+        touchOutsideCallback.firstValue.invoke()
+
+        assertSame(replacementData, underTest.captureCurrentTooltips().single())
+        verify(createdViews.last(), never()).dismiss()
     }
 
     @Test
-    fun `showTooltip logs error when tooltip view is not found`() {
-        showTooltip("missing_tooltip")
+    fun `late platform dismiss from disposed tooltip leaves replacement active`() {
+        showTooltip()
+        val disposedTooltip = divTooltips.single()
+        underTest.cancelTooltips(divView)
+        showTooltip()
+        val replacementData = underTest.captureCurrentTooltips().single()
 
-        verify(div2View).logError(any())
-        verify(visibilityController, never()).showTooltip(any(), any())
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        dismissedCallback.firstValue.invoke(createdViews.first())
+
+        assertSame(replacementData, underTest.captureCurrentTooltips().single())
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, disposedTooltip)
     }
 
     @Test
-    fun `showTooltip ignores duplicate id and scope`() {
+    fun `late layout from disposed tooltip does not report it shown`() {
+        completeViewShowImmediately = false
+        showTooltip()
+        underTest.cancelTooltips(divView)
         showTooltip()
 
+        shownCallbacks.first().invoke()
+
+        verify(shownCallback, never()).onDivTooltipShown(any(), any(), any())
+    }
+
+    @Test
+    fun `synchronous successful preload releases ticket after showing`() {
+        val ticket = mock<DivPreloader.Ticket>()
+        whenever(divPreloader.preload(any<Div>(), any(), any())).doAnswer { invocation ->
+            invocation.getArgument<DivPreloader.Callback>(2).finish(false)
+            ticket
+        }
+
+        showTooltip(completePreload = false)
+
+        verify(ticket).cancel()
+        verify(shownCallback).onDivTooltipShown(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `failed preload cancels the owned ticket`() {
+        val ticket = mock<DivPreloader.Ticket>()
+        whenever(divPreloader.preload(any<Div>(), any(), preloadCallback.capture())).doReturn(ticket)
+        showTooltip(completePreload = false)
+
+        preloadCallback.lastValue.finish(true)
+
+        verify(ticket).cancel()
+    }
+
+    @Test
+    fun `synchronous platform dismiss removes ownership`() {
         showTooltip()
 
-        verify(viewController, times(1)).createPopupWindow(any(), any(), any())
-        Assert.assertEquals(1, underTest.captureCurrentTooltips().size)
+        underTest.hideTooltip("tooltip_id")
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, divTooltips.single())
     }
 
     @Test
-    fun `showTooltip allows same id in different scopes`() {
-        val (anchorA, anchorB) = prepareScopedTooltips()
+    fun `hide pending tooltip reports neither shown nor dismissed`() {
+        showTooltip(completePreload = false)
 
-        showTooltip(scopeId = "scope_a")
-        showTooltip(scopeId = "scope_b")
+        underTest.hideTooltip("tooltip_id")
 
-        val shown = underTest.captureCurrentTooltips().toList()
-        Assert.assertEquals(2, shown.size)
-        Assert.assertEquals(setOf("scope_a", "scope_b"), shown.map { it.scopeId }.toSet())
-        verify(tooltipRestrictor, atLeastOnce())
-            .canShowTooltip(any(), eq(anchorA), any(), any(), eq("scope_a"))
-        verify(tooltipRestrictor, atLeastOnce())
-            .canShowTooltip(any(), eq(anchorB), any(), any(), eq("scope_b"))
+        verify(shownCallback, never()).onDivTooltipShown(any(), any(), any())
+        verify(shownCallback, never()).onDivTooltipDismissed(any(), any(), any())
     }
 
     @Test
-    fun `showTooltip passes multiple flag to restrictor`() {
-        showTooltip(multiple = true)
-        verify(tooltipRestrictor, atLeastOnce()).canShowTooltip(any(), any(), any(), eq(true), anyOrNull())
+    fun `clear synchronously removes shown tooltip and cancels duration`() {
+        completeViewDismissImmediately = false
+        showTooltip(duration = 1_000L)
+        val view = createdViews.single()
+
+        underTest.clear()
+        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(view).dismissImmediately()
+        verify(view, never()).dismiss()
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, divTooltips.single())
     }
 
     @Test
-    fun `showTooltip requests layout when anchor is not laid out`() {
+    fun `shown callback may synchronously hide without scheduling stale duration`() {
+        whenever(shownCallback.onDivTooltipShown(any(), any(), any())).doAnswer {
+            underTest.hideTooltip("tooltip_id")
+        }
+
+        showTooltip(duration = 1_000L)
+        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+
+        verify(createdViews.single()).dismiss()
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `async platform dismiss retains ownership until animation completes`() {
+        completeViewDismissImmediately = false
+        showTooltip()
+
+        underTest.hideTooltip("tooltip_id")
+        underTest.showTooltip("tooltip_id", divView)
+
+        assertEquals(1, underTest.captureCurrentTooltips().size)
+        verify(viewFactory).create(any(), any(), any())
+        verify(shownCallback, never()).onDivTooltipDismissed(any(), any(), any())
+
+        dismissedCallback.lastValue.invoke(createdViews.single())
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `platform dismiss removes matching tooltip and reports it`() {
+        showTooltip()
+
+        dismissedCallback.lastValue.invoke(createdViews.single())
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `stale platform dismiss does not remove current tooltip`() {
+        showTooltip()
+
+        dismissedCallback.lastValue.invoke(mock())
+
+        assertEquals(1, underTest.captureCurrentTooltips().size)
+        verify(shownCallback, never()).onDivTooltipDismissed(any(), any(), any())
+    }
+
+    @Test
+    fun `touch outside dismisses matching tooltip`() {
+        showTooltip()
+
+        touchOutsideCallback.lastValue.invoke()
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(createdViews.single()).dismiss()
+    }
+
+    @Test
+    fun `duration dismisses tooltip once`() {
+        showTooltip(duration = 1_000L)
+
+        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(createdViews.single()).dismiss()
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `configuration changes recompute current layout`() {
+        showTooltip()
+
+        underTest.handleConfigurationChange(divView)
+        underTest.handleConfigurationChange(divView)
+
+        verify(createdViews.single(), times(2)).recomputePosition()
+    }
+
+    @Test
+    fun `configuration change for another div view leaves tooltip unchanged`() {
+        showTooltip()
+
+        underTest.handleConfigurationChange(mock())
+
+        verify(createdViews.single(), never()).recomputePosition()
+    }
+
+    @Test
+    fun `clear cancels pending preload and removes ownership`() {
+        val ticket = mock<DivPreloader.Ticket>()
+        whenever(divPreloader.preload(any<Div>(), any(), any())).doReturn(ticket)
+        showTooltip(completePreload = false)
+
+        underTest.clear()
+
+        verify(ticket).cancel()
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(createdViews.single()).dismissImmediately()
+    }
+
+    @Test
+    fun `duplicate id and scope creates one runtime`() {
+        showTooltip()
+
+        underTest.showTooltip("tooltip_id", divView)
+
+        verify(viewFactory).create(any(), any(), any())
+        assertEquals(1, underTest.captureCurrentTooltips().size)
+    }
+
+    @Test
+    fun `duplicate requests before anchor layout create one runtime`() {
         whenever(anchor.width).doReturn(0)
         whenever(anchor.height).doReturn(0)
-        whenever(anchor.isLayoutRequested).doReturn(false)
+        whenever(anchor.isLayoutRequested).doReturn(true)
+        divTooltips += createDivTooltip()
 
-        showTooltip()
+        underTest.showTooltip("tooltip_id", divView)
+        underTest.showTooltip("tooltip_id", divView)
+        anchorLayoutListener.allValues.forEach { listener ->
+            listener.onLayoutChange(anchor, 0, 0, 300, 100, 0, 0, 0, 0)
+        }
 
-        verify(anchor).requestLayout()
+        verify(viewFactory).create(any(), any(), any())
+        verify(divPreloader).preload(any<Div>(), any(), any())
+        assertEquals(1, underTest.captureCurrentTooltips().size)
     }
 
     @Test
-    fun `hideTooltip with scope hides only matching tooltip`() {
-        prepareScopedTooltips()
-        val dismissCaptor = argumentCaptor<() -> Unit>()
-        showTooltip(scopeId = "scope_a")
-        verify(viewController).createPopupWindow(any(), any(), dismissCaptor.capture())
-        showTooltip(scopeId = "scope_b")
-        val hideCaptor = argumentCaptor<TooltipData>()
+    fun `same id in different scopes creates independent runtimes`() {
+        val scopedAnchors = prepareScopedTooltips()
+
+        underTest.showTooltip("tooltip_id", divView, scopeId = "scope_a")
+        preloadCallback.lastValue.finish(false)
+        underTest.showTooltip("tooltip_id", divView, scopeId = "scope_b")
+        preloadCallback.lastValue.finish(false)
+
+        assertEquals(
+            setOf("scope_a", "scope_b"),
+            underTest.captureCurrentTooltips().map { it.scopeId }.toSet(),
+        )
+        verify(tooltipRestrictor, atLeastOnce())
+            .canShowTooltip(any(), eq(scopedAnchors.first), any(), any(), eq("scope_a"))
+        verify(tooltipRestrictor, atLeastOnce())
+            .canShowTooltip(any(), eq(scopedAnchors.second), any(), any(), eq("scope_b"))
+    }
+
+    @Test
+    fun `cancel all reports whether anything was dismissed`() {
+        completeViewDismissImmediately = false
+        assertFalse(underTest.cancelAllTooltips())
+        showTooltip()
+
+        assertTrue(underTest.cancelAllTooltips())
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(createdViews.single()).dismissImmediately()
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `cancel matching tooltips synchronously removes ownership`() {
+        completeViewDismissImmediately = false
+        showTooltip()
+
+        underTest.cancelTooltips(divView)
+
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(createdViews.single()).dismissImmediately()
+        verify(shownCallback).onDivTooltipDismissed(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `map tooltip stores tooltip tag`() {
+        val view = mock<View>()
+        val mappedTooltips = listOf(createDivTooltip(id = "mapped"))
+
+        underTest.mapTooltip(view, mappedTooltips)
+
+        verify(view).setTag(R.id.div_tooltips_tag, mappedTooltips)
+    }
+
+    @Test
+    fun `show restriction prevents runtime creation`() {
+        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull()))
+            .doReturn(false)
+
+        showTooltip(completePreload = false)
+
+        verify(viewFactory, never()).create(any(), any(), any())
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+    }
+
+    @Test
+    fun `show restriction prevents creating tooltip runtime state`() {
+        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull()))
+            .doReturn(false)
+
+        showTooltip(completePreload = false)
+
+        verify(runtimeStore, never()).getOrCreateRuntime(any(), any(), any())
+    }
+
+    @Test
+    fun `anchor detached during preload prevents showing tooltip`() {
+        showTooltip(completePreload = false)
+        whenever(anchor.isAttachedToWindow).doReturn(false)
+
+        preloadCallback.lastValue.finish(false)
+
+        verify(createdViews.single(), never()).show(any())
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+    }
+
+    @Test
+    fun `restriction changed during preload prevents showing tooltip`() {
+        showTooltip(completePreload = false)
+        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull()))
+            .doReturn(false)
+
+        preloadCallback.lastValue.finish(false)
+
+        verify(createdViews.single(), never()).show(any())
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+    }
+
+    @Test
+    fun `hide affects only the requested scope`() {
+        showScopedTooltips()
 
         underTest.hideTooltip("tooltip_id", scopeId = "scope_a")
 
-        verify(visibilityController).hideTooltip(hideCaptor.capture())
-        Assert.assertEquals("scope_a", hideCaptor.firstValue.scopeId)
-
-        dismissCaptor.firstValue.invoke()
-
-        Assert.assertEquals(listOf("scope_b"), underTest.captureCurrentTooltips().map { it.scopeId })
+        assertEquals(listOf("scope_b"), underTest.captureCurrentTooltips().map { it.scopeId })
+        verify(createdViews.first()).dismiss()
+        verify(createdViews.last(), never()).dismiss()
     }
 
     @Test
-    fun `hideTooltip does nothing for unknown id`() {
-        showTooltip()
+    fun `find view returns content from the requested scope`() {
+        showScopedTooltips()
+        val firstView = mock<View>()
+        val secondView = mock<View>()
+        whenever(createdViews.first().findViewWithTag("content")).doReturn(firstView)
+        whenever(createdViews.last().findViewWithTag("content")).doReturn(secondView)
 
-        underTest.hideTooltip("other_id")
+        val foundView = underTest.findViewWithTag("content", scopeId = "scope_b")
 
-        verify(visibilityController, never()).hideTooltip(any())
-        Assert.assertEquals(1, underTest.captureCurrentTooltips().size)
+        assertSame(secondView, foundView)
     }
 
     @Test
-    fun `cancelTooltips dismisses tooltips of given divView`() {
-        showTooltip()
-        underTest.cancelTooltips(div2View)
-        verify(visibilityController).dismissTooltip(any())
-    }
-
-    @Test
-    fun `cancelTooltips ignores tooltips of other divViews`() {
+    fun `cancel for another div view leaves the tooltip active`() {
         showTooltip()
 
         underTest.cancelTooltips(mock())
 
-        verify(visibilityController, never()).dismissTooltip(any())
-        Assert.assertEquals(1, underTest.captureCurrentTooltips().size)
+        assertSame(divView, underTest.captureCurrentTooltips().single().divView)
+        verify(createdViews.single(), never()).dismissImmediately()
     }
 
     @Test
-    fun `cancelTooltips removes tooltip when dismissTooltip returns it`() {
-        showTooltip()
-        val tooltip = currentTooltip()
-        whenever(visibilityController.dismissTooltip(tooltip)).doReturn(tooltip)
+    fun `multiple flag is checked before and after preload`() {
+        divTooltips += createDivTooltip()
 
-        underTest.cancelTooltips(div2View)
+        underTest.showTooltip("tooltip_id", divView, multiple = true)
+        preloadCallback.lastValue.finish(false)
 
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
+        verify(tooltipRestrictor, times(2))
+            .canShowTooltip(divView, anchor, divTooltips.single(), true, null)
+        verify(createdViews.single()).show(any())
     }
 
     @Test
-    fun `cancelAllTooltips returns false when empty`() {
-        Assert.assertFalse(underTest.cancelAllTooltips())
-        verify(visibilityController, never()).dismissTooltip(any())
+    fun `zero duration keeps shown tooltip active after delayed tasks`() {
+        showTooltip(duration = 0L)
+
+        ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+
+        verify(createdViews.single(), never()).dismiss()
+        assertSame(divView, underTest.captureCurrentTooltips().single().divView)
     }
 
-    @Test
-    fun `cancelAllTooltips dismisses all and returns true`() {
-        showTooltip()
-
-        Assert.assertTrue(underTest.cancelAllTooltips())
-        verify(visibilityController).dismissTooltip(any())
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
-    }
-
-    @Test
-    fun `mapTooltip stores tooltips tag on view`() {
-        val view = mock<View>()
-        val mapped = listOf(createDivTooltip("mapped_id"))
-
-        underTest.mapTooltip(view, mapped)
-
-        verify(view).setTag(R.id.div_tooltips_tag, mapped)
-    }
-
-    @Test
-    fun `findViewWithTag returns view from matching tooltip popup`() {
-        val nested = mock<View>()
-        whenever(tooltipWrapper.findViewWithTag<View>("nested_id")).doReturn(nested)
-        showTooltip()
-
-        Assert.assertSame(nested, underTest.findViewWithTag("nested_id", null))
-    }
-
-    @Test
-    fun `findViewWithTag returns null for different scope`() {
-        whenever(tooltipWrapper.findViewWithTag<View>("nested_id")).doReturn(mock())
-        showTooltip()
-
-        Assert.assertNull(underTest.findViewWithTag("nested_id", "other_scope"))
-    }
-
-    @Test
-    fun `tooltip is not shown when dismissed before preload finishes`() {
-        showTooltip(completePreload = false)
-        underTest.captureCurrentTooltips().first().dismissed = true
-
-        preloadCallbackCaptor.lastValue.finish(false)
-
-        verify(visibilityController, never()).showTooltip(any(), any())
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
-    }
-
-    @Test
-    fun `tooltip is not shown when anchor detached before preload finishes`() {
-        whenever(anchor.isAttachedToWindow).doReturn(false)
-
-        showTooltip()
-
-        verify(visibilityController, never()).showTooltip(any(), any())
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
-    }
-
-    @Test
-    fun `tooltip is not shown when restrictor rejects after preload`() {
-        showTooltip(completePreload = false)
-        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull())).doReturn(false)
-
-        preloadCallbackCaptor.lastValue.finish(false)
-
-        verify(visibilityController, never()).showTooltip(any(), any())
-        Assert.assertTrue(underTest.captureCurrentTooltips().isEmpty())
-    }
-
-    @Test
-    fun `clear cancels preload ticket`() {
-        val preloadTicket = mock<DivPreloader.Ticket>()
-        whenever(divPreloader.preload(any<Div>(), any(), any())).doReturn(preloadTicket)
-        showTooltip(completePreload = false)
-
-        underTest.clear()
-
-        verify(preloadTicket).cancel()
+    private fun showScopedTooltips() {
+        prepareScopedTooltips()
+        underTest.showTooltip("tooltip_id", divView, scopeId = "scope_a")
+        preloadCallback.lastValue.finish(false)
+        underTest.showTooltip("tooltip_id", divView, scopeId = "scope_b")
+        preloadCallback.lastValue.finish(false)
     }
 
     private fun showTooltip(
-        id: String = "tooltip_id",
-        duration: Long = 0,
-        scopeId: String? = null,
-        multiple: Boolean = false,
+        duration: Long = 0L,
         completePreload: Boolean = true,
     ) {
-        tooltips.add(createDivTooltip(duration = duration))
-        underTest.showTooltip(id, div2View, multiple, scopeId)
-        if (completePreload && preloadCallbackCaptor.allValues.isNotEmpty()) {
-            preloadCallbackCaptor.lastValue.finish(false)
+        divTooltips.clear()
+        divTooltips += createDivTooltip(duration = duration)
+        underTest.showTooltip("tooltip_id", divView)
+        if (completePreload) {
+            preloadCallback.lastValue.finish(false)
         }
     }
 
-    private fun createDivTooltip(id: String = "tooltip_id", duration: Long = 0) = DivTooltip(
-        div = div,
-        id = id,
-        duration = duration.asExpression(),
-        position = DivTooltip.Position.RIGHT.asExpression(),
+    private fun createDivTooltip(
+        id: String = "tooltip_id",
+        duration: Long = 0L,
+    ): DivTooltip {
+        return DivTooltip(
+            div = div,
+            id = id,
+            duration = duration.asExpression(),
+            position = DivTooltip.Position.RIGHT.asExpression(),
+        )
+    }
+
+    private fun prepareScopedTooltips(): ScopedAnchors {
+        val firstAnchor = createScopedAnchor()
+        val secondAnchor = createScopedAnchor()
+        val firstScope = mockScope("scope_a", firstAnchor)
+        val secondScope = mockScope("scope_b", secondAnchor)
+        whenever(divView.childCount).doReturn(2)
+        whenever(divView.getChildAt(0)).doReturn(firstScope)
+        whenever(divView.getChildAt(1)).doReturn(secondScope)
+        return ScopedAnchors(
+            first = firstAnchor,
+            second = secondAnchor,
+        )
+    }
+
+    private fun createScopedAnchor(): DivLineHeightTextView {
+        val observer = mock<ViewTreeObserver> {
+            on { isAlive } doReturn true
+        }
+        return mock {
+            on { getTag(R.id.div_tooltips_tag) } doReturn listOf(createDivTooltip())
+            on { isAttachedToWindow } doReturn true
+            on { isLayoutRequested } doReturn false
+            on { width } doReturn 300
+            on { height } doReturn 100
+            on { divBlock } doReturn anchorBlock
+            on { viewTreeObserver } doReturn observer
+        }
+    }
+
+    private fun mockScope(scopeId: String, child: View): ViewGroup {
+        return mock {
+            on { tag } doReturn scopeId
+            on { childCount } doReturn 1
+            on { getChildAt(0) } doReturn child
+            on { getTag(R.id.div_tooltips_tag) } doReturn null
+        }
+    }
+
+    private data class ScopedAnchors(
+        val first: View,
+        val second: View,
     )
-
-    private fun currentTooltip() = underTest.captureCurrentTooltips().first()
-
-    private fun prepareScopedTooltips(): Pair<View, View> {
-        val tooltipA = mutableListOf(createDivTooltip())
-        val tooltipB = mutableListOf(createDivTooltip())
-        val anchorA = mockAnchor(tooltipA)
-        val anchorB = mockAnchor(tooltipB)
-        val scopeA = mockScope("scope_a", anchorA)
-        val scopeB = mockScope("scope_b", anchorB)
-        whenever(div2View.childCount).doReturn(2)
-        whenever(div2View.getChildAt(0)).doReturn(scopeA)
-        whenever(div2View.getChildAt(1)).doReturn(scopeB)
-        return anchorA to anchorB
-    }
-
-    private fun mockAnchor(tooltipList: MutableList<DivTooltip>): DivLineHeightTextView = mock {
-        on { getTag(R.id.div_tooltips_tag) } doReturn tooltipList
-        on { isAttachedToWindow } doReturn true
-        on { isLayoutRequested } doReturn false
-        on { width } doReturn 300
-        on { height } doReturn 100
-        on { divBlock } doReturn anchorBlock
-    }
-
-    private fun mockScope(scopeId: String, child: View): ViewGroup = mock {
-        on { tag } doReturn scopeId
-        on { childCount } doReturn 1
-        on { getChildAt(0) } doReturn child
-        on { getTag(R.id.div_tooltips_tag) } doReturn null
-    }
 }

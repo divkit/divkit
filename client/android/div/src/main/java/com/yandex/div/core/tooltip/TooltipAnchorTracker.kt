@@ -14,12 +14,11 @@ internal const val ANCHOR_TRACKING_DURATION_MS = 1_000L
  * when its window position or size changes (e.g. after configuration change).
  */
 internal class TooltipAnchorTracker(
-    private val tooltip: TooltipData,
+    private val anchor: View,
     private val handler: Handler,
-    private val onAnchorPositionChanged: () -> Unit,
+    private val onAnchorBoundsChanged: () -> Unit,
 ) : Disposable {
 
-    private val anchor = tooltip.anchor
     private val location = IntArray(2)
     private var lastX = Int.MIN_VALUE
     private var lastY = Int.MIN_VALUE
@@ -42,11 +41,14 @@ internal class TooltipAnchorTracker(
             viewTreeObserver.addOnPreDrawListener(preDrawListener)
         }
         handler.postDelayed(timeoutRunnable, ANCHOR_TRACKING_DURATION_MS)
-        updateIfNeeded()
+        updateIfNeeded(notify = false)
     }
 
-    private fun updateIfNeeded() {
-        if (closed || tooltip.dismissed || tooltip.popupWindow?.isShowing != true) return
+    private fun updateIfNeeded(notify: Boolean = true) {
+        if (closed) {
+            return
+        }
+
         anchor.getLocationInWindow(location)
         val width = anchor.width
         val height = anchor.height
@@ -58,11 +60,16 @@ internal class TooltipAnchorTracker(
         lastY = location[1]
         lastWidth = width
         lastHeight = height
-        onAnchorPositionChanged()
+        if (notify) {
+            onAnchorBoundsChanged()
+        }
     }
 
     override fun close() {
-        if (closed) return
+        if (closed) {
+            return
+        }
+
         closed = true
         anchor.removeOnLayoutChangeListener(layoutListener)
         if (viewTreeObserver.isAlive) {

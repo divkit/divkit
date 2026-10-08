@@ -25,14 +25,11 @@ internal class DivTooltipViewBuilder @Inject constructor(
     fun buildTooltipView(
         tooltipData: TooltipData,
         bringToTopView: View? = null,
-        width: Int = WRAP_CONTENT,
-        height: Int = WRAP_CONTENT,
     ): DivTooltipContainer {
         val divView = tooltipData.divView
-        val tooltipContainer = DivTooltipContainer(divView.getContext())
-
-        val substrateView = tooltipData.substrateBlock?.let { prepareView(it, divView) }
         val preparedBringToTopView = bringToTopView?.let { prepareBringToTopView(it, divView) }
+        val tooltipContainer = DivTooltipContainer(divView.getContext())
+        val substrateView = tooltipData.substrateBlock?.let { prepareView(it, divView) }
         val tooltipView = prepareView(tooltipData.tooltipBlock, divView)
 
         tooltipContainer.setViews(
@@ -40,8 +37,6 @@ internal class DivTooltipViewBuilder @Inject constructor(
             bringToTop = preparedBringToTopView,
             tooltip = tooltipView
         )
-
-        tooltipContainer.layoutParams = ViewGroup.LayoutParams(width, height)
         return tooltipContainer
     }
 
