@@ -2,9 +2,14 @@ package com.yandex.div.compose.video.viewbased
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
+import com.yandex.div.compose.internal.VideoEventSource
+import com.yandex.div.compose.internal.VideoEventSource.Event
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoSource
@@ -15,8 +20,10 @@ import com.yandex.div.core.player.DivPlayerView
 import com.yandex.div.core.player.DivPlayerPlaybackConfig
 import com.yandex.div.core.player.DivVideoResolution as PlayerDivVideoResolution
 import com.yandex.div.core.player.DivVideoSource as PlayerDivVideoSource
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 
 /**
  * Bridges any `View`-based [DivPlayer] implementation into the Compose-native
@@ -33,7 +40,10 @@ import kotlinx.coroutines.flow.StateFlow
  */
 internal class ViewBasedDivVideoPlayer(
     private val delegateFactory: DivPlayerFactory
-) : DivVideoPlayer {
+) : DivVideoPlayer, VideoEventSource {
+
+    private val eventChannel = Channel<Event>(Channel.UNLIMITED)
+    override val videoEvents = eventChannel.receiveAsFlow()
 
     private val _isReady = MutableStateFlow(false)
     override val isReady: StateFlow<Boolean> = _isReady
@@ -66,24 +76,36 @@ internal class ViewBasedDivVideoPlayer(
 
         override fun onPlay() {
             _isPlaying.value = true
+            _isBuffering.value = false
             _isEnded.value = false
+            eventChannel.trySend(Event.Play)
         }
 
         override fun onPause() {
             _isPlaying.value = false
+            eventChannel.trySend(Event.Pause)
         }
 
         override fun onBuffering() {
+            _isPlaying.value = false
             _isBuffering.value = true
+            eventChannel.trySend(Event.Buffering)
         }
 
         override fun onEnd() {
             _isPlaying.value = false
             _isEnded.value = true
+            eventChannel.trySend(Event.End)
+        }
+
+        @Suppress("OVERRIDE_DEPRECATION")
+        override fun onFatal() {
+            eventChannel.trySend(Event.Fatal())
         }
 
         override fun onFatal(error: Throwable) {
             _error.value = error
+            eventChannel.trySend(Event.Fatal(error))
         }
 
         override fun onCurrentTimeChange(timeMs: Long) {
@@ -109,6 +131,7 @@ internal class ViewBasedDivVideoPlayer(
     }
 
     override fun release() {
+        eventChannel.cancel()
         delegate?.let {
             it.removeObserver(stateObserver)
             it.release()
@@ -118,6 +141,7 @@ internal class ViewBasedDivVideoPlayer(
 
     @Composable
     override fun Content(config: DivVideoPlayerConfig, modifier: Modifier) {
+        var appliedSourceConfig by remember { mutableStateOf(config) }
         val player = remember {
             delegateFactory.makePlayer(
                 config.sources.toPlayerSources(),
@@ -129,7 +153,10 @@ internal class ViewBasedDivVideoPlayer(
         }
 
         LaunchedEffect(config.sources, config.autoplay, config.repeatable, config.payload) {
-            player.setSource(config.sources.toPlayerSources(), config.toPlayerPlaybackConfig())
+            if (appliedSourceConfig != config) {
+                player.setSource(config.sources.toPlayerSources(), config.toPlayerPlaybackConfig())
+                appliedSourceConfig = config
+            }
         }
         LaunchedEffect(config.muted) { player.setMuted(config.muted) }
         LaunchedEffect(config.playbackSpeed) { player.setPlaybackSpeed(config.playbackSpeed) }

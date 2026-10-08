@@ -5,6 +5,7 @@ plugins {
 }
 
 apply(from = "../div-library.gradle")
+apply(from = "../div-tests.gradle")
 apply(from = "../publish-android.gradle")
 
 android {
@@ -19,4 +20,9 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.core)
     implementation(libs.kotlinx.coroutines.core)
+
+    testImplementation(project(":test-utils"))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    testImplementation(libs.androidx.compose.ui.test.manifest)
+    testImplementation(libs.json)
 }

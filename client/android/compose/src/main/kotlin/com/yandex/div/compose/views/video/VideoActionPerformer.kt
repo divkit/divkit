@@ -2,11 +2,16 @@ package com.yandex.div.compose.views.video
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.internal.VideoEventSource
+import com.yandex.div.compose.internal.VideoEventSource.Event
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivVideo
@@ -20,15 +25,24 @@ internal fun ObserveVideoActions(
     data: DivVideo
 ) {
     val localComponent = LocalComponent.current
-    LaunchedEffect(player, data) {
-        val actionPerformer = VideoActionPerformer(
+    val actionPerformer = remember(player, data) {
+        VideoActionPerformer(
             player,
             data,
             localComponent.actionHandler,
             localComponent.actionHandlingContext,
             localComponent.reporter
         )
-        actionPerformer.observe()
+    }
+    if (player is VideoEventSource) {
+        val currentActionPerformer by rememberUpdatedState(actionPerformer)
+        LaunchedEffect(player) {
+            player.videoEvents.collect { currentActionPerformer.performEvent(it) }
+        }
+    } else {
+        LaunchedEffect(player, data) {
+            actionPerformer.observeState()
+        }
     }
 }
 
@@ -40,7 +54,17 @@ private class VideoActionPerformer(
     private val reporter: DivReporter,
 ) {
 
-    suspend fun observe() = coroutineScope {
+    fun performEvent(event: Event) {
+        when (event) {
+            Event.Play -> performActions(data.resumeActions)
+            Event.Pause -> performActions(data.pauseActions)
+            Event.Buffering -> performActions(data.bufferingActions)
+            Event.End -> performActions(data.endActions)
+            is Event.Fatal -> performFatalActions(event.error)
+        }
+    }
+
+    suspend fun observeState() = coroutineScope {
         launch { observePlayingChanges() }
         launch { observeBufferingChanges() }
         launch { observeEndedChanges() }
@@ -72,12 +96,18 @@ private class VideoActionPerformer(
     private suspend fun observeErrors() {
         player.error.collect { err ->
             if (err != null) {
-                reporter.reportError(
-                    "Playback in div with id '${data.id}' encountered an error: ${err.message}"
-                )
-                performActions(data.fatalActions)
+                performFatalActions(err)
             }
         }
+    }
+
+    private fun performFatalActions(error: Throwable?) {
+        if (error != null) {
+            reporter.reportError(
+                "Playback in div with id '${data.id}' encountered an error: ${error.message}"
+            )
+        }
+        performActions(data.fatalActions)
     }
 
     private fun performActions(actions: List<DivAction>?) {
