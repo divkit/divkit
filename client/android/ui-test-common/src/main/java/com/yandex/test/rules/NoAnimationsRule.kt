@@ -2,35 +2,18 @@ package com.yandex.test.rules
 
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import androidx.test.uiautomator.UiDevice
-import org.junit.rules.TestRule
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
+import org.junit.rules.ExternalResource
 
-class NoAnimationsRule : TestRule {
+class NoAnimationsRule : ExternalResource() {
 
     private val device = UiDevice.getInstance(getInstrumentation())
 
-    override fun apply(base: Statement, description: Description): Statement = object : Statement() {
-        override fun evaluate() {
-            try {
-                disableAnimations()
-                base.evaluate()
-            } finally {
-                enableAnimations()
-            }
-        }
-    }
+    override fun before() = toggleAnimations(false)
 
-    private fun disableAnimations() {
-        toggleAnimations(false)
-    }
-
-    private fun enableAnimations() {
-        toggleAnimations(true)
-    }
+    override fun after() = toggleAnimations(true)
 
     private fun toggleAnimations(isEnabled: Boolean) {
-        AnimationType.values().forEach { type ->
+        AnimationType.entries.forEach { type ->
             toggleAnimationsByType(type, isEnabled)
         }
     }

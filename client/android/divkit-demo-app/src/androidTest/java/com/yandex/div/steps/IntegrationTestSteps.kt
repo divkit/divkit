@@ -1,8 +1,8 @@
 package com.yandex.div.steps
 
-import android.app.Activity
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingPolicies
@@ -28,16 +28,18 @@ import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.performOnMain
-import com.yandex.test.util.runOnMainSync
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
 import java.util.concurrent.TimeUnit
 
-internal fun integration(case: IntegrationTestCase, activity: Activity, block: IntegrationTestSteps.() -> Unit) =
-    block(IntegrationTestSteps(case, activity))
+internal fun integration(
+    case: IntegrationTestCase,
+    scenario: ActivityScenario<*>,
+    block: IntegrationTestSteps.() -> Unit
+) = block(IntegrationTestSteps(case, scenario))
 
 @StepsDsl
-class IntegrationTestSteps(private val case: IntegrationTestCase, private val activity: Activity) {
+class IntegrationTestSteps(private val case: IntegrationTestCase, private val scenario: ActivityScenario<*>) {
 
     private lateinit var divView: Div2View
 
@@ -50,19 +52,19 @@ class IntegrationTestSteps(private val case: IntegrationTestCase, private val ac
     private fun setupTestData(data: DivData) {
         val actions = case.parseActions()
 
-        runOnMainSync {
-            val config = DivConfiguration.Builder(GlideDivImageLoader(activity))
+        scenario.onActivity {
+            val config = DivConfiguration.Builder(GlideDivImageLoader(it))
                 .divErrorsReporter(ErrorReporter(case.logger))
-                .divPlayerFactory(ExoDivPlayerFactory(activity))
+                .divPlayerFactory(ExoDivPlayerFactory(it))
                 .build()
-            val context = Div2Context(activity, config)
+            val context = Div2Context(it, config)
 
             case.declareResultVariables(data.variables ?: emptyList(), context.divVariableController)
 
             divView = Div2View(context)
             divView.setData(data, DivDataTag("div2"))
             actions.forEach { divView.handleAction(it) }
-            (activity.contentView as ViewGroup).addView(divView, MATCH_PARENT, MATCH_PARENT)
+            (it.contentView as ViewGroup).addView(divView, MATCH_PARENT, MATCH_PARENT)
         }
         Espresso.onIdle()
     }

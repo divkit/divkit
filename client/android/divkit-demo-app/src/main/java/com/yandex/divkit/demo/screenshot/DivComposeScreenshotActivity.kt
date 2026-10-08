@@ -2,6 +2,7 @@ package com.yandex.divkit.demo.screenshot
 
 import android.graphics.BitmapFactory
 import android.os.Build
+import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -40,6 +41,12 @@ class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
 
     val imageLoadingTracker = ComposeImageLoadingTracker()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        container = LinearLayout(this)
+        setContentView(container)
+    }
+
     override fun prepare() {
         divContext = DivContext(
             baseContext = ContextThemeWrapper(this, R.style.Div_Theme_Demo),
@@ -51,9 +58,6 @@ class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
                 reporter = FailingReporter()
             }
         )
-
-        container = LinearLayout(divContext)
-        setContentView(container)
     }
 
     override fun setDivData(json: JSONObject) {

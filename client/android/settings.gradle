@@ -8,11 +8,13 @@ pluginManagement {
     includeBuild('api-generator-plugin')
 }
 
+gradle.ext.screenshotTestRun = providers.gradleProperty("screenshot-tests")
+        .map { it.isEmpty() || Boolean.parseBoolean(it) }
+        .getOrElse(false)
 gradle.ext.screenshotComparisonEnabled = gradle.startParameter.taskNames.any {
     it.endsWith('compareDebugScreenshots') || it.endsWith('compareReleaseScreenshots')
 }
-gradle.ext.screenshotTestsEnabled = providers.gradleProperty("screenshot-tests").isPresent() ||
-        gradle.ext.screenshotComparisonEnabled
+gradle.ext.screenshotTestsEnabled = gradle.ext.screenshotTestRun || gradle.ext.screenshotComparisonEnabled
 
 if (gradle.ext.screenshotComparisonEnabled) {
     includeBuild('screenshot-test-plugin')

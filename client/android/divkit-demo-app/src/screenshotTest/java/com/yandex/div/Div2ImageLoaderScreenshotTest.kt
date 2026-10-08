@@ -2,14 +2,17 @@ package com.yandex.div
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.yandex.div.rule.baseRule
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.yandex.div.rule.baseScreenshotTestRule
+import com.yandex.div.rule.classRule
 import com.yandex.div.steps.imageLoaderScreenshot
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity.Companion.IMAGE_LOADER_COIL
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity.Companion.IMAGE_LOADER_GLIDE
 import com.yandex.divkit.regression.utils.AssetReader
-import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
+import org.junit.After
+import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,25 +22,25 @@ import org.junit.runners.Parameterized
 class Div2ImageLoaderScreenshotTest(private val casePath: String, escapedCase: String) {
 
     private val testCase = assetReader.readJson(casePath)
-    private val activityRule = ActivityParamsTestRule(DivScreenshotActivity::class.java)
 
     @get:Rule
-    val rule = baseRule(casePath, TEST_CASES_PATH, testCase, activityRule)
+    val rule = baseScreenshotTestRule(casePath, TEST_CASES_PATH, testCase)
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    fun testGlide() {
-        launchActivityWith(IMAGE_LOADER_GLIDE)
-    }
+    fun testGlide() = runTestWith(IMAGE_LOADER_GLIDE)
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
-    fun testCoil() {
-        launchActivityWith(IMAGE_LOADER_COIL)
+    fun testCoil() = runTestWith(IMAGE_LOADER_COIL)
+
+    private fun runTestWith(loaderName: String) {
+        imageLoaderScreenshot { runTest(activityRule.scenario, casePath, testCase, loaderName) }
     }
 
-    private fun launchActivityWith(loaderName: String) {
-        imageLoaderScreenshot { runTest(activityRule, casePath, testCase, loaderName) }
+    @After
+    fun cleanup() {
+        activityRule.scenario.onActivity { it.cleanup() }
     }
 
     companion object {
@@ -46,6 +49,11 @@ class Div2ImageLoaderScreenshotTest(private val casePath: String, escapedCase: S
 
         private val context: Context = ApplicationProvider.getApplicationContext()
         private val assetReader = AssetReader(context)
+        private val activityRule = ActivityScenarioRule(DivScreenshotActivity::class.java)
+
+        @JvmField
+        @ClassRule
+        val classRule = classRule(activityRule)
 
         @JvmStatic
         @Parameterized.Parameters(name = "{1}")

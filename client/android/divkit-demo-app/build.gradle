@@ -38,6 +38,9 @@ android {
         if (providers.gradleProperty("compare-compose").isPresent()) {
             testInstrumentationRunnerArguments compareComposeWithView: 'true'
         }
+        if (gradle.ext.screenshotTestRun) {
+            testInstrumentationRunnerArguments waitForActivitiesToComplete: 'false'
+        }
 
         providers.gradleProperty("shardIndex").orNull?.with { index ->
             testInstrumentationRunnerArguments.shardIndex = index
@@ -152,9 +155,7 @@ tasks.withType(Test).configureEach {
 }
 
 androidComponents.finalizeDsl { config ->
-    def isInIde = providers.systemProperty("idea.active").map(Boolean::parseBoolean).getOrElse(false)
-
-    def filter = gradle.ext.screenshotTestsEnabled || isInIde ? "annotation" : "notAnnotation"
+    def filter = gradle.ext.screenshotTestRun ? "annotation" : "notAnnotation"
     def runnerArguments = config.defaultConfig.testInstrumentationRunnerArguments
     def annotations = runnerArguments[filter]?.split(",")?.toList() ?: []
     runnerArguments[filter] = (annotations + "com.yandex.test.screenshot.Screenshot").join(",")

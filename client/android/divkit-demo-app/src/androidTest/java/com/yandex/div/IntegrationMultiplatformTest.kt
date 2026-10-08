@@ -2,6 +2,7 @@ package com.yandex.div
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.yandex.div.core.DivKit
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.integration
@@ -10,7 +11,6 @@ import com.yandex.div.test.crossplatform.IntegrationTestCaseParser
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.divkit.demo.DummyActivity
 import com.yandex.divkit.regression.utils.AssetReader
-import com.yandex.test.rules.ActivityParamsTestRule
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
@@ -21,7 +21,7 @@ import org.junit.runners.Parameterized.Parameters
 @RunWith(Parameterized::class)
 class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>) {
 
-    val activityRule = ActivityParamsTestRule(DummyActivity::class.java)
+    val activityRule = ActivityScenarioRule(DummyActivity::class.java)
 
     @get:Rule
     val rule = uiTestRule { activityRule }
@@ -30,7 +30,7 @@ class IntegrationMultiplatformTest(testCaseParsingResult: ParsingResult<Integrat
 
     @Test
     fun run() {
-        integration(testCase, activityRule.activity) {
+        integration(testCase, activityRule.scenario) {
             checkResult()
         }
     }

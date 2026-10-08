@@ -2,14 +2,16 @@ package com.yandex.div
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.yandex.div.rule.SetDataRule
-import com.yandex.div.rule.baseRule
+import com.yandex.div.rule.baseScreenshotTestRule
+import com.yandex.div.rule.classRule
 import com.yandex.div.steps.interactiveScreenshot
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.regression.utils.AssetReader
-import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
 import com.yandex.test.util.chain
+import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,18 +23,16 @@ import java.io.File
 class Div2InteractiveScreenshotTest(private val casePath: String, escapedCase: String) {
 
     private val testCase = assetReader.readJson(casePath)
-    private val activityRule = ActivityParamsTestRule(DivScreenshotActivity::class.java)
 
-    @Rule
-    @JvmField
-    val rule = baseRule(casePath, TEST_CASES_PATH, testCase, activityRule)
+    @get:Rule
+    val rule = baseScreenshotTestRule(casePath, TEST_CASES_PATH, testCase)
         .chain(SetDataRule(testCase, activityRule))
 
     @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
     fun test() {
         interactiveScreenshot {
-            runSteps(activityRule.activity, casePath, testCase, artifactsDir(casePath))
+            runSteps(activityRule.scenario, casePath, testCase, artifactsDir(casePath))
         }
     }
 
@@ -41,6 +41,11 @@ class Div2InteractiveScreenshotTest(private val casePath: String, escapedCase: S
 
         private val context: Context = ApplicationProvider.getApplicationContext()
         private val assetReader = AssetReader(context)
+        private val activityRule = ActivityScenarioRule(DivScreenshotActivity::class.java)
+
+        @JvmField
+        @ClassRule
+        val classRule = classRule(activityRule)
 
         /**
          * Transforms "interactive_snapshot_test_data/div-text/smoke.json" into

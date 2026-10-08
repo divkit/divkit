@@ -15,7 +15,6 @@ dependencies {
     api(libs.androidx.espresso.contrib) {
         exclude(group = "org.checkerframework", module = "checker-qual")
     }
-    api(libs.androidx.espresso.intents)
     api(libs.androidx.test.core)
     api(libs.androidx.test.runner)
     api(libs.androidx.test.rules)

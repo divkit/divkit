@@ -1,11 +1,11 @@
 package com.yandex.div.steps
 
+import android.view.View
+import androidx.test.core.app.ActivityScenario
 import com.yandex.div.Div2ImageLoaderScreenshotTest
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
-import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.captureScreenshots
 import com.yandex.test.util.StepsDsl
-import com.yandex.test.util.runOnMainSync
 import org.json.JSONObject
 
 internal fun imageLoaderScreenshot(f: ImageLoaderScreenshotSteps.() -> Unit) = f(ImageLoaderScreenshotSteps())
@@ -16,19 +16,22 @@ private val artifactsRelativePath = Div2ImageLoaderScreenshotTest::class.qualifi
 internal class ImageLoaderScreenshotSteps {
 
     fun runTest(
-        activityRule: ActivityParamsTestRule<DivScreenshotActivity>,
+        scenario: ActivityScenario<DivScreenshotActivity>,
         casePath: String,
         testCase: JSONObject,
         loaderName: String,
     ) {
-        val activity = activityRule.activity
-        runOnMainSync {
-            activity.imageLoaderName = loaderName
-            activity.prepare()
-            activity.setDivData(testCase)
+        scenario.onActivity {
+            it.imageLoaderName = loaderName
+            it.prepare()
+            it.setDivData(testCase)
         }
 
-        waitForLoadings(activity.divView)
-        captureScreenshots(activity.divView, "$artifactsRelativePath/$loaderName", casePath)
+        var divView: View? = null
+        scenario.onActivity { divView = it.divView }
+        val view = divView ?: return
+
+        waitForLoadings(view)
+        captureScreenshots(view, "$artifactsRelativePath/$loaderName", casePath)
     }
 }

@@ -2,13 +2,15 @@ package com.yandex.div
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.yandex.div.rule.classRule
 import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
 import com.yandex.div.steps.divInput
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.regression.utils.AssetReader
-import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
+import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,7 +20,6 @@ import org.junit.runners.Parameterized
 class Div2InputHighlightScreenshotTest(casePath: String, escapedCase: String) {
 
     private val testCase = assetReader.readJson(casePath)
-    private val activityRule = ActivityParamsTestRule(DivScreenshotActivity::class.java)
 
     @get:Rule
     val rule = screenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule)
@@ -48,6 +49,11 @@ class Div2InputHighlightScreenshotTest(casePath: String, escapedCase: String) {
 
         private val context: Context = ApplicationProvider.getApplicationContext()
         private val assetReader = AssetReader(context)
+        private val activityRule = ActivityScenarioRule(DivScreenshotActivity::class.java)
+
+        @JvmField
+        @ClassRule
+        val classRule = classRule(activityRule)
 
         @JvmStatic
         @Parameterized.Parameters(name = "{1}")

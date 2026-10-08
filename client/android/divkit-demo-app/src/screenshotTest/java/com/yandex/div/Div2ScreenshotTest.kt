@@ -2,12 +2,14 @@ package com.yandex.div
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.yandex.div.rule.classRule
 import com.yandex.div.rule.screenshotRule
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.demo.screenshot.viewDeviceScreenshotCases
 import com.yandex.divkit.regression.utils.AssetReader
-import com.yandex.test.rules.ActivityParamsTestRule
 import com.yandex.test.screenshot.Screenshot
+import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -19,7 +21,6 @@ import java.io.File
 class Div2ScreenshotTest(casePath: String, escapedCase: String) {
 
     private val testCase = assetReader.readJson(casePath)
-    private val activityRule = ActivityParamsTestRule(DivScreenshotActivity::class.java)
 
     @get:Rule
     val rule = screenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule, casePath.relativePath)
@@ -34,11 +35,16 @@ class Div2ScreenshotTest(casePath: String, escapedCase: String) {
 
         private val context: Context = ApplicationProvider.getApplicationContext()
         private val assetReader = AssetReader(context)
+        private val activityRule = ActivityScenarioRule(DivScreenshotActivity::class.java)
 
         private val ignoredCases = listOf(
             "snapshot_test_data/div-text/all_attributes.json",
             "snapshot_test_data/div-container/baseline-with-images.json",
         )
+
+        @JvmField
+        @ClassRule
+        val classRule = classRule(activityRule)
 
         @JvmStatic
         @Parameters(name = "{1}")

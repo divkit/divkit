@@ -72,7 +72,10 @@ class ViewRoborazziScreenshotTest(private val case: String, private val testCase
             awaitScreenshotReady()
 
             // Assert: Roborazzi compares the rendered card with its own JVM reference.
-            scenario.onActivity { activity -> captureScreenshot(activity.divView) }
+            scenario.onActivity { activity ->
+                captureScreenshot(activity.divView)
+                activity.cleanup()
+            }
         }
     }
 
@@ -95,7 +98,10 @@ class ViewRoborazziScreenshotTest(private val case: String, private val testCase
             awaitScreenshotReady()
 
             // Assert: the rebound card has the same visual reference.
-            scenario.onActivity { activity -> captureScreenshot(activity.divView) }
+            scenario.onActivity { activity ->
+                captureScreenshot(activity.divView)
+                activity.cleanup()
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.yandex.div.steps
 
+import android.view.View
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
@@ -18,21 +20,19 @@ import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.screenshot.captureScreenshots
 import com.yandex.test.util.StepsDsl
-import com.yandex.test.util.runOnMainSync
 import io.qameta.allure.kotlin.Allure.step
 import org.hamcrest.Matchers.equalTo
 import org.json.JSONObject
 
 private const val TAG = "InteractiveTestStepsPerformer"
 
-internal fun interactiveScreenshot(f: InteractiveScreenshotSteps.() -> Unit) =
-    f(InteractiveScreenshotSteps())
+internal fun interactiveScreenshot(f: InteractiveScreenshotSteps.() -> Unit) = f(InteractiveScreenshotSteps())
 
 @StepsDsl
 internal class InteractiveScreenshotSteps {
 
     fun runSteps(
-        activity: DivScreenshotActivity,
+        scenario: ActivityScenario<DivScreenshotActivity>,
         casePath: String,
         testCase: JSONObject,
         artifactsRelativePath: String
@@ -42,7 +42,7 @@ internal class InteractiveScreenshotSteps {
         testData.steps.forEachIndexed { index, step ->
             when (step) {
                 is Step.Action -> step("Step $index: Action ${step.action.writeToJSON()}") {
-                    runOnMainSync { handleAction(activity.divView, step.action) }
+                    scenario.onActivity { handleAction(it.divView, step.action) }
                 }
 
                 is Step.Tap -> step("Tap div '${step.id}'") {
@@ -66,12 +66,16 @@ internal class InteractiveScreenshotSteps {
                 }
 
                 is Step.VerifySnapshot -> step("Step $index: Verify screenshot step$snapshotIndex") {
-                    waitForLoadings(activity.divView)
+                    var divView: View? = null
+                    scenario.onActivity { divView = it.divView }
+                    val view = divView ?: return@step
+
+                    waitForLoadings(view)
                     Espresso.onIdle()
                     Thread.sleep(1000)
 
                     captureScreenshots(
-                        activity.divView,
+                        view,
                         artifactsRelativePath,
                         casePath,
                         stepId = snapshotIndex++,

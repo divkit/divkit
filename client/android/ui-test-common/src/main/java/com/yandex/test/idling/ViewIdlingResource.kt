@@ -1,6 +1,7 @@
 package com.yandex.test.idling
 
 import android.view.View
+import androidx.core.view.isVisible
 import com.yandex.test.util.getCurrentActivity
 import java.lang.ref.WeakReference
 
@@ -14,7 +15,7 @@ class ViewIdlingResource(private val viewTag: String) : SimpleIdlingResource() {
 
     override fun checkIdle(): Boolean {
         val view = view ?: return false
-        return view.visibility == View.VISIBLE && !view.isLayoutRequested
+        return view.isVisible && !view.isLayoutRequested
     }
 
     override fun getName() = "ViewIdlingResource"

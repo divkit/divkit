@@ -8,4 +8,6 @@ abstract class DivDataScreenshotActivity : AppCompatActivity() {
     abstract fun prepare()
 
     abstract fun setDivData(json: JSONObject)
+
+    open fun cleanup() = Unit
 }

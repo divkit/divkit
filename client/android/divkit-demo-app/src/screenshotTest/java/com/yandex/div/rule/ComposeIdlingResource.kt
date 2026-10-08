@@ -4,12 +4,12 @@ import android.os.SystemClock
 import androidx.compose.runtime.snapshots.ObserverHandle
 import androidx.compose.runtime.snapshots.Snapshot
 import androidx.test.espresso.IdlingResource
-import com.yandex.divkit.demo.screenshot.ComposeImageLoadingTracker
+import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.test.idling.SimpleIdlingResource
-import com.yandex.test.util.performOnMain
 
 class ComposeIdlingResource(
-    private val imageLoadingTracker: ComposeImageLoadingTracker,
+    private val activityRule: ActivityScenarioRule<DivComposeScreenshotActivity>,
     private val quietPeriodMillis: Long = DEFAULT_QUIET_PERIOD_MS,
 ) : SimpleIdlingResource(pollingIntervalMillis = 16, description = "ComposeIdlingResource") {
 
@@ -25,8 +25,12 @@ class ComposeIdlingResource(
         }
     }
 
-    override fun checkIdle(): Boolean = performOnMain {
-        imageLoadingTracker.isIdle && SystemClock.uptimeMillis() - lastChangeUptime >= quietPeriodMillis
+    override fun checkIdle(): Boolean {
+        var isIdle = false
+        activityRule.scenario.onActivity {
+            isIdle = it.imageLoadingTracker.isIdle
+        }
+        return isIdle && SystemClock.uptimeMillis() - lastChangeUptime >= quietPeriodMillis
     }
 
     override fun close() {

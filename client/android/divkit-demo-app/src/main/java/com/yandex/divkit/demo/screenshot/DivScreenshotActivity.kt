@@ -1,5 +1,6 @@
 package com.yandex.divkit.demo.screenshot
 
+import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
@@ -26,9 +27,13 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
     lateinit var divView: Div2View
         private set
 
-    override fun prepare() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         assertionsEnabled = DivKit.isAssertionsEnabled()
         DivKit.enableAssertions(false)
+    }
+
+    override fun prepare() {
         setImageLoader()
         divContext = divContext(activity = this, isRiveEnabled = false) {
             animationsEnabledProvider(DisabledAnimationsProvider)
@@ -48,8 +53,12 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
         ).bindViewByConfig(divView, cardJson) { it.onBound(json) }
     }
 
-    override fun onDestroy() {
+    override fun cleanup() {
+        divView.cleanup()
         Container.imageLoaderOverride = null
+    }
+
+    override fun onDestroy() {
         super.onDestroy()
         DivKit.enableAssertions(assertionsEnabled)
     }
