@@ -2,6 +2,13 @@ android {
     testOptions {
         unitTests {
             all {
+                inputs.dir(rootProject.file('../../test_data'))
+                    .withPropertyName('divkitTestData')
+                    .withPathSensitivity(PathSensitivity.RELATIVE)
+                inputs.dir(rootProject.file('../../expression-api'))
+                    .withPropertyName('divkitExpressionApi')
+                    .withPathSensitivity(PathSensitivity.RELATIVE)
+
                 maxHeapSize = "4g"
                 testLogging {
                     events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'

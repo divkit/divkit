@@ -95,6 +95,10 @@ def metalavaCheckCompatibility = tasks.register('metalavaCheckCompatibility') {
 }
 
 subprojects {
+    tasks.withType(Test).configureEach {
+        outputs.doNotCacheIf('Test results must be produced by the current run') { true }
+    }
+
     configurations.configureEach {
         exclude group: "com.google.protobuf", module: "protobuf-lite"
         exclude group: "com.intellij", module: "annotations"
@@ -137,6 +141,10 @@ subprojects {
     }
 
     plugins.withId('me.tylerbwong.gradle.metalava') {
+        tasks.named { it.startsWith('metalavaCheckCompatibility') }.configureEach {
+            outputs.doNotCacheIf('API compatibility depends on the selected base signature') { true }
+        }
+
         metalavaGenerateSignature.configure {
             dependsOn tasks.matching {
                 it.name == 'metalavaGenerateSignature' || it.name == 'metalavaGenerateSignatureRelease'
