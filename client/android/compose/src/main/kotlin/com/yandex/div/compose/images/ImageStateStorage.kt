@@ -1,6 +1,7 @@
 package com.yandex.div.compose.images
 
-import androidx.compose.runtime.mutableStateSetOf
+import androidx.compose.runtime.mutableStateMapOf
+import coil3.request.ImageRequest
 import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div2.DivBase
 import javax.inject.Inject
@@ -19,17 +20,23 @@ import javax.inject.Inject
  */
 @DivViewScope
 internal class ImageStateStorage @Inject constructor() {
-    private val loadedElements = mutableStateSetOf<DivBase>()
+    private val loadedElements = mutableStateMapOf<DivBase, ImageRequest>()
     private val appearanceAnimations = mutableMapOf<DivBase, ImageAppearanceAnimation>()
 
     fun isLoaded(data: DivBase): Boolean {
-        return loadedElements.contains(data)
+        return loadedElements.containsKey(data)
     }
 
-    fun setIsLoaded(data: DivBase, isLoaded: Boolean) {
-        if (isLoaded) {
-            loadedElements.add(data)
-        } else {
+    fun isLoaded(data: DivBase, owner: ImageRequest): Boolean {
+        return loadedElements[data] === owner
+    }
+
+    fun markLoaded(data: DivBase, owner: ImageRequest) {
+        loadedElements[data] = owner
+    }
+
+    fun reset(data: DivBase, owner: ImageRequest) {
+        if (loadedElements[data] === owner) {
             loadedElements.remove(data)
         }
     }

@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.image
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
+import coil3.request.ImageRequest
 import coil3.transform.Transformation
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
@@ -58,23 +59,38 @@ internal fun DivImageContent(
     } else {
         null
     }
-    val imagePainter = imageRequestParams?.let {
+    val successfulRequestRef = remember { SuccessfulImageRequestReference() }
+    val imageRequest = imageRequestParams?.let { rememberImageRequest(it) }
+    val imagePainter = imageRequest?.let { request ->
+        val onState: (AsyncImagePainter.State) -> Unit = remember(
+            imageStateStorage,
+            data,
+            request,
+            imageStateListener,
+        ) {
+            { state: AsyncImagePainter.State ->
+                if (state is AsyncImagePainter.State.Success) {
+                    successfulRequestRef.value = request
+                    imageStateStorage.markLoaded(data, request)
+                }
+                imageStateListener?.invoke(state)
+            }
+        }
         rememberNetworkRestoringImagePainter(
-            model = rememberImageRequest(it),
+            model = request,
             imageLoader = imageLoader,
-            onState = imageStateListener
+            onState = onState,
         )
     }
-    val imagePainterState = imagePainter?.state?.collectAsState()?.value
-    val isPainterLoaded = imagePainterState is AsyncImagePainter.State.Success
+    // Intentionally snapshot without subscribing: future successes invalidate through storage,
+    // while this covers an already-successful painter retained for the same request.
+    @SuppressLint("StateFlowValueCalledInComposition")
+    val isPainterLoaded = imagePainter?.state?.value is AsyncImagePainter.State.Success &&
+        successfulRequestRef.value === imageRequest
     val isStoredImageLoaded = imageStateStorage.isLoaded(data)
-    val isImageLoaded = isPainterLoaded || isStoredImageLoaded
-
-    if (isPainterLoaded && !isStoredImageLoaded) {
-        SideEffect {
-            imageStateStorage.setIsLoaded(data, true)
-        }
-    }
+    val isCurrentRequestStoredLoaded = imageRequest != null &&
+        imageStateStorage.isLoaded(data, imageRequest)
+    val isImageLoaded = isPainterLoaded || isCurrentRequestStoredLoaded
 
     // Match DivImageBinder.applyImage: a replacement preview is not high priority if the previous
     // image was loaded. Capture that state before DisposableEffect resets it on a URL change.
@@ -144,9 +160,12 @@ internal fun DivImageContent(
                 alignment = alignment,
                 colorFilter = colorFilter
             )
-            DisposableEffect(imageStateStorage, data, imageRequestParams) {
+            DisposableEffect(imageStateStorage, data, imageRequest, imagePainter) {
+                if (isPainterLoaded && successfulRequestRef.value === imageRequest) {
+                    imageStateStorage.markLoaded(data, imageRequest)
+                }
                 onDispose {
-                    imageStateStorage.setIsLoaded(data, false)
+                    imageStateStorage.reset(data, imageRequest)
                 }
             }
         }
@@ -177,4 +196,8 @@ private fun rememberImageStateListener(data: DivBase): ((AsyncImagePainter.State
             )
         }
     }
+}
+
+private class SuccessfulImageRequestReference {
+    var value: ImageRequest? = null
 }
