@@ -1,0 +1,238 @@
+{
+  "description": "Gallery visibility logs are emitted on each appearance and filtered by source.",
+  "platforms": [
+    "ios"
+  ],
+  "case_id": 52,
+  "div_data": {
+    "templates": {
+      "tab": {
+        "type": "gallery",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "fixed",
+          "value": 240,
+          "unit": "sp"
+        },
+        "paddings": {
+          "left": 16,
+          "right": 16
+        },
+        "restrict_parent_scroll": 1
+      },
+      "text_block": {
+        "type": "text",
+        "$text": "header",
+        "width": {
+          "type": "fixed",
+          "value": 244
+        },
+        "height": {
+          "type": "fixed",
+          "value": 240,
+          "unit": "sp"
+        },
+        "paddings": {
+          "left": 12,
+          "top": 16,
+          "right": 12,
+          "bottom": 14
+        },
+        "border": {
+          "corner_radius": 6
+        },
+        "background": [
+          {
+            "color": "#0e000000",
+            "type": "solid"
+          }
+        ],
+        "actions": [
+          {
+            "$log_id": "item_log_id"
+          }
+        ],
+        "visibility_actions": [
+          {
+            "$log_id": "item_log_id",
+            "log_limit": 0,
+            "visibility_duration": 1000,
+            "visibility_percentage": 75
+          }
+        ],
+        "font_size": 20,
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000"
+      }
+    },
+    "card": {
+      "log_id": "card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "tabs",
+            "title_paddings": {
+              "left": 12,
+              "right": 12,
+              "bottom": 8,
+              "top": 8
+            },
+            "items": [
+              {
+                "title": "State 1",
+                "div": {
+                  "type": "tab",
+                  "scroll_mode": "paging",
+                  "items": [
+                    {
+                      "type": "text_block",
+                      "header": "Item 1",
+                      "item_log_id": "item/1/01",
+                      "id": "item_1"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 2",
+                      "item_log_id": "item/1/02"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 3",
+                      "item_log_id": "item/1/03"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 4",
+                      "item_log_id": "item/1/04"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 5",
+                      "item_log_id": "item/1/05"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 6",
+                      "item_log_id": "item/1/06"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 7",
+                      "item_log_id": "item/1/07"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 8",
+                      "item_log_id": "item/1/08"
+                    }
+                  ],
+                  "id": "main_gallery"
+                }
+              },
+              {
+                "title": "State 2",
+                "div": {
+                  "type": "tab",
+                  "items": [
+                    {
+                      "type": "text_block",
+                      "header": "Item 1",
+                      "item_log_id": "item/2/01"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 2",
+                      "item_log_id": "item/2/02"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 3",
+                      "item_log_id": "item/2/03"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 4",
+                      "item_log_id": "item/2/04"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 5",
+                      "item_log_id": "item/2/05"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 6",
+                      "item_log_id": "item/2/06"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 7",
+                      "item_log_id": "item/2/07"
+                    },
+                    {
+                      "type": "text_block",
+                      "header": "Item 8",
+                      "item_log_id": "item/2/08"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_log",
+      "source": "visibility",
+      "id": "item/1/01"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "item_1"
+      }
+    },
+    {
+      "type": "verify_log",
+      "source": "visibility",
+      "id": "item/1/01",
+      "count": 1
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "main_gallery"
+      },
+      "direction": "left"
+    },
+    {
+      "type": "verify_log",
+      "source": "visibility",
+      "id": "item/1/02",
+      "count": 1
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "main_gallery"
+      },
+      "direction": "right"
+    },
+    {
+      "type": "verify_log",
+      "source": "visibility",
+      "id": "item/1/01",
+      "count": 2
+    }
+  ]
+}

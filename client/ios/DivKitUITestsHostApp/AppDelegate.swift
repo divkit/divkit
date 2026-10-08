@@ -42,13 +42,18 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
     window.rootViewController = controller
     do {
       let scenario = try readScenario(path: configuration.scenarioPath)
-      let components = makeComponents(configuration: scenario.configuration)
+      let logReporter = UITestLogReporter()
+      let components = makeComponents(
+        configuration: scenario.configuration,
+        reporter: logReporter
+      )
       let card = try parseCard(scenario: scenario, flagsInfo: components.flagsInfo)
       let cardId: DivCardID = "ui_test_card"
       let handler = UITestRequestHandler(
         components: components,
         cardId: cardId,
-        rootView: controller.view
+        rootView: controller.view,
+        logReporter: logReporter
       )
       client = UITestAppClient(
         port: configuration.connectionPort,
@@ -56,7 +61,12 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
       )
 
       Task {
-        await controller.load(card, cardId: cardId, divKitComponents: components)
+        await controller.load(
+          card,
+          cardId: cardId,
+          divKitComponents: components,
+          logReporter: logReporter
+        )
       }
     } catch {
       controller.showError(error.localizedDescription)
@@ -73,7 +83,10 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
     return try UITestScenario(data: data)
   }
 
-  private func makeComponents(configuration: UITestScenario.Configuration) -> DivKitComponents {
+  private func makeComponents(
+    configuration: UITestScenario.Configuration,
+    reporter: DivReporter
+  ) -> DivKitComponents {
     DivKitComponents(
       extensionHandlers: [GestureExtensionHandler(), MarkdownExtensionHandler()],
       flagsInfo: DivFlagsInfo(
@@ -84,7 +97,8 @@ final class SceneDelegate: NSObject, UIWindowSceneDelegate {
       imageHolderFactory: TestImageHolderFactory { [weak self] message in
         self?.controller?.showError(message)
       },
-      layoutDirection: configuration.layoutDirection
+      layoutDirection: configuration.layoutDirection,
+      reporter: reporter
     )
   }
 

@@ -8,6 +8,6 @@ extension RunnerStep {
 
 extension RunnerExecutor {
   func execute(_ step: RunnerStep.DivAction) async throws {
-    try await connection.perform(.divAction(step.action))
+    try await connection.perform(step.action)
   }
 }

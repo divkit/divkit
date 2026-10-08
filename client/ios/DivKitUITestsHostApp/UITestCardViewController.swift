@@ -49,14 +49,22 @@ final class UITestCardViewController: UIViewController, UIScrollViewDelegate {
     updateVisibleBounds()
   }
 
-  func load(_ data: DivData, cardId: DivCardID, divKitComponents: DivKitComponents) async {
+  func load(
+    _ data: DivData,
+    cardId: DivCardID,
+    divKitComponents: DivKitComponents,
+    logReporter: UITestLogReporter
+  ) async {
     loadViewIfNeeded()
     let divView = DivView(divKitComponents: divKitComponents)
     scrollView.addSubview(divView)
     sizeChangedSubscription = divView.addObserver { [weak self] _ in
       self?.view.setNeedsLayout()
     }
-    await divView.setSource(DivViewSource(kind: .divData(data), cardId: cardId))
+    await divView.setSource(
+      DivViewSource(kind: .divData(data), cardId: cardId),
+      debugParams: DebugParams(widcardExtensionHandlers: [logReporter])
+    )
     divView.setParentScrollView(scrollView)
     self.divView = divView
     view.setNeedsLayout()

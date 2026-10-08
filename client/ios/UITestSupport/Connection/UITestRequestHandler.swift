@@ -9,12 +9,15 @@ struct UITestRequestHandler {
   let components: DivKitComponents
   let cardId: DivCardID
   let rootView: UIView
+  let logReporter: UITestLogReporter
 
   func handle(_ request: UITestRequest) throws -> UITestResponse {
     switch request {
     case let .divAction(action):
       try performDivAction(action)
-      return .success
+      return .success(.divAction)
+    case .logs:
+      return .success(.logs(logReporter.logs()))
     }
   }
 

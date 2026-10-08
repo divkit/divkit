@@ -1,5 +1,6 @@
 import Foundation
 import Network
+import VGSL
 
 @MainActor
 final class UITestConnection {
@@ -69,10 +70,33 @@ final class UITestConnection {
     incoming = nil
   }
 
-  func perform(_ request: UITestRequest) async throws {
-    let response: UITestResponse
+  func perform(_ divAction: JSONDictionary) async throws {
+    let response = try await send(.divAction(divAction))
+    switch response {
+    case .success(.divAction):
+      break
+    case let .failure(message):
+      throw ConnectionError.requestFailed(message)
+    case .success:
+      throw ConnectionError.unexpectedResponse
+    }
+  }
+
+  func logs() async throws -> UITestLogSnapshot {
+    let response = try await send(.logs)
+    switch response {
+    case let .success(.logs(snapshot)):
+      return snapshot
+    case let .failure(message):
+      throw ConnectionError.requestFailed(message)
+    case .success:
+      throw ConnectionError.unexpectedResponse
+    }
+  }
+
+  private func send(_ request: UITestRequest) async throws -> UITestResponse {
     do {
-      response = try await withUITestTimeout { [self] in
+      return try await withUITestTimeout { [self] in
         if connection == nil, let incoming {
           connection = try await incoming.first(where: { _ in true })
           self.incoming = nil
@@ -86,12 +110,6 @@ final class UITestConnection {
     } catch {
       close()
       throw error
-    }
-    switch response {
-    case .success:
-      break
-    case let .failure(message):
-      throw ConnectionError.requestFailed(message)
     }
   }
 }
@@ -122,6 +140,7 @@ private enum ConnectionError: LocalizedError {
   case closed
   case timedOut
   case requestFailed(String)
+  case unexpectedResponse
 
   var errorDescription: String? {
     switch self {
@@ -133,6 +152,8 @@ private enum ConnectionError: LocalizedError {
       "UI test connection timed out after 10 seconds"
     case let .requestFailed(message):
       message
+    case .unexpectedResponse:
+      "UI test app returned an unexpected response"
     }
   }
 }

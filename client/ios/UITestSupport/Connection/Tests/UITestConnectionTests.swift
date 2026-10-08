@@ -9,11 +9,11 @@ final class UITestConnectionTests: XCTestCase {
     defer { connection.close() }
     let app = appTask(port: connection.port) { appConnection in
       _ = try await appConnection.receive()
-      try await appConnection.send(.success)
+      try await appConnection.send(.success(.divAction))
     }
     defer { app.cancel() }
 
-    try await connection.perform(.divAction([:]))
+    try await connection.perform([:])
     try await app.value
   }
 
@@ -24,17 +24,17 @@ final class UITestConnectionTests: XCTestCase {
       _ = try await appConnection.receive()
       try await appConnection.send(.failure("Invalid action"))
       _ = try await appConnection.receive()
-      try await appConnection.send(.success)
+      try await appConnection.send(.success(.divAction))
     }
     defer { app.cancel() }
 
     do {
-      try await connection.perform(.divAction([:]))
+      try await connection.perform([:])
       XCTFail("Expected the action error")
     } catch {
       XCTAssertEqual(error.localizedDescription, "Invalid action")
     }
-    try await connection.perform(.divAction([:]))
+    try await connection.perform([:])
     try await app.value
   }
 
@@ -47,7 +47,7 @@ final class UITestConnectionTests: XCTestCase {
     defer { app.cancel() }
 
     do {
-      try await connection.perform(.divAction([:]))
+      try await connection.perform([:])
       XCTFail("Expected a connection error")
     } catch {
       XCTAssertFalse(error.localizedDescription.contains("timed out"))
@@ -65,7 +65,7 @@ final class UITestConnectionTests: XCTestCase {
     defer { app.cancel() }
 
     do {
-      try await connection.perform(.divAction([:]))
+      try await connection.perform([:])
       XCTFail("Expected a timeout")
     } catch {
       XCTAssertEqual(error.localizedDescription, "UI test connection timed out after 10 seconds")
