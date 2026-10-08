@@ -13,9 +13,6 @@ apply from: "${project.projectDir}/../publish-android.gradle"
 
 apply plugin: 'de.mobilej.unmock'
 
-def expressionApiDir = "${project.projectDir}/../../../expression-api/"
-def crossplatformProjectDir = "${project.projectDir}/../../../test_data/"
-
 android {
     namespace = 'com.yandex.div'
 
@@ -27,11 +24,6 @@ android {
         release {
             consumerProguardFiles 'proguard-rules.pro'
         }
-    }
-
-    defaultConfig {
-        buildConfigField "String", "EXPRESSION_API_PATH", JsonOutput.toJson(expressionApiDir)
-        buildConfigField "String", "DIV2_JSON_PATH", JsonOutput.toJson(crossplatformProjectDir)
     }
 }
 

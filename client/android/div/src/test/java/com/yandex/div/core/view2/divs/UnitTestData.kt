@@ -1,8 +1,8 @@
 package com.yandex.div.core.view2.divs
 
-import com.yandex.div.BuildConfig
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.test.crossplatform.TEST_DATA_PATH
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
@@ -22,7 +22,7 @@ class UnitTestData(
     val div: Div
         get() {
             if (_div == null) {
-                val path = "${BuildConfig.DIV2_JSON_PATH}/$testDataDir/$dir/$fileName"
+                val path = "$TEST_DATA_PATH/$testDataDir/$dir/$fileName"
                 val jsonString = File(path).readText(Charsets.UTF_8)
                 val json = JSONObject(jsonString)
                 val environment = DivParsingEnvironment(ParsingErrorLogger.LOG)
@@ -33,7 +33,7 @@ class UnitTestData(
 
     val dataWithTemplates: DivData
         get() {
-            val path = "${BuildConfig.DIV2_JSON_PATH}/$testDataDir/$dir/$fileName"
+            val path = "$TEST_DATA_PATH/$testDataDir/$dir/$fileName"
             val jsonString = File(path).readText(Charsets.UTF_8)
             val json = JSONObject(jsonString)
             val card = json.getJSONObject("card")
@@ -46,7 +46,7 @@ class UnitTestData(
 
     val patchWithTemplates: DivPatch
         get() {
-            val path = "${BuildConfig.DIV2_JSON_PATH}/$testDataDir/$dir/$fileName"
+            val path = "$TEST_DATA_PATH/$testDataDir/$dir/$fileName"
             val jsonString = File(path).readText(Charsets.UTF_8)
             val json = JSONObject(jsonString)
             val card = json.getJSONObject("patch")

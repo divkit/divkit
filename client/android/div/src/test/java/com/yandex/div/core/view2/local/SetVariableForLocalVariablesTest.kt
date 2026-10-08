@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.local
 
 import android.view.View
-import com.yandex.div.BuildConfig
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
@@ -10,6 +9,7 @@ import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.textString
+import com.yandex.div.test.crossplatform.TEST_DATA_PATH
 import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
 import org.json.JSONObject
@@ -38,7 +38,7 @@ class SetVariableForLocalVariablesTest {
 
     @Before
     fun setDiv2View() {
-        val path = "${BuildConfig.DIV2_JSON_PATH}/regression_test_data/variables/local.json"
+        val path = "$TEST_DATA_PATH/regression_test_data/variables/local.json"
         val jsonString = File(path).readText(Charsets.UTF_8)
         val testJson = JSONObject(jsonString)
         val environment = DivParsingEnvironment({ e -> throw AssertionError(e) })

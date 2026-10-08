@@ -1,7 +1,6 @@
 package com.yandex.div.core
 
-import com.yandex.div.BuildConfig.DIV2_JSON_PATH
-import com.yandex.div.BuildConfig.EXPRESSION_API_PATH
+import com.yandex.div.test.crossplatform.TEST_DATA_PATH
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -10,7 +9,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import java.io.File
-
 
 @RunWith(Parameterized::class)
 class MultiplatformTestDataValidator(caseOrError: TestCaseOrError) {
@@ -36,13 +34,13 @@ class MultiplatformTestDataValidator(caseOrError: TestCaseOrError) {
         private const val FIELD_ARGUMENTS = "arguments"
         private const val FIELD_TYPE = "type"
 
-        private val TEST_CASES_ROOT = File(DIV2_JSON_PATH)
+        private val TEST_CASES_ROOT = File(TEST_DATA_PATH)
 
         @JvmStatic
         @Parameterized.Parameters(name = "{0}")
         fun cases(): List<TestCaseOrError> {
             val cases = mutableListOf<TestCaseOrError>()
-            cases.addAll(walkIn(File(EXPRESSION_API_PATH)).flatMap { f -> extractExpressionCases(f) })
+            cases.addAll(walkIn(File("../../../expression-api")).flatMap { f -> extractExpressionCases(f) })
             cases.addAll(walkIn("expression_test_data").flatMap { f -> extractExpressionCases(f) })
             cases.addAll(walkIn("interactive_snapshot_test_data").map { f -> toCommonUiTestCase(f) })
             cases.addAll(walkIn("regression_test_data").map { f -> toCommonUiTestCase(f) })
@@ -51,7 +49,7 @@ class MultiplatformTestDataValidator(caseOrError: TestCaseOrError) {
             return cases
         }
 
-        private fun walkIn(dir: String): Sequence<File> = walkIn(File(DIV2_JSON_PATH, dir))
+        private fun walkIn(dir: String): Sequence<File> = walkIn(File(TEST_DATA_PATH, dir))
 
         private fun walkIn(directory: File): Sequence<File> = directory
             .walkTopDown()

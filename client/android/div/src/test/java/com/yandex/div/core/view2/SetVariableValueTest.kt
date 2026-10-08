@@ -1,13 +1,13 @@
 package com.yandex.div.core.view2
 
 import android.widget.TextView
-import com.yandex.div.BuildConfig
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.textString
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.test.crossplatform.TEST_DATA_PATH
 import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.DivData
 import org.json.JSONObject
@@ -32,7 +32,7 @@ class SetVariableValueTest {
 
     @Before
     fun setUp() {
-        val path = "${BuildConfig.DIV2_JSON_PATH}/unit_test_data/variables/set_value.json"
+        val path = "$TEST_DATA_PATH/unit_test_data/variables/set_value.json"
         val testJson = JSONObject(File(path).readText(Charsets.UTF_8))
         val environment = DivParsingEnvironment(ParsingErrorLogger.ASSERT)
 

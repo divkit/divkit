@@ -12,7 +12,7 @@ import java.util.Locale
 import java.util.TimeZone
 import kotlin.test.fail
 
-private const val TEST_DATA_PATH = "../../../test_data/"
+const val TEST_DATA_PATH = "../../../test_data"
 
 object ParsingUtils {
 
