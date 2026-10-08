@@ -1,14 +1,19 @@
 package com.yandex.div.compose.views.input
 
+import android.text.InputType
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldDecorator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.InterceptPlatformTextInput
+import androidx.compose.ui.platform.PlatformTextInputInterceptor
 import androidx.compose.ui.text.TextStyle
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
@@ -16,7 +21,9 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.focus.trackInputFocus
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivInput
+import com.yandex.div2.DivInputMask
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 internal fun InputFieldLayout(
     modifier: Modifier,
@@ -39,9 +46,13 @@ internal fun InputFieldLayout(
         data.maxVisibleLines?.observedIntValue()?.coerceAtLeast(1) ?: Int.MAX_VALUE
     }
     val enabled = data.isEnabled.observedValue()
-    val options = keyboardOptions(
-        keyboardType, data.enterKeyType.observedValue(), data.autocapitalization.observedValue()
-    )
+    val enterKeyType = data.enterKeyType.observedValue()
+    val autocapitalization = data.autocapitalization.observedValue()
+    val options = remember(keyboardType, enterKeyType, autocapitalization) {
+        keyboardOptions(keyboardType, enterKeyType, autocapitalization).copy(autoCorrectEnabled = false)
+    }
+    val mask = data.mask
+    val keyboardInterceptor = remember(keyboardType, mask) { inputKeyboardInterceptor(keyboardType, mask) }
     val hintText = data.hintText?.observedValue()
     val hintColor = data.hintColor.observedColorValue()
     val decorator = TextFieldDecorator { innerTextField ->
@@ -57,7 +68,29 @@ internal fun InputFieldLayout(
     }
 
     Box(modifier = modifier.trackInputFocus(), contentAlignment = contentAlignment) {
-        content(singleLine, maxLines, enabled, options, decorator)
+        InterceptPlatformTextInput(keyboardInterceptor) {
+            content(singleLine, maxLines, enabled, options, decorator)
+        }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+private fun inputKeyboardInterceptor(
+    keyboardType: DivInput.KeyboardType,
+    mask: DivInputMask?,
+): PlatformTextInputInterceptor {
+    return PlatformTextInputInterceptor { request, nextHandler ->
+        if (keyboardType != DivInput.KeyboardType.NUMBER ||
+            mask is DivInputMask.Currency || mask is DivInputMask.Phone
+        ) {
+            nextHandler.startInputMethod(request)
+        }
+        nextHandler.startInputMethod { outAttributes ->
+            request.createInputConnection(outAttributes).also {
+                outAttributes.inputType = outAttributes.inputType or
+                    InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
+            }
+        }
     }
 }
 
