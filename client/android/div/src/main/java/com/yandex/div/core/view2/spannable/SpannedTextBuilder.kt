@@ -238,7 +238,10 @@ internal class SpannedTextBuilder @Inject constructor(
         textData: TextData,
         ranges: List<DivTextRangeResult>?,
     ): List<SpanData> {
-        if (textData.lineHeight == null && ranges.isNullOrEmpty()) return emptyList()
+        if (ranges.isNullOrEmpty()) {
+            val lineHeight = textData.lineHeight ?: return emptyList()
+            return listOf(SpanData.lineHeight(start = 0, end = textData.textLength, lineHeight = lineHeight))
+        }
 
         val textLength = textData.textLength
 

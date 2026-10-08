@@ -289,7 +289,7 @@ open class EllipsizedTextView @JvmOverloads constructor(
         val lineStart = nativeLayout.getLineStart(lastLine)
         val nativeOffset = lineStart + nativeLayout.getEllipsisStart(lastLine)
         val locale = textLocale
-        val hasSafeGraphemeBoundary = text.hasPrintableAsciiBoundary(nativeOffset) ||
+        val hasSafeGraphemeBoundary = text.hasAsciiGraphemeBoundary(nativeOffset) ||
             (lastSafeNativeOffset == nativeOffset &&
                 lastSafeNativeTextRevision == sourceTextRevision && lastSafeNativeLocale == locale)
         if (hasSafeGraphemeBoundary && !text.splitsReplacementSpan(nativeOffset)) {
@@ -312,11 +312,18 @@ open class EllipsizedTextView @JvmOverloads constructor(
         return truncatedEndText(text, safeOffset, sourceLayout, lastLine, width)
     }
 
-    private fun CharSequence.hasPrintableAsciiBoundary(offset: Int): Boolean {
+    /**
+     * Checks whether ASCII characters on either side of [offset] can be separated without Unicode analysis.
+     */
+    private fun CharSequence.hasAsciiGraphemeBoundary(offset: Int): Boolean {
         if (offset == 0 || offset == length) {
             return true
         }
-        return this[offset - 1] in ' '..'~' && this[offset] in ' '..'~'
+        val previous = this[offset - 1]
+        val next = this[offset]
+        // CRLF is the only grapheme spanning two ASCII characters.
+        return previous.code <= MAX_ASCII_CODE && next.code <= MAX_ASCII_CODE &&
+            !(previous == '\r' && next == '\n')
     }
 
     private fun ellipsize(text: CharSequence?): CharSequence? {
@@ -540,6 +547,7 @@ open class EllipsizedTextView @JvmOverloads constructor(
         private const val LEFT_TO_RIGHT_MARK = "\u200E"
         private const val RIGHT_TO_LEFT_MARK = "\u200F"
         private const val ELLIPSIS_WIDTH_UNKNOWN = -1.0f
+        private const val MAX_ASCII_CODE = 0x7F
         const val NOT_SET = -1
 
         private const val TAG = "Ya:EllipsizedTextView"

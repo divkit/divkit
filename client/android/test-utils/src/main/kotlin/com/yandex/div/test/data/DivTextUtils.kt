@@ -13,6 +13,7 @@ import com.yandex.div2.DivExtension
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivSize
+import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
 import com.yandex.div2.DivTextRangeBackground
@@ -109,7 +110,8 @@ fun text(
     variables: List<DivVariable>? = null,
     visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
     visibilityActions: List<DivVisibilityAction>? = null,
-    width: DivSize = matchParent()
+    width: DivSize = matchParent(),
+    fontSizeUnit: DivSizeUnit = DivSizeUnit.SP,
 ): Div {
     return Div.Text(
         value = DivText(
@@ -125,6 +127,7 @@ fun text(
             focus = focus,
             functions = functions,
             fontSize = constant(fontSize),
+            fontSizeUnit = constant(fontSizeUnit),
             height = height,
             id = id,
             images = images,
@@ -168,11 +171,15 @@ fun textRange(
     background: DivTextRangeBackground? = null,
     border: DivTextRangeBorder? = null,
     mask: DivTextRangeMask? = null,
+    fontSizeUnit: DivSizeUnit = DivSizeUnit.SP,
+    lineHeight: Long? = null,
 ) = DivText.Range(
     actions = actions,
     background = background,
     border = border,
     end = constant(end.toLong()),
+    fontSizeUnit = constant(fontSizeUnit),
+    lineHeight = lineHeight?.let { constant(it) },
     mask = mask,
     start = constant(start.toLong())
 )

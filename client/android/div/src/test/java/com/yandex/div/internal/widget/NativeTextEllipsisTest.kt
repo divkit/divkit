@@ -1,10 +1,12 @@
 package com.yandex.div.internal.widget
 
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils.TruncateAt
+import android.text.style.ImageSpan
 import android.text.style.RelativeSizeSpan
 import android.util.TypedValue
 import android.view.View.MeasureSpec
@@ -40,6 +42,62 @@ class NativeTextEllipsisTest {
 
         assertEquals("abcd…", renderedText())
         assertEquals(TruncateAt.END, view.ellipsize)
+    }
+
+    @Test
+    fun `ascii line break keeps native ellipsis on last visible line`() {
+        view.maxLines = 3
+        view.text = "first\nsecond\nthird\nfourth"
+
+        measureAtWidth(200)
+
+        assertEquals("first\nsecond\nthird…", renderedText())
+    }
+
+    @Test
+    fun `native ellipsis does not split carriage return and line feed`() {
+        view.maxLines = 3
+        view.text = "first\r\nsecond\r\nthird\r\nfourth"
+
+        measureAtWidth(200)
+
+        assertEquals("first\r\nsecond\r\nthird…", renderedText())
+    }
+
+    @Test
+    fun `tab before line break is preserved before native ellipsis`() {
+        view.text = "ab\t\nrest"
+
+        measureAtWidth(200)
+
+        assertEquals("ab\t…", renderedText())
+    }
+
+    @Test
+    fun `native ellipsis keeps combining mark with ascii letter`() {
+        val combiningAcuteAccent = '\u0301'
+        view.text = "ab${combiningAcuteAccent}cdef"
+
+        measureAtWidth("ab…")
+
+        assertEquals("ab${combiningAcuteAccent}…", renderedText())
+    }
+
+    @Test
+    fun `native ellipsis excludes replacement span crossing ascii line break`() {
+        // Arrange
+        val drawable = ColorDrawable().apply {
+            setBounds(0, 0, 20, 20)
+        }
+        view.text = SpannableString("abc\nnext").apply {
+            setSpan(ImageSpan(drawable), 2, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        // Act
+        measureAtWidth(200)
+
+        // Assert
+        assertEquals("ab…", renderedText())
     }
 
     @Test
@@ -127,9 +185,11 @@ class NativeTextEllipsisTest {
 
     private fun renderedText(): String {
         val layout = view.layout
-        if (layout.getEllipsisCount(0) == 0) {
+        val lastLine = minOf(view.maxLines, layout.lineCount) - 1
+        if (layout.getEllipsisCount(lastLine) == 0) {
             return layout.text.toString()
         }
-        return layout.text.subSequence(0, layout.getEllipsisStart(0)).toString() + "…"
+        val ellipsisStart = layout.getLineStart(lastLine) + layout.getEllipsisStart(lastLine)
+        return layout.text.subSequence(0, ellipsisStart).toString() + "…"
     }
 }
