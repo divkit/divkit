@@ -31,6 +31,8 @@ struct RunnerExecutor {
       try execute(step)
     case let .swipe(step):
       try execute(step)
+    case let .scrollTo(step):
+      try execute(step)
     case let .verifyText(step):
       try execute(step)
     case let .verifyLog(step):

@@ -13,7 +13,8 @@ protocol CollectionViewAccessibilityElementProviding: AnyObject {
 public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysCollectionView,
   VisibleBoundsTrackingContainer, TapControlScrollView {
   public override func accessibilityElementCount() -> Int {
-    guard accessibilityElementProvider != nil else {
+    guard UIAccessibility.isVoiceOverRunning,
+          accessibilityElementProvider != nil else {
       return super.accessibilityElementCount()
     }
 
@@ -23,7 +24,8 @@ public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysColl
   }
 
   public override func accessibilityElement(at index: Int) -> Any? {
-    guard let accessibilityElementProvider,
+    guard UIAccessibility.isVoiceOverRunning,
+          let accessibilityElementProvider,
           let indexPath = indexPath(forAccessibilityIndex: index) else {
       return super.accessibilityElement(at: index)
     }
@@ -40,7 +42,8 @@ public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysColl
   }
 
   public override func index(ofAccessibilityElement element: Any) -> Int {
-    guard accessibilityElementProvider != nil,
+    guard UIAccessibility.isVoiceOverRunning,
+          accessibilityElementProvider != nil,
           let indexPath = indexPath(containingAccessibilityElement: element) else {
       return super.index(ofAccessibilityElement: element)
     }

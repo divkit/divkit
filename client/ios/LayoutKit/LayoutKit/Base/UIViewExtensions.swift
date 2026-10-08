@@ -21,6 +21,7 @@ extension UIView {
       accessibilityTraits = UIAccessibilityTraits()
       accessibilityValue = nil
       accessibilityHint = nil
+      accessibilityIdentifier = nil
       return
     }
     // Reset fields that `applyAccessibility` overlays additively so that stale
@@ -31,6 +32,7 @@ extension UIView {
     accessibilityTraits = UIAccessibilityTraits()
     accessibilityHint = nil
     accessibilityValue = nil
+    accessibilityIdentifier = nil
     applyAccessibility(element)
   }
 }
