@@ -301,13 +301,20 @@ open class Div2View private constructor(
     @ExperimentalApi
     fun isBackgroundBindingInProgress(): Boolean = bindingDispatcher.isBackgroundBindingInProgress
 
+    /**
+     * Returns whether asynchronous work is queued or unfinished for this view,
+     * including main-thread changes and successful completion callbacks.
+     */
+    private fun hasPendingAsyncBindings(): Boolean = bindingDispatcher.hasPendingAsyncBindings
+
     @ExperimentalApi
     fun setDataAsync(
         data: DivData?,
         tag: DivDataTag,
         onComplete: ((Boolean) -> Unit)?,
     ) {
-        if (data === divData) {
+        // Pending cleanup or replacement may invalidate the current data before this request.
+        if (!hasPendingAsyncBindings() && data === divData) {
             loadMedia()
             onComplete?.invoke(true)
             return
@@ -315,7 +322,12 @@ open class Div2View private constructor(
 
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
         bindingDispatcher.runOnBindingThread(onComplete, onError) {
-            setDataInternal(data, divData, tag)
+            if (data === divData) {
+                loadMedia()
+                true
+            } else {
+                setDataInternal(data, divData, tag)
+            }
         }
     }
 
@@ -326,7 +338,7 @@ open class Div2View private constructor(
         tag: DivDataTag,
         onComplete: ((Boolean) -> Unit)?,
     ) {
-        if (data === divData) {
+        if (!hasPendingAsyncBindings() && data === divData) {
             loadMedia()
             onComplete?.invoke(true)
             return
@@ -334,7 +346,12 @@ open class Div2View private constructor(
 
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
         bindingDispatcher.runOnBindingThread(onComplete, onError) {
-            setDataInternal(data, oldDivData ?: divData, tag)
+            if (data === divData) {
+                loadMedia()
+                true
+            } else {
+                setDataInternal(data, oldDivData ?: divData, tag)
+            }
         }
     }
 

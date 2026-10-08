@@ -3172,6 +3172,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/util/validator/RegexInputValidatorTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/util/validator/RegexInputValidatorTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ApplyPatchTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ApplyPatchTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2RebindTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2RebindTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewAsyncBindingTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewAsyncBindingTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewDisappearActionsOnCleanupTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewDisappearActionsOnCleanupTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewMainActionOrderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewMainActionOrderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewReleaseChildrenTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewReleaseChildrenTest.kt",

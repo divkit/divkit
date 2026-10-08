@@ -26,6 +26,11 @@ internal class BindingDispatcher @Inject constructor(
             return criticalSection.isHeldBy(bindingThread) || criticalSection.isReservedFor(bindingThread)
         }
 
+    val hasPendingAsyncBindings: Boolean
+        get() = synchronized(pendingTasksLock) {
+            activeTask != null || pendingTasks.isNotEmpty()
+        }
+
     val isCollectingMainThreadActions: Boolean
         get() = Thread.currentThread() === executor.bindingThread && deferMainThreadAction
 
