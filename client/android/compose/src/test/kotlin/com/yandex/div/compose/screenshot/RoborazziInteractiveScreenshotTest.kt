@@ -26,7 +26,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+import com.github.takahirom.roborazzi.RoborazziTaskType
 import com.github.takahirom.roborazzi.captureRoboImage
+import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
@@ -96,6 +99,7 @@ class RoborazziInteractiveScreenshotTest(
 
     private lateinit var viewConfiguration: ViewConfiguration
 
+    @OptIn(ExperimentalRoborazziApi::class)
     @Test
     fun test() {
         val data = configuration.baseConfiguration.parseDivData()
@@ -120,19 +124,34 @@ class RoborazziInteractiveScreenshotTest(
             }
         }
 
-        configuration.steps.forEach { step ->
+        val recordedSnapshotNames = mutableSetOf<String>()
+        configuration.steps.forEachIndexed { index, step ->
             composeRule.waitForIdle()
 
             when (step) {
                 is Step.Action ->
                     divContext.debugFeatures.performAction(data = data, action = step.action)
 
-                is Step.VerifySnapshot ->
+                is Step.VerifySnapshot -> {
+                    val options = provideRoborazziContext().options
+                    val taskType = RoborazziTaskType.of(
+                        isRecording = options.taskType.isRecording() && recordedSnapshotNames.add(step.name),
+                        isComparing = options.taskType.isComparing(),
+                        isVerifying = options.taskType.isVerifying(),
+                    )
+                    val compareOptions = options.compareOptions.copy(
+                        outputDirectoryPath = "${options.compareOptions.outputDirectoryPath}/interactive/" +
+                            "${configuration.baseConfiguration.name}/step$index",
+                    )
                     composeRule
                         .onRoot()
                         .captureRoboImage(
-                            filePath = getScreenshotFilePath("interactive/${configuration.baseConfiguration.name}/${step.name}")
+                            filePath = getScreenshotFilePath(
+                                "interactive/${configuration.baseConfiguration.name}/${step.name}"
+                            ),
+                            roborazziOptions = options.copy(taskType = taskType, compareOptions = compareOptions),
                         )
+                }
 
                 is Step.Wait -> Unit
 

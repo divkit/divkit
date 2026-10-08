@@ -14,11 +14,13 @@ private const val REFERENCE_FILE_NAME = "reference-overrides.json"
 class ReferenceFileReader(fileDir: File) {
     private val referencesFile = File(fileDir, REFERENCE_FILE_NAME)
     private val references = mutableMapOf<String, String>()
+    private val firstScreenshotPaths = mutableMapOf<String, String>()
     private val gson = Gson()
 
     @Throws(IOException::class)
     fun load() {
         references.clear()
+        firstScreenshotPaths.clear()
         if (!referencesFile.exists()) {
             return
         }
@@ -30,12 +32,17 @@ class ReferenceFileReader(fileDir: File) {
                 throw IOException(e)
             }
             references[reference.targetFile] = reference.compareWith
+            if (File(reference.targetFile).parent == File(reference.compareWith).parent) {
+                firstScreenshotPaths.putIfAbsent(reference.compareWith, reference.targetFile)
+            }
         }
     }
 
     fun resolveReferencePath(relativePath: String): String? {
         return references[relativePath]
     }
+
+    fun resolveFirstScreenshotPath(referencePath: String): String? = firstScreenshotPaths[referencePath]
 }
 
 private data class FileReference(

@@ -46,7 +46,7 @@ fun captureScreenshots(
     val expected = expectedScreenshot.takeIf { it.isNotEmpty() }
         ?.substringBefore(ScreenshotType.SCREENSHOT_EXTENSION)
         ?: caseName
-    if (expected == caseName && expectedSuite.isEmpty()) return
+    if (expected == caseName && expectedSuite.isEmpty() && stepId == null) return
 
     val expectedSuite = expectedSuite.takeIf { it.isNotEmpty() } ?: suiteName
     ScreenshotType.entries.forEach {
