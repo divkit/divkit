@@ -15,6 +15,7 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 import org.robolectric.RobolectricTestRunner
@@ -271,5 +272,150 @@ class DivVariableControllerTest {
         strVariable.set("new_val")
 
         Assert.assertEquals(1, count)
+    }
+
+    @Test
+    fun `get returns null for undeclared variable`() {
+        Assert.assertNull(underTest.get("unknown"))
+    }
+
+    @Test
+    fun `isDeclared is true for local and internal variables only`() {
+        underTest.declare(Variable.StringVariable("local", "A"))
+        internalVariableController.declare(Variable.StringVariable("internal", "B"))
+
+        Assert.assertTrue(underTest.isDeclared("local"))
+        Assert.assertTrue(underTest.isDeclared("internal"))
+        Assert.assertFalse(underTest.isDeclared("unknown"))
+        Assert.assertFalse(internalVariableController.isDeclared("local"))
+    }
+
+    @Test
+    fun `isDeclared is false after variable removal`() {
+        underTest.declare(Variable.StringVariable("name", "A"))
+
+        underTest.removeAll("name")
+
+        Assert.assertFalse(underTest.isDeclared("name"))
+    }
+
+    @Test
+    fun `declaring already declared variable does not change existing value`() {
+        underTest.declare(Variable.StringVariable("name", "A"))
+
+        try {
+            underTest.declare(Variable.StringVariable("name", "B"))
+            Assert.fail("VariableDeclarationException is not thrown")
+        } catch (e: VariableDeclarationException) { }
+
+        Assert.assertEquals("A", underTest.get("name")?.getValue())
+    }
+
+    @Test
+    fun `declaring several variables fails entirely if one of them is already declared`() {
+        underTest.declare(Variable.StringVariable("existing", "A"))
+
+        try {
+            underTest.declare(
+                Variable.StringVariable("new", "B"),
+                Variable.StringVariable("existing", "C")
+            )
+            Assert.fail("VariableDeclarationException is not thrown")
+        } catch (e: VariableDeclarationException) { }
+
+        Assert.assertNull(underTest.get("new"))
+        Assert.assertEquals("A", underTest.get("existing")?.getValue())
+    }
+
+    @Test
+    fun `declare allows to declare several variables at once`() {
+        underTest.declare(
+            Variable.StringVariable("a", "A"),
+            Variable.IntegerVariable("b", 2)
+        )
+
+        Assert.assertEquals("A", underTest.get("a")?.getValue())
+        Assert.assertEquals(2L, underTest.get("b")?.getValue())
+    }
+
+    @Test
+    fun `variable declared in internal controller can be redeclared locally`() {
+        internalVariableController.declare(Variable.StringVariable("name", "internal"))
+
+        underTest.declare(Variable.StringVariable("name", "local"))
+
+        Assert.assertEquals("local", underTest.get("name")?.getValue())
+        Assert.assertEquals("internal", internalVariableController.get("name")?.getValue())
+    }
+
+    @Test
+    fun `replaceAll removes variables which are not provided`() {
+        underTest.declare(
+            Variable.StringVariable("kept", "A"),
+            Variable.StringVariable("dropped", "B")
+        )
+
+        underTest.replaceAll(
+            Variable.StringVariable("kept", "A2"),
+            Variable.StringVariable("added", "C")
+        )
+
+        Assert.assertEquals("A2", underTest.get("kept")?.getValue())
+        Assert.assertEquals("C", underTest.get("added")?.getValue())
+        Assert.assertNull(underTest.get("dropped"))
+        Assert.assertFalse(underTest.isDeclared("dropped"))
+    }
+
+    @Test
+    fun `replaceAll does not affect internal controller`() {
+        internalVariableController.declare(Variable.StringVariable("internal", "A"))
+
+        underTest.replaceAll(Variable.StringVariable("local", "B"))
+
+        Assert.assertEquals("A", underTest.get("internal")?.getValue())
+    }
+
+    @Test
+    fun `removeAll does not affect internal controller`() {
+        internalVariableController.declare(Variable.StringVariable("internal", "A"))
+
+        underTest.removeAll("internal")
+
+        Assert.assertEquals("A", underTest.get("internal")?.getValue())
+    }
+
+    @Test
+    fun `removing variable notifies declaration observer about undeclaration`() {
+        val variable = Variable.StringVariable("name", "A")
+        underTest.declare(variable)
+        val observer = mock<DeclarationObserver>()
+        underTest.variableSource.observeDeclaration(observer)
+
+        underTest.removeAll("name")
+
+        verify(observer).onUndeclared(variable)
+    }
+
+    @Test
+    fun `captureAllVariables returns local and internal variables`() {
+        val local = Variable.StringVariable("local", "A")
+        val internal = Variable.StringVariable("internal", "B")
+        underTest.declare(local)
+        internalVariableController.declare(internal)
+
+        val captured = underTest.captureAllVariables()
+
+        Assert.assertEquals(setOf(local, internal), captured.toSet())
+    }
+
+    @Test
+    fun `removed request observer is not notified`() {
+        val observer = mock<(String) -> Unit>()
+        underTest.addVariableRequestObserver(observer)
+        underTest.removeVariableRequestObserver(observer)
+
+        underTest.variableSource.getMutableVariable("name")
+
+        verify(observer, never()).invoke(any())
     }
 }
