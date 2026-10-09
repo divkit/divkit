@@ -5,6 +5,7 @@ import com.yandex.div.compose.animation.AnimationConfiguration
 import com.yandex.div.compose.dagger.DivContextScope
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import javax.inject.Inject
@@ -18,7 +19,11 @@ internal class ExtensionPreloader @Inject constructor(
     private val reporter: DivReporter,
     private val animationConfiguration: AnimationConfiguration,
 ) {
-    suspend fun preloadExtensions(div: Div, resolver: ExpressionResolver): PreloadResult = coroutineScope {
+    suspend fun preloadExtensions(
+        div: Div,
+        resolver: ExpressionResolver,
+        storedValuesStorage: DivStoredValuesStorage,
+    ): PreloadResult = coroutineScope {
         val extensions = div.value().extensions ?: return@coroutineScope PreloadResult(true)
         if (extensions.isEmpty() || handlers.isEmpty()) return@coroutineScope PreloadResult(true)
         extensions.mapNotNull { extension ->
@@ -29,6 +34,7 @@ internal class ExtensionPreloader @Inject constructor(
                 expressionResolver = resolver,
                 reporter = reporter,
                 animationsEnabled = animationConfiguration.isEnabled,
+                storedValuesStorage = storedValuesStorage,
             )
             async { handler.preloadWithResult(environment) }
         }.awaitAll().combineResults()

@@ -7,6 +7,7 @@ import com.yandex.div.internal.storedvalues.StoredValueScope
 import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.ExperimentalTime
@@ -87,6 +88,33 @@ class LazyStoredValuesStorageTest {
         )
 
         assertEquals(123.45, getValue("value"))
+    }
+
+    @Test
+    fun `public setValue reports non-finite numbers without saving them`() {
+        reporter.failOnError = false
+
+        listOf(Double.NaN, Double.POSITIVE_INFINITY).forEachIndexed { index, number ->
+            val name = "invalid$index"
+            storage.setValue(
+                value = StoredValue.DoubleStoredValue(name = name, value = number),
+                scope = DivStoredValueScope.Global,
+                lifetime = ONE_HOUR,
+            )
+
+            assertNull(storage.getStoredValue(name))
+        }
+
+        assertEquals(
+            listOf(
+                "Failed to store value 'invalid0': number must be finite.",
+                "Failed to store value 'invalid1': number must be finite.",
+            ),
+            reporter.errors,
+        )
+        assertFalse(
+            repository.values.keys.any { it.endsWith("invalid0") || it.endsWith("invalid1") }
+        )
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.custom.DivCustomEnvironment
@@ -21,9 +22,11 @@ internal fun DivCustomView(
     }
 
     val childItems = data.items.orEmpty()
+    val storedValuesStorage = LocalDivViewContext.current.component.storedValuesStorage
     val environment = DivCustomEnvironment(
         data = data,
         expressionResolver = expressionResolver,
+        storedValuesStorage = storedValuesStorage,
         items = {
             for (child in childItems) {
                 DivBlockView(child)

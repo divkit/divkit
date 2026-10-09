@@ -19,6 +19,7 @@ import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.animation.AnimationConfiguration
 import com.yandex.div.compose.patch.DivPatcher
 import com.yandex.div.compose.preload.DivPreloader
+import com.yandex.div.compose.storedvalues.DivStoredValuesStorageFactory
 import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.yatagan.BindsInstance
@@ -52,6 +53,7 @@ internal interface DivContextComponent {
     val patcher: DivPatcher
     val playerFactory: DivVideoPlayerFactory
     val preloader: DivPreloader
+    val storedValuesStorageFactory: DivStoredValuesStorageFactory
     val viewContextFactory: DivViewContextFactory
     val viewContextStorage: DivViewContextStorage
 

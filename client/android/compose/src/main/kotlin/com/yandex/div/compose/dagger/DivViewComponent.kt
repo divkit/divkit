@@ -13,6 +13,7 @@ import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.patch.DivPatchCoordinator
 import com.yandex.div.compose.patch.DivPatchDownloadManager
 import com.yandex.div.compose.state.DivStateStorage
+import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.compose.tooltips.TooltipStateStorage
 import com.yandex.div.compose.video.VideoPlayerStorage
@@ -41,6 +42,7 @@ internal interface DivViewComponent {
     val patchDownloadManager: DivPatchDownloadManager
     val states: MutableState<List<DivData.State>>
     val stateStorage: DivStateStorage
+    val storedValuesStorage: DivStoredValuesStorage
     val timerStorage: TimerStorage
     val tooltipStateStorage: TooltipStateStorage
     val videoPlayerStorage: VideoPlayerStorage

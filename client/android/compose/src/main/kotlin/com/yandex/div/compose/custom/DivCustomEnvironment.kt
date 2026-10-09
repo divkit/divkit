@@ -3,6 +3,7 @@ package com.yandex.div.compose.custom
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivCustom
 
@@ -10,9 +11,9 @@ import com.yandex.div2.DivCustom
  * Context for composing a `div-custom` element.
  *
  * Passed to [DivCustomViewFactory.Content] and provides access to the current
- * [DivCustom] data, the [ExpressionResolver] that should be used to resolve
- * expressions inside the custom element and helpers for rendering `items`
- * declared on the `div-custom`.
+ * [DivCustom] data, the [ExpressionResolver] that should be used to resolve expressions inside the
+ * custom element, [storedValuesStorage] bound to the current card, and helpers for rendering
+ * `items` declared on the `div-custom`.
  */
 @ConsistentCopyVisibility
 @Stable
@@ -21,4 +22,5 @@ data class DivCustomEnvironment internal constructor(
     val expressionResolver: ExpressionResolver,
     val items: @Composable () -> Unit,
     val item: @Composable (index: Int, modifier: Modifier) -> Unit,
+    val storedValuesStorage: DivStoredValuesStorage,
 )

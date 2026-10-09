@@ -10,6 +10,7 @@ import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.patch.DivPatcher
 import com.yandex.div.compose.preload.PreloadResult
+import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div2.DivData
@@ -55,6 +56,10 @@ class DivContext private constructor(
     @ExperimentalApi
     val patcher: DivPatcher
         get() = component.patcher
+
+    /** Returns a stored-values storage bound to [cardId]. */
+    fun getStoredValuesStorage(cardId: String): DivStoredValuesStorage =
+        component.storedValuesStorageFactory.create(cardId)
 
     /**
      * Starts preloading resources for the given [DivData] and suspends until complete.

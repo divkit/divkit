@@ -117,6 +117,7 @@ private fun BaseViewWithExtensions(
         )
         return
     }
+    val storedValuesStorage = LocalDivViewContext.current.component.storedValuesStorage
 
     extensionHandler.Content(
         modifier = modifier,
@@ -126,6 +127,7 @@ private fun BaseViewWithExtensions(
             expressionResolver = expressionResolver,
             reporter = LocalComponent.current.reporter,
             animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState(),
+            storedValuesStorage = storedValuesStorage,
         ),
         content = { modifier ->
             BaseViewWithExtensions(

@@ -12,7 +12,9 @@ import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.compose.storedvalues.DivStoredValueScope
 import com.yandex.div.compose.video.DivVideoPreloader
+import com.yandex.div.data.StoredValue.StringStoredValue
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
@@ -42,6 +44,7 @@ import kotlinx.coroutines.yield
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -272,9 +275,12 @@ class DivPreloaderTest {
             animationConfiguration = divContext.component.animationConfiguration,
         )
 
+        val div = separator(extensions = listOf(DivExtension(id = "legacy")))
+        val divData = data(content = div)
         val result = legacyPreloader.preloadExtensions(
-            separator(extensions = listOf(DivExtension(id = "legacy"))),
+            div,
             ExpressionResolver.EMPTY,
+            divContext.getStoredValuesStorage(divData.logId),
         )
 
         assertTrue(result.isSuccessful)
@@ -295,9 +301,11 @@ class DivPreloaderTest {
             }
         }
         val custom = custom(type = "legacy") as Div.Custom
+        val divData = data(content = custom)
         val environment = DivCustomEnvironment(
             data = custom.value,
             expressionResolver = ExpressionResolver.EMPTY,
+            storedValuesStorage = divContext.getStoredValuesStorage(divData.logId),
             items = {},
             item = { _, _ -> },
         )
@@ -611,6 +619,67 @@ class DivPreloaderTest {
     }
 
     @Test
+    fun `custom and extension preload environments use current card storage`() = runTest {
+        val valueName = "preload-${UUID.randomUUID()}"
+        var customValue: StringStoredValue? = null
+        var extensionValue: StringStoredValue? = null
+        val customFactory = object : DivCustomViewFactory {
+            @Composable
+            override fun Content(modifier: Modifier, environment: DivCustomEnvironment) = Unit
+
+            override suspend fun preloadWithResult(environment: DivCustomEnvironment): PreloadResult {
+                customValue = environment.storedValuesStorage.getStoredValue(
+                    valueName,
+                    DivStoredValueScope.Card,
+                ) as? StringStoredValue
+                return PreloadResult(true)
+            }
+        }
+        val extensionHandler = object : DivExtensionHandler {
+            @Composable
+            override fun Content(
+                modifier: Modifier,
+                environment: DivExtensionEnvironment,
+                content: @Composable (Modifier) -> Unit,
+            ) = Unit
+
+            override suspend fun preloadWithResult(environment: DivExtensionEnvironment): PreloadResult {
+                extensionValue = environment.storedValuesStorage.getStoredValue(
+                    valueName,
+                    DivStoredValueScope.Card,
+                ) as? StringStoredValue
+                return PreloadResult(true)
+            }
+        }
+        val context = DivContext(
+            baseContext = RuntimeEnvironment.getApplication(),
+            configuration = DivConfiguration(
+                customViewFactories = mapOf("storage" to customFactory),
+                extensionHandlers = mapOf("storage" to extensionHandler),
+            ),
+        )
+        val data = data(
+            content = container(
+                items = listOf(
+                    custom(type = "storage"),
+                    separator(extensions = listOf(DivExtension(id = "storage"))),
+                )
+            )
+        ).copy(logId = "preload-card-${UUID.randomUUID()}")
+        val expected = StringStoredValue(valueName, "card value")
+        context.getStoredValuesStorage(data.logId).setValue(
+            expected,
+            DivStoredValueScope.Card,
+            ONE_HOUR,
+        )
+
+        context.preload(data)
+
+        assertEquals(expected, customValue)
+        assertEquals(expected, extensionValue)
+    }
+
+    @Test
     fun `resolves image url from local variable in container`() = runTest {
         val localUrl = "https://example.com/local.jpg"
         val data = data(
@@ -639,3 +708,5 @@ class DivPreloaderTest {
         )
     }
 }
+
+private const val ONE_HOUR = 3600L

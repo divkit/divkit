@@ -2,6 +2,7 @@ package com.yandex.div.compose.dagger
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.compose.storedvalues.LazyStoredValuesStorage
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div2.DivData
@@ -12,6 +13,9 @@ import javax.inject.Named
 
 @Module
 internal interface DivViewModule {
+
+    @Binds
+    fun bindStoredValuesStorage(impl: LazyStoredValuesStorage): DivStoredValuesStorage
 
     @Binds
     fun bindStoredValueProvider(impl: LazyStoredValuesStorage): ScopedStoredValueProvider

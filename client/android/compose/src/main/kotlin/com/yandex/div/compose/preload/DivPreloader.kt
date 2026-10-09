@@ -8,6 +8,7 @@ import com.yandex.div.compose.dagger.DivContextScope
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.state.resolveActiveState
+import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.compose.video.DivVideoPreloader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -69,13 +70,16 @@ internal class DivPreloader @Inject constructor(
         val resolver = localComponent.expressionResolver
         val preloads = mutableListOf<Deferred<PreloadResult>>()
         preloads += async { imagePreloader.preloadImages(div, resolver, downloadAll) }
-        preloads += async { extensionPreloader.preloadExtensions(div, resolver) }
+        val storedValuesStorage = viewContext.component.storedValuesStorage
+        preloads += async {
+            extensionPreloader.preloadExtensions(div, resolver, storedValuesStorage)
+        }
         when (div) {
             is Div.Video -> preloads += async {
                 preloadVideo(div, resolver, downloadAll)
             }
             is Div.Custom -> preloads += async {
-                preloadCustom(div, resolver)
+                preloadCustom(div, resolver, storedValuesStorage)
             }
             else -> Unit
         }
@@ -144,10 +148,15 @@ internal class DivPreloader @Inject constructor(
         return videoPreloader.preloadVideoWithResult(sources)
     }
 
-    private suspend fun preloadCustom(div: Div.Custom, resolver: ExpressionResolver): PreloadResult {
+    private suspend fun preloadCustom(
+        div: Div.Custom,
+        resolver: ExpressionResolver,
+        storedValuesStorage: DivStoredValuesStorage,
+    ): PreloadResult {
         val environment = DivCustomEnvironment(
             data = div.value,
             expressionResolver = resolver,
+            storedValuesStorage = storedValuesStorage,
             items = {},
             item = { _, _ -> },
         )
