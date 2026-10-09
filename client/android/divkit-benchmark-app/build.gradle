@@ -22,6 +22,7 @@ android {
 
     defaultConfig {
         applicationId = 'com.yandex.divkit.benchmark'
+        minSdk = 26
         versionCode = divkitVersion.versionCode + divkitVersion.buildNumber
 
         buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.lifecycleScope
 import com.yandex.div.compose.DivConfiguration
@@ -20,6 +21,7 @@ import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
+import com.yandex.divkit.benchmark.perf.PerfMetricReporter
 import com.yandex.divkit.regression.utils.AssetReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -28,6 +30,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
+import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -42,6 +45,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
     private lateinit var divContext: DivContext
     private lateinit var composeView: ComposeView
     private lateinit var textView: TextView
+    private lateinit var frameTotalMetric: FrameTotalMetric
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
         composeView = ComposeView(divContext).apply {
             rootLayout.addView(this)
         }
+        frameTotalMetric = FrameTotalMetric(window)
 
         lifecycleScope.launch {
             runBenchmark()
@@ -74,26 +79,39 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
 
         showMessage("Rendering cold DivView...")
 
-        setContent(data)
-
-        waitHistogram("DivCompose.Render.Total.Cold")
+        measureRender("Cold") { setContent(data) }
 
         val modeString = intent.getStringExtra("warm_render_mode")
             ?: throw RuntimeException("Extra is required: warm_render_mode")
         when (WarmRenderMode.valueOf(modeString)) {
             WarmRenderMode.RECOMPOSITION -> {
-                divContext.debugFeatures.forceRecomposition(data)
+                measureRender("Warm") { divContext.debugFeatures.forceRecomposition(data) }
             }
 
             WarmRenderMode.RESET_CONTENT -> {
                 showMessage("Rendering warm DivView...")
-                setContent(data)
+                measureRender("Warm") { setContent(data) }
             }
         }
 
-        waitHistogram("DivCompose.Render.Total.Warm")
-
         showMessage("Finished")
+    }
+
+    override fun onDestroy() {
+        frameTotalMetric.close()
+        super.onDestroy()
+    }
+
+    private suspend fun measureRender(phase: String, render: () -> Unit) {
+        val frame = frameTotalMetric.start()
+        render()
+        waitHistogram("DivCompose.Render.Total.$phase")
+        val totalDuration = withTimeout(10.seconds) { frame.await() }
+        PerfMetricReporter.reportTimeMetric(
+            "DivCompose.Frame.Total.$phase",
+            TimeUnit.MICROSECONDS,
+            totalDuration.inWholeMicroseconds,
+        )
     }
 
     private fun parseDivData(): DivData {
@@ -129,7 +147,10 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
         composeView.setContent {
             DivView(
                 data = data,
-                modifier = Modifier.safeDrawingPadding()
+                modifier = Modifier.safeDrawingPadding().drawWithContent {
+                    frameTotalMetric.onDraw(composeView.drawingTime)
+                    drawContent()
+                }
             )
         }
     }

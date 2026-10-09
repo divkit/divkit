@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import com.yandex.div.core.DivCustomContainerViewAdapter
 import com.yandex.div.core.DivCustomContainerViewAdapter.Companion.getDivChildFactory
@@ -118,11 +117,7 @@ class DemoCustomContainerAdapter: DivCustomContainerViewAdapter {
         background = gd
         textSize = 20f
         setOnClickListener {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                isTheFinalCountDown
-            } else {
-                Toast.makeText(context, "no final countdown for you", Toast.LENGTH_SHORT).show()
-            }
+            isTheFinalCountDown
         }
         start()
     }
