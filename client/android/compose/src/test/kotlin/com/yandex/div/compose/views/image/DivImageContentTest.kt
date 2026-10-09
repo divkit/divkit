@@ -196,6 +196,7 @@ class DivImageContentTest {
                         expressionResolver = viewContext.rootLocalComponent.expressionResolver,
                         reporter = reporter,
                         animationsEnabled = false,
+                        storedValuesStorage = viewContext.component.storedValuesStorage,
                     )
                 ) { modifier ->
                     DivImageContent(
