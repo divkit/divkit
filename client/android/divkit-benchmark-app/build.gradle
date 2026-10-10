@@ -88,17 +88,7 @@ dependencies {
     implementation project(path: ':fonts')
     implementation project(path: ':glide')
     implementation project(path: ':logging')
-    implementation project(path: ':ui-test-common')
     implementation project(path: ':utils')
-
-    implementation platform(libs.androidx.compose.bom)
-    implementation libs.androidx.compose.foundation
-    implementation libs.androidx.compose.ui
-    implementation libs.markwon
-    implementation libs.okhttp
-
-    // Only the Macrobenchmark variant needs this; keep size-tracking variants unchanged.
-    macrobenchmarkReleaseImplementation libs.androidx.profileinstaller
 
     // ============================================================ \\
     // HELLO, USERNAME!                                             \\
@@ -110,9 +100,18 @@ dependencies {
     // IN DIV-KIT LIBRARY WON'T BE NOTICED!                         \\
     // ============================================================ \\
 
-    androidTestUtil libs.androidx.test.services
-    androidTestImplementation libs.androidx.lifecycle.viewmodel
-    androidTestImplementation libs.androidx.viewpager2
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.compose.foundation
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.core
+    implementation libs.androidx.recyclerview
+    implementation libs.javax
+    implementation libs.markwon
+    implementation libs.okhttp
+
+    // Only the Macrobenchmark variant needs this; keep size-tracking variants unchanged.
+    macrobenchmarkReleaseImplementation libs.androidx.profileinstaller
 }
 
 base {
