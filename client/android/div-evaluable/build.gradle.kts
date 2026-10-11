@@ -31,6 +31,7 @@ tasks.register<JavaExec>("generateFunctionProvider") {
     mainClass.set("com.yandex.div.evaluable.function.BuiltinFunctionProviderGenerator")
     workingDir(generatorOutputDir)
     outputs.dir(generatorOutputDir)
+    outputs.cacheIf { true }
 }
 
 tasks.named("compileKotlin") {
