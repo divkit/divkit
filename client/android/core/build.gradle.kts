@@ -20,8 +20,14 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             api(libs.kotlinx.datetime)
+            api(libs.kotlinx.serialization.json)
+            compileOnly(libs.json)
+        }
+        jvmMain.dependencies {
+            api(libs.json)
         }
         commonTest.dependencies {
+            implementation(libs.json)
             implementation(libs.kotlin.test)
         }
     }

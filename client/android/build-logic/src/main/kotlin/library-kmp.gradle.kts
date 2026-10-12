@@ -28,6 +28,14 @@ kotlin {
         compileSdk = androidCompileSdk.get()
         minSdk = androidMinSdk.get()
     }
+
+    compilerOptions {
+        optIn.addAll(
+            "com.yandex.div.core.annotations.ExperimentalApi",
+            "com.yandex.div.core.annotations.InternalApi",
+            "com.yandex.div.data.DivModelInternalApi",
+        )
+    }
 }
 
 dependencies {
