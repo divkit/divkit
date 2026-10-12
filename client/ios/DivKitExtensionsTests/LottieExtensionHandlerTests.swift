@@ -150,7 +150,8 @@ private func makeExpectedBlock(
           children: [],
           path: context.parentPath + "0" + "container_with_extension"
         ),
-        accessibilityElement: accessibility(identifier: "container_with_extension")
+        accessibilityElement: accessibility(identifier: "container_with_extension"),
+        path: context.parentPath + "0" + "container_with_extension"
       ),
       scale: .fit,
       isPlaying: true

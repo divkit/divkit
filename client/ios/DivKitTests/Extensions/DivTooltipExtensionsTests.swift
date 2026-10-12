@@ -257,7 +257,8 @@ final class DivTooltipExtensionsTests: XCTestCase {
                   path: UIElementPath("test_card_id") + "0" + "separator"
                     + "tooltip#tooltip1" + "container"
                 ),
-                accessibilityElement: .default
+                accessibilityElement: .default,
+                path: .root + 0 + "separator" + "tooltip#tooltip1" + "container"
               ),
             ),
             params: BlockTooltipParams(
@@ -272,7 +273,8 @@ final class DivTooltipExtensionsTests: XCTestCase {
             useLegacyWidth: false
           )),
         ],
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: .root + 0 + "separator"
       ),
       ids: []
     )
@@ -317,7 +319,8 @@ final class DivTooltipExtensionsTests: XCTestCase {
                 child: SeparatorBlock(
                   color: color("#14000000")
                 ),
-                accessibilityElement: .default
+                accessibilityElement: .default,
+                path: .root + 0 + "separator" + "tooltip#tooltip1" + "separator"
               ),
             ),
             params: BlockTooltipParams(
@@ -331,7 +334,8 @@ final class DivTooltipExtensionsTests: XCTestCase {
             useLegacyWidth: false
           )),
         ],
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: .root + 0 + "separator"
       ),
       ids: []
     )
@@ -341,6 +345,54 @@ final class DivTooltipExtensionsTests: XCTestCase {
     let errors = context.errorsStorage.errors
     XCTAssertEqual(1, errors.count)
     XCTAssertEqual("Tooltip can not host another tooltips", errors.first?.message)
+  }
+
+  @MainActor
+  func test_ShowTooltipInScope_FindsAnchorWithoutActions() async {
+    let context = DivBlockModelingContext()
+
+    let block = makeBlock(
+      divContainer(
+        id: "scope",
+        items: [
+          divContainer(
+            items: [
+              divSeparator(
+                tooltips: [
+                  DivTooltip(
+                    div: divText(text: "Tooltip"),
+                    id: "tooltip1",
+                    position: .value(.center)
+                  ),
+                ]
+              ),
+            ]
+          ),
+        ]
+      ),
+      context: context
+    )
+
+    let hostView = TestTooltipHostView()
+    let manager = DefaultTooltipManager(externalView: hostView)
+    hostView.addBlockView(block.makeBlockView(renderingDelegate: manager))
+
+    let scopePaths = context.idToPath.paths(forId: "scope", cardId: context.cardId)
+    XCTAssertEqual(scopePaths, [.root + 0 + "scope"])
+
+    var error: String?
+    let shown = await manager.showTooltip(
+      info: TooltipInfo(
+        id: "tooltip1",
+        showsOnStart: false,
+        multiple: false,
+        scopePath: scopePaths.first,
+        onError: { error = $0 }
+      )
+    )
+
+    XCTAssertNil(error)
+    XCTAssertTrue(shown)
   }
 }
 
@@ -383,5 +435,21 @@ private final class CountingExtensionHandler: DivExtensionHandler {
     context _: DivBlockModelingContext
   ) -> Block {
     block
+  }
+}
+
+private final class TestTooltipHostView: TooltipHostView {
+  private let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 480))
+
+  var tooltipContainerBounds: CGRect { containerView.bounds }
+
+  var coordinateSpace: ViewType { containerView }
+
+  func addTooltipView(_ view: ViewType) {
+    containerView.addSubview(view)
+  }
+
+  func addBlockView(_ view: UIView) {
+    containerView.addSubview(view)
   }
 }

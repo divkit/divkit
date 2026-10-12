@@ -16,7 +16,8 @@ final class DivContainerExtensionsTests: XCTestCase {
           children: [],
           path: defaultContainerPath
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -36,7 +37,8 @@ final class DivContainerExtensionsTests: XCTestCase {
           children: [],
           path: defaultContainerPath
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -60,7 +62,8 @@ final class DivContainerExtensionsTests: XCTestCase {
           children: [],
           path: defaultContainerPath
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -87,7 +90,8 @@ final class DivContainerExtensionsTests: XCTestCase {
               child: SeparatorBlock(
                 color: color("#14000000")
               ),
-              accessibilityElement: .default
+              accessibilityElement: .default,
+              path: defaultContainerPath + 0 + "separator"
             ),
             DecoratingBlock(
               child: textBlock(
@@ -97,12 +101,14 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Hello!"
-              )
+              ),
+              path: defaultContainerPath + 1 + "text"
             ),
           ],
           path: defaultContainerPath
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -129,14 +135,16 @@ final class DivContainerExtensionsTests: XCTestCase {
               child: SeparatorBlock(
                 color: color("#14000000")
               ),
-              accessibilityElement: .default
+              accessibilityElement: .default,
+              path: defaultContainerPath + 0 + "separator"
             ),
           ],
           clipContent: false,
           path: defaultContainerPath
         ),
         boundary: .noClip,
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -174,7 +182,8 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Item 1"
-              )
+              ),
+              path: defaultContainerPath + 0 + "text"
             ),
             DecoratingBlock(
               child: textBlock(
@@ -184,12 +193,14 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Item 2"
-              )
+              ),
+              path: defaultContainerPath + 1 + "text"
             ),
           ],
           path: defaultContainerPath
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -232,7 +243,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                 traits: .staticText,
                 label: "Index = 0",
                 identifier: "item_0"
-              )
+              ),
+              path: defaultContainerPath + 0 + "item_0"
             ),
             DecoratingBlock(
               child: textBlock(
@@ -243,12 +255,14 @@ final class DivContainerExtensionsTests: XCTestCase {
                 traits: .staticText,
                 label: "Index = 1",
                 identifier: "item_1"
-              )
+              ),
+              path: defaultContainerPath + 1 + "item_1"
             ),
           ],
           path: defaultContainerPath
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -297,7 +311,8 @@ final class DivContainerExtensionsTests: XCTestCase {
                 traits: .staticText,
                 label: "Index = 0",
                 identifier: "item_0"
-              )
+              ),
+              path: customContainerPath + 0 + "item_0"
             ),
             DecoratingBlock(
               child: textBlock(
@@ -308,12 +323,14 @@ final class DivContainerExtensionsTests: XCTestCase {
                 traits: .staticText,
                 label: "Index = 1",
                 identifier: "item_1"
-              )
+              ),
+              path: customContainerPath + 1 + "item_1"
             ),
           ],
           path: UIElementPath("custom_card_id") + "777" + "container"
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: UIElementPath("custom_card_id") + "777" + "container"
       ),
       ids: []
     )
@@ -351,12 +368,14 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "itemBuilder"
-              )
+              ),
+              path: defaultContainerPath + 0 + "text"
             ),
           ],
           path: defaultContainerPath
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -457,14 +476,16 @@ final class DivContainerExtensionsTests: XCTestCase {
               accessibilityElement: accessibility(
                 traits: .staticText,
                 label: "Hello!"
-              )
+              ),
+              path: defaultContainerPath + 0 + "text"
             ),
             DecoratingBlock(
               child: textBlock(
                 text: "Excluded item",
                 path: defaultContainerPath + 1 + "text"
               ),
-              accessibilityElement: accessibility(hideElementWithChildren: true)
+              accessibilityElement: accessibility(hideElementWithChildren: true),
+              path: defaultContainerPath + 1 + "text"
             ),
             DecoratingBlock(
               child: ContainerBlock(
@@ -478,12 +499,14 @@ final class DivContainerExtensionsTests: XCTestCase {
                     accessibilityElement: accessibility(
                       traits: .staticText,
                       label: "Nested item"
-                    )
+                    ),
+                    path: nestedTextPath
                   ),
                 ],
                 path: defaultContainerPath + "2" + "container"
               ),
-              accessibilityElement: .default
+              accessibilityElement: .default,
+              path: defaultContainerPath + "2" + "container"
             ),
           ],
           path: defaultContainerPath
@@ -491,7 +514,8 @@ final class DivContainerExtensionsTests: XCTestCase {
         accessibilityElement: accessibility(
           traits: .button,
           label: "Hello! Nested item"
-        )
+        ),
+        path: defaultContainerPath
       ),
       ids: []
     )
@@ -535,14 +559,16 @@ final class DivContainerExtensionsTests: XCTestCase {
                 accessibilityElement: accessibility(
                   traits: .staticText,
                   label: "Hello!"
-                )
+                ),
+                path: defaultContainerPath + 0 + "text"
               ),
               fillsCrossAxis: true
             ),
           ],
           path: defaultContainerPath
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: defaultContainerPath
       ),
       ids: []
     )

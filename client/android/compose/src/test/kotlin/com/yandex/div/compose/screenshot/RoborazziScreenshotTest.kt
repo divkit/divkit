@@ -135,15 +135,6 @@ class RoborazziScreenshotTest(
 }
 
 private val ignoredFiles = setOf(
-    // div-nine-patch-background not supported
-    "div-background/nine-patch-rhombs.json",
-    "div-background/nine-patch-rhombs-horizontal-insets.json",
-    "div-background/nine-patch-rhombs-large-all-insets.json",
-    "div-background/nine-patch-rhombs-large-bottom-inset.json",
-    "div-background/nine-patch-rhombs-large-bottom-left-inset.json",
-    "div-background/nine-patch-rhombs-large-bottom-left-right-inset.json",
-    "div-background/nine-patch-rhombs-vertical-insets.json",
-    "div-background/nine-patch-shape.json",
 
     // div-container.aspect not fully supported
     "div-container/aspect/wrap_content-width-horizontal.json",

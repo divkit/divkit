@@ -30,6 +30,7 @@ import com.yandex.div.test.data.fixedPivot
 import com.yandex.div.test.data.imageBackground
 import com.yandex.div.test.data.insets
 import com.yandex.div.test.data.linearGradientBackground
+import com.yandex.div.test.data.ninePatchBackground
 import com.yandex.div.test.data.radialGradientBackground
 import com.yandex.div.test.data.solidBackground
 import com.yandex.div.test.data.text
@@ -168,6 +169,17 @@ class ModifierEqualityTest {
                         filters = listOf(blurFilter(radius = 12)),
                         imageUrl = "test://"
                     )
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `nine patch background`() {
+        assertModifiersEqual(
+            container(
+                backgrounds = listOf(
+                    ninePatchBackground(imageUrl = "test://")
                 )
             )
         )

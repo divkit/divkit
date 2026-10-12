@@ -18,7 +18,8 @@ final class DivSeparatorExtensionsTests: XCTestCase {
         child: SeparatorBlock(
           color: color("#AABBCCDD")
         ),
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: .root + 0 + "separator"
       ),
       ids: []
     )

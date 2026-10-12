@@ -199,6 +199,7 @@ final class DivBaseBlockBuilder {
         visibilityParams: visibilityParams,
         tooltips: div.tooltips.makeTooltips(context: context),
         accessibilityElement: accessibilityElement,
+        path: context.path,
         isFocused: isFocused
       )
 

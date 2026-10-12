@@ -23,7 +23,8 @@ final class DivImageExtensionsTests: XCTestCase {
           contentMode: ImageContentMode(scale: .aspectFill),
           path: defaultPath
         ),
-        accessibilityElement: accessibility(traits: .image)
+        accessibilityElement: accessibility(traits: .image),
+        path: defaultPath
       ),
       ids: []
     )
@@ -53,7 +54,8 @@ final class DivImageExtensionsTests: XCTestCase {
         accessibilityElement: accessibility(
           traits: .image,
           label: "Description"
-        )
+        ),
+        path: defaultPath
       ),
       ids: []
     )
@@ -79,7 +81,8 @@ final class DivImageExtensionsTests: XCTestCase {
           contentMode: ImageContentMode(scale: .aspectFill),
           path: defaultPath
         ),
-        accessibilityElement: accessibility(traits: .image)
+        accessibilityElement: accessibility(traits: .image),
+        path: defaultPath
       ),
       ids: []
     )
@@ -104,7 +107,8 @@ final class DivImageExtensionsTests: XCTestCase {
           contentMode: ImageContentMode(scale: .aspectFill),
           path: defaultPath
         ),
-        accessibilityElement: accessibility(traits: .image)
+        accessibilityElement: accessibility(traits: .image),
+        path: defaultPath
       ),
       ids: []
     )

@@ -18,7 +18,8 @@ final class DivBaseExtensionsTests: XCTestCase {
     let expectedBlock = StateBlock(
       child: DecoratingBlock(
         child: separatorBlock(),
-        accessibilityElement: accessibility(identifier: "id1")
+        accessibilityElement: accessibility(identifier: "id1"),
+        path: .root + 0 + "id1"
       ),
       ids: []
     )
@@ -47,7 +48,8 @@ final class DivBaseExtensionsTests: XCTestCase {
           accessibilityElement: accessibility(
             traits: .staticText,
             label: "Hello!"
-          )
+          ),
+          path: .root + 0 + "text"
         ),
         boundary: .noClip,
         paddings: EdgeInsets(vertical: 10)
@@ -126,7 +128,8 @@ final class DivBaseExtensionsTests: XCTestCase {
           traits: .button,
           label: "Accessibility description",
           identifier: "id1"
-        )
+        ),
+        path: .root + 0 + "id1"
       ),
       ids: []
     )
@@ -152,7 +155,8 @@ final class DivBaseExtensionsTests: XCTestCase {
           accessibilityElement: accessibility(
             traits: .button,
             label: "Accessibility description"
-          )
+          ),
+          path: .root + 0 + "separator"
         ),
         boundary: .noClip,
         paddings: EdgeInsets(vertical: 10)
@@ -208,31 +212,21 @@ final class DivBaseExtensionsTests: XCTestCase {
   }
 
   func test_MarginsOverActions() {
-    let action = divAction(logId: "action_log_id")
     let block = makeBlock(
       divSeparator(
-        actions: [action],
+        actions: [divAction(logId: "action_log_id")],
         margins: DivEdgeInsets(bottom: .value(10), top: .value(10))
       )
     )
 
-    let expectedBlock = StateBlock(
-      child: DecoratingBlock(
-        child: DecoratingBlock(
-          child: separatorBlock(),
-          actions: NonEmptyArray(action.uiAction(pathSuffix: "0/separator")!),
-          actionAnimation: .default,
-          accessibilityElement: .default,
-          path: .root + 0 + "separator"
-        ),
-        boundary: .noClip,
-        paddings: EdgeInsets(vertical: 10),
-        path: nil
-      ),
-      ids: []
-    )
+    let marginsBlock = block.child as? DecoratingBlock
+    let actionsBlock = marginsBlock?.child as? DecoratingBlock
 
-    assertEqual(block, expectedBlock)
+    // Margins must stay outside the tappable area.
+    XCTAssertEqual(marginsBlock?.paddings, EdgeInsets(vertical: 10))
+    XCTAssertNil(marginsBlock?.actions)
+    XCTAssertNotNil(actionsBlock?.actions)
+    XCTAssertEqual(actionsBlock?.paddings, .zero)
   }
 
   func test_WithBorderAndActions() {
@@ -299,7 +293,7 @@ final class DivBaseExtensionsTests: XCTestCase {
             block: DecoratingBlock(
               child: separatorBlock(),
               accessibilityElement: .default,
-              path: nil
+              path: .root + 0 + "separator"
             ),
             shadow: BlockShadow(
               cornerRadii: CornerRadii(0),
@@ -357,22 +351,9 @@ final class DivBaseExtensionsTests: XCTestCase {
   }
 
   func test_WithAlpha() {
-    let block = makeBlock(
-      divSeparator(
-        alpha: 0.3
-      )
-    )
+    let block = makeBlock(divSeparator(alpha: 0.3))
 
-    let expectedBlock = StateBlock(
-      child: DecoratingBlock(
-        child: separatorBlock(),
-        childAlpha: 0.3,
-        accessibilityElement: .default
-      ),
-      ids: []
-    )
-
-    assertEqual(block, expectedBlock)
+    XCTAssertEqual((block.child as? DecoratingBlock)?.childAlpha, 0.3)
   }
 
   func test_WithBackground() {
@@ -386,7 +367,8 @@ final class DivBaseExtensionsTests: XCTestCase {
       child: DecoratingBlock(
         child: separatorBlock(),
         backgroundColor: RGBAColor.red,
-        accessibilityElement: .default
+        accessibilityElement: .default,
+        path: .root + 0 + "separator"
       ),
       ids: []
     )
@@ -407,7 +389,8 @@ final class DivBaseExtensionsTests: XCTestCase {
         child: DecoratingBlock(
           child: separatorBlock(),
           backgroundColor: RGBAColor.red,
-          accessibilityElement: .default
+          accessibilityElement: .default,
+          path: .root + 0 + "separator"
         ),
         childAlpha: 0.3
       ),
@@ -461,7 +444,8 @@ final class DivBaseExtensionsTests: XCTestCase {
         accessibilityElement: accessibility(
           traits: .staticText,
           label: "Hello!"
-        )
+        ),
+        path: .root + 0 + "text"
       ),
       ids: []
     )

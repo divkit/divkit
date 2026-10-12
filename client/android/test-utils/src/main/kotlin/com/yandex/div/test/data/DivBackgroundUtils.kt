@@ -1,13 +1,16 @@
 package com.yandex.div.test.data
 
+import android.net.Uri
 import androidx.core.net.toUri
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div2.DivAbsoluteEdgeInsets
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivImageBackground
 import com.yandex.div2.DivLinearGradient
+import com.yandex.div2.DivNinePatchBackground
 import com.yandex.div2.DivRadialGradient
 import com.yandex.div2.DivSolidBackground
 
@@ -21,6 +24,23 @@ fun imageBackground(
             filters = filters,
             imageUrl = constant(imageUrl.toUri()),
             preloadRequired = constant(preloadRequired)
+        )
+    )
+}
+
+fun ninePatchBackground(
+    imageUrl: String,
+    insets: DivAbsoluteEdgeInsets = DivAbsoluteEdgeInsets()
+): DivBackground.NinePatch = ninePatchBackground(constant(imageUrl.toUri()), insets)
+
+fun ninePatchBackground(
+    imageUrl: Expression<Uri>,
+    insets: DivAbsoluteEdgeInsets = DivAbsoluteEdgeInsets()
+): DivBackground.NinePatch {
+    return DivBackground.NinePatch(
+        value = DivNinePatchBackground(
+            imageUrl = imageUrl,
+            insets = insets
         )
     )
 }

@@ -80,7 +80,8 @@ private func makeExpectedBlock(
         enablesReturnKeyAutomatically: enablesReturnKeyAutomatically,
         spellChecking: spellChecking
       ),
-      accessibilityElement: accessibility(label: "Hello!")
+      accessibilityElement: accessibility(label: "Hello!"),
+      path: .root + "0" + "input"
     ),
     ids: []
   )

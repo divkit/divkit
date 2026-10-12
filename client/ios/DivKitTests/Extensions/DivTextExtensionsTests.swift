@@ -160,7 +160,8 @@ final class DivTextExtensionsTests: XCTestCase {
         accessibilityElement: accessibility(
           traits: .staticText,
           label: "Hello!"
-        )
+        ),
+        path: defaultPath
       ),
       ids: []
     )
@@ -193,7 +194,8 @@ final class DivTextExtensionsTests: XCTestCase {
           traits: .button,
           label: "Accessibility description",
           identifier: "text_id"
-        )
+        ),
+        path: .root + 0 + "text_id"
       ),
       ids: []
     )
@@ -221,7 +223,8 @@ final class DivTextExtensionsTests: XCTestCase {
         accessibilityElement: accessibility(
           traits: .button,
           label: "Hello!"
-        )
+        ),
+        path: defaultPath
       ),
       ids: []
     )

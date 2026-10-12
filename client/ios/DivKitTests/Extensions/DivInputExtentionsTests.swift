@@ -104,7 +104,8 @@ private func makeExpectedBlockBlock(
         isSecure: isSecure,
         spellChecking: spellChecking
       ),
-      accessibilityElement: accessibilityElement ?? accessibility(label: "Hello!")
+      accessibilityElement: accessibilityElement ?? accessibility(label: "Hello!"),
+      path: .root + "0" + "input"
     ),
     ids: []
   )
