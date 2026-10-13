@@ -1,6 +1,10 @@
 package com.yandex.div.compose.views.input
 
 import android.text.InputType
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
+import android.view.inputmethod.InputConnectionWrapper
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicText
@@ -12,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.platform.PlatformTextInputInterceptor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -38,6 +44,7 @@ internal fun InputFieldLayout(
         maxLines: Int,
         enabled: Boolean,
         keyboardOptions: KeyboardOptions,
+        onKeyboardAction: (() -> Unit)?,
         decorator: TextFieldDecorator,
     ) -> Unit,
 ) {
@@ -51,8 +58,24 @@ internal fun InputFieldLayout(
     val options = remember(keyboardType, enterKeyType, autocapitalization) {
         keyboardOptions(keyboardType, enterKeyType, autocapitalization).copy(autoCorrectEnabled = false)
     }
+    val onKeyboardAction = remember(options.imeAction) {
+        if (options.imeAction == ImeAction.Default) {
+            null
+        } else {
+            {}
+        }
+    }
     val mask = data.mask
-    val keyboardInterceptor = remember(keyboardType, mask) { inputKeyboardInterceptor(keyboardType, mask) }
+    val hasDigitsMask = mask is DivInputMask.Currency || mask is DivInputMask.Phone
+    val isMultilineKeyboard = !singleLine && !hasDigitsMask
+    val consumeEnter = isMultilineKeyboard && options.imeAction != ImeAction.Default
+    val keyboardInterceptor = remember(keyboardType, mask, enterKeyType) {
+        inputKeyboardInterceptor(
+            signedDecimal = keyboardType == DivInput.KeyboardType.NUMBER && !hasDigitsMask,
+            multiline = isMultilineKeyboard,
+            consumeEnter = consumeEnter,
+        )
+    }
     val hintText = data.hintText?.observedValue()
     val hintColor = data.hintColor.observedColorValue()
     val decorator = TextFieldDecorator { innerTextField ->
@@ -67,31 +90,50 @@ internal fun InputFieldLayout(
         )
     }
 
-    Box(modifier = modifier.trackInputFocus(), contentAlignment = contentAlignment) {
+    Box(
+        modifier = modifier.trackInputFocus().onPreviewKeyEvent { consumeEnter && it.nativeKeyEvent.isEnterDown() },
+        contentAlignment = contentAlignment,
+    ) {
         InterceptPlatformTextInput(keyboardInterceptor) {
-            content(singleLine, maxLines, enabled, options, decorator)
+            content(singleLine, maxLines, enabled, options, onKeyboardAction, decorator)
         }
     }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 private fun inputKeyboardInterceptor(
-    keyboardType: DivInput.KeyboardType,
-    mask: DivInputMask?,
+    signedDecimal: Boolean,
+    multiline: Boolean,
+    consumeEnter: Boolean,
 ): PlatformTextInputInterceptor {
     return PlatformTextInputInterceptor { request, nextHandler ->
-        if (keyboardType != DivInput.KeyboardType.NUMBER ||
-            mask is DivInputMask.Currency || mask is DivInputMask.Phone
-        ) {
-            nextHandler.startInputMethod(request)
-        }
         nextHandler.startInputMethod { outAttributes ->
-            request.createInputConnection(outAttributes).also {
+            val connection = request.createInputConnection(outAttributes)
+            if (signedDecimal) {
                 outAttributes.inputType = outAttributes.inputType or
                     InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
             }
+            if (multiline) {
+                outAttributes.imeOptions = outAttributes.imeOptions or EditorInfo.IME_FLAG_NO_ENTER_ACTION
+            }
+            if (consumeEnter) EnterInputConnection(connection) else connection
         }
     }
+}
+
+private class EnterInputConnection(connection: InputConnection) : InputConnectionWrapper(connection, false) {
+    override fun commitText(text: CharSequence?, newCursorPosition: Int): Boolean {
+        return text == "\n" || super.commitText(text, newCursorPosition)
+    }
+
+    override fun sendKeyEvent(event: KeyEvent): Boolean {
+        return event.isEnterDown() || super.sendKeyEvent(event)
+    }
+}
+
+private fun KeyEvent.isEnterDown(): Boolean {
+    return action == KeyEvent.ACTION_DOWN &&
+        (keyCode == KeyEvent.KEYCODE_ENTER || keyCode == KeyEvent.KEYCODE_NUMPAD_ENTER)
 }
 
 @Composable

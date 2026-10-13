@@ -2,6 +2,7 @@ package com.yandex.div.compose.views.input
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -76,7 +77,10 @@ private fun InputView(
         textAlignmentHorizontal = textAlignmentHorizontal,
         keyboardType = keyboardType,
         showHint = state.text.text.isEmpty() && !rendersOnEmptyInput,
-    ) { singleLine, maxLines, enabled, options, decorator ->
+    ) { singleLine, maxLines, enabled, options, onKeyboardAction, decorator ->
+        val keyboardActions = onKeyboardAction?.let { action ->
+            remember(action) { KeyboardActions { action() } }
+        } ?: KeyboardActions.Default
         BasicTextField(
             value = state.text,
             onValueChange = state.onValueChange,
@@ -87,6 +91,7 @@ private fun InputView(
             modifier = Modifier.fillMaxWidth(),
             visualTransformation = visualTransformation,
             keyboardOptions = options,
+            keyboardActions = keyboardActions,
             decorationBox = { decorator.Decoration(it) },
         )
     }

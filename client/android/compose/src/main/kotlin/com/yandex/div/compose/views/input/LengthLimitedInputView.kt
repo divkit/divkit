@@ -3,6 +3,7 @@ package com.yandex.div.compose.views.input
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.runtime.Composable
@@ -44,7 +45,7 @@ internal fun LengthLimitedInputView(
         textAlignmentHorizontal = textAlignmentHorizontal,
         keyboardType = keyboardType,
         showHint = text.isEmpty(),
-    ) { singleLine, maxLines, enabled, options, decorator ->
+    ) { singleLine, maxLines, enabled, options, onKeyboardAction, decorator ->
         val isPassword = keyboardType == DivInput.KeyboardType.PASSWORD
         val focusRequester = remember { FocusRequester() }
         var isFocused by remember { mutableStateOf(false) }
@@ -71,6 +72,7 @@ internal fun LengthLimitedInputView(
                 inputTransformation = transformation,
                 textStyle = textStyle,
                 keyboardOptions = options,
+                onKeyboardAction = rememberKeyboardActionHandler(onKeyboardAction),
                 decorator = decorator,
                 textObfuscationMode = TextObfuscationMode.Hidden,
             )
@@ -82,11 +84,19 @@ internal fun LengthLimitedInputView(
                 inputTransformation = transformation,
                 textStyle = textStyle,
                 keyboardOptions = options,
+                onKeyboardAction = rememberKeyboardActionHandler(onKeyboardAction),
                 lineLimits = if (singleLine) TextFieldLineLimits.SingleLine else {
                     TextFieldLineLimits.MultiLine(maxHeightInLines = maxLines)
                 },
                 decorator = decorator,
             )
         }
+    }
+}
+
+@Composable
+private fun rememberKeyboardActionHandler(onKeyboardAction: (() -> Unit)?): KeyboardActionHandler? {
+    return onKeyboardAction?.let { action ->
+        remember(action) { KeyboardActionHandler { action() } }
     }
 }
