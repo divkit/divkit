@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.indicator
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.scale
@@ -10,12 +11,16 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.pager.findNearestPager
 import com.yandex.div2.DivIndicator
 
 @Composable
 internal fun DivIndicatorView(modifier: Modifier, data: DivIndicator) {
     val style = data.observeIndicatorStyle()
-    val pagerState = data.pagerId?.let { LocalDivViewContext.current.pagerStateStorage.get(it) }
+    val viewContext = LocalDivViewContext.current
+    val rootDiv = viewContext.rootDiv
+    val pager = remember(rootDiv, data) { rootDiv?.let { findNearestPager(it, data) } }
+    val pagerState = pager?.let { viewContext.pagerStateStorage.get(it) }
     val itemsCount = pagerState?.pageCount ?: 0
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 

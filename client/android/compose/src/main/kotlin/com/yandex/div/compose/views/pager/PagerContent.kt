@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.first
 
 @Composable
 internal fun PagerContent(
-    id: String?,
+    pager: DivPager,
     items: List<Div>,
     isHorizontal: Boolean,
     itemSpacing: Dp,
@@ -88,7 +88,7 @@ internal fun PagerContent(
     )
 
     stateStorage.rememberAndStoreState(
-        id = id,
+        pager = pager,
         pageCount = items.size,
         listState = listState,
         snapPosition = snapPosition,

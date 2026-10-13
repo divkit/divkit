@@ -31,6 +31,14 @@ internal fun DivPagerView(
         ?: emptyList()
 
     if (items.isEmpty()) {
+        LocalDivViewContext.current.pagerStateStorage.rememberAndStoreState(
+            pager = data,
+            pageCount = 0,
+            listState = null,
+            snapPosition = SnapPosition.Start,
+            initialPage = 0,
+            infiniteScroll = false,
+        )
         Box(modifier = modifier)
         return
     }
@@ -57,7 +65,7 @@ private fun PagerView(
     val stateStorage = LocalDivViewContext.current.pagerStateStorage
 
     stateStorage.rememberAndStoreState(
-        id = data.id,
+        pager = data,
         pageCount = items.size,
         listState = null,
         snapPosition = SnapPosition.Start,
@@ -87,7 +95,7 @@ private fun PagerView(
         val viewportSize = with(density) { viewportSizePx.intValue.toDp() }
 
         PagerContent(
-            id = data.id,
+            pager = data,
             items = items,
             isHorizontal = isHorizontal,
             itemSpacing = data.itemSpacing.observedValue(),

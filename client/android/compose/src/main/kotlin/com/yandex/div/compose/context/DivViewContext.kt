@@ -19,6 +19,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
+import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
@@ -29,6 +30,9 @@ internal class DivViewContext(
 ) {
     val states: List<DivData.State>
         get() = component.states.value
+
+    val rootDiv: Div?
+        get() = states.firstOrNull()?.div
 
     val rootLocalComponent: DivLocalComponent
 

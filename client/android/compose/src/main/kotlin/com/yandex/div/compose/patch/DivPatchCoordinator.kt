@@ -14,6 +14,7 @@ import com.yandex.div.compose.context.DivLocalComponentStorage
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.internal.patch.DivPatchApply
 import com.yandex.div.internal.patch.DivPatchMap
 import com.yandex.div2.DivBase
@@ -29,6 +30,7 @@ import javax.inject.Inject
 internal class DivPatchCoordinator @Inject constructor(
     private val compositionKeyStorage: CompositionKeyStorage,
     private val localComponentStorage: DivLocalComponentStorage,
+    private val pagerStateStorage: DivPagerStateStorage,
     private val states: MutableState<List<DivData.State>>
 ) {
     var revision: Long by mutableLongStateOf(0L)
@@ -75,6 +77,7 @@ internal class DivPatchCoordinator @Inject constructor(
         pendingActions.forEach { retainedDivs.addAll(it.divs) }
         localComponentStorage.retain(retainedDivs)
         compositionKeyStorage.retain(retainedDivs)
+        pagerStateStorage.retain(retainedDivs)
         appliedActions.forEach { it.run() }
     }
 }

@@ -9,12 +9,14 @@ fun custom(
     type: String,
     customProps: JSONObject? = null,
     height: DivSize = wrapContent(),
+    items: List<Div>? = null,
 ): Div {
     return Div.Custom(
         DivCustom(
             customProps = customProps,
             customType = type,
             height = height,
+            items = items,
         )
     )
 }
