@@ -18,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 
 @InternalApi
@@ -48,11 +49,15 @@ public class SvgDivImageLoader(
                 }
                 SvgDecoder.decode(bytes.inputStream())
             }.onSuccess {
-                svgCacheManager.set(imageUrl, it)
-                callback.onSuccess(DivCachedImage.Drawable(it, BitmapSource.NETWORK))
+                withContext(Dispatchers.Main) {
+                    svgCacheManager.set(imageUrl, it)
+                    callback.onSuccess(DivCachedImage.Drawable(it, BitmapSource.NETWORK))
+                }
             }.onFailure {
                 if (it is CancellationException) throw it
-                callback.onError(it.toDivImageLoadError(imageUrl))
+                withContext(Dispatchers.Main) {
+                    callback.onError(it.toDivImageLoadError(imageUrl))
+                }
             }
         }
 
