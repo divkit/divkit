@@ -88,6 +88,18 @@
       }
     },
     {
+      "id": "ext_lottie_safe_mode",
+      "name": "Lottie extension <code>safe_mode</code> property",
+      "status": {
+        "notes": "Android-specific feature"
+      },
+      "compat": {
+        "android": {
+          "version_added": "32.61.0"
+        }
+      }
+    },
+    {
       "id": "ext_gesture",
       "name": "<code>gesture</code> extension",
       "compat": {
@@ -174,6 +186,15 @@
         },
         "ios": {
           "version_added": "30.60.0"
+        }
+      }
+    },
+    {
+      "id": "ext_backdrop_effect",
+      "name": "<code>backdrop_effect</code> extension",
+      "compat": {
+        "android": {
+          "version_added": "32.61.1"
         }
       }
     }
