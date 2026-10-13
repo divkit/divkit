@@ -3183,6 +3183,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/expression/variables/TwoWayVariableBinderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/expression/variables/TwoWayVariableBinderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/expression/variables/VariableControllerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/expression/variables/VariableControllerTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/image/DivImageLoaderWrapperTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/image/DivImageLoaderWrapperTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/image/SvgImageCallbacksTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/image/SvgImageCallbacksTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/network/DivNetworkAdaptersTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/network/DivNetworkAdaptersTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/network/DivNetworkDependencyInjectionTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/network/DivNetworkDependencyInjectionTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/network/DivNetworkDivDownloaderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/network/DivNetworkDivDownloaderTest.kt",
