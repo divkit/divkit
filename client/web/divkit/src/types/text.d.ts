@@ -16,6 +16,8 @@ export type LineStyle = 'none' | 'single';
 
 export type Truncate = 'none' | 'end';
 
+export type TruncatePolicy = 'grapheme' | 'word';
+
 export interface TextStyles {
     font_size?: number;
     font_family?: string;
@@ -158,4 +160,5 @@ export interface DivTextData extends DivBaseData, DivActionableData, TextStyles 
     // ellipsis;
     selectable?: BooleanInt;
     truncate?: Truncate;
+    truncate_policy?: TruncatePolicy;
 }

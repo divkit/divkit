@@ -136,6 +136,7 @@
     $: jsonTextColor = componentContext.getDerivedFromVars(componentContext.json.text_color);
     $: jsonFocusTextColor = componentContext.getDerivedFromVars(componentContext.json.focused_text_color);
     $: jsonTruncate = componentContext.getDerivedFromVars(componentContext.json.truncate);
+    $: jsonTruncatePolicy = componentContext.getDerivedFromVars(componentContext.json.truncate_policy);
     $: jsonTextGradient = componentContext.getDerivedFromVars(componentContext.json.text_gradient);
     $: jsonSelectable = componentContext.getDerivedFromVars(componentContext.json.selectable);
     $: jsonAutoEllipsize = componentContext.getDerivedFromVars(componentContext.json.auto_ellipsize);
@@ -180,14 +181,21 @@
         }
     }
 
-    $: singleline = $jsonMaxLines === 1;
+    $: wordTruncation = $jsonMaxLines === 1 &&
+        $jsonTruncatePolicy === 'word' &&
+        ($jsonTruncate === undefined || $jsonTruncate === 'end');
+    $: singleline = $jsonMaxLines === 1 && !wordTruncation;
     $: {
         let newMaxHeight = '';
         let newMaxLines: number | undefined;
         let newLineClamp: string | number = '';
         let newMultiline = false;
 
-        if ($jsonMaxLines && $jsonMaxLines > 1) {
+        if (wordTruncation) {
+            newMaxLines = 1;
+            newLineClamp = 1;
+            newMultiline = true;
+        } else if ($jsonMaxLines && $jsonMaxLines > 1) {
             const lines = Number($jsonMaxLines);
 
             newMaxHeight = lines * lineHeight + 'em';
@@ -501,6 +509,7 @@
     $: mods = {
         singleline,
         multiline,
+        'word-truncation': wordTruncation,
         halign,
         valign,
         truncate,

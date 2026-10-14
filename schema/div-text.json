@@ -602,7 +602,8 @@
           "$description": "translations.json#/div_text_truncate_policy",
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         "text_shadow": {

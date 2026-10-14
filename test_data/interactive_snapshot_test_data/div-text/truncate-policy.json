@@ -1,8 +1,9 @@
 {
-  "description": "Changing truncate_policy recomputes single-line and multiline text truncation.",
+  "description": "Changing truncate_policy recomputes text truncation; Web supports only single-line policy changes and keeps multiline truncation unchanged.",
   "platforms": [
     "android",
-    "ios"
+    "ios",
+    "web"
   ],
   "div_data": {
     "card": {

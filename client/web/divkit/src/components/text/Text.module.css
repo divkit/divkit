@@ -66,7 +66,7 @@
     text-overflow: ellipsis;
 }
 
-.text_truncate_none .text_singleline .text__inner {
+.text_truncate_none.text_singleline .text__inner {
     text-overflow: clip;
 }
 
@@ -74,6 +74,14 @@
     /* For -webkit-line-clamp */
     display: -webkit-box;
     -webkit-box-orient: vertical;
+}
+
+.text_word-truncation .text__inner {
+    overflow-wrap: break-word;
+}
+
+.text_word-truncation .text-range {
+    white-space: normal;
 }
 
 .text__inner_has-cloud-bg {

@@ -1,0 +1,22 @@
+{
+  "card": {
+    "log_id": "truncate-policy-whitespace",
+    "variables": [
+      { "name": "policy", "type": "string", "value": "word" }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "id": "price",
+          "text": "Price:  100\nold",
+          "font_size": 18,
+          "width": { "type": "fixed", "value": 190 },
+          "max_lines": 1,
+          "truncate_policy": "@{policy}"
+        }
+      }
+    ]
+  }
+}
