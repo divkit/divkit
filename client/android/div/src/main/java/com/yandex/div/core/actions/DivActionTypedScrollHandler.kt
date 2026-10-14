@@ -41,10 +41,11 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
         val step = action.itemCount.evaluate(resolver).toInt()
         val overflow = DivActionScrollBy.Overflow.toString(action.overflow.evaluate(resolver))
         val animated = action.animated.evaluate(resolver)
+        val duration = action.duration?.evaluate(resolver)?.toInt()
 
         val viewController = DivViewWithItemsController.create(id, scopeId, view, DivActionScrollBy.TYPE) ?: return
-        viewController.changeCurrentItemByStep(overflow, step, animated)
-        viewController.scrollByOffset(overflow, offset, animated)
+        viewController.changeCurrentItemByStep(overflow, step, animated, duration)
+        viewController.scrollByOffset(overflow, offset, animated, duration, cancelPreviousScroll = step == 0)
     }
 
     private fun handleAction(
@@ -55,27 +56,28 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
     ) {
         val id = action.id.evaluate(resolver)
         val animated = action.animated.evaluate(resolver)
+        val duration = action.duration?.evaluate(resolver)?.toInt()
         val viewController = DivViewWithItemsController.create(id, scopeId, view, DivActionScrollTo.TYPE) ?: return
 
         when(val destination = action.destination) {
             is DivActionScrollDestination.Offset -> {
                 val offset = destination.value.value.evaluate(resolver).toInt()
-                viewController.scrollTo(offset, animated)
+                viewController.scrollTo(offset, animated, duration)
             }
             is DivActionScrollDestination.Index -> {
                 val index = destination.value.value.evaluate(resolver).toInt()
-                viewController.setCurrentItem(index, animated)
+                viewController.setCurrentItem(index, animated, duration)
             }
             is DivActionScrollDestination.End -> {
-                viewController.scrollToEnd(animated)
+                viewController.scrollToEnd(animated, duration)
             }
             is DivActionScrollDestination.Start -> {
-                viewController.scrollToStart(animated)
+                viewController.scrollToStart(animated, duration)
             }
             is DivActionScrollDestination.ItemId -> {
                 val itemId = destination.value.value.evaluate(resolver)
                 try {
-                    viewController.scrollToItemId(itemId, animated)
+                    viewController.scrollToItemId(itemId, animated, duration)
                 } catch (e: RuntimeException) {
                     view.logError(e)
                 }

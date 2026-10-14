@@ -1,0 +1,564 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 160
+      },
+      "height": {
+        "type": "fixed",
+        "value": 36
+      },
+      "font_size": 13,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#DDDDDD"
+        }
+      ],
+      "margins": {
+        "right": 4,
+        "top": 4
+      },
+      "border": {
+        "corner_radius": 4
+      }
+    },
+    "tile": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 140
+      },
+      "height": {
+        "type": "fixed",
+        "value": 140
+      },
+      "font_size": 28,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "color"
+        }
+      ]
+    },
+    "pager_tile": {
+      "type": "tile",
+      "width": {
+        "type": "match_parent"
+      }
+    },
+    "navigation_gallery": {
+      "type": "control_row",
+      "items": [
+        {
+          "type": "button",
+          "text": "Gallery",
+          "actions": [
+            {
+              "log_id": "duration_mode_0",
+              "typed": {
+                "type": "set_state",
+                "state_id": "0"
+              }
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "text": "Vertical",
+          "actions": [
+            {
+              "log_id": "duration_mode_1",
+              "typed": {
+                "type": "set_state",
+                "state_id": "1"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "navigation_pager": {
+      "type": "button",
+      "text": "Pager",
+      "actions": [
+        {
+          "log_id": "duration_mode_3",
+          "typed": {
+            "type": "set_state",
+            "state_id": "3"
+          }
+        }
+      ]
+    },
+    "scroll_controls": {
+      "type": "control_row",
+      "items": [
+        {
+          "type": "button",
+          "text": "First",
+          "actions": [
+            {
+              "log_id": "duration_first",
+              "typed": {
+                "type": "scroll_to",
+                "$id": "target",
+                "destination": {
+                  "type": "item_id",
+                  "$value": "first_item"
+                },
+                "duration": "@{scroll_duration}"
+              }
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "text": "Last",
+          "actions": [
+            {
+              "log_id": "duration_last",
+              "typed": {
+                "type": "scroll_to",
+                "$id": "target",
+                "destination": {
+                  "type": "item_id",
+                  "$value": "last_item"
+                },
+                "duration": "@{scroll_duration}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "duration_controls": {
+      "type": "control_row",
+      "items": [
+        {
+          "type": "button",
+          "text": "0.5с",
+          "background": [
+            {
+              "type": "solid",
+              "color": "@{scroll_duration == 500 ? '#81C784' : '#DDDDDD'}"
+            }
+          ],
+          "actions": [
+            {
+              "log_id": "duration_500",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "scroll_duration",
+                "value": {
+                  "type": "integer",
+                  "value": 500
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "text": "2с",
+          "background": [
+            {
+              "type": "solid",
+              "color": "@{scroll_duration == 2000 ? '#81C784' : '#DDDDDD'}"
+            }
+          ],
+          "actions": [
+            {
+              "log_id": "duration_2000",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "scroll_duration",
+                "value": {
+                  "type": "integer",
+                  "value": 2000
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "section": {
+      "type": "container",
+      "orientation": "vertical",
+      "paddings": {
+        "left": 8,
+        "right": 8
+      }
+    },
+    "control_row": {
+      "type": "container",
+      "orientation": "horizontal"
+    }
+  },
+  "card": {
+    "log_id": "scroll_duration",
+    "variables": [
+      {
+        "name": "scroll_duration",
+        "type": "integer",
+        "value": 2000
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "section",
+          "items": [
+            {
+              "type": "navigation_gallery"
+            },
+            {
+              "type": "navigation_pager"
+            },
+            {
+              "type": "text",
+              "text": "Horizontal gallery",
+              "font_size": 20
+            },
+            {
+              "type": "gallery",
+              "id": "gallery_default",
+              "height": {
+                "type": "fixed",
+                "value": 180
+              },
+              "items": [
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_0",
+                  "text": "Page 0",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_1",
+                  "text": "Page 1",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_2",
+                  "text": "Page 2",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_3",
+                  "text": "Page 3",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_4",
+                  "text": "Page 4",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_5",
+                  "text": "Page 5",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_6",
+                  "text": "Page 6",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_7",
+                  "text": "Page 7",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_8",
+                  "text": "Page 8",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_9",
+                  "text": "Page 9",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_10",
+                  "text": "Page 10",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_default_item_11",
+                  "text": "Page 11",
+                  "color": "#64B5F6"
+                }
+              ],
+              "item_spacing": 0,
+              "scroll_content_alignment": "start"
+            },
+            {
+              "type": "scroll_controls",
+              "target": "gallery_default",
+              "first_item": "gallery_default_item_0",
+              "last_item": "gallery_default_item_11"
+            },
+            {
+              "type": "duration_controls"
+            }
+          ]
+        }
+      },
+      {
+        "state_id": 1,
+        "div": {
+          "type": "section",
+          "items": [
+            {
+              "type": "navigation_gallery"
+            },
+            {
+              "type": "navigation_pager"
+            },
+            {
+              "type": "text",
+              "text": "Vertical gallery",
+              "font_size": 20
+            },
+            {
+              "type": "gallery",
+              "id": "gallery_vertical",
+              "height": {
+                "type": "fixed",
+                "value": 180
+              },
+              "items": [
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_0",
+                  "text": "Page 0",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_1",
+                  "text": "Page 1",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_2",
+                  "text": "Page 2",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_3",
+                  "text": "Page 3",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_4",
+                  "text": "Page 4",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_5",
+                  "text": "Page 5",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_6",
+                  "text": "Page 6",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_7",
+                  "text": "Page 7",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_8",
+                  "text": "Page 8",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_9",
+                  "text": "Page 9",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_10",
+                  "text": "Page 10",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "tile",
+                  "id": "gallery_vertical_item_11",
+                  "text": "Page 11",
+                  "color": "#64B5F6"
+                }
+              ],
+              "item_spacing": 0,
+              "scroll_content_alignment": "start",
+              "orientation": "vertical"
+            },
+            {
+              "type": "scroll_controls",
+              "target": "gallery_vertical",
+              "first_item": "gallery_vertical_item_0",
+              "last_item": "gallery_vertical_item_11"
+            },
+            {
+              "type": "duration_controls"
+            }
+          ]
+        }
+      },
+      {
+        "state_id": 3,
+        "div": {
+          "type": "section",
+          "items": [
+            {
+              "type": "navigation_gallery"
+            },
+            {
+              "type": "navigation_pager"
+            },
+            {
+              "type": "text",
+              "text": "Pager",
+              "font_size": 20
+            },
+            {
+              "type": "pager",
+              "id": "duration_pager",
+              "height": {
+                "type": "fixed",
+                "value": 180
+              },
+              "items": [
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_0",
+                  "text": "Page 0",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_1",
+                  "text": "Page 1",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_2",
+                  "text": "Page 2",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_3",
+                  "text": "Page 3",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_4",
+                  "text": "Page 4",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_5",
+                  "text": "Page 5",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_6",
+                  "text": "Page 6",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_7",
+                  "text": "Page 7",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_8",
+                  "text": "Page 8",
+                  "color": "#64B5F6"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_9",
+                  "text": "Page 9",
+                  "color": "#E57373"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_10",
+                  "text": "Page 10",
+                  "color": "#81C784"
+                },
+                {
+                  "type": "pager_tile",
+                  "id": "duration_pager_item_11",
+                  "text": "Page 11",
+                  "color": "#64B5F6"
+                }
+              ],
+              "layout_mode": {
+                "type": "fixed",
+                "neighbour_page_width": {
+                  "type": "fixed",
+                  "value": 0
+                }
+              },
+              "infinite_scroll": false
+            },
+            {
+              "type": "indicator",
+              "pager_id": "duration_pager"
+            },
+            {
+              "type": "scroll_controls",
+              "target": "duration_pager",
+              "first_item": "duration_pager_item_0",
+              "last_item": "duration_pager_item_11"
+            },
+            {
+              "type": "duration_controls"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

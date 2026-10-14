@@ -2,20 +2,22 @@ package com.yandex.div.core.view2.items
 
 import android.content.res.Resources
 import androidx.viewpager2.widget.ViewPager2
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.divs.pager.DivPagerAdapter
+import com.yandex.div.core.view2.divs.pager.DivPagerSmoothScroller
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
-import org.junit.Assert.assertEquals
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
+import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
-import org.robolectric.RobolectricTestRunner
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class PagerItemsViewTest {
 
     private val adapter = mock<DivPagerAdapter> {
@@ -28,9 +30,13 @@ class PagerItemsViewTest {
     private val resources = mock<Resources> {
         on { displayMetrics } doReturn mock()
     }
+    private val scroller = mock<DivPagerSmoothScroller> {
+        on { pendingInstantItem } doReturn null
+    }
     private val view = mock<DivPagerView> {
         on { viewPager } doReturn viewPager
         on { resources } doReturn resources
+        on { divPagerSmoothScroller } doReturn scroller
     }
 
     private val underTest = DivViewWithItems.Pager(view)
@@ -43,7 +49,7 @@ class PagerItemsViewTest {
     @Test
     fun `set current item`() {
         underTest.setCurrentItem(5, true)
-        verify(viewPager).setCurrentItem(5, true)
+        verify(scroller).scrollTo(5, null)
     }
 
     @Test
@@ -51,7 +57,7 @@ class PagerItemsViewTest {
         underTest.setCurrentItem(-5, true)
         underTest.setCurrentItem(ITEM_COUNT, true)
 
-        verify(viewPager, never()).setCurrentItem(any(), any())
+        verify(scroller, never()).scrollTo(any(), anyOrNull())
     }
 
     @Test

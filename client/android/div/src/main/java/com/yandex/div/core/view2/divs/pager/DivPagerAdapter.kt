@@ -4,6 +4,7 @@ import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.annotation.IntRange
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.divs.CollectionItemBinding
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
@@ -15,6 +16,23 @@ internal class DivPagerAdapter(
     private val pageTranslations: SparseArray<Float>,
     private val pagerView: DivPagerView,
 ) : DivCollectionAdapter<DivPagerViewHolder>(items) {
+
+    private val beforeItemsChangeListeners = mutableListOf<() -> Unit>()
+    private val virtualItemCountChangedListeners = mutableListOf<(Int) -> Unit>()
+
+    fun onBeforeItemsChange(listener: () -> Unit): Disposable {
+        beforeItemsChangeListeners.add(listener)
+        return Disposable { beforeItemsChangeListeners.remove(listener) }
+    }
+
+    fun onVirtualItemCountChanged(listener: (Int) -> Unit): Disposable {
+        virtualItemCountChangedListeners.add(listener)
+        return Disposable { virtualItemCountChangedListeners.remove(listener) }
+    }
+
+    override fun onBeforeItemsChange() {
+        beforeItemsChangeListeners.toList().forEach { it() }
+    }
 
     override fun getItemViewType(position: Int): Int =
         itemBinding.viewType(position, super.getItemViewType(realItemPosition(position)))
@@ -35,12 +53,17 @@ internal class DivPagerAdapter(
 
     var requestedVirtualItemCount = 0
         set(@IntRange(from = 0) value) {
-            if (field == value) return
+            if (field == value) {
+                return
+            }
 
+            onBeforeItemsChange()
             itemBinding.clear()
             field = value
             val offset = updateVirtualItemCount()
-            if (offset == 0) return
+            if (offset == 0) {
+                return
+            }
 
             notifyVirtualItemCountChanged(offset)
         }
@@ -50,7 +73,14 @@ internal class DivPagerAdapter(
 
     private fun updateVirtualItemCount(): Int {
         val prevVirtualItemCount = virtualItemCount
-        virtualItemCount = if (visibleItems.size > 1) requestedVirtualItemCount else 0
+        virtualItemCount = if (visibleItems.size > 1) {
+            requestedVirtualItemCount
+        } else {
+            0
+        }
+        if (virtualItemCount != prevVirtualItemCount) {
+            virtualItemCountChangedListeners.toList().forEach { it(virtualItemCount) }
+        }
         return virtualItemCount - prevVirtualItemCount
     }
 
@@ -80,6 +110,7 @@ internal class DivPagerAdapter(
     private var removedItems = 0
 
     override fun setItems(newItems: List<DivBlock>) {
+        onBeforeItemsChange()
         itemBinding.clear()
         val oldSize = items.size
         removedItems = 0

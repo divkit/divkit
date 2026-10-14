@@ -1,6 +1,12 @@
 package com.yandex.div.core.view2.divs
 
+import android.app.Activity
+import android.os.Looper
+import android.view.View
+import android.view.ContextThemeWrapper
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.core.Div2Context
+import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.asExpression
@@ -35,16 +41,26 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
+import org.robolectric.Robolectric
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.android.controller.ActivityController
+import org.robolectric.shadows.ShadowChoreographer
+import java.time.Duration
+import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNotSame
 import kotlin.test.assertNull
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivPagerBinderTest : DivBinderTest() {
+
+    private var activityController: ActivityController<Activity>? = null
 
     private val divViewState = mock<DivViewState>()
     private val divBinder = mock<DivBinder>()
@@ -70,6 +86,83 @@ class DivPagerBinderTest : DivBinderTest() {
     @BeforeTest
     fun `init current state`() {
         whenever(divView.currentState).thenReturn(divViewState)
+    }
+
+    @AfterTest
+    fun tearDown() {
+        divPagerView.divPagerSmoothScroller?.dispose()
+        activityController?.pause()?.stop()?.destroy()
+    }
+
+    @Test
+    fun `inserting page cancels bound duration scroll`() {
+        bindAndStartDurationScroll()
+        val adapter = divPagerView.viewPager.adapter as DivPagerAdapter
+
+        adapter.addItems(adapter.items.size, listOf(adapter.items.first()))
+
+        assertFalse(divPagerView.viewPager.isFakeDragging)
+    }
+
+    @Test
+    fun `removing page cancels bound duration scroll`() {
+        bindAndStartDurationScroll()
+        val adapter = divPagerView.viewPager.adapter as DivPagerAdapter
+
+        adapter.removeItem(0)
+
+        assertFalse(divPagerView.viewPager.isFakeDragging)
+    }
+
+    @Test
+    fun `replacing pages cancels bound duration scroll`() {
+        bindAndStartDurationScroll()
+        val adapter = divPagerView.viewPager.adapter as DivPagerAdapter
+
+        adapter.setItems(adapter.items.dropLast(1))
+
+        assertFalse(divPagerView.viewPager.isFakeDragging)
+    }
+
+    @Test
+    fun `virtual range update cancels bound duration scroll`() {
+        bindAndStartDurationScroll()
+        val adapter = divPagerView.viewPager.adapter as DivPagerAdapter
+
+        adapter.requestedVirtualItemCount = VIRTUAL_ITEM_COUNT
+
+        assertFalse(divPagerView.viewPager.isFakeDragging)
+    }
+
+    @Test
+    fun `smooth scroller reference is cleared when pager is released`() {
+        underTest.bindView(divPagerView, divBlock, divView)
+        assertNotNull(divPagerView.divPagerSmoothScroller)
+
+        divPagerView.release()
+
+        assertNull(divPagerView.divPagerSmoothScroller)
+    }
+
+    @Test
+    fun `same div rebind keeps smooth scroller`() {
+        underTest.bindView(divPagerView, divBlock, divView)
+        val scroller = divPagerView.divPagerSmoothScroller
+
+        underTest.bindView(divPagerView, divBlock, divView)
+
+        assertSame(scroller, divPagerView.divPagerSmoothScroller)
+    }
+
+    @Test
+    fun `different div rebind replaces smooth scroller`() {
+        underTest.bindView(divPagerView, divBlock, divView)
+        val scroller = divPagerView.divPagerSmoothScroller
+        val reboundBlock = Div.Pager(div.value.copy()).toBlock(resolver, rootPath()) as DivBlock.Pager
+
+        underTest.bindView(divPagerView, reboundBlock, divView)
+
+        assertNotSame(scroller, divPagerView.divPagerSmoothScroller)
     }
 
     @Test
@@ -489,6 +582,26 @@ class DivPagerBinderTest : DivBinderTest() {
 
         verify(multiPageSubscription).close()
         verify(infiniteSubscription).close()
+    }
+
+    private fun bindAndStartDurationScroll() {
+        whenever(divView.context).thenReturn(Div2Context(
+            ContextThemeWrapper(context, context.theme),
+            DivConfiguration.Builder(mock()).build(),
+            lifecycleOwner = null,
+        ))
+        underTest.bindView(divPagerView, divBlock, divView)
+        val controller = Robolectric.buildActivity(Activity::class.java).setup()
+        activityController = controller
+        controller.get().setContentView(divPagerView)
+        shadowOf(Looper.getMainLooper()).idle()
+        ShadowChoreographer.setPaused(true)
+        val size = View.MeasureSpec.makeMeasureSpec(400, View.MeasureSpec.EXACTLY)
+        divPagerView.measure(size, size)
+        divPagerView.layout(0, 0, 400, 400)
+        divPagerView.divPagerSmoothScroller!!.scrollTo(DEFAULT_ITEM + 1, duration = 300)
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(16))
+        assertTrue(divPagerView.viewPager.isFakeDragging)
     }
 
     private fun div() = UnitTestData(PAGER_DIR, "pager_default_item.json").div as Div.Pager

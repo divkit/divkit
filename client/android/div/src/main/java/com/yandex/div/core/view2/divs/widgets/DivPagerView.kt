@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.view2.divs.drawShadow
 import com.yandex.div.core.view2.divs.pager.PagerMultiPageScrollHelper
+import com.yandex.div.core.view2.divs.pager.DivPagerSmoothScroller
 import com.yandex.div.core.view2.divs.pager.PagerSelectedActionsDispatcher
 import com.yandex.div.core.view2.divs.performClickOnAncestors
 import com.yandex.div.core.view2.divs.performLongClickOnAncestors
@@ -83,6 +84,7 @@ internal class DivPagerView @JvmOverloads constructor(
         }
 
     private var multiPageScrollHelper: PagerMultiPageScrollHelper? = null
+    internal var divPagerSmoothScroller: DivPagerSmoothScroller? = null
 
     /** `true` while a multi-page fling started by this pager is still running. */
     internal val isMultiPageScrolling: Boolean

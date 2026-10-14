@@ -36,6 +36,96 @@ class DivPagerAdapterTest {
     private val observer = mock<RecyclerView.AdapterDataObserver>()
 
     @Test
+    fun `before items change sees original items on replacement`() {
+        val items = listOf(item("first"), item("second"))
+        val adapter = adapter(items)
+        var itemsBeforeChange: List<DivBlock> = emptyList()
+        adapter.onBeforeItemsChange { itemsBeforeChange = adapter.items.toList() }
+
+        adapter.setItems(items.take(1))
+
+        assertEquals(items, itemsBeforeChange)
+    }
+
+    @Test
+    fun `virtual count listener receives requested range expansion`() {
+        val adapter = adapter(listOf(item("first"), item("second")))
+        adapter.requestedVirtualItemCount = VIRTUAL_ITEM_COUNT
+        var virtualItemCount = -1
+        adapter.onVirtualItemCountChanged { virtualItemCount = it }
+
+        adapter.requestedVirtualItemCount = VIRTUAL_ITEM_COUNT_EXTENDED
+
+        assertEquals(VIRTUAL_ITEM_COUNT_EXTENDED, virtualItemCount)
+    }
+
+    @Test
+    fun `before items change sees original items on insertion`() {
+        val first = item("first")
+        val adapter = adapter(listOf(first))
+        var itemsBeforeChange: List<DivBlock> = emptyList()
+        adapter.onBeforeItemsChange { itemsBeforeChange = adapter.items.toList() }
+
+        adapter.addItems(1, listOf(item("second")))
+
+        assertEquals(listOf(first), itemsBeforeChange)
+    }
+
+    @Test
+    fun `before items change sees original items on removal`() {
+        val items = listOf(item("first"), item("second"))
+        val adapter = adapter(items)
+        var itemsBeforeChange: List<DivBlock> = emptyList()
+        adapter.onBeforeItemsChange { itemsBeforeChange = adapter.items.toList() }
+
+        adapter.removeItem(1)
+
+        assertEquals(items, itemsBeforeChange)
+    }
+
+    @Test
+    fun `disposed before items change subscription receives no events`() {
+        val adapter = adapter(listOf(item("first")))
+        var events = 0
+        val subscription = adapter.onBeforeItemsChange { events++ }
+        subscription.close()
+
+        adapter.addItems(1, listOf(item("second")))
+
+        assertEquals(0, events)
+    }
+
+    @Test
+    fun `virtual count listener runs before insertion notification`() {
+        val adapter = adapter(listOf(item("first")))
+        adapter.requestedVirtualItemCount = VIRTUAL_ITEM_COUNT
+        var virtualItemCount = 0
+        var countAtNotification = 0
+        adapter.onVirtualItemCountChanged { virtualItemCount = it }
+        adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                countAtNotification = virtualItemCount
+            }
+        })
+
+        adapter.addItems(1, listOf(item("second")))
+
+        assertEquals(VIRTUAL_ITEM_COUNT, countAtNotification)
+    }
+
+    @Test
+    fun `virtual count listener receives zero when one page remains`() {
+        val adapter = adapter(listOf(item("first"), item("second")))
+        adapter.requestedVirtualItemCount = VIRTUAL_ITEM_COUNT
+        var virtualItemCount = -1
+        adapter.onVirtualItemCountChanged { virtualItemCount = it }
+
+        adapter.removeItem(1)
+
+        assertEquals(0, virtualItemCount)
+    }
+
+    @Test
     fun `extended virtual range wraps items at both real range boundaries`() {
         val first = item("first")
         val second = item("second")

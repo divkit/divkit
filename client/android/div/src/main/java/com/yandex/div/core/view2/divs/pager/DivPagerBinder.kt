@@ -88,6 +88,7 @@ internal class DivPagerBinder @Inject constructor(
             PagerItemBinding(divBlock.buildItems(), this, divView, divBinder.get(), viewCreator, pageTranslations)
         val adapter = itemBinding.adapter
         viewPager.adapter = adapter
+        bindSmoothScroller(adapter, recyclerView)
         val errorCollector = divView.errorCollector
         adapter.registerAdapterDataObserver(ItemCountObserver(this, div, resolver, adapter, errorCollector))
         bindScrollModes(div, resolver, adapter)
@@ -161,6 +162,18 @@ internal class DivPagerBinder @Inject constructor(
         }
     }
 
+    private fun DivPagerView.bindSmoothScroller(adapter: DivPagerAdapter, recyclerView: RecyclerView) {
+        val scroller = DivPagerSmoothScroller(viewPager, recyclerView)
+        divPagerSmoothScroller = scroller
+        scroller.updateVirtualItemCount(adapter.virtualItemCount)
+        addSubscription(adapter.onBeforeItemsChange { scroller.cancel() })
+        addSubscription(adapter.onVirtualItemCountChanged { scroller.updateVirtualItemCount(it) })
+        addSubscription(Disposable {
+            scroller.dispose()
+            divPagerSmoothScroller = null
+        })
+    }
+
     private fun DivPagerView.notifyItemsUpdated(
         div: DivPager,
         resolver: ExpressionResolver,
@@ -216,6 +229,9 @@ internal class DivPagerBinder @Inject constructor(
     private fun DivPagerView.createInfiniteScrollListener() = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
+            if (divPagerSmoothScroller?.isRunning == true) {
+                return
+            }
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager
             val adapter = viewPager.adapter as? DivPagerAdapter ?: return
             val virtualItemCount = adapter.virtualItemCount.takeIf { it > 0 } ?: return

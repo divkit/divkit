@@ -48,21 +48,27 @@ internal sealed class DivViewWithItems(view: View) {
     /**
      * sets Current item
      */
-    abstract fun setCurrentItem(index: Int, animated: Boolean)
+    abstract fun setCurrentItem(index: Int, animated: Boolean, duration: Int? = null)
 
     abstract fun getNearestItem(direction: ScrollDirection): Int
 
     /**
      * Scroll to the end of recycler view.
      */
-    abstract fun scrollToTheEnd(animated: Boolean)
+    abstract fun scrollToTheEnd(animated: Boolean, duration: Int? = null)
 
     abstract fun getIndicesOfItemWithId(id: String): List<Int>
 
     /**
      * Scroll to @param dp value.
      */
-    open fun scrollTo(value: Int, animated: Boolean, sizeUnit: DivSizeUnit = DivSizeUnit.PX) = Unit
+    open fun scrollTo(
+        value: Int,
+        animated: Boolean,
+        sizeUnit: DivSizeUnit = DivSizeUnit.PX,
+        duration: Int? = null,
+        cancelPreviousScroll: Boolean = true,
+    ) = Unit
 
     /**
      * Implementation of [DivViewWithItems] specific for div gallery.
@@ -82,11 +88,15 @@ internal sealed class DivViewWithItems(view: View) {
             }
         }
 
-        override fun setCurrentItem(index: Int, animated: Boolean) {
+        override fun setCurrentItem(index: Int, animated: Boolean, duration: Int?) {
             checkItem(index, itemCount) {
-                if (!animated) return@checkItem view.itemHelper.instantScroll(index)
+                view.stopScroll()
+                if (!animated) {
+                    view.itemHelper.instantScroll(index)
+                    return@checkItem
+                }
 
-                val smoothScroller = DivGallerySmoothScroller(view)
+                val smoothScroller = DivGallerySmoothScroller(view, duration)
                 smoothScroller.targetPosition = index
                 view.layoutManager?.startSmoothScroll(smoothScroller)
             }
@@ -98,34 +108,58 @@ internal sealed class DivViewWithItems(view: View) {
             return view.itemHelper.getNearestItemPosition(physicalScrollDirection)
         }
 
-        override fun scrollToTheEnd(animated: Boolean) =
-            view.scrollTo(view.scrollRange(), animated, DivSizeUnit.PX)
+        override fun scrollToTheEnd(animated: Boolean, duration: Int?) =
+            view.scrollTo(view.scrollRange(), animated, DivSizeUnit.PX, duration)
 
         override fun getIndicesOfItemWithId(id: String): List<Int> {
             val adapter = view.adapter as? DivGalleryAdapter ?: return emptyList()
             return adapter.visibleItems.getIndicesWithId(id) { div }
         }
 
-        override fun scrollTo(value: Int, animated: Boolean, sizeUnit: DivSizeUnit) {
-            if (view.scrollMode != ScrollMode.DEFAULT) return
-            view.scrollTo(value, animated, sizeUnit)
+        override fun scrollTo(
+            value: Int,
+            animated: Boolean,
+            sizeUnit: DivSizeUnit,
+            duration: Int?,
+            cancelPreviousScroll: Boolean,
+        ) {
+            if (view.scrollMode != ScrollMode.DEFAULT) {
+                return
+            }
+            view.scrollTo(value, animated, sizeUnit, duration, cancelPreviousScroll)
         }
 
         private fun DivRecyclerView.scrollTo(
             value: Int,
             animated: Boolean,
             sizeUnit: DivSizeUnit,
+            duration: Int?,
+            cancelPreviousScroll: Boolean = true,
         ) {
             val valuePx = when (sizeUnit) {
                 DivSizeUnit.PX -> value
                 DivSizeUnit.SP -> value.spToPx(metrics)
                 DivSizeUnit.DP -> value.dpToPx(metrics)
             }
-            val scroll: (dx: Int, dy: Int) -> Unit = if (animated) this::smoothScrollBy else this::scrollBy
-            if (itemHelper.isHorizontal) {
-                scroll(valuePx - computeHorizontalScrollOffset(), 0)
+            val dx = if (itemHelper.isHorizontal) {
+                valuePx - computeHorizontalScrollOffset()
             } else {
-                scroll(0, valuePx - computeVerticalScrollOffset())
+                0
+            }
+            val dy = if (itemHelper.isHorizontal) {
+                0
+            } else {
+                valuePx - computeVerticalScrollOffset()
+            }
+            if (cancelPreviousScroll) {
+                stopScroll()
+            }
+            if (!animated) {
+                scrollBy(dx, dy)
+            } else if (duration == null) {
+                smoothScrollBy(dx, dy)
+            } else {
+                smoothScrollBy(dx, dy, null, duration)
             }
         }
 
@@ -148,15 +182,24 @@ internal sealed class DivViewWithItems(view: View) {
         override val itemCount: Int
             get() = view.viewPager.adapter?.itemCount ?: 0
 
-        override fun setCurrentItem(index: Int, animated: Boolean) {
+        override fun setCurrentItem(index: Int, animated: Boolean, duration: Int?) {
             checkItem(index, itemCount) {
-                view.viewPager.setCurrentItem(index, animated)
+                val scrollDuration = if (animated) {
+                    duration
+                } else {
+                    0
+                }
+                view.divPagerSmoothScroller?.scrollTo(index, scrollDuration)
             }
         }
 
-        override fun getNearestItem(direction: ScrollDirection): Int = view.viewPager.currentItem + direction.value
+        override fun getNearestItem(direction: ScrollDirection): Int {
+            val currentItem = view.divPagerSmoothScroller?.pendingInstantItem ?: view.viewPager.currentItem
+            return currentItem + direction.value
+        }
 
-        override fun scrollToTheEnd(animated: Boolean) = view.viewPager.setCurrentItem(itemCount - 1, animated)
+        override fun scrollToTheEnd(animated: Boolean, duration: Int?) =
+            setCurrentItem(itemCount - 1, animated, duration)
 
         override fun getIndicesOfItemWithId(id: String): List<Int> {
             val adapter = view.viewPager.adapter as? DivPagerAdapter ?: return emptyList()
@@ -173,7 +216,7 @@ internal sealed class DivViewWithItems(view: View) {
         override val itemCount: Int
             get() = view.viewPager.adapter?.count ?: 0
 
-        override fun setCurrentItem(index: Int, animated: Boolean) {
+        override fun setCurrentItem(index: Int, animated: Boolean, duration: Int?) {
             checkItem(index, itemCount) {
                 val viewPager = view.viewPager
                 val smoothScroll = animated && viewPager.scrollState == SCROLL_STATE_IDLE
@@ -183,10 +226,11 @@ internal sealed class DivViewWithItems(view: View) {
 
         override fun getNearestItem(direction: ScrollDirection) = view.viewPager.currentItem + direction.value
 
-        override fun scrollToTheEnd(animated: Boolean) = setCurrentItem(itemCount - 1, animated)
+        override fun scrollToTheEnd(animated: Boolean, duration: Int?) =
+            setCurrentItem(itemCount - 1, animated, duration)
 
         override fun getIndicesOfItemWithId(id: String) =
-            view.divTabsAdapter?.tabDivs?.getIndicesWithId(id) { this } ?: emptyList()
+            view.divBlock?.divValue?.items?.getIndicesWithId(id) { div } ?: emptyList()
     }
 
     companion object {

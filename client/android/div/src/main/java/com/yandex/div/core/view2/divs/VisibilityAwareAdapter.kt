@@ -49,6 +49,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
         position: Int,
         items: Collection<DivBlock>
     ) {
+        onBeforeItemsChange()
         val visiblePosition = visiblePositionOf(position)
         val addedItemsReserveSpace = items.map { item -> item.reservesSpace }
         itemList.addAll(position, items)
@@ -62,6 +63,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     }
 
     fun removeItem(position: Int) {
+        onBeforeItemsChange()
         itemList.removeAt(position)
         val wasReservingSpace = itemReservesSpaceList.removeAt(position)
         isVisibleItemListValid = false
@@ -98,6 +100,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
             return
         }
 
+        onBeforeItemsChange()
         itemReservesSpaceList[position] = reservesSpace
         isVisibleItemListValid = false
 
@@ -119,6 +122,8 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     protected open fun notifyRawItemsInserted(position: Int, count: Int) = notifyItemRangeInserted(position, count)
 
     protected open fun notifyRawItemChanged(position: Int) = notifyItemChanged(position)
+
+    protected open fun onBeforeItemsChange() = Unit
 }
 
 private val DivBlock.visibility: DivVisibility
