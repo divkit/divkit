@@ -184,9 +184,6 @@ private val ignoredFiles = setOf(
     "div-pager/vertical-pager-wrap-content-size-mode-alignment-start.json",
     "div-pager/vertical-pager-wrap-content-size-mode-with-item-spacing.json",
 
-    // label_image_preview extension not supported
-    "div-image/custom-preview.json",
-
     // div-gallery.item_builder not supported
     "div-gallery/item-builder/item-builder.json",
     "div-gallery/item-builder/item-builder-with-local-variables.json",

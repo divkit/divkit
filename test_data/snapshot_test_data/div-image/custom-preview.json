@@ -4,6 +4,7 @@
     "ios"
   ],
   "unsupported_platforms": {
+    "android": "No such extension",
     "web": "No such extension"
   },
   "card": {
