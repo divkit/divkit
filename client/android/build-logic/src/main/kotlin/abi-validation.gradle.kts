@@ -11,6 +11,7 @@ metalava {
     hiddenAnnotations = listOf(
         "com.yandex.div.core.annotations.ExperimentalApi",
         "com.yandex.div.core.annotations.InternalApi",
+        "com.yandex.div.data.DivModelInternalApi",
         "com.yandex.yatagan.internal.YataganGenerated",
     )
     arguments = setOf(
