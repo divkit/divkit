@@ -94,6 +94,26 @@ struct DivViewTests {
     #expect(tooltips != nil)
     #expect(divView.tooltipAnchor?.tooltips != tooltips)
   }
+
+  @Test
+  func sizeThatFits_unboundedHeight_matchParentRoot_returnsContentHeight() async {
+    await divView.setData(matchParentRootTestData)
+
+    #expect(divView.cardSize?.height == .matchParent)
+
+    let size = divView.sizeThatFits(CGSize(width: 100, height: CGFloat.greatestFiniteMagnitude))
+    #expect(size.height == 40)
+  }
+
+  @Test
+  func sizeThatFits_unboundedHeight_matchParentItem_countsItemAsMinSize() async {
+    await divView.setData(matchParentItemTestData)
+
+    #expect(divView.cardSize?.height == .matchParent)
+
+    let size = divView.sizeThatFits(CGSize(width: 100, height: CGFloat.greatestFiniteMagnitude))
+    #expect(size.height == 40)
+  }
 }
 
 extension DivView {
@@ -163,5 +183,36 @@ private let disappearTestData = divData(
     ],
     text: "Sample",
     width: .divFixedSize(DivFixedSize(value: .value(100)))
+  )
+)
+
+private let matchParentRootTestData = divData(
+  divContainer(
+    height: .divMatchParentSize(DivMatchParentSize()),
+    items: [
+      divText(
+        text: "Sample",
+        width: .divFixedSize(DivFixedSize(value: .value(100))),
+        height: .divFixedSize(DivFixedSize(value: .value(40)))
+      ),
+    ]
+  )
+)
+
+private let matchParentItemTestData = divData(
+  divContainer(
+    height: .divMatchParentSize(DivMatchParentSize()),
+    items: [
+      divText(
+        text: "Sample",
+        width: .divFixedSize(DivFixedSize(value: .value(100))),
+        height: .divFixedSize(DivFixedSize(value: .value(40)))
+      ),
+      divImage(
+        height: .divMatchParentSize(DivMatchParentSize()),
+        imageUrl: "https://image.png",
+        width: .divFixedSize(DivFixedSize(value: .value(100)))
+      ),
+    ]
   )
 )

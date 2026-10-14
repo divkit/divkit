@@ -148,6 +148,96 @@ struct DivTimerStorageTests {
     #expect(popAction() == nil)
   }
 
+  @Test
+  func set_withSameTimerInstances_keepsRunningTimer() {
+    let timers = [timer("timer1")]
+    storage.set(cardId: cardId, timers: timers)
+    storage.start(cardId: cardId, timerId: "timer1")
+
+    tick()
+    #expect(popAction() == "tick://timer1")
+
+    storage.set(cardId: cardId, timers: timers)
+
+    tick()
+    #expect(popAction() == "tick://timer1")
+  }
+
+  @Test
+  func set_withNewTimerInstance_resetsTimer() {
+    storage.set(cardId: cardId, timers: [timer("timer1")])
+    storage.start(cardId: cardId, timerId: "timer1")
+
+    tick()
+    #expect(popAction() == "tick://timer1")
+
+    storage.set(cardId: cardId, timers: [timer("timer1")])
+
+    tick()
+    #expect(popAction() == nil)
+  }
+
+  @Test
+  func set_withSameTimerInstancesAfterReset_createsStoppedTimer() {
+    let timers = [timer("timer1")]
+    storage.set(cardId: cardId, timers: timers)
+    storage.start(cardId: cardId, timerId: "timer1")
+
+    tick()
+    #expect(popAction() == "tick://timer1")
+
+    storage.reset(cardId: cardId)
+    storage.set(cardId: cardId, timers: timers)
+
+    tick()
+    #expect(popAction() == nil)
+
+    storage.start(cardId: cardId, timerId: "timer1")
+
+    tick()
+    #expect(popAction() == "tick://timer1")
+  }
+
+  @Test
+  func set_withSameTimerInstancesAndNewTimer_resetsTimers() {
+    let timers = [timer("timer1")]
+    storage.set(cardId: cardId, timers: timers)
+    storage.start(cardId: cardId, timerId: "timer1")
+
+    tick()
+    #expect(popAction() == "tick://timer1")
+
+    storage.set(cardId: cardId, timers: timers + [timer("timer2")])
+
+    tick()
+    #expect(popAction() == nil)
+  }
+
+  @Test
+  func set_withDuplicatedSameTimerInstance_removesAbsentTimer() {
+    let timer1 = timer("timer1")
+    storage.set(cardId: cardId, timers: [timer1, timer("timer2")])
+    storage.start(cardId: cardId, timerId: "timer2")
+
+    tick()
+    #expect(popAction() == "tick://timer2")
+
+    storage.set(cardId: cardId, timers: [timer1, timer1])
+
+    tick()
+    #expect(popAction() == nil)
+
+    storage.start(cardId: cardId, timerId: "timer2")
+
+    tick()
+    #expect(popAction() == nil)
+
+    storage.start(cardId: cardId, timerId: "timer1")
+
+    tick()
+    #expect(popAction() == "tick://timer1")
+  }
+
   private func tick() {
     let interval = tickInterval.toTimeInterval
     timeMeasuring.passedTime = timeMeasuring.passedTime + interval

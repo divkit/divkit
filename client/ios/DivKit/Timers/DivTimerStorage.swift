@@ -36,6 +36,10 @@ final class DivTimerStorage {
   }
 
   func set(cardId: DivCardID, timers: [DivTimer]) {
+    guard !hasSameTimers(cardId: cardId, timers: timers) else {
+      return
+    }
+
     reset(cardId: cardId)
 
     for timer in timers {
@@ -120,6 +124,18 @@ final class DivTimerStorage {
         controllers.removeValue(forKey: key)
       }
     }
+  }
+
+  /// Returns `true` if `timers` are exactly the timer instances already stored for the card.
+  /// Timers with duplicate ids never match, so that `set` drops the absent timers and reports
+  /// the duplicates.
+  private func hasSameTimers(cardId: DivCardID, timers: [DivTimer]) -> Bool {
+    let existingTimers = self.timers.filter { key, _ in key.cardId == cardId }
+    guard existingTimers.count == timers.count,
+          Set(timers.map(\.id)).count == timers.count else {
+      return false
+    }
+    return timers.allSatisfy { existingTimers[cardId.path + $0.id] === $0 }
   }
 
   private func getController(cardId: DivCardID, timerId: String) -> DivTimerController? {
