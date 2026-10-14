@@ -268,6 +268,20 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
+    fun `stale image load does not reapply tint after same url rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divImage = createTestDiv(tintColor = "#ffffff")
+        binder.bindView(view, divImage, divView)
+
+        binder.bindView(view, createTestDiv(), divView)
+        Assert.assertNull(view.colorFilter)
+
+        whenDrawableLoaded(divImage)
+
+        Assert.assertNull(view.colorFilter)
+    }
+
+    @Test
     fun `tint color applied to drawable after loading`() {
         val (view, _) = createTestDiv("with_action.json")
         val divImage = createTestDiv(tintColor = "#ffffff")

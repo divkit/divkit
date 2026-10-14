@@ -30,6 +30,8 @@ open class DivImageView @JvmOverloads constructor(
 
     internal var imageUrl: Uri? = null
 
+    internal var imageLoadGeneration: Int = 0
+
     var baseTouchListener: OnTouchListener? = null
         private set
 

@@ -55,6 +55,7 @@ internal class DivImageBinder @Inject constructor(
         oldDivBlock: DivBlock.Image?,
         divView: Div2View,
     ) {
+        imageLoadGeneration++
         val div = divBlock.divValue
         val oldDiv = oldDivBlock?.divValue
         val expressionResolver = divBlock.expressionResolver
@@ -357,6 +358,8 @@ internal class DivImageBinder @Inject constructor(
             return false
         }
 
+        val loadGeneration = imageLoadGeneration
+
         // Called before resetImageLoaded() to ignore high priority preview if image was previously loaded.
         val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
 
@@ -380,7 +383,9 @@ internal class DivImageBinder @Inject constructor(
                     applyScaleAndFiltersAndSetBitmap(bitmap, div.scale, div.filters, resolver, divView)
                     applyLoadingFade(div, resolver, source, animationsEnabledController.isEnabled())
                     imageLoaded()
-                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    if (loadGeneration == imageLoadGeneration) {
+                        applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    }
                     invalidate()
                 }
 
@@ -389,7 +394,9 @@ internal class DivImageBinder @Inject constructor(
                     applyLoadingFade(div, resolver, source, animationsEnabledController.isEnabled())
 
                     imageLoaded()
-                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    if (loadGeneration == imageLoadGeneration) {
+                        applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    }
                     invalidate()
                 }
 

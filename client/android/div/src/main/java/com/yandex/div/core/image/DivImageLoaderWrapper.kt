@@ -14,6 +14,7 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivCachedImage
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.images.DivImagePriority
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div.internal.util.makeIf
@@ -61,6 +62,39 @@ class DivImageLoaderWrapper @Inject constructor(
         return loader.loadImage(modifiedUrl, wrappedCallback)
     }
 
+    override fun loadImage(
+        imageUrl: String,
+        callback: DivImageDownloadCallback,
+        @DivImagePriority loadPriority: Int,
+    ): LoadReference {
+        if (imageUrl == EMPTY_URL) {
+            callback.onCancel()
+            return LoadReference {}
+        }
+
+        val modifiedUrl = getModifiedUrl(imageUrl)
+        val loader = getProperLoader(modifiedUrl)
+        val wrappedCallback = createLimitImageBitmapSizeCallback(loader, callback)
+        return loader.loadImage(modifiedUrl, wrappedCallback, loadPriority)
+    }
+
+    @Deprecated("Use loadAnimatedImage")
+    override fun loadImageBytes(
+        imageUrl: String,
+        callback: DivImageDownloadCallback,
+        @DivImagePriority loadPriority: Int,
+    ): LoadReference {
+        if (imageUrl == EMPTY_URL) {
+            callback.onCancel()
+            return LoadReference {}
+        }
+
+        val modifiedUrl = getModifiedUrl(imageUrl)
+        val loader = getProperLoader(modifiedUrl)
+        val wrappedCallback = createLimitImageBitmapSizeCallback(loader, callback)
+        return loader.loadImageBytes(modifiedUrl, wrappedCallback, loadPriority)
+    }
+
     override fun loadAnimatedImage(
         imageUrl: String,
         callback: DivImageDownloadCallback
@@ -72,6 +106,20 @@ class DivImageLoaderWrapper @Inject constructor(
 
         val modifiedUrl = getModifiedUrl(imageUrl)
         return getProperLoader(modifiedUrl).loadAnimatedImage(modifiedUrl, callback)
+    }
+
+    override fun loadAnimatedImage(
+        imageUrl: String,
+        callback: DivImageDownloadCallback,
+        @DivImagePriority loadPriority: Int,
+    ): LoadReference {
+        if (imageUrl == EMPTY_URL) {
+            callback.onCancel()
+            return LoadReference {}
+        }
+
+        val modifiedUrl = getModifiedUrl(imageUrl)
+        return getProperLoader(modifiedUrl).loadAnimatedImage(modifiedUrl, callback, loadPriority)
     }
 
     private fun getModifiedUrl(initialUrl: String): String {
