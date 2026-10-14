@@ -25,8 +25,8 @@ class DivComposeScreenshotTest(casePath: String, escapedCase: String) {
     @get:Rule
     val rule = composeScreenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule, casePath.relativePath)
 
-    @Screenshot(viewTag = DivComposeScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
+    @Screenshot
     fun test() = Unit
 
     companion object {

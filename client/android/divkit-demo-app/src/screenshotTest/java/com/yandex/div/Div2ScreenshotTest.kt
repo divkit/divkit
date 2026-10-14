@@ -25,8 +25,8 @@ class Div2ScreenshotTest(casePath: String, escapedCase: String) {
     @get:Rule
     val rule = screenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule, casePath.relativePath)
 
-    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
+    @Screenshot
     fun test() = Unit
 
     companion object {

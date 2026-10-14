@@ -8,7 +8,6 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.KLog
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
@@ -40,64 +39,91 @@ internal class InteractiveScreenshotSteps {
         val testData = InteractiveScreenshotTestData.parse(testCase)
         var snapshotIndex = 0
         testData.steps.forEachIndexed { index, step ->
-            when (step) {
-                is Step.Action -> step("Step $index: Action ${step.action.writeToJSON()}") {
-                    scenario.onActivity { handleAction(it.divView, step.action) }
-                }
+            step("Step $index") {
+                when (step) {
+                    is Step.Action -> performAction(scenario, step.action)
 
-                is Step.Tap -> step("Tap div '${step.id}'") {
-                    tap(step.id, tapWithRetries())
-                }
+                    is Step.Tap -> performTap(step.id)
 
-                is Step.DoubleTap -> step("Double tap div '${step.id}'") {
-                    tap(step.id, doubleTapWithRetries())
-                }
+                    is Step.DoubleTap -> performDoubleTap(step.id)
 
-                is Step.LongTap -> step("Long tap div '${step.id}'") {
-                    tap(step.id, longTapWithRetries())
-                }
+                    is Step.LongTap -> performLongTap(step.id)
 
-                is Step.Wait -> step("Step $index: Wait ${step.delay} ms") {
-                    Thread.sleep(step.delay)
-                }
+                    is Step.Wait -> waitForStep(step)
 
-                is Step.VerifyText -> step("Step $index: Verify text '${step.text}' in div '${step.id}'") {
-                    verifyText(step)
-                }
+                    is Step.VerifyText -> verifyText(step)
 
-                is Step.VerifySnapshot -> step("Step $index: Verify screenshot step$snapshotIndex") {
-                    var divView: View? = null
-                    scenario.onActivity { divView = it.divView }
-                    val view = divView ?: return@step
-
-                    waitForLoadings(view)
-                    Espresso.onIdle()
-                    Thread.sleep(1000)
-
-                    captureScreenshots(
-                        view,
-                        artifactsRelativePath,
-                        casePath,
-                        stepId = snapshotIndex++,
-                        expectedScreenshot = step.name
-                    )
+                    is Step.VerifySnapshot ->
+                        verifySnapshot(scenario, step, snapshotIndex++, casePath, artifactsRelativePath)
                 }
             }
         }
     }
 
-    private fun handleAction(view: Div2View, divAction: DivAction) {
-        val actionHandled = view.handleActionWithResult(divAction)
-        if (!actionHandled) {
-            KLog.e(TAG) { "Failed to handle action: ${divAction.writeToJSON()}" }
+    private fun performAction(
+        scenario: ActivityScenario<DivScreenshotActivity>,
+        divAction: DivAction
+    ) = step("Action ${divAction.writeToJSON()}") {
+        scenario.onActivity { activity ->
+            val actionHandled = activity.divView.handleActionWithResult(divAction)
+            if (!actionHandled) {
+                KLog.e(TAG) { "Failed to handle action: ${divAction.writeToJSON()}" }
+            }
         }
     }
 
-    private fun tap(id: String, action: ViewAction) = onView(withTagValue(equalTo(id))).perform(action)
+    private fun performTap(id: String) = step("Tap div '$id'") {
+        performOnView(id, tapWithRetries())
+    }
 
-    private fun verifyText(verification: Step.VerifyText) {
+    private fun performDoubleTap(id: String) = step("Double tap div '$id'") {
+        performOnView(id, doubleTapWithRetries())
+    }
+
+    private fun performLongTap(id: String) = step("Long tap div '$id'") {
+        performOnView(id, longTapWithRetries())
+    }
+
+    private fun performOnView(id: String, action: ViewAction) = onView(withTagValue(equalTo(id))).perform(action)
+
+    private fun waitForStep(wait: Step.Wait) = step("Wait ${wait.delay} ms") {
+        Thread.sleep(wait.delay)
+    }
+
+    private fun verifyText(
+        verification: Step.VerifyText
+    ) = step("Verify text '${verification.text}' in div '${verification.id}'") {
         onView(withTagValue(equalTo(verification.id)))
             .check(matches(withText(verification.text)))
             .checkIsDisplayed()
+    }
+
+    private fun verifySnapshot(
+        scenario: ActivityScenario<DivScreenshotActivity>,
+        verification: Step.VerifySnapshot,
+        snapshotIndex: Int,
+        casePath: String,
+        artifactsRelativePath: String
+    ) = step("Verify screenshot step$snapshotIndex") {
+        var screenshotView: View? = null
+        scenario.onActivity { activity ->
+            screenshotView = verification.id?.let {
+                activity.divView.findViewWithTag(it)
+                    ?: throw AssertionError("Failed to find screenshot target with div_id '$it'")
+            } ?: activity.divView
+        }
+        val view = screenshotView ?: throw AssertionError("Screenshot view is unavailable")
+
+        waitForLoadings(view)
+        Espresso.onIdle()
+        Thread.sleep(1000)
+
+        captureScreenshots(
+            view,
+            artifactsRelativePath,
+            casePath,
+            stepId = snapshotIndex,
+            expectedScreenshot = verification.name
+        )
     }
 }

@@ -13,6 +13,7 @@ import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.idling.waitForView
 import com.yandex.test.rules.ClosePopupsRule
 import com.yandex.test.rules.NoAnimationsRule
+import com.yandex.test.screenshot.SCREENSHOT_VIEW_TAG
 import com.yandex.test.screenshot.ScreenshotRule
 import com.yandex.test.util.chain
 import org.json.JSONObject
@@ -37,7 +38,7 @@ fun screenshotRule(
     expectedSuite: String = "",
 ): TestRule {
     return screenshotRule(casePath, caseRoot, testCase, activityRule, relativePath, expectedSuite) {
-        waitForLoadings(waitForView(DivScreenshotActivity.SCREENSHOT_VIEW_TAG))
+        waitForLoadings(waitForView(SCREENSHOT_VIEW_TAG))
     }
 }
 

@@ -25,8 +25,8 @@ class Div2RebindScreenshotTest(casePath: String, escapedCase: String) {
     @get:Rule
     val rule = screenshotRule(casePath, TEST_CASES_PATH, testCase, activityRule, casePath.relativePath, expectedSuite)
 
-    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
+    @Screenshot
     fun test() {
         activityRule.scenario.onActivity { it.setDivData(testCase) }
     }

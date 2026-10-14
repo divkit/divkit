@@ -10,6 +10,8 @@ import java.io.File
 import java.util.Properties
 import java.util.concurrent.atomic.AtomicBoolean
 
+const val SCREENSHOT_VIEW_TAG = "screenshot_view"
+
 private val propertiesSaved = AtomicBoolean(false)
 
 val String.caseName: String get() {

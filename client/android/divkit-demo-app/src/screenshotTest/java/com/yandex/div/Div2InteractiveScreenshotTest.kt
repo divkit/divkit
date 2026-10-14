@@ -28,8 +28,8 @@ class Div2InteractiveScreenshotTest(private val casePath: String, escapedCase: S
     val rule = baseScreenshotTestRule(casePath, TEST_CASES_PATH, testCase)
         .chain(SetDataRule(testCase, activityRule))
 
-    @Screenshot(viewTag = DivScreenshotActivity.SCREENSHOT_VIEW_TAG)
     @Test
+    @Screenshot
     fun test() {
         interactiveScreenshot {
             runSteps(activityRule.scenario, casePath, testCase, artifactsDir(casePath))

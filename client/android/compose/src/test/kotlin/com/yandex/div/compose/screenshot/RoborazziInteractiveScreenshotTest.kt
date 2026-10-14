@@ -99,7 +99,6 @@ class RoborazziInteractiveScreenshotTest(
 
     private lateinit var viewConfiguration: ViewConfiguration
 
-    @OptIn(ExperimentalRoborazziApi::class)
     @Test
     fun test() {
         val data = configuration.baseConfiguration.parseDivData()
@@ -129,54 +128,64 @@ class RoborazziInteractiveScreenshotTest(
             composeRule.waitForIdle()
 
             when (step) {
-                is Step.Action ->
-                    divContext.debugFeatures.performAction(data = data, action = step.action)
+                is Step.Action -> divContext.debugFeatures.performAction(data = data, action = step.action)
 
-                is Step.VerifySnapshot -> {
-                    val options = provideRoborazziContext().options
-                    val taskType = RoborazziTaskType.of(
-                        isRecording = options.taskType.isRecording() && recordedSnapshotNames.add(step.name),
-                        isComparing = options.taskType.isComparing(),
-                        isVerifying = options.taskType.isVerifying(),
-                    )
-                    val compareOptions = options.compareOptions.copy(
-                        outputDirectoryPath = "${options.compareOptions.outputDirectoryPath}/interactive/" +
-                            "${configuration.baseConfiguration.name}/step$index",
-                    )
-                    composeRule
-                        .onRoot()
-                        .captureRoboImage(
-                            filePath = getScreenshotFilePath(
-                                "interactive/${configuration.baseConfiguration.name}/${step.name}"
-                            ),
-                            roborazziOptions = options.copy(taskType = taskType, compareOptions = compareOptions),
-                        )
-                }
+                is Step.Tap -> performTap(step.id)
+
+                is Step.DoubleTap -> performOnNode(step.id) { doubleClick() }
+
+                is Step.LongTap -> performOnNode(step.id) { longClick() }
 
                 is Step.Wait -> Unit
 
-                is Step.Tap -> {
-                    tap(step.id) { click() }
-                    composeRule.mainClock.advanceTimeBy(viewConfiguration.doubleTapTimeoutMillis)
-                }
+                is Step.VerifyText -> verifyText(step)
 
-                is Step.DoubleTap -> tap(step.id) { doubleClick() }
-
-                is Step.LongTap -> tap(step.id) { longClick() }
-
-                is Step.VerifyText ->
-                    composeRule
-                        .onNodeWithTag(step.id)
-                        .assertTextEquals(step.text)
-                        .assertIsDisplayed()
+                is Step.VerifySnapshot -> verifySnapshot(step, index, recordedSnapshotNames)
             }
 
             isViewEmpty = false
         }
     }
 
-    private fun tap(id: String, gesture: TouchInjectionScope.() -> Unit) =
-        composeRule.onNodeWithTag(id).performTouchInput(gesture)
+    private fun performTap(id: String) {
+        performOnNode(id) { click() }
+        composeRule.mainClock.advanceTimeBy(viewConfiguration.doubleTapTimeoutMillis)
+    }
+
+    private fun performOnNode(id: String, gesture: TouchInjectionScope.() -> Unit) =
+        onDiv(id).performTouchInput(gesture)
+
+    private fun verifyText(step: Step.VerifyText) {
+        onDiv(step.id)
+            .assertTextEquals(step.text)
+            .assertIsDisplayed()
+    }
+
+    private fun onDiv(id: String) = composeRule.onNodeWithTag(id)
+
+    @OptIn(ExperimentalRoborazziApi::class)
+    private fun verifySnapshot(step: Step.VerifySnapshot, index: Int, recordedSnapshotNames: MutableSet<String>) {
+        val options = provideRoborazziContext().options
+        val taskType = RoborazziTaskType.of(
+            isRecording = options.taskType.isRecording() && recordedSnapshotNames.add(step.name),
+            isComparing = options.taskType.isComparing(),
+            isVerifying = options.taskType.isVerifying(),
+        )
+        val compareOptions = options.compareOptions.copy(
+            outputDirectoryPath = "${options.compareOptions.outputDirectoryPath}/interactive/" +
+                "${configuration.baseConfiguration.name}/step$index",
+        )
+        val target = step.id?.let {
+            composeRule.onNodeWithTag(it, useUnmergedTree = true)
+                .assertExists("Failed to find screenshot target with div_id '$it'")
+        } ?: composeRule.onRoot()
+        target.captureRoboImage(
+            filePath = getScreenshotFilePath(
+                "interactive/${configuration.baseConfiguration.name}/${step.name}"
+            ),
+            roborazziOptions = options.copy(taskType = taskType, compareOptions = compareOptions),
+        )
+    }
 
     private class SolidBackgroundExtensionHandler : DivExtensionHandler {
         @Composable

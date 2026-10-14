@@ -21,7 +21,7 @@ class InteractiveScreenshotTestData(
 
         class Wait(val delay: Long) : Step()
 
-        class VerifySnapshot(val name: String) : Step()
+        class VerifySnapshot(val name: String, val id: String? = null) : Step()
 
         class VerifyText(val id: String, val text: String) : Step()
     }
@@ -66,7 +66,7 @@ class InteractiveScreenshotTestData(
                     if (name.isEmpty()) {
                         throw JSONException("verify_snapshot name must not be empty")
                     }
-                    Step.VerifySnapshot(name)
+                    Step.VerifySnapshot(name, if (step.has("target")) parseTargetId(step) else null)
                 }
 
                 "verify_text" -> Step.VerifyText(parseTargetId(step), step.getString("text"))
