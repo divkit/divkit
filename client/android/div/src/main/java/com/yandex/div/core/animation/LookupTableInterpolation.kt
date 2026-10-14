@@ -1,9 +1,6 @@
-package com.yandex.div.internal.animation
+package com.yandex.div.core.animation
 
-import com.yandex.div.core.annotations.InternalApi
-
-@InternalApi
-fun lookupTableInterpolation(input: Float, values: FloatArray): Float {
+internal fun lookupTableInterpolation(input: Float, values: FloatArray): Float {
     if (input <= 0f) return 0f
     if (input >= 1f) return 1f
 

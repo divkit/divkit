@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.modifiers
 
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
@@ -25,6 +26,7 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.reportError
+import com.yandex.div.compose.utils.toEasing
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
 
@@ -57,7 +59,9 @@ internal fun Modifier.actions(actions: DivActions, isFocusable: Boolean): Modifi
         DivAnimation.Name.NO_ANIMATION ->
             modifier.clickable(clickHandler)
 
-        DivAnimation.Name.SCALE,
+        DivAnimation.Name.SCALE ->
+            modifier.clickableWithScale(clickHandler = clickHandler, animation = animation)
+
         DivAnimation.Name.SET,
         DivAnimation.Name.TRANSLATE -> {
             reportError("Animation not supported: $animationName")
@@ -88,8 +92,12 @@ private fun Modifier.clickableWithFade(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val animatedAlpha by animateFloatAsState(
-        targetValue = if (isPressed) animation.endValue.observedFloatValue(1f) else 1f,
-        animationSpec = tween(durationMillis = animation.duration.observedIntValue()),
+        targetValue = if (isPressed) {
+            animation.endValue.observedFloatValue(0.6f).coerceIn(0f, 1f)
+        } else {
+            1f
+        },
+        animationSpec = animation.toAnimationSpec(),
         label = "alphaAnimation"
     )
     return graphicsLayer {
@@ -97,6 +105,40 @@ private fun Modifier.clickableWithFade(
     }.clickable(
         clickHandler = clickHandler,
         interactionSource = interactionSource
+    )
+}
+
+@Composable
+private fun Modifier.clickableWithScale(
+    clickHandler: ClickHandler,
+    animation: DivAnimation
+): Modifier {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val animatedScale by animateFloatAsState(
+        targetValue = if (isPressed) {
+            animation.endValue.observedFloatValue(0.95f).coerceAtLeast(0f)
+        } else {
+            1f
+        },
+        animationSpec = animation.toAnimationSpec(),
+        label = "scaleAnimation"
+    )
+    return graphicsLayer {
+        scaleX = animatedScale
+        scaleY = animatedScale
+    }.clickable(
+        clickHandler = clickHandler,
+        interactionSource = interactionSource
+    )
+}
+
+@Composable
+private fun DivAnimation.toAnimationSpec(): AnimationSpec<Float> {
+    return tween(
+        durationMillis = duration.observedIntValue(),
+        delayMillis = startDelay.observedIntValue(),
+        easing = interpolator.observedValue().toEasing(),
     )
 }
 
