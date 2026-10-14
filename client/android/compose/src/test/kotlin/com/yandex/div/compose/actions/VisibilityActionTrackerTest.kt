@@ -49,6 +49,26 @@ class VisibilityActionTrackerTest {
     }
 
     @Test
+    fun `onVisibilityChanged() triggers zero duration visibility action immediately`() {
+        val action = visibilityAction(delayMs = 0)
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+
+        verifyHandled(action)
+    }
+
+    @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun `zero duration visibility action is not handled again when coroutine queue runs`() {
+        val action = visibilityAction(delayMs = 0, limit = 0)
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        testScope.runCurrent()
+
+        verifyHandled(action)
+    }
+
+    @Test
     fun `onVisibilityChanged() does not trigger visibility action when limit is reached`() = testScope.runTest {
         val action = visibilityAction(delayMs = 100, limit = 3)
 
@@ -177,6 +197,26 @@ class VisibilityActionTrackerTest {
         verifyNoActionsHandled()
 
         wait(200)
+
+        verifyHandled(action)
+    }
+
+    @Test
+    fun `onVisibilityChanged() triggers zero duration disappear action immediately`() {
+        val action = disappearAction(delayMs = 0)
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = false)
+
+        verifyHandled(action)
+    }
+
+    @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun `zero duration disappear action is not handled again when coroutine queue runs`() {
+        val action = disappearAction(delayMs = 0, limit = 0)
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = false)
+        testScope.runCurrent()
 
         verifyHandled(action)
     }

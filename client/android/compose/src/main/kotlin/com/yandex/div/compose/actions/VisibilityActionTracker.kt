@@ -68,8 +68,13 @@ internal class VisibilityActionTracker @Inject constructor(
         action: DivSightAction
     ) {
         cancelAction(action)
+        val duration = action.duration.evaluate(context.expressionResolver)
+        if (duration == 0L) {
+            triggerIfNeeded(context, action)
+            return
+        }
         pendingActions[action] = mainCoroutineScope.launch {
-            delay(action.duration.evaluate(context.expressionResolver))
+            delay(duration)
             pendingActions.remove(action)
             triggerIfNeeded(context, action)
         }

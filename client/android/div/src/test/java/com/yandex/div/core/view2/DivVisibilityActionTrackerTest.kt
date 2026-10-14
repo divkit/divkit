@@ -112,6 +112,62 @@ class DivVisibilityActionTrackerTest {
     }
 
     @Test
+    fun `zero duration visibility action is dispatched before foreground scheduler is drained`() {
+        val action = DivVisibilityAction(
+            logId = "zero_duration_visibility_action".asExpression(),
+            visibilityDuration = 0L.asExpression()
+        )
+        val div = text(text = "test", visibilityActions = listOf(action))
+
+        trackVisibilityAction(view1, div, 100)
+
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view1),
+            argThat { this.contentEquals(arrayOf(action)) }
+        )
+    }
+
+    @Test
+    fun `zero duration visibility action is not dispatched again after foreground scheduler is drained`() {
+        val action = DivVisibilityAction(
+            logId = "zero_duration_visibility_action".asExpression(),
+            visibilityDuration = 0L.asExpression()
+        )
+        val div = text(text = "test", visibilityActions = listOf(action))
+
+        trackVisibilityAction(view1, div, 100)
+        Robolectric.flushForegroundThreadScheduler()
+
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view1),
+            argThat { this.contentEquals(arrayOf(action)) }
+        )
+    }
+
+    @Test
+    fun `zero duration visibility action is not dispatched again while view stays visible`() {
+        val action = DivVisibilityAction(
+            logId = "zero_duration_visibility_action".asExpression(),
+            visibilityDuration = 0L.asExpression()
+        )
+        val div = text(text = "test", visibilityActions = listOf(action))
+
+        trackVisibilityAction(view1, div, 100)
+        trackVisibilityAction(view1, div, 100)
+
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view1),
+            argThat { this.contentEquals(arrayOf(action)) }
+        )
+    }
+
+    @Test
     fun `visibility action is not dispatched when view become invisible before deadline`() {
         trackVisibilityAction(view1, div1, 100)
         trackVisibilityAction(view1, div1, 40)
@@ -329,6 +385,56 @@ class DivVisibilityActionTrackerTest {
             eq(resolver),
             eq(view5),
             argThat { this.size == 1 }
+        )
+    }
+
+    @Test
+    fun `zero duration disappear action is dispatched before foreground scheduler is drained`() {
+        val action = disappearAction(id = "zero_duration_disappear_action", delayMs = 0, percentage = 50)
+        val div = text(text = "test", disappearActions = listOf(action))
+        trackVisibilityAction(view1, div, 100)
+
+        trackVisibilityAction(view1, div, 0)
+
+        verify(visibilityActionDispatcher).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view1),
+            argThat { this.contentEquals(arrayOf(action)) }
+        )
+    }
+
+    @Test
+    fun `zero duration disappear action is not dispatched again after foreground scheduler is drained`() {
+        val action = disappearAction(id = "zero_duration_disappear_action", delayMs = 0, percentage = 50)
+        val div = text(text = "test", disappearActions = listOf(action))
+        trackVisibilityAction(view1, div, 100)
+
+        trackVisibilityAction(view1, div, 0)
+        Robolectric.flushForegroundThreadScheduler()
+
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view1),
+            argThat { this.contentEquals(arrayOf(action)) }
+        )
+    }
+
+    @Test
+    fun `zero duration disappear action is not dispatched again while view stays invisible`() {
+        val action = disappearAction(id = "zero_duration_disappear_action", delayMs = 0, percentage = 50)
+        val div = text(text = "test", disappearActions = listOf(action))
+        trackVisibilityAction(view1, div, 100)
+
+        trackVisibilityAction(view1, div, 0)
+        trackVisibilityAction(view1, div, 0)
+
+        verify(visibilityActionDispatcher, times(1)).dispatchActions(
+            eq(scope),
+            eq(resolver),
+            eq(view1),
+            argThat { this.contentEquals(arrayOf(action)) }
         )
     }
 
