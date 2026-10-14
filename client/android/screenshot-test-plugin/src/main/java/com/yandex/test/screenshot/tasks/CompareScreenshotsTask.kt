@@ -12,21 +12,26 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.VerificationException
+import org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
 import org.gradle.work.DisableCachingByDefault
 import java.io.File
 import java.io.IOException
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.util.Properties
-import kotlin.io.path.name
 
 private typealias ActualPath = String
 private typealias ReferencePath = String
@@ -49,9 +54,6 @@ abstract class CompareScreenshotsTask : DefaultTask() {
     abstract val strictComparison: Property<Boolean>
 
     @get:Input
-    abstract val ignoreFailures: Property<Boolean>
-
-    @get:Input
     abstract val selectedReferencePrefix: Property<String>
 
     @get:Internal
@@ -66,6 +68,9 @@ abstract class CompareScreenshotsTask : DefaultTask() {
     @get:OutputDirectory
     abstract val collectedDir: DirectoryProperty
 
+    @get:OutputFile
+    abstract val comparisonResultFile: RegularFileProperty
+
     private lateinit var allureResults: ScreenshotAllureResults
 
     private val logger: Logger by lazy {
@@ -74,90 +79,79 @@ abstract class CompareScreenshotsTask : DefaultTask() {
     }
 
     init {
-        group = "verification"
+        group = VERIFICATION_GROUP
     }
 
     @TaskAction
     fun perform() {
-        collectedDir.asFile.get().deleteRecursively()
-        screenshotDir.asFile.get().listFiles()?.forEach { it.copyRecursively(collectedDir.asFile.get()) }
-
+        comparisonResultFile.get().asFile.delete()
         comparisonDir.asFile.get().deleteRecursively()
+        collectedDir.asFile.get().deleteRecursively()
+
         allureResultsDir.asFile.get().apply {
             deleteRecursively()
             mkdirs()
         }
 
+        val screenshotDirFile = screenshotDir.asFile.get().listFiles { file -> file.isDirectory }?.singleOrNull()
+            ?: throw GradleException("Expected test output from exactly one device.")
+        screenshotDirFile.copyRecursively(collectedDir.asFile.get())
+
         val updates = mutableMapOf<ReferencePath, String>()
-        val screenshotDirs = screenshotDir.asFile.get().listFiles { file -> file.isDirectory }!!
-        val allSuccessful = screenshotDirs.map { screenshotDirFile ->
-            val device = screenshotDirFile.toPath().last().name
-            val properties = if (File(screenshotDirFile, "device.properties").isFile) {
-                readDeviceProperties(screenshotDirFile)
-            } else {
-                null
+        val properties = readDeviceProperties(screenshotDirFile)
+        allureResults = ScreenshotAllureResults(screenshotDirFile, allureResultsDir.get().asFile)
+        val deviceReferenceDir = referencesDir.dir(deviceDescription(properties)).get().asFile
+
+        logger.i("Screenshot comparison started")
+        logger.i("\tscreenshots from: $screenshotDirFile")
+        logger.i("\treferences from: $deviceReferenceDir")
+
+        val referenceOverrides = ReferenceFileReader(screenshotDirFile)
+        val comparator = ImageComparator(logger)
+
+        loadExplicitScreenshotMatchMap(referenceOverrides)
+
+        val comparisonSuccessful = listOf(
+            processNewScreenshots(
+                referenceOverrides,
+                screenshotDirFile,
+                deviceReferenceDir,
+                comparableCategories.get(),
+                updates,
+            ),
+            processSkippedReferences(
+                referenceOverrides,
+                screenshotDirFile,
+                deviceReferenceDir,
+                comparableCategories.get(),
+            ),
+            processDifferentScreenshots(
+                referenceOverrides,
+                comparator,
+                screenshotDirFile,
+                deviceReferenceDir,
+                comparableCategories.get(),
+                updates,
+            )
+        ).all { it }
+
+        logger.i("Screenshot comparison finished: successful=$comparisonSuccessful")
+
+        allureResults.write()
+        if (updates.isNotEmpty()) {
+            comparisonDir.file("updates.json").get().asFile.apply {
+                parentFile.mkdirs()
+                writeText(Gson().toJson(updates))
             }
-            val apiLevel = properties?.getProperty("apiLevel")
-            allureResults = ScreenshotAllureResults(screenshotDirFile, allureResultsDir.get().asFile, apiLevel)
-            val testFailures = allureResults.failedTests
-            testFailures.forEach { result ->
-                logger.e("${result.fullName ?: result.name}: ${result.statusDetails?.message.orEmpty()}")
-            }
-            if (properties == null) {
-                allureResults.write()
-                val message = "No screenshots were produced for $device"
-                logger.e(message)
-                if (!ignoreFailures.get()) throw GradleException(message)
-                return@map false
-            }
-            val deviceReferenceDir = referencesDir.dir(deviceDescription(properties)).get().asFile
-
-            logger.i("Screenshots comparison for $device started")
-            logger.i("\tscreenshots from: $screenshotDirFile")
-            logger.i("\treferences from: $deviceReferenceDir")
-
-            val referenceOverrides = ReferenceFileReader(screenshotDirFile)
-            val comparator = ImageComparator(logger)
-
-            loadExplicitScreenshotMatchMap(referenceOverrides)
-
-            val successful = listOf(
-                testFailures.isEmpty(),
-                processNewScreenshots(
-                    referenceOverrides,
-                    screenshotDirFile,
-                    deviceReferenceDir,
-                    comparableCategories.get(),
-                    updates,
-                ),
-                processSkippedReferences(
-                    referenceOverrides,
-                    screenshotDirFile,
-                    deviceReferenceDir,
-                    comparableCategories.get(),
-                    updates,
-                ),
-                processDifferentScreenshots(
-                    referenceOverrides,
-                    comparator,
-                    screenshotDirFile,
-                    deviceReferenceDir,
-                    comparableCategories.get(),
-                    updates,
-                )
-            ).all { it }
-
-            allureResults.write()
-            logger.i("Screenshot comparison for $device finished: successful=$successful")
-            successful
-        }.all { it }
-
-        comparisonDir.file("updates.json").get().asFile.apply {
-            parentFile.mkdirs()
-            writeText(Gson().toJson(updates))
         }
-        if (!allSuccessful && !ignoreFailures.get()) {
-            throw GradleException("error processing images, see log messages above")
+        comparisonResultFile.get().asFile.apply {
+            parentFile.mkdirs()
+            val temporaryFile = File(parentFile, "$name.tmp")
+            temporaryFile.writeText(if (comparisonSuccessful) "passed" else "differences")
+            Files.move(temporaryFile.toPath(), toPath(), StandardCopyOption.ATOMIC_MOVE)
+        }
+        if (!comparisonSuccessful) {
+            throw VerificationException("Screenshot comparisons failed, see log messages above")
         }
     }
 
@@ -188,6 +182,7 @@ abstract class CompareScreenshotsTask : DefaultTask() {
         }
 
         newScreenshots.forEach { image ->
+            File(screenshotDir, image).copyTo(comparisonDir.file("new/$image").get().asFile)
             addReferenceUpdate(referenceOverrides, image, updates)
             allureResults.addMissingReference(image, File(screenshotDir, image))
         }
@@ -206,7 +201,6 @@ abstract class CompareScreenshotsTask : DefaultTask() {
         screenshotDir: File,
         referenceDir: File,
         categories: List<String>,
-        updates: MutableMap<ReferencePath, String>,
     ): Boolean {
         val producedReferences = categories.flatMap { category ->
             enumerateImagesRelative(File(screenshotDir, category)).flatMap { image ->
@@ -223,10 +217,9 @@ abstract class CompareScreenshotsTask : DefaultTask() {
         requiredReferences.forEach { image ->
             val skippedPath = "skipped/$image"
             File(referenceDir, image).copyTo(comparisonDir.file(skippedPath).get().asFile)
-            updates[image] = skippedPath
         }
         skippedScreenshots.forEach { image ->
-            allureResults.addMissingScreenshot(image, required = image in requiredReferences)
+            allureResults.addMissingScreenshot(image, File(referenceDir, image), required = image in requiredReferences)
         }
 
         if (skippedScreenshots.isNotEmpty()) {
@@ -250,7 +243,7 @@ abstract class CompareScreenshotsTask : DefaultTask() {
         categories: List<String>,
         updates: MutableMap<ReferencePath, String>,
     ): Boolean {
-        val differentScreenshotDir = comparisonDir.dir("diff").get().asFile
+        val differentScreenshotDir = comparisonDir.dir(DIFF_IMAGE_NAME).get().asFile
 
         val differentScreenshots = mutableListOf<ScreenshotPair>()
         val referenceMap = mutableMapOf<ActualPath, ReferencePath>()
@@ -291,7 +284,7 @@ abstract class CompareScreenshotsTask : DefaultTask() {
                 pair.actual,
                 actualFile,
                 expectedFile,
-                File(differentScreenshotDir, pair.actual.withSuffix("_diff"))
+                File(differentScreenshotDir, pair.actual.withSuffix("_$DIFF_IMAGE_NAME"))
             )
         }
 
@@ -322,11 +315,11 @@ abstract class CompareScreenshotsTask : DefaultTask() {
         diffDir: File,
         imagePath: String,
     ) {
-        val diffFile = File(diffDir, imagePath.withSuffix("_diff"))
+        val diffFile = File(diffDir, imagePath.withSuffix("_$DIFF_IMAGE_NAME"))
 
         comparator.createDiff(actualFile, expectedFile, diffFile, imagePath)
-        actualFile.copyIfExists(File(diffDir, imagePath.withSuffix("_actual")))
-        expectedFile.copyIfExists(File(diffDir, imagePath.withSuffix("_expected")))
+        actualFile.copyIfExists(File(diffDir, imagePath.withSuffix("_$ACTUAL_IMAGE_NAME")))
+        expectedFile.copyIfExists(File(diffDir, imagePath.withSuffix("_$EXPECTED_IMAGE_NAME")))
     }
 
     private fun enumerateImagesRelative(dir: File): Set<String> {
@@ -352,7 +345,7 @@ abstract class CompareScreenshotsTask : DefaultTask() {
     private fun readDeviceProperties(
         screenshotDir: File
     ): Properties {
-        val propertiesFile = File(screenshotDir, "device.properties")
+        val propertiesFile = File(screenshotDir, DEVICE_PROPERTIES_FILENAME)
         try {
             val properties = Properties()
             propertiesFile.bufferedReader().use { properties.load(it) }
@@ -371,6 +364,7 @@ abstract class CompareScreenshotsTask : DefaultTask() {
     companion object {
 
         private const val TAG = "CompareScreenshotsTask"
+        private const val DEVICE_PROPERTIES_FILENAME = "device.properties"
 
         /**
          * Location of the additional test output of `connected<Variant>AndroidTest`, relative to the
@@ -400,15 +394,15 @@ abstract class CompareScreenshotsTask : DefaultTask() {
                 it.referencesDir.set(project.file(extension.referencesDir))
                 it.comparableCategories.set(extension.comparableCategories)
                 it.strictComparison.set(extension.strictComparison)
-                it.ignoreFailures.set(extension.ignoreFailures)
                 it.selectedReferencePrefix.set(extension.selectedReferencePrefix)
                 it.screenshotDir.set(
                     project.layout.buildDirectory.dir(additionalTestOutputDir(variant))
                 )
                 it.reportDir.set(project.reportDir)
-                it.allureResultsDir.set(project.layout.buildDirectory.dir("allure-comparison-results"))
+                it.allureResultsDir.set(extension.allureResultsDir)
                 it.comparisonDir.set(project.reportDir.map { it.dir(extension.comparisonDir.get()) })
                 it.collectedDir.set(project.reportDir.map { it.dir(extension.collectedDir.get()) })
+                it.comparisonResultFile.set(project.reportDir.map { it.file("screenshot-comparison-result.txt") })
 
                 it.onlyIf { extension.enableComparison.get() }
             }

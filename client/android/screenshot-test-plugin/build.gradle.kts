@@ -11,10 +11,10 @@ kotlin {
 }
 
 dependencies {
+    compileOnly(libs.allure.report.plugin)
     implementation(libs.agp.gradle)
     implementation(libs.allure.commons)
     implementation(libs.gson)
-    implementation(libs.google.testing.platform.proto)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.webp.imageio)
     testImplementation(kotlin("test"))

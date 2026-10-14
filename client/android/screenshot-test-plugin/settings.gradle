@@ -12,6 +12,11 @@ dependencyResolutionManagement {
     }
     repositories {
         google()
+        gradlePluginPortal {
+            content {
+                includeGroupAndSubgroups('io.qameta.allure.gradle')
+            }
+        }
         mavenCentral()
     }
 }

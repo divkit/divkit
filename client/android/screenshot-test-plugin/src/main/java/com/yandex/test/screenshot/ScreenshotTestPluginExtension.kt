@@ -1,5 +1,6 @@
 package com.yandex.test.screenshot
 
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
@@ -12,7 +13,6 @@ open class ScreenshotTestPluginExtension @Inject constructor(
 
     var enableComparison: Property<Boolean> = objects.property(Boolean::class.java).convention(true)
     val strictComparison: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
-    val ignoreFailures: Property<Boolean> = objects.property(Boolean::class.java).convention(false)
     val selectedReferencePrefix: Property<String> = objects.property(String::class.java).convention("")
     val hostDir: Property<String> = objects.property(String::class.java)
         .convention("screenshots")
@@ -20,6 +20,7 @@ open class ScreenshotTestPluginExtension @Inject constructor(
         .convention("src/androidTest/resources/screenshots")
     val collectedDir: Provider<String> = hostDir.map { "$it/collected" }
     val comparisonDir: Provider<String> = hostDir.map { "$it/comparison" }
+    val allureResultsDir: DirectoryProperty = objects.directoryProperty()
 
     val comparableCategories: ListProperty<String> = objects.listProperty(String::class.java)
         .convention(listOf("viewRender", "viewPixelCopy"))

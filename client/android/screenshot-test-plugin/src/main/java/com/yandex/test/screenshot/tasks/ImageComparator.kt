@@ -18,7 +18,7 @@ internal class ImageComparator(private val logger: Logger) {
             successful
         } catch (e: Exception) {
             logger.e("Failed to compare $imagePath: actual=$lhs, expected=$rhs", e)
-            false
+            throw e
         }
     }
 
@@ -73,6 +73,7 @@ internal class ImageComparator(private val logger: Logger) {
             logger.i("Diff saved to ${diff.absolutePath}")
         } catch (e: Exception) {
             logger.e("Failed to create diff for $imagePath: actual=$lhs, expected=$rhs, diff=$diff", e)
+            throw e
         }
     }
 
@@ -80,11 +81,11 @@ internal class ImageComparator(private val logger: Logger) {
         val lhsImage = ImageIO.read(lhs)
         val rhsImage = ImageIO.read(rhs)
 
-        // store diff image into bigger one
-        val diffImage = if (lhsImage.height >= rhsImage.height) lhsImage else rhsImage
+        val width = max(lhsImage.width, rhsImage.width)
         val height = max(lhsImage.height, rhsImage.height)
+        val diffImage = BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
 
-        for (x in 0 until lhsImage.width) {
+        for (x in 0 until width) {
             for (y in 0 until height) {
                 val color1 = lhsImage.getRGBSafe(x, y)
                 val color2 = rhsImage.getRGBSafe(x, y)
@@ -95,13 +96,13 @@ internal class ImageComparator(private val logger: Logger) {
             }
         }
 
-        diff.mkdirs()
-        ImageIO.write(diffImage, "png", diff)
+        diff.parentFile.mkdirs()
+        check(ImageIO.write(diffImage, "png", diff)) { "Failed to write diff to ${diff.absolutePath}" }
     }
 
     private fun BufferedImage.size(): String = "${width}x${height}"
 
-    private fun BufferedImage.getRGBSafe(x: Int, y: Int) = if (y < height) getRGB(x, y) else 0
+    private fun BufferedImage.getRGBSafe(x: Int, y: Int) = if (x < width && y < height) getRGB(x, y) else 0
 
     companion object {
         private const val THRESHOLD = 1e-4 // Scaled from 0 to 1

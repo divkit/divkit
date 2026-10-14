@@ -1,6 +1,8 @@
 [versions]
 agp = "9.1.1"
 allure = "2.4.0"
+allure-commandline = "2.46.1"
+allure-plugin = "4.3.0"
 android-lint = "32.1.1"  # agp + "23.0.0"
 android-compileSdk = "36"
 android-minSdk = "23"
@@ -70,6 +72,7 @@ androidsvg-aar = { module = "com.caverock:androidsvg-aar", version.ref = "androi
 
 allure-android = { module = "io.qameta.allure:allure-kotlin-android", version.ref = "allure" }
 allure-commons = { module = "io.qameta.allure:allure-kotlin-commons", version.ref = "allure" }
+allure-report-plugin = { module = "io.qameta.allure.gradle.report:allure-report-plugin", version.ref = "allure-plugin" }
 
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -192,6 +195,8 @@ zxing-core = { module = "com.google.zxing:core", version = "3.5.4" }
 zxing-embedded = { module = "com.journeyapps:zxing-android-embedded", version = "4.3.0" }
 
 [plugins]
+allure-adapter-base = { id = "io.qameta.allure-adapter-base", version.ref = "allure-plugin" }
+allure-report = { id = "io.qameta.allure-report", version.ref = "allure-plugin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }

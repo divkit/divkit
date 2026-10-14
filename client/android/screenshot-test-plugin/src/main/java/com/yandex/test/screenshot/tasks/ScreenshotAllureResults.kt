@@ -22,18 +22,16 @@ import java.io.File
 import java.util.Base64
 import java.util.UUID
 
-internal class ScreenshotAllureResults(
-    screenshotDir: File,
-    outputDir: File,
-    private val apiLevel: String?,
-) {
+private const val SCREENSHOT_PARAMETER_NAME = "Screenshot"
+internal const val ACTUAL_IMAGE_NAME = "actual"
+internal const val EXPECTED_IMAGE_NAME = "expected"
+internal const val DIFF_IMAGE_NAME = "diff"
+
+internal class ScreenshotAllureResults(screenshotDir: File, outputDir: File) {
 
     private val results = mutableListOf<TestResult>()
     private val screenshotResults = mutableMapOf<String, List<ExecutableItem>>()
     private val writer = FileSystemResultsWriter { outputDir }
-
-    val failedTests: List<TestResult>
-        get() = results.filter { it.status == Status.FAILED || it.status == Status.BROKEN }
 
     init {
         File(screenshotDir, "allure-results").walkTopDown().filter { it.isFile }.forEach {
@@ -51,19 +49,22 @@ internal class ScreenshotAllureResults(
         val method = requireNotNull(result.name).substringBefore('[').removePrefix("test")
         val casePath = result.parameters.firstOrNull { it.name == "Case" }?.value
         val testClass = result.labels.lastOrNull { it.name == TEST_CLASS_LABEL_NAME }?.value
-        val source = SHARD_DIRECTORY.matchEntire(file.parentFile.name)?.destructured
-            ?.let { (index, count) -> "Shard $index of $count" } ?: "Test run"
-        formatResult(result, casePath, requireNotNull(testClass), source, method)
+        formatResult(result, casePath, requireNotNull(testClass), method)
         results.add(result)
         registerScreenshots(listOf(result))
     }
 
     fun addMissingReference(imagePath: String, actual: File) {
-        addComparison(imagePath, Status.FAILED, "No reference screenshot", mapOf("actual" to actual))
+        addComparison(imagePath, Status.FAILED, "No reference screenshot", mapOf(ACTUAL_IMAGE_NAME to actual))
     }
 
-    fun addMissingScreenshot(imagePath: String, required: Boolean) {
-        addComparison(imagePath, if (required) Status.FAILED else Status.SKIPPED, "Screenshot was not produced")
+    fun addMissingScreenshot(imagePath: String, expected: File, required: Boolean) {
+        addComparison(
+            imagePath,
+            if (required) Status.FAILED else Status.SKIPPED,
+            "Screenshot was not produced",
+            if (required) mapOf(EXPECTED_IMAGE_NAME to expected) else emptyMap(),
+        )
     }
 
     fun addMatch(imagePath: String) {
@@ -72,9 +73,9 @@ internal class ScreenshotAllureResults(
 
     fun addDifference(imagePath: String, actual: File, expected: File, diff: File) {
         addComparison(imagePath, Status.FAILED, attachments = mapOf(
-            "actual" to actual,
-            "expected" to expected,
-            "diff" to diff,
+            ACTUAL_IMAGE_NAME to actual,
+            EXPECTED_IMAGE_NAME to expected,
+            DIFF_IMAGE_NAME to diff,
         ))
     }
 
@@ -97,6 +98,15 @@ internal class ScreenshotAllureResults(
                 val bytes = file.readBytes()
                 val format = if (bytes.size >= 12 && String(bytes, 8, 4, Charsets.US_ASCII) == "WEBP") "webp" else "png"
                 put(name, "data:image/$format;base64,${Base64.getEncoder().encodeToString(bytes)}")
+                if (name != DIFF_IMAGE_NAME) {
+                    val imageFilename = "${UUID.randomUUID()}-$name.$format"
+                    writer.write(imageFilename, bytes.inputStream())
+                    stages.last().attachments.add(Attachment(
+                        name = name.replaceFirstChar { it.uppercaseChar() },
+                        source = imageFilename,
+                        type = "image/$format",
+                    ))
+                }
             }
         }
         val filename = "${UUID.randomUUID()}-comparison.json"
@@ -115,7 +125,7 @@ internal class ScreenshotAllureResults(
     private fun registerScreenshots(stages: List<ExecutableItem>) {
         val stage = stages.last()
         stage.parameters.forEach { parameter ->
-            if (parameter.name == "Screenshot") {
+            if (parameter.name == SCREENSHOT_PARAMETER_NAME) {
                 screenshotResults[requireNotNull(parameter.value)] = stages
             }
         }
@@ -126,7 +136,6 @@ internal class ScreenshotAllureResults(
         result: TestResult,
         path: String?,
         testClass: String,
-        source: String,
         method: String = ""
     ) {
         path?.let { result.name = it.substringAfterLast('/') }
@@ -141,8 +150,6 @@ internal class ScreenshotAllureResults(
         if (method.isEmpty() && '/' in directories) {
             labels.add(createSubSuiteLabel(directories.substringAfter('/')))
         }
-        val resultApi = labels.firstOrNull { it.name == "androidApi" }?.value ?: apiLevel
-        result.parameters.add(Parameter(name = "Source", value = resultApi?.let { "[api$it] " }.orEmpty() + source))
     }
 
     private fun comparisonResult(imagePath: String): TestResult {
@@ -150,12 +157,8 @@ internal class ScreenshotAllureResults(
         val testClass = classPath.substringBefore('/')
         val path = classPath.substringAfter('/')
         val result = TestResult(uuid = UUID.randomUUID().toString())
-        result.parameters.add(Parameter(name = "Screenshot", value = imagePath))
-        formatResult(result, path, testClass, "Collect and compare screenshots")
+        result.parameters.add(Parameter(name = SCREENSHOT_PARAMETER_NAME, value = imagePath))
+        formatResult(result, path, testClass)
         return result
-    }
-
-    private companion object {
-        val SHARD_DIRECTORY = Regex("shard-(\\d+)-of-(\\d+)")
     }
 }

@@ -1,7 +1,10 @@
 import com.yandex.div.gradle.FileExtensions
 import groovy.json.JsonOutput
+import io.qameta.allure.gradle.report.AllureReportPlugin
 
 plugins {
+    alias(libs.plugins.allure.adapter.base)
+    alias(libs.plugins.allure.report)
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.roborazzi)
@@ -40,13 +43,6 @@ android {
         }
         if (gradle.ext.screenshotTestRun) {
             testInstrumentationRunnerArguments waitForActivitiesToComplete: 'false'
-        }
-
-        providers.gradleProperty("shardIndex").orNull?.with { index ->
-            testInstrumentationRunnerArguments.shardIndex = index
-        }
-        providers.gradleProperty("numShards").orNull?.with { shards ->
-            testInstrumentationRunnerArguments.numShards = shards
         }
     }
 
@@ -140,6 +136,18 @@ dependencies {
     testImplementation libs.roborazzi
     testImplementation libs.roborazzi.junit.rule
     testImplementation libs.webp.imageio
+
+    allureRawResultElements files(allure.adapter.resultsDir)
+}
+
+allure {
+    version = libs.versions.allure.commandline.get()
+    adapter.resultsDir.set(layout.buildDirectory.dir('allure-comparison-results'))
+}
+
+tasks.named(AllureReportPlugin.REPORT_TASK_NAME) {
+    reportDir.set(layout.buildDirectory.dir('allure-report'))
+    clean.set(true)
 }
 
 roborazzi {
@@ -167,9 +175,9 @@ if (gradle.ext.screenshotComparisonEnabled) {
     screenshotTests {
         enableComparison = !providers.gradleProperty("disable-screenshot-comparison").isPresent()
         strictComparison = providers.gradleProperty("screenshot-strict-comparison").isPresent()
-        ignoreFailures = providers.gradleProperty("screenshot-ignore-failures").isPresent()
         selectedReferencePrefix = providers.gradleProperty("screenshot-selected-reference-prefix").getOrElse("")
         referencesDir = "src/screenshotTest/screenshots"
+        allureResultsDir = allure.adapter.resultsDir
     }
 }
 
