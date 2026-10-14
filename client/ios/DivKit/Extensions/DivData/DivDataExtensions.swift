@@ -14,6 +14,13 @@ extension DivData: DivBlockModeling {
   static let rootPath = DivStatePath(rawValue: UIElementPath("{root}"))
 
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
+    // Ids are re-registered here rather than in DivView, so that hosts calling makeBlock directly
+    // drop paths of previous models too.
+    let idToPath = context.idToPath
+    let viewId = context.viewId
+    idToPath.beginUpdate(viewId: viewId)
+    defer { idToPath.endUpdate(viewId: viewId) }
+
     guard let state = getCurrentState(context: context) else {
       throw DivBlockModelingError("DivData has no states", path: context.path)
     }

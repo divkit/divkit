@@ -48,7 +48,7 @@ struct FocusElementActionHandlerTests {
       anchorPath: displayedTooltip.tooltip!.anchorPath
     )
     #else
-    // Stand-in for non-iOS targets: repeated makeBlock skips resetIdToPath, but still
+    // Stand-in for non-iOS targets: models the views without providers, and still
     // checks that tooltip registrations are not duplicated after a second host pass.
     let hostContext = components.makeContext(cardId: cardId, cachedImageHolders: [])
     let tooltipContext = components.makeContext(

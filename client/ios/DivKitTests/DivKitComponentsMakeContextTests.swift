@@ -63,7 +63,7 @@ struct DivKitComponentsMakeContextTests {
   }
 
   @Test
-  func withAdditionalId_idRegistration_survivesHostResetIdToPath() {
+  func withAdditionalId_idRegistration_survivesHostRemodel() {
     let hostContext = components.makeContext(cardId: cardId, cachedImageHolders: [])
     let extraContext = components.makeContext(
       cardId: cardId,
@@ -76,7 +76,7 @@ struct DivKitComponentsMakeContextTests {
 
     #expect(extraContext.idToPath.paths(forId: "extra_scope", cardId: cardId).count == 1)
 
-    components.resetIdToPath(viewId: hostContext.viewId)
+    _ = makeBlock(divSeparator(), context: hostContext)
 
     #expect(extraContext.idToPath.paths(forId: "extra_scope", cardId: cardId).count == 1)
     #expect(hostContext.idToPath.paths(forId: "host_scope", cardId: cardId).isEmpty)

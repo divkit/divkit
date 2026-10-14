@@ -7,6 +7,9 @@ import Testing
 /// element declares several - the anchor is the discriminator, not the tooltip id.
 private let anchorPath = UIElementPath("card") + "0" + "anchor"
 
+private let oldTargetPath = UIElementPath("card") + "0" + "container" + "0" + "target"
+private let newTargetPath = UIElementPath("card") + "0" + "container" + "1" + "target"
+
 @Suite
 struct IdToPathTests {
   private let hostViewId = DivViewId(cardId: "card")
@@ -29,7 +32,7 @@ struct IdToPathTests {
     idToPath.add(tooltipPath, forId: "tooltipScope", viewId: tooltip1ViewId)
 
     // Simulates the tooltip's own DivBlockProvider refreshing just its own registrations
-    // on remodel (see DivKitComponents.resetIdToPath) - this must not wipe the host's,
+    // on remodel (see DivData.makeBlock) - this must not wipe the host's,
     // which is exactly the bug this test guards against.
     idToPath.reset(viewId: tooltip1ViewId)
 
@@ -180,7 +183,7 @@ struct IdToPathTests {
     idToPath.add(scopePath, forId: "myScope", viewId: hostViewId)
 
     // The tooltip is shown and its own DivBlockProvider remodels, refreshing only its
-    // own registrations in the shared IdToPath (see DivKitComponents.resetIdToPath).
+    // own registrations in the shared IdToPath (see DivData.makeBlock).
     // Before the DivViewId-based addressing fix, this used to wipe the host's scope too,
     // since the reset only ever saw the flattened, host-only cardId.
     idToPath.reset(viewId: tooltip1ViewId)
@@ -251,7 +254,7 @@ struct IdToPathTests {
       anchorPath: displayedTooltip.tooltip!.anchorPath
     )
     #else
-    // Stand-in for non-iOS targets: repeated makeBlock skips resetIdToPath, but still
+    // Stand-in for non-iOS targets: models the views without providers, and still
     // checks that tooltip registrations are not duplicated after a second host pass.
     let hostContext = components.makeContext(
       cardId: hostViewId.cardId,
@@ -296,6 +299,106 @@ struct IdToPathTests {
     )
 
     #expect(reporter.lastError == nil)
+  }
+
+  @Test
+  func update_beforeIdIsReregistered_resolvesToPreviousPath() {
+    let idToPath = IdToPath()
+    idToPath.add(oldTargetPath, forId: "target", viewId: hostViewId)
+
+    idToPath.beginUpdate(viewId: hostViewId)
+
+    #expect(idToPath.paths(forId: "target", cardId: "card") == [oldTargetPath])
+  }
+
+  @Test
+  func update_afterIdIsReregistered_resolvesOnlyToNewPath() {
+    let idToPath = IdToPath()
+    idToPath.add(oldTargetPath, forId: "target", viewId: hostViewId)
+
+    idToPath.beginUpdate(viewId: hostViewId)
+    idToPath.add(newTargetPath, forId: "target", viewId: hostViewId)
+
+    #expect(idToPath.paths(forId: "target", cardId: "card") == [newTargetPath])
+  }
+
+  @Test
+  func update_idReregisteredAtSeveralPaths_resolvesToAllOfThem() {
+    let idToPath = IdToPath()
+    idToPath.add(oldTargetPath, forId: "target", viewId: hostViewId)
+
+    idToPath.beginUpdate(viewId: hostViewId)
+    idToPath.add(newTargetPath, forId: "target", viewId: hostViewId)
+    idToPath.add(oldTargetPath, forId: "target", viewId: hostViewId)
+
+    #expect(
+      Set(idToPath.paths(forId: "target", cardId: "card")) == [oldTargetPath, newTargetPath]
+    )
+  }
+
+  @Test
+  func endUpdate_dropsIdsThatWereNotReregistered() {
+    let idToPath = IdToPath()
+    let childPath = oldTargetPath + "0" + "child"
+    idToPath.add(oldTargetPath, forId: "target", viewId: hostViewId)
+    idToPath.add(childPath, forId: "child", viewId: hostViewId)
+
+    idToPath.beginUpdate(viewId: hostViewId)
+    idToPath.add(newTargetPath, forId: "target", viewId: hostViewId)
+    idToPath.endUpdate(viewId: hostViewId)
+
+    #expect(idToPath.paths(forId: "target", cardId: "card") == [newTargetPath])
+    #expect(idToPath.paths(forId: "child", cardId: "card").isEmpty)
+  }
+
+  @Test
+  func update_scopedLookup_resolvesInstanceNotReregisteredYet() {
+    let idToPath = IdToPath()
+    let firstItem = UIElementPath("card") + "0" + "gallery" + "0" + "item"
+    let secondItem = UIElementPath("card") + "0" + "gallery" + "1" + "item"
+    idToPath.add(firstItem + "0" + "input", forId: "input", viewId: hostViewId)
+    idToPath.add(secondItem + "0" + "input", forId: "input", viewId: hostViewId)
+
+    idToPath.beginUpdate(viewId: hostViewId)
+    idToPath.add(firstItem + "0" + "input", forId: "input", viewId: hostViewId)
+
+    // The update has not reached the second item yet, so its input is still addressable in it.
+    #expect(
+      idToPath.paths(forId: "input", cardId: "card", scopePath: secondItem)
+        == [secondItem + "0" + "input"]
+    )
+  }
+
+  @Test
+  func update_lookupWithDivTypes_ignoresNewPathsOfOtherTypes() {
+    let idToPath = IdToPath()
+    idToPath.add(oldTargetPath, forId: "target", viewId: hostViewId, divType: DivText.type)
+
+    idToPath.beginUpdate(viewId: hostViewId)
+    idToPath.add(newTargetPath, forId: "target", viewId: hostViewId, divType: DivInput.type)
+
+    #expect(
+      idToPath.paths(forId: "target", cardId: "card", divTypes: [DivText.type])
+        == [oldTargetPath]
+    )
+
+    idToPath.endUpdate(viewId: hostViewId)
+
+    #expect(idToPath.paths(forId: "target", cardId: "card", divTypes: [DivText.type]).isEmpty)
+  }
+
+  @Test
+  func endUpdate_host_leavesTooltipAndOtherCardUntouched() {
+    let fixture = makeFixture()
+
+    fixture.idToPath.beginUpdate(viewId: hostViewId)
+    fixture.idToPath.endUpdate(viewId: hostViewId)
+
+    #expect(fixture.idToPath.paths(forId: "hostButton", cardId: "card").isEmpty)
+    #expect(fixture.idToPath.paths(forId: "tooltipButton", cardId: "card") == [fixture.tooltipPath])
+    #expect(fixture.idToPath
+      .paths(forId: "otherButton", cardId: "other_card") == [fixture.otherPath]
+    )
   }
 
   private func makeFixture() -> (

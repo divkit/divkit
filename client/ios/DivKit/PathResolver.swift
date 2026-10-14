@@ -21,9 +21,12 @@ struct PathResolver {
     scopePath: UIElementPath? = nil,
     divTypes: Set<String>? = nil
   ) -> PathResolution {
-    let componentPaths = idToPath.paths(forId: id, cardId: cardId, divTypes: divTypes)
-    let paths = scopePath
-      .map { scope in componentPaths.filter { $0.starts(with: scope) } } ?? componentPaths
+    let paths = idToPath.paths(
+      forId: id,
+      cardId: cardId,
+      scopePath: scopePath,
+      divTypes: divTypes
+    )
 
     switch paths.count {
     case 0:

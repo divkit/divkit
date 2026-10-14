@@ -4,7 +4,7 @@ import LayoutKit
 import VGSL
 
 /// Models the host, then the displayed tooltip, then a host re-model through
-/// `DivBlockProvider.update`, which calls `resetIdToPath(viewId:)` the same way production does.
+/// `DivBlockProvider.update`, the same way production does.
 ///
 /// `anchorPath` must be the path the tooltip's anchor gets while modeling `host`, since that is
 /// what production feeds into `DivViewId.Tooltip` (see `cloneForTooltip`). Getting it wrong

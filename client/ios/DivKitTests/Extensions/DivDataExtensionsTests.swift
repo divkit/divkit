@@ -1,4 +1,4 @@
-@testable import DivKit
+@testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
 @testable import LayoutKit
 import XCTest
@@ -101,6 +101,100 @@ final class DivDataExtensionsTests: XCTestCase {
 
       XCTAssertEqual(result, 1)
     }
+  }
+
+  func test_WhenScopeElementMovesBetweenModels_ScopeResolvesToNewPath() throws {
+    let reporter = MockReporter()
+    let components = DivKitComponents(reporter: reporter)
+    try makeBlocksWithMovingTarget(movingTarget(), components: components)
+
+    components.actionHandler.handle(
+      divAction(
+        logId: "set_value",
+        scopeId: "target",
+        typed: .divActionSetVariable(DivActionSetVariable(
+          value: .stringValue(StringValue(value: .value("updated"))),
+          variableName: .value("value")
+        ))
+      ),
+      path: movingTargetCardId.path,
+      source: .tap,
+      sender: nil
+    )
+
+    XCTAssertNil(reporter.lastError)
+    XCTAssertEqual(components.targetValue(at: newTargetPath), "updated")
+    XCTAssertNotEqual(components.targetValue(at: oldTargetPath), "updated")
+  }
+
+  func test_WhenTriggerIsScopedToItsMovedElement_ActionUsesNewPath() throws {
+    let reporter = MockReporter()
+    let components = DivKitComponents(reporter: reporter)
+    var target = movingTarget()
+    target["variable_triggers"] = [[
+      "condition": "@{value == 'initial'}",
+      "actions": [[
+        "log_id": "set_value",
+        "scope_id": "target",
+        "typed": [
+          "type": "set_variable",
+          "variable_name": "value",
+          "value": ["type": "string", "value": "triggered"],
+        ],
+      ]],
+    ]]
+
+    try makeBlocksWithMovingTarget(target, components: components)
+
+    XCTAssertNil(reporter.lastError)
+    XCTAssertEqual(components.targetValue(at: newTargetPath), "triggered")
+  }
+
+  func test_WhenModelingFails_IdsOfPreviousModelAreDropped() throws {
+    let components = DivKitComponents()
+    try makeBlocksWithMovingTarget(movingTarget(), components: components)
+    let context = components.makeContext(cardId: movingTargetCardId, cachedImageHolders: [])
+
+    XCTAssertThrowsError(try divData(states: []).makeBlock(context: context))
+
+    XCTAssertTrue(context.idToPath.paths(forId: "target", cardId: movingTargetCardId).isEmpty)
+  }
+}
+
+private let movingTargetCardId: DivCardID = "moving_target_card"
+private let oldTargetPath = movingTargetCardId.path + 0 + "container" + 0 + "target"
+private let newTargetPath = movingTargetCardId.path + 0 + "container" + 1 + "target"
+
+private func movingTarget() -> [String: Any] {
+  [
+    "type": "text",
+    "id": "target",
+    "text": "target",
+    "variables": [["type": "string", "name": "value", "value": "initial"]],
+  ]
+}
+
+/// Models the card twice, the way hosts without DivView do, moving `target` to the second item.
+private func makeBlocksWithMovingTarget(
+  _ target: [String: Any],
+  components: DivKitComponents
+) throws {
+  let other: [String: Any] = ["type": "text", "id": "other", "text": "other"]
+  for items in [[target], [other, target]] {
+    let card: [String: Any] = [
+      "log_id": movingTargetCardId.rawValue,
+      "states": [["state_id": 0, "div": ["type": "container", "items": items]]],
+    ]
+    let divData = try XCTUnwrap(DivData.resolve(card: card, templates: nil).value)
+    _ = try divData.makeBlock(
+      context: components.makeContext(cardId: movingTargetCardId, cachedImageHolders: [])
+    )
+  }
+}
+
+extension DivKitComponents {
+  fileprivate func targetValue(at path: UIElementPath) -> String? {
+    variablesStorage.getVariableValue(path: path, name: "value")
   }
 }
 

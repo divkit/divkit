@@ -443,10 +443,6 @@ public final class DivKitComponents {
     )
   }
 
-  func resetIdToPath(viewId: DivViewId) {
-    idToPath.reset(viewId: viewId)
-  }
-
   private func debugErrorCollector(
     for cardId: DivCardID,
     debugParams: DebugParams,
