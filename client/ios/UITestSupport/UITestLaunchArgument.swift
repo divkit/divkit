@@ -2,11 +2,13 @@ enum UITestLaunchArgument: RawRepresentable {
   case scenarioPath(String)
   case connectionPort(UInt16)
   case snapshotTesting
+  case uiTesting
 
   private enum Key: String {
     case scenarioPath = "--divkit-ui-scenario"
     case connectionPort = "--divkit-ui-port"
     case snapshotTesting = "SNAPSHOTS_TESTING"
+    case uiTesting = "UI_TESTING"
   }
 
   var rawValue: String {
@@ -16,7 +18,7 @@ enum UITestLaunchArgument: RawRepresentable {
       "\(key)=\(path)"
     case let .connectionPort(port):
       "\(key)=\(port)"
-    case .snapshotTesting:
+    case .snapshotTesting, .uiTesting:
       key
     }
   }
@@ -29,6 +31,8 @@ enum UITestLaunchArgument: RawRepresentable {
       .connectionPort
     case .snapshotTesting:
       .snapshotTesting
+    case .uiTesting:
+      .uiTesting
     }
   }
 
@@ -48,6 +52,8 @@ enum UITestLaunchArgument: RawRepresentable {
       self = .connectionPort(port)
     case .snapshotTesting:
       self = .snapshotTesting
+    case .uiTesting:
+      self = .uiTesting
     }
   }
 }

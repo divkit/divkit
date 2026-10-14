@@ -26,6 +26,7 @@ final class DivKitRegressionUITests: XCTestCase {
               .scenarioPath(resourcePath),
               .connectionPort(connection.port),
               .snapshotTesting,
+              .uiTesting,
             ]
             testCase.app.launch(launchArguments: launchArguments)
             try testCase.app.waitUntilRunning()

@@ -4779,6 +4779,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivInput",
         "DivAction"

@@ -13,7 +13,7 @@ struct UITestLaunchConfiguration {
         scenarioPath = path
       case let .connectionPort(port):
         connectionPort = port
-      case .snapshotTesting:
+      case .snapshotTesting, .uiTesting:
         break
       }
     }

@@ -5,6 +5,7 @@ enum RunnerStep: Decodable {
   case swipe(Swipe)
   case scrollTo(ScrollTo)
   case verifyText(VerifyText)
+  case verifyFocus(VerifyFocus)
   case verifyLog(VerifyLog)
   case verifySnapshot(VerifySnapshot)
   case divAction(DivAction)
@@ -17,6 +18,7 @@ enum RunnerStep: Decodable {
     case swipe
     case scrollTo = "scroll_to"
     case verifyText = "verify_text"
+    case verifyFocus = "verify_focus"
     case verifyLog = "verify_log"
     case verifySnapshot = "verify_snapshot"
     case divAction = "div_action"
@@ -35,6 +37,7 @@ enum RunnerStep: Decodable {
     case .swipe: .swipe
     case .scrollTo: .scrollTo
     case .verifyText: .verifyText
+    case .verifyFocus: .verifyFocus
     case .verifyLog: .verifyLog
     case .verifySnapshot: .verifySnapshot
     case .divAction: .divAction
@@ -59,6 +62,8 @@ enum RunnerStep: Decodable {
       self = try .scrollTo(ScrollTo(from: decoder))
     case .verifyText:
       self = try .verifyText(VerifyText(from: decoder))
+    case .verifyFocus:
+      self = try .verifyFocus(VerifyFocus(from: decoder))
     case .verifyLog:
       self = try .verifyLog(VerifyLog(from: decoder))
     case .verifySnapshot:

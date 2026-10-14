@@ -612,6 +612,13 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
 
+    if #available(iOS 17.0, *), EnvironmentVars.isUITesting {
+      // Expose the child to XCTest without changing the wrapper's VoiceOver semantics.
+      automationElements = accessibilityElementsHidden
+        ? nil
+        : childView.asArray()
+    }
+
     hasFocused = oldModel?.isFocused == false && model.isFocused == true
     updateVoiceOverFocus()
 

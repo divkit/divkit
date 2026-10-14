@@ -35,6 +35,8 @@ struct RunnerExecutor {
       try execute(step)
     case let .verifyText(step):
       try execute(step)
+    case let .verifyFocus(step):
+      try execute(step)
     case let .verifyLog(step):
       try await execute(step)
     case let .verifySnapshot(step):
