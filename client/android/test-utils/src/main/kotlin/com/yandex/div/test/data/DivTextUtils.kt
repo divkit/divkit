@@ -12,6 +12,7 @@ import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivFunction
+import com.yandex.div2.DivLayoutProvider
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivText
@@ -92,6 +93,7 @@ fun text(
     height: DivSize = wrapContent(),
     id: String? = null,
     images: List<DivText.Image>? = null,
+    layoutProvider: DivLayoutProvider? = null,
     lineHeight: Long? = null,
     longTapActions: List<DivAction>? = null,
     margins: DivEdgeInsets? = null,
@@ -131,6 +133,7 @@ fun text(
             height = height,
             id = id,
             images = images,
+            layoutProvider = layoutProvider,
             lineHeight = lineHeight?.let { constant(it) },
             longtapActions = longTapActions,
             margins = margins,

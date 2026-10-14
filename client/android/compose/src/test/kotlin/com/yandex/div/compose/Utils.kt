@@ -24,13 +24,13 @@ import org.mockito.kotlin.mock
 internal fun createExpressionResolver(
     reporter: DivReporter = TestReporter(),
     storedValueProvider: ScopedStoredValueProvider = mock(),
-    variableController: DivVariableController
+    variableController: DivVariableController,
 ): DivComposeExpressionResolver {
     return DivComposeExpressionResolver(
         functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider),
         reporter = reporter,
         storedValueProvider = storedValueProvider,
-        variableController = variableController
+        variableController = variableController,
     )
 }
 

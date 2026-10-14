@@ -97,11 +97,11 @@ private fun <T : Any> rememberVariableMutableState(
     readValue: (Variable) -> T,
     validate: (Variable) -> String?,
 ): MutableState<T>? {
-    val controller = LocalComponent.current.variableController
-    val reporter = LocalComponent.current.reporter
-    val variable = remember(variableName, controller) {
-        val variable = controller.get(variableName)
-
+    val localComponent = LocalComponent.current
+    val variableController = localComponent.variableController
+    val reporter = localComponent.reporter
+    val variable = remember(variableName, variableController) {
+        val variable = variableController.get(variableName)
         if (variable == null) {
             reporter.reportError(missingVariable(variableName))
             null
@@ -135,7 +135,7 @@ private fun <T : Any> rememberVariableMutableState(
     }
 
     DisposableEffect(variable) {
-        val observer: (Variable) -> Unit = { state.onVariableChanged(it) }
+        val observer = state::onVariableChanged
         variable.addObserver(observer)
         onDispose { variable.removeObserver(observer) }
     }

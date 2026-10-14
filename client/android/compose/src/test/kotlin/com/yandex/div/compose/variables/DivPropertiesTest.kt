@@ -16,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -49,6 +50,7 @@ class DivPropertiesTest {
         reporter = reporter,
         variableController = variableController,
     )
+
     private val context = DivContext(
         baseContext = getApplicationContext(),
         configuration = configuration,
@@ -220,6 +222,7 @@ class DivPropertiesTest {
         rule.setContent {
             CompositionLocalProvider(
                 LocalContext provides context,
+                LocalDivViewContext provides context.getViewContext(card),
                 LocalComponent provides context.getViewContext(card).rootLocalComponent,
                 content = content
             )

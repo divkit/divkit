@@ -11,6 +11,7 @@ import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivFunction
+import com.yandex.div2.DivLayoutProvider
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibility
@@ -27,6 +28,7 @@ fun container(
     height: DivSize = wrapContent(),
     id: String? = null,
     items: List<Div> = emptyList(),
+    layoutProvider: DivLayoutProvider? = null,
     margins: DivEdgeInsets? = null,
     paddings: DivEdgeInsets? = null,
     variables: List<DivVariable>? = null,
@@ -46,6 +48,7 @@ fun container(
             height = height,
             id = id,
             items = items,
+            layoutProvider = layoutProvider,
             margins = margins,
             paddings = paddings,
             variables = variables,

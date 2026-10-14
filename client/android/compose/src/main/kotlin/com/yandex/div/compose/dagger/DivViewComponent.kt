@@ -9,6 +9,7 @@ import com.yandex.div.compose.context.DivLocalComponentStorage
 import com.yandex.div.compose.haptics.HapticFeedbackStorage
 import com.yandex.div.compose.histogram.DivViewHistogramReporter
 import com.yandex.div.compose.images.ImageStateStorage
+import com.yandex.div.compose.layoutprovider.LayoutProviderStorage
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.patch.DivPatchCoordinator
 import com.yandex.div.compose.patch.DivPatchDownloadManager
@@ -36,6 +37,7 @@ internal interface DivViewComponent {
     val hapticFeedbackStorage: HapticFeedbackStorage
     val histogramReporter: DivViewHistogramReporter
     val imageStateStorage: ImageStateStorage
+    val layoutProviderStorage: LayoutProviderStorage
     val localComponentStorage: DivLocalComponentStorage
     val pagerStateStorage: DivPagerStateStorage
     val patchCoordinator: DivPatchCoordinator

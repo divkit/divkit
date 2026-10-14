@@ -29,7 +29,7 @@ import javax.inject.Inject
 internal class DivComposeExpressionResolver private constructor(
     private val evaluationContext: EvaluationContext,
     private val reporter: DivReporter,
-    private val variableController: DivVariableController
+    private val variableController: DivVariableController,
 ) : ExpressionResolver {
 
     @Inject
@@ -37,7 +37,7 @@ internal class DivComposeExpressionResolver private constructor(
         functionProvider: FunctionProviderDecorator,
         reporter: DivReporter,
         storedValueProvider: ScopedStoredValueProvider,
-        variableController: DivVariableController
+        variableController: DivVariableController,
     ) : this(
         evaluationContext = EvaluationContext(
             variableProvider = { name ->
@@ -48,7 +48,7 @@ internal class DivComposeExpressionResolver private constructor(
             warningSender = EvaluatorWarningSender(reporter)
         ),
         reporter = reporter,
-        variableController = variableController
+        variableController = variableController,
     )
 
     private val evaluator = Evaluator(evaluationContext)

@@ -2,6 +2,8 @@ package com.yandex.div.test.data
 
 import com.yandex.div2.DivEdgeInsets
 
+fun insets(value: Int) = insets(start = value, end = value, top = value, bottom = value)
+
 fun insets(
     start: Int? = null,
     end: Int? = null,

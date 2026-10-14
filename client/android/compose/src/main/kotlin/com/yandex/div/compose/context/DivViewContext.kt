@@ -8,6 +8,7 @@ import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
 import com.yandex.div.compose.haptics.bind
+import com.yandex.div.compose.layoutprovider.observe
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.patch.DivPatchCoordinator
 import com.yandex.div.compose.patch.observe
@@ -77,6 +78,7 @@ internal class DivViewContext(
     @Composable
     fun onComposition() {
         component.hapticFeedbackStorage.bind()
+        component.layoutProviderStorage.observe()
         component.patchDownloadManager.observe()
         patchCoordinator.observe()
         component.timerStorage.observe()

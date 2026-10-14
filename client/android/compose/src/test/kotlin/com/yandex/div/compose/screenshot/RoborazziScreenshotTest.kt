@@ -190,8 +190,6 @@ private val ignoredFiles = setOf(
     "div-gallery/item-builder/nested-builders.json",
     "div-gallery/item-builder/non-unique-matched-selectors.json",
 
-    // div-base.layout_provider not supported
-    "div-layout-provider/layout-provider.json",
 
     // div-pager.item_builder not supported
     "div-pager/item-builder/item-builder.json",

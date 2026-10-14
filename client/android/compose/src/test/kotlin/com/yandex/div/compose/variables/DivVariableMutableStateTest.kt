@@ -21,13 +21,12 @@ import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class DivVariableMutableStateTest {
+    private val reporter = TestReporter()
+    private val variableController = DivVariableController()
+    private val localComponent = mockLocalComponent(reporter, variableController)
 
     @get:Rule
     val composeRule = createComposeRule()
-
-    private val variableController = DivVariableController()
-    private val reporter = TestReporter()
-    private val localComponent = mockLocalComponent(reporter, variableController)
 
     @Test
     fun `string state has initial variable value`() {
@@ -280,7 +279,7 @@ class DivVariableMutableStateTest {
             state = mutableStateFromVariable("flag", "default")
         }
 
-        assertEquals(state?.value, "default")
+        assertEquals("default", state?.value)
         assertEquals("Variable 'flag' is missing.", reporter.lastError)
     }
 
@@ -293,7 +292,7 @@ class DivVariableMutableStateTest {
             state = mutableStateFromVariable("flag", true)
         }
 
-        assertEquals(state?.value, true)
+        assertEquals(true, state?.value)
         assertEquals("Variable 'flag' is missing.", reporter.lastError)
     }
 

@@ -29,6 +29,7 @@ class DivInputValidatorTest {
 
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
+
     private val localComponent = mockLocalComponent(
         reporter = reporter,
         variableController = variableController,

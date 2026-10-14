@@ -18,6 +18,7 @@ import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.data.Variable
 import com.yandex.div.test.data.accessibility
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.blurFilter
@@ -37,6 +38,7 @@ import com.yandex.div.test.data.text
 import com.yandex.div.test.data.visibilityAction
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
+import com.yandex.div2.DivLayoutProvider
 import com.yandex.div2.DivTransform
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -206,6 +208,24 @@ class ModifierEqualityTest {
                     radialGradientBackground(
                         colors = listOf(color(0xFFAABBCC), color(0xFFBBCCDD))
                     )
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `layout provider`() {
+        configuration.variableController.declare(
+            Variable.IntegerVariable("width", 0),
+            Variable.IntegerVariable("height", 0)
+        )
+
+        assertModifiersEqual(
+            text(
+                text = constant("Element with layout provider"),
+                layoutProvider = DivLayoutProvider(
+                    widthVariableName = "width",
+                    heightVariableName = "height",
                 )
             )
         )

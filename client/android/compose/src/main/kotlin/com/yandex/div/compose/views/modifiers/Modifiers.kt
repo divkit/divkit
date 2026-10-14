@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.actions.DivActions
+import com.yandex.div.compose.layoutprovider.layoutProvider
 import com.yandex.div.compose.tooltips.tooltipAnchors
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
@@ -36,8 +37,11 @@ internal fun Modifier.apply(
     val divBase = div.value()
     val focusState = rememberFocusState(divBase)
     val isFocused = focusState?.value == true
-    val border = divBase.focus?.border?.takeIf { isFocused && !it.isConstantlyEmpty() } ?: divBase.border
-    val background = divBase.focus?.background?.takeIf { isFocused && it.isNotEmpty() } ?: divBase.background
+    val focus = divBase.focus
+    val border = focus?.border?.takeIf { isFocused && !it.isConstantlyEmpty() }
+        ?: divBase.border
+    val background = focus?.background?.takeIf { isFocused && it.isNotEmpty() }
+        ?: divBase.background
     return this
         .divVisibility(visibility)
         .applyIf(applyMargins) { padding(divBase.margins) }
@@ -50,6 +54,7 @@ internal fun Modifier.apply(
             defaultVerticalAlignment = defaultVerticalAlignment,
         )
         .visibilityActions(divBase)
+        .applyIfNotNull(divBase.layoutProvider) { layoutProvider(it) }
         .focus(div, focusState, hasActions = actions != null)
         .applyIfNotNull(divBase.transform) { transform(it) }
         .appearance(divBase, visibility, border)
@@ -57,7 +62,7 @@ internal fun Modifier.apply(
         // to have correct touch and animation area.
         // The actions must be applied BEFORE the background so that the action animation is applied
         // to the background.
-        .applyIfNotNull(actions) { actions(it, isFocusable = divBase.focus != null) }
+        .applyIfNotNull(actions) { actions(it, isFocusable = focus != null) }
         .background(background)
         .applyIfNotNull(divBase.id) { testTag(it) }
         .accessibility(divBase)
