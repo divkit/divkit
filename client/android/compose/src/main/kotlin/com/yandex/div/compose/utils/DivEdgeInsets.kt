@@ -2,9 +2,7 @@ package com.yandex.div.compose.utils
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivBase
@@ -63,7 +61,7 @@ private fun DivEdgeInsets?.observeHorizontalInsets(unit: DivSizeUnit): Pair<Dp, 
 
     val left = left.observedValue().toDp(unit)
     val right = right.observedValue().toDp(unit)
-    return if (LocalLayoutDirection.current == LayoutDirection.Rtl) {
+    return if (isRtlLayout) {
         Pair(right, left)
     } else {
         Pair(left, right)

@@ -7,12 +7,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.toTextUnit
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAlignmentHorizontal
@@ -52,7 +54,8 @@ internal fun observeBaseTextStyle(
         fontFamily = resolvedFontFamily,
         fontWeight = weight.toFontWeight(weightValue),
         letterSpacing = resolvedLetterSpacing,
-        textAlign = textAlignmentHorizontal.toTextAlign(),
+        textAlign = textAlignmentHorizontal.toTextAlign(isRtlLayout),
+        textDirection = TextDirection.Content,
         lineHeight = resolvedLineHeight ?: TextUnit.Unspecified,
         lineHeightStyle = lineHeightStyle(resolvedLineHeight, textSize),
         platformStyle = PlatformTextStyle(includeFontPadding = false),
@@ -76,11 +79,18 @@ private fun lineHeightStyle(lineHeight: TextUnit?, fontSize: TextUnit): LineHeig
     )
 }
 
-private fun DivAlignmentHorizontal.toTextAlign(): TextAlign {
+private fun DivAlignmentHorizontal.toTextAlign(
+    isRtlLayout: Boolean
+): TextAlign {
     return when (this) {
-        DivAlignmentHorizontal.LEFT, DivAlignmentHorizontal.START -> TextAlign.Start
+        DivAlignmentHorizontal.LEFT -> TextAlign.Left
+        DivAlignmentHorizontal.RIGHT -> TextAlign.Right
         DivAlignmentHorizontal.CENTER -> TextAlign.Center
-        DivAlignmentHorizontal.RIGHT, DivAlignmentHorizontal.END -> TextAlign.End
+        DivAlignmentHorizontal.START ->
+            if (isRtlLayout) TextAlign.Right else TextAlign.Left
+
+        DivAlignmentHorizontal.END ->
+            if (isRtlLayout) TextAlign.Left else TextAlign.Right
     }
 }
 
@@ -118,6 +128,7 @@ internal fun observedTextDecoration(
         hasStrike && hasUnderline -> TextDecoration.combine(
             listOf(TextDecoration.LineThrough, TextDecoration.Underline)
         )
+
         hasStrike -> TextDecoration.LineThrough
         hasUnderline -> TextDecoration.Underline
         strike != null || underline != null -> TextDecoration.None

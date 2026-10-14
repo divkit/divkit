@@ -141,9 +141,9 @@ internal class DivTextBinder @Inject constructor(
     ) {
         gravity = evaluateGravity(horizontalAlignment, verticalAlignment)
         textAlignment = when (horizontalAlignment) {
-            DivAlignmentHorizontal.LEFT -> TextView.TEXT_ALIGNMENT_VIEW_START
+            DivAlignmentHorizontal.LEFT -> TextView.TEXT_ALIGNMENT_GRAVITY
             DivAlignmentHorizontal.CENTER -> TextView.TEXT_ALIGNMENT_CENTER
-            DivAlignmentHorizontal.RIGHT -> TextView.TEXT_ALIGNMENT_VIEW_END
+            DivAlignmentHorizontal.RIGHT -> TextView.TEXT_ALIGNMENT_GRAVITY
             DivAlignmentHorizontal.START -> TextView.TEXT_ALIGNMENT_VIEW_START
             DivAlignmentHorizontal.END -> TextView.TEXT_ALIGNMENT_VIEW_END
         }

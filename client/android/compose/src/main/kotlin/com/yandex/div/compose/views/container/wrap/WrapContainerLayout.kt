@@ -17,12 +17,11 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
+import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.container.SeparatorVisibility
@@ -51,7 +50,6 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
         childCount = visibleItems.size,
         isHorizontal = true,
     )
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
@@ -63,7 +61,7 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
                 bottom = wrapLayoutState.crossAxisEndPadding,
             )
         }
-        .drawHorizontalWrapSeparators(separatorGeometry, wrapLayoutState, isRtl)
+        .drawHorizontalWrapSeparators(separatorGeometry, wrapLayoutState, isRtlLayout)
 
     FlowRow(
         modifier = containerModifier,
@@ -108,7 +106,6 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
         childCount = visibleItems.size,
         isHorizontal = false,
     )
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
@@ -120,7 +117,7 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
                 end = wrapLayoutState.crossAxisEndPadding,
             )
         }
-        .drawVerticalWrapSeparators(separatorGeometry, wrapLayoutState, isRtl)
+        .drawVerticalWrapSeparators(separatorGeometry, wrapLayoutState, isRtlLayout)
 
     FlowColumn(
         modifier = containerModifier,

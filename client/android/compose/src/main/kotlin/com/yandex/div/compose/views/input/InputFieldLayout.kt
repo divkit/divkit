@@ -25,7 +25,9 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.focus.trackInputFocus
+import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputMask
 
@@ -91,7 +93,9 @@ internal fun InputFieldLayout(
     }
 
     Box(
-        modifier = modifier.trackInputFocus().onPreviewKeyEvent { consumeEnter && it.nativeKeyEvent.isEnterDown() },
+        modifier = modifier
+            .trackInputFocus()
+            .onPreviewKeyEvent { consumeEnter && it.nativeKeyEvent.isEnterDown() },
         contentAlignment = contentAlignment,
     ) {
         InterceptPlatformTextInput(keyboardInterceptor) {
@@ -146,7 +150,10 @@ private fun DecorationBox(
     textStyle: TextStyle,
     maxLines: Int,
 ) {
-    Box(Modifier.fillMaxWidth(), contentAlignment = textAlignmentHorizontal.toTextAlignment()) {
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = toAlignment(textAlignmentHorizontal, DivAlignmentVertical.TOP),
+    ) {
         if (showHint && hintText != null) {
             BasicText(
                 text = hintText,

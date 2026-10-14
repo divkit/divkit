@@ -1,5 +1,5 @@
 {
-  "description": "RTL and LTR text aligned to start/end in RTL layout direction context. Text should be aligned according to the title of the text-block.",
+  "description": "RTL and LTR text aligned to start/end/left/right/center in RTL layout direction context. Text should be aligned according to the title of the text block.",
   "platforms": [
     "android",
     "ios",
@@ -12,37 +12,26 @@
   "templates": {
     "text_block": {
       "type": "text",
-      "width": {
-        "type": "match_parent"
-      },
-      "height": {
-        "type": "wrap_content"
-      },
       "margins": {
-        "left": 16,
-        "top": 16,
-        "right": 16,
-        "bottom": 16
+        "left": 10,
+        "right": 10,
+        "top": 5,
+        "bottom": 5
       },
       "paddings": {
-        "left": 16,
-        "top": 16,
-        "right": 16,
-        "bottom": 16
+        "left": 10,
+        "right": 10,
+        "top": 10,
+        "bottom": 10
       },
-      "alpha": 1,
-      "alignment_horizontal": "center",
-      "alignment_vertical": "center",
       "background": [
         {
           "type": "solid",
           "color": "#0e000000"
         }
       ],
-      "font_size": 18,
-      "font_weight": "medium",
-      "text_alignment_vertical": "center",
-      "text_color": "#000000"
+      "font_size": 12,
+      "font_weight": "medium"
     }
   },
   "card": {
@@ -53,10 +42,16 @@
         "div": {
           "type": "container",
           "orientation": "vertical",
-          "margins": {
-            "top": 24,
-            "bottom": 24
+          "paddings": {
+            "top": 5,
+            "bottom": 5
           },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
           "items": [
             {
               "type": "text_block",
@@ -70,6 +65,21 @@
             },
             {
               "type": "text_block",
+              "text_alignment_horizontal": "left",
+              "text": "LTR text aligned to LEFT"
+            },
+            {
+              "type": "text_block",
+              "text_alignment_horizontal": "right",
+              "text": "LTR text aligned to RIGHT"
+            },
+            {
+              "type": "text_block",
+              "text_alignment_horizontal": "center",
+              "text": "LTR text aligned to CENTER"
+            },
+            {
+              "type": "text_block",
               "text_alignment_horizontal": "start",
               "text": "تمت محاذاة نص RTL إلى START"
             },
@@ -77,6 +87,21 @@
               "type": "text_block",
               "text_alignment_horizontal": "end",
               "text": "تمت محاذاة نص RTL إلى END"
+            },
+            {
+              "type": "text_block",
+              "text_alignment_horizontal": "left",
+              "text": "تمت محاذاة نص RTL إلى LEFT"
+            },
+            {
+              "type": "text_block",
+              "text_alignment_horizontal": "right",
+              "text": "تمت محاذاة نص RTL إلى RIGHT"
+            },
+            {
+              "type": "text_block",
+              "text_alignment_horizontal": "center",
+              "text": "تمت محاذاة نص RTL إلى CENTER"
             }
           ]
         }

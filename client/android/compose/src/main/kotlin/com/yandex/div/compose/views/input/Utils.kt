@@ -3,21 +3,11 @@ package com.yandex.div.compose.views.input
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivInput
-
-internal fun DivAlignmentHorizontal.toTextAlignment(): Alignment {
-    return when (this) {
-        DivAlignmentHorizontal.CENTER -> Alignment.TopCenter
-        DivAlignmentHorizontal.RIGHT, DivAlignmentHorizontal.END -> Alignment.TopEnd
-        DivAlignmentHorizontal.LEFT, DivAlignmentHorizontal.START -> Alignment.TopStart
-    }
-}
 
 internal fun keyboardOptions(
     keyboardType: DivInput.KeyboardType,

@@ -2,11 +2,10 @@ package com.yandex.div.compose.views.image
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import coil3.transform.Transformation
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.reportWarning
 import com.yandex.div2.DivFilter
 
@@ -35,9 +34,8 @@ internal fun List<DivFilter>?.observedTransformations(): List<Transformation> {
                 return@mapNotNull null
             }
 
-            is DivFilter.RtlMirror -> {
-                if (LocalLayoutDirection.current == LayoutDirection.Rtl) RtlMirrorTransformation else null
-            }
+            is DivFilter.RtlMirror ->
+                if (isRtlLayout) RtlMirrorTransformation else null
         }
     }
 }

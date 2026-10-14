@@ -12,11 +12,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIfNotNull
+import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div2.DivSlider
 import kotlinx.coroutines.CoroutineScope
 import kotlin.math.roundToInt
@@ -32,7 +31,7 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
     ) ?: return
 
     val isEnabled = data.isEnabled.observedValue()
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val isRtlLayout = isRtlLayout
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = if (data.focus != null) remember { FocusRequester() } else null
 
@@ -43,12 +42,12 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
             thumbWidth = styles.maxTickOrThumbWidth,
             hasTickMarks = styles.hasTickMarks,
             isEnabled = isEnabled,
-            isRtl = isRtl,
+            isRtl = isRtlLayout,
             coroutineScope = coroutineScope,
             animationsEnabled = animationsEnabled,
             focusRequester = focusRequester,
         )
-        .drawBehind { drawSlider(state, styles, isRtl = isRtl) }
+        .drawBehind { drawSlider(state, styles, isRtl = isRtlLayout) }
 
     Layout(
         modifier = modifier,

@@ -43,6 +43,7 @@ import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.mirrorHorizontallyIfRtl
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
@@ -135,7 +136,7 @@ private fun FixedTitleRow(
 ) {
     val selectedIndex = state.selectedIndex
     val titleStartOffsetPx = titleDelimiter?.observeTitleStartOffsetPx(itemSpacing) ?: 0
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val isRtlLayout = isRtlLayout
     val itemBounds = remember(items) { mutableStateMapOf<Int, TitleBounds>() }
     val placedTitles = RowTitles(itemBounds, items.size, titleStartOffsetPx)
 
@@ -147,7 +148,7 @@ private fun FixedTitleRow(
         items.forEachIndexed { index, item ->
             TabTitleItem(
                 modifier = Modifier.onPlaced { coordinates ->
-                    coordinates.boundsFromRowStart(isRtl)?.let { itemBounds[index] = it }
+                    coordinates.boundsFromRowStart(isRtlLayout)?.let { itemBounds[index] = it }
                 },
                 index = index,
                 item = item,

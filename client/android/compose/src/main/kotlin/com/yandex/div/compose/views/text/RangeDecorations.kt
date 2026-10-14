@@ -19,14 +19,13 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.views.modifiers.onDivVisibilityChanged
 import com.yandex.div.internal.core.TextRangeCloudBackground
@@ -179,10 +178,9 @@ private fun DivEdgeInsets?.observePaddings(): RangePaddings {
     val leftPx: Float
     val rightPx: Float
     if (start != null || end != null) {
-        val layoutDirection = LocalLayoutDirection.current
         val startPx = start?.observedPxValue(unit) ?: 0f
         val endPx = end?.observedPxValue(unit) ?: 0f
-        if (layoutDirection == LayoutDirection.Rtl) {
+        if (isRtlLayout) {
             leftPx = endPx
             rightPx = startPx
         } else {
