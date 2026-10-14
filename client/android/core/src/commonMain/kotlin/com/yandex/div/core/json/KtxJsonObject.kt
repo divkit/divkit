@@ -104,7 +104,10 @@ internal value class KtxJsonObject(
     override fun optArray(key: String): JsonArray? = opt(key) as? JsonArray
 
     override fun modify(modify: JsonObject.Builder.() -> Unit): JsonObject {
-        return KtxJsonObjectBuilder(source).apply(modify).build()
+        return KtxJsonObjectBuilder(
+            source,
+            isShared = false,
+        ).apply(modify).build()
     }
 
     override fun asOrgJsonObject(): JSONObject = source.toOrgJsonObject()
@@ -116,7 +119,8 @@ internal value class KtxJsonObject(
 
 @Suppress("TooManyFunctions")
 internal class KtxJsonObjectBuilder(
-    source: KtxObject
+    source: KtxObject,
+    val isShared: Boolean,
 ) : JsonObject.Builder {
 
     private val data = source.toMutableMap()
@@ -182,6 +186,7 @@ internal class KtxJsonObjectBuilder(
     }
 
     override fun build(): JsonObject {
-        return KtxJsonObject(KtxObject(data.toMap()))
+        val result = if (isShared) data.toMap() else data
+        return KtxJsonObject(KtxObject(result))
     }
 }

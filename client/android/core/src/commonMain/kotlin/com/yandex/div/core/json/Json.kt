@@ -37,7 +37,7 @@ public fun JsonObject(source: KtxObject): JsonObject {
 
 @ExperimentalApi
 public fun JsonObject(builder: JsonObject.Builder.() -> Unit): JsonObject {
-    return KtxJsonObjectBuilder(KtxObject(emptyMap())).apply(builder).build()
+    return JsonObject.builder(isShared = false).apply(builder).build()
 }
 
 @ExperimentalApi
@@ -64,7 +64,7 @@ public fun JsonArray(source: KtxArray): JsonArray {
 
 @ExperimentalApi
 public fun JsonArray(builder: JsonArray.Builder.() -> Unit): JsonArray {
-    return KtxJsonArrayBuilder(KtxArray(emptyList())).apply(builder).build()
+    return JsonArray.builder(isShared = false).apply(builder).build()
 }
 
 @InternalApi

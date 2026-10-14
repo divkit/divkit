@@ -1,8 +1,10 @@
 package com.yandex.div.core.json
 
 import com.yandex.div.core.annotations.ExperimentalApi
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.type.DataArray
 import org.json.JSONArray
+import kotlinx.serialization.json.JsonArray as KtxArray
 
 @Suppress("TooManyFunctions")
 @ExperimentalApi
@@ -79,5 +81,21 @@ public interface JsonArray : JsonElement, DataArray {
         public fun remove(index: Int): Any?
 
         public fun build(): JsonArray
+    }
+
+    public companion object {
+
+        @JvmStatic
+        public fun builder(): Builder = KtxJsonArrayBuilder(
+            source = KtxArray(emptyList()),
+            isShared = true,
+        )
+
+        @JvmStatic
+        @InternalApi
+        public fun builder(isShared: Boolean = true): Builder = KtxJsonArrayBuilder(
+            KtxArray(emptyList()),
+            isShared,
+        )
     }
 }

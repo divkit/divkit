@@ -95,7 +95,10 @@ internal value class OrgJsonArray(
     override fun optArray(index: Int): JsonArray? = opt(index) as? JsonArray
 
     override fun modify(modify: JsonArray.Builder.() -> Unit): JsonArray  {
-        return OrgJsonArrayBuilder(source).apply(modify).build()
+        return OrgJsonArrayBuilder(
+            source,
+            isShared = false,
+        ).apply(modify).build()
     }
 
     override fun asOrgJsonArray(): JSONArray = source
@@ -107,7 +110,8 @@ internal value class OrgJsonArray(
 
 @Suppress("TooManyFunctions")
 private class OrgJsonArrayBuilder(
-    source: JSONArray
+    source: JSONArray,
+    val isShared: Boolean,
 ) : JsonArray.Builder {
 
     private val data = source.copy()
@@ -209,6 +213,7 @@ private class OrgJsonArrayBuilder(
     }
 
     override fun build(): JsonArray {
-        return OrgJsonArray(data.copy())
+        val result = if (isShared) data.copy() else data
+        return OrgJsonArray(result)
     }
 }

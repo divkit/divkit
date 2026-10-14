@@ -1,8 +1,10 @@
 package com.yandex.div.core.json
 
 import com.yandex.div.core.annotations.ExperimentalApi
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.type.DataObject
 import org.json.JSONObject
+import kotlinx.serialization.json.JsonObject as KtxObject
 
 @Suppress("TooManyFunctions")
 @ExperimentalApi
@@ -69,5 +71,21 @@ public interface JsonObject : JsonElement, DataObject {
         public fun remove(key: String): Any?
 
         public fun build(): JsonObject
+    }
+
+    public companion object {
+
+        @JvmStatic
+        public fun builder(): Builder = KtxJsonObjectBuilder(
+            source = KtxObject(emptyMap()),
+            isShared = true,
+        )
+
+        @JvmStatic
+        @InternalApi
+        public fun builder(isShared: Boolean = true): Builder = KtxJsonObjectBuilder(
+            KtxObject(emptyMap()),
+            isShared,
+        )
     }
 }
