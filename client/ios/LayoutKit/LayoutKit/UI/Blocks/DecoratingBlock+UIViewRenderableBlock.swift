@@ -133,7 +133,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       let paddings: EdgeInsets
       let source: Variable<AnyObject?>
       let visibilityParams: VisibilityParams?
-      let tooltips: [TooltipContentHolder]
+      let tooltips: [BlockTooltip]
       let accessibility: AccessibilityElement?
       let reuseId: String?
       let path: UIElementPath?
@@ -160,7 +160,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         paddings: EdgeInsets,
         source: Variable<AnyObject?>,
         visibilityParams: VisibilityParams?,
-        tooltips: [TooltipContentHolder],
+        tooltips: [BlockTooltip],
         accessibility: AccessibilityElement?,
         reuseId: String?,
         path: UIElementPath?,
@@ -216,7 +216,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     var paddings: EdgeInsets { box.paddings }
     var source: Variable<AnyObject?> { box.source }
     var visibilityParams: VisibilityParams? { box.visibilityParams }
-    var tooltips: [TooltipContentHolder] { box.tooltips }
+    var tooltips: [BlockTooltip] { box.tooltips }
     var accessibility: AccessibilityElement? { box.accessibility }
     var reuseId: String? { box.reuseId }
     var path: UIElementPath? { box.path }
@@ -275,7 +275,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       paddings: EdgeInsets,
       source: Variable<AnyObject?>,
       visibilityParams: VisibilityParams?,
-      tooltips: [TooltipContentHolder],
+      tooltips: [BlockTooltip],
       accessibility: AccessibilityElement?,
       reuseId: String?,
       path: UIElementPath?,
@@ -946,7 +946,7 @@ extension DecoratingView {
 }
 
 extension DecoratingView: TooltipAnchorView {
-  var tooltips: [BlockTooltip] { model.tooltips.map(\.tooltip) }
+  var tooltips: [BlockTooltip] { model.tooltips }
   var path: UIElementPath? { model.path }
 }
 

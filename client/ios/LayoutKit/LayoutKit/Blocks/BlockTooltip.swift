@@ -28,7 +28,7 @@ public struct BlockTooltip: Equatable {
 
   public enum ViewSource: Equatable {
     case block(Block)
-    case factory(TooltipViewFactory)
+    case factory(key: any Equatable, TooltipViewFactory)
 
     public static func ==(
       lhs: BlockTooltip.ViewSource,
@@ -37,8 +37,8 @@ public struct BlockTooltip: Equatable {
       switch (lhs, rhs) {
       case let (.block(lhsBlock), .block(rhsBlock)):
         lhsBlock.equals(rhsBlock)
-      case (.factory, .factory):
-        true
+      case let (.factory(lhsKey, _), .factory(rhsKey, _)):
+        lhsKey.isEqual(to: rhsKey)
       default:
         false
       }
@@ -85,36 +85,9 @@ public struct BlockTooltip: Equatable {
   }
 }
 
-/// Holds the current content of one tooltip anchored to a `DecoratingBlock`, reused by identity
-/// across remodels of the same anchor instead of being replaced. This lets `DecoratingBlock`
-/// treat a tooltip's content refresh as invisible to its own reuse/diffing decisions (see
-/// `DecoratingBlock.equals`), while whoever reads `tooltip` at display time always sees the
-/// latest value. The value is read and written under a lock. Equality falls back to content
-/// comparison only for trees built independently of the normal find-or-create modeling path
-/// (e.g. tests); production remodeling always reuses the same holder for a given anchor, so
-/// that fallback is never exercised there.
-public final class TooltipContentHolder: Equatable {
-  private let lock = AllocatedUnfairLock()
-  private var _tooltip: BlockTooltip
-
-  public var tooltip: BlockTooltip {
-    lock.withLock { _tooltip }
-  }
-
-  public init(tooltip: BlockTooltip) {
-    _tooltip = tooltip
-  }
-
-  public static func ==(lhs: TooltipContentHolder, rhs: TooltipContentHolder) -> Bool {
-    if lhs === rhs {
-      return true
-    }
-    return lhs.tooltip == rhs.tooltip
-  }
-
-  @_spi(Internal)
-  public func update(_ tooltip: BlockTooltip) {
-    lock.withLock { _tooltip = tooltip }
+extension Equatable {
+  fileprivate func isEqual(to other: any Equatable) -> Bool {
+    type(of: other) == Self.self && (other as? Self) == self
   }
 }
 

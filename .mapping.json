@@ -7147,7 +7147,6 @@
   "client/ios/DivKit/Timers/DivTimerController.swift":"divkit/public/client/ios/DivKit/Timers/DivTimerController.swift",
   "client/ios/DivKit/Timers/DivTimerStorage.swift":"divkit/public/client/ios/DivKit/Timers/DivTimerStorage.swift",
   "client/ios/DivKit/Timers/TimeIntervalMeasuring.swift":"divkit/public/client/ios/DivKit/Timers/TimeIntervalMeasuring.swift",
-  "client/ios/DivKit/Tooltips/DivTooltipContentStorage.swift":"divkit/public/client/ios/DivKit/Tooltips/DivTooltipContentStorage.swift",
   "client/ios/DivKit/Tooltips/DivTooltipViewFactory.swift":"divkit/public/client/ios/DivKit/Tooltips/DivTooltipViewFactory.swift",
   "client/ios/DivKit/Tooltips/DivTooltipViewRegistry.swift":"divkit/public/client/ios/DivKit/Tooltips/DivTooltipViewRegistry.swift",
   "client/ios/DivKit/Types.swift":"divkit/public/client/ios/DivKit/Types.swift",

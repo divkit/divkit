@@ -49,7 +49,6 @@ public struct DivBlockModelingContext {
   let layoutProviderHandler: DivLayoutProviderHandler?
   let idToPath: IdToPath
   let animatorController: DivAnimatorController?
-  let tooltipContentStorage: DivTooltipContentStorage
   private(set) var accessibilityElementsStorage = DivAccessibilityElementsStorage()
 
   private let persistentValuesStorage: DivPersistentValuesStorage
@@ -106,8 +105,7 @@ public struct DivBlockModelingContext {
       tooltipViewFactory: nil,
       layoutProviderHandler: nil,
       idToPath: nil,
-      animatorController: nil,
-      tooltipContentStorage: nil
+      animatorController: nil
     )
   }
 
@@ -138,8 +136,7 @@ public struct DivBlockModelingContext {
     tooltipViewFactory: DivTooltipViewFactory?,
     layoutProviderHandler: DivLayoutProviderHandler?,
     idToPath: IdToPath?,
-    animatorController: DivAnimatorController?,
-    tooltipContentStorage: DivTooltipContentStorage?
+    animatorController: DivAnimatorController?
   ) {
     self.viewId = viewId
     let path = viewId.path
@@ -176,7 +173,6 @@ public struct DivBlockModelingContext {
     )
     self.idToPath = idToPath ?? IdToPath()
     self.animatorController = animatorController
-    self.tooltipContentStorage = tooltipContentStorage ?? DivTooltipContentStorage()
     expressionResolver = makeExpressionResolver(
       functionsProvider: functionsProvider,
       viewId: viewId,

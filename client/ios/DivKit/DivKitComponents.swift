@@ -48,7 +48,6 @@ public final class DivKitComponents {
   private let animatorController = DivAnimatorController()
   private let disposePool = AutodisposePool()
   private let idToPath = IdToPath()
-  private let tooltipContentStorage = DivTooltipContentStorage()
   private let pendingActions: PendingActionsStorage
   private let functionsStorage: DivFunctionsStorage
   private let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
@@ -238,7 +237,6 @@ public final class DivKitComponents {
     idToPath.reset()
     pendingActions.reset()
     animatorController.reset()
-    tooltipContentStorage.reset()
     debugErrorCollectors = [:]
   }
 
@@ -254,7 +252,6 @@ public final class DivKitComponents {
     idToPath.reset(cardId: cardId)
     pendingActions.reset(cardId: cardId)
     animatorController.reset(cardId: cardId)
-    tooltipContentStorage.reset(cardId: cardId)
     debugErrorCollectors[cardId] = nil
   }
 
@@ -442,8 +439,7 @@ public final class DivKitComponents {
       ),
       layoutProviderHandler: layoutProviderHandler,
       idToPath: idToPath,
-      animatorController: animatorController,
-      tooltipContentStorage: tooltipContentStorage
+      animatorController: animatorController
     )
   }
 

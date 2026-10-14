@@ -16,7 +16,7 @@ struct TooltipManagerTests {
       frame: CGRect(x: 10, y: 20, width: 100, height: 40),
       tooltips: [
         BlockTooltip(
-          viewSource: .factory { MockPlainTooltipView() },
+          viewSource: .factory(key: 0) { MockPlainTooltipView() },
           params: BlockTooltipParams(
             id: "my_tooltip",
             mode: .modal,
@@ -347,7 +347,7 @@ struct TooltipManagerTests {
       frame: CGRect(x: 10, y: 20, width: 100, height: 40),
       tooltips: [
         BlockTooltip(
-          viewSource: .factory {
+          viewSource: .factory(key: 0) {
             let view = MockSizedTooltipView()
             created.view = view
             return view
@@ -592,7 +592,7 @@ private func makeTooltip(
   animationOut: [TransitioningAnimation]? = nil
 ) -> BlockTooltip {
   BlockTooltip(
-    viewSource: .factory(viewFactory),
+    viewSource: .factory(key: 0, viewFactory),
     params: BlockTooltipParams(
       id: tooltipInfo.id,
       mode: mode,

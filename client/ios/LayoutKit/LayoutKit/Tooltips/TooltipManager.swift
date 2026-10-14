@@ -68,8 +68,8 @@ extension TooltipActionPerformer {
 /// removed from the view hieararchy.
 ///
 /// An implementation must call ``TooltipContentClosing/tooltipDidClose()`` for content created by
-/// a ``BlockTooltip/ViewSource/factory(_:)`` when the tooltip closes or when the created view is
-/// discarded without being shown.
+/// a ``BlockTooltip/ViewSource/factory(key:_:)`` when the tooltip closes or when the created view
+/// is discarded without being shown.
 public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDelegate {
   /// Notifies the manager when a tooltip anchor view is added to the view hieararchy.
   ///
@@ -597,7 +597,7 @@ extension TooltipAnchorView {
         constrainedBy: constraint.size,
         useLegacyWidth: tooltip.useLegacyWidth
       )
-    case let .factory(factory):
+    case let .factory(_, factory):
       let view = await factory()
       guard let sizeProvider = view as? TooltipContentSizeProviding else {
         (view as? TooltipContentClosing)?.tooltipDidClose()

@@ -1,12 +1,12 @@
 import Foundation
-@_spi(Internal) import LayoutKit
+import LayoutKit
 import VGSL
 
 extension DivTooltip {
   fileprivate func makeTooltip(
     context: DivBlockModelingContext,
     anchorPath: UIElementPath
-  ) throws -> TooltipContentHolder? {
+  ) throws -> BlockTooltip? {
     let expressionResolver = context.expressionResolver
     guard let position = resolvePosition(expressionResolver)?.cast() else {
       return nil
@@ -33,14 +33,20 @@ extension DivTooltip {
     }
 
     let viewSource: BlockTooltip.ViewSource = if let factory = context.tooltipViewFactory {
-      .factory { [div] in
+      .factory(
+        key: FactoryKey(
+          div: div.value as AnyObject,
+          substrateDiv: substrateDiv.map { $0.value as AnyObject },
+          tooltip: tooltipRef
+        )
+      ) { [div] in
         await factory.makeView(div: div, tooltip: tooltipRef)
       }
     } else {
       try .block(div.value.makeBlock(context: context))
     }
 
-    let tooltip = BlockTooltip(
+    return BlockTooltip(
       viewSource: viewSource,
       params: BlockTooltipParams(
         id: id,
@@ -66,10 +72,16 @@ extension DivTooltip {
       bringToTopId: bringToTopId,
       substrateViewFactory: substrateViewFactory
     )
+  }
+}
 
-    // Reusing the holder keeps its identity stable across remodels, so refreshing the
-    // tooltip's content never makes the host's DecoratingBlock.equals see a change.
-    return context.tooltipContentStorage.holder(for: context.viewId) { tooltip }
+private struct FactoryKey: Equatable {
+  let div: AnyObject
+  let substrateDiv: AnyObject?
+  let tooltip: DivViewId.Tooltip
+
+  static func ==(lhs: FactoryKey, rhs: FactoryKey) -> Bool {
+    lhs.div === rhs.div && lhs.substrateDiv === rhs.substrateDiv && lhs.tooltip == rhs.tooltip
   }
 }
 
@@ -92,7 +104,7 @@ extension DivTooltip.Position {
 extension [DivTooltip]? {
   func makeTooltips(
     context: DivBlockModelingContext
-  ) throws -> [TooltipContentHolder] {
+  ) throws -> [BlockTooltip] {
     let items = self ?? []
     if !items.isEmpty, context.viewId.isTooltip {
       context.errorsStorage.add(

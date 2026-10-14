@@ -81,6 +81,19 @@ struct DivViewTests {
 
     #expect(components.visibilityCounter.visibilityCount(for: disappearPath) == 2)
   }
+
+  @Test
+  func tooltipAnchor_receivesTooltipOfNewData() async {
+    await divView.setData(tooltipData(text: "a"))
+    divView.forceLayout()
+    let tooltips = divView.tooltipAnchor?.tooltips
+
+    await divView.setData(tooltipData(text: "b"))
+    divView.forceLayout()
+
+    #expect(tooltips != nil)
+    #expect(divView.tooltipAnchor?.tooltips != tooltips)
+  }
 }
 
 extension DivView {
@@ -100,6 +113,20 @@ extension DivView {
     forceLayout()
     delay()
   }
+}
+
+extension UIView {
+  fileprivate var tooltipAnchor: TooltipAnchorView? {
+    self as? TooltipAnchorView ?? subviews.lazy.compactMap(\.tooltipAnchor).first
+  }
+}
+
+private func tooltipData(text: String) -> DivData {
+  divData(
+    divSeparator(
+      tooltips: [DivTooltip(div: divText(text: text), id: "tooltip", position: .value(.center))]
+    )
+  )
 }
 
 private func delay() {

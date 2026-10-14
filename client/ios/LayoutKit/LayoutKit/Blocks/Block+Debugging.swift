@@ -412,7 +412,7 @@ extension DecoratingBlock: CustomDebugStringConvertible {
     if !tooltips.isEmpty {
       var tooltipsDescription = "Tooltips:\n"
       for tooltip in tooltips {
-        tooltipsDescription += "   \(tooltip.tooltip.debugDescription.indented())\n"
+        tooltipsDescription += "   \(tooltip.debugDescription.indented())\n"
       }
       decorations.append(tooltipsDescription)
     }

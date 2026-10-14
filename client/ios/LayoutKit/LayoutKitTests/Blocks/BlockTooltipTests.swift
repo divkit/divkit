@@ -39,6 +39,17 @@ final class BlockTooltipTests: XCTestCase {
     }
   }
 
+  func test_FactoryViewSourcesWithEqualKeys_AreEqual() {
+    XCTAssertEqual(factorySource(key: "a"), factorySource(key: "a"))
+  }
+
+  func test_FactoryViewSourcesWithDifferentKeys_AreNotEqual() {
+    XCTAssertNotEqual(factorySource(key: "a"), factorySource(key: "b"))
+    XCTAssertNotEqual(factorySource(key: "1"), factorySource(key: 1))
+    XCTAssertNotEqual(factorySource(key: Int?.none), factorySource(key: String?.none))
+    XCTAssertNotEqual(factorySource(key: Int?(1)), factorySource(key: 1))
+  }
+
   func test_TooltipWindowClose() {
     let tooltipView = TooltipContainerView(
       tooltip: DefaultTooltipManager.Tooltip(
@@ -506,6 +517,10 @@ fileprivate func makeTooltip(offset: CGPoint, block: Block) -> BlockTooltip {
     offset: offset,
     position: .center
   )
+}
+
+fileprivate func factorySource(key: any Equatable) -> BlockTooltip.ViewSource {
+  .factory(key: key) { fatalError() }
 }
 
 fileprivate let pointOutsideTooltip = CGPoint(x: 20.0, y: 20.0)

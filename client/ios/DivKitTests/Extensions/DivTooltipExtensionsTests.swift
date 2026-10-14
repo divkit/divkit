@@ -24,7 +24,7 @@ final class DivTooltipExtensionsTests: XCTestCase {
 
     let result = try! tooltips.makeTooltips(context: context)
 
-    guard case .factory = result.first?.tooltip.viewSource else {
+    guard case .factory = result.first?.viewSource else {
       XCTFail("Expected a factory view source")
       return
     }
@@ -90,7 +90,7 @@ final class DivTooltipExtensionsTests: XCTestCase {
 
     let result = try! tooltips.makeTooltips(context: context)
 
-    guard case .block = result.first?.tooltip.viewSource else {
+    guard case .block = result.first?.viewSource else {
       XCTFail("Expected a block view source")
       return
     }
@@ -100,99 +100,44 @@ final class DivTooltipExtensionsTests: XCTestCase {
     )
   }
 
-  func test_TooltipContentRefresh_KeepsHolderIdentity_AndDecoratingBlocksEqual() {
-    let context = DivBlockModelingContext()
-    func host(offset: DivPoint) -> Div {
-      divSeparator(
-        tooltips: [
-          DivTooltip(
-            div: divContainer(id: "tooltip_content"),
-            id: "tooltip1",
-            offset: offset,
-            position: .value(.center)
-          ),
-        ]
-      )
-    }
-
-    let block1 = makeBlock(host(offset: point(x: 0, y: 0)), context: context)
-    let block2 = makeBlock(host(offset: point(x: 50, y: 50)), context: context)
-
-    guard let holder1 = (block1.child as? DecoratingBlock)?.tooltips.first,
-          let holder2 = (block2.child as? DecoratingBlock)?.tooltips.first else {
-      XCTFail("Expected a DecoratingBlock with a tooltip")
-      return
-    }
+  func test_FactoryTooltip_WithSameDiv_KeepsBlocksEqual() {
+    let context = makeFactoryContext()
+    let div = divText(text: "a")
 
     XCTAssertTrue(
-      holder1 === holder2,
-      "Remodeling the same tooltip anchor must reuse its content holder, not replace it"
-    )
-    XCTAssertEqual(holder2.tooltip.offset, CGPoint(x: 50, y: 50))
-    XCTAssertTrue(
-      block1.equals(block2),
-      "A tooltip's content changing alone must not make DecoratingBlock.equals see a " +
-        "difference - that's the whole point of routing tooltip content through a holder"
+      makeBlock(tooltipHost(div), context: context)
+        .equals(makeBlock(tooltipHost(div), context: context))
     )
   }
 
-  func test_ResetCardId_DropsOnlyMatchingCardHolders() {
-    let storage = DivTooltipContentStorage()
-    let viewIdA = tooltipViewId(cardId: "card_a")
-    let viewIdB = tooltipViewId(cardId: "card_b")
-
-    let holderA = storage.holder(for: viewIdA) { makeMinimalTooltip() }
-    let holderB = storage.holder(for: viewIdB) { makeMinimalTooltip() }
-
-    storage.reset(cardId: "card_a")
-
-    let holderAAfterReset = storage.holder(for: viewIdA) { makeMinimalTooltip() }
-    let holderBAfterReset = storage.holder(for: viewIdB) { makeMinimalTooltip() }
+  func test_FactoryTooltip_WithNewDiv_MakesBlocksDiffer() {
+    let context = makeFactoryContext()
 
     XCTAssertFalse(
-      holderAAfterReset === holderA,
-      "card_a's holder should have been dropped by reset(cardId: \"card_a\")"
-    )
-    XCTAssertTrue(
-      holderBAfterReset === holderB,
-      "card_b's holder must survive resetting card_a"
+      makeBlock(tooltipHost(divText(text: "a")), context: context)
+        .equals(makeBlock(tooltipHost(divText(text: "a")), context: context))
     )
   }
 
-  func test_TwoAnchorsWithSameTooltipId_GetDistinctHolders() {
-    let context = DivBlockModelingContext()
+  func test_FactoryTooltip_WithNewSubstrate_MakesBlocksDiffer() {
+    let context = makeFactoryContext()
+    let div = divText(text: "a")
+
+    XCTAssertFalse(
+      makeBlock(tooltipHost(div, substrate: divText(text: "a")), context: context)
+        .equals(makeBlock(tooltipHost(div, substrate: divText(text: "a")), context: context))
+    )
+  }
+
+  func test_TwoAnchorsWithSameTooltipId_AreNotEqual() {
+    let context = makeFactoryContext()
     let tooltips: [DivTooltip]? = [
       DivTooltip(div: divContainer(id: "content"), id: "hint", position: .value(.center)),
     ]
 
-    let contextA = context.modifying(pathSuffix: "anchorA")
-    let contextB = context.modifying(pathSuffix: "anchorB")
-
-    let holderA = try! tooltips.makeTooltips(context: contextA).first
-    let holderB = try! tooltips.makeTooltips(context: contextB).first
-
-    XCTAssertFalse(
-      holderA === holderB,
-      "Different anchors must not share a tooltip holder just because their tooltip ids match " +
-        "- div_tooltip_id is only required to be unique within one anchor"
-    )
-  }
-
-  func test_Storage_DoesNotKeepHolderAliveOnItsOwn() {
-    let storage = DivTooltipContentStorage()
-    let viewId = tooltipViewId(cardId: "card")
-
-    weak var weakHolder: TooltipContentHolder?
-    do {
-      let holder = storage.holder(for: viewId) { makeMinimalTooltip() }
-      weakHolder = holder
-    }
-
-    // If the storage held its values strongly, this would still be non-nil here - that's exactly
-    // the regression this test exists to catch (see DivTooltipContentStorage's retain-cycle note).
-    XCTAssertNil(
-      weakHolder,
-      "The storage must not be the thing keeping a tooltip's content holder alive"
+    XCTAssertNotEqual(
+      try! tooltips.makeTooltips(context: context.modifying(pathSuffix: "anchorA")),
+      try! tooltips.makeTooltips(context: context.modifying(pathSuffix: "anchorB"))
     )
   }
 
@@ -246,7 +191,7 @@ final class DivTooltipExtensionsTests: XCTestCase {
           color: color("#14000000")
         ),
         tooltips: [
-          TooltipContentHolder(tooltip: BlockTooltip(
+          BlockTooltip(
             viewSource: .block(
               DecoratingBlock(
                 child: ContainerBlock(
@@ -271,7 +216,7 @@ final class DivTooltipExtensionsTests: XCTestCase {
             offset: CGPoint(x: 10, y: 20),
             position: .center,
             useLegacyWidth: false
-          )),
+          ),
         ],
         accessibilityElement: .default,
         path: .root + 0 + "separator"
@@ -313,7 +258,7 @@ final class DivTooltipExtensionsTests: XCTestCase {
           color: color("#14000000")
         ),
         tooltips: [
-          TooltipContentHolder(tooltip: BlockTooltip(
+          BlockTooltip(
             viewSource: .block(
               DecoratingBlock(
                 child: SeparatorBlock(
@@ -332,7 +277,7 @@ final class DivTooltipExtensionsTests: XCTestCase {
             offset: CGPoint(x: 0, y: 0),
             position: .center,
             useLegacyWidth: false
-          )),
+          ),
         ],
         accessibilityElement: .default,
         path: .root + 0 + "separator"
@@ -396,20 +341,15 @@ final class DivTooltipExtensionsTests: XCTestCase {
   }
 }
 
-/// Anchor path is arbitrary in these storage tests - they vary the card, not the anchor.
-private func tooltipViewId(cardId: DivCardID) -> DivViewId {
-  DivViewId(
-    cardId: cardId,
-    tooltip: DivViewId.Tooltip(id: "tooltip1", anchorPath: cardId.path + "anchor")
-  )
+private func makeFactoryContext() -> DivBlockModelingContext {
+  DivKitComponents().makeContext(cardId: "test_card_id", cachedImageHolders: [])
 }
 
-private func makeMinimalTooltip(id: String = "tooltip") -> BlockTooltip {
-  BlockTooltip(
-    viewSource: .block(EmptyBlock.zeroSized),
-    params: BlockTooltipParams(id: id, mode: .modal, duration: 0, closeByTapOutside: true),
-    offset: .zero,
-    position: .center
+private func tooltipHost(_ div: Div, substrate: Div? = nil) -> Div {
+  divSeparator(
+    tooltips: [
+      DivTooltip(div: div, id: "tooltip1", position: .value(.center), substrateDiv: substrate),
+    ]
   )
 }
 
