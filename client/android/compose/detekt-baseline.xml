@@ -8,7 +8,6 @@
     <ID>CognitiveComplexMethod:DivImageContent.kt:@Composable internal fun DivImageContent</ID>
     <ID>CognitiveComplexMethod:DivSliderView.kt:private fun Modifier.sliderPointerInput: Modifier</ID>
     <ID>CognitiveComplexMethod:GalleryFlingBehavior.kt:GallerySnapLayoutInfoProvider$override fun calculateSnapOffset: Float</ID>
-    <ID>CognitiveComplexMethod:GalleryGridView.kt:private fun MeasureScope.measureNonScrollableStaggeredGrid: MeasureResult</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.observeItemBaseSizes: FloatArray</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.rememberSpannedTracks: AxisTracks</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@OptIn(ExperimentalGridApi::class) @Composable private fun List&lt;Cell&gt;.axisTracks: AxisTracks</ID>

@@ -1,9 +1,13 @@
 package com.yandex.div.compose.views.gallery
 
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeWithVelocity
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,10 +23,12 @@ import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.matchParent
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.wrapContent
+import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivSize
 import org.junit.Rule
 import org.junit.runner.RunWith
+import kotlin.math.abs
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -225,6 +231,135 @@ class GalleryGridViewTest {
         assertEquals(expectedHeight.toFloat(), itemBounds("gallery").height)
     }
 
+    @Test
+    fun `horizontal wrap content gallery scrolls when its width is bounded`() {
+        setGalleryContent(
+            height = wrapContent(),
+            itemSizes = List(8) { 100L to 50L },
+            orientation = DivGallery.Orientation.HORIZONTAL,
+        )
+
+        composeRule.onNodeWithTag("gallery").performTouchInput {
+            swipeWithVelocity(start = centerRight, end = centerLeft, endVelocity = 0f)
+        }
+
+        assertTrue(unclippedItemBounds(0).left < itemBounds("gallery").left)
+        assertEquals(itemBounds("gallery").right, unclippedItemBounds(6).right, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `vertical wrap content gallery scrolls when its height is bounded`() {
+        setGalleryContent(
+            height = fixed(300),
+            itemSizes = List(8) { 50L to 100L },
+            orientation = DivGallery.Orientation.VERTICAL,
+            width = wrapContent(),
+        )
+
+        composeRule.onNodeWithTag("gallery").performTouchInput {
+            swipeWithVelocity(start = bottomCenter, end = topCenter, endVelocity = 0f)
+        }
+
+        assertTrue(unclippedItemBounds(0).top < itemBounds("gallery").top)
+        assertEquals(itemBounds("gallery").bottom, unclippedItemBounds(6).bottom, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `match parent item fills bounded width of horizontal wrap content gallery`() {
+        setMatchParentGalleryContent(DivGallery.Orientation.HORIZONTAL)
+
+        val padding = with(composeRule.density) { 10.dp.toPx() }
+        assertEquals(itemBounds("gallery").width - padding, itemBounds("item0").width, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `match parent item fills bounded height of vertical wrap content gallery`() {
+        setMatchParentGalleryContent(DivGallery.Orientation.VERTICAL)
+
+        val padding = with(composeRule.density) { 10.dp.toPx() }
+        assertEquals(itemBounds("gallery").height - padding, itemBounds("item0").height, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `default item scrolls bounded horizontal wrap content gallery`() {
+        setGalleryContent(
+            defaultItem = 5L,
+            height = wrapContent(),
+            itemSizes = List(12) { 100L to 50L },
+            orientation = DivGallery.Orientation.HORIZONTAL,
+        )
+
+        assertEquals(itemBounds("gallery").left, unclippedItemBounds(5).left, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `default item scrolls bounded vertical wrap content gallery`() {
+        setGalleryContent(
+            defaultItem = 5L,
+            height = fixed(300),
+            itemSizes = List(12) { 50L to 100L },
+            orientation = DivGallery.Orientation.VERTICAL,
+            width = wrapContent(),
+        )
+
+        assertEquals(itemBounds("gallery").top, unclippedItemBounds(5).top, absoluteTolerance = 0.5f)
+    }
+
+    @Test
+    fun `paging wrap content gallery snaps an item to the center after fling`() {
+        setGalleryContent(
+            height = wrapContent(),
+            itemSizes = List(12) { 100L to 50L },
+            orientation = DivGallery.Orientation.HORIZONTAL,
+            scrollMode = DivGallery.ScrollMode.PAGING,
+        )
+
+        composeRule.onNodeWithTag("gallery").performTouchInput {
+            swipeWithVelocity(start = centerRight, end = centerLeft, endVelocity = 2000f)
+        }
+        composeRule.waitForIdle()
+
+        val galleryCenter = itemBounds("gallery").center.x
+        val closestDistance = List(12) { abs(unclippedItemBounds(it).center.x - galleryCenter) }.min()
+        assertTrue(unclippedItemBounds(0).left < itemBounds("gallery").left)
+        assertEquals(0f, closestDistance, absoluteTolerance = 0.5f)
+    }
+
+    private fun setMatchParentGalleryContent(orientation: DivGallery.Orientation) {
+        val isHorizontal = orientation == DivGallery.Orientation.HORIZONTAL
+        composeRule.setContent(
+            configuration = configuration,
+            data = data(
+                gallery(
+                    columnCount = constant(2L),
+                    height = if (isHorizontal) wrapContent() else fixed(300),
+                    id = "gallery",
+                    items = listOf(
+                        text(
+                            height = if (isHorizontal) fixed(50) else matchParent(),
+                            id = "item0",
+                            text = constant("match parent"),
+                            width = if (isHorizontal) matchParent() else fixed(50),
+                        ),
+                        text(
+                            height = fixed(50),
+                            id = "item1",
+                            text = constant("fixed"),
+                            width = fixed(50),
+                        ),
+                    ),
+                    orientation = constant(orientation),
+                    paddings = if (isHorizontal) {
+                        DivEdgeInsets(start = constant(10L))
+                    } else {
+                        DivEdgeInsets(top = constant(10L))
+                    },
+                    width = if (isHorizontal) fixed(300) else wrapContent(),
+                )
+            ),
+        )
+    }
+
     private fun setGalleryContent(
         columnCount: Long = 2L,
         crossSpacing: Long? = null,
@@ -233,6 +368,7 @@ class GalleryGridViewTest {
         itemSizes: List<Pair<Long, Long>>,
         layoutDirection: LayoutDirection = LayoutDirection.Ltr,
         orientation: DivGallery.Orientation,
+        scrollMode: DivGallery.ScrollMode = DivGallery.ScrollMode.DEFAULT,
         width: DivSize = fixed(300),
     ) {
         val galleryData = data(
@@ -251,6 +387,7 @@ class GalleryGridViewTest {
                     )
                 },
                 orientation = constant(orientation),
+                scrollMode = constant(scrollMode),
                 width = width,
             )
         )
@@ -266,4 +403,8 @@ class GalleryGridViewTest {
 
     private fun itemBounds(tag: String) =
         composeRule.onNodeWithTag(tag).fetchSemanticsNode().boundsInRoot
+
+    private fun unclippedItemBounds(index: Int): Rect = with(composeRule.density) {
+        composeRule.onNodeWithTag("item$index").getUnclippedBoundsInRoot().toRect()
+    }
 }

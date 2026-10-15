@@ -1,6 +1,7 @@
 package com.yandex.div.compose.utils.scroll
 
 import androidx.compose.foundation.gestures.snapping.SnapPosition
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -71,6 +72,9 @@ internal fun PaddingValues.getScrollAxisPaddings(
         Pair(calculateTopPadding(), calculateBottomPadding())
     }
 }
+
+internal fun BoxWithConstraintsScope.isScrollAxisBounded(isHorizontal: Boolean): Boolean =
+    if (isHorizontal) constraints.hasBoundedWidth else constraints.hasBoundedHeight
 
 /** Size available to a match_parent item along the scroll axis: the viewport without content padding. */
 internal fun PaddingValues.scrollAxisContentSize(

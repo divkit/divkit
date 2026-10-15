@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.gallery
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableDefaults
@@ -57,6 +58,28 @@ internal fun rememberGalleryGridFlingBehavior(
                 scrollContentAlignment = scrollContentAlignment,
                 isLinearLayout = false,
                 layoutInfo = { gridState.layoutInfo.toGallerySnapLayoutInfo() },
+            )
+        }
+        rememberSnapFlingBehavior(provider)
+    }
+}
+
+@Composable
+internal fun rememberGalleryLanesFlingBehavior(
+    scrollState: ScrollState,
+    itemPositions: MeasuredItemPositions,
+    properties: GalleryProperties,
+): FlingBehavior = when (properties.scrollMode) {
+    DivGallery.ScrollMode.DEFAULT -> ScrollableDefaults.flingBehavior()
+    DivGallery.ScrollMode.PAGING -> {
+        val minimumFlingVelocity = LocalViewConfiguration.current.minimumFlingVelocity
+        val alignmentKey = properties.resolveScrollAlignmentKey()
+        val provider = remember(scrollState, itemPositions, alignmentKey, minimumFlingVelocity) {
+            GallerySnapLayoutInfoProvider(
+                minimumFlingVelocity = minimumFlingVelocity,
+                scrollContentAlignment = alignmentKey.alignment,
+                isLinearLayout = false,
+                layoutInfo = { itemPositions.toGallerySnapLayoutInfo(scrollState, alignmentKey) },
             )
         }
         rememberSnapFlingBehavior(provider)
@@ -150,6 +173,25 @@ private fun LazyStaggeredGridLayoutInfo.toGallerySnapLayoutInfo(): GallerySnapLa
         viewportEnd = viewportEndOffset,
         beforePadding = beforeContentPadding,
         afterPadding = afterContentPadding,
+    )
+}
+
+// Same coordinates as LazyStaggeredGridLayoutInfo: offsets start after the content padding.
+private fun MeasuredItemPositions.toGallerySnapLayoutInfo(
+    scrollState: ScrollState,
+    alignmentKey: GalleryScrollAlignmentKey,
+): GallerySnapLayoutInfo {
+    val viewportSize = scrollState.viewportSize
+    return GallerySnapLayoutInfo(
+        items = offsets.indices.map { index ->
+            GallerySnapItemInfo(index = index, offset = offsets[index] - scrollState.value, size = sizes[index])
+        },
+        itemCount = offsets.size,
+        viewportSize = viewportSize,
+        viewportStart = -alignmentKey.startPaddingPx,
+        viewportEnd = viewportSize - alignmentKey.startPaddingPx,
+        beforePadding = alignmentKey.startPaddingPx,
+        afterPadding = alignmentKey.endPaddingPx,
     )
 }
 

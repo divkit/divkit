@@ -1,9 +1,13 @@
 package com.yandex.div.compose.views.gallery
 
 import androidx.compose.foundation.gestures.snapping.SnapPosition
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.utils.scroll.CrossAxisAlignment
 import com.yandex.div.compose.utils.scroll.desiredSnapOffset
+import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div2.DivGallery
 
 internal fun DivGallery.ContentAlignment.toVerticalAlignment(): Alignment.Vertical =
@@ -71,3 +75,18 @@ internal data class GalleryScrollAlignmentKey(
     val startPaddingPx: Int,
     val endPaddingPx: Int,
 )
+
+@Composable
+internal fun GalleryProperties.resolveScrollAlignmentKey(): GalleryScrollAlignmentKey {
+    val density = LocalDensity.current
+    val (startPadding, endPadding) = contentPadding.getScrollAxisPaddings(isHorizontal, LocalLayoutDirection.current)
+    return GalleryScrollAlignmentKey(
+        alignment = scrollContentAlignment,
+        isHorizontal = isHorizontal,
+        startPaddingPx = with(density) { startPadding.roundToPx() },
+        endPaddingPx = with(density) { endPadding.roundToPx() },
+    )
+}
+
+internal fun GalleryScrollAlignmentKey.desiredScrollOffset(viewportSizePx: Int, itemSizePx: Int): Int =
+    alignment.calculateDesiredScrollOffset(viewportSizePx, itemSizePx, startPaddingPx, endPaddingPx)

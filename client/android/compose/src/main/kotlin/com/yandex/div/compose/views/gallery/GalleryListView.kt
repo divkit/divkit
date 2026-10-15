@@ -2,8 +2,8 @@ package com.yandex.div.compose.views.gallery
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -11,125 +11,73 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
-import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
+import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
-import com.yandex.div2.DivGallery
 
 @Composable
 internal fun GalleryListView(
     modifier: Modifier,
     items: List<Div>,
-    orientation: DivGallery.Orientation,
-    itemSpacing: Dp,
-    crossContentAlignment: DivGallery.ContentAlignment,
-    scrollContentAlignment: DivGallery.ContentAlignment,
-    contentPadding: PaddingValues,
-    defaultItem: Int,
-    scrollMode: DivGallery.ScrollMode,
-    scrollbar: Expression<DivGallery.Scrollbar>,
+    properties: GalleryProperties,
     isScrollable: Boolean,
 ) {
     if (isScrollable) {
-        val isHorizontal = orientation == DivGallery.Orientation.HORIZONTAL
         BoxWithConstraints(modifier = modifier) {
-            val isScrollAxisBounded = if (isHorizontal) {
-                constraints.hasBoundedWidth
+            if (isScrollAxisBounded(properties.isHorizontal)) {
+                ScrollableGalleryView(items, properties)
             } else {
-                constraints.hasBoundedHeight
-            }
-            if (isScrollAxisBounded) {
-                ScrollableGalleryView(
-                    items = items,
-                    isHorizontal = isHorizontal,
-                    viewportSize = if (isHorizontal) maxWidth else maxHeight,
-                    itemSpacing = itemSpacing,
-                    crossContentAlignment = crossContentAlignment,
-                    scrollContentAlignment = scrollContentAlignment,
-                    contentPadding = contentPadding,
-                    defaultItem = defaultItem,
-                    scrollMode = scrollMode,
-                    scrollbar = scrollbar,
-                )
-            } else {
-                NonScrollableGalleryView(
-                    modifier = Modifier,
-                    items = items,
-                    orientation = orientation,
-                    itemSpacing = itemSpacing,
-                    crossContentAlignment = crossContentAlignment,
-                    contentPadding = contentPadding,
-                )
+                NonScrollableGalleryView(Modifier, items, properties)
             }
         }
     } else {
-        NonScrollableGalleryView(
-            modifier,
-            items,
-            orientation,
-            itemSpacing,
-            crossContentAlignment,
-            contentPadding
-        )
+        NonScrollableGalleryView(modifier, items, properties)
     }
 }
 
 @Composable
-private fun ScrollableGalleryView(
-    items: List<Div>,
-    isHorizontal: Boolean,
-    viewportSize: Dp,
-    itemSpacing: Dp,
-    crossContentAlignment: DivGallery.ContentAlignment,
-    scrollContentAlignment: DivGallery.ContentAlignment,
-    contentPadding: PaddingValues,
-    defaultItem: Int,
-    scrollMode: DivGallery.ScrollMode,
-    scrollbar: Expression<DivGallery.Scrollbar>,
-) {
-    val initialDefaultItem = remember { defaultItem }
+private fun BoxWithConstraintsScope.ScrollableGalleryView(items: List<Div>, properties: GalleryProperties) {
+    val isHorizontal = properties.isHorizontal
+    val initialDefaultItem = remember { properties.defaultItem }
     val clampedDefaultItem = initialDefaultItem.coerceIn(0, (items.size - 1).coerceAtLeast(0))
 
     val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = clampedDefaultItem
     )
 
-    val flingBehavior = rememberGalleryListFlingBehavior(listState, scrollMode, scrollContentAlignment)
+    val flingBehavior = rememberGalleryListFlingBehavior(
+        listState, properties.scrollMode, properties.scrollContentAlignment,
+    )
 
     if (initialDefaultItem > 0) {
-        AdjustDefaultItemAlignment(
-            listState = listState,
-            targetIndex = clampedDefaultItem,
-            isHorizontal = isHorizontal,
-            contentPadding = contentPadding,
-            scrollContentAlignment = scrollContentAlignment,
-        )
+        AdjustDefaultItemAlignment(listState, clampedDefaultItem, properties)
     }
 
-    val crossAlignment = crossContentAlignment.toCrossAxisAlignment()
-    val maxItemSize = contentPadding.scrollAxisContentSize(viewportSize, isHorizontal, LocalLayoutDirection.current)
+    val crossAlignment = properties.crossContentAlignment.toCrossAxisAlignment()
+    val maxItemSize = properties.contentPadding.scrollAxisContentSize(
+        viewportSize = if (isHorizontal) maxWidth else maxHeight,
+        isHorizontal = isHorizontal,
+        layoutDirection = LocalLayoutDirection.current,
+    )
 
     val viewContext = LocalDivViewContext.current
     OrientedLazyList(
         isHorizontal = isHorizontal,
         modifier = Modifier.galleryScrollbar(
-            scrollbar = scrollbar,
+            scrollbar = properties.scrollbar,
             scrollState = listState,
             isHorizontal = isHorizontal,
-            contentPadding = contentPadding,
+            contentPadding = properties.contentPadding,
         ),
         listState = listState,
-        contentPadding = contentPadding,
-        itemSpacing = itemSpacing,
+        contentPadding = properties.contentPadding,
+        itemSpacing = properties.itemSpacing,
         crossAxisAlignment = crossAlignment,
         flingBehavior = flingBehavior,
     ) {
@@ -149,33 +97,14 @@ private fun ScrollableGalleryView(
 private fun AdjustDefaultItemAlignment(
     listState: LazyListState,
     targetIndex: Int,
-    isHorizontal: Boolean,
-    contentPadding: PaddingValues,
-    scrollContentAlignment: DivGallery.ContentAlignment,
+    properties: GalleryProperties,
 ) {
-    val density = LocalDensity.current
-    val layoutDirection = LocalLayoutDirection.current
-    val (startPadding, endPadding) = contentPadding.getScrollAxisPaddings(isHorizontal, layoutDirection)
-    val startPaddingPx = with(density) { startPadding.roundToPx() }
-    val endPaddingPx = with(density) { endPadding.roundToPx() }
-
+    val alignmentKey = properties.resolveScrollAlignmentKey()
     AdjustScrollToItem(
         listState = listState,
         targetIndex = targetIndex,
-        restartKey = GalleryScrollAlignmentKey(
-            alignment = scrollContentAlignment,
-            isHorizontal = isHorizontal,
-            startPaddingPx = startPaddingPx,
-            endPaddingPx = endPaddingPx,
-        ),
-        desiredOffset = { viewportSize, itemSize ->
-            scrollContentAlignment.calculateDesiredScrollOffset(
-                viewportSizePx = viewportSize,
-                itemSizePx = itemSize,
-                startPaddingPx = startPaddingPx,
-                endPaddingPx = endPaddingPx,
-            )
-        },
+        restartKey = alignmentKey,
+        desiredOffset = alignmentKey::desiredScrollOffset,
     )
 }
 
@@ -183,38 +112,36 @@ private fun AdjustDefaultItemAlignment(
 private fun NonScrollableGalleryView(
     modifier: Modifier,
     items: List<Div>,
-    orientation: DivGallery.Orientation,
-    itemSpacing: Dp,
-    crossContentAlignment: DivGallery.ContentAlignment,
-    contentPadding: PaddingValues,
+    properties: GalleryProperties,
 ) {
-    when (orientation) {
-        DivGallery.Orientation.HORIZONTAL -> Row(
-            modifier = modifier.padding(contentPadding),
-            horizontalArrangement = Arrangement.spacedBy(itemSpacing),
-            verticalAlignment = crossContentAlignment.toVerticalAlignment(),
+    val crossAlignment = properties.crossContentAlignment.toCrossAxisAlignment()
+    if (properties.isHorizontal) {
+        Row(
+            modifier = modifier.padding(properties.contentPadding),
+            horizontalArrangement = Arrangement.spacedBy(properties.itemSpacing),
+            verticalAlignment = properties.crossContentAlignment.toVerticalAlignment(),
         ) {
             items.forEach {
                 ScrollableChildItem(
                     data = it,
                     modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = true),
                     isHorizontal = true,
-                    crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),
+                    crossAxisAlignment = crossAlignment,
                 )
             }
         }
-
-        DivGallery.Orientation.VERTICAL -> Column(
-            modifier = modifier.padding(contentPadding),
-            verticalArrangement = Arrangement.spacedBy(itemSpacing),
-            horizontalAlignment = crossContentAlignment.toHorizontalAlignment(),
+    } else {
+        Column(
+            modifier = modifier.padding(properties.contentPadding),
+            verticalArrangement = Arrangement.spacedBy(properties.itemSpacing),
+            horizontalAlignment = properties.crossContentAlignment.toHorizontalAlignment(),
         ) {
             items.forEach {
                 ScrollableChildItem(
                     data = it,
                     modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = false),
                     isHorizontal = false,
-                    crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),
+                    crossAxisAlignment = crossAlignment,
                 )
             }
         }
