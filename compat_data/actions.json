@@ -413,6 +413,15 @@
           "version_added": "33.5.0"
         }
       }
+    },
+    {
+      "id": "action_typed_extension_action",
+      "name": "<code>extension_action</code> typed action",
+      "compat": {
+        "android": {
+          "version_added": "33.7.0"
+        }
+      }
     }
   ]
 }

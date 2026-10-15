@@ -312,6 +312,33 @@
           "version_added": "32.53.0"
         }
       }
+    },
+    {
+      "id": "text_gradient_animated",
+      "name": "<code>animated</code> type for the <code>text_gradient</code> of a <code>text</code>",
+      "compat": {
+        "android": {
+          "version_added": "33.4.0"
+        },
+        "ios": {
+          "version_added": "33.7.0"
+        },
+        "web": {
+          "version_added": "33.7.0"
+        }
+      }
+    },
+    {
+      "id": "text_truncate_policy",
+      "name": "Text <code>truncate_policy</code> property",
+      "compat": {
+        "android": {
+          "version_added": "33.6.0"
+        },
+        "ios": {
+          "version_added": "33.6.0"
+        }
+      }
     }
   ]
 }

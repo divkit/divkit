@@ -100,6 +100,15 @@
       }
     },
     {
+      "id": "ext_lottie_actions",
+      "name": "Lottie extension <code>start</code> and <code>stop</code> actions",
+      "compat": {
+        "android": {
+          "version_added": "33.7.0"
+        }
+      }
+    },
+    {
       "id": "ext_gesture",
       "name": "<code>gesture</code> extension",
       "compat": {
