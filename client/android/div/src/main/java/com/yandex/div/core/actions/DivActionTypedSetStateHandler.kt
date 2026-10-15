@@ -1,6 +1,6 @@
 package com.yandex.div.core.actions
 
-import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.state.DivStatePathResolver
 import com.yandex.div.core.state.PathFormatException
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -34,7 +34,7 @@ internal class DivActionTypedSetStateHandler @Inject constructor()
         val stateId = action.stateId.evaluate(resolver)
         val temporary = action.temporary.evaluate(resolver)
         val statePath = try {
-            DivStatePath.parse(stateId)
+            DivStatePathResolver.resolve(view, stateId)
         } catch (e: PathFormatException) {
             view.logError(IllegalArgumentException("Invalid format of $stateId", e))
             return

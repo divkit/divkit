@@ -1,0 +1,165 @@
+{
+  "templates": {
+    "label": {
+      "type": "text",
+      "font_size": 18,
+      "paddings": {
+        "top": 12,
+        "bottom": 12
+      }
+    },
+    "button": {
+      "type": "text",
+      "font_size": 18,
+      "paddings": {
+        "left": 10,
+        "top": 12,
+        "right": 10,
+        "bottom": 12
+      },
+      "margins": {
+        "bottom": 10
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#eeeeee"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "tooltip_states",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "items": [
+            {
+              "type": "state",
+              "id": "state",
+              "states": [
+                {
+                  "state_id": "state1",
+                  "div": {
+                    "type": "label",
+                    "text": "Root state 1"
+                  }
+                },
+                {
+                  "state_id": "state2",
+                  "div": {
+                    "type": "label",
+                    "text": "Root state 2"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Show tooltip",
+              "actions": [
+                {
+                  "log_id": "show_tooltip",
+                  "url": "div-action://show_tooltip?id=states_tooltip"
+                }
+              ],
+              "tooltips": [
+                {
+                  "id": "states_tooltip",
+                  "position": "bottom",
+                  "duration": 0,
+                  "close_by_tap_outside": false,
+                  "mode": {
+                    "type": "non_modal"
+                  },
+                  "div": {
+                    "type": "container",
+                    "width": {
+                      "type": "fixed",
+                      "value": 300
+                    },
+                    "paddings": {
+                      "left": 10,
+                      "top": 10,
+                      "right": 10,
+                      "bottom": 10
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#f6f6f6"
+                      }
+                    ],
+                    "items": [
+                      {
+                        "type": "button",
+                        "text": "Set root state 2",
+                        "actions": [
+                          {
+                            "log_id": "set_root_state",
+                            "url": "div-action://set_state?state_id=0/state/state2"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "button",
+                        "text": "Set tooltip state 2",
+                        "actions": [
+                          {
+                            "log_id": "set_tooltip_state_2",
+                            "url": "div-action://set_state?state_id=state/state2"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "button",
+                        "text": "Set tooltip state 1",
+                        "actions": [
+                          {
+                            "log_id": "set_tooltip_state_1",
+                            "typed": {
+                              "type": "set_state",
+                              "state_id": "state/state1"
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "state",
+                        "id": "state",
+                        "states": [
+                          {
+                            "state_id": "state1",
+                            "div": {
+                              "type": "label",
+                              "text": "Tooltip state 1"
+                            }
+                          },
+                          {
+                            "state_id": "state2",
+                            "div": {
+                              "type": "label",
+                              "text": "Tooltip state 2"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

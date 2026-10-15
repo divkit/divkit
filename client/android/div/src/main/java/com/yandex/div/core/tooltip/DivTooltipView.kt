@@ -44,6 +44,12 @@ internal class DivTooltipView(
     val isShown: Boolean
         get() = popupWindow.isShowing
 
+    val tooltipView: View?
+        get() = container.tooltipView
+
+    val substrateView: View?
+        get() = container.substrateView
+
     fun show(onShown: () -> Unit) {
         container.doOnActualLayout {
             recomputePosition()

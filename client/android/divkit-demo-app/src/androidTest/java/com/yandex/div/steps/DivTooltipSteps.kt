@@ -14,6 +14,7 @@ import androidx.test.espresso.action.Press
 import androidx.test.espresso.action.Tap
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -38,6 +39,19 @@ internal class DivTooltipSteps : DivTestAssetSteps() {
     fun ActivityTestRule<DummyActivity>.buildContainer() {
         testAsset = "ui_test_data/tooltips/div_tooltips.json"
         buildContainer(MATCH_PARENT, MATCH_PARENT)
+    }
+
+    fun ActivityTestRule<DummyActivity>.buildStatesContainer() {
+        testAsset = "ui_test_data/tooltips/div_tooltip_states.json"
+        buildContainer(MATCH_PARENT, MATCH_PARENT)
+    }
+
+    fun showStatesTooltip(): Unit = step("Show tooltip with states") {
+        onView(withText("Show tooltip")).perform(click())
+    }
+
+    fun clickInTooltip(text: String): Unit = step("Click '$text' in tooltip") {
+        onView(withText(text)).inRoot(isPlatformPopup()).perform(tooltipClick())
     }
 
     fun showTooltip(p: DivTooltip.Position): Unit = step("show tooltip with position: $p") {
@@ -116,6 +130,18 @@ internal class DivTooltipAssertions {
     fun nonModalButtonClickedIsTrue(): Unit = step("Check non modal button clicked is true") {
         onView(withText("Non modal button clicked: true")).check(matches(isDisplayed()))
     }
+
+    fun cardShows(text: String): Unit = step("Check card shows '$text'") {
+        onView(withText(text)).check(matches(isDisplayed()))
+    }
+
+    fun tooltipShows(text: String): Unit = step("Check tooltip shows '$text'") {
+        onView(withText(text)).inRoot(isPlatformPopup()).check(matches(isDisplayed()))
+    }
+
+    fun tooltipDoesNotShow(text: String): Unit = step("Check tooltip does not show '$text'") {
+        onView(withText(text)).inRoot(isPlatformPopup()).check(doesNotExist())
+    }
 }
 
 private fun tooltip() = onView(withText("tooltip_text")).inRoot(isPlatformPopup())
@@ -135,8 +161,10 @@ private fun tooltipClick(): ViewAction {
 private fun tooltipCoordinates(view: View): FloatArray {
     val coords = floatArrayOf(0f, 0f)
     val params = view.findDecorViewParams() ?: return coords
-    coords[0] = params.x.toFloat() + view.width / 2
-    coords[1] = params.y.toFloat() + view.height / 2
+    val location = IntArray(2)
+    view.getLocationInWindow(location)
+    coords[0] = params.x.toFloat() + location[0] + view.width / 2
+    coords[1] = params.y.toFloat() + location[1] + view.height / 2
     return coords
 }
 

@@ -149,6 +149,13 @@ class DivActionHandlerTest {
     }
 
     @Test
+    fun `uri with relative path and no shown tooltips is not handled`() {
+        disableAssertions {
+            Assert.assertFalse(handleActionUrl("div-action://set_state?state_id=state/second"))
+        }
+    }
+
+    @Test
     fun `SetVariable action updates variable`() {
         setVariable("string_var", "value")
 

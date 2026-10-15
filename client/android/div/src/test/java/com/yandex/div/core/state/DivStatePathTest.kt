@@ -120,4 +120,51 @@ class DivStatePathTest {
         Assert.assertNotNull(result)
         Assert.assertEquals(listOf("rootId" to "active"), result!!.getStates())
     }
+
+    @Test
+    fun `namespace prefixes states string`() {
+        Assert.assertEquals("ns/0/a/s/d/f", scndLvlPath.withNamespace("ns").statesString)
+        Assert.assertEquals("ns/0", rootPath.withNamespace("ns").statesString)
+    }
+
+    @Test
+    fun `namespace is kept by derived paths`() {
+        val path = firstLvlPath.withNamespace("ns")
+
+        Assert.assertEquals("ns", path.append("d", "f", "g").namespace)
+        Assert.assertEquals("ns", path.appendDiv("x").namespace)
+        Assert.assertEquals("ns", path.append("d", "f", "g").parentState().namespace)
+        Assert.assertEquals("ns/0/a/s/d", path.append("d", "f", "g").pathToLastState)
+    }
+
+    @Test
+    fun `paths with different namespaces are not equal`() {
+        Assert.assertNotEquals(firstLvlPath, firstLvlPath.withNamespace("ns"))
+        Assert.assertEquals(firstLvlPath.withNamespace("ns"), firstLvlPath.withNamespace("ns"))
+        Assert.assertEquals(firstLvlPath.withNamespace("ns").hashCode(), firstLvlPath.withNamespace("ns").hashCode())
+    }
+
+    @Test
+    fun `path is not ancestor of path with another namespace`() {
+        Assert.assertFalse(firstLvlPath.withNamespace("ns").isAncestorOf(scndLvlPath))
+        Assert.assertFalse(firstLvlPath.isAncestorOf(scndLvlPath.withNamespace("ns")))
+        Assert.assertTrue(firstLvlPath.withNamespace("ns").isAncestorOf(scndLvlPath.withNamespace("ns")))
+    }
+
+    @Test
+    fun `lowestCommonAncestor of paths with different namespaces is null`() {
+        Assert.assertNull(DivStatePath.lowestCommonAncestor(scndLvlPath.withNamespace("ns"), thrdLvlPath))
+        Assert.assertEquals(
+            "ns",
+            DivStatePath.lowestCommonAncestor(scndLvlPath.withNamespace("ns"), thrdLvlPath.withNamespace("ns"))?.namespace,
+        )
+    }
+
+    @Test
+    fun `alphabeticalComparator orders paths without namespace first`() {
+        val sorted = listOf(firstLvlPath.withNamespace("b"), scndLvlPath, firstLvlPath.withNamespace("a"))
+            .sortedWith(DivStatePath.alphabeticalComparator())
+
+        Assert.assertEquals(listOf(null, "a", "b"), sorted.map { it.namespace })
+    }
 }

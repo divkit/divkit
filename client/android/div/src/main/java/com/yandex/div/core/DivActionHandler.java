@@ -13,7 +13,7 @@ import com.yandex.div.core.downloader.DivDownloadActionHandler;
 import com.yandex.div.core.expression.evaluation.DictEvaluator;
 import com.yandex.div.core.expression.evaluation.JSONObjectEvaluator;
 import com.yandex.div.core.expression.storedvalues.StoredValuesActionHandler;
-import com.yandex.div.core.state.DivStatePath;
+import com.yandex.div.core.state.DivStatePathResolver;
 import com.yandex.div.core.state.PathFormatException;
 import com.yandex.div.core.view2.Div2View;
 import com.yandex.div.core.view2.ViewLocator;
@@ -421,7 +421,7 @@ public class DivActionHandler {
             }
             boolean temporary = uri.getBooleanQueryParameter(PARAM_TEMPORARY, true);
             try {
-                view.switchToState(DivStatePath.parse(stateId), temporary);
+                view.switchToState(DivStatePathResolver.resolve(view, stateId), temporary);
             } catch (PathFormatException e) {
                 Assert.fail("Invalid format of " + stateId, e);
                 return false;

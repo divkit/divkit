@@ -130,6 +130,13 @@ class DivStatePathUtilsTest {
         )
         Assert.assertEquals(compactPathList(parent2), parent2)
     }
+
+    @Test
+    fun `compactPathList keeps paths with different namespaces`() {
+        val tooltipChild = scndLvlPath.withNamespace("ns")
+
+        Assert.assertEquals(listOf(firstLvlPath, tooltipChild), compactPathList(listOf(tooltipChild, firstLvlPath)))
+    }
 }
 
 private fun getStates(deepness: Int): List<Pair<String, String>> {

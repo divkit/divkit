@@ -3643,6 +3643,7 @@
       "title": "Switching state in the tooltip",
       "case_id": 207,
       "platforms": [
+        "android",
         "ios",
         "web"
       ],

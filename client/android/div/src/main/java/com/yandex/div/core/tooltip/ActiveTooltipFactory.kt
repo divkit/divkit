@@ -26,6 +26,7 @@ internal class ActiveTooltipFactory @Inject constructor(
         divView: Div2View,
         multiple: Boolean,
         scopeId: String?,
+        onDataCreated: (TooltipData) -> Unit,
         onFinished: (ActiveTooltipComponent) -> Unit,
     ): ActiveTooltipComponent? {
         val anchorBlock = anchor.divBlock ?: return null
@@ -41,6 +42,7 @@ internal class ActiveTooltipFactory @Inject constructor(
             anchorBlock = anchorBlock,
             divView = divView,
         )
+        onDataCreated(data)
         return ActiveTooltipComponent(
             data = data,
             tooltipRestrictor = tooltipRestrictor,

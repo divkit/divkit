@@ -35,6 +35,10 @@ internal class DivStateManager @Inject constructor(
         StateVariableCollector(variables).collectStateVariables(data, resolver)
     }
 
+    fun collectStateVariables(block: DivBlock) {
+        StateVariableCollector(variables).collectStateVariables(block)
+    }
+
     val state: DivViewState?
         get() {
             return _state
@@ -75,8 +79,8 @@ internal class DivStateManager @Inject constructor(
         variables[path]?.setValue(stateId)
     }
 
-    fun bindVariable(divStatePath: DivStatePath, variableUpdater: VariableUpdater) {
-        variables[divStatePath.statePath]?.variableUpdater = WeakReference(variableUpdater)
+    fun bindVariable(block: DivBlock.State, variableUpdater: VariableUpdater) {
+        variables[block.path.statePath(block.divValue)]?.variableUpdater = WeakReference(variableUpdater)
     }
 
     fun reset() {
@@ -102,12 +106,14 @@ private class StateVariableCollector(
 
     fun collectStateVariables(data: DivData, resolver: ExpressionResolver) = visit(data, resolver)
 
+    fun collectStateVariables(block: DivBlock) = visit(block)
+
     override fun defaultVisit(divBlock: DivBlock) = Unit
 
     override fun visitState(block: DivBlock.State) {
-        val variableName = block.divValue.stateIdVariable ?: return
-        val variable = block.expressionResolver.getVariable(variableName) ?: return
-        variables.getOrPut(block.path.statePath) { StateVariableHolder(variable) }
+        block.divValue.stateIdVariable?.let { block.expressionResolver.getVariable(it) }?.let {
+            variables.getOrPut(block.path.statePath(block.divValue)) { StateVariableHolder(it) }
+        }
         super.visitState(block)
     }
 }

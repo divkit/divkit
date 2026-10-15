@@ -15,6 +15,7 @@ internal class BulkActionHandler @Inject constructor(private val divView: Div2Vi
     private var pendingState: DivData.State? = null
     private var isPendingStateTemporary: Boolean = true
     private val pendingPaths = mutableListOf<DivStatePath>()
+    private val pendingTooltipPaths = mutableListOf<DivStatePath>()
 
     fun bulkActions(function: () -> Unit = {}) {
         bulkModeDepth++
@@ -33,13 +34,17 @@ internal class BulkActionHandler @Inject constructor(private val divView: Div2Vi
         paths: List<DivStatePath>,
         temporary: Boolean,
     ) {
-        if (pendingState != null && state != pendingState) {
-            reset()
-        }
+        val (tooltipPaths, cardPaths) = paths.partition { it.namespace != null }
+        if (cardPaths.isNotEmpty() || paths.isEmpty()) {
+            if (pendingState != null && state != pendingState) {
+                reset()
+            }
 
-        pendingState = state
-        isPendingStateTemporary = isPendingStateTemporary && temporary
-        pendingPaths += paths
+            pendingState = state
+            isPendingStateTemporary = isPendingStateTemporary && temporary
+            pendingPaths += cardPaths
+        }
+        pendingTooltipPaths += tooltipPaths
         paths.forEach { path: DivStatePath ->
             divView.dataComponent.stateManager.updateStates(path, temporary)
         }
@@ -50,6 +55,11 @@ internal class BulkActionHandler @Inject constructor(private val divView: Div2Vi
     }
 
     private fun runBulkActions() {
+        if (pendingTooltipPaths.isNotEmpty()) {
+            val tooltipPaths = pendingTooltipPaths.immutableCopy()
+            pendingTooltipPaths.clear()
+            divView.div2Component.tooltipController.switchStates(divView, tooltipPaths)
+        }
         val newState = pendingState ?: return
         divView.switchState(newState)
         reset()

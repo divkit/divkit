@@ -357,7 +357,7 @@ internal class DivStateBinder @Inject constructor(
                 }
 
                 override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
-                    divView.dataComponent.stateManager.bindVariable(divBlock.path, valueUpdater)
+                    divView.dataComponent.stateManager.bindVariable(divBlock, valueUpdater)
                 }
             },
         )

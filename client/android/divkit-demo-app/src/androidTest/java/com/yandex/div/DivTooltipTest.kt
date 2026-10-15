@@ -45,6 +45,35 @@ class DivTooltipTest {
     }
 
     @Test
+    fun tooltipAndCardStatesAreSwitchedIndependently() {
+        tooltipDiv {
+            activityRule.buildStatesContainer()
+            showStatesTooltip()
+
+            clickInTooltip("Set tooltip state 2")
+            assert {
+                tooltipShows("Tooltip state 2")
+                tooltipDoesNotShow("Tooltip state 1")
+                cardShows("Root state 1")
+            }
+
+            clickInTooltip("Set tooltip state 1")
+            assert {
+                tooltipShows("Tooltip state 1")
+                tooltipDoesNotShow("Tooltip state 2")
+                cardShows("Root state 1")
+            }
+
+            clickInTooltip("Set root state 2")
+            assert {
+                cardShows("Root state 2")
+                tooltipShows("Tooltip state 1")
+                tooltipDoesNotShow("Tooltip state 2")
+            }
+        }
+    }
+
+    @Test
     fun tooltipActionsAreHandled() {
         tooltipDiv {
             activityRule.buildContainer()

@@ -103,6 +103,12 @@ internal class ActiveTooltipComponent(
         return view.findViewWithTag(id)
     }
 
+    val tooltipView: View?
+        get() = view.tooltipView
+
+    val substrateView: View?
+        get() = view.substrateView
+
     private fun canShowTooltip(hasFailures: Boolean, multiple: Boolean): Boolean {
         if (hasFailures || !data.anchor.isAttachedToWindow) {
             return false

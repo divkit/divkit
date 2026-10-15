@@ -174,7 +174,7 @@ internal object DivPathUtils {
 
     fun Div.getId() = value().run { if (this is DivState) getId() else id }
 
-    val DivStatePath.statePath get() = "$statesString/$lastDivId"
+    fun DivStatePath.statePath(div: DivState) = "$statesString/${div.getId()}"
 
     internal fun DivStatePath.Companion.fromState(state: DivData.State): DivStatePath =
         fromRootDiv(state.stateId, state.div)

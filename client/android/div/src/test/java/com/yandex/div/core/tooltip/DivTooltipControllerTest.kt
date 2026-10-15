@@ -3,24 +3,34 @@ package com.yandex.div.core.tooltip
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.FrameLayout
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.R
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.dagger.DivDataComponent
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.local.RuntimeStore
+import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.state.PathFormatException
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
+import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.Div
+import com.yandex.div2.DivContainer
+import com.yandex.div2.DivState
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTooltip
 import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -67,11 +77,16 @@ class DivTooltipControllerTest {
     private val runtimeStore = mock<RuntimeStore> {
         on { getOrCreateRuntime(any(), any(), any()) } doReturn ExpressionsRuntime(mock())
     }
+    private val stateManager = mock<DivStateManager>()
+    private val dataComponent = mock<DivDataComponent> {
+        on { stateManager } doReturn stateManager
+    }
     private val divView = mock<Div2View> {
         on { getChildAt(0) } doReturn anchor
         on { childCount } doReturn 1
         on { runtimeStore } doReturn runtimeStore
         on { rootView } doReturn rootView
+        on { dataComponent } doReturn dataComponent
     }
     private val shownCallback = mock<DivTooltipRestrictor.DivTooltipShownCallback>()
     private val tooltipRestrictor = mock<DivTooltipRestrictor> {
@@ -88,10 +103,17 @@ class DivTooltipControllerTest {
     private val touchOutsideCallback = argumentCaptor<() -> Unit>()
     private var completeViewShowImmediately = true
     private var completeViewDismissImmediately = true
+    private var tooltipContentView: View? = null
+    private var substrateContentView: View? = null
+    private var onViewCreate: () -> Unit = {}
     private val viewFactory = mock<DivTooltipViewFactory> {
         on { create(any(), touchOutsideCallback.capture(), dismissedCallback.capture()) } doAnswer {
             val onDismissed = dismissedCallback.lastValue
-            val view = mock<DivTooltipView>()
+            onViewCreate()
+            val view = mock<DivTooltipView> {
+                on { tooltipView } doReturn tooltipContentView
+                on { substrateView } doReturn substrateContentView
+            }
             doAnswer { showInvocation ->
                 val onShown = showInvocation.getArgument<() -> Unit>(0)
                 shownCallbacks += onShown
@@ -108,12 +130,32 @@ class DivTooltipControllerTest {
             view
         }
     }
+    private val divBinder = mock<DivBinder>()
+    private val stateDiv = Div.State(
+        DivState(
+            id = "state",
+            states = listOf(DivState.State(stateId = "first"), DivState.State(stateId = "second")),
+        )
+    )
+    private val stateContainer = Div.Container(DivContainer(items = listOf(stateDiv)))
+    private val nestedStateDiv = Div.State(
+        DivState(
+            id = "outer",
+            states = listOf(
+                DivState.State(stateId = "s1", div = div),
+                DivState.State(stateId = "s2", div = stateContainer),
+            ),
+        )
+    )
+    private val tooltipStatePath = stateLayoutPath("tooltip_id")
+
     private val underTest = DivTooltipController(
         activeTooltipFactory = ActiveTooltipFactory(
             tooltipRestrictor = tooltipRestrictor,
             divPreloader = divPreloader,
             viewFactory = viewFactory,
         ),
+        divBinder = { divBinder },
     )
 
     @AfterTest
@@ -581,6 +623,309 @@ class DivTooltipControllerTest {
         assertSame(divView, underTest.captureCurrentTooltips().single().divView)
     }
 
+    @Test
+    fun `state variables of tooltip content are collected`() {
+        showTooltip()
+
+        verify(stateManager).collectStateVariables(underTest.captureCurrentTooltips().single().tooltipBlock)
+    }
+
+    @Test
+    fun `state variables of substrate content are collected`() {
+        showTooltip(substrateDiv = stateContainer)
+
+        verify(stateManager).collectStateVariables(underTest.captureCurrentTooltips().single().substrateBlock!!)
+    }
+
+    @Test
+    fun `tooltip state path rebinds matching state layout`() {
+        val stateLayout = stateLayout(tooltipStatePath)
+        tooltipContentView = frameWith(stateLayout)
+        showTooltip()
+        val path = tooltipStatePath.append("state", "second", "second")
+
+        val handled = underTest.switchStates(divView, listOf(path))
+
+        verify(divBinder).bind(stateLayout, stateLayout.divBlock!!, divView)
+        verify(divBinder).attachIndicators(divView)
+        assertEquals(listOf(path), handled)
+    }
+
+    @Test
+    fun `substrate state path rebinds matching state layout`() {
+        val stateLayout = stateLayout(stateLayoutPath("tooltip_id", prefix = "tooltip_substrate"))
+        substrateContentView = frameWith(stateLayout)
+        showTooltip(substrateDiv = stateContainer)
+        val path = stateLayoutPath("tooltip_id", prefix = "tooltip_substrate").append("state", "second", "second")
+
+        val handled = underTest.switchStates(divView, listOf(path))
+
+        verify(divBinder).bind(stateLayout, stateLayout.divBlock!!, divView)
+        assertEquals(listOf(path), handled)
+    }
+
+    @Test
+    fun `tooltip state path rebinds tooltip root when layout is not found`() {
+        val contentView = FrameLayout(testContextThemeWrapper())
+        tooltipContentView = contentView
+        showTooltip()
+
+        underTest.switchStates(divView, listOf(tooltipStatePath.append("state", "second", "second")))
+
+        verify(divBinder).bind(contentView, underTest.captureCurrentTooltips().single().tooltipBlock, divView)
+    }
+
+    @Test
+    fun `card state path with tooltip-like ids is not handled by tooltip`() {
+        showTooltip(div = stateContainer)
+
+        val handled = underTest.switchStates(
+            divView,
+            listOf(
+                DivStatePath.parse("0/tooltip#tooltip_id/global/state/second"),
+                DivStatePath.parse("0/tooltip#10#tooltip_id/0/state/second"),
+            ),
+        )
+
+        verify(divBinder, never()).bind(any(), any(), any())
+        assertTrue(handled.isEmpty())
+    }
+
+    @Test
+    fun `card state path is not handled by tooltip`() {
+        showTooltip()
+
+        val handled = underTest.switchStates(divView, listOf(DivStatePath.parse("0/state/second")))
+
+        verify(divBinder, never()).bind(any(), any(), any())
+        assertTrue(handled.isEmpty())
+    }
+
+    @Test
+    fun `state paths of another div view are ignored`() {
+        showTooltip()
+
+        val handled = underTest.switchStates(
+            mock(),
+            listOf(tooltipStatePath.append("state", "second", "second")),
+        )
+
+        verify(divBinder, never()).bind(any(), any(), any())
+        assertTrue(handled.isEmpty())
+    }
+
+    @Test
+    fun `relative state path is resolved inside shown tooltip`() {
+        showTooltip(div = stateContainer)
+
+        assertResolved("tooltip#10#tooltip_id/0/state/second", "state/second")
+    }
+
+    @Test
+    fun `relative state path is resolved when tooltip root is state`() {
+        showTooltip(div = stateDiv)
+
+        assertResolved("tooltip#10#tooltip_id/0/state/second", "state/second")
+    }
+
+    @Test
+    fun `relative nested state path is resolved inside inactive state`() {
+        showTooltip(div = nestedStateDiv)
+
+        assertResolved("tooltip#10#tooltip_id/0/outer/s2/state/second", "outer/s2/state/second")
+    }
+
+    @Test
+    fun `relative nested state path with wrong parent state throws`() {
+        showTooltip(div = nestedStateDiv)
+
+        assertFailsWith<PathFormatException> { underTest.resolveStatePath(divView, "outer/s1/state/second") }
+    }
+
+    @Test
+    fun `relative state path is resolved inside substrate`() {
+        showTooltip(substrateDiv = stateContainer)
+
+        assertResolved("tooltip_substrate#10#tooltip_id/0/state/second", "state/second")
+    }
+
+    @Test
+    fun `relative state path is resolved inside scoped tooltip`() {
+        prepareScopedTooltips(div = stateContainer)
+        underTest.showTooltip("tooltip_id", divView, scopeId = "scope_a")
+        preloadCallback.lastValue.finish(false)
+
+        assertResolved("tooltip#10#tooltip_id#7#scope_a/0/state/second", "state/second")
+    }
+
+    @Test
+    fun `relative state path without matching tooltip throws`() {
+        showTooltip()
+
+        assertFailsWith<PathFormatException> { underTest.resolveStatePath(divView, "state/second") }
+    }
+
+    @Test
+    fun `relative state path found twice in one tooltip throws`() {
+        showTooltip(div = Div.Container(DivContainer(items = listOf(stateDiv, stateDiv))))
+
+        assertFailsWith<PathFormatException> { underTest.resolveStatePath(divView, "state/second") }
+    }
+
+    @Test
+    fun `relative state path found in two tooltips throws`() {
+        showTooltips("first_tooltip", "second_tooltip")
+
+        assertFailsWith<PathFormatException> { underTest.resolveStatePath(divView, "state/second") }
+    }
+
+    @Test
+    fun `relative state path is resolved inside tooltip with slash in id`() {
+        showTooltips("broken/id")
+
+        assertResolved("tooltip#9#broken/id/0/state/second", "state/second")
+    }
+
+    @Test
+    fun `relative state path with odd segments throws`() {
+        showTooltip(div = stateContainer)
+
+        assertFailsWith<PathFormatException> { underTest.resolveStatePath(divView, "state") }
+    }
+
+    @Test
+    fun `resolved relative state path rebinds matching state layout`() {
+        val stateLayout = stateLayout(tooltipStatePath)
+        tooltipContentView = frameWith(stateLayout)
+        showTooltip(div = stateContainer)
+
+        underTest.switchStates(divView, listOf(underTest.resolveStatePath(divView, "state/second")))
+
+        verify(divBinder).bind(stateLayout, stateLayout.divBlock!!, divView)
+    }
+
+    @Test
+    fun `resolved relative state path rebinds state layout inside tooltip with slash in id`() {
+        val stateLayout = stateLayout(stateLayoutPath("broken/id"))
+        tooltipContentView = frameWith(stateLayout)
+        showTooltips("broken/id")
+
+        underTest.switchStates(divView, listOf(underTest.resolveStatePath(divView, "state/second")))
+
+        verify(divBinder).bind(stateLayout, stateLayout.divBlock!!, divView)
+    }
+
+    @Test
+    fun `relative state path is resolved while tooltip content is bound`() {
+        var resolved: DivStatePath? = null
+        onViewCreate = { resolved = underTest.resolveStatePath(divView, "state/second") }
+
+        showTooltip(div = stateContainer)
+
+        assertEquals("tooltip#10#tooltip_id/0/state/second", resolved?.statesString)
+    }
+
+    @Test
+    fun `state path switched while tooltip content is bound is applied after build`() {
+        val stateLayout = stateLayout(tooltipStatePath)
+        tooltipContentView = frameWith(stateLayout)
+        val path = tooltipStatePath.append("state", "second", "second")
+        var handled = emptyList<DivStatePath>()
+        onViewCreate = { handled = underTest.switchStates(divView, listOf(path)) }
+
+        showTooltip(div = stateContainer)
+
+        assertEquals(listOf(path), handled)
+        verify(divBinder).bind(stateLayout, stateLayout.divBlock!!, divView)
+    }
+
+    @Test
+    fun `tooltip cancelled while content is bound is not shown`() {
+        var isCancelled = false
+        onViewCreate = { isCancelled = underTest.cancelAllTooltips() }
+
+        showTooltip(completePreload = false)
+
+        assertTrue(isCancelled)
+        assertTooltipCancelledWhileBound()
+    }
+
+    @Test
+    fun `tooltip hidden while content is bound is not shown`() {
+        onViewCreate = { underTest.hideTooltip("tooltip_id") }
+
+        showTooltip(completePreload = false)
+
+        assertTooltipCancelledWhileBound()
+    }
+
+    @Test
+    fun `tooltip of cancelled div view while content is bound is not shown`() {
+        onViewCreate = { underTest.cancelTooltips(divView) }
+
+        showTooltip(completePreload = false)
+
+        assertTooltipCancelledWhileBound()
+    }
+
+    @Test
+    fun `tooltip cleared while content is bound is not shown`() {
+        onViewCreate = { underTest.clear() }
+
+        showTooltip(completePreload = false)
+
+        assertTooltipCancelledWhileBound()
+    }
+
+    @Test
+    fun `cancelled tooltip is not used for relative state paths while its content is bound`() {
+        var result: Result<DivStatePath>? = null
+        onViewCreate = {
+            underTest.hideTooltip("tooltip_id")
+            result = runCatching { underTest.resolveStatePath(divView, "state/second") }
+        }
+
+        showTooltip(div = stateContainer, completePreload = false)
+
+        assertTrue(result?.exceptionOrNull() is PathFormatException)
+    }
+
+    @Test
+    fun `cancelled tooltip does not claim state paths while its content is bound`() {
+        var handled: List<DivStatePath>? = null
+        onViewCreate = {
+            underTest.hideTooltip("tooltip_id")
+            handled = underTest.switchStates(divView, listOf(tooltipStatePath.append("state", "second", "second")))
+        }
+
+        showTooltip(div = stateContainer, completePreload = false)
+
+        assertEquals(emptyList(), handled)
+    }
+
+    @Test
+    fun `tooltip shown again while its content is bound is not duplicated`() {
+        onViewCreate = {
+            onViewCreate = {}
+            underTest.showTooltip("tooltip_id", divView)
+        }
+
+        showTooltip()
+
+        assertEquals(1, createdViews.size)
+        assertEquals(1, underTest.captureCurrentTooltips().size)
+    }
+
+    @Test
+    fun `tooltip of another div view cancelled while content is bound is shown`() {
+        onViewCreate = { underTest.cancelTooltips(mock()) }
+
+        showTooltip()
+
+        verify(createdViews.single()).show(any())
+        assertEquals(1, underTest.captureCurrentTooltips().size)
+    }
+
     private fun showScopedTooltips() {
         prepareScopedTooltips()
         underTest.showTooltip("tooltip_id", divView, scopeId = "scope_a")
@@ -592,11 +937,22 @@ class DivTooltipControllerTest {
     private fun showTooltip(
         duration: Long = 0L,
         completePreload: Boolean = true,
+        div: Div = this.div,
+        substrateDiv: Div? = null,
     ) {
         divTooltips.clear()
-        divTooltips += createDivTooltip(duration = duration)
+        divTooltips += createDivTooltip(duration = duration, div = div, substrateDiv = substrateDiv)
         underTest.showTooltip("tooltip_id", divView)
         if (completePreload) {
+            preloadCallback.lastValue.finish(false)
+        }
+    }
+
+    private fun showTooltips(vararg ids: String) {
+        divTooltips.clear()
+        ids.forEach { divTooltips += createDivTooltip(id = it, div = stateContainer) }
+        ids.forEach {
+            underTest.showTooltip(it, divView, multiple = true)
             preloadCallback.lastValue.finish(false)
         }
     }
@@ -604,18 +960,47 @@ class DivTooltipControllerTest {
     private fun createDivTooltip(
         id: String = "tooltip_id",
         duration: Long = 0L,
+        div: Div = this.div,
+        substrateDiv: Div? = null,
     ): DivTooltip {
         return DivTooltip(
             div = div,
             id = id,
             duration = duration.asExpression(),
             position = DivTooltip.Position.RIGHT.asExpression(),
+            substrateDiv = substrateDiv,
         )
     }
 
-    private fun prepareScopedTooltips(): ScopedAnchors {
-        val firstAnchor = createScopedAnchor()
-        val secondAnchor = createScopedAnchor()
+    private fun assertResolved(expected: String, relativePath: String) =
+        assertEquals(expected, underTest.resolveStatePath(divView, relativePath).statesString)
+
+    private fun assertTooltipCancelledWhileBound() {
+        verify(createdViews.single()).dismissImmediately()
+        verify(createdViews.single(), never()).show(any())
+        verify(divPreloader, never()).preload(any<Div>(), any(), any())
+        assertTrue(underTest.captureCurrentTooltips().isEmpty())
+    }
+
+    private fun stateLayoutPath(
+        tooltipId: String,
+        scopeId: String? = null,
+        prefix: String = "tooltip",
+    ) = DivStatePath.fromState(0)
+        .withNamespace("$prefix#${tooltipId.length}#$tooltipId" + scopeId?.let { "#${it.length}#$it" }.orEmpty())
+        .appendDiv("$prefix#$tooltipId")
+        .appendDiv("state")
+
+    private fun stateLayout(path: DivStatePath) = DivStateLayout(testContextThemeWrapper()).apply {
+        currentStatePath = path.append("state", "first", "first")
+        divBlock = DivBlock.State(stateDiv, ExpressionResolver.EMPTY, path)
+    }
+
+    private fun frameWith(view: View) = FrameLayout(testContextThemeWrapper()).apply { addView(view) }
+
+    private fun prepareScopedTooltips(div: Div = this.div): ScopedAnchors {
+        val firstAnchor = createScopedAnchor(div)
+        val secondAnchor = createScopedAnchor(div)
         val firstScope = mockScope("scope_a", firstAnchor)
         val secondScope = mockScope("scope_b", secondAnchor)
         whenever(divView.childCount).doReturn(2)
@@ -627,12 +1012,12 @@ class DivTooltipControllerTest {
         )
     }
 
-    private fun createScopedAnchor(): DivLineHeightTextView {
+    private fun createScopedAnchor(div: Div = this.div): DivLineHeightTextView {
         val observer = mock<ViewTreeObserver> {
             on { isAlive } doReturn true
         }
         return mock {
-            on { getTag(R.id.div_tooltips_tag) } doReturn listOf(createDivTooltip())
+            on { getTag(R.id.div_tooltips_tag) } doReturn listOf(createDivTooltip(div = div))
             on { isAttachedToWindow } doReturn true
             on { isLayoutRequested } doReturn false
             on { width } doReturn 300

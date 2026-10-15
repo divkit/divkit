@@ -13,12 +13,29 @@ import kotlin.math.min
  * **Note:** after integer top_level_state_id goes pairs of ```id->state_id``` of nested DivState's
  * ignoring other Divs.
  */
+@Suppress("TooManyFunctions")
 public data class DivStatePath @InternalApi constructor(
     public val topLevelStateId: Long,
     private val states: List<Pair<String, String>> = listOf(),
     internal val path: List<String> = listOf(topLevelStateId.toString()),
     private val containsOnlyStates: Boolean = false,
 ) {
+
+    private var _namespace: String? = null
+
+    @InternalApi
+    public val namespace: String? get() = _namespace
+
+    @InternalApi
+    public constructor(
+        namespace: String?,
+        topLevelStateId: Long,
+        states: List<Pair<String, String>>,
+        path: List<String>,
+        containsOnlyStates: Boolean = false,
+    ) : this(topLevelStateId, states, path, containsOnlyStates) {
+        _namespace = namespace
+    }
 
     public val lastStateId: String?
         get() = if (states.isEmpty()) {
@@ -31,7 +48,7 @@ public data class DivStatePath @InternalApi constructor(
         get() = if (states.isEmpty()) {
             null
         } else {
-            DivStatePath(topLevelStateId, states.subList(0, states.size - 1), path)
+            derive(states.subList(0, states.size - 1), path)
                 .statesString + "/" + states.last().divId
         }
 
@@ -43,14 +60,44 @@ public data class DivStatePath @InternalApi constructor(
 
     @InternalApi
     public val statesString: String by lazy {
+        val prefix = namespace?.let { "$it/" }.orEmpty()
         if (states.isNotEmpty()) {
-            "$topLevelStateId/" + states.flatMap { listOf(it.divId, it.stateId) }.joinToString("/")
+            "$prefix$topLevelStateId/" + states.flatMap { listOf(it.divId, it.stateId) }.joinToString("/")
         } else {
-            "$topLevelStateId"
+            "$prefix$topLevelStateId"
         }
     }
 
     override fun toString(): String = fullPath
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is DivStatePath) return false
+        return topLevelStateId == other.topLevelStateId &&
+            states == other.states &&
+            path == other.path &&
+            containsOnlyStates == other.containsOnlyStates &&
+            namespace == other.namespace
+    }
+
+    override fun hashCode(): Int {
+        var result = topLevelStateId.hashCode()
+        result = 31 * result + states.hashCode()
+        result = 31 * result + path.hashCode()
+        result = 31 * result + containsOnlyStates.hashCode()
+        result = 31 * result + namespace.hashCode()
+        return result
+    }
+
+    @InternalApi
+    public fun withNamespace(namespace: String): DivStatePath =
+        DivStatePath(namespace, topLevelStateId, states, path, containsOnlyStates)
+
+    private fun derive(
+        states: List<Pair<String, String>>,
+        path: List<String>,
+        containsOnlyStates: Boolean = false,
+    ): DivStatePath = DivStatePath(namespace, topLevelStateId, states, path, containsOnlyStates)
 
     @Deprecated("Will be removed from public API in the near future", ReplaceWith("append(divId, null, stateId)"))
     public fun append(divId: String, stateId: String): DivStatePath = append(divId, stateId, stateId)
@@ -61,7 +108,7 @@ public data class DivStatePath @InternalApi constructor(
             addAll(states)
             add(divId to stateId)
         }
-        return DivStatePath(topLevelStateId, newStates, createFullPath(stateDivId))
+        return derive(newStates, createFullPath(stateDivId))
     }
 
     @InternalApi
@@ -73,8 +120,7 @@ public data class DivStatePath @InternalApi constructor(
         }
     }
 
-    public fun appendDiv(divId: String): DivStatePath =
-        DivStatePath(topLevelStateId, states, createFullPath(divId))
+    public fun appendDiv(divId: String): DivStatePath = derive(states, createFullPath(divId))
 
     private fun createFullPath(divId: String): List<String> {
         return ArrayList<String>(path.size + 1).apply {
@@ -100,13 +146,13 @@ public data class DivStatePath @InternalApi constructor(
             ?: path.indexOfLast { it.substringBeforeLast('#') == lastState.divId }.takeIf { it != -1 }
             ?: 0.takeIf { path.first().removePrefix("$topLevelStateId:") == lastState.divId }
             ?: return this
-        return DivStatePath(topLevelStateId, list, path.subList(0, lastStateIndex + 1), containsOnlyStates)
+        return derive(list, path.subList(0, lastStateIndex + 1), containsOnlyStates)
     }
 
     public fun isRootPath(): Boolean = states.isEmpty()
 
     public fun isAncestorOf(other: DivStatePath): Boolean {
-        if (topLevelStateId != other.topLevelStateId) {
+        if (topLevelStateId != other.topLevelStateId || namespace != other.namespace) {
             return false
         }
 
@@ -158,12 +204,11 @@ public data class DivStatePath @InternalApi constructor(
          */
         @InternalApi
         public fun lowestCommonAncestor(somePath: DivStatePath, otherPath: DivStatePath): DivStatePath? {
-            if (somePath.topLevelStateId != otherPath.topLevelStateId) {
+            if (somePath.topLevelStateId != otherPath.topLevelStateId || somePath.namespace != otherPath.namespace) {
                 return null
             }
             val sharedPairs = findSharedPairs(somePath, otherPath)
-            return DivStatePath(
-                somePath.topLevelStateId,
+            return somePath.derive(
                 sharedPairs,
                 somePath.path.extractStates(sharedPairs, true),
                 somePath.containsOnlyStates || otherPath.containsOnlyStates
@@ -172,25 +217,21 @@ public data class DivStatePath @InternalApi constructor(
 
         @InternalApi
         public fun alphabeticalComparator(): Comparator<DivStatePath> {
-            return Comparator { lhs, rhs ->
-                if (lhs.topLevelStateId != rhs.topLevelStateId) {
-                    return@Comparator (lhs.topLevelStateId - rhs.topLevelStateId).toInt()
-                }
-
+            return compareBy<DivStatePath>({ it.namespace }, { it.topLevelStateId }).thenComparator { lhs, rhs ->
                 val minSize = min(lhs.states.size, rhs.states.size)
                 for (i in 0 until minSize) {
                     val lhsPair = lhs.states[i]
                     val rhsPair = rhs.states[i]
                     val divIdComparison = lhsPair.divId.compareTo(rhsPair.divId)
                     if (divIdComparison != 0) {
-                        return@Comparator divIdComparison
+                        return@thenComparator divIdComparison
                     }
                     val stateIdComparison = lhsPair.stateId.compareTo(rhsPair.stateId)
                     if (stateIdComparison != 0) {
-                        return@Comparator stateIdComparison
+                        return@thenComparator stateIdComparison
                     }
                 }
-                return@Comparator lhs.states.size - rhs.states.size
+                lhs.states.size - rhs.states.size
             }
         }
 

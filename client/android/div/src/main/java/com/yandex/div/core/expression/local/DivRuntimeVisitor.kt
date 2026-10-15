@@ -3,6 +3,7 @@ package com.yandex.div.core.expression.local
 import com.yandex.div.core.dagger.DivDataScope
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.state.DivPathUtils.append
+import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivPathUtils.getIds
 import com.yandex.div.core.state.DivPathUtils.statePath
 import com.yandex.div.core.state.DivStateManager
@@ -137,10 +138,10 @@ internal class DivRuntimeVisitor @Inject constructor(
         path: DivStatePath,
         runtime: ExpressionsRuntime,
     ) {
-        val activeStateId = stateManager.getState(div, runtime.expressionResolver, path.statePath)
+        val activeStateId = stateManager.getState(div, runtime.expressionResolver, path.statePath(div))
         div.states.forEach {
             val childDiv = it.div ?: return@forEach
-            val childPath = path.append(path.lastDivId, it, it.stateId)
+            val childPath = path.append(div.getId(), it, it.stateId)
             visitChild(childDiv, divView, childPath, runtime, it.stateId == activeStateId)
         }
     }
