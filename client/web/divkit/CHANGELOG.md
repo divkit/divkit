@@ -1,3 +1,8 @@
+## 33.8.0 (October 19, 2026)
+
+* Added single-line `truncate_policy: word` support to the Web text renderer.
+
+
 ## 33.7.0 (October 12, 2026)
 
 * Added support for animated linear and radial text gradients.
