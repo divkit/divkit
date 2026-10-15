@@ -232,6 +232,7 @@ private val selectedFiles = setOf(
     "div-extension/is-enabled.json",
     "div-gallery/specific-properties.json",
     "div-grid/grid_layout.json",
+    "div-indicator/shapes.json",
     "div-input/currency_input_mask.json",
     "div-input/fixed_length_input_mask.json",
     "div-input/focus/blurred-and-focused-background-and-border.json",
