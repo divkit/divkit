@@ -6,8 +6,6 @@ import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
-import com.yandex.div2.Div
-import com.yandex.div2.DivState
 import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -21,15 +19,13 @@ class DivStateManagerTest {
     private val resolver = mock<ExpressionResolver> {
         on { getVariable("state_var") } doReturn variable
     }
-    private val div = Div.State(
-        state(
-            id = "state",
-            stateIdVariable = "state_var",
-            states = listOf(
-                DivState.State(stateId = "first", div = text(text = "first")),
-                DivState.State(stateId = "second", div = text(text = "second")),
-            ),
-        )
+    private val div = state(
+        id = "state",
+        stateIdVariable = "state_var",
+        states = listOf(
+            state(stateId = "first", div = text(text = "first")),
+            state(stateId = "second", div = text(text = "second")),
+        ),
     )
     private val tooltipPath = DivStatePath.fromState(0).withNamespace("tooltip#1#t").appendDiv("tooltip#t")
     private val path = tooltipPath.appendDiv("state")
@@ -61,7 +57,7 @@ class DivStateManagerTest {
 
     @Test
     fun `updateStates sets state_id_variable of state nested in state without variable`() {
-        val outer = Div.State(state(id = "outer", states = listOf(DivState.State(stateId = "s1", div = div))))
+        val outer = state(id = "outer", states = listOf(state(stateId = "s1", div = div)))
         val outerPath = tooltipPath.appendDiv("outer")
         underTest.collectStateVariables(DivBlock.State(outer, resolver, outerPath))
 

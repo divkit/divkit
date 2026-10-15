@@ -8,7 +8,6 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
-import com.yandex.div2.Div
 import com.yandex.div2.DivState
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -33,11 +32,10 @@ class DivRuntimeVisitorTest {
     private val divView = mock<Div2View> {
         on { runtimeStore } doReturn runtimeStore
     }
-    private val inner = Div.State(
-        state(id = "inner", states = listOf(DivState.State(stateId = "x", div = text(text = "x"))))
-    )
-    private val outer = Div.State(
-        state(id = "outer", states = listOf(DivState.State(stateId = "s1", div = container(items = listOf(inner)))))
+    private val inner = state(id = "inner", states = listOf(state(stateId = "x", div = text(text = "x"))))
+    private val outer = state(
+        id = "outer",
+        states = listOf(state(stateId = "s1", div = container(items = listOf(inner)))),
     )
 
     @Test
