@@ -30,6 +30,7 @@
 * Supported `interpolator`, `start_delay` in action animations in the Compose renderer.
 
 ### iOS Client
+* Fixed `show_tooltip` showing a tooltip with empty content, for example one whose `div` has `visibility: gone`: an invisible modal tooltip blocked taps on the whole screen. A tooltip with empty content and no `substrate_div` is now skipped silently.
 * Fixed `show_tooltip` with `scope_id` reporting the tooltip as not found in scope when the element declaring `tooltips` has no actions.
 * Fixed actions that address elements by id (`scope_id`, `focus_element` and others) failing with "… is ambiguous" when a card is modeled with `DivData.makeBlock` without `DivView` and the element changes its path between updates. `DivData.makeBlock(context:)` now replaces the ids registered by the previous model of the same card id and additional id, as `DivView` does, so cards shown at the same time need distinct card ids or additional ids.
 * Fixed the size of cards with `match_parent` dimensions measured with an unbounded parent size: such dimensions are now sized by the card content.
