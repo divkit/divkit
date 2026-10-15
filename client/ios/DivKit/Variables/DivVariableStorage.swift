@@ -37,6 +37,22 @@ public final class DivVariableStorage {
     (outerStorage?.allValues ?? [:]) + _values
   }
 
+  private func selectedValues(for variableNames: [DivVariableName]) -> DivVariables {
+    lock.withLock {
+      selectedValuesLocked(for: variableNames)
+    }
+  }
+
+  private func selectedValuesLocked(for variableNames: [DivVariableName]) -> DivVariables {
+    var values = outerStorage?.selectedValues(for: variableNames) ?? [:]
+    for variableName in variableNames {
+      if let value = _values[variableName] {
+        values[variableName] = value
+      }
+    }
+    return values
+  }
+
   /// Initializes a new instance of ``DivVariableStorage``.
   ///
   /// - Parameters:
@@ -138,7 +154,7 @@ public final class DivVariableStorage {
   ) {
     let changedVariables = lock.withLock {
       var changedVariables = Set<DivVariableName>()
-      let oldValues = _allValues
+      let oldValues = selectedValuesLocked(for: Array(variables.keys))
       _values = _values + variables
       if notifyObservers {
         for (name, value) in variables {

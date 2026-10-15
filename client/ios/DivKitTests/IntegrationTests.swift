@@ -182,14 +182,23 @@ private func waitForExpectedVariables(
 }
 
 private final class MockReporter: @unchecked Sendable, DivReporter {
-  private(set) var errorMessages = Set<String>()
+  private let lock = NSLock()
+  private var storedErrorMessages = Set<String>()
+
+  var errorMessages: Set<String> {
+    lock.withLock { storedErrorMessages }
+  }
 
   func reportError(cardId _: DivCardID, error: DivError) {
-    errorMessages.insert(error.message)
+    insertErrorMessage(error.message)
   }
 
   func insertLoggedErrorMessage(_ message: String) {
-    errorMessages.insert(message.removingDivErrorPathPrefix)
+    insertErrorMessage(message.removingDivErrorPathPrefix)
+  }
+
+  private func insertErrorMessage(_ message: String) {
+    lock.withLock { _ = storedErrorMessages.insert(message) }
   }
 }
 
