@@ -92,7 +92,8 @@ extension Equatable {
 }
 
 /// Supplies the size of a tooltip view that was created by a `TooltipViewFactory`, since the
-/// tooltip model carries no block for it. Returns nil while the size is not known yet.
+/// tooltip model carries no block for it. Returns nil while the size is not known yet. A tooltip
+/// whose content size is empty is not shown unless it has a substrate.
 public protocol TooltipContentSizeProviding {
   func tooltipContentSize(
     constrainedBy size: CGSize,

@@ -25,7 +25,8 @@ public protocol TooltipActionPerformer {
   /// displayed.
   ///
   /// The returned value resolves once the tooltip is on screen or the attempt is provably done
-  /// (no presenter, no matching anchor view, or a tooltip with the same id is already showing).
+  /// (no presenter, no matching anchor view, the content size is unavailable or empty while there
+  /// is no substrate, or a tooltip with the same id is already showing).
   /// The `duration`-based auto-hide, if any, runs independently and does not delay the result.
   ///
   /// A request made while the tooltip is being hidden waits for that and then starts anew; it
@@ -616,6 +617,14 @@ extension TooltipAnchorView {
       }
       tooltipView = view
       contentSize = size
+    }
+
+    // Empty content is a common way to suppress a tooltip, so it is skipped silently: without
+    // a substrate it is invisible, yet a modal container would still block the whole screen.
+    let isContentEmpty = contentSize.width <= 0 || contentSize.height <= 0
+    if isContentEmpty, tooltip.substrateViewFactory == nil {
+      (tooltipView as? TooltipContentClosing)?.tooltipDidClose()
+      return nil
     }
 
     let targetRect = window != nil ?
