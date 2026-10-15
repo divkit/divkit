@@ -1,7 +1,6 @@
 package com.yandex.div.compose.views.pager
 
 import androidx.compose.animation.core.Easing
-import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
@@ -20,6 +19,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.util.lerp
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.pager.snapOffset
 import com.yandex.div.compose.utils.toEasing
 import com.yandex.div2.DivPageTransformation
 import kotlin.math.abs
@@ -229,19 +229,6 @@ private fun interpolatePagePosition(
     val stride = (target.size.toFloat() + spacing).coerceAtLeast(1f)
     val edgeShift = target.offset - snapOffsets.getValue(target.index).snap
     return PageTransformationPosition(target.index, target.offset / stride, snapOffsets, edgeShift)
-}
-
-/** The scroll distance that brings [item] to its snap position, as LazyList's SnapLayoutInfoProvider computes it. */
-internal fun LazyListLayoutInfo.snapOffset(item: LazyListItemInfo, snapPosition: SnapPosition): Float {
-    val desiredOffset = snapPosition.position(
-        layoutSize = if (orientation == Orientation.Vertical) viewportSize.height else viewportSize.width,
-        itemSize = item.size,
-        beforeContentPadding = beforeContentPadding,
-        afterContentPadding = afterContentPadding,
-        itemIndex = item.index,
-        itemCount = totalItemsCount,
-    )
-    return item.offset - desiredOffset.toFloat()
 }
 
 /** Visible items plus the adjacent pages outside the viewport, when their sizes are known. */

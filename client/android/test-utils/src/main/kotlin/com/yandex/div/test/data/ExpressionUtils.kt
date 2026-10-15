@@ -11,6 +11,7 @@ import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.internal.parser.TYPE_HELPER_URI
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div2.DivPager
 import com.yandex.div2.DivVisibility
 import kotlin.test.fail
 
@@ -93,5 +94,16 @@ fun visibilityExpression(expression: String): Expression<DivVisibility> {
         validator = { true },
         logger = throwingErrorLogger,
         typeHelper = TypeHelper.from(default = DivVisibility.VISIBLE) { it is DivVisibility },
+    )
+}
+
+fun itemAlignmentExpression(expression: String): Expression<DivPager.ItemAlignment> {
+    return Expression.MutableExpression(
+        expressionKey = "test",
+        rawExpression = expression,
+        converter = DivPager.ItemAlignment::fromString,
+        validator = { true },
+        logger = throwingErrorLogger,
+        typeHelper = TypeHelper.from(default = DivPager.ItemAlignment.CENTER) { it is DivPager.ItemAlignment },
     )
 }

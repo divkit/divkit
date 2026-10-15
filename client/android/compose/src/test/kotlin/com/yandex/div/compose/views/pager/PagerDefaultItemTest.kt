@@ -10,14 +10,12 @@ import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
-import com.yandex.div.internal.parser.TypeHelper
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.itemAlignmentExpression
 import com.yandex.div.test.data.text
-import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div2.Div
 import com.yandex.div2.DivPageContentSize
 import com.yandex.div2.DivPager
@@ -107,17 +105,4 @@ class PagerDefaultItemTest {
             ),
         )
     }
-
-    private fun itemAlignmentExpression(
-        expression: String,
-    ): Expression<DivPager.ItemAlignment> = Expression.MutableExpression(
-        expressionKey = "test",
-        rawExpression = expression,
-        converter = DivPager.ItemAlignment::fromString,
-        validator = { true },
-        logger = throwingErrorLogger,
-        typeHelper = TypeHelper.from(default = DivPager.ItemAlignment.CENTER) {
-            it is DivPager.ItemAlignment
-        },
-    )
 }

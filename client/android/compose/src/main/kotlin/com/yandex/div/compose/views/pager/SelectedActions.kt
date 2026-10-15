@@ -8,11 +8,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.pager.PagerItemWindow
+import com.yandex.div.compose.pager.PagerLayoutSnapshot
+import com.yandex.div.compose.pager.mainAxisViewportSize
+import com.yandex.div.compose.pager.snapOffset
+import com.yandex.div.compose.pager.visibleItemSizes
 import com.yandex.div2.Div
 import kotlinx.coroutines.flow.filterNotNull
 import kotlin.math.abs
@@ -21,7 +27,10 @@ internal fun interface PagerSelectedActionsHandler {
     fun onSnapOffsetCalculated(offset: Float)
 }
 
-/** Remembers a snap target handler and dispatches queued selections when the list becomes idle. */
+/**
+ * Remembers a snap target handler and dispatches queued selections when the list becomes idle.
+ * A layout in which the visible pages resized keeps the selection.
+ */
 @Composable
 internal fun rememberPagerSelectedActionsHandler(
     items: List<Div>,
@@ -29,23 +38,28 @@ internal fun rememberPagerSelectedActionsHandler(
     listState: LazyListState,
     snapPosition: SnapPosition,
     itemWindow: PagerItemWindow,
+    viewportSize: Dp,
     enabled: Boolean,
 ): PagerSelectedActionsHandler {
     val viewContext = LocalDivViewContext.current
     val parentComponent = LocalComponent.current
     val isDragged = listState.interactionSource.collectIsDraggedAsState()
     val selection = remember(listState) { PageSelection() }
+    val viewportSizePx = with(LocalDensity.current) { viewportSize.roundToPx() }
 
-    LaunchedEffect(items, itemKeys, listState, snapPosition, itemWindow, viewContext, parentComponent, enabled) {
+    LaunchedEffect(
+        items, itemKeys, listState, snapPosition, itemWindow, viewContext, parentComponent, enabled, viewportSizePx
+    ) {
         if (!enabled) return@LaunchedEffect
 
+        var previous = PagerLayoutSnapshot(page = null, itemSizes = emptyList())
         snapshotFlow {
-            if (isDragged.value || listState.isScrollInProgress) {
-                null
-            } else {
-                listState.selectedPage(snapPosition, itemWindow, 0f)
-            }
-        }.filterNotNull().collect { page ->
+            listState.selectionSnapshot(snapPosition, itemWindow, viewportSizePx, isDragged.value)
+        }.filterNotNull().collect { layout ->
+            val isResize = layout.isResizeOf(previous)
+            previous = layout
+            val page = layout.page
+            if (page == null || isResize) return@collect
             selection.select(itemKeys[page], items[page])
             while (selection.pendingItems.isNotEmpty()) {
                 val item = selection.pendingItems.removeFirst().value()
@@ -73,6 +87,20 @@ internal fun rememberPagerSelectedActionsHandler(
     }
     return remember(listState) {
         PagerSelectedActionsHandler { snapOffset -> onSnapOffsetCalculated.value(snapOffset) }
+    }
+}
+
+private fun LazyListState.selectionSnapshot(
+    snapPosition: SnapPosition,
+    itemWindow: PagerItemWindow,
+    viewportSizePx: Int,
+    isDragged: Boolean,
+): PagerLayoutSnapshot? {
+    val info = layoutInfo
+    return when {
+        info.mainAxisViewportSize != viewportSizePx -> null
+        isDragged || isScrollInProgress -> PagerLayoutSnapshot(page = null, itemSizes = emptyList())
+        else -> PagerLayoutSnapshot(selectedPage(snapPosition, itemWindow, 0f), info.visibleItemSizes())
     }
 }
 

@@ -1,13 +1,16 @@
 package com.yandex.div.compose.pager
 
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.ui.unit.IntSize
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class DivPagerStateTest {
@@ -121,6 +124,41 @@ class DivPagerStateTest {
     }
 
     @Test
+    fun `start mode - item at the start padding has zero offset`() {
+        val state = pagerState(
+            snapPosition = SnapPosition.Start,
+            firstVisibleItemIndex = 1,
+            visibleItems = listOf(
+                item(index = 1, offset = -100, size = 100),
+                item(index = 2, offset = 0, size = 100),
+            ),
+            viewportStart = -60,
+            viewportEnd = 240,
+        )
+
+        assertEquals(2, state.currentPage)
+        assertEquals(0f, state.currentPageOffsetFraction, EPSILON)
+    }
+
+    @Test
+    fun `end mode - item at the end padding has zero offset`() {
+        val state = pagerState(
+            snapPosition = SnapPosition.End,
+            firstVisibleItemIndex = 2,
+            visibleItems = listOf(
+                item(index = 2, offset = 80, size = 100),
+                item(index = 3, offset = 180, size = 100),
+            ),
+            viewportStart = -60,
+            viewportEnd = 240,
+            afterContentPadding = 60,
+        )
+
+        assertEquals(2, state.currentPage)
+        assertEquals(0f, state.currentPageOffsetFraction, EPSILON)
+    }
+
+    @Test
     fun `zero-sized snapped item returns zero fraction without dividing by zero`() {
         val state = pagerState(
             snapPosition = SnapPosition.Start,
@@ -155,6 +193,27 @@ class DivPagerStateTest {
         assertEquals(4, state.currentPage)
     }
 
+    @Test
+    fun `layout snapshot - page visible in both layouts with a new size is a resize`() {
+        val previous = PagerLayoutSnapshot(page = 2, itemSizes = listOf(1 to 100, 2 to 100))
+
+        assertTrue(PagerLayoutSnapshot(page = 2, itemSizes = listOf(1 to 100, 2 to 160)).isResizeOf(previous))
+    }
+
+    @Test
+    fun `layout snapshot - other visible pages of the same size are not a resize`() {
+        val previous = PagerLayoutSnapshot(page = 2, itemSizes = listOf(1 to 100, 2 to 100))
+
+        assertFalse(PagerLayoutSnapshot(page = 3, itemSizes = listOf(2 to 100, 3 to 50)).isResizeOf(previous))
+    }
+
+    @Test
+    fun `layout snapshot - scrolling layout without sizes is not a resize`() {
+        val previous = PagerLayoutSnapshot(page = 2, itemSizes = listOf(1 to 100, 2 to 100))
+
+        assertFalse(PagerLayoutSnapshot(page = 2, itemSizes = emptyList()).isResizeOf(previous))
+    }
+
     private companion object {
         const val EPSILON = 1e-4f
         const val VIEWPORT_END = 100
@@ -165,14 +224,19 @@ class DivPagerStateTest {
             firstVisibleItemIndex: Int = 0,
             viewportStart: Int = 0,
             viewportEnd: Int = VIEWPORT_END,
+            afterContentPadding: Int = 0,
             infiniteScroll: Boolean = false,
             initialPage: Int = 0,
         ): DivPagerState {
-            val layoutInfo: LazyListLayoutInfo = mock {
-                on { this.visibleItemsInfo } doReturn visibleItems
-                on { this.viewportStartOffset } doReturn viewportStart
-                on { this.viewportEndOffset } doReturn viewportEnd
-                on { this.totalItemsCount } doReturn 5
+            val layoutInfo = object : LazyListLayoutInfo {
+                override val visibleItemsInfo = visibleItems
+                override val viewportStartOffset = viewportStart
+                override val viewportEndOffset = viewportEnd
+                override val totalItemsCount = 5
+                override val viewportSize = IntSize(viewportEnd - viewportStart, 0)
+                override val orientation = Orientation.Horizontal
+                override val beforeContentPadding = -viewportStart
+                override val afterContentPadding = afterContentPadding
             }
             val listState: LazyListState = mock {
                 on { this.layoutInfo } doReturn layoutInfo

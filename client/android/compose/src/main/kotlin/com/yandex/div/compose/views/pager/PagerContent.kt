@@ -23,23 +23,32 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.DivPagerStateStorage
+import com.yandex.div.compose.pager.PagerAlignment
 import com.yandex.div.compose.pager.PagerItemWindow
+import com.yandex.div.compose.pager.PagerLayoutSnapshot
 import com.yandex.div.compose.pager.PagerWindowState
+import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.pagerPosition
 import com.yandex.div.compose.pager.rememberAndStoreState
+import com.yandex.div.compose.pager.snapOffset
+import com.yandex.div.compose.pager.snappedItem
+import com.yandex.div.compose.pager.visibleItemSizes
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.CrossAxisAlignment
 import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
-import com.yandex.div.compose.utils.scroll.desiredSnapOffset
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivPageTransformation
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
+import kotlin.math.abs
 
 @Composable
 internal fun PagerContent(
@@ -64,6 +73,7 @@ internal fun PagerContent(
     val initialDefaultItem = remember { defaultItem }
     val density = LocalDensity.current
     val snapPosition = scrollAxisAlignment.toSnapPosition()
+    val initialSnapPosition = remember { snapPosition }
     val crossAlignment = crossAxisAlignment.toCrossAxisAlignment()
     val (startPadding, endPadding) = paddings.getScrollAxisPaddings(isHorizontal, layoutDirection)
     val itemWindow = remember(items.size, infiniteScroll) {
@@ -96,16 +106,20 @@ internal fun PagerContent(
         infiniteScroll = infiniteScroll,
     )
 
-    PreservePageAcrossWindowChanges(
-        listState, snapPosition, itemWindow, itemKeys, initialDefaultItem, startPadding, endPadding
+    val alignmentReady = rememberCurrentPageAlignment(
+        listState = listState,
+        itemWindow = itemWindow,
+        itemKeys = itemKeys,
+        defaultItem = initialDefaultItem,
+        alignment = PagerAlignment(snapPosition, startPadding, endPadding, itemSpacing, pageSize, viewportSize),
     )
 
-    val needsInitialAlignment = pageSize == null && snapPosition != SnapPosition.Start
+    val needsInitialAlignment = pageSize == null && initialSnapPosition != SnapPosition.Start
     var initialPositionAdjusted by remember(listState, needsInitialAlignment) {
         mutableStateOf(!needsInitialAlignment)
     }
     if (needsInitialAlignment) {
-        AdjustScrollToItem(listState, rawDefaultItem, snapPosition, endPadding) {
+        AdjustScrollToItem(listState, rawDefaultItem, initialSnapPosition) {
             initialPositionAdjusted = true
         }
     }
@@ -115,7 +129,8 @@ internal fun PagerContent(
         listState = listState,
         snapPosition = snapPosition,
         itemWindow = itemWindow,
-        enabled = !needsInitialAlignment || initialPositionAdjusted,
+        viewportSize = viewportSize,
+        enabled = initialPositionAdjusted && alignmentReady,
     )
 
     val childModifier = childModifier(
@@ -186,78 +201,96 @@ internal fun PagerContent(
     }
 }
 
+@Suppress("SwallowedException")
 @Composable
-private fun PreservePageAcrossWindowChanges(
+private fun rememberCurrentPageAlignment(
     listState: LazyListState,
-    snapPosition: SnapPosition,
     itemWindow: PagerItemWindow,
     itemKeys: List<Long>,
     defaultItem: Int,
-    startPadding: Dp,
-    endPadding: Dp,
-) {
+    alignment: PagerAlignment,
+): Boolean {
     val isPositionAvailable by remember(listState) {
         derivedStateOf { listState.layoutInfo.visibleItemsInfo.isNotEmpty() }
     }
-    val density = LocalDensity.current
-    val startPaddingPx = with(density) { startPadding.roundToPx() }
-    val endPaddingPx = with(density) { endPadding.roundToPx() }
     val state = remember(listState) {
         PagerWindowState(
             initialItemWindow = itemWindow,
             initialRealPage = defaultItem,
             initialItemKeys = itemKeys,
+            initialAlignment = alignment,
         )
     }
+    val density = LocalDensity.current
+    val viewportSizePx = with(density) { alignment.viewportSize.roundToPx() }
+    var ready by remember(listState, itemWindow, itemKeys, alignment, density) { mutableStateOf(false) }
 
-    LaunchedEffect(
-        listState, itemWindow, itemKeys, snapPosition, isPositionAvailable, startPaddingPx, endPaddingPx
-    ) {
+    LaunchedEffect(listState, itemWindow, itemKeys, alignment, density, isPositionAvailable) {
         if (!isPositionAvailable) return@LaunchedEffect
 
-        val rawPage = listState.pagerPosition(snapPosition).first
-        val targetRawPage = state.update(itemWindow, rawPage, isPositionAvailable, itemKeys)
-
-        if (targetRawPage != null) {
-            listState.scrollToSnappedPage(
-                targetRawPage, snapPosition, startPaddingPx, endPaddingPx
-            )
+        val snapPosition = alignment.snapPosition
+        suspend fun snapPage(rawPage: Int) {
+            try {
+                listState.scrollToSnappedPage(rawPage, snapPosition)
+            } catch (e: CancellationException) {
+                ensureActive()
+            }
         }
 
-        snapshotFlow { listState.pagerPosition(snapPosition).first }
-            .collect { page ->
-                state.update(
-                    itemWindow = itemWindow,
-                    rawPage = page,
-                    isPositionAvailable = listState.layoutInfo.visibleItemsInfo.isNotEmpty(),
-                    itemKeys = itemKeys,
-                )
+        snapshotFlow { listState.layoutInfo }.first { alignment.matchesLayout(it, density) }
+        val rawPage = listState.pagerPosition(snapPosition).first
+        state.update(itemWindow, rawPage, isPositionAvailable, itemKeys, alignment)?.let { snapPage(it) }
+        ready = true
+
+        // The closest page of the latest layout in which the list stood still, with the sizes of the visible pages.
+        var standing: PagerLayoutSnapshot? = null
+        snapshotFlow { listState.layoutSnapshot(snapPosition, viewportSizePx) }
+            .filterNotNull()
+            .collect { layout ->
+                val previous = standing
+                if (previous?.page != null && layout.isResizeOf(previous)) {
+                    snapPage(previous.page)
+                    standing = previous.copy(itemSizes = layout.itemSizes)
+                    return@collect
+                }
+                layout.page?.let { rawPage ->
+                    state.update(
+                        itemWindow = itemWindow,
+                        rawPage = rawPage,
+                        isPositionAvailable = listState.layoutInfo.visibleItemsInfo.isNotEmpty(),
+                        itemKeys = itemKeys,
+                        alignment = alignment,
+                    )
+                }
+                standing = layout.takeIf { it.itemSizes.isNotEmpty() }
             }
     }
+    return ready
 }
 
-private suspend fun LazyListState.scrollToSnappedPage(
-    targetRawPage: Int,
-    snapPosition: SnapPosition,
-    startPaddingPx: Int,
-    endPaddingPx: Int,
-) {
-    scrollToItem(targetRawPage)
-    snapshotFlow { layoutInfo.visibleItemsInfo }
-        .first { items -> items.any { it.index == targetRawPage } }
+/**
+ * The page closest to its snap position with the sizes of the visible pages, which are omitted while the list
+ * scrolls, or null while the layout still has a previous viewport size.
+ */
+private fun LazyListState.layoutSnapshot(snapPosition: SnapPosition, viewportSizePx: Int): PagerLayoutSnapshot? {
+    val info = layoutInfo
+    if (info.mainAxisViewportSize != viewportSizePx) return null
+    val itemSizes = if (isScrollInProgress) emptyList() else info.visibleItemSizes()
+    return PagerLayoutSnapshot(info.snappedItem(snapPosition)?.index, itemSizes)
+}
+
+private suspend fun LazyListState.scrollToSnappedPage(targetRawPage: Int, snapPosition: SnapPosition) {
+    if (layoutInfo.visibleItemsInfo.none { it.index == targetRawPage }) {
+        scrollToItem(targetRawPage)
+        snapshotFlow { layoutInfo.visibleItemsInfo }
+            .first { items -> items.any { it.index == targetRawPage } }
+    }
 
     val info = layoutInfo
     val targetItem = info.visibleItemsInfo.firstOrNull { it.index == targetRawPage } ?: return
-    val viewportSize = info.viewportEndOffset - info.viewportStartOffset
-    val desiredOffset = desiredSnapOffset(
-        snapPosition = snapPosition,
-        viewportSizePx = viewportSize,
-        itemSizePx = targetItem.size,
-        startPaddingPx = startPaddingPx,
-        endPaddingPx = endPaddingPx,
-    )
-    scroll {
-        scrollBy((targetItem.offset - desiredOffset).toFloat())
+    val offset = info.snapOffset(targetItem, snapPosition)
+    if (abs(offset) >= 1f) {
+        scroll { scrollBy(offset) }
     }
 }
 
@@ -266,21 +299,21 @@ private fun AdjustScrollToItem(
     listState: LazyListState,
     defaultItem: Int,
     snapPosition: SnapPosition,
-    endPadding: Dp,
     onAdjusted: () -> Unit,
 ) {
-    val endPaddingPx = with(LocalDensity.current) { endPadding.roundToPx() }
     AdjustScrollToItem(
         listState = listState,
         targetIndex = defaultItem,
         onAdjusted = onAdjusted,
         desiredOffset = { viewportSize, itemSize ->
-            desiredSnapOffset(
-                snapPosition = snapPosition,
-                viewportSizePx = viewportSize,
-                itemSizePx = itemSize,
-                startPaddingPx = 0,
-                endPaddingPx = endPaddingPx,
+            val info = listState.layoutInfo
+            snapPosition.position(
+                layoutSize = viewportSize,
+                itemSize = itemSize,
+                beforeContentPadding = info.beforeContentPadding,
+                afterContentPadding = info.afterContentPadding,
+                itemIndex = defaultItem,
+                itemCount = info.totalItemsCount,
             )
         }
     )
@@ -348,7 +381,19 @@ private fun DivPager.ItemAlignment.toCrossAxisAlignment(): CrossAxisAlignment =
 
 private fun DivPager.ItemAlignment.toSnapPosition(): SnapPosition =
     when (this) {
-        DivPager.ItemAlignment.CENTER -> SnapPosition.Center
+        DivPager.ItemAlignment.CENTER -> ViewportCenterSnapPosition
         DivPager.ItemAlignment.START -> SnapPosition.Start
         DivPager.ItemAlignment.END -> SnapPosition.End
     }
+
+/** Centers a page in the whole viewport, as ViewPager2 does; [SnapPosition.Center] centers it between the paddings. */
+private object ViewportCenterSnapPosition : SnapPosition {
+    override fun position(
+        layoutSize: Int,
+        itemSize: Int,
+        beforeContentPadding: Int,
+        afterContentPadding: Int,
+        itemIndex: Int,
+        itemCount: Int,
+    ): Int = (layoutSize - itemSize) / 2 - beforeContentPadding
+}

@@ -3,7 +3,6 @@ package com.yandex.div.compose.views.pager
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import com.yandex.div.compose.utils.scroll.desiredSnapOffset
 import kotlin.math.max
 
 internal data class InitialScroll(
@@ -52,12 +51,13 @@ private fun calculateScrollPosition(
     viewportPx: Int,
     itemCount: Int,
 ): InitialScroll {
-    val desiredOffset = desiredSnapOffset(
-        snapPosition = snapPosition,
-        viewportSizePx = viewportPx,
-        itemSizePx = pageSizePx,
-        startPaddingPx = startPx,
-        endPaddingPx = endPx,
+    val desiredOffset = startPx + snapPosition.position(
+        layoutSize = viewportPx,
+        itemSize = pageSizePx,
+        beforeContentPadding = startPx,
+        afterContentPadding = endPx,
+        itemIndex = defaultItem,
+        itemCount = itemCount,
     )
     val itemStride = pageSizePx.toLong() + spacingPx
     if (itemStride <= 0) return InitialScroll(defaultItem, 0)

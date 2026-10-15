@@ -28,6 +28,8 @@ import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.Velocity
+import com.yandex.div.compose.pager.mainAxisViewportSize
+import com.yandex.div.compose.pager.snapOffset
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.max
@@ -101,7 +103,7 @@ internal class PagerSwipeLimiter(
     private val direction: Float get() = if (isHorizontal && layoutDirection == LayoutDirection.Rtl) 1f else -1f
 
     val viewportSizePx: Int
-        get() = listState.layoutInfo.let { if (isHorizontal) it.viewportSize.width else it.viewportSize.height }
+        get() = listState.layoutInfo.mainAxisViewportSize
 
     fun onTouchStarted() {
         touchActive = true
