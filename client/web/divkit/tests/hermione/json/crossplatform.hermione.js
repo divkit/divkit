@@ -1,6 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 
+const testPaths = new Set(hermione.ctx.screenshotTestPaths);
+const filterTests = testPaths.size > 0;
+
 function read(dir, createTestCase, skipTests = [], skipFirefox = []) {
     function append(dir, prefix) {
         const fulldir = path.join(__dirname, dir);
@@ -13,6 +16,11 @@ function read(dir, createTestCase, skipTests = [], skipFirefox = []) {
 
             if (item.endsWith('.json')) {
                 if (item === 'templates.json') {
+                    continue;
+                }
+
+                const relativePath = path.relative(path.resolve(__dirname, crossplatformPath), path.join(fulldir, item));
+                if (filterTests && !testPaths.has(relativePath)) {
                     continue;
                 }
 
@@ -30,6 +38,7 @@ function read(dir, createTestCase, skipTests = [], skipFirefox = []) {
                     only = 'chromeMobile';
                 }
                 createTestCase(testCase, testPath, only);
+                testPaths.delete(relativePath);
             } else {
                 describe(item, function() {
                     append(path.join(dir, item), prefix + item + '/');
@@ -226,3 +235,7 @@ describe('crossplatform', () => {
         read(`${crossplatformPath}/unit_test_data/`, createSimpleTestCase, skipTests);
     });
 });
+
+if (testPaths.size > 0) {
+    throw new Error(`No Web tests found for paths relative to divkit/public/test_data: ${[...testPaths].join(', ')}`);
+}
