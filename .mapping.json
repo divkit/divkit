@@ -8086,6 +8086,7 @@
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewBlurTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewBlurTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewTouchForwardingTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DecoratingViewTouchForwardingTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DetachableAnimationBlockAnimationContextTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/DetachableAnimationBlockAnimationContextTests.swift",
+  "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/PinchToZoomObserverTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/PinchToZoomObserverTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/UIViewRenderable+AccessibilityTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/UIViewRenderable+AccessibilityTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Blocks/VideoBlockSeekTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Blocks/VideoBlockSeekTests.swift",
   "client/ios/LayoutKit/LayoutKitTests/UI/Views/AnimatedTextGradientTests.swift":"divkit/public/client/ios/LayoutKit/LayoutKitTests/UI/Views/AnimatedTextGradientTests.swift",

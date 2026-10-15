@@ -22,15 +22,27 @@ extension PinchToZoomBlock {
       observer: observer,
       overscrollDelegate: overscrollDelegate,
       renderingDelegate: renderingDelegate,
-      overlayView: overlayView
+      overlayView: overlayView,
+      zoomObserver: zoomObserver
     )
   }
 }
 
 private final class PinchToZoomView: BlockView {
+  private enum ZoomState {
+    case idle
+    case zooming
+    case returning(UIViewPropertyAnimator)
+    case interrupted
+  }
+
   private var childView: BlockView!
   private weak var overlayView: UIView?
+  private weak var zoomObserver: PinchToZoomObserver?
   private let shadeView = UIView()
+
+  private var zoomState = ZoomState.idle
+  private var configurationGeneration = 0
 
   private var scale: CGFloat = 1
   private var translation = CGPoint.zero
@@ -71,6 +83,10 @@ private final class PinchToZoomView: BlockView {
   override func layoutSubviews() {
     super.layoutSubviews()
 
+    if overlayView == nil {
+      finishZoomImmediately()
+    }
+
     let currentTransform = childView.transform
     childView.transform = .identity
     if isZooming, let overlayView {
@@ -83,21 +99,52 @@ private final class PinchToZoomView: BlockView {
     childView.transform = currentTransform
   }
 
+  override func didMoveToWindow() {
+    super.didMoveToWindow()
+    if window == nil {
+      configurationGeneration += 1
+      finishZoomImmediately()
+    }
+  }
+
+  override func didMoveToSuperview() {
+    super.didMoveToSuperview()
+    if superview == nil {
+      configurationGeneration += 1
+      finishZoomImmediately()
+    }
+  }
+
   func configure(
     child: Block,
     observer: ElementStateObserver?,
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?,
-    overlayView: UIView?
+    overlayView: UIView?,
+    zoomObserver: PinchToZoomObserver?
   ) {
-    childView = child.reuse(
+    configurationGeneration += 1
+    let generation = configurationGeneration
+    finishZoomImmediately()
+    guard configurationGeneration == generation else {
+      return
+    }
+    let contentView = child.reuse(
       childView,
       observer: observer,
       overscrollDelegate: overscrollDelegate,
       renderingDelegate: renderingDelegate,
       superview: self
     )
+    guard configurationGeneration == generation else {
+      if contentView !== childView {
+        contentView.removeFromSuperview()
+      }
+      return
+    }
+    childView = contentView
     self.overlayView = overlayView
+    self.zoomObserver = zoomObserver
     setNeedsLayout()
   }
 
@@ -112,25 +159,61 @@ private final class PinchToZoomView: BlockView {
   }
 
   private func resetTransform() {
+    guard case .zooming = zoomState else {
+      return
+    }
+
+    let contentView = childView
     scale = 1
     translation = .zero
     translationToIgnore = .zero
     originTranslation = .zero
-    UIView.animate(
-      duration: 0.25,
-      animations: { [unowned self] in
-        self.childView.transform = .identity
-        self.updateShadeColor()
-      },
-      completion: { [weak self, weak childView = self.childView] _ in
-        if let view = self {
-          view.addSubview(view.childView)
-          view.shadeView.removeFromSuperview()
-        } else {
-          childView?.removeFromSuperview()
-        }
+    let animator = UIViewPropertyAnimator(duration: 0.25, curve: .easeInOut)
+    animator.addAnimations { [weak self, weak contentView] in
+      contentView?.transform = .identity
+      self?.updateShadeColor()
+    }
+    animator.addCompletion { [weak self, weak contentView, weak shadeView, weak animator] _ in
+      guard let self else {
+        contentView?.removeFromSuperview()
+        shadeView?.removeFromSuperview()
+        return
       }
-    )
+      guard case let .returning(currentAnimator) = self.zoomState,
+            currentAnimator === animator else {
+        return
+      }
+      self.finishZoomImmediately()
+    }
+    zoomState = .returning(animator)
+    animator.startAnimation()
+  }
+
+  private func finishZoomImmediately() {
+    let animator: UIViewPropertyAnimator?
+    switch zoomState {
+    case .idle, .interrupted:
+      return
+    case .zooming:
+      zoomState = .interrupted
+      animator = nil
+    case let .returning(returnAnimator):
+      zoomState = .idle
+      animator = returnAnimator
+    }
+
+    scale = 1
+    translation = .zero
+    translationToIgnore = .zero
+    originTranslation = .zero
+    if animator?.state == .active {
+      animator?.stopAnimation(true)
+    }
+    childView.transform = .identity
+    addSubview(childView)
+    childView.frame = bounds
+    shadeView.removeFromSuperview()
+    zoomObserver?.pinchToZoomDidEnd(in: childView)
   }
 
   private func updateShadeColor() {
@@ -140,10 +223,22 @@ private final class PinchToZoomView: BlockView {
 
   @objc private func handlePinch(_ recognizer: UIPinchGestureRecognizer) {
     guard let overlayView else {
+      finishZoomImmediately()
       return
     }
 
     if recognizer.state == .began {
+      let generation = configurationGeneration
+      finishZoomImmediately()
+      guard configurationGeneration == generation else {
+        zoomState = .interrupted
+        return
+      }
+      if case .interrupted = zoomState {
+        translationToIgnore = .zero
+      }
+      zoomState = .zooming
+      translation = translationToIgnore
       let origin = recognizer.location(in: self)
       originTranslation = CGPoint(
         x: bounds.width / 2 - origin.x,
@@ -155,25 +250,50 @@ private final class PinchToZoomView: BlockView {
 
     switch recognizer.state {
     case .began, .changed:
+      guard case .zooming = zoomState else {
+        return
+      }
+      let previousScale = scale
       scale = clamp(recognizer.scale, min: minScale, max: maxScale)
       recognizer.scale = scale
       updateTransform()
-    case .ended, .cancelled:
-      resetTransform()
+      if recognizer.state == .began {
+        zoomObserver?.pinchToZoomDidBegin(in: childView, scale: scale)
+      } else if scale != previousScale {
+        zoomObserver?.pinchToZoomDidChange(in: childView, scale: scale)
+      }
+    case .ended, .cancelled, .failed:
+      if case .interrupted = zoomState {
+        zoomState = .idle
+        translationToIgnore = .zero
+      } else {
+        resetTransform()
+      }
     default:
       break
     }
   }
 
   @objc private func handlePan(_ recognizer: UIPanGestureRecognizer) {
+    guard overlayView != nil else {
+      finishZoomImmediately()
+      return
+    }
+
     switch recognizer.state {
     case .began, .changed:
-      // ignore pan gesture if not zooming yet
-      if isZooming {
+      switch zoomState {
+      case .zooming:
         translation = recognizer.translation(in: self)
         updateTransform()
-      } else {
+      case .idle:
         translationToIgnore = recognizer.translation(in: self)
+      case .returning, .interrupted:
+        break
+      }
+    case .ended, .cancelled, .failed:
+      if case .idle = zoomState {
+        translationToIgnore = .zero
       }
     default:
       break

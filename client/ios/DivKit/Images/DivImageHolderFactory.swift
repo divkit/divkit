@@ -2,6 +2,12 @@ import Foundation
 import VGSL
 
 /// Loads images for `DivKit` views.
+///
+/// During background block modeling, DivKit calls `make` and reads the resulting holder's
+/// `placeholder`, `displaySize` and `reused(with:remoteImageURL:)` off the main thread.
+/// Custom factories and holders must support these calls without accessing UIKit.
+/// Image access, image requests and holder equality checks run on the main thread.
+/// Use `withBackgroundModeling()` to adapt a factory that requires the main thread.
 public protocol DivImageHolderFactory {
   /// Provides `ImageHolder` for an image with given `URL`.
   func make(_ url: URL?, _ placeholder: ImagePlaceholder?) -> ImageHolder

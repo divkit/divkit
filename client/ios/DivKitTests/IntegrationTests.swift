@@ -2,6 +2,7 @@
 import DivKitTestsSupport
 import Foundation
 import LayoutKit
+import Testing
 import VGSL
 import XCTest
 
@@ -200,6 +201,49 @@ private final class MockReporter: @unchecked Sendable, DivReporter {
   private func insertErrorMessage(_ message: String) {
     lock.withLock { _ = storedErrorMessages.insert(message) }
   }
+}
+
+@Test
+func mockReporterCollectsErrorsDuringConcurrentWritesAndSnapshotReads() async {
+  let reporter = MockReporter()
+  let writerCount = 64
+  let messagesPerWriter = 8
+  let messageCount = writerCount * messagesPerWriter
+  let expectedMessages = Set((0..<messageCount).flatMap { index in
+    ["reported-\(index)", "logged-\(index)"]
+  })
+
+  await withTaskGroup(of: Void.self) { group in
+    for writer in 0..<writerCount {
+      group.addTask {
+        for offset in 0..<messagesPerWriter {
+          let index = writer * messagesPerWriter + offset
+          reporter.reportError(cardId: "test_card", error: ReporterTestError(
+            message: "reported-\(index)"
+          ))
+          #expect(reporter.errorMessages.isSubset(of: expectedMessages))
+          await Task.yield()
+        }
+      }
+      group.addTask {
+        for offset in 0..<messagesPerWriter {
+          let index = writer * messagesPerWriter + offset
+          reporter.insertLoggedErrorMessage("[test/path]: logged-\(index)")
+          #expect(reporter.errorMessages.isSubset(of: expectedMessages))
+          await Task.yield()
+        }
+      }
+    }
+  }
+
+  #expect(reporter.errorMessages == expectedMessages)
+}
+
+private struct ReporterTestError: DivError {
+  let message: String
+  let kind = DivErrorKind.unknown
+  let path = UIElementPath("test/path")
+  let level = DivErrorLevel.error
 }
 
 extension String {
