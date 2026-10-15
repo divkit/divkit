@@ -1,3 +1,46 @@
+## 33.8.0
+
+### Android Client
+* Added `Color` class to core kmp-module.
+* Added `DateTime` class to core kmp-module.
+* Added `Url` class to core kmp-module.
+* Added `layout_provider` support in the Compose renderer.
+* Added `scale` action animations in the Compose renderer.
+* Added a public storage API to read and write stored values from Compose custom views and extensions, including during preloading.
+* Added experimental `DataArray` and `DataObject` interfaces to the core module for representing arrays and dictionaries of arbitrary values.
+* Added experimental `JsonArray` and `JsonObject` interfaces for parsing, reading and building JSON.
+* Added nine-patch backgrounds in the Compose renderer.
+* Added support for duration in typed scroll actions for galleries and pagers.
+* Fixed a crash caused by the built-in SVG loader delivering image callbacks off the main thread, for example for SVG images in `div-text` and `div-tabs` title delimiters.
+* Fixed an issue where zero-duration visibility and disappear actions could be lost.
+* Fixed forwarding image load priority to the host image loader for preload requests.
+* Fixed horizontal text alignment for RTL layout.
+* Fixed left and right alignment of items in vertical pagers and galleries in RTL layouts in the Compose renderer.
+* Fixed missing and reordered video actions with View-based players in the Compose renderer when playback events repeat or arrive in quick succession.
+* Fixed tint application for asynchronously loaded drawables.
+* Fixed tooltip layout after window configuration changes.
+* Fixed video error actions in the Compose renderer for View-based players that report errors without a cause.
+* Indicators bind to the nearest matching pager, including pagers without an ID, in the Compose renderer.
+* Input fields no longer explicitly enable keyboard autocorrection in the Compose renderer, matching Android View behavior.
+* Numeric keyboards support signed decimals in the Compose renderer, except with phone or currency masks.
+* Optimized clipping of containers.
+* Preserved asynchronous binding order when the same data is requested while cleanup or a data change is pending.
+* Pressing Enter in multiline inputs with an explicit enter key type no longer inserts a newline in the Compose renderer.
+* Pressing an explicitly configured Enter key no longer dismisses the keyboard or moves focus in the Compose renderer.
+* Supported `interpolator`, `start_delay` in action animations in the Compose renderer.
+
+### iOS Client
+* Fixed `show_tooltip` with `scope_id` reporting the tooltip as not found in scope when the element declaring `tooltips` has no actions.
+* Fixed actions that address elements by id (`scope_id`, `focus_element` and others) failing with "… is ambiguous" when a card is modeled with `DivData.makeBlock` without `DivView` and the element changes its path between updates. `DivData.makeBlock(context:)` now replaces the ids registered by the previous model of the same card id and additional id, as `DivView` does, so cards shown at the same time need distinct card ids or additional ids.
+* Fixed the size of cards with `match_parent` dimensions measured with an unbounded parent size: such dimensions are now sized by the card content.
+* Fixed timers being reset when a card is set again with the same timers.
+* Fixed variable triggers of an element failing to resolve `scope_id` pointing to this element when the element is modeled for the first time.
+* Removed `TooltipContentHolder` from LayoutKit: decorations take tooltips as `[BlockTooltip]` again. `BlockTooltip.ViewSource.factory` now takes a `key` that identifies the content the factory builds, and two factory tooltips are equal when their keys are equal.
+
+### Web Client
+* Added single-line `truncate_policy: word` support to the Web text renderer.
+
+
 ## 33.7.0
 
 ### Android Client
