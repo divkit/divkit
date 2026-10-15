@@ -16,7 +16,6 @@ import com.yandex.div.test.data.state
 import com.yandex.div.test.data.video
 import com.yandex.div.test.testContextThemeWrapper
 import com.yandex.div2.Div
-import com.yandex.div2.DivState
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -187,82 +186,72 @@ class DivVideoActionHandlerTest {
             this.viewStateStore = viewStateStore
         }
 
-    private fun stateWithDuplicateVideo(): Div = Div.State(
-        state(
-            id = STATE_ID,
-            states = listOf(
-                DivState.State(
-                    stateId = NORMAL_STATE_ID,
-                    div = video(id = VIDEO_ID),
-                ),
-                DivState.State(
-                    stateId = DUPLICATE_STATE_ID,
-                    div = container(items = listOf(video(id = VIDEO_ID), video(id = VIDEO_ID))),
-                ),
+    private fun stateWithDuplicateVideo(): Div = state(
+        id = STATE_ID,
+        states = listOf(
+            state(
+                stateId = NORMAL_STATE_ID,
+                div = video(id = VIDEO_ID),
             ),
-        )
+            state(
+                stateId = DUPLICATE_STATE_ID,
+                div = container(items = listOf(video(id = VIDEO_ID), video(id = VIDEO_ID))),
+            ),
+        ),
     )
 
-    private fun stateWithVideoOnlyInInactiveState(): Div = Div.State(
-        state(
-            id = STATE_ID,
-            states = listOf(
-                DivState.State(
-                    stateId = NORMAL_STATE_ID,
-                    div = container(),
-                ),
-                DivState.State(
-                    stateId = DUPLICATE_STATE_ID,
-                    div = video(id = VIDEO_ID),
-                ),
+    private fun stateWithVideoOnlyInInactiveState(): Div = state(
+        id = STATE_ID,
+        states = listOf(
+            state(
+                stateId = NORMAL_STATE_ID,
+                div = container(),
             ),
-        )
+            state(
+                stateId = DUPLICATE_STATE_ID,
+                div = video(id = VIDEO_ID),
+            ),
+        ),
     )
 
-    private fun nestedStatesWithDuplicateVideo(): Div = Div.State(
-        state(
-            id = STATE_ID,
-            states = listOf(
-                DivState.State(
-                    stateId = NORMAL_STATE_ID,
-                    div = Div.State(
+    private fun nestedStatesWithDuplicateVideo(): Div = state(
+        id = STATE_ID,
+        states = listOf(
+            state(
+                stateId = NORMAL_STATE_ID,
+                div = state(
+                    id = INNER_STATE_ID,
+                    states = listOf(
                         state(
-                            id = INNER_STATE_ID,
-                            states = listOf(
-                                DivState.State(
-                                    stateId = NORMAL_STATE_ID,
-                                    div = video(id = VIDEO_ID),
-                                ),
-                                DivState.State(
-                                    stateId = DUPLICATE_STATE_ID,
-                                    div = video(id = VIDEO_ID),
-                                ),
-                            ),
-                        )
+                            stateId = NORMAL_STATE_ID,
+                            div = video(id = VIDEO_ID),
+                        ),
+                        state(
+                            stateId = DUPLICATE_STATE_ID,
+                            div = video(id = VIDEO_ID),
+                        ),
                     ),
                 ),
-                DivState.State(
-                    stateId = DUPLICATE_STATE_ID,
-                    div = video(id = VIDEO_ID),
-                ),
             ),
-        )
+            state(
+                stateId = DUPLICATE_STATE_ID,
+                div = video(id = VIDEO_ID),
+            ),
+        ),
     )
 
-    private fun stateWithVideosOnlyInInactiveState(): Div = Div.State(
-        state(
-            id = STATE_ID,
-            states = listOf(
-                DivState.State(
-                    stateId = NORMAL_STATE_ID,
-                    div = container(),
-                ),
-                DivState.State(
-                    stateId = DUPLICATE_STATE_ID,
-                    div = container(items = listOf(video(id = VIDEO_ID), video(id = VIDEO_ID))),
-                ),
+    private fun stateWithVideosOnlyInInactiveState(): Div = state(
+        id = STATE_ID,
+        states = listOf(
+            state(
+                stateId = NORMAL_STATE_ID,
+                div = container(),
             ),
-        )
+            state(
+                stateId = DUPLICATE_STATE_ID,
+                div = container(items = listOf(video(id = VIDEO_ID), video(id = VIDEO_ID))),
+            ),
+        ),
     )
 }
 

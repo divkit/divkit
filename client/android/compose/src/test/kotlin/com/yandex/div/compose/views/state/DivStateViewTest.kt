@@ -53,13 +53,13 @@ class DivStateViewTest {
             id = "menu",
             stateIdVariable = "current_state",
             states = listOf(
-                DivState.State(stateId = "first"),
-                DivState.State(stateId = "second"),
+                state(stateId = "first"),
+                state(stateId = "second"),
             )
         )
 
         var result by mutableStateOf<DivState.State?>(null)
-        setContent { WithDivState(divState) { result = it } }
+        setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("second", result?.stateId)
     }
@@ -70,13 +70,13 @@ class DivStateViewTest {
             id = "menu",
             defaultStateId = constant("second"),
             states = listOf(
-                DivState.State(stateId = "first"),
-                DivState.State(stateId = "second"),
+                state(stateId = "first"),
+                state(stateId = "second"),
             )
         )
 
         var result by mutableStateOf<DivState.State?>(null)
-        setContent { WithDivState(divState) { result = it } }
+        setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("second", result?.stateId)
     }
@@ -86,13 +86,13 @@ class DivStateViewTest {
         val divState = state(
             id = "menu",
             states = listOf(
-                DivState.State(stateId = "first"),
-                DivState.State(stateId = "second"),
+                state(stateId = "first"),
+                state(stateId = "second"),
             )
         )
 
         var result by mutableStateOf<DivState.State?>(null)
-        setContent { WithDivState(divState) { result = it } }
+        setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("first", result?.stateId)
     }
@@ -106,13 +106,13 @@ class DivStateViewTest {
             id = "menu",
             stateIdVariable = "current_state",
             states = listOf(
-                DivState.State(stateId = "first"),
-                DivState.State(stateId = "second"),
+                state(stateId = "first"),
+                state(stateId = "second"),
             )
         )
 
         var result by mutableStateOf<DivState.State?>(null)
-        setContent { WithDivState(divState) { result = it } }
+        setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("first", result?.stateId)
 
@@ -131,13 +131,13 @@ class DivStateViewTest {
             id = "menu",
             defaultStateId = expression("@{default_id}"),
             states = listOf(
-                DivState.State(stateId = "first"),
-                DivState.State(stateId = "second"),
+                state(stateId = "first"),
+                state(stateId = "second"),
             )
         )
 
         var result by mutableStateOf<DivState.State?>(null)
-        setContent { WithDivState(divState) { result = it } }
+        setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("first", result?.stateId)
 
@@ -155,11 +155,11 @@ class DivStateViewTest {
         val divState = state(
             id = "menu",
             stateIdVariable = "s",
-            states = listOf(DivState.State(stateId = "first")),
+            states = listOf(state(stateId = "first")),
         )
 
         var result by mutableStateOf<DivState.State?>(null)
-        setContent { WithDivState(divState) { result = it } }
+        setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("State with id 'missing' not found", reporter.lastError)
         assertEquals("first", result?.stateId)
@@ -171,7 +171,7 @@ class DivStateViewTest {
 
         val divState = state(id = "menu", stateIdVariable = "s", states = listOf())
 
-        setContent { WithDivState(divState) { } }
+        setContent { WithDivState(divState.value) { } }
 
         assertEquals("DivState has no states", reporter.lastError)
     }
@@ -181,10 +181,10 @@ class DivStateViewTest {
         reporter.failOnError = false
 
         val divState = state(
-            states = listOf(DivState.State(stateId = "first")),
+            states = listOf(state(stateId = "first")),
         )
 
-        setContent { WithDivState(divState) { } }
+        setContent { WithDivState(divState.value) { } }
 
         assertEquals("DivState id is missing at path '0'", reporter.lastError)
     }
@@ -196,13 +196,13 @@ class DivStateViewTest {
         val divState = state(
             id = "menu",
             states = listOf(
-                DivState.State(stateId = "first"),
-                DivState.State(stateId = "second"),
+                state(stateId = "first"),
+                state(stateId = "second"),
             )
         )
 
         var result by mutableStateOf<DivState.State?>(null)
-        setContent { WithDivState(divState) { result = it } }
+        setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("second", result?.stateId)
     }
@@ -212,13 +212,13 @@ class DivStateViewTest {
         val divState = state(
             id = "menu",
             states = listOf(
-                DivState.State(stateId = "first"),
-                DivState.State(stateId = "second"),
+                state(stateId = "first"),
+                state(stateId = "second"),
             )
         )
 
         var result by mutableStateOf<DivState.State?>(null)
-        setContent { WithDivState(divState) { result = it } }
+        setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("first", result?.stateId)
 
@@ -237,12 +237,12 @@ class DivStateViewTest {
             id = "menu",
             stateIdVariable = "current_state",
             states = listOf(
-                DivState.State(stateId = "first"),
-                DivState.State(stateId = "second"),
+                state(stateId = "first"),
+                state(stateId = "second"),
             )
         )
 
-        setContent { WithDivState(divState) { } }
+        setContent { WithDivState(divState.value) { } }
 
         storage.setActiveState(DivStatePath.parse("0/menu/second"))
         composeRule.waitForIdle()

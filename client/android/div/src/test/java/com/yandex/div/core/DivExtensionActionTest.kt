@@ -28,7 +28,6 @@ import com.yandex.div2.DivActionVideo
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivExtension
-import com.yandex.div2.DivState
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Test
@@ -46,6 +45,7 @@ class DivExtensionActionTest {
 
     private val actionHandler = RecordingActionHandler()
     private val extensionHandler = TestExtensionHandler(actionHandler)
+
     private val divView = createDivView(extensionHandler = extensionHandler).also { view ->
         view.setData(defaultData(), DivDataTag("extension-action"))
     }
@@ -187,10 +187,18 @@ class DivExtensionActionTest {
         // Arrange
         val scopedHandler = RecordingActionHandler()
         val scopedView = createDivView(extensionHandler = TestExtensionHandler(scopedHandler))
-        scopedView.setData(data(container(id = "root", items = listOf(
-            container(id = "left", items = listOf(extensionTarget("Left"))),
-            container(id = "right", items = listOf(extensionTarget("Right"))),
-        ))), DivDataTag("scoped-extension-action"))
+        scopedView.setData(
+            data(
+                container(
+                    id = "root",
+                    items = listOf(
+                        container(id = "left", items = listOf(extensionTarget("Left"))),
+                        container(id = "right", items = listOf(extensionTarget("Right"))),
+                    )
+                )
+            ),
+            DivDataTag("scoped-extension-action")
+        )
 
         // Act
         val handled = scopedView.handleActionWithResult(action(payload = null, scopeId = "right"))
@@ -254,10 +262,10 @@ class DivExtensionActionTest {
         // Arrange
         val stateHandler = RecordingActionHandler()
         val stateView = createDivView(extensionHandler = TestExtensionHandler(stateHandler))
-        stateView.setData(data(Div.State(state(id = "state", states = listOf(
-            DivState.State(stateId = "active", div = extensionTarget()),
-            DivState.State(stateId = "inactive", div = extensionTarget()),
-        )))), DivDataTag("state-extension-action"))
+        stateView.setData(data(state(id = "state", states = listOf(
+            state(stateId = "active", div = extensionTarget()),
+            state(stateId = "inactive", div = extensionTarget()),
+        ))), DivDataTag("state-extension-action"))
 
         // Act
         val handled = stateView.handleActionWithResult(action(payload = null, scopeId = null))

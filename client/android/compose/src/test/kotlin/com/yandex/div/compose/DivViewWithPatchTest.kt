@@ -47,7 +47,6 @@ import com.yandex.div2.DivPageContentSize
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
 import com.yandex.div2.DivPatch
-import com.yandex.div2.DivState
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -62,8 +61,9 @@ class DivViewWithPatchTest {
     @get:Rule
     val rule = createComposeRule()
 
-    private val reporter = TestReporter()
     private val actionHandler = TestExternalActionHandler()
+    private val reporter = TestReporter()
+
     private val divContext = DivContext(
         getApplicationContext(),
         DivConfiguration(reporter = reporter, actionHandler = actionHandler)
@@ -96,17 +96,22 @@ class DivViewWithPatchTest {
 
     @Test
     fun `patch removal of active state falls back to the first remaining state`() {
-        val data = data(Div.State(state(
-            id = "switcher",
-            states = listOf(
-                DivState.State(stateId = "first", div = text(
-                    id = "first",
-                    text = "First",
-                    action = action(url = "div-action://set_state?state_id=0/switcher/second")
-                )),
-                DivState.State(stateId = "second", div = text(id = "target", text = "Second"))
+        val data = data(
+            state(
+                id = "switcher",
+                states = listOf(
+                    state(
+                        stateId = "first",
+                        div = text(
+                            id = "first",
+                            text = "First",
+                            action = action(url = "div-action://set_state?state_id=0/switcher/second")
+                        )
+                    ),
+                    state(stateId = "second", div = text(id = "target", text = "Second"))
+                )
             )
-        )))
+        )
         setContent(data)
         rule.onNodeWithTag("first").performClick()
         rule.onNodeWithTag("target").assertTextEquals("Second")
@@ -123,9 +128,20 @@ class DivViewWithPatchTest {
         val data = data(container(items = listOf(text(id = "target", text = "Before"))))
         setContent(data)
 
-        applyPatch(data, DivPatch(changes = listOf(DivPatch.Change("target", listOf(
-            text(id = "first", text = "First"), text(id = "second", text = "Second")
-        )))))
+        applyPatch(
+            data,
+            DivPatch(
+                changes = listOf(
+                    DivPatch.Change(
+                        "target",
+                        listOf(
+                            text(id = "first", text = "First"),
+                            text(id = "second", text = "Second")
+                        )
+                    )
+                )
+            )
+        )
 
         rule.onNodeWithTag("first").assertTextEquals("First")
         rule.onNodeWithTag("second").assertTextEquals("Second")
@@ -622,10 +638,10 @@ class DivViewWithPatchTest {
     @Test
     fun `patched state occurrences have independent triggers`() {
         val data = data(container(items = List(2) { index ->
-            Div.State(state(
+            state(
                 id = "state$index",
-                states = listOf(DivState.State(div = text(id = "target", text = "Before"), stateId = "initial"))
-            ))
+                states = listOf(state(div = text(id = "target", text = "Before"), stateId = "initial"))
+            )
         }))
         setContent(data)
 
@@ -757,18 +773,29 @@ class DivViewWithPatchTest {
         ), actionHandler.handledActions)
     }
 
-    private fun pagerWithSelectedActions(infiniteScroll: Boolean = false): DivData = data(Div.Pager(DivPager(
-        id = "pager",
-        width = fixed(200),
-        height = fixed(100),
-        defaultItem = constant(5L),
-        infiniteScroll = constant(infiniteScroll),
-        layoutMode = DivPagerLayoutMode.PageContentSize(DivPageContentSize()),
-        items = List(10) { text(
-            id = "page$it", text = constant("Page $it"), width = fixed(200),
-            selectedActions = listOf(action(id = "page$it"))
-        ) }
-    )))
+    private fun pagerWithSelectedActions(infiniteScroll: Boolean = false): DivData {
+
+        return data(
+            Div.Pager(
+                DivPager(
+                    id = "pager",
+                    width = fixed(200),
+                    height = fixed(100),
+                    defaultItem = constant(5L),
+                    infiniteScroll = constant(infiniteScroll),
+                    layoutMode = DivPagerLayoutMode.PageContentSize(DivPageContentSize()),
+                    items = List(10) {
+                        text(
+                            id = "page$it",
+                            text = constant("Page $it"),
+                            width = fixed(200),
+                            selectedActions = listOf(action(id = "page$it"))
+                        )
+                    }
+                )
+            )
+        )
+    }
 
     private fun setContent(data: DivData) {
         rule.setContent {

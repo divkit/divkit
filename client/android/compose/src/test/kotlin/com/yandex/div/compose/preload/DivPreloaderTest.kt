@@ -31,7 +31,6 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivImage
-import com.yandex.div2.DivState
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.async
@@ -532,26 +531,24 @@ class DivPreloaderTest {
         val image2Url = "https://example.com/s2.jpg"
         preloader.preload(
             data(
-                content = Div.State(
-                    state(
-                        id = "id",
-                        defaultStateId = constant("s1"),
-                        states = listOf(
-                            DivState.State(
-                                stateId = "s1",
-                                div = image(
-                                    imageUrl = image1Url,
-                                    preloadRequired = false
-                                )
-                            ),
-                            DivState.State(
-                                stateId = "s2",
-                                div = image(
-                                    imageUrl = image2Url,
-                                    preloadRequired = false
-                                )
-                            ),
-                        )
+                content = state(
+                    id = "id",
+                    defaultStateId = constant("s1"),
+                    states = listOf(
+                        state(
+                            stateId = "s1",
+                            div = image(
+                                imageUrl = image1Url,
+                                preloadRequired = false
+                            )
+                        ),
+                        state(
+                            stateId = "s2",
+                            div = image(
+                                imageUrl = image2Url,
+                                preloadRequired = false
+                            )
+                        ),
                     )
                 )
             ),
@@ -592,13 +589,11 @@ class DivPreloaderTest {
     fun `visits all div-state variants`() = runTest {
         val taggedSep = separator(extensions = listOf(DivExtension(id = "tag")))
         val data = data(
-            content = Div.State(
-                state(
-                    id = "id",
-                    states = listOf(
-                        DivState.State(stateId = "s1", div = taggedSep),
-                        DivState.State(stateId = "s2", div = taggedSep),
-                    )
+            content = state(
+                id = "id",
+                states = listOf(
+                    state(stateId = "s1", div = taggedSep),
+                    state(stateId = "s2", div = taggedSep),
                 )
             )
         )

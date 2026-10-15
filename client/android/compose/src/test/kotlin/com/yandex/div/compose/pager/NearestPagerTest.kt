@@ -10,8 +10,6 @@ import com.yandex.div.test.data.pager
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.tabItem
 import com.yandex.div.test.data.tabs
-import com.yandex.div2.Div
-import com.yandex.div2.DivState
 import kotlin.test.Test
 import kotlin.test.assertNull
 import kotlin.test.assertSame
@@ -85,10 +83,12 @@ class NearestPagerTest {
 
     @Test
     fun `lookup visits div states`() {
-        val root = Div.State(state(states = listOf(
-            DivState.State(stateId = "first", div = far),
-            DivState.State(stateId = "second", div = container(items = listOf(indicator, near))),
-        )))
+        val root = state(
+            states = listOf(
+                state(stateId = "first", div = far),
+                state(stateId = "second", div = container(items = listOf(indicator, near))),
+            )
+        )
 
         assertSame(near.value, findNearestPager(root, indicator.value))
     }

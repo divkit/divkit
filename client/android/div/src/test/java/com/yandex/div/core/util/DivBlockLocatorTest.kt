@@ -14,7 +14,6 @@ import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
-import com.yandex.div2.DivState
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -158,10 +157,10 @@ class DivBlockLocatorTest {
     @Test
     fun `active state selects one of duplicate targets`() {
         val activeTarget = text(id = "target", text = "Active")
-        val root = Div.State(state(id = "state", states = listOf(
-            DivState.State(stateId = "active", div = activeTarget),
-            DivState.State(stateId = "inactive", div = text(id = "target", text = "Inactive")),
-        )))
+        val root = state(id = "state", states = listOf(
+            state(stateId = "active", div = activeTarget),
+            state(stateId = "inactive", div = text(id = "target", text = "Inactive")),
+        ))
 
         val result = findTarget(
             root = root,
@@ -174,14 +173,14 @@ class DivBlockLocatorTest {
     @Test
     fun `nested active states select one of duplicate targets`() {
         val activeTarget = text(id = "target", text = "Active")
-        val innerState = Div.State(state(id = "inner", states = listOf(
-            DivState.State(stateId = "active", div = activeTarget),
-            DivState.State(stateId = "inactive", div = text(id = "target", text = "Inner inactive")),
-        )))
-        val root = Div.State(state(id = "outer", states = listOf(
-            DivState.State(stateId = "active", div = innerState),
-            DivState.State(stateId = "inactive", div = text(id = "target", text = "Outer inactive")),
-        )))
+        val innerState = state(id = "inner", states = listOf(
+            state(stateId = "active", div = activeTarget),
+            state(stateId = "inactive", div = text(id = "target", text = "Inner inactive")),
+        ))
+        val root = state(id = "outer", states = listOf(
+            state(stateId = "active", div = innerState),
+            state(stateId = "inactive", div = text(id = "target", text = "Outer inactive")),
+        ))
 
         val result = findTarget(
             root = root,
@@ -197,10 +196,10 @@ class DivBlockLocatorTest {
     @Test
     fun `unique target in inactive state remains addressable`() {
         val inactiveTarget = text(id = "target", text = "Inactive")
-        val root = Div.State(state(id = "state", states = listOf(
-            DivState.State(stateId = "active", div = container()),
-            DivState.State(stateId = "inactive", div = inactiveTarget),
-        )))
+        val root = state(id = "state", states = listOf(
+            state(stateId = "active", div = container()),
+            state(stateId = "inactive", div = inactiveTarget),
+        ))
 
         val result = findTarget(
             root = root,
@@ -212,13 +211,13 @@ class DivBlockLocatorTest {
 
     @Test
     fun `duplicate targets only in inactive state are not returned`() {
-        val root = Div.State(state(id = "state", states = listOf(
-            DivState.State(stateId = "active", div = container()),
-            DivState.State(stateId = "inactive", div = container(items = listOf(
+        val root = state(id = "state", states = listOf(
+            state(stateId = "active", div = container()),
+            state(stateId = "inactive", div = container(items = listOf(
                 text(id = "target", text = "First"),
                 text(id = "target", text = "Second"),
             ))),
-        )))
+        ))
 
         val result = findTarget(
             root = root,
@@ -230,16 +229,16 @@ class DivBlockLocatorTest {
 
     @Test
     fun `scope does not include target from inactive state with the same path`() {
-        val root = Div.State(state(id = "state", states = listOf(
-            DivState.State(stateId = "active", div = container(
+        val root = state(id = "state", states = listOf(
+            state(stateId = "active", div = container(
                 id = "scope",
                 items = listOf(text(id = "placeholder", text = "Placeholder")),
             )),
-            DivState.State(stateId = "inactive", div = container(
+            state(stateId = "inactive", div = container(
                 id = "scope",
                 items = listOf(text(id = "target", text = "Target")),
             )),
-        )))
+        ))
         val cardState = data(root).states.single()
         val scopePaths = root.walk(resolver, DivStatePath.fromState(cardState))
             .filter { block -> block.div.value().id == "scope" }
