@@ -3,7 +3,7 @@ import XCTest
 extension XCUIElement {
   func interact(
     with target: RunnerTarget,
-    operation: (XCUIElement) -> Void
+    operation: (XCUIElement) throws -> Void
   ) throws {
     let element = try resolveTarget(target, in: self)
     guard element.waitUntilVisible(
@@ -11,7 +11,7 @@ extension XCUIElement {
     ) else {
       throw TargetInteractionError.notVisible(target: target)
     }
-    operation(element)
+    try operation(element)
   }
 
   func verifyText(

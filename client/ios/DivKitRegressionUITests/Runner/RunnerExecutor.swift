@@ -33,6 +33,8 @@ struct RunnerExecutor {
       try execute(step)
     case let .scrollTo(step):
       try execute(step)
+    case let .editText(step):
+      try execute(step)
     case let .verifyText(step):
       try execute(step)
     case let .verifyFocus(step):
