@@ -35,7 +35,7 @@ Wildcards are forbidden.
 
 ### Line length
 
-Maximum line length - 120 characters.
+Maximum line length - 100 characters.
 
 ### Vertical indentation
 
@@ -54,20 +54,11 @@ Don't use curly braces in single-line `if` statement. In multiline `if` statemen
     if (condition) doSomething()
 ```
 
+**Bad:**
 ```kotlin
-    if (condition1) {
-        doSomething1()
-        doSomething2()
-        doSomething3()
-    }
-
-    if (condition2) {
-        value = Value.builder()
-            .someThing1(someThing1)
-            .someThing2(someThing2)
-            .someThing3(someThing3)
-            .build()
-    }
+    if (condition) {
+        doSomething()
+    } else doElse()
 ```
 
 In methods with an empty implementation, curly braces should be replaced with the `Unit` expression.
@@ -94,7 +85,7 @@ Always use expression body of functions in case of trivial expressions.
 
 **Bad:**
 ```kotlin
-    fun sum(a: Int, b: Int): Int { 
+    fun sum(a: Int, b: Int): Int {
         return a + b
     }
 ```
@@ -109,8 +100,8 @@ For more complex expressions, you can use the expression body in case of single-
 
 ```kotlin
     // 1 line with a break
-    fun dispatchNextState(mode: CaptureMode = null): Unit =
-        fallbackStateDispatcher.dispatchByMode(captureMode = mode ?: CaptureMode.DEFAULT, oldState = currentState)
+    fun dispatchNextState(mode: CaptureMode = CaptureMode.DEFAULT): Result =
+        fallbackStateDispatcher.dispatchByMode(captureMode = mode, oldState = currentState)
 ```
 
 **Bad:**
@@ -146,7 +137,7 @@ Declare type explicitly if:
 ```
 
 ```kotlin
-    fun sum(a: Int, b: Int): Float = а * b.toFloat()
+    fun sum(a: Int, b: Int): Float = a + b.toFloat()
 ```
 
 ```kotlin
@@ -159,28 +150,52 @@ Declare type explicitly if:
 ```
 
 ```kotlin
-    fun sum(a: Int, b: Int) = а * b.toFloat()
+    fun sum(a: Int, b: Int) = a + b.toFloat()
 ```
 
 ```kotlin
     fun toast(text: String) = Toast.makeText(activity, text, Toast.LENGTH_LONG)
 ```
 
-Don't specify return type if it is obvious.
+Don't specify return type if it is obvious (outside a public API).
 
 **Good:**
 ```kotlin
-    fun sum(a: Int, b: Int) = a + b
+    private fun sum(a: Int, b: Int) = a + b
 ```
 
 **Bad:**
 ```kotlin
-    fun sum(a: Int, b: Int): Int = а + b
+    private fun sum(a: Int, b: Int): Int = a + b
 ```
 
 ## Comments
 
 Comments must be written only in English.
+
+### KDoc
+
+Always use multiline KDoc blocks, even for short descriptions. Put `/**` and `*/` on separate
+lines and start each content line with `*`.
+
+**Good:**
+```kotlin
+/**
+ * Handles the action.
+ */
+fun handleAction() = Unit
+```
+
+**Bad:**
+```kotlin
+/** Handles the action. */
+fun handleAction() = Unit
+```
+
+```kotlin
+/* Handles the action. */
+fun handleAction() = Unit
+```
 
 
 ## Idiomatic use of language features
@@ -224,28 +239,6 @@ Use the named argument syntax for complex functions with many arguments. If the 
 drawSquare(x = 10, y = 10, width = 100, height = 100, fill = true)
 ```
 
-### Extension functions
-
-Use extension functions instead of utility functions.
-
-**Good:**
-```kotlin
-fun String.removeFirstLastChar() = substring(1, length - 1)
-```
-
-**Bad:**
-```kotlin
-fun removeFirstLastChar(string: String) = string.substring(1, string.length - 1)
-```
-
-### Enum vs `@IntDef`/`@StringDef`
-
-In all cases, the use of `enum class` or `sealed class` is recommended instead of `@IntDef`/`@StringDef` annotations.
-
 ### Scope functions `apply`/`with`/`run`/`also`/`let`
 
-It is recommended to:
-1. Use `apply` to set up or initialize an object and avoid using it for logic.
-2. Don't overuse this API and try to keep it readable in natural English style.
-3. Avoid excessive nesting.
-4. Do not use nested `with`/`run`/`apply`. In case of nested `also`/`let`, naming of the argument is required (you can't use `it`).
+Do not use nested `with`/`run`/`apply`.
