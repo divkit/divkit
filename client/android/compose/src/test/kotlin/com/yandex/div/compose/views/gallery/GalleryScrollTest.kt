@@ -28,11 +28,17 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.matchParent
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div.test.data.visibilityExpression
+import com.yandex.div.test.data.variable
+import com.yandex.div2.DivData
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivGallery
+import com.yandex.div2.DivMatchParentSize
+import com.yandex.div2.DivSize
+import com.yandex.div2.DivSizeUnitValue
 import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.math.abs
@@ -47,6 +53,7 @@ class GalleryScrollTest {
     val composeRule = createComposeRule()
 
     private val restorationTester = StateRestorationTester(composeRule)
+    private lateinit var galleryData: DivData
     private val alignment = Variable.StringVariable("alignment", "center")
     private val visibleItems = Variable.IntegerVariable("visible_items", 16)
     private val defaultItem = Variable.IntegerVariable("default_item", 8)
@@ -375,15 +382,202 @@ class GalleryScrollTest {
         assertTrue(abs(itemBounds(10).center.x - galleryBounds().center.x) > 1f)
     }
 
+    @Test
+    fun `match parent item fills horizontal gallery content viewport`() {
+        defaultItem.set(0)
+        startPadding.set(32)
+        setGalleryContent(matchParentScrollAxis = true)
+
+        assertEquals(
+            galleryBounds().width - 32f * composeRule.density.density,
+            itemBounds(0).width,
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `match parent item fills vertical gallery content viewport`() {
+        defaultItem.set(0)
+        startPadding.set(32)
+        setGalleryContent(orientation = DivGallery.Orientation.VERTICAL, matchParentScrollAxis = true)
+
+        assertEquals(
+            galleryBounds().height - 32f * composeRule.density.density,
+            itemBounds(0).height,
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `min size with margins may exceed horizontal gallery viewport`() {
+        defaultItem.set(0)
+        setGalleryContent(matchParentScrollAxis = true, itemMinSize = 400, itemMargins = DivEdgeInsets(
+            left = constant(10L), right = constant(10L),
+        ))
+
+        assertEquals(
+            400f * composeRule.density.density,
+            composeRule.onNodeWithTag("item0").fetchSemanticsNode().size.width.toFloat(),
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `min size with margins may exceed vertical gallery viewport`() {
+        defaultItem.set(0)
+        setGalleryContent(
+            orientation = DivGallery.Orientation.VERTICAL,
+            matchParentScrollAxis = true,
+            itemMinSize = 400,
+            itemMargins = DivEdgeInsets(top = constant(10L), bottom = constant(10L)),
+        )
+
+        assertEquals(
+            400f * composeRule.density.density,
+            composeRule.onNodeWithTag("item0").fetchSemanticsNode().size.height.toFloat(),
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `match parent item excludes margins from horizontal gallery viewport`() {
+        defaultItem.set(0)
+        setGalleryContent(matchParentScrollAxis = true, itemMargins = DivEdgeInsets(
+            left = constant(10L), right = constant(10L),
+        ))
+
+        assertEquals(
+            galleryBounds().width - 20f * composeRule.density.density,
+            itemBounds(0).width,
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `match parent item excludes margins from vertical gallery viewport`() {
+        defaultItem.set(0)
+        setGalleryContent(
+            orientation = DivGallery.Orientation.VERTICAL,
+            matchParentScrollAxis = true,
+            itemMargins = DivEdgeInsets(top = constant(10L), bottom = constant(10L)),
+        )
+
+        assertEquals(
+            galleryBounds().height - 20f * composeRule.density.density,
+            itemBounds(0).height,
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `match parent item fills horizontal grid gallery content viewport`() {
+        defaultItem.set(0)
+        startPadding.set(32)
+        setGalleryContent(columnCount = 2, matchParentScrollAxis = true)
+
+        assertEquals(
+            galleryBounds().width - 32f * composeRule.density.density,
+            itemBounds(0).width,
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `match parent item fills vertical grid gallery content viewport`() {
+        defaultItem.set(0)
+        startPadding.set(32)
+        setGalleryContent(columnCount = 2, orientation = DivGallery.Orientation.VERTICAL, matchParentScrollAxis = true)
+
+        assertEquals(
+            galleryBounds().height - 32f * composeRule.density.density,
+            itemBounds(0).height,
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `min size may exceed horizontal grid gallery viewport`() {
+        defaultItem.set(0)
+        setGalleryContent(columnCount = 2, matchParentScrollAxis = true, itemMinSize = 400)
+
+        assertEquals(
+            400f * composeRule.density.density,
+            composeRule.onNodeWithTag("item0").fetchSemanticsNode().size.width.toFloat(),
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `horizontal min size uses the child variable scope`() {
+        galleryData = data(
+            gallery(
+                id = "gallery",
+                width = fixed(300),
+                height = fixed(108),
+                items = listOf(text(
+                    id = "item0",
+                    text = constant("0"),
+                    width = DivSize.MatchParent(DivMatchParentSize(
+                        minSize = DivSizeUnitValue(value = intExpression("@{size}")),
+                    )),
+                    height = fixed(50),
+                    variables = listOf(variable("size", 400)),
+                )),
+            ),
+            variables = listOf(variable("size", 100)),
+        )
+
+        setContent()
+
+        assertEquals(
+            400f * composeRule.density.density,
+            composeRule.onNodeWithTag("item0").fetchSemanticsNode().size.width.toFloat(),
+            absoluteTolerance = 0.5f,
+        )
+    }
+
+    @Test
+    fun `vertical max size uses the child variable scope`() {
+        galleryData = data(
+            gallery(
+                id = "gallery",
+                orientation = constant(DivGallery.Orientation.VERTICAL),
+                width = fixed(108),
+                height = fixed(300),
+                items = listOf(text(
+                    id = "item0",
+                    text = constant("0"),
+                    width = fixed(50),
+                    height = DivSize.MatchParent(DivMatchParentSize(
+                        maxSize = DivSizeUnitValue(value = intExpression("@{size}")),
+                    )),
+                    variables = listOf(variable("size", 200)),
+                )),
+            ),
+            variables = listOf(variable("size", 100)),
+        )
+
+        setContent()
+
+        assertEquals(
+            200f * composeRule.density.density,
+            composeRule.onNodeWithTag("item0").fetchSemanticsNode().size.height.toFloat(),
+            absoluteTolerance = 0.5f,
+        )
+    }
+
     private fun setGalleryContent(
         columnCount: Long = 1,
         scrollMode: DivGallery.ScrollMode = DivGallery.ScrollMode.DEFAULT,
         layoutDirection: LayoutDirection = LayoutDirection.Ltr,
         orientation: DivGallery.Orientation = DivGallery.Orientation.HORIZONTAL,
+        matchParentScrollAxis: Boolean = false,
+        itemMinSize: Int? = null,
+        itemMargins: DivEdgeInsets? = null,
     ) {
         paging.set(scrollMode.name.lowercase())
         val isHorizontal = orientation == DivGallery.Orientation.HORIZONTAL
-        val galleryData = data(
+        galleryData = data(
             gallery(
                 columnCount = constant(columnCount),
                 defaultItem = intExpression("@{default_item}"),
@@ -391,11 +585,12 @@ class GalleryScrollTest {
                 id = "gallery",
                 items = List(16) { index ->
                     text(
-                        height = fixed(if (isHorizontal) 50 else 100),
+                        height = if (!isHorizontal && matchParentScrollAxis) matchParent(minSize = itemMinSize) else fixed(if (isHorizontal) 50 else 100),
                         id = "item$index",
+                        margins = itemMargins,
                         text = constant(index.toString()),
                         visibility = visibilityExpression("@{visible_items > $index ? 'visible' : 'gone'}"),
-                        width = fixed(if (isHorizontal) 100 else 50),
+                        width = if (isHorizontal && matchParentScrollAxis) matchParent(minSize = itemMinSize) else fixed(if (isHorizontal) 100 else 50),
                     )
                 },
                 orientation = constant(orientation),
@@ -427,6 +622,10 @@ class GalleryScrollTest {
                 width = fixed(if (isHorizontal) 300 else 108),
             )
         )
+        setContent(layoutDirection)
+    }
+
+    private fun setContent(layoutDirection: LayoutDirection = LayoutDirection.Ltr) {
         restorationTester.setContent {
             val divContext = DivContext(
                 baseContext = LocalContext.current,

@@ -16,6 +16,9 @@ import com.yandex.div2.DivActionDictSetValue
 import com.yandex.div2.DivActionDownload
 import com.yandex.div2.DivActionHaptic
 import com.yandex.div2.DivActionHideTooltip
+import com.yandex.div2.DivActionScrollBy
+import com.yandex.div2.DivActionScrollDestination
+import com.yandex.div2.DivActionScrollTo
 import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.div2.DivActionSetVariable
@@ -247,3 +250,31 @@ fun menuItem(
         text = constant(text)
     )
 }
+
+fun scrollToAction(
+    id: String,
+    destination: DivActionScrollDestination,
+    animated: Boolean = true,
+): DivActionTyped = DivActionTyped.ScrollTo(
+    DivActionScrollTo(
+        animated = constant(animated),
+        destination = destination,
+        id = constant(id),
+    )
+)
+
+fun scrollByAction(
+    id: String,
+    itemCount: Long = 0,
+    offset: Long = 0,
+    overflow: DivActionScrollBy.Overflow = DivActionScrollBy.Overflow.CLAMP,
+    animated: Boolean = true,
+): DivActionTyped = DivActionTyped.ScrollBy(
+    DivActionScrollBy(
+        animated = constant(animated),
+        id = constant(id),
+        itemCount = constant(itemCount),
+        offset = constant(offset),
+        overflow = constant(overflow),
+    )
+)

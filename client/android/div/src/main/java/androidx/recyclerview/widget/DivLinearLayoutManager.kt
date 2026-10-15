@@ -5,6 +5,7 @@ import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
+import com.yandex.div.internal.actions.DivScrollActionUtils
 import com.yandex.div2.DivGallery.ContentAlignment
 
 internal class DivLinearLayoutManager(
@@ -114,7 +115,8 @@ internal class DivLinearLayoutManager(
         for (i in range) {
             val child = view.findViewHolderForAdapterPosition(i)?.itemView ?: continue
             lastFoundPosition = i
-            val offset = getIndexOffsetIfIsNearest(child.getAnchor(), direction, reversed) ?: continue
+            val offset = DivScrollActionUtils.nearestItemIndexOffset(child.getAnchor(), anchor, direction, reversed)
+                ?: continue
             return i + offset
         }
         return if (reversed) lastFoundPosition - 1 else lastFoundPosition + 1
@@ -139,16 +141,6 @@ internal class DivLinearLayoutManager(
                     else -> right
                 }
             }
-        }
-    }
-
-    private fun getIndexOffsetIfIsNearest(childAnchor: Int, direction: Int, reversed: Boolean): Int? {
-        return when {
-            childAnchor > anchor -> if (direction >= 0) 0 else null
-            childAnchor < anchor -> if (direction < 0) 0 else null
-            direction >= 0 -> if (reversed) -1 else 1
-            reversed -> 1
-            else -> -1
         }
     }
 

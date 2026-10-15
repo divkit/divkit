@@ -1,5 +1,6 @@
 package com.yandex.div.core.actions
 
+import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.items.DivViewWithItemsController
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -24,7 +25,7 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
             true
         }
         is DivActionTyped.ScrollTo -> {
-            handleAction(action.value, scopeId, view, resolver)
+            handleScrollTo(action.value, scopeId, view, resolver)
             true
         }
         else -> false
@@ -48,40 +49,47 @@ internal class DivActionTypedScrollHandler @Inject constructor() : DivActionType
         viewController.scrollByOffset(overflow, offset, animated, duration, cancelPreviousScroll = step == 0)
     }
 
-    private fun handleAction(
-        action: DivActionScrollTo,
-        scopeId: String?,
-        view: Div2View,
-        resolver: ExpressionResolver
-    ) {
-        val id = action.id.evaluate(resolver)
-        val animated = action.animated.evaluate(resolver)
-        val duration = action.duration?.evaluate(resolver)?.toInt()
-        val viewController = DivViewWithItemsController.create(id, scopeId, view, DivActionScrollTo.TYPE) ?: return
+    companion object {
+        // DivViewWithItemsController reports item lookup failures as RuntimeException.
+        @Suppress("TooGenericExceptionCaught")
+        fun handleScrollTo(
+            action: DivActionScrollTo,
+            scopeId: String?,
+            view: DivViewFacade,
+            resolver: ExpressionResolver,
+        ): Boolean {
+            val id = action.id.evaluate(resolver)
+            val animated = action.animated.evaluate(resolver)
+            val duration = action.duration?.evaluate(resolver)?.toInt()
+            val viewController = DivViewWithItemsController.create(id, scopeId, view, DivActionScrollTo.TYPE)
+                ?: return false
 
-        when(val destination = action.destination) {
-            is DivActionScrollDestination.Offset -> {
-                val offset = destination.value.value.evaluate(resolver).toInt()
-                viewController.scrollTo(offset, animated, duration)
-            }
-            is DivActionScrollDestination.Index -> {
-                val index = destination.value.value.evaluate(resolver).toInt()
-                viewController.setCurrentItem(index, animated, duration)
-            }
-            is DivActionScrollDestination.End -> {
-                viewController.scrollToEnd(animated, duration)
-            }
-            is DivActionScrollDestination.Start -> {
-                viewController.scrollToStart(animated, duration)
-            }
-            is DivActionScrollDestination.ItemId -> {
-                val itemId = destination.value.value.evaluate(resolver)
-                try {
-                    viewController.scrollToItemId(itemId, animated, duration)
-                } catch (e: RuntimeException) {
-                    view.logError(e)
+            when (val destination = action.destination) {
+                is DivActionScrollDestination.Offset -> {
+                    val offset = destination.value.value.evaluate(resolver).toInt()
+                    viewController.scrollTo(offset, animated, duration)
+                }
+                is DivActionScrollDestination.Index -> {
+                    val index = destination.value.value.evaluate(resolver).toInt()
+                    viewController.setCurrentItem(index, animated, duration)
+                }
+                is DivActionScrollDestination.End -> {
+                    viewController.scrollToEnd(animated, duration)
+                }
+                is DivActionScrollDestination.Start -> {
+                    viewController.scrollToStart(animated, duration)
+                }
+                is DivActionScrollDestination.ItemId -> {
+                    val itemId = destination.value.value.evaluate(resolver)
+                    try {
+                        viewController.scrollToItemId(itemId, animated, duration)
+                    } catch (e: RuntimeException) {
+                        (view as? Div2View)?.logError(e)
+                        return false
+                    }
                 }
             }
+            return true
         }
     }
 }

@@ -12,8 +12,11 @@ import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
@@ -29,12 +32,13 @@ internal fun Modifier.imageAspectRatio(
     height: DivSize,
     alignment: Alignment,
     fillMatchParentHeight: Boolean,
+    matchParentMaxHeight: Dp,
     matchHeightConstraintsFirst: Boolean,
 ): Modifier {
     val bounds = if (matchHeightConstraintsFirst && height is DivSize.WrapContent) {
         HeightBounds()
     } else {
-        height.observedHeightBounds(fillMatchParentHeight)
+        height.observedHeightBounds(fillMatchParentHeight, matchParentMaxHeight)
     }
     return this then ImageAspectRatioElement(
         ratio = ratio,
@@ -50,10 +54,12 @@ private data class HeightBounds(
     val max: Dp? = null,
     val isConstrained: Boolean = false,
     val isFixed: Boolean = false,
+    /** Bound of a match_parent height whose parent constraints are unbounded. */
+    val matchParentMax: Dp? = null,
 )
 
 @Composable
-private fun DivSize.observedHeightBounds(fillMatchParentHeight: Boolean): HeightBounds {
+private fun DivSize.observedHeightBounds(fillMatchParentHeight: Boolean, matchParentMaxHeight: Dp): HeightBounds {
     val bounds = when (this) {
         is DivSize.Fixed -> value.observedValue().let { HeightBounds(min = it, max = it, isFixed = true) }
         is DivSize.WrapContent -> HeightBounds(
@@ -65,6 +71,7 @@ private fun DivSize.observedHeightBounds(fillMatchParentHeight: Boolean): Height
             min = value.minSize?.observedValue(),
             max = value.maxSize?.observedValue(),
             isConstrained = fillMatchParentHeight,
+            matchParentMax = matchParentMaxHeight.takeIf { it.isSpecified },
         )
     }
     return if (bounds.min != null && bounds.max != null && bounds.min > bounds.max) {
@@ -102,21 +109,22 @@ private class ImageAspectRatioNode(
 
     override fun MeasureScope.measure(measurable: Measurable, constraints: Constraints): MeasureResult {
         val bounds = parameters.height
-        val requestedHeight = (if (bounds.isConstrained) constraints.maxHeight else Constraints.Infinity)
+        val boundedConstraints = boundMatchParentHeight(constraints, bounds)
+        val requestedHeight = (if (bounds.isConstrained) boundedConstraints.maxHeight else Constraints.Infinity)
             .coerceIn(bounds.min?.roundToPx() ?: 0, bounds.max?.roundToPx() ?: Constraints.Infinity)
         val heightFirst = parameters.matchHeightConstraintsFirst &&
-            (bounds.isFixed || bounds.isConstrained && constraints.hasBoundedHeight)
+            (bounds.isFixed || bounds.isConstrained && boundedConstraints.hasBoundedHeight)
         val width = if (heightFirst) {
             if (requestedHeight == 0) 0 else (requestedHeight * parameters.ratio).roundToInt()
         } else {
-            constraints.constrainWidth(measurable.maxIntrinsicWidth(requestedHeight))
+            boundedConstraints.constrainWidth(measurable.maxIntrinsicWidth(requestedHeight))
         }.coerceAtMost(MAX_LAYOUT_SIZE)
         val height = if (heightFirst) requestedHeight else (width / parameters.ratio).roundToInt()
         val childConstraints = fixedWithinLayoutLimits(width, height.coerceAtMost(MAX_LAYOUT_SIZE), heightFirst)
         val placeable = measurable.measure(childConstraints)
         val size = IntSize(
-            constraints.constrainWidth(childConstraints.maxWidth),
-            constraints.constrainHeight(childConstraints.maxHeight),
+            boundedConstraints.constrainWidth(childConstraints.maxWidth),
+            boundedConstraints.constrainHeight(childConstraints.maxHeight),
         )
         return layout(size.width, size.height) {
             val offset = parameters.alignment.align(
@@ -126,6 +134,13 @@ private class ImageAspectRatioNode(
             )
             placeable.place(offset)
         }
+    }
+
+    // Same constraints as a parent bounding the match_parent height after the element's min and max sizes.
+    private fun MeasureScope.boundMatchParentHeight(constraints: Constraints, bounds: HeightBounds): Constraints {
+        val matchParentMax = bounds.matchParentMax ?: return constraints
+        val maxHeight = matchParentMax.coerceIn(bounds.min ?: 0.dp, bounds.max ?: Dp.Infinity).roundToPx()
+        return constraints.copy(maxHeight = maxHeight.coerceIn(constraints.minHeight, constraints.maxHeight))
     }
 
     private fun fixedWithinLayoutLimits(width: Int, height: Int, heightFirst: Boolean): Constraints {

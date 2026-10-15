@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 
@@ -69,6 +70,16 @@ internal fun PaddingValues.getScrollAxisPaddings(
     } else {
         Pair(calculateTopPadding(), calculateBottomPadding())
     }
+}
+
+/** Size available to a match_parent item along the scroll axis: the viewport without content padding. */
+internal fun PaddingValues.scrollAxisContentSize(
+    viewportSize: Dp,
+    isHorizontal: Boolean,
+    layoutDirection: LayoutDirection,
+): Dp {
+    val (startPadding, endPadding) = getScrollAxisPaddings(isHorizontal, layoutDirection)
+    return (viewportSize - startPadding - endPadding).coerceAtLeast(0.dp)
 }
 
 /**

@@ -1,23 +1,23 @@
 package com.yandex.div.core.view2.items
 
 import android.net.Uri
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.util.EnableAssertsRule
-import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 @Config(shadows = [DivItemChangeActionHandlerTest.ShadowDivViewWithItemsControllerCompanion::class])
 class DivItemChangeActionHandlerTest {
 
@@ -26,12 +26,12 @@ class DivItemChangeActionHandlerTest {
     @get:Rule
     val disableAsserts = EnableAssertsRule(enable = false)
 
-    @Before
+    @BeforeTest
     fun `setup mock`() {
         controller = mock<DivViewWithItemsController>()
     }
 
-    @After
+    @AfterTest
     fun `cleanup mock`() {
         controller = null
     }
@@ -151,6 +151,54 @@ class DivItemChangeActionHandlerTest {
 
         assertTrue(result)
         verify(controller)?.changeCurrentItemByStep("ring", -1, true)
+    }
+
+    @Test
+    fun `scroll to start preserves animation flag`() {
+        val result = DivItemChangeActionHandler.handleAction(
+            Uri.parse("div-action://scroll_to_start?id=$ID&animated=false"), SCOPE_ID, view,
+        )
+
+        assertTrue(result)
+        verify(controller)?.scrollToStart(false)
+    }
+
+    @Test
+    fun `scroll to end is animated by default`() {
+        val result = DivItemChangeActionHandler.handleAction(
+            Uri.parse("div-action://scroll_to_end?id=$ID"), SCOPE_ID, view,
+        )
+
+        assertTrue(result)
+        verify(controller)?.scrollToEnd(true)
+    }
+
+    @Test
+    fun `scroll to item id decodes URL parameter`() {
+        val result = DivItemChangeActionHandler.handleAction(
+            Uri.parse("div-action://scroll_to_item_id?id=$ID&item_id=second%20item&animated=false"), SCOPE_ID, view,
+        )
+
+        assertTrue(result)
+        verify(controller)?.scrollToItemId("second item", false)
+    }
+
+    @Test
+    fun `not handled when item id is missing`() {
+        val result = DivItemChangeActionHandler.handleAction(
+            Uri.parse("div-action://scroll_to_item_id?id=$ID"), SCOPE_ID, view,
+        )
+
+        assertFalse(result)
+    }
+
+    @Test
+    fun `not handled when item index overflows Int`() {
+        val result = DivItemChangeActionHandler.handleAction(
+            Uri.parse("div-action://set_current_item?id=$ID&item=4294967297"), SCOPE_ID, view,
+        )
+
+        assertFalse(result)
     }
 
     @Implements(DivViewWithItemsController.Companion::class)

@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.modifiers
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
@@ -7,7 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isUnspecified
 import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.layoutprovider.layoutProvider
 import com.yandex.div.compose.tooltips.tooltipAnchors
@@ -30,11 +34,14 @@ internal fun Modifier.apply(
     visibility: DivVisibility,
     fillMatchParentWidth: Boolean = true,
     fillMatchParentHeight: Boolean = true,
+    matchParentMaxWidth: Dp = Dp.Unspecified,
+    matchParentMaxHeight: Dp = Dp.Unspecified,
     defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
     suppressMatchParentIntrinsics: Boolean = false,
 ): Modifier {
     val divBase = div.value()
+    val margins = if (applyMargins) divBase.margins?.observeInsets() else null
     val focusState = rememberFocusState(divBase)
     val isFocused = focusState?.value == true
     val focus = divBase.focus
@@ -44,12 +51,14 @@ internal fun Modifier.apply(
         ?: divBase.background
     return this
         .divVisibility(visibility)
-        .applyIf(applyMargins) { padding(divBase.margins) }
+        .applyIfNotNull(margins) { padding(it) }
         .applyIf(suppressMatchParentIntrinsics) { suppressMatchParentIntrinsics(divBase) }
         .size(
             div,
             fillMatchParentWidth = fillMatchParentWidth,
             fillMatchParentHeight = fillMatchParentHeight,
+            matchParentMaxWidth = matchParentMaxWidth.excludeMargins(margins, isWidth = true),
+            matchParentMaxHeight = matchParentMaxHeight.excludeMargins(margins, isWidth = false),
             defaultHorizontalAlignment = defaultHorizontalAlignment,
             defaultVerticalAlignment = defaultVerticalAlignment,
         )
@@ -67,6 +76,17 @@ internal fun Modifier.apply(
         .applyIfNotNull(divBase.id) { testTag(it) }
         .accessibility(divBase)
         .tooltipAnchors(divBase.tooltips)
+}
+
+// A match_parent bound covers the element together with its margins.
+private fun Dp.excludeMargins(margins: PaddingValues?, isWidth: Boolean): Dp {
+    if (isUnspecified || margins == null) return this
+    val marginsSum = if (isWidth) {
+        margins.calculateStartPadding(LayoutDirection.Ltr) + margins.calculateEndPadding(LayoutDirection.Ltr)
+    } else {
+        margins.calculateTopPadding() + margins.calculateBottomPadding()
+    }
+    return (this - marginsSum).coerceAtLeast(0.dp)
 }
 
 @Composable

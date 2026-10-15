@@ -2153,6 +2153,8 @@
   "client/android/div-data/src/main/java/com/yandex/div/data/VariableMutationException.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/data/VariableMutationException.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/actions/CopyToClipboardHelper.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/actions/CopyToClipboardHelper.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivDownloadActionParser.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivDownloadActionParser.kt",
+  "client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivScrollActionParser.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivScrollActionParser.kt",
+  "client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivScrollActionUtils.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivScrollActionUtils.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivUntypedAction.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/actions/DivUntypedAction.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/actions/UpdateStructureHelper.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/actions/UpdateStructureHelper.kt",
   "client/android/div-data/src/main/java/com/yandex/div/internal/core/DivBlock.kt":"divkit/public/client/android/div-data/src/main/java/com/yandex/div/internal/core/DivBlock.kt",

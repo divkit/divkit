@@ -3,10 +3,8 @@ package com.yandex.div.core.view2.items
 import android.util.DisplayMetrics
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.KAssert
-import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sign
+import com.yandex.div.internal.actions.DivScrollActionUtils
+import com.yandex.div2.DivActionScrollBy
 
 private const val OVERFLOW_CLAMP = "clamp"
 private const val OVERFLOW_RING = "ring"
@@ -14,7 +12,7 @@ private const val OVERFLOW_RING = "ring"
 /**
  * Strategy to get next or previous item index based on current item.
  */
-internal sealed class OverflowItemStrategy(private val itemCount: Int) {
+internal sealed class OverflowItemStrategy {
 
     /**
      * Index of target item
@@ -26,13 +24,6 @@ internal sealed class OverflowItemStrategy(private val itemCount: Int) {
      */
     abstract fun positionAfterScrollBy(step: Int): Int
 
-    protected inline fun checkItemCount(block: () -> Int): Int {
-        return when {
-            itemCount <= 0 -> -1
-            else -> block()
-        }
-    }
-
     /**
      * Implementation of [OverflowItemStrategy] that clamps next and previous when overflowed.
      */
@@ -42,14 +33,15 @@ internal sealed class OverflowItemStrategy(private val itemCount: Int) {
         private val scrollRange: Int,
         private val scrollOffset: Int,
         private val metrics: DisplayMetrics
-    ) : OverflowItemStrategy(itemCount) {
+    ) : OverflowItemStrategy() {
 
-        override fun targetItem(step: Int): Int {
-            return checkItemCount { (nearestItem + step.delta).coerceIn(0, itemCount - 1) }
-        }
+        override fun targetItem(step: Int): Int =
+            DivScrollActionUtils.targetItem(nearestItem, itemCount, step, DivActionScrollBy.Overflow.CLAMP)
 
         override fun positionAfterScrollBy(step: Int): Int =
-            min(max(0, scrollOffset + step.dpToPx(metrics)), scrollRange)
+            DivScrollActionUtils.targetOffset(
+                scrollOffset, scrollRange, step.dpToPx(metrics), DivActionScrollBy.Overflow.CLAMP,
+            )
     }
 
     /**
@@ -61,19 +53,15 @@ internal sealed class OverflowItemStrategy(private val itemCount: Int) {
         private val scrollRange: Int,
         private val scrollOffset: Int,
         private val metrics: DisplayMetrics
-    ): OverflowItemStrategy(itemCount) {
+    ): OverflowItemStrategy() {
 
-        override fun targetItem(step: Int): Int {
-            return checkItemCount { (nearestItem + step.delta).mod(itemCount) }
-        }
+        override fun targetItem(step: Int): Int =
+            DivScrollActionUtils.targetItem(nearestItem, itemCount, step, DivActionScrollBy.Overflow.RING)
 
-        override fun positionAfterScrollBy(step: Int): Int {
-            var position = (scrollOffset + step.dpToPx(metrics)) % scrollRange
-            if (position < 0) {
-                position += scrollRange
-            }
-            return position
-        }
+        override fun positionAfterScrollBy(step: Int): Int =
+            DivScrollActionUtils.targetOffset(
+                scrollOffset, scrollRange, step.dpToPx(metrics), DivActionScrollBy.Overflow.RING,
+            )
     }
 
     internal companion object {
@@ -94,7 +82,5 @@ internal sealed class OverflowItemStrategy(private val itemCount: Int) {
                 }
             }
         }
-
-        private val Int.delta get() = sign * (abs(this) - 1)
     }
 }

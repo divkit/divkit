@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.isSpecified
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
@@ -29,11 +30,18 @@ import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnitValue
 import com.yandex.div2.DivWrapContentSize
 
+/**
+ * [matchParentMaxWidth] and [matchParentMaxHeight] bound the size a match_parent element fills when
+ * the parent measures it with unbounded constraints, e.g. a gallery item along the scroll axis.
+ * The element's own min_size and max_size take precedence over them.
+ */
 @Composable
 internal fun Modifier.size(
     div: Div,
     fillMatchParentWidth: Boolean = true,
     fillMatchParentHeight: Boolean = true,
+    matchParentMaxWidth: Dp = Dp.Unspecified,
+    matchParentMaxHeight: Dp = Dp.Unspecified,
     defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
 ): Modifier {
@@ -52,6 +60,7 @@ internal fun Modifier.size(
                     data.alignmentVertical?.observedValue()?.toVerticalAlignment() ?: defaultVerticalAlignment,
                 ),
                 fillMatchParentHeight = fillMatchParentHeight,
+                matchParentMaxHeight = matchParentMaxHeight,
                 // DivImageView keeps the measured width and derives height from aspect,
                 // even for fixed/match_parent height. DivGifImageView can resize width.
                 matchHeightConstraintsFirst = div is Div.GifImage,
@@ -63,6 +72,7 @@ internal fun Modifier.size(
             width = width,
             horizontalAlignment = horizontalAlignment,
             fillMatchParent = fillMatchParentWidth,
+            matchParentMax = matchParentMaxWidth,
         )
         .applyIfNotNull(aspectRatio) { ratio ->
             aspectRatio(ratio)
@@ -72,6 +82,7 @@ internal fun Modifier.size(
                 height = data.height,
                 verticalAlignment = data.alignmentVertical?.observedValue(),
                 fillMatchParent = fillMatchParentHeight,
+                matchParentMax = matchParentMaxHeight,
             )
         }
 }
@@ -81,6 +92,7 @@ private fun Modifier.width(
     width: DivSize,
     horizontalAlignment: DivAlignmentHorizontal? = null,
     fillMatchParent: Boolean,
+    matchParentMax: Dp,
 ): Modifier {
     val align = horizontalAlignment?.toHorizontalAlignment() ?: Alignment.Start
     return when (width) {
@@ -89,6 +101,7 @@ private fun Modifier.width(
             width.value.maxSize,
             isWidth = true
         )
+            .applyIf(matchParentMax.isSpecified) { widthIn(max = matchParentMax) }
             .applyIf(fillMatchParent) { fillMaxWidth() }
 
         is DivSize.WrapContent -> wrapWidth(width.value, horizontalAlignment)
@@ -111,6 +124,7 @@ private fun Modifier.height(
     height: DivSize,
     verticalAlignment: DivAlignmentVertical? = null,
     fillMatchParent: Boolean,
+    matchParentMax: Dp,
 ): Modifier {
     val align = verticalAlignment?.toVerticalAlignment() ?: Alignment.Top
     return when (height) {
@@ -119,6 +133,7 @@ private fun Modifier.height(
             height.value.maxSize,
             isWidth = false
         )
+            .applyIf(matchParentMax.isSpecified) { heightIn(max = matchParentMax) }
             .applyIf(fillMatchParent) { fillMaxHeight() }
 
         is DivSize.WrapContent -> {

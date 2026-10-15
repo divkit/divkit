@@ -1,22 +1,24 @@
 package com.yandex.div.core.view2.items
 
 import android.content.res.Resources
+import android.util.DisplayMetrics
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.test.testContextThemeWrapper
-import org.junit.Assert
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
+import kotlin.test.Test
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 internal class DivViewWithItemsControllerTest {
 
     private val divItemsView = mock<DivViewWithItems.Gallery> {
@@ -40,14 +42,14 @@ internal class DivViewWithItemsControllerTest {
 
         val controller = DivViewWithItemsController.create("id", null, divView, "")
 
-        Assert.assertNotNull(controller)
+        assertNotNull(controller)
     }
 
     @Test
     fun `not create controller when view is not found`() {
         val divView = mock<Div2View>()
         val controller = DivViewWithItemsController.create("id", null, divView, "")
-        Assert.assertNull(controller)
+        assertNull(controller)
     }
 
     @Test
@@ -87,6 +89,15 @@ internal class DivViewWithItemsControllerTest {
         whenever(divItemsView.getNearestItem(any())).thenReturn(-1)
         underTest.changeCurrentItemByStep("ring", -1, true)
         verify(divItemsView).setCurrentItem(ITEM_COUNT - 1, true)
+    }
+
+    @Test
+    fun `ring offset stays at zero when view has no scroll range`() {
+        whenever(divItemsView.metrics).thenReturn(DisplayMetrics().apply { density = 2f })
+
+        underTest.scrollByOffset("ring", 54, true)
+
+        verify(divItemsView).scrollTo(0, true)
     }
 
     companion object {

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
@@ -32,6 +33,11 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVisibility
 
+/**
+ * [matchParentMaxWidth] and [matchParentMaxHeight] bound the size, including margins, that a
+ * match_parent element fills when the parent measures it with unbounded constraints, e.g. a gallery
+ * item along the scroll axis. The element resolves them against its own min_size and max_size.
+ */
 @Composable
 internal inline fun DivBlockView(
     data: Div,
@@ -40,6 +46,8 @@ internal inline fun DivBlockView(
     defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
     suppressMatchParentIntrinsics: Boolean = false,
+    matchParentMaxWidth: Dp = Dp.Unspecified,
+    matchParentMaxHeight: Dp = Dp.Unspecified,
 ) {
     key(LocalDivViewContext.current.compositionKeyStorage.get(data.value())) {
         val divBase = data.value()
@@ -54,6 +62,8 @@ internal inline fun DivBlockView(
                 defaultHorizontalAlignment = defaultHorizontalAlignment,
                 defaultVerticalAlignment = defaultVerticalAlignment,
                 suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
+                matchParentMaxWidth = matchParentMaxWidth,
+                matchParentMaxHeight = matchParentMaxHeight,
             )
         }
     }
@@ -70,6 +80,8 @@ internal fun VisibleDivBlockView(
     defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
     suppressMatchParentIntrinsics: Boolean = false,
+    matchParentMaxWidth: Dp = Dp.Unspecified,
+    matchParentMaxHeight: Dp = Dp.Unspecified,
 ) {
     val divBase = data.value()
     val actions = data.observedActions()
@@ -89,6 +101,8 @@ internal fun VisibleDivBlockView(
                 defaultHorizontalAlignment = defaultHorizontalAlignment,
                 defaultVerticalAlignment = defaultVerticalAlignment,
                 suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
+                matchParentMaxWidth = matchParentMaxWidth,
+                matchParentMaxHeight = matchParentMaxHeight,
             )
         )
     }

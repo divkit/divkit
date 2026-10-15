@@ -3,6 +3,7 @@ package com.yandex.div.compose.views.gallery
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
@@ -28,6 +29,7 @@ import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
+import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -267,7 +269,7 @@ private fun staggeredGridItemConstraints(
 }
 
 @Composable
-private fun GalleryLazyHorizontalStaggeredGrid(
+private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
     scrollbar: Expression<DivGallery.Scrollbar>,
     items: List<Div>,
     gridState: LazyStaggeredGridState,
@@ -279,6 +281,7 @@ private fun GalleryLazyHorizontalStaggeredGrid(
     contentPadding: PaddingValues,
 ) {
     val viewContext = LocalDivViewContext.current
+    val maxItemSize = contentPadding.scrollAxisContentSize(maxWidth, isHorizontal = true, LocalLayoutDirection.current)
     LazyHorizontalStaggeredGrid(
         rows = StaggeredGridCells.Fixed(columnCount),
         modifier = Modifier.galleryScrollbar(
@@ -299,13 +302,14 @@ private fun GalleryLazyHorizontalStaggeredGrid(
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = true),
                 isHorizontal = true,
                 crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),
+                matchParentMaxSize = maxItemSize,
             )
         }
     }
 }
 
 @Composable
-private fun GalleryLazyVerticalStaggeredGrid(
+private fun BoxWithConstraintsScope.GalleryLazyVerticalStaggeredGrid(
     scrollbar: Expression<DivGallery.Scrollbar>,
     items: List<Div>,
     gridState: LazyStaggeredGridState,
@@ -317,6 +321,8 @@ private fun GalleryLazyVerticalStaggeredGrid(
     contentPadding: PaddingValues,
 ) {
     val viewContext = LocalDivViewContext.current
+    val maxItemSize =
+        contentPadding.scrollAxisContentSize(maxHeight, isHorizontal = false, LocalLayoutDirection.current)
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(columnCount),
         modifier = Modifier.galleryScrollbar(
@@ -337,6 +343,7 @@ private fun GalleryLazyVerticalStaggeredGrid(
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = false),
                 isHorizontal = false,
                 crossAxisAlignment = crossContentAlignment.toCrossAxisAlignment(),
+                matchParentMaxSize = maxItemSize,
             )
         }
     }

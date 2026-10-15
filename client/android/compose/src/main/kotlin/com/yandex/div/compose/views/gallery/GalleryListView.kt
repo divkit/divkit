@@ -19,6 +19,7 @@ import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
+import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -50,6 +51,7 @@ internal fun GalleryListView(
                 ScrollableGalleryView(
                     items = items,
                     isHorizontal = isHorizontal,
+                    viewportSize = if (isHorizontal) maxWidth else maxHeight,
                     itemSpacing = itemSpacing,
                     crossContentAlignment = crossContentAlignment,
                     scrollContentAlignment = scrollContentAlignment,
@@ -85,6 +87,7 @@ internal fun GalleryListView(
 private fun ScrollableGalleryView(
     items: List<Div>,
     isHorizontal: Boolean,
+    viewportSize: Dp,
     itemSpacing: Dp,
     crossContentAlignment: DivGallery.ContentAlignment,
     scrollContentAlignment: DivGallery.ContentAlignment,
@@ -113,6 +116,7 @@ private fun ScrollableGalleryView(
     }
 
     val crossAlignment = crossContentAlignment.toCrossAxisAlignment()
+    val maxItemSize = contentPadding.scrollAxisContentSize(viewportSize, isHorizontal, LocalLayoutDirection.current)
 
     val viewContext = LocalDivViewContext.current
     OrientedLazyList(
@@ -135,6 +139,7 @@ private fun ScrollableGalleryView(
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal),
                 isHorizontal = isHorizontal,
                 crossAxisAlignment = crossAlignment,
+                matchParentMaxSize = maxItemSize,
             )
         }
     }
