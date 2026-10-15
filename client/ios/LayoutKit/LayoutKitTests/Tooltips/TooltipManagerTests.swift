@@ -65,6 +65,77 @@ struct TooltipManagerTests {
     #expect(content.closeCount == 1)
   }
 
+  @Test(arguments: [CGSize.zero, CGSize(width: 50, height: 0), CGSize(width: 0, height: 30)])
+  func factoryViewWithEmptyContentSize_isClosedWithoutError(size: CGSize) async {
+    var reportedError: String?
+    let content = MockClosingTooltipView(size: size)
+    let manager = makeManager(content: content)
+
+    let shown = await manager.showTooltip(
+      info: TooltipInfo(
+        id: tooltipInfo.id,
+        showsOnStart: false,
+        multiple: false,
+        onError: { reportedError = $0 }
+      )
+    )
+
+    #expect(!shown)
+    #expect(content.closeCount == 1)
+    #expect(reportedError == nil)
+  }
+
+  @Test
+  func factoryViewWithEmptyContentSizeAndSubstrate_isShown() async {
+    let content = MockClosingTooltipView(size: .zero)
+    let substrate = MockClosingTooltipView()
+    let manager = makeManager(content: content, substrate: substrate)
+
+    let shown = await manager.showTooltip(info: tooltipInfo)
+
+    #expect(shown)
+    #expect(content.closeCount == 0)
+    #expect(substrate.closeCount == 0)
+  }
+
+  @Test
+  func blockWithEmptyContentSize_isNotShownWithoutError() async {
+    var reportedError: String?
+    let hostView = TestTooltipHostView(bounds: hostBounds)
+    let manager = DefaultTooltipManager(externalView: hostView)
+    let anchorView = MockTooltipAnchorView(
+      frame: anchorFrame,
+      tooltips: [
+        BlockTooltip(
+          viewSource: .block(EmptyBlock.zeroSized),
+          params: BlockTooltipParams(
+            id: tooltipInfo.id,
+            mode: .modal,
+            duration: 0,
+            closeByTapOutside: true
+          ),
+          offset: .zero,
+          position: .center
+        ),
+      ]
+    )
+    hostView.addAnchorView(anchorView)
+    manager.tooltipAnchorViewAdded(anchorView: anchorView)
+
+    let shown = await manager.showTooltip(
+      info: TooltipInfo(
+        id: tooltipInfo.id,
+        showsOnStart: false,
+        multiple: false,
+        onError: { reportedError = $0 }
+      )
+    )
+
+    #expect(!shown)
+    #expect(reportedError == nil)
+    #expect(hostView.coordinateSpace.subviews.isEmpty)
+  }
+
   @Test
   func viewDiscardedAfterReservationIsCancelled_isClosedWithSubstrate() async {
     let content = MockClosingTooltipView()
