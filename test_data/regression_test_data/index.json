@@ -2355,7 +2355,8 @@
       "title": "Visibility in div-base",
       "case_id": 67,
       "automated": [
-        "web"
+        "web",
+        "ios"
       ],
       "steps": [
         "Check different combinations of visibility properties"
