@@ -39,6 +39,7 @@ data class ActionScrollTo internal constructor(
         Properties(
             animated = additive.animated ?: properties.animated,
             destination = additive.destination ?: properties.destination,
+            duration = additive.duration ?: properties.duration,
             id = additive.id ?: properties.id,
         )
     )
@@ -55,6 +56,10 @@ data class ActionScrollTo internal constructor(
          */
         val destination: Property<ActionScrollDestination>?,
         /**
+         * Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
+         */
+        val duration: Property<Int>?,
+        /**
          * ID of the element where the action should be performed.
          */
         val id: Property<String>?,
@@ -64,6 +69,7 @@ data class ActionScrollTo internal constructor(
             result.putAll(properties)
             result.tryPutProperty("animated", animated)
             result.tryPutProperty("destination", destination)
+            result.tryPutProperty("duration", duration)
             result.tryPutProperty("id", id)
             return result
         }
@@ -73,6 +79,7 @@ data class ActionScrollTo internal constructor(
 /**
  * @param animated Enables scrolling animation.
  * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -80,11 +87,13 @@ fun DivScope.actionScrollTo(
     `use named arguments`: Guard = Guard.instance,
     animated: Boolean? = null,
     destination: ActionScrollDestination? = null,
+    duration: Int? = null,
     id: String? = null,
 ): ActionScrollTo = ActionScrollTo(
     ActionScrollTo.Properties(
         animated = valueOrNull(animated),
         destination = valueOrNull(destination),
+        duration = valueOrNull(duration),
         id = valueOrNull(id),
     )
 )
@@ -92,6 +101,7 @@ fun DivScope.actionScrollTo(
 /**
  * @param animated Enables scrolling animation.
  * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -99,16 +109,19 @@ fun DivScope.actionScrollToProps(
     `use named arguments`: Guard = Guard.instance,
     animated: Boolean? = null,
     destination: ActionScrollDestination? = null,
+    duration: Int? = null,
     id: String? = null,
 ) = ActionScrollTo.Properties(
     animated = valueOrNull(animated),
     destination = valueOrNull(destination),
+    duration = valueOrNull(duration),
     id = valueOrNull(id),
 )
 
 /**
  * @param animated Enables scrolling animation.
  * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -116,16 +129,19 @@ fun TemplateScope.actionScrollToRefs(
     `use named arguments`: Guard = Guard.instance,
     animated: ReferenceProperty<Boolean>? = null,
     destination: ReferenceProperty<ActionScrollDestination>? = null,
+    duration: ReferenceProperty<Int>? = null,
     id: ReferenceProperty<String>? = null,
 ) = ActionScrollTo.Properties(
     animated = animated,
     destination = destination,
+    duration = duration,
     id = id,
 )
 
 /**
  * @param animated Enables scrolling animation.
  * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -133,11 +149,13 @@ fun ActionScrollTo.override(
     `use named arguments`: Guard = Guard.instance,
     animated: Boolean? = null,
     destination: ActionScrollDestination? = null,
+    duration: Int? = null,
     id: String? = null,
 ): ActionScrollTo = ActionScrollTo(
     ActionScrollTo.Properties(
         animated = valueOrNull(animated) ?: properties.animated,
         destination = valueOrNull(destination) ?: properties.destination,
+        duration = valueOrNull(duration) ?: properties.duration,
         id = valueOrNull(id) ?: properties.id,
     )
 )
@@ -145,6 +163,7 @@ fun ActionScrollTo.override(
 /**
  * @param animated Enables scrolling animation.
  * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -152,11 +171,13 @@ fun ActionScrollTo.defer(
     `use named arguments`: Guard = Guard.instance,
     animated: ReferenceProperty<Boolean>? = null,
     destination: ReferenceProperty<ActionScrollDestination>? = null,
+    duration: ReferenceProperty<Int>? = null,
     id: ReferenceProperty<String>? = null,
 ): ActionScrollTo = ActionScrollTo(
     ActionScrollTo.Properties(
         animated = animated ?: properties.animated,
         destination = destination ?: properties.destination,
+        duration = duration ?: properties.duration,
         id = id ?: properties.id,
     )
 )
@@ -164,6 +185,7 @@ fun ActionScrollTo.defer(
 /**
  * @param animated Enables scrolling animation.
  * @param destination Defines the scrolling end position:<li>`index`: Scroll to the element with the index provided in `value`</li><li>`item_id`: Scroll to the element with identifier provided in `value`</li><li>`offset`: Scroll to the position specified in `value` and measured in `dp` from the start of the container. Applies only in `gallery`;</li><li>`start`: Scroll to the container start;</li><li>`end`: Scroll to the container end.</li>
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  */
 @Generated
@@ -171,28 +193,33 @@ fun ActionScrollTo.modify(
     `use named arguments`: Guard = Guard.instance,
     animated: Property<Boolean>? = null,
     destination: Property<ActionScrollDestination>? = null,
+    duration: Property<Int>? = null,
     id: Property<String>? = null,
 ): ActionScrollTo = ActionScrollTo(
     ActionScrollTo.Properties(
         animated = animated ?: properties.animated,
         destination = destination ?: properties.destination,
+        duration = duration ?: properties.duration,
         id = id ?: properties.id,
     )
 )
 
 /**
  * @param animated Enables scrolling animation.
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  */
 @Generated
 fun ActionScrollTo.evaluate(
     `use named arguments`: Guard = Guard.instance,
     animated: ExpressionProperty<Boolean>? = null,
+    duration: ExpressionProperty<Int>? = null,
     id: ExpressionProperty<String>? = null,
 ): ActionScrollTo = ActionScrollTo(
     ActionScrollTo.Properties(
         animated = animated ?: properties.animated,
         destination = properties.destination,
+        duration = duration ?: properties.duration,
         id = id ?: properties.id,
     )
 )

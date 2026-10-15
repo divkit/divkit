@@ -38,6 +38,7 @@ data class ActionScrollBy internal constructor(
     operator fun plus(additive: Properties): ActionScrollBy = ActionScrollBy(
         Properties(
             animated = additive.animated ?: properties.animated,
+            duration = additive.duration ?: properties.duration,
             id = additive.id ?: properties.id,
             itemCount = additive.itemCount ?: properties.itemCount,
             offset = additive.offset ?: properties.offset,
@@ -52,6 +53,10 @@ data class ActionScrollBy internal constructor(
          * Default value: `true`.
          */
         val animated: Property<Boolean>?,
+        /**
+         * Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
+         */
+        val duration: Property<Int>?,
         /**
          * ID of the element where the action should be performed.
          */
@@ -76,6 +81,7 @@ data class ActionScrollBy internal constructor(
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
             result.tryPutProperty("animated", animated)
+            result.tryPutProperty("duration", duration)
             result.tryPutProperty("id", id)
             result.tryPutProperty("item_count", itemCount)
             result.tryPutProperty("offset", offset)
@@ -95,6 +101,7 @@ data class ActionScrollBy internal constructor(
 
 /**
  * @param animated Enables scrolling animation.
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
  * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
@@ -104,6 +111,7 @@ data class ActionScrollBy internal constructor(
 fun DivScope.actionScrollBy(
     `use named arguments`: Guard = Guard.instance,
     animated: Boolean? = null,
+    duration: Int? = null,
     id: String? = null,
     itemCount: Int? = null,
     offset: Int? = null,
@@ -111,6 +119,7 @@ fun DivScope.actionScrollBy(
 ): ActionScrollBy = ActionScrollBy(
     ActionScrollBy.Properties(
         animated = valueOrNull(animated),
+        duration = valueOrNull(duration),
         id = valueOrNull(id),
         itemCount = valueOrNull(itemCount),
         offset = valueOrNull(offset),
@@ -120,6 +129,7 @@ fun DivScope.actionScrollBy(
 
 /**
  * @param animated Enables scrolling animation.
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
  * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
@@ -129,12 +139,14 @@ fun DivScope.actionScrollBy(
 fun DivScope.actionScrollByProps(
     `use named arguments`: Guard = Guard.instance,
     animated: Boolean? = null,
+    duration: Int? = null,
     id: String? = null,
     itemCount: Int? = null,
     offset: Int? = null,
     overflow: ActionScrollBy.Overflow? = null,
 ) = ActionScrollBy.Properties(
     animated = valueOrNull(animated),
+    duration = valueOrNull(duration),
     id = valueOrNull(id),
     itemCount = valueOrNull(itemCount),
     offset = valueOrNull(offset),
@@ -143,6 +155,7 @@ fun DivScope.actionScrollByProps(
 
 /**
  * @param animated Enables scrolling animation.
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
  * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
@@ -152,12 +165,14 @@ fun DivScope.actionScrollByProps(
 fun TemplateScope.actionScrollByRefs(
     `use named arguments`: Guard = Guard.instance,
     animated: ReferenceProperty<Boolean>? = null,
+    duration: ReferenceProperty<Int>? = null,
     id: ReferenceProperty<String>? = null,
     itemCount: ReferenceProperty<Int>? = null,
     offset: ReferenceProperty<Int>? = null,
     overflow: ReferenceProperty<ActionScrollBy.Overflow>? = null,
 ) = ActionScrollBy.Properties(
     animated = animated,
+    duration = duration,
     id = id,
     itemCount = itemCount,
     offset = offset,
@@ -166,6 +181,7 @@ fun TemplateScope.actionScrollByRefs(
 
 /**
  * @param animated Enables scrolling animation.
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
  * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
@@ -175,6 +191,7 @@ fun TemplateScope.actionScrollByRefs(
 fun ActionScrollBy.override(
     `use named arguments`: Guard = Guard.instance,
     animated: Boolean? = null,
+    duration: Int? = null,
     id: String? = null,
     itemCount: Int? = null,
     offset: Int? = null,
@@ -182,6 +199,7 @@ fun ActionScrollBy.override(
 ): ActionScrollBy = ActionScrollBy(
     ActionScrollBy.Properties(
         animated = valueOrNull(animated) ?: properties.animated,
+        duration = valueOrNull(duration) ?: properties.duration,
         id = valueOrNull(id) ?: properties.id,
         itemCount = valueOrNull(itemCount) ?: properties.itemCount,
         offset = valueOrNull(offset) ?: properties.offset,
@@ -191,6 +209,7 @@ fun ActionScrollBy.override(
 
 /**
  * @param animated Enables scrolling animation.
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
  * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
@@ -200,6 +219,7 @@ fun ActionScrollBy.override(
 fun ActionScrollBy.defer(
     `use named arguments`: Guard = Guard.instance,
     animated: ReferenceProperty<Boolean>? = null,
+    duration: ReferenceProperty<Int>? = null,
     id: ReferenceProperty<String>? = null,
     itemCount: ReferenceProperty<Int>? = null,
     offset: ReferenceProperty<Int>? = null,
@@ -207,6 +227,7 @@ fun ActionScrollBy.defer(
 ): ActionScrollBy = ActionScrollBy(
     ActionScrollBy.Properties(
         animated = animated ?: properties.animated,
+        duration = duration ?: properties.duration,
         id = id ?: properties.id,
         itemCount = itemCount ?: properties.itemCount,
         offset = offset ?: properties.offset,
@@ -216,6 +237,7 @@ fun ActionScrollBy.defer(
 
 /**
  * @param animated Enables scrolling animation.
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
  * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
@@ -225,6 +247,7 @@ fun ActionScrollBy.defer(
 fun ActionScrollBy.modify(
     `use named arguments`: Guard = Guard.instance,
     animated: Property<Boolean>? = null,
+    duration: Property<Int>? = null,
     id: Property<String>? = null,
     itemCount: Property<Int>? = null,
     offset: Property<Int>? = null,
@@ -232,6 +255,7 @@ fun ActionScrollBy.modify(
 ): ActionScrollBy = ActionScrollBy(
     ActionScrollBy.Properties(
         animated = animated ?: properties.animated,
+        duration = duration ?: properties.duration,
         id = id ?: properties.id,
         itemCount = itemCount ?: properties.itemCount,
         offset = offset ?: properties.offset,
@@ -241,6 +265,7 @@ fun ActionScrollBy.modify(
 
 /**
  * @param animated Enables scrolling animation.
+ * @param duration Scrolling animation duration in milliseconds. If omitted, the default platform scrolling behavior is used. A value of `0` means instant scrolling. Ignored when `animated` is `false` or animations are globally disabled.
  * @param id ID of the element where the action should be performed.
  * @param itemCount Number of container elements to scroll through. For scrolling back, use negative values.
  * @param offset Scrolling distance measured in `dp` from the current position. For scrolling back, use negative values. Only applies in `gallery`.
@@ -250,6 +275,7 @@ fun ActionScrollBy.modify(
 fun ActionScrollBy.evaluate(
     `use named arguments`: Guard = Guard.instance,
     animated: ExpressionProperty<Boolean>? = null,
+    duration: ExpressionProperty<Int>? = null,
     id: ExpressionProperty<String>? = null,
     itemCount: ExpressionProperty<Int>? = null,
     offset: ExpressionProperty<Int>? = null,
@@ -257,6 +283,7 @@ fun ActionScrollBy.evaluate(
 ): ActionScrollBy = ActionScrollBy(
     ActionScrollBy.Properties(
         animated = animated ?: properties.animated,
+        duration = duration ?: properties.duration,
         id = id ?: properties.id,
         itemCount = itemCount ?: properties.itemCount,
         offset = offset ?: properties.offset,
