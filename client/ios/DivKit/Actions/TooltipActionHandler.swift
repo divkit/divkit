@@ -61,6 +61,7 @@ final class TooltipActionHandler {
       showsOnStart: false,
       multiple: multiple,
       scopePath: context.scopePath,
+      actionSource: context.info.source,
       onError: { [weak self] message in
         self?.reporter.reportError(
           cardId: cardId,

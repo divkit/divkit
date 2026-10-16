@@ -5,6 +5,42 @@ import Testing
 
 @Suite
 struct TooltipActionHandlerTests {
+  @Test(
+    arguments: [true, false],
+    [UserInterfaceAction.DivActionSource.tap, .visibility]
+  )
+  func showTooltip_passesActionSourceToPerformer(
+    isTyped: Bool,
+    source: UserInterfaceAction.DivActionSource
+  ) {
+    var capturedInfo: TooltipInfo?
+    let layout = makeScopedTooltipLayout { capturedInfo = $0 }
+    let action: DivAction = if isTyped {
+      divAction(
+        logId: "action_id",
+        typed: .divActionShowTooltip(DivActionShowTooltip(
+          id: .value("my_tooltip"),
+          multiple: .value(false)
+        ))
+      )
+    } else {
+      divAction(
+        logId: "action_id",
+        url: "div-action://show_tooltip?id=my_tooltip"
+      )
+    }
+
+    layout.handler.handle(
+      action,
+      path: cardId.path + "button",
+      source: source,
+      sender: nil
+    )
+
+    #expect(layout.reporter.lastError == nil)
+    #expect(capturedInfo?.actionSource == source)
+  }
+
   @Test
   func showTooltip_withScopeId_firstScope_passesFirstScopePathInTooltipInfo() {
     var capturedInfo: TooltipInfo?

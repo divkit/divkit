@@ -6,6 +6,7 @@ public struct TooltipInfo: Equatable {
   public let showsOnStart: Bool
   public let multiple: Bool
   public let scopePath: UIElementPath?
+  public let actionSource: UserInterfaceAction.DivActionSource?
   public let onError: ((String) -> Void)?
 
   public var identity: TooltipIdentity {
@@ -17,12 +18,14 @@ public struct TooltipInfo: Equatable {
     showsOnStart: Bool,
     multiple: Bool,
     scopePath: UIElementPath? = nil,
+    actionSource: UserInterfaceAction.DivActionSource? = nil,
     onError: ((String) -> Void)? = nil
   ) {
     self.id = id
     self.showsOnStart = showsOnStart
     self.multiple = multiple
     self.scopePath = scopePath
+    self.actionSource = actionSource
     self.onError = onError
   }
 
@@ -30,6 +33,7 @@ public struct TooltipInfo: Equatable {
     lhs.id == rhs.id &&
       lhs.showsOnStart == rhs.showsOnStart &&
       lhs.multiple == rhs.multiple &&
-      lhs.scopePath == rhs.scopePath
+      lhs.scopePath == rhs.scopePath &&
+      lhs.actionSource == rhs.actionSource
   }
 }
