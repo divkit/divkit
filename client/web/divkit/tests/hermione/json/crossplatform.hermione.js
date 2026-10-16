@@ -3,9 +3,19 @@ const fs = require('fs');
 
 const testPaths = new Set(hermione.ctx.screenshotTestPaths);
 const filterTests = testPaths.size > 0;
+// Explicit CI mode: no changed file matches a Web test (e.g. only JSONs of
+// other platforms are touched), so no crossplatform test runs at all.
+const skipAllTests = process.env.CROSSPLATFORM_SKIP === '1';
+// Unmatched paths are only tolerated when the list was computed by CI
+// (ci/web.sh). Manual runs, including direct screenshot updates, stay strict.
+const lenientUnmatchedPaths = process.env.CROSSPLATFORM_SELECTIVITY_CI === '1';
 
 function read(dir, createTestCase, skipTests = [], skipFirefox = []) {
     function append(dir, prefix) {
+        if (skipAllTests) {
+            return;
+        }
+
         const fulldir = path.join(__dirname, dir);
         const items = fs.readdirSync(fulldir);
 
@@ -237,5 +247,13 @@ describe('crossplatform', () => {
 });
 
 if (testPaths.size > 0) {
-    throw new Error(`No Web tests found for paths relative to divkit/public/test_data: ${[...testPaths].join(', ')}`);
+    const message = `No Web tests found for paths relative to divkit/public/test_data: ${[...testPaths].join(', ')}`;
+    if (!lenientUnmatchedPaths) {
+        // Manual runs (including direct screenshot updates) must never
+        // silently skip a requested test.
+        throw new Error(message);
+    }
+    // A changed JSON may belong to another platform (filtered by `platforms`)
+    // or be skipped on Web; do not fail the whole CI run for it.
+    console.warn(`[WARN] ${message}`);
 }
