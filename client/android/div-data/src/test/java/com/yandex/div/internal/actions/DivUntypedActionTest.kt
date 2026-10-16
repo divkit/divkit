@@ -1,20 +1,33 @@
 package com.yandex.div.internal.actions
 
 import android.net.Uri
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.data.StoredValue
 import com.yandex.div.internal.storedvalues.StoredValueScope
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class DivUntypedActionTest {
 
     @Test
     fun `non div-action uri`() {
         assertNull(parse("non-div-action://"))
+    }
+
+    @Test
+    fun `download action`() {
+        assertEquals(
+            DivUntypedAction.Download(url = "https://example.test/patch?id=1&version=2"),
+            parse("div-action://download?url=https%3A%2F%2Fexample.test%2Fpatch%3Fid%3D1%26version%3D2")
+        )
+    }
+
+    @Test
+    fun `download action without url fails`() {
+        assertNull(parse("div-action://download"))
     }
 
     @Test

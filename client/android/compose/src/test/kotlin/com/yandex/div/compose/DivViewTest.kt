@@ -1,5 +1,6 @@
 package com.yandex.div.compose
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -49,6 +50,26 @@ class DivViewTest {
         )
 
         assertEquals("Empty data", reporter.lastError)
+    }
+
+    @Test
+    fun `error is reported when DivViewContext is used in another composition`() {
+        reporter.failOnError = false
+
+        val data = data(text(text = "Hello!"))
+
+        rule.setContentWithDivContext(configuration) {
+            Column {
+                DivView(data)
+                DivView(data)
+            }
+        }
+        rule.waitForIdle()
+
+        assertEquals(
+            listOf("DivViewContext is already used in another composition. This may lead to undefined behavior."),
+            reporter.errors
+        )
     }
 
     @Test

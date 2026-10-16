@@ -3,8 +3,6 @@ package com.yandex.div.compose.actions
 import android.net.Uri
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.patch.DivPatchDownloadManager
-import com.yandex.div.internal.actions.DivDownloadActionParser
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.actions.isDivAction
 import com.yandex.div.json.expressions.Expression
@@ -24,7 +22,6 @@ import com.yandex.div2.DivDownloadCallbacks
 import com.yandex.div2.DivSightAction
 import org.json.JSONObject
 import javax.inject.Inject
-import androidx.core.net.toUri
 
 @DivViewScope
 internal class DivActionHandler @Inject constructor(
@@ -35,7 +32,7 @@ internal class DivActionHandler @Inject constructor(
     private val arrayActionsHandler: ArrayActionsHandler,
     private val copyToClipboardActionHandler: CopyToClipboardActionHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
-    private val patchDownloadManager: DivPatchDownloadManager,
+    private val downloadActionHandler: DownloadActionHandler,
     private val setStateActionHandler: SetStateActionHandler,
     private val setStoredValueActionHandler: SetStoredValueActionHandler,
     private val setVariableActionHandler: SetVariableActionHandler,
@@ -133,19 +130,18 @@ internal class DivActionHandler @Inject constructor(
                 context = context,
                 action = it,
                 actionData = actionData,
-                downloadCallbacks = action.downloadCallbacks
             )
             return
         }
 
         val url = actionData.url
         if (url?.isDivAction == true) {
-            if (DivDownloadActionParser.matches(url)) {
-                handleDownload(context, url, action.downloadCallbacks)
-                return
-            }
             DivUntypedAction.parse(url)?.let {
-                handle(context = context, action = it)
+                handle(
+                    context = context,
+                    action = it,
+                    downloadCallbacks = action.downloadCallbacks
+                )
             }
         } else {
             externalActionHandler.handle(
@@ -159,7 +155,6 @@ internal class DivActionHandler @Inject constructor(
         context: DivActionHandlingContext,
         action: DivActionTyped,
         actionData: DivActionData,
-        downloadCallbacks: DivDownloadCallbacks?
     ) {
         when (action) {
             is DivActionTyped.AnimatorStart -> notSupported(DivActionAnimatorStart.TYPE)
@@ -195,12 +190,9 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.DictSetValue ->
                 dictSetValueActionHandler.handle(context, action.value)
 
-            is DivActionTyped.Download -> handleDownload(
-                context,
-                action.value.url.evaluate(context.expressionResolver),
-                action.value.onSuccessActions ?: downloadCallbacks?.onSuccessActions,
-                action.value.onFailActions ?: downloadCallbacks?.onFailActions
-            )
+            is DivActionTyped.Download ->
+                downloadActionHandler.handle(context, action.value)
+
             is DivActionTyped.ExtensionAction -> notSupported(DivActionExtensionAction.TYPE)
             is DivActionTyped.FocusElement -> notSupported(DivActionFocusElement.TYPE)
 
@@ -238,9 +230,13 @@ internal class DivActionHandler @Inject constructor(
 
     private fun handle(
         context: DivActionHandlingContext,
-        action: DivUntypedAction
+        action: DivUntypedAction,
+        downloadCallbacks: DivDownloadCallbacks?
     ) {
         when (action) {
+            is DivUntypedAction.Download ->
+                downloadActionHandler.handle(context, action, downloadCallbacks)
+
             is DivUntypedAction.HideTooltip ->
                 tooltipActionHandler.handle(action)
 
@@ -262,37 +258,6 @@ internal class DivActionHandler @Inject constructor(
             is DivUntypedAction.Video ->
                 videoActionHandler.handle(action)
         }
-    }
-
-    private fun handleDownload(
-        context: DivActionHandlingContext,
-        uri: Uri,
-        callbacks: DivDownloadCallbacks?
-    ) {
-        val downloadUrl = DivDownloadActionParser.parseUrl(uri)
-        if (downloadUrl == null) {
-            reporter.reportError("url param is required for download action")
-            return
-        }
-        handleDownload(
-            context = context,
-            url = downloadUrl.toUri(),
-            onSuccess = callbacks?.onSuccessActions,
-            onFail = callbacks?.onFailActions
-        )
-    }
-
-    private fun handleDownload(
-        context: DivActionHandlingContext,
-        url: Uri,
-        onSuccess: List<DivAction>?,
-        onFail: List<DivAction>?
-    ) {
-        patchDownloadManager.download(
-            url,
-            onSuccess = { handle(context, onSuccess.orEmpty(), DivActionSource.PATCH) },
-            onFail = { handle(context, onFail.orEmpty(), DivActionSource.PATCH) }
-        )
     }
 
     private fun notSupported(name: String) {

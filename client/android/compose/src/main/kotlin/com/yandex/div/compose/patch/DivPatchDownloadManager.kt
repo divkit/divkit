@@ -26,7 +26,6 @@ internal class DivPatchDownloadManager @Inject constructor(
 ) {
     private lateinit var applyPatch: (DivPatch, () -> Unit) -> Boolean
     private val jobs = mutableSetOf<Job>()
-    private var attachedViews = 0
 
     fun init(applyPatch: (DivPatch, () -> Unit) -> Boolean) {
         this.applyPatch = applyPatch
@@ -61,20 +60,11 @@ internal class DivPatchDownloadManager @Inject constructor(
         jobs.clear()
         pendingJobs.forEach { it.cancel() }
     }
-
-    fun attach() {
-        attachedViews++
-    }
-
-    fun detach() {
-        if (--attachedViews == 0) cancel()
-    }
 }
 
 @Composable
 internal fun DivPatchDownloadManager.observe() {
     DisposableEffect(this) {
-        attach()
-        onDispose { detach() }
+        onDispose { cancel() }
     }
 }

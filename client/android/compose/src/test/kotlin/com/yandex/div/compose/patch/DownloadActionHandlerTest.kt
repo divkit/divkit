@@ -1,11 +1,14 @@
 package com.yandex.div.compose.patch
 
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.actions.ActionHandlerEnvironment
+import com.yandex.div.compose.actions.DivActionData
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.actions.DownloadActionHandler
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.downloadAction
 import com.yandex.div2.DivDownloadCallbacks
@@ -25,115 +28,125 @@ import kotlin.test.assertTrue
 @RunWith(AndroidJUnit4::class)
 class DownloadActionHandlerTest {
     private val environment = ActionHandlerEnvironment()
-    private val externalHandler = TestExternalActionHandler()
-    private val scope = TestScope()
-    private val response = CompletableDeferred<DivPatch>()
+    private val reporter = environment.reporter
     private val requestedUrls = mutableListOf<Uri>()
+    private val response = CompletableDeferred<DivPatch>()
+    private val scope = TestScope()
+    private val testHandler = TestExternalActionHandler()
 
-    private val manager = DivPatchDownloadManager(
-        downloader = DivPatchDownloader {
+    private val handledActions: List<DivActionData>
+        get() = testHandler.handledActions
+
+    private val downloadManager = DivPatchDownloadManager(
+        downloader = {
             requestedUrls.add(it)
             response.await()
         },
         mainCoroutineScope = scope,
-        reporter = environment.reporter
+        reporter = reporter
     )
 
-    private val legacyCallbacks = DivDownloadCallbacks(
-        onSuccessActions = listOf(action(id = "legacy-success")),
-        onFailActions = listOf(action(id = "legacy-failure"))
+    private val actionHandler = DownloadActionHandler(
+        actionHandler = { environment.actionHandler },
+        downloadManager = downloadManager,
     )
 
     @BeforeTest
     fun setUp() {
-        manager.init { _, onApplied ->
+        downloadManager.init { _, onApplied ->
             onApplied()
             true
         }
-        environment.init(externalActionHandler = externalHandler, patchDownloadManager = manager)
+        environment.init(
+            downloadActionHandler = actionHandler,
+            externalActionHandler = testHandler,
+        )
     }
 
     @Test
-    fun `url download decodes its address and runs callbacks as patch actions`() {
-        environment.handle(action(
-            url = "div-action://download?url=https%3A%2F%2Fexample.test%2Fpatch%3Fid%3D1%26version%3D2",
-            downloadCallbacks = legacyCallbacks
-        ))
+    fun `div-action sends request and executes onSuccessActions`() {
+        environment.handle(
+            action(
+                url = "div-action://download?url=https%3A%2F%2Fexample.test%2Fpatch%3Fid%3D1%26version%3D2",
+                downloadCallbacks = DivDownloadCallbacks(
+                    onSuccessActions = listOf(action(id = "legacy-success")),
+                )
+            )
+        )
 
         completeDownload()
 
-        assertEquals(listOf(Uri.parse("https://example.test/patch?id=1&version=2")), requestedUrls)
-        assertEquals(listOf(actionData(id = "legacy-success", source = DivActionSource.PATCH)), externalHandler.handledActions)
+        assertEquals(
+            listOf("https://example.test/patch?id=1&version=2".toUri()),
+            requestedUrls
+        )
+
+        assertEquals(
+            listOf(actionData(id = "legacy-success", source = DivActionSource.PATCH)),
+            handledActions
+        )
     }
 
     @Test
-    fun `typed success callbacks override legacy callbacks`() {
-        environment.handle(action(
-            typed = downloadAction("https://example.test/patch", onSuccessActions = listOf(action(id = "typed-success"))),
-            downloadCallbacks = legacyCallbacks
-        ))
+    fun `typed action sends request and executes onSuccessActions`() {
+        environment.handle(
+            action(
+                typed = downloadAction(
+                    url = "https://example.test/patch",
+                    onSuccessActions = listOf(action(id = "success")),
+                ),
+            )
+        )
 
         completeDownload()
 
-        assertEquals(listOf(actionData(id = "typed-success", source = DivActionSource.PATCH)), externalHandler.handledActions)
+        assertEquals(
+            listOf("https://example.test/patch".toUri()),
+            requestedUrls
+        )
+
+        assertEquals(
+            listOf(actionData(id = "success", source = DivActionSource.PATCH)),
+            handledActions
+        )
     }
 
     @Test
-    fun `typed download falls back to legacy callbacks`() {
-        environment.handle(action(
-            typed = downloadAction("https://example.test/patch"),
-            downloadCallbacks = legacyCallbacks
-        ))
+    fun `typed action executes onFailActions after the request failure`() {
+        reporter.failOnError = false
 
-        completeDownload()
-
-        assertEquals(listOf(actionData(id = "legacy-success", source = DivActionSource.PATCH)), externalHandler.handledActions)
-    }
-
-    @Test
-    fun `empty typed callbacks suppress legacy callbacks`() {
-        environment.handle(action(
-            typed = downloadAction("https://example.test/patch", onSuccessActions = emptyList()),
-            downloadCallbacks = legacyCallbacks
-        ))
-
-        completeDownload()
-
-        assertTrue(externalHandler.handledActions.isEmpty())
-    }
-
-    @Test
-    fun `typed failure callbacks override legacy callbacks`() {
-        environment.reporter.failOnError = false
-        environment.handle(action(
-            typed = downloadAction("https://example.test/patch", onFailActions = listOf(action(id = "typed-failure"))),
-            downloadCallbacks = legacyCallbacks
-        ))
+        environment.handle(
+            action(
+                typed = downloadAction(
+                    url = "https://example.test/patch",
+                    onFailActions = listOf(action(id = "failure")),
+                ),
+            )
+        )
 
         response.completeExceptionally(IOException("Download failed"))
         scope.runCurrent()
 
-        assertEquals(listOf(actionData(id = "typed-failure", source = DivActionSource.PATCH)), externalHandler.handledActions)
+        assertEquals(
+            listOf(actionData(id = "failure", source = DivActionSource.PATCH)),
+            handledActions
+        )
     }
 
     @Test
-    fun `disabled download action does not start a request`() {
-        environment.handle(action(isEnabled = false, typed = downloadAction("https://example.test/patch")))
+    fun `typed action does not execute legacy downloadCallbacks`() {
+        environment.handle(
+            action(
+                typed = downloadAction(url = "https://example.test/patch"),
+                downloadCallbacks = DivDownloadCallbacks(
+                    onSuccessActions = listOf(action(id = "legacy-success")),
+                ),
+            )
+        )
 
-        scope.runCurrent()
+        completeDownload()
 
-        assertTrue(requestedUrls.isEmpty())
-    }
-
-    @Test
-    fun `download without url reports an error without starting a request`() {
-        environment.reporter.failOnError = false
-
-        environment.handle(action(url = "div-action://download"))
-        scope.runCurrent()
-
-        assertEquals("url param is required for download action", environment.reporter.lastError)
-        assertTrue(requestedUrls.isEmpty())
+        assertTrue(handledActions.isEmpty())
     }
 
     private fun completeDownload() {

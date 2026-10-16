@@ -8,6 +8,10 @@ import com.yandex.div.internal.storedvalues.StoredValueScope
 @InternalApi
 sealed class DivUntypedAction {
 
+    data class Download(
+        val url: String
+    ) : DivUntypedAction()
+
     data class HideTooltip(
         val id: String
     ) : DivUntypedAction()
@@ -54,6 +58,11 @@ sealed class DivUntypedAction {
             }
 
             when (uri.authority) {
+                "download" -> {
+                    val url = uri.getQueryParameter("url") ?: return null
+                    return Download(url = url)
+                }
+
                 "hide_tooltip" -> {
                     val id = uri.getQueryParameter("id") ?: return null
                     return HideTooltip(id = id)

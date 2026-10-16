@@ -78,6 +78,9 @@ class DivContext private constructor(
 
     /**
      * Removes [DivView] context associated with the given [com.yandex.div2.DivData].
+     *
+     * Must be called only when there is no active [DivView] that uses given [data] in this
+     * [DivContext].
      */
     fun clearViewContext(data: DivData) {
         component.viewContextStorage.remove(data)

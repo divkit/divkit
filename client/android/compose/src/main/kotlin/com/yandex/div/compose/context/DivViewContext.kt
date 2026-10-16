@@ -2,6 +2,7 @@ package com.yandex.div.compose.context
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.actions.VisibilityActionTracker
@@ -29,6 +30,8 @@ internal class DivViewContext(
     data: DivData,
     internal val component: DivViewComponent
 ) {
+    private var compositionCount = 0
+
     val states: List<DivData.State>
         get() = component.states.value
 
@@ -77,6 +80,16 @@ internal class DivViewContext(
     @SuppressLint("ComposableNaming")
     @Composable
     fun onComposition() {
+        DisposableEffect(this) {
+            if (compositionCount > 0) {
+                rootLocalComponent.reporter.reportError(
+                    "DivViewContext is already used in another composition. This may lead to undefined behavior."
+                )
+            }
+            compositionCount++
+            onDispose { compositionCount-- }
+        }
+
         component.hapticFeedbackStorage.bind()
         component.layoutProviderStorage.observe()
         component.patchDownloadManager.observe()

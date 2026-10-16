@@ -5,7 +5,6 @@ import com.yandex.div.core.DivActionHandler.DivActionReason
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.Assert
-import com.yandex.div.internal.actions.DivDownloadActionParser
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionDownload
@@ -17,8 +16,8 @@ internal object DivDownloadActionHandler {
 
     @JvmStatic
     fun canHandle(uri: Uri?, divViewFacade: DivViewFacade): Boolean {
-        if (uri == null || !DivDownloadActionParser.matches(uri)) return false
-        if (DivDownloadActionParser.parseUrl(uri) == null) {
+        if (uri == null || uri.authority != "download") return false
+        if (uri.getQueryParameter("url") == null) {
             Assert.fail("url param is required!")
             return false
         }
@@ -55,7 +54,7 @@ internal object DivDownloadActionHandler {
         view: Div2View,
         resolver: ExpressionResolver,
     ): Boolean {
-        val downloadUrl = DivDownloadActionParser.parseUrl(uri) ?: return false
+        val downloadUrl = uri.getQueryParameter("url") ?: return false
         return executeDownload(downloadUrl, downloadCallbacks?.onSuccessActions, downloadCallbacks?.onFailActions, view, resolver)
     }
 

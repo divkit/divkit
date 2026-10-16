@@ -2,7 +2,6 @@ package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.createExpressionResolver
-import com.yandex.div.compose.patch.DivPatchDownloadManager
 import com.yandex.div.compose.variables.DivPropertyVariableExecutor
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div2.DivAction
@@ -31,8 +30,8 @@ internal class ActionHandlerEnvironment {
         arrayActionsHandler: ArrayActionsHandler = mock(),
         copyToClipboardActionHandler: CopyToClipboardActionHandler = mock(),
         dictSetValueActionHandler: DictSetValueActionHandler = mock(),
+        downloadActionHandler: DownloadActionHandler = mock(),
         hapticActionHandler: HapticActionHandler = mock(),
-        patchDownloadManager: DivPatchDownloadManager = mock(),
         setStateActionHandler: SetStateActionHandler = mock(),
         setStoredValueActionHandler: SetStoredValueActionHandler = mock(),
         setVariableActionHandler: SetVariableActionHandler = mock(),
@@ -49,8 +48,8 @@ internal class ActionHandlerEnvironment {
             arrayActionsHandler = arrayActionsHandler,
             copyToClipboardActionHandler = copyToClipboardActionHandler,
             dictSetValueActionHandler = dictSetValueActionHandler,
+            downloadActionHandler = downloadActionHandler,
             hapticActionHandler = hapticActionHandler,
-            patchDownloadManager = patchDownloadManager,
             setStateActionHandler = setStateActionHandler,
             setStoredValueActionHandler = setStoredValueActionHandler,
             setVariableActionHandler = setVariableActionHandler,
