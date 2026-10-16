@@ -16,6 +16,7 @@ import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
+import com.yandex.div.internal.variables.DeclarationObserver
 import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -55,6 +56,19 @@ internal class DivComposeExpressionResolver private constructor(
 
     private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
     private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
+    private val variableObserver: (Variable) -> Unit = ::onVariableChanged
+    private val declarationObserver = object : DeclarationObserver {
+        override fun onDeclared(variable: Variable) {
+            variable.addObserver(variableObserver)
+            onVariableChanged(variable)
+        }
+
+        override fun onUndeclared(variable: Variable) {
+            variable.removeObserver(variableObserver)
+            onVariableChanged(variable)
+        }
+    }
+    private var isObservingVariables = false
 
     /**
      * Creates a resolver exposing the assigned property value as `new_value` (or a custom name).
@@ -103,11 +117,12 @@ internal class DivComposeExpressionResolver private constructor(
             varToExpressions
                 .getOrPut(variableName) { mutableSetOf() }
                 .add(rawExpression)
+        }
 
-            variableController.get(variableName)?.let { variable ->
-                variable.removeObserver(::onVariableChanged)
-                variable.addObserver(::onVariableChanged)
-            }
+        if (variableNames.isNotEmpty() && !isObservingVariables) {
+            isObservingVariables = true
+            variableController.variableSource.observeVariables(variableObserver)
+            variableController.variableSource.observeDeclaration(declarationObserver)
         }
 
         expressionObservers
@@ -122,8 +137,10 @@ internal class DivComposeExpressionResolver private constructor(
     }
 
     fun clearObservers() {
-        varToExpressions.keys.forEach { name ->
-            variableController.get(name)?.removeObserver(::onVariableChanged)
+        if (isObservingVariables) {
+            variableController.variableSource.removeVariablesObserver(variableObserver)
+            variableController.variableSource.removeDeclarationObserver(declarationObserver)
+            isObservingVariables = false
         }
         expressionObservers.clear()
         varToExpressions.clear()
