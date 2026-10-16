@@ -129,6 +129,22 @@ class DivTextInlineImagesTest {
     }
 
     @Test
+    fun `image with start beyond the integer range is not inserted`() {
+        rule.setContent(
+            configuration = configuration,
+            data = data(
+                text(
+                    id = "text",
+                    text = "abc",
+                    images = listOf(inlineImage(constant(4_294_967_296L))),
+                )
+            ),
+        )
+
+        assertEquals("abc", renderedText())
+    }
+
+    @Test
     fun `image size changes layout height`() {
         val imageSize = Variable.IntegerVariable("image_size", 8)
         variableController.declare(imageSize)

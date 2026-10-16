@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.mutableIntStateOf
@@ -18,6 +19,8 @@ import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.platform.LocalViewConfiguration
+import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
@@ -33,6 +36,7 @@ import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.DpSize
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.observedEnabledActions
 import com.yandex.div.compose.dagger.LocalComponent
@@ -80,8 +84,30 @@ private fun BasicText(
     val inlineImages = data.observeInlineImages(text, fontSize, textMetrics, textStyle)
     val gradientBrush = data.textGradient?.observedValue()
     val customEllipsis = data.observeCustomEllipsis(gradientBrush, fontSize, textStyle.color.alpha)
-    RenderTextContent(data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines)
+    if (data.hasActionLinks()) {
+        CompositionLocalProvider(LocalViewConfiguration provides rememberExactTouchTargetViewConfiguration()) {
+            RenderTextContent(data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines)
+        }
+    } else {
+        RenderTextContent(data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines)
+    }
 }
+
+@Composable
+private fun rememberExactTouchTargetViewConfiguration(): ViewConfiguration {
+    val viewConfiguration = LocalViewConfiguration.current
+    return remember(viewConfiguration) {
+        object : ViewConfiguration by viewConfiguration {
+            override val minimumTouchTargetSize = DpSize.Zero
+        }
+    }
+}
+
+private fun DivText.hasActionLinks(): Boolean {
+    return ranges.hasActions() || ellipsis?.actions != null || ellipsis?.ranges.hasActions()
+}
+
+private fun List<DivText.Range>?.hasActions(): Boolean = this?.any { it.actions != null } == true
 
 @Composable
 private fun RenderTextContent(
@@ -443,12 +469,13 @@ private fun AnnotatedString.Builder.addTextRanges(
     baseTextColorAlpha: Float,
     decorations: MutableList<TextRangeDecoration>,
 ) {
+    val length = textLength.toLong()
     ranges?.forEach { range ->
-        val start = range.start.observedIntValue().coerceIn(0, textLength)
-        val end = range.end.observedIntValue(textLength).coerceIn(start, textLength)
+        val start = range.start.observedValue().coerceIn(0L, length)
+        val end = range.end.observedValue(length).coerceIn(start, length)
         if (start < end) {
-            val decorationStart = offsets.rangeStart(start)
-            val decorationEnd = offsets.rangeEnd(end)
+            val decorationStart = offsets.rangeStart(start.toInt())
+            val decorationEnd = offsets.rangeEnd(end.toInt())
             val decoration = range.observeDecoration(decorationStart, decorationEnd)
             addStyle(
                 style = range.observeSpanStyle(

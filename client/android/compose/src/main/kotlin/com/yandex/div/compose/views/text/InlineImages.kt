@@ -74,14 +74,14 @@ internal fun DivText.observeInlineImages(
 ): List<InlineImageData> {
     val images = images ?: return emptyList()
     val positionedImages = images.mapIndexedNotNull { index, image ->
-        val start = image.start.observedIntValue()
+        val start = image.start.observedValue()
         if (start > text.length) {
             return@mapIndexedNotNull null
         }
 
         val position = when (image.indexingDirection.observedValue()) {
-            DivText.Image.IndexingDirection.NORMAL -> start
-            DivText.Image.IndexingDirection.REVERSED -> text.length - start
+            DivText.Image.IndexingDirection.NORMAL -> start.toInt()
+            DivText.Image.IndexingDirection.REVERSED -> text.length - start.toInt()
         }
         PositionedImage(image, index, position)
     }

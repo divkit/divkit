@@ -2079,6 +2079,8 @@
   "client/android/compose/src/test/screenshots/interactive/div-text/text-properties/step7.webp":"divkit/public/client/android/compose/src/test/screenshots/interactive/div-text/text-properties/step7.webp",
   "client/android/compose/src/test/screenshots/interactive/div-text/text-properties/step8.webp":"divkit/public/client/android/compose/src/test/screenshots/interactive/div-text/text-properties/step8.webp",
   "client/android/compose/src/test/screenshots/interactive/div-text/text-properties/step9.webp":"divkit/public/client/android/compose/src/test/screenshots/interactive/div-text/text-properties/step9.webp",
+  "client/android/compose/src/test/screenshots/interactive/div-text/text_range_without_bound/step0.webp":"divkit/public/client/android/compose/src/test/screenshots/interactive/div-text/text_range_without_bound/step0.webp",
+  "client/android/compose/src/test/screenshots/interactive/div-text/text_range_without_bound/step1.webp":"divkit/public/client/android/compose/src/test/screenshots/interactive/div-text/text_range_without_bound/step1.webp",
   "client/android/compose/src/test/screenshots/interactive/div-text/truncate-policy/grapheme.webp":"divkit/public/client/android/compose/src/test/screenshots/interactive/div-text/truncate-policy/grapheme.webp",
   "client/android/compose/src/test/screenshots/interactive/div-text/truncate-policy/word.webp":"divkit/public/client/android/compose/src/test/screenshots/interactive/div-text/truncate-policy/word.webp",
   "client/android/config/detekt/detekt-metrics.yml":"divkit/public/client/android/config/detekt/detekt-metrics.yml",

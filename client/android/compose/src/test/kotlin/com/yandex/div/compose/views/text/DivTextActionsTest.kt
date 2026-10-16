@@ -163,6 +163,53 @@ class DivTextActionsTest {
     }
 
     @Test
+    fun `tap on a range without bounds triggers range actions`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first second"),
+                ranges = listOf(textRange(actions = listOf(action(url = "test://range"))))
+            )
+        )
+
+        rule.onNodeWithTag("text").performFirstLinkClick()
+
+        assertEquals(actionData(url = "test://range"), actionHandler.handledAction)
+    }
+
+    @Test
+    fun `tap on a range with end beyond the integer range triggers range actions`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first second"),
+                ranges = listOf(
+                    textRange(start = 6, end = 2_147_483_648, actions = listOf(action(url = "test://range")))
+                )
+            )
+        )
+
+        rule.onNodeWithTag("text").performFirstLinkClick()
+
+        assertEquals(actionData(url = "test://range"), actionHandler.handledAction)
+    }
+
+    @Test
+    fun `range with start beyond the integer range does not create a link`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first second"),
+                ranges = listOf(
+                    textRange(start = 4_294_967_296, actions = listOf(action(url = "test://range")))
+                )
+            )
+        )
+
+        assertNull(rule.onNodeWithTag("text").getFirstLinkBounds())
+    }
+
+    @Test
     fun `tap on a range with disabled actions triggers element actions`() {
         setContent(
             text(
@@ -185,6 +232,47 @@ class DivTextActionsTest {
     }
 
     @Test
+    fun `tap next to a range triggers element actions`() {
+        setContent(
+            text(
+                id = "text",
+                action = action(url = "test://element"),
+                text = constant("first second"),
+                ranges = listOf(
+                    textRange(start = 0, end = 1, actions = listOf(action(url = "test://range")))
+                )
+            )
+        )
+        val rangeBounds = requireNotNull(rule.onNodeWithTag("text").getFirstLinkBounds())
+
+        rule.onNodeWithTag("text").performTouchInput {
+            click(Offset(rangeBounds.right + 10f, rangeBounds.center.y))
+        }
+
+        assertEquals(actionData(url = "test://element"), actionHandler.handledAction)
+    }
+
+    @Test
+    fun `tap on the ellipsis does not trigger actions of a range hidden by truncation`() {
+        setContent(
+            text(
+                id = "text",
+                action = action(url = "test://element"),
+                text = constant("A very long text that does not fit into a single line"),
+                maxLines = 1,
+                ranges = listOf(
+                    textRange(start = 40, end = 50, actions = listOf(action(url = "test://range")))
+                ),
+                width = fixed(100)
+            )
+        )
+
+        rule.onNodeWithTag("text").performTouchInput { click(Offset(right - 3f, centerY)) }
+
+        assertEquals(actionData(url = "test://element"), actionHandler.handledAction)
+    }
+
+    @Test
     fun `tap on a range inside the ellipsis triggers range actions instead of ellipsis actions`() {
         setContent(
             truncatedText(
@@ -193,7 +281,7 @@ class DivTextActionsTest {
                     ranges = listOf(
                         textRange(
                             start = 0,
-                            end = "… more".length,
+                            end = "… more".length.toLong(),
                             actions = listOf(action(url = "test://ellipsis_range"))
                         )
                     ),

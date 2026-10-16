@@ -168,8 +168,8 @@ fun textImage(
 )
 
 fun textRange(
-    start: Int,
-    end: Int,
+    start: Long = 0,
+    end: Long? = null,
     actions: List<DivAction>? = null,
     background: DivTextRangeBackground? = null,
     border: DivTextRangeBorder? = null,
@@ -180,9 +180,9 @@ fun textRange(
     actions = actions,
     background = background,
     border = border,
-    end = constant(end.toLong()),
+    end = end?.let { constant(it) },
     fontSizeUnit = constant(fontSizeUnit),
     lineHeight = lineHeight?.let { constant(it) },
     mask = mask,
-    start = constant(start.toLong())
+    start = constant(start)
 )
