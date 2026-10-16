@@ -18,6 +18,7 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.network.OkHttpDivNetworkClient
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
@@ -42,16 +43,16 @@ class ComposeRendererFacade(
     private val divContext = ComposeDivContext(
         baseContext = ContextThemeWrapper(container.context, R.style.Div_Theme_Demo),
         configuration = divConfiguration {
-            fontSourceProvider = ComposeFontSourceProvider()
-            playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context))
-            this.variableController = hostVariableController
             animationsEnabledProvider = Container.animationsEnabledProvider
-            patchDownloader = ComposePatchDownloader(Container.httpClient)
             extensionHandlers = mapOf(
                 "lottie" to LottieExtensionHandler(),
                 "shimmer" to ShimmerExtensionHandler(),
                 "pinch-to-zoom" to PinchToZoomExtensionHandler(),
             )
+            fontSourceProvider = ComposeFontSourceProvider()
+            networkClient = OkHttpDivNetworkClient(Container.httpClient)
+            playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(container.context))
+            this.variableController = hostVariableController
         }
     )
 

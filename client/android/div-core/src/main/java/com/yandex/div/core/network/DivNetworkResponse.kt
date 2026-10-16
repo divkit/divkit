@@ -2,7 +2,9 @@ package com.yandex.div.core.network
 
 import kotlin.AutoCloseable
 
-/** An HTTP response whose [body] and underlying resources are released by [close]. */
+/**
+ * An HTTP response whose [body] and underlying resources are released by [close].
+ */
 public interface DivNetworkResponse : AutoCloseable {
     public val url: String
     public val code: Int
@@ -28,7 +30,9 @@ public interface DivNetworkResponseBody : AutoCloseable {
     public fun skip(byteCount: Long): Long
 
     public companion object {
-        public fun fromBytes(bytes: ByteArray): DivNetworkResponseBody = ByteArrayResponseBody(bytes.copyOf())
+        public fun fromBytes(bytes: ByteArray): DivNetworkResponseBody {
+            return ByteArrayResponseBody(bytes.copyOf())
+        }
     }
 }
 

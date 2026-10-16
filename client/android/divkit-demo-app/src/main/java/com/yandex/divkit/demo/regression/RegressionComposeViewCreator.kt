@@ -16,11 +16,11 @@ import com.yandex.div.compose.video.viewbased.ViewBasedDivVideoPlayerFactory
 import com.yandex.div.lottie.CompositeDivLottieResourceLoader
 import com.yandex.div.lottie.DivLottieAssetResourceLoader
 import com.yandex.div.lottie.DivLottieRawResResourceLoader
+import com.yandex.div.network.OkHttpDivNetworkClient
 import com.yandex.div.video.m3.ExoDivPlayerFactory
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.ChronometerViewFactory
-import com.yandex.divkit.demo.div.ComposePatchDownloader
 import com.yandex.divkit.demo.div.CustomContainerViewFactory
 import com.yandex.divkit.demo.div.CustomTextViewFactory
 import com.yandex.divkit.demo.div.DemoDivLottieRawResProvider
@@ -44,7 +44,7 @@ class RegressionComposeViewCreator(context: Context) {
             baseContext = ContextThemeWrapper(activity, R.style.Div_Theme_Demo),
             configuration = divConfiguration {
                 actionHandler = RegressionComposeActionHandler(assetReader, divData)
-                patchDownloader = ComposePatchDownloader(Container.httpClient)
+                animationsEnabledProvider = Container.animationsEnabledProvider
                 customViewFactories = mapOf(
                     "old_custom_card_1" to CustomTextViewFactory(text = "Hi! I'm old card!"),
                     "old_custom_card_2" to CustomTextViewFactory(text = "Hi! I'm old as well!"),
@@ -57,8 +57,14 @@ class RegressionComposeViewCreator(context: Context) {
                 extensionHandlers = mapOf(
                     "lottie" to LottieExtensionHandler(
                         resourceLoader = CompositeDivLottieResourceLoader(
-                            DivLottieAssetResourceLoader(activity, DemoDivLottieRawResProvider::provideAssetFile),
-                            DivLottieRawResResourceLoader(activity, DemoDivLottieRawResProvider::provideRes),
+                            DivLottieAssetResourceLoader(
+                                context = activity,
+                                assetMapper = DemoDivLottieRawResProvider::provideAssetFile,
+                            ),
+                            DivLottieRawResResourceLoader(
+                                context = activity,
+                                rawResMapper = DemoDivLottieRawResProvider::provideRes,
+                            ),
                         )
                     ),
                     "shimmer" to ShimmerExtensionHandler(),
@@ -66,8 +72,8 @@ class RegressionComposeViewCreator(context: Context) {
                 )
                 fontSourceProvider = ComposeFontSourceProvider()
                 histogramConfiguration = DemoHistogramConfiguration
+                networkClient = OkHttpDivNetworkClient(Container.httpClient)
                 playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity))
-                animationsEnabledProvider = Container.animationsEnabledProvider
             }
         )
         val view = ComposeView(divContext).apply {

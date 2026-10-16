@@ -9,6 +9,7 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
+import com.yandex.div.test.data.change
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.custom
 import com.yandex.div.test.data.data
@@ -25,7 +26,16 @@ class DivPreloaderWithPatchTest {
     private val preloadedTypes = mutableListOf<String>()
     private var patch: DivPatch? = null
     private var failedType: String? = null
-    private val data = data(container(id = "root", items = listOf(custom(type = "before"), custom(type = "remaining"))))
+
+    private val data = data(
+        container(
+            id = "root",
+            items = listOf(
+                custom(type = "before"),
+                custom(type = "remaining")
+            )
+        )
+    )
 
     private val factory: DivCustomViewFactory = object : DivCustomViewFactory {
         @Composable
@@ -45,8 +55,8 @@ class DivPreloaderWithPatchTest {
     }
 
     private val divContext = DivContext(
-        getApplicationContext(),
-        DivConfiguration(
+        baseContext = getApplicationContext(),
+        configuration = DivConfiguration(
             reporter = TestReporter(),
             customViewFactories = listOf("before", "remaining", "after").associateWith { factory }
         )
@@ -84,7 +94,14 @@ class DivPreloaderWithPatchTest {
         assertEquals(listOf("after"), preloadedTypes)
     }
 
-    private fun replaceRoot(type: String): DivPatch = DivPatch(changes = listOf(
-        DivPatch.Change("root", listOf(container(id = "root", items = listOf(custom(type = type)))))
-    ))
+    private fun replaceRoot(type: String): DivPatch {
+        return DivPatch(
+            changes = listOf(
+                change(
+                    id = "root",
+                    items = listOf(container(id = "root", items = listOf(custom(type = type))))
+                )
+            )
+        )
+    }
 }

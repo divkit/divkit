@@ -1,31 +1,26 @@
 package com.yandex.div.compose
 
-import android.graphics.Typeface
 import android.net.Uri
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import com.yandex.div.compose.actions.DivExternalActionHandler
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.extensions.DivExtensionHandler
-import com.yandex.div.compose.font.DivFontSource
+import com.yandex.div.compose.font.DefaultFontSourceProvider
 import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.histogram.DisabledHistogramConfiguration
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
+import com.yandex.div.compose.patch.DefaultPatchDownloader
 import com.yandex.div.compose.patch.DivPatchDownloader
 import com.yandex.div.compose.preload.PreloadResult
-import com.yandex.div.compose.video.DivVideoPlayer
-import com.yandex.div.compose.video.DivVideoPlayerConfig
+import com.yandex.div.compose.video.DisabledVideoPlayerFactory
 import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.compose.video.DivVideoPreloader
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Named
 
 /**
@@ -47,6 +42,9 @@ class DivConfiguration private constructor(
     val actionHandler: DivExternalActionHandler,
 
     @get:Provides
+    val animationsEnabledProvider: DivAnimationsEnabledProvider,
+
+    @get:Provides
     val customViewFactories: Map<String, DivCustomViewFactory>,
 
     @get:Provides
@@ -62,13 +60,16 @@ class DivConfiguration private constructor(
     val imageLoaderConfiguration: ImageLoaderConfiguration,
 
     @get:Provides
+    val patchDownloader: DivPatchDownloader,
+
+    @get:Provides
     val playerFactory: DivVideoPlayerFactory,
 
     @get:Provides
-    val reporter: DivReporter,
+    val networkClient: DivNetworkClient,
 
     @get:Provides
-    val animationsEnabledProvider: DivAnimationsEnabledProvider,
+    val reporter: DivReporter,
 
     @get:Provides
     @get:Named(Names.HOST_VARIABLES)
@@ -76,9 +77,6 @@ class DivConfiguration private constructor(
 
     @get:Provides
     val videoPreloader: DivVideoPreloader,
-
-    @get:Provides
-    val patchDownloader: DivPatchDownloader,
 ) {
     @Deprecated(
         message = "Use divConfiguration { ... } or DivConfiguration.Builder instead.",
@@ -89,95 +87,91 @@ class DivConfiguration private constructor(
         actionHandler: DivExternalActionHandler = defaultActionHandler,
         customViewFactories: Map<String, DivCustomViewFactory> = emptyMap(),
         extensionHandlers: Map<String, DivExtensionHandler> = emptyMap(),
-        fontSourceProvider: DivFontSourceProvider = defaultFontSourceProvider,
+        fontSourceProvider: DivFontSourceProvider = DefaultFontSourceProvider,
         histogramConfiguration: DivHistogramConfiguration = DisabledHistogramConfiguration,
         imageLoaderConfiguration: ImageLoaderConfiguration = defaultImageLoaderConfiguration,
-        playerFactory: DivVideoPlayerFactory = defaultDivVideoPlayerFactory,
+        playerFactory: DivVideoPlayerFactory = DisabledVideoPlayerFactory,
         reporter: DivReporter = DivReporter(),
         animationsEnabledProvider: DivAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT,
         variableController: DivVariableController = DivVariableController(),
-        videoPreloader: DivVideoPreloader = defaultDivVideoPreloader,
+        videoPreloader: DivVideoPreloader = disabledVideoPreloader,
     ) : this(
         actionHandler = actionHandler,
+        animationsEnabledProvider = animationsEnabledProvider,
         customViewFactories = customViewFactories,
         extensionHandlers = extensionHandlers,
         fontSourceProvider = fontSourceProvider,
         histogramConfiguration = histogramConfiguration,
         imageLoaderConfiguration = imageLoaderConfiguration,
+        networkClient = disabledNetworkClient,
+        patchDownloader = DefaultPatchDownloader(
+            networkClient = disabledNetworkClient,
+            reporter = reporter,
+        ),
         playerFactory = playerFactory,
         reporter = reporter,
-        animationsEnabledProvider = animationsEnabledProvider,
         variableController = variableController,
         videoPreloader = videoPreloader,
-        patchDownloader = defaultPatchDownloader,
     )
 
-    /** Configures a [DivConfiguration] using the same defaults as its constructor. */
+    /**
+     * Configures a [DivConfiguration] using the same defaults as its constructor.
+     */
     class Builder {
         var actionHandler: DivExternalActionHandler = defaultActionHandler
+        var animationsEnabledProvider: DivAnimationsEnabledProvider =
+            DivAnimationsEnabledProvider.DEFAULT
         var customViewFactories: Map<String, DivCustomViewFactory> = emptyMap()
         var extensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
-        var fontSourceProvider: DivFontSourceProvider = defaultFontSourceProvider
+        var fontSourceProvider: DivFontSourceProvider = DefaultFontSourceProvider
         var histogramConfiguration: DivHistogramConfiguration = DisabledHistogramConfiguration
         var imageLoaderConfiguration: ImageLoaderConfiguration = defaultImageLoaderConfiguration
-        var playerFactory: DivVideoPlayerFactory = defaultDivVideoPlayerFactory
+        var playerFactory: DivVideoPlayerFactory = DisabledVideoPlayerFactory
         var reporter: DivReporter = DivReporter()
-        var animationsEnabledProvider: DivAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT
+        var networkClient: DivNetworkClient = disabledNetworkClient
         var variableController: DivVariableController = DivVariableController()
-        var videoPreloader: DivVideoPreloader = defaultDivVideoPreloader
-        var patchDownloader: DivPatchDownloader = defaultPatchDownloader
+        var videoPreloader: DivVideoPreloader = disabledVideoPreloader
+
+        private var _patchDownloader: DivPatchDownloader? = null
+
+        @Deprecated("Use networkClient to customize network requests")
+        var patchDownloader: DivPatchDownloader
+            get() = _patchDownloader ?: DefaultPatchDownloader(networkClient, reporter)
+            set(value) {
+                _patchDownloader = value
+            }
 
         fun build(): DivConfiguration = DivConfiguration(
             actionHandler = actionHandler,
+            animationsEnabledProvider = animationsEnabledProvider,
             customViewFactories = customViewFactories,
             extensionHandlers = extensionHandlers,
             fontSourceProvider = fontSourceProvider,
             histogramConfiguration = histogramConfiguration,
             imageLoaderConfiguration = imageLoaderConfiguration,
+            networkClient = networkClient,
+            patchDownloader = patchDownloader,
             playerFactory = playerFactory,
             reporter = reporter,
-            animationsEnabledProvider = animationsEnabledProvider,
             variableController = variableController,
             videoPreloader = videoPreloader,
-            patchDownloader = patchDownloader,
         )
     }
 }
 
-/** Creates a [DivConfiguration] using a [DivConfiguration.Builder] block. */
+/**
+ * Creates a [DivConfiguration] using a [DivConfiguration.Builder] block.
+ */
 fun divConfiguration(block: DivConfiguration.Builder.() -> Unit): DivConfiguration =
     DivConfiguration.Builder().apply(block).build()
 
 private val defaultActionHandler = object : DivExternalActionHandler {}
 
-private val defaultPatchDownloader = DivPatchDownloader {
-    throw UnsupportedOperationException("DivPatchDownloader is not configured")
+private val disabledNetworkClient = DivNetworkClient {
+    throw UnsupportedOperationException("DivNetworkClient is not configured")
 }
 
-private val defaultFontSourceProvider = object : DivFontSourceProvider {
-    override fun getFontSource(fontFamilyName: String?, weight: FontWeight): DivFontSource {
-        return DivFontSource.Typeface(Typeface.DEFAULT)
-    }
-}
-
-private val defaultDivVideoPlayerFactory = DivVideoPlayerFactory {
-    object : DivVideoPlayer {
-        override val isReady: StateFlow<Boolean> = MutableStateFlow(false)
-        override val isPlaying: StateFlow<Boolean> = MutableStateFlow(false)
-        override val isBuffering: StateFlow<Boolean> = MutableStateFlow(false)
-        override val isEnded: StateFlow<Boolean> = MutableStateFlow(false)
-        override val error: StateFlow<Throwable?> = MutableStateFlow(null)
-        override val currentTimeMs: StateFlow<Long> = MutableStateFlow(0L)
-        override fun seek(timeMs: Long) = Unit
-        override fun play() = Unit
-        override fun pause() = Unit
-        override fun release() = Unit
-        @Composable
-        override fun Content(config: DivVideoPlayerConfig, modifier: Modifier) = Unit
-    }
-}
-
-private val defaultDivVideoPreloader = object : DivVideoPreloader {
+private val disabledVideoPreloader = object : DivVideoPreloader {
     override suspend fun preloadVideoWithResult(sources: List<Uri>) = PreloadResult(true)
 }
 

@@ -1,6 +1,8 @@
 package com.yandex.div.core.network
 
-/** An immutable HTTP request passed to [DivNetworkClient]. */
+/**
+ * An immutable HTTP request passed to [DivNetworkClient].
+ */
 public class DivNetworkRequest private constructor(
     public val url: String,
     public val method: String,
@@ -10,10 +12,13 @@ public class DivNetworkRequest private constructor(
 ) {
     public val headers: List<DivNetworkRequestHeader> = buildList { addAll(headers) }
     private val bodyValue: ByteArray? = body?.copyOf()
+
     public val body: ByteArray?
         get() = bodyValue?.copyOf()
 
-    /** Builds a request for [url]. */
+    /**
+     * Builds a request for [url].
+     */
     public class Builder(private val url: String) {
         private var method: String = "GET"
         private val headers = mutableListOf<DivNetworkRequestHeader>()
@@ -40,7 +45,8 @@ public class DivNetworkRequest private constructor(
             this.contentType = contentType
         }
 
-        public fun build(): DivNetworkRequest = DivNetworkRequest(url, method, headers, body, contentType)
+        public fun build(): DivNetworkRequest {
+            return DivNetworkRequest(url, method, headers, body, contentType)
+        }
     }
-
 }
