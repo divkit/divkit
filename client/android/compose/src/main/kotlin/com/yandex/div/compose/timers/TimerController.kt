@@ -8,6 +8,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivTimer
+import com.yandex.yatagan.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,7 +20,7 @@ import kotlin.time.TimeSource
 
 internal class TimerController(
     private val timer: DivTimer,
-    private val actionHandler: DivActionHandler,
+    private val actionHandler: Lazy<DivActionHandler>,
     private val actionHandlingContext: DivActionHandlingContext,
     private val expressionResolver: ExpressionResolver,
     private val mainCoroutineScope: CoroutineScope,
@@ -195,13 +196,13 @@ internal class TimerController(
 
     private fun onTick() {
         timer.tickActions?.let {
-            actionHandler.handle(actionHandlingContext, it, DivActionSource.TIMER)
+            actionHandler.get().handle(actionHandlingContext, it, DivActionSource.TIMER)
         }
     }
 
     private fun onEnd() {
         timer.endActions?.let {
-            actionHandler.handle(actionHandlingContext, it, DivActionSource.TIMER)
+            actionHandler.get().handle(actionHandlingContext, it, DivActionSource.TIMER)
         }
     }
 

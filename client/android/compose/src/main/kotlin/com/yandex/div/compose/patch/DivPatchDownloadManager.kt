@@ -6,7 +6,6 @@ import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div.compose.dagger.Names
-import com.yandex.div2.DivPatch
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -22,14 +21,10 @@ internal class DivPatchDownloadManager @Inject constructor(
     private val downloader: DivPatchDownloader,
     @Named(Names.MAIN_COROUTINE_SCOPE)
     private val mainCoroutineScope: CoroutineScope,
-    private val reporter: DivReporter
+    private val patchCoordinator: DivPatchCoordinator,
+    private val reporter: DivReporter,
 ) {
-    private lateinit var applyPatch: (DivPatch, () -> Unit) -> Boolean
     private val jobs = mutableSetOf<Job>()
-
-    fun init(applyPatch: (DivPatch, () -> Unit) -> Boolean) {
-        this.applyPatch = applyPatch
-    }
 
     @Suppress("TooGenericExceptionCaught")
     fun download(url: Uri, onSuccess: () -> Unit, onFail: () -> Unit) {
@@ -46,7 +41,7 @@ internal class DivPatchDownloadManager @Inject constructor(
                     return@launch
                 }
                 currentCoroutineContext().ensureActive()
-                applyPatch(patch, onSuccess)
+                patchCoordinator.applyPatch(patch, onSuccess)
             } finally {
                 jobs.remove(currentCoroutineContext()[Job])
             }

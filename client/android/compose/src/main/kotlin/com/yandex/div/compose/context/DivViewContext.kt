@@ -11,14 +11,11 @@ import com.yandex.div.compose.dagger.DivViewComponent
 import com.yandex.div.compose.haptics.bind
 import com.yandex.div.compose.layoutprovider.observe
 import com.yandex.div.compose.pager.DivPagerStateStorage
-import com.yandex.div.compose.patch.DivPatchCoordinator
 import com.yandex.div.compose.patch.observe
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.timers.observe
 import com.yandex.div.compose.triggers.observe
-import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
 import com.yandex.div2.Div
@@ -27,7 +24,6 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 
 internal class DivViewContext(
-    data: DivData,
     internal val component: DivViewComponent
 ) {
     private var compositionCount = 0
@@ -38,43 +34,23 @@ internal class DivViewContext(
     val rootDiv: Div?
         get() = states.firstOrNull()?.div
 
-    val rootLocalComponent: DivLocalComponent
-
     val compositionKeyStorage: CompositionKeyStorage
         get() = component.compositionKeyStorage
 
     val pagerStateStorage: DivPagerStateStorage
         get() = component.pagerStateStorage
 
-    val patchCoordinator: DivPatchCoordinator
-        get() = component.patchCoordinator
+    val rootLocalComponent: DivLocalComponent
+        get() = component.rootLocalComponent.get()
 
     val stateStorage: DivStateStorage
         get() = component.stateStorage
-
-    val videoPlayerStorage: VideoPlayerStorage
-        get() = component.videoPlayerStorage
 
     val visibilityActionTracker: VisibilityActionTracker
         get() = component.visibilityActionTracker
 
     init {
-        val baseFunctionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
-        val functions = data.functions.orEmpty().toLocalFunctions()
-        rootLocalComponent = createLocalComponent(
-            variableController = DivVariableController(component.variableController),
-            functionProvider = baseFunctionProvider + functions,
-            variables = data.variables.orEmpty()
-        )
-
-        component.patchDownloadManager.init { patch, onApplied ->
-            patchCoordinator.applyPatch(patch, rootLocalComponent, onApplied)
-        }
-        component.timerStorage.init(
-            timers = data.timers.orEmpty(),
-            localComponent = rootLocalComponent
-        )
-        data.variableTriggers.orEmpty().forEach(rootLocalComponent.triggerStorage::add)
+        component.data.variableTriggers.orEmpty().forEach(rootLocalComponent.triggerStorage::add)
     }
 
     @SuppressLint("ComposableNaming")
@@ -92,8 +68,8 @@ internal class DivViewContext(
 
         component.hapticFeedbackStorage.bind()
         component.layoutProviderStorage.observe()
+        component.patchCoordinator.observe()
         component.patchDownloadManager.observe()
-        patchCoordinator.observe()
         component.timerStorage.observe()
         rootLocalComponent.triggerStorage.observe()
     }

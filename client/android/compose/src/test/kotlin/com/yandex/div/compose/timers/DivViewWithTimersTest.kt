@@ -3,6 +3,7 @@ package com.yandex.div.compose.timers
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -17,13 +18,16 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.data
+import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.timer
 import com.yandex.div.test.data.timerAction
+import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivTimer
+import com.yandex.div2.DivVariable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import org.junit.Rule
@@ -63,12 +67,10 @@ class DivViewWithTimersTest {
                 id = "start_button",
                 text = "Start timer"
             ),
-            timers = listOf(
-                timer(
-                    duration = 1000,
-                    id = "timer1",
-                    valueVariable = "counter"
-                )
+            timer = timer(
+                duration = 1000,
+                id = "timer1",
+                valueVariable = "counter"
             )
         )
 
@@ -80,6 +82,28 @@ class DivViewWithTimersTest {
         advanceTimeBy(500)
 
         assertEquals(1000L, elapsedTime.getValue())
+    }
+
+    @Test
+    fun `timer updates a card variable`() {
+        setContent(
+            text(
+                action = startTimerAction(),
+                id = "counter",
+                text = expression("@{card_counter}"),
+            ),
+            timer = timer(
+                id = "timer1",
+                duration = 1000,
+                valueVariable = "card_counter",
+            ),
+            variables = listOf(variable("card_counter", 0)),
+        )
+
+        rule.onNodeWithTag("counter").performClick()
+        advanceTimeBy(1000)
+
+        rule.onNodeWithTag("counter").assertTextEquals("1000")
     }
 
     @Test
@@ -172,12 +196,13 @@ class DivViewWithTimersTest {
 
     private fun setContent(
         content: Div,
-        timers: List<DivTimer>
+        timer: DivTimer,
+        variables: List<DivVariable>? = null,
     ) {
         rule.setContent(
             configuration = configuration,
             debugConfiguration = debugConfiguration,
-            data = data(content, timers = timers)
+            data = data(content, timers = listOf(timer), variables = variables),
         )
     }
 

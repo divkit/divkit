@@ -13,7 +13,6 @@ internal class DivViewContextFactory @Inject constructor(
 ) {
     fun getOrCreate(data: DivData): DivViewContext {
         return storage.get(data) ?: DivViewContext(
-            data = data,
             component = viewComponentBuilderProvider.get().build(data = data),
         ).also { storage.put(data, it) }
     }

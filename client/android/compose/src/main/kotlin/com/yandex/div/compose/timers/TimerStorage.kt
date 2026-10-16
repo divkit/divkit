@@ -7,7 +7,7 @@ import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div.compose.dagger.Names
-import com.yandex.div2.DivTimer
+import com.yandex.div2.DivData
 import com.yandex.yatagan.Lazy
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
@@ -16,11 +16,14 @@ import kotlin.time.TimeSource
 
 @DivViewScope
 internal class TimerStorage @Inject constructor(
+    data: DivData,
     private val actionHandler: Lazy<DivActionHandler>,
     @Named(Names.MAIN_COROUTINE_SCOPE)
     private val mainCoroutineScope: CoroutineScope,
     private val reporter: DivReporter,
-    private val timeSource: TimeSource
+    @Named(Names.ROOT_LOCAL_COMPONENT)
+    private val rootLocalComponent: Lazy<DivLocalComponent>,
+    private val timeSource: TimeSource,
 ) {
     private val timers = mutableMapOf<String, TimerController>()
 
@@ -32,11 +35,9 @@ internal class TimerStorage @Inject constructor(
             }
         }
 
-    fun init(
-        timers: List<DivTimer>,
-        localComponent: DivLocalComponent
-    ) {
-        timers.forEach { timer ->
+    init {
+        val localComponent = rootLocalComponent.get()
+        data.timers.orEmpty().forEach { timer ->
             val id = timer.id
             if (this.timers.containsKey(id)) {
                 reporter.reportError("Timer with the same id is already exist: $id")
@@ -45,7 +46,7 @@ internal class TimerStorage @Inject constructor(
 
             this.timers[id] = TimerController(
                 timer = timer,
-                actionHandler = actionHandler.get(),
+                actionHandler = actionHandler,
                 actionHandlingContext = localComponent.actionHandlingContext,
                 expressionResolver = localComponent.expressionResolver,
                 mainCoroutineScope = mainCoroutineScope,

@@ -83,6 +83,22 @@ class DivViewWithTriggersTest {
     }
 
     @Test
+    fun `initially true trigger updates a card variable`() {
+        setContent(
+            text(id = "title", text = expression("@{text}")),
+            triggers = listOf(
+                trigger(
+                    action = action(url = "div-action://set_variable?name=text&value=new text"),
+                    condition = "@{true}",
+                )
+            ),
+            variables = listOf(variable("text", "initial text")),
+        )
+
+        rule.onNodeWithTag("title").assertTextEquals("new text")
+    }
+
+    @Test
     fun `text changes when local trigger is triggered`() {
         val condition = Variable.BooleanVariable("condition", false)
         variableController.declare(condition)

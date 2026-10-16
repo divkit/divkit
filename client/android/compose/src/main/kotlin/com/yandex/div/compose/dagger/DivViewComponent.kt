@@ -22,6 +22,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div2.DivData
 import com.yandex.yatagan.BindsInstance
 import com.yandex.yatagan.Component
+import com.yandex.yatagan.Lazy
 import javax.inject.Named
 
 @DivViewScope
@@ -34,6 +35,7 @@ internal interface DivViewComponent {
     val actionHandler: DivActionHandler
     val actionMenuHolder: ActionMenuHolder
     val compositionKeyStorage: CompositionKeyStorage
+    val data: DivData
     val hapticFeedbackStorage: HapticFeedbackStorage
     val histogramReporter: DivViewHistogramReporter
     val imageStateStorage: ImageStateStorage
@@ -49,6 +51,9 @@ internal interface DivViewComponent {
     val tooltipStateStorage: TooltipStateStorage
     val videoPlayerStorage: VideoPlayerStorage
     val visibilityActionTracker: VisibilityActionTracker
+
+    @get:Named(Names.ROOT_LOCAL_COMPONENT)
+    val rootLocalComponent: Lazy<DivLocalComponent>
 
     @get:Named(Names.HOST_VARIABLES)
     val variableController: DivVariableController

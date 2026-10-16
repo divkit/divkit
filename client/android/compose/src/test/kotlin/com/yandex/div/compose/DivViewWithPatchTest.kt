@@ -701,7 +701,7 @@ class DivViewWithPatchTest {
                             val event = awaitPointerEvent(PointerEventPass.Initial)
                             if (patchOnMove && event.changes.any { it.positionChanged() }) {
                                 val viewContext = divContext.getViewContext(data)
-                                applied = viewContext.patchCoordinator.applyPatch(patch, viewContext.rootLocalComponent)
+                                applied = viewContext.component.patchCoordinator.applyPatch(patch)
                                 patchOnMove = false
                             }
                         }

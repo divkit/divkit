@@ -59,7 +59,7 @@ internal class ActionHandlerEnvironment {
             videoActionHandler = videoActionHandler
         )
         propertyVariableExecutor = DivPropertyVariableExecutor(
-            actionHandler = actionHandler,
+            actionHandler = { actionHandler },
             actionHandlingContext = context,
             expressionResolver = expressionResolver,
         )

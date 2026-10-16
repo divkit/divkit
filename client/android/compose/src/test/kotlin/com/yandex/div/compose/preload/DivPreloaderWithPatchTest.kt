@@ -46,8 +46,7 @@ class DivPreloaderWithPatchTest {
             preloadedTypes.add(type)
             if (type == "before") {
                 patch?.let {
-                    val viewContext = divContext.getViewContext(data)
-                    viewContext.patchCoordinator.applyPatch(it, viewContext.rootLocalComponent)
+                    divContext.getViewContext(data).component.patchCoordinator.applyPatch(it)
                 }
             }
             return PreloadResult(type != failedType)
@@ -85,8 +84,7 @@ class DivPreloaderWithPatchTest {
 
     @Test
     fun `preload uses a patch applied before the call`() = runTest {
-        val viewContext = divContext.getViewContext(data)
-        viewContext.patchCoordinator.applyPatch(replaceRoot("after"), viewContext.rootLocalComponent)
+        divContext.getViewContext(data).component.patchCoordinator.applyPatch(replaceRoot("after"))
 
         val result = divContext.preload(data)
 

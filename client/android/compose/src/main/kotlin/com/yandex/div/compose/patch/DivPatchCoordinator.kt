@@ -13,6 +13,7 @@ import com.yandex.div.compose.context.CompositionKeyStorage
 import com.yandex.div.compose.context.DivLocalComponentStorage
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.internal.patch.DivPatchApply
@@ -20,7 +21,9 @@ import com.yandex.div.internal.patch.DivPatchMap
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
+import com.yandex.yatagan.Lazy
 import javax.inject.Inject
+import javax.inject.Named
 
 /**
  * Coordinates patch application with Compose updates: keeps old component aliases until the
@@ -31,24 +34,37 @@ internal class DivPatchCoordinator @Inject constructor(
     private val compositionKeyStorage: CompositionKeyStorage,
     private val localComponentStorage: DivLocalComponentStorage,
     private val pagerStateStorage: DivPagerStateStorage,
-    private val states: MutableState<List<DivData.State>>
+    @Named(Names.ROOT_LOCAL_COMPONENT)
+    private val rootLocalComponent: Lazy<DivLocalComponent>,
+    private val states: MutableState<List<DivData.State>>,
 ) {
     var revision: Long by mutableLongStateOf(0L)
         private set
 
     private val pendingActions = ArrayDeque<PendingAction>()
 
-    private class PendingAction(val revision: Long, val divs: Set<DivBase>, val run: () -> Unit)
+    private class PendingAction(
+        val revision: Long,
+        val divs: Set<DivBase>,
+        val run: () -> Unit,
+    )
 
-    fun applyPatch(patch: DivPatch, rootLocalComponent: DivLocalComponent, onApplied: () -> Unit = {}): Boolean {
+    fun applyPatch(patch: DivPatch, onApplied: () -> Unit = {}): Boolean {
+        val rootLocalComponent = rootLocalComponent.get()
         val patchApply = DivPatchApply(
             patch = DivPatchMap(patch),
             errorLogger = { rootLocalComponent.reporter.reportError(it) },
             transformItem = { it.copyForPatch() }
         )
-        val updatedStates = patchApply.applyPatch(states.value, rootLocalComponent.expressionResolver)
+        val updatedStates = patchApply.applyPatch(
+            states.value,
+            rootLocalComponent.expressionResolver
+        )
         if (updatedStates == null) {
-            rootLocalComponent.handleActions(patch.onFailedActions.orEmpty(), DivActionSource.PATCH)
+            rootLocalComponent.handleActions(
+                actions = patch.onFailedActions.orEmpty(),
+                source = DivActionSource.PATCH,
+            )
             return false
         }
 
@@ -60,10 +76,15 @@ internal class DivPatchCoordinator @Inject constructor(
         updatedStates.forEach { it.div.collectDivs(retainedDivs) }
         states.value = updatedStates
         revision++
-        pendingActions.addLast(PendingAction(revision, retainedDivs) {
-            rootLocalComponent.handleActions(patch.onAppliedActions.orEmpty(), DivActionSource.PATCH)
-            onApplied()
-        })
+        pendingActions.addLast(
+            PendingAction(revision, retainedDivs) {
+                rootLocalComponent.handleActions(
+                    actions = patch.onAppliedActions.orEmpty(),
+                    source = DivActionSource.PATCH,
+                )
+                onApplied()
+            }
+        )
         return true
     }
 

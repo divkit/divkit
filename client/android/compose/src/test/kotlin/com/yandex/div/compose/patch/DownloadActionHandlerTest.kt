@@ -18,6 +18,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.mock
 import java.io.IOException
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -43,7 +46,13 @@ class DownloadActionHandlerTest {
             response.await()
         },
         mainCoroutineScope = scope,
-        reporter = reporter
+        patchCoordinator = mock {
+            on { applyPatch(patch = any(), onApplied = any()) } doAnswer {
+                it.getArgument<() -> Unit>(1).invoke()
+                true
+            }
+        },
+        reporter = reporter,
     )
 
     private val actionHandler = DownloadActionHandler(
@@ -53,10 +62,6 @@ class DownloadActionHandlerTest {
 
     @BeforeTest
     fun setUp() {
-        downloadManager.init { _, onApplied ->
-            onApplied()
-            true
-        }
         environment.init(
             downloadActionHandler = actionHandler,
             externalActionHandler = testHandler,

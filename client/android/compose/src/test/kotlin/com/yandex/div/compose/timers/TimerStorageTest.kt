@@ -8,6 +8,7 @@ import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
+import com.yandex.div.test.data.data
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.timer
 import com.yandex.div2.DivAction
@@ -34,8 +35,8 @@ class TimerStorageTest {
 
     private val actionHandler = mock<DivActionHandler> {
         on { handle(context = any(), actions = any(), source = any()) } doAnswer {
-            assertEquals(DivActionSource.TIMER, it.arguments[2])
-            handledActions.addAll(it.arguments[1] as Collection<DivAction>)
+            assertEquals(DivActionSource.TIMER, it.getArgument(2))
+            handledActions.addAll(it.getArgument(1))
             Unit
         }
     }
@@ -45,7 +46,7 @@ class TimerStorageTest {
     private val handledActions = mutableListOf<DivAction>()
 
     @Test
-    fun `init() reports an error when adding timers with non unique ids`() {
+    fun `constructor reports an error when adding timers with non unique ids`() {
         reporter.failOnError = false
 
         init(timer(id = "timer1"), timer(id = "timer1"))
@@ -54,7 +55,7 @@ class TimerStorageTest {
     }
 
     @Test
-    fun `init() reports an error when adding timers with unknown variable`() {
+    fun `constructor reports an error when adding timers with unknown variable`() {
         reporter.failOnError = false
 
         init(timer(id = "timer1", valueVariable = "unknown"))
@@ -63,7 +64,7 @@ class TimerStorageTest {
     }
 
     @Test
-    fun `init() reports an error when adding timers with invalid variable`() {
+    fun `constructor reports an error when adding timers with invalid variable`() {
         reporter.failOnError = false
 
         variableController.putOrUpdate(
@@ -635,18 +636,17 @@ class TimerStorageTest {
 
     private fun init(vararg timers: DivTimer) {
         timerStorage = TimerStorage(
+            data = data(states = emptyList(), timers = timers.asList()),
             actionHandler = { actionHandler },
             mainCoroutineScope = testScope,
             reporter = reporter,
-            timeSource = testScope.testScheduler.timeSource
-        ).apply {
-            init(
-                timers = timers.asList(),
-                localComponent = mockLocalComponent(
-                    variableController = variableController
+            rootLocalComponent = {
+                mockLocalComponent(
+                    variableController = variableController,
                 )
-            )
-        }
+            },
+            timeSource = testScope.testScheduler.timeSource,
+        )
         timerStorage.isEnabled = true
     }
 

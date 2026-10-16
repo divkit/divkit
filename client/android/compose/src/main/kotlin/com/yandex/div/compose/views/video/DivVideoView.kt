@@ -48,7 +48,7 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
     }
 
     data.id?.let {
-        LocalDivViewContext.current.videoPlayerStorage.registerPlayer(it, player)
+        LocalDivViewContext.current.component.videoPlayerStorage.registerPlayer(it, player)
     }
 
     ObserveVideoActions(player, data)

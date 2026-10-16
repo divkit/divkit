@@ -36,8 +36,7 @@ class DivPatcher @Inject internal constructor(
      */
     suspend fun applyPatch(data: DivData, patch: DivPatch): Boolean {
         return withContext(mainCoroutineScope.coroutineContext.minusKey(Job)) {
-            val viewContext = viewContextFactory.getOrCreate(data)
-            viewContext.patchCoordinator.applyPatch(patch, viewContext.rootLocalComponent)
+            viewContextFactory.getOrCreate(data).component.patchCoordinator.applyPatch(patch)
         }
     }
 }
