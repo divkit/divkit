@@ -1,4 +1,5 @@
 import UIKit
+import VGSL
 import XCTest
 
 @MainActor
@@ -19,13 +20,16 @@ final class VerifySnapshotPerformer {
     self.scenarioPath = scenarioPath
   }
 
-  func perform(name: String, on element: XCUIElement) throws {
+  func perform(
+    name: String,
+    on element: any XCUIScreenshotProviding,
+    croppingTo region: CGRect?
+  ) throws {
     try XCTContext.runActivity(named: "verify_snapshot: \(name)") { activity in
-      guard element.wait(timeout: 3, condition: { $0.exists }) else {
-        throw SnapshotError.elementDoesNotExist
-      }
       let screenshot = element.screenshot()
-      let image = screenshot.image
+      let image = try region.map {
+        try crop(screenshot.image, to: $0)
+      } ?? screenshot.image
       do {
         let referenceURL = try snapshotReferenceURL(name: name, scale: image.scale)
         let reference: UIImage?
@@ -47,7 +51,11 @@ final class VerifySnapshotPerformer {
             at: referenceURL.deletingLastPathComponent(),
             withIntermediateDirectories: true
           )
-          try screenshot.pngRepresentation.write(to: referenceURL, options: .atomic)
+          let data = image.pngData()
+          guard let data else {
+            throw SnapshotError.invalidImage
+          }
+          try data.write(to: referenceURL, options: .atomic)
           hasRecordedSnapshots = true
           return
         }
@@ -66,13 +74,25 @@ final class VerifySnapshotPerformer {
         activity.add(diff)
         throw SnapshotError.mismatch(referenceURL)
       } catch {
-        let actual = XCTAttachment(screenshot: screenshot)
+        let actual = XCTAttachment(image: image)
         actual.name = "\(name)_actual.png"
         actual.lifetime = .keepAlways
         activity.add(actual)
         throw error
       }
     }
+  }
+
+  private func crop(_ image: UIImage, to region: CGRect) throws -> UIImage {
+    let imageBounds = CGRect(origin: .zero, size: image.size)
+    guard imageBounds.contains(region),
+          let cropped = image.crop(
+            rect: region.relative(in: imageBounds),
+            preserveScale: true
+          ) else {
+      throw SnapshotError.invalidRegion(region)
+    }
+    return cropped
   }
 
   func validateExecutionResult() throws {
@@ -97,7 +117,8 @@ final class VerifySnapshotPerformer {
 
 private enum SnapshotError: LocalizedError {
   case snapshotsRecorded
-  case elementDoesNotExist
+  case invalidImage
+  case invalidRegion(CGRect)
   case invalidName(String)
   case invalidReference(URL)
   case mismatch(URL)
@@ -106,8 +127,10 @@ private enum SnapshotError: LocalizedError {
     switch self {
     case .snapshotsRecorded:
       "Snapshots recorded. Run without UPDATE_SNAPSHOTS to verify them."
-    case .elementDoesNotExist:
-      "Snapshot element does not exist in the accessibility hierarchy"
+    case .invalidImage:
+      "Cannot encode snapshot image"
+    case let .invalidRegion(region):
+      "Invalid snapshot region: \(region)"
     case let .invalidName(name):
       "Invalid snapshot name: \(name)"
     case let .invalidReference(url):

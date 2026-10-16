@@ -30,9 +30,10 @@ final class DivKitRegressionUITests: XCTestCase {
             ]
             testCase.app.launch(launchArguments: launchArguments)
             try testCase.app.waitUntilRunning()
-            let root = try testCase.app.waitForRootDivView()
+            let cardRoot = try testCase.app.waitForRootDivView()
             try await RunnerExecutor(
-              root: root,
+              root: testCase.app,
+              cardRoot: cardRoot,
               connection: connection,
               verifySnapshotPerformer: VerifySnapshotPerformer(
                 referenceSnapshotsDirectoryURL: configuration.referenceSnapshotsDirectoryURL,

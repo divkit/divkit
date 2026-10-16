@@ -3,6 +3,7 @@ import XCTest
 @MainActor
 struct RunnerExecutor {
   let root: XCUIElement
+  let cardRoot: XCUIElement
   let connection: UITestConnection
   let verifySnapshotPerformer: VerifySnapshotPerformer
 
@@ -42,7 +43,7 @@ struct RunnerExecutor {
     case let .verifyLog(step):
       try await execute(step)
     case let .verifySnapshot(step):
-      try execute(step)
+      try await execute(step)
     case let .divAction(step):
       try await execute(step)
     case .wait:

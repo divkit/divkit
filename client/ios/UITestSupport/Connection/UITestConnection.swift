@@ -94,6 +94,18 @@ final class UITestConnection {
     }
   }
 
+  func snapshotRegion() async throws -> CGRect {
+    let response = try await send(.snapshotRegion)
+    switch response {
+    case let .success(.snapshotRegion(cropRect)):
+      return cropRect
+    case let .failure(message):
+      throw ConnectionError.requestFailed(message)
+    case .success:
+      throw ConnectionError.unexpectedResponse
+    }
+  }
+
   private func send(_ request: UITestRequest) async throws -> UITestResponse {
     do {
       return try await withUITestTimeout { [self] in

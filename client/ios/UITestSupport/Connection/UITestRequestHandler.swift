@@ -18,6 +18,8 @@ struct UITestRequestHandler {
       return .success(.divAction)
     case .logs:
       return .success(.logs(logReporter.logs()))
+    case .snapshotRegion:
+      return .success(.snapshotRegion(try getSnapshotCropRect()))
     }
   }
 
@@ -42,15 +44,36 @@ struct UITestRequestHandler {
       )
     }
   }
+
+  private func getSnapshotCropRect() throws -> CGRect {
+    guard let window = rootView.window else {
+      throw RequestHandlingError.snapshotWindowMissing
+    }
+    rootView.layoutIfNeeded()
+    let cropRectInWindow = rootView.convert(rootView.safeAreaLayoutGuide.layoutFrame, to: window)
+    let cropRect = window.convert(cropRectInWindow, to: window.screen.coordinateSpace)
+    guard cropRect.isValidAndFinite,
+          !cropRect.isEmpty,
+          window.screen.coordinateSpace.bounds.contains(cropRect) else {
+      throw RequestHandlingError.invalidSnapshotRegion
+    }
+    return cropRect
+  }
 }
 
 private enum RequestHandlingError: LocalizedError {
   case invalidDivAction(String)
+  case snapshotWindowMissing
+  case invalidSnapshotRegion
 
   var errorDescription: String? {
     switch self {
     case let .invalidDivAction(details):
       "Failed to parse DivAction: \(details)"
+    case .snapshotWindowMissing:
+      "The snapshot root view is not attached to a window"
+    case .invalidSnapshotRegion:
+      "The snapshot content region is empty, invalid or outside the screen"
     }
   }
 }

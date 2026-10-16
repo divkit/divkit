@@ -1,14 +1,17 @@
+import Foundation
 import VGSL
 
 enum UITestRequest: Codable {
   case divAction(JSONDictionary)
   case logs
+  case snapshotRegion
 }
 
 enum UITestResponse: Codable, Sendable {
   enum SuccessResponse: Codable, Sendable {
     case divAction
     case logs(UITestLogSnapshot)
+    case snapshotRegion(CGRect)
   }
 
   case success(SuccessResponse)
