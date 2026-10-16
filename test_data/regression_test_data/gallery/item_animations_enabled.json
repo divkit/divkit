@@ -1,0 +1,139 @@
+{
+  "description": "Gallery item animations respect the animation setting on first bind and when it changes while the gallery is displayed.",
+  "platforms": [
+    "android"
+  ],
+  "templates": {
+    "button": {
+      "type": "text",
+      "font_size": 16,
+      "text_color": "#000000",
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "top": 12,
+        "bottom": 12
+      },
+      "margins": {
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#EEEEEE"
+        }
+      ]
+    },
+    "gallery_item": {
+      "type": "text",
+      "font_size": 18,
+      "text_color": "#000000",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#CCDDFF"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "gallery_item_animations_enabled",
+    "variables": [
+      {
+        "name": "show_middle_item",
+        "type": "boolean",
+        "value": true
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Hide and show Item 2. Watch Item 3 move. The animation buttons change the demo app setting.",
+              "font_size": 16,
+              "text_color": "#000000",
+              "margins": {
+                "bottom": 16
+              }
+            },
+            {
+              "type": "button",
+              "text": "Enable animations",
+              "actions": [
+                {
+                  "log_id": "enable_gallery_animations",
+                  "url": "div-action://set_preferences?name=disable_animations&value=0"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Disable animations",
+              "actions": [
+                {
+                  "log_id": "disable_gallery_animations",
+                  "url": "div-action://set_preferences?name=disable_animations&value=1"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "@{show_middle_item ? 'Hide Item 2' : 'Show Item 2'}",
+              "actions": [
+                {
+                  "log_id": "toggle_middle_item",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "show_middle_item",
+                    "value": {
+                      "type": "boolean",
+                      "value": "@{!show_middle_item}"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "gallery",
+              "id": "animated_gallery",
+              "items": [
+                {
+                  "type": "gallery_item",
+                  "text": "Item 1"
+                },
+                {
+                  "type": "gallery_item",
+                  "text": "Item 2",
+                  "visibility": "@{show_middle_item ? 'visible' : 'gone'}"
+                },
+                {
+                  "type": "gallery_item",
+                  "text": "Item 3"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

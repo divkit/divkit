@@ -5131,6 +5131,41 @@
         "The 2с button is highlighted again. Each transition lasts about two seconds without reloading the test."
       ],
       "file": "scroll/scroll-duration.json"
+    },
+    {
+      "title": "Gallery item animations respect animation settings",
+      "platforms": [
+        "android"
+      ],
+      "unsupported_platforms": {
+        "ios": "This case targets Android RecyclerView item animations and uses animation settings and control actions specific to Android Playground.",
+        "web": "This case targets Android RecyclerView item animations and uses animation settings and control actions specific to Android Playground."
+      },
+      "tags": [
+        "DivGallery",
+        "Animations"
+      ],
+      "steps": [
+        "Record the current demo and system animation settings. Select the standard renderer (Compose disabled), turn off Disable animations in demo Settings, set Android Animator duration scale to 1x, then open the case.",
+        "Tap Hide Item 2, wait for the update to finish, then tap Show Item 2.",
+        "Tap Disable animations without leaving the case. Wait one second, then hide and show Item 2 twice, waiting for each update to finish.",
+        "Tap Enable animations without leaving the case. Wait one second, then hide and show Item 2 twice, waiting for each update to finish.",
+        "Tap Disable animations, wait one second, then leave and reopen the case. Without tapping either animation button, hide and show Item 2 twice.",
+        "Tap Enable animations on this same gallery. Wait one second, then hide and show Item 2.",
+        "Keeping demo animations enabled, set Android Animator duration scale to Animation off (0x), then leave and reopen the case. Hide and show Item 2.",
+        "Restore the demo and system settings recorded before the test."
+      ],
+      "expected_results": [
+        "Item 1, Item 2 and Item 3 are visible. Initial display does not animate the items into place.",
+        "Item 2 disappears and returns. Item 3 smoothly moves left into the vacant position and back right; Item 1 stays in place.",
+        "On the same open gallery, Item 2 disappears and returns immediately, and Item 3 jumps to its final position without animation on every update.",
+        "Item animations resume on the same open gallery: Item 3 smoothly moves left and right on every update.",
+        "Animations remain disabled after the gallery is recreated: every hide/show update is immediate, including updates after the first layout.",
+        "Item animations also resume when the gallery was initially opened with animations disabled: Item 3 smoothly moves left and right without reopening the case.",
+        "With demo animations enabled but system animations disabled, every hide/show update is immediate.",
+        "The original settings are restored. No item remains half-transparent or displaced, and no parsing or runtime errors occur."
+      ],
+      "file": "gallery/item_animations_enabled.json"
     }
   ]
 }

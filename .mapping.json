@@ -15038,6 +15038,7 @@
   "test_data/regression_test_data/gallery/gallery_swipe_disappear_action.json":"divkit/public/test_data/regression_test_data/gallery/gallery_swipe_disappear_action.json",
   "test_data/regression_test_data/gallery/gallery_swipe_paged.json":"divkit/public/test_data/regression_test_data/gallery/gallery_swipe_paged.json",
   "test_data/regression_test_data/gallery/incompletely_filled_gallery_throws_taps.json":"divkit/public/test_data/regression_test_data/gallery/incompletely_filled_gallery_throws_taps.json",
+  "test_data/regression_test_data/gallery/item_animations_enabled.json":"divkit/public/test_data/regression_test_data/gallery/item_animations_enabled.json",
   "test_data/regression_test_data/gallery/zoomable-gallery.json":"divkit/public/test_data/regression_test_data/gallery/zoomable-gallery.json",
   "test_data/regression_test_data/gesture.json":"divkit/public/test_data/regression_test_data/gesture.json",
   "test_data/regression_test_data/image_shimmer_preview.json":"divkit/public/test_data/regression_test_data/image_shimmer_preview.json",

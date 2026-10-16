@@ -8,6 +8,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.div.DemoDivActionHandler
 import com.yandex.divkit.demo.div.parseToDiv2
+import com.yandex.divkit.demo.settings.SettingsActionHandler
 import com.yandex.divkit.demo.utils.DemoUriHandler
 import com.yandex.divkit.demo.utils.setDataByConfig
 import com.yandex.divkit.regression.utils.AssetReader
@@ -20,6 +21,7 @@ class RegressionDivActionHandler(
     override fun handleAction(action: DivAction, view: DivViewFacade, resolver: ExpressionResolver): Boolean {
         val url = action.url?.evaluate(resolver)
             ?: return super.handleAction(action, view, resolver)
+        if (SettingsActionHandler.handleActionUrl(url)) return true
         if (url.scheme == DIV_DEMO_ACTION_SCHEME) {
             handleDemoActionUrl(url, view)
             return true
