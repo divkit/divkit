@@ -48,6 +48,7 @@ internal inline fun DivBlockView(
     suppressMatchParentIntrinsics: Boolean = false,
     matchParentMaxWidth: Dp = Dp.Unspecified,
     matchParentMaxHeight: Dp = Dp.Unspecified,
+    blockTapPropagation: Boolean = false,
 ) {
     key(LocalDivViewContext.current.compositionKeyStorage.get(data.value())) {
         val divBase = data.value()
@@ -64,6 +65,7 @@ internal inline fun DivBlockView(
                 suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
                 matchParentMaxWidth = matchParentMaxWidth,
                 matchParentMaxHeight = matchParentMaxHeight,
+                blockTapPropagation = blockTapPropagation,
             )
         }
     }
@@ -82,6 +84,7 @@ internal fun VisibleDivBlockView(
     suppressMatchParentIntrinsics: Boolean = false,
     matchParentMaxWidth: Dp = Dp.Unspecified,
     matchParentMaxHeight: Dp = Dp.Unspecified,
+    blockTapPropagation: Boolean = false,
 ) {
     val divBase = data.value()
     val actions = data.observedActions()
@@ -103,6 +106,7 @@ internal fun VisibleDivBlockView(
                 suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
                 matchParentMaxWidth = matchParentMaxWidth,
                 matchParentMaxHeight = matchParentMaxHeight,
+                blockTapPropagation = blockTapPropagation,
             )
         )
     }

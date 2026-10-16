@@ -39,6 +39,14 @@ internal fun DivTooltip.observedExitTransition(): ExitTransition {
 }
 
 @Composable
+internal fun DivTooltip.observedSubstrateEnterTransition(): EnterTransition =
+    animationIn?.let { fadeIn(animationSpec = it.observedAnimationSpec()) } ?: defaultEnterTransition
+
+@Composable
+internal fun DivTooltip.observedSubstrateExitTransition(): ExitTransition =
+    animationOut?.let { fadeOut(animationSpec = it.observedAnimationSpec()) } ?: defaultExitTransition
+
+@Composable
 private fun DivAnimation.toEnterTransition(position: Position): EnterTransition {
     return when (name.observedValue()) {
         DivAnimation.Name.FADE ->

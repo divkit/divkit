@@ -18,6 +18,7 @@ internal class TooltipPositionProvider(
     private val position: DivTooltip.Position,
     private val anchorBounds: Rect?,
     private val offset: IntOffset,
+    private val fullScreen: Boolean = false,
 ) : PopupPositionProvider {
 
     override fun calculatePosition(
@@ -26,6 +27,10 @@ internal class TooltipPositionProvider(
         layoutDirection: LayoutDirection,
         popupContentSize: IntSize,
     ): IntOffset {
+        return if (fullScreen) IntOffset.Zero else calculateTooltipPosition(windowSize, popupContentSize)
+    }
+
+    fun calculateTooltipPosition(windowSize: IntSize, popupContentSize: IntSize): IntOffset {
         val anchor = this.anchorBounds ?: return IntOffset.Zero
         val anchorWidth = anchor.width.roundToInt()
         val anchorHeight = anchor.height.roundToInt()
@@ -60,11 +65,15 @@ internal class TooltipPositionProvider(
             DivTooltip.Position.CENTER -> (anchorHeight - popupContentSize.height) / 2
         }
 
-        val x = (anchorLeft + xOffset + offset.x)
-            .coerceIn(0, (windowSize.width - popupContentSize.width).coerceAtLeast(0))
-        val y = (anchorTop + yOffset + offset.y)
-            .coerceIn(0, (windowSize.height - popupContentSize.height).coerceAtLeast(0))
-
-        return IntOffset(x, y)
+        val x = anchorLeft + xOffset + offset.x
+        val y = anchorTop + yOffset + offset.y
+        return if (fullScreen) {
+            IntOffset(x, y)
+        } else {
+            IntOffset(
+                x.coerceIn(0, (windowSize.width - popupContentSize.width).coerceAtLeast(0)),
+                y.coerceIn(0, (windowSize.height - popupContentSize.height).coerceAtLeast(0)),
+            )
+        }
     }
 }

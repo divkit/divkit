@@ -3,6 +3,7 @@ package com.yandex.div.core.tooltip
 import android.app.Activity
 import android.view.MotionEvent
 import android.view.View
+import com.yandex.div.internal.tooltip.TouchEventDispatcher
 
 /**
  * Passes motions from one window to another one that is related to binding context.
@@ -10,36 +11,14 @@ import android.view.View
 internal class TouchTranslator(private val targetWindowView: View) {
     internal var canTranslateGesture = false
         private set
-    private val tmpLoc = IntArray(2)
-
-    private fun dispatchMotionEvent(event: MotionEvent): Boolean {
-        val targetDecor: View = targetWindowView.peekDecorView() ?: return false
-
-        targetDecor.getLocationOnScreen(tmpLoc)
-        val targetOriginX = tmpLoc[0].toFloat()
-        val targetOriginY = tmpLoc[1].toFloat()
-
-        val sourceOriginX = event.rawX - event.x
-        val sourceOriginY = event.rawY - event.y
-
-        val dx = sourceOriginX - targetOriginX
-        val dy = sourceOriginY - targetOriginY
-
-        val copy = MotionEvent.obtain(event)
-        try {
-            copy.offsetLocation(dx, dy)
-            return targetDecor.dispatchTouchEvent(copy)
-        } finally {
-            copy.recycle()
-        }
-    }
+    private val dispatcher = TouchEventDispatcher { targetWindowView.peekDecorView() }
 
     fun onTooltipMotionEvent(e: MotionEvent): Boolean {
         if (!canTranslateGesture) {
             return false
         }
 
-        val handled = dispatchMotionEvent(e)
+        val handled = dispatcher.dispatch(e)
 
         if (e.actionMasked == MotionEvent.ACTION_UP || e.actionMasked == MotionEvent.ACTION_CANCEL) {
             canTranslateGesture = false
@@ -49,7 +28,7 @@ internal class TouchTranslator(private val targetWindowView: View) {
 
     fun startGestureTranslation(e: MotionEvent) {
         canTranslateGesture = true
-        dispatchMotionEvent(e)
+        dispatcher.dispatch(e)
     }
 }
 

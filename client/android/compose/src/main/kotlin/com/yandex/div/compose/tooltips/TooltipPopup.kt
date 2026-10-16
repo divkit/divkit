@@ -3,10 +3,20 @@ package com.yandex.div.compose.tooltips
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.rememberTransition
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.yandex.div.compose.actions.DivActionSource
@@ -17,11 +27,13 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.internal.tooltip.hasTooltipActions
+import com.yandex.div.internal.tooltip.TouchEventDispatcher
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTooltipMode
-import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.delay
 
 /**
  * Renders a single tooltip as a [Popup] positioned relative to its registered anchor.
@@ -43,6 +55,8 @@ internal fun TooltipPopup(
     onDismissRequested: () -> Unit,
     onHidden: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val underlyingView = LocalView.current.rootView
     val tooltip = anchorEntry.tooltip
     val duration = tooltip.duration.observedValue()
 
@@ -68,7 +82,16 @@ internal fun TooltipPopup(
     }
 
     val isModal = tooltip.mode is DivTooltipMode.Modal
+    val touchDispatcher = remember(underlyingView, isModal) {
+        if (isModal) null else TouchEventDispatcher { underlyingView }::dispatch
+    }
     val closeByTapOutside = tooltip.closeByTapOutside.observedValue()
+    val positionProvider = anchorEntry.observedPositionProvider(fullScreen = tooltip.substrateDiv != null)
+    val onTapOutside = rememberTapOutsideHandler(
+        actions = tooltip.tapOutsideActions,
+        closeByTapOutside = closeByTapOutside,
+        onDismiss = onDismissRequested
+    )
 
     Popup(
         properties = PopupProperties(
@@ -77,27 +100,101 @@ internal fun TooltipPopup(
             dismissOnClickOutside = closeByTapOutside || isModal,
             clippingEnabled = false
         ),
-        popupPositionProvider = TooltipPositionProvider(
-            position = tooltip.position.observedValue(),
-            anchorBounds = anchorEntry.bounds.value,
-            offset = IntOffset(
-                x = tooltip.offset?.x?.observedPxValue()?.toInt() ?: 0,
-                y = tooltip.offset?.y?.observedPxValue()?.toInt() ?: 0
-            )
-        ),
-        onDismissRequest = rememberTapOutsideHandler(
-            actions = tooltip.tapOutsideActions,
-            closeByTapOutside = closeByTapOutside,
-            onDismiss = onDismissRequested
-        )
+        popupPositionProvider = positionProvider,
+        onDismissRequest = onTapOutside,
     ) {
+        CompositionLocalProvider(
+            LocalContext provides context,
+            LocalTooltipTouchDispatcher provides touchDispatcher,
+        ) {
+            TooltipPopupContent(
+                tooltip = tooltip,
+                positionProvider = positionProvider,
+                isVisible = isVisible,
+                enterTransition = enterTransition,
+                exitTransition = exitTransition,
+                onTapOutside = onTapOutside,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TooltipAnchorEntry.observedPositionProvider(fullScreen: Boolean) = TooltipPositionProvider(
+    position = tooltip.position.observedValue(),
+    anchorBounds = bounds.value,
+    offset = IntOffset(
+        x = tooltip.offset?.x?.observedPxValue()?.toInt() ?: 0,
+        y = tooltip.offset?.y?.observedPxValue()?.toInt() ?: 0,
+    ),
+    fullScreen = fullScreen,
+)
+
+@Composable
+private fun TooltipPopupContent(
+    tooltip: DivTooltip,
+    positionProvider: TooltipPositionProvider,
+    isVisible: Boolean,
+    enterTransition: EnterTransition,
+    exitTransition: ExitTransition,
+    onTapOutside: () -> Unit,
+) {
+    val substrate = tooltip.substrateDiv
+    if (substrate == null) {
         AnimatedVisibility(
             visible = isVisible,
             enter = enterTransition,
-            exit = exitTransition
+            exit = exitTransition,
         ) {
             DivBlockView(data = tooltip.div)
         }
+        return
+    }
+
+    val visibilityState = remember { MutableTransitionState(false) }
+    visibilityState.targetState = isVisible
+    val transition = rememberTransition(visibilityState, label = "Tooltip with substrate")
+    val handlesSubstrateTaps = remember(substrate) { substrate.hasTooltipActions() }
+    Box(Modifier.fillMaxSize().tooltipInput(onTapOutside)) {
+        transition.AnimatedVisibility(
+            visible = { it },
+            enter = if (enterTransition == EnterTransition.None) {
+                EnterTransition.None
+            } else {
+                tooltip.observedSubstrateEnterTransition()
+            },
+            exit = if (exitTransition == ExitTransition.None) {
+                ExitTransition.None
+            } else {
+                tooltip.observedSubstrateExitTransition()
+            },
+        ) {
+            DivBlockView(
+                data = substrate,
+                blockTapPropagation = handlesSubstrateTaps,
+            )
+        }
+        transition.AnimatedVisibility(
+            modifier = Modifier.tooltipPosition(positionProvider),
+            visible = { it },
+            enter = enterTransition,
+            exit = exitTransition,
+        ) {
+            DivBlockView(data = tooltip.div, blockTapPropagation = true)
+        }
+    }
+}
+
+private fun Modifier.tooltipPosition(provider: TooltipPositionProvider): Modifier = layout {
+    measurable, constraints ->
+    val placeable = measurable.measure(constraints.copy(minWidth = 0, minHeight = 0))
+    val windowSize = IntSize(constraints.maxWidth, constraints.maxHeight)
+    layout(windowSize.width, windowSize.height) {
+        val position = provider.calculateTooltipPosition(
+            windowSize = windowSize,
+            popupContentSize = IntSize(placeable.width, placeable.height),
+        )
+        placeable.place(position.x, position.y)
     }
 }
 
@@ -108,7 +205,7 @@ private fun rememberTapOutsideHandler(
     onDismiss: () -> Unit
 ): () -> Unit {
     val localComponent = LocalComponent.current
-    return remember(actions, closeByTapOutside, onDismiss) {
+    return remember(actions, closeByTapOutside, onDismiss, localComponent) {
         {
             if (!actions.isNullOrEmpty()) {
                 localComponent.handleActions(actions = actions, source = DivActionSource.TAP)

@@ -14,8 +14,7 @@ import com.yandex.div.core.util.toLayoutParamsSize
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.internal.Assert
-import com.yandex.div2.Div
-import com.yandex.div2.DivAction
+import com.yandex.div.internal.tooltip.hasTooltipActions
 import com.yandex.div2.DivTooltipMode
 import javax.inject.Inject
 
@@ -95,7 +94,7 @@ internal class DivTooltipViewFactory @Inject constructor(
             expressionResolver = data.anchorResolver,
             divView = data.divView,
             touchTranslationCoordinator = touchTranslationCoordinator,
-            handleSubstrateClick = data.divTooltip.substrateDiv?.hasAction() == true,
+            handleSubstrateClick = data.divTooltip.substrateDiv?.hasTooltipActions() == true,
             onTouchOutside = onTouchOutside,
         )
 
@@ -175,49 +174,4 @@ internal fun resolveTooltipLayoutSize(data: TooltipData): Point {
         tooltipDiv.width.toLayoutParamsSize(displayMetrics, tooltipBlock.expressionResolver),
         tooltipDiv.height.toLayoutParamsSize(displayMetrics, tooltipBlock.expressionResolver),
     )
-}
-
-private fun Div.hasAction(): Boolean {
-    val divBase = value()
-    if (!divBase.selectedActions.isNullOrEmpty()) {
-        return true
-    }
-
-    return when (this) {
-        is Div.Container -> value.run { hasActions(action, actions, doubletapActions, longtapActions) } ||
-            value.items?.any { it.hasAction() } == true
-
-        is Div.Custom -> value.items?.any { it.hasAction() } == true
-        is Div.Gallery -> true
-        is Div.GifImage -> value.run { hasActions(action, actions, doubletapActions, longtapActions) }
-        is Div.Grid -> value.run { hasActions(action, actions, doubletapActions, longtapActions) } ||
-            value.items?.any { it.hasAction() } == true
-
-        is Div.Image -> value.run { hasActions(action, actions, doubletapActions, longtapActions) }
-        is Div.Indicator -> false
-        is Div.Input -> true
-        is Div.Pager -> true
-        is Div.Select -> true
-        is Div.Separator -> value.run { hasActions(action, actions, doubletapActions, longtapActions) }
-        is Div.Slider -> true
-        is Div.State -> value.run { hasActions(action, actions, doubletapActions, longtapActions) } ||
-            value.states.any { state -> state.div?.hasAction() == true }
-
-        is Div.Switch -> true
-        is Div.Tabs -> true
-        is Div.Text -> value.run { hasActions(action, actions, doubletapActions, longtapActions) }
-        is Div.Video -> false
-    }
-}
-
-private fun hasActions(
-    action: DivAction?,
-    actions: List<DivAction>?,
-    doubletapActions: List<DivAction>?,
-    longtapActions: List<DivAction>?,
-): Boolean {
-    return action != null ||
-        !actions.isNullOrEmpty() ||
-        !doubletapActions.isNullOrEmpty() ||
-        !longtapActions.isNullOrEmpty()
 }

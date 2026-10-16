@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.isUnspecified
 import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.layoutprovider.layoutProvider
 import com.yandex.div.compose.tooltips.tooltipAnchors
+import com.yandex.div.compose.tooltips.tooltipInput
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.observeHorizontalInsets
@@ -39,6 +40,7 @@ internal fun Modifier.apply(
     defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
     defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
     suppressMatchParentIntrinsics: Boolean = false,
+    blockTapPropagation: Boolean = false,
 ): Modifier {
     val divBase = div.value()
     val margins = if (applyMargins) divBase.margins?.observeInsets() else null
@@ -67,6 +69,7 @@ internal fun Modifier.apply(
         .focus(div, focusState, hasActions = actions != null)
         .applyIfNotNull(divBase.transform) { transform(it) }
         .appearance(divBase, visibility, border)
+        .applyIf(blockTapPropagation) { tooltipInput() }
         // The actions must be applied AFTER the transformations and the border clipping in order
         // to have correct touch and animation area.
         // The actions must be applied BEFORE the background so that the action animation is applied
