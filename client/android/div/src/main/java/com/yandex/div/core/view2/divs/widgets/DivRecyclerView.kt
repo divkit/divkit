@@ -12,6 +12,7 @@ import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yandex.div.R
+import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.divBlock
@@ -70,6 +71,38 @@ internal class DivRecyclerView @JvmOverloads constructor(
     private var remeasureIsHorizontal: Boolean? = null
     private var requestedCrossAxisSize = 0
     private var isCrossAxisRemeasurePosted = false
+
+    private var itemAnimationsEnabled = true
+    private var suppressItemAnimations = false
+    private var savedItemAnimator: ItemAnimator? = itemAnimator
+
+    override fun setItemAnimator(animator: ItemAnimator?) {
+        savedItemAnimator = animator
+        if (itemAnimationsEnabled && !suppressItemAnimations) {
+            super.setItemAnimator(animator)
+        }
+    }
+
+    fun setItemAnimationsEnabled(enabled: Boolean) {
+        itemAnimationsEnabled = enabled
+        updateItemAnimator()
+    }
+
+    fun suppressItemAnimationsUntilLayout() {
+        suppressItemAnimations = true
+        updateItemAnimator()
+        doOnActualLayout {
+            suppressItemAnimations = false
+            updateItemAnimator()
+        }
+    }
+
+    private fun updateItemAnimator() {
+        val animator = savedItemAnimator.takeIf { itemAnimationsEnabled && !suppressItemAnimations }
+        if (itemAnimator !== animator) {
+            super.setItemAnimator(animator)
+        }
+    }
 
     internal fun requestCrossAxisRemeasure(targetCrossAxisSize: Int, isHorizontal: Boolean) {
         if (remeasureIsHorizontal != isHorizontal) {

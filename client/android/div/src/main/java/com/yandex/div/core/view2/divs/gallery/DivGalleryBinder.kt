@@ -4,19 +4,18 @@ import android.annotation.SuppressLint
 import androidx.core.view.doOnNextLayout
 import androidx.recyclerview.widget.DivLinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.state.UpdateStateScrollListener
-import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.toIntSafely
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivViewCreator
+import com.yandex.div.core.view2.animations.DivAnimationsEnabledController
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.bindItemBuilder
@@ -41,6 +40,7 @@ internal class DivGalleryBinder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
     private val recyclerScrollInterceptionAngle: Float,
+    private val animationsEnabledController: DivAnimationsEnabledController,
 ) : DivViewBinder<DivBlock.Gallery, DivRecyclerView>(baseBinder) {
 
     @SuppressLint("ClickableViewAccessibility")
@@ -77,12 +77,19 @@ internal class DivGalleryBinder @Inject constructor(
         setScrollingTouchSlop(RecyclerView.TOUCH_SLOP_PAGING)
         clipToPadding = false
         overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        addSubscription(
+            animationsEnabledController.observe(divView) {
+                setItemAnimationsEnabled(animationsEnabledController.isEnabled())
+            }
+        )
+        setItemAnimationsEnabled(animationsEnabledController.isEnabled())
         adapter = galleryAdapter
         bindItemBuilder(div, resolver, divBlock.path, divView)
-        resetAnimatorAndRestoreOnLayout()
+        suppressItemAnimationsUntilLayout()
         val initialPosition = updateDecorations(div, galleryAdapter, resolver, divView)
-        if (divView.viewComponent.bindingDispatcher.isCollectingMainThreadActions && !isAttachedToWindow) {
-            addSubscription(Disposable { galleryAdapter.releasePreparedItems() })
+        if (divView.viewComponent.bindingDispatcher.isCollectingMainThreadActions &&
+            !isAttachedToWindow) {
+            addSubscription { galleryAdapter.releasePreparedItems() }
             itemBinding.prepare(initialPosition)
         }
     }
@@ -192,15 +199,6 @@ internal class DivGalleryBinder @Inject constructor(
         return initialPosition
     }
 
-    private fun DivRecyclerView.resetAnimatorAndRestoreOnLayout() {
-        val prevItemAnimator = itemAnimator.also { itemAnimator = null }
-        doOnActualLayout {
-            if (itemAnimator == null) {
-                itemAnimator = prevItemAnimator
-            }
-        }
-    }
-
     private fun DivViewState.getPositionAndOffset(id: String) =
         (getBlockState(id) as? GalleryState)?.let { it.visibleItemIndex to it.scrollOffset }
 
@@ -245,7 +243,7 @@ internal class DivGalleryBinder @Inject constructor(
             adapter.setItems(builder.build(resolver, path))
             if (hasState) return@bindItemBuilder
 
-            resetAnimatorAndRestoreOnLayout()
+            suppressItemAnimationsUntilLayout()
 
             val itemCount = adapter.itemCount.takeIf { it > 1 } ?: return@bindItemBuilder
             val itemHelper = layoutManager as? DivGalleryItemHelper ?: return@bindItemBuilder

@@ -25,6 +25,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.clearInvocations
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.spy
@@ -42,12 +43,14 @@ class DivGalleryBinderTest : DivBinderTest() {
 
     private val divViewState = mock<DivViewState>()
     private val divBinder = mock<DivBinder>()
+    private val animationsEnabledController = divView.div2Component.animationsEnabledController
 
     private val underTest = DivGalleryBinder(
         baseBinder = baseBinder,
         viewCreator = viewCreator,
         divBinder = { divBinder },
-        recyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT
+        recyclerScrollInterceptionAngle = DivRecyclerView.NOT_INTERCEPT,
+        animationsEnabledController = animationsEnabledController,
     )
 
     private val div = div()
@@ -106,6 +109,7 @@ class DivGalleryBinderTest : DivBinderTest() {
 
     @Test
     fun `use updated default item only when gallery state is missing`() {
+        whenever(divView.div2Component.animationsEnabledController.isEnabled()).thenReturn(true)
         val data = mock<Expression<JSONArray>>()
         val defaultItem = mock<Expression<Long>>()
         val observer = argumentCaptor<(JSONArray) -> Unit>()
@@ -120,6 +124,7 @@ class DivGalleryBinderTest : DivBinderTest() {
         val itemBuilderBlock = itemBuilderDiv.toBlock(resolver, rootPath()) as DivBlock.Gallery
         val itemBuilderView = divRecyclerView(itemBuilderDiv).apply { layoutParams = defaultLayoutParams() }
         underTest.bindView(itemBuilderView, itemBuilderBlock, divView)
+        itemBuilderView.layout(0, 0, 0, 100)
         val adapter = mock<DivGalleryAdapter>()
         whenever(adapter.itemCount).thenReturn(ITEM_COUNT)
         itemBuilderView.adapter = adapter
@@ -131,6 +136,7 @@ class DivGalleryBinderTest : DivBinderTest() {
         Assert.assertNull(itemBuilderView.itemAnimator)
         verify(itemBuilderView).scrollToPosition(UPDATED_DEFAULT_ITEM)
 
+        itemBuilderView.layout(0, 0, 0, 200)
         whenever(divViewState.getBlockState<GalleryState>(any())).thenReturn(GalleryState(SAVED_ITEM, 0))
         (itemBuilderView.layoutManager as DivLinearLayoutManager).instantScrollToPosition(SAVED_ITEM, 0)
         val itemAnimator = mock<RecyclerView.ItemAnimator>()
@@ -141,6 +147,71 @@ class DivGalleryBinderTest : DivBinderTest() {
 
         Assert.assertSame(itemAnimator, itemBuilderView.itemAnimator)
         Assert.assertEquals(SAVED_ITEM, itemBuilderView.layoutManager.shadow().position)
+    }
+
+    @Test
+    fun `keeps item animations disabled after layout when controller is disabled`() {
+        whenever(animationsEnabledController.isEnabled()).thenReturn(false)
+
+        underTest.bindView(recyclerView, divBlock, divView)
+        recyclerView.layout(0, 0, 0, 100)
+
+        Assert.assertNull(recyclerView.itemAnimator)
+    }
+
+    @Test
+    fun `disables item animations when controller notifies about disabled state`() {
+        val observer = argumentCaptor<() -> Unit>()
+        whenever(animationsEnabledController.observe(eq(divView), observer.capture()))
+            .thenReturn(Disposable.NULL)
+        whenever(animationsEnabledController.isEnabled()).thenReturn(true)
+        underTest.bindView(recyclerView, divBlock, divView)
+        recyclerView.layout(0, 0, 0, 100)
+
+        whenever(animationsEnabledController.isEnabled()).thenReturn(false)
+        observer.firstValue()
+
+        Assert.assertNull(recyclerView.itemAnimator)
+    }
+
+    @Test
+    fun `restores item animator when controller notifies about enabled state`() {
+        val animator = requireNotNull(recyclerView.itemAnimator)
+        val observer = argumentCaptor<() -> Unit>()
+        whenever(animationsEnabledController.observe(eq(divView), observer.capture()))
+            .thenReturn(Disposable.NULL)
+        whenever(animationsEnabledController.isEnabled()).thenReturn(false)
+        underTest.bindView(recyclerView, divBlock, divView)
+        recyclerView.layout(0, 0, 0, 100)
+
+        whenever(animationsEnabledController.isEnabled()).thenReturn(true)
+        observer.firstValue()
+
+        Assert.assertSame(animator, recyclerView.itemAnimator)
+    }
+
+    @Test
+    fun `disposes animations subscription on rebind`() {
+        val subscription = mock<Disposable>()
+        whenever(animationsEnabledController.observe(eq(divView), any())).thenReturn(subscription)
+        underTest.bindView(recyclerView, divBlock, divView)
+        val reboundBlock =
+            Div.Gallery(div.value.copy()).toBlock(resolver, rootPath()) as DivBlock.Gallery
+
+        underTest.bindView(recyclerView, reboundBlock, divView)
+
+        verify(subscription).close()
+    }
+
+    @Test
+    fun `disposes animations subscription on release`() {
+        val subscription = mock<Disposable>()
+        whenever(animationsEnabledController.observe(eq(divView), any())).thenReturn(subscription)
+        underTest.bindView(recyclerView, divBlock, divView)
+
+        recyclerView.release()
+
+        verify(subscription).close()
     }
 
     @Test
