@@ -1,21 +1,20 @@
 package com.yandex.div.compose.views.input.mask
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.pressKey
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.mockLocalComponent
-import com.yandex.div.compose.views.input.DivInputState
-import com.yandex.div.compose.views.input.rememberDivInputState
+import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.data.Variable
-import com.yandex.div2.DivInput
+import com.yandex.div.test.data.data
+import com.yandex.div.test.data.input
 import com.yandex.div2.DivInputMask
 import com.yandex.div2.DivPhoneInputMask
 import org.junit.Rule
@@ -23,111 +22,90 @@ import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(DivModelInternalApi::class)
 @RunWith(AndroidJUnit4::class)
 class PhoneMaskTest {
 
     @get:Rule
-    val composeRule = createComposeRule()
+    val rule = createComposeRule()
 
-    private val reporter = TestReporter()
-    private val variableController = DivVariableController()
-
-    private val localComponent = mockLocalComponent(
-        reporter = reporter,
-        variableController = variableController,
+    private val rawVar = Variable.StringVariable("phone_raw", "")
+    private val displayVar = Variable.StringVariable("phone_display", "")
+    private val configuration = DivConfiguration(
+        reporter = TestReporter(),
+        variableController = DivVariableController().apply { declare(rawVar, displayVar) },
     )
-
-    private val rawVar = Variable.StringVariable(RAW_VAR, "")
-    private val displayVar = Variable.StringVariable(DISPLAY_VAR, "")
-
-    init {
-        variableController.declare(rawVar, displayVar)
-    }
+    private val field get() = rule.onNode(hasSetTextAction())
 
     @Test
     fun `typing digits writes raw and formats display`() {
-        var state: DivInputState? = null
-        setContent { state = phoneInput().rememberDivInputState() }
+        setContent()
 
-        state!!.onValueChange(TextFieldValue("79161234567", TextRange(11)))
-        composeRule.waitForIdle()
+        field.performTextInput("79161234567")
 
-        assertEquals("79161234567", state!!.text.text)
+        field.assertTextEquals("+7 (916) 123-45-67")
         assertEquals("79161234567", rawVar.getValue())
         assertEquals("+7 (916) 123-45-67", displayVar.getValue())
-        assertEquals("+7 (916) 123-45-67", state!!.formattedDisplay())
     }
 
     @Test
     fun `non-digit characters are dropped on`() {
-        var state: DivInputState? = null
-        setContent { state = phoneInput().rememberDivInputState() }
+        setContent()
 
-        state!!.onValueChange(TextFieldValue("+7 (916) 123-45-67", TextRange(18)))
-        composeRule.waitForIdle()
+        field.performTextInput("+7 (916) 123-45-67")
 
-        assertEquals("79161234567", state!!.text.text)
+        field.assertTextEquals("+7 (916) 123-45-67")
         assertEquals("79161234567", rawVar.getValue())
     }
 
     @Test
     fun `partial input keeps mask scaffolding for display`() {
-        var state: DivInputState? = null
-        setContent { state = phoneInput().rememberDivInputState() }
+        setContent()
 
-        state!!.onValueChange(TextFieldValue("7916", TextRange(4)))
-        composeRule.waitForIdle()
+        field.performTextInput("7916")
 
-        assertEquals("7916", state!!.text.text)
-        assertEquals("+7 (916) ", state!!.formattedDisplay())
+        field.assertTextEquals("+7 (916) ")
     }
 
     @Test
     fun `external raw variable update reformats display`() {
-        var state: DivInputState? = null
-        setContent { state = phoneInput().rememberDivInputState() }
+        setContent()
 
         rawVar.set("79161234567")
-        composeRule.waitForIdle()
 
-        assertEquals("79161234567", state!!.text.text)
+        field.assertTextEquals("+7 (916) 123-45-67")
         assertEquals("+7 (916) 123-45-67", displayVar.getValue())
     }
 
     @Test
     fun `removing trailing digit shrinks raw and formatted output`() {
-        var state: DivInputState? = null
-        setContent { state = phoneInput().rememberDivInputState() }
+        setContent()
+        field.performTextInput("79161234567")
 
-        state!!.onValueChange(TextFieldValue("79161234567", TextRange(11)))
-        composeRule.waitForIdle()
+        field.performKeyInput { pressKey(Key.Backspace) }
 
-        val current = state!!.text
-        val deleted = current.text.dropLast(1)
-        state!!.onValueChange(TextFieldValue(deleted, TextRange(deleted.length)))
-        composeRule.waitForIdle()
-
-        assertEquals("7916123456", state!!.text.text)
+        field.assertTextEquals("+7 (916) 123-45-6")
         assertEquals("7916123456", rawVar.getValue())
     }
 
-    private fun DivInputState.formattedDisplay(): String =
-        visualTransformation.filter(AnnotatedString(text.text)).text.text
+    @Test
+    fun `digits beyond the mask are dropped`() {
+        setContent()
 
-    private fun phoneInput(): DivInput = DivInput(
-        textVariable = DISPLAY_VAR,
-        mask = DivInputMask.Phone(DivPhoneInputMask(rawTextVariable = RAW_VAR)),
-    )
+        field.performTextInput("791612345678901234")
 
-    private fun setContent(content: @Composable () -> Unit) {
-        composeRule.setContent {
-            CompositionLocalProvider(LocalComponent provides localComponent) {
-                content()
-            }
-        }
+        field.assertTextEquals("+7 (916) 123-45-6789")
+        assertEquals("7916123456789", rawVar.getValue())
+    }
+
+    private fun setContent() {
+        rule.setContent(
+            configuration = configuration,
+            data = data(
+                input(
+                    mask = DivInputMask.Phone(DivPhoneInputMask(rawTextVariable = "phone_raw")),
+                    textVariable = "phone_display",
+                )
+            ),
+        )
     }
 }
-
-private const val RAW_VAR = "phone_raw"
-private const val DISPLAY_VAR = "phone_display"

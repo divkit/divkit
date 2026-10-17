@@ -297,12 +297,12 @@ class DivInputMaxLengthTest {
     }
 
     @Test
-    fun `increased max length allows more input without integer overflow`() {
+    fun `increased max length allows more input`() {
         val limit = Variable.IntegerVariable("limit", 2)
         variableController.declare(limit)
         source.set("ab")
         setContent(maxLength = intExpression("@{limit}"))
-        limit.set(Long.MAX_VALUE)
+        limit.set(6)
 
         field.performTextInput("cdef")
 

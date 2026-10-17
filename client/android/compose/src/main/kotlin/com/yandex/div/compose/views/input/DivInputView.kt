@@ -1,110 +1,215 @@
 package com.yandex.div.compose.views.input
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.BasicSecureTextField
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.input.TextFieldDecorator
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.coerceIn
+import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.focus.trackInputFocus
 import com.yandex.div.compose.text.observeBaseTextStyle
 import com.yandex.div.compose.utils.toAlignment
+import com.yandex.div.compose.views.input.mask.InputMask
+import com.yandex.div.compose.views.input.mask.PhoneInputMask
+import com.yandex.div.compose.views.input.mask.rememberCurrencyInputMask
+import com.yandex.div.compose.views.input.mask.rememberFixedLengthInputMask
 import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivInput
+import com.yandex.div2.DivInputMask
 
 @Composable
 internal fun DivInputView(modifier: Modifier, data: DivInput) {
+    val mask = data.mask?.rememberInputMask()
+    val config = data.rememberInputConfig(mask)
+    val state = data.rememberInputState(config)
+    val validators = data.validators
+    if (!validators.isNullOrEmpty()) {
+        val text = state.field.text.toString()
+        // The View renderer validates the text the field shows: the formatted text of a masked input.
+        validators.validate(if (mask == null) text else mask.format(text))
+    }
+
+    InputField(modifier, data, state.field, config)
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun InputField(modifier: Modifier, data: DivInput, field: TextFieldState, config: InputConfig) {
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
+    val textStyle = data.observeTextStyle(textAlignmentHorizontal)
+    val keyboardType = data.keyboardType.observedValue()
+    val keyboard = data.rememberInputKeyboard(keyboardType)
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val isPassword = keyboardType == DivInput.KeyboardType.PASSWORD
+    val singleLine = keyboardType != DivInput.KeyboardType.MULTI_LINE_TEXT
+    val maxLines = if (singleLine) 1 else {
+        data.maxVisibleLines?.observedIntValue()?.coerceAtLeast(1) ?: Int.MAX_VALUE
+    }
+    // The secure field has no output transformation, so it shows no placeholders of a mask.
+    val showsPlaceholders = config.showsPlaceholders && !isPassword
+    val decorator = data.hintDecorator(field, showsPlaceholders, textStyle, textAlignmentHorizontal, maxLines)
 
-    val textStyle = observeBaseTextStyle(
-        fontSize = data.fontSize.observedIntValue(),
-        fontSizeUnit = data.fontSizeUnit.observedValue(),
-        textColor = data.textColor,
-        fontWeight = data.fontWeight,
-        fontWeightValue = data.fontWeightValue,
-        fontFamily = data.fontFamily,
-        letterSpacing = data.letterSpacing,
-        lineHeight = data.lineHeight?.observedIntValue(),
-        textAlignmentHorizontal = textAlignmentHorizontal,
-        fontVariationSettings = data.fontVariationSettings
-    )
-    val contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical)
-
-    InputView(modifier, data, contentAlignment, textStyle, textAlignmentHorizontal)
+    Box(
+        modifier = modifier
+            .trackInputFocus()
+            .onPreviewKeyEvent { keyboard.consumeEnter && it.nativeKeyEvent.isEnterDown() },
+        contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical),
+    ) {
+        InterceptPlatformTextInput(keyboard.interceptor) {
+            InputTextField(
+                field = field,
+                config = config,
+                data = data,
+                isPassword = isPassword,
+                keyboard = keyboard,
+                textStyle = textStyle,
+                lineLimits = if (singleLine) TextFieldLineLimits.SingleLine else {
+                    TextFieldLineLimits.MultiLine(maxHeightInLines = maxLines)
+                },
+                interactionSource = interactionSource,
+                isFocused = isFocused,
+                decorator = decorator,
+            )
+        }
+    }
 }
 
 @Composable
-private fun InputView(
-    modifier: Modifier,
+private fun DivInput.observeTextStyle(textAlignmentHorizontal: DivAlignmentHorizontal): TextStyle {
+    return observeBaseTextStyle(
+        fontSize = fontSize.observedIntValue(),
+        fontSizeUnit = fontSizeUnit.observedValue(),
+        textColor = textColor,
+        fontWeight = fontWeight,
+        fontWeightValue = fontWeightValue,
+        fontFamily = fontFamily,
+        letterSpacing = letterSpacing,
+        lineHeight = lineHeight?.observedIntValue(),
+        textAlignmentHorizontal = textAlignmentHorizontal,
+        fontVariationSettings = fontVariationSettings
+    )
+}
+
+@Composable
+private fun InputTextField(
+    field: TextFieldState,
+    config: InputConfig,
     data: DivInput,
-    contentAlignment: Alignment,
+    isPassword: Boolean,
+    keyboard: InputKeyboard,
+    textStyle: TextStyle,
+    lineLimits: TextFieldLineLimits,
+    interactionSource: MutableInteractionSource,
+    isFocused: Boolean,
+    decorator: TextFieldDecorator,
+) {
+    val enabled = data.isEnabled.observedValue()
+    val focusRequester = remember { FocusRequester() }
+    KeepFocusAcrossPasswordSwitch(field, isPassword, isFocused, enabled, focusRequester)
+
+    val fieldModifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
+    if (isPassword) {
+        BasicSecureTextField(
+            state = field,
+            modifier = fieldModifier,
+            enabled = enabled,
+            inputTransformation = config.inputTransformation,
+            textStyle = textStyle,
+            keyboardOptions = keyboard.options,
+            onKeyboardAction = keyboard.onKeyboardAction,
+            interactionSource = interactionSource,
+            decorator = decorator,
+            // Every character stays hidden, as it did with PasswordVisualTransformation.
+            textObfuscationMode = TextObfuscationMode.Hidden,
+        )
+    } else {
+        BasicTextField(
+            state = field,
+            modifier = fieldModifier,
+            enabled = enabled,
+            inputTransformation = config.inputTransformation,
+            textStyle = textStyle,
+            keyboardOptions = keyboard.options,
+            onKeyboardAction = keyboard.onKeyboardAction,
+            lineLimits = lineLimits,
+            interactionSource = interactionSource,
+            outputTransformation = config.mask?.outputTransformation,
+            decorator = decorator,
+        )
+    }
+}
+
+/** The password field is another composable: a focused input keeps its focus and selection across the switch. */
+@Composable
+private fun KeepFocusAcrossPasswordSwitch(
+    field: TextFieldState,
+    isPassword: Boolean,
+    isFocused: Boolean,
+    enabled: Boolean,
+    focusRequester: FocusRequester,
+) {
+    val focusedSelection = remember(isPassword) { if (isFocused) field.selection else null }
+    LaunchedEffect(isPassword) {
+        if (focusedSelection != null && enabled) {
+            focusRequester.requestFocus()
+            field.edit { selection = focusedSelection.coerceIn(0, length) }
+        }
+    }
+}
+
+@Composable
+private fun DivInput.hintDecorator(
+    field: TextFieldState,
+    showsPlaceholders: Boolean,
     textStyle: TextStyle,
     textAlignmentHorizontal: DivAlignmentHorizontal,
-) {
-    val keyboardType = data.keyboardType.observedValue()
-    val maxLength = data.maxLength
-    // Masked inputs still need max_length support for the formatted text.
-    if (data.mask == null && maxLength != null) {
-        LengthLimitedInputView(
-            modifier, data, contentAlignment, textStyle, textAlignmentHorizontal,
-            keyboardType,
-            maxLength.observedValue().coerceAtMost(Int.MAX_VALUE.toLong()).toInt(),
-        )
-        return
-    }
-
-    val state = data.rememberDivInputState()
-
-    data.validators?.validate(state.text.text)
-
-    val visualTransformation = state.rememberVisualTransformation(keyboardType)
-    val rendersOnEmptyInput = remember(visualTransformation) {
-        visualTransformation.filter(AnnotatedString("")).text.text.isNotEmpty()
-    }
-
-    InputFieldLayout(
-        modifier = modifier,
-        data = data,
-        contentAlignment = contentAlignment,
-        textStyle = textStyle,
-        textAlignmentHorizontal = textAlignmentHorizontal,
-        keyboardType = keyboardType,
-        showHint = state.text.text.isEmpty() && !rendersOnEmptyInput,
-    ) { singleLine, maxLines, enabled, options, onKeyboardAction, decorator ->
-        val keyboardActions = onKeyboardAction?.let { action ->
-            remember(action) { KeyboardActions { action() } }
-        } ?: KeyboardActions.Default
-        BasicTextField(
-            value = state.text,
-            onValueChange = state.onValueChange,
-            textStyle = textStyle,
-            singleLine = singleLine,
-            maxLines = maxLines,
-            enabled = enabled,
+    maxLines: Int,
+): TextFieldDecorator {
+    val hintText = hintText?.observedValue()
+    val hintColor = hintColor.observedColorValue()
+    return TextFieldDecorator { innerTextField ->
+        Box(
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = visualTransformation,
-            keyboardOptions = options,
-            keyboardActions = keyboardActions,
-            decorationBox = { decorator.Decoration(it) },
-        )
+            contentAlignment = toAlignment(textAlignmentHorizontal, DivAlignmentVertical.TOP),
+        ) {
+            if (hintText != null && field.text.isEmpty() && !showsPlaceholders) {
+                BasicText(
+                    text = hintText,
+                    style = textStyle.copy(color = hintColor),
+                    maxLines = maxLines,
+                )
+            }
+            innerTextField()
+        }
     }
 }
 
 @Composable
-private fun DivInputState.rememberVisualTransformation(
-    keyboardType: DivInput.KeyboardType
-): VisualTransformation {
-    val passwordTransformation = remember { PasswordVisualTransformation() }
-    return if (keyboardType == DivInput.KeyboardType.PASSWORD) {
-        passwordTransformation
-    } else {
-        visualTransformation
-    }
+private fun DivInputMask.rememberInputMask(): InputMask = when (this) {
+    is DivInputMask.FixedLength -> value.rememberFixedLengthInputMask()
+    is DivInputMask.Phone -> PhoneInputMask
+    is DivInputMask.Currency -> value.rememberCurrencyInputMask()
 }

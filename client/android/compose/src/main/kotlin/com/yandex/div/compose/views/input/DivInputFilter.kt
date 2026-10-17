@@ -1,30 +1,11 @@
 package com.yandex.div.compose.views.input
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivInputFilter
 
-@Composable
-internal fun rememberFilteredState(
-    source: MutableState<String>,
-    filters: List<DivInputFilter>?,
-): MutableState<String> {
-    if (filters.isNullOrEmpty()) return source
-    val filter = filters.observeFilter()
-
-    val accepted = remember { mutableStateOf(source.value) }
-    if (filter(source.value)) {
-        accepted.value = source.value
-    }
-
-    return remember(accepted, source, filter) {
-        FilteringMutableState(accepted, source, filter)
-    }
-}
-
+/** The predicate every filter of the list accepts a text with. */
 @Composable
 internal fun List<DivInputFilter>.observeFilter(): (String) -> Boolean {
     val regexes = mutableListOf<Regex>()
@@ -43,21 +24,4 @@ internal fun List<DivInputFilter>.observeFilter(): (String) -> Boolean {
     return remember(regexes, conditions) {
         { value -> regexes.all { it.matches(value) } && conditions.all { it } }
     }
-}
-
-private class FilteringMutableState(
-    private val accepted: MutableState<String>,
-    private val source: MutableState<String>,
-    private val filter: (String) -> Boolean,
-) : MutableState<String> {
-    override var value: String
-        get() = accepted.value
-        set(newValue) {
-            if (!filter(newValue)) return
-            accepted.value = newValue
-            source.value = newValue
-        }
-
-    override fun component1(): String = value
-    override fun component2(): (String) -> Unit = { value = it }
 }

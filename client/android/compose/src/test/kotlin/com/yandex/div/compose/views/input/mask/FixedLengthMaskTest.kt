@@ -1,219 +1,292 @@
 package com.yandex.div.compose.views.input.mask
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.pressKey
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.mockLocalComponent
-import com.yandex.div.compose.views.input.DivInputState
-import com.yandex.div.compose.views.input.rememberDivInputState
+import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.data
+import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.input
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputMask
+import com.yandex.div2.DivInputValidator
+import com.yandex.div2.DivInputValidatorRegex
 import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@OptIn(DivModelInternalApi::class)
 @RunWith(AndroidJUnit4::class)
 class FixedLengthMaskTest {
 
     @get:Rule
-    val composeRule = createComposeRule()
+    val rule = createComposeRule()
 
-    private val reporter = TestReporter()
-    private val variableController = DivVariableController()
-
-    private val localComponent = mockLocalComponent(
-        reporter = reporter,
+    private val rawVar = Variable.StringVariable("fixed_raw", "")
+    private val displayVar = Variable.StringVariable("fixed_display", "")
+    private val variableController = DivVariableController().apply { declare(rawVar, displayVar) }
+    private val configuration = DivConfiguration(
+        reporter = TestReporter(),
         variableController = variableController,
     )
-
-    private val rawVar = Variable.StringVariable(RAW_VAR, "")
-    private val displayVar = Variable.StringVariable(DISPLAY_VAR, "")
-
-    init {
-        variableController.declare(rawVar, displayVar)
-    }
+    private val field get() = rule.onNode(hasSetTextAction())
 
     @Test
     fun `typing digits fills dynamic slots and inserts static characters`() {
-        var state: DivInputState? = null
-        setContent { state = digitsInput().rememberDivInputState() }
+        setContent(digitsMask())
 
-        state!!.onValueChange(TextFieldValue("1234567890", TextRange(10)))
-        composeRule.waitForIdle()
+        field.performTextInput("1234567890")
 
-        assertEquals("1234567890", state!!.text.text)
+        field.assertTextEquals("(123) 456-7890")
         assertEquals("1234567890", rawVar.getValue())
         assertEquals("(123) 456-7890", displayVar.getValue())
-        assertEquals("(123) 456-7890", state!!.formattedDisplay())
     }
 
     @Test
     fun `characters that do not match the regex are dropped`() {
-        var state: DivInputState? = null
-        setContent { state = digitsInput().rememberDivInputState() }
+        setContent(digitsMask())
 
-        state!!.onValueChange(TextFieldValue("12ab34cd56", TextRange(10)))
-        composeRule.waitForIdle()
+        field.performTextInput("12ab34cd56")
 
-        assertEquals("123456", state!!.text.text)
+        field.assertTextEquals("(123) 456-")
         assertEquals("123456", rawVar.getValue())
     }
 
     @Test
     fun `raw value is capped to the number of dynamic slots`() {
-        var state: DivInputState? = null
-        setContent { state = digitsInput().rememberDivInputState() }
+        setContent(digitsMask())
 
-        state!!.onValueChange(TextFieldValue("123456789012345", TextRange(15)))
-        composeRule.waitForIdle()
+        field.performTextInput("123456789012345")
 
-        assertEquals("1234567890", state!!.text.text)
+        field.assertTextEquals("(123) 456-7890")
+        assertEquals("1234567890", rawVar.getValue())
         assertEquals("(123) 456-7890", displayVar.getValue())
     }
 
     @Test
+    fun `digit typed after the last slot is dropped`() {
+        setContent(digitsMask())
+        field.performTextInput("1111111111")
+
+        field.performTextInput("1")
+
+        field.assertTextEquals("(111) 111-1111")
+        assertEquals("1111111111", rawVar.getValue())
+    }
+
+    @Test
     fun `partial input display variable holds only static + filled chars`() {
-        var state: DivInputState? = null
-        setContent { state = digitsInput().rememberDivInputState() }
+        setContent(digitsMask())
 
-        state!!.onValueChange(TextFieldValue("123", TextRange(3)))
-        composeRule.waitForIdle()
+        field.performTextInput("123")
 
-        assertEquals("123", state!!.text.text)
+        field.assertTextEquals("(123) ")
         assertEquals("(123) ", displayVar.getValue())
     }
 
     @Test
     fun `alwaysVisible placeholders are included in display variable`() {
-        var state: DivInputState? = null
-        setContent { state = digitsInput(alwaysVisible = true).rememberDivInputState() }
+        setContent(digitsMask(alwaysVisible = true))
 
-        state!!.onValueChange(TextFieldValue("12", TextRange(2)))
-        composeRule.waitForIdle()
+        field.performTextInput("12")
 
-        assertEquals("(12_) ___-____", state!!.formattedDisplay())
+        field.assertTextEquals("(12_) ___-____")
         assertEquals("(12_) ___-____", displayVar.getValue())
     }
 
     @Test
     fun `external raw variable update reformats display and renders placeholders`() {
-        var state: DivInputState? = null
-        setContent { state = digitsInput(alwaysVisible = true).rememberDivInputState() }
+        setContent(digitsMask(alwaysVisible = true))
 
         rawVar.set("555")
-        composeRule.waitForIdle()
 
-        assertEquals("555", state!!.text.text)
+        field.assertTextEquals("(555) ___-____")
         assertEquals("(555) ___-____", displayVar.getValue())
-        assertEquals("(555) ___-____", state!!.formattedDisplay())
     }
 
     @Test
     fun `external raw variable with invalid characters is sanitized`() {
-        var state: DivInputState? = null
-        setContent { state = digitsInput().rememberDivInputState() }
+        setContent(digitsMask())
 
         rawVar.set("12ab34")
-        composeRule.waitForIdle()
 
-        assertEquals("1234", rawVar.getValue())
+        field.assertTextEquals("(123) 4")
+        assertEquals("12ab34", rawVar.getValue())
         assertEquals("(123) 4", displayVar.getValue())
     }
 
     @Test
     fun `multi-key pattern different regexes per slot`() {
-        var state: DivInputState? = null
-        setContent { state = mixedInput().rememberDivInputState() }
+        setContent(mixedMask())
 
-        state!!.onValueChange(TextFieldValue("Aabcde1", TextRange(7)))
-        composeRule.waitForIdle()
+        field.performTextInput("Aabcde1")
 
-        assertEquals("Aabcde1", state!!.text.text)
+        field.assertTextEquals("A-abcde-1")
+        assertEquals("Aabcde1", rawVar.getValue())
         assertEquals("A-abcde-1", displayVar.getValue())
     }
 
     @Test
     fun `multi-key pattern char that does not match the expected slot is dropped`() {
-        var state: DivInputState? = null
-        setContent { state = mixedInput().rememberDivInputState() }
+        setContent(mixedMask())
 
-        state!!.onValueChange(TextFieldValue("aAbc", TextRange(4)))
-        composeRule.waitForIdle()
+        field.performTextInput("aAbc")
 
-        assertEquals("Abc", state!!.text.text)
+        field.assertTextEquals("A-bc")
+        assertEquals("Abc", rawVar.getValue())
         assertEquals("A-bc", displayVar.getValue())
     }
 
-    private fun DivInputState.formattedDisplay(): String =
-        visualTransformation.filter(AnnotatedString(text.text)).text.text
+    @Test
+    fun `pattern change re-applies the mask to the field`() {
+        val pattern = Variable.StringVariable("pattern", "####-####")
+        variableController.declare(pattern)
+        setContent(digitsMask(pattern = expression("@{pattern}")))
+        field.performTextInput("12345678")
+        field.assertTextEquals("1234-5678")
 
-    private fun digitsInput(alwaysVisible: Boolean = false): DivInput = DivInput(
-        textVariable = DISPLAY_VAR,
-        mask = DivInputMask.FixedLength(
-            DivFixedLengthInputMask(
-                alwaysVisible = Expression.constant(alwaysVisible),
-                pattern = Expression.constant("(###) ###-####"),
-                patternElements = listOf(
-                    DivFixedLengthInputMask.PatternElement(
-                        key = Expression.constant("#"),
-                        placeholder = Expression.constant("_"),
-                        regex = Expression.constant("[0-9]"),
-                    ),
-                ),
-                rawTextVariable = RAW_VAR,
+        pattern.set("###")
+
+        field.assertTextEquals("123")
+        assertEquals("12345678", rawVar.getValue())
+        assertEquals("123", displayVar.getValue())
+    }
+
+    @Test
+    fun `regex change re-admits the characters of the raw variable`() {
+        val regex = Variable.StringVariable("regex", "[0-9]")
+        variableController.declare(regex)
+        setContent(digitsMask(regex = expression("@{regex}")))
+        rawVar.set("1a2")
+        field.assertTextEquals("(12")
+
+        regex.set("[0-9a-z]")
+
+        field.assertTextEquals("(1a2) ")
+        assertEquals("1a2", rawVar.getValue())
+        assertEquals("(1a2) ", displayVar.getValue())
+    }
+
+    @Test
+    fun `mask with a static prefix hides the hint`() {
+        setContent(digitsMask(pattern = constant("+7 ###")), hintText = constant("Hint"))
+
+        field.assertTextEquals("+7 ")
+        rule.onNodeWithText("Hint").assertDoesNotExist()
+    }
+
+    @Test
+    fun `password field with a mask shows the hint`() {
+        setContent(
+            digitsMask(pattern = constant("+7 ###")),
+            keyboardType = constant(DivInput.KeyboardType.PASSWORD),
+            hintText = constant("Hint"),
+        )
+
+        rule.onNodeWithText("Hint").assertIsDisplayed()
+    }
+
+    @Test
+    fun `pattern change with a restoring observer keeps later edits synced`() {
+        val pattern = Variable.StringVariable("pattern", "####")
+        variableController.declare(pattern)
+        setContent(digitsMask(pattern = expression("@{pattern}")))
+        field.performTextInput("1234")
+        rawVar.addObserver { variable -> if (variable.getValue() != "1234") variable.set("1234") }
+        pattern.set("##")
+        field.assertTextEquals("12")
+
+        field.performKeyInput { pressKey(Key.Backspace) }
+
+        field.assertTextEquals("12")
+        assertEquals("1234", rawVar.getValue())
+    }
+
+    @Test
+    fun `regex validator checks the formatted text`() {
+        val valid = Variable.BooleanVariable("valid", false)
+        variableController.declare(valid)
+        setContent(
+            digitsMask(),
+            validators = listOf(
+                DivInputValidator.Regex(
+                    DivInputValidatorRegex(
+                        labelId = constant("label"),
+                        pattern = constant("""\(\d{3}\) \d{3}-\d{4}"""),
+                        variable = "valid",
+                    )
+                )
             ),
+        )
+
+        field.performTextInput("1234567890")
+
+        field.assertTextEquals("(123) 456-7890")
+        assertEquals(true, valid.getValue())
+    }
+
+    private fun digitsMask(
+        alwaysVisible: Boolean = false,
+        pattern: Expression<String> = constant("(###) ###-####"),
+        regex: Expression<String> = constant("[0-9]"),
+    ) = DivInputMask.FixedLength(
+        DivFixedLengthInputMask(
+            alwaysVisible = constant(alwaysVisible),
+            pattern = pattern,
+            patternElements = listOf(
+                DivFixedLengthInputMask.PatternElement(
+                    key = constant("#"),
+                    placeholder = constant("_"),
+                    regex = regex,
+                ),
+            ),
+            rawTextVariable = "fixed_raw",
         ),
     )
 
-    private fun mixedInput(): DivInput = DivInput(
-        textVariable = DISPLAY_VAR,
-        mask = DivInputMask.FixedLength(
-            DivFixedLengthInputMask(
-                alwaysVisible = Expression.constant(false),
-                pattern = Expression.constant("\$-#####-0"),
-                patternElements = listOf(
-                    DivFixedLengthInputMask.PatternElement(
-                        key = Expression.constant("\$"),
-                        placeholder = Expression.constant("_"),
-                        regex = Expression.constant("[A-Z]"),
-                    ),
-                    DivFixedLengthInputMask.PatternElement(
-                        key = Expression.constant("#"),
-                        placeholder = Expression.constant("_"),
-                        regex = Expression.constant("[a-z]"),
-                    ),
-                    DivFixedLengthInputMask.PatternElement(
-                        key = Expression.constant("0"),
-                        placeholder = Expression.constant("_"),
-                        regex = Expression.constant("[0-9]"),
-                    ),
-                ),
-                rawTextVariable = RAW_VAR,
+    private fun mixedMask() = DivInputMask.FixedLength(
+        DivFixedLengthInputMask(
+            pattern = constant("\$-#####-0"),
+            patternElements = listOf(
+                DivFixedLengthInputMask.PatternElement(key = constant("\$"), regex = constant("[A-Z]")),
+                DivFixedLengthInputMask.PatternElement(key = constant("#"), regex = constant("[a-z]")),
+                DivFixedLengthInputMask.PatternElement(key = constant("0"), regex = constant("[0-9]")),
             ),
+            rawTextVariable = "fixed_raw",
         ),
     )
 
-    private fun setContent(content: @Composable () -> Unit) {
-        composeRule.setContent {
-            CompositionLocalProvider(LocalComponent provides localComponent) {
-                content()
-            }
-        }
+    private fun setContent(
+        mask: DivInputMask,
+        validators: List<DivInputValidator>? = null,
+        keyboardType: Expression<DivInput.KeyboardType> = constant(DivInput.KeyboardType.MULTI_LINE_TEXT),
+        hintText: Expression<String>? = null,
+    ) {
+        rule.setContent(
+            configuration = configuration,
+            data = data(
+                input(
+                    hintText = hintText,
+                    keyboardType = keyboardType,
+                    mask = mask,
+                    textVariable = "fixed_display",
+                    validators = validators,
+                )
+            ),
+        )
     }
 }
-
-private const val RAW_VAR = "fixed_raw"
-private const val DISPLAY_VAR = "fixed_display"

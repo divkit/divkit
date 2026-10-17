@@ -222,6 +222,34 @@ class DivInputKeyboardTest {
     }
 
     @Test
+    fun `switching to password keeps focus and selection`() {
+        val type = Variable.StringVariable("type", "single_line_text")
+        variableController.declare(type)
+        source.set("1234")
+        setInput(keyboardType = keyboardTypeExpression())
+        field.performTextInputSelection(TextRange(1, 3))
+
+        type.set("password")
+
+        field.assertIsFocused()
+        field.assert(SemanticsMatcher.expectValue(SemanticsProperties.TextSelectionRange, TextRange(1, 3)))
+    }
+
+    @Test
+    fun `switching from password keeps focus and selection`() {
+        val type = Variable.StringVariable("type", "password")
+        variableController.declare(type)
+        source.set("1234")
+        setInput(keyboardType = keyboardTypeExpression())
+        field.performTextInputSelection(TextRange(1, 3))
+
+        type.set("single_line_text")
+
+        field.assertIsFocused()
+        field.assert(SemanticsMatcher.expectValue(SemanticsProperties.TextSelectionRange, TextRange(1, 3)))
+    }
+
+    @Test
     fun `changing enter key updates focused length limited input`() {
         val enterKeyType = Variable.StringVariable("enter", "go")
         variableController.declare(enterKeyType)
