@@ -1,0 +1,168 @@
+{
+  "description": "Patch on_failed_actions",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "alert_card": {
+        "type": "container",
+        "height": {
+          "type": "fixed",
+          "unit": "sp",
+          "value": 76
+        },
+        "width": {
+          "type": "match_parent"
+        },
+        "background": [
+          {
+            "color": "#FFFFFF",
+            "type": "solid"
+          }
+        ],
+        "border": {
+          "corner_radius": 6,
+          "stroke": {
+            "color": "#E5E5E5"
+          }
+        },
+        "orientation": "vertical",
+        "items": [
+          {
+            "type": "text",
+            "font_size": 14,
+            "text": "original text:"
+          },
+          {
+            "type": "text",
+            "max_lines": 3,
+            "font_size": 14,
+            "line_height": 18,
+            "margins": {
+              "top": 9,
+              "left": 8
+            },
+            "font_weight": "medium",
+            "$text": "alert_text",
+            "$id": "text_id"
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "alerts_gallery",
+      "variables": [
+        {
+          "type": "string",
+          "name": "patch_status",
+          "value": "Not started"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "alert_card",
+                "alert_text": "Patch status: @{patch_status}",
+                "text_id": "patch_status_text"
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent"
+                },
+                "paddings": {
+                  "top": 12,
+                  "bottom": 12
+                },
+                "items": [
+                  {
+                    "type": "alert_card",
+                    "id": "item2",
+                    "alert_text": "1 item",
+                    "text_id": "original_item2_text"
+                  },
+                  {
+                    "type": "alert_card",
+                    "id": "item3",
+                    "alert_text": "3 item",
+                    "text_id": "original_item3_text"
+                  },
+                  {
+                    "type": "alert_card",
+                    "id": "item4",
+                    "alert_text": "4 item",
+                    "text_id": "original_item4_text"
+                  }
+                ],
+                "id": "patch_container"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "original_item2_text"
+      },
+      "text": "1 item"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "patch_status_text"
+      },
+      "text": "Patch status: Not started"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "download_patch",
+        "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Ftransaction-callbacks-2.json"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "patch_status_text"
+      },
+      "text": "Patch status: fail"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "original_item2_text"
+      },
+      "text": "1 item"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "original_item3_text"
+      },
+      "text": "3 item"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "original_item4_text"
+      },
+      "text": "4 item"
+    }
+  ]
+}

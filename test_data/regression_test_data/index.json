@@ -3858,7 +3858,10 @@
       "expected_results": [
         "2 original items should be replaced with the new ones, which background is red"
       ],
-      "file": "patch/typed-gallery.json"
+      "file": "patch/typed-gallery.json",
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Patch gallery",
@@ -3891,7 +3894,10 @@
       "expected_results": [
         "Second original item should be replaced with two vertical ones, which background is red. Third item should be an empty space. That look like 2-nd and 3-rd elements became red and has slightly more free space after 3-rd"
       ],
-      "file": "patch/inside_gallery.json"
+      "file": "patch/inside_gallery.json",
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Patch grid",
@@ -3942,8 +3948,8 @@
         "ios"
       ],
       "unsupported_platforms": {
-        "android": "test is replaced by interactive_snapshot_test_data/div-grid/patch_inside_grid.json",
-        "web": "test is replaced by interactive_snapshot_test_data/div-grid/patch_inside_grid.json"
+        "android": "test is replaced by interactive_snapshot_test_data/div-pager/patch_pager.json",
+        "web": "test is replaced by interactive_snapshot_test_data/div-pager/patch_pager.json"
       },
       "tags": [
         "patch"
@@ -3973,7 +3979,10 @@
       "expected_results": [
         "Second original item should be replaced with two vertical ones, which background is red. Third item should be an empty space"
       ],
-      "file": "patch/inside_pager.json"
+      "file": "patch/inside_pager.json",
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Patch state partial",
@@ -4142,7 +4151,10 @@
       "expected_results": [
         "Second element is gallery"
       ],
-      "file": "patch/root.json"
+      "file": "patch/root.json",
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Patch on_applied_actions",
@@ -4163,7 +4175,10 @@
         "2 elements should become red",
         "Patch status text should become success"
       ],
-      "file": "patch/actions_applied.json"
+      "file": "patch/actions_applied.json",
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Patch on_failed_actions",
@@ -4184,7 +4199,10 @@
         "Patch status text should become fail",
         "No other elements hould be changed"
       ],
-      "file": "patch/actions_failed.json"
+      "file": "patch/actions_failed.json",
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "State with variable binding",

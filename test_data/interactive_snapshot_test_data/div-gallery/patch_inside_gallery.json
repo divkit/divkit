@@ -1,0 +1,161 @@
+{
+  "description": "Patch gallery internal items",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "alert_card": {
+        "type": "container",
+        "height": {
+          "type": "fixed",
+          "unit": "sp",
+          "value": 76
+        },
+        "width": {
+          "type": "match_parent",
+          "weight": 1
+        },
+        "background": [
+          {
+            "color": "#FFFFFF",
+            "type": "solid"
+          }
+        ],
+        "border": {
+          "corner_radius": 6,
+          "stroke": {
+            "color": "#E5E5E5"
+          }
+        },
+        "orientation": "horizontal",
+        "items": [
+          {
+            "type": "text",
+            "max_lines": 3,
+            "font_size": 14,
+            "line_height": 18,
+            "margins": {
+              "top": 9,
+              "left": 8
+            },
+            "font_weight": "medium",
+            "$text": "alert_text",
+            "$id": "text_id"
+          }
+        ]
+      }
+    },
+    "card": {
+      "log_id": "alerts_gallery",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "gallery",
+            "orientation": "vertical",
+            "width": {
+              "type": "match_parent"
+            },
+            "paddings": {
+              "top": 12,
+              "bottom": 12
+            },
+            "items": [
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "alert_card",
+                    "id": "item1",
+                    "alert_text": "1 item",
+                    "text_id": "original_item1_text"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "alert_card",
+                    "id": "item2",
+                    "alert_text": "2 item",
+                    "text_id": "original_item2_text"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "alert_card",
+                    "id": "item3",
+                    "alert_text": "3 item",
+                    "text_id": "original_item3_text"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "items": [
+                  {
+                    "type": "alert_card",
+                    "id": "item4",
+                    "alert_text": "4 item",
+                    "text_id": "original_item4_text"
+                  }
+                ]
+              }
+            ],
+            "id": "patch_gallery"
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "original_item2_text"
+      },
+      "text": "2 item"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "original_item3_text"
+      },
+      "text": "3 item"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "download_patch",
+        "url": "div-action://download?url=https%3A%2F%2Fyastatic.net%2Fs3%2Fhome%2Fdivkit%2Fui_tests%2Fv1%2Fpatches%2Fpartial-patch.json"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "patched_item_2_1_text"
+      },
+      "text": "2.1 item from patch"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "patched_item_2_2_text"
+      },
+      "text": "2.2 item from patch"
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "patched"
+    }
+  ]
+}
