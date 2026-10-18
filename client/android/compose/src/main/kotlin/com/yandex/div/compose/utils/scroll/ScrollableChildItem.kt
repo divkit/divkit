@@ -23,6 +23,7 @@ internal inline fun ScrollableChildItem(
     isHorizontal: Boolean,
     crossAxisAlignment: CrossAxisAlignment,
     matchParentMaxSize: Dp = Dp.Unspecified,
+    contentModifier: Modifier = Modifier,
 ) {
     val (matchParentMaxWidth, matchParentMaxHeight) = if (isHorizontal) {
         matchParentMaxSize to Dp.Unspecified
@@ -43,6 +44,7 @@ internal inline fun ScrollableChildItem(
         ) {
             DivBlockView(
                 data = data,
+                modifier = contentModifier,
                 defaultHorizontalAlignment = if (isHorizontal) {
                     Alignment.Start
                 } else {

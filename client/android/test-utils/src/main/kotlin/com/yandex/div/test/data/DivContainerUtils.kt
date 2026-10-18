@@ -31,6 +31,7 @@ fun container(
     layoutProvider: DivLayoutProvider? = null,
     margins: DivEdgeInsets? = null,
     paddings: DivEdgeInsets? = null,
+    selectedActions: List<DivAction>? = null,
     variables: List<DivVariable>? = null,
     visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
     width: DivSize = matchParent()
@@ -51,6 +52,7 @@ fun container(
             layoutProvider = layoutProvider,
             margins = margins,
             paddings = paddings,
+            selectedActions = selectedActions,
             variables = variables,
             visibility = visibility,
             width = width

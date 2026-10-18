@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalViewConfiguration
@@ -33,6 +34,7 @@ import com.yandex.div.compose.pager.rememberAndStoreState
 import com.yandex.div.compose.pager.snapOffset
 import com.yandex.div.compose.pager.snappedItem
 import com.yandex.div.compose.pager.visibleItemSizes
+import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.CrossAxisAlignment
@@ -41,9 +43,11 @@ import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div2.Div
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivPageTransformation
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode
+import com.yandex.div2.DivSize
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.filterNotNull
@@ -133,15 +137,14 @@ internal fun PagerContent(
         enabled = initialPositionAdjusted && alignmentReady,
     )
 
-    val childModifier = childModifier(
-        isHorizontal, viewportSize, crossAxisBounded, listState,
-        paddings, pageSize, startPadding, endPadding, layoutDirection, density
-    )
+    val crossAxisSizes = rememberPagerCrossAxisSizes(listState, enabled = !crossAxisBounded)
+    val childModifier = childModifier(isHorizontal, viewportSize, crossAxisSizes, pageSize, startPadding, endPadding)
     val transformation = observePageTransformation(pageTransformation)
     val overlap = transformation?.overlap == true
-    // Pages of different sizes and overlapped pages need their neighbours outside the viewport.
+    // Pages of different sizes, overlapped pages and a pager wrapping its pages need their neighbours outside
+    // the viewport.
     val neighbourSizes = rememberPagerNeighbourSizes(
-        listState, itemKeys, enabled = pageSize == null || overlap
+        listState, itemKeys, enabled = pageSize == null || overlap || crossAxisSizes != null
     )
     val pageSizePx = pageSize?.let { with(density) { it.roundToPx() } }
     val neighbourSize: (Int) -> Int? = remember(neighbourSizes, pageSizePx) {
@@ -164,7 +167,8 @@ internal fun PagerContent(
         OrientedLazyList(
             isHorizontal = isHorizontal,
             modifier = IntrinsicSizeBarrier.fillMaxSize().clipToBounds().trackPagerViewport(neighbourSizes)
-                .pagerSwipe(swipeLimiter),
+                .pagerSwipe(swipeLimiter)
+                .commitPagerCrossAxisSizes(crossAxisSizes),
             listState = listState,
             contentPadding = paddings,
             itemSpacing = itemSpacing,
@@ -185,8 +189,9 @@ internal fun PagerContent(
                 contentType = { itemWindow },
             ) { index ->
                 CompositionLocalProvider(LocalViewConfiguration provides viewConfiguration) {
+                    val item = items[itemWindow.realIndex(index)]
                     ScrollableChildItem(
-                        items[itemWindow.realIndex(index)],
+                        item,
                         childModifier
                             .trackPagerPageSize(neighbourSizes, index, isHorizontal)
                             .pageTransformation(
@@ -194,6 +199,11 @@ internal fun PagerContent(
                             ),
                         isHorizontal,
                         crossAlignment,
+                        contentModifier = Modifier.trackPagerCrossAxisSize(
+                            sizes = crossAxisSizes,
+                            isHorizontal = isHorizontal,
+                            isMatchParent = item.value().crossAxisSize(isHorizontal).isMatchParent,
+                        ),
                     )
                 }
             }
@@ -397,3 +407,5 @@ private object ViewportCenterSnapPosition : SnapPosition {
         itemCount: Int,
     ): Int = (layoutSize - itemSize) / 2 - beforeContentPadding
 }
+
+private fun DivBase.crossAxisSize(isHorizontal: Boolean): DivSize = if (isHorizontal) height else width
