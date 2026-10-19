@@ -5,6 +5,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivActions
@@ -17,19 +18,20 @@ import com.yandex.div2.DivAction
 @Composable
 internal fun WithActionMenu(
     actions: DivActions?,
-    content: @Composable () -> Unit
+    modifier: Modifier,
+    content: @Composable (Modifier) -> Unit,
 ) {
     val menuHolder = LocalDivViewContext.current.component.actionMenuHolder
     val menuAction = menuHolder.expandedMenuAction
     if (menuAction != null && actions?.hasMenuAction(menuAction) == true
         && menuAction.isEnabled.observedValue()
     ) {
-        Box {
-            content()
+        Box(modifier) {
+            content(Modifier)
             ActionMenu(menuHolder)
         }
     } else {
-        content()
+        content(modifier)
     }
 }
 

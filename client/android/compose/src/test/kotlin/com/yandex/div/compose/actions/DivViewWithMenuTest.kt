@@ -6,6 +6,7 @@ import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -15,11 +16,16 @@ import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
+import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.menuItem
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
+import com.yandex.div2.DivContainer
 import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
@@ -59,6 +65,45 @@ class DivViewWithMenuTest {
 
         rule.onNodeWithText("Item 1").assertIsDisplayed()
         rule.onNodeWithText("Item 2").assertIsDisplayed()
+    }
+
+    @Test
+    fun `menu anchor stays in place when menu is opened in overlap container`() {
+        setContent(
+            container(
+                height = fixed(100),
+                items = listOf(
+                    container(
+                        action = action(
+                            menuItems = listOf(
+                                menuItem(
+                                    action = action(),
+                                    text = "Details"
+                                )
+                            )
+                        ),
+                        alignmentHorizontal = DivAlignmentHorizontal.RIGHT,
+                        alignmentVertical = DivAlignmentVertical.TOP,
+                        height = fixed(40),
+                        items = listOf(text(text = "Menu")),
+                        orientation = DivContainer.Orientation.OVERLAP,
+                        width = fixed(40)
+                    )
+                ),
+                orientation = DivContainer.Orientation.OVERLAP
+            )
+        )
+        val menuButton = rule.onNodeWithText("Menu")
+        val initialBounds = menuButton.fetchSemanticsNode().boundsInRoot
+        val rootBounds = rule.onRoot().fetchSemanticsNode().boundsInRoot
+
+        assertEquals(rootBounds.right, initialBounds.right)
+        assertEquals(rootBounds.top, initialBounds.top)
+
+        menuButton.performClick()
+
+        rule.onNodeWithText("Details").assertIsDisplayed()
+        assertEquals(initialBounds, menuButton.fetchSemanticsNode().boundsInRoot)
     }
 
     @Test

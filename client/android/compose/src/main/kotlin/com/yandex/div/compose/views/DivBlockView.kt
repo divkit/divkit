@@ -88,13 +88,13 @@ internal fun VisibleDivBlockView(
 ) {
     val divBase = data.value()
     val actions = data.observedActions()
-    WithActionMenu(actions) {
+    WithActionMenu(actions, modifier) { contentModifier ->
         BaseViewWithExtensions(
             data = data,
             extensions = divBase.extensions
                 ?.filter { it.isEnabled.observedValue() }
                 ?: emptyList(),
-            modifier = modifier.apply(
+            modifier = contentModifier.apply(
                 data,
                 actions = actions,
                 applyMargins = applyMargins,

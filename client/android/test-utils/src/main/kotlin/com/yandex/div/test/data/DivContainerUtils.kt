@@ -4,6 +4,8 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
@@ -19,6 +21,8 @@ import com.yandex.div2.DivVisibility
 fun container(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
+    alignmentHorizontal: DivAlignmentHorizontal? = null,
+    alignmentVertical: DivAlignmentVertical? = null,
     backgrounds: List<DivBackground>? = null,
     border: DivBorder? = null,
     clipToBounds: Expression<Boolean> = constant(true),
@@ -31,6 +35,7 @@ fun container(
     layoutProvider: DivLayoutProvider? = null,
     longTapActions: List<DivAction>? = null,
     margins: DivEdgeInsets? = null,
+    orientation: DivContainer.Orientation = DivContainer.Orientation.VERTICAL,
     paddings: DivEdgeInsets? = null,
     selectedActions: List<DivAction>? = null,
     variables: List<DivVariable>? = null,
@@ -41,6 +46,8 @@ fun container(
         value = DivContainer(
             accessibility = accessibility,
             action = action,
+            alignmentHorizontal = alignmentHorizontal?.let(::constant),
+            alignmentVertical = alignmentVertical?.let(::constant),
             background = backgrounds,
             border = border,
             clipToBounds = clipToBounds,
@@ -53,6 +60,7 @@ fun container(
             layoutProvider = layoutProvider,
             longtapActions = longTapActions,
             margins = margins,
+            orientation = constant(orientation),
             paddings = paddings,
             selectedActions = selectedActions,
             variables = variables,
