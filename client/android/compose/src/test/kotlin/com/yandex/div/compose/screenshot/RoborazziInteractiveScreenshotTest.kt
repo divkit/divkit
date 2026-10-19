@@ -37,7 +37,9 @@ import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.test.INTERACTIVE_SCREENSHOT_CASES_PATH
 import com.yandex.div.test.ScreenshotTests
+import com.yandex.div.test.composeRoborazziInteractiveScreenshotCases
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
@@ -202,9 +204,9 @@ class RoborazziInteractiveScreenshotTest(
 
         // Cache cases because ParameterizedRobolectricTestRunner calls the provider repeatedly.
         private val cases =
-            ParsingUtils.parseFiles("interactive_snapshot_test_data") { file, json ->
-                val fileName = file.getRelativeFileName("interactive_snapshot_test_data")
-                if (fileName in selectedFiles) {
+            ParsingUtils.parseFiles(INTERACTIVE_SCREENSHOT_CASES_PATH) { file, json ->
+                val fileName = file.getRelativeFileName(INTERACTIVE_SCREENSHOT_CASES_PATH)
+                if (fileName in composeRoborazziInteractiveScreenshotCases) {
                     val configuration = InteractiveScreenshotTestConfiguration(
                         name = fileName.removeSuffix(".json"),
                         json = json,
@@ -221,46 +223,3 @@ class RoborazziInteractiveScreenshotTest(
         fun cases() = cases
     }
 }
-
-private val selectedFiles = setOf(
-    "div-action/base.json",
-    "div-action/is-enabled.json",
-    "div-action/set-state-no-screenshot.json",
-    "div-action/set-variable.json",
-    "div-container/base-properties.json",
-    "div-container/visibility.json",
-    "div-extension/is-enabled.json",
-    "div-gallery/specific-properties.json",
-    "div-grid/grid_layout.json",
-    "div-indicator/shapes.json",
-    "div-input/base-properties.json",
-    "div-input/currency_input_mask.json",
-    "div-input/expression_input_validator.json",
-    "div-input/fixed_length_input_mask.json",
-    "div-input/focus/blurred-and-focused-background-and-border.json",
-    "div-input/focus/blurred-and-focused-background.json",
-    "div-input/focus/blurred-and-focused-border.json",
-    "div-input/focus/blurred-background-and-border.json",
-    "div-input/focus/blurred-background.json",
-    "div-input/focus/blurred-border.json",
-    "div-input/focus/focused-background-and-border.json",
-    "div-input/focus/focused-background.json",
-    "div-input/focus/focused-border.json",
-    "div-input/phone_input_mask.json",
-    "div-input/regex_input_validator.json",
-    "div-input/size-properties.json",
-    "div-input/text-properties.json",
-    "div-input/visibility.json",
-    "div-pager/horizontal-content-alignment.json",
-    "div-pager/specific-properties.json",
-    "div-pager/vertical-content-alignment.json",
-    "div-select/base-properties.json",
-    "div-select/switching_options.json",
-    "div-select/text-properties.json",
-    "div-select/visibility.json",
-    "div-switch/base-properties.json",
-    "div-switch/switch-properties.json",
-    "div-text/text-properties.json",
-    "div-text/text_range_without_bound.json",
-    "div-text/truncate-policy.json",
-)

@@ -6,6 +6,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.yandex.div.rule.baseScreenshotTestRule
 import com.yandex.div.rule.classRule
 import com.yandex.div.steps.imageLoaderScreenshot
+import com.yandex.div.test.IMAGE_LOADER_SCREENSHOT_CASES_PATH
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity.Companion.IMAGE_LOADER_COIL
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity.Companion.IMAGE_LOADER_GLIDE
@@ -45,7 +46,7 @@ class Div2ImageLoaderScreenshotTest(private val casePath: String, escapedCase: S
 
     companion object {
 
-        private const val TEST_CASES_PATH = "ui_test_data/image-loaders"
+        private const val TEST_CASES_PATH = IMAGE_LOADER_SCREENSHOT_CASES_PATH
 
         private val context: Context = ApplicationProvider.getApplicationContext()
         private val assetReader = AssetReader(context)

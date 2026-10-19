@@ -17,9 +17,12 @@ import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziRule
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.provideRoborazziContext
+import com.yandex.div.test.SNAPSHOT_TEST_CASES_PATH
 import com.yandex.div.test.ScreenshotTests
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
+import com.yandex.div.test.crossplatform.TEST_DATA_PATH
+import com.yandex.div.test.viewDeviceScreenshotCases
 import com.yandex.divkit.demo.Container
 import org.hamcrest.Matcher
 import org.json.JSONObject
@@ -119,8 +122,9 @@ class ViewRoborazziScreenshotTest(private val case: String, private val testCase
     }
 
     companion object {
-        private val cases = ParsingUtils.parseFiles("snapshot_test_data") { file, json ->
-            val name = file.relativeTo(File("../../../test_data/snapshot_test_data")).invariantSeparatorsPath
+        val snapshotTestCases = File(TEST_DATA_PATH, SNAPSHOT_TEST_CASES_PATH)
+        private val cases = ParsingUtils.parseFiles(snapshotTestCases) { file, json ->
+            val name = file.relativeTo(snapshotTestCases).invariantSeparatorsPath
             if (name in viewDeviceScreenshotCases) {
                 return@parseFiles emptyList()
             }

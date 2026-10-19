@@ -19,7 +19,9 @@ import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.test.SNAPSHOT_TEST_CASES_PATH
 import com.yandex.div.test.ScreenshotTests
+import com.yandex.div.test.composeRoborazziIgnoredScreenshotCases
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import org.junit.Rule
@@ -115,9 +117,9 @@ class RoborazziScreenshotTest(
 
         // Cache cases because ParameterizedRobolectricTestRunner calls the provider repeatedly.
         private val cases =
-            ParsingUtils.parseFiles("snapshot_test_data") { file, json ->
-                val fileName = file.getRelativeFileName("snapshot_test_data")
-                if (fileName in ignoredFiles) {
+            ParsingUtils.parseFiles(SNAPSHOT_TEST_CASES_PATH) { file, json ->
+                val fileName = file.getRelativeFileName(SNAPSHOT_TEST_CASES_PATH)
+                if (fileName in composeRoborazziIgnoredScreenshotCases) {
                     return@parseFiles emptyList()
                 }
                 val configuration = ScreenshotTestConfiguration(
@@ -133,123 +135,3 @@ class RoborazziScreenshotTest(
         fun cases() = cases
     }
 }
-
-private val ignoredFiles = setOf(
-
-    // div-container.aspect not fully supported
-    "div-container/aspect/wrap_content-width-horizontal.json",
-    "div-container/aspect/wrap_content-width-overlap.json",
-    "div-container/aspect/wrap_content-width-overlap-fixed-height.json",
-    "div-container/aspect/wrap_content-width-overlap-match_parent-height.json",
-    "div-container/aspect/wrap_content-width-vertical.json",
-    "div-container/aspect/wrap_content-width-vertical-constrained-child-not-fit.json",
-    "div-container/aspect/wrap_content-width-vertical-fixed-height.json",
-    "div-container/aspect/wrap_content-width-vertical-match_parent-child-fits.json",
-    "div-container/aspect/wrap_content-width-vertical-match_parent-child-not-fit.json",
-    "div-container/aspect/wrap_content-width-vertical-match_parent-height.json",
-
-    // size_provider extension not supported
-    "div-container/size_provider.json",
-    "div-container/size_provider_recursive.json",
-
-    // div-container.item_builder not supported
-    "div-container/item_builder/index.json",
-    "div-container/item_builder/item-builder.json",
-    "div-container/item_builder/item-builder-priority.json",
-    "div-container/item_builder/item-builder-with-local-variables.json",
-    "div-container/item_builder/item-builder-with-nested-local-variables.json",
-    "div-container/item_builder/nested-builders.json",
-    "div-container/item_builder/non-unique-matched-selectors.json",
-    "div-container/item_builder/wrap-content-container-with-match-parent-items.json",
-
-    // div-pager vertical not supported
-    "div-pager/vertical-pager-custom-neighbour-page-width.json",
-    "div-pager/vertical-pager-custom-neighbour-page-width-with-paddings.json",
-    "div-pager/vertical-pager-custom-page-width.json",
-    "div-pager/vertical-pager-custom-page-width-with-paddings.json",
-    "div-pager/vertical-pager-neighbour-page-size-mode-alignment-end.json",
-    "div-pager/vertical-pager-neighbour-page-size-mode-alignment-start.json",
-    "div-pager/vertical-pager-neighbour-page-size-mode-item-spacing.json",
-    "div-pager/vertical-pager-neighbour-page-size-mode-two-pages.json",
-    "div-pager/vertical-pager-neighbour-page-width-0-with-item-spacing.json",
-    "div-pager/vertical-pager-neighbour-page-width-0-with-paddings.json",
-    "div-pager/vertical-pager-page-size-mode-alignment-end.json",
-    "div-pager/vertical-pager-page-size-mode-alignment-start.json",
-    "div-pager/vertical-pager-page-size-mode-item-spacing.json",
-    "div-pager/vertical-pager-page-width-100-with-item-spacing.json",
-    "div-pager/vertical-pager-page-width-100-with-paddings.json",
-    "div-pager/vertical-pager-wrap-content-height.json",
-    "div-pager/vertical-pager-wrap-content-height-with-paddings.json",
-    "div-pager/vertical-pager-wrap-content-size-mode-alignment-end.json",
-    "div-pager/vertical-pager-wrap-content-size-mode-alignment-start.json",
-    "div-pager/vertical-pager-wrap-content-size-mode-with-item-spacing.json",
-
-    // div-gallery.item_builder not supported
-    "div-gallery/item-builder/item-builder.json",
-    "div-gallery/item-builder/item-builder-with-local-variables.json",
-    "div-gallery/item-builder/nested-builders.json",
-    "div-gallery/item-builder/non-unique-matched-selectors.json",
-
-
-    // div-pager.item_builder not supported
-    "div-pager/item-builder/item-builder.json",
-    "div-pager/item-builder/item-builder-with-local-variables.json",
-    "div-pager/item-builder/nested-builders.json",
-    "div-pager/item-builder/non-unique-matched-selectors.json",
-
-    // div-text ellipsis images not supported
-    "div-text/ellipsis-with-image.json",
-    "div-text/ellipsis_builder.json",
-
-    // div-text.range.line_height not supported
-    "div-text/line-height/multi-line-text-with-image.json",
-
-    // div-text.image_builder not supported
-    "div-text/image_builder.json",
-
-    // markdown extension not supported
-    "div-text/markdown-extension.json",
-
-    // div-text.tighten_width not supported
-    "div-text/maxwidth-tight-text.json",
-
-    // div-text.range_builder not supported
-    "div-text/range_builder.json",
-
-    // div-text.range.top_offset not supported
-    "div-text/ranges-line-height-top-offset.json",
-
-    // div-text.ranges.top_offset not supported
-    "div-text/ranges-intersection-top-offset.json",
-
-    // div-text.range.baseline_offset not supported
-    "div-text/text_range_baseline_offset.json",
-
-    // div-text.range.alignment_vertical not supported
-    "div-text/text_range_vertical_alignment.json",
-
-    // test div-customs required
-    "div-size/match-parent/overlap/height/platform-wrap-content-container-height.json",
-    "div-size/match-parent/overlap/custom-with-fixed-size.json",
-
-    // image blur uses render script which is not supported in Robolectric
-    "div-background/blur.json",
-    "div-image/blur.json",
-    "div-image/blur-with-big-radius.json",
-    "div-text/blur-background.json",
-    "image-formats/animated-webp/animated_webp_background_blur.json",
-    "image-formats/animated-webp/animated_webp_image_blur.json",
-    "image-formats/animated-webp/animated_webp_preview_blur.json",
-    "image-formats/gif/gif_background_blur.json",
-    "image-formats/gif/gif_image_blur.json",
-    "image-formats/gif/gif_preview_blur.json",
-    "image-formats/png/png_background_blur.json",
-    "image-formats/png/png_image_blur.json",
-    "image-formats/png/png_preview_blur.json",
-    "image-formats/svg/svg_background_blur.json",
-    "image-formats/svg/svg_image_blur.json",
-    "image-formats/svg/svg_preview_blur.json",
-    "image-formats/webp/webp_background_blur.json",
-    "image-formats/webp/webp_image_blur.json",
-    "image-formats/webp/webp_preview_blur.json",
-)

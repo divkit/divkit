@@ -7,6 +7,7 @@ import com.yandex.div.Div2ScreenshotTest.Companion.TEST_CASES_PATH
 import com.yandex.div.Div2ScreenshotTest.Companion.relativePath
 import com.yandex.div.rule.classRule
 import com.yandex.div.rule.composeScreenshotRule
+import com.yandex.div.test.composeDeviceScreenshotCases
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.screenshot.Screenshot
@@ -45,30 +46,9 @@ class DivComposeScreenshotTest(casePath: String, escapedCase: String) {
         fun cases(): List<Array<String>> {
             val enumerator = AssetEnumerator()
             return enumerator.enumerate(TEST_CASES_PATH)
-                .filter { includedFiles.contains(it) }
+                .filter { composeDeviceScreenshotCases.contains(it) }
                 .let(enumerator::requireSelectedCase)
                 .withEscapedParameter(prefix = "$TEST_CASES_PATH/")
         }
     }
 }
-
-// Run only tests that are not supported by RoborazziScreenshotTest.
-private val includedFiles = setOf(
-    // Image blur uses RenderScript, which is not supported in Robolectric.
-    "snapshot_test_data/div-background/blur.json",
-    "snapshot_test_data/div-image/blur-with-big-radius.json",
-    "snapshot_test_data/div-image/blur.json",
-    "snapshot_test_data/div-text/blur-background.json",
-    "snapshot_test_data/image-formats/animated-webp/animated_webp_background_blur.json",
-    "snapshot_test_data/image-formats/animated-webp/animated_webp_image_blur.json",
-    "snapshot_test_data/image-formats/animated-webp/animated_webp_preview_blur.json",
-    "snapshot_test_data/image-formats/gif/gif_background_blur.json",
-    "snapshot_test_data/image-formats/gif/gif_image_blur.json",
-    "snapshot_test_data/image-formats/gif/gif_preview_blur.json",
-    "snapshot_test_data/image-formats/png/png_background_blur.json",
-    "snapshot_test_data/image-formats/png/png_image_blur.json",
-    "snapshot_test_data/image-formats/png/png_preview_blur.json",
-    "snapshot_test_data/image-formats/webp/webp_background_blur.json",
-    "snapshot_test_data/image-formats/webp/webp_image_blur.json",
-    "snapshot_test_data/image-formats/webp/webp_preview_blur.json",
-)

@@ -7,6 +7,7 @@ import com.yandex.div.rule.SetDataRule
 import com.yandex.div.rule.baseScreenshotTestRule
 import com.yandex.div.rule.classRule
 import com.yandex.div.steps.interactiveScreenshot
+import com.yandex.div.test.INTERACTIVE_SCREENSHOT_CASES_PATH
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.screenshot.Screenshot
@@ -37,7 +38,7 @@ class Div2InteractiveScreenshotTest(private val casePath: String, escapedCase: S
     }
 
     companion object {
-        private const val TEST_CASES_PATH = "interactive_snapshot_test_data"
+        private const val TEST_CASES_PATH = INTERACTIVE_SCREENSHOT_CASES_PATH
 
         private val context: Context = ApplicationProvider.getApplicationContext()
         private val assetReader = AssetReader(context)

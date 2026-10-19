@@ -5,8 +5,10 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.yandex.div.rule.classRule
 import com.yandex.div.rule.screenshotRule
+import com.yandex.div.test.SNAPSHOT_TEST_CASES_PATH
+import com.yandex.div.test.viewDeviceIgnoredScreenshotCases
+import com.yandex.div.test.viewDeviceScreenshotCases
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
-import com.yandex.divkit.demo.screenshot.viewDeviceScreenshotCases
 import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.screenshot.Screenshot
 import org.junit.ClassRule
@@ -31,16 +33,11 @@ class Div2ScreenshotTest(casePath: String, escapedCase: String) {
 
     companion object {
 
-        const val TEST_CASES_PATH = "snapshot_test_data"
+        const val TEST_CASES_PATH = SNAPSHOT_TEST_CASES_PATH
 
         private val context: Context = ApplicationProvider.getApplicationContext()
         private val assetReader = AssetReader(context)
         private val activityRule = ActivityScenarioRule(DivScreenshotActivity::class.java)
-
-        private val ignoredCases = listOf(
-            "snapshot_test_data/div-text/all_attributes.json",
-            "snapshot_test_data/div-container/baseline-with-images.json",
-        )
 
         @JvmField
         @ClassRule
@@ -51,7 +48,7 @@ class Div2ScreenshotTest(casePath: String, escapedCase: String) {
         fun cases(): List<Array<String>> {
             val enumerator = AssetEnumerator()
             return enumerator.enumerate(TEST_CASES_PATH)
-                .filter { !ignoredCases.contains(it) }
+                .filter { !viewDeviceIgnoredScreenshotCases.contains(it) }
                 .filter { it.removePrefix("$TEST_CASES_PATH/") in viewDeviceScreenshotCases }
                 .let(enumerator::requireSelectedCase)
                 .withEscapedParameter()

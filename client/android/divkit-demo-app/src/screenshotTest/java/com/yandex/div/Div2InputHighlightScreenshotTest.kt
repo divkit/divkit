@@ -7,6 +7,8 @@ import com.yandex.div.rule.classRule
 import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
 import com.yandex.div.steps.divInput
+import com.yandex.div.test.INPUT_HIGHLIGHT_SCREENSHOT_CASE
+import com.yandex.div.test.INPUT_HIGHLIGHT_SCREENSHOT_CASES_PATH
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.screenshot.Screenshot
@@ -39,7 +41,7 @@ class Div2InputHighlightScreenshotTest(casePath: String, escapedCase: String) {
 
     companion object {
 
-        private const val TEST_CASES_PATH = "ui_test_data/input"
+        private const val TEST_CASES_PATH = INPUT_HIGHLIGHT_SCREENSHOT_CASES_PATH
 
         private val context: Context = ApplicationProvider.getApplicationContext()
         private val assetReader = AssetReader(context)
@@ -54,7 +56,7 @@ class Div2InputHighlightScreenshotTest(casePath: String, escapedCase: String) {
         fun cases(): List<Array<String>> {
             return AssetEnumerator()
                 .enumerate(TEST_CASES_PATH)
-                .filter { filename -> filename.endsWith("/div_input_highlight.json") }
+                .filter { filename -> filename.endsWith("/$INPUT_HIGHLIGHT_SCREENSHOT_CASE") }
                 .withEscapedParameter()
         }
     }
