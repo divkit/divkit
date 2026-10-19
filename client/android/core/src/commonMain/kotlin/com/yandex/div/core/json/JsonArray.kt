@@ -54,7 +54,7 @@ public interface JsonArray : JsonElement, DataArray {
     public fun modify(modify: Builder.() -> Unit): JsonArray
 
     public fun asOrgJsonArray(): JSONArray
-    public fun asKtxJsonArray(): kotlinx.serialization.json.JsonArray
+    public fun asKtxJsonArray(): KtxArray
 
     @Suppress("TooManyFunctions")
     public interface Builder {

@@ -222,7 +222,8 @@ fun dependencyFailed(json: JSONObject, key: String, cause: ParsingException): Pa
     return dependencyFailed(json, key, cause as Exception)
 }
 
-internal fun dependencyFailed(json: JSONObject, key: String, cause: Exception): ParsingException {
+@InternalApi
+fun dependencyFailed(json: JSONObject, key: String, cause: Exception): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.DEPENDENCY_FAILED,
         message = "Value for key '$key' is failed to create",
@@ -237,7 +238,8 @@ fun dependencyFailed(json: JSONArray, key: String, index: Int, cause: ParsingExc
     return dependencyFailed(json, key, index, cause as Exception)
 }
 
-internal fun dependencyFailed(json: JSONArray, key: String, index: Int, cause: Exception): ParsingException {
+@InternalApi
+fun dependencyFailed(json: JSONArray, key: String, index: Int, cause: Exception): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.DEPENDENCY_FAILED,
         message = "Value at $index position of '$key' is failed to create",

@@ -31,13 +31,17 @@ class KotlinGenerator(Generator):
         self.generate_equality = config.generation.generate_equality
         self.generate_serialization = config.generation.generate_serialization
         self.generate_serializers = config.generation.generate_serializers
+        self.generate_models = config.generation.generate_models
+        self.multiplatform = config.generation.multiplatform
+        self.json_object_type = 'JsonObject' if self.multiplatform else 'JSONObject'
         self._entity_generator = KotlinEntityGenerator(self)
         self._entity_template_generator = KotlinEntityTemplateGenerator(self)
         self._string_enumeration_generator = KotlinStringEnumerationGenerator(self)
         self._serializer_generator = KotlinSerializerGenerator(self)
 
     def generate(self, objects: List[Declarable]):
-        super(KotlinGenerator, self).generate(objects)
+        output_objects = objects if self.generate_models else [obj for obj in objects if self.__is_serializer(obj)]
+        super(KotlinGenerator, self).generate(output_objects)
         if self.generate_serializers:
             serializers = list(filter(lambda obj: self.__is_serializer(obj), objects))
             flatten_serializers: List[Declarable] = []
@@ -571,6 +575,8 @@ class KotlinSerializerGenerator:
         self._generator = generator
 
     def entity_serializer_declaration(self, entity: KotlinEntity) -> Text:
+        entity.multiplatform = self._generator.multiplatform
+        entity.json_object_type = self._generator.json_object_type
         result = entity.serializer_declaration()
         if entity.inner_types:
             for inner_type in filter(lambda t: not isinstance(t, StringEnumeration) or True, entity.inner_types):
@@ -616,10 +622,10 @@ class KotlinSerializerGenerator:
         result = Text()
         result += f'class {ENTITY_PARSER_NAME}('
         result += '    private val component: JsonParserComponent'
-        result += f') : Parser<JSONObject, {entity_type}> {{'
+        result += f') : Parser<{self._generator.json_object_type}, {entity_type}> {{'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun deserialize(context: ParsingContext, data: JSONObject): {entity_type} {{'
+        result += f'    override fun deserialize(context: ParsingContext, data: {self._generator.json_object_type}): {entity_type} {{'
         if default_entity_decl:
             result += f'        val type: String = {read_type_opt_expr} ?: {default_entity_decl}.TYPE'
         else:
@@ -644,7 +650,7 @@ class KotlinSerializerGenerator:
         result += '    }'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun serialize(context: ParsingContext, value: {entity_type}): JSONObject {{'
+        result += f'    override fun serialize(context: ParsingContext, value: {entity_type}): {self._generator.json_object_type} {{'
         result += '        return when (value) {'
         for subentity in entities:
             variant_name = entity_enumeration.format_case_naming(utils.capitalize_camel_case(subentity.name))
@@ -669,10 +675,10 @@ class KotlinSerializerGenerator:
         result = Text()
         result += f'class {TEMPLATE_PARSER_NAME}('
         result += '    private val component: JsonParserComponent'
-        result += f') : Parser<JSONObject, {template_type}> {{'
+        result += f') : Parser<{self._generator.json_object_type}, {template_type}> {{'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun deserialize(context: ParsingContext, data: JSONObject): {template_type} {{'
+        result += f'    override fun deserialize(context: ParsingContext, data: {self._generator.json_object_type}): {template_type} {{'
         if default_entity_decl:
             result += f'        val extendedType = {read_type_opt_expr} ?: {default_entity_decl}Template.TYPE'
         else:
@@ -691,7 +697,7 @@ class KotlinSerializerGenerator:
         result += '    }'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun serialize(context: ParsingContext, value: {template_type}): JSONObject {{'
+        result += f'    override fun serialize(context: ParsingContext, value: {template_type}): {self._generator.json_object_type} {{'
         result += '        return when (value) {'
         for subentity in entities:
             variant_name = entity_enumeration.format_case_naming(utils.capitalize_camel_case(subentity.name))
@@ -713,10 +719,10 @@ class KotlinSerializerGenerator:
         result = Text()
         result += f'class {TEMPLATE_RESOLVER_NAME}('
         result += '    private val component: JsonParserComponent'
-        result += f') : TemplateResolver<JSONObject, {template_type}, {entity_type}> {{'
+        result += f') : TemplateResolver<{self._generator.json_object_type}, {template_type}, {entity_type}> {{'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun resolve(context: ParsingContext, template: {template_type}, data: JSONObject): {entity_type} {{'
+        result += f'    override fun resolve(context: ParsingContext, template: {template_type}, data: {self._generator.json_object_type}): {entity_type} {{'
         result += '        return when (template) {'
         for subentity in entities:
             variant_name = entity_enumeration.format_case_naming(utils.capitalize_camel_case(subentity.name))

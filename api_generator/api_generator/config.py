@@ -90,6 +90,14 @@ class Config:
                 self.generate_templates = False
 
             self.generate_serializers: bool = dictionary.get('generateSerializers', False)
+            self.generate_models: bool = dictionary.get('generateModels', True)
+            self.multiplatform: bool = dictionary.get('multiplatform', False)
+
+            if not self.generate_models or self.multiplatform:
+                if self.lang != GeneratedLanguage.KOTLIN or not self.generate_serializers:
+                    raise ValueError('Parser-only and multiplatform modes require Kotlin serializers')
+            if self.multiplatform and self.generate_models:
+                raise ValueError('Multiplatform parsers must reuse existing models')
 
             if ('generateSerializers' in dictionary) and \
                     self.lang != GeneratedLanguage.KOTLIN:

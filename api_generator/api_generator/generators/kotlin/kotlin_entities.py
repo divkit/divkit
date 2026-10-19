@@ -79,6 +79,8 @@ def _kotlin_default_value_declaration_comment(p: Property) -> str:
 class KotlinEntity(Entity):
     errors_collector_enabled: bool = False
     internal_api: InternalApiAnnotations = InternalApiAnnotations.disabled()
+    multiplatform: bool = False
+    json_object_type: str = 'JSONObject'
 
     def update_bases(self):
         Int.__bases__ = (KotlinPropertyType, PropertyType,)
@@ -304,10 +306,10 @@ class KotlinEntity(Entity):
         result = Text()
         result += f'class {ENTITY_PARSER_NAME}('
         result += '    private val component: JsonParserComponent'
-        result += f') : Parser<JSONObject, {entity_type}> {{'
+        result += f') : Parser<{self.json_object_type}, {entity_type}> {{'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun deserialize(context: ParsingContext, data: JSONObject): {entity_type} {{'
+        result += f'    override fun deserialize(context: ParsingContext, data: {self.json_object_type}): {entity_type} {{'
         if self.instance_properties_kotlin:
             if self.errors_collector_enabled:
                 result += '        @Suppress("NAME_SHADOWING") val context = context.collectingErrors()'
@@ -322,11 +324,14 @@ class KotlinEntity(Entity):
         result += '    }'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun serialize(context: ParsingContext, value: {entity_type}): JSONObject {{'
-        result += '        val data = JSONObject()'
+        result += f'    override fun serialize(context: ParsingContext, value: {entity_type}): {self.json_object_type} {{'
+        if self.multiplatform:
+            result += '        val data = JsonObject.builder()'
+        else:
+            result += f'        val data = {self.json_object_type}()'
         for property in self.properties_kotlin:
             result += self.property_serialization_declaration(property, mode=GenerationMode.NORMAL_WITH_TEMPLATES).indented(indent_width=8)
-        result += '        return data'
+        result += '        return data.build()' if self.multiplatform else '        return data'
         result += '    }'
         result += '}'
         return result
@@ -336,10 +341,10 @@ class KotlinEntity(Entity):
         result = Text()
         result += f'class {TEMPLATE_PARSER_NAME}('
         result += '    private val component: JsonParserComponent'
-        result += f') : TemplateParser<JSONObject, {template_type}> {{'
+        result += f') : TemplateParser<{self.json_object_type}, {template_type}> {{'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun deserialize(context: ParsingContext, parent: {template_type}?, data: JSONObject): {template_type} {{'
+        result += f'    override fun deserialize(context: ParsingContext, parent: {template_type}?, data: {self.json_object_type}): {template_type} {{'
         if self.instance_properties_kotlin:
             result += '        val allowOverride = context.allowPropertyOverride'
             result += '        @Suppress("NAME_SHADOWING") val context = context.restrictPropertyOverride()'
@@ -352,11 +357,14 @@ class KotlinEntity(Entity):
         result += '    }'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun serialize(context: ParsingContext, value: {template_type}): JSONObject {{'
-        result += '        val data = JSONObject()'
+        result += f'    override fun serialize(context: ParsingContext, value: {template_type}): {self.json_object_type} {{'
+        if self.multiplatform:
+            result += '        val data = JsonObject.builder()'
+        else:
+            result += f'        val data = {self.json_object_type}()'
         for property in self.properties_kotlin:
             result += self.property_serialization_declaration(property, mode=GenerationMode.TEMPLATE).indented(indent_width=8)
-        result += '      return data'
+        result += '        return data.build()' if self.multiplatform else '      return data'
         result += '    }'
         result += '}'
         return result
@@ -367,10 +375,10 @@ class KotlinEntity(Entity):
         result = Text()
         result += f'class {TEMPLATE_RESOLVER_NAME}('
         result += '    private val component: JsonParserComponent'
-        result += f') : TemplateResolver<JSONObject, {template_type}, {entity_type}> {{'
+        result += f') : TemplateResolver<{self.json_object_type}, {template_type}, {entity_type}> {{'
         result += EMPTY
         result += '    @Throws(ParsingException::class)'
-        result += f'    override fun resolve(context: ParsingContext, template: {template_type}, data: JSONObject): {entity_type} {{'
+        result += f'    override fun resolve(context: ParsingContext, template: {template_type}, data: {self.json_object_type}): {entity_type} {{'
         if self.instance_properties_kotlin:
             result += f'        return {entity_type}('
             for property in self.instance_properties_kotlin:
@@ -410,6 +418,16 @@ class KotlinEntity(Entity):
         object_serializers = filter(lambda serializer_type: serializer_type is not None, serializers)
         return sorted(set(object_serializers))
 
+    def parser_deserialization_transform(self, property_type: KotlinPropertyType, string_enum_prefixed: bool) -> str:
+        if self.multiplatform:
+            if isinstance(property_type, Array):
+                return self.parser_deserialization_transform(property_type.property_type, string_enum_prefixed)
+            if isinstance(property_type, (RawObject, Dictionary)):
+                return 'JSON_TO_ORG_OBJECT'
+            if isinstance(property_type, RawArray):
+                return 'JSON_TO_ORG_ARRAY'
+        return property_type.deserialization_transform(string_enum_prefixed)
+
     def property_deserialization_declaration(self, property: KotlinProperty, mode: GenerationMode) -> Text:
         property_type = cast(KotlinPropertyType, property.property_type)
 
@@ -446,7 +464,7 @@ class KotlinEntity(Entity):
             deserializer = ''
         else:
             deserializer = f'component.{serializer_name}'
-        transform = property_type.deserialization_transform(string_enum_prefixed=True)
+        transform = self.parser_deserialization_transform(property_type, string_enum_prefixed=True)
 
         type_helper = property_type.type_helper_reference(property) if property.supports_expressions else ''
         validator = property_type.validator_arg(
@@ -536,7 +554,7 @@ class KotlinEntity(Entity):
             value_deserializer = ''
         else:
             value_deserializer = f'component.{deserializer_name}'
-        transform = property_type.deserialization_transform(string_enum_prefixed=mode.is_template)
+        transform = self.parser_deserialization_transform(property_type, string_enum_prefixed=mode.is_template)
         validator = property_type.validator_arg(
             property_name=property.name,
             with_template_validators=False

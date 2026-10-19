@@ -55,7 +55,7 @@ public interface JsonObject : JsonElement, DataObject {
     public fun modify(modify: Builder.() -> Unit): JsonObject
 
     public fun asOrgJsonObject(): JSONObject
-    public fun asKtxJsonObject(): kotlinx.serialization.json.JsonObject
+    public fun asKtxJsonObject(): KtxObject
 
     public interface Builder {
         public fun put(key: String, value: Int)

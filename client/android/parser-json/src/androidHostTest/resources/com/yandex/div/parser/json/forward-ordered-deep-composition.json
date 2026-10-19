@@ -1,0 +1,17 @@
+{
+  "entity-1": {
+    "type": "base"
+  },
+  "entity-2": {
+    "type": "base"
+  },
+  "entity-3": {
+    "type": "base",
+    "child": {
+      "type": "entity-2",
+      "grandchild": {
+        "type" : "entity-1"
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package com.yandex.div.core.network
 
 import com.yandex.div.core.downloader.DivPatchDownloadCallback
+import com.yandex.div.core.json.JsonObject
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import kotlinx.coroutines.Dispatchers
@@ -98,8 +99,23 @@ class DivNetworkDivDownloaderTest {
             parse: () -> D,
         ): D = parse()
 
+        override fun <D> measureDataParsing(
+            json: JsonObject,
+            componentName: String?,
+            parse: () -> D,
+        ): D = parse()
+
         override fun <T> measureTemplatesParsing(
             json: JSONObject,
+            componentName: String?,
+            parse: () -> T,
+        ): T {
+            templatesParsingMeasured = true
+            return parse()
+        }
+
+        override fun <T> measureTemplatesParsing(
+            json: JsonObject,
             componentName: String?,
             parse: () -> T,
         ): T {

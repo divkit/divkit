@@ -1,0 +1,14 @@
+{
+  "lang": "kotlin",
+  "header": "// Generated code. Do not modify.\n@file:Suppress(\"DEPRECATION\", \"TYPEALIAS_EXPANSION_DEPRECATION\")\n\npackage com.yandex.div.parser.json\n\nimport android.graphics.Color\nimport android.net.Uri\nimport androidx.annotation.ColorInt\nimport com.yandex.div.core.json.JsonArray\nimport com.yandex.div.core.json.JsonObject\nimport com.yandex.div.data.*\nimport com.yandex.div.json.expressions.*\nimport com.yandex.div.parser.json.*\nimport com.yandex.div.parser.json.context.*\nimport com.yandex.div.serialization.*\nimport com.yandex.div2.*\nimport org.json.JSONArray\nimport org.json.JSONObject\n",
+  "kotlinAnnotations": {
+    "classes": [],
+    "constructors": [
+      "@DivModelInternalApi"
+    ]
+  },
+  "generateModels": false,
+  "generateSerializers": true,
+  "multiplatform": true,
+  "errorsCollectors": ["div-data"]
+}

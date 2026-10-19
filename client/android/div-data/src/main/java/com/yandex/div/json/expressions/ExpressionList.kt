@@ -2,6 +2,7 @@ package com.yandex.div.json.expressions
 
 import com.yandex.div.core.CompositeDisposable
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.internal.parser.ListValidator
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
@@ -64,6 +65,17 @@ class ConstantExpressionList<T : Any>(
         return other is ConstantExpressionList<*> && values == other.values
     }
 }
+
+/**
+ * Creates an [ExpressionList] of [expressions], some of which are not constant. Used by parsers in other modules.
+ */
+@InternalApi
+fun <T : Any> mutableExpressionList(
+    key: String,
+    expressions: List<Expression<T>>,
+    listValidator: ListValidator<T>,
+    logger: ParsingErrorLogger,
+): ExpressionList<T> = MutableExpressionList(key, expressions, listValidator, logger)
 
 internal class MutableExpressionList<T : Any>(
     private val key: String,

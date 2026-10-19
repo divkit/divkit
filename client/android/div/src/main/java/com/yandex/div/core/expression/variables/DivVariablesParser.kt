@@ -1,6 +1,7 @@
 package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.expression.asImpl
+import com.yandex.div.core.json.JsonArray
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.data.PropertyVariableExecutor
@@ -25,6 +26,13 @@ object DivVariablesParser {
      * @param variablesArray json-array of variables for parsing.
      */
     @Throws(ParsingException::class)
+    fun parse(variablesArray: JsonArray, logger: ParsingErrorLogger) =
+        parse(variablesArray, ExpressionResolver.EMPTY, logger)
+
+    /**
+     * @param variablesArray json-array of variables for parsing.
+     */
+    @Throws(ParsingException::class)
     fun parse(variablesArray: JSONArray, resolver: ExpressionResolver, logger: ParsingErrorLogger): List<Variable> {
         val env = DivParsingEnvironment(logger)
         val listValidator: (value: List<DivVariable>) -> Boolean = { true }
@@ -38,5 +46,13 @@ object DivVariablesParser {
             PropertyVariableExecutorImpl(it) { null }
         } ?: PropertyVariableExecutor.STUB
         return divVariables.mapNotNull { it.toVariable(resolver, executor, logger) }
+    }
+
+    /**
+     * @param variablesArray json-array of variables for parsing.
+     */
+    @Throws(ParsingException::class)
+    fun parse(variablesArray: JsonArray, resolver: ExpressionResolver, logger: ParsingErrorLogger): List<Variable> {
+        return parse(variablesArray.asOrgJsonArray(), resolver, logger)
     }
 }

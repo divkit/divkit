@@ -1,5 +1,6 @@
 package com.yandex.div.histogram
 
+import com.yandex.div.core.json.JsonObject
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.histogram.util.HistogramUtils
@@ -19,11 +20,37 @@ interface DivParsingHistogramReporter {
     fun <D> measureDataParsing(json: JSONObject, componentName: String?, parse: () -> D): D
 
     /**
+     * Measure DivData parsing, i.e. taken time to invoke DivData.fromJson.
+     *
+     * @param parse function calling DivData.fromJson.
+     */
+    fun <D> measureDataParsing(json: JsonObject, componentName: String?, parse: () -> D): D = measureDataParsing(
+        json.asOrgJsonObject(),
+        componentName,
+        parse,
+    )
+
+    /**
      * Measure Div templates parsing, i.e. taken time to invoke ParsingEnvironment.parseTemplates.
      *
      * @param parse function calling ParsingEnvironment.parseTemplates
      */
     fun <T> measureTemplatesParsing(json: JSONObject, componentName: String?, parse: () -> T): T
+
+    /**
+     * Measure Div templates parsing, i.e. taken time to invoke ParsingEnvironment.parseTemplates.
+     *
+     * @param parse function calling ParsingEnvironment.parseTemplates
+     */
+    fun <T> measureTemplatesParsing(
+        json: JsonObject,
+        componentName: String?,
+        parse: () -> T
+    ): T = measureTemplatesParsing(
+        json.asOrgJsonObject(),
+        componentName,
+        parse,
+    )
 
     /**
      * Measure Div input to JSON parsing, i.e. taken time to fulfill JSONObject from given input.
@@ -44,8 +71,20 @@ private class DefaultDivParsingHistogramReporter : DivParsingHistogramReporter {
         parse: () -> D
     ): D = parse()
 
+    override fun <D> measureDataParsing(
+        json: JsonObject,
+        componentName: String?,
+        parse: () -> D
+    ): D = parse()
+
     override fun <T> measureTemplatesParsing(
         json: JSONObject,
+        componentName: String?,
+        parse: () -> T
+    ): T = parse()
+
+    override fun <T> measureTemplatesParsing(
+        json: JsonObject,
         componentName: String?,
         parse: () -> T
     ): T = parse()
