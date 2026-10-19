@@ -786,6 +786,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/text/TextStyle.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/text/TextStyle.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/timers/TimerController.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/timers/TimerController.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/timers/TimerStorage.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/timers/TimerStorage.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/BringToTop.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/BringToTop.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/Modifiers.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/Modifiers.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipAnimations.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipAnimations.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipInput.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/tooltips/TooltipInput.kt",

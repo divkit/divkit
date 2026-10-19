@@ -58,14 +58,7 @@ internal fun TooltipPopup(
     val context = LocalContext.current
     val underlyingView = LocalView.current.rootView
     val tooltip = anchorEntry.tooltip
-    val duration = tooltip.duration.observedValue()
-
-    LaunchedEffect(tooltip.id, isVisible, duration) {
-        if (isVisible && duration > 0L) {
-            delay(duration.milliseconds)
-            onDismissRequested()
-        }
-    }
+    TooltipDurationEffect(tooltip, isVisible, onDismissRequested)
 
     val enterTransition = if (animationsEnabled) tooltip.observedEnterTransition() else EnterTransition.None
     val exitTransition = if (animationsEnabled) tooltip.observedExitTransition() else ExitTransition.None
@@ -105,6 +98,7 @@ internal fun TooltipPopup(
     ) {
         CompositionLocalProvider(
             LocalContext provides context,
+            LocalTooltipContent provides true,
             LocalTooltipTouchDispatcher provides touchDispatcher,
         ) {
             TooltipPopupContent(
@@ -115,6 +109,21 @@ internal fun TooltipPopup(
                 exitTransition = exitTransition,
                 onTapOutside = onTapOutside,
             )
+        }
+    }
+}
+
+@Composable
+private fun TooltipDurationEffect(
+    tooltip: DivTooltip,
+    isVisible: Boolean,
+    onDismissRequested: () -> Unit,
+) {
+    val duration = tooltip.duration.observedValue()
+    LaunchedEffect(tooltip.id, isVisible, duration) {
+        if (isVisible && duration > 0L) {
+            delay(duration.milliseconds)
+            onDismissRequested()
         }
     }
 }
@@ -174,6 +183,7 @@ private fun TooltipPopupContent(
                 blockTapPropagation = handlesSubstrateTaps,
             )
         }
+        BringToTop(tooltip.bringToTopId, Modifier.matchParentSize())
         transition.AnimatedVisibility(
             modifier = Modifier.tooltipPosition(positionProvider),
             visible = { it },

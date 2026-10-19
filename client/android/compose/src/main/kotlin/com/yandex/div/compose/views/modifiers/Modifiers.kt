@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.isUnspecified
 import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.layoutprovider.layoutProvider
 import com.yandex.div.compose.tooltips.tooltipAnchors
+import com.yandex.div.compose.tooltips.tooltipBringToTop
 import com.yandex.div.compose.tooltips.tooltipInput
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
@@ -52,6 +53,7 @@ internal fun Modifier.apply(
     val background = focus?.background?.takeIf { isFocused && it.isNotEmpty() }
         ?: divBase.background
     return this
+        .tooltipBringToTop(divBase.id)
         .divVisibility(visibility)
         .applyIfNotNull(margins) { padding(it) }
         .applyIf(suppressMatchParentIntrinsics) { suppressMatchParentIntrinsics(divBase) }
