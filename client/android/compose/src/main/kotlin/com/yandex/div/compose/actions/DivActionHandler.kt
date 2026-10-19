@@ -9,7 +9,6 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStopTemplate
-import com.yandex.div2.DivActionClearFocus
 import com.yandex.div2.DivActionExtensionAction
 import com.yandex.div2.DivActionFocusElement
 import com.yandex.div2.DivActionScrollBy
@@ -29,6 +28,7 @@ internal class DivActionHandler @Inject constructor(
     private val reporter: DivReporter,
     private val hapticActionHandler: HapticActionHandler,
     private val arrayActionsHandler: ArrayActionsHandler,
+    private val clearFocusActionHandler: ClearFocusActionHandler,
     private val copyToClipboardActionHandler: CopyToClipboardActionHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
     private val downloadActionHandler: DownloadActionHandler,
@@ -172,7 +172,7 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.Haptic ->
                 hapticActionHandler.handle(context, action.value)
 
-            is DivActionTyped.ClearFocus -> notSupported(DivActionClearFocus.TYPE)
+            is DivActionTyped.ClearFocus -> clearFocusActionHandler.handle()
 
             is DivActionTyped.CopyToClipboard ->
                 copyToClipboardActionHandler.handle(context, action.value)

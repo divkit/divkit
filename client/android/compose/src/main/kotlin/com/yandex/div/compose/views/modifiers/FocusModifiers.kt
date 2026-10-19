@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.modifiers
 
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.focusGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
@@ -11,13 +12,32 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.focus.FocusBindingStorage
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.inheritFocusVisibility
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
+
+@Composable
+internal fun Modifier.bindRootFocus(storage: FocusBindingStorage): Modifier {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val binding = remember { FocusBindingStorage.Binding() }
+    DisposableEffect(storage, focusManager, keyboardController) {
+        storage.register(binding, focusManager, keyboardController)
+        onDispose { storage.unregister(binding) }
+    }
+    return Modifier
+        .onFocusChanged { binding.hasFocus = it.hasFocus }
+        .focusProperties { onEnter = { if (storage.isClearing) cancelFocusChange() } }
+        .focusGroup()
+        .then(this)
+}
 
 @Composable
 internal fun rememberFocusState(data: DivBase): MutableState<Boolean>? {

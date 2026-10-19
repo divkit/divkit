@@ -10,6 +10,7 @@ import com.yandex.div.compose.state.WithRootStatePath
 import com.yandex.div.compose.tooltips.TooltipsHost
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.compose.views.modifiers.bindRootFocus
 import com.yandex.div2.DivData
 
 /**
@@ -36,6 +37,7 @@ fun DivView(
     val viewContext = divContext.getViewContext(data)
     viewContext.component.histogramReporter.measure {
         val localComponent = viewContext.rootLocalComponent
+        val boundModifier = modifier.bindRootFocus(viewContext.component.focusBindingStorage)
         viewContext.onComposition()
 
         CompositionLocalProvider(
@@ -56,7 +58,7 @@ fun DivView(
             WithRootStatePath(rootState.stateId) {
                 DivBlockView(
                     data = rootState.div,
-                    modifier = modifier
+                    modifier = boundModifier
                 )
                 TooltipsHost()
             }

@@ -7,6 +7,7 @@ import com.yandex.div.compose.actions.SubmitActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.CompositionKeyStorage
 import com.yandex.div.compose.context.DivLocalComponentStorage
+import com.yandex.div.compose.focus.FocusBindingStorage
 import com.yandex.div.compose.haptics.HapticFeedbackStorage
 import com.yandex.div.compose.histogram.DivViewHistogramReporter
 import com.yandex.div.compose.images.ImageStateStorage
@@ -37,6 +38,7 @@ internal interface DivViewComponent {
     val actionMenuHolder: ActionMenuHolder
     val compositionKeyStorage: CompositionKeyStorage
     val data: DivData
+    val focusBindingStorage: FocusBindingStorage
     val hapticFeedbackStorage: HapticFeedbackStorage
     val histogramReporter: DivViewHistogramReporter
     val imageStateStorage: ImageStateStorage

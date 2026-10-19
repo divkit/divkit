@@ -28,6 +28,7 @@ internal class ActionHandlerEnvironment {
     fun init(
         externalActionHandler: DivExternalActionHandler = mock(),
         arrayActionsHandler: ArrayActionsHandler = mock(),
+        clearFocusActionHandler: ClearFocusActionHandler = mock(),
         copyToClipboardActionHandler: CopyToClipboardActionHandler = mock(),
         dictSetValueActionHandler: DictSetValueActionHandler = mock(),
         downloadActionHandler: DownloadActionHandler = mock(),
@@ -47,6 +48,7 @@ internal class ActionHandlerEnvironment {
             externalActionHandler = externalActionHandler,
             reporter = reporter,
             arrayActionsHandler = arrayActionsHandler,
+            clearFocusActionHandler = clearFocusActionHandler,
             copyToClipboardActionHandler = copyToClipboardActionHandler,
             dictSetValueActionHandler = dictSetValueActionHandler,
             downloadActionHandler = downloadActionHandler,
