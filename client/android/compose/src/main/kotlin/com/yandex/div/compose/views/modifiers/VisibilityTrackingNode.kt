@@ -11,8 +11,8 @@ import androidx.compose.ui.node.GlobalPositionAwareModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.node.UnplacedAwareModifierNode
 import androidx.compose.ui.platform.InspectorInfo
-import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.DivViewHost
+import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.core.annotations.InternalApi
 
@@ -85,7 +85,11 @@ private class VisibilityTrackingNode(
     private var isVisible = false
     private var lastCoordinates: LayoutCoordinates? = null
 
-    private val invalidateCallback = CheckVisibilityCallback(::checkVisibility)
+    private val invalidateCallback = object : CheckVisibilityCallback {
+        override fun checkVisibility() = this@VisibilityTrackingNode.checkVisibility()
+
+        override fun onContentUnbound() = this@VisibilityTrackingNode.handleContentUnbound()
+    }
 
     override fun onAttach() {
         divViewHost?.addCallback(invalidateCallback)
@@ -109,6 +113,12 @@ private class VisibilityTrackingNode(
     }
 
     fun onPropertiesUpdated() = checkVisibility()
+
+    private fun handleContentUnbound() {
+        if (!isVisible) return
+        isVisible = false
+        onVisibilityChanged(false)
+    }
 
     private fun checkVisibility() {
         val currentFraction = calculateVisibilityFraction(lastCoordinates)

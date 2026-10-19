@@ -1,7 +1,11 @@
 package com.yandex.div.compose.actions
 
+import android.annotation.SuppressLint
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.internal.util.duration
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction
@@ -21,6 +25,7 @@ internal class VisibilityActionTracker @Inject constructor(
 ) {
     private val counter = mutableMapOf<DivSightAction, Int>()
     private val pendingActions = mutableMapOf<DivSightAction, Job>()
+    private val eligibleDisappearActions = mutableMapOf<DivDisappearAction, DivActionHandlingContext>()
 
     fun isLimitReached(action: DivSightAction, limit: Int): Boolean {
         return limit > 0 && ((counter[action] ?: 0) >= limit)
@@ -44,9 +49,19 @@ internal class VisibilityActionTracker @Inject constructor(
         isVisible: Boolean
     ) {
         if (isVisible) {
+            eligibleDisappearActions[action] = context
             cancelAction(action)
         } else {
             scheduleAction(context, action)
+        }
+    }
+
+    fun onContentUnbound() {
+        val actions = eligibleDisappearActions.toMap()
+        eligibleDisappearActions.clear()
+        actions.keys.forEach(::cancelAction)
+        actions.forEach { (action, context) ->
+            triggerIfNeeded(context, action)
         }
     }
 
@@ -54,6 +69,9 @@ internal class VisibilityActionTracker @Inject constructor(
         context: DivActionHandlingContext,
         action: DivSightAction
     ) {
+        if (action is DivDisappearAction) {
+            eligibleDisappearActions.remove(action)
+        }
         val limit = action.logLimit.evaluate(context.expressionResolver).toInt()
         val count = counter[action] ?: 0
         val shouldTrigger = limit == 0 || count < limit
@@ -82,5 +100,18 @@ internal class VisibilityActionTracker @Inject constructor(
 
     private fun cancelAction(action: DivSightAction) {
         pendingActions.remove(action)?.cancel()
+    }
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+internal fun VisibilityActionTracker.bind() {
+    val divViewHost = LocalDivViewHost.current ?: return
+    DisposableEffect(this, divViewHost) {
+        val contentUnboundCallback = { onContentUnbound() }
+        divViewHost.addContentUnboundCallback(contentUnboundCallback)
+        onDispose {
+            divViewHost.removeContentUnboundCallback(contentUnboundCallback)
+        }
     }
 }

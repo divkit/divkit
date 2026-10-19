@@ -11,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -22,8 +23,10 @@ import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.typedValue
 import com.yandex.div.test.data.visibilityAction
+import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
 import com.yandex.div2.DivActionTyped
+import com.yandex.div2.DivVisibility
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import org.junit.Rule
@@ -42,9 +45,10 @@ class DivViewHostWithVisibilityActionsTest {
 
     private val counter = Variable.IntegerVariable("counter", 0)
     private val contentHeight = Variable.IntegerVariable("content_height", 100)
+    private val contentVisibility = Variable.StringVariable("content_visibility", "visible")
 
     private val variableController = DivVariableController().apply {
-        declare(counter, contentHeight)
+        declare(counter, contentHeight, contentVisibility)
     }
 
     private val configuration = DivConfiguration(
@@ -171,6 +175,70 @@ class DivViewHostWithVisibilityActionsTest {
     }
 
     @Test
+    fun `unbind triggers visible disappear action immediately`() {
+        setClippedContent(
+            counterWithDisappearAction(elementHeightDp = 200, percentage = 51, limit = 0),
+            composeViewHeightDp = 200,
+        )
+
+        host.unbind()
+
+        assertEquals(1L, counter.getValue())
+        advanceTimeBy(500)
+        assertEquals(1L, counter.getValue())
+    }
+
+    @Test
+    fun `unbind triggers pending disappear action after element is removed`() {
+        setClippedContent(
+            counterWithDisappearAction(
+                elementHeightDp = 200,
+                percentage = 51,
+                limit = 0,
+                visibility = visibilityExpression("@{content_visibility}"),
+            ),
+            composeViewHeightDp = 200,
+        )
+
+        updateContentVisibility("gone")
+        composeRule.onNodeWithTag("counter").assertDoesNotExist()
+        advanceTimeBy(300)
+        assertEquals(0L, counter.getValue())
+
+        host.unbind()
+
+        assertEquals(1L, counter.getValue())
+        advanceTimeBy(500)
+        assertEquals(1L, counter.getValue())
+    }
+
+    @Test
+    fun `unbind does not trigger disappear action for invisible element`() {
+        setClippedContent(
+            counterWithDisappearAction(elementHeightDp = 200, percentage = 60),
+            composeViewHeightDp = 100,
+        )
+
+        host.unbind()
+        advanceTimeBy(500)
+
+        assertEquals(0L, counter.getValue())
+    }
+
+    @Test
+    fun `unbind cancels pending visibility action`() {
+        setClippedContent(
+            counterWithVisibilityAction(elementHeightDp = 200, percentage = 50),
+            composeViewHeightDp = 200,
+        )
+
+        host.unbind()
+        advanceTimeBy(500)
+
+        assertEquals(0L, counter.getValue())
+    }
+
+    @Test
     fun `visibility action reacts to inner compose content resize with large composeView`() {
         contentHeight.set(100)
 
@@ -252,6 +320,13 @@ class DivViewHostWithVisibilityActionsTest {
         }
     }
 
+    private fun updateContentVisibility(visibility: String) {
+        withAutoAdvance {
+            contentVisibility.set(visibility)
+            composeRule.waitForIdle()
+        }
+    }
+
     private fun viewportHeightPx(dp: Int): Int {
         return (dp * composeRule.activity.resources.displayMetrics.density).toInt()
     }
@@ -291,13 +366,17 @@ class DivViewHostWithVisibilityActionsTest {
         elementHeightDp: Int,
         percentage: Int,
         delayMs: Int = 500,
+        limit: Int = 1,
+        visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
     ): Div = text(
         id = "counter",
         text = expression("counter = @{counter}"),
         height = fixed(value = constant(elementHeightDp.toLong())),
+        visibility = visibility,
         disappearActions = listOf(
             disappearAction(
                 delayMs = delayMs.toLong(),
+                limit = limit,
                 percentage = percentage,
                 typed = incrementCounterAction(),
             )

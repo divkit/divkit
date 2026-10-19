@@ -36,7 +36,7 @@ class DivViewHostTest {
     fun `onVisibleBoundsChanged invokes registered callback`() {
         val host = createHost()
         var invokeCount = 0
-        val callback = CheckVisibilityCallback { invokeCount++ }
+        val callback = visibilityCallback { invokeCount++ }
 
         host.addCallback(callback)
         host.onVisibleBoundsChanged()
@@ -45,13 +45,57 @@ class DivViewHostTest {
     }
 
     @Test
+    fun `unbind invokes content unbound callback`() {
+        val host = createHost()
+        var visibilityCheckCount = 0
+        var contentUnboundCount = 0
+        val callback = visibilityCallback(
+            onContentUnboundBlock = { contentUnboundCount++ },
+        ) {
+            visibilityCheckCount++
+        }
+
+        host.addCallback(callback)
+        host.unbind()
+
+        assertEquals(0, visibilityCheckCount)
+        assertEquals(1, contentUnboundCount)
+    }
+
+    @Test
+    fun `unbind invokes each callback when callbacks are removed during dispatch`() {
+        val host = createHost()
+        var firstCount = 0
+        var secondCount = 0
+        lateinit var firstCallback: CheckVisibilityCallback
+        lateinit var secondCallback: CheckVisibilityCallback
+        firstCallback = visibilityCallback(
+            onContentUnboundBlock = {
+                firstCount++
+                host.removeCallback(firstCallback)
+                host.removeCallback(secondCallback)
+            },
+        ) { }
+        secondCallback = visibilityCallback(
+            onContentUnboundBlock = { secondCount++ },
+        ) { }
+
+        host.addCallback(firstCallback)
+        host.addCallback(secondCallback)
+        host.unbind()
+
+        assertEquals(1, firstCount)
+        assertEquals(1, secondCount)
+    }
+
+    @Test
     fun `onVisibleBoundsChanged invokes each callback once`() {
         val host = createHost()
         var firstCount = 0
         var secondCount = 0
 
-        host.addCallback { firstCount++ }
-        host.addCallback { secondCount++ }
+        host.addCallback(visibilityCallback { firstCount++ })
+        host.addCallback(visibilityCallback { secondCount++ })
         host.onVisibleBoundsChanged()
 
         assertEquals(1, firstCount)
@@ -62,7 +106,7 @@ class DivViewHostTest {
     fun `removeCallback stops further invocations`() {
         val host = createHost()
         var invokeCount = 0
-        val callback = CheckVisibilityCallback { invokeCount++ }
+        val callback = visibilityCallback { invokeCount++ }
 
         host.addCallback(callback)
         host.onVisibleBoundsChanged()
@@ -76,7 +120,7 @@ class DivViewHostTest {
     fun `duplicate callback is invoked once per onVisibleBoundsChanged`() {
         val host = createHost()
         var invokeCount = 0
-        val callback = CheckVisibilityCallback { invokeCount++ }
+        val callback = visibilityCallback { invokeCount++ }
 
         host.addCallback(callback)
         host.addCallback(callback)
@@ -90,7 +134,7 @@ class DivViewHostTest {
         val host = createHost()
         attachToActivity(host)
         var invokeCount = 0
-        host.addCallback { invokeCount++ }
+        host.addCallback(visibilityCallback { invokeCount++ })
 
         host.composeView.requestLayout()
         ShadowLooper.idleMainLooper()
@@ -102,7 +146,7 @@ class DivViewHostTest {
     fun `layout change does not invoke callbacks after last callback removed`() {
         val host = createHost()
         var invokeCount = 0
-        val callback = CheckVisibilityCallback { invokeCount++ }
+        val callback = visibilityCallback { invokeCount++ }
 
         host.addCallback(callback)
         host.removeCallback(callback)
@@ -119,7 +163,7 @@ class DivViewHostTest {
         val host = createHost()
         val activity = attachToActivity(host)
         var invokeCount = 0
-        host.addCallback { invokeCount++ }
+        host.addCallback(visibilityCallback { invokeCount++ })
 
         host.composeView.requestLayout()
         ShadowLooper.idleMainLooper()
@@ -241,6 +285,17 @@ class DivViewHostTest {
     }
 
     private fun createHost(): DivViewHost = DivViewHost(createDivContext())
+
+    private fun visibilityCallback(
+        onContentUnboundBlock: () -> Unit = {},
+        checkVisibilityBlock: () -> Unit,
+    ): CheckVisibilityCallback {
+        return object : CheckVisibilityCallback {
+            override fun checkVisibility() = checkVisibilityBlock()
+
+            override fun onContentUnbound() = onContentUnboundBlock()
+        }
+    }
 
     private fun createHostWithImageCapture(): DivViewHost {
         val activity = Robolectric.buildActivity(ComponentActivity::class.java).setup().get()

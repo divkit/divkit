@@ -283,6 +283,42 @@ class VisibilityActionTrackerTest {
         verifyHandled(action1)
     }
 
+    @Test
+    fun `onContentUnbound() triggers visible disappear action immediately`() = testScope.runTest {
+        val action = disappearAction(delayMs = 500)
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        tracker.onContentUnbound()
+
+        verifyHandled(action)
+        wait(500)
+        verifyNoActionsHandled()
+    }
+
+    @Test
+    fun `onContentUnbound() triggers pending disappear action immediately`() = testScope.runTest {
+        val action = disappearAction(delayMs = 500, limit = 0)
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = false)
+        wait(300)
+        tracker.onContentUnbound()
+
+        verifyHandled(action)
+        wait(500)
+        verifyNoActionsHandled()
+    }
+
+    @Test
+    fun `onContentUnbound() does not trigger disappear action that was not visible`() = testScope.runTest {
+        val action = disappearAction(delayMs = 500)
+
+        tracker.onContentUnbound()
+        wait(500)
+
+        verifyNoActionsHandled()
+    }
+
     private fun verifyHandled(action: DivSightAction, times: Int = 1) {
         assertEquals(List(times) { action }, handledActions)
         handledActions.clear()

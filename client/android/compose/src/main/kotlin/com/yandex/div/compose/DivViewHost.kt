@@ -47,6 +47,7 @@ class DivViewHost(
     val composeView = ComposeView(divContext, attrs, defStyleAttr)
 
     private val callbacks = mutableSetOf<CheckVisibilityCallback>()
+    private val contentUnboundCallbacks = mutableSetOf<() -> Unit>()
 
     private var layoutListener: View.OnLayoutChangeListener? = null
 
@@ -113,6 +114,20 @@ class DivViewHost(
         trackVisibility()
     }
 
+    /**
+     * Notifies the hosted content that it is about to be permanently unbound.
+     *
+     * Pending visibility actions are cancelled and eligible disappear actions are dispatched
+     * synchronously. This method does not dispose the composition or remove its content.
+     */
+    fun unbind() {
+        cancelPreload()
+        val callbacksSnapshot = callbacks.toList()
+        val contentUnboundCallbacksSnapshot = contentUnboundCallbacks.toList()
+        callbacksSnapshot.forEach { it.onContentUnbound() }
+        contentUnboundCallbacksSnapshot.forEach { it() }
+    }
+
     internal fun addCallback(callback: CheckVisibilityCallback) {
         callbacks.add(callback)
         addOnLayoutChangeListener()
@@ -125,8 +140,16 @@ class DivViewHost(
         }
     }
 
+    internal fun addContentUnboundCallback(callback: () -> Unit) {
+        contentUnboundCallbacks.add(callback)
+    }
+
+    internal fun removeContentUnboundCallback(callback: () -> Unit) {
+        contentUnboundCallbacks.remove(callback)
+    }
+
     internal fun trackVisibility() {
-        callbacks.forEach { it.checkVisibility() }
+        callbacks.toList().forEach { it.checkVisibility() }
     }
 
     private fun addOnLayoutChangeListener() {

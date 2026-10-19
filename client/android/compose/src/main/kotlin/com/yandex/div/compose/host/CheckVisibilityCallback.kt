@@ -1,5 +1,7 @@
 package com.yandex.div.compose.host
 
-internal fun interface CheckVisibilityCallback {
+internal interface CheckVisibilityCallback {
     fun checkVisibility()
+
+    fun onContentUnbound()
 }

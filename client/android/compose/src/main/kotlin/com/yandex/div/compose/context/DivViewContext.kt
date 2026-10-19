@@ -7,6 +7,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.actions.observe
 import com.yandex.div.compose.actions.VisibilityActionTracker
+import com.yandex.div.compose.actions.bind
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
 import com.yandex.div.compose.haptics.bind
@@ -67,6 +68,7 @@ internal class DivViewContext(
             onDispose { compositionCount-- }
         }
 
+        visibilityActionTracker.bind()
         component.hapticFeedbackStorage.bind()
         component.layoutProviderStorage.observe()
         component.patchCoordinator.observe()
