@@ -1,8 +1,6 @@
 package com.yandex.div.compose.views.slider
 
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -10,16 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import com.yandex.div.compose.context.animationsEnabled
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div2.DivSlider
-import kotlinx.coroutines.CoroutineScope
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 @Composable
 internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
@@ -32,21 +28,32 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
 
     val isEnabled = data.isEnabled.observedValue()
     val isRtlLayout = isRtlLayout
+    val animationsEnabled = animationsEnabled
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = if (data.focus != null) remember { FocusRequester() } else null
+    val localComponent = LocalComponent.current
+    val pressHandler = remember(data.pressStartActions, data.pressEndActions, localComponent, focusRequester) {
+        SliderPressHandler(data.pressStartActions, data.pressEndActions, localComponent, focusRequester)
+    }
+    val thumbWidth = styles.maxTickOrThumbWidth
+    val hasTickMarks = styles.hasTickMarks
+    val gestureHandler = remember(
+        state, thumbWidth, hasTickMarks, isRtlLayout, animationsEnabled, coroutineScope, pressHandler
+    ) {
+        SliderGestureHandler(
+            state = state,
+            thumbWidth = thumbWidth,
+            hasTickMarks = hasTickMarks,
+            isRtl = isRtlLayout,
+            animationsEnabled = animationsEnabled,
+            coroutineScope = coroutineScope,
+            pressHandler = pressHandler,
+        )
+    }
 
     val modifier = modifier
         .applyIfNotNull(focusRequester) { focusRequester(it).focusable(enabled = isEnabled) }
-        .sliderPointerInput(
-            state = state,
-            thumbWidth = styles.maxTickOrThumbWidth,
-            hasTickMarks = styles.hasTickMarks,
-            isEnabled = isEnabled,
-            isRtl = isRtlLayout,
-            coroutineScope = coroutineScope,
-            animationsEnabled = animationsEnabled,
-            focusRequester = focusRequester,
-        )
+        .sliderPointerInput(gestureHandler, isEnabled)
         .drawBehind { drawSlider(state, styles, isRtl = isRtlLayout) }
 
     Layout(
@@ -68,66 +75,4 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
             layout(width, height) {}
         }
     )
-}
-
-private fun Modifier.sliderPointerInput(
-    state: SliderState,
-    thumbWidth: Float,
-    hasTickMarks: Boolean,
-    isEnabled: Boolean,
-    isRtl: Boolean,
-    coroutineScope: CoroutineScope,
-    animationsEnabled: Boolean,
-    focusRequester: FocusRequester?,
-): Modifier {
-    if (!isEnabled)
-        return this
-    return pointerInput(state, thumbWidth, hasTickMarks, isRtl, focusRequester) {
-        awaitEachGesture {
-            val down = awaitFirstDown()
-            val trackLength = size.width - thumbWidth
-            if (trackLength <= 0f) return@awaitEachGesture
-
-            focusRequester?.requestFocus()
-
-            val activeThumb = state.closestThumb(
-                position = down.position.x - thumbWidth / 2f,
-                trackLength = trackLength,
-                isRtl = isRtl
-            )
-
-            fun valueAt(x: Float): Float {
-                val position = (x - thumbWidth / 2f).coerceIn(0f, trackLength)
-                val offset = position * state.range.span / trackLength
-                val value = if (isRtl) {
-                    state.range.maxValue - offset
-                } else {
-                    state.range.minValue + offset
-                }
-                return if (hasTickMarks) value.roundToLong().toFloat() else value
-            }
-
-            state.isInteracting = true
-            try {
-                activeThumb.setValue(
-                    valueAt(down.position.x),
-                    animated = animationsEnabled,
-                    scope = coroutineScope
-                )
-                while (true) {
-                    val event = awaitPointerEvent()
-                    val change = event.changes.firstOrNull() ?: break
-                    if (!change.pressed) break
-                    activeThumb.setValue(
-                        valueAt(change.position.x),
-                        animated = false,
-                        scope = coroutineScope
-                    )
-                    change.consume()
-                }
-            } finally {
-                state.isInteracting = false
-            }
-        }
-    }
 }

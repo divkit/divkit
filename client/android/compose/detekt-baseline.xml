@@ -6,7 +6,6 @@
     <ID>CognitiveComplexMethod:CoilImagePreloader.kt:CoilImagePreloader$override suspend fun preloadImages: PreloadResult</ID>
     <ID>CognitiveComplexMethod:ContainerAlignment.kt:internal fun DivContentAlignmentHorizontal.toHorizontalArrangement: Arrangement.Horizontal</ID>
     <ID>CognitiveComplexMethod:DivImageContent.kt:@Composable internal fun DivImageContent</ID>
-    <ID>CognitiveComplexMethod:DivSliderView.kt:private fun Modifier.sliderPointerInput: Modifier</ID>
     <ID>CognitiveComplexMethod:GalleryFlingBehavior.kt:GallerySnapLayoutInfoProvider$override fun calculateSnapOffset: Float</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.observeItemBaseSizes: FloatArray</ID>
     <ID>CognitiveComplexMethod:GridTracks.kt:@Composable private fun List&lt;Cell&gt;.rememberSpannedTracks: AxisTracks</ID>
@@ -49,7 +48,6 @@
     <ID>LongMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawHorizontalWrapSeparators</ID>
     <ID>LongMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawVerticalWrapSeparators</ID>
     <ID>LongMethod:WrapSeparatorDrawing.kt:private fun DrawScope.drawSeparatorShape</ID>
-    <ID>LoopWithTooManyJumpStatements:DivSliderView.kt:while</ID>
     <ID>LoopWithTooManyJumpStatements:PinchToZoomExtensionHandler.kt:PinchToZoomExtensionHandler$while</ID>
     <ID>MagicNumber:BlurTransformation.kt:BlurTransformation$0.1f</ID>
     <ID>MagicNumber:BlurTransformation.kt:BlurTransformation$25f</ID>

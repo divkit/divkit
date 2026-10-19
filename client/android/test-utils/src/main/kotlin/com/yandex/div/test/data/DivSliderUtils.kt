@@ -4,6 +4,7 @@ import android.graphics.Color
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivCircleShape
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivFocus
@@ -22,6 +23,8 @@ fun slider(
     focus: DivFocus? = null,
     isEnabled: Expression<Boolean> = constant(true),
     accessibility: DivAccessibility? = null,
+    pressStartActions: List<DivAction>? = null,
+    pressEndActions: List<DivAction>? = null,
 ): Div {
     val drawable =
         DivDrawable.Shape(
@@ -39,6 +42,8 @@ fun slider(
             isEnabled = isEnabled,
             maxValue = constant(maxValue),
             minValue = constant(minValue),
+            pressEndActions = pressEndActions,
+            pressStartActions = pressStartActions,
             thumbStyle = drawable,
             thumbValueVariable = thumbValueVariable,
             tickMarkActiveStyle = tickMark,
