@@ -13,37 +13,103 @@ internal data class DivActions(
     val tapActions: List<DivAction>,
     val doubleTapActions: List<DivAction>?,
     val longTapActions: List<DivAction>?,
+    val pressStartActions: List<DivAction>?,
+    val pressEndActions: List<DivAction>?,
     val animation: DivAnimation,
     val captureFocusOnAction: Expression<Boolean>,
 )
 
+@Suppress("LongMethod")
 internal fun Div.observedActions(): DivActions? = when (this) {
     is Div.Container -> with(value) {
-        observedActions(actions, action, actionAnimation, captureFocusOnAction, doubletapActions, longtapActions)
+        observedActions(
+            actions = actions,
+            action = action,
+            animation = actionAnimation,
+            captureFocusOnAction = captureFocusOnAction,
+            doubleTapActions = doubletapActions,
+            longTapActions = longtapActions,
+            pressStartActions = pressStartActions,
+            pressEndActions = pressEndActions,
+        )
     }
 
     is Div.Image -> with(value) {
-        observedActions(actions, action, actionAnimation, captureFocusOnAction, doubletapActions, longtapActions)
+        observedActions(
+            actions = actions,
+            action = action,
+            animation = actionAnimation,
+            captureFocusOnAction = captureFocusOnAction,
+            doubleTapActions = doubletapActions,
+            longTapActions = longtapActions,
+            pressStartActions = pressStartActions,
+            pressEndActions = pressEndActions,
+        )
     }
 
     is Div.GifImage -> with(value) {
-        observedActions(actions, action, actionAnimation, captureFocusOnAction, doubletapActions, longtapActions)
+        observedActions(
+            actions = actions,
+            action = action,
+            animation = actionAnimation,
+            captureFocusOnAction = captureFocusOnAction,
+            doubleTapActions = doubletapActions,
+            longTapActions = longtapActions,
+            pressStartActions = pressStartActions,
+            pressEndActions = pressEndActions,
+        )
     }
 
     is Div.Grid -> with(value) {
-        observedActions(actions, action, actionAnimation, captureFocusOnAction, doubletapActions, longtapActions)
+        observedActions(
+            actions = actions,
+            action = action,
+            animation = actionAnimation,
+            captureFocusOnAction = captureFocusOnAction,
+            doubleTapActions = doubletapActions,
+            longTapActions = longtapActions,
+            pressStartActions = pressStartActions,
+            pressEndActions = pressEndActions,
+        )
     }
 
     is Div.Separator -> with(value) {
-        observedActions(actions, action, actionAnimation, captureFocusOnAction, doubletapActions, longtapActions)
+        observedActions(
+            actions = actions,
+            action = action,
+            animation = actionAnimation,
+            captureFocusOnAction = captureFocusOnAction,
+            doubleTapActions = doubletapActions,
+            longTapActions = longtapActions,
+            pressStartActions = pressStartActions,
+            pressEndActions = pressEndActions,
+        )
     }
 
     is Div.State -> with(value) {
-        observedActions(actions, action, actionAnimation, captureFocusOnAction, doubletapActions, longtapActions)
+        observedActions(
+            actions = actions,
+            action = action,
+            animation = actionAnimation,
+            captureFocusOnAction = captureFocusOnAction,
+            doubleTapActions = doubletapActions,
+            longTapActions = longtapActions,
+            pressStartActions = pressStartActions,
+            pressEndActions = pressEndActions,
+        )
     }
 
     is Div.Text -> with(value) {
-        observedActions(actions, action, actionAnimation, captureFocusOnAction, doubletapActions, longtapActions)
+        observedActions(
+            actions = actions,
+            action = action,
+            animation = actionAnimation,
+            captureFocusOnAction = captureFocusOnAction,
+            doubleTapActions = doubletapActions,
+            longTapActions = longtapActions,
+            pressStartActions = pressStartActions,
+            pressEndActions = pressEndActions,
+        )
     }
 
     is Div.Custom,
@@ -58,22 +124,33 @@ internal fun Div.observedActions(): DivActions? = when (this) {
     is Div.Video -> null
 }
 
+@Suppress("ComplexCondition")
 private fun observedActions(
     actions: List<DivAction>?,
     action: DivAction?,
     animation: DivAnimation,
     captureFocusOnAction: Expression<Boolean>,
     doubleTapActions: List<DivAction>?,
-    longTapActions: List<DivAction>?
+    longTapActions: List<DivAction>?,
+    pressStartActions: List<DivAction>?,
+    pressEndActions: List<DivAction>?,
 ): DivActions? {
     val tapActions = actions ?: action?.let { listOf(it) }
-    if (tapActions.isNullOrEmpty() && doubleTapActions.isNullOrEmpty() && longTapActions.isNullOrEmpty()) {
+    if (tapActions.isNullOrEmpty() &&
+        doubleTapActions.isNullOrEmpty() &&
+        longTapActions.isNullOrEmpty() &&
+        pressStartActions.isNullOrEmpty() &&
+        pressEndActions.isNullOrEmpty()
+    ) {
         return null
     }
+
     return DivActions(
         tapActions = tapActions.orEmpty(),
         doubleTapActions = doubleTapActions?.takeIf { it.isNotEmpty() },
         longTapActions = longTapActions?.takeIf { it.isNotEmpty() },
+        pressStartActions = pressStartActions?.takeIf { it.isNotEmpty() },
+        pressEndActions = pressEndActions?.takeIf { it.isNotEmpty() },
         animation = animation,
         captureFocusOnAction = captureFocusOnAction,
     )

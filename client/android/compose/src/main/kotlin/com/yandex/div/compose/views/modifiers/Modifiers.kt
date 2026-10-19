@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isUnspecified
 import com.yandex.div.compose.actions.DivActions
+import com.yandex.div.compose.actions.actions
 import com.yandex.div.compose.layoutprovider.layoutProvider
 import com.yandex.div.compose.tooltips.tooltipAnchors
 import com.yandex.div.compose.tooltips.tooltipBringToTop

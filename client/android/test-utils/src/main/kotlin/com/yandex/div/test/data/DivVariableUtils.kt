@@ -1,11 +1,16 @@
 package com.yandex.div.test.data
 
+import com.yandex.div2.BoolVariable
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivEvaluableType
 import com.yandex.div2.DivVariable
 import com.yandex.div2.IntegerVariable
 import com.yandex.div2.PropertyVariable
 import com.yandex.div2.StrVariable
+
+fun variable(name: String, value: Boolean): DivVariable {
+    return DivVariable.Bool(BoolVariable(name = name, value = constant(value)))
+}
 
 fun variable(name: String, value: Long): DivVariable {
     return DivVariable.Integer(IntegerVariable(name = name, value = constant(value)))

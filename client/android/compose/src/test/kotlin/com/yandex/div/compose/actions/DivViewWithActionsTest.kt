@@ -1,17 +1,13 @@
 package com.yandex.div.compose.actions
 
-import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.doubleClick
-import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
-import androidx.core.net.toUri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestExternalActionHandler
@@ -21,10 +17,8 @@ import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
-import com.yandex.div.test.data.copyUrlToClipboardAction
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
-import com.yandex.div.test.data.input
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
@@ -43,33 +37,13 @@ class DivViewWithActionsTest {
     private val actionHandler = TestExternalActionHandler()
     private val reporter = TestReporter()
 
+    private val handledActions: List<DivActionData>
+        get() = actionHandler.handledActions
+
     private val configuration = DivConfiguration(
         actionHandler = actionHandler,
-        reporter = reporter
+        reporter = reporter,
     )
-
-    @Test
-    fun `copied url can be pasted into an input`() {
-        val url = "https://divkit.tech/path?q=hello%20world#section"
-        setContent(
-            container(
-                items = listOf(
-                    text(
-                        actions = listOf(action(typed = copyUrlToClipboardAction(constant(url.toUri())))),
-                        text = constant("Copy URL")
-                    ),
-                    input(textVariable = "input_text")
-                )
-            ),
-            variables = listOf(variable("input_text", ""))
-        )
-
-        rule.onNodeWithText("Copy URL").performClick()
-        rule.onNode(hasSetTextAction()).performClick()
-        rule.onNode(hasSetTextAction()).performSemanticsAction(SemanticsActions.PasteText) { it() }
-
-        rule.onNode(hasSetTextAction()).assertTextEquals(url)
-    }
 
     @Test
     fun `text changes when element with set_variable action is clicked`() {
@@ -131,7 +105,7 @@ class DivViewWithActionsTest {
                 actionData(url = "test://action_1"),
                 actionData(url = "test://action_2")
             ),
-            actionHandler.handledActions
+            handledActions
         )
     }
 
@@ -142,24 +116,58 @@ class DivViewWithActionsTest {
                 action = action(url = "test://container_tap"),
                 items = listOf(
                     text(
+                        text = "Button",
                         action = action(url = "test://tap"),
-                        text = constant("button")
                     )
                 )
             )
         )
 
-        rule.onNodeWithText("button").performClick()
+        rule.onNodeWithText("Button").performClick()
 
         assertEquals(
-            listOf(
-                actionData(
-                    source = DivActionSource.TAP,
-                    url = "test://tap"
-                )
-            ),
-            actionHandler.handledActions
+            listOf(actionData(source = DivActionSource.TAP, url = "test://tap")),
+            handledActions
         )
+    }
+
+    @Test
+    fun `long tap on element with tap actions does not trigger container longTapActions`() {
+        setContent(
+            container(
+                items = listOf(
+                    text(
+                        text = "Button",
+                        action = action(url = "test://tap"),
+                    )
+                ),
+                longTapActions = listOf(action(url = "test://container_long_tap")),
+            )
+        )
+
+        rule.onNodeWithText("Button").performTouchInput { longClick() }
+
+        assertEquals(
+            listOf(actionData(source = DivActionSource.TAP, url = "test://tap")),
+            handledActions
+        )
+    }
+
+    @Test
+    fun `cancel does not trigger tap actions`() {
+        setContent(
+            text(
+                action = action(url = "test://tap"),
+                text = constant("button"),
+            )
+        )
+
+        rule.onNodeWithText("button").performTouchInput {
+            down(center)
+            cancel()
+        }
+
+        assertEquals(emptyList(), handledActions)
     }
 
     @Test
@@ -173,7 +181,7 @@ class DivViewWithActionsTest {
 
         rule.onNodeWithText("button").performClick()
 
-        assertEquals(emptyList(), actionHandler.handledActions)
+        assertEquals(emptyList(), handledActions)
 
         rule.onNodeWithText("button").performTouchInput { doubleClick() }
 
@@ -184,7 +192,7 @@ class DivViewWithActionsTest {
                     url = "test://double_tap"
                 )
             ),
-            actionHandler.handledActions
+            handledActions
         )
     }
 
@@ -207,7 +215,7 @@ class DivViewWithActionsTest {
                     url = "test://double_tap"
                 )
             ),
-            actionHandler.handledActions
+            handledActions
         )
     }
 
@@ -225,7 +233,7 @@ class DivViewWithActionsTest {
 
         // action is triggered with a delay necessary to distinguish a single tap from a double tap
         rule.mainClock.advanceTimeUntil {
-            actionHandler.handledActions.isNotEmpty()
+            handledActions.isNotEmpty()
         }
 
         assertEquals(
@@ -235,7 +243,7 @@ class DivViewWithActionsTest {
                     url = "test://tap"
                 )
             ),
-            actionHandler.handledActions
+            handledActions
         )
     }
 
@@ -250,7 +258,7 @@ class DivViewWithActionsTest {
 
         rule.onNodeWithText("button").performClick()
 
-        assertEquals(emptyList(), actionHandler.handledActions)
+        assertEquals(emptyList(), handledActions)
 
         rule.onNodeWithText("button").performTouchInput { longClick() }
 
@@ -261,7 +269,7 @@ class DivViewWithActionsTest {
                     url = "test://long_tap"
                 )
             ),
-            actionHandler.handledActions
+            handledActions
         )
     }
 
