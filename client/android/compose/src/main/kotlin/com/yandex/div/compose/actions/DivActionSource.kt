@@ -13,6 +13,7 @@ enum class DivActionSource {
     PATCH,
     PROPERTY,
     SELECTION,
+    SUBMIT,
     TAP,
     TIMER,
     TRIGGER,

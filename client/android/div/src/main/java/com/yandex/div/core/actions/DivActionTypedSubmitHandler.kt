@@ -4,14 +4,10 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivRequestExecutor
 import com.yandex.div.core.util.ContainerFinder
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.evaluable.MissingVariableException
-import com.yandex.div.internal.core.DivBlock
-import com.yandex.div.internal.variables.name
-import com.yandex.div.internal.variables.variableValueToEvaluableValue
+import com.yandex.div.internal.actions.createSubmitBody
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionTyped
-import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,27 +35,17 @@ class DivActionTypedSubmitHandler @Inject constructor(
             submitAction.request.url.evaluate(resolver),
             submitAction.request.method.evaluate(resolver).toString(),
             headers,
-            createBody(container, view),
+            createSubmitBody(
+                variables = container.div.value().variables,
+                expressionResolver = container.expressionResolver,
+                reportError = view::logError,
+            ),
         )
 
         val callback = createCallback(submitAction.onSuccessActions, submitAction.onFailActions, view, resolver)
         val loadRef = requestExecutor.execute(request, callback)
         view.addLoadReference(loadRef, view)
         return true
-    }
-
-    private fun createBody(container: DivBlock, view: Div2View): String {
-        val variables = container.div.value().variables
-        if (variables.isNullOrEmpty()) return ""
-
-        val body = JSONObject()
-        variables.forEach {
-            val name = it.name
-            container.expressionResolver.getVariable(name)?.let {
-                variable -> body.put(name, variable.getValue().variableValueToEvaluableValue())
-            } ?: view.logError(MissingVariableException(name))
-        }
-        return body.toString()
     }
 
     private fun createCallback(
@@ -87,5 +73,4 @@ class DivActionTypedSubmitHandler @Inject constructor(
             }
         }
     }
-
 }

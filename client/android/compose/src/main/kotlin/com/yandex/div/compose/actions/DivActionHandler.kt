@@ -15,7 +15,6 @@ import com.yandex.div2.DivActionFocusElement
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollTo
 import com.yandex.div2.DivActionSetCursorPosition
-import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivDownloadCallbacks
@@ -36,6 +35,7 @@ internal class DivActionHandler @Inject constructor(
     private val setStateActionHandler: SetStateActionHandler,
     private val setStoredValueActionHandler: SetStoredValueActionHandler,
     private val setVariableActionHandler: SetVariableActionHandler,
+    private val submitActionHandler: SubmitActionHandler,
     private val timerActionHandler: TimerActionHandler,
     private val tooltipActionHandler: TooltipActionHandler,
     private val updateStructureActionHandler: UpdateStructureActionHandler,
@@ -215,7 +215,8 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.ShowTooltip ->
                 tooltipActionHandler.handle(context, action.value)
 
-            is DivActionTyped.Submit -> notSupported(DivActionSubmit.TYPE)
+            is DivActionTyped.Submit ->
+                submitActionHandler.handle(context, action.value)
 
             is DivActionTyped.Timer ->
                 timerActionHandler.handle(context, action.value)

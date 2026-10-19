@@ -1,5 +1,6 @@
 package com.yandex.div.compose.patch
 
+import com.yandex.div.compose.utils.children
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 
@@ -40,19 +41,7 @@ internal fun Div.copyForPatch(): Div {
 internal fun Div.collectDivs(result: MutableSet<DivBase>) {
     val base = value()
     if (!result.add(base)) return
-    val children = when (this) {
-        is Div.Container -> value.items.orEmpty()
-        is Div.Custom -> value.items.orEmpty()
-        is Div.Gallery -> value.items.orEmpty()
-        is Div.Grid -> value.items.orEmpty()
-        is Div.Pager -> value.items.orEmpty()
-        is Div.State -> value.states.mapNotNull { it.div }
-        is Div.Tabs -> value.items.map { it.div }
-        is Div.GifImage, is Div.Image, is Div.Indicator, is Div.Input,
-        is Div.Select, is Div.Separator, is Div.Slider, is Div.Switch,
-        is Div.Text, is Div.Video -> emptyList()
-    }
-    children.forEach { it.collectDivs(result) }
+    children().forEach { it.collectDivs(result) }
     base.tooltips?.forEach {
         it.div.collectDivs(result)
         it.substrateDiv?.collectDivs(result)

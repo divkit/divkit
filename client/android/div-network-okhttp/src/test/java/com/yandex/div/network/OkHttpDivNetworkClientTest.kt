@@ -67,7 +67,7 @@ class OkHttpDivNetworkClientTest {
 
         val body = requestCaptor.firstValue.body
         assertNotNull(body)
-        assertEquals(0L, body!!.contentLength())
+        assertEquals(0L, body.contentLength())
     }
 
     @Test

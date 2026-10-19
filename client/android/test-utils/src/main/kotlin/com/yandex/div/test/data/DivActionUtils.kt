@@ -23,6 +23,7 @@ import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.div2.DivActionSetVariable
 import com.yandex.div2.DivActionShowTooltip
+import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivActionUpdateStructure
@@ -215,6 +216,42 @@ fun setVariableAction(name: String, value: DivTypedValue): DivActionTyped {
 fun showTooltipAction(id: String): DivActionTyped {
     return DivActionTyped.ShowTooltip(
         DivActionShowTooltip(id = constant(id))
+    )
+}
+
+fun submitAction(
+    containerId: String,
+    url: String,
+    headers: List<DivActionSubmit.Request.Header>? = null,
+    method: DivActionSubmit.Request.Method = DivActionSubmit.Request.Method.POST,
+): DivActionTyped {
+    return submitAction(
+        containerId = constant(containerId),
+        url = constant(url.toUri()),
+        headers = headers,
+        method = method,
+    )
+}
+
+fun submitAction(
+    containerId: Expression<String>,
+    url: Expression<Uri>,
+    headers: List<DivActionSubmit.Request.Header>? = null,
+    method: DivActionSubmit.Request.Method = DivActionSubmit.Request.Method.POST,
+    onSuccessActions: List<DivAction>? = null,
+    onFailActions: List<DivAction>? = null,
+): DivActionTyped {
+    return DivActionTyped.Submit(
+        DivActionSubmit(
+            containerId = containerId,
+            request = DivActionSubmit.Request(
+                headers = headers,
+                method = constant(method),
+                url = url,
+            ),
+            onSuccessActions = onSuccessActions,
+            onFailActions = onFailActions,
+        )
     )
 }
 

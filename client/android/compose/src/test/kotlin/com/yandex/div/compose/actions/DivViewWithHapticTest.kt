@@ -37,12 +37,11 @@ class DivViewWithHapticTest {
     private val isVisible = mutableStateOf(true)
     private val reporter = TestReporter()
     private val card = data(text(text = "button", action = action(typed = hapticAction())))
-    private val divContext by lazy {
-        DivContext(
-            baseContext = RuntimeEnvironment.getApplication(),
-            configuration = DivConfiguration(reporter = reporter)
-        )
-    }
+
+    private val divContext = DivContext(
+        baseContext = RuntimeEnvironment.getApplication(),
+        configuration = DivConfiguration(reporter = reporter)
+    )
 
     @Test
     fun `action performs haptic feedback`() {

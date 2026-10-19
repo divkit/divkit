@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
+import com.yandex.div.compose.actions.observe
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
@@ -70,13 +71,14 @@ internal class DivViewContext(
         component.layoutProviderStorage.observe()
         component.patchCoordinator.observe()
         component.patchDownloadManager.observe()
+        component.submitActionHandler.observe()
         component.timerStorage.observe()
         rootLocalComponent.triggerStorage.observe()
     }
 
     fun getLocalComponent(
         data: DivBase,
-        parentComponent: DivLocalComponent
+        parentComponent: DivLocalComponent,
     ): DivLocalComponent {
         component.localComponentStorage.get(data)?.let {
             return it

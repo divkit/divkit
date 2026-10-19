@@ -3,6 +3,7 @@ package com.yandex.div.compose.dagger
 import androidx.compose.runtime.MutableState
 import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionHandler
+import com.yandex.div.compose.actions.SubmitActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.CompositionKeyStorage
 import com.yandex.div.compose.context.DivLocalComponentStorage
@@ -47,6 +48,7 @@ internal interface DivViewComponent {
     val states: MutableState<List<DivData.State>>
     val stateStorage: DivStateStorage
     val storedValuesStorage: DivStoredValuesStorage
+    val submitActionHandler: SubmitActionHandler
     val timerStorage: TimerStorage
     val tooltipStateStorage: TooltipStateStorage
     val videoPlayerStorage: VideoPlayerStorage

@@ -11,7 +11,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
@@ -35,12 +34,10 @@ internal class DivPatchDownloadManager @Inject constructor(
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
-                    currentCoroutineContext().ensureActive()
                     reporter.reportError(e)
                     onFail()
                     return@launch
                 }
-                currentCoroutineContext().ensureActive()
                 patchCoordinator.applyPatch(patch, onSuccess)
             } finally {
                 jobs.remove(currentCoroutineContext()[Job])
