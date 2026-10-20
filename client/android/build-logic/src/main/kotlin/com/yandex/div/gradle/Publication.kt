@@ -5,9 +5,11 @@ import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.publish.maven.tasks.AbstractPublishToMaven
+import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.extra
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withGroovyBuilder
 import org.gradle.kotlin.dsl.withType
 import org.gradle.plugins.signing.SigningExtension
@@ -93,5 +95,18 @@ fun Project.mavenPublication() {
             sign(publishing.publications)
             sign(configurations.getByName("archives"))
         }
+    }
+}
+
+fun Project.javadocJars() {
+    val publishing = extensions.getByType<PublishingExtension>()
+    publishing.publications.withType<MavenPublication>().configureEach {
+        val publicationName = name
+        val javadocJar = tasks.register<Jar>("${publicationName}JavadocJar") {
+            description = "Assembles an empty javadoc jar for the '$publicationName' publication."
+            archiveAppendix.set(publicationName)
+            archiveClassifier.set("javadoc")
+        }
+        artifact(javadocJar)
     }
 }

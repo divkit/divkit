@@ -1,5 +1,6 @@
 package divkit.convention
 
+import com.yandex.div.gradle.javadocJars
 import com.yandex.div.gradle.mavenPublication
 
 plugins {
@@ -10,3 +11,4 @@ plugins {
 }
 
 mavenPublication()
+javadocJars()
