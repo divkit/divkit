@@ -235,7 +235,7 @@ struct ContainerBlockLayout {
     let buildingDirectionKeyPath = layoutDirection.buildingDirectionKeyPath
     let transferDirectionKeyPath = layoutDirection.transferDirectionKeyPath
 
-    let wrapLayoutGroups = WrapLayoutGroups(
+    let wrapLayoutLines = WrapLayoutLines(
       blockLayoutDirection: blockLayoutDirection,
       children: children,
       separator: separator,
@@ -244,8 +244,8 @@ struct ContainerBlockLayout {
       layoutDirection: layoutDirection
     )
 
-    let contentCrossSize = wrapLayoutGroups.groups.map {
-      getGroupHeight(group: $0, lineAscent: getLineAscent(group: $0))
+    let contentCrossSize = wrapLayoutLines.lines.map {
+      getLineHeight(items: $0.children, lineAscent: getLineAscent(items: $0.children))
     }.reduce(0, +)
 
     var currentLineOffset = crossAlignment.offset(
@@ -256,19 +256,27 @@ struct ContainerBlockLayout {
       currentLineOffset = 0
     }
 
-    for group in wrapLayoutGroups.groups {
-      let lineAscent = getLineAscent(group: group)
+    // A line separator stands in for a whole line. Center it on the main axis regardless of
+    // content_alignment_*. crossAlignment only shifts it across the line.
+    let lineSeparatorAlignmentManager = AxialAlignmentManager(
+      layoutDirection: layoutDirection,
+      axialAlignment: .center
+    )
+
+    for line in wrapLayoutLines.lines {
+      let lineAscent = getLineAscent(items: line.children)
       if containerAscent == nil {
         containerAscent = lineAscent
       }
 
-      let groupHeight = getGroupHeight(group: group, lineAscent: lineAscent)
+      let lineHeight = getLineHeight(items: line.children, lineAscent: lineAscent)
 
-      let contentLength = group.map(\.childSize).map(to: buildingDirectionKeyPath).reduce(0, +)
+      let contentLength = line.children.map(\.childSize).map(to: buildingDirectionKeyPath)
+        .reduce(0, +)
 
-      var groupFrames: [CGRect] = []
-      for item in group {
-        let alignmentSpace = groupHeight - item.childSize[keyPath: transferDirectionKeyPath]
+      var lineFrames: [CGRect] = []
+      for item in line.children {
+        let alignmentSpace = lineHeight - item.childSize[keyPath: transferDirectionKeyPath]
         let alignedLineOffset = currentLineOffset + item.child.crossAlignment
           .offset(forAvailableSpace: alignmentSpace)
 
@@ -282,24 +290,30 @@ struct ContainerBlockLayout {
             x: item.lineOffset,
             y: alignedLineOffset + baselineOffset
           )
-          groupFrames.append(CGRect(origin: origin, size: item.childSize))
+          lineFrames.append(CGRect(origin: origin, size: item.childSize))
         case .vertical:
           let origin = CGPoint(
             x: alignedLineOffset,
             y: item.lineOffset
           )
-          groupFrames.append(CGRect(origin: origin, size: item.childSize))
+          lineFrames.append(CGRect(origin: origin, size: item.childSize))
         }
       }
 
-      frames += axialAlignmentManager.applyOffset(
-        to: groupFrames,
+      let alignmentManager = switch line {
+      case .content:
+        axialAlignmentManager
+      case .separator:
+        lineSeparatorAlignmentManager
+      }
+      frames += alignmentManager.applyOffset(
+        to: lineFrames,
         forAvailableSpace: size[keyPath: buildingDirectionKeyPath],
         contentSize: contentLength
       )
-      currentLineOffset += groupHeight
+      currentLineOffset += lineHeight
     }
-    return (wrapLayoutGroups.childrenWithSeparators, frames, containerAscent)
+    return (wrapLayoutLines.childrenWithSeparators, frames, containerAscent)
   }
 
   private func calculateHorizontalNoWrapLayoutFrames(
@@ -426,12 +440,12 @@ struct ContainerBlockLayout {
     )
   }
 
-  private func getLineAscent(group: [WrapLayoutGroups.ChildParametes]) -> CGFloat? {
+  private func getLineAscent(items: [WrapLayoutLines.ChildParameters]) -> CGFloat? {
     guard layoutDirection == .horizontal else {
       return nil
     }
     var lineAscent: CGFloat?
-    for item in group {
+    for item in items {
       lineAscent = getMaxAscent(
         current: lineAscent, child: item.child, childSize: item.childSize
       )
@@ -439,20 +453,20 @@ struct ContainerBlockLayout {
     return lineAscent
   }
 
-  private func getGroupHeight(
-    group: [WrapLayoutGroups.ChildParametes],
+  private func getLineHeight(
+    items: [WrapLayoutLines.ChildParameters],
     lineAscent: CGFloat?
   ) -> CGFloat {
     switch layoutDirection {
     case .horizontal:
-      group
+      items
         .map { item in item.childSize.height + item.child.baselineOffset(
           ascent: lineAscent,
           width: item.childSize.width
         ) }
         .max() ?? 0
     case .vertical:
-      group.map { item in item.childSize.width }.max() ?? 0
+      items.map { item in item.childSize.width }.max() ?? 0
     }
   }
 

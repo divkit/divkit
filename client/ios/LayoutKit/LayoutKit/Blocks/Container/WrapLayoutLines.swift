@@ -1,17 +1,32 @@
 import Foundation
 import VGSL
 
-struct WrapLayoutGroups {
+struct WrapLayoutLines {
   struct SeparatorSize {
     let start: CGSize?
     let end: CGSize?
     let between: CGSize?
   }
 
-  typealias ChildParametes = (child: ContainerBlock.Child, childSize: CGSize, lineOffset: CGFloat)
+  typealias ChildParameters = (child: ContainerBlock.Child, childSize: CGSize, lineOffset: CGFloat)
+
+  enum Line {
+    case content([ChildParameters])
+    /// A `line_separator`, or the `line_spacing` block stored in `lineSeparator.between`.
+    case separator(ChildParameters)
+
+    var children: [ChildParameters] {
+      switch self {
+      case let .content(children):
+        children
+      case let .separator(child):
+        [child]
+      }
+    }
+  }
 
   private(set) var childrenWithSeparators: [ContainerBlock.Child] = []
-  private(set) var groups: [[ChildParametes]] = [[]]
+  private(set) var lines: [Line] = []
 
   private let blockLayoutDirection: UserInterfaceLayoutDirection
   private let children: [ContainerBlock.Child]
@@ -22,7 +37,7 @@ struct WrapLayoutGroups {
   private let keyPath: WritableKeyPath<CGSize, CGFloat>
   private let separatorSize: SeparatorSize
   private let lineSeparatorSize: SeparatorSize
-  private var line: [ChildParametes] = []
+  private var currentLineItems: [ChildParameters] = []
   private var offset: CGFloat = 0
   private var separatorAdded = false
 
@@ -31,7 +46,7 @@ struct WrapLayoutGroups {
       return 0
     }
     var offset: CGFloat = 0
-    if line.count > 0, let between = separatorSize.between {
+    if currentLineItems.count > 0, let between = separatorSize.between {
       offset = between[keyPath: keyPath]
     } else if let start = separatorSize.start {
       offset = start[keyPath: keyPath]
@@ -69,10 +84,10 @@ struct WrapLayoutGroups {
       between: lineSeparator?.between?.content.size(forResizableBlockSize: size) ?? .zero
     )
 
-    makeGroups()
+    makeLines()
   }
 
-  private mutating func makeGroups() {
+  private mutating func makeLines() {
     addStartLineSeparator()
     for child in children {
       guard !child.isResizable(for: layoutDirection.opposite) else { continue }
@@ -120,38 +135,38 @@ struct WrapLayoutGroups {
         }
       }
     }
-    if line.count > 0 {
+    if currentLineItems.count > 0 {
       addEndSeparator()
-      addLine(line)
+      addLine(currentLineItems)
       addEndLineSeparator()
     }
 
     if layoutDirection == .vertical, blockLayoutDirection == .rightToLeft {
-      groups.reverse()
+      lines.reverse()
     }
 
-    childrenWithSeparators = groups.flatMap { $0 }.map(\.child)
+    childrenWithSeparators = lines.flatMap(\.children).map(\.child)
   }
 
   private mutating func addChild(child: ContainerBlock.Child, size: CGSize) {
-    if line.count > 0 {
+    if currentLineItems.count > 0 {
       addBetweenSeparator()
     } else {
       addStartSeparator()
     }
-    line.append((child: child, childSize: size, lineOffset: offset))
+    currentLineItems.append((child: child, childSize: size, lineOffset: offset))
     offset += size[keyPath: keyPath]
     separatorAdded = false
   }
 
-  private mutating func addLine(_ line: [ChildParametes]) {
+  private mutating func addLine(_ items: [ChildParameters]) {
     switch (layoutDirection, blockLayoutDirection) {
     case (.vertical, _):
-      groups.append(line)
+      lines.append(.content(items))
     case (.horizontal, .leftToRight):
-      groups.append(line)
+      lines.append(.content(items))
     case (.horizontal, .rightToLeft):
-      groups.append(reverseChildren(in: line))
+      lines.append(.content(reverseChildren(in: items)))
     @unknown default:
       assertionFailure(
         "Unknown blockLayoutDirection (UserInterfaceLayoutDirection) or layoutDirection (ContainerBlock.LayoutDirection)"
@@ -159,10 +174,10 @@ struct WrapLayoutGroups {
     }
   }
 
-  private func reverseChildren(in line: [ChildParametes]) -> [ChildParametes] {
-    var reversedLine = [ChildParametes]()
+  private func reverseChildren(in items: [ChildParameters]) -> [ChildParameters] {
+    var reversedLine = [ChildParameters]()
     var offset: CGFloat = 0
-    for childParameter in line.reversed() {
+    for childParameter in items.reversed() {
       reversedLine
         .append((
           child: childParameter.child,
@@ -175,12 +190,12 @@ struct WrapLayoutGroups {
   }
 
   private mutating func startNewLine() {
-    if line.count > 0 {
+    if currentLineItems.count > 0 {
       addEndSeparator()
-      addLine(line)
+      addLine(currentLineItems)
       addBetweenLineSeparator()
     }
-    line = []
+    currentLineItems = []
     offset = 0
     separatorAdded = false
   }
@@ -190,7 +205,7 @@ struct WrapLayoutGroups {
           let size = lineSeparatorSize.start else {
       return
     }
-    groups.append([(child: start, childSize: size, lineOffset: 0)])
+    addLineSeparator(start, size: size)
   }
 
   private mutating func addBetweenLineSeparator() {
@@ -198,14 +213,18 @@ struct WrapLayoutGroups {
           let size = lineSeparatorSize.between else {
       return
     }
-    groups.append([(child: between, childSize: size, lineOffset: 0)])
+    addLineSeparator(between, size: size)
   }
 
   private mutating func addEndLineSeparator() {
     guard let lineSeparator, let end = lineSeparator.end, let size = lineSeparatorSize.end else {
       return
     }
-    groups.append([(child: end, childSize: size, lineOffset: 0)])
+    addLineSeparator(end, size: size)
+  }
+
+  private mutating func addLineSeparator(_ child: ContainerBlock.Child, size: CGSize) {
+    lines.append(.separator((child: child, childSize: size, lineOffset: 0)))
   }
 
   private mutating func addStartSeparator() {
@@ -232,7 +251,7 @@ struct WrapLayoutGroups {
   private mutating func addSeparator(_ separator: ContainerBlock.Child, size: CGSize) {
     guard !separatorAdded else { return }
     separatorAdded = true
-    line.append((child: separator, childSize: size, lineOffset: offset))
+    currentLineItems.append((child: separator, childSize: size, lineOffset: offset))
     offset += size[keyPath: keyPath]
   }
 }

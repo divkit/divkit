@@ -852,8 +852,8 @@
     "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей. Если установлено значения `wrap`:<li>для каждого элемента со значением размера `match_parent` вдоль главной оси будет выделена отдельная строка;</li><li>элементы со значением `match_parent` вдоль побочной оси будут проигнорированы.</li>"
   },
   "div_container_line_separator": {
-    "en": "Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).",
-    "ru": "Разделитель между элементами вдоль поперечной оси. Не используется, если параметр `layout_mode` имеет значение `no_wrap`. В вебе поддерживаются только новые браузеры (требуется поддержка свойства `gap` для flex-блоков)."
+    "en": "Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Line separators are centered on the main axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).",
+    "ru": "Разделитель между элементами вдоль поперечной оси. Не используется, если параметр `layout_mode` имеет значение `no_wrap`. Разделители строк выравниваются по центру основной оси и не зависят от content_alignment_horizontal и content_alignment_vertical. В вебе поддерживаются только новые браузеры (требуется поддержка свойства `gap` для flex-блоков)."
   },
   "div_container_line_spacing": {
     "en": "Spacing between lines of items when `layout_mode` is set to `wrap`. Ignored if `line_separator` with type `show_between` is set.",
@@ -864,8 +864,8 @@
     "ru": "Расположение элементов. Значение `overlap` накладывает элементы друг на друга в порядке перечисления. Ниже всего — нулевой элемент массива."
   },
   "div_container_separator": {
-    "en": "Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).",
-    "ru": "Разделитель между элементами вдоль основной оси. Не используется, если параметр `orientation` имеет значение `overlap`. В вебе поддерживаются только новые браузеры (требуется поддержка свойства `gap` для flex-блоков)."
+    "en": "Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).",
+    "ru": "Разделитель между элементами вдоль основной оси. Не используется, если параметр `orientation` имеет значение `overlap`. Разделители выравниваются по центру поперечной оси и не зависят от content_alignment_horizontal и content_alignment_vertical. В вебе поддерживаются только новые браузеры (требуется поддержка свойства `gap` для flex-блоков)."
   },
   "div_container_separator_show_at_end": {
     "en": "Enables displaying the separator after the last item.",
