@@ -117,6 +117,7 @@ open class Div2View private constructor(
     @InternalApi
     val div2Component: Div2Component = context.div2Component
 
+    private val consumeTouchesToClearInputFocus = div2Component.consumeTouchesToClearInputFocus
     private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled
     private val isComplexRebindEnabled
         inline get() = div2Component.isComplexRebindEnabled
@@ -726,7 +727,7 @@ open class Div2View private constructor(
 
     @SuppressLint("ClickableViewAccessibility")
     final override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (inputFocusTracker.isFocusedOnInput()) {
+        if (consumeTouchesToClearInputFocus && inputFocusTracker.isFocusedOnInput()) {
             gestureDetector.onTouchEvent(event)
             if (event.action == MotionEvent.ACTION_DOWN) {
                 // Capturing DOWN event to get UP event, but only if actively focused on input

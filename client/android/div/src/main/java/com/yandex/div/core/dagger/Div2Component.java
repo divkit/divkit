@@ -167,6 +167,9 @@ public interface Div2Component {
     @NonNull
     StoredValuesController getStoredValuesController();
 
+    @Named(Names.CONSUME_TOUCHES_TO_CLEAR_INPUT_FOCUS)
+    boolean getConsumeTouchesToClearInputFocus();
+
     @NonNull
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
     boolean isBindOnAttachEnabled();

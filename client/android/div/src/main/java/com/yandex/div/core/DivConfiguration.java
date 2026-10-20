@@ -93,6 +93,7 @@ public class DivConfiguration {
     private final boolean mSupportHyphenation;
     private final boolean mAccessibilityEnabled;
     private final boolean mForceAccessibilityEnable;
+    private final boolean mConsumeTouchesToClearInputFocus;
     private boolean mViewPoolEnabled;
     private boolean mViewPoolProfilingEnabled;
     private boolean mViewPoolOptimizationDebug;
@@ -138,6 +139,7 @@ public class DivConfiguration {
             boolean supportHyphenation,
             boolean accessibilityEnabled,
             boolean forceAccessibilityEnable,
+            boolean consumeTouchesToClearInputFocus,
             boolean viewPoolEnabled,
             boolean viewPoolProfilingEnabled,
             boolean viewPoolOptimizationDebug,
@@ -180,6 +182,7 @@ public class DivConfiguration {
         mSupportHyphenation = supportHyphenation;
         mAccessibilityEnabled = accessibilityEnabled;
         mForceAccessibilityEnable = forceAccessibilityEnable;
+        mConsumeTouchesToClearInputFocus = consumeTouchesToClearInputFocus;
         mViewPoolEnabled = viewPoolEnabled;
         mViewPreCreationProfile = viewPreCreationProfile;
         mViewPoolProfilingEnabled = viewPoolProfilingEnabled;
@@ -430,6 +433,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @Named(Names.CONSUME_TOUCHES_TO_CLEAR_INPUT_FOCUS)
+    public boolean getConsumeTouchesToClearInputFocus() {
+        return mConsumeTouchesToClearInputFocus;
+    }
+
+    @Provides
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
     public boolean isBindOnAttachEnabled() {
         return mBindOnAttachEnabled;
@@ -526,6 +535,7 @@ public class DivConfiguration {
         private boolean mVisualErrors = Experiment.VISUAL_ERRORS_ENABLED.getDefaultValue();
         private boolean mAccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
         private boolean mForceAccessibilityEnable;
+        private boolean mConsumeTouchesToClearInputFocus = true;
         private boolean mViewPoolEnabled = Experiment.VIEW_POOL_ENABLED.getDefaultValue();
         private boolean mViewPoolProfilingEnabled = Experiment.VIEW_POOL_PROFILING_ENABLED.getDefaultValue();
         private boolean mViewPoolOptimizationDebug = Experiment.VIEW_POOL_OPTIMIZATION_DEBUG.getDefaultValue();
@@ -730,6 +740,21 @@ public class DivConfiguration {
             return this;
         }
 
+        /**
+         * Controls whether a focused input makes Div2View consume background touch gestures
+         * to clear focus on a tap. Enabled by default.
+         *
+         * Disable to allow normal touch dispatch without consuming gestures solely to clear input focus,
+         * for example when an input is hosted in a full-screen overlay above scrollable content.
+         * Other touch handlers may still consume gestures. This disables background-tap focus clearing
+         * by Div2View; action-driven focus handling is unchanged.
+         */
+        @NonNull
+        public Builder consumeTouchesToClearInputFocus(boolean consume) {
+            mConsumeTouchesToClearInputFocus = consume;
+            return this;
+        }
+
         @NonNull
         public Builder enableViewPool(boolean enable) {
             mViewPoolEnabled = enable;
@@ -868,6 +893,7 @@ public class DivConfiguration {
                     mSupportHyphenation,
                     mAccessibilityEnabled,
                     mForceAccessibilityEnable,
+                    mConsumeTouchesToClearInputFocus,
                     mViewPoolEnabled,
                     mViewPoolProfilingEnabled,
                     mViewPoolOptimizationDebug,
