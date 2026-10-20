@@ -499,19 +499,23 @@
         }, 250);
     }
 
+    function selectAll(): void {
+        if (input instanceof HTMLInputElement) {
+            input.select();
+        } else {
+            const selection = window.getSelection();
+            const range = document.createRange();
+            range.selectNodeContents(input);
+            if (selection) {
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        }
+    }
+
     function onClick() {
         if (!isPressed) {
-            if (input instanceof HTMLInputElement) {
-                input.select();
-            } else {
-                const selection = window.getSelection();
-                const range = document.createRange();
-                range.selectNodeContents(input);
-                if (selection) {
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-                }
-            }
+            selectAll();
         }
     }
 
@@ -654,17 +658,23 @@
         describedBy = describeList.join(' ');
     }
 
+    function focusInput() {
+        if (input) {
+            input.focus();
+            if ($jsonSelectAll) {
+                selectAll();
+            } else {
+                setCursorPosition(value.length, value.length);
+            }
+        }
+    }
+
     $: if (input && componentContext.json) {
         componentContext.detachViewInfo('focus');
         componentContext.detachViewInfo('setCursorPosition');
 
         if (componentContext.id && !componentContext.fakeElement) {
-            componentContext.attachViewInfo('focus', () => {
-                if (input) {
-                    input.focus();
-                    setCursorPosition(value.length, value.length);
-                }
-            });
+            componentContext.attachViewInfo('focus', focusInput);
             componentContext.attachViewInfo('setCursorPosition', (start, end) => {
                 if (document.activeElement !== input) {
                     input.focus();
