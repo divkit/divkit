@@ -1324,6 +1324,104 @@ final class ContainerBlockLayoutTests: XCTestCase {
     XCTAssertEqual(layout.blockFrames[0].height / layout.blockFrames[1].height, 0.5, accuracy: 1e-5)
   }
 
+  func test_HorizontalContainer_ConstrainedChildShrinksToFitMatchParentMinWidth() {
+    let layout = ContainerBlockLayout(
+      blocks: [
+        BlockWithFixedWrapContent(width: 351, height: 20, constrainedHorizontally: true),
+        TextBlock(
+          widthTrait: .weighted(.default, minSize: 90, maxSize: .infinity),
+          heightTrait: .fixed(20),
+          text: NSAttributedString(string: "x"),
+          accessibilityElement: nil
+        ),
+      ],
+      gaps: [16, 4, 16],
+      layoutDirection: .horizontal,
+      size: CGSize(width: 414, height: 20)
+    )
+
+    // The constrained child yields the match_parent min width: 414 - 16 - 4 - 16 - 90 = 288.
+    XCTAssertEqual(layout.blockFrames.map(\.width), [288, 90])
+    XCTAssertEqual(layout.blockFrames.last?.maxX, 398)
+  }
+
+  func test_VerticalContainer_ConstrainedChildShrinksToFitMatchParentMinHeight() {
+    let layout = ContainerBlockLayout(
+      blocks: [
+        BlockWithFixedWrapContent(width: 20, height: 100, constrainedVertically: true),
+        TextBlock(
+          widthTrait: .fixed(20),
+          heightTrait: .weighted(.default, minSize: 40, maxSize: .infinity),
+          text: NSAttributedString(string: "x"),
+          accessibilityElement: nil
+        ),
+      ],
+      gaps: [16, 4, 16],
+      layoutDirection: .vertical,
+      size: CGSize(width: 20, height: 120)
+    )
+
+    // The constrained child yields the match_parent min height: 120 - 16 - 4 - 16 - 40 = 44.
+    XCTAssertEqual(layout.blockFrames.map(\.height), [44, 40])
+    XCTAssertEqual(layout.blockFrames.last?.maxY, 104)
+  }
+
+  func test_HorizontalContainer_MatchParentMinWidthWithMargins_IsReservedOnce() {
+    let text = TextBlock(
+      widthTrait: .weighted(.default, minSize: 90, maxSize: .infinity),
+      heightTrait: .fixed(20),
+      text: NSAttributedString(string: "x"),
+      accessibilityElement: nil
+    )
+    // Background wrapper makes the inner block a PaddingProvidingBlock, so the outer block's
+    // paddings are recognised as margins.
+    let matchParent = DecoratingBlock(
+      child: DecoratingBlock(child: text),
+      paddings: EdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+    )
+
+    let layout = ContainerBlockLayout(
+      blocks: [
+        BlockWithFixedWrapContent(width: 351, height: 20, constrainedHorizontally: true),
+        matchParent,
+      ],
+      gaps: [16, 4, 16],
+      layoutDirection: .horizontal,
+      size: CGSize(width: 414, height: 20)
+    )
+
+    // The 10pt margin is reserved once, next to the 90pt min width: 382 - 4 - 10 - 90 = 278.
+    XCTAssertEqual(layout.blockFrames.map(\.width), [278, 100])
+    XCTAssertEqual(layout.blockFrames.last?.maxX, 398)
+  }
+
+  func test_HorizontalContainer_RedistributedMaxSizeCutOff_KeepsMatchParentWidth() {
+    let layout = ContainerBlockLayout(
+      blocks: [
+        TextBlock(
+          widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: 50),
+          heightTrait: .fixed(20),
+          text: NSAttributedString(string: "some sufficiently long text"),
+          accessibilityElement: nil
+        ),
+        BlockWithFixedWrapContent(width: 60, height: 20, constrainedHorizontally: true),
+        TextBlock(
+          widthTrait: .resizable,
+          heightTrait: .fixed(20),
+          text: NSAttributedString(string: "x"),
+          accessibilityElement: nil
+        ),
+      ],
+      gaps: [0, 0, 0, 0],
+      layoutDirection: .horizontal,
+      size: CGSize(width: 150, height: 20)
+    )
+
+    // The max_size cut-off of the first child raises the shrink cap of the second one above its
+    // natural width; the match_parent child keeps the remaining 40pt.
+    XCTAssertEqual(layout.blockFrames.map(\.width), [50, 60, 40])
+  }
+
   func test_HorizontalContainer_FillingChildren_AreStretchedToContainerHeight() {
     let layout = ContainerBlockLayout(
       children: [

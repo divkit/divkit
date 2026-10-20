@@ -120,6 +120,9 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     "div-container/item_builder/non-unique-matched-selectors.json",
     "div-container/item_builder/wrap-content-container-with-match-parent-items.json",
 
+    // match_parent min_size next to wrap_content constrained siblings not supported, DIVKIT-10714
+    "div-container/match-parent-min-size-with-constrained-siblings.json",
+
     // div-pager vertical not supported
     "div-pager/vertical-pager-custom-neighbour-page-width.json",
     "div-pager/vertical-pager-custom-neighbour-page-width-with-paddings.json",

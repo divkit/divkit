@@ -183,6 +183,11 @@ struct ContainerBlockLayout {
       measures: measures,
       lengthAvailableForResizableBlocks: spaceAvailableForResizableBlocks
     )
+    let minSizeOfResizableBlocks = measures.reduce(into: CGFloat(0)) {
+      if case let .resizable(_, minSize, _, _) = $1 {
+        $0 += max(0, minSize)
+      }
+    }
 
     let constrainedBlocks = blocks
       .filter { $0.isConstrained(in: layoutDirection) }
@@ -198,7 +203,10 @@ struct ContainerBlockLayout {
       .reduce(0, +)
     let constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
       blockSizes: constrainedBlockSizes,
-      lengthToDecrease: max(0, unconstrainedExcess - spaceAvailableForResizableBlocks)
+      lengthToDecrease: max(
+        0,
+        unconstrainedExcess - (spaceAvailableForResizableBlocks - minSizeOfResizableBlocks)
+      )
     )
 
     switch layoutDirection {

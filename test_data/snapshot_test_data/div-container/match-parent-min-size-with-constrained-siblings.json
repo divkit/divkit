@@ -1,0 +1,123 @@
+{
+  "description": "match_parent children with min_size keep their minimum when their wrap_content constrained siblings have to shrink, in horizontal and vertical containers",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 320
+      },
+      "item_spacing": 4,
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#DDDDDD"
+        }
+      ]
+    },
+    "constrained_text": {
+      "type": "text",
+      "font_size": 13,
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0FFA0"
+        }
+      ]
+    },
+    "min_size_text": {
+      "type": "text",
+      "font_size": 13,
+      "text_color": "#FFFFFF",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#029154"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "test_container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "constrained_text",
+                  "text": "Constrained text that is too long to fit in the row and has to shrink",
+                  "max_lines": 1,
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  }
+                },
+                {
+                  "type": "min_size_text",
+                  "text": "02:59:41",
+                  "max_lines": 1,
+                  "width": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 90
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "orientation": "vertical",
+              "height": {
+                "type": "fixed",
+                "value": 124
+              },
+              "items": [
+                {
+                  "type": "constrained_text",
+                  "text": "Line 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8",
+                  "line_height": 16,
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  }
+                },
+                {
+                  "type": "min_size_text",
+                  "text": "min_size 40",
+                  "height": {
+                    "type": "match_parent",
+                    "min_size": {
+                      "value": 40
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
