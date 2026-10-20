@@ -12,6 +12,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -34,6 +35,7 @@ import com.yandex.div.compose.pager.rememberAndStoreState
 import com.yandex.div.compose.pager.snapOffset
 import com.yandex.div.compose.pager.snappedItem
 import com.yandex.div.compose.pager.visibleItemSizes
+import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isMatchParent
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
@@ -42,6 +44,7 @@ import com.yandex.div.compose.utils.scroll.IntrinsicSizeBarrier
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
+import com.yandex.div.compose.utils.scroll.restrictParentScroll
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivPageTransformation
@@ -153,20 +156,30 @@ internal fun PagerContent(
     val transformationPosition = rememberPageTransformationPosition(
         listState, snapPosition, rawDefaultItem, neighbourSize
     )
-    val swipeLimiter = remember(listState, snapPosition, itemKeys, neighbourSize, layoutDirection) {
+    // Read when a gesture settles, so a value change never re-creates the limiter in the middle of a drag.
+    val multiPageScroll by rememberUpdatedState(pager.multiPageScroll.observedValue())
+    val isParentScrollRestricted = pager.restrictParentScroll.observedValue()
+    val gestureSlop = rememberPagerGestureSlop(isParentScrollRestricted)
+    val pagingTouchSlopExtra = gestureSlop.pagingTouchSlopExtra
+    val swipeLimiter = remember(
+        listState, snapPosition, itemKeys, neighbourSize, layoutDirection, pagingTouchSlopExtra
+    ) {
         PagerSwipeLimiter(
-            listState, snapPosition, neighbourSize, layoutDirection, selectedActionsHandler::onSnapOffsetCalculated
+            listState = listState,
+            snapPosition = snapPosition,
+            neighbourSize = neighbourSize,
+            layoutDirection = layoutDirection,
+            pagingTouchSlopExtra = pagingTouchSlopExtra,
+            multiPageScroll = { multiPageScroll },
+            onTargetPageCalculated = selectedActionsHandler::onTargetPageCalculated,
         )
     }
 
-    // The list starts a page drag after the paging touch slop, as ViewPager2 does,
-    // while the page content keeps the default touch slop for its own gestures.
-    val viewConfiguration = LocalViewConfiguration.current
-    val pagerViewConfiguration = rememberPagerViewConfiguration(viewConfiguration)
-    CompositionLocalProvider(LocalViewConfiguration provides pagerViewConfiguration) {
+    CompositionLocalProvider(LocalViewConfiguration provides gestureSlop.listViewConfiguration) {
         OrientedLazyList(
             isHorizontal = isHorizontal,
             modifier = IntrinsicSizeBarrier.fillMaxSize().clipToBounds().trackPagerViewport(neighbourSizes)
+                .applyIf(isParentScrollRestricted) { restrictParentScroll(isHorizontal) }
                 .pagerSwipe(swipeLimiter)
                 .commitPagerCrossAxisSizes(crossAxisSizes),
             listState = listState,
@@ -177,18 +190,10 @@ internal fun PagerContent(
         ) {
             items(
                 count = itemWindow.itemCount,
-                key = { index ->
-                    val itemKey = itemKeys[itemWindow.realIndex(index)]
-                    if (infiniteScroll) {
-                        val cycle = (index - itemWindow.edgeItemCount).floorDiv(items.size)
-                        "$itemKey:$cycle"
-                    } else {
-                        itemKey
-                    }
-                },
+                key = { index -> pageKey(itemKeys, itemWindow, infiniteScroll, index) },
                 contentType = { itemWindow },
             ) { index ->
-                CompositionLocalProvider(LocalViewConfiguration provides viewConfiguration) {
+                CompositionLocalProvider(LocalViewConfiguration provides gestureSlop.contentViewConfiguration) {
                     val item = items[itemWindow.realIndex(index)]
                     ScrollableChildItem(
                         item,
@@ -209,6 +214,14 @@ internal fun PagerContent(
             }
         }
     }
+}
+
+/** Keys the copies of a page in a cyclic window apart, so each cycle keeps its own composition. */
+private fun pageKey(itemKeys: List<Long>, itemWindow: PagerItemWindow, infiniteScroll: Boolean, index: Int): Any {
+    val itemKey = itemKeys[itemWindow.realIndex(index)]
+    if (!infiniteScroll) return itemKey
+    val cycle = (index - itemWindow.edgeItemCount).floorDiv(itemWindow.realItemCount)
+    return "$itemKey:$cycle"
 }
 
 @Suppress("SwallowedException")

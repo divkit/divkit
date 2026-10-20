@@ -246,7 +246,7 @@ internal fun LazyListLayoutInfo.itemsWithNeighbours(neighbourSize: (Int) -> Int?
     return listOfNotNull(before) + visibleItemsInfo + listOfNotNull(after)
 }
 
-private class NeighbourPageInfo(
+internal class NeighbourPageInfo(
     override val index: Int,
     override val offset: Int,
     override val size: Int,

@@ -17,14 +17,13 @@ import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.pager.PagerItemWindow
 import com.yandex.div.compose.pager.PagerLayoutSnapshot
 import com.yandex.div.compose.pager.mainAxisViewportSize
-import com.yandex.div.compose.pager.snapOffset
+import com.yandex.div.compose.pager.snappedItem
 import com.yandex.div.compose.pager.visibleItemSizes
 import com.yandex.div2.Div
 import kotlinx.coroutines.flow.filterNotNull
-import kotlin.math.abs
 
 internal fun interface PagerSelectedActionsHandler {
-    fun onSnapOffsetCalculated(offset: Float)
+    fun onTargetPageCalculated(rawIndex: Int)
 }
 
 /**
@@ -78,15 +77,15 @@ internal fun rememberPagerSelectedActionsHandler(
         }
     }
 
-    val onSnapOffsetCalculated = rememberUpdatedState<(Float) -> Unit> { snapOffset ->
+    val onTargetPageCalculated = rememberUpdatedState<(Int) -> Unit> { rawIndex ->
         if (enabled) {
-            listState.selectedPage(snapPosition, itemWindow, snapOffset)?.let { page ->
+            listState.realPage(itemWindow, rawIndex)?.let { page ->
                 selection.select(itemKeys[page], items[page])
             }
         }
     }
     return remember(listState) {
-        PagerSelectedActionsHandler { snapOffset -> onSnapOffsetCalculated.value(snapOffset) }
+        PagerSelectedActionsHandler { rawIndex -> onTargetPageCalculated.value(rawIndex) }
     }
 }
 
@@ -100,7 +99,7 @@ private fun LazyListState.selectionSnapshot(
     return when {
         info.mainAxisViewportSize != viewportSizePx -> null
         isDragged || isScrollInProgress -> PagerLayoutSnapshot(page = null, itemSizes = emptyList())
-        else -> PagerLayoutSnapshot(selectedPage(snapPosition, itemWindow, 0f), info.visibleItemSizes())
+        else -> PagerLayoutSnapshot(snappedPage(snapPosition, itemWindow), info.visibleItemSizes())
     }
 }
 
@@ -115,15 +114,14 @@ private class PageSelection {
     }
 }
 
-private fun LazyListState.selectedPage(
-    snapPosition: SnapPosition,
-    itemWindow: PagerItemWindow,
-    snapOffset: Float,
-): Int? {
+private fun LazyListState.snappedPage(snapPosition: SnapPosition, itemWindow: PagerItemWindow): Int? =
+    realPage(itemWindow, layoutInfo.snappedItem(snapPosition)?.index)
+
+private fun LazyListState.realPage(itemWindow: PagerItemWindow, rawIndex: Int?): Int? {
     val info = layoutInfo
+    if (rawIndex == null || rawIndex !in 0 until info.totalItemsCount) return null
     if (itemWindow.realItemCount == 0 || info.totalItemsCount != itemWindow.itemCount) return null
     // Different cyclic windows can have the same virtual item count.
     if (info.visibleItemsInfo.any { it.contentType != itemWindow }) return null
-    val page = info.visibleItemsInfo.minByOrNull { abs(info.snapOffset(it, snapPosition) - snapOffset) }
-    return page?.index?.let(itemWindow::realIndex)
+    return itemWindow.realIndex(rawIndex)
 }
