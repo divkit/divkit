@@ -1,0 +1,374 @@
+{
+  "description": "#469 Tooltip on different positions: use position buttons to show the tooltip at top, right, left, center, and bottom, then close it with its cross. The left button extends the original card. General content snapshots verify all five positions. Outside taps are outside the agreed scope of this case; full-screen frame containment is not asserted separately.",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "margins": {
+          "top": 16,
+          "left": 12,
+          "right": 12
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alpha": 1,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center"
+      }
+    },
+    "card": {
+      "log_id": "visibility",
+      "variables": [
+        {
+          "type": "string",
+          "name": "position",
+          "value": "bottom"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "button",
+                "text": "Tooltip with close button",
+                "margins": {
+                  "top": 60
+                },
+                "tooltips": [
+                  {
+                    "id": "tooltip",
+                    "position": "@{position}",
+                    "duration": 0,
+                    "offset": {
+                      "x": {
+                        "value": 0
+                      },
+                      "y": {
+                        "value": 4
+                      }
+                    },
+                    "background_accessibility_description": "close tooltip",
+                    "div": {
+                      "type": "container",
+                      "orientation": "overlap",
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "items": [
+                        {
+                          "type": "container",
+                          "width": {
+                            "type": "wrap_content"
+                          },
+                          "paddings": {
+                            "left": 20,
+                            "top": 20,
+                            "right": 20,
+                            "bottom": 20
+                          },
+                          "items": [
+                            {
+                              "type": "text",
+                              "width": {
+                                "type": "wrap_content"
+                              },
+                              "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                              },
+                              "background": [
+                                {
+                                  "type": "solid",
+                                  "color": "#799eb7"
+                                }
+                              ],
+                              "border": {
+                                "corner_radius": 6
+                              },
+                              "text_color": "#2C3E50",
+                              "text": "Title tooltip"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "image",
+                          "width": {
+                            "type": "fixed",
+                            "value": 44
+                          },
+                          "height": {
+                            "type": "fixed",
+                            "value": 44
+                          },
+                          "paddings": {
+                            "left": 12,
+                            "right": 12,
+                            "top": 12,
+                            "bottom": 12
+                          },
+                          "action": {
+                            "log_id": "hide_tooltip",
+                            "url": "div-action://hide_tooltip?id=tooltip"
+                          },
+                          "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
+                          "tint_color": "#000000",
+                          "alignment_horizontal": "left",
+                          "alignment_vertical": "top",
+                          "id": "close_positioned_tooltip"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "actions": [
+                  {
+                    "log_id": "show_tooltip",
+                    "url": "div-action://show_tooltip?id=tooltip&multiple=true"
+                  }
+                ],
+                "id": "show_positioned_tooltip"
+              },
+              {
+                "type": "text",
+                "text": "Tooltip position: @{position}"
+              },
+              {
+                "type": "button",
+                "text": "Set top position",
+                "margins": {
+                  "top": 150,
+                  "right": 15,
+                  "left": 15
+                },
+                "actions": [
+                  {
+                    "log_id": "set_top_pos",
+                    "url": "div-action://set_variable?name=position&value=top"
+                  }
+                ],
+                "id": "set_top_position"
+              },
+              {
+                "type": "button",
+                "text": "Set right position",
+                "margins": {
+                  "top": 15,
+                  "right": 15,
+                  "left": 15
+                },
+                "actions": [
+                  {
+                    "log_id": "set_right_pos",
+                    "url": "div-action://set_variable?name=position&value=right"
+                  }
+                ],
+                "id": "set_right_position"
+              },
+              {
+                "type": "button",
+                "text": "Set left position",
+                "margins": {
+                  "top": 15,
+                  "right": 15,
+                  "left": 15
+                },
+                "actions": [
+                  {
+                    "log_id": "set_left_pos",
+                    "url": "div-action://set_variable?name=position&value=left"
+                  }
+                ],
+                "id": "set_left_position"
+              },
+              {
+                "type": "button",
+                "text": "Set center position",
+                "margins": {
+                  "top": 15,
+                  "right": 15,
+                  "left": 15
+                },
+                "actions": [
+                  {
+                    "log_id": "set_center_pos",
+                    "url": "div-action://set_variable?name=position&value=center"
+                  }
+                ],
+                "id": "set_center_position"
+              },
+              {
+                "type": "button",
+                "text": "Restore bottom position",
+                "margins": {
+                  "top": 15,
+                  "right": 15,
+                  "left": 15
+                },
+                "actions": [
+                  {
+                    "log_id": "restore_bottom_pos",
+                    "url": "div-action://set_variable?name=position&value=bottom"
+                  }
+                ],
+                "id": "restore_bottom_position"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "set_top_position"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "show_positioned_tooltip"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "top_tooltip"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "close_positioned_tooltip"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "set_right_position"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "show_positioned_tooltip"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "right_tooltip"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "close_positioned_tooltip"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "set_left_position"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "show_positioned_tooltip"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "left_tooltip"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "close_positioned_tooltip"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "set_center_position"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "show_positioned_tooltip"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "center_tooltip"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "close_positioned_tooltip"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "restore_bottom_position"
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "show_positioned_tooltip"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "bottom_tooltip"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "close_positioned_tooltip"
+      }
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+{
+  "description": "#117 Tooltips: close the tooltip using its original cross action. Verify visibility/disappear logs and the tooltip snapshot, then compare the restored card with the same initial snapshot. Tapping outside is not covered; its necessity is pending discussion. Animation progress is not verified. All snapshots capture the page without an element target.",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "margins": {
+          "top": 16,
+          "left": 12,
+          "right": 12,
+          "bottom": 96
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alpha": 1,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center",
+        "height": {
+          "type": "fixed",
+          "value": 96
+        }
+      }
+    },
+    "card": {
+      "log_id": "visibility",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "button",
+                "text": "Tooltip with close button",
+                "tooltips": [
+                  {
+                    "id": "tooltip",
+                    "position": "bottom",
+                    "duration": 0,
+                    "offset": {
+                      "x": {
+                        "value": 0
+                      },
+                      "y": {
+                        "value": 4
+                      }
+                    },
+                    "div": {
+                      "type": "container",
+                      "orientation": "overlap",
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "items": [
+                        {
+                          "type": "container",
+                          "width": {
+                            "type": "wrap_content"
+                          },
+                          "paddings": {
+                            "left": 20,
+                            "top": 20,
+                            "right": 20,
+                            "bottom": 20
+                          },
+                          "items": [
+                            {
+                              "type": "text",
+                              "width": {
+                                "type": "wrap_content"
+                              },
+                              "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                              },
+                              "background": [
+                                {
+                                  "type": "solid",
+                                  "color": "#799eb7"
+                                }
+                              ],
+                              "border": {
+                                "corner_radius": 6
+                              },
+                              "font_size": 18,
+                              "text_color": "#2C3E50",
+                              "text": "Title tooltip"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "image",
+                          "width": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "height": {
+                            "type": "fixed",
+                            "value": 48
+                          },
+                          "paddings": {
+                            "left": 12,
+                            "right": 12,
+                            "top": 12,
+                            "bottom": 12
+                          },
+                          "action": {
+                            "log_id": "hide_close_button_tooltip",
+                            "url": "div-action://hide_tooltip?id=tooltip"
+                          },
+                          "image_url": "https://yastatic.net/s3/home/div/div_fullscreens/cross2.3.png",
+                          "tint_color": "#000000",
+                          "alignment_horizontal": "left",
+                          "alignment_vertical": "top",
+                          "id": "tooltip_close"
+                        }
+                      ],
+                      "visibility_actions": [
+                        {
+                          "log_id": "close_button_tooltip_visible",
+                          "visibility_duration": 0,
+                          "visibility_percentage": 100
+                        }
+                      ],
+                      "disappear_actions": [
+                        {
+                          "log_id": "close_button_tooltip_disappeared",
+                          "disappear_duration": 0,
+                          "visibility_percentage": 20
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "actions": [
+                  {
+                    "log_id": "show_close_button_tooltip",
+                    "url": "div-action://show_tooltip?id=tooltip&multiple=true"
+                  }
+                ],
+                "id": "show_tooltip_close_button"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_snapshot",
+      "name": "initial"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "show_tooltip_close_button"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "with_close_button_tooltip"
+    },
+    {
+      "type": "verify_log",
+      "source": "visibility",
+      "id": "close_button_tooltip_visible",
+      "count": 1
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "tooltip_close"
+      }
+    },
+    {
+      "type": "verify_log",
+      "source": "disappear",
+      "id": "close_button_tooltip_disappeared",
+      "count": 1
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "initial"
+    }
+  ]
+}

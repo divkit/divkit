@@ -435,7 +435,8 @@ public final class DivKitComponents {
       persistentValuesStorage: persistentValuesStorageInternal,
       tooltipViewFactory: DivTooltipViewFactory(
         divKitComponents: self,
-        cardId: cardId
+        cardId: cardId,
+        widcardExtensionHandlers: debugParams.widcardExtensionHandlers
       ),
       layoutProviderHandler: layoutProviderHandler,
       idToPath: idToPath,

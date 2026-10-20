@@ -3,13 +3,16 @@ import VGSL
 struct DivTooltipViewFactory {
   private let divKitComponents: DivKitComponents
   private let cardId: DivCardID
+  private let widcardExtensionHandlers: [DivExtensionHandler]
 
   init(
     divKitComponents: DivKitComponents,
-    cardId: DivCardID
+    cardId: DivCardID,
+    widcardExtensionHandlers: [DivExtensionHandler] = []
   ) {
     self.divKitComponents = divKitComponents
     self.cardId = cardId
+    self.widcardExtensionHandlers = widcardExtensionHandlers
   }
 
   #if os(iOS)
@@ -52,7 +55,10 @@ struct DivTooltipViewFactory {
         kind: .divData(divData),
         cardId: cardId,
         tooltip: tooltip
-      )
+      ),
+      // Tooltips share the host's card id. Only inherit wildcard handlers to avoid
+      // replacing the host's error storage or reporting tooltip timings as card timings.
+      debugParams: DebugParams(widcardExtensionHandlers: widcardExtensionHandlers)
     )
     return view
   }

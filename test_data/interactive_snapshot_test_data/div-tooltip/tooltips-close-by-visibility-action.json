@@ -1,0 +1,235 @@
+{
+  "description": "#117 Tooltips: close the tooltip through its original visibility action (hide_tooltip after 3000 ms); tooltip duration remains 0. Verify the tooltip snapshot, visibility/disappear logs and status changes from false to true, then snapshot the card after disappearance. Tapping outside is not covered; its necessity is pending discussion. Animation progress is not verified. All snapshots capture the page without an element target.",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "margins": {
+          "top": 16,
+          "left": 12,
+          "right": 12,
+          "bottom": 96
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alpha": 1,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center",
+        "height": {
+          "type": "fixed",
+          "value": 96
+        }
+      }
+    },
+    "card": {
+      "log_id": "visibility",
+      "variables": [
+        {
+          "type": "string",
+          "name": "visibility_called",
+          "value": "false"
+        },
+        {
+          "type": "string",
+          "name": "disappear_called",
+          "value": "false"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "button",
+                "text": "Tooltip closed by visibility action",
+                "tooltips": [
+                  {
+                    "id": "tooltip_with_visibility",
+                    "position": "bottom",
+                    "duration": 0,
+                    "offset": {
+                      "x": {
+                        "value": 0
+                      },
+                      "y": {
+                        "value": 4
+                      }
+                    },
+                    "div": {
+                      "type": "container",
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "paddings": {
+                        "left": 16,
+                        "top": 16,
+                        "right": 16,
+                        "bottom": 16
+                      },
+                      "items": [
+                        {
+                          "type": "text",
+                          "width": {
+                            "type": "wrap_content"
+                          },
+                          "paddings": {
+                            "left": 16,
+                            "top": 16,
+                            "right": 16,
+                            "bottom": 16
+                          },
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#799eb7"
+                            }
+                          ],
+                          "border": {
+                            "corner_radius": 6
+                          },
+                          "font_size": 18,
+                          "text_color": "#2C3E50",
+                          "text": "Title tooltip"
+                        }
+                      ],
+                      "visibility_actions": [
+                        {
+                          "log_id": "visibility_action_tooltip_hide",
+                          "url": "div-action://hide_tooltip?id=tooltip_with_visibility",
+                          "log_limit": 0,
+                          "visibility_duration": 3000,
+                          "visibility_percentage": 100
+                        },
+                        {
+                          "log_id": "visibility_action_tooltip_visible",
+                          "url": "div-action://set_variable?name=visibility_called&value=true",
+                          "log_limit": 0,
+                          "visibility_duration": 0,
+                          "visibility_percentage": 100
+                        }
+                      ],
+                      "disappear_actions": [
+                        {
+                          "log_id": "visibility_action_tooltip_disappeared",
+                          "log_limit": 0,
+                          "disappear_duration": 0,
+                          "visibility_percentage": 20,
+                          "url": "div-action://set_variable?name=disappear_called&value=true"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "actions": [
+                  {
+                    "log_id": "show_actions_tooltip",
+                    "url": "div-action://show_tooltip?id=tooltip_with_visibility&multiple=true"
+                  }
+                ],
+                "id": "show_tooltip_with_visibility"
+              },
+              {
+                "type": "text",
+                "text": "Visibility action called: @{visibility_called}",
+                "id": "visibility_action_status"
+              },
+              {
+                "type": "text",
+                "text": "Disappear action called: @{disappear_called}",
+                "id": "disappear_action_status"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "visibility_action_status"
+      },
+      "text": "Visibility action called: false"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "disappear_action_status"
+      },
+      "text": "Disappear action called: false"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "show_tooltip_with_visibility"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "close_by_visibility_action_tooltip"
+    },
+    {
+      "type": "verify_log",
+      "source": "visibility",
+      "id": "visibility_action_tooltip_visible",
+      "count": 1
+    },
+    {
+      "type": "verify_log",
+      "source": "disappear",
+      "id": "visibility_action_tooltip_disappeared",
+      "count": 0
+    },
+    {
+      "type": "verify_log",
+      "source": "visibility",
+      "id": "visibility_action_tooltip_hide",
+      "count": 1
+    },
+    {
+      "type": "verify_log",
+      "source": "disappear",
+      "id": "visibility_action_tooltip_disappeared",
+      "count": 1
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "disappear_action_status"
+      },
+      "text": "Disappear action called: true"
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "disappeared"
+    }
+  ]
+}

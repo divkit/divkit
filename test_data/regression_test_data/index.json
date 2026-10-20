@@ -3515,6 +3515,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "Tooltips",
         "visibility_actions",
@@ -3533,6 +3536,9 @@
     {
       "title": "Tooltips",
       "case_id": 117,
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "Tooltips",
         "visibility_actions"
@@ -3580,6 +3586,9 @@
     {
       "title": "Tooltip on different positions",
       "platforms": [
+        "ios"
+      ],
+      "automated": [
         "ios"
       ],
       "tags": [
@@ -3647,6 +3656,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "Tooltips"
       ],
@@ -3689,6 +3701,9 @@
         "android",
         "ios",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "Tooltips"
