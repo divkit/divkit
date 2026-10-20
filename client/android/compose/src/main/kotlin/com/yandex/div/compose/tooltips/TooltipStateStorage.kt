@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.geometry.Rect
 import com.yandex.div.compose.dagger.DivViewScope
@@ -17,11 +16,11 @@ import javax.inject.Inject
 /**
  * Tracks tooltips currently requested to be shown for a given [com.yandex.div.compose.DivView].
  *
- * The state is backed by a [SnapshotStateMap] so that composables observing
- * [isShown] or [shownTooltipIds] are automatically recomposed when the set of
- * active tooltips changes.
+ * The state is backed by Compose snapshot collections so that composables observing
+ * anchors or [shownTooltipIds] are automatically recomposed when they change.
  */
 @DivViewScope
+@Suppress("TooManyFunctions")
 internal class TooltipStateStorage @Inject constructor() {
     private val anchors = mutableStateMapOf<String, TooltipAnchorEntry>()
     private val shownTooltips = mutableStateSetOf<String>()
@@ -36,8 +35,12 @@ internal class TooltipStateStorage @Inject constructor() {
         shownTooltips.add(id)
     }
 
-    fun hide(id: String) {
-        shownTooltips.remove(id)
+    fun hide(id: String): Boolean {
+        return shownTooltips.remove(id)
+    }
+
+    fun cancelAll() {
+        shownTooltips.clear()
     }
 
     fun isShown(id: String): Boolean {
@@ -53,7 +56,17 @@ internal class TooltipStateStorage @Inject constructor() {
     }
 
     fun unregister(entry: TooltipAnchorEntry) {
-        anchors.remove(entry.tooltip.id)
+        if (anchors[entry.tooltip.id] === entry) {
+            anchors.remove(entry.tooltip.id)
+        }
+    }
+
+    internal fun availableTooltipIds(): Set<String> = anchors.values
+        .filter { it.bounds.value != null }
+        .mapTo(mutableSetOf()) { it.tooltip.id }
+
+    fun isAvailable(id: String): Boolean {
+        return getAnchor(id)?.bounds?.value != null
     }
 
     fun getAnchor(id: String): TooltipAnchorEntry? {

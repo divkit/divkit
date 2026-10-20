@@ -39,6 +39,7 @@ import kotlinx.coroutines.launch
  * }
  * ```
  */
+@Suppress("TooManyFunctions")
 class DivViewHost(
     internal val divContext: DivContext,
     attrs: AttributeSet? = null,

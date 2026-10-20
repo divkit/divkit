@@ -11,6 +11,7 @@ import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.patch.DivPatcher
 import com.yandex.div.compose.preload.PreloadResult
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
+import com.yandex.div.compose.tooltips.DivTooltipController
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div2.DivData
@@ -60,6 +61,13 @@ class DivContext private constructor(
     /** Returns a stored-values storage bound to [cardId]. */
     fun getStoredValuesStorage(cardId: String): DivStoredValuesStorage =
         component.storedValuesStorageFactory.create(cardId)
+
+    /**
+     * Returns the tooltip controller for an existing [DivView] context bound to [cardId], or
+     * `null` when that card's context does not exist.
+     */
+    fun getTooltipController(cardId: String): DivTooltipController? =
+        component.viewContextStorage.get(cardId)?.component?.tooltipController
 
     /**
      * Starts preloading resources for the given [DivData] and suspends until complete.

@@ -12,11 +12,12 @@ fun data(
     functions: List<DivFunction>? = null,
     timers: List<DivTimer>? = null,
     triggers: List<DivTrigger>? = null,
-    variables: List<DivVariable>? = null
+    variables: List<DivVariable>? = null,
+    logId: String = "test",
 ): DivData {
     return DivData(
         functions = functions,
-        logId = "test",
+        logId = logId,
         states = listOf(
             DivData.State(
                 stateId = 0,
@@ -34,11 +35,12 @@ fun data(
     functions: List<DivFunction>? = null,
     timers: List<DivTimer>? = null,
     triggers: List<DivTrigger>? = null,
-    variables: List<DivVariable>? = null
+    variables: List<DivVariable>? = null,
+    logId: String = "test",
 ): DivData {
     return DivData(
         functions = functions,
-        logId = "test",
+        logId = logId,
         states = states,
         timers = timers,
         variables = variables,

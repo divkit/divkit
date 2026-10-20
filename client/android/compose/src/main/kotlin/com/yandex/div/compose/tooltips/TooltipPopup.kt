@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -52,8 +53,10 @@ import kotlinx.coroutines.delay
 internal fun TooltipPopup(
     anchorEntry: TooltipAnchorEntry,
     isVisible: Boolean,
+    onShown: () -> Unit,
     onDismissRequested: () -> Unit,
     onHidden: () -> Unit,
+    onDismissed: () -> Unit,
 ) {
     val context = LocalContext.current
     val underlyingView = LocalView.current.rootView
@@ -87,12 +90,7 @@ internal fun TooltipPopup(
     )
 
     Popup(
-        properties = PopupProperties(
-            focusable = isModal,
-            dismissOnBackPress = true,
-            dismissOnClickOutside = closeByTapOutside || isModal,
-            clippingEnabled = false
-        ),
+        properties = tooltipPopupProperties(isModal, closeByTapOutside),
         popupPositionProvider = positionProvider,
         onDismissRequest = onTapOutside,
     ) {
@@ -101,6 +99,7 @@ internal fun TooltipPopup(
             LocalTooltipContent provides true,
             LocalTooltipTouchDispatcher provides touchDispatcher,
         ) {
+            TooltipLifecycleEffect(tooltip.id, onShown, onDismissed)
             TooltipPopupContent(
                 tooltip = tooltip,
                 positionProvider = positionProvider,
@@ -110,6 +109,25 @@ internal fun TooltipPopup(
                 onTapOutside = onTapOutside,
             )
         }
+    }
+}
+
+private fun tooltipPopupProperties(isModal: Boolean, closeByTapOutside: Boolean) = PopupProperties(
+    focusable = isModal,
+    dismissOnBackPress = true,
+    dismissOnClickOutside = closeByTapOutside || isModal,
+    clippingEnabled = false,
+)
+
+@Composable
+private fun TooltipLifecycleEffect(
+    tooltipId: String,
+    onShown: () -> Unit,
+    onDismissed: () -> Unit,
+) {
+    DisposableEffect(tooltipId) {
+        onShown()
+        onDispose(onDismissed)
     }
 }
 

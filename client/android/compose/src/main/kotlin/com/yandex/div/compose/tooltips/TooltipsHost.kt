@@ -13,7 +13,9 @@ import com.yandex.div.compose.context.LocalDivViewContext
  */
 @Composable
 internal fun TooltipsHost() {
-    val tooltipStateStorage = LocalDivViewContext.current.component.tooltipStateStorage
+    val component = LocalDivViewContext.current.component
+    val tooltipController = component.tooltipController
+    val tooltipStateStorage = component.tooltipStateStorage
     val shownIds = tooltipStateStorage.shownTooltipIds()
 
     // Local list of ids currently in composition. Includes ids that have been
@@ -35,8 +37,10 @@ internal fun TooltipsHost() {
             TooltipPopup(
                 anchorEntry = anchorEntry,
                 isVisible = id in shownIds,
+                onShown = { tooltipController.onShown(id) },
                 onDismissRequested = { tooltipStateStorage.hide(id) },
                 onHidden = { displayedIds.remove(id) },
+                onDismissed = { tooltipController.onDismissed(id) },
             )
         }
     }

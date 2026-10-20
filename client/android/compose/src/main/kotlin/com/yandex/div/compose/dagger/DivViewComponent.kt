@@ -18,6 +18,7 @@ import com.yandex.div.compose.patch.DivPatchDownloadManager
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.compose.timers.TimerStorage
+import com.yandex.div.compose.tooltips.DivTooltipController
 import com.yandex.div.compose.tooltips.TooltipStateStorage
 import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -52,6 +53,7 @@ internal interface DivViewComponent {
     val storedValuesStorage: DivStoredValuesStorage
     val submitActionHandler: SubmitActionHandler
     val timerStorage: TimerStorage
+    val tooltipController: DivTooltipController
     val tooltipStateStorage: TooltipStateStorage
     val videoPlayerStorage: VideoPlayerStorage
     val visibilityActionTracker: VisibilityActionTracker
