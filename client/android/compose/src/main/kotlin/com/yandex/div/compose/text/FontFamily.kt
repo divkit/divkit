@@ -1,10 +1,13 @@
 package com.yandex.div.compose.text
 
+import android.graphics.Typeface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.resolveAsTypeface
 import com.yandex.div.compose.context.divContext
 import com.yandex.div2.DivFontWeight
 import org.json.JSONObject
@@ -23,6 +26,24 @@ internal fun rememberFontFamily(
         val variations = buildFontVariationSettings(fontWeight, fontWeightValue, fontVariationSettings)
         val source = provider.getFontSource(fontFamily, weight)
         cache.getOrCreate(source, weight, variations)
+    }
+}
+
+/**
+ * The platform typeface of the font that [rememberFontFamily] resolves for the same inputs,
+ * for text drawn with a native [android.graphics.Paint] instead of a Compose text composable.
+ */
+@Composable
+internal fun rememberTypeface(
+    fontFamily: String?,
+    fontWeight: DivFontWeight?,
+    fontWeightValue: Int?,
+    fontVariationSettings: JSONObject? = null,
+): Typeface {
+    val family = rememberFontFamily(fontFamily, fontWeight, fontWeightValue, fontVariationSettings)
+    val resolver = LocalFontFamilyResolver.current
+    return remember(family, resolver) {
+        resolver.resolveAsTypeface(family, fontWeight.toFontWeight(fontWeightValue) ?: FontWeight.Normal).value
     }
 }
 

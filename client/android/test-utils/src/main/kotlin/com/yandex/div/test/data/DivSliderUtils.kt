@@ -25,6 +25,10 @@ fun slider(
     accessibility: DivAccessibility? = null,
     pressStartActions: List<DivAction>? = null,
     pressEndActions: List<DivAction>? = null,
+    thumbTextStyle: DivSlider.TextStyle? = null,
+    thumbSecondaryValueVariable: String? = null,
+    thumbSecondaryTextStyle: DivSlider.TextStyle? = null,
+    tickMarkStyle: DivDrawable? = null,
 ): Div {
     val drawable =
         DivDrawable.Shape(
@@ -33,7 +37,7 @@ fun slider(
                 shape = DivShape.Circle(DivCircleShape()),
             ),
         )
-    val tickMark = drawable.takeIf { hasTickMarks }
+    val tickMark = tickMarkStyle ?: drawable.takeIf { hasTickMarks }
     return Div.Slider(
         DivSlider(
             accessibility = accessibility,
@@ -44,7 +48,10 @@ fun slider(
             minValue = constant(minValue),
             pressEndActions = pressEndActions,
             pressStartActions = pressStartActions,
+            thumbSecondaryTextStyle = thumbSecondaryTextStyle,
+            thumbSecondaryValueVariable = thumbSecondaryValueVariable,
             thumbStyle = drawable,
+            thumbTextStyle = thumbTextStyle,
             thumbValueVariable = thumbValueVariable,
             tickMarkActiveStyle = tickMark,
             tickMarkInactiveStyle = tickMark,

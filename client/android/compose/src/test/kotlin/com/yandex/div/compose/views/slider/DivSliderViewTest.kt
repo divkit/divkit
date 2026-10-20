@@ -1,6 +1,8 @@
 package com.yandex.div.compose.views.slider
 
+import android.graphics.Color
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.test.assertHeightIsEqualTo
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.v2.createComposeRule
@@ -28,7 +30,12 @@ import com.yandex.div.test.data.slider
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivDrawable
+import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivGallery
+import com.yandex.div2.DivRoundedRectangleShape
+import com.yandex.div2.DivShape
+import com.yandex.div2.DivShapeDrawable
 import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
@@ -274,6 +281,28 @@ class DivSliderViewTest {
 
         assertEquals(50L, value.getValue())
         assertEquals(emptyList(), actionHandler.handledActions)
+    }
+
+    @Test
+    fun `wrap_content height includes tick marks taller than the thumb`() {
+        setContent(
+            slider(
+                id = "slider",
+                tickMarkStyle = DivDrawable.Shape(
+                    DivShapeDrawable(
+                        color = constant(Color.BLACK),
+                        shape = DivShape.RoundedRectangle(
+                            DivRoundedRectangleShape(
+                                itemHeight = DivFixedSize(value = constant(40L)),
+                                itemWidth = DivFixedSize(value = constant(6L)),
+                            )
+                        ),
+                    )
+                ),
+            )
+        )
+
+        rule.onNodeWithTag("slider").assertHeightIsEqualTo(40.dp)
     }
 
     private fun setContent(

@@ -9,6 +9,7 @@ import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.text.rememberTypeface
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.utils.observedValue
@@ -17,7 +18,6 @@ import com.yandex.div.compose.utils.toPx
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivCircleShape
 import com.yandex.div2.DivDrawable
-import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivRoundedRectangleShape
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivShapeDrawable
@@ -151,7 +151,7 @@ internal fun DivSlider.observeSliderStyles(
         activeTickMark = tickMarkActiveStyle?.observeDrawable(),
         inactiveTickMark = tickMarkInactiveStyle?.observeDrawable(),
         thumbText = thumbTextStyle?.observeTextStyle(),
-        secondaryThumbText = thumbSecondaryTextStyle?.observeTextStyle(),
+        secondaryThumbText = if (hasSecondary) thumbSecondaryTextStyle?.observeTextStyle() else null,
         ranges = ranges?.map {
             it.observeRange(
                 activeTrack,
@@ -250,24 +250,18 @@ private fun DivStroke.observeStroke(): SliderStroke {
 @Composable
 private fun DivSlider.TextStyle.observeTextStyle(): SliderTextStyle {
     val size = fontSize.observedPxValue(fontSizeUnit)
-    val weight = fontWeightValue?.observedIntValue()
-        ?: fontWeight?.observedValue()?.toTypefaceWeight()
-        ?: Typeface.NORMAL
     return SliderTextStyle(
         fontSize = size,
         letterSpacing = letterSpacing.observedFloatValue() / fontSize.observedValue()
             .coerceAtLeast(1L),
-        typeface = Typeface.create(fontFamily?.observedValue(), weight),
+        typeface = rememberTypeface(
+            fontFamily = fontFamily?.observedValue(),
+            fontWeight = fontWeight?.observedValue(),
+            fontWeightValue = fontWeightValue?.observedIntValue(),
+            fontVariationSettings = fontVariationSettings?.observedValue(),
+        ),
         offsetX = offset?.x?.observedPxValue() ?: 0f,
         offsetY = offset?.y?.observedPxValue() ?: 0f,
         color = textColor.observedValue()
     )
-}
-
-private fun DivFontWeight.toTypefaceWeight(): Int = when (this) {
-    DivFontWeight.LIGHT,
-    DivFontWeight.REGULAR,
-    DivFontWeight.MEDIUM -> Typeface.NORMAL
-
-    DivFontWeight.BOLD -> Typeface.BOLD
 }
