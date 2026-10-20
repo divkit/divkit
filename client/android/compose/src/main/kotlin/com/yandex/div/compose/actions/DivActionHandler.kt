@@ -10,7 +10,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStopTemplate
 import com.yandex.div2.DivActionExtensionAction
-import com.yandex.div2.DivActionFocusElement
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollTo
 import com.yandex.div2.DivActionSetCursorPosition
@@ -32,6 +31,7 @@ internal class DivActionHandler @Inject constructor(
     private val copyToClipboardActionHandler: CopyToClipboardActionHandler,
     private val dictSetValueActionHandler: DictSetValueActionHandler,
     private val downloadActionHandler: DownloadActionHandler,
+    private val focusElementActionHandler: FocusElementActionHandler,
     private val setStateActionHandler: SetStateActionHandler,
     private val setStoredValueActionHandler: SetStoredValueActionHandler,
     private val setVariableActionHandler: SetVariableActionHandler,
@@ -194,7 +194,8 @@ internal class DivActionHandler @Inject constructor(
                 downloadActionHandler.handle(context, action.value)
 
             is DivActionTyped.ExtensionAction -> notSupported(DivActionExtensionAction.TYPE)
-            is DivActionTyped.FocusElement -> notSupported(DivActionFocusElement.TYPE)
+            is DivActionTyped.FocusElement ->
+                focusElementActionHandler.handle(context, action.value)
 
             is DivActionTyped.HideTooltip ->
                 tooltipActionHandler.handle(context, action.value)

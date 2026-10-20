@@ -10,11 +10,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.focus.FocusBindingStorage
@@ -56,12 +59,30 @@ internal fun Modifier.focus(
         reportError("focus.next_focus_ids not supported")
     }
 
-    val modifier = observeFocusChanges(data, state).inheritFocusVisibility()
+    // Inputs bind their text field as the focus target themselves.
+    val targetId = data.value().id.takeUnless { data is Div.Input }
+    val modifier = observeFocusChanges(data, state).inheritFocusVisibility().let {
+        if (targetId == null) it else it.bindFocusTarget(targetId)
+    }
     return when {
         hasActions || data is Div.Select -> modifier.focusProperties { canFocus = focus != null }
         focus == null || data.isFocusable -> modifier
         else -> modifier.focusable()
     }
+}
+
+@Composable
+internal fun Modifier.bindFocusTarget(
+    id: String?,
+    requester: FocusRequester = remember { FocusRequester() },
+): Modifier {
+    if (id == null) return this.focusRequester(requester)
+    val storage = LocalDivViewContext.current.component.focusBindingStorage
+    DisposableEffect(storage, id, requester) {
+        storage.register(id, requester)
+        onDispose { storage.unregister(id) }
+    }
+    return this.focusRequester(requester)
 }
 
 private val Div.isFocusable: Boolean

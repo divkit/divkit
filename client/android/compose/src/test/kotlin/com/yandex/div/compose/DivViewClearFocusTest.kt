@@ -28,6 +28,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.test.data.action
+import com.yandex.div.test.data.clearFocusAction
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.input
@@ -35,8 +36,6 @@ import com.yandex.div.test.data.slider
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.trigger
 import com.yandex.div.test.data.variable
-import com.yandex.div2.DivActionClearFocus
-import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivData
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivTrigger
@@ -81,7 +80,7 @@ class DivViewClearFocusTest {
             configuration = DivConfiguration(actionHandler = actions, reporter = reporter),
         )
     }
-    private val clearAction = action(typed = DivActionTyped.ClearFocus(DivActionClearFocus()))
+    private val clearAction = action(typed = clearFocusAction())
 
     @Test
     fun `clear focus blurs the focused input once`() {
@@ -123,7 +122,7 @@ class DivViewClearFocusTest {
 
         rule.runOnIdle {
             divContext.debugFeatures.performAction(card,
-                action(isEnabled = false, typed = DivActionTyped.ClearFocus(DivActionClearFocus())))
+                action(isEnabled = false, typed = clearFocusAction()))
         }
 
         inputNode("input").assertIsFocused()

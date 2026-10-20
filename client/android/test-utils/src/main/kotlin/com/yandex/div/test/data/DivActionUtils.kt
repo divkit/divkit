@@ -9,11 +9,13 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
+import com.yandex.div2.DivActionClearFocus
 import com.yandex.div2.DivActionCopyToClipboard
 import com.yandex.div2.DivActionCopyToClipboardContent
 import com.yandex.div2.DivActionCustom
 import com.yandex.div2.DivActionDictSetValue
 import com.yandex.div2.DivActionDownload
+import com.yandex.div2.DivActionFocusElement
 import com.yandex.div2.DivActionHaptic
 import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionScrollBy
@@ -119,6 +121,8 @@ fun arraySetValueAction(
     )
 }
 
+fun clearFocusAction(): DivActionTyped = DivActionTyped.ClearFocus(DivActionClearFocus())
+
 fun copyTextToClipboardAction(value: String): DivActionTyped =
     copyTextToClipboardAction(constant(value))
 
@@ -161,6 +165,14 @@ fun dictSetValueAction(
             value = value,
             variableName = constant(name)
         )
+    )
+}
+
+fun focusElementAction(id: String): DivActionTyped = focusElementAction(constant(id))
+
+fun focusElementAction(id: Expression<String>): DivActionTyped {
+    return DivActionTyped.FocusElement(
+        DivActionFocusElement(elementId = id)
     )
 }
 

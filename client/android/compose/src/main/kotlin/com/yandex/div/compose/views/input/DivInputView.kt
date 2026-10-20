@@ -23,7 +23,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.text.TextStyle
@@ -38,6 +37,7 @@ import com.yandex.div.compose.views.input.mask.InputMask
 import com.yandex.div.compose.views.input.mask.PhoneInputMask
 import com.yandex.div.compose.views.input.mask.rememberCurrencyInputMask
 import com.yandex.div.compose.views.input.mask.rememberFixedLengthInputMask
+import com.yandex.div.compose.views.modifiers.bindFocusTarget
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivInput
@@ -138,7 +138,7 @@ private fun InputTextField(
     KeepFocusAcrossPasswordSwitch(field, isPassword, isFocused, enabled, focusRequester)
     SelectAllOnFocus(field, isFocused, data.selectAllOnFocus.observedValue())
 
-    val fieldModifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
+    val fieldModifier = Modifier.fillMaxWidth().bindFocusTarget(data.id, focusRequester)
     if (isPassword) {
         BasicSecureTextField(
             state = field,

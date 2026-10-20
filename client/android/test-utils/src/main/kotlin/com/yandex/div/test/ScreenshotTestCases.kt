@@ -215,6 +215,7 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
 
 val composeRoborazziInteractiveScreenshotCases = setOf(
     "div-action/base.json",
+    "div-action/focus-actions.json",
     "div-action/is-enabled.json",
     "div-action/set-state-no-screenshot.json",
     "div-action/set-variable.json",
