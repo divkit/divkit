@@ -29,7 +29,7 @@ class ScreenshotRule(
                 val view = waitForView(screenshot.viewTag)
                 beforeScreenshotTakenAction?.invoke()
 
-                captureScreenshots(view, suiteName, casePath, screenshot.name, expectedSuite = expectedSuite)
+                captureScreenshots(view, suiteName, casePath, expectedSuite = expectedSuite)
             }
         }
     }

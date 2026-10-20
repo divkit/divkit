@@ -23,16 +23,13 @@ fun captureScreenshots(
     view: View,
     artifactsRelativePath: String,
     casePath: String,
-    screenshotName: String = "",
     stepId: Int? = null,
     expectedScreenshot: String = "",
     expectedSuite: String = "",
 ) {
-    val (suiteName, caseName) = when {
-        screenshotName.isNotEmpty() -> artifactsRelativePath to screenshotName
-        stepId != null -> "$artifactsRelativePath/${casePath.caseName}" to "step$stepId"
-        else -> artifactsRelativePath to casePath.caseName
-    }
+    val (suiteName, caseName) =
+        stepId?.let { "$artifactsRelativePath/${casePath.caseName}" to "step$it" }
+            ?: (artifactsRelativePath to casePath.caseName)
 
     if (!propertiesSaved.getAndSet(true)) {
         saveDeviceProperties(view.context)

@@ -3,8 +3,6 @@ package com.yandex.div.test
 const val SNAPSHOT_TEST_CASES_PATH = "snapshot_test_data"
 const val INTERACTIVE_SCREENSHOT_CASES_PATH = "interactive_snapshot_test_data"
 const val IMAGE_LOADER_SCREENSHOT_CASES_PATH = "ui_test_data/image-loaders"
-const val INPUT_HIGHLIGHT_SCREENSHOT_CASES_PATH = "ui_test_data/input"
-const val INPUT_HIGHLIGHT_SCREENSHOT_CASE = "div_input_highlight.json"
 
 /**
  * Static cases excluded from JVM View screenshot tests. Roborazzi is the default runner.

@@ -5,5 +5,4 @@ package com.yandex.test.screenshot
 annotation class Screenshot(
     val viewTag: String = SCREENSHOT_VIEW_TAG,
     val relativePath: String = "",
-    val name: String = ""
 )
