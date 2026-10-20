@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.animations
 
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
@@ -71,25 +70,25 @@ internal fun capturePosition(transitionValues: TransitionValues, savePosition: (
 
 internal fun DivAnimation.asTouchListener(
     expressionResolver: ExpressionResolver,
-    view: View
-): ((View, MotionEvent) -> Unit)? {
+    view: View,
+    preserveGesture: Boolean,
+): TouchAnimationListener? {
     val directAnimation = toAnimation(expressionResolver, view = view)
     val reverseAnimation = toAnimation(expressionResolver, reverse = true)
 
+    val binding = view.getTag(R.id.div_touch_animation_binding) as? TouchAnimationBinding
+    if (preserveGesture && view.isAttachedToWindow && view.isShown && binding != null
+        && (directAnimation != null || reverseAnimation != null)) {
+        binding.updateAnimations(directAnimation, reverseAnimation)
+        return binding
+    }
+
+    view.disposeTouchAnimationBinding()
     if (directAnimation == null && reverseAnimation == null) {
         return null
     }
 
-    return { v, event ->
-        if (v.isEnabled && v.isClickable && v.hasOnClickListeners()) {
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> directAnimation?.let { v.startAnimation(it) }
-                MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> reverseAnimation?.let {
-                    v.startAnimation(it)
-                }
-            }
-        }
-    }
+    return TouchAnimationBinding(view, directAnimation, reverseAnimation)
 }
 
 private fun DivAnimation.toAnimation(

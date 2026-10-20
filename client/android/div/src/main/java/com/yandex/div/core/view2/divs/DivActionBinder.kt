@@ -56,7 +56,7 @@ internal class DivActionBinder @Inject constructor(
         resolver: ExpressionResolver,
         divView: Div2View,
     ) {
-        val onApply = {
+        val onApplyActionsCallback = OnApplyActionsCallback { preserveGesture ->
             applyDivActions(
                 target = target,
                 actions = actions.orEmpty(),
@@ -70,15 +70,16 @@ internal class DivActionBinder @Inject constructor(
                 captureFocusOnAction = captureFocusOnAction,
                 resolver = resolver,
                 divView = divView,
+                preserveGesture = preserveGesture,
             )
         }
         with(target) {
-            observe(actions, resolver) { onApply() }
-            observe(longTapActions, resolver) { onApply() }
-            observe(doubleTapActions, resolver) { onApply() }
-            observe(captureFocusOnAction, resolver) { onApply() }
+            observe(actions, resolver) { onApplyActionsCallback.onApplyActions(preserveGesture = true) }
+            observe(longTapActions, resolver) { onApplyActionsCallback.onApplyActions(preserveGesture = true) }
+            observe(doubleTapActions, resolver) { onApplyActionsCallback.onApplyActions(preserveGesture = true) }
+            observe(captureFocusOnAction, resolver) { onApplyActionsCallback.onApplyActions(preserveGesture = true) }
         }
-        onApply()
+        onApplyActionsCallback.onApplyActions(preserveGesture = false)
     }
 
     private fun applyDivActions(
@@ -94,6 +95,7 @@ internal class DivActionBinder @Inject constructor(
         captureFocusOnAction: Expression<Boolean>,
         resolver: ExpressionResolver,
         divView: Div2View,
+        preserveGesture: Boolean,
     ) {
         val divGestureListener = DivGestureListener(
             awaitLongClick = longTapActions.isNotEmpty() || target.parentIsLongClickable()
@@ -117,6 +119,7 @@ internal class DivActionBinder @Inject constructor(
             divGestureListener,
             resolver,
             divView,
+            preserveGesture,
         )
         val pressTouchListener = createPressTouchListener(target, pressStartActions, pressEndActions, resolver, divView)
 
@@ -430,6 +433,10 @@ internal class DivActionBinder @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun interface OnApplyActionsCallback {
+        fun onApplyActions(preserveGesture: Boolean)
     }
 }
 

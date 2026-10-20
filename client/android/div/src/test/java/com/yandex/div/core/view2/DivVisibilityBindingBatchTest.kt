@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2
 
 import android.app.Activity
+import android.view.MotionEvent
 import android.view.View
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
@@ -10,6 +11,7 @@ import com.yandex.div.core.DivKit
 import com.yandex.div.core.TestComponent
 import com.yandex.div.core.extension.DivExtensionHandler
 import com.yandex.div.json.missingVariable
+import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -24,6 +26,7 @@ import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivGrid
 import com.yandex.div2.DivSightAction
+import com.yandex.div2.DivText
 import com.yandex.div2.DivVisibility
 import com.yandex.div2.DivVisibilityAction
 import org.junit.After
@@ -56,6 +59,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
@@ -448,6 +452,39 @@ class DivVisibilityBindingBatchTest {
         verify(tracker).trackVisibilityActionsOf(
             eq(divView), any(), anyOrNull(), eq(trackedText), eq(appearActions), eq(disappearActions),
         )
+    }
+
+    @Test
+    fun `hiding ancestor between down and up prevents child release animation`() {
+        divView.setData(data(
+            container(
+                id = "touch-parent", width = fixed(200), height = fixed(200),
+                visibility = visibilityExpression("@{$VISIBILITY_VARIABLE}"),
+                items = listOf(Div.Text(DivText(
+                    id = "touch-target", text = constant("Tap"),
+                    width = fixed(200), height = fixed(200),
+                    actions = listOf(action(url = "test://tap")),
+                ))),
+            ),
+            variables = listOf(variable(VISIBILITY_VARIABLE, VISIBLE)),
+        ), tag)
+        attachView()
+        val target = divView.findViewWithTag<View>("touch-target")
+        val down = MotionEvent.obtain(0L, 0L, MotionEvent.ACTION_DOWN, 50f, 50f, 0)
+        target.dispatchTouchEvent(down)
+        down.recycle()
+        val directAnimation = target.animation
+        divView.findViewWithTag<View>("touch-parent").visibility = View.INVISIBLE
+        divView.setVariable(VISIBILITY_VARIABLE, GONE)
+        divView.setVariable(VISIBILITY_VARIABLE, VISIBLE)
+
+        val up = MotionEvent.obtain(0L, 10L, MotionEvent.ACTION_UP, 50f, 50f, 0)
+        target.dispatchTouchEvent(up)
+        up.recycle()
+
+        assertNotNull(directAnimation)
+        assertEquals(View.VISIBLE, divView.findViewWithTag<View>("touch-parent").visibility)
+        assertNull(target.animation)
     }
 
     private fun containerData(visibility: DivVisibility) = data(

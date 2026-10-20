@@ -29,6 +29,8 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivGestureListener
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.asTouchListener
+import com.yandex.div.core.view2.animations.cancelTouchAnimation
+import com.yandex.div.core.view2.animations.disposeTouchAnimationBinding
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
@@ -251,8 +253,14 @@ internal fun View.createAnimatedTouchListener(
     divGestureListener: DivGestureListener?,
     resolver: ExpressionResolver,
     divView: Div2View,
+    preserveGesture: Boolean,
 ): ((View, MotionEvent) -> Boolean)? {
-    val animations = divAnimation?.asTouchListener(resolver, this)
+    val animations = if (divAnimation != null) {
+        divAnimation.asTouchListener(resolver, this, preserveGesture)
+    } else {
+        disposeTouchAnimationBinding()
+        null
+    }
 
     // Avoid creating GestureDetector if unnecessary cause it's expensive.
     val gestureDetector = divGestureListener
@@ -262,7 +270,9 @@ internal fun View.createAnimatedTouchListener(
     return if (animations != null || gestureDetector != null) {
         { v, event ->
             if (divView.div2Component.animationsEnabledController.isEnabled()) {
-                animations?.invoke(v, event)
+                animations?.onTouch(v, event)
+            } else {
+                cancelTouchAnimation()
             }
             gestureDetector?.onTouchEvent(event) ?: false
         }

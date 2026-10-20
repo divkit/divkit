@@ -5,6 +5,7 @@ import android.os.Build
 import android.view.View
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
+import androidx.transition.TransitionSet
 import androidx.transition.Visibility
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.tooltip.DivTooltipController
@@ -17,6 +18,9 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
+import com.yandex.div.core.view2.animations.cancelTouchAnimations
+import com.yandex.div.core.view2.animations.doOnEnd
+import com.yandex.div.core.view2.animations.forEach
 import com.yandex.div.core.view2.animations.suppressOverlayVisibilityRestore
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.DivHolderView
@@ -412,6 +416,7 @@ internal class DivBaseBinder @Inject constructor(
         }
 
         if (newVisibility != View.VISIBLE) {
+            cancelTouchAnimations()
             clearAnimation()
         }
 
@@ -456,6 +461,7 @@ internal class DivBaseBinder @Inject constructor(
         if (transition != null) {
             if (newVisibility != View.VISIBLE) {
                 suppressOverlayVisibilityRestore()
+                cancelTouchAnimationsOnTransitionEnd(transition)
             }
             divTransitionHandler.putTransition(
                 transition,
@@ -467,6 +473,17 @@ internal class DivBaseBinder @Inject constructor(
         }
 
         divView.trackChildrenVisibility()
+    }
+
+    private fun View.cancelTouchAnimationsOnTransitionEnd(transition: Transition) {
+        transition.doOnEnd {
+            if (!isShown) {
+                cancelTouchAnimations()
+            }
+        }
+        if (transition is TransitionSet) {
+            transition.forEach { innerTransition -> cancelTouchAnimationsOnTransitionEnd(innerTransition) }
+        }
     }
 
     //endregion
