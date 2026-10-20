@@ -5,17 +5,15 @@ package com.yandex.div.rule
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.Div2ScreenshotTest
-import com.yandex.div.steps.waitForLoadings
+import com.yandex.div.steps.waitForUiReady
+import com.yandex.div.test.chain
 import com.yandex.divkit.demo.screenshot.DivComposeScreenshotActivity
 import com.yandex.divkit.demo.screenshot.DivDataScreenshotActivity
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.idling.waitForIdlingResource
-import com.yandex.test.idling.waitForView
 import com.yandex.test.rules.ClosePopupsRule
 import com.yandex.test.rules.NoAnimationsRule
-import com.yandex.test.screenshot.SCREENSHOT_VIEW_TAG
 import com.yandex.test.screenshot.ScreenshotRule
-import com.yandex.test.util.chain
 import org.json.JSONObject
 import org.junit.rules.TestRule
 
@@ -38,7 +36,7 @@ fun screenshotRule(
     expectedSuite: String = "",
 ): TestRule {
     return screenshotRule(casePath, caseRoot, testCase, activityRule, relativePath, expectedSuite) {
-        waitForLoadings(waitForView(SCREENSHOT_VIEW_TAG))
+        waitForUiReady(activityRule.scenario)
     }
 }
 
@@ -63,10 +61,10 @@ private fun screenshotRule(
     activityRule: ActivityScenarioRule<out DivDataScreenshotActivity>,
     relativePath: String,
     expectedSuite: String,
-    waitForImages: () -> Unit
+    waitForUi: () -> Unit
 ): TestRule {
     val screenshotRule = ScreenshotRule(casePath, relativePath, expectedSuite)
-    screenshotRule.beforeScreenshotTaken(waitForImages)
+    screenshotRule.beforeScreenshotTaken(waitForUi)
     return baseScreenshotTestRule(casePath, caseRoot, testCase)
         .chain(SetDataRule(testCase, activityRule))
         .chain(screenshotRule)

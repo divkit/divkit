@@ -1,4 +1,4 @@
-package com.yandex.test.util
+package com.yandex.div.test
 
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule

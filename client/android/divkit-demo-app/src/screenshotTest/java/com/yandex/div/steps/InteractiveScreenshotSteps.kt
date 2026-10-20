@@ -2,13 +2,13 @@ package com.yandex.div.steps
 
 import android.view.View
 import androidx.test.core.app.ActivityScenario
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.yandex.div.internal.KLog
+import com.yandex.div.rule.UiReadyChecker
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.view.ViewActions.doubleTapWithRetries
@@ -38,8 +38,10 @@ internal class InteractiveScreenshotSteps {
     ) = step("Run interactive screenshot steps") {
         val testData = InteractiveScreenshotTestData.parse(testCase)
         var snapshotIndex = 0
+        val uiReadyChecker = UiReadyChecker()
         testData.steps.forEachIndexed { index, step ->
             step("Step $index") {
+                waitForUiReady(scenario, uiReadyChecker)
                 when (step) {
                     is Step.Action -> performAction(scenario, step.action)
 
@@ -64,11 +66,10 @@ internal class InteractiveScreenshotSteps {
         scenario: ActivityScenario<DivScreenshotActivity>,
         divAction: DivAction
     ) = step("Action ${divAction.writeToJSON()}") {
-        scenario.onActivity { activity ->
-            val actionHandled = activity.divView.handleActionWithResult(divAction)
-            if (!actionHandled) {
-                KLog.e(TAG) { "Failed to handle action: ${divAction.writeToJSON()}" }
-            }
+        var actionHandled = false
+        scenario.onActivity { actionHandled = it.divView.handleActionWithResult(divAction) }
+        if (!actionHandled) {
+            KLog.e(TAG) { "Failed to handle action: ${divAction.writeToJSON()}" }
         }
     }
 
@@ -113,10 +114,6 @@ internal class InteractiveScreenshotSteps {
             } ?: activity.divView
         }
         val view = screenshotView ?: throw AssertionError("Screenshot view is unavailable")
-
-        waitForLoadings(view)
-        Espresso.onIdle()
-        Thread.sleep(1000)
 
         captureScreenshots(
             view,

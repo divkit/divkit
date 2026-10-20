@@ -2,9 +2,9 @@
 
 package com.yandex.div.rule
 
+import com.yandex.div.test.chain
 import com.yandex.test.rules.ClosePopupsRule
 import com.yandex.test.rules.NoAnimationsRule
-import com.yandex.test.util.chain
 import org.junit.rules.TestRule
 
 fun uiTestRule(innerRule: () -> TestRule): TestRule {

@@ -8,10 +8,10 @@ import com.yandex.div.rule.baseScreenshotTestRule
 import com.yandex.div.rule.classRule
 import com.yandex.div.steps.interactiveScreenshot
 import com.yandex.div.test.INTERACTIVE_SCREENSHOT_CASES_PATH
+import com.yandex.div.test.chain
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.divkit.regression.utils.AssetReader
 import com.yandex.test.screenshot.Screenshot
-import com.yandex.test.util.chain
 import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test

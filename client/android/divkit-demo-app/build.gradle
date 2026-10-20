@@ -121,18 +121,17 @@ dependencies {
     implementation libs.zxing.core
 
     androidTestUtil libs.androidx.test.services
-    androidTestImplementation platform(libs.androidx.compose.bom)
     androidTestImplementation project(path: ':screenshot-test-runtime')
     androidTestImplementation project(path: ':ui-test-common')
     androidTestImplementation libs.allure.android
-    androidTestImplementation libs.androidx.compose.ui.test.junit4
-    androidTestImplementation libs.androidx.lifecycle.viewmodel
-    androidTestImplementation libs.androidx.test.uiautomator
+    androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.androidx.viewpager2
     androidTestImplementation libs.hamcrest
 
+    testImplementation libs.androidx.core
     testImplementation libs.androidx.test.core
     testImplementation libs.androidx.espresso.core
+    testImplementation libs.androidx.viewpager2
     testImplementation libs.json
     testImplementation libs.roborazzi
     testImplementation libs.roborazzi.junit.rule

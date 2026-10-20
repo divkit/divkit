@@ -27,11 +27,11 @@ internal class ImageLoaderScreenshotSteps {
             it.setDivData(testCase)
         }
 
+        waitForUiReady(scenario)
+
         var divView: View? = null
         scenario.onActivity { divView = it.divView }
         val view = divView ?: return
-
-        waitForLoadings(view)
         captureScreenshots(view, "$artifactsRelativePath/$loaderName", casePath)
     }
 }
