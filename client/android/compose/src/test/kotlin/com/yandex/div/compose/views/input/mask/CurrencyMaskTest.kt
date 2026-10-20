@@ -238,7 +238,27 @@ class CurrencyMaskTest {
         assertEquals(".5", rawVar.getValue())
     }
 
-    private fun setContent(localeTag: String) {
+    @Test
+    fun `long external raw variable is clipped to max length`() {
+        setContent("en-US", maxLength = 10)
+
+        rawVar.set("1".repeat(20_000))
+
+        field.assertTextEquals("11,111,111")
+        assertEquals("11,111,111", displayVar.getValue())
+    }
+
+    @Test
+    fun `long pasted text is clipped to max length`() {
+        setContent("en-US", maxLength = 10)
+
+        field.performTextInput("1".repeat(20_000))
+
+        field.assertTextEquals("11,111,111")
+        assertEquals("11111111", rawVar.getValue())
+    }
+
+    private fun setContent(localeTag: String, maxLength: Long? = null) {
         rule.setContent(
             configuration = configuration,
             data = data(
@@ -246,6 +266,7 @@ class CurrencyMaskTest {
                     mask = DivInputMask.Currency(
                         DivCurrencyInputMask(locale = constant(localeTag), rawTextVariable = "currency_raw")
                     ),
+                    maxLength = maxLength?.let(::constant),
                     textVariable = "currency_display",
                 )
             ),

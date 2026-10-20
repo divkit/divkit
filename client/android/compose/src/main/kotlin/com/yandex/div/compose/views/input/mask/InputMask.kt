@@ -37,6 +37,17 @@ internal abstract class InputMask {
         walk(raw) { char, _ -> append(char) }
     }
 
+    /** The length of [format] up to the last raw character, which `max_length` limits. */
+    fun filledLength(raw: String): Int {
+        var length = 0
+        var filled = 0
+        walk(raw) { _, isRaw ->
+            length++
+            if (isRaw) filled = length
+        }
+        return filled
+    }
+
     /** Inserts the static characters of the pattern into the raw text of a field. */
     val outputTransformation = OutputTransformation {
         val statics = StringBuilder()

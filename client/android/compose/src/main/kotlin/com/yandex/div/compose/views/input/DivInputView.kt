@@ -11,10 +11,15 @@ import androidx.compose.foundation.text.input.TextFieldDecorator
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.TextObfuscationMode
+import androidx.compose.foundation.text.input.selectAll
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -75,24 +80,26 @@ private fun InputField(modifier: Modifier, data: DivInput, field: TextFieldState
     Box(
         modifier = modifier
             .trackInputFocus()
-            .onPreviewKeyEvent { keyboard.consumeEnter && it.nativeKeyEvent.isEnterDown() },
+            .onPreviewKeyEvent { it.nativeKeyEvent.isEnterDown() && keyboard.onEnter() },
         contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical),
     ) {
         InterceptPlatformTextInput(keyboard.interceptor) {
-            InputTextField(
-                field = field,
-                config = config,
-                data = data,
-                isPassword = isPassword,
-                keyboard = keyboard,
-                textStyle = textStyle,
-                lineLimits = if (singleLine) TextFieldLineLimits.SingleLine else {
-                    TextFieldLineLimits.MultiLine(maxHeightInLines = maxLines)
-                },
-                interactionSource = interactionSource,
-                isFocused = isFocused,
-                decorator = decorator,
-            )
+            SelectionColors(data) {
+                InputTextField(
+                    field = field,
+                    config = config,
+                    data = data,
+                    isPassword = isPassword,
+                    keyboard = keyboard,
+                    textStyle = textStyle,
+                    lineLimits = if (singleLine) TextFieldLineLimits.SingleLine else {
+                        TextFieldLineLimits.MultiLine(maxHeightInLines = maxLines)
+                    },
+                    interactionSource = interactionSource,
+                    isFocused = isFocused,
+                    decorator = decorator,
+                )
+            }
         }
     }
 }
@@ -129,6 +136,7 @@ private fun InputTextField(
     val enabled = data.isEnabled.observedValue()
     val focusRequester = remember { FocusRequester() }
     KeepFocusAcrossPasswordSwitch(field, isPassword, isFocused, enabled, focusRequester)
+    SelectAllOnFocus(field, isFocused, data.selectAllOnFocus.observedValue())
 
     val fieldModifier = Modifier.fillMaxWidth().focusRequester(focusRequester)
     if (isPassword) {
@@ -178,6 +186,25 @@ private fun KeepFocusAcrossPasswordSwitch(
             field.edit { selection = focusedSelection.coerceIn(0, length) }
         }
     }
+}
+
+@Composable
+private fun SelectAllOnFocus(field: TextFieldState, isFocused: Boolean, selectAllOnFocus: Boolean) {
+    // A change of the property applies on the next focus, as in the View renderer.
+    val currentSelectAllOnFocus by rememberUpdatedState(selectAllOnFocus)
+    LaunchedEffect(isFocused) {
+        if (isFocused && currentSelectAllOnFocus) field.edit { selectAll() }
+    }
+}
+
+@Composable
+private fun SelectionColors(data: DivInput, content: @Composable () -> Unit) {
+    val highlightColor = data.highlightColor?.observedColorValue() ?: return content()
+    val defaults = LocalTextSelectionColors.current
+    val colors = remember(highlightColor, defaults) {
+        TextSelectionColors(handleColor = defaults.handleColor, backgroundColor = highlightColor)
+    }
+    CompositionLocalProvider(LocalTextSelectionColors provides colors, content)
 }
 
 @Composable

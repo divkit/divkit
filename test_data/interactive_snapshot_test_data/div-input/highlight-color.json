@@ -1,0 +1,91 @@
+{
+  "description": "Selected input text is highlighted with highlight_color, and the color follows the variable",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "ui_test_card",
+      "variables": [
+        {
+          "name": "input_text",
+          "type": "string",
+          "value": "Selected text"
+        },
+        {
+          "name": "highlight_color",
+          "type": "color",
+          "value": "#80FF0000"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "id": "input",
+            "type": "input",
+            "text_variable": "input_text",
+            "highlight_color": "@{highlight_color}",
+            "select_all_on_focus": true,
+            "font_size": 20,
+            "width": {
+              "type": "match_parent"
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "paddings": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "border": {
+              "stroke": {
+                "color": "#0000FF"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "focus_input",
+        "typed": {
+          "type": "focus_element",
+          "element_id": "input"
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "set_highlight_color",
+        "url": "div-action://set_variable?name=highlight_color&value=%238000FF00"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    }
+  ]
+}

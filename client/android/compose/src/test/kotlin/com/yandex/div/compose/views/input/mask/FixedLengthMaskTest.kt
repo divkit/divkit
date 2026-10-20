@@ -1,6 +1,9 @@
 package com.yandex.div.compose.views.input.mask
 
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasSetTextAction
@@ -8,7 +11,9 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextInputSelection
 import androidx.compose.ui.test.pressKey
+import androidx.compose.ui.text.TextRange
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
@@ -20,6 +25,7 @@ import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.input
+import com.yandex.div.test.data.intExpression
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputMask
@@ -152,6 +158,113 @@ class FixedLengthMaskTest {
     }
 
     @Test
+    fun `max length limits the formatted text`() {
+        setContent(digitsMask(), maxLength = constant(6L))
+
+        field.performTextInput("1234567890")
+
+        field.assertTextEquals("(123) ")
+        assertEquals("123", rawVar.getValue())
+    }
+
+    @Test
+    fun `max length does not count always visible placeholders`() {
+        setContent(digitsMask(alwaysVisible = true), maxLength = constant(6L))
+
+        field.performTextInput("1234")
+
+        field.assertTextEquals("(123) ___-____")
+        assertEquals("123", rawVar.getValue())
+    }
+
+    @Test
+    fun `external raw variable is clipped to max length without changing it`() {
+        setContent(digitsMask(), maxLength = constant(6L))
+
+        rawVar.set("1234567890")
+
+        field.assertTextEquals("(123) ")
+        assertEquals("1234567890", rawVar.getValue())
+    }
+
+    @Test
+    fun `decreasing max length preserves masked text and cursor`() {
+        val limit = Variable.IntegerVariable("limit", 14)
+        variableController.declare(limit)
+        setContent(digitsMask(), maxLength = intExpression("@{limit}"))
+        field.performTextInput("1234567890")
+        limit.set(6)
+
+        field.performTextInputSelection(TextRange(3), relativeToOriginalText = false)
+
+        field.assertTextEquals("(123) 456-7890")
+        field.assert(SemanticsMatcher.expectValue(SemanticsProperties.TextSelectionRange, TextRange(3)))
+        assertEquals("1234567890", rawVar.getValue())
+    }
+
+    @Test
+    fun `insertion is rejected while masked text exceeds decreased max length`() {
+        val limit = Variable.IntegerVariable("limit", 14)
+        variableController.declare(limit)
+        setContent(digitsMask(), maxLength = intExpression("@{limit}"))
+        field.performTextInput("1234567890")
+        limit.set(6)
+        field.performTextInputSelection(TextRange(3), relativeToOriginalText = false)
+
+        field.performTextInput("5")
+
+        field.assertTextEquals("(123) 456-7890")
+        assertEquals("1234567890", rawVar.getValue())
+    }
+
+    @Test
+    fun `paste beyond max length is rejected`() {
+        setContent(digitsMask(), maxLength = constant(13L))
+        field.performTextInput("123456789")
+        field.performTextInputSelection(TextRange(9), relativeToOriginalText = false)
+
+        field.performTextInput("55")
+
+        field.assertTextEquals("(123) 456-789")
+        assertEquals("123456789", rawVar.getValue())
+    }
+
+    @Test
+    fun `external raw variable is clipped to max length at a surrogate pair`() {
+        setContent(digitsMask(pattern = constant("##"), regex = null), maxLength = constant(1L))
+
+        rawVar.set("\uD83D\uDE00")
+
+        field.assertTextEquals("")
+        assertEquals("\uD83D\uDE00", rawVar.getValue())
+    }
+
+    @Test
+    fun `typed emoji beyond max length is dropped whole`() {
+        setContent(digitsMask(pattern = constant("##"), regex = null), maxLength = constant(1L))
+
+        field.performTextInput("\uD83D\uDE00")
+
+        field.assertTextEquals("")
+        assertEquals("", rawVar.getValue())
+    }
+
+    @Test
+    fun `append is rejected while masked text exceeds decreased max length`() {
+        val limit = Variable.IntegerVariable("limit", 14)
+        variableController.declare(limit)
+        setContent(digitsMask(), maxLength = intExpression("@{limit}"))
+        field.performTextInput("1234567890")
+        limit.set(6)
+        rule.waitForIdle()
+
+        field.performTextInput("5")
+
+        field.assertTextEquals("(123) 456-7890")
+        assertEquals("1234567890", rawVar.getValue())
+    }
+
+    @Test
     fun `pattern change re-applies the mask to the field`() {
         val pattern = Variable.StringVariable("pattern", "####-####")
         variableController.declare(pattern)
@@ -242,7 +355,7 @@ class FixedLengthMaskTest {
     private fun digitsMask(
         alwaysVisible: Boolean = false,
         pattern: Expression<String> = constant("(###) ###-####"),
-        regex: Expression<String> = constant("[0-9]"),
+        regex: Expression<String>? = constant("[0-9]"),
     ) = DivInputMask.FixedLength(
         DivFixedLengthInputMask(
             alwaysVisible = constant(alwaysVisible),
@@ -272,9 +385,10 @@ class FixedLengthMaskTest {
 
     private fun setContent(
         mask: DivInputMask,
-        validators: List<DivInputValidator>? = null,
-        keyboardType: Expression<DivInput.KeyboardType> = constant(DivInput.KeyboardType.MULTI_LINE_TEXT),
         hintText: Expression<String>? = null,
+        keyboardType: Expression<DivInput.KeyboardType> = constant(DivInput.KeyboardType.MULTI_LINE_TEXT),
+        maxLength: Expression<Long>? = null,
+        validators: List<DivInputValidator>? = null,
     ) {
         rule.setContent(
             configuration = configuration,
@@ -283,6 +397,7 @@ class FixedLengthMaskTest {
                     hintText = hintText,
                     keyboardType = keyboardType,
                     mask = mask,
+                    maxLength = maxLength,
                     textVariable = "fixed_display",
                     validators = validators,
                 )

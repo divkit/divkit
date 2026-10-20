@@ -10,6 +10,8 @@ enum class DivActionSource {
     EXTERNAL,
     FOCUS,
     GESTURE,
+    /** Actions of the keyboard, such as the Enter key of an input. */
+    KEYBOARD,
     LONG_TAP,
     PATCH,
     PROPERTY,

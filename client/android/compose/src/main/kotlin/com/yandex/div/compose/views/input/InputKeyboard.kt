@@ -9,9 +9,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.platform.PlatformTextInputInterceptor
 import androidx.compose.ui.text.input.ImeAction
+import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.actions.observedEnabledActions
+import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputMask
@@ -22,8 +27,8 @@ internal class InputKeyboard(
     val options: KeyboardOptions,
     val onKeyboardAction: KeyboardActionHandler?,
     val interceptor: PlatformTextInputInterceptor,
-    /** Whether the Enter key of a multi-line input is consumed instead of inserting a newline. */
-    val consumeEnter: Boolean,
+    /** Performs the action of the Enter key of a multi-line input; false when the key inserts a newline. */
+    val onEnter: () -> Boolean,
 )
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -31,26 +36,43 @@ internal class InputKeyboard(
 internal fun DivInput.rememberInputKeyboard(keyboardType: DivInput.KeyboardType): InputKeyboard {
     val enterKeyType = enterKeyType.observedValue()
     val autocapitalization = autocapitalization.observedValue()
+    val enterKeyActions = enterKeyActions.observedEnabledActions()
     val hasDigitsMask = mask is DivInputMask.Currency || mask is DivInputMask.Phone
+    val component = LocalComponent.current
 
     val options = remember(keyboardType, enterKeyType, autocapitalization) {
         keyboardOptions(keyboardType, enterKeyType, autocapitalization).copy(autoCorrectEnabled = false)
     }
-    val onKeyboardAction = remember(options.imeAction) {
-        // A specific Enter key does nothing, as in the View renderer.
-        if (options.imeAction == ImeAction.Default) null else KeyboardActionHandler {}
+    val onKeyboardAction = remember(enterKeyActions, options.imeAction) {
+        when {
+            enterKeyActions.isNotEmpty() -> KeyboardActionHandler {
+                component.handleActions(enterKeyActions, DivActionSource.KEYBOARD)
+            }
+            options.imeAction == ImeAction.Default -> null
+            // A specific Enter key without actions does nothing, as in the View renderer.
+            else -> KeyboardActionHandler {}
+        }
     }
     val multiline = keyboardType == DivInput.KeyboardType.MULTI_LINE_TEXT && !hasDigitsMask
-    val consumeEnter = multiline && options.imeAction != ImeAction.Default
-    val interceptor = remember(keyboardType, hasDigitsMask, consumeEnter) {
+    // Enter key actions replace the newline, as the schema defines them, even for the default Enter key.
+    val consumeEnter = multiline && (options.imeAction != ImeAction.Default || enterKeyActions.isNotEmpty())
+    val onEnter = remember(consumeEnter, onKeyboardAction) {
+        {
+            if (consumeEnter) onKeyboardAction?.onKeyboardAction {}
+            consumeEnter
+        }
+    }
+    // The interceptor restarts the keyboard session when it changes: it reads the current Enter handling instead.
+    val currentOnEnter = rememberUpdatedState(onEnter)
+    val interceptor = remember(keyboardType, hasDigitsMask) {
         inputKeyboardInterceptor(
             signedDecimal = keyboardType == DivInput.KeyboardType.NUMBER && !hasDigitsMask,
             multiline = multiline,
-            consumeEnter = consumeEnter,
+            onEnter = if (multiline) { { currentOnEnter.value() } } else null,
         )
     }
-    return remember(options, onKeyboardAction, interceptor, consumeEnter) {
-        InputKeyboard(options, onKeyboardAction, interceptor, consumeEnter)
+    return remember(options, onKeyboardAction, interceptor, onEnter) {
+        InputKeyboard(options, onKeyboardAction, interceptor, onEnter)
     }
 }
 
@@ -58,7 +80,7 @@ internal fun DivInput.rememberInputKeyboard(keyboardType: DivInput.KeyboardType)
 private fun inputKeyboardInterceptor(
     signedDecimal: Boolean,
     multiline: Boolean,
-    consumeEnter: Boolean,
+    onEnter: (() -> Boolean)?,
 ): PlatformTextInputInterceptor {
     return PlatformTextInputInterceptor { request, nextHandler ->
         nextHandler.startInputMethod { outAttributes ->
@@ -70,18 +92,22 @@ private fun inputKeyboardInterceptor(
             if (multiline) {
                 outAttributes.imeOptions = outAttributes.imeOptions or EditorInfo.IME_FLAG_NO_ENTER_ACTION
             }
-            if (consumeEnter) EnterInputConnection(connection) else connection
+            if (onEnter == null) connection else EnterInputConnection(connection, onEnter)
         }
     }
 }
 
-private class EnterInputConnection(connection: InputConnection) : InputConnectionWrapper(connection, false) {
+/** Performs [onEnter] in place of the newline the keyboard commits for the Enter key, when it handles the key. */
+private class EnterInputConnection(
+    connection: InputConnection,
+    private val onEnter: () -> Boolean,
+) : InputConnectionWrapper(connection, false) {
     override fun commitText(text: CharSequence?, newCursorPosition: Int): Boolean {
-        return text == "\n" || super.commitText(text, newCursorPosition)
+        return text == "\n" && onEnter() || super.commitText(text, newCursorPosition)
     }
 
     override fun sendKeyEvent(event: KeyEvent): Boolean {
-        return event.isEnterDown() || super.sendKeyEvent(event)
+        return event.isEnterDown() && onEnter() || super.sendKeyEvent(event)
     }
 }
 
