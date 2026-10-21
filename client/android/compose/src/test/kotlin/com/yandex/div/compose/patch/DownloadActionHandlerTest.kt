@@ -20,6 +20,7 @@ import kotlinx.coroutines.test.runCurrent
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import java.io.IOException
 import kotlin.test.BeforeTest
@@ -45,7 +46,9 @@ class DownloadActionHandlerTest {
             requestedUrls.add(it)
             response.await()
         },
-        mainCoroutineScope = scope,
+        coroutineScopeProvider = mock {
+            on { get() } doReturn scope
+        },
         patchCoordinator = mock {
             on { applyPatch(patch = any(), onApplied = any()) } doAnswer {
                 it.getArgument<() -> Unit>(1).invoke()

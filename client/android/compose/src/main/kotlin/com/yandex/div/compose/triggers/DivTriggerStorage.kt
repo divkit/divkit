@@ -57,7 +57,7 @@ internal class DivTriggerStorage @Inject constructor(
     }
 
     private val items = mutableListOf<Item>()
-    private var isActive = true
+    private var isActive = false
 
     fun add(trigger: DivTrigger) {
         val item = Item(trigger, expressionResolver, this::handle)

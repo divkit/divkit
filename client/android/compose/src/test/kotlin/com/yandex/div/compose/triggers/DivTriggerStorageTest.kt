@@ -34,7 +34,16 @@ class DivTriggerStorageTest {
     )
 
     @Test
+    fun `not triggered before startObserving is called`() {
+        triggerStorage.add(trigger(action = action, condition = "@{true}"))
+
+        verifyNoInteractions(actionHandler)
+    }
+
+    @Test
     fun `triggered when added and condition is true`() {
+        triggerStorage.startObserving()
+
         triggerStorage.add(trigger(action = action, condition = "@{true}"))
 
         verifyTriggered()
@@ -42,6 +51,8 @@ class DivTriggerStorageTest {
 
     @Test
     fun `not triggered when added and condition is false`() {
+        triggerStorage.startObserving()
+
         triggerStorage.add(trigger(action = action, condition = "@{false}"))
 
         verifyNoInteractions(actionHandler)
@@ -49,6 +60,8 @@ class DivTriggerStorageTest {
 
     @Test
     fun `triggered when condition changes from false to true`() {
+        triggerStorage.startObserving()
+
         val variable = Variable.BooleanVariable("condition", false)
         variableController.declare(variable)
 
@@ -63,6 +76,8 @@ class DivTriggerStorageTest {
 
     @Test
     fun `not triggered when condition changes from true to false`() {
+        triggerStorage.startObserving()
+
         val variable = Variable.BooleanVariable("condition", true)
         variableController.declare(variable)
 
@@ -77,6 +92,8 @@ class DivTriggerStorageTest {
 
     @Test
     fun `not triggered when variable changes and mode=on_condition`() {
+        triggerStorage.startObserving()
+
         val variable = Variable.IntegerVariable("counter", 1)
         variableController.declare(variable)
 
@@ -99,6 +116,8 @@ class DivTriggerStorageTest {
 
     @Test
     fun `triggered when variable changes and mode=on_variable`() {
+        triggerStorage.startObserving()
+
         val variable = Variable.IntegerVariable("counter", 1)
         variableController.declare(variable)
 
@@ -121,7 +140,9 @@ class DivTriggerStorageTest {
 
     @Test
     fun `not triggered when added after stopObserving() is called`() {
+        triggerStorage.startObserving()
         triggerStorage.stopObserving()
+
         triggerStorage.add(trigger(action = action, condition = "@{true}"))
 
         verifyNoInteractions(actionHandler)
@@ -141,6 +162,8 @@ class DivTriggerStorageTest {
 
     @Test
     fun `not triggered when startObserving() is called and was triggered before`() {
+        triggerStorage.startObserving()
+
         triggerStorage.add(trigger(action = action, condition = "@{true}"))
 
         verifyTriggered()

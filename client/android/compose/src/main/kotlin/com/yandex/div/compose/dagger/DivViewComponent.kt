@@ -3,10 +3,10 @@ package com.yandex.div.compose.dagger
 import androidx.compose.runtime.MutableState
 import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionHandler
-import com.yandex.div.compose.actions.SubmitActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.CompositionKeyStorage
 import com.yandex.div.compose.context.DivLocalComponentStorage
+import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.focus.FocusBindingStorage
 import com.yandex.div.compose.haptics.HapticFeedbackStorage
 import com.yandex.div.compose.histogram.DivViewHistogramReporter
@@ -14,7 +14,6 @@ import com.yandex.div.compose.images.ImageStateStorage
 import com.yandex.div.compose.layoutprovider.LayoutProviderStorage
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.patch.DivPatchCoordinator
-import com.yandex.div.compose.patch.DivPatchDownloadManager
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.compose.timers.TimerStorage
@@ -38,6 +37,7 @@ internal interface DivViewComponent {
     val actionHandler: DivActionHandler
     val actionMenuHolder: ActionMenuHolder
     val compositionKeyStorage: CompositionKeyStorage
+    val coroutineScopeProvider: DivViewCoroutineScopeProvider
     val data: DivData
     val focusBindingStorage: FocusBindingStorage
     val hapticFeedbackStorage: HapticFeedbackStorage
@@ -47,11 +47,9 @@ internal interface DivViewComponent {
     val localComponentStorage: DivLocalComponentStorage
     val pagerStateStorage: DivPagerStateStorage
     val patchCoordinator: DivPatchCoordinator
-    val patchDownloadManager: DivPatchDownloadManager
     val states: MutableState<List<DivData.State>>
     val stateStorage: DivStateStorage
     val storedValuesStorage: DivStoredValuesStorage
-    val submitActionHandler: SubmitActionHandler
     val timerStorage: TimerStorage
     val tooltipController: DivTooltipController
     val tooltipStateStorage: TooltipStateStorage

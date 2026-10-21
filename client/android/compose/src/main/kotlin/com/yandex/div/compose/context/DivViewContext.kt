@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
-import com.yandex.div.compose.actions.observe
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.actions.bind
 import com.yandex.div.compose.dagger.DivLocalComponent
@@ -68,12 +67,14 @@ internal class DivViewContext(
             onDispose { compositionCount-- }
         }
 
+        // must be attached before other components since other components could rely on
+        // the coroutine scope
+        component.coroutineScopeProvider.attach()
+
         visibilityActionTracker.bind()
         component.hapticFeedbackStorage.bind()
         component.layoutProviderStorage.observe()
         component.patchCoordinator.observe()
-        component.patchDownloadManager.observe()
-        component.submitActionHandler.observe()
         component.timerStorage.observe()
         rootLocalComponent.triggerStorage.observe()
     }

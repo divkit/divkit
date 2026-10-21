@@ -12,6 +12,7 @@ import com.yandex.div.test.data.change
 import com.yandex.div.test.data.text
 import com.yandex.div2.DivPatch
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
@@ -48,6 +49,7 @@ class DefaultPatchDownloaderTest {
     }
 
     private val downloader = DefaultPatchDownloader(
+        ioDispatcher = Dispatchers.IO,
         networkClient = client,
         reporter = TestReporter(),
     )
@@ -141,6 +143,7 @@ class DefaultPatchDownloaderTest {
         val started = CompletableDeferred<Unit>()
         val cancelled = CompletableDeferred<Unit>()
         val downloader = DefaultPatchDownloader(
+            ioDispatcher = Dispatchers.IO,
             networkClient = {
                 started.complete(Unit)
                 try {

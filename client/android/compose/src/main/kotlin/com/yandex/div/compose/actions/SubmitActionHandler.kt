@@ -1,12 +1,10 @@
 package com.yandex.div.compose.actions
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivLocalComponentStorage
+import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.utils.children
 import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div.core.network.DivNetworkRequest
@@ -17,27 +15,19 @@ import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.yatagan.Lazy
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
-import javax.inject.Named
+import kotlinx.coroutines.launch
 
 @DivViewScope
 internal class SubmitActionHandler @Inject constructor(
     private val actionHandler: Lazy<DivActionHandler>,
+    private val coroutineScopeProvider: DivViewCoroutineScopeProvider,
     private val localComponentStorage: DivLocalComponentStorage,
-    @Named(Names.MAIN_COROUTINE_SCOPE)
-    private val mainCoroutineScope: CoroutineScope,
     private val networkClient: DivNetworkClient,
     private val reporter: DivReporter,
     private val states: MutableState<List<DivData.State>>,
 ) {
-    private val jobs = mutableSetOf<Job>()
-
     fun handle(
         context: DivActionHandlingContext,
         action: DivActionSubmit,
@@ -119,41 +109,22 @@ internal class SubmitActionHandler @Inject constructor(
         onSuccess: () -> Unit,
         onFail: () -> Unit,
     ) {
-        val job = mainCoroutineScope.launch(start = CoroutineStart.LAZY) {
-            try {
-                val response = try {
-                    networkClient.execute(request)
-                } catch (e: IOException) {
-                    reporter.reportError(e)
+        coroutineScopeProvider.get()?.launch {
+            val response = try {
+                networkClient.execute(request)
+            } catch (e: IOException) {
+                reporter.reportError(e)
+                onFail()
+                return@launch
+            }
+            response.use {
+                if (it.isSuccessful) {
+                    onSuccess()
+                } else {
+                    reporter.reportError("HTTP ${it.code}")
                     onFail()
-                    return@launch
                 }
-                response.use {
-                    if (it.isSuccessful) {
-                        onSuccess()
-                    } else {
-                        reporter.reportError("HTTP ${it.code}")
-                        onFail()
-                    }
-                }
-            } finally {
-                jobs.remove(currentCoroutineContext()[Job])
             }
         }
-        jobs.add(job)
-        job.start()
-    }
-
-    fun detach() {
-        val pendingJobs = jobs.toList()
-        jobs.clear()
-        pendingJobs.forEach { it.cancel() }
-    }
-}
-
-@Composable
-internal fun SubmitActionHandler.observe() {
-    DisposableEffect(this) {
-        onDispose { detach() }
     }
 }

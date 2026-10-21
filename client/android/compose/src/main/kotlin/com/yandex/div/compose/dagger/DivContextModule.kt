@@ -6,9 +6,12 @@ import android.content.res.AssetManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import coil3.ImageLoader
+import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.images.ImageLoaderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.compose.patch.DefaultPatchDownloader
+import com.yandex.div.compose.patch.DivPatchDownloader
 import com.yandex.div.compose.preload.CoilImagePreloader
 import com.yandex.div.compose.preload.ImagePreloader
 import com.yandex.div.internal.storedvalues.StoredValuesRepository
@@ -16,15 +19,15 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.storedvalues.StoredValuesRepositoryImpl
 import com.yandex.yatagan.Binds
+import com.yandex.yatagan.Lazy
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
-import javax.inject.Named
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
-import kotlin.time.TimeSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import javax.inject.Named
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 @Module
 internal interface DivContextModule {
@@ -68,6 +71,15 @@ internal interface DivContextModule {
 
         @DivContextScope
         @Provides
+        fun providePatchDownloader(
+            configuration: DivConfiguration,
+            defaultPatchDownloader: Lazy<DefaultPatchDownloader>,
+        ): DivPatchDownloader {
+            return configuration.patchDownloader ?: defaultPatchDownloader.get()
+        }
+
+        @DivContextScope
+        @Provides
         fun provideStorageComponent(context: Context): DivStorageComponent {
             return DivStorageComponent.create(
                 context = context
@@ -82,14 +94,6 @@ internal interface DivContextModule {
             return StoredValuesRepositoryImpl(
                 rawJsonRepository = storageComponent.rawJsonRepository
             )
-        }
-
-        @DivContextScope
-        @Provides
-        fun provideTimeSource(
-            debugConfiguration: DivDebugConfiguration
-        ): TimeSource {
-            return debugConfiguration.timeSource ?: TimeSource.Monotonic
         }
     }
 }

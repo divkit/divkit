@@ -31,7 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 @Component(
     modules = [
         DivConfiguration::class,
-        DivContextModule::class
+        DivContextModule::class,
+        DivDebugConfiguration::class,
     ]
 )
 internal interface DivContextComponent {

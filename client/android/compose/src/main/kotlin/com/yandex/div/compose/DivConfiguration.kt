@@ -10,7 +10,6 @@ import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.histogram.DisabledHistogramConfiguration
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
-import com.yandex.div.compose.patch.DefaultPatchDownloader
 import com.yandex.div.compose.patch.DivPatchDownloader
 import com.yandex.div.compose.preload.PreloadResult
 import com.yandex.div.compose.video.DisabledVideoPlayerFactory
@@ -59,8 +58,7 @@ class DivConfiguration private constructor(
     @get:Provides
     val imageLoaderConfiguration: ImageLoaderConfiguration,
 
-    @get:Provides
-    val patchDownloader: DivPatchDownloader,
+    val patchDownloader: DivPatchDownloader?,
 
     @get:Provides
     val playerFactory: DivVideoPlayerFactory,
@@ -78,6 +76,10 @@ class DivConfiguration private constructor(
     @get:Provides
     val videoPreloader: DivVideoPreloader,
 ) {
+    @get:Provides
+    internal val configuration: DivConfiguration
+        get() = this
+
     @Deprecated(
         message = "Use divConfiguration { ... } or DivConfiguration.Builder instead.",
         level = DeprecationLevel.WARNING,
@@ -104,10 +106,7 @@ class DivConfiguration private constructor(
         histogramConfiguration = histogramConfiguration,
         imageLoaderConfiguration = imageLoaderConfiguration,
         networkClient = disabledNetworkClient,
-        patchDownloader = DefaultPatchDownloader(
-            networkClient = disabledNetworkClient,
-            reporter = reporter,
-        ),
+        patchDownloader = null,
         playerFactory = playerFactory,
         reporter = reporter,
         variableController = variableController,
@@ -132,14 +131,8 @@ class DivConfiguration private constructor(
         var variableController: DivVariableController = DivVariableController()
         var videoPreloader: DivVideoPreloader = disabledVideoPreloader
 
-        private var _patchDownloader: DivPatchDownloader? = null
-
         @Deprecated("Use networkClient to customize network requests")
-        var patchDownloader: DivPatchDownloader
-            get() = _patchDownloader ?: DefaultPatchDownloader(networkClient, reporter)
-            set(value) {
-                _patchDownloader = value
-            }
+        var patchDownloader: DivPatchDownloader? = null
 
         fun build(): DivConfiguration = DivConfiguration(
             actionHandler = actionHandler,

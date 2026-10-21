@@ -11,12 +11,10 @@ import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.divConfiguration
-import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.setContentWithDivContext
 import com.yandex.div.compose.utils.TestNetworkClient
 import com.yandex.div.core.network.DivNetworkRequest
 import com.yandex.div.core.network.DivNetworkRequestHeader
-import com.yandex.div.core.network.DivNetworkResponse
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
@@ -31,12 +29,8 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivActionTyped
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runCurrent
 import org.junit.Rule
 import org.junit.runner.RunWith
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import java.io.IOException
 import kotlin.test.Test
@@ -50,7 +44,6 @@ class DivViewWithSubmitActionsTest {
     private val isVisible = mutableStateOf(true)
     private val networkClient = TestNetworkClient()
     private val reporter = TestReporter()
-    private val scope = TestScope()
     private val testActionHandler = TestExternalActionHandler()
 
     private val handledActions: List<DivActionData>
@@ -64,8 +57,6 @@ class DivViewWithSubmitActionsTest {
         networkClient = this@DivViewWithSubmitActionsTest.networkClient
         reporter = this@DivViewWithSubmitActionsTest.reporter
     }
-
-    private val debugConfiguration = DivDebugConfiguration(coroutineScope = scope)
 
     private val form = text(
         id = "form",
@@ -302,10 +293,8 @@ class DivViewWithSubmitActionsTest {
 
         submit()
 
-        rule.runOnIdle {
-            networkClient.response.completeExceptionally(IOException("offline"))
-            scope.runCurrent()
-        }
+        networkClient.response.completeExceptionally(IOException("offline"))
+        rule.waitForIdle()
 
         assertEquals(
             listOf(actionData(id = "failure", source = DivActionSource.SUBMIT)),
@@ -318,16 +307,9 @@ class DivViewWithSubmitActionsTest {
         setContent(action = submitAction)
 
         submit()
+        completeResponse(successful = true)
 
-        val result = mock<DivNetworkResponse> {
-            on { isSuccessful } doReturn true
-        }
-        rule.runOnIdle {
-            networkClient.response.complete(result)
-            scope.runCurrent()
-        }
-
-        verify(result).close()
+        verify(networkClient.response.getCompleted()).close()
     }
 
     @Test
@@ -373,39 +355,54 @@ class DivViewWithSubmitActionsTest {
         assertTrue(handledActions.isEmpty())
     }
 
+    @Test
+    fun `submit works after the same card returns to composition`() {
+        setContent(action = submitAction)
+
+        submit()
+
+        rule.runOnIdle { isVisible.value = false }
+        rule.waitForIdle()
+        rule.runOnIdle { isVisible.value = true }
+
+        submit()
+
+        completeResponse(successful = true)
+
+        assertEquals(2, requests.size)
+        assertEquals(
+            listOf(actionData(id = "success", source = DivActionSource.SUBMIT)),
+            handledActions
+        )
+    }
+
     private fun setContent(
         content: Div = form,
         action: DivActionTyped,
     ) {
-        rule.setContentWithDivContext(configuration, debugConfiguration) {
-            if (isVisible.value) {
-                DivView(
-                    data(
-                        container(
-                            items = listOf(
-                                content,
-                                text(text = "Submit", action = action(typed = action)),
-                            )
-                        ),
-                        variables = listOf(variable("value", "origin")),
-                    )
+        val data = data(
+            container(
+                items = listOf(
+                    content,
+                    text(text = "Submit", action = action(typed = action)),
                 )
+            ),
+            variables = listOf(variable("value", "origin")),
+        )
+        rule.setContentWithDivContext(configuration) {
+            if (isVisible.value) {
+                DivView(data)
             }
         }
     }
 
     private fun submit() {
         rule.onNodeWithText("Submit").performClick()
-        rule.runOnIdle { scope.runCurrent() }
+        rule.waitForIdle()
     }
 
     private fun completeResponse(successful: Boolean) {
-        val result = mock<DivNetworkResponse> {
-            on { isSuccessful } doReturn successful
-        }
-        rule.runOnIdle {
-            networkClient.response.complete(result)
-            scope.runCurrent()
-        }
+        networkClient.completeResponse(isSuccessful = successful)
+        rule.waitForIdle()
     }
 }
