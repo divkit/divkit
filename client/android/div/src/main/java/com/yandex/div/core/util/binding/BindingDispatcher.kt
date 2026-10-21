@@ -46,6 +46,7 @@ internal class BindingDispatcher @Inject constructor(
     private val bindingGeneration = AtomicInteger()
     private var activeTask: PendingTask? = null
     private var activeTaskStarted = false
+    private var requestCancellations: MutableSet<BindingRequestCancellation>? = null
 
     /**
      * Cancels queued work and invalidates running work before its main-thread continuation.
@@ -55,7 +56,9 @@ internal class BindingDispatcher @Inject constructor(
     fun cancelPendingTasks() {
         bindingGeneration.incrementAndGet()
         preparedViewHoldersPool.invalidate(divView::logError)
-        val nextTask = synchronized(pendingTasksLock) {
+        val (nextTask, cancelledRequests) = synchronized(pendingTasksLock) {
+            val requests = requestCancellations?.toList()
+            requestCancellations = null
             pendingTasks.removeAll { it.type.cancellable }
             pendingCoalescingTasks.values.removeAll { it.type.cancellable }
 
@@ -64,8 +67,9 @@ internal class BindingDispatcher @Inject constructor(
                 activeTask = null
                 activeTaskStarted = false
             }
-            takeNextTaskLocked()
+            takeNextTaskLocked() to requests
         }
+        cancelledRequests?.forEach(BindingRequestCancellation::cancel)
         nextTask?.let(::submitTask)
     }
 
@@ -96,6 +100,48 @@ internal class BindingDispatcher @Inject constructor(
             "Coalescing tasks must not have completion or error callbacks"
         }
         enqueueTask(BindingTask(type, bindingGeneration.get(), coalescingKey, onComplete, onError, block))
+    }
+
+    fun <T> runOnBindingThread(
+        type: BindingTaskType,
+        onComplete: ((T) -> Unit)? = null,
+        onError: ((Throwable) -> Unit)? = null,
+        onCancelled: (() -> Unit)?,
+        block: () -> T,
+    ) {
+        val generation = bindingGeneration.get()
+        val request = onCancelled?.let { registerCancellation(type, generation, it) }
+        val complete: ((T) -> Unit)? = request?.let { cancellation ->
+            { result -> cancellation.complete { onComplete?.invoke(result) } }
+        } ?: onComplete
+        val failed: ((Throwable) -> Unit)? = request?.let { cancellation ->
+            { error -> cancellation.complete { onError?.invoke(error) } }
+        } ?: onError
+        enqueueTask(BindingTask(type, generation, null, complete, failed, block))
+    }
+
+    private fun registerCancellation(
+        type: BindingTaskType,
+        generation: Int,
+        onCancelled: () -> Unit,
+    ): BindingRequestCancellation {
+        val request = BindingRequestCancellation(onCancelled) { completed ->
+            synchronized(pendingTasksLock) { requestCancellations?.remove(completed) }
+        }
+        if (!type.cancellable) return request
+        val current = synchronized(pendingTasksLock) {
+            if (bindingGeneration.get() != generation) {
+                false
+            } else {
+                val requests = requestCancellations ?: mutableSetOf<BindingRequestCancellation>().also {
+                    requestCancellations = it
+                }
+                requests.add(request)
+                true
+            }
+        }
+        if (!current) request.cancel()
+        return request
     }
 
     private fun runBindingTask(task: BindingTask<*>) {

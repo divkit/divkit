@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
+import com.yandex.div.core.DivBindingPhase
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.TestComponent
 import com.yandex.div.core.TestViewComponentBuilder
@@ -104,6 +105,21 @@ internal class Div2ViewAsyncBindingTest {
         finishBinding()
 
         assertEquals(listOf("fresh:true"), callbacks)
+    }
+
+    @Test
+    fun `cleanup reports one cancellation on main after preparation`() {
+        val results = mutableListOf<Pair<DivBindingPhase, Looper?>>()
+        onMain {
+            prepareNewBinding {
+                view.setDataAsync(firstData, tag, onBindingPhase = { results += it to Looper.myLooper() })
+            }
+            view.cleanup()
+            view.cleanup()
+        }
+        finishBinding()
+
+        assertEquals(listOf(DivBindingPhase.CANCELLED to Looper.getMainLooper()), results)
     }
 
     @Test

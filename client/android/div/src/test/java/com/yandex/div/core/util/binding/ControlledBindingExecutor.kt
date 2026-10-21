@@ -1,5 +1,7 @@
 package com.yandex.div.core.util.binding
 
+import java.util.Collections
+import java.util.IdentityHashMap
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doReturn
@@ -13,13 +15,18 @@ internal class ControlledBindingExecutor : AutoCloseable {
         check(worker.runNext())
     }.get()
 
+    private val pending = Collections.synchronizedSet(Collections.newSetFromMap(IdentityHashMap<Runnable, Boolean>()))
+
     val executor = mock<BindingThreadExecutor> {
         on { bindingThread } doReturn workerThread
         on { ensureThreadCreated() } doReturn workerThread
         on { execute(any()) } doAnswer {
-            worker.execute(it.getArgument<Runnable>(0))
+            val task = it.getArgument<Runnable>(0)
+            pending.add(task)
+            worker.execute { if (pending.remove(task)) task.run() }
             null
         }
+        on { remove(any()) } doAnswer { pending.remove(it.getArgument<Runnable>(0)) }
     }
 
     fun runNext() {

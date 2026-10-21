@@ -24,8 +24,11 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivActionHandler.DivActionReason
+import com.yandex.div.core.DivBindingCallback
+import com.yandex.div.core.DivBindingPhase
 import com.yandex.div.core.DivCreationTracker
 import com.yandex.div.core.DivCustomContainerChildFactory
+import com.yandex.div.core.DivErrorsReporter
 import com.yandex.div.core.DivKit
 import com.yandex.div.core.DivViewConfig
 import com.yandex.div.core.DivViewFacade
@@ -35,7 +38,6 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.downloader.DivDataChangedObserver
-import com.yandex.div.internal.patch.DivPatchApply
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.expression.local.RuntimeStoreImpl
@@ -46,9 +48,12 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
+import com.yandex.div.core.util.binding.AsyncBindingObserver
+import com.yandex.div.core.util.binding.AsyncBindingRequest
 import com.yandex.div.core.util.binding.BindingDispatcher
 import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.util.binding.MainThreadTaskPolicy
+import com.yandex.div.core.util.binding.asBindingObserver
 import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
@@ -81,6 +86,7 @@ import com.yandex.div.internal.Assert
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.patch.DivPatchApply
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.util.UiThreadHandler.Companion.executeOnMainThreadBlocking
 import com.yandex.div.internal.util.hasScrollableChildUnder
@@ -283,6 +289,11 @@ open class Div2View private constructor(
     private val bindingDispatcher: BindingDispatcher
         get() = viewComponent.bindingDispatcher
 
+    @Volatile
+    private var rootBindingPhase: DivBindingPhase? = null
+    @Volatile
+    private var bindingRequest: AsyncBindingRequest? = null
+
     internal val inputFocusTracker = viewComponent.inputFocusTracker
 
     init {
@@ -309,46 +320,52 @@ open class Div2View private constructor(
      * Returns whether asynchronous work is queued or unfinished for this view,
      * including main-thread changes and successful completion callbacks.
      */
-    private fun hasPendingAsyncBindings(): Boolean = bindingDispatcher.hasPendingAsyncBindings
+    @ExperimentalApi
+    fun hasPendingAsyncBindings(): Boolean = bindingDispatcher.hasPendingAsyncBindings
 
+    /**
+     * Reports completion of asynchronous preparation through the legacy Boolean callback.
+     * Binding that requires attachment may still be pending. The Boolean retains its legacy semantics.
+     */
     @ExperimentalApi
     fun setDataAsync(
         data: DivData?,
         tag: DivDataTag,
         onComplete: ((Boolean) -> Unit)?,
-    ) {
-        // Pending cleanup or replacement may invalidate the current data before this request.
-        if (!hasPendingAsyncBindings() && data === divData) {
-            loadMedia()
-            onComplete?.invoke(true)
-            return
-        }
+    ) = setDataAsyncLegacy(data, null, tag, onComplete.asBindingObserver())
 
-        val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
-        bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete, onError) {
-            if (data === divData) {
-                loadMedia()
-                true
-            } else {
-                setDataInternal(data, divData, tag)
-            }
-        }
-    }
-
+    /**
+     * Reports this request's binding phases on the main thread through one [onBindingPhase] callback.
+     * [DivBindingPhase.PREPARED] means preparation has finished and the view can be attached.
+     * If binding is already complete, [DivBindingPhase.APPLIED] is reported without PREPARED.
+     * Otherwise APPLIED follows the remaining binding on attachment. Layout and media may still be pending.
+     * Each request has exactly one terminal phase: APPLIED, CANCELLED, or FAILED.
+     * Runtime errors use the configured [DivErrorsReporter]. Observing phases does not change binding strategy.
+     * Exceptions that propagated from binding before observing phases continue to propagate.
+     * Kotlin callers select this overload with the named `onBindingPhase` argument;
+     * Java callers use `setDataAsyncWithPhases`.
+     */
     @ExperimentalApi
+    @JvmName("setDataAsyncWithPhases")
     fun setDataAsync(
+        data: DivData?,
+        tag: DivDataTag,
+        onBindingPhase: DivBindingCallback,
+    ) = setDataAsyncInternal(data, null, tag, onBindingPhase.asBindingObserver())
+
+    private fun setDataAsyncLegacy(
         data: DivData?,
         oldDivData: DivData?,
         tag: DivDataTag,
-        onComplete: ((Boolean) -> Unit)?,
+        observer: AsyncBindingObserver?,
     ) {
         if (!hasPendingAsyncBindings() && data === divData) {
             loadMedia()
-            onComplete?.invoke(true)
+            observer?.onLegacyComplete(true)
             return
         }
-
-        val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
+        val onComplete = observer?.let { it::onLegacyComplete }
+        val onError: (Throwable) -> Unit = { observer?.onLegacyComplete(false) }
         bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete, onError) {
             if (data === divData) {
                 loadMedia()
@@ -358,6 +375,95 @@ open class Div2View private constructor(
             }
         }
     }
+
+    private fun setDataAsyncInternal(
+        data: DivData?,
+        oldDivData: DivData?,
+        tag: DivDataTag,
+        observer: AsyncBindingObserver?,
+    ) {
+        val request = AsyncBindingRequest(observer, ::logError, tag, bindingDispatcher.currentGeneration)
+        if (!hasPendingAsyncBindings() && data === divData) {
+            replaceBindingRequest(request)
+            val generation = bindingDispatcher.currentGeneration
+            runCatching { loadMedia() }.onFailure { rethrowBindingFailure(request, it) }
+            UiThreadHandler.executeOnMainThread {
+                if (bindingDispatcher.currentGeneration != generation || bindingRequest !== request) {
+                    request.cancel()
+                } else {
+                    reportBindingPhase(request, data)
+                }
+            }
+            return
+        }
+        bindingDispatcher.runOnBindingThread(
+            BindingTaskType.DATA,
+            onComplete = { _: Boolean -> reportBindingPhase(request, data) },
+            onError = { request.report(DivBindingPhase.FAILED) },
+            onCancelled = request::cancel,
+        ) {
+            replaceBindingRequest(request)
+            if (data === divData) {
+                loadMedia()
+                true
+            } else {
+                setDataInternal(data, oldDivData ?: divData, tag, request = request)
+            }
+        }
+    }
+
+    private fun replaceBindingRequest(request: AsyncBindingRequest) {
+        val previous = bindingRequest
+        bindingRequest = request
+        previous?.cancel()
+    }
+
+    private fun cancelBindingRequest() {
+        val request = bindingRequest
+        bindingRequest = null
+        request?.cancel()
+    }
+
+    private fun cancelBindingOnAttach() {
+        if (rootBindingPhase == DivBindingPhase.PREPARED) rootBindingPhase = null
+        bindOnAttachRunnable?.cancel()
+    }
+
+    private fun reportBindingPhase(request: AsyncBindingRequest, data: DivData?) {
+        val phase = if (data != null && data === divData) rootBindingPhase else null
+        val reason = when {
+            data == null -> "NO_DATA"
+            phase == null -> "ROOT_NOT_PREPARED"
+            else -> null
+        }
+        request.report(phase ?: DivBindingPhase.FAILED, reason)
+    }
+
+    private fun rethrowBindingFailure(request: AsyncBindingRequest, error: Throwable): Nothing {
+        // Reporting must not replace the original binding error.
+        runCatching { logError(error) }
+        request.report(DivBindingPhase.FAILED)
+        throw error
+    }
+
+    /** Uses the same binding lifecycle as [setDataAsync], with an explicit previous document. */
+    @ExperimentalApi
+    fun setDataAsync(
+        data: DivData?,
+        oldDivData: DivData?,
+        tag: DivDataTag,
+        onComplete: ((Boolean) -> Unit)?,
+    ) = setDataAsyncLegacy(data, oldDivData, tag, onComplete.asBindingObserver())
+
+    /** See [setDataAsync] for the per-request lifecycle contract. */
+    @ExperimentalApi
+    @JvmName("setDataAsyncWithPhases")
+    fun setDataAsync(
+        data: DivData?,
+        oldDivData: DivData?,
+        tag: DivDataTag,
+        onBindingPhase: DivBindingCallback,
+    ) = setDataAsyncInternal(data, oldDivData, tag, onBindingPhase.asBindingObserver())
 
     fun setData(data: DivData?, tag: DivDataTag): Boolean = setDataOrReplacePending(data, null, tag)
 
@@ -383,6 +489,7 @@ open class Div2View private constructor(
         tag: DivDataTag,
         paths: List<DivStatePath>? = null,
         temporary: Boolean = true,
+        request: AsyncBindingRequest? = null,
     ): Boolean = bindingDispatcher.withLock(fallback = false) {
         val reporter = viewComponent.bindingReporterProvider.get(oldDivData, data)
 
@@ -395,13 +502,15 @@ open class Div2View private constructor(
             return@withLock false
         }
         mediaWasReleased = false
+        if (bindingRequest !== request) cancelBindingRequest()
 
         notifyBindStarted()
-        bindOnAttachRunnable?.cancel()
+        cancelBindingOnAttach()
 
         histogramReporter.onRenderStarted()
 
         val oldData = divData ?: oldDivData
+        rootBindingPhase = null
         updateRuntimeStore(data, tag)
         dataComponent.layoutProviderBinder.release()
         val newDivBlock = data.getRootDivBlock()
@@ -512,7 +621,7 @@ open class Div2View private constructor(
         newDivData: DivData,
         reporter: PatchEventReporter,
     ): Boolean {
-        bindOnAttachRunnable?.cancel()
+        cancelBindingOnAttach()
         val oldRootDiv = oldData.state()?.div
         val rootChanges = patch.changes.find { it.id == oldRootDiv?.value()?.id } ?: run {
             val newDivBlock = newDivData.getRootDivBlock() ?: return false
@@ -565,6 +674,7 @@ open class Div2View private constructor(
     }
 
     private fun updateNow(data: DivData, reporter: ForceRebindReporter): Boolean {
+        rootBindingPhase = null
         val oldData = divData
         if (oldData == null) {
             histogramReporter.onBindingStarted()
@@ -778,15 +888,26 @@ open class Div2View private constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        reportBindingResumedRunnable?.onAttach()
-        bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA) {
-            tryAttachVariableTriggers(divData)
+        val request = bindingRequest?.takeIf { it.isPending }
+        val error = runCatching {
+            reportBindingResumedRunnable?.onAttach()
+            bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA) {
+                tryAttachVariableTriggers(divData)
+            }
+            bindOnAttachRunnable?.onAttach()
+            reportBindingFinishedRunnable?.onAttach()
+            divTimerEventDispatcher?.onAttach(this)
+            dataComponent.layoutProviderBinder.onAttach(this)
+            viewComponent.errorMonitor.onAttach()
+        }.exceptionOrNull()
+        if (error != null) {
+            if (request == null) throw error
+            rethrowBindingFailure(request, error)
         }
-        bindOnAttachRunnable?.onAttach()
-        reportBindingFinishedRunnable?.onAttach()
-        divTimerEventDispatcher?.onAttach(this)
-        dataComponent.layoutProviderBinder.onAttach(this)
-        viewComponent.errorMonitor.onAttach()
+        if (bindingRequest === request && request?.isPrepared == true &&
+            rootBindingPhase == DivBindingPhase.APPLIED) {
+            request.report(DivBindingPhase.APPLIED)
+        }
     }
 
     override fun onDetachedFromWindow() {
@@ -852,6 +973,8 @@ open class Div2View private constructor(
     }
 
     final override fun cleanup() {
+        cancelBindingRequest()
+        rootBindingPhase = null
         if (UiThreadHandler.get().isMainThread()) {
             visibilityTrackingBatch = null
         }
@@ -862,6 +985,10 @@ open class Div2View private constructor(
     }
 
     private fun cleanup(removeChildren: Boolean) {
+        if (removeChildren) {
+            cancelBindingRequest()
+            rootBindingPhase = null
+        }
         rebindTask?.clear()?.let {
             rebindTask = null
         }
@@ -903,7 +1030,7 @@ open class Div2View private constructor(
         temporary: Boolean
     ): Unit = withLockOrDefer {
         if (stateId != DivData.INVALID_STATE_ID) {
-            bindOnAttachRunnable?.cancel()
+            cancelBindingOnAttach()
             forceSwitchToState(stateId, temporary)
         }
     }
@@ -1006,7 +1133,7 @@ open class Div2View private constructor(
         }
 
         val newDivBlock = newState.toDivBlock()
-        val newStateView = buildViewAsyncAndUpdateState(stateId, newDivBlock)
+        val newStateView = buildViewAsyncAndUpdateState(stateId, newDivBlock, newData)
 
         oldState?.let { discardStateVisibility(it) }
         trackStateVisibility(newState)
@@ -1015,8 +1142,17 @@ open class Div2View private constructor(
             newData.allowsTransitionsOnDataChange(expressionResolver)
 
         runMainThreadAction(BindingTaskType.DATA) {
+            val preparedPhase = rootBindingPhase
+            if (newData === divData) rootBindingPhase = null
             addNewStateViewWithTransition(oldData, newData, oldState?.div, newState,
                 newStateView, allowsTransition, bindBeforeViewAdded = false)
+            if (newData === divData && getChildAt(0) === newStateView) {
+                rootBindingPhase = if (preparedPhase == DivBindingPhase.APPLIED) {
+                    DivBindingPhase.APPLIED
+                } else {
+                    DivBindingPhase.PREPARED
+                }
+            }
         }
 
         if (oldData != null) {
@@ -1048,6 +1184,8 @@ open class Div2View private constructor(
         val currentState = data.states.firstOrNull { it.stateId == currentStateId }
         val newState = (data.states.firstOrNull { it.stateId == stateId }) ?: return false
 
+        rootBindingPhase = null
+
         currentState?.let { discardStateVisibility(it) }
         trackStateVisibility(newState)
 
@@ -1069,6 +1207,7 @@ open class Div2View private constructor(
             newDivBlock = if (isReplaceable) newDivBlock else null,
         )
 
+        onBindingComplete(data)
         return true
     }
 
@@ -1131,22 +1270,26 @@ open class Div2View private constructor(
     private fun buildViewAsyncAndUpdateState(
         stateId: Long,
         divBlock: DivBlock,
+        data: DivData,
         isUpdateTemporary: Boolean = true
     ): View {
         dataComponent.stateManager.updateState(stateId, isUpdateTemporary)
         val view = div2Component.div2Builder.createView(divBlock.div, divBlock.expressionResolver, divBlock.path, this)
         if (bindOnAttachEnabled) {
             bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
+                if (data === divData) rootBindingPhase = null
                 suppressExpressionErrors {
                     div2Component.divBinder.bind(view, divBlock, this)
                 }
                 div2Component.divBinder.attachIndicators(this)
+                onBindingComplete(data)
             }
         } else {
             div2Component.divBinder.bind(view, divBlock, this)
             doOnAttach {
                 div2Component.divBinder.attachIndicators(this)
             }
+            onBindingComplete(data)
         }
         return view
     }
@@ -1425,6 +1568,7 @@ open class Div2View private constructor(
     }
 
     private fun rebind(newData: DivData, newDivBlock: DivBlock?, reporter: SimpleRebindReporter) {
+        rootBindingPhase = null
         try {
             if (isEmpty()) {
                 reporter.onSimpleRebindNoChild()
@@ -1451,6 +1595,7 @@ open class Div2View private constructor(
                 histogramReporter.onRebindingFinished()
 
                 reporter.onSimpleRebindSuccess()
+                onBindingComplete(newData)
             }
         } catch (error: Exception) {
             reporter.onSimpleRebindException(error)
@@ -1475,6 +1620,7 @@ open class Div2View private constructor(
         oldData: DivData,
         reporter: ComplexRebindReporter
     ): Boolean = executeOnMainThreadBlocking {
+        rootBindingPhase = null
         val stateToBind = newData.stateToBind ?: let {
             reporter.onComplexRebindFatalNoState()
             return@executeOnMainThreadBlocking false
@@ -1499,7 +1645,12 @@ open class Div2View private constructor(
         requestLayout()
 
         histogramReporter.onRebindingFinished()
+        onBindingComplete(newData)
         return@executeOnMainThreadBlocking true
+    }
+
+    private fun onBindingComplete(data: DivData) = runMainThreadAction(BindingTaskType.DATA) {
+        if (data === divData) rootBindingPhase = DivBindingPhase.APPLIED
     }
 
     private fun createRebindTask(reporter: ComplexRebindReporter): RebindTask {
