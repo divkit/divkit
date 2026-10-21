@@ -226,6 +226,17 @@
       }
     },
     {
+      "id": "action_typed_scroll_duration",
+      "name": "<code>duration</code> parameter for typed scroll actions",
+      "compat": {
+        "android": {
+          "version_added": "33.8.0",
+          "partial_implementation": true,
+          "notes": "Supported only for galleries and pagers."
+        }
+      }
+    },
+    {
       "id": "action_scroll_to_item_id",
       "name": "Typed action <code>scroll_to</code> with destination <code>item_id</code> and action url <code>scroll_to_item_id</code>",
       "compat": {

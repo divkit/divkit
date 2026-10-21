@@ -337,6 +337,11 @@
         },
         "ios": {
           "version_added": "33.6.0"
+        },
+        "web": {
+          "version_added": "33.8.0",
+          "partial_implementation": true,
+          "notes": "Only single-line text supports <code>truncate_policy</code>=<code>word</code>."
         }
       }
     }
