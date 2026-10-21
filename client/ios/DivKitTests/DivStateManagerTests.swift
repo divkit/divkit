@@ -123,6 +123,61 @@ final class DivStateManagerTests: XCTestCase {
     )
     stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
     XCTAssertEqual(stateManager.get(stateBlockPath: statePath)?.currentStateID, "second")
+    XCTAssertEqual(stateManager.get(stateBlockPath: statePath)?.previousState, .empty)
+    registerBlock(id: "secondTitle", stateID: "second")
+    XCTAssertFalse(stateManager.isBlockAdded("secondTitle", stateBlockPath: statePath))
+  }
+
+  func test_changingBoundStateAddsOnlyNewBlocks() {
+    let stateBinding = Binding<String>(
+      name: "binding",
+      value: Property<String>(initialValue: "first")
+    )
+    registerBlock(id: "firstTitle", stateID: "first")
+    registerBlock(id: "secondTitle", stateID: "second")
+    stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
+
+    stateBinding.value = "second"
+    stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
+
+    XCTAssertTrue(stateManager.isBlockAdded("secondTitle", stateBlockPath: statePath))
+    XCTAssertFalse(stateManager.isBlockAdded("firstTitle", stateBlockPath: statePath))
+    XCTAssertEqual(stateManager.get(stateBlockPath: statePath)?.previousState, .withID("first"))
+
+    stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
+    XCTAssertEqual(stateManager.get(stateBlockPath: statePath)?.previousState, .withID("first"))
+
+    stateManager.setState(stateBlockPath: statePath, stateID: "second")
+    stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
+    XCTAssertFalse(stateManager.isBlockAdded("secondTitle", stateBlockPath: statePath))
+  }
+
+  func test_bindingPreservesExplicitStateTransition() {
+    stateManager.setStateWithHistory(path: statePath, stateID: "second")
+    let stateBinding = Binding<String>(
+      name: "binding",
+      value: Property<String>(initialValue: "second")
+    )
+
+    stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
+    registerBlock(id: "secondTitle", stateID: "second")
+
+    XCTAssertEqual(stateManager.get(stateBlockPath: statePath)?.previousState, .initial)
+    XCTAssertTrue(stateManager.isBlockAdded("secondTitle", stateBlockPath: statePath))
+  }
+
+  func test_bindingPreservesRestoredStateTransition() {
+    let stateManager = DivStateManager(items: [
+      statePath: DivStateManager.Item(currentStateID: "second", previousState: .initial),
+    ])
+    let stateBinding = Binding<String>(
+      name: "binding",
+      value: Property<String>(initialValue: "second")
+    )
+
+    stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
+
+    XCTAssertEqual(stateManager.get(stateBlockPath: statePath)?.previousState, .initial)
   }
 
   func test_checkBindingChangedAfterSettingStateManually() {
@@ -133,6 +188,13 @@ final class DivStateManagerTests: XCTestCase {
     stateManager.setState(stateBlockPath: statePath, stateBinding: stateBinding)
     stateManager.setState(stateBlockPath: statePath, stateID: "first")
     XCTAssertEqual(stateBinding.value, "first")
+  }
+
+  private func registerBlock(id: String, stateID: DivStateID) {
+    stateManager.updateBlockIdsWithStateChangeTransition(
+      statePath: statePath + stateID,
+      div: divSeparator(id: id, transitionIn: transition, transitionTriggers: [.stateChange])
+    )
   }
 }
 

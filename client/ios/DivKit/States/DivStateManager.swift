@@ -165,8 +165,16 @@ public class DivStateManager {
   func setState(stateBlockPath: DivStatePath, stateBinding: Binding<String>) {
     lock.withLock {
       _stateBindings[stateBlockPath] = stateBinding
-      guard stateBinding.value != _items[stateBlockPath]?.currentStateID.rawValue else { return }
-      updateState(path: stateBlockPath, stateID: DivStateID(rawValue: stateBinding.value))
+      let stateID = DivStateID(rawValue: stateBinding.value)
+      guard let item = _items[stateBlockPath] else {
+        _items[stateBlockPath] = Item(
+          currentStateID: stateID,
+          previousState: .empty
+        )
+        return
+      }
+      guard stateID != item.currentStateID else { return }
+      updateState(path: stateBlockPath, stateID: stateID)
     }
   }
 
