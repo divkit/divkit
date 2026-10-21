@@ -4884,7 +4884,6 @@
     },
     {
       "title": "Masked input autocomplete cursor position",
-      "case_id": 532,
       "platforms": [
         "ios"
       ],
