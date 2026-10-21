@@ -260,7 +260,7 @@ data class State internal constructor(
          */
         val transitionChange: Property<ChangeTransition>?,
         /**
-         * Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+         * Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
          */
         val transitionIn: Property<AppearanceTransition>?,
         /**
@@ -460,7 +460,7 @@ data class State internal constructor(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
@@ -617,7 +617,7 @@ fun DivScope.state(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
@@ -772,7 +772,7 @@ fun DivScope.stateProps(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
@@ -927,7 +927,7 @@ fun TemplateScope.stateRefs(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
@@ -1084,7 +1084,7 @@ fun State.override(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
@@ -1241,7 +1241,7 @@ fun State.defer(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
@@ -1479,7 +1479,7 @@ fun State.evaluate(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
@@ -1637,7 +1637,7 @@ fun Component<State>.override(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
@@ -1877,7 +1877,7 @@ fun Component<State>.evaluate(
  * @param transformations Array of transformations to be applied to the element in sequence.
  * @param transitionAnimationSelector It determines which events trigger transition animations.
  * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).
  * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
  * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
  * @param variableTriggers Triggers for changing variables within an element.
