@@ -3,8 +3,8 @@ package com.yandex.div.steps
 import android.view.View
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.ViewAction
-import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.doesNotHaveFocus
+import androidx.test.espresso.matcher.ViewMatchers.hasFocus
 import androidx.test.espresso.matcher.ViewMatchers.withTagValue
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.yandex.div.internal.KLog
@@ -14,7 +14,7 @@ import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.view.ViewActions.doubleTapWithRetries
 import com.yandex.div.view.ViewActions.longTapWithRetries
 import com.yandex.div.view.ViewActions.tapWithRetries
-import com.yandex.div.view.checkIsDisplayed
+import com.yandex.div.view.waitUntilVisible
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.screenshot.captureScreenshots
@@ -55,6 +55,8 @@ internal class InteractiveScreenshotSteps {
 
                     is Step.VerifyText -> verifyText(step)
 
+                    is Step.VerifyFocus -> verifyFocus(step)
+
                     is Step.VerifySnapshot ->
                         verifySnapshot(scenario, step, snapshotIndex++, casePath, artifactsRelativePath)
                 }
@@ -74,18 +76,16 @@ internal class InteractiveScreenshotSteps {
     }
 
     private fun performTap(id: String) = step("Tap div '$id'") {
-        performOnView(id, tapWithRetries())
+        onView(id).perform(tapWithRetries())
     }
 
     private fun performDoubleTap(id: String) = step("Double tap div '$id'") {
-        performOnView(id, doubleTapWithRetries())
+        onView(id).perform(doubleTapWithRetries())
     }
 
     private fun performLongTap(id: String) = step("Long tap div '$id'") {
-        performOnView(id, longTapWithRetries())
+        onView(id).perform(longTapWithRetries())
     }
-
-    private fun performOnView(id: String, action: ViewAction) = onView(withTagValue(equalTo(id))).perform(action)
 
     private fun waitForStep(wait: Step.Wait) = step("Wait ${wait.delay} ms") {
         Thread.sleep(wait.delay)
@@ -94,10 +94,17 @@ internal class InteractiveScreenshotSteps {
     private fun verifyText(
         verification: Step.VerifyText
     ) = step("Verify text '${verification.text}' in div '${verification.id}'") {
-        onView(withTagValue(equalTo(verification.id)))
-            .check(matches(withText(verification.text)))
-            .checkIsDisplayed()
+        onView(verification.id).waitUntilVisible(withText(verification.text))
     }
+
+    private fun verifyFocus(
+        verification: Step.VerifyFocus
+    ) = step("Verify focused=${verification.focused} in div '${verification.id}'") {
+        val focused = if (verification.focused) hasFocus() else doesNotHaveFocus()
+        onView(verification.id).waitUntilVisible(focused)
+    }
+
+    private fun onView(id: String) = onView(withTagValue(equalTo(id)))
 
     private fun verifySnapshot(
         scenario: ActivityScenario<DivScreenshotActivity>,

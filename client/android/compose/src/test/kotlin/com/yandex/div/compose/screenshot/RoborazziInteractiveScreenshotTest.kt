@@ -15,11 +15,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.TouchInjectionScope
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.doubleClick
+import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.hasTextExactly
+import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
@@ -142,6 +144,8 @@ class RoborazziInteractiveScreenshotTest(
 
                 is Step.VerifyText -> verifyText(step)
 
+                is Step.VerifyFocus -> verifyFocus(step)
+
                 is Step.VerifySnapshot -> verifySnapshot(step, index, recordedSnapshotNames)
             }
 
@@ -155,15 +159,18 @@ class RoborazziInteractiveScreenshotTest(
     }
 
     private fun performOnNode(id: String, gesture: TouchInjectionScope.() -> Unit) =
-        onDiv(id).performTouchInput(gesture)
+        composeRule.onNodeWithTag(id).performTouchInput(gesture)
 
-    private fun verifyText(step: Step.VerifyText) {
-        onDiv(step.id)
-            .assertTextEquals(step.text)
-            .assertIsDisplayed()
+    private fun verifyText(step: Step.VerifyText) = verifyStep(step.id, hasTextExactly(step.text))
+
+    private fun verifyFocus(step: Step.VerifyFocus) {
+        val focusMatcher = isFocused() or hasAnyDescendant(isFocused())
+        val focused = if (step.focused) focusMatcher else !focusMatcher
+        verifyStep(step.id, focused)
     }
 
-    private fun onDiv(id: String) = composeRule.onNodeWithTag(id)
+    private fun verifyStep(id: String, check: SemanticsMatcher) =
+        composeRule.waitUntilVisible(id, check)
 
     @OptIn(ExperimentalRoborazziApi::class)
     private fun verifySnapshot(step: Step.VerifySnapshot, index: Int, recordedSnapshotNames: MutableSet<String>) {

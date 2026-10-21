@@ -1,6 +1,7 @@
 {
   "description": "Input focus after tapping elements with and without focus capture",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

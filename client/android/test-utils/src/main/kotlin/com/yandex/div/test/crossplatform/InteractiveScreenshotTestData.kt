@@ -24,6 +24,8 @@ class InteractiveScreenshotTestData(
         class VerifySnapshot(val name: String, val id: String? = null) : Step()
 
         class VerifyText(val id: String, val text: String) : Step()
+
+        class VerifyFocus(val id: String, val focused: Boolean) : Step()
     }
 
     companion object {
@@ -70,6 +72,8 @@ class InteractiveScreenshotTestData(
                 }
 
                 "verify_text" -> Step.VerifyText(parseTargetId(step), step.getString("text"))
+
+                "verify_focus" -> Step.VerifyFocus(parseTargetId(step), step.getBoolean("focused"))
 
                 else -> throw JSONException("Unknown interactive step type: $type")
             }
