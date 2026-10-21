@@ -84,8 +84,8 @@ internal class DivVideoBinderTest : DivBinderTest() {
     fun setUpBindingDispatcher() {
         val mainHandler = Handler(Looper.getMainLooper())
         divView.viewComponent.bindingDispatcher.apply {
-            whenever { postMainThreadAction(any()) } doAnswer { invocation ->
-                mainHandler.post(invocation.getArgument<() -> Unit>(0))
+            whenever { postMainThreadAction(any(), any()) } doAnswer { invocation ->
+                mainHandler.post(invocation.getArgument<() -> Unit>(1))
                 null
             }
         }

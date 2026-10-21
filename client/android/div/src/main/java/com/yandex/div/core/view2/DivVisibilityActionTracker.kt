@@ -5,12 +5,14 @@ import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.AnyThread
+import androidx.annotation.MainThread
 import androidx.core.os.postDelayed
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.SynchronizedWeakHashMap
 import com.yandex.div.core.util.allAppearActions
 import com.yandex.div.core.util.allDisappearActions
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.util.doOnHierarchyLayout
 import com.yandex.div.core.view2.divs.divBlock
 import com.yandex.div.internal.KAssert
@@ -89,9 +91,23 @@ internal class DivVisibilityActionTracker @Inject constructor(
         appearActions: List<DivVisibilityAction> = div.value().allAppearActions,
         disappearActions: List<DivDisappearAction> = div.value().allDisappearActions
     ) {
-        val visibilityActions = appearActions + disappearActions
-        if (visibilityActions.isEmpty()) return
+        if (appearActions.isEmpty() && disappearActions.isEmpty()) return
 
+        scope.runMainThreadAction(BindingTaskType.DATA) {
+            trackVisibilityActionsOnMain(scope, resolver, view, div, appearActions, disappearActions)
+        }
+    }
+
+    @MainThread
+    private fun trackVisibilityActionsOnMain(
+        scope: Div2View,
+        resolver: ExpressionResolver,
+        view: View?,
+        div: Div,
+        appearActions: List<DivVisibilityAction>,
+        disappearActions: List<DivDisappearAction>,
+    ) {
+        val visibilityActions = appearActions + disappearActions
         val originalDataTag = scope.dataTag
         if (view != null) {
             if (enqueuedVisibilityActions.containsKey(view)) return
@@ -149,7 +165,13 @@ internal class DivVisibilityActionTracker @Inject constructor(
      * Dispatches disappear actions for divs that already appeared but haven't dropped below
      * their disappear threshold yet, e.g. when [view] is being permanently removed via cleanup.
      */
-    fun dispatchWaitingDisappearActions(scope: Div2View, resolver: ExpressionResolver, view: View) {
+    fun dispatchWaitingDisappearActions(scope: Div2View, resolver: ExpressionResolver, view: View) =
+        scope.runMainThreadAction(BindingTaskType.LIFECYCLE) {
+            dispatchWaitingDisappearActionsOnMain(scope, resolver, view)
+        }
+
+    @MainThread
+    private fun dispatchWaitingDisappearActionsOnMain(scope: Div2View, resolver: ExpressionResolver, view: View) {
         val actions = appearedForDisappearActions.remove(view)?.toList() ?: return
         divWithWaitingDisappearActions.remove(view)
         if (actions.isEmpty()) return
@@ -224,7 +246,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         div: Div,
         appearActions: List<DivVisibilityAction>,
         disappearActions: List<DivDisappearAction>
-    ) = scope.runMainThreadAction {
+    ) = scope.runMainThreadAction(BindingTaskType.DATA) {
         val visibilityPercentage = view.let {
             val result = viewVisibilityCalculator.calculateVisibilityPercentage(view)
             updateVisibility(view, div, result, scope)

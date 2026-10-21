@@ -55,113 +55,168 @@ internal class BindingDispatcher @Inject constructor(
     fun cancelPendingTasks() {
         bindingGeneration.incrementAndGet()
         preparedViewHoldersPool.invalidate(divView::logError)
-        synchronized(pendingTasksLock) {
-            pendingTasks.clear()
-            pendingCoalescingTasks.clear()
+        val nextTask = synchronized(pendingTasksLock) {
+            pendingTasks.removeAll { it.type.cancellable }
+            pendingCoalescingTasks.values.removeAll { it.type.cancellable }
 
             val task = activeTask
-            if (task != null && !activeTaskStarted && executor.remove(task.runnable)) {
+            if (task != null && tryCancelNotStartedTaskLocked(task)) {
                 activeTask = null
                 activeTaskStarted = false
-                task.reservationThread?.let(criticalSection::cancelReservationFor)
             }
+            takeNextTaskLocked()
         }
+        nextTask?.let(::submitTask)
+    }
+
+    private fun tryCancelNotStartedTaskLocked(task: PendingTask): Boolean {
+        if (!task.type.cancellable || activeTaskStarted) return false
+        val bindingTask = when (task) {
+            is MainThreadCall -> return true
+            is BindingTask<*> -> task
+        }
+        val runnable = bindingTask.runnable ?: return false
+        if (!executor.remove(runnable)) return false
+
+        bindingTask.reservationThread?.let(criticalSection::cancelReservationFor)
+        return true
     }
 
     /**
-     * Use to schedule new task for background binding.
+     * Use to schedule new task for background binding. Tasks run one by one in FIFO order.
      */
-    inline fun <T> runOnBindingThread(
-        noinline onComplete: ((T) -> Unit)? = null,
-        noinline onError: ((Throwable) -> Unit)? = null,
+    fun <T> runOnBindingThread(
+        type: BindingTaskType,
+        onComplete: ((T) -> Unit)? = null,
+        onError: ((Throwable) -> Unit)? = null,
         coalescingKey: Any? = null,
-        crossinline block: () -> T
+        block: () -> T
     ) {
         require(coalescingKey == null || (onComplete == null && onError == null)) {
             "Coalescing tasks must not have completion or error callbacks"
         }
-        val generation = bindingGeneration.get()
-        lateinit var task: Runnable
-        task = Runnable {
-            synchronized(pendingTasksLock) {
-                if (!isActiveTaskLocked(task)) {
-                    return@Runnable
-                }
-                activeTaskStarted = true
-            }
-            if (bindingGeneration.get() != generation) {
-                criticalSection.cancelReservationFor(Thread.currentThread())
-                completeTask(task)
-                return@Runnable
-            }
+        enqueueTask(BindingTask(type, bindingGeneration.get(), coalescingKey, onComplete, onError, block))
+    }
 
-            val handle = criticalSection.enter()
-            if (bindingGeneration.get() != generation) {
-                criticalSection.exit(handle)
-                completeTask(task)
-                return@Runnable
+    private fun runBindingTask(task: BindingTask<*>) {
+        if (!tryStartTask(task)) {
+            return
+        }
+        if (!task.isUpToDate()) {
+            criticalSection.cancelReservationFor(Thread.currentThread())
+            completeTask(task)
+            return
+        }
+
+        val handle = criticalSection.enter()
+        if (!task.isUpToDate()) {
+            finishTask(task, handle)
+            return
+        }
+        bind(task, handle)
+    }
+
+    private fun <T> bind(task: BindingTask<T>, handle: Disposable) {
+        val preparedHolders = PreparedCollectionViewHoldersPool.BindingBatch(
+            collectionId = System.identityHashCode(divView),
+            generation = task.generation,
+        )
+        try {
+            val (result, deferredActions) = collectMainThreadAction {
+                preparedViewHoldersPool.collect(preparedHolders) { task.block() }
             }
-            val preparedHolders = PreparedCollectionViewHoldersPool.BindingBatch(
-                collectionId = System.identityHashCode(divView),
-                generation = generation,
-            )
-            try {
-                val (result, deferredActions) = collectMainThreadAction {
-                    preparedViewHoldersPool.collect(preparedHolders) { block() }
-                }
-                if (deferredActions.isEmpty() && onComplete == null) {
-                    finishBindingTask(task, handle, preparedHolders)
-                } else {
-                    UiThreadHandler.postOnMainThread {
-                        criticalSection.transferToCurrentThread()
-                        var applied = false
-                        try {
-                            applied = applyMainThreadBinding(generation, deferredActions, onError) {
-                                onComplete?.invoke(result)
-                            }
-                        } finally {
-                            finishBindingTask(task, handle, if (applied) null else preparedHolders)
-                        }
-                    }
-                }
-            } catch (e: Throwable) {
-                finishBindingTask(task, handle, preparedHolders)
-                UiThreadHandler.postOnMainThread {
-                    divView.logError(e)
-                    if (bindingGeneration.get() == generation) {
-                        onError?.invoke(e)
-                    }
+            if (deferredActions.isEmpty() && task.onComplete == null) {
+                finishTask(task, handle, preparedHolders)
+                return
+            }
+            UiThreadHandler.postOnMainThread {
+                criticalSection.transferToCurrentThread()
+                completeOnMain(task, handle, preparedHolders, result, deferredActions)
+            }
+        } catch (e: Throwable) {
+            finishTask(task, handle, preparedHolders)
+            UiThreadHandler.postOnMainThread {
+                divView.logError(e)
+                if (task.isUpToDate()) {
+                    task.onError?.invoke(e)
                 }
             }
         }
-        enqueueTask(task, onError, coalescingKey)
     }
 
-    private fun applyMainThreadBinding(
-        generation: Int,
-        actions: List<Action>,
-        onError: ((Throwable) -> Unit)?,
-        onComplete: () -> Unit,
-    ): Boolean {
+    private fun <T> completeOnMain(
+        task: BindingTask<T>,
+        handle: Disposable,
+        preparedHolders: PreparedCollectionViewHoldersPool.BindingBatch,
+        result: T,
+        deferredActions: List<Action>,
+    ) {
+        var applied = false
         try {
-            for (action in actions) {
-                if (bindingGeneration.get() != generation) return false
+            for (action in deferredActions) {
+                if (!task.isUpToDate()) {
+                    return
+                }
                 action()
             }
-            if (bindingGeneration.get() != generation) return false
-            onComplete()
-            return true
-        } catch (error: Throwable) {
-            divView.logError(error)
-            if (bindingGeneration.get() == generation) onError?.invoke(error)
-            return false
+            if (task.isUpToDate()) {
+                task.onComplete?.invoke(result)
+                applied = true
+            }
+        } catch (e: Throwable) {
+            divView.logError(e)
+            if (task.isUpToDate()) {
+                task.onError?.invoke(e)
+            }
+        } finally {
+            finishTask(task, handle, if (applied) null else preparedHolders)
         }
     }
 
-    private fun finishBindingTask(
-        task: Runnable,
+    private fun runMainThreadCall(task: MainThreadCall) {
+        if (!tryStartTask(task)) {
+            return
+        }
+        if (!task.isUpToDate()) {
+            completeTask(task)
+            return
+        }
+
+        val handle = criticalSection.tryEnter()
+        if (handle == null) {
+            retryMainThreadCallLater(task)
+            return
+        }
+        try {
+            task.action()
+        } finally {
+            finishTask(task, handle)
+        }
+    }
+
+    private fun retryMainThreadCallLater(task: MainThreadCall) {
+        synchronized(pendingTasksLock) {
+            if (activeTask === task) {
+                activeTaskStarted = false
+            }
+        }
+        UiThreadHandler.get().postDelayed({ runMainThreadCall(task) }, MAIN_THREAD_CALL_RETRY_DELAY_MS)
+    }
+
+    private fun tryStartTask(task: PendingTask): Boolean {
+        synchronized(pendingTasksLock) {
+            if (activeTask !== task) {
+                return false
+            }
+            activeTaskStarted = true
+            return true
+        }
+    }
+
+    private fun finishTask(
+        task: PendingTask,
         handle: Disposable,
-        discardedHolders: PreparedCollectionViewHoldersPool.BindingBatch?,
+        discardedHolders: PreparedCollectionViewHoldersPool.BindingBatch? = null,
     ) {
         try {
             discardedHolders?.release(divView::logError)
@@ -172,13 +227,11 @@ internal class BindingDispatcher @Inject constructor(
         }
     }
 
-    private fun enqueueTask(
-        task: Runnable,
-        onError: ((Throwable) -> Unit)?,
-        coalescingKey: Any?,
-    ) {
+    private fun PendingTask.isUpToDate(): Boolean = !type.cancellable || bindingGeneration.get() == generation
+
+    private fun enqueueTask(pendingTask: PendingTask) {
         val nextTask = synchronized(pendingTasksLock) {
-            val pendingTask = PendingTask(task, onError, coalescingKey)
+            val coalescingKey = pendingTask.coalescingKey
             if (coalescingKey != null) {
                 pendingCoalescingTasks.put(coalescingKey, pendingTask)?.let(pendingTasks::remove)
             }
@@ -191,44 +244,51 @@ internal class BindingDispatcher @Inject constructor(
     private fun submitTask(task: PendingTask) {
         var nextTask: PendingTask? = task
         while (nextTask != null) {
-            val currentTask = nextTask
-            val error = trySubmitTask(currentTask)
-            if (error == null) {
-                return
+            val currentTask: PendingTask = nextTask
+            nextTask = when (currentTask) {
+                is MainThreadCall -> {
+                    UiThreadHandler.postOnMainThread { runMainThreadCall(currentTask) }
+                    null
+                }
+                is BindingTask<*> -> {
+                    val error = trySubmitTask(currentTask) ?: return
+                    reportSubmissionError(currentTask, error)
+                    releaseActiveTask(currentTask)
+                }
             }
-
-            reportSubmissionError(currentTask, error)
-            nextTask = completeRejectedTask(currentTask)
         }
     }
 
-    private fun trySubmitTask(task: PendingTask): Throwable? {
+    private fun trySubmitTask(task: BindingTask<*>): Throwable? {
         val bindingThread = try {
             executor.ensureThreadCreated()
         } catch (error: Throwable) {
             return error
         }
 
+        val runnable = Runnable { runBindingTask(task) }
         task.reservationThread = bindingThread
+        task.runnable = runnable
         criticalSection.reserveFor(bindingThread)
         return try {
-            executor.execute(task.runnable)
+            executor.execute(runnable)
             null
         } catch (error: Throwable) {
             criticalSection.cancelReservationFor(bindingThread)
+            task.runnable = null
             task.reservationThread = null
             error
         }
     }
 
-    private fun reportSubmissionError(task: PendingTask, error: Throwable) {
+    private fun reportSubmissionError(task: BindingTask<*>, error: Throwable) {
         UiThreadHandler.postOnMainThread {
             divView.logError(error)
             task.onError?.invoke(error)
         }
     }
 
-    private fun completeRejectedTask(task: PendingTask): PendingTask? {
+    private fun releaseActiveTask(task: PendingTask): PendingTask? {
         return synchronized(pendingTasksLock) {
             if (activeTask !== task) {
                 return null
@@ -239,20 +299,8 @@ internal class BindingDispatcher @Inject constructor(
         }
     }
 
-    private fun completeTask(task: Runnable) {
-        val nextTask = synchronized(pendingTasksLock) {
-            if (activeTask?.runnable !== task) {
-                return
-            }
-            activeTask = null
-            activeTaskStarted = false
-            takeNextTaskLocked()
-        }
-        nextTask?.let(::submitTask)
-    }
-
-    private fun isActiveTaskLocked(task: Runnable): Boolean {
-        return activeTask?.runnable === task
+    private fun completeTask(task: PendingTask) {
+        releaseActiveTask(task)?.let(::submitTask)
     }
 
     private fun takeNextTaskLocked(): PendingTask? {
@@ -281,20 +329,20 @@ internal class BindingDispatcher @Inject constructor(
         }
     }
 
-    inline fun runMainThreadAction(crossinline action: Action) {
+    inline fun runMainThreadAction(type: BindingTaskType, crossinline action: Action) {
         if (UiThreadHandler.get().isMainThread()) {
             action()
         } else {
-            postMainThreadAction { action() }
+            postMainThreadAction(type) { action() }
         }
     }
 
-    fun postMainThreadAction(action: Action) {
+    fun postMainThreadAction(type: BindingTaskType, action: Action) {
         if (isCollectingMainThreadActions) {
             mainThreadActions.add(action)
         } else {
             // Other owners and threads must use this owner's FIFO, without borrowing its lock handle.
-            runOnBindingThread {
+            runOnBindingThread(type) {
                 mainThreadActions.add(action)
             }
         }
@@ -305,12 +353,13 @@ internal class BindingDispatcher @Inject constructor(
      * If background binding not in progress, executes on calling thread.
      * If background binding in progress, executes on background binding thread.
      */
-    inline fun <T> runWithinBindingContext(
+    fun runWithinBindingContext(
+        type: BindingTaskType,
         coalescingKey: Any? = null,
-        crossinline block: () -> T
+        block: () -> Unit
     ) {
         if (isBackgroundBindingInProgress && UiThreadHandler.get().isMainThread()) {
-            runOnBindingThread(null, null, coalescingKey, block)
+            runOnBindingThread(type, coalescingKey = coalescingKey, block = block)
         } else {
             block()
         }
@@ -318,15 +367,7 @@ internal class BindingDispatcher @Inject constructor(
 
     /**
      * Use from methods which could be externally called from main thread while background binding is in progress.
-     * In such case, rejects the execution.
-     *
-     * This method is a shortcut for `safeBindingLock(Unit, block)`.
-     */
-    inline fun withLock(block: () -> Unit): Unit = withLock(Unit, block)
-
-    /**
-     * Use from methods which could be externally called from main thread while background binding is in progress.
-     * In such case, rejects the execution returning [fallback].
+     * In such case, handles the call according to [policy] and returns [fallback].
      *
      * Acquisition is done with [BindingCriticalSection.tryEnter] on the main thread —
      * a single atomic operation inside the section's lock. The previous implementation
@@ -339,17 +380,49 @@ internal class BindingDispatcher @Inject constructor(
      * Off the main thread we still use the blocking [withLockInternal] path, because
      * background binding tasks are expected to serialize against each other.
      */
-    inline fun <T> withLock(fallback: T, block: () -> T): T {
-        if (UiThreadHandler.get().isMainThread()) {
-            val handle = criticalSection.tryEnter()
-            if (handle == null) {
-                reportLockFail()
-                return fallback
-            }
-            return handle.use { block() }
+    fun <T> withLock(
+        fallback: T,
+        policy: MainThreadTaskPolicy = MainThreadTaskPolicy.REJECT,
+        onBusy: Action? = null,
+        block: () -> T,
+    ): T {
+        if (!UiThreadHandler.get().isMainThread()) {
+            return withLockInternal(block)
         }
+        val handle = tryEnterOnMain(policy)
+        if (handle == null) {
+            handleBusy(policy, onBusy) { block() }
+            return fallback
+        }
+        return handle.use { block() }
+    }
 
-        return withLockInternal(block)
+    private fun tryEnterOnMain(policy: MainThreadTaskPolicy): Disposable? = when (policy) {
+        MainThreadTaskPolicy.REJECT -> criticalSection.tryEnter()
+        MainThreadTaskPolicy.DEFER -> tryEnterAfterPendingTasks()
+        MainThreadTaskPolicy.REPLACE -> tryEnterAfterPendingTasks() ?: run {
+            cancelPendingTasks()
+            tryEnterAfterPendingTasks()
+        }
+    }
+
+    private fun handleBusy(policy: MainThreadTaskPolicy, onBusy: Action?, block: Action) {
+        when {
+            onBusy != null -> onBusy()
+            policy == MainThreadTaskPolicy.REJECT -> reportLockFail()
+            policy == MainThreadTaskPolicy.DEFER ->
+                enqueueTask(MainThreadCall(BindingTaskType.DATA, bindingGeneration.get(), block))
+            policy == MainThreadTaskPolicy.REPLACE -> runOnBindingThread(BindingTaskType.DATA, block = block)
+        }
+    }
+
+    private fun tryEnterAfterPendingTasks(): Disposable? {
+        if (criticalSection.isHeldBy(Thread.currentThread())) {
+            return criticalSection.tryEnter()
+        }
+        return synchronized(pendingTasksLock) {
+            if (activeTask == null && pendingTasks.isEmpty()) criticalSection.tryEnter() else null
+        }
     }
 
     private inline fun <T> withLockInternal(block: () -> T): T {
@@ -365,17 +438,36 @@ internal class BindingDispatcher @Inject constructor(
     }
 
     private companion object {
+        const val MAIN_THREAD_CALL_RETRY_DELAY_MS = 16L
         const val MESSAGE_LOCK_FAIL = "Trying to run UI thread binding operation while background one in progress. " +
             "Such actions may cause deadlocks, so your call is terminated. Fix this call ASAP."
         const val MESSAGE_LOCK_FAIL_WITH_ASSERTS_OFF = "Looks like asserts are turned off, so your call received default return value."
     }
 
-    private class PendingTask(
-        val runnable: Runnable,
-        val onError: ((Throwable) -> Unit)?,
+    private sealed class PendingTask(
+        val type: BindingTaskType,
+        val generation: Int,
         val coalescingKey: Any?,
-    ) {
+    )
+
+    private class BindingTask<T>(
+        type: BindingTaskType,
+        generation: Int,
+        coalescingKey: Any?,
+        val onComplete: ((T) -> Unit)?,
+        val onError: ((Throwable) -> Unit)?,
+        val block: () -> T,
+    ) : PendingTask(type, generation, coalescingKey) {
         @Volatile
         var reservationThread: Thread? = null
+
+        @Volatile
+        var runnable: Runnable? = null
     }
+
+    private class MainThreadCall(
+        type: BindingTaskType,
+        generation: Int,
+        val action: Action,
+    ) : PendingTask(type, generation, coalescingKey = null)
 }

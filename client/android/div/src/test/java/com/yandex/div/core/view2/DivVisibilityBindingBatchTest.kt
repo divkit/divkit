@@ -10,6 +10,7 @@ import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivKit
 import com.yandex.div.core.TestComponent
 import com.yandex.div.core.extension.DivExtensionHandler
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.json.missingVariable
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
@@ -276,7 +277,7 @@ class DivVisibilityBindingBatchTest {
         val completed = CountDownLatch(1)
         val failure = AtomicReference<Throwable?>()
         val dispatcher = divView.viewComponent.bindingDispatcher
-        dispatcher.runOnBindingThread<Unit>(onError = { failure.set(it) }) {
+        dispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA, onError = { failure.set(it) }) {
             started.countDown()
             check(resume.await(5, TimeUnit.SECONDS))
         }
@@ -287,6 +288,7 @@ class DivVisibilityBindingBatchTest {
                 divView.discardVisibilityTracking()
             }
             dispatcher.runOnBindingThread<Unit>(
+                BindingTaskType.DATA,
                 onComplete = { completed.countDown() },
                 onError = { failure.set(it); completed.countDown() },
             ) {}

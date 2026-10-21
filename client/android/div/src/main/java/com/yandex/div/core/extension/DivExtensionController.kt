@@ -9,6 +9,7 @@ import com.yandex.div.core.actions.logActionError
 import com.yandex.div.core.actions.logWarning
 import com.yandex.div.core.expression.evaluation.DictEvaluator
 import com.yandex.div.core.expression.suppressExpressionErrors
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.runMainThreadAction
@@ -108,7 +109,7 @@ internal class DivExtensionController @Inject constructor(
             bindExtensionHandlers(divView, view, binding, request, generation)
         }
         if (dispatcher.isCollectingMainThreadActions) {
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.DATA) {
                 suppressExpressionErrors { bind() }
             }
         } else {

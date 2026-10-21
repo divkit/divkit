@@ -2,6 +2,7 @@ package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
@@ -148,7 +149,7 @@ internal class VariableControllerImpl(
         if (divView == null) {
             UiThreadHandler.executeOnMainThread(block)
         } else {
-            divView.runMainThreadAction(block)
+            divView.runMainThreadAction(BindingTaskType.DATA, block)
         }
     }
 

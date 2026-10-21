@@ -47,6 +47,8 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
 import com.yandex.div.core.util.binding.BindingDispatcher
+import com.yandex.div.core.util.binding.BindingTaskType
+import com.yandex.div.core.util.binding.MainThreadTaskPolicy
 import com.yandex.div.core.util.clearTreeAnimations
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
@@ -147,6 +149,7 @@ open class Div2View private constructor(
 
     @VisibleForTesting
     internal var stateId = DivData.INVALID_STATE_ID
+    @Volatile
     private var config = DivViewConfig.DEFAULT
 
     private var rebindTask: RebindTask? = null
@@ -322,7 +325,7 @@ open class Div2View private constructor(
         }
 
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
-        bindingDispatcher.runOnBindingThread(onComplete, onError) {
+        bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete, onError) {
             if (data === divData) {
                 loadMedia()
                 true
@@ -346,7 +349,7 @@ open class Div2View private constructor(
         }
 
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
-        bindingDispatcher.runOnBindingThread(onComplete, onError) {
+        bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete, onError) {
             if (data === divData) {
                 loadMedia()
                 true
@@ -356,10 +359,23 @@ open class Div2View private constructor(
         }
     }
 
-    fun setData(data: DivData?, tag: DivDataTag): Boolean = setDataInternal(data, divData, tag)
+    fun setData(data: DivData?, tag: DivDataTag): Boolean = setDataOrReplacePending(data, null, tag)
 
     fun setData(data: DivData?, oldDivData: DivData?, tag: DivDataTag): Boolean =
-        setDataInternal(data, oldDivData ?: divData, tag)
+        setDataOrReplacePending(data, oldDivData, tag)
+
+    private fun setDataOrReplacePending(
+        data: DivData?,
+        oldDivData: DivData?,
+        tag: DivDataTag,
+        paths: List<DivStatePath>? = null,
+        temporary: Boolean = true,
+    ): Boolean {
+        val policy = if (data === divData) MainThreadTaskPolicy.DEFER else MainThreadTaskPolicy.REPLACE
+        return bindingDispatcher.withLock(fallback = true, policy = policy) {
+            setDataInternal(data, oldDivData ?: divData, tag, paths, temporary)
+        }
+    }
 
     private fun setDataInternal(
         data: DivData?,
@@ -372,11 +388,11 @@ open class Div2View private constructor(
 
         if (data == null) {
             reporter.onBindingFatalNoData()
-            return false
+            return@withLock false
         } else if (divData === data) {
             reporter.onBindingFatalSameData()
             loadMedia()
-            return false
+            return@withLock false
         }
         mediaWasReleased = false
 
@@ -410,7 +426,7 @@ open class Div2View private constructor(
 
         sendCreationHistograms()
         notifyBindEnded()
-        return result
+        result
     }
 
     @ExperimentalApi
@@ -422,7 +438,7 @@ open class Div2View private constructor(
         onComplete: ((Boolean) -> Unit)?,
     ) {
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
-        bindingDispatcher.runOnBindingThread(onComplete, onError) {
+        bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete, onError) {
             setDataInternal(data, divData, tag, paths, temporary)
         }
     }
@@ -432,7 +448,7 @@ open class Div2View private constructor(
         tag: DivDataTag,
         paths: List<DivStatePath>,
         temporary: Boolean
-    ): Boolean = setDataInternal(data, divData, tag, paths, temporary)
+    ): Boolean = setDataOrReplacePending(data, null, tag, paths, temporary)
 
     private fun notifyBindStarted() {
         if (inMiddleOfBind) {
@@ -453,7 +469,7 @@ open class Div2View private constructor(
         onComplete: ((Boolean) -> Unit)?,
     ) {
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
-        bindingDispatcher.runOnBindingThread(onComplete, onError) {
+        bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete, onError) {
             applyPatchInternal(patch)
         }
     }
@@ -461,7 +477,7 @@ open class Div2View private constructor(
     fun applyPatch(patch: DivPatch): Boolean = applyPatchInternal(patch)
 
     private fun applyPatchInternal(patch: DivPatch): Boolean = bindingDispatcher.withLock(fallback = false) {
-        val oldData: DivData = divData ?: return false
+        val oldData: DivData = divData ?: return@withLock false
         val newDivData = div2Component.patchManager.createPatchedDivData(
             oldDivData = oldData,
             divDataTag = dataTag,
@@ -479,15 +495,15 @@ open class Div2View private constructor(
             reporter.onPatchSuccess()
             div2Component.actionPerformer
                 .performActions(this@Div2View, expressionResolver, patch.onAppliedActions, DivActionReason.PATCH)
-            return true
+            return@withLock true
         }
 
-        runMainThreadAction {
+        runMainThreadAction(BindingTaskType.DATA) {
             div2Component.actionPerformer
                 .performActions(this@Div2View, expressionResolver, patch.onFailedActions, DivActionReason.PATCH)
         }
         reporter.onPatchNoState()
-        return false
+        false
     }
 
     private fun tryApplyPatch(
@@ -585,7 +601,8 @@ open class Div2View private constructor(
     }
 
     fun tryLogVisibility(): Unit = bindingDispatcher.runWithinBindingContext(
-        VisibilityTrackingOperation.LOG_VISIBILITY
+        BindingTaskType.DATA,
+        VisibilityTrackingOperation.LOG_VISIBILITY,
     ) {
         val state = divData?.states?.firstOrNull { it.stateId == stateId }
         state?.let { trackStateVisibility(it) }
@@ -603,7 +620,7 @@ open class Div2View private constructor(
         if (UiThreadHandler.get().isMainThread()) {
             visibilityTrackingBatch?.pending = false
         }
-        bindingDispatcher.runWithinBindingContext(VisibilityTrackingOperation.DISCARD) {
+        bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA, VisibilityTrackingOperation.DISCARD) {
             val state = divData?.states?.firstOrNull { it.stateId == stateId }
             state?.let { discardStateVisibility(it, dispatchDisappearActions) }
             discardChildrenVisibility(dispatchDisappearActions)
@@ -665,7 +682,8 @@ open class Div2View private constructor(
     }
 
     private fun trackChildrenVisibilityNow(): Unit = bindingDispatcher.runWithinBindingContext(
-        VisibilityTrackingOperation.TRACK_CHILDREN
+        BindingTaskType.DATA,
+        VisibilityTrackingOperation.TRACK_CHILDREN,
     ) {
         trackChildrenVisibilityInternal()
     }
@@ -761,7 +779,9 @@ open class Div2View private constructor(
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         reportBindingResumedRunnable?.onAttach()
-        tryAttachVariableTriggers(divData)
+        bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA) {
+            tryAttachVariableTriggers(divData)
+        }
         bindOnAttachRunnable?.onAttach()
         reportBindingFinishedRunnable?.onAttach()
         divTimerEventDispatcher?.onAttach(this)
@@ -774,13 +794,15 @@ open class Div2View private constructor(
         discardVisibilityTracking()
         divTimerEventDispatcher?.onDetach(this)
         viewComponent.animatorController.onDetachedFromWindow()
-        runtimeStore.onDetachedFromWindow(this)
+        bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
+            runtimeStore.onDetachedFromWindow(this)
+        }
         dataComponent.layoutProviderBinder.onDetach(this)
         viewComponent.errorMonitor.onDetach()
     }
 
     final override fun addLoadReference(loadReference: LoadReference, targetView: View) {
-        bindingDispatcher.runWithinBindingContext {
+        bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
             loadReferences.add(loadReference)
         }
     }
@@ -790,7 +812,11 @@ open class Div2View private constructor(
         newData: DivData,
         oldData: DivData? = null,
         newDataTag: DivDataTag? = null
-    ): Boolean = bindingDispatcher.withLock(fallback = false) {
+    ): Boolean = bindingDispatcher.withLock(
+        fallback = false,
+        policy = MainThreadTaskPolicy.REPLACE,
+        onBusy = ::cleanup,
+    ) {
         val tag = newDataTag ?: DivDataTag(UUID.randomUUID().toString())
         val newRuntimeStore = div2Component.dataComponentStore.getOrPut(tag.id, div2Component)
             .runtimeStoreProvider.getOrCreate(newData)
@@ -805,21 +831,21 @@ open class Div2View private constructor(
             cleanup()
         }
 
-        return canBeReplaced
+        canBeReplaced
     }
 
     internal val errorCollector get() = dataComponent.errorCollectors.getOrCreate(divData)
 
     fun logError(throwable: Throwable) = errorCollector.logError(throwable)
 
-    fun loadMedia(): Unit = bindingDispatcher.runWithinBindingContext {
+    fun loadMedia(): Unit = bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA) {
         if (mediaWasReleased) {
             mediaWasReleased = false
             viewComponent.mediaLoadViewVisitor.loadMedia()
         }
     }
 
-    fun releaseMedia(): Unit = bindingDispatcher.runWithinBindingContext {
+    fun releaseMedia(): Unit = bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
         mediaWasReleased = true
         cancelImageLoads()
         releaseMedia(this)
@@ -830,7 +856,7 @@ open class Div2View private constructor(
             visibilityTrackingBatch = null
         }
         bindingDispatcher.cancelPendingTasks()
-        bindingDispatcher.runWithinBindingContext {
+        bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
             cleanup(removeChildren = true)
         }
     }
@@ -851,8 +877,10 @@ open class Div2View private constructor(
         dataComponent.layoutProviderBinder.release()
 
         if (removeChildren) {
-            _divData = null
-            resetRuntimeStoreAndTag()
+            runMainThreadAction(BindingTaskType.LIFECYCLE) {
+                _divData = null
+                resetRuntimeStoreAndTag()
+            }
         }
     }
 
@@ -860,8 +888,8 @@ open class Div2View private constructor(
         synchronized(viewToDivBindings) {
             viewToDivBindings.clear()
         }
-        cancelTooltips() // Depends on children, should be called before removing them
-        clearSubscriptions()
+        cancelTooltipsInternal() // Depends on children, should be called before removing them
+        overflowMenuListeners.clear()
         divDataChangedObservers.clear()
     }
 
@@ -873,7 +901,7 @@ open class Div2View private constructor(
     final override fun switchToState(
         stateId: Long,
         temporary: Boolean
-    ): Unit = bindingDispatcher.withLock {
+    ): Unit = withLockOrDefer {
         if (stateId != DivData.INVALID_STATE_ID) {
             bindOnAttachRunnable?.cancel()
             forceSwitchToState(stateId, temporary)
@@ -893,7 +921,7 @@ open class Div2View private constructor(
     final override fun switchToState(
         path: DivStatePath,
         temporary: Boolean
-    ): Unit = bindingDispatcher.withLock {
+    ): Unit = withLockOrDefer {
         val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
         viewComponent.bulkActionHandler.switchState(state, path, temporary)
     }
@@ -932,13 +960,13 @@ open class Div2View private constructor(
      */
     fun addDivDataChangeObserver(
         observer: DivDataChangedObserver
-    ): Unit = bindingDispatcher.runWithinBindingContext {
+    ): Unit = bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
         divDataChangedObservers.add(observer)
     }
 
     fun removeDivDataChangeObserver(
         observer: DivDataChangedObserver
-    ): Unit = bindingDispatcher.runWithinBindingContext {
+    ): Unit = bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
         divDataChangedObservers.remove(observer)
     }
 
@@ -947,18 +975,18 @@ open class Div2View private constructor(
      * The list with these observers doesn't cleans when setting new DivData.
      */
     internal fun addPersistentDivDataObserver(observer: PersistentDivDataObserver) {
-        bindingDispatcher.runWithinBindingContext {
+        bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
             persistentDivDataObservers.addObserver(observer)
         }
     }
 
     internal fun removePersistentDivDataObserver(observer: PersistentDivDataObserver) {
-        bindingDispatcher.runWithinBindingContext {
+        bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
             persistentDivDataObservers.removeObserver(observer)
         }
     }
 
-    final override fun resetToInitialState(): Unit = bindingDispatcher.withLock {
+    final override fun resetToInitialState(): Unit = withLockOrDefer {
         val viewState = currentState
         viewState?.reset()
         dataComponent.stateManager.reset()
@@ -986,7 +1014,7 @@ open class Div2View private constructor(
         val allowsTransition = oldData?.allowsTransitionsOnDataChange(oldExpressionResolver) == true ||
             newData.allowsTransitionsOnDataChange(expressionResolver)
 
-        runMainThreadAction {
+        runMainThreadAction(BindingTaskType.DATA) {
             addNewStateViewWithTransition(oldData, newData, oldState?.div, newState,
                 newStateView, allowsTransition, bindBeforeViewAdded = false)
         }
@@ -1181,11 +1209,11 @@ open class Div2View private constructor(
         }
     }
 
-    fun startDivAnimation(): Unit = bindingDispatcher.runWithinBindingContext {
+    fun startDivAnimation(): Unit = bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA) {
         if (isNotEmpty()) (getChildAt(0) as? DivAnimator)?.startDivAnimation()
     }
 
-    fun stopDivAnimation(): Unit = bindingDispatcher.runWithinBindingContext {
+    fun stopDivAnimation(): Unit = bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA) {
         if (isNotEmpty()) (getChildAt(0) as? DivAnimator)?.stopDivAnimation()
     }
 
@@ -1194,8 +1222,11 @@ open class Div2View private constructor(
         action: DivAction,
         reason: String = DivActionReason.EXTERNAL,
         resolver: ExpressionResolver = expressionResolver
-    ): Unit = bindingDispatcher.withLock {
-        handleActionWithResult(action, reason, resolver)
+    ) {
+        val callResolver = expressionResolver
+        withLockOrDefer {
+            handleActionWithResult(action, reason, resolverAtExecution(resolver, callResolver))
+        }
     }
 
     @JvmOverloads
@@ -1203,28 +1234,30 @@ open class Div2View private constructor(
         action: DivAction,
         reason: String = DivActionReason.EXTERNAL,
         resolver: ExpressionResolver = expressionResolver
-    ): Boolean = bindingDispatcher.withLock(fallback = false) {
-        return div2Component.actionPerformer.performAction(
-            divView = this,
-            resolver,
-            action = action,
-            reason = reason,
-            actionUid = null,
-            viewActionHandler = actionHandler
-        )
-    }
-
-    final override fun handleUri(uri: Uri): Unit = bindingDispatcher.withLock {
-        if (actionHandler?.handleActionUrl(uri, this) == true) {
-            return
+    ): Boolean {
+        val callResolver = expressionResolver
+        return withLockOrDefer(fallback = true) {
+            div2Component.actionPerformer.performAction(
+                divView = this,
+                resolverAtExecution(resolver, callResolver),
+                action = action,
+                reason = reason,
+                actionUid = null,
+                viewActionHandler = actionHandler
+            )
         }
-
-        div2Component.actionHandler.handleActionUrl(uri, this)
     }
 
-    final override fun setConfig(viewConfig: DivViewConfig): Unit = bindingDispatcher.withLock {
-        this.config = viewConfig
+    final override fun handleUri(uri: Uri): Unit = withLockOrDefer {
+        if (actionHandler?.handleActionUrl(uri, this) != true) {
+            div2Component.actionHandler.handleActionUrl(uri, this)
+        }
     }
+
+    final override fun setConfig(viewConfig: DivViewConfig): Unit =
+        bindingDispatcher.runWithinBindingContext(BindingTaskType.LIFECYCLE) {
+            this.config = viewConfig
+        }
 
     final override fun getConfig(): DivViewConfig = config
 
@@ -1233,11 +1266,11 @@ open class Div2View private constructor(
 
     final override fun subscribe(
         listener: OverflowMenuSubscriber.Listener
-    ): Unit = bindingDispatcher.withLock {
+    ): Unit = withLockOrDefer {
         overflowMenuListeners.add(listener)
     }
 
-    final override fun clearSubscriptions(): Unit = bindingDispatcher.withLock {
+    final override fun clearSubscriptions(): Unit = withLockOrDefer {
         overflowMenuListeners.clear()
     }
 
@@ -1255,7 +1288,7 @@ open class Div2View private constructor(
         div2Component.tooltipController.handleConfigurationChange(this)
     }
 
-    final override fun dismissPendingOverflowMenus(): Unit = bindingDispatcher.withLock {
+    final override fun dismissPendingOverflowMenus(): Unit = withLockOrDefer {
         overflowMenuListeners.forEach { it.dismiss() }
     }
 
@@ -1299,7 +1332,7 @@ open class Div2View private constructor(
     ): Unit = showTooltip(tooltipId, multiple, null)
 
     final override fun showTooltip(tooltipId: String, multiple: Boolean, scopeId: String?) {
-        bindingDispatcher.withLock {
+        withLockOrDefer {
             div2Component.tooltipController.showTooltip(tooltipId, this, multiple, scopeId)
         }
     }
@@ -1308,14 +1341,14 @@ open class Div2View private constructor(
     final override fun hideTooltip(tooltipId: String): Unit = hideTooltip(tooltipId, null)
 
     final override fun hideTooltip(tooltipId: String, scopeId: String?) {
-        bindingDispatcher.withLock {
+        withLockOrDefer {
             div2Component.tooltipController.hideTooltip(tooltipId, scopeId)
         }
     }
 
-    final override fun cancelTooltips(): Unit = bindingDispatcher.withLock {
-        div2Component.tooltipController.cancelTooltips(this)
-    }
+    final override fun cancelTooltips(): Unit = withLockOrDefer(::cancelTooltipsInternal)
+
+    private fun cancelTooltipsInternal() = div2Component.tooltipController.cancelTooltips(this)
 
     override fun dispatchDraw(canvas: Canvas) {
         // By default ViewGroup (and FrameLayout) doesn't draw, so draw() call may be skipped.
@@ -1354,14 +1387,14 @@ open class Div2View private constructor(
     fun setVariable(
         name: String,
         value: String
-    ): VariableMutationException? = bindingDispatcher.withLock(fallback = null) {
+    ): VariableMutationException? = withLockOrDefer(fallback = null) {
         div2Component.variableMutationHandler.setVariable(name, value, expressionResolver, errorCollector)
     }
 
     fun applyTimerCommand(
         id: String,
         command: String
-    ): Unit = bindingDispatcher.withLock {
+    ): Unit = withLockOrDefer {
         divTimerEventDispatcher?.changeState(id, command)
     }
 
@@ -1371,9 +1404,21 @@ open class Div2View private constructor(
         command: String,
         expressionResolver: ExpressionResolver = getExpressionResolver(),
         scopeId: String? = null,
-    ): Boolean = bindingDispatcher.withLock(fallback = false) {
-        return div2Component.divVideoActionHandler.handleAction(this, divId, scopeId, command, expressionResolver)
+    ): Boolean {
+        val callResolver = getExpressionResolver()
+        return withLockOrDefer(fallback = true) {
+            val resolver = resolverAtExecution(expressionResolver, callResolver)
+            div2Component.divVideoActionHandler.handleAction(this, divId, scopeId, command, resolver)
+        }
     }
+
+    private fun resolverAtExecution(passed: ExpressionResolver, atCall: ExpressionResolver): ExpressionResolver =
+        if (passed === atCall) getExpressionResolver() else passed
+
+    private fun withLockOrDefer(block: () -> Unit): Unit = withLockOrDefer(Unit, block)
+
+    private fun <T> withLockOrDefer(fallback: T, block: () -> T): T =
+        bindingDispatcher.withLock(fallback, MainThreadTaskPolicy.DEFER, block = block)
 
     internal fun unbindViewFromDiv(view: View): Div? = synchronized(viewToDivBindings) {
         viewToDivBindings.remove(view)
@@ -1395,7 +1440,7 @@ open class Div2View private constructor(
                 return
             }
 
-            runMainThreadAction {
+            runMainThreadAction(BindingTaskType.DATA) {
                 histogramReporter.onRebindingStarted()
                 errorCollector.cleanRuntimeWarningsAndErrors()
                 _divData = newData

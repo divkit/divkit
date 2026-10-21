@@ -4,6 +4,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionPerformer
 import com.yandex.div.core.downloader.PersistentDivDataObserver
 import com.yandex.div.core.expression.ExpressionResolverImpl
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.runMainThreadAction
@@ -161,7 +162,7 @@ private class TriggerExecutor(
 
     private fun tryTriggerActions() {
         attachedViews.forEach { divView ->
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.DATA) {
                 tryTriggerActions(divView)
             }
         }

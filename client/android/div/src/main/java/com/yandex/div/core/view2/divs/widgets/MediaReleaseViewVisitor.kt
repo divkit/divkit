@@ -4,6 +4,7 @@ import android.view.View
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.util.binding.BindingDispatcher
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.view.DivImageView
 import javax.inject.Inject
@@ -16,21 +17,21 @@ internal class MediaReleaseViewVisitor @Inject constructor(
 ) : DivViewVisitor() {
 
     override fun visit(view: DivVideoView) {
-        bindingDispatcher.runMainThreadAction {
+        bindingDispatcher.runMainThreadAction(BindingTaskType.LIFECYCLE) {
             view.releaseMedia()
             defaultVisit(view)
         }
     }
 
     override fun visit(view: DivImageView) {
-        bindingDispatcher.runMainThreadAction {
+        bindingDispatcher.runMainThreadAction(BindingTaskType.LIFECYCLE) {
             view.releaseMedia()
             defaultVisit(view)
         }
     }
 
     override fun visit(view: DivGifImageView) {
-        bindingDispatcher.runMainThreadAction {
+        bindingDispatcher.runMainThreadAction(BindingTaskType.LIFECYCLE) {
             view.releaseMedia()
             defaultVisit(view)
         }

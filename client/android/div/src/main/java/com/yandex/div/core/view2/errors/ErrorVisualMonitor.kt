@@ -6,6 +6,7 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.PERMANENT_DEBUG_PANEL_ENABLED
 import com.yandex.div.core.experiments.Experiment.VISUAL_ERRORS_ENABLED
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.util.hotreload.HotReloadController
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewBindingProvider
@@ -43,7 +44,7 @@ internal class ErrorVisualMonitor @Inject constructor(
     }
 
     private fun connectOrDisconnect() {
-        divView.runMainThreadAction {
+        divView.runMainThreadAction(BindingTaskType.LIFECYCLE) {
             if (canShowDebugView()) {
                 bindingProvider.observeAndGet { debugViewModelProvider.bind(it) }
                 lastConnectionView?.let {
@@ -73,7 +74,7 @@ internal class ErrorVisualMonitor @Inject constructor(
     }
 
     fun connect(root: ViewGroup) {
-        divView.runMainThreadAction {
+        divView.runMainThreadAction(BindingTaskType.LIFECYCLE) {
             lastConnectionView = root
             if (!canShowDebugView()) {
                 return@runMainThreadAction

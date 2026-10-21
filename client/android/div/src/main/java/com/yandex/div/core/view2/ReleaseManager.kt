@@ -7,6 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.internal.Log
 import java.util.WeakHashMap
 import javax.inject.Inject
@@ -59,7 +60,7 @@ internal class ReleaseManager @Inject constructor() {
 
     private fun addLifecycleListener(lifecycleOwner: LifecycleOwner, divView: Div2View) = synchronized(monitor) {
         val views = divToRelease.getOrPut(lifecycleOwner) {
-            divView.runMainThreadAction { lifecycleOwner.lifecycle.addObserver(observer) }
+            divView.runMainThreadAction(BindingTaskType.LIFECYCLE) { lifecycleOwner.lifecycle.addObserver(observer) }
             WeakHashMap<Div2View, Any>()
         }
         views[divView] = Any()

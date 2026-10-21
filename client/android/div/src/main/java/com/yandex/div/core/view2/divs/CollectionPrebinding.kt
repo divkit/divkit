@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.view.ViewGroup
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemovePreparedChildren
 import com.yandex.div.core.view2.runMainThreadAction
@@ -82,7 +83,7 @@ internal class CollectionPrebinding<H : DivCollectionViewHolder>(
         var scheduled = false
         try {
             binding.bind(holder, block, position)
-            divView.runMainThreadAction(item::ready)
+            divView.runMainThreadAction(BindingTaskType.DATA, item::ready)
             scheduled = true
         } finally {
             if (!scheduled) item.release()

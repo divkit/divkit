@@ -29,6 +29,7 @@ import com.yandex.div.core.player.DivVideoResolution
 import com.yandex.div.core.player.DivVideoSource
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.ImageRepresentation
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.DivVideoViewState
@@ -80,7 +81,7 @@ internal class DivVideoBinder @Inject constructor(
 
         if (deferredVideoPlayerCreationEnabled) {
             val initialScale = div.scale.evaluate(resolver)
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.DATA) {
                 videoBindingController.invalidatePendingPreviewBindingIfChanged(preview, initialScale)
                 launchVideoBinding {
                     awaitParentRecyclersStableIdle()
@@ -104,7 +105,7 @@ internal class DivVideoBinder @Inject constructor(
             return
         }
 
-        divView.runMainThreadAction {
+        divView.runMainThreadAction(BindingTaskType.DATA) {
             cancelPendingVideoBinding()
             val currentSource = if (div.hasDynamicSource()) div.createSource(resolver) else source
             if (currentSource.isEmpty() && div.playerSettingsPayload == null) {

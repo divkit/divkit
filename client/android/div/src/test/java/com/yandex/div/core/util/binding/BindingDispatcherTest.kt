@@ -120,6 +120,7 @@ internal class BindingDispatcherTest {
         val onCompleteRan = CountDownLatch(1)
 
         dispatcher.runOnBindingThread(
+            BindingTaskType.DATA,
             onComplete = { _ ->
                 onCompleteThread.set(Thread.currentThread())
 
@@ -177,6 +178,7 @@ internal class BindingDispatcherTest {
         val done = CountDownLatch(1)
 
         dispatcher.runOnBindingThread(
+            BindingTaskType.DATA,
             onComplete = { _ ->
                 repeat(3) {
                     dispatcher.withLock(fallback = false) {
@@ -210,7 +212,7 @@ internal class BindingDispatcherTest {
     fun `runOnBindingThread without onComplete releases lock from binding thread`() {
         val ran = CountDownLatch(1)
 
-        dispatcher.runOnBindingThread(onComplete = null) {
+        dispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete = null) {
             ran.countDown()
         }
 
@@ -240,15 +242,15 @@ internal class BindingDispatcherTest {
         val firstPendingTaskFinished = CountDownLatch(1)
         val secondDispatcherTaskFinished = CountDownLatch(1)
 
-        firstDispatcher.runOnBindingThread(onComplete = {}) {
+        firstDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete = {}) {
             firstBackgroundPhaseFinished.countDown()
         }
         assertTrue(firstBackgroundPhaseFinished.await(2, TimeUnit.SECONDS))
 
-        firstDispatcher.runOnBindingThread {
+        firstDispatcher.runOnBindingThread(BindingTaskType.DATA) {
             firstPendingTaskFinished.countDown()
         }
-        secondDispatcher.runOnBindingThread {
+        secondDispatcher.runOnBindingThread(BindingTaskType.DATA) {
             secondDispatcherTaskFinished.countDown()
         }
 
@@ -268,16 +270,16 @@ internal class BindingDispatcherTest {
         val firstBackgroundPhaseFinished = CountDownLatch(1)
         val allTasksFinished = CountDownLatch(1)
 
-        dispatcher.runOnBindingThread(onComplete = {}) {
+        dispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete = {}) {
             executionOrder += 1
             firstBackgroundPhaseFinished.countDown()
         }
         assertTrue(firstBackgroundPhaseFinished.await(2, TimeUnit.SECONDS))
 
-        dispatcher.runOnBindingThread {
+        dispatcher.runOnBindingThread(BindingTaskType.DATA) {
             executionOrder += 2
         }
-        dispatcher.runOnBindingThread {
+        dispatcher.runOnBindingThread(BindingTaskType.DATA) {
             executionOrder += 3
             allTasksFinished.countDown()
         }
@@ -312,12 +314,12 @@ internal class BindingDispatcherTest {
             val queuedDispatcher = BindingDispatcher(divView, criticalSection, queuedExecutor)
             val completions = mutableListOf<Int>()
 
-            queuedDispatcher.runOnBindingThread(onComplete = { completions += 1 }) {}
+            queuedDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete = { completions += 1 }) {}
             assertTrue(pausedExecutor.runNext())
             assertTrue(criticalSection.isHeldBy(bindingThread))
             assertTrue(completions.isEmpty())
 
-            queuedDispatcher.runOnBindingThread(onComplete = { completions += 2 }) {}
+            queuedDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete = { completions += 2 }) {}
             assertFalse("Second binding must wait for the first main-thread completion", pausedExecutor.hasQueuedTasks())
 
             ShadowLooper.idleMainLooper()
@@ -357,9 +359,9 @@ internal class BindingDispatcherTest {
             }
         }.whenever(rejectedExecutor).execute(any())
 
-        rejectedDispatcher.runOnBindingThread {}
+        rejectedDispatcher.runOnBindingThread(BindingTaskType.DATA) {}
         repeat(pendingTaskCount) {
-            rejectedDispatcher.runOnBindingThread(onError = { errorCount.incrementAndGet() }) {}
+            rejectedDispatcher.runOnBindingThread(BindingTaskType.DATA, onError = { errorCount.incrementAndGet() }) {}
         }
 
         firstTask.get().run()
@@ -382,14 +384,14 @@ internal class BindingDispatcherTest {
 
         val cancelledRuns = AtomicInteger()
         repeat(100) {
-            dispatcher.runOnBindingThread {
+            dispatcher.runOnBindingThread(BindingTaskType.DATA) {
                 cancelledRuns.incrementAndGet()
             }
         }
 
         val otherDispatcher = BindingDispatcher(divView, BindingCriticalSection(), executor)
         val otherRun = CountDownLatch(1)
-        otherDispatcher.runOnBindingThread {
+        otherDispatcher.runOnBindingThread(BindingTaskType.DATA) {
             otherRun.countDown()
         }
 
@@ -413,8 +415,8 @@ internal class BindingDispatcherTest {
         val deferredRuns = AtomicInteger()
         val completionRuns = AtomicInteger()
 
-        dispatcher.runOnBindingThread(onComplete = { completionRuns.incrementAndGet() }) {
-            dispatcher.runMainThreadAction { deferredRuns.incrementAndGet() }
+        dispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete = { completionRuns.incrementAndGet() }) {
+            dispatcher.runMainThreadAction(BindingTaskType.DATA) { deferredRuns.incrementAndGet() }
             backgroundStarted.countDown()
             releaseBackground.await()
             backgroundFinished.countDown()
@@ -446,7 +448,7 @@ internal class BindingDispatcherTest {
         val errorCallbackRuns = AtomicInteger()
         doAnswer { errorLogged.countDown() }.whenever(divView).logError(expectedError)
 
-        dispatcher.runOnBindingThread(onError = { errorCallbackRuns.incrementAndGet() }) {
+        dispatcher.runOnBindingThread(BindingTaskType.DATA, onError = { errorCallbackRuns.incrementAndGet() }) {
             backgroundStarted.countDown()
             try {
                 releaseBackground.await()
@@ -473,11 +475,115 @@ internal class BindingDispatcherTest {
         assertFalse(criticalSection.isReserved)
     }
 
+    @LooperMode(LooperMode.Mode.PAUSED)
+    @Test
+    fun `lifecycle task keeps its main thread actions after cancelPendingTasks`() {
+        ControlledBindingExecutor().use { binding ->
+            val controlled = BindingDispatcher(divView, BindingCriticalSection(), binding.executor)
+            val runs = mutableListOf<String>()
+            controlled.runOnBindingThread<Unit>(BindingTaskType.LIFECYCLE) {
+                controlled.runMainThreadAction(BindingTaskType.LIFECYCLE) { runs += "deferred" }
+            }
+            binding.runNext()
+
+            controlled.cancelPendingTasks()
+            binding.settle()
+
+            assertEquals(listOf("deferred"), runs)
+        }
+    }
+
+    @LooperMode(LooperMode.Mode.PAUSED)
+    @Test
+    fun `cancelPendingTasks keeps posted lifecycle main thread actions and drops data ones`() {
+        ControlledBindingExecutor().use { binding ->
+            val controlled = BindingDispatcher(divView, BindingCriticalSection(), binding.executor)
+            val runs = mutableListOf<String>()
+            controlled.runOnBindingThread<Unit>(BindingTaskType.DATA) { runs += "active" }
+            controlled.postMainThreadAction(BindingTaskType.DATA) { runs += "data" }
+            controlled.postMainThreadAction(BindingTaskType.LIFECYCLE) { runs += "lifecycle" }
+
+            controlled.cancelPendingTasks()
+            binding.settle()
+
+            assertEquals(listOf("lifecycle"), runs)
+        }
+    }
+
+    @LooperMode(LooperMode.Mode.PAUSED)
+    @Test
+    fun `cancelPendingTasks drops queued data tasks and keeps lifecycle ones in order`() {
+        ControlledBindingExecutor().use { binding ->
+            val controlled = BindingDispatcher(divView, BindingCriticalSection(), binding.executor)
+            val runs = mutableListOf<String>()
+            controlled.runOnBindingThread<Unit>(BindingTaskType.DATA) { runs += "active" }
+            controlled.runOnBindingThread<Unit>(BindingTaskType.LIFECYCLE) { runs += "cleanup" }
+            controlled.runOnBindingThread<Unit>(BindingTaskType.DATA) { runs += "stale" }
+
+            controlled.cancelPendingTasks()
+            controlled.runOnBindingThread<Unit>(BindingTaskType.DATA) { runs += "replacement" }
+            binding.settle()
+
+            assertEquals(listOf("cleanup", "replacement"), runs)
+        }
+    }
+
+    @Test(timeout = 5_000)
+    fun `cancelPendingTasks starts lifecycle task left behind a withdrawn one`() {
+        val blockerStarted = CountDownLatch(1)
+        val releaseBlocker = CountDownLatch(1)
+        executor.execute {
+            blockerStarted.countDown()
+            releaseBlocker.await()
+        }
+        assertTrue(blockerStarted.await(1, TimeUnit.SECONDS))
+        val withdrawnRuns = AtomicInteger()
+        val keptRun = CountDownLatch(1)
+
+        dispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA) { withdrawnRuns.incrementAndGet() }
+        dispatcher.runOnBindingThread<Unit>(BindingTaskType.LIFECYCLE) { keptRun.countDown() }
+        dispatcher.cancelPendingTasks()
+        releaseBlocker.countDown()
+
+        assertTrue(keptRun.await(2, TimeUnit.SECONDS))
+        assertEquals(0, withdrawnRuns.get())
+    }
+
+    @LooperMode(LooperMode.Mode.PAUSED)
+    @Test(timeout = 5_000)
+    fun `deferred call waits for a lock held by another thread and runs after it is released`() {
+        val lockTaken = CountDownLatch(1)
+        val releaseLock = CountDownLatch(1)
+        val holder = Thread {
+            val handle = criticalSection.enter()
+            lockTaken.countDown()
+            releaseLock.await()
+            handle.close()
+        }.apply { start() }
+        assertTrue(lockTaken.await(1, TimeUnit.SECONDS))
+        val runs = AtomicInteger()
+
+        val result = dispatcher.withLock(fallback = "deferred", policy = MainThreadTaskPolicy.DEFER) {
+            runs.incrementAndGet()
+            "executed"
+        }
+        ShadowLooper.idleMainLooper()
+        val runsWhileLocked = runs.get()
+        releaseLock.countDown()
+        holder.join(1_000)
+        ShadowLooper.idleMainLooper(100, TimeUnit.MILLISECONDS)
+
+        assertEquals("deferred", result)
+        assertEquals(0, runsWhileLocked)
+        assertEquals(1, runs.get())
+        assertFalse(criticalSection.isHeld)
+    }
+
     @Test(timeout = 10_000)
     fun `coalescing keeps only the latest pending task`() {
         val blockerStarted = CountDownLatch(1)
         val releaseBlocker = CountDownLatch(1)
-        dispatcher.runOnBindingThread<Unit> {
+        dispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA) {
             blockerStarted.countDown()
             releaseBlocker.await()
         }
@@ -487,7 +593,7 @@ internal class BindingDispatcherTest {
         val latestValue = AtomicInteger(-1)
         val latestTaskFinished = CountDownLatch(1)
         repeat(100) { value ->
-            dispatcher.runWithinBindingContext(coalescingKey = "visibility") {
+            dispatcher.runWithinBindingContext(BindingTaskType.DATA, coalescingKey = "visibility") {
                 runs.incrementAndGet()
                 latestValue.set(value)
                 latestTaskFinished.countDown()
@@ -509,7 +615,7 @@ internal class BindingDispatcherTest {
         val runs = AtomicInteger()
         val latestValue = AtomicInteger(-1)
 
-        dispatcher.runOnBindingThread<Unit>(coalescingKey = "visibility") {
+        dispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA, coalescingKey = "visibility") {
             firstTaskStarted.countDown()
             releaseFirstTask.await()
             runs.incrementAndGet()
@@ -517,7 +623,7 @@ internal class BindingDispatcherTest {
         assertTrue(firstTaskStarted.await(1, TimeUnit.SECONDS))
 
         repeat(100) { value ->
-            dispatcher.runOnBindingThread<Unit>(coalescingKey = "visibility") {
+            dispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA, coalescingKey = "visibility") {
                 runs.incrementAndGet()
                 latestValue.set(value)
                 latestTaskFinished.countDown()
@@ -538,10 +644,10 @@ internal class BindingDispatcherTest {
         val secondDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
         val backgroundPhasesFinished = CountDownLatch(2)
 
-        firstDispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+        firstDispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA, onComplete = {}) {
             backgroundPhasesFinished.countDown()
         }
-        secondDispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+        secondDispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA, onComplete = {}) {
             backgroundPhasesFinished.countDown()
         }
         assertTrue(backgroundPhasesFinished.await(1, TimeUnit.SECONDS))
@@ -550,11 +656,11 @@ internal class BindingDispatcherTest {
         val firstLatestValue = AtomicInteger(-1)
         val secondLatestValue = AtomicInteger(-1)
         repeat(10) { value ->
-            firstDispatcher.runWithinBindingContext(coalescingKey = "visibility") {
+            firstDispatcher.runWithinBindingContext(BindingTaskType.DATA, coalescingKey = "visibility") {
                 firstLatestValue.set(value)
                 latestTasksFinished.countDown()
             }
-            secondDispatcher.runWithinBindingContext(coalescingKey = "visibility") {
+            secondDispatcher.runWithinBindingContext(BindingTaskType.DATA, coalescingKey = "visibility") {
                 secondLatestValue.set(value)
                 latestTasksFinished.countDown()
             }
@@ -576,16 +682,16 @@ internal class BindingDispatcherTest {
         val backgroundPhaseFinished = CountDownLatch(1)
         val operationsFinished = CountDownLatch(2)
         val operations = CopyOnWriteArrayList<String>()
-        dispatcher.runOnBindingThread<Unit>(onComplete = {}) {
+        dispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA, onComplete = {}) {
             backgroundPhaseFinished.countDown()
         }
         assertTrue(backgroundPhaseFinished.await(1, TimeUnit.SECONDS))
 
-        dispatcher.runWithinBindingContext(coalescingKey = "discard") {
+        dispatcher.runWithinBindingContext(BindingTaskType.DATA, coalescingKey = "discard") {
             operations += "discard"
             operationsFinished.countDown()
         }
-        dispatcher.runWithinBindingContext(coalescingKey = "track") {
+        dispatcher.runWithinBindingContext(BindingTaskType.DATA, coalescingKey = "track") {
             operations += "track"
             operationsFinished.countDown()
         }
@@ -601,6 +707,7 @@ internal class BindingDispatcherTest {
 
         try {
             dispatcher.runOnBindingThread<Unit>(
+                BindingTaskType.DATA,
                 onComplete = {},
                 coalescingKey = "visibility",
             ) { Unit }

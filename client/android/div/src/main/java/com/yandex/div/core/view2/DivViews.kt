@@ -3,6 +3,7 @@ package com.yandex.div.core.view2
 import android.graphics.Outline
 import android.view.ViewGroup
 import androidx.core.view.allViews
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.internal.util.UiThreadHandler
 
 /**
@@ -28,15 +29,15 @@ public inline fun <T> ViewGroup.withDivViewCanvasClipping(block: () -> T): T {
     }
 }
 
-internal inline fun Div2View.runMainThreadAction(crossinline action: () -> Unit) {
+internal inline fun Div2View.runMainThreadAction(type: BindingTaskType, crossinline action: () -> Unit) {
     // Keep it as is for simplicity of testing
     if (UiThreadHandler.get().isMainThread()) {
         action()
     } else {
-        postMainThreadAction { action() }
+        postMainThreadAction(type) { action() }
     }
 }
 
-internal inline fun Div2View.postMainThreadAction(crossinline action: () -> Unit) {
-    viewComponent.bindingDispatcher.runMainThreadAction(action)
+internal inline fun Div2View.postMainThreadAction(type: BindingTaskType, crossinline action: () -> Unit) {
+    viewComponent.bindingDispatcher.runMainThreadAction(type, action)
 }

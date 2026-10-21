@@ -12,6 +12,7 @@ import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
 import com.yandex.div.core.util.androidInterpolator
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.util.bitmap.applyScaleAndFilters
 import com.yandex.div.core.util.equalsToConstant
 import com.yandex.div.core.util.evaluateGravity
@@ -522,19 +523,19 @@ internal class DivImageBinder @Inject constructor(
         view.applyImage(divBlock.divValue, divBlock.expressionResolver, divView, divView.errorCollector)
 
     private fun DivImageView.setImageDrawable(divView: Div2View, drawable: Drawable?) {
-        divView.runMainThreadAction {
+        divView.runMainThreadAction(BindingTaskType.DATA) {
             setImageDrawable(drawable)
         }
     }
 
     private fun DivImageView.setImageBitmap(divView: Div2View, bitmap: Bitmap?) {
-        divView.runMainThreadAction {
+        divView.runMainThreadAction(BindingTaskType.DATA) {
             setImageBitmap(bitmap)
         }
     }
 
     private fun DivImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
-        divView.runMainThreadAction {
+        divView.runMainThreadAction(BindingTaskType.DATA) {
             if (!isImageLoaded && !isImagePreview) {
                 setPlaceholder(drawable)
             }

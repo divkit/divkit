@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.extension.DivExtensionController
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.view2.divs.DivContainerBinder
 import com.yandex.div.core.view2.divs.DivCustomBinder
 import com.yandex.div.core.view2.divs.DivGifImageBinder
@@ -105,7 +106,7 @@ internal class DivBinder @Inject constructor(
         }
     }
 
-    internal fun attachIndicators(divView: Div2View) = divView.runMainThreadAction {
+    internal fun attachIndicators(divView: Div2View) = divView.runMainThreadAction(BindingTaskType.DATA) {
         pagerIndicatorConnector.attach()
     }
 

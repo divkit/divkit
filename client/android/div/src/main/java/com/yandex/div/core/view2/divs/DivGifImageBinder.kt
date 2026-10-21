@@ -14,6 +14,7 @@ import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.ImageRepresentation
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.util.evaluateGravity
 import com.yandex.div.core.util.toImageScale
 import com.yandex.div.core.view2.Div2View
@@ -335,7 +336,7 @@ internal class DivGifImageBinder @Inject constructor(
         const val GIF_SUFFIX = ".gif"
 
         private fun DivGifImageView.setPlaceholder(divView: Div2View, drawable: Drawable?) {
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.DATA) {
                 if (!isImageLoaded && !isImagePreview) {
                     setPlaceholder(drawable)
                 }
@@ -343,27 +344,27 @@ internal class DivGifImageBinder @Inject constructor(
         }
 
         private fun DivGifImageView.setPreview(divView: Div2View, drawable: Drawable?) {
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.DATA) {
                 setPreview(drawable)
             }
             previewLoaded()
         }
 
         private fun DivGifImageView.setPreview(divView: Div2View, bitmap: Bitmap?) {
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.DATA) {
                 setPreview(bitmap)
             }
             previewLoaded()
         }
 
         private fun DivGifImageView.setImage(divView: Div2View, bitmap: Bitmap?) {
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.DATA) {
                 setImage(bitmap)
             }
         }
 
         private fun DivGifImageView.setImage(divView: Div2View, drawable: Drawable?) {
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.DATA) {
                 setImage(drawable)
             }
         }

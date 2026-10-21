@@ -12,6 +12,7 @@ import com.yandex.div.core.TestViewComponentBuilder
 import com.yandex.div.core.util.EnableAssertsRule
 import com.yandex.div.core.util.binding.BindingCriticalSection
 import com.yandex.div.core.util.binding.BindingDispatcher
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.util.binding.BindingThreadExecutor
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.text
@@ -302,11 +303,11 @@ internal class Div2ViewAsyncBindingTest {
     }
 
     private fun queueWorkerTask() = onMain {
-        view.viewComponent.bindingDispatcher.runOnBindingThread { Unit }
+        view.viewComponent.bindingDispatcher.runOnBindingThread(BindingTaskType.DATA) { Unit }
     }
 
     private fun prepareMainContinuation() {
-        view.viewComponent.bindingDispatcher.runOnBindingThread(onComplete = { _: Unit -> }) { Unit }
+        view.viewComponent.bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete = { _: Unit -> }) { Unit }
         runNextBinding()
     }
 

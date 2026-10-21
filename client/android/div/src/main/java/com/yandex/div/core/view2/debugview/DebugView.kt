@@ -25,6 +25,7 @@ import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.font.DivTypefaceProvider
+import com.yandex.div.core.util.binding.BindingTaskType
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.errors.VariableMonitor
@@ -44,7 +45,7 @@ internal class DebugView(
     private var viewModel: DebugViewModel = DebugViewModel.Hidden
         set(value) {
             field = value
-            divView.runMainThreadAction {
+            divView.runMainThreadAction(BindingTaskType.LIFECYCLE) {
                 updateView(value)
             }
         }
