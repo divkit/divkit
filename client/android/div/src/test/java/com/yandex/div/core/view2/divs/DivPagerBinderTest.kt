@@ -18,7 +18,6 @@ import com.yandex.div2.DivPager
 import com.yandex.div2.DivVisibilityAction
 import org.junit.Assert
 import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.eq
@@ -27,6 +26,8 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import kotlin.test.Test
+import kotlin.test.assertNull
 
 @RunWith(RobolectricTestRunner::class)
 class DivPagerBinderTest: DivBinderTest() {
@@ -59,6 +60,15 @@ class DivPagerBinderTest: DivBinderTest() {
         underTest.bindView(bindingContext, divPagerView, div, rootPath())
 
         Assert.assertEquals(DEFAULT_ITEM, divPagerView.currentItem)
+    }
+
+    @Test
+    fun `measurement callback is cleared when pager is released`() {
+        underTest.bindView(bindingContext, divPagerView, div, rootPath())
+
+        divPagerView.release()
+
+        assertNull(divPagerView.onViewPagerMeasured)
     }
 
     @Test
