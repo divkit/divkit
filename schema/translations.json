@@ -664,8 +664,8 @@
     "ru": "Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой верстке."
   },
   "div_base_transition_in": {
-    "en": "Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction#animation/transition-animation).",
-    "ru": "Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции переходов в разделе [Анимация перехода](../../interaction#animation/transition-animation)."
+    "en": "Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../animation#transition-animation).",
+    "ru": "Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции переходов в разделе [Анимация перехода](../../animation#transition-animation)."
   },
   "div_base_transition_out": {
     "en": "Disappearance animation. It is played when an element disappears in the new layout.",
