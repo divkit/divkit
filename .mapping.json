@@ -13770,6 +13770,7 @@
   "client/web/divkit/typings/store.d.ts":"divkit/public/client/web/divkit/typings/store.d.ts",
   "client/web/divkit/typings/variables.d.ts":"divkit/public/client/web/divkit/typings/variables.d.ts",
   "client/web/divkit/vite.config.mts":"divkit/public/client/web/divkit/vite.config.mts",
+  "compat_data.schema.json":"divkit/public/compat_data.schema.json",
   "compat_data/actions.json":"divkit/public/compat_data/actions.json",
   "compat_data/div-accessibility.json":"divkit/public/compat_data/div-accessibility.json",
   "compat_data/div-actionable.json":"divkit/public/compat_data/div-actionable.json",

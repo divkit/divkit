@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DivKit feature compatibility data",
+  "type": "object",
+  "required": ["features"],
+  "additionalProperties": false,
+  "properties": {
+    "features": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/feature" }
+    }
+  },
+  "definitions": {
+    "feature": {
+      "type": "object",
+      "required": ["id", "name", "compat"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "status": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "deprecated": { "type": "boolean" },
+            "notes": { "type": "string" }
+          }
+        },
+        "compat": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "properties": {
+            "android": { "$ref": "#/definitions/platform" },
+            "ios": { "$ref": "#/definitions/platform" },
+            "web": { "$ref": "#/definitions/platform" },
+            "flutter": { "$ref": "#/definitions/platform" }
+          }
+        }
+      }
+    },
+    "platform": {
+      "oneOf": [
+        { "$ref": "#/definitions/support" },
+        {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/support" }
+        }
+      ]
+    },
+    "support": {
+      "type": "object",
+      "anyOf": [
+        { "required": ["version_added"] },
+        { "required": ["version_removed"] },
+        { "required": ["notes"] }
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "version_added": { "$ref": "#/definitions/version" },
+        "version_removed": { "$ref": "#/definitions/version" },
+        "notes": { "type": "string", "minLength": 1 },
+        "partial_implementation": { "type": "boolean" }
+      }
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    }
+  }
+}
