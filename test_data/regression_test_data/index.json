@@ -5043,7 +5043,10 @@
         "After deleting the symbol, the additional gallery element is hidden"
       ],
       "file": "input_in_gallery.json",
-      "case_id": 477
+      "case_id": 477,
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Color scheme dependent color animator",
