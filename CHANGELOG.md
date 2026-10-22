@@ -1,3 +1,66 @@
+## 33.9.0
+
+### Android Client
+* A mostly vertical drag that starts on a `div-slider` scrolls the enclosing gallery in the Compose renderer, and a tap on the slider no longer triggers the actions of the element around it.
+* A pager with a wrap_content cross size follows its pages when they grow or shrink, for example after a page expands its text, in the Compose renderer.
+* Added `DivConfiguration.Builder.consumeTouchesToClearInputFocus` to allow gestures to reach underlying content while an input remains focused. The default behavior is unchanged.
+* Added `DivViewHost.unbind()` to cancel pending visibility actions and dispatch eligible disappear actions synchronously when Compose content is permanently unbound.
+* Added `networkClient` to `DivConfiguration.Builder` in the Compose renderer. The default patch downloader uses the configured `DivNetworkClient`. `DivConfiguration.Builder.patchDownloader` is deprecated, use `networkClient` to customize network requests.
+* Added a public card-scoped Compose tooltip controller for showing, hiding, cancelling, observing lifecycle events, and tracking stateful tooltip availability. `showTooltip` accepts the reserved `multiple` flag.
+* Added an optional per-request binding lifecycle callback to `setDataAsync`: `PREPARED`, `APPLIED`, `CANCELLED`, or `FAILED`. Callbacks run on the main thread; a prepared view can be attached so its remaining binding can finish.
+* Added experimental `parser-json` module.
+* Added pending asynchronous binding status, covering queued work and main-thread continuations. A prepared root waiting for attachment does not keep this status set.
+* Added support for `bring_to_top_id` in tooltips in the Compose renderer.
+* Added support for `press_start_actions` and `press_end_actions` on actionable elements in the Compose renderer.
+* Added support for modal and non-modal tooltip substrates in the Compose renderer.
+* Added support for the `clear_focus` action in the Compose renderer.
+* Added support for the `focus_element` action in the Compose renderer.
+* Binding failures without a runtime exception use the configured Div2View errors reporter, including the request tag, generation, and reason. Existing runtime errors keep their original reporting path; cancellation is not reported as an error.
+* Changed `DivConfiguration.patchDownloader` property type to nullable.
+* Events follow the existing binding and attachment steps. Existing binding strategies and legacy Boolean completion behavior are preserved; cleanup and retry remain the caller's responsibility.
+* Fixed `set_state` not updating `state_id_variable` of a root `div-state` and of a `div-state` nested in a `div-state` without `state_id_variable`.
+* Fixed a crash when cancelling an OkHttp-backed network request with an unread response body on the main thread.
+* Fixed an issue where opening an action menu changed its anchor position in the Compose renderer.
+* Fixed centering of pages in pagers with different start and end paddings in the Compose renderer.
+* Fixed expression subscriptions to variables declared later in the Compose renderer.
+* Fixed hidden views intercepting touches after an interrupted `action_animation` press animation.
+* Fixed match-parent gallery items along the scroll axis in the Compose renderer.
+* Fixed ring offset scrolling when content fits in the viewport.
+* Fixed the current page and the indicator position of pagers with paddings in the Compose renderer.
+* Fixed the position of centered and end-aligned pages in wrap-content pagers with paddings in the Compose renderer.
+* Fixed the position of the current page after the items of a pager with paddings change in the Compose renderer.
+* Fixed view attach, detach and visibility tracking being applied out of order during asynchronous binding.
+* Gallery item animations respect the animation enablement setting, including changes while the gallery is displayed.
+* Grid gallery with a `wrap_content` cross axis is scrollable in the Compose renderer and sizes its match_parent items by the viewport along the scroll axis.
+* Reworked `div-input` of the Compose renderer around the state-based text field: validators of masked inputs check the formatted text, an externally written raw value is shown sanitized and kept in the raw variable as written, a currency raw variable stores the decimal point and accepts a point or a comma as the decimal separator.
+* Supported `max_length` of masked inputs, `select_all_on_focus`, `enter_key_actions` and `highlight_color` of `div-input` in the Compose renderer.
+* Supported `multi_page_scroll` of `div-pager` in the Compose renderer: a fling turns as many pages as its distance spans, and a slow release settles on the page the gesture moves towards.
+* Supported `press_start_actions` and `press_end_actions` of `div-slider` in the Compose renderer.
+* Supported `restrict_parent_scroll` of `div-pager` in the Compose renderer: gestures that start on the pager no longer scroll its scrolling ancestors.
+* Supported `set_state` inside tooltips: paths without a top-level state id switch `div-state` in the shown tooltip.
+* Supported `submit` actions in the Compose renderer.
+* The current page of a pager stays aligned and selected when its `scroll_axis_alignment`, paddings, `item_spacing`, `page_width`, `neighbour_page_width` or the pager size change at runtime in the Compose renderer.
+* The current page of a wrap-content pager stays aligned and selected when visible pages resize in the Compose renderer, unless the previous page shrinks out of the viewport.
+* `Div2View` calls made on the main thread during asynchronous binding (`setConfig`, state switching, actions, variables, tooltips) are no longer rejected and take effect after the binding.
+* `div-state` inside tooltips no longer shares its state with a card `div-state` that has the same id: tooltip states are stored separately.
+* `div-text` images with `start` beyond the 32-bit integer range are no longer shown at the beginning of the text in the Compose renderer.
+* `div-text` range `start` and `end` values beyond the 32-bit integer range are clamped to the text length in the Compose renderer, as in the View renderer.
+* `div-text` range actions in the Compose renderer run only on taps over the range's characters: a tap next to a short range, or on the ellipsis that hides a range, runs the text's own actions.
+* `setData` called during asynchronous binding is no longer rejected and replaces the pending binding.
+* `thumb_text_style` and `thumb_secondary_text_style` of `div-slider` take their font from the configured font source provider in the Compose renderer, so `font_family`, `font_weight`, `font_weight_value` and `font_variation_settings` of the thumb text render as in the View renderer.
+
+### iOS Client
+* Added `TooltipInfo.actionSource` to expose the trigger source of tooltip show requests, including user gestures and visibility actions. The source is passed for both typed `show_tooltip` and `div-action://show_tooltip` actions; host-created requests default to `nil`.
+* Added an optional observer for the beginning, scale changes and end of pinch-to-zoom sessions.
+* Fixed `line_separator` in containers with `layout_mode: wrap` following `content_alignment_horizontal` and `content_alignment_vertical`. Line separators are now always centered on the main axis.
+* Fixed `wrap_content` constrained container items not shrinking enough to fit the `min_size` of their `match_parent` siblings.
+* Fixed unintended state-change animations on initial `state_id_variable` binding.
+* Limit the previous-value snapshot to incoming variable keys during batch updates.
+
+### Web Client
+* The `select_all_on_focus` property for `input` now works with `focus` action as well.
+
+
 ## 33.8.0
 
 ### Android Client

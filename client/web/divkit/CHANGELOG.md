@@ -1,3 +1,8 @@
+## 33.9.0 (October 26, 2026)
+
+* The `select_all_on_focus` property for `input` now works with `focus` action as well.
+
+
 ## 33.8.0 (October 19, 2026)
 
 * Added single-line `truncate_policy: word` support to the Web text renderer.
