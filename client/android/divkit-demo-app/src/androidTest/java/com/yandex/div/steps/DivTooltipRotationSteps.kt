@@ -129,8 +129,10 @@ internal class DivTooltipRotationSteps : DivTestAssetSteps() {
         }
 
     private fun rotationTooltipViews(): RotationTooltipViews {
-        val divView = requireRotationState().divView
+        val state = requireRotationState()
+        val divView = state.divView
         return RotationTooltipViews(
+            screen = state.activity.fullScreenBounds,
             div2View = divView,
             anchor = activityView(ROTATION_ANCHOR_ID, divView),
             sourceOmnibox = activityView(ROTATION_SOURCE_OMNIBOX_ID, divView),
@@ -197,6 +199,7 @@ private class TooltipAtBottomCenterIdlingResource(
 }
 
 private class RotationTooltipViews(
+    private val screen: Rect,
     private val div2View: Div2View,
     private val anchor: View,
     private val sourceOmnibox: View,
@@ -215,6 +218,7 @@ private class RotationTooltipViews(
     )
 
     fun geometry() = RotationTooltipGeometry(
+        screen = screen,
         div2View = div2View.boundsOnScreen,
         anchor = anchor.boundsOnScreen,
         sourceOmnibox = sourceOmnibox.boundsOnScreen,
@@ -230,7 +234,7 @@ private class RotationTooltipViews(
             allViewsShown = allViews.all(View::isShown),
             allLayoutsSettled = allViews.none(View::isLayoutRequested),
             expectedOrientation = geometry.hasExpectedOrientation(orientation),
-            popupCoversDiv2View = geometry.popupRoot.hasSameSizeAs(geometry.div2View),
+            popupCoversScreen = geometry.popupRoot == geometry.screen,
             overlayMatchesSource = geometry.overlayOmnibox == geometry.sourceOmnibox,
             bubbleTouchesAnchor = abs(geometry.bubble.bottom - geometry.anchor.top) <= 1,
             bubbleIsCenteredOnScreen = geometry.bubble.isCenteredHorizontallyIn(geometry.div2View),
@@ -244,7 +248,7 @@ private data class TooltipPlacementState(
     val allViewsShown: Boolean,
     val allLayoutsSettled: Boolean,
     val expectedOrientation: Boolean,
-    val popupCoversDiv2View: Boolean,
+    val popupCoversScreen: Boolean,
     val overlayMatchesSource: Boolean,
     val bubbleTouchesAnchor: Boolean,
     val bubbleIsCenteredOnScreen: Boolean,
@@ -255,7 +259,7 @@ private data class TooltipPlacementState(
         get() = allViewsShown &&
             allLayoutsSettled &&
             expectedOrientation &&
-            popupCoversDiv2View &&
+            popupCoversScreen &&
             overlayMatchesSource &&
             bubbleTouchesAnchor &&
             bubbleIsCenteredOnScreen &&
@@ -263,6 +267,7 @@ private data class TooltipPlacementState(
 }
 
 private data class RotationTooltipGeometry(
+    val screen: Rect,
     val div2View: Rect,
     val anchor: Rect,
     val sourceOmnibox: Rect,
@@ -309,10 +314,6 @@ private fun View.fitToWindowFrame(parent: View, decorView: View) {
     )
     this.layoutParams = layoutParams
     parent.requestLayout()
-}
-
-private fun Rect.hasSameSizeAs(other: Rect): Boolean {
-    return width() == other.width() && height() == other.height()
 }
 
 private fun Rect.isCenteredHorizontallyIn(other: Rect): Boolean {

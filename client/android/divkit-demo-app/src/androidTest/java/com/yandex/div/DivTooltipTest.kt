@@ -131,6 +131,18 @@ class DivTooltipTest {
     }
 
     @Test
+    fun tooltipSubstrateCoversScreen() {
+        tooltipDiv {
+            activityRule.buildBringToTopContainer()
+            showBringToTopTooltip()
+
+            assert {
+                popupCoversScreen(activityRule.activity)
+            }
+        }
+    }
+
+    @Test
     fun nonModalTooltipAllowsClickingUnderlyingElements() {
         tooltipDiv {
             activityRule.buildContainer()

@@ -107,8 +107,13 @@ internal class DivTooltipViewFactory @Inject constructor(
 
         popupWindow.setTouchInterceptor(touchListener)
         if (data.substrateBlock != null) {
-            popupWindow.isAttachedInDecor = true
             popupWindow.isClippingEnabled = false
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                popupWindow.isAttachedInDecor = false
+                popupWindow.setIsLaidOutInScreen(true)
+            } else {
+                popupWindow.isAttachedInDecor = true
+            }
         }
 
         if (!isModal) {

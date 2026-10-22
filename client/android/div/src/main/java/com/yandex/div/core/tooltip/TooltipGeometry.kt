@@ -2,7 +2,9 @@ package com.yandex.div.core.tooltip
 
 import android.graphics.Point
 import android.graphics.Rect
+import android.os.Build
 import android.view.View
+import android.view.WindowManager
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div2.DivTooltip
 
@@ -38,10 +40,18 @@ internal fun View.getWindowFrame(): Rect {
     return Rect().also(::getWindowVisibleDisplayFrame)
 }
 
-internal fun View.getWindowContentSize(): Point {
-    val windowFrame = getWindowFrame()
-    if (windowFrame.width() > 0 && windowFrame.height() > 0) {
-        return Point(windowFrame.width(), windowFrame.height())
+internal fun View.getWindowSize(): Point {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val bounds = context.getSystemService(WindowManager::class.java).currentWindowMetrics.bounds
+        if (bounds.width() > 0 && bounds.height() > 0) {
+            return Point(bounds.width(), bounds.height())
+        }
+    }
+
+    val displaySize = Point()
+    display?.getRealSize(displaySize)
+    if (displaySize.x > 0 && displaySize.y > 0) {
+        return displaySize
     }
 
     return resources.displayMetrics.let { Point(it.widthPixels, it.heightPixels) }

@@ -2,6 +2,7 @@ package com.yandex.div.core.tooltip
 
 import android.content.res.Resources
 import android.graphics.Rect
+import android.os.Build
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.View
@@ -49,6 +50,7 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLooper
 
 @RunWith(RobolectricTestRunner::class)
@@ -254,6 +256,7 @@ class DivTooltipViewTest {
     }
 
     @Test
+    @Config(sdk = [Build.VERSION_CODES.Q])
     fun `recompute fills popup window and positions tooltip when substrate exists`() {
         container.setViews(
             substrate = substrateView,

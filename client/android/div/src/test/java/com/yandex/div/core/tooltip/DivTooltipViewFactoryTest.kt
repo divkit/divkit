@@ -1,6 +1,7 @@
 package com.yandex.div.core.tooltip
 
 import android.app.Activity
+import android.os.Build
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -40,6 +41,7 @@ import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 class DivTooltipViewFactoryTest {
@@ -184,7 +186,19 @@ class DivTooltipViewFactoryTest {
     }
 
     @Test
-    fun `substrate popup fills decor without clipping`() {
+    @Config(sdk = [Build.VERSION_CODES.Q])
+    fun `substrate popup fills screen without clipping`() {
+        val popup = showTooltip(substrateDiv = div)
+
+        assertFalse(popup.isAttachedInDecor)
+        assertFalse(popup.isClippingEnabled)
+        assertTrue(popup.isLaidOutInScreen)
+        assertEquals(ViewGroup.LayoutParams.MATCH_PARENT, popup.width)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.P])
+    fun `substrate popup stays attached to decor before Android Q`() {
         val popup = showTooltip(substrateDiv = div)
 
         assertTrue(popup.isAttachedInDecor)

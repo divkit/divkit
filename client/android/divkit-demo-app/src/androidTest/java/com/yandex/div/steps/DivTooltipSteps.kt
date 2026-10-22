@@ -1,6 +1,9 @@
 package com.yandex.div.steps
 
+import android.app.Activity
 import android.graphics.Point
+import android.graphics.Rect
+import android.os.Build
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
@@ -30,6 +33,7 @@ import com.yandex.divkit.demo.DummyActivity
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.assertNoPopupsAreDisplayed
+import org.junit.Assert.assertTrue
 
 internal fun tooltipDiv(f: DivTooltipSteps.() -> Unit) = f(DivTooltipSteps())
 
@@ -46,7 +50,16 @@ internal class DivTooltipSteps : DivTestAssetSteps() {
         buildContainer(MATCH_PARENT, MATCH_PARENT)
     }
 
+    fun ActivityTestRule<DummyActivity>.buildBringToTopContainer() {
+        testAsset = "regression_test_data/tooltips/tooltip-with-bring-to-top-view.json"
+        buildContainer(MATCH_PARENT, MATCH_PARENT)
+    }
+
     fun showStatesTooltip(): Unit = step("Show tooltip with states") {
+        onView(withText("Show tooltip")).perform(click())
+    }
+
+    fun showBringToTopTooltip(): Unit = step("Show tooltip with substrate and bring-to-top view") {
         onView(withText("Show tooltip")).perform(click())
     }
 
@@ -103,6 +116,21 @@ internal class DivTooltipAssertions {
         tooltip().check(matches(isDisplayed()))
     }
 
+    fun popupCoversScreen(activity: Activity): Unit = step("Check tooltip substrate covers the whole screen") {
+        onView(isRoot()).inRoot(isPlatformPopup()).check { view, _ ->
+            val location = IntArray(2)
+            view.getLocationOnScreen(location)
+            val actual = Rect(
+                location[0],
+                location[1],
+                location[0] + view.width,
+                location[1] + view.height,
+            )
+            val expected = activity.fullScreenBounds
+            assertTrue("Expected popup bounds $expected, actual=$actual", actual == expected)
+        }
+    }
+
     fun noTooltipsDisplayed() = step("Check no tooltips are displayed") {
         assertNoPopupsAreDisplayed()
     }
@@ -143,6 +171,15 @@ internal class DivTooltipAssertions {
         onView(withText(text)).inRoot(isPlatformPopup()).check(doesNotExist())
     }
 }
+
+internal val Activity.fullScreenBounds: Rect
+    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        windowManager.currentWindowMetrics.bounds
+    } else {
+        val size = Point()
+        windowManager.defaultDisplay.getRealSize(size)
+        Rect(0, 0, size.x, size.y)
+    }
 
 private fun tooltip() = onView(withText("tooltip_text")).inRoot(isPlatformPopup())
 

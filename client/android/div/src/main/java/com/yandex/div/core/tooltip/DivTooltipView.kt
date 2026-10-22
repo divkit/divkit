@@ -201,7 +201,7 @@ private fun calculateLayout(
     tooltipView: View,
 ): TooltipLayout {
     val windowFrame = data.divView.getWindowFrame()
-    val windowSize = data.divView.getWindowContentSize()
+    val windowSize = data.divView.getWindowSize()
     tooltipView.requestLayout()
     val measuredTooltipSize = measureTooltip(container, tooltipView, windowFrame)
     val tooltipSize = resolveTooltipSize(measuredTooltipSize, windowFrame)
