@@ -10,9 +10,8 @@ func resolveTextInput(
   }
 
   var inputs: [XCUIElement] = []
-  // Walk through wrappers to find native inputs, keeping each result
-  // bound to its accessibility element throughout the traversal.
-  var elementsToCheck = element.children(matching: .any).allElementsBoundByAccessibilityElement
+  // Walk through wrappers to find native inputs.
+  var elementsToCheck = element.children(matching: .any).allElementsBoundByIndex
   while let candidate = elementsToCheck.popLast() {
     if requiredInputTypes.contains(candidate.elementType) {
       // A non-editable UITextView can expose text lines as accessibility children.
@@ -20,7 +19,7 @@ func resolveTextInput(
       inputs.append(candidate)
     } else {
       elementsToCheck.append(
-        contentsOf: candidate.children(matching: .any).allElementsBoundByAccessibilityElement
+        contentsOf: candidate.children(matching: .any).allElementsBoundByIndex
       )
     }
   }
