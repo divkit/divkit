@@ -1,0 +1,135 @@
+{
+  "description": "Tapping a DivState's text buttons runs set_state actions to switch to the other state and back; the displayed text follows both transitions.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "margins": {
+          "top": 16,
+          "bottom": 16,
+          "left": 16,
+          "right": 16
+        },
+        "border": {
+          "corner_radius": 8
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alpha": 1.0,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center"
+      }
+    },
+    "card": {
+      "log_id": "simple_tap",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "state",
+            "id": "label",
+            "alignment_vertical": "center",
+            "height": {
+              "type": "match_parent"
+            },
+            "states": [
+              {
+                "state_id": "not_tapped",
+                "div": {
+                  "type": "button",
+                  "id": "click_on_me_button",
+                  "text": "Click on me",
+                  "actions": [
+                    {
+                      "log_id": "not_tapped",
+                      "url": "div-action://set_state?state_id=0/label/tapped"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "tapped",
+                "div": {
+                  "type": "button",
+                  "id": "you_clicked_on_me_button",
+                  "text": "You clicked on me :)",
+                  "actions": [
+                    {
+                      "log_id": "tapped",
+                      "url": "div-action://set_state?state_id=0/label/not_tapped"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "click_on_me_button"
+      },
+      "text": "Click on me"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "click_on_me_button"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "you_clicked_on_me_button"
+      },
+      "text": "You clicked on me :)"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "you_clicked_on_me_button"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "click_on_me_button"
+      },
+      "text": "Click on me"
+    }
+  ]
+}

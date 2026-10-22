@@ -1,0 +1,264 @@
+{
+  "description": "With both pagers sharing the same ID and both indicators omitting pager_id, each indicator auto-binds to its nearest pager. Three real swipes and whole-card snapshots check independent upper/lower page and indicator selections of 1/0 and 1/2.",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "pager_item": {
+        "type": "container",
+        "width": {
+          "type": "fixed",
+          "value": 200
+        },
+        "height": {
+          "type": "fixed",
+          "value": 200
+        },
+        "content_alignment_vertical": "center",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0e000000"
+          }
+        ],
+        "items": [
+          {
+            "type": "text",
+            "$text": "item_text",
+            "font_size": 20,
+            "text_color": "#000000",
+            "text_alignment_horizontal": "center"
+          }
+        ],
+        "border": {
+          "corner_radius": 16
+        }
+      },
+      "pager_block": {
+        "type": "pager",
+        "layout_mode": {
+          "type": "wrap_content"
+        },
+        "width": {
+          "type": "match_parent"
+        },
+        "items": [
+          {
+            "type": "pager_item",
+            "item_text": "Item 0"
+          },
+          {
+            "type": "pager_item",
+            "item_text": "Item 1"
+          },
+          {
+            "type": "pager_item",
+            "item_text": "Item 2"
+          }
+        ],
+        "id": "pager",
+        "item_spacing": {
+          "type": "fixed",
+          "value": 4
+        }
+      },
+      "indicator_block": {
+        "type": "indicator",
+        "active_shape": {
+          "type": "rounded_rectangle",
+          "background_color": "#21201F",
+          "corner_radius": {
+            "type": "fixed",
+            "value": 16
+          },
+          "item_height": {
+            "type": "fixed",
+            "value": 16
+          },
+          "item_width": {
+            "type": "fixed",
+            "value": 16
+          },
+          "stroke": {
+            "color": "#FFFFFF",
+            "unit": "px",
+            "width": 1
+          }
+        },
+        "alignment_horizontal": "center",
+        "alignment_vertical": "bottom",
+        "height": {
+          "type": "wrap_content"
+        },
+        "inactive_minimum_shape": {
+          "type": "rounded_rectangle",
+          "background_color": "#4d21201F",
+          "corner_radius": {
+            "type": "fixed",
+            "value": 14
+          },
+          "item_height": {
+            "type": "fixed",
+            "value": 14
+          },
+          "item_width": {
+            "type": "fixed",
+            "value": 14
+          },
+          "stroke": {
+            "color": "#FFFFFF",
+            "unit": "px",
+            "width": 1
+          }
+        },
+        "inactive_shape": {
+          "type": "rounded_rectangle",
+          "background_color": "#4d21201F",
+          "corner_radius": {
+            "type": "fixed",
+            "value": 14
+          },
+          "item_height": {
+            "type": "fixed",
+            "value": 14
+          },
+          "item_width": {
+            "type": "fixed",
+            "value": 14
+          },
+          "stroke": {
+            "color": "#FFFFFF",
+            "unit": "px",
+            "width": 1
+          }
+        },
+        "margins": {
+          "bottom": 5,
+          "right": 6
+        },
+        "space_between_centers": {
+          "type": "fixed",
+          "value": 18
+        },
+        "width": {
+          "type": "wrap_content"
+        }
+      }
+    },
+    "card": {
+      "log_id": "div2_sample_card",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "content_alignment_horizontal": "center",
+            "items": [
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "match_parent"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "pager_block"
+                  },
+                  {
+                    "type": "indicator_block"
+                  }
+                ],
+                "id": "upper_pager_container"
+              },
+              {
+                "type": "container",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "match_parent"
+                },
+                "content_alignment_horizontal": "center",
+                "items": [
+                  {
+                    "type": "indicator_block"
+                  },
+                  {
+                    "type": "pager_block"
+                  }
+                ],
+                "id": "lower_pager_container"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "upper_pager_container"
+      },
+      "from": {
+        "x": 0.7,
+        "y": 0.2
+      },
+      "to": {
+        "x": 0.3,
+        "y": 0.2
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "upper_1_lower_0"
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "lower_pager_container"
+      },
+      "from": {
+        "x": 0.7,
+        "y": 0.2
+      },
+      "to": {
+        "x": 0.3,
+        "y": 0.2
+      }
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "lower_pager_container"
+      },
+      "from": {
+        "x": 0.7,
+        "y": 0.2
+      },
+      "to": {
+        "x": 0.3,
+        "y": 0.2
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "upper_1_lower_2"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "description": "Trigger with mode 'on_condition'",
+  "description": "Triggers with mode 'on_condition': condition transitions and all four combinations of two boolean variables.",
   "div_data": {
     "card": {
       "log_id": "sample_card",
@@ -13,6 +13,21 @@
           "name": "trigger_state",
           "type": "string",
           "value": "unset"
+        },
+        {
+          "name": "left_switched",
+          "type": "boolean",
+          "value": 0
+        },
+        {
+          "name": "right_switched",
+          "type": "boolean",
+          "value": 0
+        },
+        {
+          "name": "combined_trigger_state",
+          "type": "string",
+          "value": "unset"
         }
       ],
       "variable_triggers": [
@@ -23,6 +38,46 @@
             {
               "log_id": "trigger_invoke",
               "url": "div-action://set_variable?name=trigger_state&value=activated"
+            }
+          ]
+        },
+        {
+          "condition": "@{left_switched && !right_switched}",
+          "mode": "on_condition",
+          "actions": [
+            {
+              "log_id": "set_left_trigger_state",
+              "url": "div-action://set_variable?name=combined_trigger_state&value=Left%20switched"
+            }
+          ]
+        },
+        {
+          "condition": "@{!left_switched && right_switched}",
+          "mode": "on_condition",
+          "actions": [
+            {
+              "log_id": "set_right_trigger_state",
+              "url": "div-action://set_variable?name=combined_trigger_state&value=Right%20switched"
+            }
+          ]
+        },
+        {
+          "condition": "@{left_switched && right_switched}",
+          "mode": "on_condition",
+          "actions": [
+            {
+              "log_id": "set_both_trigger_state",
+              "url": "div-action://set_variable?name=combined_trigger_state&value=Both%20switched"
+            }
+          ]
+        },
+        {
+          "condition": "@{!left_switched && !right_switched}",
+          "mode": "on_condition",
+          "actions": [
+            {
+              "log_id": "set_neither_trigger_state",
+              "url": "div-action://set_variable?name=combined_trigger_state&value=No%20buttons%20switched"
             }
           ]
         }
@@ -178,6 +233,144 @@
           "value": {
             "type": "string",
             "value": "unset"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=left_switched&value=1",
+            "log_id": "set_left_switched_1"
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "combined_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "Left switched"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=left_switched&value=1",
+            "log_id": "set_left_switched_1"
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=right_switched&value=1",
+            "log_id": "set_right_switched_1"
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "combined_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "Both switched"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=left_switched&value=1",
+            "log_id": "set_left_switched_1"
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=right_switched&value=1",
+            "log_id": "set_right_switched_1"
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=left_switched&value=0",
+            "log_id": "set_left_switched_0"
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "combined_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "Right switched"
+          }
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "steps": [
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=left_switched&value=1",
+            "log_id": "set_left_switched_1"
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=right_switched&value=1",
+            "log_id": "set_right_switched_1"
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=left_switched&value=0",
+            "log_id": "set_left_switched_0"
+          }
+        },
+        {
+          "type": "div_action",
+          "action": {
+            "url": "div-action://set_variable?name=right_switched&value=0",
+            "log_id": "set_right_switched_0"
+          }
+        },
+        {
+          "type": "verify_variable",
+          "variable_name": "combined_trigger_state",
+          "value": {
+            "type": "string",
+            "value": "No buttons switched"
           }
         }
       ],

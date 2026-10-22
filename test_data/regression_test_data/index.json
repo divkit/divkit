@@ -173,6 +173,8 @@
         "DivAction"
       ],
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "steps": [
@@ -406,6 +408,8 @@
         "web"
       ],
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "tags": [
@@ -585,6 +589,7 @@
         "web"
       ],
       "automated": [
+        "ios",
         "web"
       ],
       "tags": [
@@ -635,6 +640,7 @@
         "web"
       ],
       "automated": [
+        "ios",
         "web"
       ],
       "tags": [
@@ -1940,7 +1946,8 @@
         "web"
       ],
       "automated": [
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "visibility_actions"
@@ -1960,7 +1967,8 @@
       "case_id": 54,
       "automated": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "platforms": [
         "ios",
@@ -1990,7 +1998,8 @@
         "android"
       ],
       "automated": [
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "visibility_actions",
@@ -2015,6 +2024,7 @@
         "android"
       ],
       "automated": [
+        "ios",
         "web"
       ],
       "tags": [
@@ -2040,7 +2050,8 @@
         "android"
       ],
       "automated": [
-        "android"
+        "android",
+        "ios"
       ],
       "tags": [
         "visibility_actions",
@@ -2065,7 +2076,8 @@
       ],
       "automated": [
         "android",
-        "web"
+        "web",
+        "ios"
       ],
       "tags": [
         "visibility_actions",
@@ -2145,6 +2157,7 @@
         "android"
       ],
       "automated": [
+        "ios",
         "web"
       ],
       "tags": [
@@ -2168,6 +2181,7 @@
         "android"
       ],
       "automated": [
+        "ios",
         "web"
       ],
       "tags": [
@@ -2208,6 +2222,9 @@
       "title": "Visibility actions in DivState",
       "case_id": 63,
       "platforms": [
+        "ios"
+      ],
+      "automated": [
         "ios"
       ],
       "unsupported_platforms": {
@@ -2413,6 +2430,9 @@
     {
       "title": "Variables in DivImage",
       "case_id": 153,
+      "automated": [
+        "ios"
+      ],
       "platforms": [
         "ios"
       ],
@@ -2444,6 +2464,7 @@
       "title": "Variables triggers",
       "case_id": 71,
       "automated": [
+        "ios",
         "web"
       ],
       "tags": [
@@ -2495,7 +2516,8 @@
       "title": "Local variables",
       "case_id": 155,
       "automated": [
-        "android"
+        "android",
+        "ios"
       ],
       "platforms": [
         "android",
@@ -2633,6 +2655,9 @@
     {
       "title": "Text input max_length",
       "case_id": 163,
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivInput"
       ],
@@ -2854,6 +2879,8 @@
       "title": "States default state",
       "case_id": 88,
       "automated": [
+        "android",
+        "ios",
         "web"
       ],
       "file": "states_default_state.json"
@@ -3016,6 +3043,7 @@
       "title": "Gallery items posing",
       "case_id": 95,
       "automated": [
+        "ios",
         "web"
       ],
       "tags": [
@@ -3105,6 +3133,9 @@
     {
       "title": "Blur in DivImage",
       "case_id": 99,
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivImage"
       ],
@@ -3195,6 +3226,9 @@
       "platforms": [
         "android",
         "web",
+        "ios"
+      ],
+      "automated": [
         "ios"
       ],
       "tags": [
@@ -4516,6 +4550,10 @@
     {
       "title": "Container with item_builder",
       "case_id": 138,
+      "automated": [
+        "android",
+        "ios"
+      ],
       "platforms": [
         "ios",
         "web",
@@ -4785,7 +4823,10 @@
         "Each indicator is bound to the nearest pager"
       ],
       "file": "indicator_auto_binding_no_ids.json",
-      "case_id": 520
+      "case_id": 520,
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Indicator auto-binding (same pager ids)",
@@ -4804,7 +4845,10 @@
         "Each indicator is bound to the nearest pager"
       ],
       "file": "indicator_auto_binding_same_ids.json",
-      "case_id": 521
+      "case_id": 521,
+      "automated": [
+        "ios"
+      ]
     },
     {
       "title": "Input with capture on focus actions",
@@ -5106,6 +5150,9 @@
     },
     {
       "title": "Visibility action with local variable in url",
+      "automated": [
+        "ios"
+      ],
       "platforms": [
         "android",
         "ios",
@@ -5136,7 +5183,11 @@
         "The symbol '^' appears and is displayed upside down (rotated 180 degrees)"
       ],
       "file": "div-transform/transform_rotation_after_rebind.json",
-      "case_id": 523
+      "case_id": 523,
+      "automated": [
+        "android",
+        "ios"
+      ]
     },
     {
       "title": "Typed scroll action duration",

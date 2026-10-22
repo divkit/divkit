@@ -1,12 +1,10 @@
 {
-  "description": "div-action://set_state switches one state to another and back",
+  "description": "A nested DivState initially displays its first state; div-action://set_state switches it to the second state and back, with the displayed text checked at each step.",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],
-  "unsupported_platforms": {
-    "android": "Supported as set-state-no-screenshot"
-  },
   "div_data": {
     "card": {
       "log_id": "sample_card",
@@ -21,6 +19,7 @@
                 "state_id": "first",
                 "div": {
                   "type": "text",
+                  "id": "state_text",
                   "text": "first state"
                 }
               },
@@ -28,6 +27,7 @@
                 "state_id": "second",
                 "div": {
                   "type": "text",
+                  "id": "state_text",
                   "text": "second state"
                 }
               }
@@ -39,8 +39,12 @@
   },
   "steps": [
     {
-      "type": "verify_snapshot",
-      "name": "step0"
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "state_text"
+      },
+      "text": "first state"
     },
     {
       "type": "div_action",
@@ -50,8 +54,12 @@
       }
     },
     {
-      "type": "verify_snapshot",
-      "name": "step1"
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "state_text"
+      },
+      "text": "second state"
     },
     {
       "type": "div_action",
@@ -61,8 +69,12 @@
       }
     },
     {
-      "type": "verify_snapshot",
-      "name": "step0"
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "state_text"
+      },
+      "text": "first state"
     }
   ]
 }

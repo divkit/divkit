@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Pager navigation through div-action set_next_item and set_previous_item, including step=2 and clamp/ring overflow, set_current_item with valid and invalid indices, and scroll_to_start/end. Page visibility actions update Last logged item after navigation; whole-card snapshots verify the page, indicator and displayed item ID.",
   "platforms": [
     "android",
     "ios",
@@ -52,8 +52,7 @@
             "type": "container",
             "orientation": "vertical",
             "height": {
-              "type": "fixed",
-              "value": 300
+              "type": "wrap_content"
             },
             "width": {
               "type": "fixed",
@@ -82,40 +81,139 @@
                     "text": "Item0",
                     "width": {
                       "type": "match_parent"
-                    }
+                    },
+                    "visibility_actions": [
+                      {
+                        "log_id": "content_item_show/0",
+                        "url": "div-action://set_variable?name=last_logged_item&value=item0",
+                        "visibility_percentage": 80,
+                        "visibility_duration": 0,
+                        "log_limit": 0
+                      }
+                    ]
                   },
                   {
                     "type": "text_block",
                     "text": "Item1",
                     "width": {
                       "type": "match_parent"
-                    }
+                    },
+                    "visibility_actions": [
+                      {
+                        "log_id": "content_item_show/1",
+                        "url": "div-action://set_variable?name=last_logged_item&value=item1",
+                        "visibility_percentage": 80,
+                        "visibility_duration": 0,
+                        "log_limit": 0
+                      }
+                    ]
                   },
                   {
                     "type": "text_block",
                     "text": "Item2",
                     "width": {
                       "type": "match_parent"
-                    }
+                    },
+                    "visibility_actions": [
+                      {
+                        "log_id": "content_item_show/2",
+                        "url": "div-action://set_variable?name=last_logged_item&value=item2",
+                        "visibility_percentage": 80,
+                        "visibility_duration": 0,
+                        "log_limit": 0
+                      }
+                    ]
                   },
                   {
                     "type": "text_block",
                     "text": "Item3",
                     "width": {
                       "type": "match_parent"
-                    }
+                    },
+                    "visibility_actions": [
+                      {
+                        "log_id": "content_item_show/3",
+                        "url": "div-action://set_variable?name=last_logged_item&value=item3",
+                        "visibility_percentage": 80,
+                        "visibility_duration": 0,
+                        "log_limit": 0
+                      }
+                    ]
                   },
                   {
                     "type": "text_block",
                     "text": "Item4",
                     "width": {
                       "type": "match_parent"
-                    }
+                    },
+                    "visibility_actions": [
+                      {
+                        "log_id": "content_item_show/4",
+                        "url": "div-action://set_variable?name=last_logged_item&value=item4",
+                        "visibility_percentage": 80,
+                        "visibility_duration": 0,
+                        "log_limit": 0
+                      }
+                    ]
                   }
                 ]
+              },
+              {
+                "type": "indicator",
+                "pager_id": "test_pager",
+                "alignment_horizontal": "center",
+                "active_item_color": "#000000",
+                "active_item_size": 1.5,
+                "inactive_item_color": "#D0D1D9",
+                "height": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "width": {
+                  "type": "fixed",
+                  "value": 60
+                },
+                "margins": {
+                  "top": 10,
+                  "bottom": 10
+                },
+                "space_between_centers": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 2
+                  },
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 2
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 10
+                  }
+                }
+              },
+              {
+                "type": "text",
+                "id": "last_logged_item_text",
+                "text": "Last logged item: @{last_logged_item}",
+                "text_alignment_horizontal": "center",
+                "font_size": 14,
+                "text_color": "#000000"
               }
             ]
           }
+        }
+      ],
+      "variables": [
+        {
+          "name": "last_logged_item",
+          "type": "string",
+          "value": "-"
         }
       ]
     }
@@ -218,6 +316,50 @@
       "action": {
         "url": "div-action://set_current_item?id=test_pager&item=0&animated=false",
         "log_id": "first item"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_next_item?id=test_pager&step=2&animated=false",
+        "log_id": "next_two_items"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step7"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://set_previous_item?id=test_pager&step=2&animated=false",
+        "log_id": "previous_two_items"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_end?id=test_pager&animated=false",
+        "log_id": "scroll_to_end"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step4"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "url": "div-action://scroll_to_start?id=test_pager&animated=false",
+        "log_id": "scroll_to_start"
       }
     },
     {

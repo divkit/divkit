@@ -1,8 +1,9 @@
 {
-  "description": "Image with different blur radii and without blur",
+  "description": "A variable-bound blur filter on a 256x256 DivImage follows radius changes 4 -> 0 -> 30 -> 4 through div_action; snapshots verify removing blur, applying a larger radius and restoring the initial image.",
   "platforms": [
     "android",
-    "web"
+    "web",
+    "ios"
   ],
   "div_data": {
     "card": {

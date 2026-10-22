@@ -1,7 +1,8 @@
 {
-  "description": "Variables in DivImage (image_url, tint_color)",
+  "description": "set_variable actions update a DivImage's expression-bound tint_color and image_url. Snapshots verify black-to-red tint on the camera, replacement by the pattern while retaining red tint, and a final blue tint.",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "div_data": {

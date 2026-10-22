@@ -1,7 +1,8 @@
 {
-  "description": "Visibility action in DivStates",
+  "description": "After set_state selects state2, its child's delayed visibility action updates a bound message variable. An initial snapshot checks state1, and verify_text checks the final Triggered! message.",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "div_data": {
@@ -44,6 +45,7 @@
                 "state_id": "state2",
                 "div": {
                   "type": "title",
+                  "id": "visibility_message",
                   "text": "@{message}",
                   "visibility_actions": [
                     {
@@ -69,7 +71,7 @@
       "type": "div_action",
       "action": {
         "url": "div-action://set_state?state_id=0/states/state2",
-        "log_id": "set state"
+        "log_id": "show_state_2"
       }
     },
     {
@@ -77,8 +79,12 @@
       "duration_ms": 2000
     },
     {
-      "type": "verify_snapshot",
-      "name": "step1"
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "visibility_message"
+      },
+      "text": "Triggered!"
     }
   ]
 }
