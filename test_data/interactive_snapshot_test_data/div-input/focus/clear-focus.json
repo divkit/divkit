@@ -1,0 +1,173 @@
+{
+  "description": "#165 Clear focus: tap the Focus input button to focus the input, then clear focus with a DivKit action.",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "right": 8,
+          "left": 8
+        },
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "font_size": 12,
+        "text_color": "#ffff",
+        "font_weight": "bold",
+        "height": {
+          "type": "wrap_content"
+        },
+        "width": {
+          "type": "match_parent"
+        },
+        "border": {
+          "corner_radius": 16
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0000FF"
+          }
+        ],
+        "focus": {
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ff5500"
+            }
+          ]
+        }
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "input_value_1",
+          "type": "string",
+          "value": "input view"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "margins": {
+              "top": 24,
+              "bottom": 24
+            },
+            "items": [
+              {
+                "id": "input",
+                "text_variable": "input_value_1",
+                "type": "input",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "wrap_content"
+                },
+                "paddings": {
+                  "left": 16,
+                  "top": 16,
+                  "right": 16,
+                  "bottom": 16
+                },
+                "margins": {
+                  "left": 16,
+                  "top": 16,
+                  "right": 16,
+                  "bottom": 16
+                },
+                "border": {
+                  "corner_radius": 8,
+                  "stroke": {
+                    "color": "#0000FF"
+                  }
+                },
+                "focus": {
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#ff5500"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "button",
+                "text": "Focus input",
+                "id": "button_1",
+                "alignment_horizontal": "center",
+                "width": {
+                  "type": "wrap_content"
+                },
+                "actions": [
+                  {
+                    "log_id": "focus_1",
+                    "typed": {
+                      "type": "focus_element",
+                      "element_id": "input"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_snapshot",
+      "name": "initial"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_1"
+      }
+    },
+    {
+      "type": "verify_focus",
+      "target": {
+        "type": "div_id",
+        "id": "input"
+      },
+      "focused": true
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "clear focus",
+        "typed": {
+          "type": "clear_focus"
+        }
+      }
+    },
+    {
+      "type": "verify_focus",
+      "target": {
+        "type": "div_id",
+        "id": "input"
+      },
+      "focused": false
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "initial"
+    }
+  ]
+}

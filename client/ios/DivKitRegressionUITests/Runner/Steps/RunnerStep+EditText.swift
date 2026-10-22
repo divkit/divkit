@@ -16,19 +16,7 @@ extension RunnerStep {
 extension RunnerExecutor {
   func execute(_ step: RunnerStep.EditText) throws {
     try root.interact(with: step.target) { element in
-      let types: [XCUIElement.ElementType] = [.textField, .secureTextField, .textView]
-      let input: XCUIElement
-      if types.contains(element.elementType) {
-        input = element
-      } else {
-        let inputs = element.descendants(matching: .any).matching(
-          NSPredicate(format: "elementType IN %@", types.map(\.rawValue))
-        )
-        guard inputs.count == 1 else {
-          throw EditTextError.invalidInputCount(inputs.count)
-        }
-        input = inputs.element(boundBy: 0)
-      }
+      let input = try resolveTextInput(in: element, target: step.target)
 
       input.tap()
 
@@ -49,17 +37,6 @@ extension RunnerExecutor {
       for character in step.text {
         input.typeText(String(character))
       }
-    }
-  }
-}
-
-private enum EditTextError: LocalizedError {
-  case invalidInputCount(Int)
-
-  var errorDescription: String? {
-    switch self {
-    case let .invalidInputCount(count):
-      "edit_text requires one native text input, found \(count)"
     }
   }
 }

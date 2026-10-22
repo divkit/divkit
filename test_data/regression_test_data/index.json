@@ -124,6 +124,9 @@
       "platforms": [
         "ios"
       ],
+      "automated": [
+        "ios"
+      ],
       "unsupported_platforms": {
         "android": "test is replaced by interactive_snapshot_test_data/div-action/focus-actions.json",
         "web": "test is replaced by interactive_snapshot_test_data/div-action/focus-actions.json"
@@ -147,6 +150,9 @@
       "platforms": [
         "ios",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivAction"
@@ -4616,6 +4622,9 @@
         "ios",
         "android",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivInput"

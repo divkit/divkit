@@ -4,18 +4,30 @@ func resolveTextInput(
   in element: XCUIElement,
   target: RunnerTarget
 ) throws -> XCUIElement {
-  let types: [XCUIElement.ElementType] = [.textField, .secureTextField, .textView]
-  if types.contains(element.elementType) {
+  let requiredInputTypes: [XCUIElement.ElementType] = [.textField, .secureTextField, .textView]
+  if requiredInputTypes.contains(element.elementType) {
     return element
   }
 
-  let inputs = element.descendants(matching: .any).matching(
-    NSPredicate(format: "elementType IN %@", types.map(\.rawValue))
-  )
+  var inputs: [XCUIElement] = []
+  // Walk through wrappers to find native inputs, keeping each result
+  // bound to its accessibility element throughout the traversal.
+  var elementsToCheck = element.children(matching: .any).allElementsBoundByAccessibilityElement
+  while let candidate = elementsToCheck.popLast() {
+    if requiredInputTypes.contains(candidate.elementType) {
+      // A non-editable UITextView can expose text lines as accessibility children.
+      // Skip the input's children so those lines are not counted as separate inputs.
+      inputs.append(candidate)
+    } else {
+      elementsToCheck.append(
+        contentsOf: candidate.children(matching: .any).allElementsBoundByAccessibilityElement
+      )
+    }
+  }
   guard inputs.count == 1 else {
     throw TextInputResolutionError.invalidInputCount(target: target, count: inputs.count)
   }
-  return inputs.element(boundBy: 0)
+  return inputs[0]
 }
 
 private enum TextInputResolutionError: LocalizedError {
