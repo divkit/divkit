@@ -1,5 +1,5 @@
 {
-  "description": "Fixed length input mask: replace and append",
+  "description": "Fixed length input mask: reject invalid characters and toggle placeholders",
   "platforms": [
     "ios"
   ],
@@ -271,7 +271,7 @@
               },
               {
                 "type": "state",
-                "id": "always_visible_button",
+                "id": "placeholders_always_visible_button",
                 "default_state_id": "false",
                 "states": [
                   {
@@ -286,7 +286,7 @@
                         },
                         {
                           "log_id": "show_placeholders_button_state",
-                          "url": "div-action://set_state?state_id=0/always_visible_button/true"
+                          "url": "div-action://set_state?state_id=0/placeholders_always_visible_button/true"
                         }
                       ]
                     }
@@ -303,7 +303,7 @@
                         },
                         {
                           "log_id": "hide_placeholders_button_state",
-                          "url": "div-action://set_state?state_id=0/always_visible_button/false"
+                          "url": "div-action://set_state?state_id=0/placeholders_always_visible_button/false"
                         }
                       ]
                     }
@@ -414,7 +414,7 @@
       "type": "tap",
       "target": {
         "type": "div_id",
-        "id": "always_visible_button"
+        "id": "placeholders_always_visible_button"
       }
     },
     {
@@ -437,7 +437,7 @@
       "type": "tap",
       "target": {
         "type": "div_id",
-        "id": "always_visible_button"
+        "id": "placeholders_always_visible_button"
       }
     },
     {

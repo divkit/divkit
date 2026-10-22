@@ -1,5 +1,5 @@
 {
-  "description": "Text input max_length: replace and append",
+  "description": "Text input max_length: enforce the character limit and update bound text",
   "platforms": [
     "ios"
   ],

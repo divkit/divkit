@@ -3351,6 +3351,9 @@
     {
       "title": "Currency input mask",
       "case_id": 106,
+      "automated": [
+        "ios"
+      ],
       "platforms": [
         "android",
         "web",

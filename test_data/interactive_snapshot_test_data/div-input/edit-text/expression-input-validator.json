@@ -1,5 +1,5 @@
 {
-  "description": "Expression input validator: replace and append",
+  "description": "Expression input validator: validate the minimum value, revalidate after threshold changes, and control empty input",
   "platforms": [
     "ios"
   ],
@@ -184,7 +184,7 @@
                 "id": "value_is_too_small_title",
                 "type": "pretty_text",
                 "text": "@{value_is_too_small_variable ? 'Valid' : 'Value is too small'}",
-                "text_color": "#ff0000",
+                "text_color": "@{value_is_too_small_variable ? '#008000' : '#ff0000'}",
                 "font_size": 14
               },
               {
@@ -242,6 +242,14 @@
         "id": "value_input"
       },
       "mode": "replace",
+      "text": "41"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "value_input"
+      },
       "text": "41"
     },
     {
@@ -400,6 +408,56 @@
         "type": "div_id",
         "id": "allow_empty_button"
       }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "value_input"
+      },
+      "text": ""
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "value_is_too_small_title"
+      },
+      "text": "Valid"
+    },
+    {
+      "type": "edit_text",
+      "target": {
+        "type": "div_id",
+        "id": "value_input"
+      },
+      "mode": "replace",
+      "text": "42"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "value_input"
+      },
+      "text": "42"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "value_is_too_small_title"
+      },
+      "text": "Value is too small"
+    },
+    {
+      "type": "edit_text",
+      "target": {
+        "type": "div_id",
+        "id": "value_input"
+      },
+      "mode": "replace",
+      "text": ""
     },
     {
       "type": "verify_text",
