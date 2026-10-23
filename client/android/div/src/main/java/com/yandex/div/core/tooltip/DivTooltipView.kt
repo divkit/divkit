@@ -31,6 +31,7 @@ internal class DivTooltipView(
 ) {
 
     private var hasLoggedSizeWarnings = false
+    private var isDismissRequested = false
 
     init {
         popupWindow.setOnDismissListener {
@@ -54,10 +55,15 @@ internal class DivTooltipView(
         container.doOnActualLayout {
             recomputePosition()
             container.tooltipView?.sendTooltipAccessibilityEvent(accessibilityStateProvider)
+            // Visibility actions may show another tooltip; its restrictor must see this one as shown.
+            onShown()
+            // The shown callback may start dismissing while the popup is still animating.
+            if (isDismissRequested || !isShown) {
+                return@doOnActualLayout
+            }
             stopVisibilityTracking()
             data.tooltipBlock.trackVisibility(container.tooltipView)
             data.substrateBlock?.trackVisibility(container.substrateView)
-            onShown()
         }
         val tooltipView = container.tooltipView ?: return
 
@@ -71,6 +77,7 @@ internal class DivTooltipView(
     }
 
     fun dismiss() {
+        isDismissRequested = true
         val wasShown = isShown
         hideTooltip()
         if (!wasShown) {
@@ -79,6 +86,7 @@ internal class DivTooltipView(
     }
 
     fun dismissImmediately() {
+        isDismissRequested = true
         val wasShown = isShown
         container.substrateView?.clearAnimation()
         container.tooltipView?.clearAnimation()

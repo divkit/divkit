@@ -109,6 +109,13 @@ internal class ActiveTooltipComponent(
     val substrateView: View?
         get() = view.substrateView
 
+    /**
+     * Whether the popup window is open, including while waiting for layout and during dismissal.
+     * This does not indicate the tooltip's lifecycle state.
+     */
+    val isWindowShown: Boolean
+        get() = view.isShown
+
     private fun canShowTooltip(hasFailures: Boolean, multiple: Boolean): Boolean {
         if (hasFailures || !data.anchor.isAttachedToWindow) {
             return false

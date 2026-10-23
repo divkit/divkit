@@ -4,6 +4,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivTimer
+import com.yandex.div2.DivTransitionSelector
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 
@@ -14,6 +15,7 @@ fun data(
     triggers: List<DivTrigger>? = null,
     variables: List<DivVariable>? = null,
     logId: String = "test",
+    transitionAnimationSelector: DivTransitionSelector = DivTransitionSelector.NONE,
 ): DivData {
     return DivData(
         functions = functions,
@@ -25,6 +27,7 @@ fun data(
             )
         ),
         timers = timers,
+        transitionAnimationSelector = constant(transitionAnimationSelector),
         variables = variables,
         variableTriggers = triggers,
     )

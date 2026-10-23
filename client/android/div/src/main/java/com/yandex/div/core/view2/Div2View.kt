@@ -1136,7 +1136,6 @@ open class Div2View private constructor(
         val newStateView = buildViewAsyncAndUpdateState(stateId, newDivBlock, newData)
 
         oldState?.let { discardStateVisibility(it) }
-        trackStateVisibility(newState)
 
         val allowsTransition = oldData?.allowsTransitionsOnDataChange(oldExpressionResolver) == true ||
             newData.allowsTransitionsOnDataChange(expressionResolver)
@@ -1187,7 +1186,6 @@ open class Div2View private constructor(
         rootBindingPhase = null
 
         currentState?.let { discardStateVisibility(it) }
-        trackStateVisibility(newState)
 
         val rootView: View? = getChildAt(0)
         rootView?.clearTreeAnimations()
@@ -1244,6 +1242,8 @@ open class Div2View private constructor(
             addView(newStateView)
             viewComponent.errorMonitor.connect(this)
         }
+
+        trackStateVisibility(newState)
     }
 
     private fun updateState(

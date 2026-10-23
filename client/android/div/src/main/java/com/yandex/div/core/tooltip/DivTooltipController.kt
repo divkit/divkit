@@ -187,6 +187,12 @@ internal class DivTooltipController @Inject constructor(
         return activeTooltips.values.map(ActiveTooltipComponent::data)
     }
 
+    fun captureShownTooltips(): Collection<TooltipData> {
+        return activeTooltips.values
+            .filter(ActiveTooltipComponent::isWindowShown)
+            .map(ActiveTooltipComponent::data)
+    }
+
     fun switchStates(divView: Div2View, paths: List<DivStatePath>): List<DivStatePath> {
         val handled = mutableListOf<DivStatePath>()
         pendingBuildingTooltips.forEach { data ->
