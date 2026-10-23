@@ -29,6 +29,7 @@
 * Fixed the current page and the indicator position of pagers with paddings in the Compose renderer.
 * Fixed the position of centered and end-aligned pages in wrap-content pagers with paddings in the Compose renderer.
 * Fixed the position of the current page after the items of a pager with paddings change in the Compose renderer.
+* Fixed tooltips triggered by visibility actions after replacing card data or switching the root state.
 * Fixed view attach, detach and visibility tracking being applied out of order during asynchronous binding.
 * Gallery item animations respect the animation enablement setting, including changes while the gallery is displayed.
 * Grid gallery with a `wrap_content` cross axis is scrollable in the Compose renderer and sizes its match_parent items by the viewport along the scroll axis.
@@ -42,6 +43,7 @@
 * The current page of a pager stays aligned and selected when its `scroll_axis_alignment`, paddings, `item_spacing`, `page_width`, `neighbour_page_width` or the pager size change at runtime in the Compose renderer.
 * The current page of a wrap-content pager stays aligned and selected when visible pages resize in the Compose renderer, unless the previous page shrinks out of the viewport.
 * `Div2View` calls made on the main thread during asynchronous binding (`setConfig`, state switching, actions, variables, tooltips) are no longer rejected and take effect after the binding.
+* `DivTooltipManager.captureShownTooltips()` now excludes tooltips that are still preloading and includes open popup windows before their content is laid out, so tooltip restrictors can reliably detect an existing popup.
 * `div-state` inside tooltips no longer shares its state with a card `div-state` that has the same id: tooltip states are stored separately.
 * `div-text` images with `start` beyond the 32-bit integer range are no longer shown at the beginning of the text in the Compose renderer.
 * `div-text` range `start` and `end` values beyond the 32-bit integer range are clamped to the text length in the Compose renderer, as in the View renderer.
