@@ -94,6 +94,17 @@ def metalavaCheckCompatibility = tasks.register('metalavaCheckCompatibility') {
     description = 'Checks API compatibility for every module applying the abi-validation convention.'
 }
 
+def fileLengthRules = files(layout.projectDirectory.file('build-logic/build/libs/divkit-detekt-rules.jar'))
+        .builtBy(gradle.includedBuild('build-logic').task(':detektRulesJar'))
+
+def fileLengthExcludedModules = [
+        'api-generator-test', 'buildSrc', 'lint-rules',
+        'test-utils', 'ui-test-common', 'screenshot-test-runtime', 'sample',
+        'divkit-demo-app', 'divkit-benchmark-app', 'divkit-perftests',
+        'divkit-regression-testing', 'macrobenchmark',
+        'div-video-sample-app', 'divkit-libssl-sample-app',
+]
+
 subprojects {
     tasks.withType(Test).configureEach {
         outputs.doNotCacheIf('Test results must be produced by the current run') { true }
@@ -129,6 +140,16 @@ subprojects {
             include '*/java/**/*.kt', '*/kotlin/**/*.kt'
             exclude 'test/**', 'test*/**', '*Test/**'
         })
+    }
+
+    if (!fileLengthExcludedModules.contains(project.name)) {
+        dependencies {
+            detektPlugins fileLengthRules
+        }
+        tasks.withType(dev.detekt.gradle.Detekt).configureEach {
+            config.setFrom(rootProject.file('config/detekt/file-length.yml'),
+                    rootProject.file('config/detekt/detekt.yml'))
+        }
     }
 
     tasks.withType(dev.detekt.gradle.Detekt).configureEach {

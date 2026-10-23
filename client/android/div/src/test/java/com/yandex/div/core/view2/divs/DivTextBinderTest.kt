@@ -1,6 +1,13 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.LinearGradient
+import com.yandex.div.core.Disposable
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.test.data.constant
+import com.yandex.div2.DivDimension
+import com.yandex.div2.DivPoint
+import com.yandex.div2.DivShadow
 import android.text.Layout
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.state.DivStatePath
@@ -108,6 +115,65 @@ class DivTextBinderTest : DivBinderTest() {
         Assert.assertTrue(view.paint.shader is LinearGradient)
     }
 
+    @Test
+    fun `text shadow disables clipping of the view and wrapper`() {
+        val (block, view) = createTestData(textWithShadow())
+        val wrapper = DivViewWrapper(context).apply { addView(view) }
+
+        binder.bindView(view, block, divView)
+
+        Assert.assertEquals(listOf(false, false, false),
+            listOf(view.clipToOutline, wrapper.clipChildren, wrapper.clipToPadding))
+        Assert.assertEquals(4f * context.resources.displayMetrics.density, view.shadowRadius, 0f)
+    }
+
+    @Test
+    fun `removing text shadow restores clipping and clears shadow`() {
+        val (block, view) = createTestData(textWithShadow())
+        val wrapper = DivViewWrapper(context).apply { addView(view) }
+        binder.bindView(view, block, divView)
+        val replacement = Div.Text(block.divValue.copy(textShadow = null)).toBlock(resolver, path) as DivBlock.Text
+
+        binder.bindView(view, replacement, divView)
+
+        Assert.assertEquals(0f, view.shadowRadius, 0f)
+        Assert.assertEquals(listOf(true, true, true),
+            listOf(view.clipToOutline, wrapper.clipChildren, wrapper.clipToPadding))
+    }
+
+    @Test
+    fun `changing the shadow blur expression updates the shadow`() {
+        val blur = MutableShadowBlur()
+        val (block, view) = createTestData(textWithShadow(blur))
+        binder.bindView(view, block, divView)
+
+        blur.setValue(8)
+
+        Assert.assertEquals(8f * context.resources.displayMetrics.density, view.shadowRadius, 0f)
+    }
+
+    @Test
+    fun `rebound text no longer observes the previous shadow expression`() {
+        val blur = MutableShadowBlur()
+        val (block, view) = createTestData(textWithShadow(blur))
+        binder.bindView(view, block, divView)
+        val replacement = Div.Text(block.divValue.copy(textShadow = null)).toBlock(resolver, path) as DivBlock.Text
+        binder.bindView(view, replacement, divView)
+
+        blur.setValue(8)
+
+        Assert.assertEquals(0f, view.shadowRadius, 0f)
+    }
+
+    private fun textWithShadow(blur: Expression<Long> = constant(4L)): Div.Text {
+        val text = text(text = "shadow") as Div.Text
+        val shadow = DivShadow(
+            blur = blur,
+            offset = DivPoint(DivDimension(value = constant(0.0)), DivDimension(value = constant(0.0))),
+        )
+        return Div.Text(text.value.copy(textShadow = shadow))
+    }
+
     private fun createTestData(filename: String): Pair<DivBlock.Text, DivLineHeightTextView> {
         return createTestData(UnitTestData(TEXT_DIR, filename).div)
     }
@@ -126,4 +192,22 @@ class DivTextBinderTest : DivBinderTest() {
     companion object {
         private const val TEXT_DIR = "div-text"
     }
+    private class MutableShadowBlur : Expression<Long>() {
+        override val rawValue: Any = "shadow_blur"
+        private var value = 4L
+        private val observers = mutableSetOf<(Long) -> Unit>()
+
+        override fun evaluate(resolver: ExpressionResolver) = value
+
+        override fun observe(resolver: ExpressionResolver, callback: (Long) -> Unit): Disposable {
+            observers += callback
+            return Disposable { observers -= callback }
+        }
+
+        fun setValue(value: Long) {
+            this.value = value
+            observers.toList().forEach { it(value) }
+        }
+    }
+
 }

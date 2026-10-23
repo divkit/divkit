@@ -19,7 +19,6 @@
     <ID>CognitiveComplexMethod:FrameContainerLayout.kt:FrameContainerLayout$private fun considerMatchParentChildrenInMaxSize</ID>
     <ID>CognitiveComplexMethod:IndicatorsStripDrawer.kt:IndicatorsStripDrawer.IndicatorsRibbon$private fun downscaleAndDisperse</ID>
     <ID>CognitiveComplexMethod:LinearContainerLayout.kt:LinearContainerLayout$private fun calculateMatchParentSizes</ID>
-    <ID>CognitiveComplexMethod:LinearContainerLayout.kt:LinearContainerLayout$private fun layoutHorizontal</ID>
     <ID>CognitiveComplexMethod:PaddingItemDecoration.kt:PaddingItemDecoration$override fun getItemOffsets</ID>
     <ID>CognitiveComplexMethod:SpannedTextBuilder.kt:SpannedTextBuilder$private fun addSpan</ID>
     <ID>CognitiveComplexMethod:SpannedTextBuilder.kt:SpannedTextBuilder$private fun preprocessSpans: List&lt;SpanData&gt;</ID>
@@ -47,8 +46,6 @@
     <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$ellipsis?.ranges == null &amp;&amp; ellipsis?.rangeBuilder == null &amp;&amp; ellipsis?.images == null &amp;&amp; ellipsis?.imageBuilder == null &amp;&amp; ellipsis?.actions == null</ID>
     <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$newDiv.ranges == null &amp;&amp; newDiv.rangeBuilder == null &amp;&amp; newDiv.images == null &amp;&amp; newDiv.imageBuilder == null</ID>
     <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$newDiv.text.equalsToConstant(oldDiv?.text) &amp;&amp; newDiv.lineHeight.equalsToConstant(oldDiv?.lineHeight) &amp;&amp; newDiv.fontSizeUnit.equalsToConstant(oldDiv?.fontSizeUnit) &amp;&amp; newDiv.extensions.compareNullableWith(oldDiv?.extensions) { new, old -&gt; new.id == old.id }</ID>
-    <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$newDiv.textShadow?.alpha.equalsToConstant(oldDiv?.textShadow?.alpha) &amp;&amp; newDiv.textShadow?.blur.equalsToConstant(oldDiv?.textShadow?.blur) &amp;&amp; newDiv.textShadow?.color.equalsToConstant(oldDiv?.textShadow?.color) &amp;&amp; newDiv.textShadow?.offset?.x?.value.equalsToConstant(oldDiv?.textShadow?.offset?.x?.value) &amp;&amp; newDiv.textShadow?.offset?.x?.unit.equalsToConstant(oldDiv?.textShadow?.offset?.x?.unit) &amp;&amp; newDiv.textShadow?.offset?.y?.value.equalsToConstant(oldDiv?.textShadow?.offset?.y?.value) &amp;&amp; newDiv.textShadow?.offset?.y?.unit.equalsToConstant(oldDiv?.textShadow?.offset?.y?.unit)</ID>
-    <ID>ComplexCondition:DivTextBinder.kt:DivTextBinder$newDiv.textShadow?.alpha.isConstantOrNull() &amp;&amp; newDiv.textShadow?.blur.isConstantOrNull() &amp;&amp; newDiv.textShadow?.color.isConstantOrNull() &amp;&amp; newDiv.textShadow?.offset?.x?.value.isConstantOrNull() &amp;&amp; newDiv.textShadow?.offset?.x?.unit.isConstantOrNull() &amp;&amp; newDiv.textShadow?.offset?.y?.value.isConstantOrNull() &amp;&amp; newDiv.textShadow?.offset?.y?.unit.isConstantOrNull()</ID>
     <ID>ComplexCondition:FrameContainerLayout.kt:FrameContainerLayout$skippedMatchParentChildren.contains(child) &amp;&amp; ((lp.width == MATCH_PARENT &amp;&amp; needMeasureWidth) || (lp.height == MATCH_PARENT &amp;&amp; needMeasureHeight))</ID>
     <ID>ComplexCondition:RebindTask.kt:RebindTaskImpl$id != null &amp;&amp; existingIdToken != null &amp;&amp; existingIdToken.div.javaClass == newToken.div.javaClass &amp;&amp; DivComparator.areValuesReplaceable(existingIdToken.item, newToken.item)</ID>
     <ID>ComplexCondition:SliderView.kt:SliderView$animated &amp;&amp; animationsEnabledProvider() &amp;&amp; thumbSecondaryValue != null &amp;&amp; newValue != null</ID>
@@ -127,7 +124,6 @@
     <ID>MaxLineLength:BindingThread.kt:BindingThread$*</ID>
     <ID>MaxLineLength:Colormap.kt:IllegalStateException("Colors for linear gradient are not provided. Please check if 'colors' or 'color_map' properties are defined")</ID>
     <ID>MaxLineLength:CurrencyInputMask.kt:CurrencyInputMask$}</ID>
-    <ID>MaxLineLength:Div2View.kt:Div2View$fun</ID>
     <ID>MaxLineLength:DivActionBinder.kt:DivActionBinder$gestureListener.onSingleTapListener = null</ID>
     <ID>MaxLineLength:DivBaseBinder.kt:DivBaseBinder$bindNextFocusId</ID>
     <ID>MaxLineLength:DivBorderDrawer.kt:DivBorderDrawer.Companion$KLog.w("DivBorderDrawer") { "Corner radius $cornerRadius is greater than half of the smallest side $maxCornerRadius" }</ID>
@@ -182,11 +178,6 @@
     <ID>ReturnCount:DebugViewModelProvider.kt:DebugViewModelProvider$fun tryRenderErrorsAndWarnings: DebugViewModel?</ID>
     <ID>ReturnCount:DebugViewModelProvider.kt:DebugViewModelProvider$private fun pasteToClipBoard: Result&lt;Unit&gt;</ID>
     <ID>ReturnCount:DebugViewModelProvider.kt:DebugViewModelProvider$private fun toViewModel: DebugViewModel</ID>
-    <ID>ReturnCount:Div2View.kt:Div2View$private fun forceSwitchToState: Boolean</ID>
-    <ID>ReturnCount:Div2View.kt:Div2View$private fun prepareTransition: Transition?</ID>
-    <ID>ReturnCount:Div2View.kt:Div2View$private fun rebind</ID>
-    <ID>ReturnCount:Div2View.kt:Div2View$private fun tryApplyPatch: Boolean</ID>
-    <ID>ReturnCount:Div2View.kt:Div2View$private fun updateNow: Boolean</ID>
     <ID>ReturnCount:DivAccessibilityBinder.kt:DivAccessibilityBinder$private fun View.bindMode</ID>
     <ID>ReturnCount:DivAccessibilityBinder.kt:DivAccessibilityBinder$private fun getAccessibilityDelegate: AccessibilityDelegateCompat?</ID>
     <ID>ReturnCount:DivActionBeaconSender.kt:DivActionBeaconSender$fun sendSwipeOutActionBeacon</ID>
@@ -350,7 +341,7 @@
     <ID>TooGenericExceptionCaught:DataStorage.kt:DataStorage$e: Exception</ID>
     <ID>TooGenericExceptionCaught:DebugViewModelProvider.kt:DebugViewModelProvider$e: Exception</ID>
     <ID>TooGenericExceptionCaught:DecodeBase64ImageTask.kt:DecodeBase64ImageTask$e: Exception</ID>
-    <ID>TooGenericExceptionCaught:Div2View.kt:Div2View$error: Exception</ID>
+    <ID>TooGenericExceptionCaught:DivViewBindingController.kt:DivViewBindingController$error: Exception</ID>
     <ID>TooGenericExceptionCaught:DivActionTypedScrollHandler.kt:DivActionTypedScrollHandler$e: RuntimeException</ID>
     <ID>TooGenericExceptionCaught:DivItemChangeActionHandler.kt:DivItemChangeActionHandler$e: RuntimeException</ID>
     <ID>TooGenericExceptionCaught:ExpressionResolverImpl.kt:ExpressionResolverImpl$e: Exception</ID>
@@ -392,6 +383,7 @@
     <ID>TooManyFunctions:DivPathUtils.kt:DivPathUtils</ID>
     <ID>TooManyFunctions:DivPreloader.kt:DivPreloader$DownloadCallback : DivImageDownloadCallbackPreloadingRegistry</ID>
     <ID>TooManyFunctions:DivRecyclerView.kt:DivRecyclerView : BackHandlingRecyclerViewDivHolderViewOnInterceptTouchEventListenerHostDivScrollActionHolder</ID>
+    <ID>TooManyFunctions:DivRootStateController.kt:DivRootStateController</ID>
     <ID>TooManyFunctions:DivRuntimeVisitor.kt:DivRuntimeVisitor</ID>
     <ID>TooManyFunctions:DivSliderBinder.kt:DivSliderBinder : DivViewBinder</ID>
     <ID>TooManyFunctions:DivStateBinder.kt:DivStateBinder : DivViewBinder</ID>
@@ -403,6 +395,7 @@
     <ID>TooManyFunctions:DivUtil.kt:com.yandex.div.core.util.DivUtil.kt</ID>
     <ID>TooManyFunctions:DivVideoBinder.kt:DivVideoBinder : DivViewBinder</ID>
     <ID>TooManyFunctions:DivVideoView.kt:DivVideoView : FrameContainerLayoutDivHolderViewDivExtensionViewReleasableMediaReleasable</ID>
+    <ID>TooManyFunctions:DivViewBindingController.kt:DivViewBindingController</ID>
     <ID>TooManyFunctions:DivViewVisitor.kt:DivViewVisitor</ID>
     <ID>TooManyFunctions:DivVisibilityActionTracker.kt:DivVisibilityActionTracker</ID>
     <ID>TooManyFunctions:DivVisitor.kt:DivVisitor&lt;T&gt;</ID>

@@ -1,0 +1,9 @@
+divkit:
+  active: true
+  FileLength:
+    active: true
+    allowedLines: 800
+    excludes:
+      - '**/src/*[Tt]est*/**'
+      - '**/src/*[Gg]enerat*/**'
+      - '**/src/**/*[Gg]enerated*/**'

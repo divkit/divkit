@@ -1,11 +1,9 @@
 package com.yandex.div.core.view2.divs
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.Paint
+import android.content.res.ColorStateList
 import android.text.Layout
 import android.text.TextUtils.TruncateAt
-import android.util.DisplayMetrics
 import android.view.View
 import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
@@ -19,11 +17,9 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
-import com.yandex.div.core.view2.spannable.ShadowData
 import com.yandex.div.core.view2.spannable.SpannedTextBuilder
 import com.yandex.div.core.view2.text.SelectableLinkMovementMethod
 import com.yandex.div.core.widget.AdaptiveMaxLines
-import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.util.compareNullableWith
@@ -36,7 +32,6 @@ import com.yandex.div.json.expressions.isConstantOrNull
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivLineStyle
-import com.yandex.div2.DivShadow
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextRangeMaskParticles
@@ -94,7 +89,7 @@ internal class DivTextBinder @Inject constructor(
         bindEllipsis(div, oldDiv, expressionResolver, divBlock.path, divView)
         bindEllipsize(div, oldDiv, expressionResolver)
         TextGradientBinder.bind(this, divView, div, oldDiv, expressionResolver)
-        bindTextShadow(div, oldDiv, expressionResolver)
+        TextShadowBinder.bind(this, div, oldDiv, expressionResolver)
         bindSelectable(div, oldDiv, expressionResolver)
         bindTightenWidth(div, oldDiv, expressionResolver)
         updateFocusableState(div)
@@ -722,72 +717,6 @@ internal class DivTextBinder @Inject constructor(
 
     //endregion
 
-    //region Text Shadow
-
-    private fun DivLineHeightTextView.bindTextShadow(
-        newDiv: DivText,
-        oldDiv: DivText?,
-        resolver: ExpressionResolver
-    ) {
-        if (newDiv.textShadow?.alpha.equalsToConstant(oldDiv?.textShadow?.alpha)
-            && newDiv.textShadow?.blur.equalsToConstant(oldDiv?.textShadow?.blur)
-            && newDiv.textShadow?.color.equalsToConstant(oldDiv?.textShadow?.color)
-            && newDiv.textShadow?.offset?.x?.value.equalsToConstant(oldDiv?.textShadow?.offset?.x?.value)
-            && newDiv.textShadow?.offset?.x?.unit.equalsToConstant(oldDiv?.textShadow?.offset?.x?.unit)
-            && newDiv.textShadow?.offset?.y?.value.equalsToConstant(oldDiv?.textShadow?.offset?.y?.value)
-            && newDiv.textShadow?.offset?.y?.unit.equalsToConstant(oldDiv?.textShadow?.offset?.y?.unit)) {
-            return
-        }
-
-        val shadow = newDiv.textShadow
-        val displayMetrics = resources.displayMetrics
-        applyTextShadow(shadow?.getShadowData(resolver, displayMetrics, newDiv.textColor.evaluate(resolver)))
-
-        if (newDiv.textShadow?.alpha.isConstantOrNull()
-            && newDiv.textShadow?.blur.isConstantOrNull()
-            && newDiv.textShadow?.color.isConstantOrNull()
-            && newDiv.textShadow?.offset?.x?.value.isConstantOrNull()
-            && newDiv.textShadow?.offset?.x?.unit.isConstantOrNull()
-            && newDiv.textShadow?.offset?.y?.value.isConstantOrNull()
-            && newDiv.textShadow?.offset?.y?.unit.isConstantOrNull()) {
-            return
-        }
-
-        val callback = { _: Any ->
-            applyTextShadow(shadow?.getShadowData(resolver, displayMetrics, newDiv.textColor.evaluate(resolver)))
-        }
-
-        addSubscription(shadow?.alpha?.observe(resolver, callback))
-        addSubscription(shadow?.color?.observe(resolver, callback))
-        addSubscription(shadow?.blur?.observe(resolver, callback))
-        addSubscription(shadow?.offset?.x?.value?.observe(resolver, callback))
-        addSubscription(shadow?.offset?.x?.unit?.observe(resolver, callback))
-        addSubscription(shadow?.offset?.y?.value?.observe(resolver, callback))
-        addSubscription(shadow?.offset?.y?.unit?.observe(resolver, callback))
-    }
-
-    private fun TextView.applyTextShadow(shadowParams: ShadowData?) {
-        if (shadowParams == null) {
-            (parent as? DivViewWrapper)?.let {
-                it.clipChildren = true
-                it.clipToPadding = true
-            }
-            clipToOutline = true
-            setShadowLayer(0.0f, 0.0f, 0.0f, Color.TRANSPARENT)
-        } else {
-            (parent as? DivViewWrapper)?.let {
-                it.clipChildren = false
-                it.clipToPadding = false
-            }
-            clipToOutline = false
-            with(shadowParams) {
-                setShadowLayer(radius, offsetX, offsetY, color)
-            }
-        }
-    }
-
-    //endregion
-
     //region Ellipsize
 
     private fun DivLineHeightTextView.bindEllipsize(
@@ -832,21 +761,4 @@ internal class DivTextBinder @Inject constructor(
         isFocusable = isFocusable || (div.focusedTextColor != null)
     }
 
-    private fun DivShadow.getShadowData(
-        resolver: ExpressionResolver,
-        displayMetrics: DisplayMetrics,
-        fontColor: Int
-    ): ShadowData {
-        val fontAlpha = fontColor ushr 24
-
-        val radius = blur.evaluate(resolver).dpToPxF(displayMetrics)
-        val offsetX = offset.x.toPx(displayMetrics, resolver).toFloat()
-        val offsetY = offset.y.toPx(displayMetrics, resolver).toFloat()
-        val color = Paint().apply {
-            color = this@getShadowData.color.evaluate(resolver)
-            alpha = (this@getShadowData.alpha.evaluate(resolver) * fontAlpha).toInt()
-        }.color
-
-        return ShadowData(offsetX, offsetY, radius, color)
-    }
 }

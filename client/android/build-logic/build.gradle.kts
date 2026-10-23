@@ -17,3 +17,14 @@ dependencies {
     implementation(libs.metalava)
     implementation(libs.nexusPublishPlugin)
 }
+
+val detektRules by sourceSets.creating
+
+dependencies {
+    add(detektRules.compileOnlyConfigurationName, "dev.detekt:detekt-api:${libs.versions.detekt.get()}")
+}
+
+tasks.register<Jar>("detektRulesJar") {
+    archiveFileName.set("divkit-detekt-rules.jar")
+    from(detektRules.output)
+}

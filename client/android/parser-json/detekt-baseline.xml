@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>FileLength:JsonFieldResolver.kt:com.yandex.div.parser.json.JsonFieldResolver.kt</ID>
+    <ID>LargeClass:JsonFieldResolver.kt:JsonFieldResolver</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$JsonExpressionParser.readExpression(context, data, field.reference, typeHelper, transform, validator)</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$JsonPropertyParser.readOptionalList(context, data, field.reference, transform, listValidator, itemValidator)</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return JsonPropertyParser.readOptionalList(context, data, field.reference, deserializer, listValidator)</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveExpressionList(context, field, data, key, typeHelper, doNotConvert(), alwaysValidList(), alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveExpressionList(context, field, data, key, typeHelper, doNotConvert(), listValidator, alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveOptionalExpressionList(context, field, data, key, typeHelper, doNotConvert(), alwaysValidList(), alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveOptionalExpressionList(context, field, data, key, typeHelper, doNotConvert(), listValidator, alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveOptionalExpressionList(context, field, data, key, typeHelper, doNotConvert(), listValidator, itemValidator)</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveOptionalExpressionList(context, field, data, key, typeHelper, transform, alwaysValidList(), alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveOptionalExpressionList(context, field, data, key, typeHelper, transform, listValidator, alwaysValid())</ID>
+    <ID>TooManyFunctions:JsonFieldResolver.kt:JsonFieldResolver</ID>
+  </CurrentIssues>
+</SmellBaseline>
