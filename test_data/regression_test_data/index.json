@@ -323,6 +323,9 @@
         "ios",
         "web"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -480,6 +483,9 @@
         "android",
         "ios"
       ],
+      "automated": [
+        "ios"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -490,6 +496,9 @@
       "case_id": 26,
       "platforms": [
         "android",
+        "ios"
+      ],
+      "automated": [
         "ios"
       ],
       "tags": [
@@ -539,6 +548,9 @@
         "android",
         "ios",
         "web"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivGallery"
@@ -1199,7 +1211,8 @@
         "web"
       ],
       "automated": [
-        "web"
+        "web",
+        "ios"
       ],
       "steps": [
         "Tap Button 1",
@@ -2596,6 +2609,9 @@
         "ios",
         "web",
         "android"
+      ],
+      "automated": [
+        "ios"
       ],
       "tags": [
         "DivText"

@@ -1,0 +1,404 @@
+{
+  "description": "Tap, long tap and double tap invoke the corresponding button actions; a tap in the outer spacing around Button 7 invokes its outer action, and a long tap invokes the container action.",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "button": {
+        "type": "text",
+        "height": {
+          "type": "fixed",
+          "value": 48
+        },
+        "margins": {
+          "bottom": 10
+        },
+        "paddings": {
+          "left": 10,
+          "right": 10
+        },
+        "border": {
+          "corner_radius": 10
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0E000000"
+          }
+        ],
+        "font_size": 16,
+        "font_weight": "medium",
+        "text_alignment_vertical": "center",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center",
+        "action_animation": {
+          "name": "native"
+        }
+      }
+    },
+    "card": {
+      "log_id": "test_card",
+      "variables": [
+        {
+          "name": "last_action",
+          "type": "string",
+          "value": ""
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "height": {
+              "type": "match_parent"
+            },
+            "longtap_actions": [
+              {
+                "log_id": "container_longtap",
+                "url": "div-action://set_variable?name=last_action&value=Container long tap"
+              }
+            ],
+            "paddings": {
+              "left": 20,
+              "right": 20,
+              "top": 20,
+              "bottom": 20
+            },
+            "items": [
+              {
+                "type": "button",
+                "id": "button_1",
+                "text": "Button 1 (tap)",
+                "actions": [
+                  {
+                    "log_id": "button1_tap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 1 tapped"
+                  }
+                ]
+              },
+              {
+                "type": "button",
+                "id": "button_2",
+                "text": "Button 2 (long tap)",
+                "longtap_actions": [
+                  {
+                    "log_id": "button2_longtap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 2 long tapped"
+                  }
+                ]
+              },
+              {
+                "type": "button",
+                "id": "button_3",
+                "text": "Button 3 (double tap)",
+                "doubletap_actions": [
+                  {
+                    "log_id": "button3_doubletap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 3 double tapped"
+                  }
+                ]
+              },
+              {
+                "type": "button",
+                "id": "button_4",
+                "text": "Button 4 (tap + long tap + double tap)",
+                "actions": [
+                  {
+                    "log_id": "button4_tap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 4 tapped"
+                  }
+                ],
+                "doubletap_actions": [
+                  {
+                    "log_id": "button4_doubletap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 4 double tapped"
+                  }
+                ],
+                "longtap_actions": [
+                  {
+                    "log_id": "button4_longtap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 4 long tapped"
+                  }
+                ]
+              },
+              {
+                "type": "button",
+                "id": "button_5",
+                "text": "Button 5 (tap + long tap)",
+                "actions": [
+                  {
+                    "log_id": "button5_tap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 5 tapped"
+                  }
+                ],
+                "longtap_actions": [
+                  {
+                    "log_id": "button5_longtap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 5 long tapped"
+                  }
+                ]
+              },
+              {
+                "type": "button",
+                "id": "button_6",
+                "text": "Button 6 (tap + double tap)",
+                "actions": [
+                  {
+                    "log_id": "button6_tap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 6 tapped"
+                  }
+                ],
+                "doubletap_actions": [
+                  {
+                    "log_id": "button6_doubletap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 6 double tapped"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "id": "button_7_outer",
+                "margins": {
+                  "bottom": 10
+                },
+                "border": {
+                  "corner_radius": 10
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#09000000"
+                  }
+                ],
+                "action_animation": {
+                  "name": "native"
+                },
+                "actions": [
+                  {
+                    "log_id": "button7_tap",
+                    "url": "div-action://set_variable?name=last_action&value=Button 7 outer part tapped"
+                  }
+                ],
+                "items": [
+                  {
+                    "type": "button",
+                    "text": "Button 7",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "margins": {
+                      "top": 20,
+                      "bottom": 20
+                    },
+                    "actions": [
+                      {
+                        "log_id": "button7_inner_tap",
+                        "url": "div-action://set_variable?name=last_action&value=Button 7 inner part tapped"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "id": "last_action",
+                "text": "@{last_action}",
+                "font_size": 18
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_1"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 1 tapped"
+    },
+    {
+      "type": "long_tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_2"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 2 long tapped"
+    },
+    {
+      "type": "double_tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_3"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 3 double tapped"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_4"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 4 tapped"
+    },
+    {
+      "type": "long_tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_4"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 4 long tapped"
+    },
+    {
+      "type": "double_tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_4"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 4 double tapped"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_5"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 5 tapped"
+    },
+    {
+      "type": "long_tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_5"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 5 long tapped"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_6"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 6 tapped"
+    },
+    {
+      "type": "double_tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_6"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 6 double tapped"
+    },
+    {
+      "type": "long_tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_7_outer"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Container long tap"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "button_7_outer"
+      },
+      "point": {
+        "x": 0.1,
+        "y": 0.9
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "last_action"
+      },
+      "text": "Button 7 outer part tapped"
+    }
+  ]
+}

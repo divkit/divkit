@@ -1,0 +1,269 @@
+{
+  "description": "Tapping each solid or particle mask reveals its text without changing text layout.",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "text_template": {
+        "type": "text",
+        "font_size": 20
+      }
+    },
+    "card": {
+      "log_id": "snapshot_test_card",
+      "variables": [
+        {
+          "name": "mask0",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "mask1",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "mask2",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "mask3",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "mask4",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "text_template",
+                "id": "masked_text_0",
+                "text": "Solid mask value. Text end",
+                "ranges": [
+                  {
+                    "start": 11,
+                    "end": 16,
+                    "mask": {
+                      "type": "solid",
+                      "is_enabled": "@{mask0}",
+                      "color": "#ccc"
+                    },
+                    "actions": [
+                      {
+                        "log_id": "toggle_mask",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "mask0",
+                          "value": {
+                            "type": "boolean",
+                            "value": "@{!mask0}"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "text_template",
+                "id": "masked_text_1",
+                "text": "Particles mask 0.2 value. Text end",
+                "ranges": [
+                  {
+                    "start": 19,
+                    "end": 24,
+                    "mask": {
+                      "type": "particles",
+                      "is_enabled": "@{mask1}",
+                      "color": "#000",
+                      "density": 0.2
+                    },
+                    "actions": [
+                      {
+                        "log_id": "toggle_mask",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "mask1",
+                          "value": {
+                            "type": "boolean",
+                            "value": "@{!mask1}"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "text_template",
+                "id": "masked_text_2",
+                "text": "Particles mask 0.4 value. Text end",
+                "ranges": [
+                  {
+                    "start": 19,
+                    "end": 24,
+                    "mask": {
+                      "type": "particles",
+                      "is_enabled": "@{mask2}",
+                      "color": "#000",
+                      "density": 0.4
+                    },
+                    "actions": [
+                      {
+                        "log_id": "toggle_mask",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "mask2",
+                          "value": {
+                            "type": "boolean",
+                            "value": "@{!mask2}"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "text_template",
+                "id": "masked_text_3",
+                "text": "Particles mask 0.8 value. Text end",
+                "ranges": [
+                  {
+                    "start": 19,
+                    "end": 24,
+                    "mask": {
+                      "type": "particles",
+                      "is_enabled": "@{mask3}",
+                      "color": "#000",
+                      "density": 0.8
+                    },
+                    "actions": [
+                      {
+                        "log_id": "toggle_mask",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "mask3",
+                          "value": {
+                            "type": "boolean",
+                            "value": "@{!mask3}"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "text_template",
+                "id": "masked_text_4",
+                "text": "Particles mask 1.0 value. Text end",
+                "ranges": [
+                  {
+                    "start": 19,
+                    "end": 24,
+                    "mask": {
+                      "type": "particles",
+                      "is_enabled": "@{mask4}",
+                      "color": "#000",
+                      "density": 1
+                    },
+                    "actions": [
+                      {
+                        "log_id": "toggle_mask",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "mask4",
+                          "value": {
+                            "type": "boolean",
+                            "value": "@{!mask4}"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_snapshot",
+      "name": "masked"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "masked_text_0"
+      },
+      "point": {
+        "x": 0.3,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "masked_text_1"
+      },
+      "point": {
+        "x": 0.46,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "masked_text_2"
+      },
+      "point": {
+        "x": 0.46,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "masked_text_3"
+      },
+      "point": {
+        "x": 0.46,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "masked_text_4"
+      },
+      "point": {
+        "x": 0.46,
+        "y": 0.5
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "revealed"
+    }
+  ]
+}
