@@ -8,6 +8,7 @@ import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
+import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivEdgeInsets
@@ -24,6 +25,7 @@ import com.yandex.div2.DivTextRangeBorder
 import com.yandex.div2.DivTextRangeMask
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTransform
+import com.yandex.div2.DivTransitionTrigger
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibility
@@ -52,6 +54,8 @@ fun text(
     textGradient: DivTextGradient? = null,
     tooltips: List<DivTooltip>? = null,
     transform: DivTransform? = null,
+    transitionIn: DivAppearanceTransition? = null,
+    transitionTriggers: List<DivTransitionTrigger>? = null,
     triggers: List<DivTrigger>? = null,
     variables: List<DivVariable>? = null,
     visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
@@ -80,6 +84,8 @@ fun text(
         textGradient = textGradient,
         tooltips = tooltips,
         transform = transform,
+        transitionIn = transitionIn,
+        transitionTriggers = transitionTriggers,
         triggers = triggers,
         variables = variables,
         visibility = visibility,
@@ -122,6 +128,8 @@ fun text(
     truncatePolicy: DivText.TruncatePolicy = DivText.TruncatePolicy.GRAPHEME,
     tooltips: List<DivTooltip>? = null,
     transform: DivTransform? = null,
+    transitionIn: DivAppearanceTransition? = null,
+    transitionTriggers: List<DivTransitionTrigger>? = null,
     triggers: List<DivTrigger>? = null,
     variables: List<DivVariable>? = null,
     visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
@@ -166,6 +174,8 @@ fun text(
             textColor = textColor?.let { constant(it.value) } ?: constant(0xFF000000.toInt()),
             tooltips = tooltips,
             transform = transform,
+            transitionIn = transitionIn,
+            transitionTriggers = transitionTriggers,
             variables = variables,
             variableTriggers = triggers,
             visibility = visibility,

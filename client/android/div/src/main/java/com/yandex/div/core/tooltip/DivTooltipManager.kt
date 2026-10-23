@@ -12,9 +12,11 @@ class DivTooltipManager @Inject internal constructor(
 ) {
     /**
      * Captures all currently shown tooltips.
+     * Includes open popup windows whose content has not been laid out yet.
+     * Tooltips that are still preloading their content are not included.
      */
     fun captureShownTooltips(): List<TooltipMetadata> {
-        return tooltipController.captureCurrentTooltips().map {
+        return tooltipController.captureShownTooltips().map {
             TooltipMetadata(id = it.id, initiator = it.divView)
         }
     }

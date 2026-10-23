@@ -142,7 +142,6 @@ internal class DivRootStateController(
         val newStateView = buildViewAsyncAndUpdateState(stateId, newDivBlock, newData)
 
         oldState?.let { divView.discardStateVisibility(it) }
-        divView.trackStateVisibility(newState)
 
         val allowsTransition = oldData?.allowsTransitionsOnDataChange(oldExpressionResolver) == true ||
             newData.allowsTransitionsOnDataChange(expressionResolver)
@@ -207,7 +206,6 @@ internal class DivRootStateController(
         bindingPhase = null
 
         currentState?.let { divView.discardStateVisibility(it) }
-        divView.trackStateVisibility(newState)
 
         val rootView: View? = getChildAt(0)
         rootView?.clearTreeAnimations()
@@ -264,6 +262,8 @@ internal class DivRootStateController(
             addView(newStateView)
             viewComponent.errorMonitor.connect(this)
         }
+
+        divView.trackStateVisibility(newState)
     }
 
     private fun updateState(

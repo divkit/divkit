@@ -12,6 +12,7 @@ import android.view.accessibility.AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
 import android.view.animation.AlphaAnimation
 import android.view.animation.Transformation
 import android.widget.PopupWindow
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
@@ -33,11 +34,11 @@ import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTooltip
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertSame
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
@@ -49,11 +50,10 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLooper
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(AndroidJUnit4::class)
 class DivTooltipViewTest {
 
     private val context = testContextThemeWrapper()
@@ -158,18 +158,19 @@ class DivTooltipViewTest {
 
         underTest.show {
             underTest.dismiss()
+            whenever(popupWindow.isShowing).doReturn(false)
         }
         layoutContainer(width = TOOLTIP_WIDTH, height = TOOLTIP_HEIGHT)
 
+        verify(visibilityActionTracker, never()).trackVisibilityActionsOf(
+            scope = eq(divView),
+            resolver = eq(expressionResolver),
+            view = eq(tooltipView),
+            div = eq(tooltipDiv),
+            appearActions = any(),
+            disappearActions = any(),
+        )
         inOrder(visibilityActionTracker).apply {
-            verify(visibilityActionTracker).trackVisibilityActionsOf(
-                scope = eq(divView),
-                resolver = eq(expressionResolver),
-                view = eq(tooltipView),
-                div = eq(tooltipDiv),
-                appearActions = any(),
-                disappearActions = any(),
-            )
             verify(visibilityActionTracker).trackVisibilityActionsOf(
                 scope = divView,
                 resolver = expressionResolver,
@@ -179,6 +180,31 @@ class DivTooltipViewTest {
             verify(visibilityActionTracker).getDivWithWaitingDisappearActions()
             verifyNoMoreInteractions()
         }
+    }
+
+    @Test
+    fun `animated dismiss from shown callback does not start visibility tracking`() {
+        // Arrange
+        container.setViews(substrate = substrateView, bringToTop = null, tooltip = tooltipView)
+        val underTest = createUnderTest(data = tooltipData(substrateDiv = fixedDiv()))
+        whenever(popupWindow.isShowing) doReturn true
+        whenever(animationsEnabledController.isEnabled()) doReturn true
+
+        // Act
+        underTest.show { underTest.dismiss() }
+        layoutContainer(width = TOOLTIP_WIDTH, height = TOOLTIP_HEIGHT)
+
+        // Assert
+        assertNotNull(tooltipView.animation)
+        verify(popupWindow, never()).dismiss()
+        verify(visibilityActionTracker, never()).trackVisibilityActionsOf(
+            scope = eq(divView),
+            resolver = eq(expressionResolver),
+            view = eq(tooltipView),
+            div = eq(tooltipDiv),
+            appearActions = any(),
+            disappearActions = any(),
+        )
     }
 
     @Test

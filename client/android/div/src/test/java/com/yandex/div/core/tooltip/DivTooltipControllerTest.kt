@@ -110,11 +110,14 @@ class DivTooltipControllerTest {
         on { create(any(), touchOutsideCallback.capture(), dismissedCallback.capture()) } doAnswer {
             val onDismissed = dismissedCallback.lastValue
             onViewCreate()
+            var isPopupShowing = false
             val view = mock<DivTooltipView> {
+                on { isShown } doAnswer { isPopupShowing }
                 on { tooltipView } doReturn tooltipContentView
                 on { substrateView } doReturn substrateContentView
             }
             doAnswer { showInvocation ->
+                isPopupShowing = true
                 val onShown = showInvocation.getArgument<() -> Unit>(0)
                 shownCallbacks += onShown
                 if (completeViewShowImmediately) {
@@ -123,6 +126,7 @@ class DivTooltipControllerTest {
             }.whenever(view).show(any())
             doAnswer {
                 if (completeViewDismissImmediately) {
+                    isPopupShowing = false
                     onDismissed(view)
                 }
             }.whenever(view).dismiss()
@@ -157,6 +161,152 @@ class DivTooltipControllerTest {
         ),
         divBinder = { divBinder },
     )
+
+    private val manager = DivTooltipManager(underTest)
+
+    @Test
+    fun `pending tooltip is not reported as shown`() {
+        showTooltip(completePreload = false)
+
+        assertTrue(manager.captureShownTooltips().isEmpty())
+    }
+
+    @Test
+    fun `open tooltip waiting for layout is reported as shown`() {
+        completeViewShowImmediately = false
+
+        showTooltip()
+
+        assertEquals(listOf("tooltip_id"), manager.captureShownTooltips().map { it.id })
+    }
+
+    @Test
+    fun `shown tooltip is reported with its initiator`() {
+        showTooltip()
+
+        val metadata = manager.captureShownTooltips().single()
+        assertEquals("tooltip_id", metadata.id)
+        assertSame(divView, metadata.initiator)
+    }
+
+    @Test
+    fun `tooltip remains reported during dismissal animation`() {
+        completeViewDismissImmediately = false
+        showTooltip()
+
+        underTest.hideTooltip("tooltip_id")
+
+        assertEquals(listOf("tooltip_id"), manager.captureShownTooltips().map { it.id })
+    }
+
+    @Test
+    fun `dismissed tooltip is no longer reported`() {
+        showTooltip()
+
+        underTest.hideTooltip("tooltip_id")
+
+        assertTrue(manager.captureShownTooltips().isEmpty())
+    }
+
+    @Test
+    fun `synchronous preload is not blocked by its own pending tooltip`() {
+        restrictToNoShownTooltips()
+        whenever(divPreloader.preload(any<Div>(), any(), any())).doAnswer { invocation ->
+            invocation.getArgument<DivPreloader.Callback>(2).finish(false)
+            mock<DivPreloader.Ticket>()
+        }
+
+        showTooltip(completePreload = false)
+
+        assertEquals(listOf("tooltip_id"), manager.captureShownTooltips().map { it.id })
+        verify(shownCallback).onDivTooltipShown(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `asynchronous preload is not blocked by its own pending tooltip`() {
+        restrictToNoShownTooltips()
+        showTooltip(completePreload = false)
+
+        preloadCallback.lastValue.finish(false)
+
+        assertEquals(listOf("tooltip_id"), manager.captureShownTooltips().map { it.id })
+        verify(shownCallback).onDivTooltipShown(divView, anchor, divTooltips.single())
+    }
+
+    @Test
+    fun `another shown tooltip still prevents showing a tooltip`() {
+        showTooltip()
+        restrictToNoShownTooltips()
+        divTooltips += createDivTooltip(id = "another_tooltip")
+
+        underTest.showTooltip("another_tooltip", divView)
+
+        verify(viewFactory).create(any(), any(), any())
+        assertEquals(listOf("tooltip_id"), manager.captureShownTooltips().map { it.id })
+        verify(shownCallback, never()).onDivTooltipShown(divView, anchor, divTooltips.last())
+    }
+
+    @Test
+    fun `cancel all includes pending tooltips and ignores their late preload`() {
+        showTooltip(completePreload = false)
+
+        assertTrue(manager.cancelAllTooltips())
+        preloadCallback.lastValue.finish(false)
+
+        assertTrue(manager.captureShownTooltips().isEmpty())
+        verify(shownCallback, never()).onDivTooltipShown(any(), any(), any())
+    }
+
+    @Test
+    fun `pending tooltip survives configuration change without becoming shown`() {
+        showTooltip(completePreload = false)
+
+        underTest.handleConfigurationChange(divView)
+
+        assertTrue(manager.captureShownTooltips().isEmpty())
+        assertEquals("tooltip_id", underTest.captureCurrentTooltips().single().id)
+    }
+
+    @Test
+    fun `pending tooltip can finish preload after configuration change`() {
+        restrictToNoShownTooltips()
+        showTooltip(completePreload = false)
+        underTest.handleConfigurationChange(divView)
+
+        preloadCallback.lastValue.finish(false)
+
+        assertEquals(listOf("tooltip_id"), manager.captureShownTooltips().map { it.id })
+    }
+
+    @Test
+    fun `shown callback observes the tooltip in the public list`() {
+        val reportedIds = mutableListOf<String>()
+        whenever(shownCallback.onDivTooltipShown(any(), any(), any())).doAnswer {
+            reportedIds += manager.captureShownTooltips().map { it.id }
+        }
+
+        showTooltip()
+
+        assertEquals(listOf("tooltip_id"), reportedIds)
+    }
+
+    @Test
+    fun `dismissed callback observes an empty public list`() {
+        val reportedLists = mutableListOf<List<String>>()
+        whenever(shownCallback.onDivTooltipDismissed(any(), any(), any())).doAnswer {
+            reportedLists += manager.captureShownTooltips().map { it.id }
+        }
+        showTooltip()
+
+        underTest.hideTooltip("tooltip_id")
+
+        assertEquals(listOf(emptyList()), reportedLists)
+    }
+
+    private fun restrictToNoShownTooltips() {
+        whenever(tooltipRestrictor.canShowTooltip(any(), any(), any(), any(), anyOrNull()))
+            .doAnswer { manager.captureShownTooltips().isEmpty() }
+    }
 
     @AfterTest
     fun tearDown() {
