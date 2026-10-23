@@ -1,5 +1,6 @@
 package com.yandex.div.compose.screenshot
 
+import android.graphics.PointF
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text
@@ -9,7 +10,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toAndroidRectF
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -27,6 +30,7 @@ import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipe
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziTaskType
@@ -45,6 +49,7 @@ import com.yandex.div.test.composeRoborazziInteractiveScreenshotCases
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
+import com.yandex.div.test.crossplatform.clipSwipeToBounds
 import org.junit.Rule
 import org.junit.experimental.categories.Category
 import org.junit.rules.RuleChain
@@ -140,6 +145,8 @@ class RoborazziInteractiveScreenshotTest(
 
                 is Step.LongTap -> performOnNode(step.id) { longClick() }
 
+                is Step.Swipe -> performSwipe(step)
+
                 is Step.Wait -> Unit
 
                 is Step.VerifyText -> verifyText(step)
@@ -160,6 +167,20 @@ class RoborazziInteractiveScreenshotTest(
 
     private fun performOnNode(id: String, gesture: TouchInjectionScope.() -> Unit) =
         composeRule.onNodeWithTag(id).performTouchInput(gesture)
+
+    private fun performSwipe(step: Step.Swipe) {
+        val target = composeRule.onNodeWithTag(step.id)
+        val node = target.fetchSemanticsNode()
+        val size = node.size
+        val from = PointF(size.width * step.from.x, size.height * step.from.y)
+        val to = PointF(size.width * step.to.x, size.height * step.to.y)
+        val visibleBounds = node.boundsInWindow.translate(-node.positionInWindow)
+        clipSwipeToBounds(from, to, visibleBounds.toAndroidRectF())
+        val offset = node.positionInRoot - node.boundsInRoot.topLeft
+        target.performTouchInput {
+            swipe(offset + Offset(from.x, from.y), offset + Offset(to.x, to.y))
+        }
+    }
 
     private fun verifyText(step: Step.VerifyText) = verifyStep(step.id, hasTextExactly(step.text))
 

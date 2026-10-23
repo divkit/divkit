@@ -1,6 +1,7 @@
 {
   "description": "Pager with multi page scroll",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

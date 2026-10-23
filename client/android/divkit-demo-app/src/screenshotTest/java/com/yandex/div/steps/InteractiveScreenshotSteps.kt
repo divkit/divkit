@@ -14,6 +14,7 @@ import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.view.ViewActions.doubleTapWithRetries
 import com.yandex.div.view.ViewActions.longTapWithRetries
 import com.yandex.div.view.ViewActions.tapWithRetries
+import com.yandex.div.view.actions.SwipeWithinVisibleBounds
 import com.yandex.div.view.waitUntilVisible
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
@@ -51,6 +52,8 @@ internal class InteractiveScreenshotSteps {
 
                     is Step.LongTap -> performLongTap(step.id)
 
+                    is Step.Swipe -> performSwipe(step)
+
                     is Step.Wait -> waitForStep(step)
 
                     is Step.VerifyText -> verifyText(step)
@@ -85,6 +88,10 @@ internal class InteractiveScreenshotSteps {
 
     private fun performLongTap(id: String) = step("Long tap div '$id'") {
         onView(id).perform(longTapWithRetries())
+    }
+
+    private fun performSwipe(swipe: Step.Swipe) = step("Swipe div '${swipe.id}'") {
+        onView(swipe.id).perform(SwipeWithinVisibleBounds(swipe.from, swipe.to))
     }
 
     private fun waitForStep(wait: Step.Wait) = step("Wait ${wait.delay} ms") {

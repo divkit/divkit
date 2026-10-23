@@ -1,6 +1,7 @@
 {
   "description": "Gesture (extension)",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {

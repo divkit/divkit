@@ -622,6 +622,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "steps": [
@@ -744,6 +745,7 @@
         "ios"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -4290,6 +4292,7 @@
         "android"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -4412,6 +4415,7 @@
         "web"
       ],
       "automated": [
+        "android",
         "ios"
       ],
       "tags": [

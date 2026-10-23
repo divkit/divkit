@@ -1,5 +1,6 @@
 package com.yandex.div.test.crossplatform
 
+import android.graphics.PointF
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.internal.util.asList
 import com.yandex.div.test.data.throwingErrorLogger
@@ -18,6 +19,8 @@ class InteractiveScreenshotTestData(
         class DoubleTap(val id: String) : Step()
 
         class LongTap(val id: String) : Step()
+
+        class Swipe(val id: String, val from: PointF, val to: PointF) : Step()
 
         class Wait(val delay: Long) : Step()
 
@@ -55,6 +58,8 @@ class InteractiveScreenshotTestData(
 
                 "long_tap" -> Step.LongTap(parseTargetId(step))
 
+                "swipe" -> parseSwipe(step)
+
                 "wait" -> {
                     val delay = step.getLong("duration_ms")
                     if (delay <= 0) {
@@ -86,6 +91,43 @@ class InteractiveScreenshotTestData(
                 throw JSONException("Unsupported ${step.getString("type")} target type: $targetType")
             }
             return target.getString("id")
+        }
+
+        private const val SWIPE_DIRECTION = "direction"
+        private const val SWIPE_FROM = "from"
+        private const val SWIPE_TO = "to"
+
+        private fun parseSwipe(step: JSONObject): Step.Swipe {
+            val id = parseTargetId(step)
+            return if (step.has(SWIPE_DIRECTION)) {
+                if (step.has(SWIPE_FROM) || step.has(SWIPE_TO)) {
+                    throw JSONException(
+                        "Swipe must specify either direction or from/to coordinates, not both"
+                    )
+                }
+                val from = when (val value = step.getString(SWIPE_DIRECTION)) {
+                    "left" -> PointF(0.75f, 0.5f)
+                    "right" -> PointF(0.25f, 0.5f)
+                    "up" -> PointF(0.5f, 0.75f)
+                    "down" -> PointF(0.5f, 0.25f)
+                    else -> throw JSONException("Unsupported swipe direction: $value")
+                }
+                val to = PointF(1f - from.x, 1f - from.y)
+                Step.Swipe(id, from, to)
+            } else {
+                val from = parsePoint(step.getJSONObject(SWIPE_FROM))
+                val to = parsePoint(step.getJSONObject(SWIPE_TO))
+                Step.Swipe(id, from, to)
+            }
+        }
+
+        private fun parsePoint(point: JSONObject): PointF {
+            val x = point.getDouble("x").toFloat()
+            val y = point.getDouble("y").toFloat()
+            if (x !in 0f..1f || y !in 0f..1f) {
+                throw JSONException("Swipe coordinates must be between 0 and 1, got: ($x, $y)")
+            }
+            return PointF(x, y)
         }
     }
 }

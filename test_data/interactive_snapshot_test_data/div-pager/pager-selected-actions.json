@@ -1,6 +1,7 @@
 {
   "description": "Pager selected actions",
   "platforms": [
+    "android",
     "ios"
   ],
   "div_data": {
