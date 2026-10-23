@@ -10,8 +10,8 @@ import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
-import org.json.JSONArray
-import org.json.JSONObject
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 import java.math.BigDecimal
 
 internal abstract class GetStoredIntegerValueBase : GetStoredValue<Long>() {
@@ -214,8 +214,8 @@ internal abstract class GetStoredComplexValue<T : Any> : Function() {
     private fun throwWrongTypeException(functionName: String, args: List<Any>, expected: EvaluableType, actual: Any): Nothing {
         val actualType = when (actual) {
             is Int, is Double, is BigDecimal -> "Number"
-            is JSONObject -> "Dict"
-            is JSONArray -> "Array"
+            is DataObject -> "Dict"
+            is DataArray -> "Array"
             else -> actual.javaClass.simpleName
         }
         throwExceptionOnFunctionEvaluationFailed(functionName, args,
@@ -223,7 +223,7 @@ internal abstract class GetStoredComplexValue<T : Any> : Function() {
     }
 }
 
-internal abstract class GetStoredArrayValueBase : GetStoredComplexValue<JSONArray>() {
+internal abstract class GetStoredArrayValueBase : GetStoredComplexValue<DataArray>() {
     override val name = "getStoredArrayValue"
     override val resultType = EvaluableType.ARRAY
 }
@@ -242,7 +242,7 @@ internal object GetScopedStoredArrayValue: GetStoredArrayValueBase() {
     override val hasScope = true
 }
 
-internal abstract class GetStoredDictValueBase : GetStoredComplexValue<JSONObject>() {
+internal abstract class GetStoredDictValueBase : GetStoredComplexValue<DataObject>() {
     override val name = "getStoredDictValue"
     override val resultType = EvaluableType.DICT
 }

@@ -3,7 +3,6 @@ package com.yandex.div.internal.actions
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.evaluable.MissingVariableException
 import com.yandex.div.internal.variables.name
-import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVariable
 import org.json.JSONObject
@@ -25,7 +24,7 @@ fun createSubmitBody(
         if (variable == null) {
             reportError(MissingVariableException(name))
         } else {
-            body.put(name, variable.getValue().variableValueToEvaluableValue())
+            body.put(name, variable.getValue())
         }
     }
     return body.toString()

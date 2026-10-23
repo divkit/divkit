@@ -21,6 +21,70 @@
       ]
     },
     {
+      "expression": "@{getIntegerFromArray(array, -1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntegerFromArray(<array>, -1)]. Requested index (-1) out of bounds array size (1)."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{getIntegerFromArray(array, -4294967295)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntegerFromArray(<array>, -4294967295)]. Requested index (-4294967295) out of bounds array size (2)."
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123,
+            321
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{getOptIntegerFromArray(array, -1, 321)}",
+      "expected": {
+        "type": "integer",
+        "value": 321
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            123
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
       "expression": "@{getIntegerFromArray(array, 0)}",
       "expected": {
         "type": "integer",
@@ -823,6 +887,52 @@
         "ios",
         "web",
         "flutter"
+      ]
+    },
+    {
+      "expression": "@{getOptDictFromArray(array, -1)}",
+      "expected": {
+        "type": "dict",
+        "value": {}
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            {
+              "key": "value"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{getOptDictFromArray(array, 1)}",
+      "expected": {
+        "type": "dict",
+        "value": {}
+      },
+      "variables": [
+        {
+          "type": "array",
+          "name": "array",
+          "value": [
+            {
+              "key": "value"
+            }
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
       ]
     },
     {

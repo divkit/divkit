@@ -1,8 +1,8 @@
 package com.yandex.div.evaluable
 
 import com.yandex.div.evaluable.internal.Token
-import org.json.JSONArray
-import org.json.JSONObject
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 
 internal const val REASON_DIVISION_BY_ZERO = "Division by zero is not supported."
 internal const val REASON_EMPTY_ARGUMENT_LIST = "Function requires non empty argument list."
@@ -32,8 +32,8 @@ class MissingVariableException(
 ) : EvaluableException("Variable '${variableName}' is missing.", cause)
 
 class IntegerOverflow(
-        val expression: String,
-        cause: Exception? = null
+    val expression: String,
+    cause: Exception? = null
 ) : EvaluableException("Failed to evaluate [$expression]. $REASON_INTEGER_OVERFLOW", cause)
 
 class MissingLocalFunctionException(
@@ -80,7 +80,7 @@ internal fun throwExceptionOnEvaluationFailed(
     right: Any,
 ): Nothing {
     val evaluable = "${left.toMessageFormat()} $operator ${right.toMessageFormat()}"
-    val typesMessage = if (left.javaClass != right.javaClass) {
+    val typesMessage = if (!left.hasSameTypeAs(right)) {
         "different types: ${EvaluableType.of(left).typeName} and ${EvaluableType.of(right).typeName}"
     } else {
         "${EvaluableType.of(left).typeName} type"
@@ -99,8 +99,8 @@ internal fun List<Any>.toMessageFormat(): String {
 
 internal fun Any.toMessageFormat(): String {
     return when (this) {
-        is JSONArray -> "<array>"
-        is JSONObject -> "<dict>"
+        is DataArray -> "<array>"
+        is DataObject -> "<dict>"
         is String -> "'$this'"
         else -> toString()
     }

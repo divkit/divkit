@@ -19,21 +19,21 @@ public interface DataObject : Iterable<Pair<String, Any?>> {
 
         @JvmStatic
         public fun empty(): DataObject {
-            return EmptyDataObject
+            return DataObjectImpl(emptyMap())
+        }
+
+        /**
+         * Creates a [DataObject] with the given source. Nested dicts and arrays are kept as is, without copying.
+         *
+         * Values may be strings, booleans, finite numbers, [DataObject]s, [DataArray]s or `null`.
+         * Numbers are read back with the same types as from JSON, e.g. a [Long] that fits [Int] becomes [Int].
+         * The created object is equal only to itself.
+         *
+         * @throws IllegalArgumentException if a value has an unsupported type or is a non-finite number.
+         */
+        @JvmStatic
+        public fun of(source: Map<String, Any?>): DataObject {
+            return DataObjectImpl(source.mapValues { (_, value) -> value.toDataValue() })
         }
     }
-}
-
-private object EmptyDataObject : DataObject {
-
-    override val size: Int = 0
-    override val keys: Set<String> = emptySet()
-    override val values: Collection<Any?> = emptyList()
-
-    override fun isEmpty(): Boolean = true
-    override fun containsKey(key: String): Boolean = false
-    override fun containsValue(value: Any?): Boolean = false
-    override fun get(key: String): Any = throw NoSuchElementException()
-    override fun opt(key: String): Any? = null
-    override fun iterator(): Iterator<Pair<String, Any?>> = emptyList<Pair<String, Any?>>().iterator()
 }

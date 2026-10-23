@@ -13,20 +13,21 @@ public interface DataArray : Collection<Any?> {
 
         @JvmStatic
         public fun empty(): DataArray {
-            return EmptyDataArray
+            return DataArrayImpl(emptyList())
+        }
+
+        /**
+         * Creates a [DataArray] with the given source. Nested dicts and arrays are kept as is, without copying.
+         *
+         * Values may be strings, booleans, finite numbers, [DataObject]s, [DataArray]s or `null`.
+         * Numbers are read back with the same types as from JSON, e.g. a [Long] that fits [Int] becomes [Int].
+         * The created array is equal only to itself.
+         *
+         * @throws IllegalArgumentException if a value has an unsupported type or is a non-finite number.
+         */
+        @JvmStatic
+        public fun of(source: List<Any?>): DataArray {
+            return DataArrayImpl(source.map { it.toDataValue() })
         }
     }
-}
-
-private object EmptyDataArray : DataArray {
-
-    override val size: Int = 0
-
-    override fun isEmpty(): Boolean = true
-    override fun contains(element: Any?): Boolean = false
-    override fun containsAll(elements: Collection<Any?>): Boolean = elements.isEmpty()
-    override fun get(index: Int): Any = throw NoSuchElementException()
-    override fun opt(index: Int): Any? = null
-    override fun indexOf(element: Any?): Int = -1
-    override fun iterator(): Iterator<Any?> = emptyList<Any?>().iterator()
 }

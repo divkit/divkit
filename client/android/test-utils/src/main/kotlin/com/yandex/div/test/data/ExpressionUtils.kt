@@ -5,8 +5,10 @@ import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
 import com.yandex.div.internal.parser.STRING_TO_URI
 import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
 import com.yandex.div.internal.parser.TYPE_HELPER_COLOR
+import com.yandex.div.internal.parser.TYPE_HELPER_DICT
 import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE
 import com.yandex.div.internal.parser.TYPE_HELPER_INT
+import com.yandex.div.internal.parser.TYPE_HELPER_JSON_ARRAY
 import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.internal.parser.TYPE_HELPER_URI
 import com.yandex.div.internal.parser.TypeHelper
@@ -15,6 +17,8 @@ import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivVisibility
+import org.json.JSONArray
+import org.json.JSONObject
 import kotlin.test.fail
 
 fun <T : Any> constant(value: T) = Expression.ConstantExpression(value)
@@ -74,6 +78,28 @@ fun intExpression(
         validator = { true },
         logger = { if (failOnError) fail(it.message) },
         typeHelper = TYPE_HELPER_INT,
+    )
+}
+
+fun dictExpression(expression: String): Expression<JSONObject> {
+    return Expression.MutableExpression<JSONObject, JSONObject>(
+        expressionKey = "test",
+        rawExpression = expression,
+        converter = { it },
+        validator = { true },
+        logger = throwingErrorLogger,
+        typeHelper = TYPE_HELPER_DICT,
+    )
+}
+
+fun arrayExpression(expression: String): Expression<JSONArray> {
+    return Expression.MutableExpression<JSONArray, JSONArray>(
+        expressionKey = "test",
+        rawExpression = expression,
+        converter = { it },
+        validator = { true },
+        logger = throwingErrorLogger,
+        typeHelper = TYPE_HELPER_JSON_ARRAY,
     )
 }
 

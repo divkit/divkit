@@ -16,8 +16,7 @@ import kotlinx.serialization.json.JsonElement as KtxElement
  */
 @Suppress("TooManyFunctions")
 @ExperimentalApi
-@JvmInline
-internal value class KtxJsonArray(
+internal class KtxJsonArray(
     private val source: KtxArray
 ) : JsonArray {
 
@@ -106,6 +105,10 @@ internal value class KtxJsonArray(
     override fun asOrgJsonArray(): JSONArray = source.toOrgJsonArray()
 
     override fun asKtxJsonArray(): KtxArray = source
+
+    override fun equals(other: Any?): Boolean = other is KtxJsonArray && source === other.source
+
+    override fun hashCode(): Int = source.hashCode()
 
     override fun toString(): String = source.toString()
 }

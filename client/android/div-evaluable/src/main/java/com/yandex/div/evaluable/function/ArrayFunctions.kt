@@ -1,5 +1,7 @@
 package com.yandex.div.evaluable.function
 
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.ExpressionContext
@@ -11,8 +13,6 @@ import com.yandex.div.evaluable.throwExceptionOnEvaluationFailed
 import com.yandex.div.evaluable.toMessageFormat
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
-import org.json.JSONArray
-import org.json.JSONObject
 import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.math.roundToLong
@@ -385,7 +385,7 @@ internal abstract class ArrayFromArray : ArrayFunction(EvaluableType.ARRAY) {
         args: List<Any>
     ): Any {
         val result = evaluateArray(name, args, isMethod)
-        return result as? JSONArray ?: throwArrayWrongTypeException(name, args, resultType, result, isMethod)
+        return result as? DataArray ?: throwArrayWrongTypeException(name, args, resultType, result, isMethod)
     }
 }
 
@@ -411,7 +411,7 @@ internal object GetOptArrayFromArray : ArrayOptFunction(EvaluableType.ARRAY) {
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any = evaluateSafe(name, args) as? JSONArray ?: JSONArray()
+    ): Any = evaluateSafe(name, args) as? DataArray ?: DataArray.empty()
 }
 
 internal abstract class ArrayDict : ArrayFunction(EvaluableType.DICT) {
@@ -421,7 +421,7 @@ internal abstract class ArrayDict : ArrayFunction(EvaluableType.DICT) {
         args: List<Any>
     ): Any {
         val result = evaluateArray(name, args, isMethod)
-        return result as? JSONObject ?: throwArrayWrongTypeException(name, args, resultType, result, isMethod)
+        return result as? DataObject ?: throwArrayWrongTypeException(name, args, resultType, result, isMethod)
     }
 }
 
@@ -447,7 +447,7 @@ internal object GetOptDictFromArray : ArrayFunction(EvaluableType.DICT) {
         evaluationContext: EvaluationContext,
         expressionContext: ExpressionContext,
         args: List<Any>
-    ): Any = evaluateArray(name, args) as? JSONObject ?: JSONObject()
+    ): Any = evaluateSafe(name, args) as? DataObject ?: DataObject.empty()
 }
 
 internal object GetArrayLength : Function() {
@@ -467,8 +467,8 @@ internal object GetArrayLength : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val array = args[0] as JSONArray
-        return array.length().toLong()
+        val array = args[0] as DataArray
+        return array.size.toLong()
     }
 }
 
@@ -488,31 +488,31 @@ internal object ArrayIsEmpty : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val array = args[0] as JSONArray
-        return array.length() == 0
+        val array = args[0] as DataArray
+        return array.isEmpty()
     }
 }
 
-internal fun evaluateArray(functionName: String, args: List<Any>, isMethod: Boolean = false): Any {
+internal fun evaluateArray(functionName: String, args: List<Any>, isMethod: Boolean = false): Any? {
     checkIndexOfBoundException(functionName, args, isMethod)
-    val array = args[0] as JSONArray
+    val array = args[0] as DataArray
     val index = args[1] as Long
-    return array.get(index.toInt())
+    return array.opt(index.toInt())
 }
 
 internal fun evaluateSafe(functionName: String, args: List<Any>): Any? {
     return runCatching {
         checkIndexOfBoundException(functionName, args)
-        val array = args[0] as JSONArray
+        val array = args[0] as DataArray
         val index = args[1] as Long
-        array.get(index.toInt())
+        array.opt(index.toInt())
     }.getOrNull()
 }
 
 private fun checkIndexOfBoundException(functionName: String, args: List<Any>, isMethod: Boolean = false) {
-    val arraySize = (args[0] as JSONArray).length()
+    val arraySize = (args[0] as DataArray).size
     val index = args[1] as Long
-    if (index >= arraySize) {
+    if (index < 0 || index >= arraySize) {
         throwArrayException(
             functionName = functionName,
             args = args,
@@ -526,14 +526,14 @@ internal fun throwArrayWrongTypeException(
     functionName: String,
     args: List<Any>,
     expected: EvaluableType,
-    actual: Any,
+    actual: Any?,
     isMethod: Boolean = false
 ) {
     val actualType = when (actual) {
-        JSONObject.NULL -> "Null"
+        null -> "Null"
         is Number -> "Number"
-        is JSONObject -> "Dict"
-        is JSONArray -> "Array"
+        is DataObject -> "Dict"
+        is DataArray -> "Array"
         else -> actual.javaClass.simpleName
     }
     throwArrayException(functionName, args,

@@ -3,6 +3,7 @@ package com.yandex.div.core.json
 import kotlinx.serialization.json.jsonArray
 import org.json.JSONArray
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -11,12 +12,9 @@ import org.junit.runners.Parameterized
 import kotlinx.serialization.json.Json as KtxJson
 
 @RunWith(Parameterized::class)
-class JsonArrayTest(backend: JsonBackend) {
+class JsonArrayTest(private val backend: JsonBackend) {
 
-    private val jsonArray: JsonArray = when (backend) {
-        JsonBackend.ORG_JSON -> OrgJsonArray(JSONArray(JSON_ARRAY))
-        JsonBackend.KTX_JSON -> KtxJsonArray(KtxJson.parseToJsonElement(JSON_ARRAY).jsonArray)
-    }
+    private val jsonArray: JsonArray = createJsonArray()
 
     @Test
     fun `array get reads short integer number value`() {
@@ -2168,6 +2166,41 @@ class JsonArrayTest(backend: JsonBackend) {
     @Test
     fun `array optString with fallback returns fallback for array value`() {
         assertEquals("fallback", jsonArray.optString(17, "fallback"))
+    }
+
+    @Test
+    fun `array get returns equal nested objects`() {
+        assertEquals(jsonArray.get(16), jsonArray.get(16))
+    }
+
+    @Test
+    fun `array get returns nested objects with equal hash codes`() {
+        assertEquals(jsonArray.get(16).hashCode(), jsonArray.get(16).hashCode())
+    }
+
+    @Test
+    fun `array get returns equal nested arrays`() {
+        assertEquals(jsonArray.get(17), jsonArray.get(17))
+    }
+
+    @Test
+    fun `array get returns nested arrays with equal hash codes`() {
+        assertEquals(jsonArray.get(17).hashCode(), jsonArray.get(17).hashCode())
+    }
+
+    @Test
+    fun `array does not equal array with the same content`() {
+        assertNotEquals(jsonArray, createJsonArray())
+    }
+
+    @Test
+    fun `array does not equal its modified copy`() {
+        assertNotEquals(jsonArray, jsonArray.modify {})
+    }
+
+    private fun createJsonArray(): JsonArray = when (backend) {
+        JsonBackend.ORG_JSON -> OrgJsonArray(JSONArray(JSON_ARRAY))
+        JsonBackend.KTX_JSON -> KtxJsonArray(KtxJson.parseToJsonElement(JSON_ARRAY).jsonArray)
     }
 
     companion object {

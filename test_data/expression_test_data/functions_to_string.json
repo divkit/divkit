@@ -289,6 +289,100 @@
         }
       ],
       "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toString(array_with_escaped_string)}",
+      "expected": {
+        "type": "string",
+        "value": "[\"\\\\\",\"\\\"\",\"/\",\"\\b\",\"\\f\",\"\\n\",\"\\r\",\"\\t\"]"
+      },
+      "variables": [
+        {
+          "name": "array_with_escaped_string",
+          "type": "array",
+          "value": [
+            "\\",
+            "\"",
+            "/",
+            "\b",
+            "\f",
+            "\n",
+            "\r",
+            "\t"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toString(array_with_control_characters)}",
+      "expected": {
+        "type": "string",
+        "value": "[\"\\u0001\\u001f\"]"
+      },
+      "variables": [
+        {
+          "name": "array_with_control_characters",
+          "type": "array",
+          "value": [
+            "\u0001\u001f"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toString(array_with_whole_number)}",
+      "expected": {
+        "type": "string",
+        "value": "[2,1.5,3]"
+      },
+      "variables": [
+        {
+          "name": "array_with_whole_number",
+          "type": "array",
+          "value": [
+            2.0,
+            1.5,
+            3
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "expression": "@{toString(dict_with_whole_number)}",
+      "expected": {
+        "type": "string",
+        "value": "{\"integer\":3,\"number\":2}"
+      },
+      "variables": [
+        {
+          "name": "dict_with_whole_number",
+          "type": "dict",
+          "value": {
+            "number": 2.0,
+            "integer": 3
+          }
+        }
+      ],
+      "platforms": [
+        "android",
         "ios",
         "web"
       ]

@@ -3,6 +3,7 @@ package com.yandex.div.core.json
 import kotlinx.serialization.json.jsonObject
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -11,12 +12,9 @@ import org.junit.runners.Parameterized
 import kotlinx.serialization.json.Json as KtxJson
 
 @RunWith(Parameterized::class)
-class JsonObjectTest(backend: JsonBackend) {
+class JsonObjectTest(private val backend: JsonBackend) {
 
-    private val jsonObject: JsonObject = when (backend) {
-        JsonBackend.ORG_JSON -> OrgJsonObject(JSONObject(JSON_OBJECT))
-        JsonBackend.KTX_JSON -> KtxJsonObject(KtxJson.parseToJsonElement(JSON_OBJECT).jsonObject)
-    }
+    private val jsonObject: JsonObject = createJsonObject()
 
     @Test
     fun `object get reads short integer number value`() {
@@ -1880,6 +1878,41 @@ class JsonObjectTest(backend: JsonBackend) {
     @Test
     fun `object optString with fallback returns fallback for array value`() {
         assertEquals("fallback", jsonObject.optString("array", "fallback"))
+    }
+
+    @Test
+    fun `object get returns equal nested objects`() {
+        assertEquals(jsonObject.get("object"), jsonObject.get("object"))
+    }
+
+    @Test
+    fun `object get returns nested objects with equal hash codes`() {
+        assertEquals(jsonObject.get("object").hashCode(), jsonObject.get("object").hashCode())
+    }
+
+    @Test
+    fun `object get returns equal nested arrays`() {
+        assertEquals(jsonObject.get("array"), jsonObject.get("array"))
+    }
+
+    @Test
+    fun `object get returns nested arrays with equal hash codes`() {
+        assertEquals(jsonObject.get("array").hashCode(), jsonObject.get("array").hashCode())
+    }
+
+    @Test
+    fun `object does not equal object with the same content`() {
+        assertNotEquals(jsonObject, createJsonObject())
+    }
+
+    @Test
+    fun `object does not equal its modified copy`() {
+        assertNotEquals(jsonObject, jsonObject.modify {})
+    }
+
+    private fun createJsonObject(): JsonObject = when (backend) {
+        JsonBackend.ORG_JSON -> OrgJsonObject(JSONObject(JSON_OBJECT))
+        JsonBackend.KTX_JSON -> KtxJsonObject(KtxJson.parseToJsonElement(JSON_OBJECT).jsonObject)
     }
 
     companion object {

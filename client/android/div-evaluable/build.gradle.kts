@@ -64,14 +64,14 @@ tasks.register<Jar>("replJar") {
     archiveClassifier.set("repl")
 }
 
+@Suppress("AvoidDuplicateDependencies")
 dependencies {
+    api(project(":core"))
     implementation(libs.javax)
-    compileOnly(libs.json)
 
-    "generatorCompileOnly"(libs.json)
+    "generatorCompileOnly"(project(":core"))
     "generatorImplementation"(libs.kotlinpoet)
 
-    testImplementation(libs.json)
     testImplementation(libs.kotlin.test)
     testImplementation(libs.mockito.kotlin)
 }

@@ -1,5 +1,8 @@
 package com.yandex.div.evaluable
 
+import com.yandex.div.core.json.JsonElement
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 import com.yandex.div.evaluable.internal.Token
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
@@ -66,7 +69,7 @@ class Evaluator(val evaluationContext: EvaluationContext) {
         val rawRight: Any = eval(binary.right)
         binary.updateIsCacheable(binary.right.checkIsCacheable())
         val (left, right) = castArgumentsIfNeeded(rawLeft, rawRight)
-        if (left.javaClass != right.javaClass) {
+        if (!left.hasSameTypeAs(right)) {
             throwExceptionOnEvaluationFailed(binary.token, left, right)
         }
 
@@ -106,8 +109,18 @@ class Evaluator(val evaluationContext: EvaluationContext) {
 
     private fun evalEquality(operator: Token.Operator.Binary.Equality, left: Any, right: Any): Any {
         return when (operator) {
-            is Token.Operator.Binary.Equality.Equal -> left == right
-            is Token.Operator.Binary.Equality.NotEqual -> left != right
+            is Token.Operator.Binary.Equality.Equal -> left.isEqualTo(right)
+            is Token.Operator.Binary.Equality.NotEqual -> !left.isEqualTo(right)
+        }
+    }
+
+    // Dicts and arrays are compared by reference, regardless of their content.
+    // JSON containers compare their backing objects, since every read wraps them anew.
+    private fun Any.isEqualTo(other: Any): Boolean {
+        return when {
+            this is JsonElement -> this == other
+            this is DataObject || this is DataArray -> this === other
+            else -> this == other
         }
     }
 

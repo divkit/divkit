@@ -1,5 +1,7 @@
 package com.yandex.div.evaluable.function
 
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.ExpressionContext
@@ -11,8 +13,6 @@ import com.yandex.div.evaluable.throwExceptionOnEvaluationFailed
 import com.yandex.div.evaluable.toMessageFormat
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
-import org.json.JSONArray
-import org.json.JSONObject
 import java.math.BigDecimal
 import java.math.BigInteger
 import kotlin.math.roundToLong
@@ -264,7 +264,7 @@ internal abstract class DictFromDict : Function() {
         args: List<Any>
     ): Any {
         val result = evaluate(name, args, isMethod)
-        return result as? JSONObject ?: throwWrongTypeException(name, args, resultType, result, isMethod)
+        return result as? DataObject ?: throwWrongTypeException(name, args, resultType, result, isMethod)
     }
 }
 
@@ -295,7 +295,7 @@ internal abstract class ArrayFromDict : Function() {
         args: List<Any>
     ): Any {
         val result = evaluate(name, args, isMethod)
-        return result as? JSONArray ?: throwWrongTypeException(name, args, resultType, result, isMethod)
+        return result as? DataArray ?: throwWrongTypeException(name, args, resultType, result, isMethod)
     }
 }
 
@@ -308,30 +308,34 @@ internal object GetArray : ArrayFromDict() {
     override val isMethod = true
 }
 
-internal fun evaluate(functionName: String, args: List<Any>, isMethod: Boolean = false): Any {
-    var dict = args.first() as JSONObject?
+internal fun evaluate(functionName: String, args: List<Any>, isMethod: Boolean = false): Any? {
+    var dict = args.first() as DataObject?
+
     var propName: String
     for (i in 1 until args.size - 1) {
         propName = args[i] as String
-        runCatching { dict = dict!!.opt(propName) as? JSONObject }.getOrElse {
+        runCatching { dict = dict!!.opt(propName) as? DataObject }.getOrElse {
             throwMissingPropertyException(functionName, args, propName, isMethod)
         }
     }
     propName = args.last() as String
-    return runCatching { dict!!.get(propName) }.getOrElse {
+    val lastDict = dict
+    // A property with null value is present in the dict and must be reported as a type mismatch.
+    if (lastDict == null || !lastDict.containsKey(propName)) {
         throwMissingPropertyException(functionName, args, propName, isMethod)
     }
+    return lastDict.opt(propName)
 }
 
 private fun throwMissingPropertyException(functionName: String, args: List<Any>, propName: String, isMethod: Boolean = false): Nothing =
     throwException(functionName, args, "Missing property \"$propName\" in the dict.", isMethod)
 
-internal fun throwWrongTypeException(functionName: String, args: List<Any>, expected: EvaluableType, actual: Any, isMethod: Boolean = false): Nothing {
+internal fun throwWrongTypeException(functionName: String, args: List<Any>, expected: EvaluableType, actual: Any?, isMethod: Boolean = false): Nothing {
     val actualType = when (actual) {
-        JSONObject.NULL -> "Null"
+        null -> "Null"
         is Number -> "Number"
-        is JSONObject -> "Dict"
-        is JSONArray -> "Array"
+        is DataObject -> "Dict"
+        is DataArray -> "Array"
         else -> actual.javaClass.simpleName
     }
     throwException(functionName, args,
@@ -606,8 +610,8 @@ internal object GetOptDictFromDict : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val fallback = JSONObject()
-        return evaluateSafe(args, fallback, defaultFallback = true) as? JSONObject ?: fallback
+        val fallback = DataObject.empty()
+        return evaluateSafe(args, fallback, defaultFallback = true) as? DataObject ?: fallback
     }
 }
 
@@ -628,8 +632,8 @@ internal object GetOptArrayFromDict : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val fallback = JSONArray()
-        return evaluateSafe(args, fallback, defaultFallback = true) as? JSONArray ?: fallback
+        val fallback = DataArray.empty()
+        return evaluateSafe(args, fallback, defaultFallback = true) as? DataArray ?: fallback
     }
 }
 
@@ -649,8 +653,8 @@ internal object GetDictLength : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val dict = args[0] as JSONObject
-        return dict.length().toLong()
+        val dict = args[0] as DataObject
+        return dict.size.toLong()
     }
 }
 
@@ -671,9 +675,9 @@ internal object DictContainsKey : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val dict = args[0] as JSONObject
+        val dict = args[0] as DataObject
         val key = args[1] as String
-        return dict.has(key)
+        return dict.containsKey(key)
     }
 }
 
@@ -692,8 +696,8 @@ internal object DictIsEmpty : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val dict = args[0] as JSONObject
-        return dict.length() == 0
+        val dict = args[0] as DataObject
+        return dict.isEmpty()
     }
 }
 
@@ -713,12 +717,8 @@ internal abstract class GetKeysFromDict : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val dict = args[0] as JSONObject
-        val keysList = JSONArray()
-        dict.keys().forEach { key ->
-            keysList.put(key)
-        }
-        return keysList
+        val dict = args[0] as DataObject
+        return DataArray.of(dict.keys.toList())
     }
 }
 
@@ -748,12 +748,8 @@ internal abstract class GetValuesFromDict : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val dict = args[0] as JSONObject
-        val names = JSONArray()
-        dict.keys().forEach { key ->
-            names.put(dict.get(key))
-        }
-        return names
+        val dict = args[0] as DataObject
+        return DataArray.of(dict.keys.map(dict::opt))
     }
 }
 
@@ -769,9 +765,9 @@ internal object GetValues : GetValuesFromDict() {
 
 internal fun evaluateSafe(args: List<Any>, fallback: Any, defaultFallback: Boolean = false): Any? {
     val dictIndex = if (defaultFallback) 0 else 1
-    var dict = args[dictIndex] as? JSONObject ?: return fallback
+    var dict = args[dictIndex] as? DataObject ?: return fallback
     for (i in dictIndex + 1 until args.size - 1) {
-        dict = dict.optJSONObject(args[i] as String) ?: return fallback
+        dict = dict.opt(args[i] as String) as? DataObject ?: return fallback
     }
     return dict.opt(args.last() as String)
 }

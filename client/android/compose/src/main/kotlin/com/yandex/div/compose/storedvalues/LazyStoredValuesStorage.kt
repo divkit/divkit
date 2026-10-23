@@ -9,6 +9,7 @@ import com.yandex.div.internal.storedvalues.StoredValueException
 import com.yandex.div.internal.storedvalues.StoredValueScope
 import com.yandex.div.internal.storedvalues.StoredValuesRepository
 import com.yandex.div.internal.storedvalues.StoredValuesStorage
+import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.yatagan.Lazy
 import javax.inject.Inject
 import javax.inject.Named
@@ -36,7 +37,7 @@ internal class LazyStoredValuesStorage @Inject constructor(
         return getValue(
             name = name,
             scope = StoredValueScope.fromString(scope)
-        )
+        ).variableValueToEvaluableValue()
     }
 
     fun getValue(

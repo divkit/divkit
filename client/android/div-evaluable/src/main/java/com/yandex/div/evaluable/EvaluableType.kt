@@ -3,8 +3,8 @@ package com.yandex.div.evaluable
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.evaluable.types.Url
-import org.json.JSONArray
-import org.json.JSONObject
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 
 enum class EvaluableType(internal val typeName: String) {
     INTEGER("Integer"),
@@ -35,11 +35,20 @@ enum class EvaluableType(internal val typeName: String) {
                 is DateTime -> DATETIME
                 is Color -> COLOR
                 is Url -> URL
-                is JSONObject -> DICT
-                is JSONArray -> ARRAY
+                is DataObject -> DICT
+                is DataArray -> ARRAY
                 null -> throw EvaluableException("Unable to find type for null")
                 else -> throw EvaluableException("Unable to find type for ${value!!::class.java.name}")
             }
         }
+    }
+}
+
+/** Dicts and arrays may have different implementations, so they are matched by interface. */
+internal fun Any.hasSameTypeAs(other: Any): Boolean {
+    return when (this) {
+        is DataObject -> other is DataObject
+        is DataArray -> other is DataArray
+        else -> javaClass == other.javaClass
     }
 }

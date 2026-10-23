@@ -2,17 +2,24 @@ package com.yandex.div.internal.variables
 
 import android.net.Uri
 import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.core.json.JsonArray
+import com.yandex.div.core.json.JsonObject
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.types.Url
 import com.yandex.div.internal.data.PropertyDelegate
 import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div.internal.expressions.DivExpressionParser.readTypedExpression
+import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVariable
 import com.yandex.div2.PropertyVariable
+import org.json.JSONArray
+import org.json.JSONObject
 
 @InternalApi
 fun DivVariable.toVariable(
@@ -97,8 +104,33 @@ val DivVariable.name: String
 fun Any?.variableValueToEvaluableValue(): Any? {
     return when(this) {
         is Uri -> Url(toString())
+        is JSONObject -> JsonObject(this)
+        is JSONArray -> JsonArray(this)
         else -> this
     }
+}
+
+@InternalApi
+fun Any.evaluableValueToFieldValue(fieldType: TypeHelper<*>): Any? = when (this) {
+    is DataObject if fieldType.typeDefault is JSONObject -> evaluableValueToVariableValue()
+    is DataArray if fieldType.typeDefault is JSONArray -> evaluableValueToVariableValue()
+    else -> this
+}
+
+/**
+ * Converts evaluator containers back to the types used by existing models and variables.
+ * Containers may come from external providers and functions, so any implementation is supported.
+ */
+private fun Any?.evaluableValueToVariableValue(): Any? = when (this) {
+    is JsonObject -> asOrgJsonObject()
+    is JsonArray -> asOrgJsonArray()
+    is DataObject -> JSONObject().also { result ->
+        forEach { (key, value) -> result.put(key, value.evaluableValueToVariableValue() ?: JSONObject.NULL) }
+    }
+    is DataArray -> JSONArray().also { result ->
+        forEach { value -> result.put(value.evaluableValueToVariableValue() ?: JSONObject.NULL) }
+    }
+    else -> this
 }
 
 private fun PropertyVariable.toVariable(

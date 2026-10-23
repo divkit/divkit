@@ -264,6 +264,28 @@
       ]
     },
     {
+      "expression": "@{array_var.getString(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getString(-1)]. Requested index (-1) out of bounds array size (2)."
+      },
+      "variables": [
+        {
+          "name": "array_var",
+          "type": "array",
+          "value": [
+            "zero",
+            "one"
+          ]
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
       "expression": "@{array_var.isEmpty()}",
       "expected": {
         "type": "boolean",

@@ -1,5 +1,7 @@
 package com.yandex.div.evaluable.function
 
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.EvaluationContext
 import com.yandex.div.evaluable.ExpressionContext
@@ -7,10 +9,10 @@ import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
-import org.json.JSONArray
-import org.json.JSONObject
 
 private const val FUNCTION_NAME = "toString"
+private const val HEX_RADIX = 16
+private const val UNICODE_ESCAPE_LENGTH = 4
 
 internal object IntegerToString : Function() {
 
@@ -145,36 +147,8 @@ internal object DictToString : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        val obj = (args.first() as JSONObject)
-
-        return obj.sort().toStringLikeJson()
-    }
-
-    private fun JSONObject.sort(): Map<String, Any> {
-        val keys = mutableListOf<String>()
-        keys().forEach { key -> keys.add(key) }
-        keys.sort()
-        val sortedObj = sortedMapOf<String, Any>()
-        keys.forEach { key ->
-            var value = this[key]
-            if (value is JSONObject) {
-                value = value.sort()
-            }
-            sortedObj[key] = value
-        }
-        return sortedObj
-    }
-
-    private fun Any.toStringLikeJson(): String {
-        return when (this) {
-            is Map<*, *> -> {
-                val list = arrayListOf<String>()
-                iterator().forEach { map -> list.add("\"" + map.key + "\":" + map.value?.toStringLikeJson()) }
-                "{" + list.joinToString(",") + "}"
-            }
-            is String -> "\"$this\""
-            else -> toString()
-        }
+        val obj = (args.first() as DataObject)
+        return obj.toJsonString()
     }
 }
 
@@ -194,6 +168,54 @@ internal object ArrayToString : Function() {
         expressionContext: ExpressionContext,
         args: List<Any>
     ): Any {
-        return (args.first() as JSONArray).toString()
+        val array = (args.first() as DataArray)
+        return array.toJsonString()
     }
+}
+
+private fun Any?.toJsonString(): String = when (this) {
+    is DataObject -> keys.sorted().joinToString(separator = ",", prefix = "{", postfix = "}") { key ->
+        "${key.quotedJsonString()}:${opt(key).toJsonString()}"
+    }
+
+    is DataArray -> joinToString(separator = ",", prefix = "[", postfix = "]") { element ->
+        element.toJsonString()
+    }
+
+    is String -> quotedJsonString()
+    is Float -> toJsonString()
+    is Double -> toJsonString()
+    else -> toString()
+}
+
+private fun Float.toJsonString(): String {
+    val integerPart = toLong()
+    return if (this == integerPart.toFloat()) integerPart.toString() else toString()
+}
+
+private fun Double.toJsonString(): String {
+    val integerPart = toLong()
+    return if (this == integerPart.toDouble()) integerPart.toString() else toString()
+}
+
+private fun String.quotedJsonString(): String = buildString {
+    append('"')
+    for (char in this@quotedJsonString) {
+        when (char) {
+            '"' -> append("\\\"")
+            '\\' -> append("\\\\")
+            '\b' -> append("\\b")
+            '\u000C' -> append("\\f")
+            '\n' -> append("\\n")
+            '\r' -> append("\\r")
+            '\t' -> append("\\t")
+            else -> if (char < ' ') {
+                append("\\u")
+                append(char.code.toString(HEX_RADIX).padStart(UNICODE_ESCAPE_LENGTH, '0'))
+            } else {
+                append(char)
+            }
+        }
+    }
+    append('"')
 }

@@ -17,6 +17,7 @@ import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
 import com.yandex.div.internal.variables.DeclarationObserver
+import com.yandex.div.internal.variables.evaluableValueToFieldValue
 import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -163,7 +164,7 @@ internal class DivComposeExpressionResolver private constructor(
         fieldType: TypeHelper<T>,
     ): T {
         val result = try {
-            getEvaluationResult<R>(rawExpression, evaluable)
+            getEvaluationResult<Any>(rawExpression, evaluable).evaluableValueToFieldValue(fieldType) as R
         } catch (e: EvaluableException) {
             val variableName = tryGetMissingVariableName(e)
             if (variableName != null) {

@@ -15,6 +15,7 @@ import com.yandex.div.evaluable.MissingVariableException
 import com.yandex.div.internal.parser.Converter
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
+import com.yandex.div.internal.variables.evaluableValueToFieldValue
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.ParsingExceptionReason
@@ -74,7 +75,8 @@ internal class ExpressionResolverImpl(
         fieldType: TypeHelper<T>,
     ): T {
         val result = try {
-            getEvaluationResult<R>(rawExpression, evaluable)
+            // Keep cached results evaluator-native. Adapt only legacy JSON model fields.
+            getEvaluationResult<Any>(rawExpression, evaluable).evaluableValueToFieldValue(fieldType) as R
         } catch (e: EvaluableException) {
             val variableName = tryGetMissingVariableName(e)
 

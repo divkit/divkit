@@ -22,6 +22,7 @@ import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
+import com.yandex.div.internal.variables.variableValueToEvaluableValue
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger
@@ -51,7 +52,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
                     scope = scope,
                     dataTag = dataTag,
                     errorCollector = errorCollector
-                )?.getValue()
+                )?.getValue().variableValueToEvaluableValue()
             }
         }
         var functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)

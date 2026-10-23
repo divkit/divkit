@@ -22,6 +22,10 @@ import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.test.data.arrayExpression
+import com.yandex.div.test.data.dataArray
+import com.yandex.div.test.data.dataObject
+import com.yandex.div.test.data.dictExpression
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.intExpression
 import org.junit.Assert.assertEquals
@@ -31,6 +35,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 import java.util.TimeZone
 
@@ -167,6 +172,29 @@ class ExpressionResolverImplTest {
         assertEquals(
             "http://yandex.ru/api?int_param=100",
             expression("http://@{host}/api?int_param=@{hundred}").evaluate(underTest)
+        )
+    }
+
+    @Test
+    fun `dict expression converts external dict with nested containers`() {
+        whenever(evaluationContext.storedValueProvider.get("external_dict"))
+            .thenReturn(dataObject("array" to dataArray(1L, dataObject("key" to "value"))))
+
+        assertEquals(
+            """{"array":[1,{"key":"value"}]}""",
+            dictExpression("@{getStoredDictValue('external_dict')}").evaluate(underTest).toString()
+        )
+    }
+
+    @Test
+    fun `array expression converts fallback array`() {
+        whenever(evaluationContext.storedValueProvider.get("external_dict")).thenReturn(dataObject())
+
+        assertEquals(
+            "[]",
+            arrayExpression("@{getOptArrayFromDict(getStoredDictValue('external_dict'), 'missing')}")
+                .evaluate(underTest)
+                .toString()
         )
     }
 

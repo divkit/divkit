@@ -1,8 +1,17 @@
 package com.yandex.div.evaluable
 
+import com.yandex.div.core.json.JsonArray
+import com.yandex.div.core.json.JsonObject
+import com.yandex.div.core.json.asJsonArray
+import com.yandex.div.core.json.asJsonObject
+import com.yandex.div.core.type.DataArray
+import com.yandex.div.core.type.DataObject
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
+import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
@@ -96,6 +105,31 @@ class EvaluableTest {
         assertStringTemplate("This is true", "This is @{$TEST_VARIABLE_1}")
         setVariable(TEST_VARIABLE_1, false)
         assertStringTemplate("This is false", "This is @{$TEST_VARIABLE_1}")
+    }
+
+    @Test
+    fun `string template # with fallback dict and array`() {
+        setVariable(TEST_VARIABLE_1, JsonArray(ARRAY_JSON))
+        assertStringTemplate(
+            "{} and []",
+            "@{getOptDictFromArray($TEST_VARIABLE_1, 5)} and @{getOptArrayFromArray($TEST_VARIABLE_1, 5)}"
+        )
+    }
+
+    @Test
+    fun `string template # with dict keys`() {
+        dictFactories.forEach { createDict ->
+            setVariable(TEST_VARIABLE_1, createDict(NESTED_DICT_JSON))
+            assertStringTemplate("""Keys: ["nested"]""", "Keys: @{getDictKeys($TEST_VARIABLE_1)}")
+        }
+    }
+
+    @Test
+    fun `string template # with dict values`() {
+        dictFactories.forEach { createDict ->
+            setVariable(TEST_VARIABLE_1, createDict(NESTED_DICT_JSON))
+            assertStringTemplate("""Values: [{"key":"value"}]""", "Values: @{getDictValues($TEST_VARIABLE_1)}")
+        }
     }
 
     @Test
@@ -380,6 +414,110 @@ class EvaluableTest {
 
         setVariable(TEST_VARIABLE_1, "sdfh ao89&(*&9sd")
         assertEqualityExpression(false, "'sdfh ao 89&(*&9sd '", TEST_VARIABLE_1)
+    }
+
+    // Dict equality tests
+    @Test
+    fun `equality # dict variable equals itself`() {
+        dictFactories.forEach { createDict ->
+            setVariable(TEST_VARIABLE_1, createDict(DICT_JSON))
+            assertEqualityExpression(true, TEST_VARIABLE_1, TEST_VARIABLE_1)
+        }
+    }
+
+    @Test
+    fun `equality # the same nested dict equals itself`() {
+        dictFactories.forEach { createDict ->
+            setVariable(TEST_VARIABLE_1, createDict(NESTED_DICT_JSON))
+            val nestedDict = "getDictFromDict($TEST_VARIABLE_1, 'nested')"
+            assertEqualityExpression(true, nestedDict, nestedDict)
+        }
+    }
+
+    @Test
+    fun `equality # different dicts with the same content not equals`() {
+        dictFactories.forEach { createDict ->
+            setVariable(TEST_VARIABLE_1, createDict(DICT_JSON))
+            setVariable(TEST_VARIABLE_2, createDict(DICT_JSON))
+            assertEqualityExpression(false, TEST_VARIABLE_1, TEST_VARIABLE_2)
+        }
+    }
+
+    @Test
+    fun `equality # dicts of different implementations with the same content not equals`() {
+        setVariable(TEST_VARIABLE_1, JSONObject(DICT_JSON).asJsonObject())
+        setVariable(TEST_VARIABLE_2, JsonObject(DICT_JSON))
+        assertEqualityExpression(false, TEST_VARIABLE_1, TEST_VARIABLE_2)
+    }
+
+    @Test
+    fun `equality # nested dict from getDictValues equals the same nested dict`() {
+        dictFactories.forEach { createDict ->
+            setVariable(TEST_VARIABLE_1, createDict(NESTED_DICT_JSON))
+            assertEqualityExpression(
+                true,
+                "getDictFromArray(getDictValues($TEST_VARIABLE_1), 0)",
+                "getDictFromDict($TEST_VARIABLE_1, 'nested')"
+            )
+        }
+    }
+
+    @Test
+    fun `equality # nested dict from getValues equals the same nested dict`() {
+        dictFactories.forEach { createDict ->
+            setVariable(TEST_VARIABLE_1, createDict(NESTED_DICT_JSON))
+            assertEqualityExpression(
+                true,
+                "getDictFromArray($TEST_VARIABLE_1.getValues(), 0)",
+                "getDictFromDict($TEST_VARIABLE_1, 'nested')"
+            )
+        }
+    }
+
+    @Test
+    fun `equality # nested dict of external implementation from getDictValues equals the same nested dict`() {
+        val nestedDict = mock<DataObject>()
+        val dict = mock<DataObject> {
+            on { keys } doReturn listOf("nested")
+            on { opt("nested") } doReturn nestedDict
+        }
+        setVariable(TEST_VARIABLE_1, dict)
+        setVariable(TEST_VARIABLE_2, nestedDict)
+        assertEqualityExpression(true, "getDictFromArray(getDictValues($TEST_VARIABLE_1), 0)", TEST_VARIABLE_2)
+    }
+
+    // Array equality tests
+    @Test
+    fun `equality # array variable equals itself`() {
+        arrayFactories.forEach { createArray ->
+            setVariable(TEST_VARIABLE_1, createArray(ARRAY_JSON))
+            assertEqualityExpression(true, TEST_VARIABLE_1, TEST_VARIABLE_1)
+        }
+    }
+
+    @Test
+    fun `equality # the same nested array equals itself`() {
+        arrayFactories.forEach { createArray ->
+            setVariable(TEST_VARIABLE_1, createArray(NESTED_ARRAY_JSON))
+            val nestedArray = "getArrayFromArray($TEST_VARIABLE_1, 0)"
+            assertEqualityExpression(true, nestedArray, nestedArray)
+        }
+    }
+
+    @Test
+    fun `equality # different arrays with the same content not equals`() {
+        arrayFactories.forEach { createArray ->
+            setVariable(TEST_VARIABLE_1, createArray(ARRAY_JSON))
+            setVariable(TEST_VARIABLE_2, createArray(ARRAY_JSON))
+            assertEqualityExpression(false, TEST_VARIABLE_1, TEST_VARIABLE_2)
+        }
+    }
+
+    @Test
+    fun `equality # arrays of different implementations with the same content not equals`() {
+        setVariable(TEST_VARIABLE_1, JSONArray(ARRAY_JSON).asJsonArray())
+        setVariable(TEST_VARIABLE_2, JsonArray(ARRAY_JSON))
+        assertEqualityExpression(false, TEST_VARIABLE_1, TEST_VARIABLE_2)
     }
 
     // Int comparison tests
@@ -753,5 +891,20 @@ class EvaluableTest {
         const val TEST_VARIABLE_2 = "test_2"
         const val VAR_A = "var_a"
         const val VAR_B = "var_b"
+
+        const val DICT_JSON = """{"key":"value"}"""
+        const val NESTED_DICT_JSON = """{"nested":{"key":"value"}}"""
+        const val ARRAY_JSON = """[1,"value"]"""
+        const val NESTED_ARRAY_JSON = """[[1,"value"]]"""
+
+        private val dictFactories = listOf<(String) -> DataObject>(
+            { JSONObject(it).asJsonObject() },
+            { JsonObject(it) },
+        )
+
+        private val arrayFactories = listOf<(String) -> DataArray>(
+            { JSONArray(it).asJsonArray() },
+            { JsonArray(it) },
+        )
     }
 }

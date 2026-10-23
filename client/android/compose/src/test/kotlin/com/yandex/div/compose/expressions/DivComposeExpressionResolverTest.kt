@@ -8,10 +8,15 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.internal.variables.toVariable
+import com.yandex.div.test.data.arrayExpression
+import com.yandex.div.test.data.dataArray
+import com.yandex.div.test.data.dataObject
+import com.yandex.div.test.data.dictExpression
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.property
 import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div2.DivEvaluableType
+import org.json.JSONObject
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -74,6 +79,43 @@ class DivComposeExpressionResolverTest {
             "value + 10 = 133.45",
             evaluate("value + 10 = @{value + 10}")
         )
+    }
+
+    @Test
+    fun `dict expression returns dict variable value`() {
+        variableController.declare(Variable.DictVariable("dict", JSONObject("""{"key":"value"}""")))
+
+        val dict = dictExpression("@{dict}").evaluate(expressionResolver)
+
+        assertEquals("""{"key":"value"}""", dict.toString())
+    }
+
+    @Test
+    fun `array expression returns array built by function`() {
+        variableController.declare(Variable.DictVariable("dict", JSONObject("""{"key":"value"}""")))
+
+        val array = arrayExpression("@{getDictKeys(dict)}").evaluate(expressionResolver)
+
+        assertEquals("""["key"]""", array.toString())
+    }
+
+    @Test
+    fun `dict expression converts external dict with nested containers`() {
+        whenever(storedValueProvider.get(name = eq("dict"))) doReturn
+            dataObject("array" to dataArray(1L, dataObject("key" to "value")))
+
+        val dict = dictExpression("@{getStoredDictValue('dict')}").evaluate(expressionResolver)
+
+        assertEquals("""{"array":[1,{"key":"value"}]}""", dict.toString())
+    }
+
+    @Test
+    fun `array expression converts fallback array`() {
+        variableController.declare(Variable.DictVariable("dict", JSONObject("""{"key":"value"}""")))
+
+        val array = arrayExpression("@{getOptArrayFromDict(dict, 'missing')}").evaluate(expressionResolver)
+
+        assertEquals("[]", array.toString())
     }
 
     @Test
