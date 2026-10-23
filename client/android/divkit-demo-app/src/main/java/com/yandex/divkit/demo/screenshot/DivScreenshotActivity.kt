@@ -101,7 +101,8 @@ class DivScreenshotActivity : DivDataScreenshotActivity() {
         for (child in children) {
             if (child is EditText) {
                 child.isCursorVisible = false
-                child.inputType = child.inputType or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                // Preserve the key listener that input masks restore when updating.
+                child.setRawInputType(child.inputType or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
             } else {
                 (child as? ViewGroup)?.hideCursor()
             }
