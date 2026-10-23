@@ -5,13 +5,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.state.LocalDivStatePath
 import com.yandex.div.compose.state.findState
+import com.yandex.div.compose.utils.combineAlignment
 import com.yandex.div.compose.utils.reportError
+import com.yandex.div.compose.utils.toHorizontalAlignment
+import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div.compose.variables.mutableStateFromStringVariable
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.clipToBounds
@@ -32,7 +36,15 @@ internal fun DivStateView(
 
     WithDivState(data) { activeState ->
         val activeDiv = activeState.div ?: return@WithDivState
-        Box(modifier = modifier.padding(data.paddings)) {
+        val activeDivData = activeDiv.value()
+        val contentAlignment = combineAlignment(
+            activeDivData.alignmentHorizontal?.observedValue()?.toHorizontalAlignment() ?: Alignment.Start,
+            activeDivData.alignmentVertical?.observedValue()?.toVerticalAlignment() ?: Alignment.Top,
+        )
+        Box(
+            modifier = modifier.padding(data.paddings),
+            contentAlignment = contentAlignment,
+        ) {
             DivBlockView(activeDiv)
         }
     }

@@ -6,6 +6,8 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivEdgeInsets
@@ -30,6 +32,8 @@ import com.yandex.div2.DivVisibilityAction
 fun text(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
+    alignmentHorizontal: Expression<DivAlignmentHorizontal>? = null,
+    alignmentVertical: Expression<DivAlignmentVertical>? = null,
     backgrounds: List<DivBackground>? = null,
     captureFocusOnAction: Expression<Boolean> = constant(true),
     disappearActions: List<DivDisappearAction>? = null,
@@ -56,6 +60,8 @@ fun text(
     return text(
         accessibility = accessibility,
         action = action,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         backgrounds = backgrounds,
         captureFocusOnAction = captureFocusOnAction,
         disappearActions = disappearActions,
@@ -85,6 +91,8 @@ fun text(
     accessibility: DivAccessibility? = null,
     action: DivAction? = null,
     actions: List<DivAction>? = null,
+    alignmentHorizontal: Expression<DivAlignmentHorizontal>? = null,
+    alignmentVertical: Expression<DivAlignmentVertical>? = null,
     backgrounds: List<DivBackground>? = null,
     captureFocusOnAction: Expression<Boolean> = constant(true),
     disappearActions: List<DivDisappearAction>? = null,
@@ -126,6 +134,8 @@ fun text(
             accessibility = accessibility,
             action = action,
             actions = actions,
+            alignmentHorizontal = alignmentHorizontal,
+            alignmentVertical = alignmentVertical,
             background = backgrounds,
             captureFocusOnAction = captureFocusOnAction,
             disappearActions = disappearActions,

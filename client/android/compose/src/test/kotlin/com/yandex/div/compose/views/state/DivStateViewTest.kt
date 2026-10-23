@@ -5,22 +5,32 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.test.assertPositionInRootIsEqualTo
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.compose.mockViewContext
+import com.yandex.div.compose.setContent
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.state.WithRootStatePath
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.data.DivModelInternalApi
 import com.yandex.div.data.Variable
+import com.yandex.div.test.data.alignmentHorizontalExpression
+import com.yandex.div.test.data.alignmentVerticalExpression
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.state
+import com.yandex.div.test.data.text
 import com.yandex.div2.DivState
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -95,6 +105,46 @@ class DivStateViewTest {
         setContent { WithDivState(divState.value) { result = it } }
 
         assertEquals("first", result?.stateId)
+    }
+
+    @Test
+    fun `active div is centered and follows alignment expressions`() {
+        val horizontalAlignment = Variable.StringVariable("horizontal_alignment", "center")
+        val verticalAlignment = Variable.StringVariable("vertical_alignment", "center")
+        variableController.declare(horizontalAlignment)
+        variableController.declare(verticalAlignment)
+
+        val content = text(
+            alignmentHorizontal = alignmentHorizontalExpression("@{horizontal_alignment}"),
+            alignmentVertical = alignmentVerticalExpression("@{vertical_alignment}"),
+            height = fixed(20),
+            id = "content",
+            text = constant("Content"),
+            width = fixed(20),
+        )
+        val divState = state(
+            height = fixed(100),
+            id = "state",
+            states = listOf(state(div = content, stateId = "active")),
+            width = fixed(100),
+        )
+
+        val configuration = divConfiguration {
+            reporter = this@DivStateViewTest.reporter
+            variableController = this@DivStateViewTest.variableController
+        }
+        composeRule.setContent(
+            configuration = configuration,
+            data = data(divState),
+        )
+
+        composeRule.onNodeWithTag("content").assertPositionInRootIsEqualTo(40.dp, 40.dp)
+
+        horizontalAlignment.set("start")
+        verticalAlignment.set("top")
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithTag("content").assertPositionInRootIsEqualTo(0.dp, 0.dp)
     }
 
     @Test

@@ -252,6 +252,7 @@ val composeRoborazziInteractiveScreenshotCases = setOf(
     "div-select/switching_options.json",
     "div-select/text-properties.json",
     "div-select/visibility.json",
+    "div-state/base-properties.json",
     "div-switch/base-properties.json",
     "div-switch/switch-properties.json",
     "div-text/text-properties.json",
