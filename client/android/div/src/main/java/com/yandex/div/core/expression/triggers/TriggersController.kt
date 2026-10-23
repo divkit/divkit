@@ -162,6 +162,7 @@ private class TriggerExecutor(
 
     private fun tryTriggerActions() {
         attachedViews.forEach { divView ->
+            divView.flushPendingVisibilityTracking()
             divView.runMainThreadAction(BindingTaskType.DATA) {
                 tryTriggerActions(divView)
             }

@@ -297,12 +297,17 @@ internal class DivViewBindingController(
             logError(RuntimeException("New binding started when previous not ended!"))
         }
         inMiddleOfBind = true
-        persistentDivDataObservers.forEach { it.onBeforeDivDataChanged() }
+        notifyDataObservers { it.onBeforeDivDataChanged() }
     }
 
     private fun notifyBindEnded(): Unit = with(divView) {
         inMiddleOfBind = false
-        persistentDivDataObservers.forEach { it.onAfterDivDataChanged() }
+        notifyDataObservers { it.onAfterDivDataChanged() }
+    }
+
+    private inline fun notifyDataObservers(crossinline notify: (PersistentDivDataObserver) -> Unit) {
+        divView.flushPendingVisibilityTracking()
+        persistentDivDataObservers.forEach { notify(it) }
     }
 
     fun applyPatchAsync(

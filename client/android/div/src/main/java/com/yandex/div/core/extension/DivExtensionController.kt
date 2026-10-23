@@ -53,6 +53,7 @@ internal class DivExtensionController @Inject constructor(
             if (getBindings(divView)?.get(view) !== binding || binding.releasing ||
                 dispatcher.currentGeneration != generation) return
             binding.enteredHandlerCount = index + 1
+            divView.flushPendingVisibilityTracking()
             handler.beforeBindView(divView, divBlock.expressionResolver, view, divBlock.div.value())
         }
     }
@@ -109,6 +110,7 @@ internal class DivExtensionController @Inject constructor(
             bindExtensionHandlers(divView, view, binding, request, generation)
         }
         if (dispatcher.isCollectingMainThreadActions) {
+            if (binding.handlers.isNotEmpty()) divView.flushPendingVisibilityTracking()
             divView.runMainThreadAction(BindingTaskType.DATA) {
                 suppressExpressionErrors { bind() }
             }
@@ -150,6 +152,7 @@ internal class DivExtensionController @Inject constructor(
             bindings.remove(view)
             return
         }
+        divView.flushPendingVisibilityTracking()
         executeOnMainThreadBlocking {
             val divBlock = binding.divBlock
             try {
@@ -250,14 +253,14 @@ internal class DivExtensionController @Inject constructor(
 
     fun loadMedia(view: View, divBlock: DivBlock, divView: Div2View) {
         if (!hasEnabledExtensions(divBlock)) return
-        onExtensionHandlers(divBlock) { div, resolver ->
+        onViewExtensionHandlers(divBlock, divView) { div, resolver ->
             loadMedia(divView, resolver, view, div)
         }
     }
 
     fun releaseMedia(view: View, divBlock: DivBlock, divView: Div2View) {
         if (!hasExtensions(divBlock)) return
-        onExtensionHandlers(divBlock) { div, resolver ->
+        onViewExtensionHandlers(divBlock, divView) { div, resolver ->
             releaseMedia(divView, resolver, view, div)
         }
     }
@@ -271,6 +274,15 @@ internal class DivExtensionController @Inject constructor(
             return false
         }
         return divBlock.div.value().extensions?.any { it.isEnabled.evaluate(divBlock.expressionResolver) } ?: false
+    }
+
+    private fun onViewExtensionHandlers(
+        divBlock: DivBlock,
+        divView: Div2View,
+        action: DivExtensionHandler.(DivBase, ExpressionResolver) -> Unit,
+    ) {
+        divView.flushPendingVisibilityTracking()
+        onExtensionHandlers(divBlock, action)
     }
 
     private fun onExtensionHandlers(

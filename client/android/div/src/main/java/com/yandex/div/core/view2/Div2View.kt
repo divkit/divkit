@@ -61,12 +61,6 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import java.util.WeakHashMap
 
-private enum class VisibilityTrackingOperation {
-    LOG_VISIBILITY,
-    DISCARD,
-    TRACK_CHILDREN,
-}
-
 /**
  * Main entry point for building Div2s
  */
@@ -105,6 +99,7 @@ open class Div2View private constructor(
 
     private val viewToDivBindings = WeakHashMap<View, Div>()
     private var visibilityTrackingBatch: VisibilityTrackingBatch? = null
+    private var workerVisibilityTrackingBatch: WorkerVisibilityTrackingBatch? = null
     private val loadReferences = mutableListOf<LoadReference>()
 
     @Volatile
@@ -313,6 +308,8 @@ open class Div2View private constructor(
     fun discardVisibilityTracking(dispatchDisappearActions: Boolean = false) {
         if (UiThreadHandler.get().isMainThread()) {
             visibilityTrackingBatch?.pending = false
+        } else if (bindingDispatcher.isCollectingMainThreadActions) {
+            workerVisibilityTrackingBatch?.discard()
         }
         bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA, VisibilityTrackingOperation.DISCARD) {
             val state = divData?.states?.firstOrNull { it.stateId == stateId }
@@ -323,9 +320,13 @@ open class Div2View private constructor(
 
     internal fun <T> withBatchedVisibilityTracking(block: () -> T): T {
         if (!UiThreadHandler.get().isMainThread()) {
-            return block()
+            if (!bindingDispatcher.isCollectingMainThreadActions) return block()
+            val batch = workerVisibilityTrackingBatch ?: WorkerVisibilityTrackingBatch(this, bindingDispatcher) {
+                suppressExpressionErrors { trackChildrenVisibilityNow() }
+            }.also { workerVisibilityTrackingBatch = it }
+            return batch.collect(block)
         }
-        if (visibilityTrackingBatch?.matchesData() == true) {
+        if (visibilityTrackingBatch?.matchesData(this) == true) {
             return block()
         }
         val batch = VisibilityTrackingBatch(divData, dataTag)
@@ -334,7 +335,7 @@ open class Div2View private constructor(
             val result = block()
             if (visibilityTrackingBatch === batch) {
                 visibilityTrackingBatch = null
-                if (batch.pending && batch.matchesData()) {
+                if (batch.pending && batch.matchesData(this)) {
                     suppressExpressionErrors { trackChildrenVisibilityNow() }
                 }
             }
@@ -349,11 +350,14 @@ open class Div2View private constructor(
     fun trackChildrenVisibility() {
         if (UiThreadHandler.get().isMainThread()) {
             visibilityTrackingBatch?.let {
-                if (it.matchesData()) {
+                if (it.matchesData(this)) {
                     it.pending = true
                     return
                 }
             }
+        } else if (bindingDispatcher.isCollectingMainThreadActions) {
+            val batch = workerVisibilityTrackingBatch
+            if (batch != null && batch.tryDeferScan()) return
         }
         trackChildrenVisibilityNow()
     }
@@ -381,6 +385,12 @@ open class Div2View private constructor(
             view = null,
             div = state.div
         )
+    }
+
+    internal fun flushPendingVisibilityTracking() {
+        if (!UiThreadHandler.get().isMainThread() && bindingDispatcher.isCollectingMainThreadActions) {
+            workerVisibilityTrackingBatch?.flush()
+        }
     }
 
     private fun trackChildrenVisibilityNow(): Unit = bindingDispatcher.runWithinBindingContext(
@@ -419,16 +429,6 @@ open class Div2View private constructor(
                 visibilityActionTracker.trackVisibilityActionsOf(this, it, null, div)
             }
         }
-    }
-
-    private fun VisibilityTrackingBatch.matchesData(): Boolean =
-        data === divData && tag == dataTag
-
-    private class VisibilityTrackingBatch(
-        val data: DivData?,
-        val tag: DivDataTag,
-    ) {
-        var pending = false
     }
 
     internal fun getCustomContainerChildFactory(): DivCustomContainerChildFactory {

@@ -49,6 +49,7 @@ internal class DivCustomBinder @Inject constructor(
         baseBinder.bindId(divView, view, null)
 
         val divValue = divBlock.divValue
+        divView.flushPendingVisibilityTracking()
         executeOnMainThreadBlocking {
             if (divCustomContainerViewAdapter.isCustomTypeSupported(divValue.customType)) {
                 bind(

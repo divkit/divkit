@@ -53,7 +53,7 @@ internal class BindingDispatcherTest {
     @get:Rule
     val disableAsserts = EnableAssertsRule(enable = false)
 
-    private val divView = mock<Div2View>()
+    private val divView = divView()
     private val criticalSection = BindingCriticalSection()
     private val executor = BindingThreadExecutor.create("test-binding-thread")
     private val dispatcher = BindingDispatcher(divView, criticalSection, executor)
@@ -236,8 +236,8 @@ internal class BindingDispatcherTest {
     @Test(timeout = 5_000)
     fun `pending task does not block shared executor while previous task waits for main thread`() {
         val sharedExecutor = BindingThreadExecutor.create("shared-test-binding-thread")
-        val firstDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
-        val secondDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
+        val firstDispatcher = BindingDispatcher(divView(), BindingCriticalSection(), sharedExecutor)
+        val secondDispatcher = BindingDispatcher(divView(), BindingCriticalSection(), sharedExecutor)
         val firstBackgroundPhaseFinished = CountDownLatch(1)
         val firstPendingTaskFinished = CountDownLatch(1)
         val secondDispatcherTaskFinished = CountDownLatch(1)
@@ -340,7 +340,7 @@ internal class BindingDispatcherTest {
     @Test(timeout = 5_000)
     fun `executor rejection drains queue iteratively and reports every error`() {
         val rejectedExecutor = mock<BindingThreadExecutor>()
-        val rejectedDivView = mock<Div2View>()
+        val rejectedDivView = divView()
         val rejectedDispatcher = BindingDispatcher(
             rejectedDivView,
             BindingCriticalSection(),
@@ -640,8 +640,8 @@ internal class BindingDispatcherTest {
     @Test(timeout = 5_000)
     fun `coalescing is isolated between dispatchers`() {
         val sharedExecutor = BindingThreadExecutor.create("coalescing-test-binding-thread")
-        val firstDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
-        val secondDispatcher = BindingDispatcher(mock(), BindingCriticalSection(), sharedExecutor)
+        val firstDispatcher = BindingDispatcher(divView(), BindingCriticalSection(), sharedExecutor)
+        val secondDispatcher = BindingDispatcher(divView(), BindingCriticalSection(), sharedExecutor)
         val backgroundPhasesFinished = CountDownLatch(2)
 
         firstDispatcher.runOnBindingThread<Unit>(BindingTaskType.DATA, onComplete = {}) {
@@ -716,5 +716,11 @@ internal class BindingDispatcherTest {
         }
 
         assertTrue(rejected)
+    }
+
+    private fun divView(): Div2View = mock {
+        on { withBatchedVisibilityTracking<Any?>(any()) } doAnswer {
+            it.getArgument<() -> Any?>(0).invoke()
+        }
     }
 }

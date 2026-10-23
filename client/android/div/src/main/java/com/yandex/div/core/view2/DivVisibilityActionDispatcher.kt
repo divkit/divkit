@@ -45,6 +45,7 @@ internal class DivVisibilityActionDispatcher @Inject constructor(
 
         val logLimit = action.logLimit.evaluate(resolver)
         if (logLimit == LIMITLESS_LOG || counter < logLimit) {
+            scope.flushPendingVisibilityTracking()
             if (divActionHandler.useActionUid) {
                 val uuid = UUID.randomUUID().toString()
 

@@ -110,15 +110,14 @@ internal class BindingDispatcher @Inject constructor(
         block: () -> T,
     ) {
         val generation = bindingGeneration.get()
-        val request = onCancelled?.let { registerCancellation(type, generation, it) }
-        val complete: ((T) -> Unit)? = request?.let { cancellation ->
-            { result -> cancellation.complete { onComplete?.invoke(result) } }
-        } ?: onComplete
-        val failed: ((Throwable) -> Unit)? = request?.let { cancellation ->
-            { error -> cancellation.complete { onError?.invoke(error) } }
-        } ?: onError
+        val request: BindingRequestCancellation? = onCancelled?.let { registerCancellation(type, generation, it) }
+        val complete = request?.completeBeforeCallback(onComplete) ?: onComplete
+        val failed = request?.completeBeforeCallback(onError) ?: onError
         enqueueTask(BindingTask(type, generation, null, complete, failed, block))
     }
+
+    private fun <T> BindingRequestCancellation.completeBeforeCallback(callback: ((T) -> Unit)?): (T) -> Unit =
+        { result -> complete { callback?.invoke(result) } }
 
     private fun registerCancellation(
         type: BindingTaskType,
@@ -169,7 +168,9 @@ internal class BindingDispatcher @Inject constructor(
         )
         try {
             val (result, deferredActions) = collectMainThreadAction {
-                preparedViewHoldersPool.collect(preparedHolders) { task.block() }
+                divView.withBatchedVisibilityTracking {
+                    preparedViewHoldersPool.collect(preparedHolders) { task.block() }
+                }
             }
             if (deferredActions.isEmpty() && task.onComplete == null) {
                 finishTask(task, handle, preparedHolders)

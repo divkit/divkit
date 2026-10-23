@@ -81,6 +81,7 @@ internal class DivVideoBinder @Inject constructor(
 
         if (deferredVideoPlayerCreationEnabled) {
             val initialScale = div.scale.evaluate(resolver)
+            divView.flushPendingVisibilityTracking()
             divView.runMainThreadAction(BindingTaskType.DATA) {
                 videoBindingController.invalidatePendingPreviewBindingIfChanged(preview, initialScale)
                 launchVideoBinding {
@@ -105,6 +106,7 @@ internal class DivVideoBinder @Inject constructor(
             return
         }
 
+        divView.flushPendingVisibilityTracking()
         divView.runMainThreadAction(BindingTaskType.DATA) {
             cancelPendingVideoBinding()
             val currentSource = if (div.hasDynamicSource()) div.createSource(resolver) else source

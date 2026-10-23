@@ -149,6 +149,8 @@ internal class VariableControllerImpl(
         if (divView == null) {
             UiThreadHandler.executeOnMainThread(block)
         } else {
+            // An observer may replace the document; finish preceding visibility work before queuing it.
+            divView.flushPendingVisibilityTracking()
             divView.runMainThreadAction(BindingTaskType.DATA, block)
         }
     }
