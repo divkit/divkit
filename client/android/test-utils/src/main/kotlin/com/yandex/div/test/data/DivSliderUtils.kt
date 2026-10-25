@@ -15,8 +15,8 @@ import com.yandex.div2.DivSlider
 
 fun slider(
     id: String? = null,
-    minValue: Long = 0,
-    maxValue: Long = 100,
+    minValue: Expression<Long> = constant(0L),
+    maxValue: Expression<Long> = constant(100L),
     thumbValueVariable: String? = null,
     hasTickMarks: Boolean = false,
     width: DivSize = fixed(constant(200L)),
@@ -44,8 +44,8 @@ fun slider(
             id = id,
             focus = focus,
             isEnabled = isEnabled,
-            maxValue = constant(maxValue),
-            minValue = constant(minValue),
+            maxValue = maxValue,
+            minValue = minValue,
             pressEndActions = pressEndActions,
             pressStartActions = pressStartActions,
             thumbSecondaryTextStyle = thumbSecondaryTextStyle,

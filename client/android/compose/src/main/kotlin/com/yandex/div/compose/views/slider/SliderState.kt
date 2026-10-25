@@ -60,6 +60,14 @@ internal class SliderThumb(
             else visual.snapTo(coerced)
         }
     }
+
+    fun applyVariableValue(): Long {
+        val value = variable.value.coerceIn(range.minValue.roundToLong(), range.maxValue.roundToLong())
+        if (value != variable.value) {
+            variable.value = value
+        }
+        return value
+    }
 }
 
 internal class SliderRange(val minValue: Float, val maxValue: Float) {
@@ -108,12 +116,9 @@ private fun rememberThumb(variableName: String?, range: SliderRange): SliderThum
 private fun SyncVariableToVisual(thumb: SliderThumb, state: SliderState) {
     val animated = animationsEnabled
     LaunchedEffect(thumb, thumb.variable.value, state.isInteracting) {
-        if (state.isInteracting) return@LaunchedEffect
-        val range = state.range
-        val visualValue = thumb.visual.value.coerceIn(range.minValue, range.maxValue)
-        if (thumb.variable.value == visualValue.roundToLong())
-            return@LaunchedEffect
-        val target = thumb.variable.value.toFloat().coerceIn(range.minValue, range.maxValue)
+        val value = thumb.applyVariableValue()
+        if (state.isInteracting || value == thumb.visual.value.roundToLong()) return@LaunchedEffect
+        val target = value.toFloat()
         if (animated) {
             thumb.visual.animateTo(target, SLIDER_ANIMATION_SPEC)
         } else {

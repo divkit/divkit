@@ -26,6 +26,7 @@ import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
+import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.slider
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
@@ -281,6 +282,63 @@ class DivSliderViewTest {
 
         assertEquals(50L, value.getValue())
         assertEquals(emptyList(), actionHandler.handledActions)
+    }
+
+    @Test
+    fun `thumb value outside the range is clamped in the variable`() {
+        value.set(150L)
+
+        setContent(slider(id = "slider", thumbValueVariable = value.name))
+
+        assertEquals(100L, value.getValue())
+    }
+
+    @Test
+    fun `thumb value is clamped in the variable when the range shrinks`() {
+        val maxValue = Variable.IntegerVariable(name = "max_value", defaultValue = 100)
+        variableController.declare(maxValue)
+        value.set(80L)
+        setContent(slider(id = "slider", thumbValueVariable = value.name, maxValue = intExpression("@{max_value}")))
+
+        maxValue.set(60L)
+        rule.waitForIdle()
+
+        assertEquals(60L, value.getValue())
+    }
+
+    @Test
+    fun `secondary thumb value below the range is clamped in the variable`() {
+        val secondaryValue = Variable.IntegerVariable(name = "secondary_value", defaultValue = 5)
+        variableController.declare(secondaryValue)
+        value.set(50L)
+
+        setContent(
+            slider(
+                id = "slider",
+                minValue = constant(10L),
+                thumbValueVariable = value.name,
+                thumbSecondaryValueVariable = secondaryValue.name,
+            )
+        )
+
+        assertEquals(10L, secondaryValue.getValue())
+    }
+
+    @Test
+    fun `sliders with disjoint ranges sharing a variable settle on one clamped value`() {
+        value.set(50L)
+
+        setContent(
+            container(
+                items = listOf(
+                    slider(maxValue = constant(10L), thumbValueVariable = value.name),
+                    slider(minValue = constant(20L), maxValue = constant(30L), thumbValueVariable = value.name),
+                )
+            )
+        )
+        rule.waitForIdle()
+
+        assertEquals(20L, value.getValue())
     }
 
     @Test

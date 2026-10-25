@@ -4,6 +4,7 @@ import android.graphics.Paint
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.nativeCanvas
@@ -24,8 +25,12 @@ internal fun DrawScope.drawSlider(state: SliderState, styles: SliderStyles, isRt
 
     val rangeBounds = styles.rangeBounds(trackLength, trackStart, isRtl)
 
-    drawTrackExcludingRanges(styles.inactiveTrack, trackStart, trackStart + trackLength, rangeBounds)
-    drawTrackExcludingRanges(styles.activeTrack, activeLeft, activeRight, rangeBounds)
+    val canvas = drawContext.canvas
+    canvas.save()
+    rangeBounds.forEach { canvas.clipRect(it.start, 0f, it.end, size.height, ClipOp.Difference) }
+    drawSliderDrawable(styles.inactiveTrack, trackStart, trackStart + trackLength)
+    drawSliderDrawable(styles.activeTrack, activeLeft, activeRight)
+    canvas.restore()
     rangeBounds.forEach { bounds ->
         val range = bounds.range
         drawRangeSegment(range, bounds.start + range.marginStart, bounds.end - range.marginEnd, activeLeft, activeRight)
@@ -53,24 +58,6 @@ private fun DrawScope.drawThumb(
         val text = value.coerceIn(range.minValue, range.maxValue).roundToInt().toString()
         drawThumbText(text, it, centerX)
     }
-}
-
-private fun DrawScope.drawTrackExcludingRanges(
-    style: SliderDrawable,
-    start: Float,
-    end: Float,
-    excludedRanges: List<SliderRangeBounds>,
-) {
-    if (end <= start) return
-    var segmentStart = start
-    excludedRanges.forEach { range ->
-        val excludedStart = range.start.coerceIn(start, end)
-        val excludedEnd = range.end.coerceIn(start, end)
-        if (excludedEnd <= segmentStart) return@forEach
-        if (excludedStart > segmentStart) drawSliderDrawable(style, segmentStart, excludedStart)
-        segmentStart = max(segmentStart, excludedEnd)
-    }
-    if (segmentStart < end) drawSliderDrawable(style, segmentStart, end)
 }
 
 private fun DrawScope.drawRangeSegment(
