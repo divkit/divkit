@@ -1,6 +1,10 @@
 package com.yandex.div.core.actions
 
 import android.view.View
+import android.view.accessibility.AccessibilityManager
+import android.view.accessibility.AccessibilityNodeInfo.ACTION_ACCESSIBILITY_FOCUS
+import androidx.core.content.ContextCompat
+import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.ViewLocator
 import com.yandex.div.core.view2.divs.widgets.DivInputView
@@ -46,6 +50,18 @@ internal class DivActionTypedFocusElementHandler @Inject constructor() : DivActi
         requestedView.requestFocus()
         when (requestedView) {
             is DivInputView -> requestedView.openKeyboard()
+        }
+        requestedView.requestScreenReaderFocus()
+    }
+
+    private fun View.requestScreenReaderFocus() {
+        val manager = ContextCompat.getSystemService(context, AccessibilityManager::class.java)
+        if (manager?.isTouchExplorationEnabled != true) return
+
+        doOnActualLayout {
+            if (it.isAttachedToWindow && it.isShown && it.isImportantForAccessibility) {
+                it.performAccessibilityAction(ACTION_ACCESSIBILITY_FOCUS, null)
+            }
         }
     }
 }

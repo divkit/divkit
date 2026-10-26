@@ -3411,6 +3411,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/DivTypefaceProviderTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/DivTypefaceProviderTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/MultiplatformTestDataValidator.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/MultiplatformTestDataValidator.kt",
   "client/android/div/src/test/java/com/yandex/div/core/TestApplication.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/TestApplication.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/actions/DivActionTypedFocusElementHandlerTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/actions/DivActionTypedFocusElementHandlerTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/data/DivDataViewConnectorTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/data/DivDataViewConnectorTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/expression/EvaluableMultiplatformTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/expression/EvaluableMultiplatformTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/expression/ExpressionResolverImplTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/expression/ExpressionResolverImplTest.kt",

@@ -148,8 +148,8 @@
     "ru": "Идентификатор расширения, которое обрабатывает действие."
   },
   "div_action_focus_element": {
-    "en": "Requests focus for an element. May require a user action on the web.",
-    "ru": "Запрашивает фокус для элемента. В вебе может требовать действие пользователя."
+    "en": "Requests focus for an element. May also move screen-reader focus to it. May require a user action on the web.",
+    "ru": "Запрашивает фокус для элемента. Может также переместить на него фокус программы чтения с экрана. В вебе может требовать действие пользователя."
   },
   "div_action_hide_tooltip": {
     "en": "Hides the tooltip.",
