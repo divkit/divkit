@@ -982,6 +982,7 @@
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithActionsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithActionsTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithDownloadActionsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithDownloadActionsTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithHapticTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithHapticTest.kt",
+  "client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithHoverActionsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithHoverActionsTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithMenuTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithMenuTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithPressActionsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithPressActionsTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithSubmitActionsTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/actions/DivViewWithSubmitActionsTest.kt",

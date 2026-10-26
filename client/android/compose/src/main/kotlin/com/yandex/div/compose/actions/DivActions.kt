@@ -13,6 +13,8 @@ internal data class DivActions(
     val tapActions: List<DivAction>,
     val doubleTapActions: List<DivAction>?,
     val longTapActions: List<DivAction>?,
+    val hoverStartActions: List<DivAction>?,
+    val hoverEndActions: List<DivAction>?,
     val pressStartActions: List<DivAction>?,
     val pressEndActions: List<DivAction>?,
     val animation: DivAnimation,
@@ -29,6 +31,8 @@ internal fun Div.observedActions(): DivActions? = when (this) {
             captureFocusOnAction = captureFocusOnAction,
             doubleTapActions = doubletapActions,
             longTapActions = longtapActions,
+            hoverStartActions = hoverStartActions,
+            hoverEndActions = hoverEndActions,
             pressStartActions = pressStartActions,
             pressEndActions = pressEndActions,
         )
@@ -42,6 +46,8 @@ internal fun Div.observedActions(): DivActions? = when (this) {
             captureFocusOnAction = captureFocusOnAction,
             doubleTapActions = doubletapActions,
             longTapActions = longtapActions,
+            hoverStartActions = hoverStartActions,
+            hoverEndActions = hoverEndActions,
             pressStartActions = pressStartActions,
             pressEndActions = pressEndActions,
         )
@@ -55,6 +61,8 @@ internal fun Div.observedActions(): DivActions? = when (this) {
             captureFocusOnAction = captureFocusOnAction,
             doubleTapActions = doubletapActions,
             longTapActions = longtapActions,
+            hoverStartActions = hoverStartActions,
+            hoverEndActions = hoverEndActions,
             pressStartActions = pressStartActions,
             pressEndActions = pressEndActions,
         )
@@ -68,6 +76,8 @@ internal fun Div.observedActions(): DivActions? = when (this) {
             captureFocusOnAction = captureFocusOnAction,
             doubleTapActions = doubletapActions,
             longTapActions = longtapActions,
+            hoverStartActions = hoverStartActions,
+            hoverEndActions = hoverEndActions,
             pressStartActions = pressStartActions,
             pressEndActions = pressEndActions,
         )
@@ -81,6 +91,8 @@ internal fun Div.observedActions(): DivActions? = when (this) {
             captureFocusOnAction = captureFocusOnAction,
             doubleTapActions = doubletapActions,
             longTapActions = longtapActions,
+            hoverStartActions = hoverStartActions,
+            hoverEndActions = hoverEndActions,
             pressStartActions = pressStartActions,
             pressEndActions = pressEndActions,
         )
@@ -94,6 +106,8 @@ internal fun Div.observedActions(): DivActions? = when (this) {
             captureFocusOnAction = captureFocusOnAction,
             doubleTapActions = doubletapActions,
             longTapActions = longtapActions,
+            hoverStartActions = hoverStartActions,
+            hoverEndActions = hoverEndActions,
             pressStartActions = pressStartActions,
             pressEndActions = pressEndActions,
         )
@@ -107,6 +121,8 @@ internal fun Div.observedActions(): DivActions? = when (this) {
             captureFocusOnAction = captureFocusOnAction,
             doubleTapActions = doubletapActions,
             longTapActions = longtapActions,
+            hoverStartActions = hoverStartActions,
+            hoverEndActions = hoverEndActions,
             pressStartActions = pressStartActions,
             pressEndActions = pressEndActions,
         )
@@ -132,6 +148,8 @@ private fun observedActions(
     captureFocusOnAction: Expression<Boolean>,
     doubleTapActions: List<DivAction>?,
     longTapActions: List<DivAction>?,
+    hoverStartActions: List<DivAction>?,
+    hoverEndActions: List<DivAction>?,
     pressStartActions: List<DivAction>?,
     pressEndActions: List<DivAction>?,
 ): DivActions? {
@@ -139,6 +157,8 @@ private fun observedActions(
     if (tapActions.isNullOrEmpty() &&
         doubleTapActions.isNullOrEmpty() &&
         longTapActions.isNullOrEmpty() &&
+        hoverStartActions.isNullOrEmpty() &&
+        hoverEndActions.isNullOrEmpty() &&
         pressStartActions.isNullOrEmpty() &&
         pressEndActions.isNullOrEmpty()
     ) {
@@ -149,6 +169,8 @@ private fun observedActions(
         tapActions = tapActions.orEmpty(),
         doubleTapActions = doubleTapActions?.takeIf { it.isNotEmpty() },
         longTapActions = longTapActions?.takeIf { it.isNotEmpty() },
+        hoverStartActions = hoverStartActions?.takeIf { it.isNotEmpty() },
+        hoverEndActions = hoverEndActions?.takeIf { it.isNotEmpty() },
         pressStartActions = pressStartActions?.takeIf { it.isNotEmpty() },
         pressEndActions = pressEndActions?.takeIf { it.isNotEmpty() },
         animation = animation,
