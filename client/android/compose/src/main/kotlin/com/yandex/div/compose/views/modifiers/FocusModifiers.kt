@@ -20,11 +20,12 @@ import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.focus.FocusBindingStorage
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.inheritFocusVisibility
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
+import com.yandex.div2.DivFocus
 
 @Composable
 internal fun Modifier.bindRootFocus(storage: FocusBindingStorage): Modifier {
@@ -55,19 +56,36 @@ internal fun Modifier.focus(
     hasActions: Boolean,
 ): Modifier {
     val focus = data.value().focus
-    if (focus?.nextFocusIds != null) {
-        reportError("focus.next_focus_ids not supported")
-    }
 
     // Inputs bind their text field as the focus target themselves.
     val targetId = data.value().id.takeUnless { data is Div.Input }
-    val modifier = observeFocusChanges(data, state).inheritFocusVisibility().let {
-        if (targetId == null) it else it.bindFocusTarget(targetId)
-    }
+    val modifier = observeFocusChanges(data, state)
+        .inheritFocusVisibility()
+        .nextFocusIds(focus?.nextFocusIds)
+        .let { if (targetId == null) it else it.bindFocusTarget(targetId) }
     return when {
         hasActions || data is Div.Select -> modifier.focusProperties { canFocus = focus != null }
         focus == null || data.isFocusable -> modifier
         else -> modifier.focusable()
+    }
+}
+
+@Composable
+private fun Modifier.nextFocusIds(ids: DivFocus.NextFocusIds?): Modifier {
+    if (ids == null) return this
+
+    val storage = LocalDivViewContext.current.component.focusBindingStorage
+    val forward = ids.forward?.observedValue()
+    val right = ids.right?.observedValue()
+    val down = ids.down?.observedValue()
+    val left = ids.left?.observedValue()
+    val up = ids.up?.observedValue()
+    return focusProperties {
+        next = forward?.let(storage::getFocusRequester) ?: FocusRequester.Default
+        this.right = right?.let(storage::getFocusRequester) ?: FocusRequester.Default
+        this.down = down?.let(storage::getFocusRequester) ?: FocusRequester.Default
+        this.left = left?.let(storage::getFocusRequester) ?: FocusRequester.Default
+        this.up = up?.let(storage::getFocusRequester) ?: FocusRequester.Default
     }
 }
 

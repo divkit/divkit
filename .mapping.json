@@ -1070,6 +1070,7 @@
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/views/input/mask/FixedLengthMaskTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/views/input/mask/FixedLengthMaskTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/views/input/mask/PhoneMaskTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/views/input/mask/PhoneMaskTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/views/modifiers/ClipModifiersTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/views/modifiers/ClipModifiersTest.kt",
+  "client/android/compose/src/test/kotlin/com/yandex/div/compose/views/modifiers/FocusModifiersTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/views/modifiers/FocusModifiersTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/views/modifiers/ModifierEqualityTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/views/modifiers/ModifierEqualityTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/views/pager/PageTransformationTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/views/pager/PageTransformationTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/views/pager/PagerCrossAxisSizeTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/views/pager/PagerCrossAxisSizeTest.kt",

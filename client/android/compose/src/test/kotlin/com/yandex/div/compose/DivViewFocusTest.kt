@@ -93,23 +93,6 @@ class DivViewFocusTest {
     }
 
     @Test
-    fun `unsupported next focus ids are reported once`() {
-        reporter.failOnError = false
-
-        setContent(
-            text(
-                id = "text",
-                text = "Text",
-                focus = DivFocus(nextFocusIds = DivFocus.NextFocusIds(forward = constant("next"))),
-            )
-        )
-
-        rule.onNodeWithTag("text").performSemanticsAction(SemanticsActions.RequestFocus)
-
-        assertEquals(listOf("focus.next_focus_ids not supported"), reporter.errors)
-    }
-
-    @Test
     fun `input focus dispatches focus action`() {
         setContent(
             input(textVariable = "input", focus = focus)
