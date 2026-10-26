@@ -27,7 +27,9 @@ kotlin {
             api(libs.json)
         }
         commonTest.dependencies {
-            implementation(libs.json)
+            implementation(libs.kotlin.test)
+        }
+        jvmTest.dependencies {
             implementation(libs.kotlin.test)
         }
     }

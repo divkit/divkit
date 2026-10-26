@@ -4,6 +4,7 @@ import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.type.DataObject
 import org.json.JSONObject
+import kotlin.jvm.JvmStatic
 import kotlinx.serialization.json.JsonObject as KtxObject
 
 @Suppress("TooManyFunctions")

@@ -1,5 +1,7 @@
 package com.yandex.div.core
 
+import kotlin.jvm.JvmName
+
 /**
  * A container for a list of observers.
  *

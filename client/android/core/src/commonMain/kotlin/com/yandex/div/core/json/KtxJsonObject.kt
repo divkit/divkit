@@ -3,6 +3,7 @@ package com.yandex.div.core.json
 import com.yandex.div.core.annotations.ExperimentalApi
 import kotlinx.serialization.json.JsonPrimitive
 import org.json.JSONObject
+import kotlin.jvm.JvmInline
 import kotlinx.serialization.json.JsonElement as KtxElement
 import kotlinx.serialization.json.JsonObject as KtxObject
 

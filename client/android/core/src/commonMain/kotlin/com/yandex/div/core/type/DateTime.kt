@@ -1,6 +1,8 @@
 package com.yandex.div.core.type
 
 import kotlinx.datetime.TimeZone
+import kotlin.jvm.JvmOverloads
+import kotlin.jvm.JvmStatic
 
 public class DateTime private constructor(
     public val epochMillis: Long,

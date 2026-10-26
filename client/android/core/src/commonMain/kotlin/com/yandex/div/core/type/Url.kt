@@ -1,5 +1,7 @@
 package com.yandex.div.core.type
 
+import kotlin.jvm.JvmInline
+
 @JvmInline
 public value class Url private constructor(
     private val value: String

@@ -1,6 +1,7 @@
 package com.yandex.div.core.state
 
 import com.yandex.div.core.annotations.InternalApi
+import kotlin.jvm.JvmStatic
 import kotlin.math.min
 
 /**

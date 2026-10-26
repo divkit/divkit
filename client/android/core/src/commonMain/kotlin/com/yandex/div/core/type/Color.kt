@@ -1,5 +1,8 @@
 package com.yandex.div.core.type
 
+import kotlin.jvm.JvmInline
+import kotlin.jvm.JvmStatic
+
 @JvmInline
 public value class Color private constructor(
     private val value: Int

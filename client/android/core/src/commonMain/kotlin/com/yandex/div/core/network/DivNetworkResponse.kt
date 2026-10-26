@@ -1,6 +1,6 @@
 package com.yandex.div.core.network
 
-import kotlin.AutoCloseable
+private const val READ_BUFFER_SIZE = 8 * 1024
 
 /**
  * An HTTP response whose [body] and underlying resources are released by [close].
@@ -40,7 +40,7 @@ public fun DivNetworkResponseBody.readBytes(): ByteArray {
     val chunks = mutableListOf<ByteArray>()
     var size = 0
     while (true) {
-        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
+        val buffer = ByteArray(READ_BUFFER_SIZE)
         val count = read(buffer, 0, buffer.size)
         if (count < 0) break
         check(count != 0) { "Body returned 0 for a non-empty buffer" }

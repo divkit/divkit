@@ -4,6 +4,7 @@ import com.yandex.div.core.annotations.ExperimentalApi
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import kotlin.jvm.JvmInline
 
 /**
  * [JsonArray] backed by [org.json.JSONArray].

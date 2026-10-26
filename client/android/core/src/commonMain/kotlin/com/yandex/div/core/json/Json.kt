@@ -9,6 +9,7 @@ import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.jvm.JvmName
 import kotlinx.serialization.json.Json as KtxJson
 import kotlinx.serialization.json.JsonArray as KtxArray
 import kotlinx.serialization.json.JsonObject as KtxObject

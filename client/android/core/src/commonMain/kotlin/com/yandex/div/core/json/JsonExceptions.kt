@@ -2,6 +2,7 @@
 
 package com.yandex.div.core.json
 
+import kotlin.jvm.JvmName
 import kotlinx.serialization.json.JsonArray as KtxArray
 import kotlinx.serialization.json.JsonElement as KtxElement
 import kotlinx.serialization.json.JsonNull as KtxNull
@@ -29,7 +30,7 @@ internal fun missingValue(index: Int): RuntimeException {
 }
 
 internal fun unsupportedValue(value: Any): RuntimeException {
-    return IllegalArgumentException("Unsupported JSON value type: ${value.javaClass.name}")
+    return IllegalArgumentException("Unsupported JSON value type: ${value::class.simpleName}")
 }
 
 internal fun typeMismatch(key: String, value: Any, expected: String?): RuntimeException {
@@ -46,7 +47,7 @@ private fun Any.typeName(): String = when (this) {
     is String -> "string"
     is JsonObject -> "object"
     is JsonArray -> "array"
-    else -> javaClass.name
+    else -> this::class.simpleName ?: "unknown"
 }
 
 private fun KtxElement.typeName(): String = when (this) {

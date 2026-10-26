@@ -1,6 +1,8 @@
 package com.yandex.div.core.log
 
 import com.yandex.div.core.annotations.InternalApi
+import kotlin.concurrent.Volatile
+import kotlin.jvm.JvmStatic
 
 @Suppress("TooManyFunctions")
 @InternalApi

@@ -4,6 +4,7 @@ import com.yandex.div.core.annotations.ExperimentalApi
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
 import org.json.JSONArray
+import kotlin.jvm.JvmInline
 import kotlinx.serialization.json.JsonArray as KtxArray
 import kotlinx.serialization.json.JsonElement as KtxElement
 

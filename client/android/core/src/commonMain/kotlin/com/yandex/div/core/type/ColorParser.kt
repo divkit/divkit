@@ -14,7 +14,7 @@ internal object ColorParser {
                 val r: Char = colorString[1]
                 val g: Char = colorString[2]
                 val b: Char = colorString[3]
-                String(charArrayOf('F', 'F', r, r, g, g, b, b))
+                charArrayOf('F', 'F', r, r, g, g, b, b).concatToString()
             }
 
             5 -> {
@@ -22,7 +22,7 @@ internal object ColorParser {
                 val r: Char = colorString[2]
                 val g: Char = colorString[3]
                 val b: Char = colorString[4]
-                String(charArrayOf(a, a, r, r, g, g, b, b))
+                charArrayOf(a, a, r, r, g, g, b, b).concatToString()
             }
 
             7 -> {

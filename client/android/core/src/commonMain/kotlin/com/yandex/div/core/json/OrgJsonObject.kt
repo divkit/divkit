@@ -3,6 +3,7 @@ package com.yandex.div.core.json
 import com.yandex.div.core.annotations.ExperimentalApi
 import org.json.JSONException
 import org.json.JSONObject
+import kotlin.jvm.JvmInline
 
 /**
  * [JsonObject] backed by [org.json.JSONObject].

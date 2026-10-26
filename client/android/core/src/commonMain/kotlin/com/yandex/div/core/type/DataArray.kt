@@ -1,6 +1,7 @@
 package com.yandex.div.core.type
 
 import com.yandex.div.core.annotations.ExperimentalApi
+import kotlin.jvm.JvmStatic
 
 @ExperimentalApi
 public interface DataArray : Collection<Any?> {
