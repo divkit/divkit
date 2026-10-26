@@ -297,7 +297,9 @@ public func divContainer(
 
 public func divGallery(
   items: [Div],
-  id: String? = nil
+  id: String? = nil,
+  orientation: DivGallery.Orientation? = nil,
+  paddings: DivEdgeInsets? = nil
 ) -> Div {
   .divGallery(DivGallery(
     accessibility: nil,
@@ -324,8 +326,8 @@ public func divGallery(
     items: items,
     layoutProvider: nil,
     margins: nil,
-    orientation: nil,
-    paddings: nil,
+    orientation: orientation.map { .value($0) },
+    paddings: paddings,
     restrictParentScroll: nil,
     reuseId: nil,
     rowSpan: nil,
@@ -406,7 +408,8 @@ public func divGrid(
 
 public func divPager(
   items: [Div],
-  layoutMode: DivPagerLayoutMode
+  layoutMode: DivPagerLayoutMode,
+  paddings: DivEdgeInsets? = nil
 ) -> Div {
   .divPager(DivPager(
     accessibility: nil,
@@ -435,7 +438,7 @@ public func divPager(
     margins: nil,
     multiPageScroll: nil,
     orientation: nil,
-    paddings: nil,
+    paddings: paddings,
     pageTransformation: nil,
     restrictParentScroll: nil,
     reuseId: nil,

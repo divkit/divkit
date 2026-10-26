@@ -1,6 +1,7 @@
 @testable import DivKit
 import DivKitTestsSupport
 import LayoutKit
+import VGSL
 import XCTest
 
 final class DivGalleryExtensionsTests: XCTestCase {
@@ -97,6 +98,99 @@ final class DivGalleryExtensionsTests: XCTestCase {
     XCTAssertEqual(gallery?.state.contentPosition, .paging(index: 0))
     XCTAssertEqual(gallery?.model.items.count, 0)
   }
+
+  func test_HorizontalGallery_UsesStartEndPaddingsAsAxialInsets() throws {
+    let gallery = try makeGallery(
+      paddings: DivEdgeInsets(bottom: .value(4), end: .value(8), start: .value(16), top: .value(2))
+    )
+
+    XCTAssertEqual(gallery.model.metrics.axialInsetMode, .fixed(values: SideInsets(
+      leading: 16,
+      trailing: 8
+    )))
+    XCTAssertEqual(gallery.model.metrics.crossInsetMode, .fixed(values: SideInsets(
+      leading: 2,
+      trailing: 4
+    )))
+  }
+
+  func test_HorizontalGallery_PrefersStartEndPaddingsOverLeftRight() throws {
+    let gallery = try makeGallery(
+      paddings: DivEdgeInsets(left: .value(30), right: .value(40), start: .value(16))
+    )
+
+    XCTAssertEqual(gallery.model.metrics.axialInsetMode, .fixed(values: SideInsets(
+      leading: 16,
+      trailing: 0
+    )))
+  }
+
+  func test_HorizontalGallery_InRTL_UsesStartEndPaddingsAsAxialInsets() throws {
+    let gallery = try makeGallery(
+      paddings: DivEdgeInsets(end: .value(8), start: .value(16)),
+      layoutDirection: .rightToLeft
+    )
+
+    XCTAssertEqual(gallery.model.metrics.axialInsetMode, .fixed(values: SideInsets(
+      leading: 16,
+      trailing: 8
+    )))
+  }
+
+  func test_HorizontalGallery_InRTL_KeepsLeftRightPaddingsPhysical() throws {
+    let gallery = try makeGallery(
+      paddings: DivEdgeInsets(left: .value(30), right: .value(40)),
+      layoutDirection: .rightToLeft
+    )
+
+    XCTAssertEqual(gallery.model.metrics.axialInsetMode, .fixed(values: SideInsets(
+      leading: 40,
+      trailing: 30
+    )))
+  }
+
+  func test_VerticalGallery_UsesStartEndPaddingsAsCrossInsets() throws {
+    let paddings = DivEdgeInsets(
+      bottom: .value(4),
+      end: .value(8),
+      start: .value(16),
+      top: .value(2)
+    )
+    let ltrGallery = try makeGallery(orientation: .vertical, paddings: paddings)
+    let rtlGallery = try makeGallery(
+      orientation: .vertical,
+      paddings: paddings,
+      layoutDirection: .rightToLeft
+    )
+
+    XCTAssertEqual(ltrGallery.model.metrics.axialInsetMode, .fixed(values: SideInsets(
+      leading: 2,
+      trailing: 4
+    )))
+    XCTAssertEqual(ltrGallery.model.metrics.crossInsetMode, .fixed(values: SideInsets(
+      leading: 16,
+      trailing: 8
+    )))
+    XCTAssertEqual(rtlGallery.model.metrics.crossInsetMode, .fixed(values: SideInsets(
+      leading: 16,
+      trailing: 8
+    )))
+  }
+}
+
+private func makeGallery(
+  orientation: DivGallery.Orientation? = nil,
+  paddings: DivEdgeInsets,
+  layoutDirection: UserInterfaceLayoutDirection = .leftToRight
+) throws -> GalleryBlock {
+  let context = DivKitComponents(layoutDirection: layoutDirection)
+    .makeContext(cardId: "card", cachedImageHolders: [])
+  let block = try divGallery(
+    items: [divText(text: "text")],
+    orientation: orientation,
+    paddings: paddings
+  ).value.makeBlock(context: context) as! WrapperBlock
+  return block.child as! GalleryBlock
 }
 
 private func makeBlock(

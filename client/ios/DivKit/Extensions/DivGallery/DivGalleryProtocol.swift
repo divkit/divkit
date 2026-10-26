@@ -79,7 +79,7 @@ extension DivGalleryProtocol {
       crossSpacing: crossSpacing,
       childrenCount: children.count,
       direction: direction,
-      with: expressionResolver
+      context: context
     )
 
     return GalleryViewModel(
@@ -105,7 +105,7 @@ extension DivGalleryProtocol {
     crossSpacing: CGFloat,
     childrenCount: Int,
     direction: ScrollDirection,
-    with expressionResolver: ExpressionResolver
+    context: DivBlockModelingContext
   ) throws -> GalleryViewMetrics {
     let spacings = [CGFloat](
       repeating: spacing,
@@ -114,14 +114,16 @@ extension DivGalleryProtocol {
 
     let axialInsets: SideInsets
     let crossInsets: SideInsets
-    let horizontalInsets = paddings.resolveHorizontalInsets(expressionResolver)
-    let verticalInsets = paddings.resolveVerticalInsets(expressionResolver)
+    let insets = paddings.resolve(context)
+    let horizontalInsets = context.layoutDirection == .rightToLeft
+      ? SideInsets(leading: insets.right, trailing: insets.left)
+      : insets.horizontal
     switch direction {
     case .horizontal:
       axialInsets = horizontalInsets
-      crossInsets = verticalInsets
+      crossInsets = insets.vertical
     case .vertical:
-      axialInsets = verticalInsets
+      axialInsets = insets.vertical
       crossInsets = horizontalInsets
     }
 

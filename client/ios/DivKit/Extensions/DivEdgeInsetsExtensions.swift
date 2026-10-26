@@ -6,14 +6,6 @@ extension DivEdgeInsets? {
   func resolve(_ context: DivBlockModelingContext) -> EdgeInsets {
     self?.resolve(context) ?? EdgeInsets.zero
   }
-
-  func resolveHorizontalInsets(_ expressionResolver: ExpressionResolver) -> SideInsets {
-    self?.resolveHorizontalInsets(expressionResolver) ?? SideInsets.zero
-  }
-
-  func resolveVerticalInsets(_ expressionResolver: ExpressionResolver) -> SideInsets {
-    self?.resolveVerticalInsets(expressionResolver) ?? SideInsets.zero
-  }
 }
 
 extension DivEdgeInsets {
@@ -41,21 +33,5 @@ extension DivEdgeInsets {
     }
 
     return EdgeInsets(top: top, left: left, bottom: bottom, right: right)
-  }
-
-  func resolveHorizontalInsets(_ expressionResolver: ExpressionResolver) -> SideInsets {
-    let unit = resolveUnit(expressionResolver)
-    return SideInsets(
-      leading: unit.makeScaledValue(resolveLeft(expressionResolver)),
-      trailing: unit.makeScaledValue(resolveRight(expressionResolver))
-    )
-  }
-
-  func resolveVerticalInsets(_ expressionResolver: ExpressionResolver) -> SideInsets {
-    let unit = resolveUnit(expressionResolver)
-    return SideInsets(
-      leading: unit.makeScaledValue(resolveTop(expressionResolver)),
-      trailing: unit.makeScaledValue(resolveBottom(expressionResolver))
-    )
   }
 }

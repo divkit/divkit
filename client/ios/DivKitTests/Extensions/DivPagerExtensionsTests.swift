@@ -1,6 +1,7 @@
 @testable import DivKit
 import DivKitTestsSupport
 @testable import LayoutKit
+import VGSL
 import XCTest
 
 final class DivPagerExtensionsTests: XCTestCase {
@@ -65,6 +66,22 @@ final class DivPagerExtensionsTests: XCTestCase {
     )
 
     XCTAssertEqual(state.synchronized(with: model), state)
+  }
+
+  func test_InRTL_UsesStartEndPaddingsAsAxialInsets() throws {
+    let context = DivKitComponents(layoutDirection: .rightToLeft)
+      .makeContext(cardId: "card", cachedImageHolders: [])
+    let block = try divPager(
+      items: [divText(text: "text")],
+      layoutMode: .divPageSize(DivPageSize(pageWidth: DivPercentageSize(value: .value(80)))),
+      paddings: DivEdgeInsets(end: .value(8), left: .value(30), start: .value(16))
+    ).value.makeBlock(context: context) as! DecoratingBlock
+    let pager = block.child as! PagerBlock
+
+    XCTAssertEqual(pager.gallery.metrics.axialInsetMode, .fixed(values: SideInsets(
+      leading: 16,
+      trailing: 8
+    )))
   }
 
   private func makePagerBlock() throws -> PagerBlock {
