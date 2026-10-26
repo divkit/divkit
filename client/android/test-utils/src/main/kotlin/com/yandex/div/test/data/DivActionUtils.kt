@@ -21,6 +21,7 @@ import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollDestination
 import com.yandex.div2.DivActionScrollTo
+import com.yandex.div2.DivActionSetCursorPosition
 import com.yandex.div2.DivActionSetState
 import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.div2.DivActionSetVariable
@@ -185,6 +186,22 @@ fun hapticAction(feedback: DivActionHaptic.Feedback = DivActionHaptic.Feedback.L
 fun hideTooltipAction(id: String): DivActionTyped {
     return DivActionTyped.HideTooltip(
         DivActionHideTooltip(id = constant(id))
+    )
+}
+
+fun setCursorPositionAction(id: String, start: Long, end: Long? = null): DivActionTyped =
+    setCursorPositionAction(constant(id), constant(start), end?.let(::constant))
+
+fun setCursorPositionAction(
+    id: Expression<String>,
+    start: Expression<Long>,
+    end: Expression<Long>? = null,
+): DivActionTyped {
+    return DivActionTyped.SetCursorPosition(
+        DivActionSetCursorPosition(
+            id = id,
+            position = DivActionSetCursorPosition.Position(start = start, end = end),
+        )
     )
 }
 

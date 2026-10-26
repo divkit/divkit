@@ -11,7 +11,6 @@ import androidx.compose.foundation.text.input.TextFieldDecorator
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.TextObfuscationMode
-import androidx.compose.foundation.text.input.selectAll
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.runtime.Composable
@@ -23,6 +22,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.text.TextStyle
@@ -49,18 +49,15 @@ internal fun DivInputView(modifier: Modifier, data: DivInput) {
     val config = data.rememberInputConfig(mask)
     val state = data.rememberInputState(config)
     val validators = data.validators
-    if (!validators.isNullOrEmpty()) {
-        val text = state.field.text.toString()
-        // The View renderer validates the text the field shows: the formatted text of a masked input.
-        validators.validate(if (mask == null) text else mask.format(text))
-    }
+    // The View renderer validates the text the field shows: the formatted text of a masked input.
+    if (!validators.isNullOrEmpty()) validators.validate(state.shownText(config))
 
-    InputField(modifier, data, state.field, config)
+    InputField(modifier, data, state, config)
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun InputField(modifier: Modifier, data: DivInput, field: TextFieldState, config: InputConfig) {
+private fun InputField(modifier: Modifier, data: DivInput, state: DivInputState, config: InputConfig) {
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
     val textStyle = data.observeTextStyle(textAlignmentHorizontal)
@@ -75,7 +72,13 @@ private fun InputField(modifier: Modifier, data: DivInput, field: TextFieldState
     }
     // The secure field has no output transformation, so it shows no placeholders of a mask.
     val showsPlaceholders = config.showsPlaceholders && !isPassword
-    val decorator = data.hintDecorator(field, showsPlaceholders, textStyle, textAlignmentHorizontal, maxLines)
+    val decorator = data.hintDecorator(
+        field = state.field,
+        showsPlaceholders = showsPlaceholders,
+        textStyle = textStyle,
+        textAlignmentHorizontal = textAlignmentHorizontal,
+        maxLines = maxLines,
+    )
 
     Box(
         modifier = modifier
@@ -86,7 +89,7 @@ private fun InputField(modifier: Modifier, data: DivInput, field: TextFieldState
         InterceptPlatformTextInput(keyboard.interceptor) {
             SelectionColors(data) {
                 InputTextField(
-                    field = field,
+                    state = state,
                     config = config,
                     data = data,
                     isPassword = isPassword,
@@ -122,7 +125,7 @@ private fun DivInput.observeTextStyle(textAlignmentHorizontal: DivAlignmentHoriz
 
 @Composable
 private fun InputTextField(
-    field: TextFieldState,
+    state: DivInputState,
     config: InputConfig,
     data: DivInput,
     isPassword: Boolean,
@@ -133,12 +136,15 @@ private fun InputTextField(
     isFocused: Boolean,
     decorator: TextFieldDecorator,
 ) {
+    val field = state.field
     val enabled = data.isEnabled.observedValue()
-    val focusRequester = remember { FocusRequester() }
-    KeepFocusAcrossPasswordSwitch(field, isPassword, isFocused, enabled, focusRequester)
-    SelectAllOnFocus(field, isFocused, data.selectAllOnFocus.observedValue())
+    KeepFocusAcrossPasswordSwitch(field, isPassword, isFocused, enabled, state.focusRequester)
+    SelectAllOnFocus(state, isFocused, data.selectAllOnFocus.observedValue())
 
-    val fieldModifier = Modifier.fillMaxWidth().bindFocusTarget(data.id, focusRequester)
+    val fieldModifier = Modifier
+        .fillMaxWidth()
+        .onFocusChanged { state.trackFocus(it.isFocused) }
+        .bindFocusTarget(data.id, state.focusRequester, input = state)
     if (isPassword) {
         BasicSecureTextField(
             state = field,
@@ -189,12 +195,10 @@ private fun KeepFocusAcrossPasswordSwitch(
 }
 
 @Composable
-private fun SelectAllOnFocus(field: TextFieldState, isFocused: Boolean, selectAllOnFocus: Boolean) {
+private fun SelectAllOnFocus(state: DivInputState, isFocused: Boolean, selectAllOnFocus: Boolean) {
     // A change of the property applies on the next focus, as in the View renderer.
     val currentSelectAllOnFocus by rememberUpdatedState(selectAllOnFocus)
-    LaunchedEffect(isFocused) {
-        if (isFocused && currentSelectAllOnFocus) field.edit { selectAll() }
-    }
+    LaunchedEffect(isFocused) { state.onFocusChanged(isFocused, currentSelectAllOnFocus) }
 }
 
 @Composable

@@ -48,6 +48,17 @@ internal abstract class InputMask {
         return filled
     }
 
+    /** The offset in [raw] of the first raw character at or after [formattedOffset] of [format]. */
+    fun rawOffset(raw: String, formattedOffset: Int): Int {
+        var rawOffset = 0
+        var offset = 0
+        walk(raw) { _, isRaw ->
+            if (offset++ >= formattedOffset) return rawOffset
+            if (isRaw) rawOffset++
+        }
+        return rawOffset
+    }
+
     /** Inserts the static characters of the pattern into the raw text of a field. */
     val outputTransformation = OutputTransformation {
         val statics = StringBuilder()

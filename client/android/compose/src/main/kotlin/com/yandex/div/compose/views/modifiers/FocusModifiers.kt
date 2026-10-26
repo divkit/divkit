@@ -93,12 +93,18 @@ private fun Modifier.nextFocusIds(ids: DivFocus.NextFocusIds?): Modifier {
 internal fun Modifier.bindFocusTarget(
     id: String?,
     requester: FocusRequester = remember { FocusRequester() },
+    input: FocusBindingStorage.InputText? = null,
 ): Modifier {
     if (id == null) return this.focusRequester(requester)
     val storage = LocalDivViewContext.current.component.focusBindingStorage
-    DisposableEffect(storage, id, requester) {
-        storage.register(id, requester)
-        onDispose { storage.unregister(id) }
+    DisposableEffect(storage, id, requester, input) {
+        val target = if (input == null) {
+            FocusBindingStorage.Target(requester)
+        } else {
+            FocusBindingStorage.InputTarget(requester, input)
+        }
+        storage.register(id, target)
+        onDispose { storage.unregister(id, target) }
     }
     return this.focusRequester(requester)
 }

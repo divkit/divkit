@@ -99,7 +99,7 @@ class DivViewFocusElementTest {
 
         perform(action(typed = focusElementAction("input")))
 
-        assertEquals(listOf("Element with id 'input' not found for focus_element action"), reporter.errors)
+        assertEquals(listOf("Element with id 'input' not found"), reporter.errors)
     }
 
     private fun setContent() {

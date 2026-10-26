@@ -9,6 +9,7 @@ import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.focusElementAction
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -17,8 +18,8 @@ import kotlin.test.assertEquals
 @RunWith(AndroidJUnit4::class)
 class FocusElementActionHandlerTest {
     private val environment = ActionHandlerEnvironment()
-    private val storage = FocusBindingStorage()
-    private val handler = FocusElementActionHandler(storage, environment.reporter)
+    private val storage = FocusBindingStorage(environment.reporter)
+    private val handler = FocusElementActionHandler(storage)
     private val requester = mock<FocusRequester>()
 
     @BeforeTest
@@ -33,8 +34,8 @@ class FocusElementActionHandlerTest {
         val target = Variable.StringVariable("target", "first")
         environment.variableController.declare(target)
         val second = mock<FocusRequester>()
-        storage.register("first", requester)
-        storage.register("second", second)
+        storage.register("first", FocusBindingStorage.Target(requester))
+        storage.register("second", FocusBindingStorage.Target(second))
         val action = action(typed = focusElementAction(expression("@{target}")))
 
         environment.handle(action)
@@ -47,7 +48,7 @@ class FocusElementActionHandlerTest {
 
     @Test
     fun `element id uses the action context`() {
-        storage.register("local", requester)
+        storage.register("local", FocusBindingStorage.Target(requester))
         environment.variableController.declare(Variable.StringVariable("target", "root"))
         val local = ActionHandlerEnvironment()
         local.variableController.declare(Variable.StringVariable("target", "local"))
@@ -74,7 +75,30 @@ class FocusElementActionHandlerTest {
 
         environment.handle(action(typed = focusElementAction("missing")))
 
-        assertEquals(listOf("Element with id 'missing' not found for focus_element action"),
-            environment.reporter.errors)
+        assertEquals(listOf("Element with id 'missing' not found"), environment.reporter.errors)
+    }
+
+    @Test
+    fun `ambiguous target reports the requested id and focuses nothing`() {
+        environment.reporter.failOnError = false
+        storage.register("twice", FocusBindingStorage.Target(requester))
+        storage.register("twice", FocusBindingStorage.Target(mock()))
+
+        environment.handle(action(typed = focusElementAction("twice")))
+
+        assertEquals(listOf("Element with id 'twice' is ambiguous"), environment.reporter.errors)
+        verify(requester, never()).requestFocus()
+    }
+
+    @Test
+    fun `target that left the composition is not found`() {
+        environment.reporter.failOnError = false
+        val target = FocusBindingStorage.Target(requester)
+        storage.register("gone", target)
+        storage.unregister("gone", target)
+
+        environment.handle(action(typed = focusElementAction("gone")))
+
+        assertEquals(listOf("Element with id 'gone' not found"), environment.reporter.errors)
     }
 }

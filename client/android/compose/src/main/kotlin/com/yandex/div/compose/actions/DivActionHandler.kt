@@ -11,7 +11,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStopTemplate
 import com.yandex.div2.DivActionExtensionAction
-import com.yandex.div2.DivActionSetCursorPosition
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivDownloadCallbacks
@@ -32,6 +31,7 @@ internal class DivActionHandler @Inject constructor(
     private val downloadActionHandler: DownloadActionHandler,
     private val focusElementActionHandler: FocusElementActionHandler,
     private val scrollActionHandler: ScrollActionHandler,
+    private val setCursorPositionActionHandler: SetCursorPositionActionHandler,
     private val setStateActionHandler: SetStateActionHandler,
     private val setStoredValueActionHandler: SetStoredValueActionHandler,
     private val setVariableActionHandler: SetVariableActionHandler,
@@ -216,7 +216,8 @@ internal class DivActionHandler @Inject constructor(
 
             is DivActionTyped.ScrollBy -> scrollActionHandler.handle(context, action.value)
             is DivActionTyped.ScrollTo -> scrollActionHandler.handle(context, action.value)
-            is DivActionTyped.SetCursorPosition -> notSupported(DivActionSetCursorPosition.TYPE)
+            is DivActionTyped.SetCursorPosition ->
+                setCursorPositionActionHandler.handle(context, action.value)
 
             is DivActionTyped.SetState ->
                 setStateActionHandler.handle(context, action.value)
