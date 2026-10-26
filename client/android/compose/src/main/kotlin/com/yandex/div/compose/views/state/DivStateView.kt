@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.state.LocalDivStatePath
@@ -29,7 +30,10 @@ internal fun DivStateView(
     data: DivState
 ) {
     val modifier = if (data.clipToBounds.observedValue()) {
-        modifier.clipToBounds(data)
+        modifier.clipToBounds(
+            data,
+            divContext.component.configuration.wildcardExtensions.isNotEmpty(),
+        )
     } else {
         modifier
     }

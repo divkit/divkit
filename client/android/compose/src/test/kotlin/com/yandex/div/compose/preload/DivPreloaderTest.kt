@@ -8,6 +8,7 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.PreloadMode
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
@@ -131,6 +132,7 @@ class DivPreloaderTest {
                 "other" to extensionHandler,
                 "tag" to extensionHandler,
             ),
+            configuration = divContext.component.configuration,
             reporter = TestReporter(),
             animationConfiguration = divContext.component.animationConfiguration,
         ),
@@ -270,6 +272,7 @@ class DivPreloaderTest {
         }
         val legacyPreloader = ExtensionPreloader(
             handlers = mapOf("legacy" to legacyHandler),
+            configuration = divContext.component.configuration,
             reporter = TestReporter(),
             animationConfiguration = divContext.component.animationConfiguration,
         )
@@ -570,6 +573,23 @@ class DivPreloaderTest {
         )
         preloader.preload(data)
         assertEquals(listOf("lottie", "other"), extensionIds)
+    }
+
+    @Test
+    fun `calls wildcard extension preload for every element`() = runTest {
+        val context = DivContext(
+            baseContext = RuntimeEnvironment.getApplication(),
+            configuration = divConfiguration {
+                extensionHandlers = mapOf("lottie" to extensionHandler)
+                wildcardExtensionHandlers = mapOf("wildcard" to extensionHandler)
+            },
+        )
+
+        context.preload(data(content = container(items = listOf(
+            separator(extensions = listOf(DivExtension(id = "lottie"))),
+        ))))
+
+        assertEquals(listOf("lottie", "wildcard", "wildcard"), extensionIds.sorted())
     }
 
     @Test

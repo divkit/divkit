@@ -50,7 +50,7 @@ class Div2ViewReleaseChildrenTest {
             (it.arguments[0] as DivHolderView<DivBlock>).divBlock = it.arguments[1] as DivBlock
         }
     }
-    private val divExtensionController = DivExtensionController(emptyList())
+    private val divExtensionController = DivExtensionController(emptyList(), emptyList())
     private val releaseViewVisitor = spy(ReleaseViewVisitor(mock(), DivCustomContainerViewAdapter.STUB, divExtensionController))
     private val component: TestComponent = TestComponent(
         wrapped = backingContext.div2Component,

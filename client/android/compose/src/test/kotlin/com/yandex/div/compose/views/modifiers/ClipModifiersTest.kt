@@ -22,7 +22,7 @@ class ClipModifiersTest {
 
         assertSame(
             Modifier,
-            Modifier.clipToBounds(data.value())
+            Modifier.clipToBounds(data.value(), hasWildcardExtensions = false)
         )
     }
 
@@ -32,7 +32,7 @@ class ClipModifiersTest {
 
         assertSame(
             Modifier,
-            Modifier.clipToBounds(data.value())
+            Modifier.clipToBounds(data.value(), hasWildcardExtensions = false)
         )
     }
 
@@ -46,7 +46,7 @@ class ClipModifiersTest {
 
         assertSame(
             Modifier,
-            Modifier.clipToBounds(data.value())
+            Modifier.clipToBounds(data.value(), hasWildcardExtensions = false)
         )
     }
 
@@ -56,7 +56,7 @@ class ClipModifiersTest {
 
         assertEquals(
             Modifier.clipToBounds(),
-            Modifier.clipToBounds(data.value())
+            Modifier.clipToBounds(data.value(), hasWildcardExtensions = false)
         )
     }
 
@@ -66,7 +66,7 @@ class ClipModifiersTest {
 
         assertEquals(
             Modifier.clipToBounds(),
-            Modifier.clipToBounds(data.value())
+            Modifier.clipToBounds(data.value(), hasWildcardExtensions = false)
         )
     }
 
@@ -79,7 +79,17 @@ class ClipModifiersTest {
 
         assertEquals(
             Modifier.clipToBounds(),
-            Modifier.clipToBounds(data.value())
+            Modifier.clipToBounds(data.value(), hasWildcardExtensions = false)
+        )
+    }
+
+    @Test
+    fun `clipToBounds() is applied for element with wildcard extensions`() {
+        val data = container(border = border(cornerRadius = 16))
+
+        assertEquals(
+            Modifier.clipToBounds(),
+            Modifier.clipToBounds(data.value(), hasWildcardExtensions = true)
         )
     }
 
@@ -92,7 +102,7 @@ class ClipModifiersTest {
 
         assertEquals(
             Modifier.clipToBounds(),
-            Modifier.clipToBounds(data.value())
+            Modifier.clipToBounds(data.value(), hasWildcardExtensions = false)
         )
     }
 }

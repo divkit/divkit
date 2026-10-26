@@ -42,6 +42,12 @@ internal class MediaLoadViewVisitor @Inject constructor(
         extensionController.loadMedia(view, divBlock, divView)
     }
 
+    override fun visit(view: DivCustomWrapper) {
+        val divBlock = view.divBlock ?: return
+        val customView = view.customView ?: return
+        extensionController.loadMedia(customView, divBlock, divView)
+    }
+
     override fun defaultVisit(view: DivHolderView<*>) {
         val divBlock = view.divBlock ?: return
         extensionController.loadMedia(view as View, divBlock, divView)

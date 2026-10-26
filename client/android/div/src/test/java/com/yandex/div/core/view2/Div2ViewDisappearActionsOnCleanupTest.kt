@@ -47,7 +47,7 @@ class Div2ViewDisappearActionsOnCleanupTest {
             (it.arguments[0] as DivHolderView<DivBlock>).divBlock = it.arguments[1] as DivBlock
         }
     }
-    private val divExtensionController = DivExtensionController(emptyList())
+    private val divExtensionController = DivExtensionController(emptyList(), emptyList())
     private val releaseViewVisitor = spy(ReleaseViewVisitor(mock(), DivCustomContainerViewAdapter.STUB, divExtensionController))
     private val visibilityActionTracker = mock<DivVisibilityActionTracker>()
     private val component: TestComponent = TestComponent(

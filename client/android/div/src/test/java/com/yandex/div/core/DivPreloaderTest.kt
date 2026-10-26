@@ -56,7 +56,7 @@ class DivPreloaderTest {
     private val underTest = DivPreloader(
         imagePreloader,
         customAdapter,
-        DivExtensionController(emptyList()),
+        DivExtensionController(emptyList(), emptyList()),
         videoPreloader,
         DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER,
     )
@@ -103,7 +103,7 @@ class DivPreloaderTest {
         val underTest = DivPreloader(
             imagePreloader,
             customAdapter,
-            DivExtensionController(listOf(matchingHandler, unrelatedHandler)),
+            DivExtensionController(listOf(matchingHandler, unrelatedHandler), emptyList()),
             videoPreloader,
             DivPreloader.PreloadFilter.ONLY_PRELOAD_REQUIRED_FILTER,
         )
@@ -115,6 +115,28 @@ class DivPreloaderTest {
 
         verify(matchingHandler).preprocess(eq(separator), eq(resolver), any())
         verify(unrelatedHandler, never()).preprocess(any(), any(), any())
+    }
+
+    @Test
+    fun `preload runs matching wildcard handlers for divs without extensions`() {
+        val separator = DivSeparator()
+        val wildcardHandler = mock<DivExtensionHandler> {
+            on { matches(separator) } doReturn true
+        }
+        val configuration = DivConfiguration.Builder(mock())
+            .wildcardExtension(wildcardHandler)
+            .build()
+
+        DivPreloader(configuration).preload(
+            Div.Container(DivContainer(items = listOf(
+                Div.Separator(separator),
+                text(text = "text"),
+            ))),
+            resolver,
+        )
+
+        verify(wildcardHandler).preprocess(eq(separator), eq(resolver), any())
+        verify(wildcardHandler, times(1)).preprocess(any(), any(), any())
     }
 
     @Test

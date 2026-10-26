@@ -18,6 +18,7 @@ import com.yandex.div.compose.video.DivVideoPreloader
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.network.DivNetworkClient
+import com.yandex.div2.DivExtension
 import com.yandex.yatagan.Module
 import com.yandex.yatagan.Provides
 import javax.inject.Named
@@ -75,10 +76,15 @@ class DivConfiguration private constructor(
 
     @get:Provides
     val videoPreloader: DivVideoPreloader,
+
+    val wildcardExtensionHandlers: Map<String, DivExtensionHandler>,
 ) {
     @get:Provides
     internal val configuration: DivConfiguration
         get() = this
+
+    internal val wildcardExtensions: List<Pair<DivExtension, DivExtensionHandler>> =
+        wildcardExtensionHandlers.map { (id, handler) -> DivExtension(id = id) to handler }
 
     @Deprecated(
         message = "Use divConfiguration { ... } or DivConfiguration.Builder instead.",
@@ -111,6 +117,7 @@ class DivConfiguration private constructor(
         reporter = reporter,
         variableController = variableController,
         videoPreloader = videoPreloader,
+        wildcardExtensionHandlers = emptyMap(),
     )
 
     /**
@@ -130,6 +137,7 @@ class DivConfiguration private constructor(
         var networkClient: DivNetworkClient = disabledNetworkClient
         var variableController: DivVariableController = DivVariableController()
         var videoPreloader: DivVideoPreloader = disabledVideoPreloader
+        var wildcardExtensionHandlers: Map<String, DivExtensionHandler> = emptyMap()
 
         @Deprecated("Use networkClient to customize network requests")
         var patchDownloader: DivPatchDownloader? = null
@@ -148,6 +156,7 @@ class DivConfiguration private constructor(
             reporter = reporter,
             variableController = variableController,
             videoPreloader = videoPreloader,
+            wildcardExtensionHandlers = wildcardExtensionHandlers,
         )
     }
 }

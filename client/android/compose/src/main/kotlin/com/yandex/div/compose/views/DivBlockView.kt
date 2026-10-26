@@ -13,6 +13,7 @@ import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
+import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView
@@ -30,6 +31,7 @@ import com.yandex.div.compose.views.tabs.DivTabsView
 import com.yandex.div.compose.views.text.DivTextView
 import com.yandex.div.compose.views.video.DivVideoView
 import com.yandex.div2.Div
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVisibility
 
@@ -91,9 +93,7 @@ internal fun VisibleDivBlockView(
     WithActionMenu(actions, modifier) { contentModifier ->
         BaseViewWithExtensions(
             data = data,
-            extensions = divBase.extensions
-                ?.filter { it.isEnabled.observedValue() }
-                ?: emptyList(),
+            extensions = extensions(divBase),
             modifier = contentModifier.apply(
                 data,
                 actions = actions,
@@ -113,21 +113,31 @@ internal fun VisibleDivBlockView(
 }
 
 @Composable
+private fun extensions(div: DivBase): List<Pair<DivExtension, DivExtensionHandler?>> {
+    val component = divContext.component
+    val extensions = div.extensions
+        ?.filter { it.isEnabled.observedValue() }
+        ?.map { it to component.extensionHandlers[it.id] }
+        .orEmpty()
+    val wildcardExtensions = component.configuration.wildcardExtensions
+    return if (wildcardExtensions.isEmpty()) extensions else wildcardExtensions + extensions
+}
+
+@Composable
 private fun BaseViewWithExtensions(
     data: Div,
-    extensions: List<DivExtension>,
+    extensions: List<Pair<DivExtension, DivExtensionHandler?>>,
     modifier: Modifier
 ) {
-    val extension = extensions.firstOrNull()
-    if (extension == null) {
+    val first = extensions.firstOrNull()
+    if (first == null) {
         BaseView(data = data, modifier = modifier)
         return
     }
 
-    val id = extension.id
-    val extensionHandler = divContext.component.extensionHandlers[id]
+    val (extension, extensionHandler) = first
     if (extensionHandler == null) {
-        reportError("No handler for extension: $id")
+        reportError("No handler for extension: ${extension.id}")
         BaseViewWithExtensions(
             data = data,
             extensions = extensions.drop(1),

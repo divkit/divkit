@@ -39,6 +39,7 @@ internal interface DivContextComponent {
 
     val animationConfiguration: AnimationConfiguration
     val baseContext: Context
+    val configuration: DivConfiguration
     val customViewFactories: Map<String, DivCustomViewFactory>
     val debugConfiguration: DivDebugConfiguration
     val debugFeatures: DivDebugFeatures

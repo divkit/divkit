@@ -37,6 +37,12 @@ internal class MediaReleaseViewVisitor @Inject constructor(
         }
     }
 
+    override fun visit(view: DivCustomWrapper) {
+        val divBlock = view.divBlock ?: return
+        val customView = view.customView ?: return
+        extensionController.releaseMedia(customView, divBlock, divView)
+    }
+
     override fun defaultVisit(view: DivHolderView<*>) {
         val divBlock = view.divBlock ?: return
         extensionController.releaseMedia(view as View, divBlock, divView)

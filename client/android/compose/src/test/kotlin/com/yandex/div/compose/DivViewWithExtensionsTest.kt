@@ -38,6 +38,15 @@ class DivViewWithExtensionsTest {
         reporter = reporter
     )
 
+    private val wildcardConfiguration = divConfiguration {
+        extensionHandlers = mapOf(
+            "wrapper" to WrapperExtensionHandler(),
+            "replacement" to ReplacementExtensionHandler(),
+        )
+        wildcardExtensionHandlers = mapOf("wildcard" to WrapperExtensionHandler())
+        reporter = this@DivViewWithExtensionsTest.reporter
+    }
+
     @Test
     fun `error is reported if handler not found`() {
         reporter.failOnError = false
@@ -99,7 +108,68 @@ class DivViewWithExtensionsTest {
         }
     }
 
-    private fun setContent(content: Div) {
+    @Test
+    fun `wildcard extension wraps element without extensions`() {
+        setContent(text(text = constant("Hello!")), wildcardConfiguration)
+
+        rule.onNodeWithTag("wildcard").onChild().assertTextEquals("Hello!")
+    }
+
+    @Test
+    fun `wildcard extension wraps declared extensions`() {
+        setContent(
+            text(
+                extensions = listOf(
+                    DivExtension(
+                        id = "wrapper",
+                        params = JSONObject(mapOf("id" to "wrapper1"))
+                    )
+                ),
+                text = constant("Hello!")
+            ),
+            wildcardConfiguration
+        )
+
+        rule.onNodeWithTag("wildcard").onChild().apply {
+            assert(hasTestTag("wrapper1"))
+            onChild().assertTextEquals("Hello!")
+        }
+    }
+
+    @Test
+    fun `wildcard extension wraps declared extension that replaces content`() {
+        setContent(
+            text(
+                extensions = listOf(DivExtension(id = "replacement")),
+                text = constant("Hello!")
+            ),
+            wildcardConfiguration
+        )
+
+        rule.onNodeWithTag("wildcard").onChild().assert(hasTestTag("replacement"))
+    }
+
+    @Test
+    fun `wildcard extension is applied when declared extensions are disabled`() {
+        setContent(
+            text(
+                extensions = listOf(
+                    DivExtension(
+                        id = "wrapper",
+                        isEnabled = constant(false),
+                        params = JSONObject(mapOf("id" to "wrapper1"))
+                    )
+                ),
+                text = constant("Hello!")
+            ),
+            wildcardConfiguration
+        )
+
+        rule.onNodeWithTag("wrapper1").assertDoesNotExist()
+        rule.onNodeWithTag("wildcard").onChild().assertTextEquals("Hello!")
+    }
+
+    private fun setContent(content: Div, configuration: DivConfiguration = this.configuration) {
         rule.setContent(
             configuration = configuration,
             data = data(content)
@@ -115,9 +185,21 @@ private class WrapperExtensionHandler : DivExtensionHandler {
         environment: DivExtensionEnvironment,
         content: @Composable (modifier: Modifier) -> Unit
     ) {
-        val id = environment.extension.params?.getString("id") ?: ""
+        val id = environment.extension.params?.getString("id") ?: environment.extension.id
         Box(modifier = modifier.testTag(id)) {
             content(Modifier)
         }
+    }
+}
+
+private class ReplacementExtensionHandler : DivExtensionHandler {
+
+    @Composable
+    override fun Content(
+        modifier: Modifier,
+        environment: DivExtensionEnvironment,
+        content: @Composable (modifier: Modifier) -> Unit
+    ) {
+        Box(modifier = modifier.testTag("replacement"))
     }
 }

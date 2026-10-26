@@ -45,7 +45,10 @@ class DivPreloader internal constructor(
     ) : this(
         imagePreloader = DivImagePreloader(configuration.imageLoader),
         customContainerViewAdapter = configuration.divCustomContainerViewAdapter,
-        extensionController = DivExtensionController(configuration.extensionHandlers),
+        extensionController = DivExtensionController(
+            configuration.extensionHandlers,
+            configuration.wildcardExtensionHandlers,
+        ),
         videoPreloader = configuration.divPlayerPreloader,
         preloadFilter = preloadFilter
     )

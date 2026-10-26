@@ -2,6 +2,7 @@ package com.yandex.div.compose.views.container
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.views.container.wrap.ContainerWrapHorizontalView
 import com.yandex.div.compose.views.container.wrap.ContainerWrapVerticalView
@@ -16,7 +17,10 @@ internal fun DivContainerView(
     data: DivContainer
 ) {
     val modifier = if (data.clipToBounds.observedValue()) {
-        modifier.clipToBounds(data)
+        modifier.clipToBounds(
+            data,
+            divContext.component.configuration.wildcardExtensions.isNotEmpty(),
+        )
     } else {
         modifier
     }

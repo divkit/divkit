@@ -69,6 +69,8 @@ public class DivConfiguration {
     private final DivTooltipRestrictor mTooltipRestrictor;
     @NonNull
     private final List<DivExtensionHandler> mExtensionHandlers;
+    @NonNull
+    private final List<DivExtensionHandler> mWildcardExtensionHandlers;
     @Nullable
     private final DivDownloader mDivDownloader;
     @NonNull
@@ -124,6 +126,7 @@ public class DivConfiguration {
             @NonNull DivPlayerPreloader divPlayerPreloader,
             @NonNull DivTooltipRestrictor tooltipRestrictor,
             @NonNull List<DivExtensionHandler> extensionHandlers,
+            @NonNull List<DivExtensionHandler> wildcardExtensionHandlers,
             @Nullable DivDownloader divDownloader,
             @NonNull DivTypefaceProvider typefaceProvider,
             @NonNull Map<String, DivTypefaceProvider> typefaceProviders,
@@ -169,6 +172,7 @@ public class DivConfiguration {
         mDivPlayerPreloader = divPlayerPreloader;
         mTooltipRestrictor = tooltipRestrictor;
         mExtensionHandlers = extensionHandlers;
+        mWildcardExtensionHandlers = wildcardExtensionHandlers;
         mDivDownloader = divDownloader;
         mTypefaceProvider = typefaceProvider;
         mTypefaceProviders = typefaceProviders;
@@ -284,6 +288,13 @@ public class DivConfiguration {
     @NonNull
     public List<? extends DivExtensionHandler> getExtensionHandlers() {
         return mExtensionHandlers;
+    }
+
+    @Provides
+    @NonNull
+    @Named(Names.WILDCARD_EXTENSION_HANDLERS)
+    public List<? extends DivExtensionHandler> getWildcardExtensionHandlers() {
+        return mWildcardExtensionHandlers;
     }
 
     @Provides
@@ -514,6 +525,8 @@ public class DivConfiguration {
         private DivTooltipRestrictor mTooltipRestrictor;
         @NonNull
         private final List<DivExtensionHandler> mExtensionHandlers = new ArrayList<>();
+        @NonNull
+        private final List<DivExtensionHandler> mWildcardExtensionHandlers = new ArrayList<>();
         @Nullable
         private DivDownloader mDivDownloader;
         @Nullable
@@ -662,6 +675,12 @@ public class DivConfiguration {
         @NonNull
         public Builder extension(@NonNull DivExtensionHandler extensionHandler) {
             mExtensionHandlers.add(extensionHandler);
+            return this;
+        }
+
+        @NonNull
+        public Builder wildcardExtension(@NonNull DivExtensionHandler extensionHandler) {
+            mWildcardExtensionHandlers.add(extensionHandler);
             return this;
         }
 
@@ -878,6 +897,7 @@ public class DivConfiguration {
                     divPlayerPreloader,
                     mTooltipRestrictor == null ? DivTooltipRestrictor.STUB : mTooltipRestrictor,
                     mExtensionHandlers,
+                    mWildcardExtensionHandlers,
                     mDivDownloader,
                     nonNullTypefaceProvider,
                     mAdditionalTypefaceProviders == null ? new HashMap<>() : mAdditionalTypefaceProviders,

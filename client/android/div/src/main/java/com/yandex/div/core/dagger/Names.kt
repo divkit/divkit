@@ -11,4 +11,5 @@ internal object Names {
     const val DATA_TAG = "data_tag"
     const val CONSUME_TOUCHES_TO_CLEAR_INPUT_FOCUS = "consume_touches_to_clear_input_focus"
     const val FORCE_ACCESSIBILITY_ENABLE = "force_accessibility_enable"
+    const val WILDCARD_EXTENSION_HANDLERS = "wildcard_extension_handlers"
 }
