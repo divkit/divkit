@@ -3,11 +3,9 @@ package com.yandex.div.core.view2.items
 import android.util.DisplayMetrics
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.actions.DivScrollActionParser
 import com.yandex.div.internal.actions.DivScrollActionUtils
 import com.yandex.div2.DivActionScrollBy
-
-private const val OVERFLOW_CLAMP = "clamp"
-private const val OVERFLOW_RING = "ring"
 
 /**
  * Strategy to get next or previous item index based on current item.
@@ -73,13 +71,10 @@ internal sealed class OverflowItemStrategy {
             scrollOffset: Int,
             metrics: DisplayMetrics
         ): OverflowItemStrategy {
-            return when (overflow) {
-                null, OVERFLOW_CLAMP -> Clamp(nearestItem, itemCount, scrollRange, scrollOffset, metrics)
-                OVERFLOW_RING -> Ring(nearestItem, itemCount, scrollRange, scrollOffset, metrics)
-                else -> {
-                    KAssert.fail { "Unsupported overflow $overflow" }
-                    Clamp(nearestItem, itemCount, scrollRange, scrollOffset, metrics)
-                }
+            val strategy = DivScrollActionParser.parseOverflow(overflow) { message -> KAssert.fail { message } }
+            return when (strategy) {
+                DivActionScrollBy.Overflow.CLAMP -> Clamp(nearestItem, itemCount, scrollRange, scrollOffset, metrics)
+                DivActionScrollBy.Overflow.RING -> Ring(nearestItem, itemCount, scrollRange, scrollOffset, metrics)
             }
         }
     }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
@@ -18,6 +19,8 @@ import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
+import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
+import com.yandex.div.compose.views.gallery.scroll.galleryScrollLayout
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 import com.yandex.div2.Div
 
@@ -49,6 +52,16 @@ private fun BoxWithConstraintsScope.ScrollableGalleryView(items: List<Div>, prop
 
     val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = clampedDefaultItem
+    )
+
+    val density = LocalDensity.current
+    val scrollLayout = remember(listState, density) { listState.galleryScrollLayout(density) }
+    BindGalleryScrollActions(
+        id = properties.id,
+        items = items,
+        layout = scrollLayout,
+        scrollMode = properties.scrollMode,
+        alignment = properties.scrollContentAlignment,
     )
 
     val flingBehavior = rememberGalleryListFlingBehavior(
@@ -114,6 +127,7 @@ private fun NonScrollableGalleryView(
     items: List<Div>,
     properties: GalleryProperties,
 ) {
+    BindGalleryScrollActions(properties.id, items)
     val crossAlignment = properties.crossContentAlignment.toCrossAxisAlignment()
     if (properties.isHorizontal) {
         Row(

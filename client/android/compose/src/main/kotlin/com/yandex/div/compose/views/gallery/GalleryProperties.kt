@@ -24,6 +24,7 @@ internal data class GalleryProperties(
     val defaultItem: Int,
     val scrollMode: DivGallery.ScrollMode,
     val scrollbar: Expression<DivGallery.Scrollbar>,
+    val id: String?,
 )
 
 @Composable
@@ -42,5 +43,6 @@ internal fun DivGallery.observeProperties(): GalleryProperties {
         defaultItem = defaultItem.observedIntValue(),
         scrollMode = mode,
         scrollbar = scrollbar,
+        id = id,
     )
 }

@@ -6,8 +6,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.utils.scroll.CrossAxisAlignment
-import com.yandex.div.compose.utils.scroll.desiredSnapOffset
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
+import com.yandex.div.compose.views.gallery.scroll.calculateDesiredScrollOffset
 import com.yandex.div2.DivGallery
 
 internal fun DivGallery.ContentAlignment.toVerticalAlignment(): Alignment.Vertical =
@@ -25,25 +25,6 @@ internal fun DivGallery.ContentAlignment.toCrossAxisAlignment(): CrossAxisAlignm
 
 internal fun DivGallery.ContentAlignment.toSnapPosition(): SnapPosition =
     GallerySnapPosition(this)
-
-internal fun DivGallery.ContentAlignment.calculateDesiredScrollOffset(
-    viewportSizePx: Int,
-    itemSizePx: Int,
-    startPaddingPx: Int,
-    endPaddingPx: Int,
-): Int {
-    return desiredSnapOffset(
-        snapPosition = when (this) {
-            DivGallery.ContentAlignment.START -> SnapPosition.Start
-            DivGallery.ContentAlignment.CENTER -> SnapPosition.Center
-            DivGallery.ContentAlignment.END -> SnapPosition.End
-        },
-        viewportSizePx = viewportSizePx,
-        itemSizePx = itemSizePx,
-        startPaddingPx = startPaddingPx,
-        endPaddingPx = endPaddingPx,
-    ) - startPaddingPx
-}
 
 private data class GallerySnapPosition(
     val alignment: DivGallery.ContentAlignment,

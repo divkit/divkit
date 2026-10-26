@@ -1,9 +1,11 @@
 package com.yandex.div.compose.views.gallery
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.layout.LazyLayoutScrollScope
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -23,6 +25,7 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
@@ -30,6 +33,10 @@ import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
+import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
+import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutInfo
+import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutItem
+import com.yandex.div.compose.views.gallery.scroll.GalleryScrollLayout
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 import com.yandex.div2.Div
 import kotlinx.coroutines.flow.first
@@ -48,6 +55,18 @@ internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
     if (isScrollAxisBounded(properties.isHorizontal)) {
         val scrollState = rememberScrollState()
         val itemPositions = remember { MeasuredItemPositions() }
+        val alignmentKey = properties.resolveScrollAlignmentKey()
+        val density = LocalDensity.current
+        val scrollLayout = remember(scrollState, itemPositions, alignmentKey, density) {
+            itemPositions.galleryScrollLayout(scrollState, alignmentKey, density)
+        }
+        BindGalleryScrollActions(
+            id = properties.id,
+            items = items,
+            layout = scrollLayout,
+            scrollMode = properties.scrollMode,
+            alignment = properties.scrollContentAlignment,
+        )
         if (defaultItem > 0) {
             AdjustDefaultItemAlignment(scrollState, itemPositions, defaultItem, properties)
         }
@@ -67,21 +86,86 @@ internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
             itemPositions = itemPositions,
         )
     } else {
+        BindGalleryScrollActions(properties.id, items)
         MeasuredLanesLayout(items, properties, Modifier, matchParentMaxSize = Dp.Unspecified, itemPositions = null)
     }
 }
 
 /** Scroll-axis positions of laid out items, relative to the content start after the content padding. */
 internal class MeasuredItemPositions {
-    var offsets = IntArray(0)
+    var offsets by mutableStateOf(IntArray(0))
         private set
-    var sizes = IntArray(0)
+    var sizes by mutableStateOf(IntArray(0))
         private set
 
+    // Written during measurement; equal arrays are skipped so observers wake up only on real changes.
     fun update(offsets: IntArray, sizes: IntArray) {
-        this.offsets = offsets
-        this.sizes = sizes
+        if (!this.offsets.contentEquals(offsets)) this.offsets = offsets
+        if (!this.sizes.contentEquals(sizes)) this.sizes = sizes
     }
+}
+
+/** Every item is laid out, so distances are exact and no item is skipped. */
+private fun MeasuredItemPositions.galleryScrollLayout(
+    scrollState: ScrollState,
+    alignmentKey: GalleryScrollAlignmentKey,
+    density: Density,
+): GalleryScrollLayout = GalleryScrollLayout(
+    scrollState = scrollState,
+    density = density,
+    isStaggered = false,
+    teleportItems = { Int.MAX_VALUE },
+    currentLayoutInfo = { toGalleryLayoutInfo(scrollState, alignmentKey) },
+    jumpToItem = { index -> scrollState.scrollTo(offsets[index]) },
+    scroll = { block ->
+        scrollState.scroll { MeasuredLanesScrollScope(this, scrollState, this@galleryScrollLayout).block() }
+    },
+)
+
+private class MeasuredLanesScrollScope(
+    scope: ScrollScope,
+    private val scrollState: ScrollState,
+    private val positions: MeasuredItemPositions,
+) : LazyLayoutScrollScope, ScrollScope by scope {
+
+    override val itemCount: Int
+        get() = positions.offsets.size
+
+    override val firstVisibleItemIndex: Int
+        get() = positions.offsets.indices
+            .firstOrNull { positions.offsets[it] + positions.sizes[it] > scrollState.value } ?: 0
+
+    override val firstVisibleItemScrollOffset: Int
+        get() = scrollState.value - positions.offsets.getOrElse(firstVisibleItemIndex) { 0 }
+
+    override val lastVisibleItemIndex: Int
+        get() = positions.offsets.indexOfLast { it < scrollState.value + scrollState.viewportSize }.coerceAtLeast(0)
+
+    override fun snapToItem(index: Int, offset: Int) {
+        scrollBy(calculateDistanceTo(index, offset).toFloat())
+    }
+
+    override fun calculateDistanceTo(targetIndex: Int, targetOffset: Int): Int =
+        positions.offsets.getOrElse(targetIndex) { scrollState.value } - scrollState.value + targetOffset
+}
+
+// Same coordinates as LazyStaggeredGridLayoutInfo: offsets start after the content padding.
+internal fun MeasuredItemPositions.toGalleryLayoutInfo(
+    scrollState: ScrollState,
+    alignmentKey: GalleryScrollAlignmentKey,
+): GalleryLayoutInfo {
+    val viewportSize = scrollState.viewportSize
+    return GalleryLayoutInfo(
+        items = offsets.indices.map { index ->
+            GalleryLayoutItem(index = index, offset = offsets[index] - scrollState.value, size = sizes[index])
+        },
+        itemCount = offsets.size,
+        viewportSize = viewportSize,
+        viewportStart = -alignmentKey.startPaddingPx,
+        viewportEnd = viewportSize - alignmentKey.startPaddingPx,
+        beforePadding = alignmentKey.startPaddingPx,
+        afterPadding = alignmentKey.endPaddingPx,
+    )
 }
 
 // Applies default_item once, like the lazy grid; a restored or user-changed position is kept.

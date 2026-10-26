@@ -11,11 +11,14 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
+import com.yandex.div.compose.views.gallery.scroll.BindGalleryScrollActions
+import com.yandex.div.compose.views.gallery.scroll.galleryScrollLayout
 import com.yandex.div.compose.views.modifiers.fillMaxCrossAxisIfBounded
 import com.yandex.div2.Div
 
@@ -33,8 +36,19 @@ internal fun GalleryGridView(
 
     BoxWithConstraints(modifier = modifier) {
         val isLazyGridSupported = constraints.hasBoundedWidth && constraints.hasBoundedHeight
-        if (isLazyGridSupported && items.isNotEmpty() && initialDefaultItem > 0) {
-            AdjustDefaultGridItemAlignment(gridState, clampedDefaultItem, items.size, properties)
+        if (isLazyGridSupported) {
+            val density = LocalDensity.current
+            val scrollLayout = remember(gridState, density) { gridState.galleryScrollLayout(density) }
+            BindGalleryScrollActions(
+                id = properties.id,
+                items = items,
+                layout = scrollLayout,
+                scrollMode = properties.scrollMode,
+                alignment = properties.scrollContentAlignment,
+            )
+            if (items.isNotEmpty() && initialDefaultItem > 0) {
+                AdjustDefaultGridItemAlignment(gridState, clampedDefaultItem, items.size, properties)
+            }
         }
         when {
             !isLazyGridSupported -> MeasuredLanesStaggeredGrid(items, properties, clampedDefaultItem)

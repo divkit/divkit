@@ -102,13 +102,13 @@ private suspend fun LazyStaggeredGridState.scrollForwardUntilItemIsVisible(
     targetIndex: Int,
     expectedItemsCount: Int,
 ): Boolean {
-    if (expectedItemsCount == 0 || targetIndex !in 0 until expectedItemsCount) return false
+    if (targetIndex !in 0 until expectedItemsCount) return false
 
     val initialPosition = scrollPosition
     snapshotFlow { layoutInfo.totalItemsCount }.first { it == expectedItemsCount }
     if (layoutInfo.visibleItemsInfo.any { it.index == targetIndex }) return true
 
-    if (targetIndex < firstVisibleItemIndex) {
+    if (layoutInfo.visibleItemsInfo.any { it.index > targetIndex }) {
         scrollToItem(0)
     }
 

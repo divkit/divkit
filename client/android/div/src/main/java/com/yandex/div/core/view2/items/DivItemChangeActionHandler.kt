@@ -11,11 +11,9 @@ private const val AUTHORITY_NEXT_ITEM = "set_next_item"
 private const val AUTHORITY_PREVIOUS_ITEM = "set_previous_item"
 private const val AUTHORITY_SCROLL_FORWARD = "scroll_forward"
 private const val AUTHORITY_SCROLL_BACKWARD = "scroll_backward"
-private const val AUTHORITY_SCROLL_TO_POSITION = "scroll_to_position"
 
 private const val PARAM_ANIMATED = "animated"
 private const val PARAM_ID = "id"
-private const val PARAM_STEP = "step"
 private const val PARAM_OVERFLOW = "overflow"
 
 /**
@@ -25,15 +23,7 @@ internal object DivItemChangeActionHandler {
 
     @JvmStatic
     fun canHandle(authority: String?): Boolean {
-        return DivScrollActionParser.matches(authority) || when (authority) {
-            AUTHORITY_NEXT_ITEM,
-            AUTHORITY_SCROLL_BACKWARD,
-            AUTHORITY_SCROLL_FORWARD,
-            AUTHORITY_SCROLL_TO_POSITION,
-            AUTHORITY_PREVIOUS_ITEM -> true
-
-            else -> false
-        }
+        return DivScrollActionParser.matches(authority) || DivScrollActionParser.matchesScrollBy(authority)
     }
 
     @JvmStatic
@@ -55,7 +45,6 @@ internal object DivItemChangeActionHandler {
             AUTHORITY_PREVIOUS_ITEM -> handlePreviousItem(uri, animated, viewController)
             AUTHORITY_SCROLL_BACKWARD -> handleScrollBackward(uri, animated, viewController)
             AUTHORITY_SCROLL_FORWARD -> handleScrollForward(uri, animated, viewController)
-            AUTHORITY_SCROLL_TO_POSITION -> handleScrollTo(uri, animated, viewController)
             else -> false
         }
     }
@@ -100,31 +89,11 @@ internal object DivItemChangeActionHandler {
         }
     }
 
-    private fun handleScrollTo(
-        uri: Uri,
-        animated: Boolean,
-        viewController: DivViewWithItemsController
-    ): Boolean {
-        val step = uri.getStepParam()
-        viewController.scrollTo(step, animated)
-        return true
-    }
-
-    private fun Uri.getStepParam(default: Int = 1): Int {
-        val rawStep = getQueryParameter(PARAM_STEP) ?: return default
-        return try {
-            rawStep.toInt()
-        } catch (_: NumberFormatException) {
-            KAssert.fail { "$rawStep is not a number" }
-            default
-        }
-    }
-
     private inline fun withOverflowAndStep(
         uri: Uri,
         actionOnViewController: (String?, Int) -> Unit
     ): Boolean {
-        val step = uri.getStepParam()
+        val step = DivScrollActionParser.parseStep(uri) { message -> KAssert.fail { message } }
         val overflow = uri.getQueryParameter(PARAM_OVERFLOW)
         actionOnViewController(overflow, step)
         return true

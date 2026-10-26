@@ -90,7 +90,9 @@ class RoborazziInteractiveScreenshotTest(
             extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler()),
             fontSourceProvider = TestFontSourceProvider(),
             imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext()),
-            reporter = TestReporter(),
+            reporter = TestReporter().apply {
+                failOnError = configuration.baseConfiguration.failOnParsingError
+            },
         ),
         debugConfiguration = DivDebugConfiguration(
             imagePainterStateListener = painterTracker::onStateChanged
@@ -158,6 +160,7 @@ class RoborazziInteractiveScreenshotTest(
 
             isViewEmpty = false
         }
+        composeRule.waitForIdle()
     }
 
     private fun performTap(id: String) {

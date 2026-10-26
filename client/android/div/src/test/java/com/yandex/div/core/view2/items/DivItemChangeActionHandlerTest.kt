@@ -184,6 +184,38 @@ class DivItemChangeActionHandlerTest {
     }
 
     @Test
+    fun `scroll to position preserves offset and animation`() {
+        val result = DivItemChangeActionHandler.handleAction(
+            Uri.parse("div-action://scroll_to_position?id=$ID&step=30&animated=false"),
+            SCOPE_ID,
+            view,
+        )
+
+        assertTrue(result)
+        verify(requireNotNull(controller)).scrollTo(offset = 30, animated = false)
+    }
+
+    @Test
+    fun `scroll to position defaults to one dp`() {
+        val result = DivItemChangeActionHandler.handleAction(
+            Uri.parse("div-action://scroll_to_position?id=$ID"), SCOPE_ID, view,
+        )
+
+        assertTrue(result)
+        verify(requireNotNull(controller)).scrollTo(offset = 1, animated = true)
+    }
+
+    @Test
+    fun `scroll to position uses default when step is malformed`() {
+        val result = DivItemChangeActionHandler.handleAction(
+            Uri.parse("div-action://scroll_to_position?id=$ID&step=invalid"), SCOPE_ID, view,
+        )
+
+        assertTrue(result)
+        verify(requireNotNull(controller)).scrollTo(offset = 1, animated = true)
+    }
+
+    @Test
     fun `not handled when item id is missing`() {
         val result = DivItemChangeActionHandler.handleAction(
             Uri.parse("div-action://scroll_to_item_id?id=$ID"), SCOPE_ID, view,

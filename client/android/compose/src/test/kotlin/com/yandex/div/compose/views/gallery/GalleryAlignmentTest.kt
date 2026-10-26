@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.setContent
+import com.yandex.div.compose.views.gallery.scroll.calculateDesiredScrollOffset
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.parser.TypeHelper

@@ -14,6 +14,7 @@ import com.yandex.div.compose.images.ImageStateStorage
 import com.yandex.div.compose.layoutprovider.LayoutProviderStorage
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.patch.DivPatchCoordinator
+import com.yandex.div.compose.scroll.ScrollTargetStorage
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.compose.timers.TimerStorage
@@ -47,6 +48,7 @@ internal interface DivViewComponent {
     val localComponentStorage: DivLocalComponentStorage
     val pagerStateStorage: DivPagerStateStorage
     val patchCoordinator: DivPatchCoordinator
+    val scrollTargetStorage: ScrollTargetStorage
     val states: MutableState<List<DivData.State>>
     val stateStorage: DivStateStorage
     val storedValuesStorage: DivStoredValuesStorage

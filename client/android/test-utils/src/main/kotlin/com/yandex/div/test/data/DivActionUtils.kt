@@ -304,9 +304,11 @@ fun scrollToAction(
     id: String,
     destination: DivActionScrollDestination,
     animated: Boolean = true,
+    duration: Expression<Long>? = null,
 ): DivActionTyped = DivActionTyped.ScrollTo(
     DivActionScrollTo(
         animated = constant(animated),
+        duration = duration,
         destination = destination,
         id = constant(id),
     )
@@ -318,9 +320,11 @@ fun scrollByAction(
     offset: Long = 0,
     overflow: DivActionScrollBy.Overflow = DivActionScrollBy.Overflow.CLAMP,
     animated: Boolean = true,
+    duration: Expression<Long>? = null,
 ): DivActionTyped = DivActionTyped.ScrollBy(
     DivActionScrollBy(
         animated = constant(animated),
+        duration = duration,
         id = constant(id),
         itemCount = constant(itemCount),
         offset = constant(offset),

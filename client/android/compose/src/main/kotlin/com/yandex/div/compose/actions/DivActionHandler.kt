@@ -3,6 +3,7 @@ package com.yandex.div.compose.actions
 import android.net.Uri
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.internal.actions.DivScrollActionParser
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.actions.isDivAction
 import com.yandex.div.json.expressions.Expression
@@ -10,8 +11,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStopTemplate
 import com.yandex.div2.DivActionExtensionAction
-import com.yandex.div2.DivActionScrollBy
-import com.yandex.div2.DivActionScrollTo
 import com.yandex.div2.DivActionSetCursorPosition
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivDisappearAction
@@ -32,6 +31,7 @@ internal class DivActionHandler @Inject constructor(
     private val dictSetValueActionHandler: DictSetValueActionHandler,
     private val downloadActionHandler: DownloadActionHandler,
     private val focusElementActionHandler: FocusElementActionHandler,
+    private val scrollActionHandler: ScrollActionHandler,
     private val setStateActionHandler: SetStateActionHandler,
     private val setStoredValueActionHandler: SetStoredValueActionHandler,
     private val setVariableActionHandler: SetVariableActionHandler,
@@ -125,7 +125,8 @@ internal class DivActionHandler @Inject constructor(
 
         menuAction?.let { actionMenuHolder.showIfNeeded(it, expressionResolver) }
 
-        action.typed?.let {
+        val typedAction = action.typed ?: actionData.url?.let(::parseActionUrl)
+        typedAction?.let {
             handle(
                 context = context,
                 action = it,
@@ -148,6 +149,19 @@ internal class DivActionHandler @Inject constructor(
                 context = context,
                 action = actionData
             )
+        }
+    }
+
+    private fun parseActionUrl(uri: Uri): DivActionTyped? {
+        if (!uri.isDivAction) return null
+        return when {
+            DivScrollActionParser.matchesScrollBy(uri.authority) ->
+                DivScrollActionParser.parseScrollBy(uri, reporter::reportError)
+                    ?.let { DivActionTyped.ScrollBy(it) }
+            DivScrollActionParser.matches(uri.authority) ->
+                DivScrollActionParser.parse(uri, reporter::reportError)
+                    ?.let { DivActionTyped.ScrollTo(it) }
+            else -> null
         }
     }
 
@@ -200,8 +214,8 @@ internal class DivActionHandler @Inject constructor(
             is DivActionTyped.HideTooltip ->
                 tooltipActionHandler.handle(context, action.value)
 
-            is DivActionTyped.ScrollBy -> notSupported(DivActionScrollBy.TYPE)
-            is DivActionTyped.ScrollTo -> notSupported(DivActionScrollTo.TYPE)
+            is DivActionTyped.ScrollBy -> scrollActionHandler.handle(context, action.value)
+            is DivActionTyped.ScrollTo -> scrollActionHandler.handle(context, action.value)
             is DivActionTyped.SetCursorPosition -> notSupported(DivActionSetCursorPosition.TYPE)
 
             is DivActionTyped.SetState ->
