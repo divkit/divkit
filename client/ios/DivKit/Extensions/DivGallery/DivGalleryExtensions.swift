@@ -83,7 +83,8 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
       itemsCount: itemsCount,
       isScrolling: false,
       scrollRange: scrollRange,
-      animated: animated
+      animated: animated,
+      scrollRequest: sourceState?.scrollRequest
     )
     storage.setState(path: path, state: newState)
     return newState

@@ -72,10 +72,6 @@ final class ScrollHandler {
 
   var infiniteScrollLoopPerformed = false
 
-  var isUserInitiatedScroll: Bool {
-    state.isUserInitiatedScroll
-  }
-
   private var infiniteScroll: InfiniteScroll?
   private var contentPager: ScrollableContentPager?
 
@@ -85,6 +81,10 @@ final class ScrollHandler {
         infiniteScrollLoopPerformed = false
       }
     }
+  }
+
+  var isUserInitiatedScroll: Bool {
+    state.isUserInitiatedScroll
   }
 
   init(layout: GalleryViewLayouting) {
@@ -137,9 +137,11 @@ final class ScrollHandler {
     newPosition: GalleryViewState.Position,
     newLayout: Bool,
     animated: Bool,
+    scrollDuration: TimeInterval? = nil,
+    isNewScrollRequest: Bool = false,
     direction: ScrollNavigationDirection = .none
   ) {
-    guard !state.isUserInitiatedScroll, oldPosition != newPosition else {
+    guard !state.isUserInitiatedScroll, oldPosition != newPosition || isNewScrollRequest else {
       return
     }
 
@@ -157,7 +159,7 @@ final class ScrollHandler {
     if newLayout {
       delegate?.updateOffsetDetached(position)
     } else {
-      delegate?.updateOffsetToPosition(position, animated: animated)
+      delegate?.updateOffsetToPosition(position, animated: animated, scrollDuration: scrollDuration)
     }
   }
 
@@ -343,7 +345,11 @@ extension ScrollHandler: ScrollDelegate {
 protocol ScrollHandlerDelegate: AnyObject {
   func updateOffsetDetached(_ offset: CGFloat)
   func updateOffsetDetached(_ pos: GalleryViewState.Position)
-  func updateOffsetToPosition(_ pos: GalleryViewState.Position, animated: Bool)
+  func updateOffsetToPosition(
+    _ pos: GalleryViewState.Position,
+    animated: Bool,
+    scrollDuration: TimeInterval?
+  )
   func updateGalleryState(_ pos: GalleryViewState.Position, offset: CGFloat)
   func interruptScrolling()
   func finishScrolling(scrollStartOffset: CGFloat?)
@@ -351,7 +357,7 @@ protocol ScrollHandlerDelegate: AnyObject {
 
 extension ScrollHandlerDelegate {
   func updateOffsetToPosition(_ pos: GalleryViewState.Position) {
-    updateOffsetToPosition(pos, animated: true)
+    updateOffsetToPosition(pos, animated: true, scrollDuration: nil)
   }
 }
 

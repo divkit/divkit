@@ -8,7 +8,7 @@
       },
       "height": {
         "type": "fixed",
-        "value": 36
+        "value": 44
       },
       "font_size": 13,
       "text_alignment_horizontal": "center",
@@ -110,8 +110,7 @@
                 "type": "scroll_to",
                 "$id": "target",
                 "destination": {
-                  "type": "item_id",
-                  "$value": "first_item"
+                  "type": "start"
                 },
                 "duration": "@{scroll_duration}"
               }
@@ -128,8 +127,7 @@
                 "type": "scroll_to",
                 "$id": "target",
                 "destination": {
-                  "type": "item_id",
-                  "$value": "last_item"
+                  "type": "end"
                 },
                 "duration": "@{scroll_duration}"
               }
@@ -143,7 +141,7 @@
       "items": [
         {
           "type": "button",
-          "text": "0.5с",
+          "text": "0.5s",
           "background": [
             {
               "type": "solid",
@@ -166,7 +164,7 @@
         },
         {
           "type": "button",
-          "text": "2с",
+          "text": "2s",
           "background": [
             {
               "type": "solid",
@@ -200,6 +198,30 @@
     "control_row": {
       "type": "container",
       "orientation": "horizontal"
+    },
+    "navigation_pager_tabs": {
+      "type": "control_row",
+      "items": [
+        {
+          "type": "navigation_pager"
+        },
+        {
+          "type": "navigation_tabs"
+        }
+      ]
+    },
+    "navigation_tabs": {
+      "type": "button",
+      "text": "Tabs",
+      "actions": [
+        {
+          "log_id": "duration_mode_4",
+          "typed": {
+            "type": "set_state",
+            "state_id": "4"
+          }
+        }
+      ]
     }
   },
   "card": {
@@ -221,7 +243,7 @@
               "type": "navigation_gallery"
             },
             {
-              "type": "navigation_pager"
+              "type": "navigation_pager_tabs"
             },
             {
               "type": "text",
@@ -314,9 +336,7 @@
             },
             {
               "type": "scroll_controls",
-              "target": "gallery_default",
-              "first_item": "gallery_default_item_0",
-              "last_item": "gallery_default_item_11"
+              "target": "gallery_default"
             },
             {
               "type": "duration_controls"
@@ -333,7 +353,7 @@
               "type": "navigation_gallery"
             },
             {
-              "type": "navigation_pager"
+              "type": "navigation_pager_tabs"
             },
             {
               "type": "text",
@@ -427,9 +447,7 @@
             },
             {
               "type": "scroll_controls",
-              "target": "gallery_vertical",
-              "first_item": "gallery_vertical_item_0",
-              "last_item": "gallery_vertical_item_11"
+              "target": "gallery_vertical"
             },
             {
               "type": "duration_controls"
@@ -446,7 +464,7 @@
               "type": "navigation_gallery"
             },
             {
-              "type": "navigation_pager"
+              "type": "navigation_pager_tabs"
             },
             {
               "type": "text",
@@ -549,9 +567,139 @@
             },
             {
               "type": "scroll_controls",
-              "target": "duration_pager",
-              "first_item": "duration_pager_item_0",
-              "last_item": "duration_pager_item_11"
+              "target": "duration_pager"
+            },
+            {
+              "type": "duration_controls"
+            }
+          ]
+        }
+      },
+      {
+        "state_id": 4,
+        "div": {
+          "type": "section",
+          "items": [
+            {
+              "type": "navigation_gallery"
+            },
+            {
+              "type": "navigation_pager_tabs"
+            },
+            {
+              "type": "text",
+              "text": "Tabs",
+              "font_size": 20
+            },
+            {
+              "type": "tabs",
+              "id": "duration_tabs",
+              "height": {
+                "type": "fixed",
+                "value": 220
+              },
+              "items": [
+                {
+                  "title": "Tab 0",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 0",
+                    "color": "#E57373"
+                  }
+                },
+                {
+                  "title": "Tab 1",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 1",
+                    "color": "#81C784"
+                  }
+                },
+                {
+                  "title": "Tab 2",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 2",
+                    "color": "#64B5F6"
+                  }
+                },
+                {
+                  "title": "Tab 3",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 3",
+                    "color": "#E57373"
+                  }
+                },
+                {
+                  "title": "Tab 4",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 4",
+                    "color": "#81C784"
+                  }
+                },
+                {
+                  "title": "Tab 5",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 5",
+                    "color": "#64B5F6"
+                  }
+                },
+                {
+                  "title": "Tab 6",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 6",
+                    "color": "#E57373"
+                  }
+                },
+                {
+                  "title": "Tab 7",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 7",
+                    "color": "#81C784"
+                  }
+                },
+                {
+                  "title": "Tab 8",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 8",
+                    "color": "#64B5F6"
+                  }
+                },
+                {
+                  "title": "Tab 9",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 9",
+                    "color": "#E57373"
+                  }
+                },
+                {
+                  "title": "Tab 10",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 10",
+                    "color": "#81C784"
+                  }
+                },
+                {
+                  "title": "Tab 11",
+                  "div": {
+                    "type": "pager_tile",
+                    "text": "Page 11",
+                    "color": "#64B5F6"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "scroll_controls",
+              "target": "duration_tabs"
             },
             {
               "type": "duration_controls"

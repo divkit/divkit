@@ -655,7 +655,11 @@ private final class MockScrollHandlerDelegate: ScrollHandlerDelegate {
     updateOffsetToPositionCalls.append(PositionCall(position: pos, animated: false))
   }
 
-  func updateOffsetToPosition(_ pos: GalleryViewState.Position, animated: Bool) {
+  func updateOffsetToPosition(
+    _ pos: GalleryViewState.Position,
+    animated: Bool,
+    scrollDuration _: TimeInterval?
+  ) {
     updateOffsetToPositionCalls.append(PositionCall(position: pos, animated: animated))
   }
 

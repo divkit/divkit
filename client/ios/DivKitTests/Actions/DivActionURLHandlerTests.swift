@@ -1,5 +1,6 @@
 @testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
+import Foundation
 import LayoutKit
 import Testing
 
@@ -21,8 +22,9 @@ struct DivActionURLHandlerTests {
   func setNextItemAction() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
-      afterState: SetItemAction.secondElementState,
-      mode: .next(step: nil, overflow: .clamp)
+      afterState: SetItemAction.firstElementState,
+      mode: .next(step: nil, overflow: .clamp),
+      expectedDelta: .items(1, wraps: false)
     )
   }
 
@@ -30,8 +32,9 @@ struct DivActionURLHandlerTests {
   func setNextItemActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.lastElementState,
-      afterState: SetItemAction.firstElementState,
-      mode: .next(step: nil, overflow: .ring)
+      afterState: SetItemAction.lastElementState,
+      mode: .next(step: nil, overflow: .ring),
+      expectedDelta: .items(1, wraps: true)
     )
   }
 
@@ -39,8 +42,9 @@ struct DivActionURLHandlerTests {
   func setNextItem_WithStep() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
-      afterState: SetItemAction.thirdElementState,
-      mode: .next(step: 2, overflow: .clamp)
+      afterState: SetItemAction.firstElementState,
+      mode: .next(step: 2, overflow: .clamp),
+      expectedDelta: .items(2, wraps: false)
     )
   }
 
@@ -48,8 +52,9 @@ struct DivActionURLHandlerTests {
   func setNextItem_WithStepAndRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.lastElementState,
-      afterState: SetItemAction.secondElementState,
-      mode: .next(step: 2, overflow: .ring)
+      afterState: SetItemAction.lastElementState,
+      mode: .next(step: 2, overflow: .ring),
+      expectedDelta: .items(2, wraps: true)
     )
   }
 
@@ -58,7 +63,8 @@ struct DivActionURLHandlerTests {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStates,
       afterState: SetItemAction.emptyStates,
-      mode: .next(step: nil, overflow: .clamp)
+      mode: .next(step: nil, overflow: .clamp),
+      expectedDelta: .items(1, wraps: false)
     )
   }
 
@@ -66,8 +72,9 @@ struct DivActionURLHandlerTests {
   func setPreviousItemAction() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementState,
-      afterState: SetItemAction.firstElementState,
-      mode: .previous(step: nil, overflow: .clamp)
+      afterState: SetItemAction.secondElementState,
+      mode: .previous(step: nil, overflow: .clamp),
+      expectedDelta: .items(-1, wraps: false)
     )
   }
 
@@ -75,8 +82,9 @@ struct DivActionURLHandlerTests {
   func setPreviousItemActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
-      afterState: SetItemAction.lastElementState,
-      mode: .previous(step: nil, overflow: .ring)
+      afterState: SetItemAction.firstElementState,
+      mode: .previous(step: nil, overflow: .ring),
+      expectedDelta: .items(-1, wraps: true)
     )
   }
 
@@ -84,8 +92,9 @@ struct DivActionURLHandlerTests {
   func setPreviousItem_WithStep() {
     setItemTestCases(
       beforeStates: SetItemAction.thirdElementState,
-      afterState: SetItemAction.firstElementState,
-      mode: .previous(step: 2, overflow: .clamp)
+      afterState: SetItemAction.thirdElementState,
+      mode: .previous(step: 2, overflow: .clamp),
+      expectedDelta: .items(-2, wraps: false)
     )
   }
 
@@ -93,8 +102,9 @@ struct DivActionURLHandlerTests {
   func setPreviousItem_WithStepAndRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementState,
-      afterState: SetItemAction.thirdElementState,
-      mode: .previous(step: 8, overflow: .ring)
+      afterState: SetItemAction.firstElementState,
+      mode: .previous(step: 8, overflow: .ring),
+      expectedDelta: .items(-8, wraps: true)
     )
   }
 
@@ -103,7 +113,8 @@ struct DivActionURLHandlerTests {
     setItemTestCases(
       beforeStates: SetItemAction.emptyStates,
       afterState: SetItemAction.emptyStates,
-      mode: .previous(step: nil, overflow: .clamp)
+      mode: .previous(step: nil, overflow: .clamp),
+      expectedDelta: .items(-1, wraps: false)
     )
   }
 
@@ -134,8 +145,9 @@ struct DivActionURLHandlerTests {
   func setScrollForwardAction() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementStateWithOffset,
-      afterState: SetItemAction.secondElementStateWithOffset,
-      mode: .forward(10, .clamp)
+      afterState: SetItemAction.firstElementStateWithOffset,
+      mode: .forward(10, .clamp),
+      expectedDelta: .offset(10, wraps: false)
     )
   }
 
@@ -143,8 +155,9 @@ struct DivActionURLHandlerTests {
   func setScrollForwardActionWithClampOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementStateWithOffset,
-      afterState: SetItemAction.endStateWithOffset,
-      mode: .forward(30, .clamp)
+      afterState: SetItemAction.firstElementStateWithOffset,
+      mode: .forward(30, .clamp),
+      expectedDelta: .offset(30, wraps: false)
     )
   }
 
@@ -152,16 +165,27 @@ struct DivActionURLHandlerTests {
   func setScrollForwardActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.firstElementStateWithOffset,
-      afterState: SetItemAction.secondElementStateWithOffset,
-      mode: .forward(30, .ring)
+      afterState: SetItemAction.firstElementStateWithOffset,
+      mode: .forward(30, .ring),
+      expectedDelta: .offset(30, wraps: true)
     )
   }
 
   @Test
   func setScrollForwardActionWithEmptyState() {
-    setItemTestCases(
-      beforeStates: SetItemAction.emptyStatesWithOffset,
-      afterState: SetItemAction.emptyStatesWithOffset,
+    setItemTestCase(
+      beforeState: SetItemAction.zeroRangeState,
+      afterState: SetItemAction.zeroRangeState,
+      mode: .forward(30, .ring),
+      expectedDelta: .offset(30, wraps: true)
+    )
+  }
+
+  @Test
+  func setScrollForwardActionWithoutRange() {
+    setItemTestCase(
+      beforeState: SetItemAction.unknownRangeState,
+      afterState: SetItemAction.unknownRangeState,
       mode: .forward(30, .ring)
     )
   }
@@ -170,8 +194,9 @@ struct DivActionURLHandlerTests {
   func setScrollBackwardAction() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
-      afterState: SetItemAction.firstElementStateWithOffset,
-      mode: .backward(10, .clamp)
+      afterState: SetItemAction.secondElementStateWithOffset,
+      mode: .backward(10, .clamp),
+      expectedDelta: .offset(-10, wraps: false)
     )
   }
 
@@ -179,8 +204,9 @@ struct DivActionURLHandlerTests {
   func setScrollBackwardActionWithClampOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
-      afterState: SetItemAction.firstElementStateWithOffset,
-      mode: .backward(40, .clamp)
+      afterState: SetItemAction.secondElementStateWithOffset,
+      mode: .backward(40, .clamp),
+      expectedDelta: .offset(-40, wraps: false)
     )
   }
 
@@ -188,16 +214,27 @@ struct DivActionURLHandlerTests {
   func setScrollBackwardActionWithRingOverflow() {
     setItemTestCases(
       beforeStates: SetItemAction.secondElementStateWithOffset,
-      afterState: SetItemAction.firstElementStateWithOffset,
-      mode: .backward(30, .ring)
+      afterState: SetItemAction.secondElementStateWithOffset,
+      mode: .backward(30, .ring),
+      expectedDelta: .offset(-30, wraps: true)
     )
   }
 
   @Test
   func setScrollBackwardActionWithEmptyState() {
-    setItemTestCases(
-      beforeStates: SetItemAction.emptyStatesWithOffset,
-      afterState: SetItemAction.emptyStatesWithOffset,
+    setItemTestCase(
+      beforeState: SetItemAction.zeroRangeState,
+      afterState: SetItemAction.zeroRangeState,
+      mode: .backward(30, .ring),
+      expectedDelta: .offset(-30, wraps: true)
+    )
+  }
+
+  @Test
+  func setScrollBackwardActionWithoutRange() {
+    setItemTestCase(
+      beforeState: SetItemAction.unknownRangeState,
+      afterState: SetItemAction.unknownRangeState,
       mode: .backward(30, .ring)
     )
   }
@@ -267,17 +304,17 @@ struct DivActionURLHandlerTests {
 
   @Test
   func scrollAction_GalleryWithoutAnimation() {
-    let cases: [(SetItemAction.Mode, GalleryViewState.Position)] = [
-      (.current(2), .paging(index: 2)),
-      (.next(step: 1, overflow: .clamp), .paging(index: 2)),
-      (.previous(step: 1, overflow: .clamp), .paging(index: 0)),
-      (.forward(10, .clamp), .offset(20)),
-      (.backward(10, .clamp), .offset(0)),
-      (.position(5), .offset(5)),
-      (.start, .offset(0)),
-      (.end, .offset(20)),
+    let cases: [(SetItemAction.Mode, GalleryViewState.Position, ScrollDelta?)] = [
+      (.current(2), .paging(index: 2), nil),
+      (.next(step: 1, overflow: .clamp), .paging(index: 1), .items(1, wraps: false)),
+      (.previous(step: 1, overflow: .clamp), .paging(index: 1), .items(-1, wraps: false)),
+      (.forward(10, .clamp), .offset(10), .offset(10, wraps: false)),
+      (.backward(10, .clamp), .offset(10), .offset(-10, wraps: false)),
+      (.position(5), .offset(5), nil),
+      (.start, .offset(0), nil),
+      (.end, .offset(20), nil),
     ]
-    for (mode, position) in cases {
+    for (mode, position, delta) in cases {
       setItemTestCase(
         beforeState: GalleryViewState(
           contentPosition: .offset(10, firstVisibleItemIndex: 1),
@@ -294,26 +331,28 @@ struct DivActionURLHandlerTests {
           animated: false
         ),
         mode: mode,
-        animated: false
+        animated: false,
+        expectedDelta: delta
       )
     }
   }
 
   @Test
   func scrollAction_PagerWithoutAnimation() {
-    let cases: [(SetItemAction.Mode, Int)] = [
-      (.current(2), 2),
-      (.next(step: 1, overflow: .clamp), 2),
-      (.previous(step: 1, overflow: .clamp), 0),
-      (.start, 0),
-      (.end, 2),
+    let cases: [(SetItemAction.Mode, Int, ScrollDelta?)] = [
+      (.current(2), 2, nil),
+      (.next(step: 1, overflow: .clamp), 1, .items(1, wraps: false)),
+      (.previous(step: 1, overflow: .clamp), 1, .items(-1, wraps: false)),
+      (.start, 0, nil),
+      (.end, 2, nil),
     ]
-    for (mode, page) in cases {
+    for (mode, page, delta) in cases {
       setItemTestCase(
         beforeState: PagerViewState(numberOfPages: 3, currentPage: 1, animated: true),
         afterState: PagerViewState(numberOfPages: 3, currentPage: page, animated: false),
         mode: mode,
-        animated: false
+        animated: false,
+        expectedDelta: delta
       )
     }
   }
@@ -321,27 +360,44 @@ struct DivActionURLHandlerTests {
   private func setItemTestCases(
     beforeStates: [ElementState],
     afterState: [ElementState],
-    mode: SetItemAction.Mode
+    mode: SetItemAction.Mode,
+    expectedDelta: ScrollDelta? = nil
   ) {
     for states in zip(beforeStates, afterState) {
       switch states {
       case let (before as GalleryViewState, after as GalleryViewState):
-        setItemTestCase(beforeState: before, afterState: after, mode: mode)
+        setItemTestCase(
+          beforeState: before,
+          afterState: after,
+          mode: mode,
+          expectedDelta: expectedDelta
+        )
       case let (before as PagerViewState, after as PagerViewState):
-        setItemTestCase(beforeState: before, afterState: after, mode: mode)
+        setItemTestCase(
+          beforeState: before,
+          afterState: after,
+          mode: mode,
+          expectedDelta: expectedDelta
+        )
       case let (before as TabViewState, after as TabViewState):
-        setItemTestCase(beforeState: before, afterState: after, mode: mode)
+        setItemTestCase(
+          beforeState: before,
+          afterState: after,
+          mode: mode,
+          expectedDelta: expectedDelta
+        )
       case (_, _):
         Issue.record("Unsupported element state")
       }
     }
   }
 
-  private func setItemTestCase<State: ElementState & Equatable>(
+  private func setItemTestCase<State: ScrollStateForTesting>(
     beforeState: State,
     afterState: State,
     mode: SetItemAction.Mode,
-    animated: Bool? = nil
+    animated: Bool? = nil,
+    expectedDelta: ScrollDelta? = nil
   ) {
     blockStateStorage.setState(path: elementPath, state: beforeState)
     actionHandler.handle(
@@ -350,7 +406,28 @@ struct DivActionURLHandlerTests {
       source: .tap,
       sender: nil
     )
-    #expect(blockStateStorage.getState(elementPath) == afterState)
+    let result: State? = blockStateStorage.getState(elementPath)
+    #expect(result?.withoutScrollRequest == afterState.withoutScrollRequest)
+    expectScrollRequest(result, delta: expectedDelta)
+  }
+
+  private func expectScrollRequest(_ state: ElementState?, delta: ScrollDelta?) {
+    let request: (ScrollRequest?, ScrollDelta?)
+    switch state {
+    case let state as GalleryViewState:
+      request = (state.scrollRequest, state.scrollRequest?.delta)
+    case let state as PagerViewState:
+      request = (state.scrollRequest, state.scrollRequest?.delta)
+    case let state as TabViewState:
+      request = (state.scrollRequest, state.scrollRequest?.delta)
+    default:
+      Issue.record("Unsupported element state")
+      return
+    }
+    #expect(request.1 == delta)
+    if delta != nil {
+      #expect(request.0 != nil)
+    }
   }
 }
 
@@ -426,22 +503,17 @@ private enum SetItemAction {
     ),
   ]
 
-  static let emptyStatesWithOffset: [ElementState] = [
-    GalleryViewState(
-      contentPosition: .offset(0),
-      itemsCount: 0,
-      isScrolling: false,
-      scrollRange: 0,
-      animated: true
-    ),
-    GalleryViewState(
-      contentPosition: .offset(0),
-      itemsCount: 0,
-      isScrolling: false,
-      scrollRange: nil,
-      animated: true
-    ),
-  ]
+  static let zeroRangeState = GalleryViewState(
+    contentPosition: .offset(0), itemsCount: 0, isScrolling: false,
+    scrollRange: 0, animated: true
+  )
+
+  static let unknownRangeState = GalleryViewState(
+    contentPosition: .offset(0), itemsCount: 0, isScrolling: false,
+    scrollRange: nil, animated: true
+  )
+
+  static let emptyStatesWithOffset: [ElementState] = [zeroRangeState, unknownRangeState]
 
   static func makeURL(mode: Mode, animated: Bool? = nil) -> String {
     var url: String

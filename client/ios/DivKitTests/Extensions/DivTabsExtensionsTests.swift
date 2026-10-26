@@ -1,9 +1,40 @@
-import DivKit
+@testable import DivKit
 import DivKitTestsSupport
-import LayoutKit
+@testable import LayoutKit
 import XCTest
 
 final class DivTabsExtensionsTests: XCTestCase {
+  func test_RebuildBeforeViewCreation_PreservesRelativeScroll() throws {
+    let storage = DivBlockStateStorage()
+    let context = DivBlockModelingContext(blockStateStorage: storage)
+    let div = try XCTUnwrap(divTabs(items: [
+      divTabsItem(div: divText(text: "First"), title: "First"),
+      divTabsItem(div: divText(text: "Second"), title: "Second"),
+    ]).value as? DivTabs)
+    let request = ScrollRequest(duration: 2, delta: .items(1, wraps: false))
+    storage.setPendingState(.root + "tabs", state: TabViewState(
+      selectedPageIndex: 0, countOfPages: 2, animated: false, scrollRequest: request
+    ))
+    _ = try div.makeBlock(context: context)
+
+    let wrapper = try XCTUnwrap(div.makeBlock(context: context) as? WrapperBlock)
+    let tabs = try XCTUnwrap(wrapper.child as? TabsBlock)
+    let view = TabContentsView(scrollClock: TestScrollAnimationClock())
+    view.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+    view.configure(
+      model: tabs.model.contentsModel,
+      state: tabs.state,
+      observer: storage,
+      overscrollDelegate: nil,
+      renderingDelegate: nil
+    )
+    view.layoutIfNeeded()
+
+    XCTAssertEqual(view.selectedPageIndex, 1)
+    XCTAssertEqual(tabs.state.scrollRequest?.duration, 2)
+    XCTAssertFalse(tabs.state.animated)
+  }
+
   func test_WhenSwitchByContentTabsIsDisabled_ScrollingDisabledInContentsModel() throws {
     let block = try makeBlock(fromFile: "switch_by_content_swipe_disabled") as? WrapperBlock
     let tabsBlock = block?.child as? TabsBlock

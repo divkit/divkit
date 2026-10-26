@@ -3,6 +3,24 @@ import VGSL
 import XCTest
 
 final class GalleryBlockTests: XCTestCase {
+  func test_NewScrollRequestWithSamePosition_UpdatesBlock() throws {
+    let block = GalleryBlockTestModels.base
+    let request = ScrollRequest()
+    let state = GalleryViewState(
+      contentPosition: block.state.contentPosition,
+      itemsCount: block.state.itemsCount,
+      isScrolling: block.state.isScrolling,
+      scrollRange: block.state.scrollRange,
+      animated: block.state.animated,
+      scrollRequest: request
+    )
+
+    let updatedBlock = try block.updated(withStates: [GalleryBlockTestModels.path: state])
+
+    XCTAssertEqual(updatedBlock.state.scrollRequest, request)
+    XCTAssertNotEqual(updatedBlock, block)
+  }
+
   func test_WhenUpdatesState_UsesIt() throws {
     let state = GalleryViewState(contentOffset: 1, itemsCount: 2)
     let states = [GalleryBlockTestModels.path: state]

@@ -1,4 +1,5 @@
 import CoreGraphics
+import Foundation
 import VGSL
 
 public enum ScrollNavigationDirection: Equatable, Sendable {
@@ -18,6 +19,8 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
   public let numberOfPages: Int
   public let currentPage: CGFloat
   public let animated: Bool
+  /// Identity distinguishes commands with the same destination.
+  public let scrollRequest: ScrollRequest?
   public let isInfiniteScrollable: Bool
   public let isScrolling: Bool
   public let navigationDirection: ScrollNavigationDirection
@@ -26,6 +29,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     numberOfPages: Int,
     currentPage: Int,
     animated: Bool,
+    scrollRequest: ScrollRequest? = nil,
     isInfiniteScrollable: Bool = false,
     isScrolling: Bool = false,
     navigationDirection: ScrollNavigationDirection = .none
@@ -33,6 +37,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     self.numberOfPages = numberOfPages
     self.currentPage = CGFloat(currentPage)
     self.animated = animated
+    self.scrollRequest = scrollRequest
     self.isInfiniteScrollable = isInfiniteScrollable
     self.isScrolling = isScrolling
     self.navigationDirection = navigationDirection
@@ -43,6 +48,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     self.numberOfPages = numberOfPages
     self.currentPage = floatCurrentPage
     self.animated = true
+    self.scrollRequest = nil
     self.isInfiniteScrollable = false
     self.isScrolling = false
     self.navigationDirection = .none
@@ -53,6 +59,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     numberOfPages: Int,
     currentPageValue: CGFloat,
     animated: Bool,
+    scrollRequest: ScrollRequest? = nil,
     isInfiniteScrollable: Bool,
     isScrolling: Bool,
     navigationDirection: ScrollNavigationDirection
@@ -60,6 +67,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     self.numberOfPages = numberOfPages
     self.currentPage = currentPageValue
     self.animated = animated
+    self.scrollRequest = scrollRequest
     self.isInfiniteScrollable = isInfiniteScrollable
     self.isScrolling = isScrolling
     self.navigationDirection = navigationDirection
@@ -69,6 +77,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
     lhs.numberOfPages == rhs.numberOfPages
       && lhs.currentPage == rhs.currentPage
       && lhs.animated == rhs.animated
+      && lhs.scrollRequest == rhs.scrollRequest
       && lhs.isInfiniteScrollable == rhs.isInfiniteScrollable
       && lhs.isScrolling == rhs.isScrolling
   }
@@ -78,6 +87,7 @@ public struct PagerViewState: ElementState, Equatable, Sendable {
       numberOfPages: numberOfPages,
       currentPageValue: currentPage,
       animated: animated,
+      scrollRequest: scrollRequest,
       isInfiniteScrollable: isInfiniteScrollable,
       isScrolling: isScrolling,
       navigationDirection: direction
@@ -101,6 +111,7 @@ extension PagerViewState {
       numberOfPages: pageCount,
       currentPageValue: currentPageValue,
       animated: animated,
+      scrollRequest: scrollRequest,
       isInfiniteScrollable: isInfiniteScrollable,
       isScrolling: isScrolling,
       navigationDirection: navigationDirection

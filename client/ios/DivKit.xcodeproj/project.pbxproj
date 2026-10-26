@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D10616210000000000000001 /* ScrollActionScopeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10616210000000000000002 /* ScrollActionScopeTests.swift */; };
+		D10616220000000000000001 /* ScrollActionTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10616220000000000000002 /* ScrollActionTestSupport.swift */; };
 		D97639000000000000000002 /* TestImageHolderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97639000000000000000001 /* TestImageHolderFactory.swift */; };
 		D97639000000000000000003 /* TestImageHolderFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97639000000000000000001 /* TestImageHolderFactory.swift */; };
 		D97639000000000000000004 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C035199288EC5AB0016A747 /* Images.xcassets */; };
@@ -184,6 +186,7 @@
 		8C7EE1D628B7786E008A48E6 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */; };
 		8C80DB312D22C64F0029C683 /* DivTooltipExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */; };
 		8C84C2232D0870F400A574AC /* ScrollActionHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */; };
+		D10616000000000000000002 /* ScrollActionDurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10616000000000000000001 /* ScrollActionDurationTests.swift */; };
 		8C90A2122B975B9000BB8CFD /* FunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C90A2112B975B9000BB8CFD /* FunctionTests.swift */; };
 		8C9D63672E79BE0900403E3C /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C9D63662E79BE0900403E3C /* XCTest.framework */; platformFilter = ios; };
 		8CA1B7A62B289BA3003734C2 /* ExpressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CA1B7A52B289BA3003734C2 /* ExpressionTests.swift */; };
@@ -361,6 +364,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D10616210000000000000002 /* ScrollActionScopeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollActionScopeTests.swift; sourceTree = "<group>"; };
+		D10616220000000000000002 /* ScrollActionTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollActionTestSupport.swift; sourceTree = "<group>"; };
 		D97639000000000000000001 /* TestImageHolderFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestImageHolderFactory.swift; sourceTree = "<group>"; };
 		D97635000000000000000001 /* UITestConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestConnection.swift; sourceTree = "<group>"; };
 		08E1F5D4108D483EB1229C83 /* IdToPathTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdToPathTests.swift; sourceTree = "<group>"; };
@@ -526,6 +531,7 @@
 		8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
 		8C80DB302D22C6470029C683 /* DivTooltipExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTooltipExtensionsTests.swift; sourceTree = "<group>"; };
 		8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollActionHandlerTests.swift; sourceTree = "<group>"; };
+		D10616000000000000000001 /* ScrollActionDurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollActionDurationTests.swift; sourceTree = "<group>"; };
 		8C87CF1B28AD059600D262E1 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		8C87CF1D28AD05BC00D262E1 /* Default.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Default.xcconfig; sourceTree = "<group>"; };
@@ -908,6 +914,9 @@
 				431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */,
 				8CF91B032D0AE4ED0082FDC1 /* MockDivActionHandler.swift */,
 				8C84C2222D0870F400A574AC /* ScrollActionHandlerTests.swift */,
+				D10616210000000000000002 /* ScrollActionScopeTests.swift */,
+				D10616220000000000000002 /* ScrollActionTestSupport.swift */,
+				D10616000000000000000001 /* ScrollActionDurationTests.swift */,
 				7A11B2C3D4E5F60718293A4B /* SetStateActionHandlerTests.swift */,
 				8D9283362F9A3F83001CD269 /* SetCursorPositionActionHandlerTests.swift */,
 				8C06622F2D09A42800B30CE3 /* SetStoredValueActionHandlerTests.swift */,
@@ -1969,6 +1978,9 @@
 				8C7B1BF62865C01C0036EF4C /* DivTextExtensionsTests.swift in Sources */,
 				9D5AE8362DFC680500D58B81 /* FilesProvider.swift in Sources */,
 				8C84C2232D0870F400A574AC /* ScrollActionHandlerTests.swift in Sources */,
+				D10616210000000000000001 /* ScrollActionScopeTests.swift in Sources */,
+				D10616220000000000000001 /* ScrollActionTestSupport.swift in Sources */,
+				D10616000000000000000002 /* ScrollActionDurationTests.swift in Sources */,
 				8C23F41B29DDB3810069F3F7 /* EntityWithArrayWithTransform.swift in Sources */,
 				8C23F42929DDB3810069F3F7 /* EntityWithPropertyWithDefaultValue.swift in Sources */,
 				8C23F44229DDB3810069F3F7 /* OptionalComplexPropertyTests.swift in Sources */,

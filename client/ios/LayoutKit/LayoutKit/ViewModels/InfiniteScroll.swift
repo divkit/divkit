@@ -58,11 +58,13 @@ struct InfiniteScroll {
     direction: ScrollNavigationDirection = .none,
     updateToPosition: (CGFloat) -> Void
   ) -> GalleryViewState.Position? {
-    guard let oldStatePageIndex = oldPosition?.pageIndex?.rounded(),
+    guard let oldPageIndex = oldPosition?.pageIndex,
           let newStatePageIndex = newPosition.pageIndex?.rounded() else {
       return nil
     }
 
+    let oldStatePageIndex = oldPageIndex.rounded()
+    let fractionalOffset = oldPageIndex - oldStatePageIndex
     let firstRealPageIndex = CGFloat(bufferSize)
     let lastRealPageIndex = CGFloat(origins.count - bufferSize) - 1
     let bufferedCopyOfFirstRealPageIndex = lastRealPageIndex + 1
@@ -71,21 +73,21 @@ struct InfiniteScroll {
     switch direction {
     case .forward:
       if newStatePageIndex <= oldStatePageIndex {
-        updateToPosition(bufferedCopyOfLastRealPageIndex)
+        updateToPosition(bufferedCopyOfLastRealPageIndex + fractionalOffset)
       }
       return newPosition
     case .backward:
       if newStatePageIndex >= oldStatePageIndex {
-        updateToPosition(bufferedCopyOfFirstRealPageIndex)
+        updateToPosition(bufferedCopyOfFirstRealPageIndex + fractionalOffset)
       }
       return newPosition
     case .none:
       switch (oldStatePageIndex, newStatePageIndex) {
       case (lastRealPageIndex, firstRealPageIndex):
-        updateToPosition(bufferedCopyOfLastRealPageIndex)
+        updateToPosition(bufferedCopyOfLastRealPageIndex + fractionalOffset)
         return newPosition
       case (firstRealPageIndex, lastRealPageIndex):
-        updateToPosition(bufferedCopyOfFirstRealPageIndex)
+        updateToPosition(bufferedCopyOfFirstRealPageIndex + fractionalOffset)
         return newPosition
       default:
         return newPosition

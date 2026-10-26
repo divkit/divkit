@@ -5227,7 +5227,8 @@
     {
       "title": "Typed scroll action duration",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ],
       "tags": [
         "TypedActions",
@@ -5235,18 +5236,19 @@
         "Duration",
         "Animations",
         "DivGallery",
-        "DivPager"
+        "DivPager",
+        "DivTabs"
       ],
       "priority": "normal",
       "steps": [
-        "Open the test. In each mode (Gallery, Vertical and Pager), tap Last and First with the default 2с duration.",
-        "Select 0.5с, then tap Last and First in each mode.",
-        "Select 2с again, then tap Last and First in each mode."
+        "Open the test. In each mode (Gallery, Vertical, Pager and Tabs on iOS), tap Last and First with the default 2s duration.",
+        "Select 0.5s, then tap Last and First in each mode.",
+        "Select 2s again, then tap Last and First in each mode."
       ],
       "expected_results": [
-        "The 2с button is selected by default below First and Last. Each transition lasts about two seconds.",
-        "The 0.5с button is highlighted. Each transition lasts about half a second. The selected duration is preserved when switching modes.",
-        "The 2с button is highlighted again. Each transition lasts about two seconds without reloading the test."
+        "The 2s button is selected by default below First and Last. Each transition lasts about two seconds. Scrolling finishes on the selected first or last item. Pager indicator and tabs titles follow the content.",
+        "The 0.5s button is highlighted. Each transition lasts about half a second. The selected duration is preserved when switching modes.",
+        "The 2s button is highlighted again. Each transition lasts about two seconds without reloading the test."
       ],
       "file": "scroll/scroll-duration.json"
     },

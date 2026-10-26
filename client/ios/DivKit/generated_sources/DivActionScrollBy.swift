@@ -13,6 +13,7 @@ public final class DivActionScrollBy: Sendable {
 
   public static let type: String = "scroll_by"
   public let animated: Expression<Bool> // default value: true
+  public let duration: Expression<Int>? // constraint: number >= 0
   public let id: Expression<String>
   public let itemCount: Expression<Int> // default value: 0
   public let offset: Expression<Int> // default value: 0
@@ -20,6 +21,10 @@ public final class DivActionScrollBy: Sendable {
 
   public func resolveAnimated(_ resolver: ExpressionResolver) -> Bool {
     resolver.resolveNumeric(animated) ?? true
+  }
+
+  public func resolveDuration(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumeric(duration)
   }
 
   public func resolveId(_ resolver: ExpressionResolver) -> String? {
@@ -38,9 +43,13 @@ public final class DivActionScrollBy: Sendable {
     resolver.resolveEnum(overflow) ?? Overflow.clamp
   }
 
+  static let durationValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 >= 0 })
+
   public convenience init(dictionary: [String: Any], context: ParsingContext) throws {
     self.init(
       animated: try dictionary.getOptionalExpressionField("animated", context: context),
+      duration: try dictionary.getOptionalExpressionField("duration", validator: Self.durationValidator, context: context),
       id: try dictionary.getExpressionField("id", context: context),
       itemCount: try dictionary.getOptionalExpressionField("item_count", context: context),
       offset: try dictionary.getOptionalExpressionField("offset", context: context),
@@ -50,12 +59,14 @@ public final class DivActionScrollBy: Sendable {
 
   init(
     animated: Expression<Bool>? = nil,
+    duration: Expression<Int>? = nil,
     id: Expression<String>,
     itemCount: Expression<Int>? = nil,
     offset: Expression<Int>? = nil,
     overflow: Expression<Overflow>? = nil
   ) {
     self.animated = animated ?? .value(true)
+    self.duration = duration
     self.id = id
     self.itemCount = itemCount ?? .value(0)
     self.offset = offset ?? .value(0)
@@ -68,12 +79,13 @@ extension DivActionScrollBy: Equatable {
   public static func ==(lhs: DivActionScrollBy, rhs: DivActionScrollBy) -> Bool {
     guard
       lhs.animated == rhs.animated,
-      lhs.id == rhs.id,
-      lhs.itemCount == rhs.itemCount
+      lhs.duration == rhs.duration,
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.itemCount == rhs.itemCount,
       lhs.offset == rhs.offset,
       lhs.overflow == rhs.overflow
     else {
@@ -90,6 +102,7 @@ extension DivActionScrollBy: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
     result["animated"] = animated.toValidSerializationValue()
+    result["duration"] = duration?.toValidSerializationValue()
     result["id"] = id.toValidSerializationValue()
     result["item_count"] = itemCount.toValidSerializationValue()
     result["offset"] = offset.toValidSerializationValue()

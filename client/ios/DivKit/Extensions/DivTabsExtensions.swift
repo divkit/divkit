@@ -101,17 +101,16 @@ extension DivTabs: DivBlockModeling {
     let stateStorage = context.blockStateStorage
     let path = context.path
 
-    let index: CGFloat = if let pending = stateStorage
-      .takePendingState(path) as? TabViewState {
-      pending.selectedPageIndex
-    } else if let state: TabViewState = stateStorage.getState(path) {
-      state.selectedPageIndex
-    } else {
-      CGFloat(resolveSelectedTab(context.expressionResolver))
-    }
+    let pending = stateStorage.takePendingState(path) as? TabViewState
+    let stored: TabViewState? = stateStorage.getState(path)
+    let sourceState = pending ?? stored
+    let index = sourceState?.selectedPageIndex
+      ?? CGFloat(resolveSelectedTab(context.expressionResolver))
     let newState = TabViewState(
       selectedPageIndex: min(index, CGFloat(tabs.count) - 1),
-      countOfPages: tabs.count
+      countOfPages: tabs.count,
+      animated: sourceState?.animated ?? true,
+      scrollRequest: sourceState?.scrollRequest
     )
     stateStorage.setState(path: path, state: newState)
     return newState

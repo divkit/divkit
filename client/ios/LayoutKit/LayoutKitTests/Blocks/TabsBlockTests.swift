@@ -3,6 +3,21 @@ import VGSL
 import XCTest
 
 final class TabsBlockTests: XCTestCase {
+  func test_NewScrollRequestWithSamePosition_UpdatesBlock() throws {
+    let block = TabsBlockTestModels.base
+    let request = ScrollRequest()
+    let state = TabViewState(
+      selectedPageIndex: block.state.selectedPageIndex,
+      countOfPages: block.state.countOfPages,
+      scrollRequest: request
+    )
+
+    let updatedBlock = try block.updated(withStates: [TabsBlockTestModels.path: state])
+
+    XCTAssertEqual(updatedBlock.state.scrollRequest, request)
+    XCTAssertNotEqual(updatedBlock, block)
+  }
+
   func test_WhenUpdatesState_UsesIt() throws {
     let state = TabViewState(selectedPageIndex: 1, countOfPages: 1)
     let states = [TabsBlockTestModels.path: state]

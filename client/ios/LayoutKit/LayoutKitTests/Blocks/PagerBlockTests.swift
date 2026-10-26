@@ -3,6 +3,22 @@ import VGSL
 import XCTest
 
 final class PagerBlockTests: XCTestCase {
+  func test_NewScrollRequestWithSamePosition_UpdatesBlock() throws {
+    let block = makePagerBlock(currentPage: 0)
+    let request = ScrollRequest()
+    let state = PagerViewState(
+      numberOfPages: block.state.numberOfPages,
+      currentPage: 0,
+      animated: block.state.animated,
+      scrollRequest: request
+    )
+
+    let updatedBlock = try block.updated(withStates: [block.gallery.path: state])
+
+    XCTAssertEqual(updatedBlock.state.scrollRequest, request)
+    XCTAssertNotEqual(updatedBlock, block)
+  }
+
   func test_WhenFixedHeight_IntrinsicContentHeightReturnsFixedHeight() {
     let block = makePagerBlock(heightTrait: .fixed(111))
 

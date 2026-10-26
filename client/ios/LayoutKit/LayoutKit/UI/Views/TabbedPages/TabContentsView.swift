@@ -71,6 +71,15 @@ final class TabContentsView: BlockView {
   private let dataSource = GenericCollectionViewDataSource()
   private let collectionViewLayout = GenericCollectionViewLayout()
 
+  private var appliedScrollRequest: ScrollRequest?
+  private var hasDeferredScrollRequest = false
+  private var scrollTargetPageIndex: CGFloat?
+  private let scrollClock: ScrollAnimationClock
+  private lazy var scrollAnimator = ScrollOffsetAnimator(
+    scrollView: collectionView,
+    clock: scrollClock
+  )
+
   private var scrolledPageIndex: CGFloat = 0
 
   private var isAnimatingTransition = false
@@ -91,7 +100,8 @@ final class TabContentsView: BlockView {
     CGPoint(x: collectionView.bounds.width * selectedPageIndex, y: 0)
   }
 
-  init() {
+  init(scrollClock: ScrollAnimationClock = DisplayLinkScrollAnimationClock()) {
+    self.scrollClock = scrollClock
     collectionView = VisibleBoundsTrackingCollectionView(
       frame: .zero,
       collectionViewLayout: collectionViewLayout
@@ -119,25 +129,29 @@ final class TabContentsView: BlockView {
     super.layoutSubviews()
 
     if collectionView.frame != bounds {
+      if collectionView.bounds.width != bounds.width, scrollAnimator.isRunning {
+        scrollAnimator.cancel()
+        isAnimatingTransition = false
+        updateSelectedPageIndexFromRelativeContentOffset(isIntermediate: false)
+        delegate?.tabContentsViewDidEndAnimation()
+      }
+      let offset = collectionView.contentOffset
       collectionView.frame = bounds
-      collectionView.contentOffset = selectedPageContentOffset
+      collectionView.contentOffset = scrollAnimator.isRunning ? offset : selectedPageContentOffset
     }
-
     let newLayout = TabContentsViewLayout(
       pages: model.pages.map(\.block),
       footer: model.footer,
       size: collectionView.bounds.size,
       pagesInsets: model.contentInsets.horizontal
     )
-    guard newLayout != layout else {
-      return
+    if newLayout != layout {
+      layout = newLayout
+      collectionView.setNeedsLayout()
+      footerView?.frame = layout.footerFrame
+      backgroundView?.frame = bounds
     }
-
-    layout = newLayout
-    collectionView.setNeedsLayout()
-
-    footerView?.frame = layout.footerFrame
-    backgroundView?.frame = bounds
+    completeDeferredScrollRequest()
   }
 
   func configure(
@@ -150,6 +164,15 @@ final class TabContentsView: BlockView {
     let oldModel: TabContentsViewModel! = self.model
     let oldObserver = self.observer
 
+    let isScrollContextChanged = oldModel != nil && (
+      oldModel.path != model.path || oldModel.layoutDirection != model.layoutDirection
+    )
+    let interruptedTarget = isScrollContextChanged && oldModel.path == model.path
+      && scrollAnimator.isRunning ? scrollTargetPageIndex : nil
+    if isScrollContextChanged {
+      scrollAnimator.cancel()
+      isAnimatingTransition = false
+    }
     self.model = model
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
@@ -161,51 +184,17 @@ final class TabContentsView: BlockView {
     }
 
     if oldModel == nil || oldModel.pages !== model.pages || oldObserver !== observer {
-      let cellModels = model.pages.map(\.block)
-      cellRegistrator.register(blocks: cellModels, in: collectionView)
-      dataSource.models = [cellModels]
-
-      if let backgroundView,
-         let background = model.background,
-         background.canConfigureBlockView(backgroundView) {
-        background.configureBlockViewWithReporting(
-          backgroundView,
-          observer: observer,
-          overscrollDelegate: overscrollDelegate,
-          renderingDelegate: renderingDelegate
-        )
-      } else {
-        backgroundView = model.background?.makeBlockView(
-          observer: observer,
-          overscrollDelegate: overscrollDelegate,
-          renderingDelegate: renderingDelegate
-        )
-      }
-
-      footerView = model.footer
-        .flatMap { view in
-          view.makeBlockView(
-            observer: observer,
-            overscrollDelegate: overscrollDelegate,
-            renderingDelegate: renderingDelegate
-          )
-        }
-      layout = nil
-      if oldModel?.pages.count == model.pages.count {
-        configureVisibleCells(cellModels)
-      } else {
-        collectionView.reloadData()
-      }
+      configureContents(model: model, oldModel: oldModel)
     }
 
     collectionView.isScrollEnabled = model.scrollingEnabled
 
-    if oldModel != model || layout == nil || state.selectedPageIndex != selectedPageIndex {
-      if !isAnimatingTransition {
-        updateSelectedPageIndexIfNeeded(state.selectedPageIndex)
-      }
-      setNeedsLayout()
-    }
+    retargetScrollIfNeeded()
+    applyState(
+      state, modelChanged: oldModel != model, scrollContextChanged: isScrollContextChanged,
+      useStoredPosition: oldModel?.path != model.path || collectionView.bounds.width == 0,
+      interruptedTarget: interruptedTarget
+    )
   }
 
   func updateRelativeOffset(_ offset: CGFloat) {
@@ -213,14 +202,131 @@ final class TabContentsView: BlockView {
     updateSelectedPageIndexIfNeeded(relativeContentOffset)
   }
 
-  func updateSelectedPageIndexIfNeeded(_ idx: CGFloat) {
-    guard selectedPageIndex.isApproximatelyNotEqualTo(idx) else {
+  func updateSelectedPageIndexIfNeeded(
+    _ idx: CGFloat,
+    animated: Bool = true,
+    scrollDuration: TimeInterval? = nil,
+    isNewScrollRequest: Bool = false
+  ) {
+    guard selectedPageIndex.isApproximatelyNotEqualTo(idx) || isNewScrollRequest else {
       delegate?.tabContentsViewDidEndAnimation()
       return
     }
 
     selectedPageIndex = idx
-    updateContentOffset()
+    updateContentOffset(animated: animated, scrollDuration: scrollDuration)
+  }
+
+  private func completeDeferredScrollRequest() {
+    guard hasDeferredScrollRequest, collectionView.bounds.width > 0 else {
+      return
+    }
+    hasDeferredScrollRequest = false
+    appliedScrollRequest?.markApplied()
+    updateSelectedPageIndexFromRelativeContentOffset(isIntermediate: false)
+  }
+
+  private func configureContents(model: TabContentsViewModel, oldModel: TabContentsViewModel?) {
+    let cellModels = model.pages.map(\.block)
+    cellRegistrator.register(blocks: cellModels, in: collectionView)
+    dataSource.models = [cellModels]
+
+    if let backgroundView,
+       let background = model.background,
+       background.canConfigureBlockView(backgroundView) {
+      background.configureBlockViewWithReporting(
+        backgroundView,
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate
+      )
+    } else {
+      backgroundView = model.background?.makeBlockView(
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate
+      )
+    }
+
+    footerView = model.footer
+      .flatMap { view in
+        view.makeBlockView(
+          observer: observer,
+          overscrollDelegate: overscrollDelegate,
+          renderingDelegate: renderingDelegate
+        )
+      }
+    if oldModel?.pages.count == model.pages.count {
+      configureVisibleCells(cellModels)
+    } else {
+      layout = nil
+      collectionView.reloadData()
+    }
+  }
+
+  private func retargetScrollIfNeeded() {
+    if scrollAnimator.isRunning, let scrollTargetPageIndex {
+      let target = min(scrollTargetPageIndex, CGFloat(model.pages.count - 1))
+      self.scrollTargetPageIndex = target
+      scrollAnimator.retarget(to: CGPoint(x: collectionView.bounds.width * target, y: 0))
+    }
+  }
+
+  private func applyState(
+    _ state: TabViewState,
+    modelChanged: Bool,
+    scrollContextChanged: Bool,
+    useStoredPosition: Bool,
+    interruptedTarget: CGFloat?
+  ) {
+    let isNewScrollRequest = state.scrollRequest != nil
+      && state.scrollRequest != appliedScrollRequest
+    if isNewScrollRequest {
+      appliedScrollRequest = state.scrollRequest
+      hasDeferredScrollRequest = collectionView.bounds.width == 0
+      if !hasDeferredScrollRequest {
+        state.scrollRequest?.markApplied()
+      }
+    }
+    if let interruptedTarget, !isNewScrollRequest {
+      updateSelectedPageIndexIfNeeded(
+        min(interruptedTarget, CGFloat(model.pages.count - 1)),
+        animated: false, isNewScrollRequest: true
+      )
+      setNeedsLayout()
+      return
+    }
+    if modelChanged || layout == nil || state
+      .selectedPageIndex != selectedPageIndex || isNewScrollRequest {
+      let isAppliedRelativeRequest = state.scrollRequest?.delta != nil && !isNewScrollRequest
+      if isNewScrollRequest || (!isAnimatingTransition && !isAppliedRelativeRequest) {
+        updateSelectedPageIndexIfNeeded(
+          requestedPageIndex(
+            for: state,
+            isNewRequest: isNewScrollRequest,
+            useStoredPosition: useStoredPosition
+          ),
+          animated: state.animated && !scrollContextChanged,
+          scrollDuration: state.scrollRequest?.duration,
+          isNewScrollRequest: isNewScrollRequest || scrollContextChanged
+        )
+      }
+      setNeedsLayout()
+    }
+  }
+
+  private func requestedPageIndex(
+    for state: TabViewState,
+    isNewRequest: Bool,
+    useStoredPosition: Bool
+  ) -> CGFloat {
+    guard isNewRequest, let request = state.scrollRequest, !request.destinations.isEmpty else {
+      return state.selectedPageIndex
+    }
+    return request.destinationIndex(
+      from: useStoredPosition ? state.selectedPageIndex : relativeContentOffset,
+      count: model.pages.count
+    )
   }
 
   private func configureVisibleCells(_ blocks: [Block]) {
@@ -235,9 +341,22 @@ final class TabContentsView: BlockView {
     }
   }
 
-  private func updateContentOffset() {
+  private func updateContentOffset(animated: Bool, scrollDuration: TimeInterval?) {
+    guard collectionView.bounds.width > 0 else {
+      return
+    }
     isAnimatingTransition = true
-    collectionView.setContentOffset(selectedPageContentOffset, animated: true)
+    scrollTargetPageIndex = selectedPageIndex
+    scrollAnimator.scroll(
+      to: selectedPageContentOffset,
+      animated: animated,
+      duration: scrollDuration
+    ) { [weak self] in
+      guard let self else {
+        return
+      }
+      scrollViewDidEndScrollingAnimation(collectionView)
+    }
   }
 
   private func updateSelectedPageIndexFromRelativeContentOffset(
@@ -254,7 +373,10 @@ final class TabContentsView: BlockView {
 
     self.selectedPageIndex = index
     updatesDelegate?.onSelectedPageIndexChanged(index, inModel: model)
-    let state = TabViewState(selectedPageIndex: index, countOfPages: countOfPages)
+    let state = TabViewState(
+      selectedPageIndex: index,
+      countOfPages: countOfPages
+    )
     observer?.elementStateChanged(state, forPath: model.path)
   }
 }
@@ -277,6 +399,7 @@ extension TabContentsView: UICollectionViewDelegate {
   func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     overscrollDelegate?.onDidEndScrollingAnimation(scrollView)
     isAnimatingTransition = false
+    scrollTargetPageIndex = nil
     delegate?.tabContentsViewDidEndAnimation()
     updateSelectedPageIndexFromRelativeContentOffset(isIntermediate: false)
   }
@@ -297,6 +420,8 @@ extension TabContentsView: UICollectionViewDelegate {
   }
 
   func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    scrollAnimator.cancel()
+    isAnimatingTransition = false
     scrolledPageIndex = selectedPageIndex
     overscrollDelegate?.onWillBeginDragging(scrollView)
   }
@@ -326,7 +451,10 @@ extension TabContentsView: UICollectionViewDelegate {
       collectionView.contentOffset.x = collectionView.bounds.width * newValue
     }
     get {
-      collectionView.contentOffset.x / collectionView.bounds.width
+      guard collectionView.bounds.width > 0 else {
+        return selectedPageIndex
+      }
+      return collectionView.contentOffset.x / collectionView.bounds.width
     }
   }
 

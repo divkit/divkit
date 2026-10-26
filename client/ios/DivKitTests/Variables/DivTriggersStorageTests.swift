@@ -1,6 +1,7 @@
 @testable @_spi(Internal) import DivKit
 import DivKitTestsSupport
-import LayoutKit
+@testable import LayoutKit
+import UIKit
 import XCTest
 
 final class DivTriggerTests: XCTestCase {
@@ -446,6 +447,76 @@ final class DivTriggerTests: XCTestCase {
     variablesStorage.update(path: pathState2, name: "should_trigger", value: .bool(true))
 
     XCTAssertEqual(triggersCount, 0)
+  }
+
+  func test_DeferredTabsScroll_ActivatesOnlyDestinationTabTrigger() throws {
+    let tabsPath = UIElementPath("card_id") + "tabs_id"
+    registerTabTrigger(at: tabsPath + "0", url: "https://example.com/initial")
+    registerTabTrigger(at: tabsPath + "1", url: "https://example.com/destination")
+    blockStateStorage.setState(
+      path: tabsPath, state: TabViewState(selectedPageIndex: 0, countOfPages: 5)
+    )
+    let (view, model) = try makeScrollTestTabs(
+      path: tabsPath, clock: TestScrollAnimationClock(), observer: blockStateStorage, frame: .zero
+    )
+    view.configure(
+      model: model,
+      state: TabViewState(
+        selectedPageIndex: 0, countOfPages: 5, animated: false,
+        scrollRequest: ScrollRequest(delta: .items(1, wraps: false))
+      ),
+      observer: blockStateStorage, overscrollDelegate: nil, renderingDelegate: nil
+    )
+    view.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+    view.layoutIfNeeded()
+
+    variablesStorage.update(path: tabsPath + "0", name: "should_trigger", value: .bool(true))
+    variablesStorage.update(path: tabsPath + "1", name: "should_trigger", value: .bool(true))
+
+    XCTAssertEqual(firedUrls, ["https://example.com/destination"])
+  }
+
+  private func registerTabTrigger(at path: UIElementPath, url: String) {
+    variablesStorage.initializeIfNeeded(path: path, variables: ["should_trigger": .bool(false)])
+    triggerStorage.setIfNeeded(path: path, triggers: [DivTrigger(
+      actions: [DivAction(logId: .value("tab_trigger"), url: .value(URL(string: url)!))],
+      condition: expression("@{should_trigger}"), mode: .value(.onCondition)
+    )], viewId: hostViewId)
+  }
+
+  func test_TimedTabsScroll_DoesNotActivateIntermediateTabTrigger() throws {
+    let tabsPath = UIElementPath("card_id") + "tabs_id"
+    let tabPath = tabsPath + "1"
+    variablesStorage.initializeIfNeeded(path: tabPath, variables: ["should_trigger": .bool(false)])
+    triggerStorage.setIfNeeded(path: tabPath, triggers: [DivTrigger(
+      actions: [action], condition: expression("@{should_trigger}"), mode: .value(.onCondition)
+    )], viewId: hostViewId)
+    blockStateStorage.setState(
+      path: tabsPath,
+      state: TabViewState(selectedPageIndex: 0, countOfPages: 5)
+    )
+    variablesStorage.update(path: tabPath, name: "should_trigger", value: .bool(true))
+    let clock = TestScrollAnimationClock()
+    let (view, model) = try makeScrollTestTabs(
+      path: tabsPath, clock: clock, observer: blockStateStorage
+    )
+
+    view.configure(
+      model: model,
+      state: TabViewState(
+        selectedPageIndex: 4, countOfPages: 5, scrollRequest: ScrollRequest(duration: 2)
+      ),
+      observer: blockStateStorage,
+      overscrollDelegate: nil,
+      renderingDelegate: nil
+    )
+    clock.advance(to: 0.75)
+    clock.advance(to: 1.25)
+    clock.advance(to: 2)
+
+    XCTAssertEqual(triggersCount, 0)
+    let state: TabViewState? = blockStateStorage.getState(tabsPath)
+    XCTAssertEqual(state?.selectedPageIndex, 4)
   }
 
   func test_DoesLocalTrigger_WhenTabIsActive() throws {

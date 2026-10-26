@@ -38,6 +38,7 @@ private final class PagerView: BlockView {
   private var model: GalleryViewModel!
   private var selectedActions: [[UserInterfaceAction]]!
   private var lastState: (UIElementPath, PagerViewState)?
+  private var pendingScrollRequest: ScrollRequest?
   private weak var observer: ElementStateObserver?
   private weak var overscrollDelegate: ScrollDelegate?
 
@@ -70,6 +71,10 @@ private final class PagerView: BlockView {
   ) {
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
+    let isNewModel = model != self.model
+    self.model = model
+    self.selectedActions = selectedActions
+    pendingScrollRequest = state.scrollRequest
 
     let galleryState = makeGalleryViewState(oldState: galleryView.state, model: model, state: state)
     let layoutFactory: GalleryView.LayoutFactory = { model, boundsSize in
@@ -90,11 +95,7 @@ private final class PagerView: BlockView {
       navigationDirection: state.navigationDirection
     )
 
-    let isNewModel = model != self.model
-    self.model = model
-    self.selectedActions = selectedActions
-
-    if isNewModel {
+    if isNewModel, state.scrollRequest == nil {
       onMainThreadAsync {
         self.setState(
           path: model.path,
@@ -110,9 +111,11 @@ private final class PagerView: BlockView {
     state: PagerViewState,
     selectedActions: [[UserInterfaceAction]]
   ) {
-    if lastState?.0 != path || lastState?.1 != state {
+    let isRequestConsumed = pendingScrollRequest != nil && state.scrollRequest == nil
+    if lastState?.0 != path || lastState?.1 != state || isRequestConsumed {
       let previousState = lastState
       lastState = (path, state)
+      pendingScrollRequest = state.scrollRequest
 
       observer?.elementStateChanged(state, forPath: path)
 
@@ -138,7 +141,6 @@ extension PagerViewState {
   fileprivate func isSamePageState(as other: PagerViewState) -> Bool {
     numberOfPages == other.numberOfPages &&
       currentPage == other.currentPage &&
-      animated == other.animated &&
       isInfiniteScrollable == other.isInfiniteScrollable
   }
 }
@@ -186,7 +188,8 @@ private func makeGalleryViewState(
   state: PagerViewState
 ) -> GalleryViewState {
   let pagerPosition = state.currentPage + CGFloat(model.infiniteCorrection)
-  let position: GalleryViewState.Position = if let oldState, oldState.isScrolling {
+  let position: GalleryViewState.Position = if let oldState, oldState.isScrolling,
+                                               state.isScrolling {
     oldState.contentPosition
   } else {
     .paging(index: CGFloat(pagerPosition))
@@ -195,9 +198,10 @@ private func makeGalleryViewState(
   return GalleryViewState(
     contentPosition: position,
     itemsCount: model.items.count,
-    isScrolling: oldState?.isScrolling ?? state.isScrolling,
+    isScrolling: state.isScrolling,
     scrollRange: oldState?.scrollRange,
-    animated: state.animated
+    animated: state.animated,
+    scrollRequest: state.scrollRequest
   ).resetToModelIfInconsistent(model)
 }
 #endif
