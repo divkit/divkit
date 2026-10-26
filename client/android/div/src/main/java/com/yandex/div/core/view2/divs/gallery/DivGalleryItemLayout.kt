@@ -52,29 +52,7 @@ internal class DivGalleryItemLayout(
             setMeasuredDimension(0, 0)
         } else {
             super.onMeasure(widthSpec, heightSpec)
-            requestGalleryRemeasureIfNeeded(recyclerView, isHorizontal)
         }
-    }
-
-    private fun requestGalleryRemeasureIfNeeded(recyclerView: DivRecyclerView, isHorizontal: Boolean) {
-        val galleryCrossAxisSpec = recyclerView.parentCrossAxisMeasureSpec
-        val galleryCrossAxisMode = MeasureSpec.getMode(galleryCrossAxisSpec)
-        if (galleryCrossAxisMode == MeasureSpec.EXACTLY) return
-
-        val galleryPaddings = if (isHorizontal) {
-            recyclerView.paddingTop + recyclerView.paddingBottom
-        } else {
-            recyclerView.paddingLeft + recyclerView.paddingRight
-        }
-        val itemCrossAxisSize = if (isHorizontal) measuredHeight else measuredWidth
-        val requiredCrossAxisSize = itemCrossAxisSize * columnCount() + totalCrossSpacing() + galleryPaddings
-        val targetCrossAxisSize = if (galleryCrossAxisMode == MeasureSpec.AT_MOST) {
-            min(requiredCrossAxisSize, MeasureSpec.getSize(galleryCrossAxisSpec))
-        } else {
-            requiredCrossAxisSize
-        }
-
-        recyclerView.requestCrossAxisRemeasure(targetCrossAxisSize, isHorizontal)
     }
 
     private fun totalCrossSpacing(): Int {

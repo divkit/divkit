@@ -11,6 +11,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.OrientationHelper
 import com.yandex.div.R
 import com.yandex.div.core.util.doOnActualLayout
 import com.yandex.div.core.view2.Releasable
@@ -22,13 +23,13 @@ import com.yandex.div.core.view2.divs.gallery.DivGallerySnapHelper
 import com.yandex.div.core.view2.divs.gallery.DivGridLayoutManager
 import com.yandex.div.core.view2.items.DivScrollActionHolder
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.core.widget.isExact
 import com.yandex.div.core.widget.isUnspecified
 import com.yandex.div.core.widget.makeExactSpec
 import com.yandex.div.internal.core.DivBlock
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div2.Div
-import com.yandex.div2.DivBase
 import com.yandex.div2.DivGallery.ScrollMode
 import com.yandex.div2.DivSize
 import kotlin.math.abs
@@ -65,12 +66,8 @@ internal class DivRecyclerView @JvmOverloads constructor(
 
     var widthMeasureSpec = 0
     var heightMeasureSpec = 0
-    var parentCrossAxisMeasureSpec = 0
+    private var parentCrossAxisMeasureSpec = 0
     var considerMatchParent = false
-
-    private var remeasureIsHorizontal: Boolean? = null
-    private var requestedCrossAxisSize = 0
-    private var isCrossAxisRemeasurePosted = false
 
     private var itemAnimationsEnabled = true
     private var suppressItemAnimations = false
@@ -104,40 +101,6 @@ internal class DivRecyclerView @JvmOverloads constructor(
         }
     }
 
-    internal fun requestCrossAxisRemeasure(targetCrossAxisSize: Int, isHorizontal: Boolean) {
-        if (remeasureIsHorizontal != isHorizontal) {
-            remeasureIsHorizontal = isHorizontal
-            requestedCrossAxisSize = 0
-        }
-        if (targetCrossAxisSize <= crossAxisSize(isHorizontal) ||
-            targetCrossAxisSize <= requestedCrossAxisSize
-        ) {
-            return
-        }
-
-        requestedCrossAxisSize = targetCrossAxisSize
-        if (!isCrossAxisRemeasurePosted) {
-            isCrossAxisRemeasurePosted = true
-            if (!post {
-                isCrossAxisRemeasurePosted = false
-                val orientation = remeasureIsHorizontal ?: return@post
-                if (requestedCrossAxisSize > crossAxisSize(orientation)) {
-                    requestLayout()
-                } else {
-                    requestedCrossAxisSize = 0
-                }
-            }) {
-                isCrossAxisRemeasurePosted = false
-                requestedCrossAxisSize = 0
-            }
-        }
-    }
-
-    internal fun resetCrossAxisRemeasure() {
-        requestedCrossAxisSize = 0
-    }
-
-    private fun crossAxisSize(isHorizontal: Boolean) = if (isHorizontal) measuredHeight else measuredWidth
 
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
         widthMeasureSpec = widthSpec
@@ -148,43 +111,37 @@ internal class DivRecyclerView @JvmOverloads constructor(
             is DivGridLayoutManager -> layoutManager.orientation
             else -> HORIZONTAL
         }
-        parentCrossAxisMeasureSpec = if (orientation == HORIZONTAL) heightSpec else widthSpec
-        considerMatchParent = if (orientation == HORIZONTAL) {
-            needConsiderMatchParent(heightMeasureSpec) { height }
-        } else {
-            needConsiderMatchParent(widthMeasureSpec) { width }
-        }
+        val isHorizontal = orientation == HORIZONTAL
+        parentCrossAxisMeasureSpec = if (isHorizontal) heightSpec else widthSpec
+        considerMatchParent = needConsiderMatchParent(parentCrossAxisMeasureSpec, isHorizontal)
 
         super.onMeasure(widthSpec, heightSpec)
 
-        val needRecalculateMatchParent = if (orientation == HORIZONTAL) {
-            needRecalculateMatchParent(heightMeasureSpec) { height }
+        if (layoutManager == null) return
+        if (!needRecalculateMatchParent(parentCrossAxisMeasureSpec, isHorizontal)) return
+
+        considerMatchParent = false
+        if (isHorizontal) {
+            heightMeasureSpec = makeExactSpec(measuredHeight)
         } else {
-            needRecalculateMatchParent(widthMeasureSpec) { width }
+            widthMeasureSpec = makeExactSpec(measuredWidth)
         }
 
-        if (needRecalculateMatchParent) {
-            considerMatchParent = false
-            widthMeasureSpec =
-                getMaxSizeSpec(orientation == VERTICAL, widthSpec, paddingLeft + paddingRight) { measuredWidth }
-            heightMeasureSpec =
-                getMaxSizeSpec(orientation == HORIZONTAL, heightSpec, paddingTop + paddingBottom) { measuredHeight }
-            children.forEach {
-                val divBlock = it.divBlock ?: return@forEach
-                if (!divBlock.div.isMatchParent { if (orientation == HORIZONTAL) height else width }) return@forEach
-                it.measure(widthMeasureSpec, heightMeasureSpec)
-            }
+        children.forEach {
+            val divBlock = it.divBlock ?: return@forEach
+            if (!divBlock.div.isCrossAxisMatchParent(isHorizontal)) return@forEach
+            it.measure(widthMeasureSpec, heightMeasureSpec)
         }
     }
 
-    private fun needConsiderMatchParent(spec: Int, size: DivBase.() -> DivSize): Boolean {
+    private fun needConsiderMatchParent(spec: Int, isHorizontal: Boolean): Boolean {
         val items = getItemsIfNeeded(spec) ?: return false
-        return items.all { it.div.isMatchParent(size) }
+        return items.all { it.div.isCrossAxisMatchParent(isHorizontal) }
     }
 
-    private fun needRecalculateMatchParent(spec: Int, size: DivBase.() -> DivSize): Boolean {
+    private fun needRecalculateMatchParent(spec: Int, isHorizontal: Boolean): Boolean {
         val items = getItemsIfNeeded(spec) ?: return false
-        return items.any { it.div.isMatchParent(size) }
+        return items.any { it.div.isCrossAxisMatchParent(isHorizontal) }
     }
 
     private fun getItemsIfNeeded(spec: Int): List<DivBlock>? {
@@ -194,13 +151,10 @@ internal class DivRecyclerView @JvmOverloads constructor(
         return adapter.visibleItems.takeIf { it.isNotEmpty() }
     }
 
-    private fun Div.isMatchParent(size: DivBase.() -> DivSize) = value().size() is DivSize.MatchParent
-
-    private fun getMaxSizeSpec(isCrossAxis: Boolean, oldSpec: Int, paddings: Int, size: View.() -> Int): Int {
-        if (!isCrossAxis) return oldSpec
-        val maxSize = children.maxOf { it.size() }
-        val layoutManager = layoutManager as? DivGridLayoutManager ?: return makeExactSpec(maxSize + paddings)
-        return makeExactSpec(maxSize * 2 + layoutManager.crossSpacing + paddings)
+    private fun Div.isCrossAxisMatchParent(isHorizontal: Boolean): Boolean {
+        val div = value()
+        val size = if (isHorizontal) div.height else div.width
+        return size is DivSize.MatchParent
     }
 
     override fun fling(velocityX: Int, velocityY: Int): Boolean {
@@ -225,6 +179,8 @@ internal class DivRecyclerView @JvmOverloads constructor(
     }
 
     override fun onScrolled(dx: Int, dy: Int) {
+        requestCrossAxisRemeasureIfNeeded()
+
         // if there was no focus before scroll we should not set extra focus
         if (beforeScrollFocusPosition == NO_POSITION) return
 
@@ -245,6 +201,42 @@ internal class DivRecyclerView @JvmOverloads constructor(
             ?.child?.requestFocus()
 
         super.onScrolled(dx, dy)
+    }
+
+    private fun requestCrossAxisRemeasureIfNeeded() {
+        if (isExact(parentCrossAxisMeasureSpec)) return
+
+        val layoutManager = layoutManager ?: return
+        if (layoutManager.childCount == 0) return
+
+        val isHorizontal = layoutManager.canScrollHorizontally()
+        val helper = OrientationHelper.createOrientationHelper(
+            layoutManager,
+            if (isHorizontal) VERTICAL else HORIZONTAL,
+        )
+
+        var maxItemSize = 0
+        for (index in 0 until layoutManager.childCount) {
+            val child = layoutManager.getChildAt(index) ?: continue
+            maxItemSize = maxOf(maxItemSize, helper.getDecoratedMeasurement(child))
+        }
+
+        val spanCount = (layoutManager as? DivGridLayoutManager)?.spanCount ?: 1
+        val requiredContentSize = maxItemSize * spanCount
+        val crossAxisPadding = helper.startAfterPadding + helper.endPadding
+        val availableContentSize = if (isUnspecified(parentCrossAxisMeasureSpec)) {
+            requiredContentSize
+        } else {
+            minOf(requiredContentSize, MeasureSpec.getSize(parentCrossAxisMeasureSpec) - crossAxisPadding)
+        }
+        val targetSize = LayoutManager.chooseSize(
+            parentCrossAxisMeasureSpec,
+            availableContentSize / spanCount * spanCount + crossAxisPadding,
+            if (isHorizontal) minimumHeight else minimumWidth,
+        )
+        val currentSize = if (isHorizontal) measuredHeight else measuredWidth
+
+        if (targetSize > currentSize) requestLayout()
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
@@ -339,14 +331,6 @@ internal class DivRecyclerView @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        val crossAxisSizeChanged = when (remeasureIsHorizontal) {
-            true -> h != oldh
-            false -> w != oldw
-            null -> false
-        }
-        if (crossAxisSizeChanged && !isCrossAxisRemeasurePosted) {
-            requestedCrossAxisSize = 0
-        }
         onBoundsChanged(w, h)
     }
 

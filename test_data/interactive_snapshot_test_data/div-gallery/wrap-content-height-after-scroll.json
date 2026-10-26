@@ -1,5 +1,5 @@
 {
-  "description": "Horizontal wrap_content gallery grows when a taller item becomes visible after scrolling",
+  "description": "Horizontal wrap_content gallery restores its height after scrolling past a tall item to short items",
   "platforms": [
     "android",
     "ios",
@@ -221,11 +221,11 @@
                   },
                   {
                     "bottom_text": "Item 12",
-                    "bar_color": "#FFD6D6",
-                    "bar_height": 4,
-                    "top_text": "Low",
+                    "bar_color": "#EDEEF2",
+                    "bar_height": 52,
+                    "top_text": "High",
                     "type": "gallery_item",
-                    "text_color": "#FF4C52"
+                    "text_color": "#222222"
                   },
                   {
                     "bottom_text": "Item 13",
@@ -341,7 +341,8 @@
               }
             ],
             "width": {
-              "type": "match_parent"
+              "type": "fixed",
+              "value": 360
             }
           }
         }
@@ -357,6 +358,61 @@
       "type": "div_action",
       "action": {
         "log_id": "scroll_to_tall_item",
+        "typed": {
+          "type": "scroll_to",
+          "id": "resizable_gallery",
+          "animated": false,
+          "destination": {
+            "type": "end"
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "return_to_start",
+        "typed": {
+          "type": "scroll_to",
+          "id": "resizable_gallery",
+          "animated": false,
+          "destination": {
+            "type": "start"
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "scroll_past_tall_item",
+        "typed": {
+          "type": "scroll_to",
+          "id": "resizable_gallery",
+          "animated": false,
+          "destination": {
+            "type": "offset",
+            "value": 1100
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "past_tall_item"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "return_to_end",
         "typed": {
           "type": "scroll_to",
           "id": "resizable_gallery",
