@@ -4,6 +4,11 @@
 <dict>
 	<key>REFERENCE_SNAPSHOTS_PATH</key>
 	<string>$(PROJECT_DIR)/Tests/reference_snapshots/</string>
+	<key>UIApplicationSceneManifest</key>
+	<dict>
+		<key>UIApplicationSupportsMultipleScenes</key>
+		<false/>
+	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>YSText-Bold.ttf</string>

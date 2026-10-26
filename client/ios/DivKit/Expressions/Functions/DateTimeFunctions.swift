@@ -215,6 +215,37 @@ extension String {
   func toDate() -> Date? {
     makeDateFormatter(dateFormat, isUTC: true).date(from: self)
   }
+
+  fileprivate func withZeroPaddedDayFields(locale: Locale) -> String {
+    guard contains("ddd") else {
+      return self
+    }
+    let zero = makeZeroDigit(locale: locale)
+    var result = ""
+    var isQuoted = false
+    var dayFieldLength: UInt = 0
+    func appendDayField() {
+      if dayFieldLength > 2 {
+        result += [String](repeating: zero, times: dayFieldLength - 2).joined() + "dd"
+      } else {
+        result += String(repeating: "d", times: dayFieldLength)
+      }
+      dayFieldLength = 0
+    }
+    for char in self {
+      if char == "d", !isQuoted {
+        dayFieldLength += 1
+        continue
+      }
+      appendDayField()
+      if char == "'" {
+        isQuoted.toggle()
+      }
+      result.append(char)
+    }
+    appendDayField()
+    return result
+  }
 }
 
 extension Date {
@@ -260,14 +291,20 @@ private func makeDateFormatter(
   locale: String? = nil
 ) -> DateFormatter {
   let formatter = DateFormatter()
-  formatter.dateFormat = format
   if isUTC {
     formatter.timeZone = utcTimeZone
   }
   if let locale {
     formatter.locale = Locale(identifier: locale)
   }
+  formatter.dateFormat = format.withZeroPaddedDayFields(locale: formatter.locale)
   return formatter
+}
+
+private func makeZeroDigit(locale: Locale) -> String {
+  let formatter = NumberFormatter()
+  formatter.locale = locale
+  return formatter.string(from: 0) ?? "0"
 }
 
 private func componentsError() -> Error {

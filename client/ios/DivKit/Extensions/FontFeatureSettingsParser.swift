@@ -25,9 +25,9 @@ extension UIFont {
 
 extension [[UIFontDescriptor.FeatureKey: Int]] {
   fileprivate mutating func setFeature(_ feature: Feature) {
-    let featureDict = [
-      UIFontDescriptor.FeatureKey.featureIdentifier: feature.type,
-      UIFontDescriptor.FeatureKey.typeIdentifier: feature.selector,
+    let featureDict: [UIFontDescriptor.FeatureKey: Int] = [
+      .init(rawValue: kCTFontFeatureTypeIdentifierKey as String): feature.type,
+      .init(rawValue: kCTFontFeatureSelectorIdentifierKey as String): feature.selector,
     ]
     if feature.isEnabled {
       append(featureDict)

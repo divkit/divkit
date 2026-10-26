@@ -2,15 +2,29 @@ import UIKit
 
 @main
 final class AppDelegate: NSObject, UIApplicationDelegate {
-  var window: UIWindow? = UIWindow()
-
   func application(
     _: UIApplication,
-    didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?
-  ) -> Bool {
-    window?.rootViewController = ViewController(nibName: nil, bundle: nil)
-    window?.makeKeyAndVisible()
+    configurationForConnecting session: UISceneSession,
+    options _: UIScene.ConnectionOptions
+  ) -> UISceneConfiguration {
+    let configuration = UISceneConfiguration(name: nil, sessionRole: session.role)
+    configuration.delegateClass = SceneDelegate.self
+    return configuration
+  }
+}
 
-    return true
+final class SceneDelegate: NSObject, UIWindowSceneDelegate {
+  var window: UIWindow?
+
+  func scene(
+    _ scene: UIScene,
+    willConnectTo _: UISceneSession,
+    options _: UIScene.ConnectionOptions
+  ) {
+    guard let windowScene = scene as? UIWindowScene else { return }
+    let window = UIWindow(windowScene: windowScene)
+    window.rootViewController = ViewController(nibName: nil, bundle: nil)
+    window.makeKeyAndVisible()
+    self.window = window
   }
 }
