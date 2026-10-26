@@ -38,6 +38,7 @@ internal class DivTransitionHandler @Inject constructor(
     }
 
     fun putTransition(transition: Transition, view: View, changeType: ChangeType.Visibility) {
+        cancelPendingTransition(view)
         pendingTransitions
             .add(TransitionData(transition, view, mutableListOf(changeType), mutableListOf()))
 
@@ -45,7 +46,8 @@ internal class DivTransitionHandler @Inject constructor(
     }
 
     fun getLastChange(target: View): ChangeType.Visibility? {
-        val pendingTransition = pendingTransitions.getChange(target).lastOrNull()
+        val pendingTransition = pendingTransitions
+            .lastOrNull { it.target == target }?.changes?.lastOrNull()
 
         if (pendingTransition != null) return pendingTransition
 
@@ -54,6 +56,10 @@ internal class DivTransitionHandler @Inject constructor(
         if (activeTransition != null) return activeTransition
 
         return null
+    }
+
+    fun cancelPendingTransition(target: View) {
+        pendingTransitions.removeAll { it.target == target }
     }
 
     private fun List<TransitionData>.getChange(target: View): List<ChangeType.Visibility> {

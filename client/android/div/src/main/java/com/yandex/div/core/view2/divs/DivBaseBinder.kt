@@ -469,6 +469,7 @@ internal class DivBaseBinder @Inject constructor(
                 ChangeType.Visibility(newVisibility)
             )
         } else {
+            divTransitionHandler.cancelPendingTransition(this)
             this.visibility = newVisibility
         }
 
