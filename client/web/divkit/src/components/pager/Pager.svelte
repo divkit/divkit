@@ -8,6 +8,15 @@
         visibility?: Visibility;
     }
 
+    interface InfiniteScrollAnimation {
+        startPosition: number;
+        endPosition: number;
+        origin: number;
+        cycleDistance: number;
+        targetIndex: number;
+        duration: number;
+    }
+
     const SIZE_MAP: Record<Size['type'], string> = {
         wrap_content: 'content',
         fixed: 'fixed',
@@ -17,6 +26,7 @@
     const DUPLICATES_IN_INFINITE = 2;
     const WHEEL_THROTTLE = 400;
     const MIN_SWIPE_DISTANCE = 8;
+    const MULTI_PAGE_FLING_TIME = 200;
 
     function getItemMods(orientation: Orientation, childInfo: {
         width?: MaybeMissing<Size>;
@@ -131,6 +141,7 @@
 
     let wheelFired = 0;
     let infinite = false;
+    let multiPageScroll = false;
     let hasDuplicates = false;
     let animated = false;
     let shouldClampDuplicates = false;
@@ -138,6 +149,9 @@
     let transformStr = '';
     let swipeTs = 0;
     let cancelPointer: (() => void) | undefined;
+    let multiPageFrame = 0;
+    let multiPageSequence = 0;
+    let resnapPending = false;
 
     let devapi = process.env.DEVTOOL ? {
         devapi: {
@@ -158,8 +172,11 @@
         crossAxisAlignment = 'start';
         scrollAxisAlignment = 'center';
         infinite = false;
+        multiPageScroll = false;
         hasDuplicates = false;
         shouldClampDuplicates = false;
+        resnapPending = false;
+        cancelMultiPageAnimation();
     }
 
     $: if (origJson) {
@@ -179,12 +196,17 @@
     $: jsonCrossAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.cross_axis_alignment);
     $: jsonScrollAxisAlignment = componentContext.getDerivedFromVars(componentContext.json.scroll_axis_alignment);
     $: jsonInfiniteScroll = componentContext.getDerivedFromVars(componentContext.json.infinite_scroll);
+    $: jsonMultiPageScroll = componentContext.getDerivedFromVars(componentContext.json.multi_page_scroll);
     $: jsonItemCountVariable = componentContext.json.item_count_variable;
 
     $: itemCountVariable = jsonItemCountVariable && (componentContext.getVariable(jsonItemCountVariable, 'integer') || rootCtx.awaitGlobalVariable(jsonItemCountVariable, 'integer', 0)) || createVariable('temp', 'integer', 0);
 
     $: {
         infinite = correctBooleanInt($jsonInfiniteScroll, infinite);
+    }
+
+    $: {
+        multiPageScroll = correctBooleanInt($jsonMultiPageScroll, multiPageScroll);
     }
 
     function replaceItems(items: (MaybeMissing<DivBaseData> | undefined)[]): void {
@@ -463,6 +485,7 @@
         animated,
         clip: rootCtx.pagerChildrenClipEnabled,
         orientation,
+        'mouse-drag': rootCtx.pagerMouseDragEnabled,
         'cross-align': crossAxisAlignment,
         'scroll-align': scrollAxisAlignment
     };
@@ -515,14 +538,14 @@
         if (!actions?.length) {
             return;
         }
-        componentContext.execAnyActions(actions);
+        items[currentItem].execAnyActions(actions);
     }
 
     $: pagerDataUpdate(visibleItemsWithOutDuplicates, currentItem);
 
     $: runSelectedActions(currentItem);
 
-    function getTransformPosition(visibleIndex: number): number {
+    function getTransformPosition(visibleIndex: number, scrollSize?: number): number {
         const atStart = hasDuplicates ? false : (visibleIndex === 0);
         const atEnd = hasDuplicates ? false : (visibleIndex === visibleItems.length - 1);
 
@@ -538,16 +561,16 @@
         const containerSize = getContainerSize();
         const startPadding = getStartPadding();
         const endPadding = getEndPadding();
-        const scrollSize = getScrollSize();
+        const contentSize = scrollSize ?? getScrollSize();
 
-        if (containerSize >= scrollSize + startPadding + endPadding) {
+        if (containerSize >= contentSize + startPadding + endPadding) {
             return 0;
         }
 
         if (atStart) {
             return 0;
         } else if (atEnd) {
-            return (containerSize - startPadding - endPadding - scrollSize) * ($direction === 'rtl' ? -1 : 1);
+            return (containerSize - startPadding - endPadding - contentSize) * ($direction === 'rtl' ? -1 : 1);
         }
 
         if (
@@ -564,15 +587,75 @@
         return pagerItemsWrapper[elementSize] / 2 - (pagerItem[elementOffset] + pagerItem[elementSize] / 2);
     }
 
+    function cancelMultiPageAnimation(): void {
+        multiPageSequence++;
+        if (multiPageFrame) {
+            cancelAnimationFrame(multiPageFrame);
+            multiPageFrame = 0;
+        }
+    }
+
+    function wrapInfiniteTransform(position: number, origin: number, cycleDistance: number): number {
+        // Duplicates make positions one cycle apart visually identical.
+        return position - Math.floor((position - origin) / cycleDistance) * cycleDistance;
+    }
+
+    function animateInfiniteScroll({
+        startPosition,
+        endPosition,
+        origin,
+        cycleDistance,
+        targetIndex,
+        duration
+    }: InfiniteScrollAnimation): void {
+        cancelMultiPageAnimation();
+        animated = false;
+        shouldClampDuplicates = false;
+        const sequence = multiPageSequence;
+        let startTime: number | undefined;
+
+        const frame = (time: number) => {
+            if (sequence !== multiPageSequence) {
+                return;
+            }
+            startTime ??= time;
+            const progress = Math.min(1, (time - startTime) / duration);
+            const easedProgress = 1 - (1 - progress) ** 2;
+            transform = wrapInfiniteTransform(
+                startPosition + (endPosition - startPosition) * easedProgress,
+                origin,
+                cycleDistance
+            );
+            transformStr = transformToStr(transform);
+
+            if (progress < 1) {
+                multiPageFrame = requestAnimationFrame(frame);
+            } else {
+                multiPageFrame = 0;
+                currentItem = visibleToAllMap[targetIndex] ?? 0;
+                if (resnapPending) {
+                    resnap();
+                }
+            }
+        };
+
+        multiPageFrame = requestAnimationFrame(frame);
+    }
+
     function scrollToVisiblePagerItem(visibleIndex: number, isAnimated: boolean): void {
+        cancelMultiPageAnimation();
         if (!pagerItemsWrapper) {
             return;
         }
 
+        const sequence = multiPageSequence;
         const position = getTransformPosition(visibleIndex);
 
         animated = isAnimated;
         tick().then(() => {
+            if (sequence !== multiPageSequence) {
+                return;
+            }
             transform = position;
             transformStr = transformToStr(transform);
             currentItem = visibleToAllMap[visibleIndex] ?? 0;
@@ -746,7 +829,7 @@
 
     function onFocus(event: Event): void {
         const target = event.target;
-        if (!(target instanceof Element) || !pagerItemsWrapper) {
+        if (!(target instanceof Element) || !pagerItemsWrapper || cancelPointer) {
             return;
         }
 
@@ -775,19 +858,59 @@
     }
 
     function onPointerDown(event: PointerEvent): void {
-        if (!rootCtx.pagerMouseDragEnabled && event.pointerType === 'mouse') {
+        if (!event.isPrimary || event.button !== 0 || !rootCtx.pagerMouseDragEnabled && event.pointerType === 'mouse') {
             return;
         }
+        cancelMultiPageAnimation();
+        resnapPending = false;
 
+        const pointerId = event.pointerId;
         const isHorizontal = orientation === 'horizontal';
+        if (animated && pagerItemsWrapper) {
+            const currentTransform = getComputedStyle(pagerItemsWrapper).transform;
+            if (currentTransform !== 'none') {
+                const matrix = new DOMMatrixReadOnly(currentTransform);
+                transform = isHorizontal ? matrix.m41 : matrix.m42;
+                transformStr = transformToStr(transform);
+            }
+            animated = false;
+        }
         const start = isHorizontal ? event.pageX : event.pageY;
 
         const startTransform = transform;
         const containerSize = getContainerSize() - getStartPadding() - getEndPadding();
         const scrollSize = getScrollSize();
+        const cycleOrigin = hasDuplicates && multiPageScroll ? getTransformPosition(0, scrollSize) : 0;
+        const cycleDistance = hasDuplicates && multiPageScroll ?
+            getTransformPosition(visibleItemsWithOutDuplicates, scrollSize) - cycleOrigin : 0;
+        let dragTransform = startTransform;
+        let gestureStartIndex = allToVisibleMap[currentItem] ?? 0;
         const swipeStartTime = Date.now();
+        const directionSign = $direction === 'rtl' ? -1 : 1;
+
+        const nearestIndex = (position: number): number => {
+            let closestDistance = Infinity;
+            let closestIndex = gestureStartIndex;
+            for (let index = 0; index < visibleItemsWithOutDuplicates; index++) {
+                const itemPosition = getTransformPosition(index, scrollSize);
+                const cycles = cycleDistance !== 0 ? Math.round((position - itemPosition) / cycleDistance) : 0;
+                const distance = Math.abs(itemPosition + cycles * cycleDistance - position);
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestIndex = index;
+                }
+            }
+            return closestIndex;
+        };
+
+        if (multiPageScroll) {
+            gestureStartIndex = nearestIndex(startTransform);
+        }
 
         const onPointerMove = (event: PointerEvent) => {
+            if (event.pointerId !== pointerId) {
+                return;
+            }
             const current = isHorizontal ? event.pageX : event.pageY;
             let newTransform = startTransform + current - start;
 
@@ -811,20 +934,39 @@
                 }
             }
 
-            transform = newTransform;
+            dragTransform = newTransform;
+            transform = cycleDistance !== 0 ?
+                wrapInfiniteTransform(newTransform, cycleOrigin, cycleDistance) : newTransform;
             transformStr = transformToStr(transform);
 
             event.preventDefault();
         };
         const onPointerUp = (event: PointerEvent) => {
+            if (event.pointerId !== pointerId) {
+                return;
+            }
             cancelPointer?.();
             cancelPointer = undefined;
 
             // 512px limit for big screens
             const panelsWrapperWidth = Math.min(512, containerSize);
-            const swipeDist = Math.abs(startTransform - transform);
+            const swipeDist = Math.abs(startTransform - dragTransform);
             if (swipeDist < MIN_SWIPE_DISTANCE) {
-                scrollToVisiblePagerItem(allToVisibleMap[currentItem], true);
+                if (cycleDistance !== 0) {
+                    const index = gestureStartIndex;
+                    const position = getTransformPosition(index, scrollSize);
+                    const cycles = Math.round((dragTransform - position) / cycleDistance);
+                    animateInfiniteScroll({
+                        startPosition: dragTransform,
+                        endPosition: position + cycles * cycleDistance,
+                        origin: cycleOrigin,
+                        cycleDistance,
+                        targetIndex: index,
+                        duration: 150
+                    });
+                } else {
+                    scrollToVisiblePagerItem(gestureStartIndex, true);
+                }
 
                 return;
             }
@@ -833,9 +975,86 @@
             swipeTs = Date.now();
 
             const swipeCoefficient = Math.min(1, (Date.now() - swipeStartTime) / 750);
-            let newCurrent = allToVisibleMap[currentItem];
+            let newCurrent = gestureStartIndex;
             if (swipeDist > (panelsWrapperWidth / 4) * swipeCoefficient) {
-                newCurrent += (startTransform > transform ? 1 : -1) * ($direction === 'rtl' ? -1 : 1);
+                const direction = (startTransform > dragTransform ? 1 : -1) * directionSign;
+                if (multiPageScroll) {
+                    const swipeDuration = Math.max(1, Date.now() - swipeStartTime);
+                    const velocity = (dragTransform - startTransform) / swipeDuration;
+                    const projectedTransform = dragTransform + velocity * MULTI_PAGE_FLING_TIME;
+                    let closestDistance = Infinity;
+
+                    if (cycleDistance !== 0) {
+                        const count = visibleItemsWithOutDuplicates;
+                        const currentPosition = getTransformPosition(newCurrent, scrollSize);
+                        const currentCycle = Math.round((startTransform - currentPosition) / cycleDistance);
+                        const first = newCurrent + currentCycle * count + direction;
+                        let target = first;
+
+                        for (let index = 0; index < count; index++) {
+                            const position = getTransformPosition(index, scrollSize);
+                            let cycles = Math.round((projectedTransform - position) / cycleDistance);
+                            let virtualIndex = index + cycles * count;
+                            if (direction > 0 && virtualIndex < first) {
+                                cycles += Math.ceil((first - virtualIndex) / count);
+                            } else if (direction < 0 && virtualIndex > first) {
+                                cycles -= Math.ceil((virtualIndex - first) / count);
+                            }
+                            virtualIndex = index + cycles * count;
+
+                            const distance = Math.abs(position + cycles * cycleDistance - projectedTransform);
+                            if (distance < closestDistance) {
+                                closestDistance = distance;
+                                target = virtualIndex;
+                            }
+                        }
+
+                        const targetIndex = nonNegativeModulo(target, count);
+                        const targetCycle = Math.floor(target / count);
+                        const targetPosition = getTransformPosition(targetIndex, scrollSize) +
+                            targetCycle * cycleDistance;
+                        const duration = Math.max(150, Math.min(800,
+                            2 * Math.abs(targetPosition - dragTransform) / Math.abs(velocity)
+                        ));
+                        animateInfiniteScroll({
+                            startPosition: dragTransform,
+                            endPosition: targetPosition,
+                            origin: cycleOrigin,
+                            cycleDistance,
+                            targetIndex,
+                            duration
+                        });
+                        return;
+                    }
+
+                    const first = newCurrent + direction;
+                    const duplicateCount = hasDuplicates ? DUPLICATES_IN_INFINITE : 0;
+                    const last = direction > 0 ?
+                        visibleItemsWithOutDuplicates - 1 + duplicateCount : -duplicateCount;
+
+                    for (let index = first; direction > 0 ? index <= last : index >= last; index += direction) {
+                        const distance = Math.abs(getTransformPosition(index, scrollSize) - projectedTransform);
+                        if (distance < closestDistance) {
+                            closestDistance = distance;
+                            newCurrent = index;
+                        }
+                    }
+                } else {
+                    newCurrent += direction;
+                }
+            }
+            if (cycleDistance !== 0) {
+                const position = getTransformPosition(newCurrent, scrollSize);
+                const cycles = Math.round((dragTransform - position) / cycleDistance);
+                animateInfiniteScroll({
+                    startPosition: dragTransform,
+                    endPosition: position + cycles * cycleDistance,
+                    origin: cycleOrigin,
+                    cycleDistance,
+                    targetIndex: newCurrent,
+                    duration: 150
+                });
+                return;
             }
             if (!hasDuplicates) {
                 if (newCurrent >= visibleItems.length) {
@@ -847,16 +1066,39 @@
 
             scrollToVisiblePagerItem(newCurrent, true);
         };
+        const onPointerCancel = (event: PointerEvent) => {
+            if (event.pointerId !== pointerId) {
+                return;
+            }
+            cancelPointer?.();
+            cancelPointer = undefined;
+
+            const index = multiPageScroll ? nearestIndex(dragTransform) : gestureStartIndex;
+            if (cycleDistance !== 0) {
+                const position = getTransformPosition(index, scrollSize);
+                const cycles = Math.round((dragTransform - position) / cycleDistance);
+                animateInfiniteScroll({
+                    startPosition: dragTransform,
+                    endPosition: position + cycles * cycleDistance,
+                    origin: cycleOrigin,
+                    cycleDistance,
+                    targetIndex: index,
+                    duration: 150
+                });
+            } else {
+                scrollToVisiblePagerItem(index, true);
+            }
+        };
 
         window.addEventListener('pointermove', onPointerMove);
         window.addEventListener('pointerup', onPointerUp);
-        window.addEventListener('pointercancel', onPointerUp);
+        window.addEventListener('pointercancel', onPointerCancel);
 
         cancelPointer?.();
         cancelPointer = () => {
             window.removeEventListener('pointermove', onPointerMove);
             window.removeEventListener('pointerup', onPointerUp);
-            window.removeEventListener('pointercancel', onPointerUp);
+            window.removeEventListener('pointercancel', onPointerCancel);
         };
     }
 
@@ -879,18 +1121,42 @@
         }
     }
 
-    function onTransitionEnd(): void {
+    async function finishPagerTransition(): Promise<void> {
+        const sequence = multiPageSequence;
         animated = false;
 
         if (shouldClampDuplicates) {
-            tick().then(() => {
-                scrollToPagerItem(currentItem, false);
+            await tick();
+            if (sequence !== multiPageSequence) {
+                return;
+            }
+            transform = getTransformPosition(allToVisibleMap[currentItem]);
+            transformStr = transformToStr(transform);
+            shouldClampDuplicates = false;
+        }
+    }
+
+    function onTransitionEnd(event: TransitionEvent): void {
+        if (event.target === pagerItemsWrapper && event.propertyName === 'transform' && animated) {
+            void finishPagerTransition().then(() => {
+                if (resnapPending) {
+                    resnap();
+                }
             });
         }
     }
 
     function resnap(): void {
+        const sequence = multiPageSequence;
         tick().then(() => {
+            if (sequence !== multiPageSequence) {
+                return;
+            }
+            if (cancelPointer || multiPageFrame) {
+                resnapPending = true;
+                return;
+            }
+            resnapPending = false;
             scrollToPagerItem(currentItem, false);
         });
     }
@@ -907,6 +1173,7 @@
         mounted = false;
 
         cancelPointer?.();
+        cancelMultiPageAnimation();
 
         items.forEach(context => {
             context.destroy();
@@ -944,6 +1211,7 @@
             on:transitionend={onTransitionEnd}
             on:focus|capture={onFocus}
             on:click|capture={onItemsClick}
+            on:dragstart={rootCtx.pagerMouseDragEnabled ? event => event.preventDefault() : undefined}
         >
             {#each visibleItems as item}
                 <div

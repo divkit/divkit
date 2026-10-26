@@ -53,6 +53,11 @@
     touch-action: pan-x;
 }
 
+.pager_mouse-drag {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
 .pager_orientation_horizontal > .pager__items {
     justify-content: start;
     grid-auto-flow: column;

@@ -754,7 +754,8 @@
       "title": "Pager with multi page scroll",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "automated": [
         "android",
