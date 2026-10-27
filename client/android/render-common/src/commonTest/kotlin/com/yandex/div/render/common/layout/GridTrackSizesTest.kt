@@ -1,4 +1,4 @@
-package com.yandex.div.internal.core
+package com.yandex.div.render.common.layout
 
 import kotlin.test.Test
 import kotlin.test.assertContentEquals

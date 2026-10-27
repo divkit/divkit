@@ -7,8 +7,8 @@ import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
-import com.yandex.div.core.util.isSystemAnimationsEnabled
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.render.common.animation.isSystemAnimationsEnabled
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch

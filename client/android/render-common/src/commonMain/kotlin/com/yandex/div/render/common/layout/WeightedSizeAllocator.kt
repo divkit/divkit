@@ -1,10 +1,10 @@
-package com.yandex.div.internal.core
+package com.yandex.div.render.common.layout
 
 import com.yandex.div.core.annotations.InternalApi
 import kotlin.math.ceil
 
 @InternalApi
-fun resolveWeightedSizes(
+public fun resolveWeightedSizes(
     weights: FloatArray,
     baseSizes: IntArray,
     minimumSize: Int,

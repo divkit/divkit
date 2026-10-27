@@ -9,8 +9,8 @@ import android.text.Layout
 import android.util.DisplayMetrics
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.unitToPx
-import com.yandex.div.internal.core.TextRangeCloudBackground
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.render.common.text.TextRangeCloudBackground
 import com.yandex.div2.DivCloudBackground
 import com.yandex.div2.DivSizeUnit
 import kotlin.math.roundToInt

@@ -1,7 +1,7 @@
-package com.yandex.div.core.util
+package com.yandex.div.render.common.text
 
-import android.graphics.PointF
 import com.yandex.div.core.annotations.InternalApi
+import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -9,27 +9,32 @@ import kotlin.math.sin
 @InternalApi
 public object AnimatedTextGradientMath {
 
+    @PublishedApi
+    internal const val DEGREES_TO_RADIANS: Double = PI / 180.0
+
     @JvmStatic
     public fun phase(frameTimeMillis: Long, durationMillis: Long): Float {
         val safeDuration = durationMillis.coerceAtLeast(1L)
         return (frameTimeMillis % safeDuration).toFloat() / safeDuration
     }
 
-    @JvmStatic
-    public fun linearTranslation(
+    /**
+     * Passes the linear gradient translation to [consumer], so that callers updating it on every frame
+     * don't allocate.
+     */
+    public inline fun <R> linearTranslation(
         angleDegrees: Float,
         width: Float,
         height: Float,
         phase: Float,
-        result: PointF = PointF(),
-    ): PointF {
-        val angleRadians = Math.toRadians(angleDegrees.toDouble())
+        consumer: (x: Float, y: Float) -> R,
+    ): R {
+        val angleRadians = angleDegrees * DEGREES_TO_RADIANS
         val xDirection = cos(angleRadians).toFloat()
         val yDirection = -sin(angleRadians).toFloat()
         val distance = abs(width * xDirection) + abs(height * yDirection)
         val offset = symmetricOffset(distance, phase)
-        result.set(xDirection * offset, yDirection * offset)
-        return result
+        return consumer(xDirection * offset, yDirection * offset)
     }
 
     @JvmStatic
@@ -37,7 +42,8 @@ public object AnimatedTextGradientMath {
         return symmetricOffset(width, phase)
     }
 
-    private fun symmetricOffset(distance: Float, phase: Float): Float {
+    @PublishedApi
+    internal fun symmetricOffset(distance: Float, phase: Float): Float {
         return -distance + 2f * distance * phase.coerceIn(0f, 1f)
     }
 }

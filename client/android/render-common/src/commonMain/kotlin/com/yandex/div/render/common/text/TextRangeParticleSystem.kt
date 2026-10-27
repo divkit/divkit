@@ -1,4 +1,4 @@
-package com.yandex.div.internal.core
+package com.yandex.div.render.common.text
 
 import com.yandex.div.core.annotations.InternalApi
 import kotlin.math.PI
@@ -18,7 +18,7 @@ private const val SPEED_MAX_DP = 9f
 private const val RESPAWN_SEED_STEP = 0x9E3779B9L
 
 @InternalApi
-class TextRangeParticleSystem(
+public class TextRangeParticleSystem(
     bounds: List<Bounds>,
     start: Int,
     end: Int,
@@ -26,7 +26,7 @@ class TextRangeParticleSystem(
     particleSizePx: Float,
     displayDensity: Float,
 ) {
-    data class Bounds(
+    public data class Bounds(
         val left: Float,
         val top: Float,
         val right: Float,
@@ -36,8 +36,8 @@ class TextRangeParticleSystem(
         val height: Float get() = bottom - top
     }
 
-    class Particle internal constructor(
-        val bounds: Bounds,
+    public class Particle internal constructor(
+        public val bounds: Bounds,
         internal val index: Int,
         radius: Float,
         x: Float,
@@ -49,26 +49,26 @@ class TextRangeParticleSystem(
         ageMs: Float,
     ) {
         internal var respawnCount = 0L
-        var radius: Float = radius
+        public var radius: Float = radius
             internal set
-        var x: Float = x
+        public var x: Float = x
             internal set
-        var y: Float = y
+        public var y: Float = y
             internal set
-        var velocityX: Float = velocityX
+        public var velocityX: Float = velocityX
             internal set
-        var velocityY: Float = velocityY
+        public var velocityY: Float = velocityY
             internal set
-        var angularVelocity: Float = angularVelocity
+        public var angularVelocity: Float = angularVelocity
             internal set
-        var lifetimeMs: Float = lifetimeMs
+        public var lifetimeMs: Float = lifetimeMs
             internal set
-        var ageMs: Float = ageMs
+        public var ageMs: Float = ageMs
             internal set
 
-        val constrainedX: Float
+        public val constrainedX: Float
             get() = bounds.left + x.coerceParticleCenter(radius, bounds.width)
-        val constrainedY: Float
+        public val constrainedY: Float
             get() = bounds.top + y.coerceParticleCenter(radius, bounds.height)
     }
 
@@ -78,9 +78,9 @@ class TextRangeParticleSystem(
     private val speedMinPx = SPEED_MIN_DP * displayDensity
     private val speedMaxPx = SPEED_MAX_DP * displayDensity
 
-    val particles: List<Particle> = createParticles(bounds, density)
+    public val particles: List<Particle> = createParticles(bounds, density)
 
-    fun advance(elapsedSeconds: Float) {
+    public fun advance(elapsedSeconds: Float) {
         if (elapsedSeconds <= 0f) return
 
         particles.forEach { particle ->

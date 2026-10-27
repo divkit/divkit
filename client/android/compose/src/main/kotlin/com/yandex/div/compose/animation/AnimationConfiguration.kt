@@ -6,7 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.yandex.div.compose.dagger.DivContextScope
 import com.yandex.div.core.DivAnimationsEnabledProvider
-import com.yandex.div.core.util.isSystemAnimationsEnabled
+import com.yandex.div.render.common.animation.isSystemAnimationsEnabled
 import javax.inject.Inject
 
 @DivContextScope

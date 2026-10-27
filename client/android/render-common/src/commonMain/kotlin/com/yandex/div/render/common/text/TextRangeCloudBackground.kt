@@ -1,4 +1,4 @@
-package com.yandex.div.internal.core
+package com.yandex.div.render.common.text
 
 import com.yandex.div.core.annotations.InternalApi
 import kotlin.math.abs
@@ -11,22 +11,22 @@ private const val SEGMENT_DELTA_X = 0
 private const val SEGMENT_DELTA_Y = 1
 
 @InternalApi
-object TextRangeCloudBackground {
-    data class LineBounds(
+public object TextRangeCloudBackground {
+    public data class LineBounds(
         val left: Int,
         val top: Int,
         val right: Int,
         val bottom: Int,
     )
 
-    interface PathSink {
-        fun moveTo(x: Float, y: Float)
-        fun relativeLineTo(dx: Float, dy: Float)
-        fun relativeQuadraticTo(dx1: Float, dy1: Float, dx2: Float, dy2: Float)
-        fun close()
+    public interface PathSink {
+        public fun moveTo(x: Float, y: Float)
+        public fun relativeLineTo(dx: Float, dy: Float)
+        public fun relativeQuadraticTo(dx1: Float, dy1: Float, dx2: Float, dy2: Float)
+        public fun close()
     }
 
-    fun buildPath(
+    public fun buildPath(
         sourceLines: List<LineBounds>,
         cornerRadius: Int,
         sink: PathSink,

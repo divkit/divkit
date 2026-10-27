@@ -4,7 +4,6 @@ import android.app.Activity
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Matrix
-import android.graphics.PointF
 import android.graphics.RadialGradient
 import android.text.Spannable
 import android.text.SpannableString
@@ -15,7 +14,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
-import com.yandex.div.core.util.AnimatedTextGradientMath
 import com.yandex.div.internal.drawable.RadialGradientDrawable
 import com.yandex.div.internal.graphics.Colormap
 import com.yandex.div.internal.spannable.TextColorSpan
@@ -104,19 +102,6 @@ class AnimatedTextGradientControllerTest {
 
         assertSame(shader, view.paint.shader)
         assertEquals(ceil(view.paint.measureText("animated")) / 2f, view.shaderTranslationX(), 0.01f)
-    }
-
-    @Test
-    fun `linear translation overwrites the supplied point`() {
-        val point = PointF(12f, 34f)
-
-        val result = AnimatedTextGradientMath.linearTranslation(
-            angleDegrees = 90f, width = 200f, height = 40f, phase = 0.25f, result = point,
-        )
-
-        assertSame(point, result)
-        assertEquals(0f, point.x, 0.01f)
-        assertEquals(20f, point.y, 0.01f)
     }
 
     @Test
@@ -311,16 +296,6 @@ class AnimatedTextGradientControllerTest {
         controller.onAttachedToWindow()
 
         assertTrue(view.paint.shader is LinearGradient)
-    }
-
-    @Test
-    fun `phase is synchronized by frame time and clamps duration to one millisecond`() {
-        assertEquals(0.25f, AnimatedTextGradientMath.phase(400L, 1600L))
-        assertEquals(
-            AnimatedTextGradientMath.phase(400L, 1600L),
-            AnimatedTextGradientMath.phase(2000L, 1600L),
-        )
-        assertEquals(0f, AnimatedTextGradientMath.phase(400L, 0L))
     }
 
     @Test

@@ -4,8 +4,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.Spanned
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
-import com.yandex.div.internal.core.TextRangeParticleSystem
 import com.yandex.div.internal.spannable.PositionAwareReplacementSpan
+import com.yandex.div.render.common.text.TextRangeParticleSystem
 
 internal class MaskSpan(
     private val mask: MaskData,

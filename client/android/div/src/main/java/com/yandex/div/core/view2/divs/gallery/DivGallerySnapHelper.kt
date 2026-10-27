@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.divs.utils.isForwardScroll
-import com.yandex.div.internal.scroll.SnapPositions
-import com.yandex.div.internal.scroll.findDirectionalSnapPosition
+import com.yandex.div.render.common.scroll.SnapPositions
+import com.yandex.div.render.common.scroll.findDirectionalSnapPosition
 import com.yandex.div2.DivGallery.ContentAlignment
 
 internal class DivGallerySnapHelper(private val view: RecyclerView) : PagerSnapHelper() {

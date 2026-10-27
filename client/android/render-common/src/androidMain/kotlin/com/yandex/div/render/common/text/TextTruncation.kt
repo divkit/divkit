@@ -1,4 +1,4 @@
-package com.yandex.div.core.text
+package com.yandex.div.render.common.text
 
 import android.os.Build
 import androidx.annotation.RequiresApi

@@ -13,8 +13,8 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import com.yandex.div.compose.views.gallery.scroll.GalleryLayoutInfo
 import com.yandex.div.compose.views.gallery.scroll.toGalleryLayoutInfo
-import com.yandex.div.internal.scroll.SnapPositions
-import com.yandex.div.internal.scroll.findDirectionalSnapPosition
+import com.yandex.div.render.common.scroll.SnapPositions
+import com.yandex.div.render.common.scroll.findDirectionalSnapPosition
 import com.yandex.div2.DivGallery
 import kotlin.math.abs
 

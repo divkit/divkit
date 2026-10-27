@@ -2,8 +2,8 @@ package com.yandex.div.core.util
 
 import android.util.Log
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.internal.util.NearestItemSearch
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.render.common.tree.NearestItemSearch
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 

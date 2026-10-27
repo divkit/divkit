@@ -46,6 +46,7 @@ dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':div-svg')
     implementation project(path: ':logging')
+    implementation project(path: ':render-common')
     implementation project(path: ':utils')
 
     api project(path: ':beacon')

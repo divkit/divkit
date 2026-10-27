@@ -6,7 +6,7 @@ import android.graphics.Shader
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ShaderBrush
-import com.yandex.div.core.util.AnimatedTextGradientMath
+import com.yandex.div.render.common.text.AnimatedTextGradientMath
 import com.yandex.div2.DivRadialGradientRelativeRadius
 import kotlin.math.abs
 import kotlin.math.pow

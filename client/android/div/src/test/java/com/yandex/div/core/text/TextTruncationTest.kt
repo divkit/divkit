@@ -1,6 +1,7 @@
 package com.yandex.div.core.text
 
 import com.yandex.div.core.annotations.InternalApi
+import com.yandex.div.render.common.text.TextTruncation
 import java.util.Locale
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

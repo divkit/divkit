@@ -1,24 +1,24 @@
-package com.yandex.div.internal.util
+package com.yandex.div.render.common.tree
 
 import com.yandex.div.core.annotations.InternalApi
 
 @InternalApi
-class NearestItemSearch<T : Any> {
+public class NearestItemSearch<T : Any> {
     private var seekerRoute: SearchRoute<T>? = null
     private val searchRoutes = mutableListOf<SearchRoute<T>>()
     private val finishedRoutes = mutableMapOf<T, Int>()
 
-    fun onEnter() {
+    public fun onEnter() {
         searchRoutes.forEach { it.onEnter() }
         seekerRoute?.onEnter()
     }
 
-    fun onLeave() {
+    public fun onLeave() {
         searchRoutes.forEach { it.onLeave() }
         seekerRoute?.onLeave()
     }
 
-    fun onSeeker() {
+    public fun onSeeker() {
         searchRoutes.forEach { route ->
             route.item?.let { finishedRoutes[it] = route.distance() }
         }
@@ -26,7 +26,7 @@ class NearestItemSearch<T : Any> {
         seekerRoute = SearchRoute(null)
     }
 
-    fun onItem(item: T) {
+    public fun onItem(item: T) {
         val route = seekerRoute
         if (route != null) {
             finishedRoutes[item] = route.distance()
@@ -35,7 +35,7 @@ class NearestItemSearch<T : Any> {
         }
     }
 
-    fun nearestItems(): List<T> {
+    public fun nearestItems(): List<T> {
         val minDistance = finishedRoutes.values.minOrNull() ?: return emptyList()
         return finishedRoutes.filterValues { it == minDistance }.keys.toList()
     }

@@ -1,6 +1,6 @@
-package com.yandex.div.internal.core
+package com.yandex.div.render.common.text
 
-import com.yandex.div.internal.core.TextRangeCloudBackground.LineBounds
+import com.yandex.div.render.common.text.TextRangeCloudBackground.LineBounds
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

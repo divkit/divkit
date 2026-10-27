@@ -1,14 +1,13 @@
 package com.yandex.div.core.view2.divs.widgets
 
 import android.graphics.Matrix
-import android.graphics.PointF
 import android.graphics.Shader
 import android.view.Choreographer
 import android.view.View
-import com.yandex.div.core.util.AnimatedTextGradientMath
 import com.yandex.div.core.view2.divs.availableWidth
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
+import com.yandex.div.render.common.text.AnimatedTextGradientMath
 import kotlin.math.ceil
 
 internal class AnimatedTextGradientController(
@@ -17,7 +16,6 @@ internal class AnimatedTextGradientController(
 ) : Choreographer.FrameCallback {
 
     private val shaderMatrix = Matrix()
-    private val translation = PointF()
     private var gradientData: AnimatedTextGradientData? = null
     private var shader: Shader? = null
     private var shaderWidth = 0
@@ -152,9 +150,7 @@ internal class AnimatedTextGradientController(
                         width = width.toFloat(),
                         height = height.toFloat(),
                         phase = phase,
-                        result = translation,
-                    )
-                    shaderMatrix.setTranslate(translation.x, translation.y)
+                    ) { x, y -> shaderMatrix.setTranslate(x, y) }
                 }
                 is AnimatedTextGradientData.Gradient.Radial -> {
                     shaderMatrix.setTranslate(

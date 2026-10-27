@@ -10,8 +10,8 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.utils.gradient.LinearGradientBrush
 import com.yandex.div.core.DivAnimationsEnabledProvider
-import com.yandex.div.core.util.AnimatedTextGradientMath
 import com.yandex.div.json.expressions.Expression
+import com.yandex.div.render.common.text.AnimatedTextGradientMath
 import com.yandex.div.test.data.animatedTextGradient
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.text
@@ -71,7 +71,7 @@ class AnimatedTextGradientTest {
             width = GRADIENT_SIZE.width,
             height = GRADIENT_SIZE.height,
             phase = phase,
-        ).x
+        ) { x, _ -> x }
         assertEquals(expectedTranslation, brush.createShader(GRADIENT_SIZE).translationX(), TOLERANCE)
     }
 

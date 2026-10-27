@@ -28,8 +28,8 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.views.modifiers.onDivVisibilityChanged
-import com.yandex.div.internal.core.TextRangeCloudBackground
-import com.yandex.div.internal.core.TextRangeParticleSystem
+import com.yandex.div.render.common.text.TextRangeCloudBackground
+import com.yandex.div.render.common.text.TextRangeParticleSystem
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivText

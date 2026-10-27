@@ -34,6 +34,7 @@ dependencies {
     implementation(project(":div-histogram"))
     implementation(project(":div-storage"))
     implementation(project(":logging"))
+    implementation(project(":render-common"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation.layout)

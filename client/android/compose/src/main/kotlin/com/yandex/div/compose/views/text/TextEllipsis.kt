@@ -10,7 +10,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
-import com.yandex.div.core.text.TextTruncation
+import com.yandex.div.render.common.text.TextTruncation
 import com.yandex.div2.DivText
 import java.util.Locale
 

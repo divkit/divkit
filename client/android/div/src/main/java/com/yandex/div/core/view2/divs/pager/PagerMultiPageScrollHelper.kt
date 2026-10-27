@@ -10,7 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.divs.utils.isForwardScroll
 import com.yandex.div.core.view2.divs.utils.snapPositions
-import com.yandex.div.internal.scroll.findDirectionalSnapPosition
+import com.yandex.div.render.common.scroll.findDirectionalSnapPosition
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.roundToInt

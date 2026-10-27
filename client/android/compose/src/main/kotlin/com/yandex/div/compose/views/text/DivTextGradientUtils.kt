@@ -12,7 +12,7 @@ import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.gradient.observeLinearGradient
 import com.yandex.div.compose.utils.gradient.observeRadialGradient
-import com.yandex.div.core.util.AnimatedTextGradientMath
+import com.yandex.div.render.common.text.AnimatedTextGradientMath
 import com.yandex.div2.DivAnimatedTextGradient
 import com.yandex.div2.DivStaticTextGradient
 import com.yandex.div2.DivTextGradient

@@ -1,6 +1,6 @@
 @file:JvmName("DivSystemAnimationUtils")
 
-package com.yandex.div.core.util
+package com.yandex.div.render.common.animation
 
 import android.animation.ValueAnimator
 import android.content.Context

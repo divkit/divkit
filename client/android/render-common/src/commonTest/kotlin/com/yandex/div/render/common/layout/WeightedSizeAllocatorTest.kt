@@ -1,8 +1,8 @@
-package com.yandex.div.internal.core
+package com.yandex.div.render.common.layout
 
 import com.yandex.div.core.annotations.InternalApi
-import org.junit.Assert.assertArrayEquals
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertContentEquals
 
 @OptIn(InternalApi::class)
 class WeightedSizeAllocatorTest {
@@ -15,7 +15,7 @@ class WeightedSizeAllocatorTest {
             minimumSize = 400,
         )
 
-        assertArrayEquals(intArrayOf(134, 134, 134), sizes)
+        assertContentEquals(intArrayOf(134, 134, 134), sizes)
     }
 
     @Test
@@ -26,7 +26,7 @@ class WeightedSizeAllocatorTest {
             minimumSize = 400,
         )
 
-        assertArrayEquals(intArrayOf(200, 134, 67), sizes)
+        assertContentEquals(intArrayOf(200, 134, 67), sizes)
     }
 
     @Test
@@ -37,7 +37,7 @@ class WeightedSizeAllocatorTest {
             minimumSize = 100,
         )
 
-        assertArrayEquals(intArrayOf(44, 44, 44), sizes)
+        assertContentEquals(intArrayOf(44, 44, 44), sizes)
     }
 
     @Test
@@ -48,6 +48,6 @@ class WeightedSizeAllocatorTest {
             minimumSize = 100,
         )
 
-        assertArrayEquals(intArrayOf(40, 30, 30), sizes)
+        assertContentEquals(intArrayOf(40, 30, 30), sizes)
     }
 }

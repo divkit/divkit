@@ -1,10 +1,10 @@
-package com.yandex.div.internal.core
+package com.yandex.div.render.common.layout
 
 import com.yandex.div.core.annotations.InternalApi
 import kotlin.math.ceil
 
 @InternalApi
-data class GridItemMeasurement(
+public data class GridItemMeasurement(
     val lineIndex: Int,
     val contentSize: Int,
     val size: Int,
@@ -13,7 +13,7 @@ data class GridItemMeasurement(
 )
 
 @InternalApi
-fun resolveGridTrackSizes(
+public fun resolveGridTrackSizes(
     count: Int,
     items: List<GridItemMeasurement>,
     minimumSize: Int,

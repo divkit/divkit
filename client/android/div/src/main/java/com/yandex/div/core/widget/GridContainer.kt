@@ -11,11 +11,11 @@ import android.view.View
 import androidx.core.view.isEmpty
 import com.yandex.div.R
 import com.yandex.div.internal.KLog
-import com.yandex.div.internal.core.GridItemMeasurement
-import com.yandex.div.internal.core.resolveGridTrackSizes
 import com.yandex.div.internal.widget.DivLayoutParams
 import com.yandex.div.internal.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
 import com.yandex.div.internal.widget.DivViewGroup
+import com.yandex.div.render.common.layout.GridItemMeasurement
+import com.yandex.div.render.common.layout.resolveGridTrackSizes
 import kotlin.math.max
 import kotlin.math.min
 

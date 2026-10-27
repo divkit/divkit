@@ -1,4 +1,4 @@
-package com.yandex.div.internal.core
+package com.yandex.div.render.common.text
 
 import kotlin.math.abs
 import kotlin.test.Test

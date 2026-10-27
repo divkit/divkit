@@ -17,9 +17,9 @@ import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.utils.observedValue
-import com.yandex.div.internal.core.GridItemMeasurement
-import com.yandex.div.internal.core.resolveGridTrackSizes
-import com.yandex.div.internal.core.resolveWeightedSizes
+import com.yandex.div.render.common.layout.GridItemMeasurement
+import com.yandex.div.render.common.layout.resolveGridTrackSizes
+import com.yandex.div.render.common.layout.resolveWeightedSizes
 import com.yandex.div2.Div
 import com.yandex.div2.DivSize
 import kotlin.math.roundToInt

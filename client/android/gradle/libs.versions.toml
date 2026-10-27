@@ -40,6 +40,7 @@ webp-imageio = "0.3.3"
 yatagan = "2.0.0"
 
 androidx-activity = "1.11.0"
+androidx-annotation = "1.8.1"
 androidx-appcompat = "1.6.1"
 androidx-benchmark = "1.5.0"
 androidx-collection = "1.6.0"
@@ -75,6 +76,7 @@ allure-commons = { module = "io.qameta.allure:allure-kotlin-commons", version.re
 allure-report-plugin = { module = "io.qameta.allure.gradle.report:allure-report-plugin", version.ref = "allure-plugin" }
 
 androidx-activity = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-benchmark-macro-junit4 = { module = "androidx.benchmark:benchmark-macro-junit4", version.ref = "androidx-benchmark" }
 androidx-profileinstaller = { module = "androidx.profileinstaller:profileinstaller", version.ref = "androidx-profileinstaller" }

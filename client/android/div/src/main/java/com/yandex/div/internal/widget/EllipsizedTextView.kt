@@ -12,9 +12,9 @@ import android.util.AttributeSet
 import androidx.annotation.VisibleForTesting
 import androidx.core.widget.TextViewCompat
 import com.yandex.div.R
-import com.yandex.div.core.text.TextTruncation
 import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
 import com.yandex.div.internal.view.DrawingPassOverrideStrategy
+import com.yandex.div.render.common.text.TextTruncation
 import com.yandex.div2.DivText
 import java.util.Locale
 

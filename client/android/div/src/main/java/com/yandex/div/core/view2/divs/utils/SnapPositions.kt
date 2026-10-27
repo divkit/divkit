@@ -1,7 +1,7 @@
 package com.yandex.div.core.view2.divs.utils
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.yandex.div.internal.scroll.SnapPositions
+import com.yandex.div.render.common.scroll.SnapPositions
 
 internal fun isForwardScroll(
     isVertical: Boolean,

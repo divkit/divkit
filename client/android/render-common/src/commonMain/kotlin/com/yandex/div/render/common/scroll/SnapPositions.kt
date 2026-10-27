@@ -1,4 +1,4 @@
-package com.yandex.div.internal.scroll
+package com.yandex.div.render.common.scroll
 
 import com.yandex.div.core.annotations.InternalApi
 
@@ -9,17 +9,17 @@ import com.yandex.div.core.annotations.InternalApi
  * visible: an adapter maps each one explicitly instead of passing four same-typed getters in order.
  */
 @InternalApi
-interface SnapPositions {
-    val itemCount: Int
-    val isLinearLayout: Boolean
-    val firstCompletelyVisible: Int
-    val lastCompletelyVisible: Int
-    val firstVisible: Int
-    val lastVisible: Int
+public interface SnapPositions {
+    public val itemCount: Int
+    public val isLinearLayout: Boolean
+    public val firstCompletelyVisible: Int
+    public val lastCompletelyVisible: Int
+    public val firstVisible: Int
+    public val lastVisible: Int
 }
 
 @InternalApi
-fun findDirectionalSnapPosition(forward: Boolean, positions: SnapPositions): Int {
+public fun findDirectionalSnapPosition(forward: Boolean, positions: SnapPositions): Int {
     val visible = if (forward) positions.lastVisible else positions.firstVisible
     // Snap to a partially visible edge item instead of moving away from the linear layout edge.
     val isEdgeItem = if (forward) {

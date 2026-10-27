@@ -6,7 +6,7 @@ import android.graphics.Shader
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ShaderBrush
-import com.yandex.div.core.util.AnimatedTextGradientMath
+import com.yandex.div.render.common.text.AnimatedTextGradientMath
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -38,13 +38,13 @@ internal data class LinearGradientBrush(
             Shader.TileMode.CLAMP,
         ).apply {
             animationPhase?.let { phase ->
-                val translation = AnimatedTextGradientMath.linearTranslation(
+                val matrix = AnimatedTextGradientMath.linearTranslation(
                     angleDegrees = angle.toFloat(),
                     width = width,
                     height = height,
                     phase = phase,
-                )
-                setLocalMatrix(Matrix().apply { setTranslate(translation.x, translation.y) })
+                ) { x, y -> Matrix().apply { setTranslate(x, y) } }
+                setLocalMatrix(matrix)
             }
         }
     }
