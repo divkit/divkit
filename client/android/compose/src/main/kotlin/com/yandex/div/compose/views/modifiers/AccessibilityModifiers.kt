@@ -28,6 +28,8 @@ import com.yandex.div2.DivText
 
 @Composable
 internal fun Modifier.accessibility(data: DivBase): Modifier {
+    // The slider publishes its accessibility on its thumb nodes, see DivSliderView.
+    if (data is DivSlider) return this
     val accessibility = data.accessibility ?: return this
 
     val mode = accessibility.mode.observedValue()
@@ -48,18 +50,7 @@ internal fun Modifier.accessibility(data: DivBase): Modifier {
         return this
     }
 
-    val contentDescription = accessibility.observeContentDescription()
-    val stateDescription = accessibility.stateDescription?.observedValue()
-    val isChecked = if (type.isCheckable) accessibility.isChecked?.observedValue() else null
-    val properties: (SemanticsPropertyReceiver.() -> Unit) = {
-        contentDescription?.let { this.contentDescription = it }
-        stateDescription?.let { this.stateDescription = it }
-        isChecked?.let { toggleableState = if (it) ToggleableState.On else ToggleableState.Off }
-        role?.let { this.role = it }
-        if (type.isHeader) {
-            heading()
-        }
-    }
+    val properties = accessibility.observeSemanticsProperties(type, role)
     return when {
         !isMerge -> semantics(properties = properties)
         data.keepsControlSemanticsOnMerge -> semantics(mergeDescendants = true, properties = properties)
@@ -68,7 +59,26 @@ internal fun Modifier.accessibility(data: DivBase): Modifier {
 }
 
 @Composable
-private fun DivAccessibility.observeContentDescription(): String? {
+private fun DivAccessibility.observeSemanticsProperties(
+    type: Type,
+    role: Role?,
+): SemanticsPropertyReceiver.() -> Unit {
+    val contentDescription = observeContentDescription()
+    val stateDescription = stateDescription?.observedValue()
+    val isChecked = if (type.isCheckable) isChecked?.observedValue() else null
+    return {
+        contentDescription?.let { this.contentDescription = it }
+        stateDescription?.let { this.stateDescription = it }
+        isChecked?.let { toggleableState = if (it) ToggleableState.On else ToggleableState.Off }
+        role?.let { this.role = it }
+        if (type.isHeader) {
+            heading()
+        }
+    }
+}
+
+@Composable
+internal fun DivAccessibility.observeContentDescription(): String? {
     val description = description?.observedValue()
     val hint = hint?.observedValue()
     return when {
@@ -91,7 +101,7 @@ private fun DivAccessibility.hasSemantics(type: Type, role: Role?, isMerge: Bool
 
 /** Controls without nested elements: merging must not clear the control's own semantics. */
 private val DivBase.keepsControlSemanticsOnMerge: Boolean
-    get() = this is DivSwitch || this is DivSlider || this is DivSelect
+    get() = this is DivSwitch || this is DivSelect
 
 private val DivBase.defaultRole: Role?
     get() = when (this) {
