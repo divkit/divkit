@@ -1,0 +1,80 @@
+{
+  "description": "DivSelect popup overlaps half of the select and matches its width with content paddings",
+  "platforms": [
+    "android"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "div_select_popup_geometry",
+      "variables": [
+        {
+          "name": "selected_option",
+          "type": "string",
+          "value": "selected"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "select",
+            "id": "select",
+            "options": [
+              {
+                "value": "selected",
+                "text": "Selected option"
+              },
+              {
+                "value": "second",
+                "text": "Second option"
+              },
+              {
+                "value": "third",
+                "text": "Third option"
+              }
+            ],
+            "width": {
+              "type": "fixed",
+              "value": 240
+            },
+            "height": {
+              "type": "fixed",
+              "value": 64
+            },
+            "margins": {
+              "left": 24,
+              "top": 80
+            },
+            "paddings": {
+              "left": 20,
+              "top": 12,
+              "right": 20,
+              "bottom": 12
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#4C6FFF"
+              }
+            ],
+            "text_color": "#FFFFFF",
+            "value_variable": "selected_option"
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "tap",
+      "target": {
+        "type": "div_id",
+        "id": "select"
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "popup_open"
+    }
+  ]
+}

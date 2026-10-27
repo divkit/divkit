@@ -182,7 +182,7 @@ private fun BaseView(
         is Div.Indicator -> DivIndicatorView(modifier.applyPaddings(data), data.value)
         is Div.Input -> DivInputView(modifier.applyPaddings(data), data.value)
         is Div.Pager -> DivPagerView(modifier, data.value)
-        is Div.Select -> DivSelectView(modifier.applyPaddings(data), data.value)
+        is Div.Select -> DivSelectView(modifier, data.value)
         is Div.Separator -> DivSeparatorView(modifier.applyPaddings(data), data.value)
         is Div.Slider -> DivSliderView(modifier.applyPaddings(data), data.value)
         is Div.State -> DivStateView(modifier, data.value)

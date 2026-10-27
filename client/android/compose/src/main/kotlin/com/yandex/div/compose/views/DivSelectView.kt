@@ -2,6 +2,7 @@ package com.yandex.div.compose.views
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -16,14 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.InputMode
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInputModeManager
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
@@ -31,8 +38,12 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.text.observeBaseTextStyle
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.variables.mutableStateFromVariable
+import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivSelect
+
+private const val POPUP_ANCHOR_OVERLAP_FRACTION = 0.5f
 
 @Composable
 internal fun DivSelectView(
@@ -70,7 +81,8 @@ internal fun DivSelectView(
         valueState = valueState,
         text = text,
         textStyle = textStyle.copy(color = color),
-        options = options
+        options = options,
+        paddings = data.paddings,
     )
 }
 
@@ -80,14 +92,19 @@ private fun SelectView(
     valueState: MutableState<String>,
     text: String,
     textStyle: TextStyle,
-    options: List<Option>
+    options: List<Option>,
+    paddings: DivEdgeInsets?,
 ) {
     var expanded by remember { mutableStateOf(false) }
     var isVisible by remember { mutableStateOf(true) }
     var isFocused by remember { mutableStateOf(false) }
+    var selectSize by remember { mutableStateOf(IntSize.Zero) }
     val focusRequester = remember { FocusRequester() }
     val inputFocus = divContext.component.inputFocus
     val inputModeManager = LocalInputModeManager.current
+    val density = LocalDensity.current
+    val selectWidthDp = with(density) { selectSize.width.toDp() }
+    val selectHeightDp = with(density) { selectSize.height.toDp() }
 
     val openPopup = {
         if (inputModeManager.inputMode == InputMode.Touch) inputFocus.clear()
@@ -115,15 +132,19 @@ private fun SelectView(
             openPopup()
         }
 
-    Box(modifier) {
+    Box(modifier.onSizeChanged { selectSize = it }) {
         BasicText(
+            modifier = Modifier.padding(paddings),
             text = text,
             style = textStyle
         )
 
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.width(selectWidthDp),
+            offset = DpOffset(x = 0.dp, y = -selectHeightDp * POPUP_ANCHOR_OVERLAP_FRACTION),
+            containerColor = Color.White,
         ) {
             options.forEach { option ->
                 DropdownMenuItem(

@@ -65,6 +65,7 @@ val viewDeviceScreenshotCases: Set<String> = setOf(
 )
 
 val viewDeviceIgnoredScreenshotCases = listOf(
+    "interactive_snapshot_test_data/div-select/popup-geometry.json",
     "snapshot_test_data/div-text/all_attributes.json",
     "snapshot_test_data/div-container/baseline-with-images.json",
 )
@@ -257,6 +258,7 @@ val composeRoborazziInteractiveScreenshotCases = setOf(
     "div-pager/variables.json",
     "div-pager/vertical-content-alignment.json",
     "div-select/base-properties.json",
+    "div-select/popup-geometry.json",
     "div-select/switching_options.json",
     "div-select/text-properties.json",
     "div-select/visibility.json",
