@@ -11,7 +11,7 @@
 }
 
 .pager_animated > .pager__items {
-    transition-duration: .15s;
+    transition-duration: var(--divkit-pager-scroll-duration, .15s);
 }
 
 .pager__item {

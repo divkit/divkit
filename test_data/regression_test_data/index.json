@@ -5230,7 +5230,8 @@
       "title": "Typed scroll action duration",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ],
       "tags": [
         "TypedActions",

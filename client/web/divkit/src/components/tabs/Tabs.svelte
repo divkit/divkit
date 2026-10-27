@@ -103,6 +103,7 @@
     let delimitierStyle: TabsDelimiter | undefined;
     let animationType: TabsTitleAnimationType = 'slide';
     let animationDuration: number | undefined;
+    let actionScrollDuration: number | undefined;
     let selectedTabStyles: Record<string, string> | undefined;
     let prevContext: ComponentContext<DivTabsData> | undefined;
 
@@ -444,11 +445,12 @@
     }
     $: updateItems(items);
 
-    async function setSelected(val: number, focus: boolean, animated: boolean): Promise<void> {
+    async function setSelected(val: number, focus: boolean, animated: boolean, duration?: number): Promise<void> {
         previousSelected = selected;
         selected = val;
+        actionScrollDuration = duration;
         initTabsSwipe();
-        changeTab(animated);
+        changeTab(animated && duration !== 0);
 
         updateSlideAnimation();
 
@@ -560,7 +562,7 @@
         }
         hidePanelsTimeout = window.setTimeout(() => {
             visiblePanels = items.map((_, i) => i === selected);
-        }, 400);
+        }, (actionScrollDuration ?? 300) + 100);
     }
 
     function onTabKeydown(event: KeyboardEvent): void {
@@ -616,6 +618,7 @@
         moveCoords = null;
         swipeStartTime = Date.now();
         startTransform = currentTransform || -selected * panelsWrapper.clientWidth;
+        actionScrollDuration = undefined;
         isAnimated = false;
 
         if (hidePanelsTimeout) {
@@ -733,12 +736,12 @@
 
         if (componentContext.id && !hasError && !componentContext.fakeElement) {
             componentContext.attachViewInfo('scrollable', {
-                setCurrentItem(item: number, animated: boolean) {
+                setCurrentItem(item: number, animated: boolean, duration?: number) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
                     }
 
-                    setSelected(item, false, animated);
+                    setSelected(item, false, animated, duration);
                 },
                 setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
                     let previousItem = clampIndex(selected - step, overflow);
@@ -750,28 +753,29 @@
 
                     setSelected(nextItem, false, animated);
                 },
-                scrollToStart(animated: boolean) {
-                    setSelected(0, false, animated);
+                scrollToStart(animated: boolean, duration?: number) {
+                    setSelected(0, false, animated, duration);
                 },
-                scrollToEnd(animated: boolean) {
-                    setSelected(items.length - 1, false, animated);
+                scrollToEnd(animated: boolean, duration?: number) {
+                    setSelected(items.length - 1, false, animated, duration);
                 },
                 scrollCombined({
                     step,
                     overflow,
-                    animated
+                    animated,
+                    duration
                 }) {
                     if (step) {
-                        setSelected(clampIndex(selected + step, overflow || 'clamp'), false, animated || true);
+                        setSelected(clampIndex(selected + step, overflow || 'clamp'), false, animated ?? true, duration);
                     }
                 },
-                scrollToItemId(itemId, animated) {
+                scrollToItemId(itemId, animated, duration) {
                     const targetItems = items
                         .map((it, index) => it.div?.id === itemId ? index : undefined)
                         .filter(it => it !== undefined);
 
                     if (targetItems.length === 1) {
-                        setSelected(targetItems[0], false, animated);
+                        setSelected(targetItems[0], false, animated, duration);
                     } else if (!targetItems.length) {
                         componentContext.logError(wrapError(new Error('There are no items with id'), {
                             additional: {
@@ -851,7 +855,8 @@
             style:--divkit-tabs-inactive-background-color={tabInactiveBackground}
             style:--divkit-tabs-border-radius={tabBorderRadius}
             style:--divkit-tabs-items-spacing={tabItemSpacing ? pxToEmWithUnits(tabItemSpacing * 10 / tabFontSize) : ''}
-            style:--divkit-tabs-animation-duration={animationDuration !== undefined ? `${animationDuration}ms` : ''}
+            style:--divkit-tabs-animation-duration={(actionScrollDuration ?? animationDuration) !== undefined ?
+                `${actionScrollDuration ?? animationDuration}ms` : ''}
             on:keydown={onTabKeydown}
         >
             <div class={css['tabs__items-bg']} aria-hidden="true">
@@ -943,6 +948,7 @@
                     animated: isAnimated
                 })}
                 bind:this={swiperElem}
+                style:transition-duration={isAnimated && actionScrollDuration !== undefined ? `${actionScrollDuration}ms` : ''}
             >
                 {#each $childStore as item}
                     {@const index = item.index}

@@ -14,7 +14,8 @@
       "$ref": "common.json#/non_negative_integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   }

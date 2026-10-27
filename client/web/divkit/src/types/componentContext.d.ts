@@ -40,19 +40,20 @@ export interface InfoGetter {
         pause(): void;
     };
     scrollable: {
-        setCurrentItem(item: number, animated: boolean): void;
+        setCurrentItem(item: number, animated: boolean, duration?: number): void;
         setPreviousItem(step: number, overflow: Overflow, animated: boolean): void;
         setNextItem(step: number, overflow: Overflow, animated: boolean): void;
-        scrollToStart?: (animated: boolean) => void;
-        scrollToEnd?: (animated: boolean) => void;
-        scrollToPosition?: (step: number, animated: boolean) => void;
+        scrollToStart?: (animated: boolean, duration?: number) => void;
+        scrollToEnd?: (animated: boolean, duration?: number) => void;
+        scrollToPosition?: (step: number, animated: boolean, duration?: number) => void;
         scrollCombined?: (opts: {
             step?: number;
             offset?: number;
             overflow?: Overflow;
             animated?: boolean;
+            duration?: number;
         }) => void;
-        scrollToItemId?: (itemId: string, animated: boolean) => void;
+        scrollToItemId?: (itemId: string, animated: boolean, duration?: number) => void;
     };
     tooltips: MaybeMissing<Tooltip>[];
     extensionActions: Map<string, DivExtension[]>;

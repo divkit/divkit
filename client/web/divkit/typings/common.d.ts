@@ -351,6 +351,7 @@ export interface ActionScrollBy {
     type: 'scroll_by';
     id: string;
     animated?: boolean;
+    duration?: number;
     overflow?: Overflow;
     offset?: number;
     item_count?: number;
@@ -386,6 +387,7 @@ export interface ActionScrollTo {
     type: 'scroll_to';
     id: string;
     animated?: boolean;
+    duration?: number;
     destination: ActionScrollToDestination;
 }
 

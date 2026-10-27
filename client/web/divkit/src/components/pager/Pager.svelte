@@ -76,6 +76,7 @@
     import { makeStyle } from '../../utils/makeStyle';
     import { correctGeneralOrientation } from '../../utils/correctGeneralOrientation';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
+    import { isPrefersReducedMotion } from '../../utils/isPrefersReducedMotion';
     import { Truthy } from '../../utils/truthy';
     import { nonNegativeModulo } from '../../utils/nonNegativeModulo';
     import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
@@ -144,6 +145,7 @@
     let multiPageScroll = false;
     let hasDuplicates = false;
     let animated = false;
+    let scrollDuration: number | undefined;
     let shouldClampDuplicates = false;
     let transform = 0;
     let transformStr = '';
@@ -479,6 +481,7 @@
         [gridAutoSizeProp]: autoSizeVal,
         [gridTemplateSizeProp]: templateSizeVal,
         transform: transformStr,
+        '--divkit-pager-scroll-duration': scrollDuration === undefined ? undefined : `${scrollDuration}ms`,
     };
 
     $: mods = {
@@ -642,7 +645,9 @@
         multiPageFrame = requestAnimationFrame(frame);
     }
 
-    function scrollToVisiblePagerItem(visibleIndex: number, isAnimated: boolean): void {
+    function scrollToVisiblePagerItem(visibleIndex: number, isAnimated: boolean, duration?: number): void {
+        cancelPointer?.();
+        cancelPointer = undefined;
         cancelMultiPageAnimation();
         if (!pagerItemsWrapper) {
             return;
@@ -651,7 +656,8 @@
         const sequence = multiPageSequence;
         const position = getTransformPosition(visibleIndex);
 
-        animated = isAnimated;
+        animated = isAnimated && duration !== 0 && !isPrefersReducedMotion();
+        scrollDuration = duration;
         tick().then(() => {
             if (sequence !== multiPageSequence) {
                 return;
@@ -665,8 +671,8 @@
         });
     }
 
-    function scrollToPagerItem(index: number, isAnimated = true): void {
-        scrollToVisiblePagerItem(allToVisibleMap[index] ?? 0, isAnimated);
+    function scrollToPagerItem(index: number, isAnimated = true, duration?: number): void {
+        scrollToVisiblePagerItem(allToVisibleMap[index] ?? 0, isAnimated, duration);
     }
 
     function transformToStr(transform: number): string {
@@ -719,39 +725,41 @@
 
         if (componentContext.id && !componentContext.fakeElement) {
             componentContext.attachViewInfo('scrollable', {
-                setCurrentItem(item: number, animated: boolean) {
+                setCurrentItem(item: number, animated: boolean, duration?: number) {
                     if (item < 0 || item > items.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
                     }
 
-                    scrollToPagerItem(item, animated);
+                    scrollToPagerItem(item, animated, duration);
                 },
                 setPreviousItem,
                 setNextItem,
-                scrollToStart(animated) {
-                    scrollToPagerItem(visibleItems[hasDuplicates ? DUPLICATES_IN_INFINITE : 0].index, animated);
+                scrollToStart(animated, duration) {
+                    const index = visibleItems[hasDuplicates ? DUPLICATES_IN_INFINITE : 0].index;
+                    scrollToPagerItem(index, animated, duration);
                 },
-                scrollToEnd(animated) {
+                scrollToEnd(animated, duration) {
                     scrollToPagerItem(visibleItems[
                         visibleItems.length - 1 - (hasDuplicates ? DUPLICATES_IN_INFINITE : 0)
-                    ].index, animated);
+                    ].index, animated, duration);
                 },
                 scrollCombined({
                     step,
                     overflow,
-                    animated
+                    animated,
+                    duration
                 }) {
                     if (step) {
-                        scrollToPagerItem(clampIndex(allToVisibleMap[currentItem] + step, overflow || 'clamp'), animated);
+                        scrollToPagerItem(clampIndex(allToVisibleMap[currentItem] + step, overflow || 'clamp'), animated, duration);
                     }
                 },
-                scrollToItemId(itemId, animated) {
+                scrollToItemId(itemId, animated, duration) {
                     const targetItems = items
                         .map((it, index) => it.json.id === itemId ? index : undefined)
                         .filter(it => it !== undefined);
 
                     if (targetItems.length === 1) {
-                        scrollToPagerItem(targetItems[0], animated);
+                        scrollToPagerItem(targetItems[0], animated, duration);
                     } else if (!targetItems.length) {
                         componentContext.logError(wrapError(new Error('There are no items with id'), {
                             additional: {

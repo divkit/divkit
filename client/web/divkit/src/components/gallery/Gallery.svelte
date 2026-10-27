@@ -31,6 +31,7 @@
     import { constStore } from '../../utils/constStore';
     import { getItemsFromItemBuilder } from '../../utils/itemBuilder';
     import { isDeepEqual } from '../../utils/isDeepEqual';
+    import { scrollWithDuration } from '../../utils/scrollWithDuration';
     import { wrapError } from '../../utils/wrapError';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -53,6 +54,7 @@
     const direction = rootCtx.direction;
 
     let scroller: HTMLElement;
+    let cancelScrollAnimation: (() => void) | undefined;
     let galleryItemsWrappers: HTMLElement[] = [];
     let hasScrollLeft = false;
     let hasScrollRight = false;
@@ -408,10 +410,7 @@
     }
 
     function scroll(type: 'left' | 'right'): void {
-        scroller.scroll({
-            left: scroller.scrollLeft + (scroller.offsetWidth * .75) * (type === 'right' ? 1 : -1),
-            behavior: 'smooth'
-        });
+        scrollTo(scroller.scrollLeft + (scroller.offsetWidth * .75) * (type === 'right' ? 1 : -1));
     }
 
     function getItems(): HTMLElement[] {
@@ -430,22 +429,24 @@
         return res;
     }
 
-    function scrollTo(offset: number, animated = true): void {
-        const isHorizontal = orientation === 'horizontal';
-        const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
-
-        scroller.scroll({
-            [scrollDirection]: offset,
-            behavior: animated ? 'smooth' : 'instant'
+    function scrollTo(offset: number, animated = true, duration?: number): void {
+        cancelScrollAnimation?.();
+        cancelScrollAnimation = scrollWithDuration(scroller, offset, {
+            axis: orientation === 'horizontal' ? 'left' : 'top',
+            rtl: orientation === 'horizontal' && $direction === 'rtl',
+            animated,
+            duration
         });
     }
 
     function scrollToGalleryItem(galleryElements: HTMLElement[], index: number, {
         animated = true,
+        duration,
         extraOffset = 0,
         overflow = 'clamp'
     }: {
         animated?: boolean;
+        duration?: number;
         extraOffset?: number;
         overflow?: Overflow;
     } = {}): void {
@@ -509,16 +510,18 @@
                 }
             }
 
-            scrollTo(offset, animated);
+            scrollTo(offset, animated, duration);
         }
     }
 
     function scrollOffset(offset: number, {
         overflow = 'clamp',
-        animated = true
+        animated = true,
+        duration
     }: {
         overflow?: Overflow;
         animated?: boolean;
+        duration?: number;
     } = {}): void {
         const isHorizontal = orientation === 'horizontal';
         const directionMultiplier = ($direction === 'ltr' || !isHorizontal) ? 1 : -1;
@@ -542,7 +545,7 @@
                 newOffset = nonNegativeModulo(newOffset, maxOffset);
             }
         }
-        scrollTo(newOffset * directionMultiplier, animated);
+        scrollTo(newOffset * directionMultiplier, animated, duration);
     }
 
     function checkIsIntersecting(scroller: DOMRect, item: DOMRect): boolean {
@@ -596,13 +599,13 @@
 
         if (componentContext.id && !componentContext.fakeElement) {
             componentContext.attachViewInfo('scrollable', {
-                setCurrentItem(item: number, animated: boolean) {
+                setCurrentItem(item: number, animated: boolean, duration?: number) {
                     const galleryElements = getItems();
                     if (item < 0 || item > galleryElements.length - 1) {
                         throw new Error('Item is out of range in "set-current-item" action');
                     }
 
-                    scrollToGalleryItem(galleryElements, item, { animated });
+                    scrollToGalleryItem(galleryElements, item, { animated, duration });
                 },
                 setPreviousItem(step: number, overflow: Overflow, animated: boolean) {
                     const currentElementIndex = calculateCurrentElementIndex('prev');
@@ -631,39 +634,43 @@
 
                     scrollToGalleryItem(galleryElements, nextItem, { animated, overflow });
                 },
-                scrollToStart(animated: boolean) {
-                    scrollTo(0, animated);
+                scrollToStart(animated: boolean, duration?: number) {
+                    scrollTo(0, animated, duration);
                 },
-                scrollToEnd(animated: boolean) {
-                    scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? 1e6 : -1e6, animated);
+                scrollToEnd(animated: boolean, duration?: number) {
+                    scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? 1e6 : -1e6, animated, duration);
                 },
-                scrollToPosition(step, animated: boolean) {
-                    scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? step : -step, animated);
+                scrollToPosition(step, animated: boolean, duration?: number) {
+                    scrollTo(($direction === 'ltr' || orientation !== 'horizontal') ? step : -step, animated, duration);
                 },
                 scrollCombined({
                     step,
                     offset,
                     overflow,
-                    animated
+                    animated,
+                    duration
                 }) {
                     if (step) {
                         const currentElementIndex = calculateCurrentElementIndex(step > 0 ? 'next' : 'prev');
                         const nextItem = currentElementIndex + step;
-                        scrollToGalleryItem(getItems(), nextItem, { animated, extraOffset: offset, overflow });
+                        scrollToGalleryItem(getItems(), nextItem, {
+                            animated, duration, extraOffset: offset, overflow
+                        });
                     } else if (offset) {
                         scrollOffset(offset, {
                             overflow,
-                            animated
+                            animated,
+                            duration
                         });
                     }
                 },
-                scrollToItemId(itemId, animated) {
+                scrollToItemId(itemId, animated, duration) {
                     const targetItems = items
                         .map((it, index) => it.json.id === itemId ? index : undefined)
                         .filter(it => it !== undefined);
 
                     if (targetItems.length === 1) {
-                        scrollToGalleryItem(getItems(), targetItems[0], { animated });
+                        scrollToGalleryItem(getItems(), targetItems[0], { animated, duration });
                     } else if (!targetItems.length) {
                         componentContext.logError(wrapError(new Error('There are no items with id'), {
                             additional: {
@@ -694,6 +701,7 @@
     });
 
     onDestroy(() => {
+        cancelScrollAnimation?.();
         mounted = false;
 
         items.forEach(context => {
@@ -718,6 +726,8 @@
     <div
         class="{css.gallery__scroller} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
         bind:this={scroller}
+        on:pointerdown={() => cancelScrollAnimation?.()}
+        on:wheel={() => cancelScrollAnimation?.()}
         on:scroll={shouldCheckArrows ? updateArrowsVisibility : null}
         style={makeStyle(scrollerStyle)}
     >

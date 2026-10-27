@@ -779,7 +779,9 @@
             return;
         }
 
-        if (actionTyped.animated !== undefined && typeof actionTyped.animated !== 'boolean') {
+        if (actionTyped.animated !== undefined && typeof actionTyped.animated !== 'boolean' ||
+            actionTyped.duration !== undefined &&
+                (!Number.isInteger(actionTyped.duration) || actionTyped.duration < 0)) {
             scopeContext.logError(wrapError(new Error('Missing properties for "scroll_to" action'), {
                 additional: {
                     id: actionTyped.id
@@ -787,30 +789,32 @@
             }));
             return;
         }
+        const animated = actionTyped.animated ?? true;
+        const duration = actionTyped.duration;
         switch (actionTyped.destination?.type) {
             case 'index': {
                 if (typeof actionTyped.destination.value === 'number') {
-                    info.setCurrentItem(actionTyped.destination.value, actionTyped.animated ?? true);
+                    info.setCurrentItem(actionTyped.destination.value, animated, duration);
                 }
                 break;
             }
             case 'offset': {
                 if (typeof actionTyped.destination.value === 'number') {
-                    info.scrollToPosition?.(actionTyped.destination.value, actionTyped.animated ?? true);
+                    info.scrollToPosition?.(actionTyped.destination.value, animated, duration);
                 }
                 break;
             }
             case 'start': {
-                info.scrollToStart?.(actionTyped.animated ?? true);
+                info.scrollToStart?.(animated, duration);
                 break;
             }
             case 'end': {
-                info.scrollToEnd?.(actionTyped.animated ?? true);
+                info.scrollToEnd?.(animated, duration);
                 break;
             }
             case 'item_id': {
                 if (actionTyped.destination.value && typeof actionTyped.destination.value === 'string') {
-                    info.scrollToItemId?.(actionTyped.destination.value, actionTyped.animated ?? true);
+                    info.scrollToItemId?.(actionTyped.destination.value, animated, duration);
                 }
                 break;
             }
@@ -844,7 +848,8 @@
             typeof actionTyped.item_count !== 'number' && actionTyped.item_count !== undefined ||
             typeof actionTyped.offset !== 'number' && actionTyped.offset !== undefined ||
             actionTyped.overflow !== undefined && actionTyped.overflow !== 'clamp' && actionTyped.overflow !== 'ring' ||
-            actionTyped.animated !== undefined && typeof actionTyped.animated !== 'boolean'
+            actionTyped.animated !== undefined && typeof actionTyped.animated !== 'boolean' ||
+            actionTyped.duration !== undefined && (!Number.isInteger(actionTyped.duration) || actionTyped.duration < 0)
         ) {
             scopeContext.logError(wrapError(new Error('Missing properties for "scroll_by" action'), {
                 additional: {
@@ -857,7 +862,8 @@
             step: actionTyped.item_count,
             offset: actionTyped.offset,
             overflow: actionTyped.overflow,
-            animated: actionTyped.animated
+            animated: actionTyped.animated,
+            duration: actionTyped.duration
         });
     }
 
