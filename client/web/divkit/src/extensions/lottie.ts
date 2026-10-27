@@ -56,6 +56,7 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
         private wrapper: HTMLElement | undefined;
         private isPlayingUnsubscriber: Unsubscriber | undefined;
         private isPlaying = true;
+        private actionPlaybackState: 'started' | 'stopped' | undefined;
         private unsubscribe: (() => void) | undefined;
 
         constructor(params: Params) {
@@ -268,6 +269,13 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
                             preserveAspectRatio: scale.attribute
                         }
                     });
+                    if (this.actionPlaybackState === 'started') {
+                        animItem.goToAndPlay(0, true);
+                    } else if (this.actionPlaybackState === 'stopped') {
+                        animItem.goToAndStop(0, true);
+                    } else if (!this.isPlaying) {
+                        animItem.pause();
+                    }
                     this.setSvgScale(scale);
                     this.animItem.addEventListener('data_failed', onError);
                     if (loop && (repeatMode === 'reverse' || repeatCount !== -1)) {
@@ -292,10 +300,24 @@ export function lottieExtensionBuilder(loadAnimation: LoadAnimation) {
 
             this.isPlayingUnsubscriber = context.derviedExpression(this.params.is_playing).subscribe(val => {
                 this.isPlaying = val !== false;
-                if (this.animItem) {
+                if (this.animItem && !this.actionPlaybackState) {
                     this.animItem[this.isPlaying ? 'play' : 'pause']();
                 }
             });
+        }
+
+        handleAction(payload: Record<string, unknown> | undefined): boolean {
+            if (payload?.type === 'start') {
+                this.actionPlaybackState = 'started';
+                this.animItem?.goToAndPlay(0, true);
+                return true;
+            }
+            if (payload?.type === 'stop') {
+                this.actionPlaybackState = 'stopped';
+                this.animItem?.goToAndStop(0, true);
+                return true;
+            }
+            return false;
         }
 
         updateView(_node: HTMLElement, context: DivExtensionContext): void {

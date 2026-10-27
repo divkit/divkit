@@ -1,5 +1,5 @@
 import type { Readable } from 'svelte/store';
-import type { Action, TemplateContext } from '../../typings/common';
+import type { Action, DivExtension, TemplateContext } from '../../typings/common';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
 import type { WrappedError } from '../utils/wrapError';
@@ -55,6 +55,7 @@ export interface InfoGetter {
         scrollToItemId?: (itemId: string, animated: boolean) => void;
     };
     tooltips: MaybeMissing<Tooltip>[];
+    extensionActions: Map<string, DivExtension[]>;
 }
 
 export interface ComponentContext<T extends DivBaseData = DivBaseData> {

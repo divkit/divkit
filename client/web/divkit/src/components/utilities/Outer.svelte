@@ -924,6 +924,7 @@
     }
 
     function unmountExtensions(): void {
+        componentContext.detachViewInfo('extensionActions');
         if (extensions && currentNode) {
             const ctx = rootCtx.getExtensionContext(componentContext);
             extensions.forEach(it => {
@@ -962,6 +963,7 @@
 
             unmountExtensions();
 
+            let extensionActions: Map<string, DivExtension[]> | undefined;
             if (Array.isArray(prevExtensionsVal)) {
                 const ctx = rootCtx.getExtensionContext(componentContext);
                 extensions = prevExtensionsVal.map((it, index) => {
@@ -976,11 +978,20 @@
                     const instance = rootCtx.getExtension(id, it.params);
 
                     if (instance) {
+                        if (instance.handleAction) {
+                            extensionActions ||= new Map();
+                            const handlers = extensionActions.get(id) || [];
+                            handlers.push(instance);
+                            extensionActions.set(id, handlers);
+                        }
                         instance.mountView?.(currentNode, ctx);
                     }
 
                     return instance;
                 }).filter(Truthy);
+            }
+            if (extensionActions) {
+                componentContext.attachViewInfo('extensionActions', extensionActions);
             }
         });
     }

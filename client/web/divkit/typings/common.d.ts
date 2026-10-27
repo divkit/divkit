@@ -400,6 +400,12 @@ export interface ActionCustom {
     type: 'custom';
 }
 
+export interface ActionExtensionAction {
+    type: 'extension_action';
+    extension_id: string;
+    div_id: string;
+}
+
 export interface ActionSetCursorPosition {
     type: 'set_cursor_position';
     id: string;
@@ -414,7 +420,7 @@ export type TypedAction = ActionSetVariable | ActionArrayRemoveValue | ActionArr
     ActionCopyToClipboard | ActionFocusElement | ActionClearFocus | ActionDictSetValue | ActionArraySetValue |
     ActionAnimatorStart | ActionAnimatorStop | ActionShowTooltip | ActionHideTooltip | ActionTimer | ActionDownload |
     ActionVideo | ActionStore | ActionSetState | ActionSubmit | ActionScrollBy | ActionScrollTo |
-    ActionUpdateStructure | ActionCustom | ActionSetCursorPosition;
+    ActionUpdateStructure | ActionCustom | ActionSetCursorPosition | ActionExtensionAction;
 
 export interface ActionBase {
     log_id: string;
@@ -545,6 +551,12 @@ export interface DivExtension {
     updateView?(node: HTMLElement, context: DivExtensionContext): void;
 
     unmountView?(node: HTMLElement, context: DivExtensionContext): void;
+
+    /** Handles extension_action for this extension instance. Return true when the action is handled. */
+    handleAction?(
+        payload: Record<string, unknown> | undefined,
+        context: DivExtensionContext
+    ): boolean | Promise<boolean>;
 }
 
 export interface PatchChange {

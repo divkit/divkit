@@ -56,7 +56,8 @@
         VideoPlayerProvider,
         DivFunction,
         DivPropertyVariable,
-        CustomActionCallbackWithTyped
+        CustomActionCallbackWithTyped,
+        ActionExtensionAction
     } from '../../typings/common';
     import type { CustomComponentDescription } from '../../typings/custom';
     import type { Animator, AppearanceTransition, DivBaseData, Tooltip, TransitionChange } from '../types/base';
@@ -1351,6 +1352,7 @@
             urlType === 'scroll_to_position' ||
             urlType === 'scroll_to_item_id' ||
             typedType === 'submit' ||
+            typedType === 'extension_action' ||
             typedType === 'show_tooltip' ||
             typedType === 'hide_tooltip' ||
             urlType === 'show_tooltip' ||
@@ -1602,6 +1604,10 @@
                 }
                 case 'set_state': {
                     await setState(actionTyped.state_id, componentContext);
+                    break;
+                }
+                case 'extension_action': {
+                    await callExtensionAction(scopeContext, isScopeFound, actionTyped, action.payload, log);
                     break;
                 }
                 case 'submit': {
@@ -1869,6 +1875,55 @@
         componentContext: ComponentContext | undefined
     ): void {
         onCustomAction?.(action, getExtensionContext(componentContext));
+    }
+
+    async function callExtensionAction(
+        scopeContext: ComponentContext,
+        isScopeFound: boolean,
+        action: MaybeMissing<ActionExtensionAction>,
+        payload: Record<string, unknown> | undefined,
+        log: (error: WrappedError) => void
+    ): Promise<void> {
+        const { div_id: divId, extension_id: extensionId } = action;
+        if (typeof divId !== 'string' || typeof extensionId !== 'string') {
+            log(wrapError(new Error('Incorrect extension action'), {
+                additional: { divId, extensionId }
+            }));
+            return;
+        }
+
+        const targets = [...(componentContextMap.get(divId) || [])].filter(target => {
+            if (isScopeFound) {
+                let current: ComponentContext | undefined = target;
+                while (current && current !== scopeContext) {
+                    current = current.parent;
+                }
+                if (!current) {
+                    return false;
+                }
+            }
+            return target.json.extensions?.some(extension => extension.id === extensionId) || false;
+        });
+
+        if (targets.length !== 1) {
+            const message = targets.length ? 'Extension action target is ambiguous' : 'Extension action target not found';
+            log(wrapError(new Error(message), {
+                additional: { divId, extensionId, count: targets.length }
+            }));
+            return;
+        }
+
+        const target = targets[0];
+        const handlers = target.getViewInfo('extensionActions')?.get(extensionId);
+        if (!handlers) {
+            return;
+        }
+        const context = getExtensionContext(target);
+        for (const extension of handlers) {
+            if (await extension.handleAction?.(payload, context)) {
+                return;
+            }
+        }
     }
 
     function processVariableTriggers(
