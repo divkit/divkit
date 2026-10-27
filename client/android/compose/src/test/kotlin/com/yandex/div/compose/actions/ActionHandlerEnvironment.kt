@@ -26,6 +26,7 @@ internal class ActionHandlerEnvironment {
     lateinit var propertyVariableExecutor: DivPropertyVariableExecutor
 
     fun init(
+        animatorActionHandler: AnimatorActionHandler = mock(),
         externalActionHandler: DivExternalActionHandler = mock(),
         arrayActionsHandler: ArrayActionsHandler = mock(),
         clearFocusActionHandler: ClearFocusActionHandler = mock(),
@@ -48,6 +49,7 @@ internal class ActionHandlerEnvironment {
     ) {
         actionHandler = DivActionHandler(
             actionMenuHolder = actionMenuHolder,
+            animatorActionHandler = animatorActionHandler,
             externalActionHandler = externalActionHandler,
             reporter = reporter,
             arrayActionsHandler = arrayActionsHandler,

@@ -6,6 +6,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.actions.observedActions
+import com.yandex.div.compose.animation.WithAnimatorTarget
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.context.expressionResolver
@@ -55,20 +56,22 @@ internal inline fun DivBlockView(
     key(LocalDivViewContext.current.compositionKeyStorage.get(data.value())) {
         val divBase = data.value()
         WithLocalComponent(divBase) {
-            val visibility = divBase.visibility.observedValue()
-            if (visibility == DivVisibility.GONE) return@WithLocalComponent
-            VisibleDivBlockView(
-                data = data,
-                modifier = modifier,
-                applyMargins = applyMargins,
-                visibility = visibility,
-                defaultHorizontalAlignment = defaultHorizontalAlignment,
-                defaultVerticalAlignment = defaultVerticalAlignment,
-                suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
-                matchParentMaxWidth = matchParentMaxWidth,
-                matchParentMaxHeight = matchParentMaxHeight,
-                blockTapPropagation = blockTapPropagation,
-            )
+            WithAnimatorTarget(divBase) {
+                val visibility = divBase.visibility.observedValue()
+                if (visibility == DivVisibility.GONE) return@WithAnimatorTarget
+                VisibleDivBlockView(
+                    data = data,
+                    modifier = modifier,
+                    applyMargins = applyMargins,
+                    visibility = visibility,
+                    defaultHorizontalAlignment = defaultHorizontalAlignment,
+                    defaultVerticalAlignment = defaultVerticalAlignment,
+                    suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
+                    matchParentMaxWidth = matchParentMaxWidth,
+                    matchParentMaxHeight = matchParentMaxHeight,
+                    blockTapPropagation = blockTapPropagation,
+                )
+            }
         }
     }
 }

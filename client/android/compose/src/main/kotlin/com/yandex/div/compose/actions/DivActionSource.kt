@@ -4,6 +4,7 @@ package com.yandex.div.compose.actions
  * Source of DivKit action.
  */
 enum class DivActionSource {
+    ANIMATION,
     BLUR,
     DISAPPEAR,
     DOUBLE_TAP,

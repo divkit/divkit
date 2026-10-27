@@ -8,8 +8,6 @@ import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.actions.isDivAction
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
-import com.yandex.div2.DivActionAnimatorStart
-import com.yandex.div2.DivActionAnimatorStopTemplate
 import com.yandex.div2.DivActionExtensionAction
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivDisappearAction
@@ -21,6 +19,7 @@ import javax.inject.Inject
 @DivViewScope
 internal class DivActionHandler @Inject constructor(
     private val actionMenuHolder: ActionMenuHolder,
+    private val animatorActionHandler: AnimatorActionHandler,
     private val externalActionHandler: DivExternalActionHandler,
     private val reporter: DivReporter,
     private val hapticActionHandler: HapticActionHandler,
@@ -57,7 +56,7 @@ internal class DivActionHandler @Inject constructor(
         action: DivAction,
         source: DivActionSource,
     ) {
-        if (action.scopeId != null) {
+        if (action.scopeId != null && !action.typed.supportsScopeId) {
             reporter.reportError("div-action.scope_id not supported")
         }
 
@@ -71,6 +70,7 @@ internal class DivActionHandler @Inject constructor(
                 payload = action.payload,
                 referer = action.referer,
                 source = source,
+                scopeId = action.scopeId,
                 typed = action.typed,
                 url = action.url
             ),
@@ -79,7 +79,7 @@ internal class DivActionHandler @Inject constructor(
     }
 
     fun handle(context: DivActionHandlingContext, action: DivSightAction) {
-        if (action.scopeId != null) {
+        if (action.scopeId != null && !action.typed.supportsScopeId) {
             reporter.reportError("div-action.scope_id not supported")
         }
 
@@ -97,6 +97,7 @@ internal class DivActionHandler @Inject constructor(
                 } else {
                     DivActionSource.VISIBILITY
                 },
+                scopeId = action.scopeId,
                 typed = action.typed,
                 url = action.url
             )
@@ -131,6 +132,7 @@ internal class DivActionHandler @Inject constructor(
                 context = context,
                 action = it,
                 actionData = actionData,
+                scopeId = action.scopeId?.evaluate(expressionResolver),
             )
             return
         }
@@ -169,10 +171,11 @@ internal class DivActionHandler @Inject constructor(
         context: DivActionHandlingContext,
         action: DivActionTyped,
         actionData: DivActionData,
+        scopeId: String?,
     ) {
         when (action) {
-            is DivActionTyped.AnimatorStart -> notSupported(DivActionAnimatorStart.TYPE)
-            is DivActionTyped.AnimatorStop -> notSupported(DivActionAnimatorStopTemplate.TYPE)
+            is DivActionTyped.AnimatorStart -> animatorActionHandler.handle(scopeId, action.value)
+            is DivActionTyped.AnimatorStop -> animatorActionHandler.handle(scopeId, action.value)
 
             is DivActionTyped.ArrayInsertValue ->
                 arrayActionsHandler.handle(context, action.value)
@@ -290,6 +293,13 @@ private class DivActionBase(
     val payload: JSONObject?,
     val referer: Expression<Uri>?,
     val source: DivActionSource,
+    val scopeId: Expression<String>?,
     val typed: DivActionTyped?,
     val url: Expression<Uri>?,
 )
+
+private val DivActionTyped?.supportsScopeId: Boolean
+    get() = when (this) {
+        is DivActionTyped.AnimatorStart, is DivActionTyped.AnimatorStop -> true
+        else -> false
+    }

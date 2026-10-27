@@ -6,6 +6,7 @@ import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
+import com.yandex.div2.DivAnimator
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
@@ -23,6 +24,7 @@ fun container(
     action: DivAction? = null,
     alignmentHorizontal: DivAlignmentHorizontal? = null,
     alignmentVertical: DivAlignmentVertical? = null,
+    animators: List<DivAnimator>? = null,
     backgrounds: List<DivBackground>? = null,
     border: DivBorder? = null,
     clipToBounds: Expression<Boolean> = constant(true),
@@ -48,6 +50,7 @@ fun container(
             action = action,
             alignmentHorizontal = alignmentHorizontal?.let(::constant),
             alignmentVertical = alignmentVertical?.let(::constant),
+            animators = animators,
             background = backgrounds,
             border = border,
             clipToBounds = clipToBounds,

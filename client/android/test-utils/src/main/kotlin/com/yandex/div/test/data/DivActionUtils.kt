@@ -9,6 +9,8 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
+import com.yandex.div2.DivActionAnimatorStart
+import com.yandex.div2.DivActionAnimatorStop
 import com.yandex.div2.DivActionClearFocus
 import com.yandex.div2.DivActionCopyToClipboard
 import com.yandex.div2.DivActionCopyToClipboardContent
@@ -30,8 +32,11 @@ import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivActionTimer
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivActionUpdateStructure
-import com.yandex.div2.DivTypedValue
+import com.yandex.div2.DivAnimationDirection
+import com.yandex.div2.DivAnimationInterpolator
+import com.yandex.div2.DivCount
 import com.yandex.div2.DivDownloadCallbacks
+import com.yandex.div2.DivTypedValue
 import org.json.JSONObject
 
 fun action(
@@ -43,6 +48,7 @@ fun action(
     url: String? = null,
     logUrl: String? = null,
     referer: String? = null,
+    scopeId: String? = null,
     downloadCallbacks: DivDownloadCallbacks? = null,
 ): DivAction {
     return DivAction(
@@ -53,6 +59,7 @@ fun action(
         menuItems = menuItems,
         payload = payload,
         referer = referer?.let { constant(it.toUri()) },
+        scopeId = scopeId?.let { constant(it) },
         typed = typed,
         url = url?.let { constant(it.toUri()) }
     )
@@ -67,6 +74,7 @@ fun action(
     url: Expression<Uri>,
     logUrl: String? = null,
     referer: String? = null,
+    scopeId: String? = null,
     downloadCallbacks: DivDownloadCallbacks? = null,
 ): DivAction {
     return DivAction(
@@ -77,6 +85,7 @@ fun action(
         menuItems = menuItems,
         payload = payload,
         referer = referer?.let { constant(it.toUri()) },
+        scopeId = scopeId?.let { constant(it) },
         typed = typed,
         url = url
     )
@@ -121,6 +130,31 @@ fun arraySetValueAction(
         )
     )
 }
+
+fun animatorStartAction(
+    animatorId: String,
+    direction: DivAnimationDirection? = null,
+    duration: Long? = null,
+    endValue: DivTypedValue? = null,
+    interpolator: DivAnimationInterpolator? = null,
+    repeatCount: DivCount? = null,
+    startDelay: Long? = null,
+    startValue: DivTypedValue? = null,
+): DivActionTyped = DivActionTyped.AnimatorStart(
+    DivActionAnimatorStart(
+        animatorId = animatorId,
+        direction = direction?.let { constant(it) },
+        duration = duration?.let { constant(it) },
+        endValue = endValue,
+        interpolator = interpolator?.let { constant(it) },
+        repeatCount = repeatCount,
+        startDelay = startDelay?.let { constant(it) },
+        startValue = startValue,
+    )
+)
+
+fun animatorStopAction(animatorId: String): DivActionTyped =
+    DivActionTyped.AnimatorStop(DivActionAnimatorStop(animatorId))
 
 fun clearFocusAction(): DivActionTyped = DivActionTyped.ClearFocus(DivActionClearFocus())
 

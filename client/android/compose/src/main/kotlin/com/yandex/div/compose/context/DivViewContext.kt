@@ -7,6 +7,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.actions.bind
+import com.yandex.div.compose.animation.observe
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
 import com.yandex.div.compose.haptics.bind
@@ -70,7 +71,7 @@ internal class DivViewContext(
         // must be attached before other components since other components could rely on
         // the coroutine scope
         component.coroutineScopeProvider.attach()
-
+        component.animatorStorage.observe()
         visibilityActionTracker.bind()
         component.hapticFeedbackStorage.bind()
         component.layoutProviderStorage.observe()
