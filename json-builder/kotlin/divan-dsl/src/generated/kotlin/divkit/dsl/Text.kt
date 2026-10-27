@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, text`.
  */
 @Generated
+@JsonSerialize(using = TextSerializer::class)
 @ExposedCopyVisibility
 data class Text internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Div {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "text")
-    )
-
     operator fun plus(additive: Properties): Text = Text(
         Properties(
             text = additive.text ?: properties.text,
@@ -524,14 +519,11 @@ data class Text internal constructor(
      * Required parameters: `text`.
      */
     @Generated
+    @JsonSerialize(using = TextEllipsisSerializer::class)
     @ExposedCopyVisibility
     data class Ellipsis internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Ellipsis = Ellipsis(
             Properties(
                 actions = additive.actions ?: properties.actions,
@@ -587,14 +579,11 @@ data class Text internal constructor(
      * Required parameters: `url, start`.
      */
     @Generated
+    @JsonSerialize(using = TextImageSerializer::class)
     @ExposedCopyVisibility
     data class Image internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Image = Image(
             Properties(
                 accessibility = additive.accessibility ?: properties.accessibility,
@@ -695,14 +684,11 @@ data class Text internal constructor(
          * Can be created using the method [textImageAccessibility].
          */
         @Generated
+        @JsonSerialize(using = TextImageAccessibilitySerializer::class)
         @ExposedCopyVisibility
         data class Accessibility internal constructor(
-            @JsonIgnore
             val properties: Properties,
         ) {
-            @JsonAnyGetter
-            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
             operator fun plus(additive: Properties): Accessibility = Accessibility(
                 Properties(
                     description = additive.description ?: properties.description,
@@ -751,14 +737,11 @@ data class Text internal constructor(
      * Required parameters: `prototypes, data`.
      */
     @Generated
+    @JsonSerialize(using = TextImageBuilderSerializer::class)
     @ExposedCopyVisibility
     data class ImageBuilder internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): ImageBuilder = ImageBuilder(
             Properties(
                 data = additive.data ?: properties.data,
@@ -799,14 +782,11 @@ data class Text internal constructor(
          * Required parameters: `image`.
          */
         @Generated
+        @JsonSerialize(using = TextImageBuilderPrototypeSerializer::class)
         @ExposedCopyVisibility
         data class Prototype internal constructor(
-            @JsonIgnore
             val properties: Properties,
         ) {
-            @JsonAnyGetter
-            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
             operator fun plus(additive: Properties): Prototype = Prototype(
                 Properties(
                     image = additive.image ?: properties.image,
@@ -845,14 +825,11 @@ data class Text internal constructor(
      * Can be created using the method [textRange].
      */
     @Generated
+    @JsonSerialize(using = TextRangeSerializer::class)
     @ExposedCopyVisibility
     data class Range internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Range = Range(
             Properties(
                 actions = additive.actions ?: properties.actions,
@@ -1013,14 +990,11 @@ data class Text internal constructor(
      * Required parameters: `prototypes, data`.
      */
     @Generated
+    @JsonSerialize(using = TextRangeBuilderSerializer::class)
     @ExposedCopyVisibility
     data class RangeBuilder internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): RangeBuilder = RangeBuilder(
             Properties(
                 data = additive.data ?: properties.data,
@@ -1061,14 +1035,11 @@ data class Text internal constructor(
          * Required parameters: `range`.
          */
         @Generated
+        @JsonSerialize(using = TextRangeBuilderPrototypeSerializer::class)
         @ExposedCopyVisibility
         data class Prototype internal constructor(
-            @JsonIgnore
             val properties: Properties,
         ) {
-            @JsonAnyGetter
-            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
             operator fun plus(additive: Properties): Prototype = Prototype(
                 Properties(
                     range = additive.range ?: properties.range,

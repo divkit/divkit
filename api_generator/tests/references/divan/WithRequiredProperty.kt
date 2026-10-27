@@ -5,8 +5,7 @@
 
 package divan
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divan.annotation.Generated
 import divan.core.Guard
 import divan.core.Property
@@ -15,6 +14,7 @@ import divan.core.tryPutProperty
 import divan.core.valueOrNull
 import divan.scope.DivScope
 import divan.scope.TemplateScope
+import divan.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -27,16 +27,11 @@ import kotlin.collections.Map
  * Required parameters: `type, property`.
  */
 @Generated
+@JsonSerialize(using = WithRequiredPropertySerializer::class)
 @ExposedCopyVisibility
 data class WithRequiredProperty internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Entity {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "entity_with_required_property")
-    )
-
     operator fun plus(additive: Properties): WithRequiredProperty = WithRequiredProperty(
         Properties(
             property = additive.property ?: properties.property,

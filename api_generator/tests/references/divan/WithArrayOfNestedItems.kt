@@ -5,8 +5,7 @@
 
 package divan
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divan.annotation.Generated
 import divan.core.Guard
 import divan.core.Property
@@ -15,6 +14,7 @@ import divan.core.tryPutProperty
 import divan.core.valueOrNull
 import divan.scope.DivScope
 import divan.scope.TemplateScope
+import divan.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -27,16 +27,11 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
+@JsonSerialize(using = WithArrayOfNestedItemsSerializer::class)
 @ExposedCopyVisibility
 data class WithArrayOfNestedItems internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Entity {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "entity_with_array_of_nested_items")
-    )
-
     operator fun plus(additive: Properties): WithArrayOfNestedItems = WithArrayOfNestedItems(
         Properties(
             items = additive.items ?: properties.items,
@@ -61,14 +56,11 @@ data class WithArrayOfNestedItems internal constructor(
      * Required parameters: `property, entity`.
      */
     @Generated
+    @JsonSerialize(using = WithArrayOfNestedItemsItemSerializer::class)
     @ExposedCopyVisibility
     data class Item internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Item = Item(
             Properties(
                 entity = additive.entity ?: properties.entity,

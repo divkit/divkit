@@ -1,4 +1,5 @@
-from typing import List, Dict, Union
+import os
+from typing import List, Dict, Union, cast
 
 from .divan_entities import (
     update_base,
@@ -19,6 +20,8 @@ from ...schema.modeling.entities import (
 )
 from ...schema.modeling.text import Text, EMPTY
 
+SERIALIZERS_DIRECTORY = 'serialization'
+
 
 class DivanGenerator(Generator):
     def __init__(self, config):
@@ -34,9 +37,45 @@ class DivanGenerator(Generator):
         updated_objects = list(map(lambda obj: update_base(obj, self.remove_prefix), objects))
         super(DivanGenerator, self).generate(updated_objects)
         self._generate_enums_values(updated_objects)
+        self._generate_serializers(updated_objects)
 
     def filename(self, name: str) -> str:
         return f'{utils.capitalize_camel_case(name, self.remove_prefix)}.kt'
+
+    def _generate_serializers(self, objects: List[Declarable]):
+        serializers_path = os.path.join(self._config.output_path, SERIALIZERS_DIRECTORY)
+        os.makedirs(serializers_path, exist_ok=True)
+        header = self._config.generation.serializers_header
+        model_package = self._config.generation.model_package
+        for obj in objects:
+            if not isinstance(obj, DivanEntity):
+                continue
+            lines = str(self.__serializers_declaration(obj)).rstrip().split('\n')
+            declaration = '\n'.join(map(lambda line: '' if line.isspace() else line, lines))
+            if not declaration:
+                continue
+            head_lines = [header.rstrip('\n')] if header.strip() else []
+            if model_package:
+                # Explicit import prevents shadowing of the model type by default imports (e.g. kotlin.Function).
+                entity_name = utils.capitalize_camel_case(obj.name, self.remove_prefix)
+                head_lines.append(f'import {model_package}.{entity_name}')
+            head_for_file = '\n'.join(head_lines) + '\n\n' if head_lines else ''
+            filename = os.path.join(serializers_path, f'{obj.serializer_name}.kt')
+            with open(filename, 'w') as file:
+                file.write(f'{head_for_file}{declaration}\n')
+
+    def __serializers_declaration(self, entity: DivanEntity) -> Text:
+        if entity.generate_as_protocol:
+            return Text()
+        result_declaration = entity.serializer_declaration(self.kotlin_annotations.top_level_definitions)
+        inner_entities = sorted(filter(lambda t: isinstance(t, Entity), entity.inner_types), key=lambda d: d.name)
+        for inner_entity in inner_entities:
+            inner_entity = update_base(inner_entity, self.remove_prefix)
+            inner_declaration = self.__serializers_declaration(cast(DivanEntity, inner_entity))
+            if inner_declaration.lines:
+                result_declaration += EMPTY
+                result_declaration += inner_declaration
+        return result_declaration
 
     def _entity_declaration(self, entity: DivanEntity) -> Text:
         return self.__entity_declaration_with(entity, with_factory_methods=True)
@@ -55,35 +94,36 @@ class DivanGenerator(Generator):
 
         entity_name = utils.capitalize_camel_case(entity.name, self.remove_prefix)
 
+        result_declaration += entity.serialization_annotation
+
         has_properties = len(entity.instance_properties) > 0
         if not has_properties:
-            result_declaration += f'data object {entity_name}{entity.supertype_declaration} {{'
+            class_declaration = f'data object {entity_name}{entity.supertype_declaration}'
         else:
             result_declaration += '@ExposedCopyVisibility'
             result_declaration += f'data class {entity_name} internal constructor('
-            result_declaration += '    @JsonIgnore'
             result_declaration += '    val properties: Properties,'
-            result_declaration += f'){entity.supertype_declaration} {{'
+            class_declaration = f'){entity.supertype_declaration}'
 
-        serialization_declaration = entity.serialization_declaration(has_properties).indented(indent_width=4)
-
-        if serialization_declaration.lines:
-            result_declaration += serialization_declaration
-
+        body_sections = []
         if has_properties:
             if entity.generator_properties is None or entity.generator_properties.plus_operator_declaration:
-                result_declaration += EMPTY
-                result_declaration += entity.operator_plus_declaration.indented(indent_width=4)
-
-            result_declaration += EMPTY
-            result_declaration += entity.properties_class_declaration(self.translations).indented(indent_width=4)
+                body_sections.append(entity.operator_plus_declaration)
+            body_sections.append(entity.properties_class_declaration(self.translations))
 
         nested_classes_declaration = self.__nested_classes_declaration(entity)
         if nested_classes_declaration.lines:
-            result_declaration += EMPTY
-            result_declaration += nested_classes_declaration.indented(indent_width=4)
+            body_sections.append(nested_classes_declaration)
 
-        result_declaration += '}'
+        if body_sections:
+            result_declaration += f'{class_declaration} {{'
+            for ind, section in enumerate(body_sections):
+                if ind != 0:
+                    result_declaration += EMPTY
+                result_declaration += section.indented(indent_width=4)
+            result_declaration += '}'
+        else:
+            result_declaration += class_declaration
 
         result_declaration += EMPTY
 

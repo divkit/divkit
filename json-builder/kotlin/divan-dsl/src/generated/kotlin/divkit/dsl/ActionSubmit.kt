@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, request, container_id`.
  */
 @Generated
+@JsonSerialize(using = ActionSubmitSerializer::class)
 @ExposedCopyVisibility
 data class ActionSubmit internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : ActionTyped {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "submit")
-    )
-
     operator fun plus(additive: Properties): ActionSubmit = ActionSubmit(
         Properties(
             containerId = additive.containerId ?: properties.containerId,
@@ -82,14 +77,11 @@ data class ActionSubmit internal constructor(
      * Required parameters: `url`.
      */
     @Generated
+    @JsonSerialize(using = ActionSubmitRequestSerializer::class)
     @ExposedCopyVisibility
     data class Request internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Request = Request(
             Properties(
                 headers = additive.headers ?: properties.headers,
@@ -138,14 +130,11 @@ data class ActionSubmit internal constructor(
          * Required parameters: `value, name`.
          */
         @Generated
+        @JsonSerialize(using = ActionSubmitRequestHeaderSerializer::class)
         @ExposedCopyVisibility
         data class Header internal constructor(
-            @JsonIgnore
             val properties: Properties,
         ) {
-            @JsonAnyGetter
-            internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
             operator fun plus(additive: Properties): Header = Header(
                 Properties(
                     name = additive.name ?: properties.name,

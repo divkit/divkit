@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, color`.
  */
 @Generated
+@JsonSerialize(using = SolidBackgroundSerializer::class)
 @ExposedCopyVisibility
 data class SolidBackground internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Background, TextRangeBackground {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "solid")
-    )
-
     operator fun plus(additive: Properties): SolidBackground = SolidBackground(
         Properties(
             color = additive.color ?: properties.color,

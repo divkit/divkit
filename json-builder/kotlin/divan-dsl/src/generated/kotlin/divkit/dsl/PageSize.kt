@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, page_width`.
  */
 @Generated
+@JsonSerialize(using = PageSizeSerializer::class)
 @ExposedCopyVisibility
 data class PageSize internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : PagerLayoutMode {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "percentage")
-    )
-
     operator fun plus(additive: Properties): PageSize = PageSize(
         Properties(
             pageWidth = additive.pageWidth ?: properties.pageWidth,

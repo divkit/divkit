@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, text_variable`.
  */
 @Generated
+@JsonSerialize(using = InputSerializer::class)
 @ExposedCopyVisibility
 data class Input internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Div {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "input")
-    )
-
     operator fun plus(additive: Properties): Input = Input(
         Properties(
             accessibility = additive.accessibility ?: properties.accessibility,
@@ -465,14 +460,11 @@ data class Input internal constructor(
      * Required parameters: `color`.
      */
     @Generated
+    @JsonSerialize(using = InputNativeInterfaceSerializer::class)
     @ExposedCopyVisibility
     data class NativeInterface internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): NativeInterface = NativeInterface(
             Properties(
                 color = additive.color ?: properties.color,

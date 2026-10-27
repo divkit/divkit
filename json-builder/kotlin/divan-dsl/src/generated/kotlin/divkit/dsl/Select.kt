@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `value_variable, type, options`.
  */
 @Generated
+@JsonSerialize(using = SelectSerializer::class)
 @ExposedCopyVisibility
 data class Select internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Div {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "select")
-    )
-
     operator fun plus(additive: Properties): Select = Select(
         Properties(
             accessibility = additive.accessibility ?: properties.accessibility,
@@ -340,14 +335,11 @@ data class Select internal constructor(
      * Required parameters: `value`.
      */
     @Generated
+    @JsonSerialize(using = SelectOptionSerializer::class)
     @ExposedCopyVisibility
     data class Option internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Option = Option(
             Properties(
                 text = additive.text ?: properties.text,

@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -23,14 +23,11 @@ import kotlin.collections.Map
  * Can be created using the method [absoluteEdgeInsets].
  */
 @Generated
+@JsonSerialize(using = AbsoluteEdgeInsetsSerializer::class)
 @ExposedCopyVisibility
 data class AbsoluteEdgeInsets internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
     operator fun plus(additive: Properties): AbsoluteEdgeInsets = AbsoluteEdgeInsets(
         Properties(
             bottom = additive.bottom ?: properties.bottom,

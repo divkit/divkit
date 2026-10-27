@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,10 +25,8 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-data object FilterRtlMirror : Filter {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "rtl_mirror")
-}
+@JsonSerialize(using = FilterRtlMirrorSerializer::class)
+data object FilterRtlMirror : Filter
 
 @Generated
 fun DivScope.filterRtlMirror(): FilterRtlMirror = FilterRtlMirror

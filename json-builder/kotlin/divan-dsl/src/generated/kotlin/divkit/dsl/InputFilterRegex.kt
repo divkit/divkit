@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, pattern`.
  */
 @Generated
+@JsonSerialize(using = InputFilterRegexSerializer::class)
 @ExposedCopyVisibility
 data class InputFilterRegex internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : InputFilter {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "regex")
-    )
-
     operator fun plus(additive: Properties): InputFilterRegex = InputFilterRegex(
         Properties(
             pattern = additive.pattern ?: properties.pattern,

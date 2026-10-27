@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, track_inactive_style, track_active_style, thumb_style`.
  */
 @Generated
+@JsonSerialize(using = SliderSerializer::class)
 @ExposedCopyVisibility
 data class Slider internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Div {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "slider")
-    )
-
     operator fun plus(additive: Properties): Slider = Slider(
         Properties(
             accessibility = additive.accessibility ?: properties.accessibility,
@@ -361,14 +356,11 @@ data class Slider internal constructor(
      * Can be created using the method [sliderRange].
      */
     @Generated
+    @JsonSerialize(using = SliderRangeSerializer::class)
     @ExposedCopyVisibility
     data class Range internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Range = Range(
             Properties(
                 end = additive.end ?: properties.end,
@@ -422,14 +414,11 @@ data class Slider internal constructor(
      * Required parameters: `font_size`.
      */
     @Generated
+    @JsonSerialize(using = SliderTextStyleSerializer::class)
     @ExposedCopyVisibility
     data class TextStyle internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): TextStyle = TextStyle(
             Properties(
                 fontFamily = additive.fontFamily ?: properties.fontFamily,

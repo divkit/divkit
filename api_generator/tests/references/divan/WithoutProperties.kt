@@ -5,8 +5,7 @@
 
 package divan
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divan.annotation.Generated
 import divan.core.Guard
 import divan.core.Property
@@ -15,6 +14,7 @@ import divan.core.tryPutProperty
 import divan.core.valueOrNull
 import divan.scope.DivScope
 import divan.scope.TemplateScope
+import divan.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -27,10 +27,8 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
-data object WithoutProperties : Entity {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "entity_without_properties")
-}
+@JsonSerialize(using = WithoutPropertiesSerializer::class)
+data object WithoutProperties : Entity
 
 @Generated
 fun DivScope.withoutProperties(): WithoutProperties = WithoutProperties

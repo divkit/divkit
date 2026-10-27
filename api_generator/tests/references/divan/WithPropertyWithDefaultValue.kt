@@ -5,8 +5,7 @@
 
 package divan
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divan.annotation.Generated
 import divan.core.Guard
 import divan.core.Property
@@ -15,6 +14,7 @@ import divan.core.tryPutProperty
 import divan.core.valueOrNull
 import divan.scope.DivScope
 import divan.scope.TemplateScope
+import divan.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -27,16 +27,11 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@JsonSerialize(using = WithPropertyWithDefaultValueSerializer::class)
 @ExposedCopyVisibility
 data class WithPropertyWithDefaultValue internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Entity {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "entity_with_property_with_default_value")
-    )
-
     operator fun plus(additive: Properties): WithPropertyWithDefaultValue = WithPropertyWithDefaultValue(
         Properties(
             colorAarrggbb = additive.colorAarrggbb ?: properties.colorAarrggbb,
@@ -90,14 +85,11 @@ data class WithPropertyWithDefaultValue internal constructor(
      * Required parameters: `non_optional`.
      */
     @Generated
+    @JsonSerialize(using = WithPropertyWithDefaultValueNestedSerializer::class)
     @ExposedCopyVisibility
     data class Nested internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Nested = Nested(
             Properties(
                 int = additive.int ?: properties.int,

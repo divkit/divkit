@@ -5,8 +5,7 @@
 
 package divan
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divan.annotation.Generated
 import divan.core.Guard
 import divan.core.Property
@@ -15,6 +14,7 @@ import divan.core.tryPutProperty
 import divan.core.valueOrNull
 import divan.scope.DivScope
 import divan.scope.TemplateScope
+import divan.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -27,16 +27,11 @@ import kotlin.collections.Map
  * Required parameters: `type`.
  */
 @Generated
+@JsonSerialize(using = WithComplexPropertyWithDefaultValueSerializer::class)
 @ExposedCopyVisibility
 data class WithComplexPropertyWithDefaultValue internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Entity {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "entity_with_complex_property_with_default_value")
-    )
-
     operator fun plus(additive: Properties): WithComplexPropertyWithDefaultValue = WithComplexPropertyWithDefaultValue(
         Properties(
             property = additive.property ?: properties.property,
@@ -64,14 +59,11 @@ data class WithComplexPropertyWithDefaultValue internal constructor(
      * Required parameters: `value`.
      */
     @Generated
+    @JsonSerialize(using = WithComplexPropertyWithDefaultValueComplexPropertySerializer::class)
     @ExposedCopyVisibility
     data class ComplexProperty internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): ComplexProperty = ComplexProperty(
             Properties(
                 value = additive.value ?: properties.value,

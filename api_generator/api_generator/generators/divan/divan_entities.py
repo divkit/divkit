@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import List, cast, Dict
 
 from ... import utils
@@ -25,7 +26,7 @@ from ...schema.modeling.entities import (
     RawArray,
     DivanGeneratorProperties,
 )
-from ...schema.modeling.text import Text
+from ...schema.modeling.text import Text, EMPTY
 
 GUARD_INSTANCE_PARAM = '`use named arguments`: Guard = Guard.instance,'
 
@@ -103,6 +104,19 @@ def update_base(obj: Declarable, remove_prefix: str) -> Declarable:
     elif isinstance(obj, StringEnumeration):
         obj.__class__ = DivanStringEnumeration
     return obj
+
+
+def property_name_constants(properties: List[DivanProperty]) -> Dict[str, str]:
+    constants: Dict[str, str] = {}
+    for prop in properties:
+        constant = utils.fixing_first_digit(re.sub(r'\W', '_', utils.constant_upper_case(prop.name)))
+        unique_constant = constant
+        index = 2
+        while unique_constant in constants.values():
+            unique_constant = f'{constant}_{index}'
+            index += 1
+        constants[prop.name] = unique_constant
+    return constants
 
 
 def comment(*lines) -> Text:
@@ -239,21 +253,45 @@ class DivanEntity(Entity):
         ]
         return comment(*params) if params else Text()
 
-    def serialization_declaration(self, has_properties: bool) -> Text:
-        result = Text('@JsonAnyGetter')
-        fun_declaration = 'internal fun getJsonProperties(): Map<String, Any>'
-        static_type = self.static_type
+    @property
+    def serializer_name(self) -> str:
+        return full_name(self, self.remove_prefix).replace('.', '') + 'Serializer'
 
-        if has_properties:
-            if static_type is not None:
-                result += f'{fun_declaration} = properties.mergeWith('
-                result += utils.indented(f'mapOf("type" to "{static_type}")', indent_width=4)
-                result += ')'
-            else:
-                result += f'{fun_declaration} = properties.mergeWith(emptyMap())'
-        else:
-            result += f'{fun_declaration} = mapOf("type" to "{static_type}")'
-        return result
+    @property
+    def serialization_annotation(self) -> str:
+        return f'@JsonSerialize(using = {self.serializer_name}::class)'
+
+    def serializer_declaration(self, annotations: List[str]) -> Text:
+        name = full_name(self, self.remove_prefix)
+        constructor_args = [f'{name}::class.java']
+        if self.static_type is not None:
+            constructor_args.append(f'"{self.static_type}"')
+        declaration = Text()
+        for annotation in annotations:
+            declaration += annotation
+        class_declaration = (f'internal class {self.serializer_name} : '
+                             f'EntitySerializer<{name}>({", ".join(constructor_args)})')
+
+        properties = cast(List[DivanProperty], self.instance_properties)
+        if not properties:
+            return declaration + class_declaration
+
+        constants = property_name_constants(properties)
+        body = Text(f'override fun writeFields(value: {name}, gen: JsonGenerator, provider: SerializerProvider) {{')
+        body += '    val properties = value.properties'
+        for prop in properties:
+            body += f'    gen.writeProperty({constants[prop.name]}, properties.{prop.name_declaration}, provider)'
+        body += '}'
+        body += EMPTY
+        body += 'private companion object {'
+        for prop in properties:
+            body += f'    val {constants[prop.name]} = PropertyName("{prop.name}")'
+        body += '}'
+
+        declaration += f'{class_declaration} {{'
+        declaration += body.indented(indent_width=4)
+        declaration += '}'
+        return declaration
 
     def literal_properties_signature(
             self,

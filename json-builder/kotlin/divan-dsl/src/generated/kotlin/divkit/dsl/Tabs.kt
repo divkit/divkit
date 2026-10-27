@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, items`.
  */
 @Generated
+@JsonSerialize(using = TabsSerializer::class)
 @ExposedCopyVisibility
 data class Tabs internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Div {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "tabs")
-    )
-
     operator fun plus(additive: Properties): Tabs = Tabs(
         Properties(
             accessibility = additive.accessibility ?: properties.accessibility,
@@ -334,14 +329,11 @@ data class Tabs internal constructor(
      * Required parameters: `title, div`.
      */
     @Generated
+    @JsonSerialize(using = TabsItemSerializer::class)
     @ExposedCopyVisibility
     data class Item internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): Item = Item(
             Properties(
                 div = additive.div ?: properties.div,
@@ -385,14 +377,11 @@ data class Tabs internal constructor(
      * Required parameters: `image_url`.
      */
     @Generated
+    @JsonSerialize(using = TabsTabTitleDelimiterSerializer::class)
     @ExposedCopyVisibility
     data class TabTitleDelimiter internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): TabTitleDelimiter = TabTitleDelimiter(
             Properties(
                 height = additive.height ?: properties.height,
@@ -436,14 +425,11 @@ data class Tabs internal constructor(
      * Can be created using the method [tabsTabTitleStyle].
      */
     @Generated
+    @JsonSerialize(using = TabsTabTitleStyleSerializer::class)
     @ExposedCopyVisibility
     data class TabTitleStyle internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): TabTitleStyle = TabTitleStyle(
             Properties(
                 activeBackgroundColor = additive.activeBackgroundColor ?: properties.activeBackgroundColor,

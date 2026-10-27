@@ -5,8 +5,7 @@
 
 package divan
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divan.annotation.Generated
 import divan.core.Guard
 import divan.core.Property
@@ -15,6 +14,7 @@ import divan.core.tryPutProperty
 import divan.core.valueOrNull
 import divan.scope.DivScope
 import divan.scope.TemplateScope
+import divan.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,10 +25,8 @@ import kotlin.collections.Map
  * Can be created using the method [withDefault].
  */
 @Generated
-data object WithDefault : EnumWithDefaultType {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "default")
-}
+@JsonSerialize(using = WithDefaultSerializer::class)
+data object WithDefault : EnumWithDefaultType
 
 @Generated
 fun DivScope.withDefault(): WithDefault = WithDefault

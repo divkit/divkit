@@ -45,7 +45,7 @@ internal fun MutableMap<String, Any>.tryPutProperty(
     }
 }
 
-internal fun resolveValue(value: Any) = if (value is List<*>) {
+internal fun resolveValue(value: Any) = if (value is List<*> && value.any { it is ArrayElement<*> }) {
     @Suppress("UNCHECKED_CAST")
     value.map { (it as? ArrayElement<out Any>)?.serialize() ?: it }
 } else {

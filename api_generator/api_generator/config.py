@@ -69,6 +69,8 @@ class Config:
         def __init__(self, dictionary):
             self.lang: GeneratedLanguage = GeneratedLanguage(dictionary['lang'])
             self.header: Text = dictionary.get('header') or ''
+            self.serializers_header: Text = dictionary.get('serializersHeader') or ''
+            self.model_package: str = dictionary.get('modelPackage') or ''
             self.errors_collectors: List[str] = dictionary.get('errorsCollectors') or []
             self.kotlin_annotations: Config.KotlinAnnotations = Config.KotlinAnnotations(dictionary.get('kotlinAnnotations') or {})
             self.generate_equality: bool = dictionary.get('generateEquality') or False

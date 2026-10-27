@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `value, type, name`.
  */
 @Generated
+@JsonSerialize(using = StringVariableSerializer::class)
 @ExposedCopyVisibility
 data class StringVariable internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : Variable {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "string")
-    )
-
     operator fun plus(additive: Properties): StringVariable = StringVariable(
         Properties(
             name = additive.name ?: properties.name,

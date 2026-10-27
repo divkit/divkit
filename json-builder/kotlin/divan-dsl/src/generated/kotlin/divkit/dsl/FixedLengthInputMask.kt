@@ -5,12 +5,12 @@
 
 package divkit.dsl
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import divkit.dsl.annotation.*
 import divkit.dsl.core.*
 import divkit.dsl.scope.*
+import divkit.dsl.serialization.*
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -25,16 +25,11 @@ import kotlin.collections.Map
  * Required parameters: `type, raw_text_variable, pattern_elements, pattern`.
  */
 @Generated
+@JsonSerialize(using = FixedLengthInputMaskSerializer::class)
 @ExposedCopyVisibility
 data class FixedLengthInputMask internal constructor(
-    @JsonIgnore
     val properties: Properties,
 ) : InputMask {
-    @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "fixed_length")
-    )
-
     operator fun plus(additive: Properties): FixedLengthInputMask = FixedLengthInputMask(
         Properties(
             alwaysVisible = additive.alwaysVisible ?: properties.alwaysVisible,
@@ -83,14 +78,11 @@ data class FixedLengthInputMask internal constructor(
      * Required parameters: `key`.
      */
     @Generated
+    @JsonSerialize(using = FixedLengthInputMaskPatternElementSerializer::class)
     @ExposedCopyVisibility
     data class PatternElement internal constructor(
-        @JsonIgnore
         val properties: Properties,
     ) {
-        @JsonAnyGetter
-        internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
-
         operator fun plus(additive: Properties): PatternElement = PatternElement(
             Properties(
                 key = additive.key ?: properties.key,
