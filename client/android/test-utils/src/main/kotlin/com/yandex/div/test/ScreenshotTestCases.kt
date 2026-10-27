@@ -245,6 +245,7 @@ val composeRoborazziInteractiveScreenshotCases = setOf(
     "div-input/focus/focused-background.json",
     "div-input/focus/focused-border.json",
     "div-input/focus/selection.json",
+    "div-input/highlight-color.json",
     "div-input/phone_input_mask.json",
     "div-input/regex_input_validator.json",
     "div-input/size-properties.json",

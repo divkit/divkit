@@ -22,10 +22,12 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.input
 import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.text
 import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputMask
@@ -333,14 +335,20 @@ class FixedLengthMaskTest {
     fun `regex validator checks the formatted text`() {
         val valid = Variable.BooleanVariable("valid", false)
         variableController.declare(valid)
-        setContent(
-            digitsMask(),
-            validators = listOf(
-                DivInputValidator.Regex(
-                    DivInputValidatorRegex(
-                        labelId = constant("label"),
-                        pattern = constant("""\(\d{3}\) \d{3}-\d{4}"""),
-                        variable = "valid",
+        val validator = DivInputValidator.Regex(
+            DivInputValidatorRegex(
+                labelId = constant("label"),
+                pattern = constant("""\(\d{3}\) \d{3}-\d{4}"""),
+                variable = "valid",
+            )
+        )
+        rule.setContent(
+            configuration = configuration,
+            data = data(
+                container(
+                    items = listOf(
+                        text(id = "label", text = "Invalid phone"),
+                        input(mask = digitsMask(), textVariable = "fixed_display", validators = listOf(validator)),
                     )
                 )
             ),

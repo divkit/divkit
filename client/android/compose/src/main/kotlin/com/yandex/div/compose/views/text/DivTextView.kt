@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.NonRestartableComposable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.DpSize
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.observedEnabledActions
+import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
@@ -76,6 +78,7 @@ private fun BasicText(
     horizontalAlignment: DivAlignmentHorizontal
 ) {
     val text = data.text.observedValue()
+    data.id?.let { id -> LabelText(id, text) }
     val fontSize = data.fontSize.observedIntValue()
     val hyphens = if (SOFT_HYPHEN in text) Hyphens.Auto else Hyphens.None
     val maxLines = data.maxLines.observedIntValue(Int.MAX_VALUE).coerceAtLeast(1)
@@ -91,6 +94,15 @@ private fun BasicText(
     } else {
         RenderTextContent(data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines)
     }
+}
+
+/** Keeps the [text] of the element with [id] in the storage: a validator of an input names its label by `label_id`. */
+@Composable
+private fun LabelText(id: String, text: String) {
+    val storage = LocalDivViewContext.current.component.labelTextStorage
+    // The label withdraws its text when the composition forgets it.
+    val label = remember(storage, id) { storage.label(id) }
+    SideEffect { label.set(text) }
 }
 
 @Composable

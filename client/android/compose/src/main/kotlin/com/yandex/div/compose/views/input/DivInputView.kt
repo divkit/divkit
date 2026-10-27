@@ -25,6 +25,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.InterceptPlatformTextInput
+import androidx.compose.ui.semantics.error
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.coerceIn
 import com.yandex.div.compose.expressions.observedColorValue
@@ -32,6 +34,7 @@ import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.focus.trackInputFocus
 import com.yandex.div.compose.text.observeBaseTextStyle
+import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.views.input.mask.InputMask
 import com.yandex.div.compose.views.input.mask.PhoneInputMask
@@ -49,15 +52,24 @@ internal fun DivInputView(modifier: Modifier, data: DivInput) {
     val config = data.rememberInputConfig(mask)
     val state = data.rememberInputState(config)
     val validators = data.validators
-    // The View renderer validates the text the field shows: the formatted text of a masked input.
-    if (!validators.isNullOrEmpty()) validators.validate(state.shownText(config))
+    val errorMessage = if (validators.isNullOrEmpty()) null else {
+        // The View renderer validates the text the field shows: the formatted text of a masked input.
+        val failed = validators.validate(state.shownText(config))
+        validators.observeErrorMessage(failed)
+    }
 
-    InputField(modifier, data, state, config)
+    InputField(modifier, data, state, config, errorMessage)
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun InputField(modifier: Modifier, data: DivInput, state: DivInputState, config: InputConfig) {
+private fun InputField(
+    modifier: Modifier,
+    data: DivInput,
+    state: DivInputState,
+    config: InputConfig,
+    errorMessage: String?,
+) {
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
     val textStyle = data.observeTextStyle(textAlignmentHorizontal)
@@ -101,6 +113,7 @@ private fun InputField(modifier: Modifier, data: DivInput, state: DivInputState,
                     interactionSource = interactionSource,
                     isFocused = isFocused,
                     decorator = decorator,
+                    errorMessage = errorMessage,
                 )
             }
         }
@@ -135,6 +148,7 @@ private fun InputTextField(
     interactionSource: MutableInteractionSource,
     isFocused: Boolean,
     decorator: TextFieldDecorator,
+    errorMessage: String?,
 ) {
     val field = state.field
     val enabled = data.isEnabled.observedValue()
@@ -145,6 +159,8 @@ private fun InputTextField(
         .fillMaxWidth()
         .onFocusChanged { state.trackFocus(it.isFocused) }
         .bindFocusTarget(data.id, state.focusRequester, input = state)
+        // Accessibility services announce the error of the field: the labels of the failed validators.
+        .applyIfNotNull(errorMessage) { semantics { error(it) } }
     if (isPassword) {
         BasicSecureTextField(
             state = field,

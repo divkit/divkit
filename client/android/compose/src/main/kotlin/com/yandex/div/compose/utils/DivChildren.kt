@@ -14,3 +14,6 @@ internal fun Div.children(): List<Div> = when (this) {
     is Div.Select, is Div.Separator, is Div.Slider, is Div.Switch,
     is Div.Text, is Div.Video -> emptyList()
 }
+
+/** Whether this element or one of its descendants has [id]; the items of an `item_builder` are not in the tree. */
+internal fun Div.hasElement(id: String): Boolean = value().id == id || children().any { it.hasElement(id) }
