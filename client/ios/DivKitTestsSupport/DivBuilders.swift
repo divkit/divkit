@@ -299,6 +299,9 @@ public func divGallery(
   items: [Div],
   id: String? = nil,
   orientation: DivGallery.Orientation? = nil,
+  width: DivSize? = nil,
+  height: DivSize? = nil,
+  itemBuilder: DivCollectionItemBuilder? = nil,
   paddings: DivEdgeInsets? = nil
 ) -> Div {
   .divGallery(DivGallery(
@@ -319,9 +322,9 @@ public func divGallery(
     extensions: nil,
     focus: nil,
     functions: nil,
-    height: nil,
+    height: height,
     id: id,
-    itemBuilder: nil,
+    itemBuilder: itemBuilder,
     itemSpacing: nil,
     items: items,
     layoutProvider: nil,
@@ -347,7 +350,7 @@ public func divGallery(
     visibility: nil,
     visibilityAction: nil,
     visibilityActions: nil,
-    width: nil
+    width: width
   ))
 }
 
@@ -599,8 +602,11 @@ public func fixedSize(_ value: Int) -> DivSize {
   .divFixedSize(DivFixedSize(value: .value(value)))
 }
 
-public func matchParentSize() -> DivSize {
-  .divMatchParentSize(DivMatchParentSize())
+public func matchParentSize(minSize: Int? = nil, maxSize: Int? = nil) -> DivSize {
+  .divMatchParentSize(DivMatchParentSize(
+    maxSize: maxSize.map { DivSizeUnitValue(value: .value($0)) },
+    minSize: minSize.map { DivSizeUnitValue(value: .value($0)) }
+  ))
 }
 
 public func wrapContentSize() -> DivSize {

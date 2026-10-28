@@ -2,6 +2,7 @@
   "description": "Horizontal gallery with constrained wrap_content height and match_parent items",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

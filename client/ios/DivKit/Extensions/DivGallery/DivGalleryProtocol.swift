@@ -30,6 +30,9 @@ extension DivGalleryProtocol {
     onItem: (Div, Block, DivBlockModelingContext) -> Void = { _, _, _ in }
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
+    let sizeModifier = itemBuilder == nil
+      ? DivGallerySizeModifier(context: context, gallery: self, direction: direction)
+      : nil
     var children: [GalleryViewModel.Item]
     func blockMapper(
       _ div: Div,
@@ -44,7 +47,8 @@ extension DivGalleryProtocol {
             : div.value.resolveAlignmentHorizontal(expressionResolver)?
             .alignment(isRTLLayout: context.layoutDirection == .rightToLeft)
         ) ?? defaultCrossAlignment,
-        content: block
+        content: block,
+        fillsCrossAxis: sizeModifier?.fillsCrossAxis(div) == true
       )
     }
 
@@ -53,11 +57,7 @@ extension DivGalleryProtocol {
     } else {
       nonNilItems.makeBlocks(
         context: context,
-        sizeModifier: DivGallerySizeModifier(
-          context: context,
-          gallery: self,
-          direction: direction
-        ),
+        sizeModifier: sizeModifier,
         mappedBy: blockMapper
       )
     }
@@ -133,13 +133,6 @@ extension DivGalleryProtocol {
       spacings: spacings,
       crossSpacing: crossSpacing
     )
-  }
-
-  var typeName: String {
-    guard let typeName = String(describing: self).split(separator: ".").last else {
-      return "DivGallery"
-    }
-    return String(typeName)
   }
 }
 

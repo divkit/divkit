@@ -33,3 +33,18 @@ public struct GalleryViewMetrics: Equatable {
     return [insets.leading] + spacings + [insets.trailing]
   }
 }
+
+extension GalleryViewMetrics {
+  func axialInsets(fitting bounds: AxialBounds) -> SideInsets {
+    axialInsetMode.insets(forSize: bounds.along ?? 0)
+  }
+
+  func crossInsets(fitting bounds: AxialBounds) -> SideInsets {
+    crossInsetMode.insets(forSize: bounds.across ?? 0)
+  }
+
+  /// The leading axial inset followed by the spacings and the trailing axial inset.
+  func gaps(fitting bounds: AxialBounds) -> [CGFloat] {
+    gaps(forSize: bounds.along ?? 0)
+  }
+}

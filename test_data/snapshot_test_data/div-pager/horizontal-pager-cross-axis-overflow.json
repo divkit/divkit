@@ -1,0 +1,170 @@
+{
+  "description": "Horizontal pager with pages taller than the available cross axis space and different cross axis alignments",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      }
+    },
+    "edge_marker": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 20
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 10,
+      "text_color": "#FFFFFF"
+    },
+    "overflow_page": {
+      "type": "container",
+      "orientation": "vertical",
+      "height": {
+        "type": "fixed",
+        "value": 140
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#AAAAAA"
+        }
+      ],
+      "items": [
+        {
+          "type": "edge_marker",
+          "text": "TOP",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#E53935"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "height": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "left": 4,
+            "right": 4
+          },
+          "text_alignment_vertical": "center",
+          "font_size": 10,
+          "text": "page height = 140"
+        },
+        {
+          "type": "edge_marker",
+          "text": "BOTTOM",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#1E88E5"
+            }
+          ]
+        }
+      ]
+    },
+    "test_pager": {
+      "type": "pager",
+      "width": {
+        "type": "fixed",
+        "value": 320
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "margins": {
+        "bottom": 16
+      },
+      "layout_mode": {
+        "type": "percentage",
+        "page_width": {
+          "value": 32
+        }
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "top": 20,
+        "bottom": 20
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "default_item": 1,
+      "items": [
+        {
+          "type": "overflow_page",
+          "$alignment_vertical": "item_0_alignment"
+        },
+        {
+          "type": "overflow_page",
+          "$alignment_vertical": "item_1_alignment"
+        },
+        {
+          "type": "overflow_page",
+          "$alignment_vertical": "item_2_alignment"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "pager height = 120, paddings = 20 + 20\npage height = 140 (overflows available 80 by 60)\ncross_axis_alignment = null (default = start)\nalignment_vertical = top | center | bottom"
+            },
+            {
+              "type": "test_pager",
+              "item_0_alignment": "top",
+              "item_1_alignment": "center",
+              "item_2_alignment": "bottom"
+            },
+            {
+              "type": "title",
+              "text": "cross_axis_alignment = center\nalignment_vertical = null"
+            },
+            {
+              "type": "test_pager",
+              "cross_axis_alignment": "center"
+            },
+            {
+              "type": "title",
+              "text": "cross_axis_alignment = end\nalignment_vertical = null"
+            },
+            {
+              "type": "test_pager",
+              "cross_axis_alignment": "end"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

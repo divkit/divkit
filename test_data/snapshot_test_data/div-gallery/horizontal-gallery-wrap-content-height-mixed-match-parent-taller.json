@@ -1,0 +1,69 @@
+{
+  "description": "Horizontal gallery with wrap_content height, where one item is match_parent and its content is taller than the wrap_content neighbour. The row height is defined by the neighbour and the match_parent item is clipped (Android and iOS). Web grows the row to the match_parent item: this is an open question of the specification",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "gallery_item": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 120
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "font_size": 14,
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "horizontal",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "item_spacing": 8,
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "gallery_item",
+              "text": "match_parent\nitem with\nnine lines\nof text:\nline 5\nline 6\nline 7\nline 8\nline 9",
+              "height": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "gallery_item",
+              "text": "wrap_content\nitem with\nthree lines"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

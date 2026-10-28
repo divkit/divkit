@@ -1,11 +1,15 @@
 import LayoutKit
 
+/// Rewrites a match_parent item size across the scroll axis of a gallery that wraps its content
+/// across the scroll axis to constrained wrap_content with the same min/max, but only when all
+/// items are match_parent across the scroll axis. Such an item takes part in the gallery cross
+/// size and then fills it (see `GalleryViewModel.Item.fillsCrossAxis`).
+///
+/// This is the Android rule: items are measured by their content only if all of them are
+/// match_parent, otherwise a match_parent item does not affect the cross size of the gallery.
 struct DivGallerySizeModifier: DivSizeModifier {
-  private static let wrapContentSize: DivSize =
-    .divWrapContentSize(DivWrapContentSize(constrained: .value(true)))
-
-  private let shouldOverrideMatchParentWidth: Bool
-  private let shouldOverrideMatchParentHeight: Bool
+  let shouldOverrideMatchParentWidth: Bool
+  let shouldOverrideMatchParentHeight: Bool
 
   init(
     context: DivBlockModelingContext,
@@ -13,51 +17,44 @@ struct DivGallerySizeModifier: DivSizeModifier {
     direction: ScrollDirection
   ) {
     let items = gallery.nonNilItems
+    shouldOverrideMatchParentWidth = direction == .vertical
+      && gallery.getTransformedWidth(context).isIntrinsic
+      && items.allHorizontallyMatchParent
+    shouldOverrideMatchParentHeight = direction == .horizontal
+      && gallery.getTransformedHeight(context).isIntrinsic
+      && items.allVerticallyMatchParent
+  }
 
-    if direction == .vertical,
-       gallery.getTransformedWidth(context).isIntrinsic,
-       items.allHorizontallyMatchParent {
-      context.addWarning(
-        message: "All items in vertical \(gallery.typeName) with wrap_content width has match_parent width"
-      )
-      shouldOverrideMatchParentWidth = true
-    } else {
-      shouldOverrideMatchParentWidth = false
-    }
-
-    if direction == .horizontal,
-       gallery.getTransformedHeight(context).isIntrinsic,
-       items.allVerticallyMatchParent {
-      context.addWarning(
-        message: "All items in horizontal \(gallery.typeName) with wrap_content height has match_parent height"
-      )
-      shouldOverrideMatchParentHeight = true
-    } else {
-      shouldOverrideMatchParentHeight = false
-    }
+  func fillsCrossAxis(_ div: Div) -> Bool {
+    shouldOverrideMatchParentWidth && div.isHorizontallyMatchParent
+      || shouldOverrideMatchParentHeight && div.isVerticallyMatchParent
   }
 
   func transformWidth(_ width: DivSize) -> DivSize {
-    if case let .divMatchParentSize(size) = width {
-      if shouldOverrideMatchParentWidth {
-        return Self.wrapContentSize
-      }
-      if size.weight != nil {
-        return .divMatchParentSize(DivMatchParentSize(maxSize: size.maxSize, minSize: size.minSize))
-      }
-    }
-    return width
+    transform(width, shouldOverrideMatchParent: shouldOverrideMatchParentWidth)
   }
 
   func transformHeight(_ height: DivSize) -> DivSize {
-    if case let .divMatchParentSize(size) = height {
-      if shouldOverrideMatchParentHeight {
-        return Self.wrapContentSize
-      }
-      if size.weight != nil {
-        return .divMatchParentSize(DivMatchParentSize(maxSize: size.maxSize, minSize: size.minSize))
-      }
+    transform(height, shouldOverrideMatchParent: shouldOverrideMatchParentHeight)
+  }
+
+  private func transform(_ size: DivSize, shouldOverrideMatchParent: Bool) -> DivSize {
+    guard case let .divMatchParentSize(matchParentSize) = size else {
+      return size
     }
-    return height
+    if shouldOverrideMatchParent {
+      return .divWrapContentSize(DivWrapContentSize(
+        constrained: .value(true),
+        maxSize: matchParentSize.maxSize,
+        minSize: matchParentSize.minSize
+      ))
+    }
+    if matchParentSize.weight != nil {
+      return .divMatchParentSize(DivMatchParentSize(
+        maxSize: matchParentSize.maxSize,
+        minSize: matchParentSize.minSize
+      ))
+    }
+    return size
   }
 }

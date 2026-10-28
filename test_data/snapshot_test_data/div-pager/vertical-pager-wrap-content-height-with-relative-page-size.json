@@ -1,0 +1,127 @@
+{
+  "description": "Vertical pager with wrap_content height (the default) and layout_mode percentage or fixed. The pager size along the scroll axis is not known, so the page size has nothing to be calculated from. Platforms resolve this differently, the expected result is an open question of the specification. The last pager with layout_mode wrap_content is a control case.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 12,
+      "margins": {
+        "top": 16,
+        "bottom": 8
+      }
+    },
+    "text_page": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 160
+      },
+      "item_spacing": {
+        "type": "fixed",
+        "value": 8
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "items": [
+        {
+          "type": "text_page",
+          "text": "Page 1"
+        },
+        {
+          "type": "text_page",
+          "text": "Page 2"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "paddings": {
+            "left": 16,
+            "top": 0,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Pager width = 160, height is not set\nlayout_mode = percentage, page_width = 50%"
+            },
+            {
+              "type": "test_pager",
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "type": "percentage",
+                  "value": 50
+                }
+              }
+            },
+            {
+              "type": "title",
+              "text": "Pager width = 160, height is not set\nlayout_mode = fixed, neighbour_page_width = 20"
+            },
+            {
+              "type": "test_pager",
+              "layout_mode": {
+                "type": "fixed",
+                "neighbour_page_width": {
+                  "type": "fixed",
+                  "value": 20
+                }
+              }
+            },
+            {
+              "type": "title",
+              "text": "Pager width = 160, height is not set\nlayout_mode = wrap_content (control)"
+            },
+            {
+              "type": "test_pager",
+              "layout_mode": {
+                "type": "wrap_content"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

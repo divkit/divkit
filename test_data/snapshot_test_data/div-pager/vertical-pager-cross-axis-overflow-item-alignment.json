@@ -1,0 +1,163 @@
+{
+  "description": "Vertical pager with pages wider than the available cross axis space, aligned by alignment_horizontal of each page (left, center, right). Each page that does not fit keeps its own alignment and may stick out on either side",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      }
+    },
+    "edge_marker": {
+      "type": "text",
+      "width": {
+        "type": "fixed",
+        "value": 20
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 10,
+      "text_color": "#FFFFFF"
+    },
+    "overflow_page": {
+      "type": "container",
+      "orientation": "horizontal",
+      "width": {
+        "type": "fixed",
+        "value": 140
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#AAAAAA"
+        }
+      ],
+      "items": [
+        {
+          "type": "edge_marker",
+          "text": "L",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#E53935"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 4,
+            "bottom": 4
+          },
+          "text_alignment_horizontal": "center",
+          "text_alignment_vertical": "center",
+          "font_size": 10,
+          "text": "page width = 140"
+        },
+        {
+          "type": "edge_marker",
+          "text": "R",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#1E88E5"
+            }
+          ]
+        }
+      ]
+    },
+    "test_pager": {
+      "type": "pager",
+      "width": {
+        "type": "fixed",
+        "value": 120
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240
+      },
+      "margins": {
+        "bottom": 16
+      },
+      "layout_mode": {
+        "type": "percentage",
+        "page_width": {
+          "value": 32
+        }
+      },
+      "item_spacing": {
+        "value": 10
+      },
+      "paddings": {
+        "left": 20,
+        "right": 20
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "default_item": 1,
+      "items": [
+        {
+          "type": "overflow_page",
+          "$alignment_horizontal": "item_0_alignment"
+        },
+        {
+          "type": "overflow_page",
+          "$alignment_horizontal": "item_1_alignment"
+        },
+        {
+          "type": "overflow_page",
+          "$alignment_horizontal": "item_2_alignment"
+        }
+      ],
+      "orientation": "vertical"
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "pager width = 120, paddings = 20 + 20\npage width = 140 (overflows available 80 by 60)\ncross_axis_alignment = null (default = start)\nalignment_horizontal = left | center | right\nexpected: pages keep their alignment"
+            },
+            {
+              "type": "test_pager",
+              "item_0_alignment": "left",
+              "item_1_alignment": "center",
+              "item_2_alignment": "right"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

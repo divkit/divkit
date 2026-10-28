@@ -8,7 +8,7 @@ public final class GalleryBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
 
-  private lazy var contentSize: CGSize = model.intrinsicSize
+  private lazy var contentSize: CGSize = model.intrinsicSize(fitting: .unbounded)
 
   public var path: UIElementPath? {
     model.path
@@ -53,7 +53,7 @@ public final class GalleryBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case let .intrinsic(_, minSize, maxSize):
-      let height = model.intrinsicSize(width: width).height
+      let height = model.intrinsicSize(fitting: model.direction.bounds(forWidth: width)).height
       return clamp(height, min: minSize, max: maxSize)
     case let .weighted(_, minSize, _):
       return minSize

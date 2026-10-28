@@ -31,14 +31,19 @@ public struct GalleryViewModel: Equatable {
   public struct Item: Equatable {
     public let crossAlignment: Alignment
     public var content: Block
+    /// The item is sized by its content and then stretched to the cross-axis slot,
+    /// clamped by its own min/max. Used for a match_parent item of a gallery that wraps its
+    /// content across the scroll axis: the item takes part in the slot size and fills it.
+    public let fillsCrossAxis: Bool
 
     var existingItem: Bool {
       !content.isEmpty
     }
 
-    public init(crossAlignment: Alignment, content: Block) {
+    public init(crossAlignment: Alignment, content: Block, fillsCrossAxis: Bool = false) {
       self.crossAlignment = crossAlignment
       self.content = content
+      self.fillsCrossAxis = fillsCrossAxis
     }
   }
 
@@ -211,6 +216,7 @@ public struct GalleryViewModel: Equatable {
 extension GalleryViewModel.Item {
   public static func ==(lhs: GalleryViewModel.Item, rhs: GalleryViewModel.Item) -> Bool {
     lhs.crossAlignment == rhs.crossAlignment && lhs.content == rhs.content
+      && lhs.fillsCrossAxis == rhs.fillsCrossAxis
   }
 }
 

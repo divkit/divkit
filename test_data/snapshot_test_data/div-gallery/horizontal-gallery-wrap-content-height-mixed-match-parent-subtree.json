@@ -1,0 +1,159 @@
+{
+  "description": "Horizontal gallery with wrap_content height, where only some items are match_parent. The row height is defined by the wrap_content item, match_parent items fill the row, and their match_parent descendants fill them too: the body fills the card and the button is at the bottom; the state background fills the item",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "card_text": {
+      "type": "text",
+      "font_size": 14,
+      "paddings": {
+        "left": 4,
+        "top": 4,
+        "right": 4,
+        "bottom": 4
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "horizontal",
+          "width": {
+            "type": "fixed",
+            "value": 360
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "item_spacing": 8,
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "width": {
+                "type": "fixed",
+                "value": 110
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "border": {
+                "stroke": {
+                  "color": "#0000FF",
+                  "width": 2
+                }
+              },
+              "items": [
+                {
+                  "type": "card_text",
+                  "text": "Header"
+                },
+                {
+                  "type": "card_text",
+                  "text": "Body",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#DDDDDD"
+                    }
+                  ]
+                },
+                {
+                  "type": "card_text",
+                  "text": "Button",
+                  "height": {
+                    "type": "fixed",
+                    "value": 28
+                  },
+                  "text_alignment_horizontal": "center",
+                  "text_alignment_vertical": "center",
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#AAC8FF"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "id": "state_item",
+              "default_state_id": "first",
+              "width": {
+                "type": "fixed",
+                "value": 110
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "states": [
+                {
+                  "state_id": "first",
+                  "div": {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#FFCC80"
+                      }
+                    ],
+                    "items": [
+                      {
+                        "type": "card_text",
+                        "text": "State item"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Neighbour\nwith six\nlines of\ntext that\ndefine the\nrow height",
+              "width": {
+                "type": "fixed",
+                "value": 110
+              },
+              "font_size": 14,
+              "border": {
+                "stroke": {
+                  "color": "#0000FF",
+                  "width": 2
+                }
+              },
+              "paddings": {
+                "left": 4,
+                "top": 4,
+                "right": 4,
+                "bottom": 4
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -2,6 +2,7 @@
   "description": "Vertical gallery with wrap_content width, two columns and match_parent items",
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "templates": {

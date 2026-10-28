@@ -30,7 +30,7 @@ public final class PagerBlock: BlockWithTraits {
       return value
     case let .intrinsic(_, minSize, maxSize):
       let width = gallery.intrinsicPagerSize(
-        forWidth: nil,
+        fitting: .unbounded,
         layoutMode: layoutMode
       ).width
       return clamp(width, min: minSize, max: maxSize)
@@ -71,7 +71,7 @@ public final class PagerBlock: BlockWithTraits {
       return value
     case let .intrinsic(_, minSize, maxSize):
       let height = gallery.intrinsicPagerSize(
-        forWidth: width,
+        fitting: intrinsicBounds(forWidth: width),
         layoutMode: layoutMode
       ).height
       return clamp(height, min: minSize, max: maxSize)
@@ -83,6 +83,17 @@ public final class PagerBlock: BlockWithTraits {
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? PagerBlock else { return false }
     return self == other
+  }
+
+  /// A vertical pager measures its height before its size along the scroll axis is known.
+  /// Percentage and neighbour page sizes need that size, so they are resolved against
+  /// the pager width.
+  private func intrinsicBounds(forWidth width: CGFloat) -> AxialBounds {
+    var bounds = gallery.direction.bounds(forWidth: width)
+    if bounds.along == nil, layoutMode != .pageContentSize {
+      bounds.along = width
+    }
+    return bounds
   }
 }
 

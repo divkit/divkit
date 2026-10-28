@@ -5,48 +5,61 @@ import VGSL
 
 @Suite
 struct GalleryViewLayoutTests {
-  @Test
-  func producesEqualToModelBlocksCountNumberOfFrames() {
-    let model = Blocks.horizontalCenterModel
+  @Test(arguments: ScrollDirection.allCases)
+  func producesEqualToModelBlocksCountNumberOfFrames(direction: ScrollDirection) {
+    let model = Blocks.makeModel(direction: direction)
     let layout = GalleryViewLayout(model: model)
     #expect(layout.blockFrames.count == model.items.count)
   }
 
-  @Test
-  func whenHasHorizontalDirection_producesSummaryWidthAndBlockMaximumHeightContentSizePlusCrossInsets(
+  @Test(arguments: ScrollDirection.allCases)
+  func producesSummaryAxialSizeAndBlockMaximumCrossSizeContentSizePlusCrossInsets(
+    direction: ScrollDirection
   ) {
-    let layout = GalleryViewLayout(model: Blocks.horizontalCenterModel)
-    #expect(layout.contentSize.width == Blocks.contentAxialSize)
-    #expect(layout.contentSize.height == Blocks.contentCrossMaxSize + Blocks.fixedInsets.sum)
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(model: Blocks.makeModel(direction: direction))
+    #expect(axis.along(layout.contentSize) == Blocks.contentAxialSize)
+    #expect(
+      axis.across(layout.contentSize) == Blocks.contentCrossMaxSize + Blocks.fixedInsets.sum
+    )
   }
 
-  @Test
-  func whenDoesNotHaveBounds_andHorizontalDirection_appliesResizableBlockHeightToOtherBlocksMaximumHeight(
+  @Test(arguments: ScrollDirection.allCases)
+  func whenDoesNotHaveBounds_appliesOtherBlocksMaximumCrossSizeToCrossResizableBlock(
+    direction: ScrollDirection
   ) throws {
-    let model = Blocks.horizontalCenterModel
+    let axis = TestAxis(direction)
+    let model = Blocks.makeModel(direction: direction)
     let layout = GalleryViewLayout(model: model)
-    let index = try #require(model.items.firstIndex(where: { $0.content.isVerticallyResizable }))
-    #expect(layout.blockFrames[index].height == Blocks.contentCrossMaxSize)
+    let index = try #require(model.items.firstIndex(where: { axis.isAcrossResizable($0.content) }))
+    #expect(axis.acrossSize(layout.blockFrames[index]) == Blocks.contentCrossMaxSize)
   }
 
-  @Test
-  func whenHasBounds_andHorizontalDirection_appliesResizableBlockHeightToInsetedBoundsHeight(
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasBounds_appliesInsetedBoundsCrossSizeToCrossResizableBlock(
+    direction: ScrollDirection
   ) throws {
-    let model = Blocks.horizontalCenterModel
+    let axis = TestAxis(direction)
+    let model = Blocks.makeModel(direction: direction)
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let height = boundsSize.height - Blocks.fixedInsets.sum
-    let index = try #require(model.items.firstIndex(where: { $0.content.isVerticallyResizable }))
-    #expect(layout.blockFrames[index].height == height)
+    let index = try #require(model.items.firstIndex(where: { axis.isAcrossResizable($0.content) }))
+    #expect(
+      axis.acrossSize(layout.blockFrames[index])
+        == axis.across(boundsSize) - Blocks.fixedInsets.sum
+    )
   }
 
-  @Test
-  func whenHorizontalDirection_clampsResizableItemHeightToItsConstraints() {
-    func item(minHeight: CGFloat, maxHeight: CGFloat) -> Block {
-      TextBlock(
-        widthTrait: .fixed(90),
-        heightTrait: .weighted(.default, minSize: minHeight, maxSize: maxHeight),
-        text: NSAttributedString(string: "x"),
-        accessibilityElement: nil
+  @Test(arguments: ScrollDirection.allCases)
+  func clampsCrossResizableItemToItsConstraints(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    func item(minSize: CGFloat, maxSize: CGFloat) -> GalleryViewModel.Item {
+      GalleryViewModel.Item(
+        crossAlignment: .leading,
+        content: axis.textBlock(
+          along: .fixed(90),
+          across: .weighted(.default, minSize: minSize, maxSize: maxSize),
+          text: "x"
+        )
       )
     }
     let metrics = GalleryViewMetrics(
@@ -57,173 +70,117 @@ struct GalleryViewLayoutTests {
     )
     let model = GalleryViewModel(
       items: [
-        GalleryViewModel.Item(
-          crossAlignment: .leading,
-          content: item(minHeight: 0, maxHeight: .infinity)
-        ),
-        GalleryViewModel.Item(
-          crossAlignment: .leading,
-          content: item(minHeight: 110, maxHeight: .infinity)
-        ),
-        GalleryViewModel.Item(
-          crossAlignment: .leading,
-          content: item(minHeight: 0, maxHeight: 60)
-        ),
+        item(minSize: 0, maxSize: .infinity),
+        item(minSize: 110, maxSize: .infinity),
+        item(minSize: 0, maxSize: 60),
       ],
       layoutDirection: .leftToRight,
       metrics: metrics,
       scrollMode: .default,
       path: UIElementPath("model"),
-      direction: .horizontal,
+      direction: direction,
       scrollAlignment: nil
     )
-    let layout = GalleryViewLayout(model: model, boundsSize: CGSize(width: 300, height: 100))
+    let layout = GalleryViewLayout(model: model, boundsSize: axis.size(along: 300, across: 100))
 
     // match_parent items fill the 100pt cross size, each clamped to its own min/max.
-    #expect(layout.blockFrames.map(\.height) == [100, 110, 60])
+    #expect(layout.blockFrames.map(axis.acrossSize) == [100, 110, 60])
   }
 
-  @Test
-  func horizontalGallery_constrainedCrossAxisHeight_respectsCrossInsets() throws {
-    let galleryWidth: CGFloat = 300
-    let galleryHeight: CGFloat = 100
+  @Test(arguments: ScrollDirection.allCases)
+  func crossAxisOverflow_alignsItemsRelativeToAvailableSpace(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(
+      model: CrossAxisOverflowFixtures.model(direction: direction),
+      boundsSize: CrossAxisOverflowFixtures.boundsSize(axis)
+    )
+
+    // Items overflow the 100pt cross size by 60pt: center splits overflow evenly,
+    // trailing pushes it before the leading edge.
+    #expect(layout.blockFrames.map(axis.minAcross) == [0, -30, -60])
+  }
+
+  @Test(arguments: ScrollDirection.allCases)
+  func constrainedCrossAxisSize_respectsCrossInsets(direction: ScrollDirection) throws {
+    let axis = TestAxis(direction)
+    // Original inputs of the former horizontal and vertical tests.
+    let (galleryAlong, galleryAcross, itemAlong, itemAcross): (CGFloat, CGFloat, CGFloat, CGFloat) =
+      direction.isHorizontal
+        ? (300, 100, 120, ConstrainedCrossAxisGalleryFixtures.tallIntrinsicCrossAxisSize)
+        : (100, 300, 60, ConstrainedCrossAxisGalleryFixtures.wideIntrinsicCrossAxisSize)
     let crossPadding: CGFloat = 10
-    let availableCrossAxisHeight = galleryHeight - crossPadding * 2
+    let availableCrossAxisSize = galleryAcross - crossPadding * 2
 
     let model = GalleryViewModel(
       items: [
         GalleryViewModel.Item(
           crossAlignment: .leading,
-          content: BlockWithFixedWrapContent(
-            width: 120,
-            height: ConstrainedCrossAxisGalleryFixtures.tallIntrinsicCrossAxisSize,
-            constrainedVertically: true
+          content: axis.fixedWrapContentBlock(
+            along: itemAlong,
+            across: itemAcross,
+            constrainedAcross: true
           )
         ),
       ],
       metrics: ConstrainedCrossAxisGalleryFixtures.galleryMetrics(crossPadding: crossPadding),
-      path: UIElementPath("horizontal-gallery-constrained-height"),
-      direction: .horizontal
+      path: UIElementPath("gallery-constrained-cross-axis"),
+      direction: direction
     )
 
     let layout = GalleryViewLayout(
       model: model,
-      boundsSize: CGSize(width: galleryWidth, height: galleryHeight)
+      boundsSize: axis.size(along: galleryAlong, across: galleryAcross)
     )
 
     let firstFrame = try #require(layout.blockFrames.first)
 
-    #expect(firstFrame.minY == crossPadding)
-    #expect(firstFrame.height == availableCrossAxisHeight)
-    #expect(firstFrame.maxY == galleryHeight - crossPadding)
+    #expect(axis.minAcross(firstFrame) == crossPadding)
+    #expect(axis.acrossSize(firstFrame) == availableCrossAxisSize)
+    #expect(axis.maxAcross(firstFrame) == galleryAcross - crossPadding)
   }
 
-  @Test
-  func horizontalGallery_degenerateBoundedCrossAxis_clampsCrossAxisViewportToZero() throws {
-    let galleryWidth: CGFloat = 300
-    let galleryHeight: CGFloat = 8
+  @Test(arguments: ScrollDirection.allCases)
+  func degenerateBoundedCrossAxis_clampsCrossAxisViewportToZero(
+    direction: ScrollDirection
+  ) throws {
+    let axis = TestAxis(direction)
+    let galleryAcross: CGFloat = 8
     let crossPadding: CGFloat = 10
-    let itemHeight: CGFloat = 20
+    let itemAcross: CGFloat = 20
 
     let model = GalleryViewModel(
       items: [
         GalleryViewModel.Item(
           crossAlignment: .center,
-          content: BlockWithFixedWrapContent(width: 120, height: itemHeight)
+          content: axis.fixedWrapContentBlock(along: 120, across: itemAcross)
         ),
       ],
       metrics: ConstrainedCrossAxisGalleryFixtures.galleryMetrics(crossPadding: crossPadding),
-      path: UIElementPath("horizontal-gallery-degenerate-cross-axis-viewport"),
-      direction: .horizontal
+      path: UIElementPath("gallery-degenerate-cross-axis-viewport"),
+      direction: direction
     )
 
     let layout = GalleryViewLayout(
       model: model,
-      boundsSize: CGSize(width: galleryWidth, height: galleryHeight)
+      boundsSize: axis.size(along: 300, across: galleryAcross)
     )
 
     let firstFrame = try #require(layout.blockFrames.first)
 
-    #expect(galleryHeight < crossPadding * 2)
-    #expect(firstFrame.height == itemHeight)
-    #expect(firstFrame.minY == 0)
+    #expect(galleryAcross < crossPadding * 2)
+    #expect(axis.acrossSize(firstFrame) == itemAcross)
+    #expect(axis.minAcross(firstFrame) == 0)
   }
 
-  @Test
-  func verticalGallery_constrainedCrossAxisWidth_respectsCrossInsets() throws {
-    let galleryWidth: CGFloat = 300
-    let galleryHeight: CGFloat = 100
-    let crossPadding: CGFloat = 10
-    let availableCrossAxisWidth = galleryWidth - crossPadding * 2
-
-    let model = GalleryViewModel(
-      items: [
-        GalleryViewModel.Item(
-          crossAlignment: .leading,
-          content: BlockWithFixedWrapContent(
-            width: ConstrainedCrossAxisGalleryFixtures.wideIntrinsicCrossAxisSize,
-            height: 60,
-            constrainedHorizontally: true
-          )
-        ),
-      ],
-      metrics: ConstrainedCrossAxisGalleryFixtures.galleryMetrics(crossPadding: crossPadding),
-      path: UIElementPath("vertical-gallery-constrained-width"),
-      direction: .vertical
-    )
-
-    let layout = GalleryViewLayout(
-      model: model,
-      boundsSize: CGSize(width: galleryWidth, height: galleryHeight)
-    )
-
-    let firstFrame = try #require(layout.blockFrames.first)
-
-    #expect(firstFrame.minX == crossPadding)
-    #expect(firstFrame.width == availableCrossAxisWidth)
-    #expect(firstFrame.maxX == galleryWidth - crossPadding)
-  }
-
-  @Test
-  func whenHasVerticalDirection_producesSummaryHeightAndBlockMaximumWidthContentSizePlusCrossInsets(
-  ) {
-    let layout = GalleryViewLayout(model: Blocks.verticalCenterModel)
-    #expect(layout.contentSize.width == Blocks.contentCrossMaxSize + Blocks.fixedInsets.sum)
-    #expect(layout.contentSize.height == Blocks.contentAxialSize)
-  }
-
-  @Test
-  func whenDoesNotHaveBounds_andVerticalDirection_appliesResizableBlockWidthToOtherBlocksMaximumWidth(
-  ) throws {
-    let model = Blocks.verticalCenterModel
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasSeveralColumns_producesContentAxialSizeOfLongestColumn(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    let model = MultiColumnGalleryFixtures.makeModel(direction: direction)
     let layout = GalleryViewLayout(model: model)
-    let index = try #require(model.items.firstIndex(where: { $0.content.isHorizontallyResizable }))
-    #expect(layout.blockFrames[index].width == Blocks.contentCrossMaxSize)
+    #expect(axis.along(layout.contentSize) == 100)
   }
 
-  @Test
-  func whenHasBounds_andVerticalDirection_appliesResizableBlockWidthToInsetedBoundsWidth() throws {
-    let model = Blocks.verticalCenterModel
-    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let index = try #require(model.items.firstIndex(where: { $0.content.isHorizontallyResizable }))
-    #expect(layout.blockFrames[index].width == boundsSize.width - Blocks.fixedInsets.sum)
-  }
-
-  @Test
-  func whenHasVerticalDirection_andSeveralColumns_producesContentHeightOfLongestColumn() {
-    let model = MultiColumnGalleryFixtures.makeModel(direction: .vertical)
-    let layout = GalleryViewLayout(model: model)
-    #expect(layout.contentSize.height == 100)
-  }
-
-  @Test
-  func whenHasHorizontalDirection_andSeveralRows_producesContentWidthOfLongestRow() {
-    let model = MultiColumnGalleryFixtures.makeModel(direction: .horizontal)
-    let layout = GalleryViewLayout(model: model)
-    #expect(layout.contentSize.width == 100)
-  }
-
-  @Test(arguments: [ScrollDirection.horizontal, .vertical])
+  @Test(arguments: ScrollDirection.allCases)
   func whenHasSeveralColumns_lastPageEndsAtLongestColumnEnd(direction: ScrollDirection) throws {
     let layout = GalleryViewLayout(
       model: MultiColumnGalleryFixtures.makeModel(direction: direction),
@@ -233,134 +190,105 @@ struct GalleryViewLayoutTests {
     #expect(lastPage.origin + lastPage.size == 100)
   }
 
-  @Test
-  func whenHasResizableAxialInsets_andHorizontalDirection_calculatesContentSizeFittingProvidedSize(
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasResizableAxialInsets_calculatesContentSizeFittingProvidedSize(
+    direction: ScrollDirection
   ) {
-    let model = Blocks.horizontalResizableModel
+    let axis = TestAxis(direction)
+    let model = Blocks.makeModel(direction: direction, metrics: .resizableAxial)
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let expectedSize = Blocks.contentAxialSizeWithoutSideGaps + boundsSize.width - Blocks
+    let expectedSize = Blocks.contentAxialSizeWithoutSideGaps + axis.along(boundsSize) - Blocks
       .resizableInsets.maxViewportSize
-    #expect(layout.contentSize.width == expectedSize)
+    #expect(axis.along(layout.contentSize) == expectedSize)
   }
 
-  @Test
-  func whenHasResizableAxialInsets_andVerticalDirection_calculatesContentSizeFittingProvidedSize() {
-    let model = Blocks.verticalResizableModel
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasResizableAxialInsets_producesSideGapsFittingProvidedSize(
+    direction: ScrollDirection
+  ) {
+    let axis = TestAxis(direction)
+    let model = Blocks.makeModel(direction: direction, metrics: .resizableAxial)
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let expectedSize = Blocks.contentAxialSizeWithoutSideGaps + boundsSize.height - Blocks
-      .resizableInsets.maxViewportSize
-    #expect(layout.contentSize.height == expectedSize)
+    let expectedInsetValue = (axis.along(boundsSize) - Blocks.resizableInsets.maxViewportSize) / 2
+    #expect(layout.blockFrames.first.map(axis.minAlong) == expectedInsetValue)
+    #expect(
+      layout.blockFrames.last.map(axis.maxAlong)
+        == axis.along(layout.contentSize) - expectedInsetValue
+    )
   }
 
-  @Test
-  func whenHasResizableAxialInsets_andHorizontalDirection_producesSideGapsFittingProvidedSize() {
-    let model = Blocks.horizontalResizableModel
-    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let expectedInsetValue = (boundsSize.width - Blocks.resizableInsets.maxViewportSize) / 2
-    #expect(layout.blockFrames.first?.minX == expectedInsetValue)
-    #expect(layout.blockFrames.last?.maxX == layout.contentSize.width - expectedInsetValue)
-  }
-
-  @Test
-  func whenHasResizableAxialInsets_andVerticalDirection_producesSideGapsFittingProvidedSize() {
-    let model = Blocks.verticalResizableModel
-    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let expectedInsetValue = (boundsSize.height - Blocks.resizableInsets.maxViewportSize) / 2
-    #expect(layout.blockFrames.first?.minY == expectedInsetValue)
-    #expect(layout.blockFrames.last?.maxY == layout.contentSize.height - expectedInsetValue)
-  }
-
-  @Test
-  func whenHasResizableCrossInsets_andVerticalDirection_producesSideGapsFittingProvidedSize() {
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasResizableCrossInsets_producesSideGapsFittingProvidedSize(
+    direction: ScrollDirection
+  ) {
+    let axis = TestAxis(direction)
     let model = Blocks.makeModel(
-      direction: .vertical,
+      direction: direction,
       metrics: .resizableCross,
       crossAlignment: .leading
     )
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let expectedInsetValue = (boundsSize.width - Blocks.resizableInsets.maxViewportSize) / 2
-    #expect(layout.blockFrames.first?.minX == expectedInsetValue)
-    #expect(layout.blockFrames.first?.maxX == layout.contentSize.width - expectedInsetValue)
-  }
-
-  @Test
-  func whenHasResizableCrossInsets_andHorizontalDirection_producesSideGapsFittingProvidedSize() {
-    let model = Blocks.makeModel(
-      direction: .horizontal,
-      metrics: .resizableCross,
-      crossAlignment: .leading
+    let expectedInsetValue = (axis.across(boundsSize) - Blocks.resizableInsets.maxViewportSize) / 2
+    #expect(layout.blockFrames.first.map(axis.minAcross) == expectedInsetValue)
+    #expect(
+      layout.blockFrames.first.map(axis.maxAcross)
+        == axis.across(layout.contentSize) - expectedInsetValue
     )
-    let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let expectedInsetValue = (boundsSize.height - Blocks.resizableInsets.maxViewportSize) / 2
-    #expect(layout.blockFrames.first?.minY == expectedInsetValue)
-    #expect(layout.blockFrames.first?.maxY == layout.contentSize.height - expectedInsetValue)
   }
 
-  @Test
-  func whenHasHorizontalDirection_startsLeftEdgeAtFirstGapAndFinishesRightEdgeBeforeLastGap() {
-    let layout = GalleryViewLayout(model: Blocks.horizontalCenterModel)
-    #expect(layout.blockFrames.first?.minX == Blocks.gapSize)
-    #expect(layout.blockFrames.last?.maxX == Blocks.gapSize + Blocks.framesAxialSize)
+  @Test(arguments: ScrollDirection.allCases)
+  func startsAtFirstGapAndFinishesBeforeLastGap(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(model: Blocks.makeModel(direction: direction))
+    #expect(layout.blockFrames.first.map(axis.minAlong) == Blocks.gapSize)
+    #expect(
+      layout.blockFrames.last.map(axis.maxAlong) == Blocks.gapSize + Blocks.framesAxialSize
+    )
   }
 
-  @Test
-  func whenHasHorizontalDirection_andCenterVerticalAlignment_layoutFramesAroundInsetedVerticalCenter(
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasCenterCrossAlignment_layoutFramesAroundInsetedCrossCenter(
+    direction: ScrollDirection
   ) {
-    let layout = GalleryViewLayout(model: Blocks.horizontalCenterModel, boundsSize: boundsSize)
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(
+      model: Blocks.makeModel(direction: direction, crossAlignment: .center),
+      boundsSize: boundsSize
+    )
     let center = floor(
-      Blocks.fixedInsets.leading + (boundsSize.height - Blocks.fixedInsets.sum) / 2
+      Blocks.fixedInsets.leading + (axis.across(boundsSize) - Blocks.fixedInsets.sum) / 2
     )
-    #expect(layout.blockFrames.allSatisfy { $0.midY.isApproximatelyEqualTo(center) })
+    #expect(layout.blockFrames.allSatisfy { axis.midAcross($0).isApproximatelyEqualTo(center) })
   }
 
-  @Test
-  func whenHasHorizontalDirection_andLeadingVerticalAlignment_layoutFramesAboveCrossInsets() {
-    let layout = GalleryViewLayout(model: Blocks.horizontalTrailingModel, boundsSize: boundsSize)
-    let trailing = boundsSize.height - Blocks.fixedInsets.trailing
-    #expect(layout.blockFrames.allSatisfy { $0.maxY.isApproximatelyEqualTo(trailing) })
-  }
-
-  @Test
-  func whenHasHorizontalDirection_andTrailingVerticalAlignment_layoutFramesBelowCrossInsets() {
-    let layout = GalleryViewLayout(model: Blocks.horizontalLeadingModel, boundsSize: boundsSize)
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasLeadingCrossAlignment_layoutFramesAtLeadingCrossInset(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(
+      model: Blocks.makeModel(direction: direction, crossAlignment: .leading),
+      boundsSize: boundsSize
+    )
     #expect(
-      layout.blockFrames.allSatisfy { $0.minY.isApproximatelyEqualTo(Blocks.fixedInsets.leading) }
+      layout.blockFrames.allSatisfy {
+        axis.minAcross($0).isApproximatelyEqualTo(Blocks.fixedInsets.leading)
+      }
     )
   }
 
-  @Test
-  func whenHasVerticalDirection_andCenterHorizontalAlignment_layoutFramesAroundInsetedHorizontalCenter(
-  ) {
-    let layout = GalleryViewLayout(model: Blocks.verticalCenterModel, boundsSize: boundsSize)
-    let center = floor(Blocks.fixedInsets.leading + (boundsSize.width - Blocks.fixedInsets.sum) / 2)
-    #expect(layout.blockFrames.allSatisfy { $0.midX.isApproximatelyEqualTo(center) })
-  }
-
-  @Test
-  func whenHasVerticalDirection_andLeadingHorizontalAlignment_layoutFramesAtLeadingOfCrossInset() {
-    let layout = GalleryViewLayout(model: Blocks.verticalLeadingModel, boundsSize: boundsSize)
-    #expect(
-      layout.blockFrames.allSatisfy { $0.minX.isApproximatelyEqualTo(Blocks.fixedInsets.leading) }
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasTrailingCrossAlignment_layoutFramesAtTrailingCrossInset(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(
+      model: Blocks.makeModel(direction: direction, crossAlignment: .trailing),
+      boundsSize: boundsSize
     )
+    let trailing = axis.across(boundsSize) - Blocks.fixedInsets.trailing
+    #expect(layout.blockFrames.allSatisfy { axis.maxAcross($0).isApproximatelyEqualTo(trailing) })
   }
 
-  @Test
-  func whenHasVerticalDirection_andTrailingHorizontalAlignment_layoutFramesAtTrailingOfCrossInset() {
-    let layout = GalleryViewLayout(model: Blocks.verticalTrailingModel, boundsSize: boundsSize)
-    let trailing = boundsSize.width - Blocks.fixedInsets.trailing
-    #expect(layout.blockFrames.allSatisfy { $0.maxX.isApproximatelyEqualTo(trailing) })
-  }
-
-  @Test
-  func whenHasVerticalDirection_startsHeightAtFirstGapAndFinishesBeforeLastGap() {
-    let layout = GalleryViewLayout(model: Blocks.verticalCenterModel)
-    #expect(layout.blockFrames.first?.minY == Blocks.gapSize)
-    #expect(layout.blockFrames.last?.maxY == Blocks.gapSize + Blocks.framesAxialSize)
-  }
-
-  @Test
-  func whenHasPagingModel_returnsLastIndexForLastPageOrigin() {
-    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel)
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasPagingModel_returnsLastIndexForLastPageOrigin(direction: ScrollDirection) {
+    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel(direction: direction))
     let index = layout.blockFrames.count - 1
     let offset = layout.blockPages[index].origin
     let pageIndex = layout.pageIndex(forContentOffset: offset)
@@ -372,9 +300,9 @@ struct GalleryViewLayoutTests {
     )
   }
 
-  @Test
-  func whenHasPagingModel_returnsZeroIndexForOffsetOutOfRange() {
-    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel)
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasPagingModel_returnsZeroIndexForOffsetOutOfRange(direction: ScrollDirection) {
+    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel(direction: direction))
     #expect(layout.pageIndex(forContentOffset: -1).isApproximatelyEqualTo(
       0,
       withAccuracy: accuracy
@@ -385,9 +313,14 @@ struct GalleryViewLayoutTests {
     ))
   }
 
-  @Test
-  func whenHasFixedPagingModel_returnsInitialOffsetForReverseConversion() {
-    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel, boundsSize: boundsSize)
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasFixedPagingModel_returnsInitialOffsetForReverseConversion(
+    direction: ScrollDirection
+  ) {
+    let layout = GalleryViewLayout(
+      model: Blocks.fixedPagingModel(direction: direction),
+      boundsSize: boundsSize
+    )
     let page = layout.blockPages[2]
     let offset = page.origin + page.size / 2
     let pageIndex = layout.pageIndex(forContentOffset: offset)
@@ -395,9 +328,14 @@ struct GalleryViewLayoutTests {
     #expect(offset.isApproximatelyEqualTo(foundOffset, withAccuracy: accuracy))
   }
 
-  @Test
-  func whenHasAutoPagingModel_returnsInitialOffsetForReverseConversion() {
-    let layout = GalleryViewLayout(model: Blocks.autoPagingModel, boundsSize: boundsSize)
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasAutoPagingModel_returnsInitialOffsetForReverseConversion(
+    direction: ScrollDirection
+  ) {
+    let layout = GalleryViewLayout(
+      model: Blocks.autoPagingModel(direction: direction),
+      boundsSize: boundsSize
+    )
     let page = layout.blockPages[2]
     let offset = page.origin + page.size / 2
     let pageIndex = layout.pageIndex(forContentOffset: offset)
@@ -405,18 +343,23 @@ struct GalleryViewLayoutTests {
     #expect(offset.isApproximatelyEqualTo(foundOffset, withAccuracy: accuracy))
   }
 
-  @Test
-  func whenHasAutoPagingModel_returnsMaxOffsetForLastPage() {
-    let layout = GalleryViewLayout(model: Blocks.autoPagingModel, boundsSize: boundsSize)
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasAutoPagingModel_returnsMaxOffsetForLastPage(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(
+      model: Blocks.autoPagingModel(direction: direction),
+      boundsSize: boundsSize
+    )
     let offset = layout.contentOffset(pageIndex: CGFloat(layout.blockPages.count - 1))
-    let maxOffset = layout.contentSize.width - boundsSize.width
+    let maxOffset = axis.along(layout.contentSize) - axis.along(boundsSize)
     #expect(maxOffset.isApproximatelyEqualTo(offset, withAccuracy: accuracy))
   }
 
-  @Test
+  @Test(arguments: ScrollDirection.allCases)
   func whenHasPagingModel_detectsContainingGreaterOrEqualMinimumAndLowerMaximumWithAccuracy(
+    direction: ScrollDirection
   ) throws {
-    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel)
+    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel(direction: direction))
     let page = try #require(layout.blockPages.first)
     let below = page.origin - .leastNonzeroMagnitude
     let middle = page.origin + page.size / 2
@@ -426,9 +369,9 @@ struct GalleryViewLayoutTests {
     #expect(!page.contains(upper))
   }
 
-  @Test
-  func whenHasPagingModel_containsContinuousPages() {
-    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel)
+  @Test(arguments: ScrollDirection.allCases)
+  func whenHasPagingModel_containsContinuousPages(direction: ScrollDirection) {
+    let layout = GalleryViewLayout(model: Blocks.fixedPagingModel(direction: direction))
     let totalSpace = (1..<layout.blockPages.count).reduce(CGFloat(0)) { result, index in
       let page = layout.blockPages[index - 1]
       let nextPage = layout.blockPages[index]
@@ -437,118 +380,143 @@ struct GalleryViewLayoutTests {
     #expect(totalSpace.isApproximatelyEqualTo(0, withAccuracy: accuracy))
   }
 
-  @Test
-  func horizontal_resizableHeightContent() {
-    let layout = GalleryViewLayout(
-      model: GalleryViewModel(
-        blocks: [
-          TextBlock(
-            widthTrait: .intrinsic,
-            heightTrait: .resizable,
-            text: NSAttributedString(string: "Item 1")
-          ),
-        ],
-        metrics: GalleryViewMetrics(gaps: [10, 10]),
-        path: UIElementPath("model"),
-        direction: .horizontal
-      ),
-      boundsSize: CGSize(width: 100, height: 200)
-    )
-    #expect(layout.blockFrames[0].height == 200)
+  @Test(arguments: ScrollDirection.allCases)
+  func fillingItems_withoutBounds_takePartInSlotAndFillIt(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(model: FillingItemsFixtures.model(direction: direction))
+
+    // The slot fits the largest content (80), filling items stretch to it, the others keep theirs.
+    #expect(layout.blockFrames.map(axis.acrossSize) == [80, 80, 50, 40])
+    #expect(axis.across(layout.contentSize) == 80)
   }
 
-  @Test
-  func vertical_resizableWidthContent() {
+  @Test(arguments: ScrollDirection.allCases)
+  func fillingItems_withBounds_fillBoundedSlot(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
+    let layout = GalleryViewLayout(
+      model: FillingItemsFixtures.model(direction: direction),
+      boundsSize: axis.size(along: 300, across: 100)
+    )
+
+    #expect(layout.blockFrames.map(axis.acrossSize) == [100, 100, 50, 40])
+  }
+
+  @Test(arguments: ScrollDirection.allCases)
+  func crossResizableContent_fillsBoundsCrossSize(direction: ScrollDirection) {
+    let axis = TestAxis(direction)
     let layout = GalleryViewLayout(
       model: GalleryViewModel(
         blocks: [
-          TextBlock(
-            widthTrait: .resizable,
-            text: NSAttributedString(string: "Item 1")
-          ),
+          axis.textBlock(along: .intrinsic, across: .resizable, text: "Item 1"),
         ],
         metrics: GalleryViewMetrics(gaps: [10, 10]),
         path: UIElementPath("model"),
-        direction: .vertical
+        direction: direction
       ),
+      // Original bounds of the former horizontal and vertical tests.
       boundsSize: CGSize(width: 100, height: 200)
     )
-    #expect(layout.blockFrames[0].width == 100)
+    #expect(axis.acrossSize(layout.blockFrames[0]) == axis.across(CGSize(width: 100, height: 200)))
   }
 
   // MARK: - Parametrized scrollAlignment tests
 
   @Test(
     "Leading scroll alignment: item's leading edge aligns with the viewport's leading edge",
-    arguments: pagingScrollModes
+    arguments: pagingScrollModes, ScrollDirection.allCases
   )
   func leadingScrollAlignment_itemLeadingEdgeMatchesViewportLeadingEdge(
-    scrollMode: GalleryViewModel.ScrollMode
+    scrollMode: GalleryViewModel.ScrollMode,
+    direction: ScrollDirection
   ) {
-    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .leading)
+    let axis = TestAxis(direction)
+    let model = Blocks.makeModel(
+      direction: direction,
+      scrollMode: scrollMode,
+      scrollAlignment: .leading
+    )
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
     for (frame, page) in zip(layout.blockFrames, layout.blockPages) {
-      #expect(frame.minX.isApproximatelyEqualTo(page.origin, withAccuracy: accuracy))
+      #expect(axis.minAlong(frame).isApproximatelyEqualTo(page.origin, withAccuracy: accuracy))
     }
   }
 
   @Test(
     "Center scroll alignment: item is centered in the viewport",
-    arguments: pagingScrollModes
+    arguments: pagingScrollModes, ScrollDirection.allCases
   )
   func centerScrollAlignment_itemCenteredInViewport(
-    scrollMode: GalleryViewModel.ScrollMode
+    scrollMode: GalleryViewModel.ScrollMode,
+    direction: ScrollDirection
   ) {
-    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .center)
+    let axis = TestAxis(direction)
+    let model = Blocks.makeModel(
+      direction: direction,
+      scrollMode: scrollMode,
+      scrollAlignment: .center
+    )
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let pageSize = pageSizeFor(scrollMode: scrollMode, boundsWidth: boundsSize.width)
+    let pageSize = pageSizeFor(scrollMode: scrollMode, boundsAxialSize: axis.along(boundsSize))
     for (frame, page) in zip(layout.blockFrames, layout.blockPages) {
       let viewportCenter = page.origin + pageSize / 2
-      #expect(frame.midX.isApproximatelyEqualTo(viewportCenter, withAccuracy: accuracy))
+      #expect(axis.midAlong(frame).isApproximatelyEqualTo(viewportCenter, withAccuracy: accuracy))
     }
   }
 
   @Test(
     "Trailing scroll alignment: item's trailing edge aligns with the viewport's trailing edge",
-    arguments: pagingScrollModes
+    arguments: pagingScrollModes, ScrollDirection.allCases
   )
   func trailingScrollAlignment_itemTrailingEdgeMatchesViewportTrailingEdge(
-    scrollMode: GalleryViewModel.ScrollMode
+    scrollMode: GalleryViewModel.ScrollMode,
+    direction: ScrollDirection
   ) {
-    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .trailing)
+    let axis = TestAxis(direction)
+    let model = Blocks.makeModel(
+      direction: direction,
+      scrollMode: scrollMode,
+      scrollAlignment: .trailing
+    )
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
-    let pageSize = pageSizeFor(scrollMode: scrollMode, boundsWidth: boundsSize.width)
+    let pageSize = pageSizeFor(scrollMode: scrollMode, boundsAxialSize: axis.along(boundsSize))
     for (frame, page) in zip(layout.blockFrames, layout.blockPages) {
       // Skip pages clamped to origin 0: the geometric invariant only holds
       // when the frame is far enough from the content start.
-      guard frame.minX >= pageSize - frame.width else { continue }
+      guard axis.minAlong(frame) >= pageSize - axis.alongSize(frame) else { continue }
       let viewportTrailingEdge = page.origin + pageSize
-      #expect(frame.maxX.isApproximatelyEqualTo(viewportTrailingEdge, withAccuracy: accuracy))
+      #expect(
+        axis.maxAlong(frame).isApproximatelyEqualTo(viewportTrailingEdge, withAccuracy: accuracy)
+      )
     }
   }
 
   @Test(
     "Page count equals frame count for each paging mode and scrollAlignment",
-    arguments: pagingScrollModes, scrollAlignments
+    arguments: pagingCases, ScrollDirection.allCases
   )
-  func pageCount_equalsFrameCount(
-    scrollMode: GalleryViewModel.ScrollMode,
-    alignment: Alignment
-  ) {
-    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: alignment)
+  func pageCount_equalsFrameCount(pagingCase: PagingCase, direction: ScrollDirection) {
+    let model = Blocks.makeModel(
+      direction: direction,
+      scrollMode: pagingCase.scrollMode,
+      scrollAlignment: pagingCase.alignment
+    )
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
     #expect(layout.blockPages.count == layout.blockFrames.count)
   }
 
   @Test(
     "Roundtrip pageIndex→contentOffset→pageIndex is stable for each paging mode and scrollAlignment",
-    arguments: pagingScrollModes, scrollAlignments
+    arguments: pagingCases, ScrollDirection.allCases
   )
   func roundtrip_pageIndexToContentOffsetToPageIndex_isStable(
-    scrollMode: GalleryViewModel.ScrollMode,
-    alignment: Alignment
+    pagingCase: PagingCase,
+    direction: ScrollDirection
   ) throws {
-    let model = Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: alignment)
+    let model = Blocks.makeModel(
+      direction: direction,
+      scrollMode: pagingCase.scrollMode,
+      scrollAlignment: pagingCase.alignment
+    )
     let layout = GalleryViewLayout(model: model, boundsSize: boundsSize)
     let page = try #require(layout.blockPages.dropFirst().first)
     let offset = page.origin + page.size / 2
@@ -559,34 +527,42 @@ struct GalleryViewLayoutTests {
 
   @Test(
     "For items narrower than the viewport, trailing alignment has the smallest page origin and leading the largest",
-    arguments: pagingScrollModes
+    arguments: pagingScrollModes, ScrollDirection.allCases
   )
   func scrollAlignment_pageOriginsOrdered_forNarrowItems(
-    scrollMode: GalleryViewModel.ScrollMode
+    scrollMode: GalleryViewModel.ScrollMode,
+    direction: ScrollDirection
   ) throws {
-    let leadingLayout = GalleryViewLayout(
-      model: Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .leading),
-      boundsSize: boundsSize
-    )
-    let centerLayout = GalleryViewLayout(
-      model: Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .center),
-      boundsSize: boundsSize
-    )
-    let trailingLayout = GalleryViewLayout(
-      model: Blocks.makeModel(scrollMode: scrollMode, scrollAlignment: .trailing),
-      boundsSize: boundsSize
-    )
+    func layout(_ scrollAlignment: Alignment) -> GalleryViewLayout {
+      GalleryViewLayout(
+        model: Blocks.makeModel(
+          direction: direction,
+          scrollMode: scrollMode,
+          scrollAlignment: scrollAlignment
+        ),
+        boundsSize: boundsSize
+      )
+    }
     // Use the last page: it maps to a 1pt-wide resizable block (narrower than the 64pt viewport),
     // so the ordering trailing < center < leading holds regardless of scroll mode.
-    let leadingOrigin = try #require(leadingLayout.blockPages.last).origin
-    let centerOrigin = try #require(centerLayout.blockPages.last).origin
-    let trailingOrigin = try #require(trailingLayout.blockPages.last).origin
+    let leadingOrigin = try #require(layout(.leading).blockPages.last).origin
+    let centerOrigin = try #require(layout(.center).blockPages.last).origin
+    let trailingOrigin = try #require(layout(.trailing).blockPages.last).origin
     #expect(trailingOrigin < centerOrigin)
     #expect(centerOrigin < leadingOrigin)
   }
 }
 
 // MARK: - Test data
+
+struct PagingCase: Sendable, CustomTestStringConvertible {
+  let scrollMode: GalleryViewModel.ScrollMode
+  let alignment: Alignment
+
+  var testDescription: String {
+    "\(scrollMode), \(alignment)"
+  }
+}
 
 private let pagingScrollModes: [GalleryViewModel.ScrollMode] = [
   .autoPaging(inertionEnabled: true),
@@ -595,13 +571,17 @@ private let pagingScrollModes: [GalleryViewModel.ScrollMode] = [
 
 private let scrollAlignments: [Alignment] = [.leading, .center, .trailing]
 
+private let pagingCases: [PagingCase] = pagingScrollModes.flatMap { scrollMode in
+  scrollAlignments.map { PagingCase(scrollMode: scrollMode, alignment: $0) }
+}
+
 private func pageSizeFor(
   scrollMode: GalleryViewModel.ScrollMode,
-  boundsWidth: CGFloat
+  boundsAxialSize: CGFloat
 ) -> CGFloat {
   switch scrollMode {
   case .autoPaging, .default:
-    boundsWidth
+    boundsAxialSize
   case let .fixedPaging(pageSize):
     pageSize
   }
@@ -626,27 +606,8 @@ private enum Blocks {
   static let contentAxialSize = bigAxialSize + smallAxialSize + resizableAxialSize + gapAxialSize
   static let contentAxialSizeWithoutSideGaps = contentAxialSize - 2 * gapSize
   static let contentCrossMaxSize = max(bigSize, smallSize)
-  static let horizontalCenterModel = makeModel()
-  static let horizontalLeadingModel = makeModel(crossAlignment: .leading)
-  static let horizontalTrailingModel = makeModel(crossAlignment: .trailing)
-  static let verticalCenterModel = makeModel(direction: .vertical)
-  static let verticalLeadingModel = makeModel(
-    direction: .vertical,
-    crossAlignment: .leading
-  )
-  static let verticalTrailingModel = makeModel(
-    direction: .vertical,
-    crossAlignment: .trailing
-  )
-  static let fixedPagingModel = makeModel(scrollMode: .fixedPaging(pageSize: boundsSize.width))
-  static let autoPagingModel = makeModel(scrollMode: .autoPaging(inertionEnabled: true))
   static let fixedInsets = SideInsets(leading: 4, trailing: 10)
   static let resizableInsets = InsetMode.Resizable(minValue: 10, maxViewportSize: 14)
-  static let horizontalResizableModel = makeModel(metrics: .resizableAxial)
-  static let verticalResizableModel = makeModel(
-    direction: .vertical,
-    metrics: .resizableAxial
-  )
 
   private static let horizontallyResizable: Block = SeparatorBlock(direction: .horizontal)
 
@@ -665,6 +626,14 @@ private enum Blocks {
     heightTrait: .fixed(bigSize),
     children: [verticallyResizable]
   )
+
+  static func fixedPagingModel(direction: ScrollDirection) -> GalleryViewModel {
+    makeModel(direction: direction, scrollMode: .fixedPaging(pageSize: boundsSize.width))
+  }
+
+  static func autoPagingModel(direction: ScrollDirection) -> GalleryViewModel {
+    makeModel(direction: direction, scrollMode: .autoPaging(inertionEnabled: true))
+  }
 
   static func makeModel(
     direction: ScrollDirection = .horizontal,

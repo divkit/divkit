@@ -1,0 +1,107 @@
+{
+  "description": "Vertical pager with wrap_content height and pages constrained across the scroll axis. The pager measures its height before its width reaches the pages, so a page must be measured at the pager width minus paddings, not at its unbounded intrinsic width.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 12,
+      "margins": {
+        "bottom": 8
+      }
+    },
+    "text_page": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content",
+        "constrained": true
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "stroke": {
+          "color": "#0000FF",
+          "width": 2
+        }
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      }
+    },
+    "test_pager": {
+      "type": "pager",
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "value": 200
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "layout_mode": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 10,
+        "right": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#BBFF0000",
+          "width": 1
+        }
+      },
+      "items": [
+        {
+          "type": "text_page",
+          "text": "Page width = wrap_content, constrained = true. Unconstrained this text is one long line, at the pager width it wraps and the pager must be tall enough for every line."
+        },
+        {
+          "type": "text_page",
+          "text": "Second page"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Pager width = 200, height = wrap_content\nlayout_mode = wrap_content, paddings = 10 + 10\nPage is constrained to 180 and wraps"
+            },
+            {
+              "type": "test_pager"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
