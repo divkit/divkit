@@ -175,6 +175,13 @@ internal fun PagerContent(
         )
     }
 
+    val scrollLayout = remember(
+        listState, itemWindow, rawDefaultItem, snapPosition, neighbourSize, selectedActionsHandler
+    ) {
+        PagerScrollLayout(listState, itemWindow, rawDefaultItem, snapPosition, neighbourSize, selectedActionsHandler)
+    }
+    BindPagerScrollActions(id = pager.id, items = items, layout = scrollLayout)
+
     CompositionLocalProvider(LocalViewConfiguration provides gestureSlop.listViewConfiguration) {
         OrientedLazyList(
             isHorizontal = isHorizontal,
