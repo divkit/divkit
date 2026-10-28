@@ -73,6 +73,14 @@
         "web"
       ]
     },
+    "menu": {
+      "type": "array",
+      "items": {
+        "$ref": "div-accessibility-menu-item.json"
+      },
+      "$description": "translations.json#/div_accessibility_menu",
+      "platforms": []
+    },
     "mute_after_action": {
       "$ref": "common.json#/boolean_int",
       "default_value": "false",

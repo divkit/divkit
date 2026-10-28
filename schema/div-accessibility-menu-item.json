@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_accessibility_menu_item",
+  "properties": {
+    "label": {
+      "type": "string",
+      "$description": "translations.json#/div_accessibility_menu_item_label"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "$description": "translations.json#/div_accessibility_menu_item_actions"
+    }
+  },
+  "required": [
+    "label",
+    "actions"
+  ],
+  "platforms": []
+}

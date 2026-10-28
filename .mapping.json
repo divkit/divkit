@@ -14956,6 +14956,7 @@
   "samples/cloud-functions/simple/Handler.kt":"divkit/public/samples/cloud-functions/simple/Handler.kt",
   "schema/common.json":"divkit/public/schema/common.json",
   "schema/div-absolute-edge-insets.json":"divkit/public/schema/div-absolute-edge-insets.json",
+  "schema/div-accessibility-menu-item.json":"divkit/public/schema/div-accessibility-menu-item.json",
   "schema/div-accessibility.json":"divkit/public/schema/div-accessibility.json",
   "schema/div-action-animator-start.json":"divkit/public/schema/div-action-animator-start.json",
   "schema/div-action-animator-stop.json":"divkit/public/schema/div-action-animator-stop.json",

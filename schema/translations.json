@@ -15,6 +15,22 @@
     "en": "Accessibility settings.",
     "ru": "Настройки доступности."
   },
+  "div_accessibility_menu": {
+    "en": "Named commands added to the accessibility service's action menu. The element's primary activation (for example, a VoiceOver double-tap) continues to execute its regular `actions`. Selecting a menu item executes only that item's `actions`, without falling back to the element's actions. If a menu item's `actions` list is empty or all its actions are disabled, that item is excluded from the commands available for execution. In `merge` mode, only the merging element's menu items are exposed; descendant menu items are not collected automatically. If `exclude` mode is set on the element or any of its ancestors, the element's menu items are hidden from the accessibility service.",
+    "ru": "Именованные команды, добавляемые в меню действий accessibility-сервиса. Основная активация элемента (например, двойной тап VoiceOver) по-прежнему выполняет обычные `actions` элемента. При выборе пункта меню выполняются только его собственные `actions`, без подстановки действий элемента. Если список `actions` пункта меню пуст или все его действия выключены, этот пункт исключается из команд, доступных для выполнения. В режиме `merge` доступны только пункты меню объединяющего элемента; пункты меню потомков автоматически не собираются. Если у элемента или любого из его предков задан режим `exclude`, пункты меню элемента скрыты от accessibility-сервиса."
+  },
+  "div_accessibility_menu_item": {
+    "en": "A menu item available through the accessibility service. Selecting it executes `actions`.",
+    "ru": "Пункт меню, доступный через accessibility-сервис. При выборе выполняются `actions`."
+  },
+  "div_accessibility_menu_item_label": {
+    "en": "Text read aloud by the accessibility service when navigating to the menu item.",
+    "ru": "Текст, который accessibility-сервис зачитывает при переходе к пункту меню."
+  },
+  "div_accessibility_menu_item_actions": {
+    "en": "Actions executed when this menu item is selected. If this list is empty or all its actions are disabled, the item is excluded from the commands available for execution.",
+    "ru": "Действия, которые выполняются при выборе этого пункта меню. Если список пуст или все действия выключены, пункт исключается из команд, доступных для выполнения."
+  },
   "div_accessibility_description": {
     "en": "Element description. It is used as the main description for screen reading applications.",
     "ru": "Описание элемента. Используется в качестве основного описания для программ экранного чтения."
