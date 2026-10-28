@@ -6,8 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -222,6 +224,158 @@ class DivTooltipControllerTest {
     }
 
     @Test
+    fun `multiple false rejects a tooltip after it was shown and hidden`() {
+        val divContext = setControlledContent(data(anchor()))
+        val controller = controller(divContext)
+        showAndHideTooltip(controller)
+
+        assertFalse(controller.showTooltip(TOOLTIP_ID, multiple = false))
+
+        rule.onNodeWithText("Tooltip text").assertDoesNotExist()
+    }
+
+    @Test
+    fun `multiple true shows a tooltip after it was shown and hidden`() {
+        val divContext = setControlledContent(data(anchor()))
+        val controller = controller(divContext)
+        showAndHideTooltip(controller)
+
+        assertTrue(controller.showTooltip(TOOLTIP_ID, multiple = true))
+
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+    }
+
+    @Test
+    fun `multiple false rejects a tooltip previously shown with multiple true`() {
+        val divContext = setControlledContent(data(anchor()))
+        val controller = controller(divContext)
+        showAndHideTooltip(controller, multiple = true)
+
+        assertFalse(controller.showTooltip(TOOLTIP_ID, multiple = false))
+    }
+
+    @Test
+    fun `showing an active one-time tooltip is accepted without duplication`() {
+        val divContext = setControlledContent(data(anchor()))
+        val controller = controller(divContext)
+        controller.showTooltip(TOOLTIP_ID, multiple = false)
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+
+        assertTrue(controller.showTooltip(TOOLTIP_ID, multiple = false))
+
+        rule.onAllNodesWithText("Tooltip text").assertCountEquals(1)
+    }
+
+    @Test
+    fun `cancel does not allow another one-time show`() {
+        val divContext = setControlledContent(data(anchor()))
+        val controller = controller(divContext)
+        controller.showTooltip(TOOLTIP_ID, multiple = false)
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+        controller.cancelTooltips()
+        rule.onNodeWithText("Tooltip text").assertDoesNotExist()
+
+        assertFalse(controller.showTooltip(TOOLTIP_ID, multiple = false))
+    }
+
+    @Test
+    fun `request hidden before display does not consume one-time show`() {
+        val divContext = setControlledContent(data(anchor()))
+        val controller = controller(divContext)
+        rule.runOnIdle {
+            controller.showTooltip(TOOLTIP_ID, multiple = false)
+            controller.hideTooltip(TOOLTIP_ID)
+        }
+        rule.waitForIdle()
+
+        assertTrue(controller.showTooltip(TOOLTIP_ID, multiple = false))
+
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+    }
+
+    @Test
+    fun `one-time show history is card local`() {
+        val firstCard = data(anchor(), logId = FIRST_CARD_ID)
+        val secondCard = data(anchor(), logId = SECOND_CARD_ID)
+        val divContext = setControlledContent(firstCard, secondCard)
+        showAndHideTooltip(controller(divContext, FIRST_CARD_ID))
+
+        assertTrue(controller(divContext, SECOND_CARD_ID).showTooltip(TOOLTIP_ID, multiple = false))
+
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+    }
+
+    @Test
+    fun `multiple true keeps tooltip visible when requested during exit`() {
+        val divContext = setControlledContent(data(anchor()))
+        val controller = controller(divContext)
+        controller.showTooltip(TOOLTIP_ID, multiple = false)
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+        rule.mainClock.autoAdvance = false
+        controller.hideTooltip(TOOLTIP_ID)
+        rule.mainClock.advanceTimeByFrame()
+
+        controller.showTooltip(TOOLTIP_ID, multiple = true)
+        rule.mainClock.advanceTimeBy(1000)
+        rule.mainClock.autoAdvance = true
+
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+        rule.onAllNodesWithText("Tooltip text").assertCountEquals(1)
+    }
+
+    @Test
+    fun `one-time tooltip is not restored when card returns to composition`() {
+        val isComposed = mutableStateOf(true)
+        val card = data(anchor())
+        val divContext = setControlledContent {
+            if (isComposed.value) {
+                DivView(card)
+            }
+        }
+        controller(divContext).showTooltip(TOOLTIP_ID, multiple = false)
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+        rule.runOnIdle { isComposed.value = false }
+        rule.onNodeWithText("Tooltip text").assertDoesNotExist()
+
+        rule.runOnIdle { isComposed.value = true }
+
+        rule.onNodeWithText("Anchor").assertIsDisplayed()
+        rule.onNodeWithText("Tooltip text").assertDoesNotExist()
+    }
+
+    @Test
+    fun `one-time tooltip is not restored when anchor becomes visible again`() {
+        val variableController = DivVariableController()
+        val visibility = Variable.StringVariable("visibility", "visible")
+        variableController.declare(visibility)
+        val divContext = DivContext(
+            activity,
+            divConfiguration {
+                reporter = TestReporter()
+                this.variableController = variableController
+            },
+        )
+        val card = data(text(
+            text = "Anchor",
+            visibility = visibilityExpression("@{visibility}"),
+            tooltips = listOf(tooltip(TOOLTIP_ID, "Tooltip text")),
+        ))
+        activity.setContentView(ComposeView(divContext).apply {
+            setContent { DivView(card) }
+        })
+        rule.onNodeWithText("Anchor").assertIsDisplayed()
+        controller(divContext).showTooltip(TOOLTIP_ID, multiple = false)
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+        visibility.set("gone")
+        rule.onNodeWithText("Tooltip text").assertDoesNotExist()
+
+        visibility.set("visible")
+
+        rule.onNodeWithText("Anchor").assertIsDisplayed()
+        rule.onNodeWithText("Tooltip text").assertDoesNotExist()
+    }
+
+    @Test
     fun `show targets matching card`() {
         val firstCard = data(
             anchor(
@@ -369,6 +523,13 @@ class DivTooltipControllerTest {
         rule.waitForIdle()
 
         assertEquals(listOf(DivTooltipEvent.Dismissed(CARD_ID, TOOLTIP_ID)), events)
+    }
+
+    private fun showAndHideTooltip(controller: DivTooltipController, multiple: Boolean = false) {
+        controller.showTooltip(TOOLTIP_ID, multiple)
+        rule.onNodeWithText("Tooltip text").assertIsDisplayed()
+        controller.hideTooltip(TOOLTIP_ID)
+        rule.onNodeWithText("Tooltip text").assertDoesNotExist()
     }
 
     private fun setControlledContent(vararg data: DivData): DivContext {

@@ -1,6 +1,7 @@
 package com.yandex.div.compose.tooltips
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateListOf
@@ -17,6 +18,10 @@ internal fun TooltipsHost() {
     val tooltipController = component.tooltipController
     val tooltipStateStorage = component.tooltipStateStorage
     val shownIds = tooltipStateStorage.shownTooltipIds()
+
+    DisposableEffect(tooltipStateStorage) {
+        onDispose { tooltipStateStorage.cancelAll() }
+    }
 
     // Local list of ids currently in composition. Includes ids that have been
     // removed from [tooltipStateStorage] but are still running their exit animation,
@@ -40,7 +45,13 @@ internal fun TooltipsHost() {
                 onShown = { tooltipController.onShown(id) },
                 onDismissRequested = { tooltipStateStorage.hide(id) },
                 onHidden = { displayedIds.remove(id) },
-                onDismissed = { tooltipController.onDismissed(id) },
+                onDismissed = {
+                    if (tooltipStateStorage.getAnchor(id) == null) {
+                        tooltipStateStorage.hide(id)
+                        displayedIds.remove(id)
+                    }
+                    tooltipController.onDismissed(id)
+                },
             )
         }
     }

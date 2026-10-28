@@ -6,10 +6,10 @@ import com.yandex.div.test.data.action
 import com.yandex.div.test.data.hideTooltipAction
 import com.yandex.div.test.data.showTooltipAction
 import com.yandex.div2.DivAction
-import org.junit.runner.RunWith
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class TooltipActionHandlerTest {
@@ -65,6 +65,42 @@ class TooltipActionHandlerTest {
         )
 
         assertEquals(listOf("tooltip2"), tooltipStateStorage.shownTooltipIds())
+    }
+
+    @Test
+    fun `typed action without multiple does not repeat a shown tooltip`() {
+        tooltipStateStorage.onShown("tooltip1")
+
+        handle(action(typed = showTooltipAction(id = "tooltip1")))
+
+        assertEquals(emptyList(), tooltipStateStorage.shownTooltipIds())
+    }
+
+    @Test
+    fun `typed multiple false does not repeat a shown tooltip`() {
+        tooltipStateStorage.onShown("tooltip1")
+
+        handle(action(typed = showTooltipAction(id = "tooltip1", multiple = false)))
+
+        assertEquals(emptyList(), tooltipStateStorage.shownTooltipIds())
+    }
+
+    @Test
+    fun `url without multiple does not repeat a shown tooltip`() {
+        tooltipStateStorage.onShown("tooltip1")
+
+        handle(action(url = "div-action://show_tooltip?id=tooltip1"))
+
+        assertEquals(emptyList(), tooltipStateStorage.shownTooltipIds())
+    }
+
+    @Test
+    fun `url multiple true repeats a shown tooltip`() {
+        tooltipStateStorage.onShown("tooltip1")
+
+        handle(action(url = "div-action://show_tooltip?id=tooltip1&multiple=true"))
+
+        assertEquals(listOf("tooltip1"), tooltipStateStorage.shownTooltipIds())
     }
 
     private fun handle(action: DivAction) = actionHandlerEnvironment.handle(action)

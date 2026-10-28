@@ -24,6 +24,7 @@ import javax.inject.Inject
 internal class TooltipStateStorage @Inject constructor() {
     private val anchors = mutableStateMapOf<String, TooltipAnchorEntry>()
     private val shownTooltips = mutableStateSetOf<String>()
+    private val shownTooltipHistory = mutableSetOf<String>()
     private val bringToTopEntries = mutableStateListOf<BringToTopEntry>()
     private val bringToTopIds by derivedStateOf(structuralEqualityPolicy()) {
         anchors.values.mapNotNull { entry ->
@@ -31,8 +32,16 @@ internal class TooltipStateStorage @Inject constructor() {
         }.toSet()
     }
 
-    fun show(id: String) {
+    fun show(id: String, multiple: Boolean = false): Boolean {
+        if (id in shownTooltips) return true
+        if (!multiple && id in shownTooltipHistory) return false
+
         shownTooltips.add(id)
+        return true
+    }
+
+    fun onShown(id: String) {
+        shownTooltipHistory.add(id)
     }
 
     fun hide(id: String): Boolean {

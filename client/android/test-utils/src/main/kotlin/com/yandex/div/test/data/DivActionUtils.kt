@@ -276,9 +276,9 @@ fun setVariableAction(name: String, value: DivTypedValue): DivActionTyped {
     )
 }
 
-fun showTooltipAction(id: String): DivActionTyped {
+fun showTooltipAction(id: String, multiple: Boolean? = null): DivActionTyped {
     return DivActionTyped.ShowTooltip(
-        DivActionShowTooltip(id = constant(id))
+        DivActionShowTooltip(id = constant(id), multiple = multiple?.let { constant(it) })
     )
 }
 

@@ -48,22 +48,23 @@ class DivTooltipController @Inject internal constructor(
      * Shows a tooltip if its anchor is currently composed and laid out. Android View attachment is
      * not tracked separately.
      *
-     * [multiple] is required for parity with the server-provided tooltip command. It is currently
-     * accepted but does not affect behavior.
+     * [multiple] allows a tooltip to be shown again after its content has left composition.
+     * Otherwise each tooltip can be shown once for this card's view context. Already requested
+     * tooltips are not duplicated, and different tooltips are independent.
      *
      * @return `true` when the request is accepted, including when the tooltip is already requested;
      * `false` when the card's [DivView] is not currently composed, or the tooltip anchor is not
-     * currently composed or not laid out. Popup content composition lifecycle is reported
+     * currently composed or not laid out, or the tooltip was already shown and [multiple] is false.
+     * Popup content composition lifecycle is reported
      * separately through [events].
      */
     fun showTooltip(
         tooltipId: String,
-        @Suppress("UNUSED_PARAMETER") multiple: Boolean,
+        multiple: Boolean,
     ): Boolean {
         if (!tooltipStateStorage.isAvailable(tooltipId)) return false
 
-        tooltipStateStorage.show(tooltipId)
-        return true
+        return tooltipStateStorage.show(tooltipId, multiple = multiple)
     }
 
     /**
@@ -88,6 +89,7 @@ class DivTooltipController @Inject internal constructor(
     }
 
     internal fun onShown(tooltipId: String) {
+        tooltipStateStorage.onShown(tooltipId)
         publish(DivTooltipEvent.Shown(cardId, tooltipId))
     }
 

@@ -99,7 +99,6 @@ internal fun TooltipPopup(
             LocalTooltipContent provides true,
             LocalTooltipTouchDispatcher provides touchDispatcher,
         ) {
-            TooltipLifecycleEffect(tooltip.id, onShown, onDismissed)
             TooltipPopupContent(
                 tooltip = tooltip,
                 positionProvider = positionProvider,
@@ -107,6 +106,8 @@ internal fun TooltipPopup(
                 enterTransition = enterTransition,
                 exitTransition = exitTransition,
                 onTapOutside = onTapOutside,
+                onShown = onShown,
+                onDismissed = onDismissed,
             )
         }
     }
@@ -165,6 +166,8 @@ private fun TooltipPopupContent(
     enterTransition: EnterTransition,
     exitTransition: ExitTransition,
     onTapOutside: () -> Unit,
+    onShown: () -> Unit,
+    onDismissed: () -> Unit,
 ) {
     val substrate = tooltip.substrateDiv
     if (substrate == null) {
@@ -173,6 +176,7 @@ private fun TooltipPopupContent(
             enter = enterTransition,
             exit = exitTransition,
         ) {
+            TooltipLifecycleEffect(tooltip.id, onShown, onDismissed)
             DivBlockView(data = tooltip.div)
         }
         return
@@ -208,6 +212,7 @@ private fun TooltipPopupContent(
             enter = enterTransition,
             exit = exitTransition,
         ) {
+            TooltipLifecycleEffect(tooltip.id, onShown, onDismissed)
             DivBlockView(data = tooltip.div, blockTapPropagation = true)
         }
     }
