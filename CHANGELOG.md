@@ -1,3 +1,9 @@
+## 33.4.1
+
+### Android Client
+* Fixed pager page sizes and aspect-ratio heights during initial measurement, rebind, and resize while preserving wrap-content sizing for neighbouring pages.
+
+
 ## 33.4.0
 
 ### Android Client
