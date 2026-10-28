@@ -206,11 +206,6 @@
     "property_variable": {
       "type": "object",
       "$description": "translations.json#/div_property",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
       "properties": {
         "name": {
           "$ref": "div-variable-name.json",

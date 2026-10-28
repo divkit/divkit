@@ -24,39 +24,19 @@
       ],
       "default_value": "auto",
       "supports_expressions": false,
-      "$description": "translations.json#/div_accessibility_type",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_accessibility_type"
     },
     "state_description": {
       "type": "string",
-      "$description": "translations.json#/div_accessibility_state_description",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_accessibility_state_description"
     },
     "hint": {
       "type": "string",
-      "$description": "translations.json#/div_accessibility_hint",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_accessibility_hint"
     },
     "is_checked": {
       "$ref": "common.json#/boolean_int",
-      "$description": "translations.json#/div_accessibility_is_checked",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_accessibility_is_checked"
     },
     "mode": {
       "type": "string",
@@ -66,12 +46,7 @@
         "exclude"
       ],
       "default_value": "default",
-      "$description": "translations.json#/div_accessibility_mode",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_accessibility_mode"
     },
     "menu": {
       "type": "array",
@@ -93,10 +68,5 @@
         "web": "iOS-specific functionality, no such feature"
       }
     }
-  },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ]
+  }
 }

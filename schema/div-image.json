@@ -26,12 +26,7 @@
         "high_priority_preview_show": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_image_high_priority_preview_show",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_image_high_priority_preview_show"
         },
         "type": {
           "type": "string",
@@ -50,12 +45,7 @@
         },
         "appearance_animation": {
           "$ref": "div-fade-transition.json",
-          "$description": "translations.json#/div_image_appearance_animation",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_image_appearance_animation"
         },
         "filters": {
           "type": "array",

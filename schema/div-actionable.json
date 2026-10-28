@@ -16,92 +16,52 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_actionable_longtap_actions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_actionable_longtap_actions"
     },
     "doubletap_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_actionable_doubletap_actions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_actionable_doubletap_actions"
     },
     "press_start_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_actionable_press_start_actions",
-      "platforms": [
-        "web",
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_actionable_press_start_actions"
     },
     "press_end_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_actionable_press_end_actions",
-      "platforms": [
-        "web",
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_actionable_press_end_actions"
     },
     "hover_start_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_actionable_hover_start_actions",
-      "platforms": [
-        "web",
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_actionable_hover_start_actions"
     },
     "hover_end_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_actionable_hover_end_actions",
-      "platforms": [
-        "web",
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_actionable_hover_end_actions"
     },
     "action_animation": {
       "$ref": "div-animation.json",
       "default_value": "{\"name\": \"fade\", \"start_value\": 1, \"end_value\": 0.6, \"duration\": 100 }",
-      "$description": "translations.json#/div_actionable_action_animation",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_actionable_action_animation"
     },
     "capture_focus_on_action": {
       "type": "boolean",
       "default_value": "true",
-      "$description": "translations.json#/div_actionable_capture_focus_on_action",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_actionable_capture_focus_on_action"
     }
   }
 }

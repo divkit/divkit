@@ -14,21 +14,11 @@
     },
     "min_size": {
       "$ref": "div-size-unit-value.json",
-      "$description": "translations.json#/div_size_min",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_size_min"
     },
     "max_size": {
       "$ref": "div-size-unit-value.json",
-      "$description": "translations.json#/div_size_max",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_size_max"
     }
   },
   "required": [

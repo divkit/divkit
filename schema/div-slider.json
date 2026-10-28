@@ -113,12 +113,7 @@
           "items": {
             "$ref": "#/definitions/range"
           },
-          "$description": "translations.json#/div_slider_ranges",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_slider_ranges"
         },
         "secondary_value_accessibility": {
           "$ref": "div-accessibility.json",
@@ -133,44 +128,24 @@
         "is_enabled": {
           "$ref": "common.json#/boolean_int",
           "default_value": "true",
-          "$description": "translations.json#/div_slider_is_enabled",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_slider_is_enabled"
         },
         "press_start_actions": {
           "type": "array",
           "items": {
             "$ref": "div-action.json"
           },
-          "$description": "translations.json#/div_actionable_press_start_actions",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_actionable_press_start_actions"
         },
         "press_end_actions": {
           "type": "array",
           "items": {
             "$ref": "div-action.json"
           },
-          "$description": "translations.json#/div_actionable_press_end_actions",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_actionable_press_end_actions"
         }
       }
     }
-  ],
-  "platforms": [
-    "android",
-    "ios",
-    "web"
   ],
   "required": [
     "type",

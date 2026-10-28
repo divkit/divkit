@@ -33,11 +33,6 @@
           "$description": "translations.json#/div_text_range_mask_particles_density"
         }
       },
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
       "required": [
         "type",
         "color"

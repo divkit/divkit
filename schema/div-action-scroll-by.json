@@ -33,11 +33,6 @@
           "default_value": "0"
         }
       },
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
       "required": [
         "type",
         "id"

@@ -122,12 +122,7 @@
             },
             "active_font_weight_value": {
               "$ref": "common.json#/positive_integer",
-              "$description": "translations.json#/div_tabs_tab_title_style_active_font_weight_value",
-              "platforms": [
-                "ios",
-                "web",
-                "android"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_active_font_weight_value"
             },
             "inactive_font_weight": {
               "$ref": "div-font-weight.json",
@@ -135,12 +130,7 @@
             },
             "inactive_font_weight_value": {
               "$ref": "common.json#/positive_integer",
-              "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight_value",
-              "platforms": [
-                "ios",
-                "web",
-                "android"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight_value"
             },
             "active_font_variation_settings": {
               "type": "dict",
@@ -195,12 +185,7 @@
                 "none"
               ],
               "default_value": "slide",
-              "$description": "translations.json#/div_tabs_tab_title_style_animation_type",
-              "platforms": [
-                "android",
-                "ios",
-                "web"
-              ]
+              "$description": "translations.json#/div_tabs_tab_title_style_animation_type"
             },
             "animation_duration": {
               "$ref": "common.json#/non_negative_integer",
@@ -212,12 +197,7 @@
         },
         "tab_title_delimiter": {
           "$ref": "#/definitions/tab_title_delimiter",
-          "$description": "translations.json#/div_tabs_tab_title_delimiter_delimiter_style",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_tabs_tab_title_delimiter_delimiter_style"
         },
         "selected_tab": {
           "$ref": "common.json#/non_negative_integer",
@@ -270,11 +250,6 @@
         }
       }
     }
-  ],
-  "platforms": [
-    "android",
-    "ios",
-    "web"
   ],
   "required": [
     "type",

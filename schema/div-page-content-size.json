@@ -9,11 +9,6 @@
       ]
     }
   },
-  "platforms": [
-    "ios",
-    "android",
-    "web"
-  ],
   "required": [
     "type"
   ]

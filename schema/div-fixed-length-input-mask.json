@@ -55,11 +55,6 @@
       }
     }
   ],
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "pattern",

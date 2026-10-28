@@ -47,11 +47,6 @@
   "definitions": {
     "separator": {
       "type": "object",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
       "properties": {
         "show_at_start": {
           "$ref": "common.json#/boolean_int",
@@ -128,41 +123,21 @@
         },
         "separator": {
           "$ref": "#/definitions/separator",
-          "$description": "translations.json#/div_container_separator",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_container_separator"
         },
         "item_spacing": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "0",
-          "$description": "translations.json#/div_container_item_spacing",
-          "platforms": [
-            "ios",
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_container_item_spacing"
         },
         "line_spacing": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "0",
-          "$description": "translations.json#/div_container_line_spacing",
-          "platforms": [
-            "ios",
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_container_line_spacing"
         },
         "line_separator": {
           "$ref": "#/definitions/separator",
-          "$description": "translations.json#/div_container_line_separator",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_container_line_separator"
         },
         "items": {
           "type": "array",
@@ -173,12 +148,7 @@
         },
         "item_builder": {
           "$ref": "div-collection-item-builder.json",
-          "$description": "translations.json#/div_collection_item_builder",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_collection_item_builder"
         },
         "aspect": {
           "$ref": "div-aspect.json",
@@ -187,12 +157,7 @@
         "clip_to_bounds": {
           "$ref": "common.json#/boolean_int",
           "default_value": "true",
-          "$description": "translations.json#/div_clip_to_bounds",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_clip_to_bounds"
         }
       }
     }

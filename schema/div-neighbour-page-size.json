@@ -13,11 +13,6 @@
       "$description": "translations.json#/div_neighbour_page_size_neighbour_page_width"
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "neighbour_page_width"

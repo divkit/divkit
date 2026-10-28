@@ -17,11 +17,6 @@
       "type": "boolean"
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "id"

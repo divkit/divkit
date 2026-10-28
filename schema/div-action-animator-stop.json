@@ -13,11 +13,6 @@
       "$description": "translations.json#/div_action_animator_stop_animator_id"
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "animator_id"

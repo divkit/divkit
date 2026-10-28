@@ -8,10 +8,5 @@
     "ease_in_out",
     "spring"
   ],
-  "$description": "translations.json#/div_animation_interpolator",
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ]
+  "$description": "translations.json#/div_animation_interpolator"
 }

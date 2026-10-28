@@ -6,12 +6,7 @@
     },
     "scope_id": {
       "type": "string",
-      "$description": "translations.json#/div_action_base_scope_id",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_action_base_scope_id"
     },
     "url": {
       "$ref": "common.json#/url",

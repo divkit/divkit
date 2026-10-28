@@ -17,11 +17,6 @@
           "$description": "translations.json#/div_solid_background_color"
         }
       },
-      "platforms": [
-        "web",
-        "ios",
-        "android"
-      ],
       "required": [
         "color",
         "type"

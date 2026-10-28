@@ -38,11 +38,6 @@
       "$description": "translations.json#/div_collection_item_builder_prototypes"
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "data",
     "prototypes"

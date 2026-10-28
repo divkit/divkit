@@ -13,11 +13,6 @@
       "$description": "translations.json#/div_input_filters_expression_condition"
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "condition"

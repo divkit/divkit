@@ -26,19 +26,9 @@
       "enum": [
         "global",
         "card"
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
       ]
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "name",

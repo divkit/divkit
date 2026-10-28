@@ -62,30 +62,15 @@
       "items": {
         "$ref": "div-animator.json"
       },
-      "$description": "translations.json#/div_base_animators",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_animators"
     },
     "row_span": {
       "$ref": "common.json#/non_negative_integer",
-      "$description": "translations.json#/div_base_row_span",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_row_span"
     },
     "column_span": {
       "$ref": "common.json#/non_negative_integer",
-      "$description": "translations.json#/div_base_column_span",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_column_span"
     },
     "visibility_action": {
       "$ref": "div-visibility-action.json",
@@ -103,45 +88,25 @@
       "items": {
         "$ref": "div-disappear-action.json"
       },
-      "$description": "translations.json#/div_base_disappear_actions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_disappear_actions"
     },
     "tooltips": {
       "type": "array",
       "items": {
         "$ref": "div-tooltip.json"
       },
-      "$description": "translations.json#/div_base_tooltips",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_tooltips"
     },
     "accessibility": {
       "$ref": "div-accessibility.json",
-      "$description": "translations.json#/div_base_accessibility",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_accessibility"
     },
     "extensions": {
       "type": "array",
       "items": {
         "$ref": "div-extension.json"
       },
-      "$description": "translations.json#/div_base_extensions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_extensions"
     },
     "transition_triggers": {
       "type": "array",
@@ -150,51 +115,26 @@
       },
       "minItems": 1,
       "supports_expressions": false,
-      "$description": "translations.json#/div_base_transition_triggers",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_transition_triggers"
     },
     "transition_in": {
       "$ref": "div-appearance-transition.json",
-      "$description": "translations.json#/div_base_transition_in",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_transition_in"
     },
     "transition_change": {
       "$ref": "div-change-transition.json",
-      "$description": "translations.json#/div_base_transition_change",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_transition_change"
     },
     "transition_out": {
       "$ref": "div-appearance-transition.json",
-      "$description": "translations.json#/div_base_transition_out",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_transition_out"
     },
     "selected_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_base_selected_actions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_selected_actions"
     },
     "focus": {
       "$ref": "div-focus.json",
@@ -210,45 +150,25 @@
       "items": {
         "$ref": "div-function.json"
       },
-      "$description": "translations.json#/div_base_functions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_functions"
     },
     "variables": {
       "type": "array",
       "items": {
         "$ref": "div-variable.json"
       },
-      "$description": "translations.json#/div_base_variables",
-      "platforms": [
-        "ios",
-        "web",
-        "android"
-      ]
+      "$description": "translations.json#/div_base_variables"
     },
     "variable_triggers": {
       "type": "array",
       "items": {
         "$ref": "div-trigger.json"
       },
-      "$description": "translations.json#/div_base_variable_triggers",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_variable_triggers"
     },
     "transform": {
       "$ref": "div-transform.json",
-      "$description": "translations.json#/div_base_transform",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_base_transform"
     },
     "transformations": {
       "type": "array",
@@ -262,12 +182,7 @@
     },
     "layout_provider": {
       "$ref": "div-layout-provider.json",
-      "$description": "translations.json#/div_layout_provider",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_layout_provider"
     },
     "reuse_id": {
       "type": "string",

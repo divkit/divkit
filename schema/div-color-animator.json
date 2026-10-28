@@ -24,11 +24,6 @@
       "required": [
         "type",
         "end_value"
-      ],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
       ]
     }
   ]

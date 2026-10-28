@@ -34,12 +34,7 @@
         },
         "column_count": {
           "$ref": "common.json#/positive_integer",
-          "$description": "translations.json#/div_gallery_column_count",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_gallery_column_count"
         },
         "item_spacing": {
           "$ref": "common.json#/non_negative_integer",
@@ -48,12 +43,7 @@
         },
         "cross_spacing": {
           "$ref": "common.json#/non_negative_integer",
-          "$description": "translations.json#/div_gallery_cross_spacing",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_gallery_cross_spacing"
         },
         "scroll_mode": {
           "type": "string",
@@ -62,12 +52,7 @@
             "paging",
             "default"
           ],
-          "$description": "translations.json#/div_gallery_scroll_mode",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_gallery_scroll_mode"
         },
         "items": {
           "type": "array",
@@ -78,12 +63,7 @@
         },
         "item_builder": {
           "$ref": "div-collection-item-builder.json",
-          "$description": "translations.json#/div_collection_item_builder",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_collection_item_builder"
         },
         "orientation": {
           "type": "string",
@@ -109,12 +89,7 @@
         "default_item": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "0",
-          "$description": "translations.json#/div_gallery_default_item",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_gallery_default_item"
         },
         "scrollbar": {
           "type": "string",
@@ -123,21 +98,11 @@
             "auto"
           ],
           "default_value": "none",
-          "$description": "translations.json#/div_scrollbar",
-          "platforms": [
-            "web",
-            "android",
-            "ios"
-          ]
+          "$description": "translations.json#/div_scrollbar"
         },
         "scroll_content_alignment": {
           "$description": "translations.json#/div_gallery_scroll_content_alignment",
-          "$ref": "#/definitions/content_alignment",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$ref": "#/definitions/content_alignment"
         },
         "allow_tap_while_scroll": {
           "type": "boolean",

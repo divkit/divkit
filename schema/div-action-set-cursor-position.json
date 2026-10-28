@@ -40,11 +40,6 @@
       "$ref": "#/definitions/position"
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "id",

@@ -79,11 +79,6 @@
       "items": {
         "$ref": "div-function.json"
       },
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
       "$description": "translations.json#/div_data_functions"
     },
     "variables": {

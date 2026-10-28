@@ -19,10 +19,5 @@
         }
       }
     }
-  ],
-  "platforms": [
-    "android",
-    "ios",
-    "web"
   ]
 }

@@ -44,11 +44,6 @@
       }
     }
   ],
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "column_count",
     "type"

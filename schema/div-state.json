@@ -64,12 +64,7 @@
       "$ref": "div-base.json"
     },
     {
-      "$ref": "div-actionable.json",
-      "platforms": [
-        "android",
-        "web",
-        "ios"
-      ]
+      "$ref": "div-actionable.json"
     },
     {
       "properties": {
@@ -109,12 +104,7 @@
         "clip_to_bounds": {
           "$ref": "common.json#/boolean_int",
           "default_value": "true",
-          "$description": "translations.json#/div_clip_to_bounds",
-          "platforms": [
-            "android",
-            "web",
-            "ios"
-          ]
+          "$description": "translations.json#/div_clip_to_bounds"
         }
       },
       "required": [

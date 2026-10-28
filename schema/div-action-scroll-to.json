@@ -18,11 +18,6 @@
           "$ref": "div-action-scroll-destination.json"
         }
       },
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
       "required": [
         "type",
         "id",

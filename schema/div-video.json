@@ -32,12 +32,7 @@
         "preload_required": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_video_preload_required",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_video_preload_required"
         },
         "muted": {
           "$ref": "common.json#/boolean_int",
@@ -90,12 +85,7 @@
         "player_settings_payload": {
           "type": "object",
           "additionalProperties": true,
-          "$description": "translations.json#/div_video_player_settings_payload",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_video_player_settings_payload"
         },
         "aspect": {
           "$ref": "div-aspect.json",
@@ -109,20 +99,10 @@
         "playback_speed": {
           "$ref": "common.json#/positive_number",
           "default_value": "1.0",
-          "description": "translations.json#/div_video_playback_speed",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_video_playback_speed"
         }
       }
     }
-  ],
-  "platforms": [
-    "android",
-    "ios",
-    "web"
   ],
   "required": [
     "type"

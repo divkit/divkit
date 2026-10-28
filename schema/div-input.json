@@ -32,11 +32,6 @@
         "filters": {
           "type": "array",
           "$description": "translations.json#/div_input_filters",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ],
           "items": {
             "$ref": "div-input-filter.json"
           }
@@ -65,12 +60,7 @@
         },
         "max_length": {
           "$ref": "common.json#/positive_integer",
-          "$description": "translations.json#/div_input_max_length",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_input_max_length"
         },
         "hint_text": {
           "type": "string",
@@ -83,12 +73,7 @@
         },
         "highlight_color": {
           "$ref": "common.json#/color",
-          "$description": "translations.json#/div_input_highlight_color",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_input_highlight_color"
         },
         "native_interface": {
           "$ref": "#/definitions/native_interface",
@@ -111,24 +96,14 @@
             "all_characters"
           ],
           "default_value": "auto",
-          "$description": "translations.json#/div_input_autocapitalization",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_input_autocapitalization"
         },
         "enter_key_actions": {
           "type": "array",
           "items": {
             "$ref": "div-action.json"
           },
-          "$description": "translations.json#/div_input_enter_key_actions",
-          "platforms": [
-            "ios",
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_input_enter_key_actions"
         },
         "enter_key_type": {
           "type": "string",
@@ -140,12 +115,7 @@
             "done"
           ],
           "default_value": "default",
-          "$description": "translations.json#/div_input_enter_key_type",
-          "platforms": [
-            "ios",
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_input_enter_key_type"
         },
         "keyboard_type": {
           "type": "string",
@@ -164,12 +134,7 @@
         "select_all_on_focus": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_input_select_all_on_focus",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_input_select_all_on_focus"
         },
         "allow_suggestions_bar": {
           "$ref": "common.json#/boolean_int",
@@ -181,21 +146,11 @@
         },
         "mask": {
           "$ref": "div-input-mask.json",
-          "$description": "translations.json#/div_input_mask",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_input_mask"
         },
         "validators": {
           "type": "array",
           "$description": "translations.json#/div_input_validators",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ],
           "items": {
             "$ref": "div-input-validator.json"
           }

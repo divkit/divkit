@@ -13,21 +13,11 @@
     "letter_spacing": {
       "type": "number",
       "default_value": "0",
-      "$description": "translations.json#/div_text_letter_spacing",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_text_letter_spacing"
     },
     "font_family": {
       "type": "string",
-      "$description": "translations.json#/div_font_family",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_font_family"
     },
     "font_weight": {
       "$ref": "div-font-weight.json",
@@ -35,21 +25,11 @@
     },
     "font_weight_value": {
       "$ref": "common.json#/positive_integer",
-      "$description": "translations.json#/div_font_weight_value",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_font_weight_value"
     },
     "font_variation_settings": {
       "type": "dict",
-      "$description": "translations.json#/div_font_variation_settings",
-      "platforms": [
-        "ios",
-        "android",
-        "web"
-      ]
+      "$description": "translations.json#/div_font_variation_settings"
     },
     "text_color": {
       "$ref": "common.json#/color",

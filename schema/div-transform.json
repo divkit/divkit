@@ -1,11 +1,6 @@
 {
   "type": "object",
   "$description": "translations.json#/div_transform",
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "properties": {
     "rotation": {
       "type": "number",

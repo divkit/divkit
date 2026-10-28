@@ -1,6 +1,10 @@
 {
   "type": "object",
   "$description": "translations.json#/div_filter_rtl_mirror",
+  "platforms": [
+    "android",
+    "web"
+  ],
   "properties": {
     "type": {
       "type": "string",

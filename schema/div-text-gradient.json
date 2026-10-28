@@ -2,30 +2,15 @@
   "anyOf": [
     {
       "$ref": "div-linear-gradient.json",
-      "$description": "translations.json#/div_gradient_linear",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_gradient_linear"
     },
     {
       "$ref": "div-radial-gradient.json",
-      "$description": "translations.json#/div_gradient_radial",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_gradient_radial"
     },
     {
       "$ref": "div-animated-text-gradient.json",
-      "$description": "translations.json#/div_animated_text_gradient",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_animated_text_gradient"
     }
   ]
 }

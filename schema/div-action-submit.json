@@ -81,11 +81,6 @@
       "$description": "translations.json#/div_action_submit_on_fail_actions"
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "container_id",

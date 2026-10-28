@@ -37,12 +37,7 @@
         "partial"
       ],
       "default_value": "partial",
-      "$description": "translations.json#/div_patch_mode",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_patch_mode"
     },
     "changes": {
       "type": "array",
@@ -57,24 +52,14 @@
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_patch_on_applied_actions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_patch_on_applied_actions"
     },
     "on_failed_actions": {
       "type": "array",
       "items": {
         "$ref": "div-action.json"
       },
-      "$description": "translations.json#/div_patch_on_failed_actions",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_patch_on_failed_actions"
     }
   },
   "required": [

@@ -30,41 +30,21 @@
         "scroll_axis_alignment": {
           "$ref": "#/definitions/item_alignment",
           "default_value": "center",
-          "$description": "translations.json#/div_pager_scroll_axis_alignment",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_pager_scroll_axis_alignment"
         },
         "cross_axis_alignment": {
           "$ref": "#/definitions/item_alignment",
           "default_value": "start",
-          "$description": "translations.json#/div_pager_cross_axis_alignment",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_pager_cross_axis_alignment"
         },
         "layout_mode": {
           "$ref": "div-pager-layout-mode.json",
-          "$description": "translations.json#/div_pager_layout_mode",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_pager_layout_mode"
         },
         "item_spacing": {
           "$ref": "div-fixed-size.json",
           "default_value": "{\"type\": \"fixed\",\"value\":0}",
-          "$description": "translations.json#/div_pager_item_spacing",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_pager_item_spacing"
         },
         "items": {
           "type": "array",
@@ -75,21 +55,11 @@
         },
         "item_count_variable": {
           "$ref": "div-variable-name.json",
-          "$description": "translations.json#/div_pager_items_count_variable",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_pager_items_count_variable"
         },
         "item_builder": {
           "$ref": "div-collection-item-builder.json",
-          "$description": "translations.json#/div_collection_item_builder",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_collection_item_builder"
         },
         "orientation": {
           "type": "string",
@@ -128,22 +98,12 @@
         "infinite_scroll": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_pager_infinite_scroll",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_pager_infinite_scroll"
         },
         "multi_page_scroll": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_pager_multi_page_scroll",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_pager_multi_page_scroll"
         }
       }
     }

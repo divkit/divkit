@@ -11,12 +11,7 @@
     },
     "duration": {
       "$description": "translations.json#/div_action_scroll_duration",
-      "$ref": "common.json#/non_negative_integer",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$ref": "common.json#/non_negative_integer"
     }
   }
 }

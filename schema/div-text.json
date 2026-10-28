@@ -10,11 +10,6 @@
   "definitions": {
     "range": {
       "type": "object",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
       "properties": {
         "start": {
           "$ref": "common.json#/non_negative_integer",
@@ -27,22 +22,12 @@
         },
         "alignment_vertical": {
           "$ref": "div-text-alignment-vertical.json",
-          "$description": "translations.json#/div_text_range_alignment_vertical",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_range_alignment_vertical"
         },
         "baseline_offset": {
           "type": "number",
           "$description": "translations.json#/div_text_range_baseline_offset",
-          "default_value": "0",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "default_value": "0"
         },
         "font_size": {
           "$ref": "common.json#/non_negative_integer",
@@ -59,21 +44,11 @@
         },
         "font_feature_settings": {
           "type": "string",
-          "$description": "translations.json#/div_font_feature_settings",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_font_feature_settings"
         },
         "font_variation_settings": {
           "type": "dict",
-          "$description": "translations.json#/div_font_variation_settings",
-          "platforms": [
-            "ios",
-            "android",
-            "web"
-          ]
+          "$description": "translations.json#/div_font_variation_settings"
         },
         "letter_spacing": {
           "type": "number",
@@ -85,12 +60,7 @@
         },
         "font_weight_value": {
           "$ref": "common.json#/positive_integer",
-          "$description": "translations.json#/div_font_weight_value",
-          "platforms": [
-            "ios",
-            "web",
-            "android"
-          ]
+          "$description": "translations.json#/div_font_weight_value"
         },
         "text_color": {
           "$ref": "common.json#/color",
@@ -129,21 +99,11 @@
         },
         "text_shadow": {
           "$ref": "div-shadow.json",
-          "$description": "translations.json#/div_text_range_shadow",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_range_shadow"
         },
         "mask": {
           "$ref": "div-text-range-mask.json",
-          "$description": "translations.json#/div_text_range_mask",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_range_mask"
         }
       },
       "$description": "translations.json#/div_text_range"
@@ -234,11 +194,6 @@
     },
     "image": {
       "type": "object",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ],
       "properties": {
         "start": {
           "$ref": "common.json#/non_negative_integer",
@@ -265,22 +220,12 @@
         "tint_mode": {
           "$ref": "div-blend-mode.json",
           "default_value": "source_in",
-          "$description": "translations.json#/div_text_image_tint_mode",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_image_tint_mode"
         },
         "preload_required": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_image_base_preload_required",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_image_base_preload_required"
         },
         "accessibility": {
           "type": "object",
@@ -314,12 +259,7 @@
         "alignment_vertical": {
           "$ref": "div-text-alignment-vertical.json",
           "default_value": "center",
-          "$description": "translations.json#/div_text_image_alignment_vertical",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_image_alignment_vertical"
         },
         "baseline_offset": {
           "type": "number",
@@ -335,12 +275,7 @@
             "reversed"
           ],
           "default_value": "normal",
-          "$description": "translations.json#/div_text_image_indexing_direction",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_image_indexing_direction"
         }
       },
       "required": [
@@ -431,12 +366,7 @@
         },
         "font_feature_settings": {
           "type": "string",
-          "$description": "translations.json#/div_font_feature_settings",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_font_feature_settings"
         },
         "line_height": {
           "$ref": "common.json#/non_negative_integer",
@@ -459,13 +389,7 @@
         },
         "auto_ellipsize": {
           "$ref": "common.json#/boolean_int",
-          "$description": "translations.json#/div_text_auto_ellipsize",
-          "platforms": [
-            "android",
-            "ios",
-            "web",
-            "flutter"
-          ]
+          "$description": "translations.json#/div_text_auto_ellipsize"
         },
         "text_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",
@@ -479,21 +403,11 @@
         },
         "focused_text_color": {
           "$ref": "common.json#/color",
-          "$description": "translations.json#/div_text_focused_text_color",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_focused_text_color"
         },
         "text_gradient": {
           "$ref": "div-text-gradient.json",
-          "$description": "translations.json#/div_text_text_gradient",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_text_gradient"
         },
         "text": {
           "type": "string",
@@ -514,40 +428,20 @@
           "items": {
             "$ref": "#/definitions/range"
           },
-          "$description": "translations.json#/div_text_ranges",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_ranges"
         },
         "range_builder": {
-          "$ref": "#/definitions/range_builder",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$ref": "#/definitions/range_builder"
         },
         "images": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/image"
           },
-          "$description": "translations.json#/div_text_images",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_images"
         },
         "image_builder": {
-          "$ref": "#/definitions/image_builder",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$ref": "#/definitions/image_builder"
         },
         "ellipsis": {
           "$ref": "#/definitions/ellipsis"
@@ -555,12 +449,7 @@
         "selectable": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_text_selectable",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_selectable"
         },
         "tighten_width": {
           "$ref": "common.json#/boolean_int",
@@ -599,21 +488,11 @@
             "word"
           ],
           "default_value": "grapheme",
-          "$description": "translations.json#/div_text_truncate_policy",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_truncate_policy"
         },
         "text_shadow": {
           "$ref": "div-shadow.json",
-          "$description": "translations.json#/div_text_shadow",
-          "platforms": [
-            "android",
-            "ios",
-            "web"
-          ]
+          "$description": "translations.json#/div_text_shadow"
         }
       }
     }

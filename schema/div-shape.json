@@ -6,12 +6,7 @@
     },
     {
       "$ref": "div-circle-shape.json",
-      "$description": "translations.json#/div_circle_shape",
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
+      "$description": "translations.json#/div_circle_shape"
     }
   ]
 }

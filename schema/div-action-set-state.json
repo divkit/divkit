@@ -22,11 +22,6 @@
       ]
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "state_id"

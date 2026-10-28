@@ -28,11 +28,6 @@
       }
     }
   ],
-  "platforms": [
-    "ios",
-    "android",
-    "web"
-  ],
   "required": [
     "type",
     "is_on_variable"

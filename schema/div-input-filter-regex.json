@@ -13,11 +13,6 @@
       "$description": "translations.json#/div_input_filters_regex_pattern"
     }
   },
-  "platforms": [
-    "android",
-    "ios",
-    "web"
-  ],
   "required": [
     "type",
     "pattern"
