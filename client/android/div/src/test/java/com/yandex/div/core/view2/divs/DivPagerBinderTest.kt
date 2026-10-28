@@ -38,6 +38,7 @@ import org.mockito.kotlin.whenever
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 @RunWith(AndroidJUnit4::class)
 class DivPagerBinderTest : DivBinderTest() {
@@ -66,6 +67,15 @@ class DivPagerBinderTest : DivBinderTest() {
     @BeforeTest
     fun `init current state`() {
         whenever(divView.currentState).thenReturn(divViewState)
+    }
+
+    @Test
+    fun `measurement callback is cleared when pager is released`() {
+        underTest.bindView(divPagerView, divBlock, divView)
+
+        divPagerView.release()
+
+        assertNull(divPagerView.onViewPagerMeasured)
     }
 
     @Test

@@ -24,6 +24,8 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
             viewPager.setPageTransformer(value)
         }
 
+    internal var onViewPagerMeasured: ((Int) -> Boolean)? = null
+
     init {
         addView(viewPager)
     }
@@ -74,10 +76,17 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         if (!isWrapContentAlongCrossAxis()) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+            // RecyclerView measures pages during layout when both dimensions are exact.
+            if (notifyViewPagerMeasured() && !(isExact(widthMeasureSpec) && isExact(heightMeasureSpec))) {
+                super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+            }
             return
         }
 
         measureChild(viewPager, widthMeasureSpec, heightMeasureSpec)
+        if (notifyViewPagerMeasured() && !(isExact(widthMeasureSpec) && isExact(heightMeasureSpec))) {
+            measureChild(viewPager, widthMeasureSpec, heightMeasureSpec)
+        }
 
         when(orientation) {
             ViewPager2.ORIENTATION_HORIZONTAL -> {
@@ -89,6 +98,15 @@ internal open class ViewPager2Wrapper @JvmOverloads constructor(
                 super.onMeasure(makeExactSpec(maxWidth), heightMeasureSpec)
             }
         }
+    }
+
+    private fun notifyViewPagerMeasured(): Boolean {
+        val scrollAxisSize = if (orientation == ViewPager2.ORIENTATION_HORIZONTAL) {
+            viewPager.measuredWidth
+        } else {
+            viewPager.measuredHeight
+        }
+        return onViewPagerMeasured?.invoke(scrollAxisSize) == true
     }
 
     internal fun isWrapContentAlongCrossAxis(): Boolean =
