@@ -10518,6 +10518,7 @@
   "client/web/divkit/tests/bundles/package.json":"divkit/public/client/web/divkit/tests/bundles/package.json",
   "client/web/divkit/tests/bundles/server.test.ts":"divkit/public/client/web/divkit/tests/bundles/server.test.ts",
   "client/web/divkit/tests/bundles/ssr.test.ts":"divkit/public/client/web/divkit/tests/bundles/ssr.test.ts",
+  "client/web/divkit/tests/components/animationCopyTriggers.test.ts":"divkit/public/client/web/divkit/tests/components/animationCopyTriggers.test.ts",
   "client/web/divkit/tests/components/scrollDuration.test.ts":"divkit/public/client/web/divkit/tests/components/scrollDuration.test.ts",
   "client/web/divkit/tests/components/textStyle.test.ts":"divkit/public/client/web/divkit/tests/components/textStyle.test.ts",
   "client/web/divkit/tests/expressions/expressions.test.ts":"divkit/public/client/web/divkit/tests/expressions/expressions.test.ts",

@@ -232,7 +232,10 @@
         }
 
         prevTriggersUnsubscribe?.();
-        if ($isEnabled) {
+        // The copied element runs its triggers itself: an animation copy or a pager duplicate
+        // would repeat their actions, and a copy built from the json with evaluated expressions
+        // also reports errors
+        if ($isEnabled && !componentContext.fakeElement) {
             prevTriggersUnsubscribe = rootCtx.processVariableTriggers(
                 componentContext,
                 componentContext.json.variable_triggers
@@ -246,7 +249,7 @@
         rebind();
     }
 
-    $: if ($isEnabled) {
+    $: if ($isEnabled && !componentContext.fakeElement) {
         prevTriggersUnsubscribe?.();
         prevTriggersUnsubscribe = rootCtx.processVariableTriggers(
             componentContext,
