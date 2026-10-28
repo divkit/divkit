@@ -21,6 +21,16 @@ internal data class DivActions(
     val captureFocusOnAction: Expression<Boolean>,
 )
 
+internal inline fun DivActions.any(predicate: (List<DivAction>?) -> Boolean): Boolean {
+    return predicate(tapActions)
+            || predicate(doubleTapActions)
+            || predicate(longTapActions)
+            || predicate(hoverStartActions)
+            || predicate(hoverEndActions)
+            || predicate(pressStartActions)
+            || predicate(pressEndActions)
+}
+
 @Suppress("LongMethod")
 internal fun Div.observedActions(): DivActions? = when (this) {
     is Div.Container -> with(value) {

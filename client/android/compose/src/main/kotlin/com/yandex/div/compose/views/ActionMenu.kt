@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivActions
+import com.yandex.div.compose.actions.any
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
@@ -28,9 +29,14 @@ internal fun WithActionMenu(
     menuOffset: DpOffset,
     content: @Composable (Modifier) -> Unit,
 ) {
+    if (actions?.any { it.hasMenuItems() } != true) {
+        content(modifier)
+        return
+    }
+
     val menuHolder = LocalDivViewContext.current.component.actionMenuHolder
     val menuAction = menuHolder.expandedMenuAction
-    if (menuAction != null && actions?.hasMenuAction(menuAction) == true
+    if (menuAction != null && actions?.any { it.hasMenuAction(menuAction) } == true
         && menuAction.isEnabled.observedValue()
     ) {
         Box(modifier) {
@@ -68,12 +74,11 @@ private fun ActionMenu(menuHolder: ActionMenuHolder, offset: DpOffset) {
     }
 }
 
-private fun DivActions.hasMenuAction(action: DivAction): Boolean {
-    return tapActions.hasMenuAction(action)
-            || doubleTapActions.hasMenuAction(action)
-            || longTapActions.hasMenuAction(action)
+private fun List<DivAction>?.hasMenuItems(): Boolean {
+    return this?.any { !it.menuItems.isNullOrEmpty() } ?: false
 }
 
 private fun List<DivAction>?.hasMenuAction(action: DivAction): Boolean {
     return this?.contains(action) ?: false
 }
+
