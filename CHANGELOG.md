@@ -1,3 +1,59 @@
+## 33.10.0
+
+### Android Client
+* A `div-slider` thumb value outside `min_value`..`max_value` is clamped and written back to `thumb_value_variable` and `thumb_secondary_value_variable` in the Compose renderer, including when the range changes.
+* Actions that address an element by `id` in the Compose renderer report an ambiguous `id` instead of using the element registered last.
+* Added `DataObject.of` and `DataArray.of` to create dicts and arrays from maps and lists. Nested dicts and arrays are kept as is, without copying.
+* Added custom keyboard and D-pad focus navigation with `focus.next_focus_ids` in the Compose renderer.
+* Added support for `hover_start_actions` and `hover_end_actions` in the Compose renderer.
+* Added support for gallery `scroll_to` and `scroll_by` actions, including `duration`, in the Compose renderer.
+* Added support for gallery item selection and offset scrolling via URLs in the Compose renderer.
+* Added support for number animators and animator control actions in the Android Compose renderer.
+* Added the `render-common` module for rendering utilities shared by the View and Compose renderers.
+* Added wildcard extension handlers that are applied to every element without declaring `extensions` in the layout: `DivConfiguration.Builder.wildcardExtension` and `wildcardExtensionHandlers` in the Compose renderer.
+* Array getters now report an out of bounds error for negative indexes, matching iOS and Web.
+* Batched repeated visibility cleanup during asynchronous binding while preserving callback boundaries.
+* Fixed action menu appearance and positioning in the Compose renderer.
+* Fixed an issue where a tooltip substrate did not cover system bars on Android.
+* Fixed child alignment in `div-state` in the Compose renderer.
+* Fixed clipping of taller items after scrolling a `wrap_content` gallery.
+* Fixed escaping of strings in `toString` for dicts and arrays, matching iOS and Web.
+* Fixed outdated visibility transitions hiding views after a newer visible state.
+* Fixed sizing of `match_parent` items in galleries with multiple rows or columns.
+* Fixed the `div-select` popup alignment and width in the Compose renderer.
+* In the Android View renderer, the `focus_element` action also requests screen-reader focus when touch exploration is enabled.
+* Removed JVM API from `core` module.
+* Supported `item_builder` in `div-container` in the Compose renderer.
+* Supported `secondary_value_accessibility` of `div-slider` in the Compose renderer: its description names the second thumb and `mode: exclude` hides it.
+* Supported `validator.label_id` of `div-input` in the Compose renderer: while a validator fails, accessibility services announce the text of its label as the error of the input.
+* Supported the `set_cursor_position` action in the Compose renderer: it focuses the input with the given `id` and selects the given range of the text it shows, the formatted text of a masked input included.
+* `JsonObject` and `JsonArray` are now compared by reference: they are equal only if they wrap the same JSON object or array.
+* `accessibility.type` and `accessibility.state_description` of `div-slider` are not applied in the Compose renderer: the thumbs are announced as sliders with their values.
+* `div-evaluable` now represents dict and array values with `DataObject` and `DataArray` classes. Dict and array values passed to the evaluator through `VariableProvider`, `StoredValueProvider` or custom functions must now be `DataObject` and `DataArray`; `JSONObject` and `JSONArray` are no longer recognized.
+* `div-slider` ranges in the Compose renderer cut the track with square edges, as in the View renderer, instead of rounding the track pieces between ranges.
+* `div-slider` thumbs are separate accessibility nodes in the Compose renderer: each reports its value and range, can be adjusted by accessibility services in steps of five percent and is described by the slider `accessibility`, with "Range start" and "Range end" for the two thumbs of a range.
+* `getOptDictFromArray` now returns an empty dict for out of bounds indexes instead of an error, matching iOS and Web.
+* `toString` for dicts now prints whole numbers without a fractional part, e.g. `{"number":2}`, matching iOS and Web.
+
+### iOS Client
+* Added configurable animation duration for `scroll_to` and `scroll_by` actions in galleries, pagers, and tabs.
+* Fixed `formatDateAsLocal`, `formatDateAsUTC` and their `WithLocale` variants returning an ordinal day (e.g. `15th`) instead of a zero-padded day for patterns with three or more `d` letters on iOS 27.
+* Fixed `paddings.start` and `paddings.end` being ignored in `div-gallery` and `div-pager`. `paddings.left` and `paddings.right` are no longer mirrored in RTL layout.
+* Fixed compiler warnings when building DivKit with Xcode 27.
+* Relative `scroll_by` and scroll URL actions now use the current view position, including when interrupting an animation. Requests applied before layout use the stored position.
+
+### Web Client
+* Added `multi_page_scroll` support to the Web pager, with continuous cyclic inertia for infinite pagers.
+* Added support for `duration` in typed `scroll` actions.
+* Added typed `extension_action` for extensions, including Lottie `start` and `stop` commands. Start rewinds and plays the animation; Stop rewinds and leaves it stopped.
+* Fixed errors and repeated actions of `variable_triggers` in elements with `transition_in`, `transition_out` or `transition_change` inside a `state` and in the pages of a `pager` with `infinite_scroll`.
+
+### Kotlin JSON Builder
+* Entities no longer expose `@JsonAnyGetter`/`getJsonProperties()`; `ObjectMapper` inclusion and ordering settings and module-registered serializers do not affect DSL entities anymore.
+* Optimized JSON serialization of Kotlin DSL entities: generated Jackson serializers replace `@JsonAnyGetter`, making serialization up to 2.4× faster with up to 4× less memory allocated.
+* Template components are now serialized with the `type` field first, followed by their properties in insertion order.
+
+
 ## 33.9.0
 
 ### Android Client
