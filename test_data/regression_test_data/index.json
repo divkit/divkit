@@ -489,6 +489,22 @@
       "tags": [
         "DivGallery"
       ],
+      "steps": [
+        "Swipe the gallery left and right",
+        "Check the text displayed below the gallery",
+        "Tap '… Expand' at the end of the text",
+        "Swipe the gallery left and right",
+        "Tap the expanded text to collapse it",
+        "Swipe the gallery left and right"
+      ],
+      "expected_results": [
+        "Gallery scrolls smoothly; pages are finite; indicator updates when switching pages",
+        "Text below the gallery changes per selected slide; each slide has its own text",
+        "Full text is expanded",
+        "Expanded text is shown for the current slide while swiping",
+        "Text collapses; '… Expand' is shown again",
+        "Collapsed text (with Expand) is shown for each slide while swiping"
+      ],
       "file": "gallery/gallery-bottom-multiline.json"
     },
     {
@@ -932,15 +948,15 @@
       ],
       "steps": [
         "Press 'CHANGE STATE (TEMPORARY)'",
-        "Restart the app",
-        "Turn back to this scenario",
+        "Restart the app (element is recreated)",
+        "Open this scenario again",
         "Press 'CHANGE STATE'",
-        "Restart the app",
-        "Turn back to this scenario"
+        "Restart the app (element is recreated)",
+        "Open this scenario again"
       ],
       "expected_results": [
-        "button 'CHANGE STATE (TEMPORARY)' change state and save it between app restart",
-        "button 'CHANGE STATE' change state, but state resets after app restart"
+        "Button 'CHANGE STATE (TEMPORARY)' changes state; after app restart the state is reset",
+        "Button 'CHANGE STATE' changes state; after app restart the state is preserved"
       ],
       "file": "root_state_switching.json"
     },
@@ -1216,30 +1232,32 @@
         "ios"
       ],
       "steps": [
-        "Tap Button 1",
-        "Long tap Button 2",
-        "Double tap Button 3",
-        "Tap Button 4",
-        "Long tap Button 4",
-        "Double tap Button 4",
-        "Tap Button 5",
-        "Long tap Button 5",
-        "Tap Button 6",
-        "Double tap Button 6",
-        "Long tap on container (between buttons)"
+        "Tap 'Button 1 (tap)'",
+        "Long tap 'Button 2 (long tap)'",
+        "Double tap 'Button 3 (double tap)'",
+        "Tap 'Button 4 (tap + long tap + double tap)'",
+        "Double tap 'Button 4 (tap + long tap + double tap)'",
+        "Long tap 'Button 4 (tap + long tap + double tap)'",
+        "Tap 'Button 5 (tap + long tap)'",
+        "Long tap 'Button 5 (tap + long tap)'",
+        "Tap 'Button 6 (tap + double tap)'",
+        "Double tap 'Button 6 (tap + double tap)'",
+        "Tap 'Button 7'",
+        "Long tap on container (around Button 7 / between buttons)"
       ],
       "expected_results": [
         "Message appears without delay: Button 1 tapped",
         "Message appears: Button 2 long tapped",
         "Message appears: Button 3 double tapped",
-        "Message appears with delay: Button 4 tapped",
-        "Message appears: Button 4 long tapped",
+        "Message appears: Button 4 tapped",
         "Message appears: Button 4 double tapped",
-        "Message appears without delay: Button 5 tapped",
+        "Message appears: Button 4 long tapped",
+        "Message appears: Button 5 tapped",
         "Message appears: Button 5 long tapped",
-        "Message appears with delay: Button 6 tapped",
-        "Message appears: Button 5 double tapped",
-        "Message appears: Container long tapped"
+        "Message appears: Button 6 tapped",
+        "Message appears: Button 6 double tapped",
+        "Message appears: Button 7 inner part tapped",
+        "Message appears: Container long tap"
       ],
       "file": "button_actions.json"
     },
@@ -4467,13 +4485,17 @@
         "Rebind"
       ],
       "steps": [
-        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
-        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
-        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+        "Open the case with 'Complex Rebind' disabled",
+        "Tap 'Do'/'UnDo' several times to check that forward and backward rebind works correctly",
+        "Tap 'Next', then repeat step 2 on the new layout",
+        "Repeat steps 2–3 until the first layout returns after pressing 'Next'",
+        "Enable 'Complex Rebind' in Settings, reopen the case, and repeat steps 2–4"
       ],
       "expected_results": [
+        "'Do' changes the container content; 'UnDo' restores the previous state",
+        "'Next' replaces the whole layout; 'Do'/'UnDo' still work on the new layout",
         "No crashes, asserts or parsing errors",
-        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+        "Behavior is the same with and without 'Complex Rebind'"
       ],
       "file": "rebind/container/un_added.json"
     },
@@ -4491,13 +4513,17 @@
         "Rebind"
       ],
       "steps": [
-        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
-        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
-        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+        "Open the case with 'Complex Rebind' disabled",
+        "Tap 'Do'/'UnDo' several times to check that forward and backward rebind works correctly",
+        "Tap 'Next', then repeat step 2 on the new layout",
+        "Repeat steps 2–3 until the first layout returns after pressing 'Next'",
+        "Enable 'Complex Rebind' in Settings, reopen the case, and repeat steps 2–4"
       ],
       "expected_results": [
+        "'Do' changes the grid content; 'UnDo' restores the previous state",
+        "'Next' replaces the whole layout; 'Do'/'UnDo' still work on the new layout",
         "No crashes, asserts or parsing errors",
-        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+        "Behavior is the same with and without 'Complex Rebind'"
       ],
       "file": "rebind/grid/un_added.json"
     },
@@ -4515,13 +4541,17 @@
         "Rebind"
       ],
       "steps": [
-        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
-        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
-        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+        "Open the case with 'Complex Rebind' disabled",
+        "Tap 'Do'/'UnDo' several times to check that forward and backward rebind works correctly",
+        "Tap 'Next', then repeat step 2 on the new layout",
+        "Repeat steps 2–3 until the first layout returns after pressing 'Next'",
+        "Enable 'Complex Rebind' in Settings, reopen the case, and repeat steps 2–4"
       ],
       "expected_results": [
+        "'Do' changes the gallery content; 'UnDo' restores the previous state",
+        "'Next' replaces the whole layout; 'Do'/'UnDo' still work on the new layout",
         "No crashes, asserts or parsing errors",
-        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+        "Behavior is the same with and without 'Complex Rebind'"
       ],
       "file": "rebind/gallery/un_added.json"
     },
@@ -4539,13 +4569,17 @@
         "Rebind"
       ],
       "steps": [
-        "Tap to \"Do\"/\"UnDo\" several times to check that forward and backward rebind works correctly",
-        "Tap to \"Next\", repeat step 1. Needed to check complex layout rebinds",
-        "Repeat steps 1 and 2 until you return to the first layout after pressing \"Next\""
+        "Open the case with 'Complex Rebind' disabled",
+        "Tap 'Do', then 'UnDo'",
+        "Tap 'Next', then tap 'Do' and 'UnDo' on the new layout",
+        "Keep tapping 'Next' and checking 'Do'/'UnDo' until the first layout returns",
+        "Enable 'Complex Rebind' in Settings, reopen the case, and repeat steps 2–4"
       ],
       "expected_results": [
-        "No crashes, asserts or parsing errors",
-        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+        "After 'Do' on the first layout: 'New first item' and 'New last item' appear; after 'UnDo' they disappear",
+        "After 'Next': layout is replaced (e.g. replaced-text: 'Item 0'/'Item 4' ↔ 'Item 0 new'/'Item 4 new' via 'Do'/'UnDo')",
+        "On every layout 'Do' applies the patch and 'UnDo' reverts it; no crashes, asserts or parsing errors",
+        "With 'Complex Rebind' enabled the results are the same as without the flag"
       ],
       "file": "rebind/pager/un_added.json"
     },
@@ -4697,11 +4731,16 @@
         "Rebind"
       ],
       "steps": [
-        "Tap to \"Next\" several times to check that forward and backward rebind works correctly"
+        "Open the case with 'Complex Rebind' disabled",
+        "Tap 'Next'",
+        "Tap 'Next' again",
+        "Enable 'Complex Rebind' in Settings, reopen the case, and repeat steps 2–3"
       ],
       "expected_results": [
+        "After the first 'Next': 'This is div-text item 1' → 'This is div-text item 1.1'; items 2 and 3 unchanged; 'This is div-text item 4' appears",
+        "After the second 'Next': layout returns to the initial state (items 1, 2, 3; no item 4)",
         "No crashes, asserts or parsing errors",
-        "Test behaves the same with and without \"Complex Rebind\" flag activated"
+        "With 'Complex Rebind' enabled the results are the same as without the flag"
       ],
       "file": "rebind/custom/custom-container.json"
     },
@@ -5003,7 +5042,7 @@
     },
     {
       "title": "Input Properties Extension",
-      "case_id": 222,
+      "case_id": 473,
       "platforms": [
         "ios"
       ],
@@ -5016,12 +5055,13 @@
         "DivInput"
       ],
       "steps": [
-        "Toggle the switches to enable or disable spell checking, automatic return key and autocorrection",
-        "Close and reopen the keyboard by tapping outside the text input and then selecting it again"
+        "Toggle the switches for spell checking, automatic return key and autocorrection; after each change close and reopen the keyboard (tap outside the input, then select it again)",
+        "Check each option on and off"
       ],
       "expected_results": [
-        "Spell checking: Misspelled words should appear highlighted if enabled",
-        "Return key: The return key is only enabled when text is not empty, if the option is on"
+        "Spell checking on: misspelled words are highlighted; off: no highlighting",
+        "Return key automatically on: Return is disabled when input is empty and enabled when text is not empty; off: Return stays enabled",
+        "Autocorrection on: a common typo is corrected; off: text stays as typed"
       ],
       "file": "input/input_properties_extension.json"
     },
