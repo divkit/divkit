@@ -64,7 +64,8 @@ internal class DivAsyncBindingController(
             return
         }
         val onError: (Throwable) -> Unit = { onComplete?.invoke(false) }
-        bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete, onError) {
+        val timer = histogramReporter.onAsyncBindingQueued()
+        bindingDispatcher.runOnBindingThread(BindingTaskType.DATA, onComplete, onError, timer) {
             if (paths == null && data === divData) {
                 divView.loadMedia()
                 true
@@ -99,6 +100,7 @@ internal class DivAsyncBindingController(
             onComplete = { _: Boolean -> reportBindingPhase(request, data) },
             onError = { request.report(DivBindingPhase.FAILED) },
             onCancelled = request::cancel,
+            timer = histogramReporter.onAsyncBindingQueued(),
         ) {
             replaceBindingRequest(request)
             if (data === divData) {

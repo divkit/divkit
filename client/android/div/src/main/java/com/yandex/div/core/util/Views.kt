@@ -106,6 +106,8 @@ internal class SingleTimeOnAttachCallback(
         }
     }
 
+    val isPending: Boolean get() = onAttachAction != null
+
     fun onAttach() {
         onAttachAction?.invoke()
         onAttachAction = null

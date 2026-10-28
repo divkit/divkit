@@ -58,6 +58,7 @@ internal object Container {
                 measureFilter = HistogramFilter.ON,
                 layoutFilter = HistogramFilter.ON,
                 drawFilter = HistogramFilter.ON,
+                prepareFilter = HistogramFilter.ON,
             )
         }
         DemoHistogramConfiguration(

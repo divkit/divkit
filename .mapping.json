@@ -3512,6 +3512,7 @@
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2RebindTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2RebindTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewAsyncBindingTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewAsyncBindingTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewBindingErrorReportingTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewBindingErrorReportingTest.kt",
+  "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewBindingHistogramsTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewBindingHistogramsTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewBindingStateReadinessTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewBindingStateReadinessTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewBindingWindowTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewBindingWindowTest.kt",
   "client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewDisappearActionsOnCleanupTest.kt":"divkit/public/client/android/div/src/test/java/com/yandex/div/core/view2/Div2ViewDisappearActionsOnCleanupTest.kt",

@@ -9,6 +9,9 @@ import kotlinx.coroutines.launch
 /**
  * Start activity with default data:
  * adb shell am start -n com.yandex.divkit.benchmark/.Div2BenchmarkActivity --es asset_name with_templates.json
+ *
+ * Add `--ez async_binding true` to bind the cards with
+ * [com.yandex.div.core.view2.Div2View.setDataAsync].
  */
 class Div2BenchmarkActivity : AppCompatActivity() {
 
@@ -24,10 +27,11 @@ class Div2BenchmarkActivity : AppCompatActivity() {
         val rebindAssetName = intent.getStringExtra(EXTRA_REBIND_ASSET_NAME)
         val disableLogs = intent.getBooleanExtra(EXTRA_FORCE_DISABLE_LOGS, false)
         val reportSize = intent.getBooleanExtra(EXTRA_REPORT_SIZE, false)
+        val asyncBinding = intent.getBooleanExtra(EXTRA_ASYNC_BINDING, false)
 
         val viewController = Div2BenchmarkViewController(rootLayout)
         val divContext = divContext(activity = this, forceDisableLogs = disableLogs)
-        benchmark = Div2Benchmark(divContext, viewController)
+        benchmark = Div2Benchmark(divContext, viewController, asyncBinding)
 
         if (reportSize) {
             lifecycleScope.launch {

@@ -265,6 +265,7 @@ internal class DivViewBindingController(
 
             div2Component.divViewDataPreloader.preload(data, expressionResolver)
             paths?.forEach { dataComponent.stateManager.updateStates(it, temporary) }
+            histogramReporter.onPrepareFinished()
 
             val withStates = paths != null
             val result = applyBindingStrategy(

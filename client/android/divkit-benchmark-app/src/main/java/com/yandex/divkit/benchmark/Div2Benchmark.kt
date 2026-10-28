@@ -25,9 +25,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.util.UUID
+import kotlin.coroutines.resume
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -35,6 +37,7 @@ import kotlin.time.Duration.Companion.seconds
 internal class Div2Benchmark(
     private val divContext: Div2Context,
     private val viewController: Div2BenchmarkViewController,
+    private val asyncBinding: Boolean,
 ) {
 
     private val mainTemplateProvider = CachingTemplateProvider<DivTemplate>(
@@ -147,8 +150,12 @@ internal class Div2Benchmark(
         return metrics.result
     }
 
-    private fun createView(divData: DivData): Div2View {
+    private suspend fun createView(divData: DivData): Div2View {
         val divView = Div2View(divContext)
+        if (asyncBinding) {
+            setDataAsync(divView, divData)
+            return divView
+        }
         val metrics = profile {
             divView.setData(divData, divDataTag)
         }
@@ -168,8 +175,18 @@ internal class Div2Benchmark(
     }
 
     private suspend fun rebind(divView: Div2View, divData: DivData) {
-        divView.setData(divData, divDataTag)
+        if (asyncBinding) {
+            setDataAsync(divView, divData)
+        } else {
+            divView.setData(divData, divDataTag)
+        }
         delay(500.milliseconds)
+    }
+
+    private suspend fun setDataAsync(divView: Div2View, divData: DivData) {
+        suspendCancellableCoroutine<Unit> { continuation ->
+            divView.setDataAsync(divData, divDataTag) { continuation.resume(Unit) }
+        }
     }
 
     private fun reportMetrics(passType: String) {

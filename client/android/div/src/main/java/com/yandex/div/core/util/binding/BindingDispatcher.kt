@@ -5,6 +5,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.PreparedCollectionViewHoldersPool
+import com.yandex.div.histogram.Div2ViewAsyncBindingTimer
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.UiThreadHandler
 import java.util.ArrayDeque
@@ -88,18 +89,23 @@ internal class BindingDispatcher @Inject constructor(
 
     /**
      * Use to schedule new task for background binding. Tasks run one by one in FIFO order.
+     *
+     * @param timer measures the phases of the task; they are reported after its main-thread
+     * continuation applies the result and are dropped if the task fails.
      */
     fun <T> runOnBindingThread(
         type: BindingTaskType,
         onComplete: ((T) -> Unit)? = null,
         onError: ((Throwable) -> Unit)? = null,
+        timer: Div2ViewAsyncBindingTimer? = null,
         coalescingKey: Any? = null,
         block: () -> T
     ) {
         require(coalescingKey == null || (onComplete == null && onError == null)) {
             "Coalescing tasks must not have completion or error callbacks"
         }
-        enqueueTask(BindingTask(type, bindingGeneration.get(), coalescingKey, onComplete, onError, block))
+        val generation = bindingGeneration.get()
+        enqueueTask(BindingTask(type, generation, coalescingKey, onComplete, onError, timer, block))
     }
 
     fun <T> runOnBindingThread(
@@ -107,13 +113,14 @@ internal class BindingDispatcher @Inject constructor(
         onComplete: ((T) -> Unit)? = null,
         onError: ((Throwable) -> Unit)? = null,
         onCancelled: (() -> Unit)?,
+        timer: Div2ViewAsyncBindingTimer? = null,
         block: () -> T,
     ) {
         val generation = bindingGeneration.get()
         val request: BindingRequestCancellation? = onCancelled?.let { registerCancellation(type, generation, it) }
         val complete = request?.completeBeforeCallback(onComplete) ?: onComplete
         val failed = request?.completeBeforeCallback(onError) ?: onError
-        enqueueTask(BindingTask(type, generation, null, complete, failed, block))
+        enqueueTask(BindingTask(type, generation, null, complete, failed, timer, block))
     }
 
     private fun <T> BindingRequestCancellation.completeBeforeCallback(callback: ((T) -> Unit)?): (T) -> Unit =
@@ -167,11 +174,13 @@ internal class BindingDispatcher @Inject constructor(
             generation = task.generation,
         )
         try {
+            task.timer?.onBackgroundStarted()
             val (result, deferredActions) = collectMainThreadAction {
                 divView.withBatchedVisibilityTracking {
                     preparedViewHoldersPool.collect(preparedHolders) { task.block() }
                 }
             }
+            task.timer?.onBackgroundFinished()
             if (deferredActions.isEmpty() && task.onComplete == null) {
                 finishTask(task, handle, preparedHolders)
                 return
@@ -181,6 +190,7 @@ internal class BindingDispatcher @Inject constructor(
                 completeOnMain(task, handle, preparedHolders, result, deferredActions)
             }
         } catch (e: Throwable) {
+            task.timer?.cancel()
             finishTask(task, handle, preparedHolders)
             UiThreadHandler.postOnMainThread {
                 divView.logError(e)
@@ -200,6 +210,7 @@ internal class BindingDispatcher @Inject constructor(
     ) {
         var applied = false
         try {
+            task.timer?.onMainStarted()
             for (action in deferredActions) {
                 if (!task.isUpToDate()) {
                     return
@@ -207,10 +218,12 @@ internal class BindingDispatcher @Inject constructor(
                 action()
             }
             if (task.isUpToDate()) {
+                task.timer?.onMainFinished()
                 task.onComplete?.invoke(result)
                 applied = true
             }
         } catch (e: Throwable) {
+            task.timer?.cancel()
             divView.logError(e)
             if (task.isUpToDate()) {
                 task.onError?.invoke(e)
@@ -218,6 +231,7 @@ internal class BindingDispatcher @Inject constructor(
         } finally {
             finishTask(task, handle, if (applied) null else preparedHolders)
         }
+        task.timer?.report()
     }
 
     private fun runMainThreadCall(task: MainThreadCall) {
@@ -503,6 +517,7 @@ internal class BindingDispatcher @Inject constructor(
         coalescingKey: Any?,
         val onComplete: ((T) -> Unit)?,
         val onError: ((Throwable) -> Unit)?,
+        val timer: Div2ViewAsyncBindingTimer?,
         val block: () -> T,
     ) : PendingTask(type, generation, coalescingKey) {
         @Volatile

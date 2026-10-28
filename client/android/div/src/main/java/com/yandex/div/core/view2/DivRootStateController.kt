@@ -306,8 +306,13 @@ internal class DivRootStateController(
                 div2Component.divBinder.attachIndicators(this)
                 onBindingComplete(data)
             }
+            if (deferredBinding?.isPending == true) {
+                histogramReporter.onBindingDeferred()
+            }
         } else {
+            histogramReporter.onBindViewsStarted()
             div2Component.divBinder.bind(view, divBlock, this)
+            histogramReporter.onBindViewsFinished()
             doOnAttach {
                 div2Component.divBinder.attachIndicators(this)
             }
