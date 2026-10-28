@@ -8,7 +8,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.Insets
-import com.yandex.div.core.images.toNinePatch
+import com.yandex.div.render.common.images.toNinePatch
 
 internal class NinePatchDrawable : Drawable() {
 

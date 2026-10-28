@@ -1,4 +1,4 @@
-package com.yandex.div.core.images
+package com.yandex.div.render.common.images
 
 import android.graphics.Bitmap
 import android.graphics.NinePatch

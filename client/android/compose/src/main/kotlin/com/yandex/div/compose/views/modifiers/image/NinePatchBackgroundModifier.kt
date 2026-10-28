@@ -22,7 +22,7 @@ import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.images.rememberNetworkRestoringImagePainter
 import com.yandex.div.compose.utils.reportError
-import com.yandex.div.core.images.toNinePatch
+import com.yandex.div.render.common.images.toNinePatch
 import com.yandex.div2.DivAbsoluteEdgeInsets
 import com.yandex.div2.DivNinePatchBackground
 import kotlin.math.roundToInt

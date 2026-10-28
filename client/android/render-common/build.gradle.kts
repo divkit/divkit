@@ -15,6 +15,7 @@ kotlin {
             api(project(":core"))
         }
         androidMain.dependencies {
+            api(libs.androidx.core)
             compileOnly(libs.androidx.annotation)
         }
         commonTest.dependencies {
