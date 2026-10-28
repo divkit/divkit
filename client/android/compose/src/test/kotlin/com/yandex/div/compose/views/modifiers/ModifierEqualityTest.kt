@@ -18,6 +18,7 @@ import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.accessibility
 import com.yandex.div.test.data.action
@@ -269,7 +270,7 @@ class ModifierEqualityTest {
             div = this,
             actions = observedActions(),
             visibility = value().visibility.observedValue(),
-            applyMargins = true
+            margins = value().margins?.observeInsets(),
         )
     }
 }

@@ -1,11 +1,15 @@
 package com.yandex.div.compose.views
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivActions
@@ -15,10 +19,13 @@ import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivAction
 
+private val ACTION_MENU_MIN_WIDTH = 196.dp
+
 @Composable
 internal fun WithActionMenu(
     actions: DivActions?,
     modifier: Modifier,
+    menuOffset: DpOffset,
     content: @Composable (Modifier) -> Unit,
 ) {
     val menuHolder = LocalDivViewContext.current.component.actionMenuHolder
@@ -28,7 +35,7 @@ internal fun WithActionMenu(
     ) {
         Box(modifier) {
             content(Modifier)
-            ActionMenu(menuHolder)
+            ActionMenu(menuHolder, menuOffset)
         }
     } else {
         content(modifier)
@@ -36,11 +43,14 @@ internal fun WithActionMenu(
 }
 
 @Composable
-private fun ActionMenu(menuHolder: ActionMenuHolder) {
+private fun ActionMenu(menuHolder: ActionMenuHolder, offset: DpOffset) {
     val menuItems = menuHolder.menuItems
     DropdownMenu(
         expanded = menuItems.isNotEmpty(),
-        onDismissRequest = { menuHolder.dismiss() }
+        onDismissRequest = { menuHolder.dismiss() },
+        modifier = Modifier.widthIn(min = ACTION_MENU_MIN_WIDTH),
+        offset = offset,
+        containerColor = Color.White,
     ) {
         val localComponent = LocalComponent.current
         menuItems.forEach { item ->

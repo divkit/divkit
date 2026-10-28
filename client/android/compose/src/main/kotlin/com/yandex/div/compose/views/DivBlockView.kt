@@ -5,6 +5,8 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.animation.WithAnimatorTarget
 import com.yandex.div.compose.context.LocalDivViewContext
@@ -15,6 +17,7 @@ import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
+import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView
@@ -93,14 +96,19 @@ internal fun VisibleDivBlockView(
 ) {
     val divBase = data.value()
     val actions = data.observedActions()
-    WithActionMenu(actions, modifier) { contentModifier ->
+    val margins = if (applyMargins) divBase.margins?.observeInsets() else null
+    val menuOffset = DpOffset(
+        x = 0.dp,
+        y = -(margins?.calculateBottomPadding() ?: 0.dp),
+    )
+    WithActionMenu(actions, modifier, menuOffset) { contentModifier ->
         BaseViewWithExtensions(
             data = data,
             extensions = extensions(divBase),
             modifier = contentModifier.apply(
                 data,
                 actions = actions,
-                applyMargins = applyMargins,
+                margins = margins,
                 visibility = visibility,
                 fillMatchParentWidth = fillMatchParentWidth,
                 fillMatchParentHeight = fillMatchParentHeight,

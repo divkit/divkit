@@ -33,7 +33,7 @@ import com.yandex.div2.DivVisibility
 internal fun Modifier.apply(
     div: Div,
     actions: DivActions?,
-    applyMargins: Boolean,
+    margins: PaddingValues?,
     visibility: DivVisibility,
     fillMatchParentWidth: Boolean = true,
     fillMatchParentHeight: Boolean = true,
@@ -45,7 +45,6 @@ internal fun Modifier.apply(
     blockTapPropagation: Boolean = false,
 ): Modifier {
     val divBase = div.value()
-    val margins = if (applyMargins) divBase.margins?.observeInsets() else null
     val focusState = rememberFocusState(divBase)
     val isFocused = focusState?.value == true
     val focus = divBase.focus
