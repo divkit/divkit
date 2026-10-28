@@ -77,8 +77,9 @@ internal fun DivAnimation.asTouchListener(
     val reverseAnimation = toAnimation(expressionResolver, reverse = true)
 
     val binding = view.getTag(R.id.div_touch_animation_binding) as? TouchAnimationBinding
-    if (preserveGesture && view.isAttachedToWindow && view.isShown && binding != null
-        && (directAnimation != null || reverseAnimation != null)) {
+    val canPreserveGesture = preserveGesture && view.isAttachedToWindow && view.isShown
+    val hasAnimation = directAnimation != null || reverseAnimation != null
+    if (canPreserveGesture && binding != null && hasAnimation) {
         binding.updateAnimations(directAnimation, reverseAnimation)
         return binding
     }

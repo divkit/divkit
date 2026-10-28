@@ -27,9 +27,12 @@ internal class TouchAnimationBinding(
     }
 
     override fun onTouch(target: View, event: MotionEvent) {
-        if (disposed) return
-        if (!target.isAttachedToWindow || !target.isShown || !target.isEnabled
-            || !target.isClickable || !target.hasOnClickListeners()) {
+        if (disposed) {
+            return
+        }
+        val canReceiveTouch = target.isAttachedToWindow && target.isShown && target.isEnabled
+        val canHandleClick = target.isClickable && target.hasOnClickListeners()
+        if (!canReceiveTouch || !canHandleClick) {
             cancel()
             return
         }

@@ -2,8 +2,28 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
+    <ID>CognitiveComplexMethod:JsonExpressionParser.kt:JsonExpressionParser$private fun &lt;R, V : Any&gt; readExpressionItems: ExpressionList&lt;V&gt;</ID>
     <ID>FileLength:JsonFieldResolver.kt:com.yandex.div.parser.json.JsonFieldResolver.kt</ID>
+    <ID>LargeClass:JsonFieldParser.kt:JsonFieldParser</ID>
     <ID>LargeClass:JsonFieldResolver.kt:JsonFieldResolver</ID>
+    <ID>LoopWithTooManyJumpStatements:JsonExpressionParser.kt:JsonExpressionParser$for</ID>
+    <ID>LoopWithTooManyJumpStatements:JsonPropertyParser.kt:JsonPropertyParser$for</ID>
+    <ID>MagicNumber:ParsingExceptions.kt:3</ID>
+    <ID>MatchingDeclarationName:ParsingContextExtensions.kt:ParsingContextWrapper : ParsingContext</ID>
+    <ID>MaxLineLength:JsonExpressionParser.kt:JsonExpressionParser$readExpressionItems(context, jsonObject, array, key, length, typeHelper, transform, listValidator, itemValidator)</ID>
+    <ID>MaxLineLength:JsonExpressionParser.kt:JsonExpressionParser$return readExpressionItems(context, jsonObject, array, key, length, typeHelper, transform, listValidator, itemValidator)</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return if (reference != null) Field.Reference(overridable, reference, value) else Field.Value(overridable, value)</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readExpressionListField(context, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readExpressionListField(context, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, itemValidator)</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readExpressionListField(context, json, key, typeHelper, overridable, fallback, transform, alwaysValidList(), alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readExpressionListField(context, json, key, typeHelper, overridable, fallback, transform, listValidator, alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readOptionalExpressionListField(context, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readOptionalExpressionListField(context, json, key, typeHelper, overridable, fallback, doNotConvert(), listValidator, itemValidator)</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readOptionalExpressionListField(context, json, key, typeHelper, overridable, fallback, transform, alwaysValidList(), alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readOptionalExpressionListField(context, json, key, typeHelper, overridable, fallback, transform, listValidator, alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readOptionalListField(context, json, key, overridable, fallback, doNotConvert(), listValidator, itemValidator)</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return readOptionalListField(context, json, key, overridable, fallback, transform, alwaysValidList(), alwaysValid())</ID>
+    <ID>MaxLineLength:JsonFieldParser.kt:JsonFieldParser$return referenceOrFallback(overridable, readReference(context, json, key), fallback) ?: Field.nullField(overridable)</ID>
     <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$JsonExpressionParser.readExpression(context, data, field.reference, typeHelper, transform, validator)</ID>
     <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$JsonPropertyParser.readOptionalList(context, data, field.reference, transform, listValidator, itemValidator)</ID>
     <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return JsonPropertyParser.readOptionalList(context, data, field.reference, deserializer, listValidator)</ID>
@@ -14,6 +34,24 @@
     <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveOptionalExpressionList(context, field, data, key, typeHelper, doNotConvert(), listValidator, itemValidator)</ID>
     <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveOptionalExpressionList(context, field, data, key, typeHelper, transform, alwaysValidList(), alwaysValid())</ID>
     <ID>MaxLineLength:JsonFieldResolver.kt:JsonFieldResolver$return resolveOptionalExpressionList(context, field, data, key, typeHelper, transform, listValidator, alwaysValid())</ID>
+    <ID>MaxLineLength:JsonPropertyParser.kt:JsonPropertyParser$/** Deserializes object items of [array]; failed items are logged and skipped, non-object items are skipped silently. */</ID>
+    <ID>MaxLineLength:JsonPropertyParser.kt:JsonPropertyParser$fun</ID>
+    <ID>SwallowedException:JsonExpressionParser.kt:JsonExpressionParser$e: ClassCastException</ID>
+    <ID>SwallowedException:JsonPropertyParser.kt:JsonPropertyParser$e: ClassCastException</ID>
+    <ID>ThrowsCount:JsonExpressionParser.kt:JsonExpressionParser$@JvmStatic fun &lt;R, V : Any&gt; readExpression: Expression&lt;V&gt;</ID>
+    <ID>ThrowsCount:JsonPropertyParser.kt:JsonPropertyParser$@JvmStatic fun &lt;R, V : Any&gt; read: V</ID>
+    <ID>ThrowsCount:JsonPropertyParser.kt:JsonPropertyParser$@JvmStatic fun &lt;R, V : Any&gt; readList: List&lt;V&gt;</ID>
+    <ID>ThrowsCount:JsonPropertyParser.kt:JsonPropertyParser$@JvmStatic fun &lt;V : Any&gt; readList: List&lt;V&gt;</ID>
+    <ID>TooGenericExceptionCaught:DivKitJsonParser.kt:DivKitJsonParser$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:JsonExpressionParser.kt:JsonExpressionParser$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:JsonExpressionParser.kt:JsonExpressionParser$e: RuntimeException</ID>
+    <ID>TooGenericExceptionCaught:JsonPropertyParser.kt:JsonPropertyParser$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:JsonPropertyParser.kt:JsonPropertyParser$e: RuntimeException</ID>
+    <ID>TooGenericExceptionCaught:TemplateParsingEnvironment.kt:TemplateParsingEnvironment$e: Exception</ID>
+    <ID>TooManyFunctions:JsonExpressionParser.kt:JsonExpressionParser</ID>
+    <ID>TooManyFunctions:JsonFieldParser.kt:JsonFieldParser</ID>
     <ID>TooManyFunctions:JsonFieldResolver.kt:JsonFieldResolver</ID>
+    <ID>TooManyFunctions:JsonPropertyParser.kt:JsonPropertyParser</ID>
+    <ID>TooManyFunctions:ParsingExceptions.kt:com.yandex.div.parser.json.ParsingExceptions.kt</ID>
   </CurrentIssues>
 </SmellBaseline>
