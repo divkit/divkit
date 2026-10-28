@@ -5,6 +5,7 @@ import type {
     Customization,
     Direction,
     DivExtensionClass,
+    DivExtensionRegistration,
     DivJson,
     DivkitInstance,
     ErrorCallback,
@@ -30,6 +31,7 @@ export function render(opts: {
     customization?: Customization;
     builtinProtocols?: string[];
     extensions?: Map<string, DivExtensionClass>;
+    extensionsForAllComponents?: DivExtensionRegistration[];
     onStat?: StatCallback;
     onCustomAction?: CustomActionCallback;
     onError?: ErrorCallback;

@@ -53,6 +53,7 @@ export interface RootCtxValue {
     getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined;
     getBuiltinProtocols(): Set<string>;
     getExtension(id: string, params: object | undefined): DivExtension | undefined;
+    getExtensionsForAllComponents(): { id?: string; instance: DivExtension }[];
     getExtensionContext(componentContext: ComponentContext): DivExtensionContext;
     registerTimeout(timeout: number): void;
     isPointerFocus: Readable<boolean>;

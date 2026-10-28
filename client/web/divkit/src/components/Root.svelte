@@ -38,6 +38,7 @@
         DivExtension,
         DivExtensionContext,
         DivExtensionClass,
+        DivExtensionRegistration,
         TypefaceProvider,
         DerivedExpression,
         DisappearAction,
@@ -107,6 +108,7 @@
     export let customization: Customization = {};
     export let builtinProtocols: string[] = ['http', 'https', 'tel', 'mailto', 'intent'];
     export let extensions: Map<string, DivExtensionClass> = new Map();
+    export let extensionsForAllComponents: DivExtensionRegistration[] = [];
     export let onError: ErrorCallback | undefined = undefined;
     export let onStat: StatCallback | undefined = undefined;
     export let onSubmit: SubmitCallback | undefined = undefined;
@@ -1908,7 +1910,8 @@
                     return false;
                 }
             }
-            return target.json.extensions?.some(extension => extension.id === extensionId) || false;
+            return target.json.extensions?.some(extension => extension.id === extensionId) ||
+                target.getViewInfo('extensionActions')?.has(extensionId) || false;
         });
 
         if (targets.length !== 1) {
@@ -2131,6 +2134,18 @@
         if (Builder) {
             return new Builder(params || {});
         }
+    }
+
+    function getExtensionsForAllComponents(): { id?: string; instance: DivExtension }[] {
+        return extensionsForAllComponents.map(registration => {
+            if (typeof registration === 'function') {
+                return { instance: new registration({}) };
+            }
+            return {
+                id: registration.id,
+                instance: new registration.Extension(registration.params || {})
+            };
+        });
     }
 
     function getExtensionContext(componentContext?: ComponentContext): DivExtensionContext {
@@ -2573,6 +2588,7 @@
         getCustomization,
         getBuiltinProtocols,
         getExtension,
+        getExtensionsForAllComponents,
         getExtensionContext,
         registerTimeout,
         typefaceProvider,

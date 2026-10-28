@@ -547,6 +547,12 @@ export interface DivExtensionClass {
     prototype: DivExtension;
 }
 
+export type DivExtensionRegistration = DivExtensionClass | {
+    id?: string;
+    Extension: DivExtensionClass;
+    params?: object;
+};
+
 export interface DivExtension {
     mountView?(node: HTMLElement, context: DivExtensionContext): void;
 

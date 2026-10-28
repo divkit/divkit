@@ -365,6 +365,26 @@ Also be aware of new releases (even minor and patch versions). Built-in extensio
 
 [Building of a new extension](../divkit-examples/extensions-handmade/)
 
+### extensionsForAllComponents
+
+`DivExtensionRegistration[]`, optional, defaults to `[]`. Each entry is a `DivExtensionClass` or `{ Extension: DivExtensionClass, params?: object, id?: string }`.
+
+Applies each extension to every rendered component without an `extensions` entry in JSON. Uses the same `DivExtension` interface as `extensions`: a separate instance is created for each component DOM node, with the registration's `params` object passed directly to its constructor. Bare classes and registrations without `params` receive an empty object. Parameters are host-provided values; DivKit does not evaluate JSON expressions in them. Like `extensions`, this option is client-side only.
+
+```js
+render({
+    target,
+    id: 'card',
+    json,
+    extensionsForAllComponents: [
+        HoverNotifier,
+        { Extension: HoverNotifier, params: { label: 'debug' } }
+    ]
+});
+```
+
+To receive `extension_action`, provide an `id` in the registration and implement `handleAction`. The action's `extension_id` selects that registration, and `div_id` selects the component; no JSON extension declaration is required. Registrations without an `id` still receive lifecycle callbacks but cannot be addressed by actions. For a shared ID, JSON extension handlers run first, followed by handlers from `extensionsForAllComponents` in registration order, stopping when a handler returns `true` (including an awaited result).
+
 ### customComponents
 
 `Map<string, CustomComponentDescription>`, optional.

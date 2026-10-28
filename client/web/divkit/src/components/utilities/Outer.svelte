@@ -112,10 +112,16 @@
     let currentNode: HTMLElement;
     let attrs: Record<string, string> | undefined;
     let extensions: DivExtension[] | null = null;
+    let extensionsForAllComponents: { id?: string; instance: DivExtension }[] = [];
+    let extensionsNode: HTMLElement | undefined;
+    let extensionsDestroyed = false;
+    let extensionsUpdateVersion = 0;
     let extensionStore: Readable<{
         isEnabled?: BooleanInt;
     }[]>;
     let prevExtensionsVal: MaybeMissing<Extension>[] | undefined = undefined;
+    let appliedExtensionsVal: MaybeMissing<Extension>[] | undefined;
+    let appliedIsEnabledList: { isEnabled?: BooleanInt }[] | undefined;
 
     let prevChilds: string[] = [];
 
@@ -926,14 +932,22 @@
         }
     }
 
-    function unmountExtensions(): void {
+    function unmountExtensions(includeForAllComponents = true): void {
         componentContext.detachViewInfo('extensionActions');
-        if (extensions && currentNode) {
+        if (extensionsNode) {
+            const node = extensionsNode;
             const ctx = rootCtx.getExtensionContext(componentContext);
-            extensions.forEach(it => {
-                it.unmountView?.(currentNode, ctx);
+            extensions?.forEach(instance => {
+                instance.unmountView?.(node, ctx);
             });
             extensions = null;
+            if (includeForAllComponents) {
+                extensionsForAllComponents.forEach(({ instance }) => {
+                    instance.unmountView?.(node, ctx);
+                });
+                extensionsForAllComponents = [];
+                extensionsNode = undefined;
+            }
         }
     }
 
@@ -957,19 +971,28 @@
 
     $: {
         const isEnabledList = $extensionStore;
-        let exts = prevExtensionsVal;
+        const exts = prevExtensionsVal;
+        const node = currentNode;
+        const version = ++extensionsUpdateVersion;
 
         tick().then(() => {
-            if (exts !== prevExtensionsVal || !currentNode) {
+            if (extensionsDestroyed || version !== extensionsUpdateVersion || !node || node !== currentNode) {
                 return;
             }
 
-            unmountExtensions();
+            const nodeChanged = extensionsNode !== node;
+            if (!nodeChanged && exts === appliedExtensionsVal && isEnabledList === appliedIsEnabledList) {
+                return;
+            }
+            appliedExtensionsVal = exts;
+            appliedIsEnabledList = isEnabledList;
+            unmountExtensions(nodeChanged);
+            extensionsNode = node;
+            const ctx = rootCtx.getExtensionContext(componentContext);
 
             let extensionActions: Map<string, DivExtension[]> | undefined;
-            if (Array.isArray(prevExtensionsVal)) {
-                const ctx = rootCtx.getExtensionContext(componentContext);
-                extensions = prevExtensionsVal.map((it, index) => {
+            if (Array.isArray(exts)) {
+                extensions = exts.map((it, index) => {
                     const id = it.id;
                     if (!id) {
                         return;
@@ -987,12 +1010,27 @@
                             handlers.push(instance);
                             extensionActions.set(id, handlers);
                         }
-                        instance.mountView?.(currentNode, ctx);
+                        instance.mountView?.(node, ctx);
                     }
 
                     return instance;
                 }).filter(Truthy);
             }
+            if (nodeChanged) {
+                extensionsForAllComponents = rootCtx.getExtensionsForAllComponents();
+                extensionsForAllComponents.forEach(({ instance }) => {
+                    instance.mountView?.(node, ctx);
+                });
+            }
+
+            extensionsForAllComponents.forEach(({ id, instance }) => {
+                if (id && instance.handleAction) {
+                    extensionActions ||= new Map();
+                    const handlers = extensionActions.get(id) || [];
+                    handlers.push(instance);
+                    extensionActions.set(id, handlers);
+                }
+            });
             if (extensionActions) {
                 componentContext.attachViewInfo('extensionActions', extensionActions);
             }
@@ -1000,9 +1038,9 @@
     }
 
     function afterInstanceUpdate(): void {
-        if (extensions?.length) {
+        if (extensionsNode === currentNode && (extensions?.length || extensionsForAllComponents.length)) {
             const ctx = rootCtx.getExtensionContext(componentContext);
-            extensions.forEach(instance => {
+            [...extensions || [], ...extensionsForAllComponents.map(({ instance }) => instance)].forEach(instance => {
                 instance.updateView?.(currentNode, ctx);
             });
         }
@@ -1273,6 +1311,7 @@
 
         prevTriggersUnsubscribe?.();
 
+        extensionsDestroyed = true;
         unmountExtensions();
     });
 </script>

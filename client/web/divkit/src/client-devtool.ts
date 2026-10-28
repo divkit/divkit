@@ -5,6 +5,7 @@ import type {
     CustomActionCallback,
     Customization,
     DivExtensionClass,
+    DivExtensionRegistration,
     DivJson,
     ErrorCallback,
     FetchInit,
@@ -35,6 +36,7 @@ export function render(opts: {
     customization?: Customization;
     builtinProtocols?: string[];
     extensions?: Map<string, DivExtensionClass>;
+    extensionsForAllComponents?: DivExtensionRegistration[];
     onStat?: StatCallback;
     onCustomAction?: CustomActionCallback;
     onError?: ErrorCallback;

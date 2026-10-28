@@ -8,6 +8,7 @@ import type {
     Theme,
     Customization,
     DivExtensionClass,
+    DivExtensionRegistration,
     TypefaceProvider,
     FetchInit,
     Direction,
@@ -31,6 +32,7 @@ export function render(opts: {
     customization?: Customization;
     builtinProtocols?: string[];
     extensions?: Map<string, DivExtensionClass>;
+    extensionsForAllComponents?: DivExtensionRegistration[];
     theme?: Theme;
     themeVariableName?: string;
     fetchInit?: FetchInit;
