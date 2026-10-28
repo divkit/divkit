@@ -2023,6 +2023,10 @@
     "en": "Line spacing of the text. Measured in units set in `font_size_unit`.",
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных параметром `font_size_unit`."
   },
+  "div_select_options": {
+    "en": "List of options available for selection.",
+    "ru": "Список доступных вариантов выбора."
+  },
   "div_select_option": {
     "en": "List option.",
     "ru": "Вариант выбора в списке."
@@ -3094,6 +3098,10 @@
   "div_video_scale": {
     "en": "Video scaling:<li>`fit` places the entire video into the element (free space is filled with background);</li><li>`fill` scales the video to the element size and cuts off anything that's extra.</li>",
     "ru": "Масштабирование видео:<li>`fit` помещает видео в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует видео по размеру элемента и обрезает лишнее.</li>"
+  },
+  "div_video_sources": {
+    "en": "List of media sources.",
+    "ru": "Список источников видео."
   },
   "div_video_source": {
     "en": "Description of one media file. Contains a link to the source, MIME type, bitrate, and resolution.",

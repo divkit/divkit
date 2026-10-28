@@ -14,9 +14,9 @@
         },
         "video_sources": {
           "type": "array",
+          "$description": "translations.json#/div_video_sources",
           "items": {
-            "$ref": "div-video-source.json",
-            "$description": "translations.json#/div_video_source"
+            "$ref": "div-video-source.json"
           }
         },
         "repeatable": {

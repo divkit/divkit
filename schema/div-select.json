@@ -3,6 +3,7 @@
   "definitions": {
     "option": {
       "type": "object",
+      "$description": "translations.json#/div_select_option",
       "properties": {
         "text": {
           "type": "string",
@@ -35,9 +36,9 @@
         },
         "options": {
           "type": "array",
+          "$description": "translations.json#/div_select_options",
           "items": {
-            "$ref": "#/definitions/option",
-            "$description": "translations.json#/div_select_option"
+            "$ref": "#/definitions/option"
           },
           "minItems": 1
         },

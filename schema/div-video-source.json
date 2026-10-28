@@ -1,4 +1,5 @@
 {
+  "$description": "translations.json#/div_video_source",
   "definitions": {
     "resolution": {
       "type": "object",
