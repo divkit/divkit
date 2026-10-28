@@ -4974,7 +4974,8 @@
       "expected_results": [
         "The cursor is positioned at the end of the formatted text after autocomplete fills the masked phone input"
       ],
-      "file": "input/masked_input_autocomplete_cursor.json"
+      "file": "input/masked_input_autocomplete_cursor.json",
+      "case_id": 533
     },
     {
       "title": "Submit action test",
@@ -5253,7 +5254,8 @@
         "The 0.5s button is highlighted. Each transition lasts about half a second. The selected duration is preserved when switching modes.",
         "The 2s button is highlighted again. Each transition lasts about two seconds without reloading the test."
       ],
-      "file": "scroll/scroll-duration.json"
+      "file": "scroll/scroll-duration.json",
+      "case_id": 534
     },
     {
       "title": "Gallery item animations respect animation settings",
@@ -5288,7 +5290,8 @@
         "With demo animations enabled but system animations disabled, every hide/show update is immediate.",
         "The original settings are restored. No item remains half-transparent or displaced, and no parsing or runtime errors occur."
       ],
-      "file": "gallery/item_animations_enabled.json"
+      "file": "gallery/item_animations_enabled.json",
+      "case_id": 535
     }
   ]
 }
