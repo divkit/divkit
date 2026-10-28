@@ -18,7 +18,7 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Requests focus for an element. May require a user action on the web.
+ * Requests focus for an element. May also move screen-reader focus to it. May require a user action on the web.
  * 
  * Can be created using the method [actionFocusElement].
  * 
