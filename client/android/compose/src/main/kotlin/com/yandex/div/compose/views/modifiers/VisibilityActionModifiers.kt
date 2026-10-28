@@ -2,6 +2,7 @@ package com.yandex.div.compose.views.modifiers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
@@ -31,7 +32,7 @@ private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modi
     val actionHandlingContext = LocalComponent.current.actionHandlingContext
     var modifier = this
     actions
-        .filter { shouldRegisterVisibilityCallback(it) }
+        .filter { shouldRegisterVisibilityCallback(actionHandlingContext, it) }
         .forEach { action ->
             modifier = modifier.onDivVisibilityChanged(
                 minFractionVisible = action.visibilityPercentage.observedValue() / 100f
@@ -52,7 +53,7 @@ private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifi
     val actionHandlingContext = LocalComponent.current.actionHandlingContext
     var modifier = this
     actions
-        .filter { shouldRegisterVisibilityCallback(it) }
+        .filter { shouldRegisterVisibilityCallback(actionHandlingContext, it) }
         .forEach { action ->
             modifier = modifier.onDivVisibilityChanged(
                 minFractionVisible = action.visibilityPercentage.observedValue() / 100f
@@ -68,8 +69,12 @@ private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifi
 }
 
 @Composable
-private fun shouldRegisterVisibilityCallback(action: DivSightAction): Boolean {
+private fun shouldRegisterVisibilityCallback(
+    context: DivActionHandlingContext,
+    action: DivSightAction
+): Boolean {
     return !LocalDivViewContext.current.visibilityActionTracker.isLimitReached(
+        context = context,
         action = action,
         limit = action.logLimit.observedIntValue()
     )

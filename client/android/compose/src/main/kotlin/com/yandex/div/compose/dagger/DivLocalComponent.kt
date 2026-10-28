@@ -15,7 +15,7 @@ import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.triggers.DivTriggerStorage
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.variables.DivVariableAdapter
-import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.compose.variables.VariableAndConstantProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
@@ -40,13 +40,13 @@ internal interface DivLocalComponent {
     val reporter: DivReporter
     val triggerStorage: DivTriggerStorage
     val variableAdapter: DivVariableAdapter
-    val variableController: DivVariableController
+    val variableProvider: VariableAndConstantProvider
 
     @Component.Builder
     interface Builder {
         fun build(
             @BindsInstance functionProvider: FunctionProviderDecorator,
-            @BindsInstance variableController: DivVariableController
+            @BindsInstance variableProvider: VariableAndConstantProvider
         ): DivLocalComponent
     }
 }
@@ -58,16 +58,22 @@ internal fun DivLocalComponent.handleActions(
     actionHandler.handle(actionHandlingContext, actions, source)
 }
 
+/**
+
+ * An element with its own variables, functions or triggers is resolved in its own scope.
+
+ */
+internal val DivBase.declaresLocalScope: Boolean
+    get() = !variables.isNullOrEmpty() || !functions.isNullOrEmpty() ||
+        !variableTriggers.isNullOrEmpty()
+
 internal val LocalComponent = staticCompositionLocalOf<DivLocalComponent> {
     throw DivException("DivLocalComponent not provided")
 }
 
 @Composable
 internal fun WithLocalComponent(data: DivBase, content: @Composable () -> Unit) {
-    val functions = data.functions.orEmpty()
-    val variables = data.variables.orEmpty()
-    val triggers = data.variableTriggers.orEmpty()
-    if (functions.isEmpty() && variables.isEmpty() && triggers.isEmpty()) {
+    if (!data.declaresLocalScope) {
         return content()
     }
 
@@ -75,6 +81,20 @@ internal fun WithLocalComponent(data: DivBase, content: @Composable () -> Unit) 
         data,
         parentComponent = LocalComponent.current
     )
+    if (localComponent === LocalComponent.current) {
+        return content()
+    }
     localComponent.triggerStorage.observe()
     CompositionLocalProvider(LocalComponent provides localComponent, content)
+}
+
+@Composable
+internal inline fun WithLocalComponent(
+    component: DivLocalComponent?,
+    crossinline content: @Composable () -> Unit,
+) {
+    if (component == null || component === LocalComponent.current) {
+        return content()
+    }
+    CompositionLocalProvider(LocalComponent provides component) { content() }
 }

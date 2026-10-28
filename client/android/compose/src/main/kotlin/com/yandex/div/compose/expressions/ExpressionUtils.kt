@@ -3,7 +3,6 @@ package com.yandex.div.compose.expressions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div.json.expressions.Expression
@@ -20,11 +19,10 @@ internal fun <T : Any> Expression<T>?.observedValue(
     defaultValue: T,
     valueType: KClass<T>
 ): T {
-    val expressionResolver = expressionResolver
     return when (this) {
         null -> defaultValue
-        is Expression.ConstantExpression -> evaluate(expressionResolver)
-        else -> cachedObservedValue(this, valueType)
+        is Expression.ConstantExpression -> evaluate(LocalComponent.current.expressionResolver)
+        else -> cachedObservedValue(this, valueType, LocalComponent.current.expressionCache)
     }
 }
 
@@ -46,10 +44,10 @@ inline fun <reified T : Any> Expression<T>.observedValue(): T {
 @PublishedApi
 @Composable
 internal fun <T : Any> Expression<T>.observedValue(valueType: KClass<T>): T {
-    val expressionResolver = expressionResolver
+    val component = LocalComponent.current
     return when (this) {
-        is Expression.ConstantExpression -> evaluate(expressionResolver)
-        else -> cachedObservedValue(this, valueType)
+        is Expression.ConstantExpression -> evaluate(component.expressionResolver)
+        else -> cachedObservedValue(this, valueType, component.expressionCache)
     }
 }
 
@@ -72,26 +70,26 @@ fun Expression<Double>.observedFloatValue(): Float {
 internal inline fun <reified T : Any, R> Expression<T>.observedValue(
     crossinline transform: (T) -> R
 ): R {
-    val expressionResolver = expressionResolver
+    val component = LocalComponent.current
     return when (this) {
         is Expression.ConstantExpression ->
-            remember(this, expressionResolver) {
-                transform(evaluate(expressionResolver))
+            remember(this, component.expressionResolver) {
+                transform(evaluate(component.expressionResolver))
             }
 
         else -> {
-            val value = cachedObservedValue(this, T::class)
+            val value = cachedObservedValue(this, T::class, component.expressionCache)
             remember(value) { transform(value) }
         }
     }
 }
 
 @Composable
-private fun <T : Any> cachedObservedValue(
+internal fun <T : Any> cachedObservedValue(
     expression: Expression<T>,
-    valueType: KClass<T>
+    valueType: KClass<T>,
+    cache: ExpressionCache
 ): T {
-    val cache = LocalComponent.current.expressionCache
     val ref = remember(expression, cache) {
         cache.getOrCreate(expression, valueType)
     }

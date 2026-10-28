@@ -109,16 +109,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     "div-container/size_provider.json",
     "div-container/size_provider_recursive.json",
 
-    // div-container.item_builder not supported
-    "div-container/item_builder/index.json",
-    "div-container/item_builder/item-builder.json",
-    "div-container/item_builder/item-builder-priority.json",
-    "div-container/item_builder/item-builder-with-local-variables.json",
-    "div-container/item_builder/item-builder-with-nested-local-variables.json",
-    "div-container/item_builder/nested-builders.json",
-    "div-container/item_builder/non-unique-matched-selectors.json",
-    "div-container/item_builder/wrap-content-container-with-match-parent-items.json",
-
     // match_parent min_size next to wrap_content constrained siblings not supported, DIVKIT-10714
     "div-container/match-parent-min-size-with-constrained-siblings.json",
 
@@ -221,6 +211,7 @@ val composeRoborazziInteractiveScreenshotCases = setOf(
     "div-action/set-state.json",
     "div-action/set-variable.json",
     "div-container/base-properties.json",
+    "div-container/item_builder.json",
     "div-container/visibility.json",
     "div-extension/is-enabled.json",
     "div-gallery/paging-paddings.json",
@@ -280,4 +271,9 @@ val composeRoborazziInteractiveScreenshotCases = setOf(
     "div-text/text-properties.json",
     "div-text/text_range_without_bound.json",
     "div-text/truncate-policy.json",
+    "local-variables/item-builder-data-change-another-id.json",
+    "local-variables/item-builder-data-change-no-id-same-data-and-index.json",
+    "local-variables/item-builder-data-change-no-id-same-data-another-index.json",
+    "local-variables/item-builder-data-change-no-id-same-index-another-data.json",
+    "local-variables/item-builder-data-change-same-id-data-and-index.json",
 )

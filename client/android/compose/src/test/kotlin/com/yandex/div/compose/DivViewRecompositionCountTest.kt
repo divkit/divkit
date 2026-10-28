@@ -19,6 +19,10 @@ import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.itemBuilder
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
+import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.solidBackground
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
@@ -185,6 +189,41 @@ class DivViewRecompositionCountTest {
                         extensions = compositionCounter("item"),
                         text = "Item"
                     )
+                )
+            )
+        )
+
+        margin.set(10)
+        rule.waitForIdle()
+
+        assertCompositions(
+            "container" to 2,
+            "item" to 1
+        )
+    }
+
+    @Test
+    fun `item_builder items are not recomposed when container margins are changed`() {
+        val margin = Variable.IntegerVariable(name = "margin", defaultValue = 0)
+        variableController.putOrUpdate(margin)
+
+        setContent(
+            container(
+                extensions = compositionCounter("container"),
+                itemBuilder = itemBuilder(
+                    data = jsonArray(jsonObject()),
+                    prototypes = listOf(
+                        prototype(
+                            div = text(
+                                extensions = compositionCounter("item"),
+                                text = "Item"
+                            )
+                        )
+                    )
+                ),
+                margins = DivEdgeInsets(
+                    start = intExpression("@{margin}"),
+                    end = intExpression("@{margin}")
                 )
             )
         )

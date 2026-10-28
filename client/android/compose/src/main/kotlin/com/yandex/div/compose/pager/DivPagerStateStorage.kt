@@ -29,6 +29,10 @@ internal class DivPagerStateStorage @Inject constructor() {
     fun retain(divs: Set<DivBase>) {
         states.keys.retainAll(divs)
     }
+
+    fun remove(divs: Set<DivBase>) {
+        states.keys.removeAll(divs)
+    }
 }
 
 @SuppressLint("ComposableNaming")

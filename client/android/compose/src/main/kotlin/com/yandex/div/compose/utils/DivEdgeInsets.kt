@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivEdgeInsets
@@ -35,32 +37,46 @@ internal fun DivEdgeInsets?.observeVerticalInsets(): Pair<Dp, Dp> {
 }
 
 @Composable
-internal fun DivBase.observeHorizontalMarginsSum(): Dp {
+internal fun DivBase.observeHorizontalMarginsSum(): Dp =
+    observeHorizontalMarginsSum(component = null)
+
+@Composable
+internal fun DivBase.observeHorizontalMarginsSum(component: DivLocalComponent?): Dp {
     val margins = margins ?: return 0.dp
-    val (start, end) = margins.observeHorizontalInsets()
+    val localComponent = component ?: LocalComponent.current
+    val unit = margins.unit.observedValue(component = localComponent)
+    val (start, end) = margins.observeHorizontalInsets(unit, localComponent)
     return start + end
 }
 
 @Composable
-internal fun DivBase.observeVerticalMarginsSum(): Dp {
+internal fun DivBase.observeVerticalMarginsSum(): Dp = observeVerticalMarginsSum(component = null)
+
+@Composable
+internal fun DivBase.observeVerticalMarginsSum(component: DivLocalComponent?): Dp {
     val margins = margins ?: return 0.dp
-    val unit = margins.unit.observedValue()
-    return margins.top.observedValue().toDp(unit) + margins.bottom.observedValue().toDp(unit)
+    val localComponent = component ?: LocalComponent.current
+    val unit = margins.unit.observedValue(component = localComponent)
+    return margins.top.observedValue(component = localComponent).toDp(unit) +
+        margins.bottom.observedValue(component = localComponent).toDp(unit)
 }
 
 @Composable
-private fun DivEdgeInsets?.observeHorizontalInsets(unit: DivSizeUnit): Pair<Dp, Dp> {
+private fun DivEdgeInsets?.observeHorizontalInsets(
+    unit: DivSizeUnit,
+    component: DivLocalComponent = LocalComponent.current
+): Pair<Dp, Dp> {
     this ?: return ZeroPair
 
     if (start != null || end != null) {
         return Pair(
-            start?.observedValue()?.toDp(unit) ?: 0.dp,
-            end?.observedValue()?.toDp(unit) ?: 0.dp
+            start?.observedValue(component = component)?.toDp(unit) ?: 0.dp,
+            end?.observedValue(component = component)?.toDp(unit) ?: 0.dp
         )
     }
 
-    val left = left.observedValue().toDp(unit)
-    val right = right.observedValue().toDp(unit)
+    val left = left.observedValue(component = component).toDp(unit)
+    val right = right.observedValue(component = component).toDp(unit)
     return if (isRtlLayout) {
         Pair(right, left)
     } else {

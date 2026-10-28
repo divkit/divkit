@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.compose.actions.DivActionSource
+import com.yandex.div.compose.collection.CollectionItemScopeStorage
 import com.yandex.div.compose.context.CompositionKeyStorage
 import com.yandex.div.compose.context.DivLocalComponentStorage
 import com.yandex.div.compose.dagger.DivLocalComponent
@@ -31,6 +32,7 @@ import javax.inject.Named
  */
 @DivViewScope
 internal class DivPatchCoordinator @Inject constructor(
+    private val collectionItemScopeStorage: CollectionItemScopeStorage,
     private val compositionKeyStorage: CompositionKeyStorage,
     private val localComponentStorage: DivLocalComponentStorage,
     private val pagerStateStorage: DivPagerStateStorage,
@@ -69,6 +71,7 @@ internal class DivPatchCoordinator @Inject constructor(
         }
 
         patchApply.copiedDivs.forEach { (original, updated) ->
+            collectionItemScopeStorage.alias(original, updated)
             localComponentStorage.alias(original, updated)
             compositionKeyStorage.alias(original, updated)
         }
@@ -96,6 +99,7 @@ internal class DivPatchCoordinator @Inject constructor(
         val applied = appliedActions.lastOrNull() ?: return
         val retainedDivs = applied.divs.toMutableSet()
         pendingActions.forEach { retainedDivs.addAll(it.divs) }
+        collectionItemScopeStorage.retain(retainedDivs)
         localComponentStorage.retain(retainedDivs)
         compositionKeyStorage.retain(retainedDivs)
         pagerStateStorage.retain(retainedDivs)

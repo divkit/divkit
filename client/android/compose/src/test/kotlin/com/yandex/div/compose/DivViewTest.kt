@@ -2,20 +2,30 @@ package com.yandex.div.compose
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertLeftPositionInRootIsEqualTo
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.container
+import com.yandex.div.test.data.containerSeparator
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.fixed
+import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.variable
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
+import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
+import com.yandex.div2.DivState
 import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibility
 import org.junit.Rule
@@ -157,6 +167,81 @@ class DivViewTest {
     }
 
     @Test
+    fun `container resolves the visibility of a child in the scope of the child`() {
+        setContent(
+            container(
+                items = listOf(
+                    text(
+                        id = "title",
+                        text = "Hello!",
+                        variables = listOf(variable("hidden", false)),
+                        visibility = visibilityExpression("@{hidden ? 'gone' : 'visible'}")
+                    )
+                )
+            ),
+            variables = listOf(variable("hidden", true))
+        )
+
+        rule.onNodeWithTag("title").assertIsDisplayed()
+    }
+
+    @Test
+    fun `scoped static child observes current visibility when returning to composition`() {
+        val active = Variable.StringVariable("active", "list")
+        val visibility = Variable.StringVariable("visibility", "visible")
+        variableController.declare(active, visibility)
+        setContent(switchable(container(
+            items = listOf(
+                text(text = "list"),
+                // A local variable keeps the child scope in storage that outlives the composition.
+                text(
+                    id = "item",
+                    text = "item",
+                    variables = listOf(variable("local", "item")),
+                    visibility = visibilityExpression("@{visibility}")
+                )
+            )
+        )))
+        rule.onNodeWithTag("item").assertIsDisplayed()
+        active.set("empty")
+        rule.onNodeWithText("empty").assertIsDisplayed()
+        visibility.set("gone")
+
+        active.set("list")
+
+        rule.onNodeWithText("list").assertIsDisplayed()
+        rule.onNodeWithTag("item").assertDoesNotExist()
+    }
+
+    @Test
+    fun `separator and unscoped sibling observe parent variable shadowed by a scoped child`() {
+        val gap = Variable.IntegerVariable("gap", 4)
+        variableController.declare(gap)
+        setContent(
+            container(
+                orientation = DivContainer.Orientation.HORIZONTAL,
+                items = listOf(
+                    text(
+                        text = expression("@{gap}"),
+                        variables = listOf(variable("gap", 100L)),
+                        width = fixed(10)
+                    ),
+                    text(id = "sibling", text = expression("@{gap}"), width = fixed(30))
+                ),
+                separator = containerSeparator(width = intExpression("@{gap}"))
+            )
+        )
+        rule.waitForIdle()
+
+        gap.set(16)
+
+        // A 10 dp item and a 16 dp separator precede the sibling.
+        rule.onNodeWithTag("sibling")
+            .assertTextEquals("16")
+            .assertLeftPositionInRootIsEqualTo(26.dp)
+    }
+
+    @Test
     fun `text changes when host variable changes`() {
         val variable = Variable.IntegerVariable("counter", 10)
         variableController.declare(variable)
@@ -180,3 +265,12 @@ class DivViewTest {
         )
     }
 }
+
+private fun switchable(content: Div): Div = state(
+    id = "switch",
+    stateIdVariable = "active",
+    states = listOf(
+        DivState.State(div = content, stateId = "list"),
+        DivState.State(div = text(text = "empty"), stateId = "empty")
+    )
+)

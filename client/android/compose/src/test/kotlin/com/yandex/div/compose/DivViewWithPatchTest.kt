@@ -34,6 +34,10 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
+import com.yandex.div.test.data.itemBuilder
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
+import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.throwingErrorLogger
@@ -283,6 +287,25 @@ class DivViewWithPatchTest {
 
     @Test
     fun `unchanged gallery keeps its scroll when a preceding child expands`() {
+        assertGalleryKeepsScrollWhenPrecedingChildExpands(container(items = galleryAfterTarget()))
+    }
+
+    @Test
+    fun `unchanged gallery keeps its scroll when a preceding wrap child expands`() {
+        assertGalleryKeepsScrollWhenPrecedingChildExpands(
+            container(layoutMode = DivContainer.LayoutMode.WRAP, items = galleryAfterTarget())
+        )
+    }
+
+    @Test
+    fun `unchanged gallery keeps its scroll when a preceding overlap child expands`() {
+        assertGalleryKeepsScrollWhenPrecedingChildExpands(
+            container(orientation = DivContainer.Orientation.OVERLAP, items = galleryAfterTarget())
+        )
+    }
+
+    @Test
+    fun `unchanged gallery keeps its scroll when a patch adds the first scoped sibling`() {
         val data = data(container(items = listOf(
             text(id = "target", text = "Before"),
             gallery(id = "gallery", width = fixed(200), height = fixed(100), items = List(10) {
@@ -294,9 +317,10 @@ class DivViewWithPatchTest {
         rule.onNodeWithTag("page5").assertIsDisplayed()
 
         applyPatch(data, DivPatch(changes = listOf(DivPatch.Change("target", listOf(
-            text(text = "First"), text(text = "Second")
+            text(text = expression("@{title}"), variables = listOf(variable("title", "After")))
         )))))
 
+        rule.onNodeWithText("After").assertIsDisplayed()
         rule.onNodeWithTag("page5").assertIsDisplayed()
     }
 
@@ -795,6 +819,53 @@ class DivViewWithPatchTest {
                 )
             )
         )
+    }
+
+    @Test
+    fun `builder items start with fresh state when a patch replaces their container`() {
+        // A replaced element is a new model: its local components and composition keys start
+        // over, as they do for static children.
+        val target = {
+            container(id = "target", itemBuilder = itemBuilder(
+                data = jsonArray(jsonObject()),
+                prototypes = listOf(prototype(id = constant("item"), div = text(
+                    text = expression("@{local}"),
+                    variables = listOf(variable("local", "initial")),
+                    action = action(url = "div-action://set_variable?name=local&value=changed")
+                )))
+            ))
+        }
+        val data = data(target())
+        setContent(data)
+        rule.onNodeWithTag("item").performClick()
+        rule.onNodeWithTag("item").assertTextEquals("changed")
+
+        applyPatch(data, DivPatch(changes = listOf(
+            DivPatch.Change("target", listOf(target()))
+        )))
+
+        rule.onNodeWithTag("item").assertTextEquals("initial")
+    }
+
+    private fun galleryAfterTarget(): List<Div> = listOf(
+        text(id = "target", text = "Before"),
+        gallery(id = "gallery", width = fixed(200), height = fixed(100), items = List(10) {
+            text(id = "page$it", text = constant("Page $it"), width = fixed(100))
+        })
+    )
+
+    private fun assertGalleryKeepsScrollWhenPrecedingChildExpands(content: Div) {
+        val data = data(content)
+        setContent(data)
+        rule.onNode(hasScrollToIndexAction() and hasAnyAncestor(hasTestTag("gallery")))
+            .performScrollToIndex(5)
+        rule.onNodeWithTag("page5").assertIsDisplayed()
+
+        applyPatch(data, DivPatch(changes = listOf(DivPatch.Change("target", listOf(
+            text(text = "First"), text(text = "Second")
+        )))))
+
+        rule.onNodeWithTag("page5").assertIsDisplayed()
     }
 
     private fun setContent(data: DivData) {

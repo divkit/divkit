@@ -20,8 +20,6 @@ import com.yandex.div2.DivPager
 import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 
-internal const val INDEX_VARIABLE_NAME = "index"
-
 @InternalApi
 fun DivBlock.Container.buildItems(): List<DivBlock> =
     buildItems(divValue.items, divValue.itemBuilder, expressionResolver, path)
@@ -111,47 +109,6 @@ private fun getItemResolverAndPath(
         ))
         resolverImpl.withConstants(pathSegment, localDataProvider)
     } to childPath
-}
-
-private fun Div.copy(id: String? = value().id): Div {
-    return when (this) {
-        is Div.Image -> Div.Image(value.copy(id = id))
-        is Div.GifImage -> Div.GifImage(value.copy(id = id))
-        is Div.Text -> Div.Text(value.copy(id = id))
-        is Div.Separator -> Div.Separator(value.copy(id = id))
-        is Div.Container -> Div.Container(value.copy(
-            id = id,
-            items = value.items?.map { it.copy() },
-        ))
-        is Div.Grid -> Div.Grid(value.copy(
-            id = id,
-            items = value.items?.map { it.copy() }
-        ))
-        is Div.Gallery -> Div.Gallery(value.copy(
-            id = id,
-            items = value.items?.map { it.copy() }
-        ))
-        is Div.Pager -> Div.Pager(value.copy(
-            id = id,
-            items = value.items?.map { it.copy() }
-        ))
-        is Div.Tabs -> Div.Tabs(value.copy(
-            id = id,
-            items = value.items.map { it.copy(div = it.div.copy()) }
-        ))
-        is Div.State -> Div.State(value.copy(
-            id = id,
-            divId = id,
-            states = value.states.map { it.copy(div = it.div?.copy()) }
-        ))
-        is Div.Custom -> Div.Custom(value.copy(id = id))
-        is Div.Indicator -> Div.Indicator(value.copy(id = id))
-        is Div.Slider -> Div.Slider(value.copy(id = id))
-        is Div.Input -> Div.Input(value.copy(id = id))
-        is Div.Select -> Div.Select(value.copy(id = id))
-        is Div.Video -> Div.Video(value.copy(id = id))
-        is Div.Switch -> Div.Switch(value.copy(id = id))
-    }
 }
 
 val DivContainer.nonNullItems: List<Div> get() = items ?: emptyList()

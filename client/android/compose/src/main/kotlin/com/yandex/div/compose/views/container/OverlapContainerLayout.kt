@@ -14,7 +14,10 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.collection.observeItems
+import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.WithDivKey
+import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.aspect
@@ -42,7 +45,7 @@ import kotlin.math.min
 internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
-    val items = data.items.orEmpty()
+    val items = data.observeItems()
     val defaultHorizontalAlignment = horizontalAlignment.toCrossAxisHorizontalAlignment()
     val defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment()
     val defaultAlignment = combineAlignment(
@@ -57,26 +60,31 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
 
     val isWidthWrapContent = data.width is DivSize.WrapContent
     val isHeightWrapContent = data.height is DivSize.WrapContent
-    val needsMatchParentMeasurement = data.aspect == null && items.none { it.value().aspect != null } &&
-        items.any {
+    val needsMatchParentMeasurement = data.aspect == null &&
+        items.items.none { it.value().aspect != null } &&
+        items.items.any {
             val child = it.value()
             (isWidthWrapContent && child.width.isMatchParent) ||
                 (isHeightWrapContent && child.height.isMatchParent)
         }
     if (!needsMatchParentMeasurement) {
         Box(containerModifier, contentAlignment = defaultAlignment) {
-            data.visibleItems().forEach { item ->
-                DivBlockView(
-                    data = item,
-                    defaultHorizontalAlignment = defaultHorizontalAlignment,
-                    defaultVerticalAlignment = defaultVerticalAlignment,
-                    modifier = Modifier.align(
-                        item.resolveOverlapChildAlignment(
-                            defaultHorizontal = horizontalAlignment,
-                            defaultVertical = verticalAlignment,
+            items.observeVisible().forEach { item ->
+                WithDivKey(item) {
+                    WithLocalComponent(items.components?.get(item)) {
+                        DivBlockView(
+                            data = item,
+                            defaultHorizontalAlignment = defaultHorizontalAlignment,
+                            defaultVerticalAlignment = defaultVerticalAlignment,
+                            modifier = Modifier.align(
+                                item.resolveOverlapChildAlignment(
+                                    defaultHorizontal = horizontalAlignment,
+                                    defaultVertical = verticalAlignment,
+                                )
+                            )
                         )
-                    )
-                )
+                    }
+                }
             }
         }
         return
@@ -84,7 +92,8 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
 
     MatchParentOverlapLayout(
         modifier = containerModifier,
-        items = items,
+        items = items.items,
+        components = items.components,
         isWidthWrapContent = isWidthWrapContent,
         isHeightWrapContent = isHeightWrapContent,
         defaultHorizontal = horizontalAlignment,
@@ -97,6 +106,7 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
 private fun MatchParentOverlapLayout(
     modifier: Modifier,
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     isWidthWrapContent: Boolean,
     isHeightWrapContent: Boolean,
     defaultHorizontal: DivContentAlignmentHorizontal,
@@ -110,7 +120,8 @@ private fun MatchParentOverlapLayout(
             items.forEach { item ->
                 WithDivKey(item) {
                     MatchParentOverlapChild(
-                        item = item,
+                        div = item,
+                        component = components?.get(item),
                         isWidthWrapContent = isWidthWrapContent,
                         isHeightWrapContent = isHeightWrapContent,
                         defaultHorizontal = defaultHorizontal,
@@ -128,75 +139,94 @@ private fun MatchParentOverlapLayout(
 
 @Composable
 private fun MatchParentOverlapChild(
-    item: Div,
+    div: Div,
+    component: DivLocalComponent?,
     isWidthWrapContent: Boolean,
     isHeightWrapContent: Boolean,
     defaultHorizontal: DivContentAlignmentHorizontal,
     defaultVertical: DivContentAlignmentVertical,
 ) {
-    val divBase = item.value()
-    WithLocalComponent(divBase) {
-        val visibility = divBase.visibility.observedValue()
-        if (visibility == DivVisibility.GONE) return@WithLocalComponent
+    WithLocalComponent(component) {
+        val divBase = div.value()
+        WithLocalComponent(divBase) {
+            val visibility = divBase.visibility.observedValue()
+            if (visibility == DivVisibility.GONE) return@WithLocalComponent
 
-        val matchParentWidth = divBase.width.isMatchParent
-        val matchParentHeight = divBase.height.isMatchParent
-        val widthBounds = if (isWidthWrapContent && matchParentWidth) {
-            divBase.width.observeMatchParentBounds()
-        } else {
-            UnboundedMatchParentBounds
-        }
-        val heightBounds = if (isHeightWrapContent && matchParentHeight) {
-            divBase.height.observeMatchParentBounds()
-        } else {
-            UnboundedMatchParentBounds
-        }
-        val horizontalMargins = if (isWidthWrapContent && matchParentWidth) {
-            divBase.margins.observeHorizontalInsets()
-        } else {
-            ZeroMargins
-        }
-        val verticalMargins = if (isHeightWrapContent && matchParentHeight) {
-            divBase.margins.observeVerticalInsets()
-        } else {
-            ZeroMargins
-        }
-        val child = OverlapChild(
-            alignment = item.resolveOverlapChildAlignment(
+            val child = div.observeOverlapChild(
+                isWidthWrapContent = isWidthWrapContent,
+                isHeightWrapContent = isHeightWrapContent,
                 defaultHorizontal = defaultHorizontal,
                 defaultVertical = defaultVertical,
-            ),
-            matchParentWidth = matchParentWidth,
-            matchParentHeight = matchParentHeight,
-            hasPositiveFixedHeight = isWidthWrapContent && matchParentWidth &&
-                divBase.height.observeIsPositiveFixedSize(),
-            minWidth = widthBounds.minSize,
-            maxWidth = widthBounds.maxSize,
-            minHeight = heightBounds.minSize,
-            maxHeight = heightBounds.maxSize,
-            horizontalMarginStart = horizontalMargins.first,
-            horizontalMarginEnd = horizontalMargins.second,
-            verticalMarginTop = verticalMargins.first,
-            verticalMarginBottom = verticalMargins.second,
-        )
-        // The wrapper keeps one measurable per Div and carries metadata resolved in the
-        // same local-variable scope as the child itself.
-        Box(
-            modifier = Modifier.layoutId(child),
-            propagateMinConstraints = true,
-        ) {
-            VisibleDivBlockView(
-                data = item,
-                modifier = Modifier,
-                applyMargins = true,
-                visibility = visibility,
-                fillMatchParentWidth = !(isWidthWrapContent && matchParentWidth),
-                fillMatchParentHeight = !(isHeightWrapContent && matchParentHeight),
-                defaultHorizontalAlignment = defaultHorizontal.toCrossAxisHorizontalAlignment(),
-                defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment(),
             )
+            // The wrapper keeps one measurable per Div and carries metadata resolved in the
+            // same local-variable scope as the child itself.
+            Box(
+                modifier = Modifier.layoutId(child),
+                propagateMinConstraints = true,
+            ) {
+                VisibleDivBlockView(
+                    data = div,
+                    modifier = Modifier,
+                    applyMargins = true,
+                    visibility = visibility,
+                    fillMatchParentWidth = !(isWidthWrapContent && child.matchParentWidth),
+                    fillMatchParentHeight = !(isHeightWrapContent && child.matchParentHeight),
+                    defaultHorizontalAlignment = defaultHorizontal.toCrossAxisHorizontalAlignment(),
+                    defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment(),
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun Div.observeOverlapChild(
+    isWidthWrapContent: Boolean,
+    isHeightWrapContent: Boolean,
+    defaultHorizontal: DivContentAlignmentHorizontal,
+    defaultVertical: DivContentAlignmentVertical,
+): OverlapChild {
+    val divBase = value()
+    val matchParentWidth = divBase.width.isMatchParent
+    val matchParentHeight = divBase.height.isMatchParent
+    val widthBounds = if (isWidthWrapContent && matchParentWidth) {
+        divBase.width.observeMatchParentBounds()
+    } else {
+        UnboundedMatchParentBounds
+    }
+    val heightBounds = if (isHeightWrapContent && matchParentHeight) {
+        divBase.height.observeMatchParentBounds()
+    } else {
+        UnboundedMatchParentBounds
+    }
+    val horizontalMargins = if (isWidthWrapContent && matchParentWidth) {
+        divBase.margins.observeHorizontalInsets()
+    } else {
+        ZeroMargins
+    }
+    val verticalMargins = if (isHeightWrapContent && matchParentHeight) {
+        divBase.margins.observeVerticalInsets()
+    } else {
+        ZeroMargins
+    }
+    return OverlapChild(
+        alignment = resolveOverlapChildAlignment(
+            defaultHorizontal = defaultHorizontal,
+            defaultVertical = defaultVertical,
+        ),
+        matchParentWidth = matchParentWidth,
+        matchParentHeight = matchParentHeight,
+        hasPositiveFixedHeight = isWidthWrapContent && matchParentWidth &&
+            divBase.height.observeIsPositiveFixedSize(),
+        minWidth = widthBounds.minSize,
+        maxWidth = widthBounds.maxSize,
+        minHeight = heightBounds.minSize,
+        maxHeight = heightBounds.maxSize,
+        horizontalMarginStart = horizontalMargins.first,
+        horizontalMarginEnd = horizontalMargins.second,
+        verticalMarginTop = verticalMargins.first,
+        verticalMarginBottom = verticalMargins.second,
+    )
 }
 
 private fun overlapMeasurePolicy(

@@ -34,4 +34,8 @@ internal class DivLocalComponentStorage @Inject constructor() {
             }
         }
     }
+
+    fun remove(divs: Set<DivBase>) {
+        retain(items.keys - divs)
+    }
 }

@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.collection.observeItems
+import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
@@ -38,28 +40,35 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val itemSpacing = data.itemSpacing.observedValue()
     val separator = data.separator
     val separatorVisibility = separator.resolveSeparatorVisibility()
-    val visibleItems = data.visibleItems()
+    val items = data.observeItems()
+    val visibleItems = items.observeVisible()
 
     val supportsMainAxisWeight = !data.width.isWrapContent
     val isCrossAxisWrapContent = data.height is DivSize.WrapContent
-    var hasWeightedChildren = false
-    var weightedChildrenMargins = 0.dp
+    var foundWeightedChildren = false
+    var totalWeightedChildrenMargins = 0.dp
     var needsCrossAxisIntrinsicSize = false
-    var hasCrossAxisSizingChild = false
+    var foundCrossAxisSizingChild = false
     for (item in visibleItems) {
         val child = item.value()
         if (supportsMainAxisWeight && child.width.isMatchParent) {
-            hasWeightedChildren = true
-            weightedChildrenMargins += child.observeHorizontalMarginsSum()
+            foundWeightedChildren = true
+            totalWeightedChildrenMargins += child.observeHorizontalMarginsSum(
+                component = items.components?.get(item)
+            )
         }
         if (isCrossAxisWrapContent) {
             if (child.height.isMatchParent) {
                 needsCrossAxisIntrinsicSize = true
             } else {
-                hasCrossAxisSizingChild = true
+                foundCrossAxisSizingChild = true
             }
         }
     }
+
+    val hasWeightedChildren = foundWeightedChildren
+    val weightedChildrenMargins = totalWeightedChildrenMargins
+    val hasCrossAxisSizingChild = foundCrossAxisSizingChild
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
@@ -80,6 +89,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     ) {
         LinearContainer(
             items = visibleItems,
+            components = items.components,
             separator = separator,
             separatorVisibility = separatorVisibility,
             renderSeparator = { separatorData ->
@@ -88,16 +98,16 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
             renderSpacing = {
                 if (itemSpacing > 0) Spacer(Modifier.width(itemSpacing.toDp()))
             },
-        ) { childDiv ->
+        ) { item ->
             HorizontalChildItem(
-                childDiv,
+                item,
                 data.width,
                 alignByBaseline = verticalAlignment == DivContentAlignmentVertical.BASELINE &&
-                    !(isCrossAxisWrapContent && childDiv.value().height.isMatchParent),
+                    !(isCrossAxisWrapContent && item.value().height.isMatchParent),
                 // A match-parent child must not define a wrap-content cross axis when a sibling
                 // can define it. Without such a sibling, legacy DivKit treats it as wrap-content.
                 excludeCrossAxisFromIntrinsics = hasCrossAxisSizingChild &&
-                    childDiv.value().height.isMatchParent,
+                    item.value().height.isMatchParent,
                 hasWeightedChildren,
                 weightedChildrenMargins,
                 defaultHorizontalAlignment = defaultHorizontalAlignment,
@@ -109,7 +119,7 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
 
 @Composable
 private fun RowScope.HorizontalChildItem(
-    item: Div,
+    div: Div,
     containerMainSize: DivSize,
     alignByBaseline: Boolean,
     excludeCrossAxisFromIntrinsics: Boolean,
@@ -118,7 +128,7 @@ private fun RowScope.HorizontalChildItem(
     defaultHorizontalAlignment: Alignment.Horizontal,
     defaultVerticalAlignment: Alignment.Vertical,
 ) {
-    val divBase = item.value()
+    val divBase = div.value()
     val isWeightedChild = divBase.width.isMatchParent && !containerMainSize.isWrapContent
 
     var modifier = Modifier
@@ -133,7 +143,7 @@ private fun RowScope.HorizontalChildItem(
                 weightedChildrenMargins
             )
         )
-        .then(observeVerticalChildModifier(item, alignByBaseline = alignByBaseline))
+        .then(observeVerticalChildModifier(div, alignByBaseline = alignByBaseline))
 
     if (isWeightedChild) {
         val (startMargin, endMargin) = divBase.margins.observeHorizontalInsets()
@@ -141,7 +151,7 @@ private fun RowScope.HorizontalChildItem(
 
         if (startMargin > 0.dp) Spacer(Modifier.width(startMargin))
         DivBlockView(
-            data = item,
+            data = div,
             modifier = modifier,
             applyMargins = false,
             defaultHorizontalAlignment = defaultHorizontalAlignment,
@@ -150,7 +160,7 @@ private fun RowScope.HorizontalChildItem(
         if (endMargin > 0.dp) Spacer(Modifier.width(endMargin))
     } else {
         DivBlockView(
-            data = item,
+            data = div,
             modifier = modifier,
             defaultHorizontalAlignment = defaultHorizontalAlignment,
             defaultVerticalAlignment = defaultVerticalAlignment,

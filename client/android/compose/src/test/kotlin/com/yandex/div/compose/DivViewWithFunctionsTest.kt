@@ -1,14 +1,17 @@
 package com.yandex.div.compose
 
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.text
+import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
 import com.yandex.div2.DivEvaluableType
 import com.yandex.div2.DivFunction
@@ -100,6 +103,27 @@ class DivViewWithFunctionsTest {
         rule.onNodeWithTag("title").assertTextEquals("len('123') = 20")
     }
 
+    @Test
+    fun `container resolves the visibility of a child with a local function in its scope`() {
+        setContent(
+            container(
+                items = listOf(
+                    text(
+                        id = "title",
+                        text = constant("Hello!"),
+                        functions = listOf(isHiddenFunction("@{false}")),
+                        visibility = visibilityExpression(
+                            "@{isHidden() ? 'gone' : 'visible'}"
+                        )
+                    )
+                )
+            ),
+            functions = listOf(isHiddenFunction("@{true}"))
+        )
+
+        rule.onNodeWithTag("title").assertIsDisplayed()
+    }
+
     private fun setContent(
         content: Div,
         functions: List<DivFunction>? = null,
@@ -118,5 +142,14 @@ private fun getMessageFunction(body: String): DivFunction {
         body = body,
         name = "getMessage",
         returnType = DivEvaluableType.STRING
+    )
+}
+
+private fun isHiddenFunction(body: String): DivFunction {
+    return DivFunction(
+        arguments = listOf(),
+        body = body,
+        name = "isHidden",
+        returnType = DivEvaluableType.BOOLEAN
     )
 }

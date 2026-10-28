@@ -8,8 +8,10 @@ import com.yandex.div.compose.DivException
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.actions.bind
 import com.yandex.div.compose.animation.observe
+import com.yandex.div.compose.collection.CollectionItemScopeStorage
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivViewComponent
+import com.yandex.div.compose.dagger.declaresLocalScope
 import com.yandex.div.compose.haptics.bind
 import com.yandex.div.compose.layoutprovider.observe
 import com.yandex.div.compose.pager.DivPagerStateStorage
@@ -17,13 +19,14 @@ import com.yandex.div.compose.patch.observe
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.timers.observe
 import com.yandex.div.compose.triggers.observe
+import com.yandex.div.compose.variables.ScopedVariableProvider
+import com.yandex.div.compose.variables.VariableAndConstantProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
-import com.yandex.div2.DivVariable
 
 internal class DivViewContext(
     internal val component: DivViewComponent
@@ -35,6 +38,9 @@ internal class DivViewContext(
 
     val rootDiv: Div?
         get() = states.firstOrNull()?.div
+
+    val collectionItemScopeStorage: CollectionItemScopeStorage
+        get() = component.collectionItemScopeStorage
 
     val compositionKeyStorage: CompositionKeyStorage
         get() = component.compositionKeyStorage
@@ -80,6 +86,19 @@ internal class DivViewContext(
         rootLocalComponent.triggerStorage.observe()
     }
 
+    /**
+     * The scope the expressions of [data] itself are resolved in: [parentComponent] extended with
+     * the variables, functions and triggers [data] declares. Elements declaring none keep
+     * [parentComponent], so the scope of an element can be resolved outside its own composition —
+     * a container reads the visibility and the margins of a child on the child's behalf and has to
+     * use the same scope the child is rendered in.
+     */
+    fun getOwnComponent(
+        data: DivBase,
+        parentComponent: DivLocalComponent
+    ): DivLocalComponent =
+        if (data.declaresLocalScope) getLocalComponent(data, parentComponent) else parentComponent
+
     fun getLocalComponent(
         data: DivBase,
         parentComponent: DivLocalComponent,
@@ -89,39 +108,46 @@ internal class DivViewContext(
         }
 
         val functions = data.functions.orEmpty().toLocalFunctions()
+        val functionProvider = parentComponent.functionProvider + functions
         val variables = data.variables.orEmpty()
-        return createLocalComponent(
-            variableController = if (variables.isEmpty()) {
-                parentComponent.variableController
-            } else {
-                DivVariableController(parentComponent.variableController)
-            },
-            functionProvider = parentComponent.functionProvider + functions,
-            variables = variables
-        ).also { localComponent ->
-            component.localComponentStorage.put(data, localComponent)
-            data.variableTriggers.orEmpty().forEach(localComponent.triggerStorage::add)
-        }
-    }
-
-    private fun createLocalComponent(
-        variableController: DivVariableController,
-        functionProvider: FunctionProviderDecorator,
-        variables: List<DivVariable>,
-    ): DivLocalComponent {
-        val localComponent = component.localComponent().build(
-            functionProvider = functionProvider,
-            variableController = variableController
-        )
-
-        variables.forEach { variableData ->
-            localComponent.variableAdapter.convert(variableData)?.let {
-                variableController.declare(it)
+        val parentProvider = parentComponent.variableProvider
+        val localComponent = if (variables.isEmpty()) {
+            buildLocalComponent(parentProvider, functionProvider)
+        } else {
+            val variableProvider = ScopedVariableProvider(
+                controller = DivVariableController(parentProvider.controller),
+                parent = parentProvider,
+            )
+            buildLocalComponent(variableProvider, functionProvider).also { localComponent ->
+                variables.forEach { variableData ->
+                    localComponent.variableAdapter.convert(variableData)
+                        ?.let(variableProvider::declare)
+                }
             }
         }
-
+        component.localComponentStorage.put(data, localComponent)
+        data.variableTriggers.orEmpty().forEach(localComponent.triggerStorage::add)
         return localComponent
     }
+
+    fun createLocalComponent(
+        parentComponent: DivLocalComponent,
+        variableProvider: VariableAndConstantProvider,
+    ): DivLocalComponent = buildLocalComponent(variableProvider, parentComponent.functionProvider)
+
+    fun releaseComponents(divs: Set<DivBase>) {
+        component.localComponentStorage.remove(divs)
+        component.compositionKeyStorage.remove(divs)
+        component.pagerStateStorage.remove(divs)
+    }
+
+    private fun buildLocalComponent(
+        variableProvider: VariableAndConstantProvider,
+        functionProvider: FunctionProviderDecorator,
+    ): DivLocalComponent = component.localComponent().build(
+        functionProvider = functionProvider,
+        variableProvider = variableProvider,
+    )
 }
 
 internal val LocalDivViewContext = staticCompositionLocalOf<DivViewContext> {

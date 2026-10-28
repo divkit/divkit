@@ -4,7 +4,6 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivTimer
@@ -25,8 +24,7 @@ internal class TimerController(
     private val expressionResolver: ExpressionResolver,
     private val mainCoroutineScope: CoroutineScope,
     private val reporter: DivReporter,
-    private val timeSource: TimeSource,
-    private val variableController: DivVariableController
+    private val timeSource: TimeSource
 ) {
     private val valueVariable: Variable.IntegerVariable?
 
@@ -126,7 +124,7 @@ internal class TimerController(
     private fun getValueVariable(): Variable.IntegerVariable? {
         val variableName = timer.valueVariable ?: return null
 
-        val variable = variableController.get(variableName)
+        val variable = expressionResolver.getVariable(variableName)
         if (variable == null) {
             reporter.reportError("Timer variable is not declared: $variableName")
             return null

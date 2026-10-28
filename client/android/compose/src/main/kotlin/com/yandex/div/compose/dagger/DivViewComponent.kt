@@ -5,6 +5,7 @@ import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.animation.AnimatorStorage
+import com.yandex.div.compose.collection.CollectionItemScopeStorage
 import com.yandex.div.compose.context.CompositionKeyStorage
 import com.yandex.div.compose.context.DivLocalComponentStorage
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
@@ -40,6 +41,7 @@ internal interface DivViewComponent {
     val actionHandler: DivActionHandler
     val actionMenuHolder: ActionMenuHolder
     val animatorStorage: AnimatorStorage
+    val collectionItemScopeStorage: CollectionItemScopeStorage
     val compositionKeyStorage: CompositionKeyStorage
     val coroutineScopeProvider: DivViewCoroutineScopeProvider
     val data: DivData

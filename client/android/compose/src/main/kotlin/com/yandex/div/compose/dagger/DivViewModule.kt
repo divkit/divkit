@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.compose.storedvalues.LazyStoredValuesStorage
+import com.yandex.div.compose.variables.ScopedVariableProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
@@ -39,18 +40,19 @@ internal interface DivViewModule {
             @Named(Names.HOST_VARIABLES)
             hostVariableController: DivVariableController,
         ): DivLocalComponent {
-            val variableController = DivVariableController(hostVariableController)
+            val variableProvider = ScopedVariableProvider(
+                controller = DivVariableController(hostVariableController),
+                parent = null,
+            )
             val baseFunctionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider)
             val localFunctions = data.functions.orEmpty().toLocalFunctions()
             val component = componentBuilder.build(
                 functionProvider = baseFunctionProvider + localFunctions,
-                variableController = variableController,
+                variableProvider = variableProvider,
             )
 
             data.variables.orEmpty().forEach { variableData ->
-                component.variableAdapter.convert(variableData)?.let {
-                    variableController.declare(it)
-                }
+                component.variableAdapter.convert(variableData)?.let(variableProvider::declare)
             }
 
             return component

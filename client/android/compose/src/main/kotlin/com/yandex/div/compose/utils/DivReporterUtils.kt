@@ -16,6 +16,14 @@ internal fun reportError(message: String) {
 }
 
 @Composable
+internal fun reportError(error: Exception) {
+    val reporter = LocalComponent.current.reporter
+    LaunchedEffect(error) {
+        reporter.reportError(error)
+    }
+}
+
+@Composable
 internal fun reportWarning(message: String) {
     val reporter = LocalComponent.current.reporter
     LaunchedEffect(message) {

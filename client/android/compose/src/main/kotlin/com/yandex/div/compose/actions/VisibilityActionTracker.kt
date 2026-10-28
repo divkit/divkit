@@ -23,23 +23,25 @@ internal class VisibilityActionTracker @Inject constructor(
     @Named(Names.MAIN_COROUTINE_SCOPE)
     private val mainCoroutineScope: CoroutineScope
 ) {
-    private val counter = mutableMapOf<DivSightAction, Int>()
-    private val pendingActions = mutableMapOf<DivSightAction, Job>()
-    private val eligibleDisappearActions = mutableMapOf<DivDisappearAction, DivActionHandlingContext>()
+    private val pendingActions = mutableMapOf<TrackedAction, Job>()
+    private val eligibleDisappearActions = mutableSetOf<TrackedAction>()
 
-    fun isLimitReached(action: DivSightAction, limit: Int): Boolean {
-        return limit > 0 && ((counter[action] ?: 0) >= limit)
-    }
+    fun isLimitReached(
+        context: DivActionHandlingContext,
+        action: DivSightAction,
+        limit: Int
+    ): Boolean = limit > 0 && (context.sightActionCounts[action] ?: 0) >= limit
 
     fun onVisibilityChanged(
         context: DivActionHandlingContext,
         action: DivVisibilityAction,
         isVisible: Boolean
     ) {
+        val trackedAction = TrackedAction(context, action)
         if (!isVisible) {
-            cancelAction(action)
+            cancelAction(trackedAction)
         } else {
-            scheduleAction(context, action)
+            scheduleAction(trackedAction)
         }
     }
 
@@ -48,60 +50,65 @@ internal class VisibilityActionTracker @Inject constructor(
         action: DivDisappearAction,
         isVisible: Boolean
     ) {
+        val trackedAction = TrackedAction(context, action)
         if (isVisible) {
-            eligibleDisappearActions[action] = context
-            cancelAction(action)
+            eligibleDisappearActions.add(trackedAction)
+            cancelAction(trackedAction)
         } else {
-            scheduleAction(context, action)
+            scheduleAction(trackedAction)
         }
     }
 
     fun onContentUnbound() {
-        val actions = eligibleDisappearActions.toMap()
+        val actions = eligibleDisappearActions.toList()
         eligibleDisappearActions.clear()
-        actions.keys.forEach(::cancelAction)
-        actions.forEach { (action, context) ->
-            triggerIfNeeded(context, action)
-        }
+        actions.forEach(::cancelAction)
+        actions.forEach(::triggerIfNeeded)
     }
 
-    private fun triggerIfNeeded(
-        context: DivActionHandlingContext,
-        action: DivSightAction
-    ) {
+    private fun triggerIfNeeded(trackedAction: TrackedAction) {
+        val (context, action) = trackedAction
         if (action is DivDisappearAction) {
-            eligibleDisappearActions.remove(action)
+            eligibleDisappearActions.remove(trackedAction)
         }
         val limit = action.logLimit.evaluate(context.expressionResolver).toInt()
-        val count = counter[action] ?: 0
-        val shouldTrigger = limit == 0 || count < limit
-        if (shouldTrigger) {
-            counter[action] = count + 1
+        if (limit == 0) {
+            actionHandler.handle(context, action)
+            return
+        }
+        val count = context.sightActionCounts[action] ?: 0
+        if (count < limit) {
+            context.sightActionCounts[action] = count + 1
             actionHandler.handle(context, action)
         }
     }
 
-    private fun scheduleAction(
-        context: DivActionHandlingContext,
-        action: DivSightAction
-    ) {
-        cancelAction(action)
+    private fun scheduleAction(trackedAction: TrackedAction) {
+        cancelAction(trackedAction)
+        val (context, action) = trackedAction
         val duration = action.duration.evaluate(context.expressionResolver)
         if (duration == 0L) {
-            triggerIfNeeded(context, action)
+            triggerIfNeeded(trackedAction)
             return
         }
-        pendingActions[action] = mainCoroutineScope.launch {
+        pendingActions[trackedAction] = mainCoroutineScope.launch {
             delay(duration)
-            pendingActions.remove(action)
-            triggerIfNeeded(context, action)
+            pendingActions.remove(trackedAction)
+            triggerIfNeeded(trackedAction)
         }
     }
 
-    private fun cancelAction(action: DivSightAction) {
-        pendingActions.remove(action)?.cancel()
+    private fun cancelAction(trackedAction: TrackedAction) {
+        pendingActions.remove(trackedAction)?.cancel()
     }
 }
+
+/**
+
+ * A sight action together with the scope of the element that declares it.
+
+ */
+private data class TrackedAction(val context: DivActionHandlingContext, val action: DivSightAction)
 
 @SuppressLint("ComposableNaming")
 @Composable

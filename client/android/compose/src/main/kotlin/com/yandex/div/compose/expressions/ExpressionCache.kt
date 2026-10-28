@@ -1,8 +1,10 @@
 package com.yandex.div.compose.expressions
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateOf
+import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.DivLocalScope
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -124,5 +126,26 @@ internal class ExpressionCacheRef<T : Any>(
 
     override fun onAbandoned() {
         cache.abandon(entry)
+    }
+}
+
+/**
+ * Observes the expression in the scope of the given [component] instead of the current
+ * composition local — for reads made on behalf of a child element from its parent's composition,
+ * e.g. the container layout pre-pass over collection items.
+ */
+@Composable
+internal inline fun <reified T : Any> Expression<T>.observedValue(component: DivLocalComponent): T {
+    return observedValue(component, T::class)
+}
+
+@Composable
+internal fun <T : Any> Expression<T>.observedValue(
+    component: DivLocalComponent,
+    valueType: KClass<T>
+): T {
+    return when (this) {
+        is Expression.ConstantExpression -> evaluate(component.expressionResolver)
+        else -> cachedObservedValue(this, valueType, component.expressionCache)
     }
 }

@@ -10,7 +10,6 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -23,7 +22,7 @@ class VisibilityActionTrackerTest {
     private val testScope = TestScope()
 
     private val actionHandler = mock<DivActionHandler> {
-        on { handle(eq(actionHandlingContext), any<DivSightAction>()) } doAnswer {
+        on { handle(any<DivActionHandlingContext>(), any<DivSightAction>()) } doAnswer {
             handledActions.add(it.getArgument(1))
             Unit
         }
@@ -90,6 +89,7 @@ class VisibilityActionTrackerTest {
         }
 
         verifyHandled(action, times = 5)
+        assertTrue(actionHandlingContext.sightActionCounts.isEmpty())
     }
 
     @Test
@@ -146,21 +146,21 @@ class VisibilityActionTrackerTest {
     fun `isLimitReached() is false for new visibility action`() {
         val action = visibilityAction(limit = 1)
 
-        assertFalse(tracker.isLimitReached(action, limit = 1))
+        assertFalse(tracker.isLimitReached(actionHandlingContext, action, limit = 1))
     }
 
     @Test
     fun `isLimitReached() is false for infinite visibility action`() {
         val action = visibilityAction(limit = 0)
 
-        assertFalse(tracker.isLimitReached(action, limit = 0))
+        assertFalse(tracker.isLimitReached(actionHandlingContext, action, limit = 0))
     }
 
     @Test
     fun `isLimitReached() is false for infinite disappear action`() {
         val action = disappearAction(limit = 0)
 
-        assertFalse(tracker.isLimitReached(action, limit = 0))
+        assertFalse(tracker.isLimitReached(actionHandlingContext, action, limit = 0))
     }
 
     @Test
@@ -172,7 +172,7 @@ class VisibilityActionTrackerTest {
             wait(100)
         }
 
-        assertTrue(tracker.isLimitReached(action, limit = 3))
+        assertTrue(tracker.isLimitReached(actionHandlingContext, action, limit = 3))
     }
 
     @Test
@@ -184,7 +184,7 @@ class VisibilityActionTrackerTest {
             wait(100)
         }
 
-        assertFalse(tracker.isLimitReached(action, limit = 5))
+        assertFalse(tracker.isLimitReached(actionHandlingContext, action, limit = 5))
     }
 
     @Test
@@ -317,6 +317,20 @@ class VisibilityActionTrackerTest {
         wait(500)
 
         verifyNoActionsHandled()
+    }
+
+    @Test
+    fun `the same action is tracked separately for each context`() = testScope.runTest {
+        val action = visibilityAction(delayMs = 500)
+        val otherContext = ActionHandlerEnvironment().context
+
+        tracker.onVisibilityChanged(actionHandlingContext, action, isVisible = true)
+        tracker.onVisibilityChanged(otherContext, action, isVisible = true)
+        wait(500)
+
+        verifyHandled(action, times = 2)
+        assertTrue(tracker.isLimitReached(actionHandlingContext, action, limit = 1))
+        assertTrue(tracker.isLimitReached(otherContext, action, limit = 1))
     }
 
     private fun verifyHandled(action: DivSightAction, times: Int = 1) {

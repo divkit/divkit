@@ -51,8 +51,7 @@ internal class TimerStorage @Inject constructor(
                 expressionResolver = localComponent.expressionResolver,
                 mainCoroutineScope = mainCoroutineScope,
                 reporter = reporter,
-                timeSource = timeSource,
-                variableController = localComponent.variableController
+                timeSource = timeSource
             )
         }
     }

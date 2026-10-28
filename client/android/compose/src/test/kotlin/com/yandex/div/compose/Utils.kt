@@ -13,6 +13,8 @@ import com.yandex.div.compose.expressions.ExpressionCache
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.state.DivStateStorage
+import com.yandex.div.compose.variables.ScopedVariableProvider
+import com.yandex.div.compose.variables.VariableAndConstantProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
@@ -24,15 +26,20 @@ import org.mockito.kotlin.mock
 internal fun createExpressionResolver(
     reporter: DivReporter = TestReporter(),
     storedValueProvider: ScopedStoredValueProvider = mock(),
-    variableController: DivVariableController,
+    variableController: DivVariableController = DivVariableController(),
+    variableProvider: VariableAndConstantProvider = rootVariableProvider(variableController),
 ): DivComposeExpressionResolver {
     return DivComposeExpressionResolver(
         functionProvider = FunctionProviderDecorator(GeneratedBuiltinFunctionProvider),
         reporter = reporter,
         storedValueProvider = storedValueProvider,
-        variableController = variableController,
+        variableProvider = variableProvider,
     )
 }
+
+internal fun rootVariableProvider(
+    variableController: DivVariableController = DivVariableController(),
+): ScopedVariableProvider = ScopedVariableProvider(variableController, parent = null)
 
 internal fun mockViewContext(
     stateStorage: DivStateStorage = DivStateStorage(),
@@ -49,9 +56,10 @@ internal fun mockLocalComponent(
     variableController: DivVariableController = DivVariableController(),
     networkRestorationController: NetworkRestorationController? = null,
 ): DivLocalComponent {
+    val variableProvider = rootVariableProvider(variableController)
     val expressionResolver = createExpressionResolver(
         reporter = reporter,
-        variableController = variableController
+        variableProvider = variableProvider
     )
     val actionHandlingContext = DivActionHandlingContext(
         cardId = "test",
@@ -63,7 +71,7 @@ internal fun mockLocalComponent(
         on { this.expressionCache } doReturn expressionCache
         on { this.expressionResolver } doReturn expressionResolver
         on { this.reporter } doReturn reporter
-        on { this.variableController } doReturn variableController
+        on { this.variableProvider } doReturn variableProvider
         networkRestorationController?.let {
             on { this.networkRestorationController } doReturn it
         }

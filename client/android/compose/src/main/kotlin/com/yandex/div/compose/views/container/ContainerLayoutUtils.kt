@@ -8,13 +8,14 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.WithDivKey
+import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div2.Div
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivContainer
-import com.yandex.div2.DivVisibility
 
 @Composable
 internal fun DivContainer.Separator?.resolveSeparatorVisibility(): SeparatorVisibility {
@@ -51,13 +52,6 @@ internal data class SeparatorVisibility(
 
 internal fun SeparatorVisibility.effectiveItemSpacing(itemSpacing: Long): Long =
     if (hasAnySeparator) 0L else itemSpacing
-
-@Composable
-internal fun DivContainer.visibleItems(): List<Div> {
-    return items
-        ?.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
-        ?: emptyList()
-}
 
 @Composable
 internal fun RowScope.observeVerticalChildModifier(
@@ -98,6 +92,27 @@ internal fun Modifier.reduceMaxConstraint(
 
 @Composable
 internal inline fun LinearContainer(
+    items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
+    separator: DivContainer.Separator?,
+    separatorVisibility: SeparatorVisibility,
+    renderSeparator: @Composable (DivContainer.Separator) -> Unit,
+    renderSpacing: @Composable () -> Unit,
+    crossinline renderItem: @Composable (Div) -> Unit,
+) {
+    LinearContainerContent(
+        items = items,
+        separator = separator,
+        separatorVisibility = separatorVisibility,
+        renderSeparator = renderSeparator,
+        renderSpacing = renderSpacing,
+    ) { item ->
+        WithLocalComponent(components?.get(item)) { renderItem(item) }
+    }
+}
+
+@Composable
+private inline fun LinearContainerContent(
     items: List<Div>,
     separator: DivContainer.Separator?,
     separatorVisibility: SeparatorVisibility,

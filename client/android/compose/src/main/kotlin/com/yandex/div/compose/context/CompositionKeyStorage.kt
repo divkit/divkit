@@ -18,4 +18,8 @@ internal class CompositionKeyStorage @Inject constructor() {
     fun retain(divs: Set<DivBase>) {
         keys.keys.retainAll(divs)
     }
+
+    fun remove(divs: Set<DivBase>) {
+        keys.keys.removeAll(divs)
+    }
 }

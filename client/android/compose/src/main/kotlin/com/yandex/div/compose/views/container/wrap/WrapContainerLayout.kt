@@ -19,6 +19,10 @@ import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.collection.observeItems
+import com.yandex.div.compose.collection.observeVisible
+import com.yandex.div.compose.context.WithDivKey
+import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isRtlLayout
@@ -33,7 +37,6 @@ import com.yandex.div.compose.views.container.toCrossAxisHorizontalAlignment
 import com.yandex.div.compose.views.container.toCrossAxisVerticalAlignment
 import com.yandex.div.compose.views.container.toHorizontalArrangement
 import com.yandex.div.compose.views.container.toVerticalArrangement
-import com.yandex.div.compose.views.container.visibleItems
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
@@ -44,7 +47,8 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
     val wrapLayoutState = resolveWrapLayoutState(data, isHorizontal = true)
-    val visibleItems = data.visibleItems()
+    val items = data.observeItems()
+    val visibleItems = items.observeVisible()
     val separatorGeometry = rememberSeparatorGeometry(
         enabled = wrapLayoutState.hasSeparatorsToDraw && visibleItems.isNotEmpty(),
         childCount = visibleItems.size,
@@ -78,18 +82,23 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
             else -> horizontalAlignment.toCrossAxisHorizontalAlignment()
         }
         val defaultVerticalAlignment = verticalAlignment.toCrossAxisVerticalAlignment()
+        val alignByBaseline = verticalAlignment == DivContentAlignmentVertical.BASELINE
         visibleItems.forEachIndexed { index, item ->
-            DivBlockView(
-                data = item,
-                // Match View's horizontal line gravity. Wrap children do not inherit the
-                // container's vertical content alignment.
-                defaultHorizontalAlignment = defaultHorizontalAlignment,
-                modifier = observeVerticalChildModifier(
-                    item = item,
-                    defaultAlignment = defaultVerticalAlignment,
-                    alignByBaseline = verticalAlignment == DivContentAlignmentVertical.BASELINE,
-                ).trackChildPlacement(separatorGeometry, index),
-            )
+            WithDivKey(item) {
+                WithLocalComponent(items.components?.get(item)) {
+                    DivBlockView(
+                        data = item,
+                        // Match View's horizontal line gravity. Wrap children do not inherit the
+                        // container's vertical content alignment.
+                        defaultHorizontalAlignment = defaultHorizontalAlignment,
+                        modifier = observeVerticalChildModifier(
+                            item = item,
+                            defaultAlignment = defaultVerticalAlignment,
+                            alignByBaseline = alignByBaseline,
+                        ).trackChildPlacement(separatorGeometry, index),
+                    )
+                }
+            }
         }
     }
 }
@@ -100,7 +109,8 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
     val horizontalAlignment = data.contentAlignmentHorizontal.observedValue()
     val verticalAlignment = data.contentAlignmentVertical.observedValue()
     val wrapLayoutState = resolveWrapLayoutState(data, isHorizontal = false)
-    val visibleItems = data.visibleItems()
+    val items = data.observeItems()
+    val visibleItems = items.observeVisible()
     val separatorGeometry = rememberSeparatorGeometry(
         enabled = wrapLayoutState.hasSeparatorsToDraw && visibleItems.isNotEmpty(),
         childCount = visibleItems.size,
@@ -134,15 +144,20 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
             else -> verticalAlignment.toCrossAxisVerticalAlignment()
         }
         visibleItems.forEachIndexed { index, item ->
-            DivBlockView(
-                data = item,
-                // Match View's vertical line gravity. Wrap children do not inherit the
-                // container's horizontal content alignment.
-                defaultVerticalAlignment = defaultVerticalAlignment,
-                modifier = Modifier
-                    .align(item.observeHorizontalChildAlignment() ?: defaultHorizontalAlignment)
-                    .trackChildPlacement(separatorGeometry, index),
-            )
+            WithDivKey(item) {
+                WithLocalComponent(items.components?.get(item)) {
+                    val childAlignment = item.observeHorizontalChildAlignment()
+                    DivBlockView(
+                        data = item,
+                        // Match View's vertical line gravity. Wrap children do not inherit the
+                        // container's horizontal content alignment.
+                        defaultVerticalAlignment = defaultVerticalAlignment,
+                        modifier = Modifier
+                            .align(childAlignment ?: defaultHorizontalAlignment)
+                            .trackChildPlacement(separatorGeometry, index),
+                    )
+                }
+            }
         }
     }
 }

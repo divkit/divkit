@@ -98,10 +98,10 @@ private fun <T : Any> rememberVariableMutableState(
     validate: (Variable) -> String?,
 ): MutableState<T>? {
     val localComponent = LocalComponent.current
-    val variableController = localComponent.variableController
+    val variableProvider = localComponent.variableProvider
     val reporter = localComponent.reporter
-    val variable = remember(variableName, variableController) {
-        val variable = variableController.get(variableName)
+    val variable = remember(variableName, variableProvider) {
+        val variable = variableProvider.getVariable(variableName)
         if (variable == null) {
             reporter.reportError(missingVariable(variableName))
             null
