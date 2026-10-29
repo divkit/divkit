@@ -5,6 +5,9 @@
     "ios",
     "web"
   ],
+  "configuration": {
+    "fail_on_parsing_error": false
+  },
   "div_data": {
     "templates": {
       "text_block": {

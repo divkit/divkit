@@ -39,6 +39,7 @@ internal fun DivPagerView(
             initialPage = 0,
             infiniteScroll = false,
         )
+        BindPagerScrollActions(id = data.id, items = items)
         Box(modifier = modifier)
         return
     }
