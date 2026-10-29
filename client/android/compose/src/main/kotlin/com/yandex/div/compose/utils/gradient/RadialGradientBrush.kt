@@ -6,11 +6,10 @@ import android.graphics.Shader
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.ShaderBrush
+import com.yandex.div.render.common.gradient.GradientGeometry
+import com.yandex.div.render.common.gradient.GradientGeometry.RelativeRadius
 import com.yandex.div.render.common.text.AnimatedTextGradientMath
 import com.yandex.div2.DivRadialGradientRelativeRadius
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 @Immutable
 internal data class RadialGradientBrush(
@@ -43,38 +42,27 @@ internal data class RadialGradientBrush(
         val width = size.width
         val height = size.height
 
-        val centerX = when (centerX) {
-            is Center.Fixed -> centerX.value
-            is Center.Relative -> centerX.fraction * width
-        }
-        val centerY = when (centerY) {
-            is Center.Fixed -> centerY.value
-            is Center.Relative -> centerY.fraction * height
-        }
+        val centerX = centerX.absoluteValue(width)
+        val centerY = centerY.absoluteValue(height)
 
         val radius = when (radius) {
             is Radius.Fixed -> radius.value
-            is Radius.Relative -> when (radius.type) {
-                DivRadialGradientRelativeRadius.Value.NEAREST_CORNER -> minOf(
-                    distTo(centerX, centerY, 0f, 0f), distTo(centerX, centerY, width, 0f),
-                    distTo(centerX, centerY, width, height), distTo(centerX, centerY, 0f, height),
-                )
-
-                DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER -> maxOf(
-                    distTo(centerX, centerY, 0f, 0f), distTo(centerX, centerY, width, 0f),
-                    distTo(centerX, centerY, width, height), distTo(centerX, centerY, 0f, height),
-                )
-
-                DivRadialGradientRelativeRadius.Value.NEAREST_SIDE -> minOf(
-                    distToVerticalSide(centerX, 0f), distToVerticalSide(centerX, width),
-                    distToHorizontalSide(centerY, 0f), distToHorizontalSide(centerY, height),
-                )
-
-                DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE -> maxOf(
-                    distToVerticalSide(centerX, 0f), distToVerticalSide(centerX, width),
-                    distToHorizontalSide(centerY, 0f), distToHorizontalSide(centerY, height),
-                )
-            }
+            is Radius.Relative -> GradientGeometry.relativeRadius(
+                type = when (radius.type) {
+                    DivRadialGradientRelativeRadius.Value.NEAREST_CORNER ->
+                        RelativeRadius.NEAREST_CORNER
+                    DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER ->
+                        RelativeRadius.FARTHEST_CORNER
+                    DivRadialGradientRelativeRadius.Value.NEAREST_SIDE ->
+                        RelativeRadius.NEAREST_SIDE
+                    DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE ->
+                        RelativeRadius.FARTHEST_SIDE
+                },
+                centerX = centerX,
+                centerY = centerY,
+                width = width,
+                height = height,
+            )
         }
 
         return RadialGradient(
@@ -93,16 +81,17 @@ internal data class RadialGradientBrush(
         }
     }
 
-    private fun distTo(centerX: Float, centerY: Float, x: Float, y: Float): Float {
-        return sqrt((centerX - x).pow(2) + (centerY - y).pow(2))
-    }
-
-    private fun distToVerticalSide(centerX: Float, x: Float): Float {
-        return abs(centerX - x)
-    }
-
-    private fun distToHorizontalSide(centerY: Float, y: Float): Float {
-        return abs(centerY - y)
+    private fun Center.absoluteValue(parentSize: Float): Float = when (this) {
+        is Center.Fixed -> GradientGeometry.absoluteCenter(
+            value = value,
+            isRelative = false,
+            parentSize = parentSize,
+        )
+        is Center.Relative -> GradientGeometry.absoluteCenter(
+            value = fraction,
+            isRelative = true,
+            parentSize = parentSize,
+        )
     }
 
     private companion object {

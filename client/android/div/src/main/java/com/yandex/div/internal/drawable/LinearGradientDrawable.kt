@@ -9,10 +9,7 @@ import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import com.yandex.div.internal.graphics.Colormap
-import kotlin.math.PI
-import kotlin.math.abs
-import kotlin.math.cos
-import kotlin.math.sin
+import com.yandex.div.render.common.gradient.GradientGeometry
 
 /**
  * Gradient drawable with different angle. (In android linear gradient drawable angle is multiple 45)
@@ -61,21 +58,13 @@ internal class LinearGradientDrawable(
             width: Int,
             height: Int
         ): LinearGradient {
-            val halfWidth = width / 2.0f
-            val halfHeight = height / 2.0f
-            val angleRad = angle.toRadian()
-            val gradientWidth = abs(width * cos(angleRad)) + abs(height * sin(angleRad))
-            val widthDelta = (cos(angleRad) * gradientWidth / 2.0f).snap(to = 0.0f)
-            val heightDelta = (sin(angleRad) * gradientWidth / 2.0f).snap(to = 0.0f)
-            return LinearGradient(halfWidth - widthDelta, halfHeight + heightDelta,
-                halfWidth + widthDelta, halfHeight - heightDelta,
-                colors, positions, Shader.TileMode.CLAMP)
+            return GradientGeometry.linearEndpoints(
+                angleDegrees = angle.toDouble(),
+                width = width.toFloat(),
+                height = height.toFloat(),
+            ) { startX, startY, endX, endY ->
+                LinearGradient(startX, startY, endX, endY, colors, positions, Shader.TileMode.CLAMP)
+            }
         }
-
-        private fun Float.toRadian() = (this * PI / 180f).toFloat()
     }
-}
-
-private fun Float.snap(to: Float, sensitivity: Float = 0.0001f): Float {
-    return if (abs(to - this) <= sensitivity) to else this
 }

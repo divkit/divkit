@@ -8,9 +8,8 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
-import kotlin.math.abs
-import kotlin.math.pow
-import kotlin.math.sqrt
+import com.yandex.div.render.common.gradient.GradientGeometry
+import com.yandex.div.render.common.gradient.GradientGeometry.RelativeRadius
 
 typealias CordX = Float
 typealias CordY = Float
@@ -69,51 +68,35 @@ internal class RadialGradientDrawable(
                 height: Int
         ): RadialGradient {
             fun Center.value(parentSize: Int) = when (this) {
-                is Center.Fixed -> this.value
-                is Center.Relative -> this.value * parentSize
+                is Center.Fixed -> GradientGeometry.absoluteCenter(
+                    value = value,
+                    isRelative = false,
+                    parentSize = parentSize.toFloat(),
+                )
+                is Center.Relative -> GradientGeometry.absoluteCenter(
+                    value = value,
+                    isRelative = true,
+                    parentSize = parentSize.toFloat(),
+                )
             }
 
             val absoluteCenterX = centerX.value(width)
             val absoluteCenterY = centerY.value(height)
 
-            val rightCord = width.toFloat()
-            val leftCord = 0.0f
-            val topCord = 0.0f
-            val bottomCord = height.toFloat()
-
-            fun distTo(x: CordX, y: CordY): Float =
-                sqrt((absoluteCenterX - x).pow(2) + (absoluteCenterY - y).pow(2))
-
-            fun distToVerticalSide(x: CordX): Float = abs(absoluteCenterX - x)
-            fun distToHorizontalSide(y: CordY): Float = abs(absoluteCenterY - y)
-
-            val distancesToCorners by lazy {
-                arrayOf(
-                    distTo(leftCord, topCord),
-                    distTo(rightCord, topCord),
-                    distTo(rightCord, bottomCord),
-                    distTo(leftCord, bottomCord),
-                )
-            }
-            val distancesToSides by lazy {
-                arrayOf(
-                    distToVerticalSide(leftCord),
-                    distToVerticalSide(rightCord),
-                    distToHorizontalSide(bottomCord),
-                    distToHorizontalSide(topCord),
-                )
-            }
-
             val radiusPx = when (radius) {
                 is Radius.Fixed -> radius.value
-                is Radius.Relative -> {
-                    when (radius.type) {
-                        Radius.Relative.Type.NEAREST_CORNER -> distancesToCorners.minOrNull()!!
-                        Radius.Relative.Type.FARTHEST_CORNER -> distancesToCorners.maxOrNull()!!
-                        Radius.Relative.Type.NEAREST_SIDE -> distancesToSides.minOrNull()!!
-                        Radius.Relative.Type.FARTHEST_SIDE -> distancesToSides.maxOrNull()!!
-                    }
-                }
+                is Radius.Relative -> GradientGeometry.relativeRadius(
+                    type = when (radius.type) {
+                        Radius.Relative.Type.NEAREST_CORNER -> RelativeRadius.NEAREST_CORNER
+                        Radius.Relative.Type.FARTHEST_CORNER -> RelativeRadius.FARTHEST_CORNER
+                        Radius.Relative.Type.NEAREST_SIDE -> RelativeRadius.NEAREST_SIDE
+                        Radius.Relative.Type.FARTHEST_SIDE -> RelativeRadius.FARTHEST_SIDE
+                    },
+                    centerX = absoluteCenterX,
+                    centerY = absoluteCenterY,
+                    width = width.toFloat(),
+                    height = height.toFloat(),
+                )
             }
 
             return RadialGradient(
