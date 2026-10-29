@@ -11,10 +11,14 @@
       {
         "state_id": 0,
         "div": {
-          "type": "separator",
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 165
+          },
           "height": {
             "type": "fixed",
-            "value": 300
+            "value": 165
           },
           "background": [
             {
