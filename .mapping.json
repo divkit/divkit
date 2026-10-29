@@ -10594,6 +10594,7 @@
   "client/web/divkit/tests/expressions/perf.ts":"divkit/public/client/web/divkit/tests/expressions/perf.ts",
   "client/web/divkit/tests/expressions/signatures.test.ts":"divkit/public/client/web/divkit/tests/expressions/signatures.test.ts",
   "client/web/divkit/tests/expressions/simpleUnescapeString.test.ts":"divkit/public/client/web/divkit/tests/expressions/simpleUnescapeString.test.ts",
+  "client/web/divkit/tests/extensions/lottie.test.ts":"divkit/public/client/web/divkit/tests/extensions/lottie.test.ts",
   "client/web/divkit/tests/hermione/commands/page-expectations/expectations/no-client-errors.js":"divkit/public/client/web/divkit/tests/hermione/commands/page-expectations/expectations/no-client-errors.js",
   "client/web/divkit/tests/hermione/commands/page-expectations/expectations/no-strange-keywords.js":"divkit/public/client/web/divkit/tests/hermione/commands/page-expectations/expectations/no-strange-keywords.js",
   "client/web/divkit/tests/hermione/commands/page-expectations/index.js":"divkit/public/client/web/divkit/tests/hermione/commands/page-expectations/index.js",

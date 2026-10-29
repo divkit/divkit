@@ -88,3 +88,15 @@ import Lottie from 'lottie-web/build/player/lottie';
 
 map.set('lottie', lottieExtensionBuilder(Lottie.loadAnimation));
 ```
+
+The extension starts and pauses animations itself, so a player other than `lottie-web` should give animations with `play` and `pause`.
+
+The player can also be loaded lazily, with the first animation on the page. Pass `loadPlayer`, which resolves with the player; the extension loads it together with the animation file and draws the animation once both are loaded. `loadPlayer` is called for every animation, so it should load the player only once, as a dynamic `import` does:
+
+```js
+import { lottieExtensionBuilder } from '@divkitframework/divkit/client';
+
+map.set('lottie', lottieExtensionBuilder({
+    loadPlayer: () => import('lottie-web/build/player/lottie_light').then(module => module.default)
+}));
+```

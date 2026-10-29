@@ -20,8 +20,11 @@ interface AnimationItem {
 
     addEventListener(type: string, cb: () => void): void;
     destroy(): void;
+    play(): void;
+    pause(): void;
     stop(): void;
     setDirection(direction: number): void;
+    goToAndStop(value: number, isFrame?: boolean): void;
     goToAndPlay(value: number, isFrame?: boolean): void;
 }
 
@@ -30,6 +33,10 @@ interface LoadAnimationParamsWidthPath {
     path: string;
     renderer: 'svg' | 'html' | 'canvas';
     loop: boolean | number | undefined;
+    autoplay?: boolean;
+    rendererSettings: {
+        preserveAspectRatio: string;
+    };
 }
 
 interface LoadAnimationParamsWidthData {
@@ -37,11 +44,26 @@ interface LoadAnimationParamsWidthData {
     animationData: any;
     renderer: 'svg' | 'html' | 'canvas';
     loop: boolean | number | undefined;
+    autoplay?: boolean;
+    rendererSettings: {
+        preserveAspectRatio: string;
+    };
 }
 
 type LoadAnimation = (opts: LoadAnimationParamsWidthPath | LoadAnimationParamsWidthData) => AnimationItem;
 
-export function lottieExtensionBuilder(loadAnimation: LoadAnimation): typeof Lottie;
+interface LottiePlayer {
+    loadAnimation: LoadAnimation;
+}
+
+interface LazyLottiePlayer {
+    /**
+     * Loads the player. Called for every animation, so it should load the player only once, as a dynamic import does
+     */
+    loadPlayer(): Promise<LottiePlayer>;
+}
+
+export function lottieExtensionBuilder(player: LoadAnimation | LazyLottiePlayer): typeof Lottie;
 
 export type MarkdownProcessor = (markdown: string) => string;
 
