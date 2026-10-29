@@ -49,6 +49,10 @@ private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modi
 
 @Composable
 private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifier {
+    if (actions.isEmpty()) {
+        return this
+    }
+
     val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
     val actionHandlingContext = LocalComponent.current.actionHandlingContext
     var modifier = this
