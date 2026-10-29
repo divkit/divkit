@@ -628,6 +628,7 @@ data class Text internal constructor(
              * Background image must be loaded before the display.
              * Default value: `false`.
              */
+            @DeprecatedApi("Marked as deprecated in the JSON schema")
             val preloadRequired: Property<Boolean>?,
             /**
              * A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
@@ -3610,7 +3611,7 @@ fun DivScope.textImage(
     baselineOffset: Double? = null,
     height: FixedSize? = null,
     indexingDirection: Text.Image.IndexingDirection? = null,
-    preloadRequired: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
@@ -3654,7 +3655,7 @@ fun DivScope.textImageProps(
     baselineOffset: Double? = null,
     height: FixedSize? = null,
     indexingDirection: Text.Image.IndexingDirection? = null,
-    preloadRequired: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
@@ -3696,7 +3697,7 @@ fun TemplateScope.textImageRefs(
     baselineOffset: ReferenceProperty<Double>? = null,
     height: ReferenceProperty<FixedSize>? = null,
     indexingDirection: ReferenceProperty<Text.Image.IndexingDirection>? = null,
-    preloadRequired: ReferenceProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
     tintColor: ReferenceProperty<Color>? = null,
     tintMode: ReferenceProperty<BlendMode>? = null,
@@ -3738,7 +3739,7 @@ fun Text.Image.override(
     baselineOffset: Double? = null,
     height: FixedSize? = null,
     indexingDirection: Text.Image.IndexingDirection? = null,
-    preloadRequired: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: Boolean? = null,
     start: Int? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
@@ -3782,7 +3783,7 @@ fun Text.Image.defer(
     baselineOffset: ReferenceProperty<Double>? = null,
     height: ReferenceProperty<FixedSize>? = null,
     indexingDirection: ReferenceProperty<Text.Image.IndexingDirection>? = null,
-    preloadRequired: ReferenceProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: ReferenceProperty<Boolean>? = null,
     start: ReferenceProperty<Int>? = null,
     tintColor: ReferenceProperty<Color>? = null,
     tintMode: ReferenceProperty<BlendMode>? = null,
@@ -3826,7 +3827,7 @@ fun Text.Image.modify(
     baselineOffset: Property<Double>? = null,
     height: Property<FixedSize>? = null,
     indexingDirection: Property<Text.Image.IndexingDirection>? = null,
-    preloadRequired: Property<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: Property<Boolean>? = null,
     start: Property<Int>? = null,
     tintColor: Property<Color>? = null,
     tintMode: Property<BlendMode>? = null,
@@ -3866,7 +3867,7 @@ fun Text.Image.evaluate(
     alignmentVertical: ExpressionProperty<TextAlignmentVertical>? = null,
     baselineOffset: ExpressionProperty<Double>? = null,
     indexingDirection: ExpressionProperty<Text.Image.IndexingDirection>? = null,
-    preloadRequired: ExpressionProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: ExpressionProperty<Boolean>? = null,
     start: ExpressionProperty<Int>? = null,
     tintColor: ExpressionProperty<Color>? = null,
     tintMode: ExpressionProperty<BlendMode>? = null,

@@ -71,6 +71,7 @@ data class ImageBackground internal constructor(
          * Background image must be loaded before the display.
          * Default value: `false`.
          */
+        @DeprecatedApi("Marked as deprecated in the JSON schema")
         val preloadRequired: Property<Boolean>?,
         /**
          * Image scaling.
@@ -110,7 +111,7 @@ fun DivScope.imageBackground(
     contentAlignmentVertical: AlignmentVertical? = null,
     filters: List<Filter>? = null,
     imageUrl: Url? = null,
-    preloadRequired: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: Boolean? = null,
     scale: ImageScale? = null,
 ): ImageBackground = ImageBackground(
     ImageBackground.Properties(
@@ -141,7 +142,7 @@ fun DivScope.imageBackgroundProps(
     contentAlignmentVertical: AlignmentVertical? = null,
     filters: List<Filter>? = null,
     imageUrl: Url? = null,
-    preloadRequired: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: Boolean? = null,
     scale: ImageScale? = null,
 ) = ImageBackground.Properties(
     alpha = valueOrNull(alpha),
@@ -170,7 +171,7 @@ fun TemplateScope.imageBackgroundRefs(
     contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
     imageUrl: ReferenceProperty<Url>? = null,
-    preloadRequired: ReferenceProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: ReferenceProperty<Boolean>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
 ) = ImageBackground.Properties(
     alpha = alpha,
@@ -199,7 +200,7 @@ fun ImageBackground.override(
     contentAlignmentVertical: AlignmentVertical? = null,
     filters: List<Filter>? = null,
     imageUrl: Url? = null,
-    preloadRequired: Boolean? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: Boolean? = null,
     scale: ImageScale? = null,
 ): ImageBackground = ImageBackground(
     ImageBackground.Properties(
@@ -230,7 +231,7 @@ fun ImageBackground.defer(
     contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     filters: ReferenceProperty<List<Filter>>? = null,
     imageUrl: ReferenceProperty<Url>? = null,
-    preloadRequired: ReferenceProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: ReferenceProperty<Boolean>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
 ): ImageBackground = ImageBackground(
     ImageBackground.Properties(
@@ -261,7 +262,7 @@ fun ImageBackground.modify(
     contentAlignmentVertical: Property<AlignmentVertical>? = null,
     filters: Property<List<Filter>>? = null,
     imageUrl: Property<Url>? = null,
-    preloadRequired: Property<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: Property<Boolean>? = null,
     scale: Property<ImageScale>? = null,
 ): ImageBackground = ImageBackground(
     ImageBackground.Properties(
@@ -290,7 +291,7 @@ fun ImageBackground.evaluate(
     contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
     contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     imageUrl: ExpressionProperty<Url>? = null,
-    preloadRequired: ExpressionProperty<Boolean>? = null,
+    @DeprecatedApi("Marked as deprecated in the JSON schema") preloadRequired: ExpressionProperty<Boolean>? = null,
     scale: ExpressionProperty<ImageScale>? = null,
 ): ImageBackground = ImageBackground(
     ImageBackground.Properties(

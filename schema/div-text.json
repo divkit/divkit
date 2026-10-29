@@ -225,7 +225,8 @@
         "preload_required": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_image_base_preload_required"
+          "$description": "translations.json#/div_image_base_preload_required",
+          "deprecated": true
         },
         "accessibility": {
           "type": "object",

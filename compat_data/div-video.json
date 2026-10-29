@@ -3,6 +3,9 @@
     {
       "id": "video_preload_required",
       "name": "Video property <code>preload_required</code>",
+      "status": {
+        "deprecated": true
+      },
       "compat": {
         "android": {
           "version_added": "29.3.0"

@@ -31,6 +31,7 @@
       "$ref": "common.json#/boolean_int",
       "default_value": "false",
       "$description": "translations.json#/div_image_background_preload_required",
+      "deprecated": true,
       "platforms": [
         "android",
         "ios"

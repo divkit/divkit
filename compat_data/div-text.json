@@ -193,6 +193,9 @@
     {
       "id": "text_image_preload_required",
       "name": "<code>preload_required</code> property for the image of a <code>text</code>",
+      "status": {
+        "deprecated": true
+      },
       "compat": {
         "web": {
           "version_added": "29.6.0"

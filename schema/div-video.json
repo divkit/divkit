@@ -32,7 +32,8 @@
         "preload_required": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "$description": "translations.json#/div_video_preload_required"
+          "$description": "translations.json#/div_video_preload_required",
+          "deprecated": true
         },
         "muted": {
           "$ref": "common.json#/boolean_int",

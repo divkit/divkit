@@ -135,6 +135,9 @@
     {
       "id": "background_preload_required",
       "name": "<code>preload_required</code> for the background images",
+      "status": {
+        "deprecated": true
+      },
       "compat": {
         "android": {
           "version_added": "1.0.0"
