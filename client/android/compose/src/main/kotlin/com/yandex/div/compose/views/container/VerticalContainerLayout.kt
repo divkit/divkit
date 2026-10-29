@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.collection.CollectionItems
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.expressions.observedFloatValue
@@ -44,34 +45,9 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     val items = data.observeItems()
     val visibleItems = items.observeVisible()
 
-    val supportsMainAxisWeight = !data.height.isWrapContent
     val hasOnlyFixedHeightItems = visibleItems.isNotEmpty() &&
         visibleItems.all { it.value().height is DivSize.Fixed }
-    val isCrossAxisWrapContent = data.width is DivSize.WrapContent
-    var foundWeightedChildren = false
-    var totalWeightedChildrenMargins = 0.dp
-    var needsCrossAxisIntrinsicSize = false
-    var foundCrossAxisSizingChild = false
-    for (item in visibleItems) {
-        val child = item.value()
-        if (supportsMainAxisWeight && child.height.isMatchParent) {
-            foundWeightedChildren = true
-            totalWeightedChildrenMargins += child.observeVerticalMarginsSum(
-                component = items.components?.get(item)
-            )
-        }
-        if (isCrossAxisWrapContent) {
-            if (child.width.isMatchParent) {
-                needsCrossAxisIntrinsicSize = true
-            } else {
-                foundCrossAxisSizingChild = true
-            }
-        }
-    }
-
-    val hasWeightedChildren = foundWeightedChildren
-    val weightedChildrenMargins = totalWeightedChildrenMargins
-    val hasCrossAxisSizingChild = foundCrossAxisSizingChild
+    val sizing = observeVerticalChildrenSizing(data, items, visibleItems)
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
@@ -84,7 +60,7 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
                 unbounded = true,
             )
         }
-        .applyIf(needsCrossAxisIntrinsicSize) { width(IntrinsicSize.Max) }
+        .applyIf(sizing.needsCrossAxisIntrinsicSize) { width(IntrinsicSize.Max) }
 
     Column(
         modifier = containerModifier,
@@ -110,15 +86,58 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
                 data.height,
                 // A match-parent child must not define a wrap-content cross axis when a sibling
                 // can define it. Without such a sibling, legacy DivKit treats it as wrap-content.
-                excludeCrossAxisFromIntrinsics = hasCrossAxisSizingChild &&
+                excludeCrossAxisFromIntrinsics = sizing.hasCrossAxisSizingChild &&
                     item.value().width.isMatchParent,
-                hasWeightedChildren,
-                weightedChildrenMargins,
+                sizing.hasWeightedChildren,
+                sizing.weightedChildrenMargins,
                 defaultHorizontalAlignment = defaultHorizontalAlignment,
                 defaultVerticalAlignment = defaultVerticalAlignment,
             )
         }
     }
+}
+
+private class VerticalChildrenSizing(
+    val hasWeightedChildren: Boolean,
+    val weightedChildrenMargins: Dp,
+    val needsCrossAxisIntrinsicSize: Boolean,
+    val hasCrossAxisSizingChild: Boolean,
+)
+
+@Composable
+private fun observeVerticalChildrenSizing(
+    data: DivContainer,
+    items: CollectionItems,
+    visibleItems: List<Div>,
+): VerticalChildrenSizing {
+    val supportsMainAxisWeight = !data.height.isWrapContent
+    val isCrossAxisWrapContent = data.width is DivSize.WrapContent
+    var hasWeightedChildren = false
+    var weightedChildrenMargins = 0.dp
+    var needsCrossAxisIntrinsicSize = false
+    var hasCrossAxisSizingChild = false
+    for (item in visibleItems) {
+        val child = item.value()
+        if (supportsMainAxisWeight && child.height.isMatchParent) {
+            hasWeightedChildren = true
+            weightedChildrenMargins += child.observeVerticalMarginsSum(
+                component = items.components?.get(item)
+            )
+        }
+        if (isCrossAxisWrapContent) {
+            if (child.width.isMatchParent) {
+                needsCrossAxisIntrinsicSize = true
+            } else {
+                hasCrossAxisSizingChild = true
+            }
+        }
+    }
+    return VerticalChildrenSizing(
+        hasWeightedChildren = hasWeightedChildren,
+        weightedChildrenMargins = weightedChildrenMargins,
+        needsCrossAxisIntrinsicSize = needsCrossAxisIntrinsicSize,
+        hasCrossAxisSizingChild = hasCrossAxisSizingChild,
+    )
 }
 
 @Composable
