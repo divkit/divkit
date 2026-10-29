@@ -35,6 +35,7 @@ import com.yandex.div.compose.views.slider.DivSliderView
 import com.yandex.div.compose.views.state.DivStateView
 import com.yandex.div.compose.views.tabs.DivTabsView
 import com.yandex.div.compose.views.text.DivTextView
+import com.yandex.div.compose.views.transition.WithStateChangeTransition
 import com.yandex.div.compose.views.video.DivVideoView
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -105,26 +106,29 @@ internal fun VisibleDivBlockView(
         y = -(margins?.calculateBottomPadding() ?: 0.dp),
     )
     WithActionMenu(actions, modifier, menuOffset) { contentModifier ->
-        WithExtensions(
-            data = data,
-            extensions = extensions(divBase),
-            modifier = contentModifier.apply(
-                data,
-                actions = actions,
-                margins = margins,
-                visibility = visibility,
-                focusState = focusState,
-                fillMatchParentWidth = fillMatchParentWidth,
-                fillMatchParentHeight = fillMatchParentHeight,
-                defaultHorizontalAlignment = defaultHorizontalAlignment,
-                defaultVerticalAlignment = defaultVerticalAlignment,
-                suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
-                matchParentMaxWidth = matchParentMaxWidth,
-                matchParentMaxHeight = matchParentMaxHeight,
-                blockTapPropagation = blockTapPropagation,
-            )
-        ) { baseModifier ->
-            BaseView(data = data, modifier = baseModifier, focusState = focusState)
+        WithStateChangeTransition(data, visibility) { stateChangeTransition ->
+            WithExtensions(
+                data = data,
+                extensions = extensions(divBase),
+                modifier = contentModifier.apply(
+                    data,
+                    actions = actions,
+                    margins = margins,
+                    visibility = visibility,
+                    focusState = focusState,
+                    stateChangeTransition = stateChangeTransition,
+                    fillMatchParentWidth = fillMatchParentWidth,
+                    fillMatchParentHeight = fillMatchParentHeight,
+                    defaultHorizontalAlignment = defaultHorizontalAlignment,
+                    defaultVerticalAlignment = defaultVerticalAlignment,
+                    suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
+                    matchParentMaxWidth = matchParentMaxWidth,
+                    matchParentMaxHeight = matchParentMaxHeight,
+                    blockTapPropagation = blockTapPropagation,
+                )
+            ) { baseModifier ->
+                BaseView(data = data, modifier = baseModifier, focusState = focusState)
+            }
         }
     }
 }

@@ -18,8 +18,9 @@ internal fun Modifier.appearance(
     data: DivBase,
     visibility: DivVisibility,
     border: DivBorder? = data.border,
+    alphaOverride: Float? = null,
 ): Modifier {
-    val alpha = if (visibility == DivVisibility.VISIBLE) {
+    val alpha = alphaOverride ?: if (visibility == DivVisibility.VISIBLE) {
         data.alpha.observedFloatValue()
     } else {
         0f

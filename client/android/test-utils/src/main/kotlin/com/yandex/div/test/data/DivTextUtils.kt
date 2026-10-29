@@ -8,8 +8,8 @@ import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivAnimator
+import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivBackground
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivEdgeInsets
@@ -37,6 +37,7 @@ fun text(
     action: DivAction? = null,
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = null,
     alignmentVertical: Expression<DivAlignmentVertical>? = null,
+    alpha: Expression<Double> = constant(1.0),
     animators: List<DivAnimator>? = null,
     backgrounds: List<DivBackground>? = null,
     captureFocusOnAction: Expression<Boolean> = constant(true),
@@ -71,6 +72,7 @@ fun text(
         action = action,
         alignmentHorizontal = alignmentHorizontal,
         alignmentVertical = alignmentVertical,
+        alpha = alpha,
         animators = animators,
         backgrounds = backgrounds,
         captureFocusOnAction = captureFocusOnAction,
@@ -108,6 +110,7 @@ fun text(
     actions: List<DivAction>? = null,
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = null,
     alignmentVertical: Expression<DivAlignmentVertical>? = null,
+    alpha: Expression<Double> = constant(1.0),
     animators: List<DivAnimator>? = null,
     backgrounds: List<DivBackground>? = null,
     captureFocusOnAction: Expression<Boolean> = constant(true),
@@ -160,6 +163,7 @@ fun text(
             actions = actions,
             alignmentHorizontal = alignmentHorizontal,
             alignmentVertical = alignmentVertical,
+            alpha = alpha,
             animators = animators,
             background = backgrounds,
             captureFocusOnAction = captureFocusOnAction,

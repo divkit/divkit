@@ -31,6 +31,8 @@ import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
+import com.yandex.div2.DivAppearanceTransition
+import com.yandex.div2.DivFadeTransition
 import com.yandex.div2.DivState
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -120,6 +122,47 @@ class DivStateViewTest {
             height = fixed(20),
             id = "content",
             text = constant("Content"),
+            width = fixed(20),
+        )
+        val divState = state(
+            height = fixed(100),
+            id = "state",
+            states = listOf(state(div = content, stateId = "active")),
+            width = fixed(100),
+        )
+
+        val configuration = divConfiguration {
+            reporter = this@DivStateViewTest.reporter
+            variableController = this@DivStateViewTest.variableController
+        }
+        composeRule.setContent(
+            configuration = configuration,
+            data = data(divState),
+        )
+
+        composeRule.onNodeWithTag("content").assertPositionInRootIsEqualTo(40.dp, 40.dp)
+
+        horizontalAlignment.set("start")
+        verticalAlignment.set("top")
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithTag("content").assertPositionInRootIsEqualTo(0.dp, 0.dp)
+    }
+
+    @Test
+    fun `active div with transition is centered and follows alignment expressions`() {
+        val horizontalAlignment = Variable.StringVariable("horizontal_alignment", "center")
+        val verticalAlignment = Variable.StringVariable("vertical_alignment", "center")
+        variableController.declare(horizontalAlignment)
+        variableController.declare(verticalAlignment)
+
+        val content = text(
+            alignmentHorizontal = alignmentHorizontalExpression("@{horizontal_alignment}"),
+            alignmentVertical = alignmentVerticalExpression("@{vertical_alignment}"),
+            height = fixed(20),
+            id = "content",
+            text = constant("Content"),
+            transitionIn = DivAppearanceTransition.Fade(DivFadeTransition()),
             width = fixed(20),
         )
         val divState = state(

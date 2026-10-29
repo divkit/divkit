@@ -25,6 +25,7 @@ import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.views.divVisibility
+import com.yandex.div.compose.views.transition.StateChangeTransitionModifier
 import com.yandex.div.internal.util.isConstantlyEmpty
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
@@ -37,6 +38,7 @@ internal fun Modifier.apply(
     margins: PaddingValues?,
     visibility: DivVisibility,
     focusState: MutableState<Boolean>?,
+    stateChangeTransition: StateChangeTransitionModifier = StateChangeTransitionModifier(),
     fillMatchParentWidth: Boolean = true,
     fillMatchParentHeight: Boolean = true,
     matchParentMaxWidth: Dp = Dp.Unspecified,
@@ -67,11 +69,13 @@ internal fun Modifier.apply(
             defaultHorizontalAlignment = defaultHorizontalAlignment,
             defaultVerticalAlignment = defaultVerticalAlignment,
         )
+        .then(stateChangeTransition.modifier)
         .visibilityActions(divBase)
+        .then(stateChangeTransition.snapshotModifier)
         .applyIfNotNull(divBase.layoutProvider) { layoutProvider(it) }
         .focus(div, focusState, hasActions = actions != null)
         .applyIfNotNull(divBase.transform) { transform(it) }
-        .appearance(divBase, visibility, border)
+        .appearance(divBase, visibility, border, stateChangeTransition.appearanceAlpha)
         .applyIf(blockTapPropagation) { tooltipInput() }
         // The actions must be applied AFTER the transformations and the border clipping in order
         // to have correct touch and animation area.
