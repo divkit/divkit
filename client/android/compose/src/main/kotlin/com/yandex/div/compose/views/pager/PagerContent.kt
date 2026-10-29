@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.pager.PagerAlignment
@@ -61,6 +62,7 @@ import kotlin.math.abs
 internal fun PagerContent(
     pager: DivPager,
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     isHorizontal: Boolean,
     itemSpacing: Dp,
     paddings: PaddingValues,
@@ -132,6 +134,7 @@ internal fun PagerContent(
     }
     val selectedActionsHandler = rememberPagerSelectedActionsHandler(
         items = items,
+        components = components,
         itemKeys = itemKeys,
         listState = listState,
         snapPosition = snapPosition,
@@ -204,6 +207,7 @@ internal fun PagerContent(
                     val item = items[itemWindow.realIndex(index)]
                     ScrollableChildItem(
                         item,
+                        components?.get(item),
                         childModifier
                             .trackPagerPageSize(neighbourSizes, index, isHorizontal)
                             .pageTransformation(

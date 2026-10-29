@@ -18,6 +18,7 @@ import com.yandex.div.test.data.colorExpression
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.itemBuilder
 import com.yandex.div.test.data.jsonArray
@@ -25,9 +26,11 @@ import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.solidBackground
 import com.yandex.div.test.data.text
+import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivExtension
+import com.yandex.div2.DivVariable
 import org.json.JSONObject
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -238,6 +241,34 @@ class DivViewRecompositionCountTest {
     }
 
     @Test
+    fun `static gallery item is recomposed once when item_spacing is changed`() {
+        setContent(galleryWithSpacing(variables = null))
+
+        counter.set(10)
+        rule.waitForIdle()
+
+        // The spacing is read inside the gallery node; the lazy item content is invoked again
+        // with the new list of visible items.
+        assertCompositions(
+            "gallery" to 1,
+            "item" to 2
+        )
+    }
+
+    @Test
+    fun `scoped static gallery item is recomposed once when item_spacing is changed`() {
+        setContent(galleryWithSpacing(variables = listOf(variable("local", "value"))))
+
+        counter.set(10)
+        rule.waitForIdle()
+
+        assertCompositions(
+            "gallery" to 1,
+            "item" to 2
+        )
+    }
+
+    @Test
     fun `items are not recomposed when container background is changed`() {
         setContent(
             container(
@@ -284,6 +315,18 @@ class DivViewRecompositionCountTest {
 
         assertCompositions("button" to 3)
     }
+
+    private fun galleryWithSpacing(variables: List<DivVariable>?): Div = gallery(
+        extensions = compositionCounter("gallery"),
+        itemSpacing = intExpression("@{counter}"),
+        items = listOf(
+            text(
+                extensions = compositionCounter("item"),
+                text = "Item",
+                variables = variables
+            )
+        )
+    )
 
     private fun setContent(content: Div) {
         rule.setContent(configuration = configuration, data = data(content))

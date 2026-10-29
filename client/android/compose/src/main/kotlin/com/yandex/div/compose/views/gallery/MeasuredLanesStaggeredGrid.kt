@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
+import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded
@@ -49,6 +50,7 @@ import kotlinx.coroutines.flow.first
 @Composable
 internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     properties: GalleryProperties,
     defaultItem: Int,
 ) {
@@ -73,6 +75,7 @@ internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
         val flingBehavior = rememberGalleryLanesFlingBehavior(scrollState, itemPositions, properties)
         MeasuredLanesLayout(
             items = items,
+            components = components,
             properties = properties,
             modifier = Modifier
                 .galleryScrollbar(properties.scrollbar, scrollState, properties.isHorizontal, properties.contentPadding)
@@ -87,7 +90,14 @@ internal fun BoxWithConstraintsScope.MeasuredLanesStaggeredGrid(
         )
     } else {
         BindGalleryScrollActions(properties.id, items)
-        MeasuredLanesLayout(items, properties, Modifier, matchParentMaxSize = Dp.Unspecified, itemPositions = null)
+        MeasuredLanesLayout(
+            items,
+            components,
+            properties,
+            Modifier,
+            matchParentMaxSize = Dp.Unspecified,
+            itemPositions = null,
+        )
     }
 }
 
@@ -192,6 +202,7 @@ private fun AdjustDefaultItemAlignment(
 @Composable
 private fun MeasuredLanesLayout(
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     properties: GalleryProperties,
     modifier: Modifier,
     matchParentMaxSize: Dp,
@@ -209,6 +220,7 @@ private fun MeasuredLanesLayout(
             items.forEach { item ->
                 ScrollableChildItem(
                     data = item,
+                    component = components?.get(item),
                     modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal),
                     isHorizontal = isHorizontal,
                     crossAxisAlignment = crossAlignment,

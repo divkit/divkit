@@ -25,15 +25,22 @@ internal fun DivEdgeInsets?.observeInsets(): PaddingValues {
 }
 
 @Composable
-internal fun DivEdgeInsets?.observeHorizontalInsets(): Pair<Dp, Dp> {
-    val unit = this?.unit?.observedValue() ?: return ZeroPair
-    return observeHorizontalInsets(unit)
+internal fun DivEdgeInsets?.observeHorizontalInsets(
+    component: DivLocalComponent = LocalComponent.current,
+): Pair<Dp, Dp> {
+    val unit = this?.unit?.observedValue(component = component) ?: return ZeroPair
+    return observeHorizontalInsets(unit, component)
 }
 
 @Composable
-internal fun DivEdgeInsets?.observeVerticalInsets(): Pair<Dp, Dp> {
-    val unit = this?.unit?.observedValue() ?: return ZeroPair
-    return Pair(top.observedValue().toDp(unit), bottom.observedValue().toDp(unit))
+internal fun DivEdgeInsets?.observeVerticalInsets(
+    component: DivLocalComponent = LocalComponent.current,
+): Pair<Dp, Dp> {
+    val unit = this?.unit?.observedValue(component = component) ?: return ZeroPair
+    return Pair(
+        top.observedValue(component = component).toDp(unit),
+        bottom.observedValue(component = component).toDp(unit),
+    )
 }
 
 @Composable

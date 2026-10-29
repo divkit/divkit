@@ -5,6 +5,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivExtension
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivSize
 
@@ -13,6 +14,7 @@ fun gallery(
     columnCount: Expression<Long>? = null,
     crossSpacing: Expression<Long>? = null,
     defaultItem: Expression<Long> = constant(0L),
+    extensions: List<DivExtension>? = null,
     height: DivSize = wrapContent(),
     id: String? = null,
     itemBuilder: DivCollectionItemBuilder? = null,
@@ -30,6 +32,7 @@ fun gallery(
             columnCount = columnCount,
             crossSpacing = crossSpacing,
             defaultItem = defaultItem,
+            extensions = extensions,
             height = height,
             id = id,
             itemBuilder = itemBuilder,

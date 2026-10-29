@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
@@ -26,6 +27,7 @@ import com.yandex.div2.Div
 internal fun GalleryGridView(
     modifier: Modifier,
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     properties: GalleryProperties,
 ) {
     val initialDefaultItem = remember { properties.defaultItem }
@@ -51,9 +53,11 @@ internal fun GalleryGridView(
             }
         }
         when {
-            !isLazyGridSupported -> MeasuredLanesStaggeredGrid(items, properties, clampedDefaultItem)
-            properties.isHorizontal -> GalleryLazyHorizontalStaggeredGrid(items, gridState, properties)
-            else -> GalleryLazyVerticalStaggeredGrid(items, gridState, properties)
+            !isLazyGridSupported ->
+                MeasuredLanesStaggeredGrid(items, components, properties, clampedDefaultItem)
+            properties.isHorizontal ->
+                GalleryLazyHorizontalStaggeredGrid(items, components, gridState, properties)
+            else -> GalleryLazyVerticalStaggeredGrid(items, components, gridState, properties)
         }
     }
 }
@@ -79,6 +83,7 @@ private fun AdjustDefaultGridItemAlignment(
 @Composable
 private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     gridState: LazyStaggeredGridState,
     properties: GalleryProperties,
 ) {
@@ -108,6 +113,7 @@ private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
         items(count = items.size, key = { viewContext.compositionKeyStorage.get(items[it].value()) }) { index ->
             ScrollableChildItem(
                 data = items[index],
+                component = components?.get(items[index]),
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = true),
                 isHorizontal = true,
                 crossAxisAlignment = crossAlignment,
@@ -120,6 +126,7 @@ private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
 @Composable
 private fun BoxWithConstraintsScope.GalleryLazyVerticalStaggeredGrid(
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     gridState: LazyStaggeredGridState,
     properties: GalleryProperties,
 ) {
@@ -149,6 +156,7 @@ private fun BoxWithConstraintsScope.GalleryLazyVerticalStaggeredGrid(
         items(count = items.size, key = { viewContext.compositionKeyStorage.get(items[it].value()) }) { index ->
             ScrollableChildItem(
                 data = items[index],
+                component = components?.get(items[index]),
                 modifier = Modifier.fillMaxCrossAxisIfBounded(isHorizontal = false),
                 isHorizontal = false,
                 crossAxisAlignment = crossAlignment,

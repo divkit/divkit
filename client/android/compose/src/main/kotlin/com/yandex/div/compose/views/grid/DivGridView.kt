@@ -13,6 +13,10 @@ import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
 import androidx.compose.ui.unit.Constraints
+import com.yandex.div.compose.collection.observeStaticItems
+import com.yandex.div.compose.collection.observeVisible
+import com.yandex.div.compose.context.WithDivKey
+import com.yandex.div.compose.dagger.WithLocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
@@ -24,16 +28,16 @@ import com.yandex.div.compose.utils.toVerticalAlignment
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivGrid
-import com.yandex.div2.DivVisibility
 
 @OptIn(ExperimentalGridApi::class)
 @Composable
 internal fun DivGridView(modifier: Modifier, data: DivGrid) {
-    val items = data.items
-        ?.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
-        ?: emptyList()
+    val collectionItems = data.observeStaticItems(data.items)
+    val items = collectionItems.observeVisible()
+    val components = collectionItems.components
     val columnCount = data.columnCount.observedIntValue().coerceAtLeast(DEFAULT_COLUMN_COUNT)
     val (columnTracks, rowTracks) = items.computeTracks(
+        components = components,
         columnCount = columnCount,
         widthWrapContent = data.width.isWrapContent,
         heightWrapContent = data.height.isWrapContent,
@@ -53,22 +57,26 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
             }
         ) {
             items.forEach { item ->
-                val divBase = item.value()
-                val columnSpan = divBase.columnSpan.observedIntValue(DEFAULT_SPAN)
-                val rowSpan = divBase.rowSpan.observedIntValue(DEFAULT_SPAN)
-                DivBlockView(
-                    data = item,
-                    modifier = Modifier
-                        .applyIf(columnSpan > 1 && rowSpan == 1) {
-                            then(UnboundedIntrinsicHeight)
-                        }
-                        .gridItem(
-                            columnSpan = columnSpan,
-                            rowSpan = rowSpan,
-                            alignment = divBase.toGridItemAlignment()
-                        ),
-                    suppressMatchParentIntrinsics = true,
-                )
+                WithDivKey(item) {
+                    WithLocalComponent(components?.get(item)) {
+                        val divBase = item.value()
+                        val columnSpan = divBase.columnSpan.observedIntValue(DEFAULT_SPAN)
+                        val rowSpan = divBase.rowSpan.observedIntValue(DEFAULT_SPAN)
+                        DivBlockView(
+                            data = item,
+                            modifier = Modifier
+                                .applyIf(columnSpan > 1 && rowSpan == 1) {
+                                    then(UnboundedIntrinsicHeight)
+                                }
+                                .gridItem(
+                                    columnSpan = columnSpan,
+                                    rowSpan = rowSpan,
+                                    alignment = divBase.toGridItemAlignment()
+                                ),
+                            suppressMatchParentIntrinsics = true,
+                        )
+                    }
+                }
             }
         }
     }

@@ -113,7 +113,6 @@ private val ignoredFiles = listOf(
     "action_before_bind.json",
     "action_same_id_in_states.json",
     "item_builder_variable_triggers.json",
-    "local-triggers-gallery.json",
     "local-triggers-gallery-with-item-builder.json",
     "local-triggers-states.json",
     "local-triggers-tabs.json",

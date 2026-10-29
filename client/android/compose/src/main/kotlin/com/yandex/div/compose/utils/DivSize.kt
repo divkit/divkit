@@ -2,6 +2,8 @@ package com.yandex.div.compose.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
+import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivSize
@@ -20,13 +22,19 @@ internal fun DivSize.observeIsConstrained(): Boolean = when (this) {
 }
 
 @Composable
-internal fun DivFixedSize.observedValue(): Dp {
-    return value.observedDpValue(unit)
+internal fun DivFixedSize.observedValue(
+    component: DivLocalComponent = LocalComponent.current,
+): Dp {
+    val value = value.observedValue(component = component)
+    return value.toDp(unit.observedValue(component = component))
 }
 
 @Composable
-internal fun DivFixedSize.observedPxValue(): Float {
-    return value.observedPxValue(unit)
+internal fun DivFixedSize.observedPxValue(
+    component: DivLocalComponent = LocalComponent.current,
+): Float {
+    val value = value.observedValue(component = component)
+    return value.toPx(unit.observedValue(component = component))
 }
 
 @Composable

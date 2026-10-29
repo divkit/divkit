@@ -11,7 +11,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
 import com.yandex.div.compose.pager.PagerItemWindow
@@ -33,6 +33,7 @@ internal fun interface PagerSelectedActionsHandler {
 @Composable
 internal fun rememberPagerSelectedActionsHandler(
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     itemKeys: List<Long>,
     listState: LazyListState,
     snapPosition: SnapPosition,
@@ -40,14 +41,14 @@ internal fun rememberPagerSelectedActionsHandler(
     viewportSize: Dp,
     enabled: Boolean,
 ): PagerSelectedActionsHandler {
-    val viewContext = LocalDivViewContext.current
     val parentComponent = LocalComponent.current
     val isDragged = listState.interactionSource.collectIsDraggedAsState()
     val selection = remember(listState) { PageSelection() }
     val viewportSizePx = with(LocalDensity.current) { viewportSize.roundToPx() }
 
     LaunchedEffect(
-        items, itemKeys, listState, snapPosition, itemWindow, viewContext, parentComponent, enabled, viewportSizePx
+        items, components, itemKeys, listState, snapPosition, itemWindow, parentComponent, enabled,
+        viewportSizePx
     ) {
         if (!enabled) return@LaunchedEffect
 
@@ -61,17 +62,11 @@ internal fun rememberPagerSelectedActionsHandler(
             if (page == null || isResize) return@collect
             selection.select(itemKeys[page], items[page])
             while (selection.pendingItems.isNotEmpty()) {
-                val item = selection.pendingItems.removeFirst().value()
-                val actions = item.selectedActions
+                val item = selection.pendingItems.removeFirst()
+                val actions = item.value().selectedActions
                 if (actions.isNullOrEmpty()) continue
 
-                val component = if (item.functions.isNullOrEmpty() &&
-                    item.variables.isNullOrEmpty() && item.variableTriggers.isNullOrEmpty()
-                ) {
-                    parentComponent
-                } else {
-                    viewContext.getLocalComponent(item, parentComponent)
-                }
+                val component = components?.get(item) ?: parentComponent
                 component.handleActions(actions, DivActionSource.SELECTION)
             }
         }

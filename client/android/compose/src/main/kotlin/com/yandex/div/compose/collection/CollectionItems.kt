@@ -36,6 +36,13 @@ internal fun DivContainer.observeItems(): CollectionItems =
     observeCollectionItems(this, items, itemBuilder)
 
 /**
+ * The static [items] of this collection owner, each with the scope it is rendered in.
+ */
+@Composable
+internal fun DivBase.observeStaticItems(items: List<Div>?): CollectionItems =
+    observeCollectionItems(owner = this, items = items, itemBuilder = null)
+
+/**
  * The children of [owner]: the items its [itemBuilder] builds, or the static [items] otherwise,
  * each with the scope it is rendered in.
  */

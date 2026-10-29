@@ -2,12 +2,13 @@ package com.yandex.div.compose.views.gallery
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.yandex.div.compose.collection.observeStaticItems
+import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.scroll.restrictParentScroll
 import com.yandex.div2.DivGallery
-import com.yandex.div2.DivVisibility
 
 @Composable
 internal fun DivGalleryView(
@@ -18,14 +19,19 @@ internal fun DivGalleryView(
     val modifier = modifier.applyIf(data.restrictParentScroll.observedValue()) {
         restrictParentScroll(isHorizontal = properties.isHorizontal)
     }
-    val items = data.items
-        ?.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
-        ?: emptyList()
+    val collectionItems = data.observeStaticItems(data.items)
+    val items = collectionItems.observeVisible()
 
     if (properties.columnCount > 1) {
-        GalleryGridView(modifier, items, properties)
+        GalleryGridView(modifier, items, collectionItems.components, properties)
     } else {
-        GalleryListView(modifier, items, properties, isScrollable = data.observeIsScrollable(properties.isHorizontal))
+        GalleryListView(
+            modifier,
+            items,
+            collectionItems.components,
+            properties,
+            isScrollable = data.observeIsScrollable(properties.isHorizontal),
+        )
     }
 }
 

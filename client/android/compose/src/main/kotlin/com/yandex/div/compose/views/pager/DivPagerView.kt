@@ -9,7 +9,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import com.yandex.div.compose.collection.observeStaticItems
+import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.rememberAndStoreState
@@ -19,16 +22,14 @@ import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
 import com.yandex.div.compose.views.modifiers.onMeasureConstraints
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
-import com.yandex.div2.DivVisibility
 
 @Composable
 internal fun DivPagerView(
     modifier: Modifier,
     data: DivPager,
 ) {
-    val items = data.items
-        ?.filter { it.value().visibility.observedValue() != DivVisibility.GONE }
-        ?: emptyList()
+    val collectionItems = data.observeStaticItems(data.items)
+    val items = collectionItems.observeVisible()
 
     if (items.isEmpty()) {
         LocalDivViewContext.current.pagerStateStorage.rememberAndStoreState(
@@ -47,6 +48,7 @@ internal fun DivPagerView(
     PagerView(
         modifier = modifier,
         items = items,
+        components = collectionItems.components,
         data = data
     )
 }
@@ -55,6 +57,7 @@ internal fun DivPagerView(
 private fun PagerView(
     modifier: Modifier,
     items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
     data: DivPager,
 ) {
     val viewportSizePx = remember { mutableIntStateOf(0) }
@@ -98,6 +101,7 @@ private fun PagerView(
         PagerContent(
             pager = data,
             items = items,
+            components = components,
             isHorizontal = isHorizontal,
             itemSpacing = data.itemSpacing.observedValue(),
             paddings = data.paddings.observeInsets(),

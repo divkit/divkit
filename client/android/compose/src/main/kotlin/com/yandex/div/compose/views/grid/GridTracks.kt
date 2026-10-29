@@ -9,7 +9,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.aspect
 import com.yandex.div.compose.utils.observeHorizontalInsets
 import com.yandex.div.compose.utils.observeHorizontalMarginsSum
@@ -27,12 +29,16 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalGridApi::class)
 @Composable
 internal fun List<Div>.computeTracks(
+    components: Map<Div, DivLocalComponent>?,
     columnCount: Int,
     widthWrapContent: Boolean,
     heightWrapContent: Boolean,
 ): Pair<AxisTracks, AxisTracks> {
     val freeAtRow = IntArray(columnCount)
-    val cells = map { it.value().toCell(freeAtRow, columnCount) }
+    val parentComponent = LocalComponent.current
+    val cells = map { item ->
+        item.value().toCell(components?.get(item) ?: parentComponent, freeAtRow, columnCount)
+    }
     val rowCount = freeAtRow.maxOrNull() ?: 0
 
     val columnTracks = cells.axisTracks(columnCount, isColumn = true, isWrapContent = widthWrapContent)
@@ -166,14 +172,15 @@ private fun List<Cell>.rememberSpannedTracks(
     val measurements = map { cell ->
         val size = if (isColumn) cell.base.width else cell.base.height
         val contentSize = if (size is DivSize.Fixed) {
-            size.value.observedPxValue().roundToInt()
+            size.value.observedPxValue(cell.component).roundToInt()
         } else {
             0
         }
-        val (startMargin, endMargin) = if (isColumn) cell.base.margins.observeHorizontalInsets()
-                                      else cell.base.margins.observeVerticalInsets()
+        val margins = cell.base.margins
+        val (startMargin, endMargin) = if (isColumn) margins.observeHorizontalInsets(cell.component)
+                                      else margins.observeVerticalInsets(cell.component)
         val marginSize = with(density) { startMargin.roundToPx() + endMargin.roundToPx() }
-        val weight = if (size is DivSize.MatchParent) size.value.weight?.observedFloatValue() ?: 0f else 0f
+        val weight = if (size is DivSize.MatchParent) cell.observedWeight(size) else 0f
         val lineIndex = if (isColumn) cell.columnIndex else cell.rowIndex
         val span = if (isColumn) cell.columnSpan else cell.rowSpan
         remember(lineIndex, contentSize, marginSize, span, weight) {
@@ -207,7 +214,7 @@ private fun List<Cell>.observeLineWeights(lineCount: Int, isColumn: Boolean): Fl
         val start = if (isColumn) cell.columnIndex else cell.rowIndex
         val size = if (isColumn) cell.base.width else cell.base.height
         if (size is DivSize.MatchParent) {
-            val weight = (size.value.weight?.observedFloatValue() ?: 0f) / span
+            val weight = cell.observedWeight(size) / span
             for (line in start until start + span) {
                 weights[line] = maxOf(weights[line], weight)
             }
@@ -225,19 +232,23 @@ private fun List<Cell>.observeItemBaseSizes(
     val size = if (isColumn) cell.base.width else cell.base.height
     when (size) {
         is DivSize.Fixed -> {
-            val margins = if (isColumn) cell.base.observeHorizontalMarginsSum()
-                          else cell.base.observeVerticalMarginsSum()
-            (size.value.observedValue() + margins).value
+            val margins = if (isColumn) cell.base.observeHorizontalMarginsSum(cell.component)
+                          else cell.base.observeVerticalMarginsSum(cell.component)
+            (size.value.observedValue(cell.component) + margins).value
         }
         is DivSize.MatchParent -> {
             if (!includeMatchParentMargins) return@FloatArray 0f
-            val margins = if (isColumn) cell.base.observeHorizontalMarginsSum()
-                          else cell.base.observeVerticalMarginsSum()
+            val margins = if (isColumn) cell.base.observeHorizontalMarginsSum(cell.component)
+                          else cell.base.observeVerticalMarginsSum(cell.component)
             margins.value
         }
         is DivSize.WrapContent -> 0f
     }
 }
+
+@Composable
+private fun Cell.observedWeight(size: DivSize.MatchParent): Float =
+    size.value.weight?.observedValue(component = component)?.toFloat() ?: 0f
 
 private fun List<Cell>.lineBaseSize(
     line: Int,

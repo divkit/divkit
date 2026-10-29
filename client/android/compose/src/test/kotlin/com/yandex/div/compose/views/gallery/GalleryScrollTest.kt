@@ -19,11 +19,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasScrollToIndexAction
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeWithVelocity
@@ -43,17 +46,22 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
+import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.matchParent
 import com.yandex.div.test.data.scrollByAction
 import com.yandex.div.test.data.scrollToAction
+import com.yandex.div.test.data.setVariableAction
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.throwingErrorLogger
+import com.yandex.div.test.data.trigger
+import com.yandex.div.test.data.typedValue
 import com.yandex.div.test.data.variable
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div.test.data.wrapContent
+import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollDestination
@@ -601,6 +609,84 @@ class GalleryScrollTest {
             composeRule.onNodeWithTag("item0").fetchSemanticsNode().size.height.toFloat(),
             absoluteTolerance = 0.5f,
         )
+    }
+
+    @Test
+    fun `item visible by its local variable is shown`() {
+        galleryData = data(
+            scopedItemGallery(
+                text(
+                    height = fixed(50),
+                    id = "item0",
+                    text = constant("0"),
+                    variables = listOf(variable("hidden", false)),
+                    visibility = visibilityExpression("@{hidden ? 'gone' : 'visible'}"),
+                    width = fixed(100),
+                )
+            ),
+            variables = listOf(variable("hidden", true)),
+        )
+
+        setContent()
+
+        composeRule.onNodeWithTag("item0").assertIsDisplayed()
+    }
+
+    @Test
+    fun `trigger of a scoped item keeps firing while the item is scrolled out and back`() {
+        val condition = Variable.BooleanVariable("condition", false)
+        val firings = Variable.IntegerVariable("firings", 0)
+        configuration.variableController.declare(condition, firings)
+        galleryData = data(scopedItemGallery(
+            text(
+                height = fixed(50),
+                id = "item0",
+                text = constant("0"),
+                triggers = listOf(trigger(
+                    action = action(
+                        typed = setVariableAction(
+                            name = "firings",
+                            value = typedValue(intExpression("@{firings + 1}")),
+                        )
+                    ),
+                    condition = "@{condition}",
+                )),
+                width = fixed(100),
+            )
+        ))
+        setContent()
+        val gallery = composeRule.onNode(hasScrollToIndexAction())
+
+        gallery.performScrollToIndex(15)
+        composeRule.onNodeWithTag("item0").assertDoesNotExist()
+        composeRule.runOnIdle { condition.set(true) }
+        composeRule.runOnIdle { condition.set(false) }
+        gallery.performScrollToIndex(0)
+        composeRule.runOnIdle { condition.set(true) }
+
+        composeRule.runOnIdle { assertEquals(2L, firings.getValue()) }
+    }
+
+    @Test
+    fun `scoped item keeps its local variable after it is scrolled out and back`() {
+        galleryData = data(scopedItemGallery(
+            text(
+                actions = listOf(action(typed = setVariableAction("label", typedValue("changed")))),
+                height = fixed(50),
+                id = "item0",
+                text = expression("@{label}"),
+                variables = listOf(variable("label", "initial")),
+                width = fixed(100),
+            )
+        ))
+        setContent()
+        val gallery = composeRule.onNode(hasScrollToIndexAction())
+        composeRule.onNodeWithTag("item0").performClick()
+
+        gallery.performScrollToIndex(15)
+        gallery.performScrollToIndex(0)
+
+        composeRule.onNodeWithTag("item0").assertTextEquals("changed")
     }
 
     @Test
@@ -1202,6 +1288,19 @@ class GalleryScrollTest {
         )
         setContent(layoutDirection)
     }
+
+    private fun scopedItemGallery(scopedItem: Div): Div = gallery(
+        height = fixed(108),
+        id = "gallery",
+        items = listOf(scopedItem) + List(15) { index ->
+            text(
+                height = fixed(50),
+                id = "item${index + 1}",
+                text = constant("${index + 1}"),
+                width = fixed(100),
+            )
+        },
+    )
 
     private fun setContent(layoutDirection: LayoutDirection = LayoutDirection.Ltr) {
         restorationTester.setContent {
