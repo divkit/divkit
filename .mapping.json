@@ -10573,6 +10573,7 @@
   "client/web/divkit/src/utils/wrapError.ts":"divkit/public/client/web/divkit/src/utils/wrapError.ts",
   "client/web/divkit/svelte.config.mjs":"divkit/public/client/web/divkit/svelte.config.mjs",
   "client/web/divkit/tests/bundles/client.test.ts":"divkit/public/client/web/divkit/tests/bundles/client.test.ts",
+  "client/web/divkit/tests/bundles/hydration.test.ts":"divkit/public/client/web/divkit/tests/bundles/hydration.test.ts",
   "client/web/divkit/tests/bundles/package.json":"divkit/public/client/web/divkit/tests/bundles/package.json",
   "client/web/divkit/tests/bundles/server.test.ts":"divkit/public/client/web/divkit/tests/bundles/server.test.ts",
   "client/web/divkit/tests/bundles/ssr.test.ts":"divkit/public/client/web/divkit/tests/bundles/ssr.test.ts",

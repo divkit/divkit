@@ -43,6 +43,11 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
+    // Actions do not run on the server, so the server html gets the text style as an attribute;
+    // in the browser the style belongs to applyTextStyle and the gradient animation. The server
+    // is told by the build, as a server may have a document too
+    const isServer = import.meta.env.SSR;
+
     const direction = rootCtx.direction;
 
     let text = '';
@@ -572,6 +577,7 @@
                 ...innerMods,
                 'cloud-bg': true
             })}
+            style={isServer ? makeStyle(cloudStyle) : undefined}
             use:applyTextStyle={cloudStyle}
             use:animateTextGradient={{ animation: resolvedTextGradient?.animation, fontSize }}
         >
@@ -604,6 +610,7 @@
     {/if}
     <span
         class={genClassName('text__inner', css, innerMods)}
+        style={isServer ? makeStyle(style) : undefined}
         use:applyTextStyle={style}
         use:animateTextGradient={{ animation: resolvedTextGradient?.animation, fontSize }}
         use:autoEllipsize={{
