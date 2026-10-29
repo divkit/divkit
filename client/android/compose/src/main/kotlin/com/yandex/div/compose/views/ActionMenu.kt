@@ -23,7 +23,7 @@ import com.yandex.div2.DivAction
 private val ACTION_MENU_MIN_WIDTH = 196.dp
 
 @Composable
-internal fun WithActionMenu(
+internal inline fun WithActionMenu(
     actions: DivActions?,
     modifier: Modifier,
     menuOffset: DpOffset,

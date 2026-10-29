@@ -72,7 +72,7 @@ internal val LocalComponent = staticCompositionLocalOf<DivLocalComponent> {
 }
 
 @Composable
-internal fun WithLocalComponent(data: DivBase, content: @Composable () -> Unit) {
+internal inline fun WithLocalComponent(data: DivBase, crossinline content: @Composable () -> Unit) {
     if (!data.declaresLocalScope) {
         return content()
     }
@@ -85,7 +85,9 @@ internal fun WithLocalComponent(data: DivBase, content: @Composable () -> Unit) 
         return content()
     }
     localComponent.triggerStorage.observe()
-    CompositionLocalProvider(LocalComponent provides localComponent, content)
+    CompositionLocalProvider(LocalComponent provides localComponent) {
+        content()
+    }
 }
 
 @Composable
