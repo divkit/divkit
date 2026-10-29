@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div.compose.views.modifiers.horizontalPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivSize
 
 @Composable
@@ -43,6 +45,8 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     val visibleItems = items.observeVisible()
 
     val supportsMainAxisWeight = !data.height.isWrapContent
+    val hasOnlyFixedHeightItems = visibleItems.isNotEmpty() &&
+        visibleItems.all { it.value().height is DivSize.Fixed }
     val isCrossAxisWrapContent = data.width is DivSize.WrapContent
     var foundWeightedChildren = false
     var totalWeightedChildrenMargins = 0.dp
@@ -71,6 +75,15 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
+        // Measure fixed children as one column so centered overflow is clipped symmetrically.
+        .applyIf(
+            hasOnlyFixedHeightItems && verticalAlignment == DivContentAlignmentVertical.CENTER
+        ) {
+            wrapContentHeight(
+                align = defaultVerticalAlignment,
+                unbounded = true,
+            )
+        }
         .applyIf(needsCrossAxisIntrinsicSize) { width(IntrinsicSize.Max) }
 
     Column(

@@ -1,0 +1,202 @@
+{
+  "description": "Fixed-size children overflowing horizontal and vertical containers remain centered and are clipped symmetrically.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "card": {
+    "log_id": "compose_linear_overflow",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "content_alignment_horizontal": "center",
+          "item_spacing": 20,
+          "paddings": {
+            "top": 20,
+            "bottom": 20
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 520
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#E5E5E5"
+            }
+          ],
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "center",
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "clip_to_bounds": true,
+              "width": {
+                "type": "fixed",
+                "value": 360
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "items": [
+                {
+                  "type": "container",
+                  "orientation": "overlap",
+                  "width": {
+                    "type": "fixed",
+                    "value": 92
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FF3B30"
+                    }
+                  ],
+                  "items": []
+                },
+                {
+                  "type": "container",
+                  "orientation": "overlap",
+                  "width": {
+                    "type": "fixed",
+                    "value": 238
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#34C759"
+                    }
+                  ],
+                  "items": []
+                },
+                {
+                  "type": "container",
+                  "orientation": "overlap",
+                  "width": {
+                    "type": "fixed",
+                    "value": 92
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#007AFF"
+                    }
+                  ],
+                  "items": []
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "content_alignment_vertical": "center",
+              "alignment_horizontal": "center",
+              "clip_to_bounds": true,
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 360
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "items": [
+                {
+                  "type": "container",
+                  "orientation": "overlap",
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 92
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FF3B30"
+                    }
+                  ],
+                  "items": []
+                },
+                {
+                  "type": "container",
+                  "orientation": "overlap",
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 238
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#34C759"
+                    }
+                  ],
+                  "items": []
+                },
+                {
+                  "type": "container",
+                  "orientation": "overlap",
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 92
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#007AFF"
+                    }
+                  ],
+                  "items": []
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

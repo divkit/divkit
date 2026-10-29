@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div.compose.views.modifiers.verticalPaddings
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivContentAlignmentHorizontal
 import com.yandex.div2.DivContentAlignmentVertical
 import com.yandex.div2.DivSize
 
@@ -44,6 +46,8 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val visibleItems = items.observeVisible()
 
     val supportsMainAxisWeight = !data.width.isWrapContent
+    val hasOnlyFixedWidthItems = visibleItems.isNotEmpty() &&
+        visibleItems.all { it.value().width is DivSize.Fixed }
     val isCrossAxisWrapContent = data.height is DivSize.WrapContent
     var foundWeightedChildren = false
     var totalWeightedChildrenMargins = 0.dp
@@ -72,6 +76,15 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
+        // Measure fixed children as one row so centered overflow is clipped symmetrically.
+        .applyIf(
+            hasOnlyFixedWidthItems && horizontalAlignment == DivContentAlignmentHorizontal.CENTER
+        ) {
+            wrapContentWidth(
+                align = defaultHorizontalAlignment,
+                unbounded = true,
+            )
+        }
         // Row's intrinsic height does not include baseline offsets. Let Row calculate those
         // offsets itself when baseline alignment and a match-parent child are combined.
         .applyIf(
