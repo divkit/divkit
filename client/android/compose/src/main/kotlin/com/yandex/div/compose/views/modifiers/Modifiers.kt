@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -35,6 +36,7 @@ internal fun Modifier.apply(
     actions: DivActions?,
     margins: PaddingValues?,
     visibility: DivVisibility,
+    focusState: MutableState<Boolean>?,
     fillMatchParentWidth: Boolean = true,
     fillMatchParentHeight: Boolean = true,
     matchParentMaxWidth: Dp = Dp.Unspecified,
@@ -45,7 +47,6 @@ internal fun Modifier.apply(
     blockTapPropagation: Boolean = false,
 ): Modifier {
     val divBase = div.value()
-    val focusState = rememberFocusState(divBase)
     val isFocused = focusState?.value == true
     val focus = divBase.focus
     val border = focus?.border?.takeIf { isFocused && !it.isConstantlyEmpty() }

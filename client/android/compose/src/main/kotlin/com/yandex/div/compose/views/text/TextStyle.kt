@@ -2,6 +2,7 @@ package com.yandex.div.compose.views.text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
@@ -9,6 +10,7 @@ import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.isSpecified
+import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.text.observeBaseTextStyle
@@ -99,4 +101,14 @@ private fun rememberExactLineHeight(textStyle: TextStyle): TextStyle {
             ),
         )
     }
+}
+
+@Composable
+internal fun DivText.observeFocusedTextStyle(
+    textStyle: TextStyle,
+    focusState: State<Boolean>?,
+): TextStyle {
+    val focusedColor = focusedTextColor ?: return textStyle
+    if (focusState?.value != true) return textStyle
+    return textStyle.copy(color = focusedColor.observedColorValue())
 }

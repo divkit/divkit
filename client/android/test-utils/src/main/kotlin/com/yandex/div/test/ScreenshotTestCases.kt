@@ -272,6 +272,7 @@ val composeRoborazziInteractiveScreenshotCases = setOf(
     "div-switch/base-properties.json",
     "div-switch/switch-properties.json",
     "div-text/text-properties.json",
+    "div-text/text_focused_text_color.json",
     "div-text/text_range_without_bound.json",
     "div-text/truncate-policy.json",
     "local-variables/item-builder-data-change-another-id.json",

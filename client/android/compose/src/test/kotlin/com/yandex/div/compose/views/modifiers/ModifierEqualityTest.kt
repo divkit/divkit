@@ -271,6 +271,7 @@ class ModifierEqualityTest {
             actions = observedActions(),
             visibility = value().visibility.observedValue(),
             margins = value().margins?.observeInsets(),
+            focusState = rememberFocusState(value()),
         )
     }
 }

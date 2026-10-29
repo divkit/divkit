@@ -1,6 +1,6 @@
 {
-  "description": "Text with focused text color and focus background",
-  "platforms": ["ios"],
+  "description": "Focused text color updates with its variable while focus is retained",
+  "platforms": ["android", "ios"],
   "div_data": {
     "templates": {
       "button": {
@@ -19,7 +19,7 @@
         "text_alignment_vertical": "center",
         "font_size": 30,
         "text_color": "#ffff",
-        "focused_text_color": "#00FF00",
+        "focused_text_color": "@{focused_text_color}",
         "font_weight": "bold",
         "height": {
           "type": "fixed",
@@ -57,6 +57,13 @@
     },
     "card": {
       "log_id": "tests",
+      "variables": [
+        {
+          "name": "focused_text_color",
+          "type": "color",
+          "value": "#00FF00"
+        }
+      ],
       "states": [
         {
           "state_id": 0,
@@ -97,6 +104,24 @@
     {
       "type": "verify_snapshot",
       "name": "step1"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "update_focused_text_color",
+        "typed": {
+          "type": "set_variable",
+          "variable_name": "focused_text_color",
+          "value": {
+            "type": "color",
+            "value": "#FF00FF"
+          }
+        }
+      }
+    },
+    {
+      "type": "verify_snapshot",
+      "name": "step2"
     }
   ]
 }

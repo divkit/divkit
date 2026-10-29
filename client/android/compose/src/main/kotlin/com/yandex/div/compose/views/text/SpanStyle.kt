@@ -51,6 +51,7 @@ internal fun DivText.Range.observeSpanStyle(
     }
     return SpanStyle(
         brush = spanBrush,
+        alpha = 1f,
         fontSize = spanFontSize,
         fontFamily = spanFontFamily,
         fontWeight = rangeFontWeight.toFontWeight(rangeFontWeightValue),

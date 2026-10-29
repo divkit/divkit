@@ -116,6 +116,7 @@ fun text(
     ellipsis: DivText.Ellipsis? = null,
     extensions: List<DivExtension>? = null,
     focus: DivFocus? = null,
+    focusedTextColor: Expression<Int>? = null,
     fontSize: Long = 12,
     functions: List<DivFunction>? = null,
     height: DivSize = wrapContent(),
@@ -136,6 +137,7 @@ fun text(
     selectedActions: List<DivAction>? = null,
     text: Expression<String>,
     textColor: Color? = null,
+    textColorExpression: Expression<Int>? = null,
     textGradient: DivTextGradient? = null,
     truncatePolicy: DivText.TruncatePolicy = DivText.TruncatePolicy.GRAPHEME,
     tooltips: List<DivTooltip>? = null,
@@ -165,6 +167,7 @@ fun text(
             ellipsis = ellipsis,
             extensions = extensions,
             focus = focus,
+            focusedTextColor = focusedTextColor,
             functions = functions,
             fontSize = constant(fontSize),
             fontSizeUnit = constant(fontSizeUnit),
@@ -187,7 +190,9 @@ fun text(
             text = text,
             textGradient = textGradient,
             truncatePolicy = constant(truncatePolicy),
-            textColor = textColor?.let { constant(it.value) } ?: constant(0xFF000000.toInt()),
+            textColor = textColorExpression
+                ?: textColor?.let { constant(it.value) }
+                ?: constant(0xFF000000.toInt()),
             tooltips = tooltips,
             transform = transform,
             transitionIn = transitionIn,
@@ -219,6 +224,7 @@ fun textRange(
     background: DivTextRangeBackground? = null,
     border: DivTextRangeBorder? = null,
     mask: DivTextRangeMask? = null,
+    textColor: Int? = null,
     fontSizeUnit: DivSizeUnit = DivSizeUnit.SP,
     lineHeight: Long? = null,
 ) = DivText.Range(
@@ -229,5 +235,6 @@ fun textRange(
     fontSizeUnit = constant(fontSizeUnit),
     lineHeight = lineHeight?.let { constant(it) },
     mask = mask,
-    start = constant(start)
+    start = constant(start),
+    textColor = textColor?.let(::constant),
 )

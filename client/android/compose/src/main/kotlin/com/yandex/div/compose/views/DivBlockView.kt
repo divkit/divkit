@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +29,7 @@ import com.yandex.div.compose.views.indicator.DivIndicatorView
 import com.yandex.div.compose.views.input.DivInputView
 import com.yandex.div.compose.views.modifiers.apply
 import com.yandex.div.compose.views.modifiers.applyPaddings
+import com.yandex.div.compose.views.modifiers.rememberFocusState
 import com.yandex.div.compose.views.pager.DivPagerView
 import com.yandex.div.compose.views.slider.DivSliderView
 import com.yandex.div.compose.views.state.DivStateView
@@ -95,6 +97,7 @@ internal fun VisibleDivBlockView(
     blockTapPropagation: Boolean = false,
 ) {
     val divBase = data.value()
+    val focusState = rememberFocusState(divBase)
     val actions = data.observedActions()
     val margins = if (applyMargins) divBase.margins?.observeInsets() else null
     val menuOffset = DpOffset(
@@ -102,7 +105,7 @@ internal fun VisibleDivBlockView(
         y = -(margins?.calculateBottomPadding() ?: 0.dp),
     )
     WithActionMenu(actions, modifier, menuOffset) { contentModifier ->
-        BaseViewWithExtensions(
+        WithExtensions(
             data = data,
             extensions = extensions(divBase),
             modifier = contentModifier.apply(
@@ -110,6 +113,7 @@ internal fun VisibleDivBlockView(
                 actions = actions,
                 margins = margins,
                 visibility = visibility,
+                focusState = focusState,
                 fillMatchParentWidth = fillMatchParentWidth,
                 fillMatchParentHeight = fillMatchParentHeight,
                 defaultHorizontalAlignment = defaultHorizontalAlignment,
@@ -119,7 +123,9 @@ internal fun VisibleDivBlockView(
                 matchParentMaxHeight = matchParentMaxHeight,
                 blockTapPropagation = blockTapPropagation,
             )
-        )
+        ) { baseModifier ->
+            BaseView(data = data, modifier = baseModifier, focusState = focusState)
+        }
     }
 }
 
@@ -135,24 +141,26 @@ private fun extensions(div: DivBase): List<Pair<DivExtension, DivExtensionHandle
 }
 
 @Composable
-private fun BaseViewWithExtensions(
+private fun WithExtensions(
     data: Div,
     extensions: List<Pair<DivExtension, DivExtensionHandler?>>,
-    modifier: Modifier
+    modifier: Modifier,
+    content: @Composable (Modifier) -> Unit,
 ) {
     val first = extensions.firstOrNull()
     if (first == null) {
-        BaseView(data = data, modifier = modifier)
+        content(modifier)
         return
     }
 
     val (extension, extensionHandler) = first
     if (extensionHandler == null) {
         reportError("No handler for extension: ${extension.id}")
-        BaseViewWithExtensions(
+        WithExtensions(
             data = data,
             extensions = extensions.drop(1),
-            modifier = modifier
+            modifier = modifier,
+            content = content,
         )
         return
     }
@@ -168,11 +176,12 @@ private fun BaseViewWithExtensions(
             animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState(),
             storedValuesStorage = storedValuesStorage,
         ),
-        content = { modifier ->
-            BaseViewWithExtensions(
+        content = { contentModifier ->
+            WithExtensions(
                 data = data,
                 extensions = extensions.drop(1),
-                modifier = modifier
+                modifier = contentModifier,
+                content = content,
             )
         }
     )
@@ -181,7 +190,8 @@ private fun BaseViewWithExtensions(
 @Composable
 private fun BaseView(
     data: Div,
-    modifier: Modifier
+    modifier: Modifier,
+    focusState: State<Boolean>?,
 ) {
     when (data) {
         is Div.Container -> DivContainerView(modifier, data.value)
@@ -199,7 +209,7 @@ private fun BaseView(
         is Div.State -> DivStateView(modifier, data.value)
         is Div.Switch -> DivSwitchView(modifier, data.value)
         is Div.Tabs -> DivTabsView(modifier, data.value)
-        is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value)
+        is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value, focusState)
         is Div.Video -> DivVideoView(modifier.applyPaddings(data), data.value)
     }
 }

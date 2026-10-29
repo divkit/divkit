@@ -9,6 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -54,7 +55,8 @@ import com.yandex.div2.DivText
 @Composable
 internal fun DivTextView(
     modifier: Modifier,
-    data: DivText
+    data: DivText,
+    focusState: State<Boolean>?,
 ) {
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
@@ -64,10 +66,10 @@ internal fun DivTextView(
     ) {
         if (data.selectable.observedValue()) {
             SelectionContainer {
-                BasicText(data = data, horizontalAlignment = textAlignmentHorizontal)
+                BasicText(data = data, horizontalAlignment = textAlignmentHorizontal, focusState = focusState)
             }
         } else {
-            BasicText(data = data, horizontalAlignment = textAlignmentHorizontal)
+            BasicText(data = data, horizontalAlignment = textAlignmentHorizontal, focusState = focusState)
         }
     }
 }
@@ -75,7 +77,8 @@ internal fun DivTextView(
 @Composable
 private fun BasicText(
     data: DivText,
-    horizontalAlignment: DivAlignmentHorizontal
+    horizontalAlignment: DivAlignmentHorizontal,
+    focusState: State<Boolean>?,
 ) {
     val text = data.text.observedValue()
     data.id?.let { id -> LabelText(id, text) }
@@ -89,10 +92,14 @@ private fun BasicText(
     val customEllipsis = data.observeCustomEllipsis(gradientBrush, fontSize, textStyle.color.alpha)
     if (data.hasActionLinks()) {
         CompositionLocalProvider(LocalViewConfiguration provides rememberExactTouchTargetViewConfiguration()) {
-            RenderTextContent(data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines)
+            RenderTextContent(
+                data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines, focusState
+            )
         }
     } else {
-        RenderTextContent(data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines)
+        RenderTextContent(
+            data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines, focusState
+        )
     }
 }
 
@@ -126,11 +133,12 @@ private fun RenderTextContent(
     data: DivText,
     text: String,
     fontSize: Int,
-    textStyle: TextStyle,
+    baseTextStyle: TextStyle,
     inlineImages: List<InlineImageData>,
     gradientBrush: Brush?,
     customEllipsis: AnnotatedText?,
     maxLines: Int,
+    focusState: State<Boolean>?,
 ) {
     val hasMaxLines = data.maxLines != null
     val truncate = data.observeTruncate(hasMaxLines, customEllipsis)
@@ -145,7 +153,7 @@ private fun RenderTextContent(
         ranges = data.ranges,
         gradientBrush = gradientBrush,
         baseFontSize = fontSize,
-        baseTextColorAlpha = textStyle.color.alpha,
+        baseTextColorAlpha = baseTextStyle.color.alpha,
         inlineImages = inlineImages,
     )
     val needsMeasuredEndEllipsis = customEllipsis == null && shouldMeasureEndEllipsis(
@@ -155,6 +163,7 @@ private fun RenderTextContent(
         containsInlineImages = inlineImages.isNotEmpty(),
         text = text,
     )
+    val textStyle = data.observeFocusedTextStyle(baseTextStyle, focusState)
     if (customEllipsis != null || needsMeasuredEndEllipsis) {
         RenderMeasuredText(text, annotatedText, customEllipsis, textStyle, maxLines, truncatePolicy, inlineImages)
     } else if (annotatedText == null) {
@@ -454,7 +463,7 @@ private fun buildAnnotatedText(
 
 private fun AnnotatedString.Builder.addTextGradient(gradientBrush: Brush?) {
     if (gradientBrush == null) return
-    addStyle(SpanStyle(brush = gradientBrush), 0, length)
+    addStyle(SpanStyle(brush = gradientBrush, alpha = 1f), 0, length)
 }
 
 @Composable
