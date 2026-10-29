@@ -9,6 +9,8 @@
 * Added support for gallery `scroll_to` and `scroll_by` actions, including `duration`, in the Compose renderer.
 * Added support for gallery item selection and offset scrolling via URLs in the Compose renderer.
 * Added support for number animators and animator control actions in the Android Compose renderer.
+* Added support for pager `scroll_to` and `scroll_by` actions, including `duration`, in the Compose renderer.
+* Added support for pager page selection via URLs (`set_current_item`, `set_next_item`, `set_previous_item`, `scroll_to_start`, `scroll_to_end`, `scroll_to_item_id`) in the Compose renderer.
 * Added the `render-common` module for rendering utilities shared by the View and Compose renderers.
 * Added wildcard extension handlers that are applied to every element without declaring `extensions` in the layout: `DivConfiguration.Builder.wildcardExtension` and `wildcardExtensionHandlers` in the Compose renderer.
 * Array getters now report an out of bounds error for negative indexes, matching iOS and Web.
