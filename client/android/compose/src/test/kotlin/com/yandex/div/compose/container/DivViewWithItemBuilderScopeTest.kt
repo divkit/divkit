@@ -25,6 +25,7 @@ import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.variable
+import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
@@ -100,18 +101,19 @@ class DivViewWithItemBuilderScopeTest(private val case: Case) {
 
         when (case.removal) {
             Removal.DATA -> elements.set(jsonArray())
-            Removal.PATCH -> removeBuilder(card)
+            Removal.PATCH -> patchBuilder(card, items = null)
+            Removal.REPLACEMENT -> patchBuilder(card, items = listOf(replacementBuilder()))
         }
         rule.waitForIdle()
 
         assertEquals(cardObservers, observers)
     }
 
-    private fun removeBuilder(card: DivData) {
+    private fun patchBuilder(card: DivData, items: List<Div>?) {
         rule.runOnIdle {
             assertTrue(runBlocking {
                 divContext.patcher.applyPatch(card, DivPatch(
-                    changes = listOf(DivPatch.Change(BUILDER_ID)),
+                    changes = listOf(DivPatch.Change(BUILDER_ID, items)),
                     onAppliedActions = listOf(action(id = "applied"))
                 ))
             })
@@ -124,7 +126,7 @@ class DivViewWithItemBuilderScopeTest(private val case: Case) {
         )
     }
 
-    enum class Removal { DATA, PATCH }
+    enum class Removal { DATA, PATCH, REPLACEMENT }
 
     class Case(
         private val name: String,
@@ -162,6 +164,17 @@ class DivViewWithItemBuilderScopeTest(private val case: Case) {
             Case("item expression, builder removed by a patch", Removal.PATCH) {
                 prototype(div = text(text = expression("@{parent}")))
             },
+            Case("item expression, builder replaced by a patch", Removal.REPLACEMENT) {
+                prototype(div = text(text = expression("@{parent}")))
+            },
+        )
+
+        private fun replacementBuilder(): Div = container(
+            id = BUILDER_ID,
+            itemBuilder = itemBuilder(
+                data = arrayExpression("@{elements}"),
+                prototypes = listOf(prototype(div = text(text = "replaced")))
+            )
         )
 
         private fun localVariableText() = text(

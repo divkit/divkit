@@ -1,6 +1,7 @@
 package com.yandex.div.test.data
 
 import com.yandex.div2.Div
+import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivPageContentSize
 import com.yandex.div2.DivPageSize
 import com.yandex.div2.DivPager
@@ -10,6 +11,7 @@ import com.yandex.div2.DivSize
 
 fun pager(
     id: String? = null,
+    itemBuilder: DivCollectionItemBuilder? = null,
     items: List<Div> = emptyList(),
     height: DivSize = wrapContent(),
     width: DivSize = matchParent(),
@@ -22,6 +24,7 @@ fun pager(
     defaultItem = constant(defaultItem),
     infiniteScroll = constant(infiniteScroll),
     id = id,
+    itemBuilder = itemBuilder,
     items = items,
     height = height,
     width = width,

@@ -16,6 +16,7 @@ import com.yandex.div.compose.utils.reportWarning
 import com.yandex.div.internal.core.INDEX_VARIABLE_NAME
 import com.yandex.div.json.typeMismatch
 import com.yandex.div2.Div
+import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivVisibility
@@ -31,20 +32,32 @@ internal class CollectionItems(
 )
 
 @Composable
-internal fun DivContainer.observeItems(): CollectionItems {
-    val builder = itemBuilder
-    if (builder == null) {
+internal fun DivContainer.observeItems(): CollectionItems =
+    observeCollectionItems(this, items, itemBuilder)
+
+/**
+ * The children of [owner]: the items its [itemBuilder] builds, or the static [items] otherwise,
+ * each with the scope it is rendered in.
+ */
+@Composable
+private fun observeCollectionItems(
+    owner: DivBase,
+    items: List<Div>?,
+    itemBuilder: DivCollectionItemBuilder?,
+): CollectionItems {
+    if (itemBuilder == null) {
         val staticItems = items.orEmpty()
         if (staticItems.none { it.value().declaresLocalScope }) {
             return CollectionItems(staticItems, components = null, triggerComponents = emptyList())
         }
     }
     val component = LocalComponent.current
-    val collectionItems = if (builder == null) {
+    val collectionItems = if (itemBuilder == null) {
         val viewContext = LocalDivViewContext.current
-        viewContext.collectionItemScopeStorage.getOrCreateStaticItems(this, component, viewContext)
+        viewContext.collectionItemScopeStorage
+            .getOrCreateStaticItems(owner, items.orEmpty(), component, viewContext)
     } else {
-        builder.observeBuiltItems(this, component)
+        itemBuilder.observeBuiltItems(owner, component)
     }
     collectionItems.triggerComponents.forEach { triggerComponent ->
         key(triggerComponent) {
@@ -81,7 +94,7 @@ internal inline fun CollectionItems.observeVisible(): List<Div> {
  */
 @Composable
 private fun DivCollectionItemBuilder.observeBuiltItems(
-    container: DivContainer,
+    owner: DivBase,
     parent: DivLocalComponent,
 ): CollectionItems {
     if (isDataElementShadowedByIndex) {
@@ -105,7 +118,7 @@ private fun DivCollectionItemBuilder.observeBuiltItems(
     val idCounts = selectedItems.mapNotNull { it.id }.groupingBy { it }.eachCount()
     val items = selectedItems.mapIndexed { index, item ->
         viewContext.collectionItemScopeStorage.getOrCreateItem(
-            container = container,
+            owner = owner,
             parent = parent,
             item = item,
             duplicateIndex = index.takeIf { (idCounts[item.id] ?: 0) > 1 },
@@ -114,7 +127,7 @@ private fun DivCollectionItemBuilder.observeBuiltItems(
     }
     SideEffect {
         val removedDivs =
-            viewContext.collectionItemScopeStorage.retainItems(container, parent, items)
+            viewContext.collectionItemScopeStorage.retainItems(owner, parent, items)
         if (removedDivs.isNotEmpty()) viewContext.releaseComponents(removedDivs)
         items.forEach { it.notifyChanges() }
     }
