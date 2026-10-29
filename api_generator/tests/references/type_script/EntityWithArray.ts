@@ -13,7 +13,7 @@ export class EntityWithArray<T extends EntityWithArrayProps = EntityWithArrayPro
 
     readonly type = 'entity_with_array';
     /**
-     * Platforms: android, ios, web, flutter
+     * Platforms: android, ios, web
      */
     array: Type<(Entity)[]>;
 
@@ -24,7 +24,7 @@ export class EntityWithArray<T extends EntityWithArrayProps = EntityWithArrayPro
 
 export interface EntityWithArrayProps {
     /**
-     * Platforms: android, ios, web, flutter
+     * Platforms: android, ios, web
      */
     array: Type<(Entity)[]>;
 }

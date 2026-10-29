@@ -174,8 +174,7 @@
             "platforms": [
               "android",
               "ios",
-              "web",
-              "flutter"
+              "web"
             ],
             "items": {
               "$resolved_refs": [

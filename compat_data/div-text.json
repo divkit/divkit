@@ -25,9 +25,6 @@
         "web": {
           "version_added": "29.2.0"
         },
-        "flutter": {
-          "version_added": "0.1.0"
-        },
         "ios": {
           "version_added": "31.3.0",
           "notes": "Default value is true"

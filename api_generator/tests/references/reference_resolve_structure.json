@@ -117,8 +117,7 @@
             "platforms": [
               "android",
               "ios",
-              "web",
-              "flutter"
+              "web"
             ],
             "items": {
               "$ref": "entity.json"
