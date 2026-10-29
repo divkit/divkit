@@ -2,6 +2,7 @@ package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.expression.asImpl
 import com.yandex.div.core.json.JsonArray
+import com.yandex.div.core.json.asOrgJsonArray
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.data.PropertyVariableExecutor

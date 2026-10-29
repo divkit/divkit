@@ -4,10 +4,9 @@ import com.yandex.div.core.annotations.ExperimentalApi
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import kotlin.jvm.JvmInline
 
 /**
- * [JsonArray] backed by [org.json.JSONArray].
+ * [JsonArray] backed by [JSONArray].
  *
  * `get*` methods throw [RuntimeException] if a value is missing or has an unexpected type,
  * `get*` with a fallback throw only on unexpected type,
@@ -16,7 +15,7 @@ import kotlin.jvm.JvmInline
 @Suppress("TooManyFunctions")
 @ExperimentalApi
 internal class OrgJsonArray(
-    private val source: JSONArray
+    internal val source: JSONArray
 ) : JsonArray {
 
     override val size: Int
@@ -100,8 +99,6 @@ internal class OrgJsonArray(
             isShared = false,
         ).apply(modify).build()
     }
-
-    override fun asOrgJsonArray(): JSONArray = source
 
     override fun asKtxJsonArray(): kotlinx.serialization.json.JsonArray = source.toKtxJsonArray()
 

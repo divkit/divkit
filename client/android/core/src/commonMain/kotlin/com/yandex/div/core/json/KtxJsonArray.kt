@@ -3,8 +3,6 @@ package com.yandex.div.core.json
 import com.yandex.div.core.annotations.ExperimentalApi
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
-import org.json.JSONArray
-import kotlin.jvm.JvmInline
 import kotlinx.serialization.json.JsonArray as KtxArray
 import kotlinx.serialization.json.JsonElement as KtxElement
 
@@ -102,8 +100,6 @@ internal class KtxJsonArray(
             isShared = false,
         ).apply(modify).build()
     }
-
-    override fun asOrgJsonArray(): JSONArray = source.toOrgJsonArray()
 
     override fun asKtxJsonArray(): KtxArray = source
 

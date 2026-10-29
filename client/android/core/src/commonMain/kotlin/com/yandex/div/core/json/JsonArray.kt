@@ -3,7 +3,6 @@ package com.yandex.div.core.json
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.type.DataArray
-import org.json.JSONArray
 import kotlin.jvm.JvmStatic
 import kotlinx.serialization.json.JsonArray as KtxArray
 
@@ -54,7 +53,6 @@ public interface JsonArray : JsonElement, DataArray {
 
     public fun modify(modify: Builder.() -> Unit): JsonArray
 
-    public fun asOrgJsonArray(): JSONArray
     public fun asKtxJsonArray(): KtxArray
 
     @Suppress("TooManyFunctions")

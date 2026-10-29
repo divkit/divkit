@@ -3,7 +3,6 @@ package com.yandex.div.core.json
 import org.json.JSONArray
 import org.json.JSONObject
 
-
 internal fun JSONObject.copy(): JSONObject {
     val result = JSONObject()
     keys().forEach { key ->

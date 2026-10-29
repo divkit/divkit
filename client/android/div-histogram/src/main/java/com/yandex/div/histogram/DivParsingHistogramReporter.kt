@@ -1,6 +1,7 @@
 package com.yandex.div.histogram
 
 import com.yandex.div.core.json.JsonObject
+import com.yandex.div.core.json.asOrgJsonObject
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.util.HistogramClock
 import com.yandex.div.histogram.util.HistogramUtils

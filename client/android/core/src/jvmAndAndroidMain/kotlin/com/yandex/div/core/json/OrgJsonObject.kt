@@ -3,10 +3,9 @@ package com.yandex.div.core.json
 import com.yandex.div.core.annotations.ExperimentalApi
 import org.json.JSONException
 import org.json.JSONObject
-import kotlin.jvm.JvmInline
 
 /**
- * [JsonObject] backed by [org.json.JSONObject].
+ * [JsonObject] backed by [JSONObject].
  *
  * `get*` methods throw [RuntimeException] if a value is missing or has an unexpected type,
  * `get*` with a fallback throw only on unexpected type,
@@ -15,7 +14,7 @@ import kotlin.jvm.JvmInline
 @Suppress("TooManyFunctions")
 @ExperimentalApi
 internal class OrgJsonObject(
-    private val source: JSONObject
+    internal val source: JSONObject
 ) : JsonObject {
 
     override val size: Int
@@ -105,8 +104,6 @@ internal class OrgJsonObject(
             isShared = false,
         ).apply(modify).build()
     }
-
-    override fun asOrgJsonObject(): JSONObject = source
 
     override fun asKtxJsonObject(): kotlinx.serialization.json.JsonObject = source.toKtxJsonObject()
 

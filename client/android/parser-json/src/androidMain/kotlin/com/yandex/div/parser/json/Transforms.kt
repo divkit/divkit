@@ -3,6 +3,8 @@ package com.yandex.div.parser.json
 import android.net.Uri
 import com.yandex.div.core.json.JsonArray
 import com.yandex.div.core.json.JsonObject
+import com.yandex.div.core.json.asOrgJsonArray
+import com.yandex.div.core.json.asOrgJsonObject
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
 import org.json.JSONArray

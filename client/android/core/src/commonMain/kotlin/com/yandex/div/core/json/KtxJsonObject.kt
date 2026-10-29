@@ -2,8 +2,6 @@ package com.yandex.div.core.json
 
 import com.yandex.div.core.annotations.ExperimentalApi
 import kotlinx.serialization.json.JsonPrimitive
-import org.json.JSONObject
-import kotlin.jvm.JvmInline
 import kotlinx.serialization.json.JsonElement as KtxElement
 import kotlinx.serialization.json.JsonObject as KtxObject
 
@@ -109,8 +107,6 @@ internal class KtxJsonObject(
             isShared = false,
         ).apply(modify).build()
     }
-
-    override fun asOrgJsonObject(): JSONObject = source.toOrgJsonObject()
 
     override fun asKtxJsonObject(): KtxObject = source
 

@@ -5,6 +5,7 @@ package com.yandex.div.core.type
 import com.yandex.div.core.json.JsonElement
 import com.yandex.div.core.json.requireFinite
 import kotlinx.serialization.json.JsonPrimitive
+import kotlin.jvm.JvmName
 
 /**
  * Normalizes a value to the type that JSON-backed containers return for it.

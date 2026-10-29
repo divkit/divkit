@@ -7,8 +7,6 @@ import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
-import org.json.JSONArray
-import org.json.JSONObject
 import kotlin.jvm.JvmName
 import kotlinx.serialization.json.Json as KtxJson
 import kotlinx.serialization.json.JsonArray as KtxArray
@@ -24,11 +22,6 @@ public fun JsonObject(source: String): JsonObject {
     val element = runCatching { KtxJson.parseToJsonElement(source) }.getOrElse { e -> throw malformedJson(e) }
     val `object` = runCatching { element.jsonObject }.getOrElse { throw unexpectedRootObject(element) }
     return KtxJsonObject(`object`)
-}
-
-@InternalApi
-public fun JsonObject(source: JSONObject): JsonObject {
-    return OrgJsonObject(source)
 }
 
 @InternalApi
@@ -54,11 +47,6 @@ public fun JsonArray(source: String): JsonArray {
 }
 
 @InternalApi
-public fun JsonArray(source: JSONArray): JsonArray {
-    return OrgJsonArray(source)
-}
-
-@InternalApi
 public fun JsonArray(source: KtxArray): JsonArray {
     return KtxJsonArray(source)
 }
@@ -69,18 +57,8 @@ public fun JsonArray(builder: JsonArray.Builder.() -> Unit): JsonArray {
 }
 
 @InternalApi
-public fun JSONObject.asJsonObject(): JsonObject {
-    return OrgJsonObject(this)
-}
-
-@InternalApi
 public fun KtxObject.asJsonObject(): JsonObject {
     return KtxJsonObject(this)
-}
-
-@InternalApi
-public fun JSONArray.asJsonArray(): JsonArray {
-    return OrgJsonArray(this)
 }
 
 @InternalApi

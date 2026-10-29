@@ -3,7 +3,6 @@ package com.yandex.div.core.json
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.type.DataObject
-import org.json.JSONObject
 import kotlin.jvm.JvmStatic
 import kotlinx.serialization.json.JsonObject as KtxObject
 
@@ -55,7 +54,6 @@ public interface JsonObject : JsonElement, DataObject {
 
     public fun modify(modify: Builder.() -> Unit): JsonObject
 
-    public fun asOrgJsonObject(): JSONObject
     public fun asKtxJsonObject(): KtxObject
 
     public interface Builder {

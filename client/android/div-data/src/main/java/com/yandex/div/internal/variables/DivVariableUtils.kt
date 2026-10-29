@@ -4,6 +4,8 @@ import android.net.Uri
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.core.json.JsonArray
 import com.yandex.div.core.json.JsonObject
+import com.yandex.div.core.json.asOrgJsonArray
+import com.yandex.div.core.json.asOrgJsonObject
 import com.yandex.div.core.type.DataArray
 import com.yandex.div.core.type.DataObject
 import com.yandex.div.data.Variable
