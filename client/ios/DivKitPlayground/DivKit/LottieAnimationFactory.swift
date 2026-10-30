@@ -19,7 +19,12 @@ final class LottieAnimationFactory: AsyncSourceAnimatableViewFactory {
   }
 }
 
-extension LottieAnimationView: DivKitExtensions.AsyncSourceAnimatableView {
+extension LottieAnimationView: DivKitExtensions.LottiePlaybackControlling {
+  public func reset() {
+    stop()
+    animationSpeed = abs(animationSpeed)
+  }
+
   public func play() {
     self.play(completion: nil)
   }
@@ -36,6 +41,7 @@ extension LottieAnimationView: DivKitExtensions.AsyncSourceAnimatableView {
         try? LottieAnimation(dictionary: json)
       }
     }.value
+    layoutIfNeeded()
     forceDisplayUpdate()
   }
 }

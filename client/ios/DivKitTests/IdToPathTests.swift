@@ -401,6 +401,63 @@ struct IdToPathTests {
     )
   }
 
+  @Test
+  func resolvedExtensionTarget_survivesRegistrationRemoval() {
+    // Arrange
+    let idToPath = IdToPath()
+    let handler = RecordingExtensionActionHandler()
+    idToPath.add(
+      oldTargetPath, forId: "target", viewId: hostViewId,
+      extensionIds: ["test"], extensionHandlers: ["test": handler]
+    )
+    let resolver = PathResolver(idToPath: idToPath)
+
+    // Act
+    guard case let .resolved(target) = resolver.resolveTarget(
+      id: "target", cardId: "card", extensionId: "test"
+    ) else {
+      Issue.record("Expected the modeled extension target to resolve")
+      return
+    }
+    idToPath.beginUpdate(viewId: hostViewId)
+    idToPath.endUpdate(viewId: hostViewId)
+    let resolvedHandler = target.extensionHandler?.actionHandler
+
+    // Assert
+    #expect(target.path == oldTargetPath)
+    #expect(resolvedHandler as? RecordingExtensionActionHandler === handler)
+  }
+
+  @Test
+  func resolvedExtensionTarget_keepsHandlerFromSelectedRegistration() {
+    // Arrange
+    let idToPath = IdToPath()
+    let handler = RecordingExtensionActionHandler()
+    let replacement = RecordingExtensionActionHandler()
+    idToPath.add(
+      oldTargetPath, forId: "target", viewId: hostViewId,
+      extensionIds: ["test"], extensionHandlers: ["test": handler]
+    )
+    let resolver = PathResolver(idToPath: idToPath)
+
+    // Act
+    guard case let .resolved(target) = resolver.resolveTarget(
+      id: "target", cardId: "card", extensionId: "test"
+    ) else {
+      Issue.record("Expected the modeled extension target to resolve")
+      return
+    }
+    idToPath.add(
+      oldTargetPath, forId: "target", viewId: hostViewId,
+      extensionIds: ["test"], extensionHandlers: ["test": replacement]
+    )
+    let resolvedHandler = target.extensionHandler?.actionHandler
+
+    // Assert
+    #expect(target.path == oldTargetPath)
+    #expect(resolvedHandler as? RecordingExtensionActionHandler === handler)
+  }
+
   private func makeFixture() -> (
     idToPath: IdToPath,
     hostPath: UIElementPath,

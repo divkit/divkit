@@ -177,9 +177,9 @@ extension DivInput: DivBlockModeling {
       guard let labelId else {
         return nil
       }
-      switch pathResolver.resolvePath(id: labelId, cardId: cardId, divTypes: [DivText.type]) {
-      case let .resolved(path):
-        guard let state: TextBlockViewState = storage.getState(path) else {
+      switch pathResolver.resolveTarget(id: labelId, cardId: cardId, divTypes: [DivText.type]) {
+      case let .resolved(target):
+        guard let state: TextBlockViewState = storage.getState(target.path) else {
           DivKitLogger.error("Text with id '\(labelId)' has no state")
           return nil
         }

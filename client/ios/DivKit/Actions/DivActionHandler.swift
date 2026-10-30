@@ -12,6 +12,8 @@ public final class DivActionHandler {
 
   typealias UpdateCardAction = (DivCardUpdateReason) -> Void
 
+  private let extensionActionHandler: ExtensionActionHandler
+
   private let customActionHandler: DivCustomActionHandling?
   private let urlHandler: DivUrlHandler
   private let variablesStorage: DivVariablesStorage
@@ -76,6 +78,7 @@ public final class DivActionHandler {
       idToPath: IdToPath(),
       pendingActions: PendingActionsStorage(),
       animatorController: DivAnimatorController(),
+      isCardUpdatePending: { _ in false },
       flags: .default
     )
   }
@@ -97,6 +100,7 @@ public final class DivActionHandler {
     idToPath: IdToPath,
     pendingActions: PendingActionsStorage,
     animatorController: DivAnimatorController,
+    isCardUpdatePending: @escaping (DivCardID) -> Bool,
     flags: DivFlagsInfo
   ) {
     self.customActionHandler = customActionHandler
@@ -113,6 +117,11 @@ public final class DivActionHandler {
 
     let actionPathResolver = ActionPathResolver(reporter: reporter, idToPath: idToPath)
     self.actionPathResolver = actionPathResolver
+    extensionActionHandler = ExtensionActionHandler(
+      pathResolver: actionPathResolver,
+      reporter: reporter,
+      isCardUpdatePending: isCardUpdatePending
+    )
 
     animatorActionHandler = AnimatorActionHandler(
       animatorController: animatorController,
@@ -248,6 +257,8 @@ public final class DivActionHandler {
     )
 
     switch action.typed {
+    case let .divExtensionAction(action):
+      extensionActionHandler.handle(action, context: context)
     case let .divActionAnimatorStart(action):
       animatorActionHandler.handle(action, context: context)
     case let .divActionAnimatorStop(action):
@@ -316,15 +327,17 @@ public final class DivActionHandler {
   func enqueuePendingAction(
     id: String,
     divTypes: Set<String>? = nil,
+    extensionId: String? = nil,
     scopePath: UIElementPath?,
     cardId: DivCardID,
     sourcePath: UIElementPath,
-    apply: @escaping (UIElementPath) -> Void
+    apply: @escaping (IdToPath.Target) -> Void
   ) {
     pendingActions.enqueue(
       PendingActionsStorage.PendingAction(
         id: id,
         divTypes: divTypes,
+        extensionId: extensionId,
         scopePath: scopePath,
         cardId: cardId,
         sourcePath: sourcePath,
@@ -337,18 +350,74 @@ public final class DivActionHandler {
     updateCard(.state(cardId))
   }
 
+  func processCardUpdates(_ update: () -> Void) {
+    let actions = pendingActions.take()
+    update()
+    processPendingActions(actions)
+  }
+
+  func supersedePendingExtensionAction(
+    id: String, extensionId: String, scopePath: UIElementPath?, cardId: DivCardID
+  ) {
+    pendingActions.supersedeExtensionAction(
+      id: id, extensionId: extensionId, scopePath: scopePath, cardId: cardId
+    )
+  }
+
+  /// Direct modeling hosts do not necessarily subscribe to card updates.
+  func processRetainedActions(cardId: DivCardID) {
+    guard pendingActions.contains(cardId: cardId) else {
+      return
+    }
+    onMainThreadAsync { [weak self] in
+      guard let self else {
+        return
+      }
+      self.processPendingActions(self.pendingActions.takeRetained(cardId: cardId))
+    }
+  }
+
+  func containsPendingActions(cardId: DivCardID) -> Bool {
+    pendingActions.contains(cardId: cardId)
+  }
+
+  func resetPendingActions(cardId: DivCardID? = nil) {
+    if let cardId {
+      pendingActions.reset(cardId: cardId)
+    } else {
+      pendingActions.reset()
+    }
+  }
+
   /// Resolves actions captured at the start of a card-update tick. Must be called after
   /// all synchronously subscribed views have been re-modeled, when `IdToPath` is up to date.
-  func processPendingActions(_ actions: [PendingActionsStorage.PendingAction]) {
+  private func processPendingActions(_ actions: [PendingActionsStorage.PendingAction]) {
     for action in actions {
-      switch actionPathResolver.resolvePath(
+      defer { pendingActions.finish(action) }
+      guard !pendingActions.isSuperseded(action) else {
+        continue
+      }
+      switch actionPathResolver.resolveTarget(
         id: action.id,
         cardId: action.cardId,
         scopePath: action.scopePath,
-        divTypes: action.divTypes
+        divTypes: action.divTypes,
+        extensionId: action.extensionId
       ) {
-      case let .resolved(path):
-        action.apply(path)
+      case let .resolved(target):
+        action.apply(target)
+      case .notFound where action.retainsUntilResolved:
+        if !action.isDeferred {
+          actionPathResolver.reportDeferred(
+            id: action.id,
+            cardId: action.cardId,
+            scopePath: action.scopePath,
+            sourcePath: action.sourcePath
+          )
+        }
+        var retained = action
+        retained.isDeferred = true
+        pendingActions.retain(retained)
       case .notFound:
         actionPathResolver.reportNotFound(
           id: action.id,

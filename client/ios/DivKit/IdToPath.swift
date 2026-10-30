@@ -18,9 +18,16 @@ import VGSL
 /// deliberately no view-scoped lookup: narrowing addressing to a single view is not a thing a
 /// caller should be able to ask for by accident.
 final class IdToPath {
+  struct Target {
+    let path: UIElementPath
+    let extensionHandler: DivExtensionHandler?
+  }
+
   private struct Registration {
     let divType: String?
     let generation: Int
+    let extensionIds: Set<String>
+    let extensionHandlers: [String: DivExtensionHandler]
   }
 
   private var idToPath = [DivViewId: [String: [UIElementPath: Registration]]]()
@@ -40,25 +47,50 @@ final class IdToPath {
     scopePath: UIElementPath? = nil,
     divTypes: Set<String>? = nil
   ) -> [UIElementPath] {
+    targets(
+      forId: id, cardId: cardId, scopePath: scopePath,
+      divTypes: divTypes
+    ).map(\.path)
+  }
+
+  /// Captures paths and their extensions together so delivery cannot mix registrations
+  /// from different model updates. Host-provided properties must be accessed outside the lock.
+  func targets(
+    forId id: String,
+    cardId: DivCardID,
+    scopePath: UIElementPath? = nil,
+    divTypes: Set<String>? = nil,
+    extensionId: String? = nil
+  ) -> [Target] {
     lock.withLock {
-      idToPath.reduce(into: [UIElementPath]()) { result, entry in
+      idToPath.reduce(into: [Target]()) { result, entry in
         guard entry.key.cardId == cardId else {
           return
         }
-        result.append(contentsOf: latestPaths(
+        result.append(contentsOf: selectLatestTargets(
           in: entry.value[id],
           scopePath: scopePath,
-          divTypes: divTypes
+          divTypes: divTypes,
+          extensionId: extensionId
         ))
       }
     }
   }
 
-  func add(_ path: UIElementPath, forId id: String, viewId: DivViewId, divType: String? = nil) {
+  func add(
+    _ path: UIElementPath,
+    forId id: String,
+    viewId: DivViewId,
+    divType: String? = nil,
+    extensionIds: Set<String> = [],
+    extensionHandlers: [String: DivExtensionHandler] = [:]
+  ) {
     lock.withLock {
       idToPath[viewId, default: [:]][id, default: [:]][path] = Registration(
         divType: divType,
-        generation: generations[viewId, default: 0]
+        generation: generations[viewId, default: 0],
+        extensionIds: extensionIds,
+        extensionHandlers: extensionHandlers
       )
     }
   }
@@ -114,31 +146,38 @@ final class IdToPath {
     }
   }
 
-  private func latestPaths(
+  private func selectLatestTargets(
     in registrations: [UIElementPath: Registration]?,
     scopePath: UIElementPath?,
-    divTypes: Set<String>?
-  ) -> [UIElementPath] {
+    divTypes: Set<String>?,
+    extensionId: String?
+  ) -> [Target] {
     guard let registrations else {
       return []
     }
-    func matches(_ path: UIElementPath, _ registration: Registration) -> Bool {
+    let matching = registrations.lazy.filter { path, registration in
       if let scopePath, !path.starts(with: scopePath) {
         return false
       }
-      guard let divTypes, let divType = registration.divType else {
-        return true
+      if let extensionId, !registration.extensionIds.contains(extensionId) {
+        return false
       }
-      return divTypes.contains(divType)
+      if let divTypes, let divType = registration.divType {
+        return divTypes.contains(divType)
+      }
+      return true
     }
-    guard let generation = registrations.lazy
-      .filter({ matches($0.key, $0.value) })
-      .map(\.value.generation)
-      .max() else {
+    guard let generation = matching.map(\.value.generation).max() else {
       return []
     }
-    return registrations.compactMap { path, registration in
-      registration.generation == generation && matches(path, registration) ? path : nil
+    return matching.compactMap { path, registration in
+      guard registration.generation == generation else {
+        return nil
+      }
+      return Target(
+        path: path,
+        extensionHandler: extensionId.flatMap { registration.extensionHandlers[$0] }
+      )
     }
   }
 }

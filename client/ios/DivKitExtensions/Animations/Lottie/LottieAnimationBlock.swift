@@ -10,6 +10,7 @@ final class LottieAnimationBlock: SizeForwardingBlock {
   let sizeProvider: Block
   let scale: DivImageScale
   var isPlaying: Bool
+  let playbackState: LottiePlaybackState?
 
   var debugDescription: String {
     "Animation Block playing animation with view: \(animatableView)"
@@ -20,13 +21,15 @@ final class LottieAnimationBlock: SizeForwardingBlock {
     animationHolder: AnimationHolder,
     sizeProvider: Block,
     scale: DivImageScale,
-    isPlaying: Bool
+    isPlaying: Bool,
+    playbackState: LottiePlaybackState?
   ) {
     self.animatableView = animatableView
     self.animationHolder = animationHolder
     self.sizeProvider = sizeProvider
     self.scale = scale
     self.isPlaying = isPlaying
+    self.playbackState = playbackState
   }
 
   func getImageHolders() -> [ImageHolder] { [] }
@@ -44,6 +47,7 @@ final class LottieAnimationBlock: SizeForwardingBlock {
       && self.animationHolder == other.animationHolder
       && self.scale == other.scale
       && self.isPlaying == other.isPlaying
+      && self.playbackState == other.playbackState
   }
 }
 

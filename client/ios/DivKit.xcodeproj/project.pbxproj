@@ -270,6 +270,8 @@
 		D97634000000000000000007 /* UITestLaunchArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97634000000000000000003 /* UITestLaunchArgument.swift */; };
 		D97636000000000000000002 /* UITestRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97636000000000000000001 /* UITestRequestHandler.swift */; };
 		90AD3E8C0F214FBC80E21F13 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 25C4B997383348A4A73C4875 /* DivKitExtensions */; };
+		D10587000000000000000001 /* ExtensionActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10587000000000000000000 /* ExtensionActionTests.swift */; };
+		D10587000000000000000003 /* RecordingExtensionActionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10587000000000000000002 /* RecordingExtensionActionHandler.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -608,6 +610,8 @@
 		D97634000000000000000002 /* UITestAppClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestAppClient.swift; sourceTree = "<group>"; };
 		D97634000000000000000003 /* UITestLaunchArgument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestLaunchArgument.swift; sourceTree = "<group>"; };
 		D97636000000000000000001 /* UITestRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestRequestHandler.swift; sourceTree = "<group>"; };
+		D10587000000000000000000 /* ExtensionActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionActionTests.swift; sourceTree = "<group>"; };
+		D10587000000000000000002 /* RecordingExtensionActionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingExtensionActionHandler.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -909,6 +913,8 @@
 			isa = PBXGroup;
 			children = (
 				9DD0C7892D74AB7E009EA1AF /* SubmitActionHandlerTests.swift */,
+				D10587000000000000000000 /* ExtensionActionTests.swift */,
+				D10587000000000000000002 /* RecordingExtensionActionHandler.swift */,
 				8C40BA012ABB3B5C008405AD /* DivActionHandlerTests.swift */,
 				8C7B1B312865C01C0036EF4C /* DivActionIntentTests.swift */,
 				431CF8572B7BC47E005A2E61 /* DivActionURLHandlerTests.swift */,
@@ -1934,6 +1940,8 @@
 				8CBE33022BD699CC00CFFDF5 /* DivVariableStorageTests.swift in Sources */,
 				8C90A2122B975B9000BB8CFD /* FunctionTests.swift in Sources */,
 				9D08688F2DCE3C0900C5B2CC /* IntegrationTests.swift in Sources */,
+				D10587000000000000000001 /* ExtensionActionTests.swift in Sources */,
+				D10587000000000000000003 /* RecordingExtensionActionHandler.swift in Sources */,
 				8C40BA022ABB3B5C008405AD /* DivActionHandlerTests.swift in Sources */,
 				E945FC46293E1CA80066C3EA /* Utils.swift in Sources */,
 				52907F662A71199B00518F50 /* DivLastVisibleBoundsCacheTests.swift in Sources */,

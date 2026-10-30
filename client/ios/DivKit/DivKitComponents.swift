@@ -13,7 +13,9 @@ public final class DivKitComponents {
   public let actionHandler: DivActionHandler
   public let blockStateStorage = DivBlockStateStorage()
   public let divCustomBlockFactory: DivCustomBlockFactory
+  /// Changes apply to action targets when they are modeled again.
   public var extensionHandlers: [DivExtensionHandler]
+
   public let flagsInfo: DivFlagsInfo
   public let fontProvider: DivFontProvider
   public let imageHolderFactory: DivImageHolderFactory
@@ -48,7 +50,6 @@ public final class DivKitComponents {
   private let animatorController = DivAnimatorController()
   private let disposePool = AutodisposePool()
   private let idToPath = IdToPath()
-  private let pendingActions: PendingActionsStorage
   private let functionsStorage: DivFunctionsStorage
   private let lastVisibleBoundsCache = DivLastVisibleBoundsCache()
   private let layoutProviderHandler: DivLayoutProviderHandler
@@ -121,7 +122,6 @@ public final class DivKitComponents {
   ) {
     self.persistentValuesStorage = persistentValuesStorageInternal
     let pendingActions = PendingActionsStorage()
-    self.pendingActions = pendingActions
 
     self.divCustomBlockFactory = divCustomBlockFactory ?? EmptyDivCustomBlockFactory()
     self.extensionHandlers = extensionHandlers
@@ -142,9 +142,13 @@ public final class DivKitComponents {
 
     weak var weakActionHandler: DivActionHandler?
     updateAggregator = RunLoopCardUpdateAggregator { reasons in
-      let actions = pendingActions.take()
-      updateCardPipe.send(reasons)
-      weakActionHandler?.processPendingActions(actions)
+      guard let actionHandler = weakActionHandler else {
+        updateCardPipe.send(reasons)
+        return
+      }
+      actionHandler.processCardUpdates {
+        updateCardPipe.send(reasons)
+      }
     }
     updateCard = updateAggregator.aggregate(_:)
 
@@ -181,6 +185,7 @@ public final class DivKitComponents {
       idToPath: idToPath,
       pendingActions: pendingActions,
       animatorController: animatorController,
+      isCardUpdatePending: updateAggregator.hasPendingUpdate(cardId:),
       flags: flagsInfo
     )
     weakActionHandler = actionHandler
@@ -226,6 +231,7 @@ public final class DivKitComponents {
     submitter.cancelRequests()
 
     blockStateStorage.reset()
+    actionHandler.resetPendingActions()
     lastVisibleBoundsCache.reset()
     stateManagement.reset()
     variablesStorage.reset()
@@ -235,13 +241,13 @@ public final class DivKitComponents {
     timerStorage.reset()
     tooltipManager.reset()
     idToPath.reset()
-    pendingActions.reset()
     animatorController.reset()
     debugErrorCollectors = [:]
   }
 
   public func reset(cardId: DivCardID) {
     blockStateStorage.reset(cardId: cardId)
+    actionHandler.resetPendingActions(cardId: cardId)
     lastVisibleBoundsCache.dropVisibleBounds(prefix: UIElementPath(cardId.rawValue))
     stateManagement.reset(cardId: cardId)
     variablesStorage.reset(cardId: cardId)
@@ -250,7 +256,6 @@ public final class DivKitComponents {
     visibilityCounter.reset(cardId: cardId)
     timerStorage.reset(cardId: cardId)
     idToPath.reset(cardId: cardId)
-    pendingActions.reset(cardId: cardId)
     animatorController.reset(cardId: cardId)
     debugErrorCollectors[cardId] = nil
   }
@@ -365,7 +370,7 @@ public final class DivKitComponents {
     }
     // A trigger initialized synchronously above can enqueue an action while update aggregation
     // is disabled. Restore the otherwise guaranteed update tick for such an action.
-    if pendingActions.contains(cardId: cardId) {
+    if actionHandler.containsPendingActions(cardId: cardId) {
       updateCard(.state(cardId))
     }
   }

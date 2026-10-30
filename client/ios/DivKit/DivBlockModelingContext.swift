@@ -21,6 +21,7 @@ public struct DivBlockModelingContext {
   public private(set) var currentDivId: String?
 
   private(set) var currentDivType: String?
+  var isOutgoingState = false
 
   private(set) var viewId: DivViewId
   private(set) var cardLogId: String?

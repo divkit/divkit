@@ -18,11 +18,15 @@ extension RiveAnimationBlock {
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {
-    if let animationView = view as? AnimationBlockView,
-       animationView.animationHolder != animationHolder {
+    guard let animationView = view as? AnimationBlockView else {
+      return
+    }
+    if animationView.animationHolder != animationHolder {
       animationView.animatableView = animatableView.value
       animationView.animationHolder = animationHolder
     }
+    animationView.playbackState = nil
+    animationView.isPlaying = true
   }
 }
 #endif

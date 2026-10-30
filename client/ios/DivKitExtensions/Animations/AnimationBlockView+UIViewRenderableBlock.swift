@@ -27,6 +27,7 @@ extension LottieAnimationBlock {
       lottieView.animationHolder = animationHolder
     }
     lottieView.isPlaying = isPlaying
+    lottieView.playbackState = playbackState
   }
 }
 

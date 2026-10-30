@@ -16,6 +16,21 @@ final class RunLoopCardUpdateAggregator {
     self.mainThreadAsyncRunner = mainThreadAsyncRunner
   }
 
+  func hasPendingUpdate(cardId: DivCardID) -> Bool {
+    lock.withLock {
+      batch.contains { reason in
+        switch reason {
+        case let .patch(id, _), let .timer(id), let .state(id):
+          id == cardId
+        case let .variable(cards):
+          cards[cardId] != nil
+        case .external:
+          true
+        }
+      }
+    }
+  }
+
   func performWithNoUpdates(_ action: Action) {
     lock.withLock {
       enabled = false

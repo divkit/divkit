@@ -154,7 +154,8 @@ private func makeExpectedBlock(
         path: context.parentPath + "0" + "container_with_extension"
       ),
       scale: .fit,
-      isPlaying: true
+      isPlaying: true,
+      playbackState: nil
     ),
     ids: []
   )

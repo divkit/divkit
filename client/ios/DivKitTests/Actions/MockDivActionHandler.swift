@@ -37,6 +37,7 @@ extension DivActionHandler {
       idToPath: idToPath,
       pendingActions: pendingActions,
       animatorController: DivAnimatorController(),
+      isCardUpdatePending: { _ in false },
       flags: flags
     )
   }

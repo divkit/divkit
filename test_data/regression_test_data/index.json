@@ -1777,6 +1777,7 @@
       "title": "Lottie typed extension action: Start and Stop",
       "platforms": [
         "android",
+        "ios",
         "web"
       ],
       "tags": [

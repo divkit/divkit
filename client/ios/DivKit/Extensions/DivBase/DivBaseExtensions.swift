@@ -166,7 +166,9 @@ extension DivBase {
         path,
         forId: id,
         viewId: context.viewId,
-        divType: context.currentDivType
+        divType: context.currentDivType,
+        extensionIds: context.isOutgoingState ? [] : Set(extensions?.map(\.id) ?? []),
+        extensionHandlers: context.extensionHandlers
       )
     }
 

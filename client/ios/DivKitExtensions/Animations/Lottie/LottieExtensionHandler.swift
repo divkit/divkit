@@ -11,6 +11,10 @@ public final class LottieExtensionHandler: DivExtensionHandler {
   private let requester: URLResourceRequesting
   private let localAnimationDataProvider: ((URL) -> Data?)?
 
+  public var actionHandler: DivExtensionActionHandler? {
+    LottieExtensionActionHandler()
+  }
+
   public init(
     factory: AsyncSourceAnimatableViewFactory,
     requester: URLResourceRequesting,
@@ -71,7 +75,11 @@ public final class LottieExtensionHandler: DivExtensionHandler {
       animationHolder: animationHolder,
       sizeProvider: block,
       scale: scale,
-      isPlaying: params.isPlaying
+      isPlaying: params.isPlaying,
+      playbackState: context.blockStateStorage.getExtensionState(
+        path: context.path,
+        extensionId: id
+      )
     )
   }
 

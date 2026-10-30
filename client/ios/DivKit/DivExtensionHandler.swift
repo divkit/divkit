@@ -17,6 +17,8 @@ public protocol DivExtensionHandler {
   /// A unique identifier for the extension.
   var id: String { get }
 
+  var actionHandler: DivExtensionActionHandler? { get }
+
   /// Notifies extension handler that div will be processed by DivKit.
   ///
   /// - Parameters:
@@ -59,6 +61,8 @@ public protocol DivExtensionHandler {
 }
 
 extension DivExtensionHandler {
+  public var actionHandler: DivExtensionActionHandler? { nil }
+
   public func accept(
     div _: DivBase,
     context _: DivBlockModelingContext

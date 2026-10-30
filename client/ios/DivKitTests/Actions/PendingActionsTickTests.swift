@@ -324,6 +324,7 @@ struct PendingActionsTickTests {
     PendingActionsStorage.PendingAction(
       id: "target",
       divTypes: nil,
+      extensionId: nil,
       scopePath: nil,
       cardId: cardId,
       sourcePath: cardId.path + "source",

@@ -3,6 +3,7 @@ import LayoutKit
 import Testing
 import VGSL
 
+@MainActor
 @Suite(.serialized)
 struct DivLayoutProviderHandlerTests {
   private let variablesStorage = DivVariablesStorage()

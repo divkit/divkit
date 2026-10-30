@@ -19,7 +19,10 @@ extension DivData: DivBlockModeling {
     let idToPath = context.idToPath
     let viewId = context.viewId
     idToPath.beginUpdate(viewId: viewId)
-    defer { idToPath.endUpdate(viewId: viewId) }
+    defer {
+      idToPath.endUpdate(viewId: viewId)
+      context.actionHandler?.processRetainedActions(cardId: context.cardId)
+    }
 
     guard let state = getCurrentState(context: context) else {
       throw DivBlockModelingError("DivData has no states", path: context.path)

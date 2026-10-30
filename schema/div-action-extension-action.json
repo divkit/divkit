@@ -1,5 +1,6 @@
 {
   "type": "object",
+  "alias_swift": "div_extension_action",
   "$description": "translations.json#/div_action_extension_action",
   "properties": {
     "type": {
@@ -19,6 +20,7 @@
   },
   "platforms": [
     "android",
+    "ios",
     "web"
   ],
   "required": [

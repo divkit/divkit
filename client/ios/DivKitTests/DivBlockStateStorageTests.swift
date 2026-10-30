@@ -29,6 +29,72 @@ final class DivBlockStateStorageTests: XCTestCase {
     XCTAssertEqual(storage.getState(path(cardId: "card_id", path: "0/id")), state2)
   }
 
+  func test_ExtensionReadDoesNotExposeElementState() {
+    storage.setState(path: path(cardId: "card_id", path: "0/id"), state: state1)
+    let context = makeExtensionContext(id: "first")
+
+    let extensionState: State? = context.getState()
+
+    XCTAssertNil(extensionState)
+  }
+
+  func test_ExtensionWritePreservesElementState() {
+    let elementPath = path(cardId: "card_id", path: "0/id")
+    storage.setState(path: elementPath, state: state1)
+    let context = makeExtensionContext(id: "first")
+
+    context.setState(state2)
+
+    XCTAssertEqual(storage.getState(elementPath), state1)
+  }
+
+  func test_ExtensionStateIsIsolatedById() {
+    let first = makeExtensionContext(id: "first")
+    let second = makeExtensionContext(id: "second")
+    first.setState(state1)
+
+    second.setState(state2)
+
+    XCTAssertEqual(first.getState(), state1)
+    XCTAssertEqual(second.getState(), state2)
+  }
+
+  func test_ElementWritePreservesExtensionState() {
+    let context = makeExtensionContext(id: "first")
+    context.setState(state1)
+
+    storage.setState(path: path(cardId: "card_id", path: "0/id"), state: state2)
+
+    XCTAssertEqual(context.getState(), state1)
+  }
+
+  func test_ResetClearsExtensionState() {
+    let context = makeExtensionContext(id: "first")
+    context.setState(state1)
+
+    storage.reset()
+
+    XCTAssertNil(context.getState() as State?)
+  }
+
+  func test_ResetCardClearsExtensionState() {
+    let context = makeExtensionContext(id: "first")
+    context.setState(state1)
+
+    storage.reset(cardId: "card_id")
+
+    XCTAssertNil(context.getState() as State?)
+  }
+
+  func test_ResetCardPreservesOtherCardExtensionState() {
+    let context = makeExtensionContext(id: "first", cardId: "other_card")
+    context.setState(state1)
+
+    storage.reset(cardId: "card_id")
+
+    XCTAssertEqual(context.getState(), state1)
+  }
+
   func test_SetState_WithTheSameId_InDifferentPaths_KeepsBothStates() {
     storage.setState(path: path(cardId: "card_id", path: "0/id"), state: state1)
     storage.setState(path: path(cardId: "card_id", path: "1/id"), state: state2)
@@ -242,6 +308,30 @@ final class DivBlockStateStorageTests: XCTestCase {
 
     let result: VideoBlockViewState? = storage.getState(videoPath)
     XCTAssertEqual(result?.state, .playing)
+  }
+
+  private func makeExtensionContext(
+    id: String, cardId: DivCardID = "card_id"
+  ) -> DivExtensionActionContext {
+    let elementPath = path(cardId: cardId.rawValue, path: "0/id")
+    return DivExtensionActionContext(
+      path: elementPath,
+      extensionId: id,
+      info: DivActionInfo(
+        path: elementPath, logId: "extension", url: nil, logUrl: nil,
+        referer: nil, source: .tap, payload: nil
+      ),
+      expressionResolver: ExpressionResolver(
+        functionsProvider: FunctionsProvider(
+          persistentValuesStorage: DivPersistentValuesStorage(), cardId: cardId
+        ),
+        customFunctionsStorageProvider: { _ in nil },
+        variableValueProvider: { _ in nil },
+        errorTracker: { _ in }
+      ),
+      blockStateStorage: storage,
+      updateCard: { _ in }
+    )
   }
 }
 

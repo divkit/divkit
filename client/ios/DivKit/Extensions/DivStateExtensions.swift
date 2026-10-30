@@ -61,12 +61,10 @@ extension DivState: DivBlockModeling {
       if let parentPrefix = context.path.parent {
         context.lastVisibleBoundsCache.dropVisibleBounds(prefix: parentPrefix)
       }
-      previousBlock = try previousDiv.value.makeBlock(
-        context: context.makeContextForState(
-          id: id,
-          stateId: previousState.stateId
-        )
-      )
+      var previousContext = context.makeContextForState(id: id, stateId: previousState.stateId)
+      // The outgoing subtree exists only for the transition, not for action addressing.
+      previousContext.isOutgoingState = true
+      previousBlock = try previousDiv.value.makeBlock(context: previousContext)
       animationOut = previousState.animationOut?
         .makeTransitioningAnimations(for: .disappearing, with: expressionResolver)
       animationIn = activeState.animationIn?

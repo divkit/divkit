@@ -180,8 +180,9 @@ struct FocusElementActionHandlerTests {
     #expect(!updateReasons.isEmpty)
 
     // The re-model reveals the element and repopulates `idToPath`.
-    idToPath.add(inputPath, forId: "input", viewId: hostViewId)
-    handler.processPendingActions(pendingActions.take())
+    handler.processCardUpdates {
+      idToPath.add(inputPath, forId: "input", viewId: hostViewId)
+    }
 
     #expect(reporter.lastError == nil)
     #expect(blockStateStorage.isFocused(path: inputPath))
@@ -214,7 +215,7 @@ struct FocusElementActionHandlerTests {
     #expect(reporter.lastError == nil)
 
     // The element is still absent after the re-model, so the deferred error surfaces.
-    handler.processPendingActions(pendingActions.take())
+    handler.processCardUpdates {}
     #expect(reporter.lastError != nil)
   }
 

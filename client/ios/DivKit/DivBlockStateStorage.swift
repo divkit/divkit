@@ -9,6 +9,7 @@ public final class DivBlockStateStorage {
   }
 
   private var _states: BlocksState
+  private var extensionStates: [UIElementPath: [String: ElementState]] = [:]
   private var _pendingStates: BlocksState = [:]
   private var videoPagerPaths: [UIElementPath: UIElementPath] = [:]
   private var _isInputFocused = false
@@ -59,6 +60,14 @@ public final class DivBlockStateStorage {
     }
   }
 
+  public func getExtensionState<T: ElementState>(
+    path: UIElementPath, extensionId: String
+  ) -> T? {
+    lock.withLock {
+      extensionStates[path]?[extensionId] as? T
+    }
+  }
+
   public func setState(path: UIElementPath, state: ElementState) {
     let updates = lock.withLock {
       updateState(path: path, state: state)
@@ -97,6 +106,7 @@ public final class DivBlockStateStorage {
   public func reset() {
     lock.withLock {
       _states = [:]
+      extensionStates = [:]
       _pendingStates = [:]
       videoPagerPaths = [:]
       _focusedElement = nil
@@ -106,11 +116,18 @@ public final class DivBlockStateStorage {
   public func reset(cardId: DivCardID) {
     lock.withLock {
       _states = _states.filter { $0.key.cardId != cardId }
+      extensionStates = extensionStates.filter { $0.key.cardId != cardId }
       _pendingStates = _pendingStates.filter { $0.key.cardId != cardId }
       videoPagerPaths = videoPagerPaths.filter { $0.key.cardId != cardId }
       if _focusedElement?.cardId == cardId {
         _focusedElement = nil
       }
+    }
+  }
+
+  func setExtensionState(path: UIElementPath, extensionId: String, state: ElementState) {
+    lock.withLock {
+      extensionStates[path, default: [:]][extensionId] = state
     }
   }
 

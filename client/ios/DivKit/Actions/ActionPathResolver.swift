@@ -9,17 +9,19 @@ struct ActionPathResolver {
     pathResolver = PathResolver(idToPath: idToPath)
   }
 
-  func resolvePath(
+  func resolveTarget(
     id: String,
     cardId: DivCardID,
     scopePath: UIElementPath?,
-    divTypes: Set<String>? = nil
-  ) -> PathResolution {
-    pathResolver.resolvePath(
+    divTypes: Set<String>? = nil,
+    extensionId: String? = nil
+  ) -> TargetResolution {
+    pathResolver.resolveTarget(
       id: id,
       cardId: cardId,
       scopePath: scopePath,
-      divTypes: divTypes
+      divTypes: divTypes,
+      extensionId: extensionId
     )
   }
 
@@ -37,18 +39,32 @@ struct ActionPathResolver {
     context: DivActionHandlingContext,
     perform: @escaping (UIElementPath) -> Void
   ) {
-    switch resolvePath(
+    resolveTarget(id: id, divTypes: divTypes, context: context) { target in
+      perform(target.path)
+    }
+  }
+
+  func resolveTarget(
+    id: String,
+    divTypes: Set<String>? = nil,
+    extensionId: String? = nil,
+    context: DivActionHandlingContext,
+    perform: @escaping (IdToPath.Target) -> Void
+  ) {
+    switch resolveTarget(
       id: id,
       cardId: context.cardId,
       scopePath: context.scopePath,
-      divTypes: divTypes
+      divTypes: divTypes,
+      extensionId: extensionId
     ) {
-    case let .resolved(path):
-      perform(path)
+    case let .resolved(target):
+      perform(target)
     case .notFound:
       context.actionHandler.enqueuePendingAction(
         id: id,
         divTypes: divTypes,
+        extensionId: extensionId,
         scopePath: context.scopePath,
         cardId: context.cardId,
         sourcePath: context.sourcePath,
@@ -62,6 +78,21 @@ struct ActionPathResolver {
         sourcePath: context.sourcePath
       )
     }
+  }
+
+  func reportDeferred(
+    id: String,
+    cardId: DivCardID,
+    scopePath: UIElementPath?,
+    sourcePath: UIElementPath
+  ) {
+    reporter.reportError(
+      cardId: cardId,
+      error: DivUnknownWarning(
+        "Element with id '\(id)' is not modeled yet, the action is deferred\(scopeSuffix(scopePath))",
+        path: sourcePath
+      )
+    )
   }
 
   func reportNotFound(
