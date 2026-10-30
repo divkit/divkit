@@ -274,6 +274,7 @@ val composeRoborazziInteractiveScreenshotCases = setOf(
     "div-state/base-properties.json",
     "div-switch/base-properties.json",
     "div-switch/switch-properties.json",
+    "div-tabs/select-elements.json",
     "div-text/text-properties.json",
     "div-text/text_focused_text_color.json",
     "div-text/text_range_without_bound.json",

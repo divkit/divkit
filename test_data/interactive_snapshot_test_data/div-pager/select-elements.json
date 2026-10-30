@@ -6,7 +6,7 @@
     "web"
   ],
   "configuration": {
-    "fail_on_parsing_error": false
+    "runtime_error_count": 1
   },
   "div_data": {
     "templates": {

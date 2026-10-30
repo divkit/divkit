@@ -4,6 +4,9 @@
     "android",
     "web"
   ],
+  "configuration": {
+    "runtime_error_count": 1
+  },
   "div_data": {
     "templates": {
       "text_block": {

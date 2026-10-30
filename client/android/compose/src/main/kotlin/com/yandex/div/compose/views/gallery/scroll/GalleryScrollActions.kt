@@ -7,11 +7,11 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.scroll.ScrollTarget
 import com.yandex.div.compose.utils.scroll.toScrollOverflow
@@ -21,7 +21,6 @@ import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivGallery
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -45,14 +44,15 @@ internal fun BindGalleryScrollActions(
 ) {
     if (id == null) return
 
-    val targetStorage = LocalDivViewContext.current.component.scrollTargetStorage
-    val scope = rememberCoroutineScope()
+    val component = LocalDivViewContext.current.component
+    val targetStorage = component.scrollTargetStorage
+    val coroutineScopeProvider = component.coroutineScopeProvider
     val density = LocalDensity.current
     val currentScrollMode by rememberUpdatedState(scrollMode)
     val currentAlignment by rememberUpdatedState(alignment)
-    DisposableEffect(targetStorage, id, items, layout, density) {
+    DisposableEffect(id, items, layout, density) {
         val scrolls = layout?.let {
-            GalleryScrolls(it, items, scope, density, { currentScrollMode }, { currentAlignment })
+            GalleryScrolls(it, items, coroutineScopeProvider, density, { currentScrollMode }, { currentAlignment })
         }
         val target = ScrollTarget(
             items = items,
@@ -78,7 +78,7 @@ internal fun BindGalleryScrollActions(
 private class GalleryScrolls(
     private val layout: GalleryScrollLayout,
     private val items: List<Div>,
-    private val scope: CoroutineScope,
+    private val coroutineScopeProvider: DivViewCoroutineScopeProvider,
     private val density: Density,
     private val scrollMode: () -> DivGallery.ScrollMode,
     private val alignment: () -> DivGallery.ContentAlignment,
@@ -115,6 +115,7 @@ private class GalleryScrolls(
     }
 
     private fun launch(action: suspend () -> Unit) {
+        val scope = coroutineScopeProvider.get() ?: return
         job?.cancel()
         job = scope.launch { action() }
     }

@@ -66,7 +66,11 @@ internal class DivTabsState(
     internal val indicatorProgress: Float
         get() = titleTransition?.progress?.value ?: abs(pagerState.currentPageOffsetFraction)
 
-    internal suspend fun selectTab(index: Int, animation: TabTitleAnimation?) {
+    /**
+     * Selects the tab at [index]: instantly without an [animation], otherwise with it. An explicit [durationMillis]
+     * sets the length of both the page scroll and the title transition.
+     */
+    internal suspend fun selectTab(index: Int, animation: TabTitleAnimation?, durationMillis: Int? = null) {
         if (tabCount <= 0) return
         val target = index.coerceIn(0, tabCount - 1)
         if (animation == null) {
@@ -76,23 +80,32 @@ internal class DivTabsState(
         val from = selectedIndex
         if (from == target) {
             if (titleTransition == null) {
-                pagerState.animateScrollToPage(target)
+                animateToPage(target, durationMillis)
             }
             return
         }
 
         val transition = TitleTransition(from = from, to = target)
         titleTransition = transition
+        val titleAnimation = durationMillis?.let { animation.copy(durationMillis = it) } ?: animation
         try {
             coroutineScope {
-                launch { transition.run(animation) }
-                pagerState.animateScrollToPage(target)
+                launch { transition.run(titleAnimation) }
+                animateToPage(target, durationMillis)
             }
         } finally {
             if (titleTransition === transition) {
                 titleTransition = null
             }
         }
+    }
+}
+
+private suspend fun DivTabsState.animateToPage(page: Int, durationMillis: Int?) {
+    if (durationMillis == null) {
+        pagerState.animateScrollToPage(page)
+    } else {
+        pagerState.animateScrollToPage(page, animationSpec = tween(durationMillis))
     }
 }
 

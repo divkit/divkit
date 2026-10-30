@@ -8,8 +8,8 @@ import androidx.compose.foundation.lazy.LazyLayoutScrollScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.pager.mainAxisViewportSize
@@ -23,7 +23,6 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivActionScrollBy
 import kotlin.math.abs
 import kotlin.math.sign
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -39,11 +38,12 @@ internal fun BindPagerScrollActions(
 ) {
     if (id == null) return
 
-    val targetStorage = LocalDivViewContext.current.component.scrollTargetStorage
+    val component = LocalDivViewContext.current.component
+    val targetStorage = component.scrollTargetStorage
+    val coroutineScopeProvider = component.coroutineScopeProvider
     val reporter = LocalComponent.current.reporter
-    val scope = rememberCoroutineScope()
-    DisposableEffect(targetStorage, id, items, layout) {
-        val scrolls = layout?.let { PagerScrolls(it, items, scope) }
+    DisposableEffect(id, items, layout) {
+        val scrolls = layout?.let { PagerScrolls(it, items, coroutineScopeProvider) }
         val target = ScrollTarget(
             items = items,
             scrollTo = { index, animated, _, duration -> scrolls?.scrollTo(index, animated, duration) },
@@ -135,7 +135,7 @@ internal class PagerScrollLayout(
 private class PagerScrolls(
     private val layout: PagerScrollLayout,
     private val items: List<Div>,
-    private val scope: CoroutineScope,
+    private val coroutineScopeProvider: DivViewCoroutineScopeProvider,
 ) {
     private var job: Job? = null
     /** The page of the latest action until it completes; relative actions count from it. */
@@ -179,6 +179,7 @@ private class PagerScrolls(
     }
 
     private fun launch(page: Int, animated: Boolean, duration: Int?) {
+        val scope = coroutineScopeProvider.get() ?: return
         job?.cancel()
         val request = Request(page)
         pending = request

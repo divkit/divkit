@@ -58,6 +58,7 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 /**
  * Verify interactive screenshots:
@@ -83,6 +84,8 @@ class RoborazziInteractiveScreenshotTest(
 ) {
     private val configuration = parsingResult.getOrThrow()
     private val painterTracker = ImagePainterTracker()
+    private val expectedErrorCount = configuration.runtimeErrorCount
+    private val reporter = TestReporter().apply { failOnError = expectedErrorCount == null }
 
     private val divContext = DivContext(
         baseContext = getApplicationContext(),
@@ -90,9 +93,7 @@ class RoborazziInteractiveScreenshotTest(
             extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler()),
             fontSourceProvider = TestFontSourceProvider(),
             imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext()),
-            reporter = TestReporter().apply {
-                failOnError = configuration.baseConfiguration.failOnParsingError
-            },
+            reporter = reporter,
         ),
         debugConfiguration = DivDebugConfiguration(
             imagePainterStateListener = painterTracker::onStateChanged
@@ -161,6 +162,12 @@ class RoborazziInteractiveScreenshotTest(
             isViewEmpty = false
         }
         composeRule.waitForIdle()
+        expectedErrorCount?.let { verifyExpectedErrors(it) }
+    }
+
+    private fun verifyExpectedErrors(count: Int) {
+        val errors = reporter.errors
+        assertEquals(count, errors.size, "Expected $count error(s), got: $errors")
     }
 
     private fun performTap(id: String) {

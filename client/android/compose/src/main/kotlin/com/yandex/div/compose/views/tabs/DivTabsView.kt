@@ -44,6 +44,7 @@ internal fun DivTabsView(
 ) {
     val items = data.items
     if (items.isEmpty()) {
+        BindTabsScrollActions(id = data.id, items = emptyList())
         Box(modifier = modifier)
         return
     }
@@ -70,6 +71,13 @@ internal fun DivTabsView(
             state.selectTab(externalSelected, titleAnimation)
         }
     }
+
+    BindTabsScrollActions(
+        id = data.id,
+        items = remember(items) { items.map { it.div } },
+        state = state,
+        animation = titleAnimation,
+    )
 
     val scope = rememberCoroutineScope()
     val fixedWidth = (data.width as? DivSize.Fixed)?.value?.observedValue()

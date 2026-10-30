@@ -15,5 +15,10 @@ class InteractiveScreenshotTestConfiguration(
 
     val steps by lazy { InteractiveScreenshotTestData.parse(json).steps }
 
+    /** Runtime errors the scenario reports on purpose; null when the first runtime error fails it. */
+    val runtimeErrorCount: Int? = json.optJSONObject("configuration")
+        ?.takeIf { it.has("runtime_error_count") }
+        ?.getInt("runtime_error_count")
+
     override fun toString() = baseConfiguration.name
 }
