@@ -160,6 +160,7 @@ final class DivKitRegressionUITests: XCTestCase {
 extension XCUIApplication {
   fileprivate func launch(launchArguments: [UITestLaunchArgument]) {
     self.launchArguments += launchArguments.map(\.rawValue)
+    configureEnglishKeyboard()
     launch()
   }
 
@@ -177,6 +178,10 @@ extension XCUIApplication {
 
     try waitForCardOrLoadingError(root: element)
     return element
+  }
+
+  private func configureEnglishKeyboard() {
+    launchArguments += ["-AppleKeyboards", "(\"en_US@sw=QWERTY;hw=US\")"]
   }
 
   private func waitForCardOrLoadingError(root: XCUIElement) throws {
