@@ -50,7 +50,10 @@ export function scrollWithDuration(
             active = false;
             cancelAnimationFrame(frame);
             if (hasSnap) {
+                // Chrome incorrectly resnaps on snap change, return scroll position in correct position after that
+                const target = horizontal ? scroller.scrollLeft : scroller.scrollTop;
                 scroller.style.scrollSnapType = previousSnapType;
+                scroller.scroll({ [axis]: target, behavior: 'instant' });
             }
         }
     };
