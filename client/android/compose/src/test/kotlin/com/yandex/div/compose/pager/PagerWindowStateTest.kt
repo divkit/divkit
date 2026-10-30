@@ -2,6 +2,7 @@ package com.yandex.div.compose.pager
 
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.ui.unit.dp
+import com.yandex.div.render.common.pager.PagerItemWindow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull

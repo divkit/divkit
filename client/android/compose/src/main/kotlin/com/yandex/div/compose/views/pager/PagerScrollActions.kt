@@ -12,12 +12,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.pager.PagerItemWindow
 import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.snapOffset
 import com.yandex.div.compose.pager.snappedItem
 import com.yandex.div.compose.scroll.ScrollTarget
 import com.yandex.div.compose.utils.scroll.toScrollOverflow
+import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.Div
 import com.yandex.div2.DivActionScrollBy

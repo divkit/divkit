@@ -9,6 +9,7 @@ import com.yandex.div.core.view2.divs.CollectionItemBinding
 import com.yandex.div.core.view2.divs.DivCollectionAdapter
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.render.common.pager.normalizePagerIndex
 
 internal class DivPagerAdapter(
     items: List<DivBlock>,
@@ -90,7 +91,7 @@ internal class DivPagerAdapter(
 
     fun normalizeItemPosition(position: Int): Int {
         val size = visibleItems.size.takeIf { it > 0 } ?: return 0
-        return position.mod(size)
+        return normalizePagerIndex(rawIndex = position, realItemCount = size)
     }
 
     fun getPosition(visibleItemIndex: Int) = visibleItemIndex + virtualItemCount

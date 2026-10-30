@@ -27,7 +27,6 @@ import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.pager.PagerAlignment
-import com.yandex.div.compose.pager.PagerItemWindow
 import com.yandex.div.compose.pager.PagerLayoutSnapshot
 import com.yandex.div.compose.pager.PagerWindowState
 import com.yandex.div.compose.pager.mainAxisViewportSize
@@ -46,6 +45,7 @@ import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.getScrollAxisPaddings
 import com.yandex.div.compose.utils.scroll.restrictParentScroll
+import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivPageTransformation

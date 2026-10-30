@@ -3,7 +3,7 @@ package com.yandex.div.compose.views.pager
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.pager.PagerItemWindow
+import com.yandex.div.render.common.pager.PagerItemWindow
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.junit.runner.RunWith

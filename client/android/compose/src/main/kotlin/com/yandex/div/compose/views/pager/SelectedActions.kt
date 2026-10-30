@@ -14,11 +14,11 @@ import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.dagger.handleActions
-import com.yandex.div.compose.pager.PagerItemWindow
 import com.yandex.div.compose.pager.PagerLayoutSnapshot
 import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.snappedItem
 import com.yandex.div.compose.pager.visibleItemSizes
+import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div2.Div
 import kotlinx.coroutines.flow.filterNotNull
 

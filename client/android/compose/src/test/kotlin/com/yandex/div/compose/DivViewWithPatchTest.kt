@@ -25,8 +25,8 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.pager.PagerItemWindow
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container

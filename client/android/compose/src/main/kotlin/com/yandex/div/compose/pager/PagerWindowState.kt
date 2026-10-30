@@ -4,6 +4,7 @@ import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import com.yandex.div.render.common.pager.PagerItemWindow
 
 /** Inputs that define where pages are aligned in the viewport. */
 internal data class PagerAlignment(

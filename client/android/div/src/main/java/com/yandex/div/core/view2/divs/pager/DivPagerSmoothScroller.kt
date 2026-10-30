@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.util.isLayoutRtl
+import com.yandex.div.render.common.pager.normalizePagerIndex
 import kotlin.math.roundToInt
 
 internal class DivPagerSmoothScroller(
@@ -134,7 +135,11 @@ internal class DivPagerSmoothScroller(
             return
         }
         val currentItem = viewPager.currentItem
-        val position = (currentItem - virtualItemCount).mod(realItemCount) + virtualItemCount
+        val position = normalizePagerIndex(
+            rawIndex = currentItem,
+            realItemCount = realItemCount,
+            edgeItemCount = virtualItemCount,
+        ) + virtualItemCount
         if (position != currentItem) {
             recyclerView.scrollToPosition(position)
         }

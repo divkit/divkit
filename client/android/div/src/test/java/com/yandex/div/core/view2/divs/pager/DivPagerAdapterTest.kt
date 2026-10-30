@@ -36,6 +36,44 @@ class DivPagerAdapterTest {
     private val observer = mock<RecyclerView.AdapterDataObserver>()
 
     @Test
+    fun `empty adapter normalizes every position to zero`() {
+        val adapter = adapter(emptyList())
+
+        assertEquals(listOf(0, 0, 0), listOf(-1, 0, 1).map(adapter::normalizeItemPosition))
+    }
+
+    @Test
+    fun `empty adapter maps every position to real item zero`() {
+        val adapter = adapter(emptyList())
+
+        assertEquals(listOf(0, 0, 0), listOf(-1, 0, 1).map(adapter::realItemPosition))
+    }
+
+    @Test
+    fun `raw position conversion shifts indices without normalizing them`() {
+        val adapter = adapter(listOf(item("first"), item("second"), item("third")))
+        adapter.requestedVirtualItemCount = 2
+
+        assertEquals(listOf(1, 2, 4, 5, 6), listOf(-1, 0, 2, 3, 4).map(adapter::getPosition))
+    }
+
+    @Test
+    fun `real position conversion shifts indices without normalizing them`() {
+        val adapter = adapter(listOf(item("first"), item("second"), item("third")))
+        adapter.requestedVirtualItemCount = 2
+
+        assertEquals(listOf(-3, -2, 0, 1, 2), listOf(-1, 0, 2, 3, 4).map(adapter::getRealPosition))
+    }
+
+    @Test
+    fun `real item positions wrap around both virtual edges`() {
+        val adapter = adapter(listOf(item("first"), item("second"), item("third")))
+        adapter.requestedVirtualItemCount = 2
+
+        assertEquals(listOf(1, 2, 0, 1, 2, 0, 1), (0 until 7).map(adapter::realItemPosition))
+    }
+
+    @Test
     fun `before items change sees original items on replacement`() {
         val items = listOf(item("first"), item("second"))
         val adapter = adapter(items)

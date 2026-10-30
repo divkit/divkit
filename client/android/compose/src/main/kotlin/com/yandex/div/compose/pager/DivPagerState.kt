@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.lazy.LazyListItemInfo
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
+import com.yandex.div.render.common.pager.PagerItemWindow
 import kotlin.math.abs
 
 internal class DivPagerState(
