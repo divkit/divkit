@@ -6,7 +6,7 @@ import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridLayoutInfo
 import androidx.compose.ui.unit.LayoutDirection
 import com.yandex.div.compose.utils.scroll.desiredSnapOffset
-import com.yandex.div.internal.actions.DivScrollActionUtils
+import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.DivGallery
 import kotlin.math.sign
 

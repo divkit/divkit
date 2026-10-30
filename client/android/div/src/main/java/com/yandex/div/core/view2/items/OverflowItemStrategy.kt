@@ -4,7 +4,7 @@ import android.util.DisplayMetrics
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.actions.DivScrollActionParser
-import com.yandex.div.internal.actions.DivScrollActionUtils
+import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.DivActionScrollBy
 
 /**
@@ -34,11 +34,11 @@ internal sealed class OverflowItemStrategy {
     ) : OverflowItemStrategy() {
 
         override fun targetItem(step: Int): Int =
-            DivScrollActionUtils.targetItem(nearestItem, itemCount, step, DivActionScrollBy.Overflow.CLAMP)
+            DivScrollActionUtils.targetItem(nearestItem, itemCount, step, DivScrollActionUtils.Overflow.CLAMP)
 
         override fun positionAfterScrollBy(step: Int): Int =
             DivScrollActionUtils.targetOffset(
-                scrollOffset, scrollRange, step.dpToPx(metrics), DivActionScrollBy.Overflow.CLAMP,
+                scrollOffset, scrollRange, step.dpToPx(metrics), DivScrollActionUtils.Overflow.CLAMP,
             )
     }
 
@@ -54,11 +54,11 @@ internal sealed class OverflowItemStrategy {
     ): OverflowItemStrategy() {
 
         override fun targetItem(step: Int): Int =
-            DivScrollActionUtils.targetItem(nearestItem, itemCount, step, DivActionScrollBy.Overflow.RING)
+            DivScrollActionUtils.targetItem(nearestItem, itemCount, step, DivScrollActionUtils.Overflow.RING)
 
         override fun positionAfterScrollBy(step: Int): Int =
             DivScrollActionUtils.targetOffset(
-                scrollOffset, scrollRange, step.dpToPx(metrics), DivActionScrollBy.Overflow.RING,
+                scrollOffset, scrollRange, step.dpToPx(metrics), DivScrollActionUtils.Overflow.RING,
             )
     }
 

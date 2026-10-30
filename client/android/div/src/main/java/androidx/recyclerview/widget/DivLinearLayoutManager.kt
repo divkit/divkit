@@ -5,7 +5,7 @@ import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.gallery.DivGalleryItemHelper
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div.internal.actions.DivScrollActionUtils
+import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.DivGallery.ContentAlignment
 
 internal class DivLinearLayoutManager(

@@ -14,7 +14,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.scroll.ScrollTarget
-import com.yandex.div.internal.actions.DivScrollActionUtils
+import com.yandex.div.compose.utils.scroll.toScrollOverflow
+import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.Div
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivGallery
@@ -97,7 +98,7 @@ private class GalleryScrolls(
         if (step != 0 && items.isNotEmpty()) {
             launch {
                 val index = DivScrollActionUtils.targetItem(
-                    layout.layoutInfo.nearestItem(step, alignment()), items.size, step, overflow,
+                    layout.layoutInfo.nearestItem(step, alignment()), items.size, step, overflow.toScrollOverflow(),
                 )
                 val offsetPx = if (scrollMode() == DivGallery.ScrollMode.DEFAULT) offset.dpToPx() else 0
                 val destination = GalleryScrollDestination(index, offset = offsetPx, overflow = overflow)
@@ -152,7 +153,7 @@ internal fun ScrollableState.galleryOffsetDistance(
     val state = requireNotNull(scrollIndicatorState)
     val range = state.contentSize - state.viewportSize
     val from = state.scrollOffset + itemDistance.toInt()
-    val target = DivScrollActionUtils.targetOffset(from, range, offset, overflow)
+    val target = DivScrollActionUtils.targetOffset(from, range, offset, overflow.toScrollOverflow())
     return (target - state.scrollOffset).toFloat()
 }
 
@@ -173,3 +174,4 @@ internal fun defaultScrollDuration(distancePx: Float, density: Density): Int {
     return (inches * MILLISECONDS_PER_INCH / LINEAR_SCROLL_FRACTION).roundToInt()
         .coerceIn(1, MAX_DEFAULT_SCROLL_DURATION)
 }
+

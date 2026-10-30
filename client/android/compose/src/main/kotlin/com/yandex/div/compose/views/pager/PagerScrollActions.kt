@@ -17,7 +17,8 @@ import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.snapOffset
 import com.yandex.div.compose.pager.snappedItem
 import com.yandex.div.compose.scroll.ScrollTarget
-import com.yandex.div.internal.actions.DivScrollActionUtils
+import com.yandex.div.compose.utils.scroll.toScrollOverflow
+import com.yandex.div.render.common.scroll.DivScrollActionUtils
 import com.yandex.div2.Div
 import com.yandex.div2.DivActionScrollBy
 import kotlin.math.abs
@@ -148,7 +149,12 @@ private class PagerScrolls(
         val current = currentPage()
         val window = layout.itemWindow
         val page = if (window.edgeItemCount == 0) {
-            DivScrollActionUtils.targetItem(current + step.sign, items.size, step, overflow)
+            DivScrollActionUtils.targetItem(
+                nearestItem = current + step.sign,
+                itemCount = items.size,
+                step = step,
+                overflow = overflow.toScrollOverflow(),
+            )
         } else {
             // A cyclic window wraps on its own; overflow never applies.
             (current + step).coerceIn(0, window.itemCount - 1)
