@@ -163,8 +163,6 @@ class DocumentationGenerator(Generator):
             return self.__translations['div_generator_ios']
         if platform == Platform.WEB:
             return self.__translations['div_generator_web']
-        if platform == Platform.FLUTTER:
-            return self.__translations['div_generator_flutter']
         raise NotImplementedError
 
     def _entity_enumeration_declaration(self, entity_enumeration: EntityEnumeration) -> Text:

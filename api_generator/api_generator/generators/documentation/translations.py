@@ -30,10 +30,6 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "en": "Can be created using the method [{}].",
         "ru": "Можно создать при помощи метода [{}]."
     },
-    "div_generator_flutter": {
-        "en": "Flutter",
-        "ru": "Flutter"
-    },
     "div_generator_html_formatting": {
         "en": "Limited HTML formatting is allowed.",
         "ru": "Допускается ограниченное HTML-форматирование."
