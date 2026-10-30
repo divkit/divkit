@@ -26,6 +26,7 @@ import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.views.divVisibility
 import com.yandex.div.compose.views.transition.StateChangeTransitionModifier
+import com.yandex.div.compose.visibility.visibilityActions
 import com.yandex.div.internal.util.isConstantlyEmpty
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets

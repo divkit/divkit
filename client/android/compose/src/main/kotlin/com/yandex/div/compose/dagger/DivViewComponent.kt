@@ -3,7 +3,6 @@ package com.yandex.div.compose.dagger
 import androidx.compose.runtime.MutableState
 import com.yandex.div.compose.actions.ActionMenuHolder
 import com.yandex.div.compose.actions.DivActionHandler
-import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.animation.AnimatorStorage
 import com.yandex.div.compose.collection.CollectionItemScopeStorage
 import com.yandex.div.compose.context.CompositionKeyStorage
@@ -24,6 +23,7 @@ import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.compose.tooltips.DivTooltipController
 import com.yandex.div.compose.tooltips.TooltipStateStorage
 import com.yandex.div.compose.video.VideoPlayerStorage
+import com.yandex.div.compose.visibility.VisibilityActionTracker
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div2.DivData
 import com.yandex.yatagan.BindsInstance

@@ -1,4 +1,4 @@
-package com.yandex.div.compose.actions
+package com.yandex.div.compose.visibility
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -44,7 +44,7 @@ class DivViewWithVisibilityActionsTest {
 
     private val counter = Variable.IntegerVariable("counter", 0)
     private val visibility = Variable.StringVariable("visibility", "visible")
-    val viewHeight = Variable.IntegerVariable("view_height", 0)
+    private val viewHeight = Variable.IntegerVariable("view_height", 0)
 
     private val variableController = DivVariableController().apply {
         declare(counter, visibility, viewHeight)

@@ -1,6 +1,5 @@
-package com.yandex.div.compose.views.modifiers
+package com.yandex.div.compose.visibility
 
-import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
@@ -12,7 +11,6 @@ import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.node.UnplacedAwareModifierNode
 import androidx.compose.ui.platform.InspectorInfo
 import com.yandex.div.compose.DivViewHost
-import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.core.annotations.InternalApi
 
@@ -20,7 +18,7 @@ import com.yandex.div.core.annotations.InternalApi
 @ReadOnlyComposable
 @InternalApi
 fun Modifier.onDivVisibilityChanged(
-    minFractionVisible: Float = 1f,
+    minFractionVisible: Float,
     divViewHost: DivViewHost? = LocalDivViewHost.current,
     onVisibilityChanged: (Boolean) -> Unit,
 ): Modifier = this then VisibilityTrackingElement(
@@ -68,7 +66,7 @@ private class VisibilityTrackingElement(
 
     override fun hashCode(): Int {
         var result = minFractionVisible.hashCode()
-        result = 31 * result + (divViewHost?.hashCode() ?: 0)
+        result = 31 * result + divViewHost.hashCode()
         result = 31 * result + onVisibilityChanged.hashCode()
         return result
     }
@@ -87,7 +85,6 @@ private class VisibilityTrackingNode(
 
     private val invalidateCallback = object : CheckVisibilityCallback {
         override fun checkVisibility() = this@VisibilityTrackingNode.checkVisibility()
-
         override fun onContentUnbound() = this@VisibilityTrackingNode.handleContentUnbound()
     }
 
@@ -129,26 +126,32 @@ private class VisibilityTrackingNode(
     }
 
     private fun calculateVisibilityFraction(coordinates: LayoutCoordinates?): Float {
-        if (coordinates == null || !coordinates.isAttached) return 0f
+        if (coordinates == null || !coordinates.isAttached) {
+            return 0f
+        }
 
         val size = coordinates.size
-        val rectArea = size.width.toFloat() * size.height.toFloat()
-        if (rectArea <= 0f) return 0f
+        val area = size.width.toFloat() * size.height.toFloat()
+        if (area <= 0f) {
+            return 0f
+        }
 
         val parentBounds = getParentBounds(coordinates) ?: return 0f
 
-        val elementBounds = coordinates.boundsInWindow()
-        val visibleBounds = elementBounds.intersect(parentBounds)
-        val visibleArea = if (visibleBounds.isEmpty) 0f else visibleBounds.width * visibleBounds.height
-
-        return (visibleArea / rectArea).coerceIn(0f, 1f)
+        val visibleBounds = coordinates.boundsInWindow().intersect(parentBounds)
+        val visibleArea = if (visibleBounds.isEmpty) {
+            0f
+        } else {
+            visibleBounds.width * visibleBounds.height
+        }
+        return (visibleArea / area).coerceIn(0f, 1f)
     }
 
     private fun getParentBounds(coordinates: LayoutCoordinates): Rect? {
         var currentParent = coordinates.parentLayoutCoordinates
         val divViewHost = divViewHost
         var clipBounds: Rect? = when {
-            divViewHost != null -> divViewHost.composeView.getHostVisibleRectInWindow()
+            divViewHost != null -> divViewHost.getVisibleRectInWindow()
             else -> currentParent?.boundsInWindow()
         } ?: return null
         while (currentParent != null && currentParent.isAttached) {
@@ -156,17 +159,5 @@ private class VisibilityTrackingNode(
             currentParent = currentParent.parentLayoutCoordinates
         }
         return clipBounds
-    }
-
-    private fun View.getHostVisibleRectInWindow(): Rect? {
-        val globalRect = android.graphics.Rect()
-        if (!getGlobalVisibleRect(globalRect)) return null
-
-        return Rect(
-            left = globalRect.left.toFloat(),
-            top = globalRect.top.toFloat(),
-            right = globalRect.right.toFloat(),
-            bottom = globalRect.bottom.toFloat(),
-        )
     }
 }

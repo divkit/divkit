@@ -4,9 +4,11 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.toComposeRect
 import androidx.compose.ui.platform.ComposeView
-import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.host.LocalDivViewHost
+import com.yandex.div.compose.visibility.CheckVisibilityCallback
 import com.yandex.div2.DivData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -151,6 +153,15 @@ class DivViewHost(
 
     internal fun trackVisibility() {
         callbacks.toList().forEach { it.checkVisibility() }
+    }
+
+    internal fun getVisibleRectInWindow(): Rect? {
+        val globalRect = android.graphics.Rect()
+        return if (composeView.getGlobalVisibleRect(globalRect)) {
+            globalRect.toComposeRect()
+        } else {
+            null
+        }
     }
 
     private fun addOnLayoutChangeListener() {

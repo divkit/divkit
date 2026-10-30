@@ -1,4 +1,4 @@
-package com.yandex.div.compose.actions
+package com.yandex.div.compose.visibility
 
 import android.view.View
 import androidx.activity.ComponentActivity

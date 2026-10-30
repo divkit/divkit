@@ -27,7 +27,7 @@ import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.observedPxValue
-import com.yandex.div.compose.views.modifiers.onDivVisibilityChanged
+import com.yandex.div.compose.visibility.onDivVisibilityChanged
 import com.yandex.div.render.common.text.TextRangeCloudBackground
 import com.yandex.div.render.common.text.TextRangeParticleSystem
 import com.yandex.div2.DivEdgeInsets

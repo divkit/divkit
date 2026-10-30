@@ -5,8 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
-import com.yandex.div.compose.actions.VisibilityActionTracker
-import com.yandex.div.compose.actions.bind
 import com.yandex.div.compose.animation.observe
 import com.yandex.div.compose.collection.CollectionItemScopeStorage
 import com.yandex.div.compose.dagger.DivLocalComponent
@@ -21,6 +19,8 @@ import com.yandex.div.compose.timers.observe
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.variables.ScopedVariableProvider
 import com.yandex.div.compose.variables.VariableAndConstantProvider
+import com.yandex.div.compose.visibility.VisibilityActionTracker
+import com.yandex.div.compose.visibility.bind
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions

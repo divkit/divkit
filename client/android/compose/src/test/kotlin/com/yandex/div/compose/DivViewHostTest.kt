@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.host.CheckVisibilityCallback
 import com.yandex.div.compose.internal.DivDebugConfiguration
+import com.yandex.div.compose.visibility.CheckVisibilityCallback
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.image
 import kotlinx.coroutines.CoroutineScope

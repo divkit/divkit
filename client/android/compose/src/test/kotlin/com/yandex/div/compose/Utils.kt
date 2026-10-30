@@ -5,7 +5,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import com.yandex.div.compose.actions.DivActionHandlingContext
-import com.yandex.div.compose.actions.VisibilityActionTracker
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.dagger.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
@@ -15,6 +14,7 @@ import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.variables.ScopedVariableProvider
 import com.yandex.div.compose.variables.VariableAndConstantProvider
+import com.yandex.div.compose.visibility.VisibilityActionTracker
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider

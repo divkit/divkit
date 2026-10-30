@@ -13,7 +13,7 @@ import com.yandex.div.compose.internal.VideoEventSource.Event
 import com.yandex.div.compose.video.DivVideoPlayer
 import com.yandex.div.compose.video.DivVideoPlayerConfig
 import com.yandex.div.compose.video.DivVideoSource
-import com.yandex.div.compose.views.modifiers.onDivVisibilityChanged
+import com.yandex.div.compose.visibility.onDivVisibilityChanged
 import com.yandex.div.core.player.DivPlayer
 import com.yandex.div.core.player.DivPlayerFactory
 import com.yandex.div.core.player.DivPlayerView

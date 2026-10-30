@@ -1,8 +1,10 @@
-package com.yandex.div.compose.actions
+package com.yandex.div.compose.visibility
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import com.yandex.div.compose.actions.DivActionHandler
+import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.dagger.DivViewScope
 import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.host.LocalDivViewHost

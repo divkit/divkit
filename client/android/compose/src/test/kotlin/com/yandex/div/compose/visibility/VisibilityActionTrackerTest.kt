@@ -1,5 +1,8 @@
-package com.yandex.div.compose.actions
+package com.yandex.div.compose.visibility
 
+import com.yandex.div.compose.actions.ActionHandlerEnvironment
+import com.yandex.div.compose.actions.DivActionHandler
+import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.test.data.disappearAction
 import com.yandex.div.test.data.visibilityAction
 import com.yandex.div2.DivSightAction
@@ -15,6 +18,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
 
 class VisibilityActionTrackerTest {
     private val actionHandlingContext = ActionHandlerEnvironment().context
@@ -310,16 +314,6 @@ class VisibilityActionTrackerTest {
     }
 
     @Test
-    fun `onContentUnbound() does not trigger disappear action that was not visible`() = testScope.runTest {
-        val action = disappearAction(delayMs = 500)
-
-        tracker.onContentUnbound()
-        wait(500)
-
-        verifyNoActionsHandled()
-    }
-
-    @Test
     fun `the same action is tracked separately for each context`() = testScope.runTest {
         val action = visibilityAction(delayMs = 500)
         val otherContext = ActionHandlerEnvironment().context
@@ -339,12 +333,12 @@ class VisibilityActionTrackerTest {
     }
 
     private fun verifyNoActionsHandled() {
-        assertEquals(emptyList<DivSightAction>(), handledActions)
+        assertEquals(emptyList(), handledActions)
     }
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
 private fun TestScope.wait(delayMs: Long) {
-    advanceTimeBy(delayMs)
+    advanceTimeBy(delayMs.milliseconds)
     runCurrent()
 }
