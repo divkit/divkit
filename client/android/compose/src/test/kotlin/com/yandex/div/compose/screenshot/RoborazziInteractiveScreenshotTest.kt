@@ -18,17 +18,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.TouchInjectionScope
-import androidx.compose.ui.test.click
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.hasAnyDescendant
-import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -50,6 +49,9 @@ import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import com.yandex.div.test.crossplatform.clipSwipeToBounds
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Rule
 import org.junit.experimental.categories.Category
 import org.junit.rules.RuleChain
@@ -59,6 +61,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Verify interactive screenshots:
@@ -75,17 +78,19 @@ import kotlin.test.assertEquals
  *
  * Goldens are stored in `src/test/screenshots/interactive/`.
  */
-@Config(qualifiers = "w360dp-h728dp-xxhdpi")
 @Category(ScreenshotTests::class)
+@Config(qualifiers = "w360dp-h728dp-xxhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RoborazziInteractiveScreenshotTest(
     parsingResult: ParsingResult<InteractiveScreenshotTestConfiguration>
 ) {
     private val configuration = parsingResult.getOrThrow()
-    private val painterTracker = ImagePainterTracker()
     private val expectedErrorCount = configuration.runtimeErrorCount
+    private val painterTracker = ImagePainterTracker()
     private val reporter = TestReporter().apply { failOnError = expectedErrorCount == null }
+    private val testScope = TestScope(UnconfinedTestDispatcher())
 
     private val divContext = DivContext(
         baseContext = getApplicationContext(),
@@ -96,7 +101,9 @@ class RoborazziInteractiveScreenshotTest(
             reporter = reporter,
         ),
         debugConfiguration = DivDebugConfiguration(
-            imagePainterStateListener = painterTracker::onStateChanged
+            coroutineScope = testScope,
+            imagePainterStateListener = painterTracker::onStateChanged,
+            timeSource = testScope.testScheduler.timeSource,
         )
     )
 
@@ -140,27 +147,22 @@ class RoborazziInteractiveScreenshotTest(
             composeRule.waitForIdle()
 
             when (step) {
-                is Step.Action -> divContext.debugFeatures.performAction(data = data, action = step.action)
+                is Step.Action ->
+                    divContext.debugFeatures.performAction(data = data, action = step.action)
 
                 is Step.Tap -> performTap(step.id)
-
-                is Step.DoubleTap -> performOnNode(step.id) { doubleClick() }
-
-                is Step.LongTap -> performOnNode(step.id) { longClick() }
-
+                is Step.DoubleTap -> onNodeWithTag(step.id).performTouchInput { doubleClick() }
+                is Step.LongTap -> onNodeWithTag(step.id).performTouchInput { longClick() }
                 is Step.Swipe -> performSwipe(step)
-
-                is Step.Wait -> Unit
-
                 is Step.VerifyText -> verifyText(step)
-
                 is Step.VerifyFocus -> verifyFocus(step)
-
                 is Step.VerifySnapshot -> verifySnapshot(step, index, recordedSnapshotNames)
+                is Step.Wait -> wait(step)
             }
 
             isViewEmpty = false
         }
+
         composeRule.waitForIdle()
         expectedErrorCount?.let { verifyExpectedErrors(it) }
     }
@@ -170,16 +172,15 @@ class RoborazziInteractiveScreenshotTest(
         assertEquals(count, errors.size, "Expected $count error(s), got: $errors")
     }
 
+    private fun onNodeWithTag(tag: String) = composeRule.onNodeWithTag(tag)
+
     private fun performTap(id: String) {
-        performOnNode(id) { click() }
+        onNodeWithTag(id).performClick()
         composeRule.mainClock.advanceTimeBy(viewConfiguration.doubleTapTimeoutMillis)
     }
 
-    private fun performOnNode(id: String, gesture: TouchInjectionScope.() -> Unit) =
-        composeRule.onNodeWithTag(id).performTouchInput(gesture)
-
     private fun performSwipe(step: Step.Swipe) {
-        val target = composeRule.onNodeWithTag(step.id)
+        val target = onNodeWithTag(step.id)
         val node = target.fetchSemanticsNode()
         val size = node.size
         val from = PointF(size.width * step.from.x, size.height * step.from.y)
@@ -192,19 +193,22 @@ class RoborazziInteractiveScreenshotTest(
         }
     }
 
-    private fun verifyText(step: Step.VerifyText) = verifyStep(step.id, hasTextExactly(step.text))
-
-    private fun verifyFocus(step: Step.VerifyFocus) {
-        val focusMatcher = isFocused() or hasAnyDescendant(isFocused())
-        val focused = if (step.focused) focusMatcher else !focusMatcher
-        verifyStep(step.id, focused)
+    private fun verifyText(step: Step.VerifyText) {
+        onNodeWithTag(step.id).assertTextEquals(step.text)
     }
 
-    private fun verifyStep(id: String, check: SemanticsMatcher) =
-        composeRule.waitUntilVisible(id, check)
+    private fun verifyFocus(step: Step.VerifyFocus) {
+        val isFocusMatcher = isFocused() or hasAnyDescendant(isFocused())
+        onNodeWithTag(step.id)
+            .assert(if (step.focused) isFocusMatcher else !isFocusMatcher)
+    }
 
     @OptIn(ExperimentalRoborazziApi::class)
-    private fun verifySnapshot(step: Step.VerifySnapshot, index: Int, recordedSnapshotNames: MutableSet<String>) {
+    private fun verifySnapshot(
+        step: Step.VerifySnapshot,
+        index: Int,
+        recordedSnapshotNames: MutableSet<String>,
+    ) {
         val options = provideRoborazziContext().options
         val taskType = RoborazziTaskType.of(
             isRecording = options.taskType.isRecording() && recordedSnapshotNames.add(step.name),
@@ -213,7 +217,7 @@ class RoborazziInteractiveScreenshotTest(
         )
         val compareOptions = options.compareOptions.copy(
             outputDirectoryPath = "${options.compareOptions.outputDirectoryPath}/interactive/" +
-                "${configuration.baseConfiguration.name}/step$index",
+                    "${configuration.baseConfiguration.name}/step$index",
         )
         val target = step.id?.let {
             composeRule.onNodeWithTag(it, useUnmergedTree = true)
@@ -225,6 +229,12 @@ class RoborazziInteractiveScreenshotTest(
             ),
             roborazziOptions = options.copy(taskType = taskType, compareOptions = compareOptions),
         )
+    }
+
+    private fun wait(step: Step.Wait) {
+        testScope.testScheduler.advanceTimeBy(step.delay.milliseconds)
+        testScope.testScheduler.runCurrent()
+        composeRule.mainClock.advanceTimeBy(milliseconds = step.delay)
     }
 
     private class SolidBackgroundExtensionHandler : DivExtensionHandler {
