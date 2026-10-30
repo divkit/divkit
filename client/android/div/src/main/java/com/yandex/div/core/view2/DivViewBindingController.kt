@@ -97,7 +97,7 @@ internal class DivViewBindingController(
         asyncBinding.onAttachedToWindow {
             reportBindingResumedRunnable?.onAttach()
             bindingDispatcher.runWithinBindingContext(BindingTaskType.DATA) {
-                tryAttachVariableTriggers(divData)
+                tryAttachVariableTriggers(divData, true)
             }
             rootStates.completeDeferredBindingOnAttach()
             reportBindingFinishedRunnable?.onAttach()
@@ -177,13 +177,19 @@ internal class DivViewBindingController(
         dataTag = DivDataTag.INVALID
     }
 
-    private fun tryAttachVariableTriggers(data: DivData?): Unit = with(divView) {
-        if (bindOnAttachEnabled && !view.isAttachedToWindow) {
-            return
-        }
+    private fun tryAttachVariableTriggers(
+        data: DivData?,
+        isWindowAttach: Boolean = false,
+    ): Unit = with(divView) {
+        if (bindOnAttachEnabled && !view.isAttachedToWindow) return
 
         val state = rootStates.findCurrentState(data) ?: return
-        dataComponent.runtimeVisitor.createAndAttachRuntimes(state.div, DivStatePath.fromState(state), this)
+        val path = DivStatePath.fromState(state)
+        if (isWindowAttach) {
+            dataComponent.runtimeAttachCacheManager.reattachRuntimes(state.div, path, this)
+        } else {
+            dataComponent.runtimeVisitor.createAndAttachRuntimes(state.div, path, this)
+        }
     }
 
     private fun updateTimers(): Unit = with(divView) {

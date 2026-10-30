@@ -3,6 +3,7 @@ package com.yandex.div.core.dagger
 import com.yandex.div.core.data.DivDataViewConnector
 import com.yandex.div.core.expression.RuntimeStoreProvider
 import com.yandex.div.core.expression.local.DivRuntimeVisitor
+import com.yandex.div.core.expression.local.RuntimeAttachCacheManager
 import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.TabsStateCache
 import com.yandex.div.core.timer.DivTimerEventDispatcherProvider
@@ -24,6 +25,7 @@ internal interface DivDataComponent {
     val errorCollectors: ErrorCollectors
     val layoutProviderBinder: DivLayoutProviderBinder
     val runtimeStoreProvider: RuntimeStoreProvider
+    val runtimeAttachCacheManager: RuntimeAttachCacheManager
     val runtimeVisitor: DivRuntimeVisitor
     val stateManager: DivStateManager
     val tabsStateCache: TabsStateCache

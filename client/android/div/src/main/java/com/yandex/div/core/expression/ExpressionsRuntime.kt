@@ -15,6 +15,11 @@ internal class ExpressionsRuntime(
         triggersController?.clearBinding(view)
     }
 
+    /**
+     * Must include every effect performed by [onAttachedToWindow].
+     */
+    val hasWindowAttachWork: Boolean get() = triggersController != null
+
     fun onAttachedToWindow(view: Div2View) {
         triggersController?.onAttachedToWindow(view)
     }

@@ -54,6 +54,7 @@ internal class DivDataComponentStore @Inject constructor() {
 
     private fun DivDataComponent.reset(@ResetFlag flags: Int) {
         if (flags and RESET_EXPRESSION_RUNTIMES != 0) {
+            runtimeAttachCacheManager.invalidate()
             runtimeStoreProvider.reset()
         }
         if (flags and RESET_VIEW_STATES != 0) {
