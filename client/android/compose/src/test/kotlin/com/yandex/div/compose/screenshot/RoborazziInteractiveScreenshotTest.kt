@@ -44,7 +44,7 @@ import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.test.INTERACTIVE_SCREENSHOT_CASES_PATH
 import com.yandex.div.test.ScreenshotTests
-import com.yandex.div.test.composeRoborazziInteractiveScreenshotCases
+import com.yandex.div.test.composeIgnoredInteractiveScreenshotCases
 import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
@@ -254,15 +254,14 @@ class RoborazziInteractiveScreenshotTest(
         private val cases =
             ParsingUtils.parseFiles(INTERACTIVE_SCREENSHOT_CASES_PATH) { file, json ->
                 val fileName = file.getRelativeFileName(INTERACTIVE_SCREENSHOT_CASES_PATH)
-                if (fileName in composeRoborazziInteractiveScreenshotCases) {
-                    val configuration = InteractiveScreenshotTestConfiguration(
-                        name = fileName.removeSuffix(".json"),
-                        json = json,
-                    )
-                    listOf(ParsingResult.Success(configuration))
-                } else {
-                    emptyList()
+                if (fileName in composeIgnoredInteractiveScreenshotCases) {
+                    return@parseFiles emptyList()
                 }
+                val configuration = InteractiveScreenshotTestConfiguration(
+                    name = fileName.removeSuffix(".json"),
+                    json = json,
+                )
+                listOf(ParsingResult.Success(configuration))
             }
 
         @JvmStatic
