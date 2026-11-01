@@ -112,28 +112,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     // match_parent min_size next to wrap_content constrained siblings not supported, DIVKIT-10714
     "div-container/match-parent-min-size-with-constrained-siblings.json",
 
-    // div-pager vertical not supported
-    "div-pager/vertical-pager-custom-neighbour-page-width.json",
-    "div-pager/vertical-pager-custom-neighbour-page-width-with-paddings.json",
-    "div-pager/vertical-pager-custom-page-width.json",
-    "div-pager/vertical-pager-custom-page-width-with-paddings.json",
-    "div-pager/vertical-pager-neighbour-page-size-mode-alignment-end.json",
-    "div-pager/vertical-pager-neighbour-page-size-mode-alignment-start.json",
-    "div-pager/vertical-pager-neighbour-page-size-mode-item-spacing.json",
-    "div-pager/vertical-pager-neighbour-page-size-mode-two-pages.json",
-    "div-pager/vertical-pager-neighbour-page-width-0-with-item-spacing.json",
-    "div-pager/vertical-pager-neighbour-page-width-0-with-paddings.json",
-    "div-pager/vertical-pager-page-size-mode-alignment-end.json",
-    "div-pager/vertical-pager-page-size-mode-alignment-start.json",
-    "div-pager/vertical-pager-page-size-mode-item-spacing.json",
-    "div-pager/vertical-pager-page-width-100-with-item-spacing.json",
-    "div-pager/vertical-pager-page-width-100-with-paddings.json",
-    "div-pager/vertical-pager-wrap-content-height.json",
-    "div-pager/vertical-pager-wrap-content-height-with-paddings.json",
-    "div-pager/vertical-pager-wrap-content-size-mode-alignment-end.json",
-    "div-pager/vertical-pager-wrap-content-size-mode-alignment-start.json",
-    "div-pager/vertical-pager-wrap-content-size-mode-with-item-spacing.json",
-
     // div-gallery.item_builder not supported
     "div-gallery/item-builder/item-builder.json",
     "div-gallery/item-builder/item-builder-with-local-variables.json",
