@@ -118,7 +118,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     "div-gallery/item-builder/nested-builders.json",
     "div-gallery/item-builder/non-unique-matched-selectors.json",
 
-
     // div-pager.item_builder not supported
     "div-pager/item-builder/item-builder.json",
     "div-pager/item-builder/item-builder-with-local-variables.json",
@@ -219,7 +218,6 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-pager/multi-page-scroll.json",
     "div-pager/patch_pager.json",
     "div-pager/visibility.json",
-    "div-state/clip-to-bounds-with-shadow.json",
     "div-state/multiple-root-state-switching.json",
     "div-state/patch_state_partial.json",
     "div-state/patch_state_transactional_broken.json",
@@ -228,7 +226,5 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-tabs/patch_tabs_transactional_broken.json",
     "div-tabs/patch_tabs_transactional_success.json",
     "div-text/background-image-blur.json",
-    "div-timer/timer-end-actions-tick-actions.json",
     "div-transform/rotation-after-rebind.json",
-    "local-variables/global-and-local.json",
 )
