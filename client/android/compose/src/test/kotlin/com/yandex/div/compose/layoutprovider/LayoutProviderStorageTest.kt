@@ -31,7 +31,7 @@ class LayoutProviderStorageTest {
         variableController = variableController,
     )
 
-    private val width = registerVariableHandler("width")
+    private val width = rememberVariableHandler("width")
 
     private var frameTimeNanos = 0L
 
@@ -114,26 +114,26 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `disposing a binding discards its pending update`() {
+    fun `forgetting a handler discards its pending update`() {
         storage.attach(testScope)
 
         width.update(sizeInPixels = 20, density = 1f)
-        width.unregister()
+        width.onForgotten()
         advanceFrame()
 
         assertEquals(0L, widthVariable.getValue())
     }
 
     @Test
-    fun `disposing one binding preserves another binding update`() {
+    fun `forgetting one handler preserves another handler update`() {
         val heightVariable = Variable.IntegerVariable("height", 0)
         variableController.declare(heightVariable)
 
         storage.attach(testScope)
 
         width.update(sizeInPixels = 20, density = 1f)
-        registerVariableHandler("height").update(sizeInPixels = 40, density = 1f)
-        width.unregister()
+        rememberVariableHandler("height").update(sizeInPixels = 40, density = 1f)
+        width.onForgotten()
         advanceFrame()
 
         assertEquals(40L, heightVariable.getValue())
@@ -171,10 +171,10 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `variables from bindings created after attaching are observed`() {
-        width.unregister()
+    fun `variables from handlers remembered after attaching are observed`() {
+        width.onForgotten()
         storage.attach(testScope)
-        val width = registerVariableHandler("width")
+        val width = rememberVariableHandler("width")
 
         repeat(12) { index ->
             widthVariable.set(-1)
@@ -187,10 +187,10 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `disposing one binding preserves another binding subscription to the same variable`() {
-        val otherWidth = registerVariableHandler("width")
+    fun `forgetting one handler preserves another handler subscription to the same variable`() {
+        val otherWidth = rememberVariableHandler("width")
         storage.attach(testScope)
-        otherWidth.unregister()
+        otherWidth.onForgotten()
 
         repeat(12) { index ->
             widthVariable.set(-1)
@@ -203,12 +203,12 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `changes to a disposed binding variable do not reset update counts`() {
+    fun `changes to a forgotten handler variable do not reset update counts`() {
         val heightVariable = Variable.IntegerVariable("height", 0)
         variableController.declare(heightVariable)
-        val height = registerVariableHandler("height")
+        val height = rememberVariableHandler("height")
         storage.attach(testScope)
-        width.unregister()
+        width.onForgotten()
         heightVariable.addObserver {
             height.update(sizeInPixels = (it.getValue() as Long).toInt() + 1, density = 1f)
         }
@@ -224,10 +224,10 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `changes to another active binding variable do not reset update counts`() {
+    fun `changes to another remembered handler variable do not reset update counts`() {
         val heightVariable = Variable.IntegerVariable("height", 0)
         variableController.declare(heightVariable)
-        registerVariableHandler("height")
+        rememberVariableHandler("height")
         storage.attach(testScope)
         widthVariable.addObserver {
             width.update(sizeInPixels = (it.getValue() as Long).toInt() + 1, density = 1f)
@@ -245,7 +245,7 @@ class LayoutProviderStorageTest {
 
     @Test
     fun `creating a handler does not activate it`() {
-        width.unregister()
+        width.onForgotten()
         storage.attach(testScope)
         val handler = assertNotNull(storage.getVariableHandler("width", expressionResolver))
 
@@ -256,8 +256,8 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `attaching storage does not activate an unregistered handler`() {
-        width.unregister()
+    fun `attaching storage does not activate a handler that is not remembered`() {
+        width.onForgotten()
         val handler = assertNotNull(storage.getVariableHandler("width", expressionResolver))
 
         storage.attach(testScope)
@@ -268,10 +268,10 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `variable subscriptions resume after registering a disposed handler`() {
+    fun `variable subscriptions resume after remembering a forgotten handler`() {
         storage.attach(testScope)
-        width.unregister()
-        width.register()
+        width.onForgotten()
+        width.onRemembered()
 
         repeat(12) { index ->
             widthVariable.set(-1)
@@ -335,13 +335,13 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `bindings to the same variable publish only the latest size per frame`() {
+    fun `handlers of the same variable publish only the latest size per frame`() {
         storage.attach(testScope)
         val publishedSizes = mutableListOf<Long>()
         widthVariable.addObserver { publishedSizes.add(it.getValue() as Long) }
 
         repeat(4) { index ->
-            registerVariableHandler("width").update(sizeInPixels = (index + 1) * 10, density = 1f)
+            rememberVariableHandler("width").update(sizeInPixels = (index + 1) * 10, density = 1f)
         }
         advanceFrame()
 
@@ -350,8 +350,8 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `latest update wins when a binding updates again before the next frame`() {
-        val otherWidth = registerVariableHandler("width")
+    fun `latest update wins when a handler updates again before the next frame`() {
+        val otherWidth = rememberVariableHandler("width")
         storage.attach(testScope)
 
         width.update(sizeInPixels = 10, density = 1f)
@@ -363,13 +363,13 @@ class LayoutProviderStorageTest {
     }
 
     @Test
-    fun `unregistering the latest binding preserves another pending update to the same variable`() {
-        val otherWidth = registerVariableHandler("width")
+    fun `forgetting the latest handler preserves another pending update to the same variable`() {
+        val otherWidth = rememberVariableHandler("width")
         storage.attach(testScope)
 
         width.update(sizeInPixels = 10, density = 1f)
         otherWidth.update(sizeInPixels = 20, density = 1f)
-        otherWidth.unregister()
+        otherWidth.onForgotten()
         advanceFrame()
 
         assertEquals(10L, widthVariable.getValue())
@@ -392,9 +392,9 @@ class LayoutProviderStorageTest {
         assertEquals(0L, widthVariable.getValue())
     }
 
-    private fun registerVariableHandler(variableName: String): LayoutProviderStorage.VariableHandler {
+    private fun rememberVariableHandler(variableName: String): LayoutProviderStorage.VariableHandler {
         return assertNotNull(storage.getVariableHandler(variableName, expressionResolver)).apply {
-            register()
+            onRemembered()
         }
     }
 

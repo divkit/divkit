@@ -1,7 +1,6 @@
 package com.yandex.div.compose.layoutprovider
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
@@ -28,14 +27,6 @@ internal fun Modifier.layoutProvider(layoutProvider: DivLayoutProvider): Modifie
     }
     val heightVariable = remember(heightVariableName, expressionResolver) {
         heightVariableName?.let { storage.getVariableHandler(it, expressionResolver) }
-    }
-    DisposableEffect(widthVariable, heightVariable) {
-        widthVariable?.register()
-        heightVariable?.register()
-        onDispose {
-            widthVariable?.unregister()
-            heightVariable?.unregister()
-        }
     }
 
     val density = LocalDensity.current.density

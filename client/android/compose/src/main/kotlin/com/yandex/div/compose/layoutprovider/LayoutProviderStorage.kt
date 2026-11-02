@@ -2,6 +2,7 @@ package com.yandex.div.compose.layoutprovider
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.withFrameNanos
 import com.yandex.div.compose.DivReporter
@@ -138,25 +139,25 @@ internal class LayoutProviderStorage @Inject constructor(
         }
     }
 
-    inner class VariableHandler internal constructor(
-        internal val variable: Variable,
-    ) {
+    inner class VariableHandler(val variable: Variable) : RememberObserver {
         private var previousSize = 0
 
-        fun register() {
+        override fun onRemembered() {
             variableHandlers.add(this)
             if (coroutineScope != null) {
                 variable.addObserver(variableObserver)
             }
         }
 
-        fun unregister() {
+        override fun onForgotten() {
             pendingUpdates.remove(this)
             variableHandlers.remove(this)
             if (variableHandlers.none { it.variable === variable }) {
                 variable.removeObserver(variableObserver)
             }
         }
+
+        override fun onAbandoned() = Unit
 
         fun update(
             sizeInPixels: Int,

@@ -2,7 +2,7 @@ package com.yandex.div.compose.views.pager
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,11 +26,7 @@ internal fun rememberPagerNeighbourSizes(
     enabled: Boolean,
 ): PagerNeighbourSizes? {
     if (!enabled) return null
-    val sizes = remember(listState, itemKeys) { PagerNeighbourSizes(listState) }
-    DisposableEffect(sizes) {
-        onDispose { sizes.dispose() }
-    }
-    return sizes
+    return remember(listState, itemKeys) { PagerNeighbourSizes(listState) }
 }
 
 @Composable
@@ -50,7 +46,9 @@ internal fun Modifier.trackPagerViewport(neighbourSizes: PagerNeighbourSizes?): 
     }
 }
 
-internal class PagerNeighbourSizes(private val listState: LazyListState) {
+internal class PagerNeighbourSizes(
+    private val listState: LazyListState,
+) : RememberObserver {
     private val sizes = mutableStateMapOf<Int, Int>()
     private val pages = mutableMapOf<Int, PageSizeNode>()
     private var visibleRange: IntRange? = null
@@ -66,12 +64,16 @@ internal class PagerNeighbourSizes(private val listState: LazyListState) {
         if (!visible) pages.values.toList().forEach { it.release() }
     }
 
-    fun dispose() {
+    override fun onRemembered() = Unit
+
+    override fun onForgotten() {
         pages.values.toList().forEach { it.release() }
         pages.clear()
         sizes.clear()
         visibleRange = null
     }
+
+    override fun onAbandoned() = Unit
 
     private fun register(page: PageSizeNode) {
         pages.put(page.index, page)?.release()

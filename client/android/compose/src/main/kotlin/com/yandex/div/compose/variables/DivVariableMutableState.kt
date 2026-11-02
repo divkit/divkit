@@ -1,8 +1,8 @@
 package com.yandex.div.compose.variables
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -120,7 +120,7 @@ private fun <T : Any> rememberVariableMutableState(
         return null
     }
 
-    val state = remember(variable) {
+    return remember(variable) {
         DivVariableMutableState(
             variable = variable,
             readValue = readValue,
@@ -133,21 +133,15 @@ private fun <T : Any> rememberVariableMutableState(
             },
         )
     }
-
-    DisposableEffect(variable) {
-        val observer = state::onVariableChanged
-        variable.addObserver(observer)
-        onDispose { variable.removeObserver(observer) }
-    }
-
-    return state
 }
 
 private class DivVariableMutableState<T : Any>(
     private val variable: Variable,
     private val readValue: (Variable) -> T,
     private val writeValue: (Variable, T) -> Unit,
-) : MutableState<T> {
+) : MutableState<T>, RememberObserver {
+    private val observer = ::onVariableChanged
+
     private var _value by mutableStateOf(readValue(variable))
 
     override var value: T
@@ -160,7 +154,17 @@ private class DivVariableMutableState<T : Any>(
     override fun component1(): T = value
     override fun component2(): (T) -> Unit = { value = it }
 
-    fun onVariableChanged(variable: Variable) {
+    override fun onRemembered() {
+        variable.addObserver(observer)
+    }
+
+    override fun onForgotten() {
+        variable.removeObserver(observer)
+    }
+
+    override fun onAbandoned() = Unit
+
+    private fun onVariableChanged(variable: Variable) {
         _value = readValue(variable)
     }
 }
