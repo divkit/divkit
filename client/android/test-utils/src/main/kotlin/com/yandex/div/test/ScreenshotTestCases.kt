@@ -209,7 +209,6 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-grid/patch_grid.json",
     "div-grid/patch_inside_grid.json",
     "div-image/blur.json",
-    "div-image/variables_div_image.json",
     "div-input/capture-focus-on-action.json",
     "div-layout-provider/layout-provider-recursive.json",
     "div-pager/base-properties.json",

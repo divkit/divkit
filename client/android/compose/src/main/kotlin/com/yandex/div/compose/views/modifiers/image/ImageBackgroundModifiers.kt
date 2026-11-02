@@ -38,7 +38,6 @@ internal fun Modifier.imageBackground(data: DivImageBackground): Modifier {
                 transformations = data.filters.observedTransformations()
             )
         ),
-        imageLoader = component.imageLoader,
         onState = component.debugConfiguration.imagePainterStateListener
     )
 

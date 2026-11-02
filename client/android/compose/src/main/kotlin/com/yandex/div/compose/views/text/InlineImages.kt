@@ -255,7 +255,6 @@ private fun InlineImage(image: InlineImageData) {
                 limitToDisplaySize = true,
             )
         ),
-        imageLoader = component.imageLoader,
         onState = component.debugConfiguration.imagePainterStateListener,
     )
     Box(modifier = Modifier.fillMaxSize()) {

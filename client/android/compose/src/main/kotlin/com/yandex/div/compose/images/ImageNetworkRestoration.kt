@@ -4,11 +4,12 @@ import android.Manifest
 import androidx.annotation.RequiresPermission
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
-import coil3.ImageLoader
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.network.HttpException
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.dagger.LocalComponent
 import com.yandex.div.compose.internal.NetworkRestorationController
 import java.io.InterruptedIOException
@@ -21,9 +22,8 @@ import java.net.UnknownHostException
 @RequiresPermission(Manifest.permission.ACCESS_NETWORK_STATE)
 internal fun rememberNetworkRestoringImagePainter(
     model: Any?,
-    imageLoader: ImageLoader,
     onState: ((AsyncImagePainter.State) -> Unit)? = null,
-): AsyncImagePainter {
+): AsyncImagePainter = key(model) {
     val networkRestorationController = LocalComponent.current.networkRestorationController
     val restoration = remember(networkRestorationController) {
         ImageNetworkRestoration(networkRestorationController)
@@ -31,14 +31,14 @@ internal fun rememberNetworkRestoringImagePainter(
     restoration.beginInputUpdate()
     val painter = rememberAsyncImagePainter(
         model = model,
-        imageLoader = imageLoader,
+        imageLoader = divContext.component.imageLoader,
         onState = { state ->
             restoration.onState(state)
             onState?.invoke(state)
         },
     )
     restoration.bind(painter)
-    return painter
+    painter
 }
 
 private class ImageNetworkRestoration(

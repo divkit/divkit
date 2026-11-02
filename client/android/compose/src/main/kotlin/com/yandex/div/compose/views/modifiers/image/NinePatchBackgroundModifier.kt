@@ -38,7 +38,6 @@ private fun Modifier.ninePatchBackground(imageUrl: Uri, insets: DivAbsoluteEdgeI
     val component = divContext.component
     val painter = rememberNetworkRestoringImagePainter(
         model = rememberImageRequest(ImageRequestParams(data = imageUrl)),
-        imageLoader = component.imageLoader,
         onState = component.debugConfiguration.imagePainterStateListener
     )
     val state by painter.state.collectAsState()

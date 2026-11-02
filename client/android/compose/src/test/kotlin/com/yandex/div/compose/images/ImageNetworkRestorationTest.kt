@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import coil3.ImageLoader
+import coil3.ComponentRegistry
 import coil3.asImage
 import coil3.compose.AsyncImagePainter
 import coil3.network.HttpException
@@ -20,8 +20,10 @@ import coil3.request.ImageRequest
 import coil3.request.ImageResult
 import coil3.request.SuccessResult
 import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.mockLocalComponent
+import com.yandex.div.compose.setContentWithDivContext
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,15 +62,17 @@ class ImageNetworkRestorationTest {
 
     private var loadingGate: CompletableDeferred<Unit>? = null
 
-    private val imageLoader = ImageLoader.Builder(context)
-        .components {
-            add { chain ->
+    private val imageLoaderConfiguration = object : ImageLoaderConfiguration {
+        override val reportErrors = false
+
+        override fun applyComponents(builder: ComponentRegistry.Builder) {
+            builder.add { chain ->
                 attempts.incrementAndGet()
                 loadingGate?.await()
                 nextResult(chain.request)
             }
         }
-        .build()
+    }
 
     @Test
     fun `restarts on UnknownHostException`() = expectRestart {
@@ -269,7 +273,6 @@ class ImageNetworkRestorationTest {
     ): AsyncImagePainter {
         val painter = rememberNetworkRestoringImagePainter(
             model = model,
-            imageLoader = imageLoader,
             onState = onState,
         )
         Image(painter = painter, contentDescription = null)
@@ -277,7 +280,11 @@ class ImageNetworkRestorationTest {
     }
 
     private fun setContent(content: @Composable () -> Unit) {
-        composeRule.setContent {
+        composeRule.setContentWithDivContext(
+            configuration = divConfiguration {
+                imageLoaderConfiguration = this@ImageNetworkRestorationTest.imageLoaderConfiguration
+            }
+        ) {
             CompositionLocalProvider(LocalComponent provides localComponent) {
                 content()
             }

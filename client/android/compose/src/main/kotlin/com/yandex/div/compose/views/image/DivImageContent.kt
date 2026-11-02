@@ -48,7 +48,6 @@ internal fun DivImageContent(
     preview: @Composable () -> Any?
 ) {
     val component = divContext.component
-    val imageLoader = component.imageLoader
     val imageStateListener = rememberImageStateListener(data)
     val imageStateStorage = LocalDivViewContext.current.component.imageStateStorage
     val imageRequestParams = if (imageUrl?.isValidImageUri() == true) {
@@ -78,7 +77,6 @@ internal fun DivImageContent(
         }
         rememberNetworkRestoringImagePainter(
             model = request,
-            imageLoader = imageLoader,
             onState = onState,
         )
     }
@@ -128,7 +126,7 @@ internal fun DivImageContent(
     val previewPainter = if (!isImageLoaded && previewRequest != null) {
         rememberAsyncImagePainter(
             model = previewRequest,
-            imageLoader = imageLoader,
+            imageLoader = component.imageLoader,
             onState = component.debugConfiguration.imagePainterStateListener
         )
     } else {
