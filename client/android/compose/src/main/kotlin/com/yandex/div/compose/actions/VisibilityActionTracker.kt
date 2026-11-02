@@ -86,13 +86,8 @@ internal class VisibilityActionTracker @Inject constructor(
     private fun scheduleAction(trackedAction: TrackedAction) {
         cancelAction(trackedAction)
         val (context, action) = trackedAction
-        val duration = action.duration.evaluate(context.expressionResolver)
-        if (duration == 0L) {
-            triggerIfNeeded(trackedAction)
-            return
-        }
         pendingActions[trackedAction] = mainCoroutineScope.launch {
-            delay(duration)
+            delay(action.duration.evaluate(context.expressionResolver))
             pendingActions.remove(trackedAction)
             triggerIfNeeded(trackedAction)
         }
