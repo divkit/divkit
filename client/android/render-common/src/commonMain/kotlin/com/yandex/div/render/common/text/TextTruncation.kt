@@ -1,22 +1,23 @@
 package com.yandex.div.render.common.text
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.yandex.div.core.annotations.InternalApi
-import java.text.BreakIterator
-import java.util.Locale
 
-/** Selects logical text boundaries; the renderer owns shaping, spans and the width budget. */
+/**
+ * Selects logical text boundaries; the renderer owns shaping, spans and the width budget.
+ */
 @InternalApi
-public class TextTruncation(private val text: String, private val locale: Locale) {
+public class TextTruncation internal constructor(
+    private val text: String,
+    boundaryIterator: (character: Boolean) -> TextBoundaryIterator,
+) {
 
-    private val graphemeBoundaries by lazy { boundaryIterator(character = true) }
-    private val lineBreakBoundaries by lazy { boundaryIterator(character = false) }
+    private val graphemeBoundaries by lazy { boundaryIterator(true) }
+    private val lineBreakBoundaries by lazy { boundaryIterator(false) }
 
     /**
-     * Returns the last safe boundary whose prefix and marker satisfy [fits], or `null` when none fit.
+     * Returns the last safe boundary whose prefix and marker satisfy [fits], or `null` if none fit.
      * [fits] must include replacement content when measuring the prefix together with its marker.
-     * For offset `0`, it must report whether the marker itself fits. This check avoids scanning every
+     * For offset `0`, it must report whether the marker fits. This check avoids scanning every
      * boundary when the marker is already too large; other offsets may additionally enforce layout
      * constraints such as keeping the marker on the last visible line.
      */
@@ -33,7 +34,9 @@ public class TextTruncation(private val text: String, private val locale: Locale
         if (byWord) {
             findBoundaryBackward(lineBreakBoundaries, lineStart, lineEnd) { boundary ->
                 val end = trimLineEnd(boundary, lineStart)
-                if (end > lineStart && graphemeBoundaries.isBoundary(end) && isSafeBoundary(end) && fits(end)) {
+                if (end > lineStart && graphemeBoundaries.isBoundary(end) &&
+                    isSafeBoundary(end) && fits(end)
+                ) {
                     end
                 } else {
                     null
@@ -66,31 +69,14 @@ public class TextTruncation(private val text: String, private val locale: Locale
         var end = boundary
         while (end > lineStart) {
             val codePoint = text.codePointBefore(end)
-            if (codePoint != ZERO_WIDTH_SPACE && codePoint != SOFT_HYPHEN && !Character.isWhitespace(codePoint)) {
+            if (codePoint != ZERO_WIDTH_SPACE && codePoint != SOFT_HYPHEN &&
+                !isTrimmableWhitespace(codePoint)
+            ) {
                 break
             }
-            end -= Character.charCount(codePoint)
+            end -= codePointSize(codePoint)
         }
         return end
-    }
-
-    private fun boundaryIterator(character: Boolean): TextBoundaryIterator {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val iterator = if (character) {
-                android.icu.text.BreakIterator.getCharacterInstance(locale)
-            } else {
-                android.icu.text.BreakIterator.getLineInstance(locale)
-            }
-            iterator.setText(text)
-            return IcuTextBoundaryIterator(iterator)
-        }
-        val iterator = if (character) {
-            BreakIterator.getCharacterInstance(locale)
-        } else {
-            BreakIterator.getLineInstance(locale)
-        }
-        iterator.setText(text)
-        return JavaTextBoundaryIterator(iterator)
     }
 
     private fun findBoundaryBackward(
@@ -122,12 +108,7 @@ public class TextTruncation(private val text: String, private val locale: Locale
         }
         val next = text.codePointAt(offset)
         val previous = text.codePointBefore(offset)
-        val type = Character.getType(next)
-        if (type == Character.NON_SPACING_MARK.toInt() || type == Character.COMBINING_SPACING_MARK.toInt() ||
-            type == Character.ENCLOSING_MARK.toInt() || next == ZERO_WIDTH_JOINER || previous == ZERO_WIDTH_JOINER ||
-            next in VARIATION_SELECTORS || next in SUPPLEMENTARY_VARIATION_SELECTORS ||
-            next in EMOJI_MODIFIERS || next in TAG_CHARACTERS
-        ) {
+        if (previous == ZERO_WIDTH_JOINER || isGraphemeExtension(next)) {
             return false
         }
         return !isRegionalIndicatorContinuation(offset, next)
@@ -145,38 +126,54 @@ public class TextTruncation(private val text: String, private val locale: Locale
                 break
             }
             precedingIndicators++
-            previousOffset -= Character.charCount(previous)
+            previousOffset -= codePointSize(previous)
         }
         return precedingIndicators % 2 != 0
     }
 
-    private interface TextBoundaryIterator {
-        fun isBoundary(offset: Int): Boolean
-        fun preceding(offset: Int): Int
+    private fun isGraphemeExtension(codePoint: Int): Boolean = when (codePoint) {
+        ZERO_WIDTH_JOINER,
+        in VARIATION_SELECTORS,
+        in SUPPLEMENTARY_VARIATION_SELECTORS,
+        in EMOJI_MODIFIERS,
+        in TAG_CHARACTERS -> true
+        else -> isCombiningMark(codePoint)
+    }
 
-        companion object {
-            const val DONE = -1
+    private fun String.codePointAt(offset: Int): Int {
+        val first = this[offset]
+        return if (first.isHighSurrogate() && offset + 1 < length &&
+            this[offset + 1].isLowSurrogate()
+        ) {
+            combineSurrogates(first, this[offset + 1])
+        } else {
+            first.code
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
-    private class IcuTextBoundaryIterator(
-        private val iterator: android.icu.text.BreakIterator,
-    ) : TextBoundaryIterator {
-        override fun isBoundary(offset: Int): Boolean = iterator.isBoundary(offset)
-
-        override fun preceding(offset: Int): Int = iterator.preceding(offset)
+    private fun String.codePointBefore(offset: Int): Int {
+        val second = this[offset - 1]
+        return if (second.isLowSurrogate() && offset >= 2 &&
+            this[offset - 2].isHighSurrogate()
+        ) {
+            combineSurrogates(this[offset - 2], second)
+        } else {
+            second.code
+        }
     }
 
-    private class JavaTextBoundaryIterator(
-        private val iterator: BreakIterator,
-    ) : TextBoundaryIterator {
-        override fun isBoundary(offset: Int): Boolean = iterator.isBoundary(offset)
+    private fun combineSurrogates(high: Char, low: Char): Int =
+        MIN_SUPPLEMENTARY_CODE_POINT +
+            (high.code - Char.MIN_HIGH_SURROGATE.code) * SURROGATE_RANGE_SIZE +
+            (low.code - Char.MIN_LOW_SURROGATE.code)
 
-        override fun preceding(offset: Int): Int = iterator.preceding(offset)
-    }
+    private fun codePointSize(codePoint: Int): Int =
+        if (codePoint >= MIN_SUPPLEMENTARY_CODE_POINT) 2 else 1
 
     private companion object {
+        const val MIN_SUPPLEMENTARY_CODE_POINT = 0x10000
+        const val SURROGATE_RANGE_SIZE = 0x400
+
         const val ZERO_WIDTH_SPACE = 0x200B
         const val SOFT_HYPHEN = 0x00AD
         const val ZERO_WIDTH_JOINER = 0x200D
