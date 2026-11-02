@@ -25,6 +25,7 @@
 * Fixed the `div-select` popup alignment and width in the Compose renderer.
 * In the Android View renderer, the `focus_element` action also requests screen-reader focus when touch exploration is enabled.
 * Removed JVM API from `core` module.
+* Reverted synchronous execution of zero-duration visibility and disappear actions.
 * Supported `item_builder` in `div-container` in the Compose renderer.
 * Supported `secondary_value_accessibility` of `div-slider` in the Compose renderer: its description names the second thumb and `mode: exclude` hides it.
 * Supported `validator.label_id` of `div-input` in the Compose renderer: while a validator fails, accessibility services announce the text of its label as the error of the input.
