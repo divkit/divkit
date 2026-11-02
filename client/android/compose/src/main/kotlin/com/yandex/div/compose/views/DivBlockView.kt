@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -107,27 +108,32 @@ internal fun VisibleDivBlockView(
     )
     WithActionMenu(actions, modifier, menuOffset) { contentModifier ->
         WithStateChangeTransition(data, visibility) { stateChangeTransition ->
-            WithExtensions(
-                data = data,
-                extensions = extensions(divBase),
-                modifier = contentModifier.apply(
-                    data,
-                    actions = actions,
-                    margins = margins,
-                    visibility = visibility,
+            val extensions = extensions(divBase)
+            val decoratedModifier = contentModifier.apply(
+                data,
+                actions = actions,
+                margins = margins,
+                visibility = visibility,
+                focusState = focusState,
+                stateChangeTransition = stateChangeTransition,
+                fillMatchParentWidth = fillMatchParentWidth,
+                fillMatchParentHeight = fillMatchParentHeight,
+                defaultHorizontalAlignment = defaultHorizontalAlignment,
+                defaultVerticalAlignment = defaultVerticalAlignment,
+                suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
+                matchParentMaxWidth = matchParentMaxWidth,
+                matchParentMaxHeight = matchParentMaxHeight,
+                blockTapPropagation = blockTapPropagation,
+            )
+            if (extensions.isEmpty()) {
+                BaseView(data = data, modifier = decoratedModifier, focusState = focusState)
+            } else {
+                BaseViewWithExtensions(
+                    data = data,
+                    extensions = extensions,
+                    modifier = decoratedModifier,
                     focusState = focusState,
-                    stateChangeTransition = stateChangeTransition,
-                    fillMatchParentWidth = fillMatchParentWidth,
-                    fillMatchParentHeight = fillMatchParentHeight,
-                    defaultHorizontalAlignment = defaultHorizontalAlignment,
-                    defaultVerticalAlignment = defaultVerticalAlignment,
-                    suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
-                    matchParentMaxWidth = matchParentMaxWidth,
-                    matchParentMaxHeight = matchParentMaxHeight,
-                    blockTapPropagation = blockTapPropagation,
                 )
-            ) { baseModifier ->
-                BaseView(data = data, modifier = baseModifier, focusState = focusState)
             }
         }
     }
@@ -145,26 +151,26 @@ private fun extensions(div: DivBase): List<Pair<DivExtension, DivExtensionHandle
 }
 
 @Composable
-private fun WithExtensions(
+private fun BaseViewWithExtensions(
     data: Div,
     extensions: List<Pair<DivExtension, DivExtensionHandler?>>,
     modifier: Modifier,
-    content: @Composable (Modifier) -> Unit,
+    focusState: State<Boolean>?,
 ) {
     val first = extensions.firstOrNull()
     if (first == null) {
-        content(modifier)
+        BaseView(data = data, modifier = modifier, focusState = focusState)
         return
     }
 
     val (extension, extensionHandler) = first
     if (extensionHandler == null) {
         reportError("No handler for extension: ${extension.id}")
-        WithExtensions(
+        BaseViewWithExtensions(
             data = data,
             extensions = extensions.drop(1),
             modifier = modifier,
-            content = content,
+            focusState = focusState,
         )
         return
     }
@@ -180,18 +186,19 @@ private fun WithExtensions(
             animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState(),
             storedValuesStorage = storedValuesStorage,
         ),
-        content = { contentModifier ->
-            WithExtensions(
+        content = { modifier ->
+            BaseViewWithExtensions(
                 data = data,
                 extensions = extensions.drop(1),
-                modifier = contentModifier,
-                content = content,
+                modifier = modifier,
+                focusState = focusState,
             )
         }
     )
 }
 
 @Composable
+@NonRestartableComposable
 private fun BaseView(
     data: Div,
     modifier: Modifier,

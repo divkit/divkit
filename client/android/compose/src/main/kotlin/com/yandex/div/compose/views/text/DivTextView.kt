@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.text
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -13,6 +14,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.IntrinsicMeasurable
@@ -60,18 +62,14 @@ internal fun DivTextView(
 ) {
     val textAlignmentHorizontal = data.textAlignmentHorizontal.observedValue()
     val textAlignmentVertical = data.textAlignmentVertical.observedValue()
-    Box(
-        modifier = modifier.semantics(mergeDescendants = true) {},
-        contentAlignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical)
-    ) {
-        if (data.selectable.observedValue()) {
-            SelectionContainer {
-                BasicText(data = data, horizontalAlignment = textAlignmentHorizontal, focusState = focusState)
-            }
-        } else {
-            BasicText(data = data, horizontalAlignment = textAlignmentHorizontal, focusState = focusState)
-        }
-    }
+    BasicText(
+        data = data,
+        horizontalAlignment = textAlignmentHorizontal,
+        focusState = focusState,
+        modifier = modifier,
+        alignment = toAlignment(textAlignmentHorizontal, textAlignmentVertical),
+        selectable = data.selectable.observedValue(),
+    )
 }
 
 @Composable
@@ -79,6 +77,9 @@ private fun BasicText(
     data: DivText,
     horizontalAlignment: DivAlignmentHorizontal,
     focusState: State<Boolean>?,
+    modifier: Modifier,
+    alignment: Alignment,
+    selectable: Boolean,
 ) {
     val text = data.text.observedValue()
     data.id?.let { id -> LabelText(id, text) }
@@ -93,12 +94,14 @@ private fun BasicText(
     if (data.hasActionLinks()) {
         CompositionLocalProvider(LocalViewConfiguration provides rememberExactTouchTargetViewConfiguration()) {
             RenderTextContent(
-                data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines, focusState
+                data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines,
+                focusState, modifier, alignment, selectable,
             )
         }
     } else {
         RenderTextContent(
-            data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines, focusState
+            data, text, fontSize, textStyle, inlineImages, gradientBrush, customEllipsis, maxLines,
+            focusState, modifier, alignment, selectable,
         )
     }
 }
@@ -139,6 +142,9 @@ private fun RenderTextContent(
     customEllipsis: AnnotatedText?,
     maxLines: Int,
     focusState: State<Boolean>?,
+    modifier: Modifier,
+    alignment: Alignment,
+    selectable: Boolean,
 ) {
     val hasMaxLines = data.maxLines != null
     val truncate = data.observeTruncate(hasMaxLines, customEllipsis)
@@ -164,15 +170,60 @@ private fun RenderTextContent(
         text = text,
     )
     val textStyle = data.observeFocusedTextStyle(baseTextStyle, focusState)
-    if (customEllipsis != null || needsMeasuredEndEllipsis) {
-        RenderMeasuredText(text, annotatedText, customEllipsis, textStyle, maxLines, truncatePolicy, inlineImages)
-    } else if (annotatedText == null) {
+    val needsMeasuredText = customEllipsis != null || needsMeasuredEndEllipsis
+    if (!selectable && !needsMeasuredText && annotatedText == null) {
         BasicText(
+            modifier = modifier.plainTextLayout(alignment),
             text = text,
             style = textStyle,
             overflow = overflow,
             maxLines = maxLines,
         )
+    } else {
+        Box(
+            modifier = modifier.semantics(mergeDescendants = true) {},
+            contentAlignment = alignment,
+        ) {
+            if (selectable) {
+                SelectionContainer {
+                    RenderComplexTextContent(
+                        text, annotatedText, customEllipsis, textStyle, maxLines, truncatePolicy,
+                        inlineImages, overflow, needsMeasuredText,
+                    )
+                }
+            } else {
+                RenderComplexTextContent(
+                    text, annotatedText, customEllipsis, textStyle, maxLines, truncatePolicy,
+                    inlineImages, overflow, needsMeasuredText,
+                )
+            }
+        }
+    }
+}
+
+// A single-child Box without propagated minimum constraints has the same measure and placement
+// behavior. Keeping its wrapper in modifiers avoids an additional LayoutNode for plain text.
+internal fun Modifier.plainTextLayout(alignment: Alignment): Modifier =
+    semantics(mergeDescendants = true) {}.wrapContentSize(align = alignment, unbounded = false)
+
+@Composable
+private fun RenderComplexTextContent(
+    text: String,
+    annotatedText: AnnotatedText?,
+    customEllipsis: AnnotatedText?,
+    textStyle: TextStyle,
+    maxLines: Int,
+    truncatePolicy: DivText.TruncatePolicy,
+    inlineImages: List<InlineImageData>,
+    overflow: TextOverflow,
+    needsMeasuredText: Boolean,
+) {
+    if (needsMeasuredText) {
+        RenderMeasuredText(
+            text, annotatedText, customEllipsis, textStyle, maxLines, truncatePolicy, inlineImages,
+        )
+    } else if (annotatedText == null) {
+        BasicText(text = text, style = textStyle, overflow = overflow, maxLines = maxLines)
     } else {
         RenderAnnotatedText(annotatedText, inlineImages, textStyle, overflow, maxLines)
     }

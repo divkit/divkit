@@ -1,8 +1,8 @@
 package com.yandex.div.compose.views.grid
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Grid
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,40 +42,38 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
         widthWrapContent = data.width.isWrapContent,
         heightWrapContent = data.height.isWrapContent,
     )
-
-    Box(
-        modifier,
-        contentAlignment = observedAlignment(
-            data.contentAlignmentHorizontal,
-            data.contentAlignmentVertical
-        )
+    Grid(
+        modifier = modifier.wrapContentSize(
+            align = observedAlignment(
+                data.contentAlignmentHorizontal,
+                data.contentAlignmentVertical
+            ),
+            unbounded = false,
+        ),
+        config = {
+            columnTracks.resolve(constraints.maxWidth, this).forEach { column(it) }
+            rowTracks.resolve(constraints.maxHeight, this).forEach { row(it) }
+        }
     ) {
-        Grid(
-            config = {
-                columnTracks.resolve(constraints.maxWidth, this).forEach { column(it) }
-                rowTracks.resolve(constraints.maxHeight, this).forEach { row(it) }
-            }
-        ) {
-            items.forEach { item ->
-                WithDivKey(item) {
-                    WithLocalComponent(components?.get(item)) {
-                        val divBase = item.value()
-                        val columnSpan = divBase.columnSpan.observedIntValue(DEFAULT_SPAN)
-                        val rowSpan = divBase.rowSpan.observedIntValue(DEFAULT_SPAN)
-                        DivBlockView(
-                            data = item,
-                            modifier = Modifier
-                                .applyIf(columnSpan > 1 && rowSpan == 1) {
-                                    then(UnboundedIntrinsicHeight)
-                                }
-                                .gridItem(
-                                    columnSpan = columnSpan,
-                                    rowSpan = rowSpan,
-                                    alignment = divBase.toGridItemAlignment()
-                                ),
-                            suppressMatchParentIntrinsics = true,
-                        )
-                    }
+        items.forEach { item ->
+            WithDivKey(item) {
+                WithLocalComponent(components?.get(item)) {
+                    val divBase = item.value()
+                    val columnSpan = divBase.columnSpan.observedIntValue(DEFAULT_SPAN)
+                    val rowSpan = divBase.rowSpan.observedIntValue(DEFAULT_SPAN)
+                    DivBlockView(
+                        data = item,
+                        modifier = Modifier
+                            .applyIf(columnSpan > 1 && rowSpan == 1) {
+                                then(UnboundedIntrinsicHeight)
+                            }
+                            .gridItem(
+                                columnSpan = columnSpan,
+                                rowSpan = rowSpan,
+                                alignment = divBase.toGridItemAlignment()
+                            ),
+                        suppressMatchParentIntrinsics = true,
+                    )
                 }
             }
         }
