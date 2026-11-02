@@ -18,5 +18,7 @@
     "label",
     "actions"
   ],
-  "platforms": []
+  "platforms": [
+    "ios"
+  ]
 }

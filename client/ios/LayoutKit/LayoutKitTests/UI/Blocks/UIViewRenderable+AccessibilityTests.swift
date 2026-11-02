@@ -178,6 +178,19 @@ final class UIViewRenderable_AccessibilityTests: XCTestCase {
     }
     textFieldView.assertHasAccessibilityEqualsTo(accessibility)
   }
+
+  func test_decoratingBlockCustomActionsReplacedAndClearedOnReconfigure() {
+    let view = makeDecoratingBlock(customActions: ["First", "Second"]).makeBlockView()
+    XCTAssertEqual(view.accessibilityCustomActions?.map(\.name), ["First", "Second"])
+
+    makeDecoratingBlock(customActions: ["Third"])
+      .configureBlockView(view, observer: nil, overscrollDelegate: nil, renderingDelegate: nil)
+    XCTAssertEqual(view.accessibilityCustomActions?.map(\.name), ["Third"])
+
+    makeDecoratingBlock(customActions: [])
+      .configureBlockView(view, observer: nil, overscrollDelegate: nil, renderingDelegate: nil)
+    XCTAssertNil(view.accessibilityCustomActions)
+  }
 }
 
 extension UIView {
@@ -244,6 +257,21 @@ private func makeDecoratingBlock(
   DecoratingBlock(
     child: EmptyBlock.zeroSized,
     accessibilityElement: accessibility
+  )
+}
+
+private func makeDecoratingBlock(
+  customActions names: [String]
+) -> DecoratingBlock {
+  DecoratingBlock(
+    child: EmptyBlock.zeroSized,
+    accessibilityElement: accessibility,
+    accessibilityCustomActions: names.map {
+      AccessibilityCustomAction(
+        name: $0,
+        actions: NonEmptyArray(UserInterfaceAction(payload: .empty, path: UIElementPath($0)))
+      )
+    }
   )
 }
 

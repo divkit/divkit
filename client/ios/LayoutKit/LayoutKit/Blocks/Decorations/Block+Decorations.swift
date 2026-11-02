@@ -31,6 +31,7 @@ extension Block {
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool,
     accessibilityElement: AccessibilityElement? = nil,
+    accessibilityCustomActions: [AccessibilityCustomAction]? = nil,
     reuseId: String?,
     path: UIElementPath?,
     isEmpty: Bool?,
@@ -51,6 +52,7 @@ extension Block {
         || tooltips?.isEmpty == false
         || forceWrapping
         || accessibilityElement != nil
+        || accessibilityCustomActions?.isEmpty == false
         || reuseId != nil
         || isEmpty != nil
         || isFocused != nil
@@ -88,6 +90,7 @@ extension Block {
         visibilityParams: visibilityParams ?? block.visibilityParams,
         tooltips: [tooltips, block.tooltips].compactMap { $0 }.flatMap { $0 },
         accessibilityElement: accessibilityElement,
+        accessibilityCustomActions: accessibilityCustomActions,
         reuseId: reuseId,
         path: path,
         isFocused: isFocused,
@@ -123,6 +126,7 @@ extension Block {
       visibilityParams: visibilityParams,
       tooltips: tooltips ?? [],
       accessibilityElement: accessibilityElement,
+      accessibilityCustomActions: accessibilityCustomActions ?? [],
       reuseId: reuseId,
       path: path,
       isFocused: isFocused ?? false,
@@ -159,6 +163,7 @@ extension Block {
     tooltips: [BlockTooltip]? = nil,
     forceWrapping: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
+    accessibilityCustomActions: [AccessibilityCustomAction]? = nil,
     reuseId: String? = nil,
     path: UIElementPath? = nil,
     isEmpty: Bool? = nil,
@@ -185,6 +190,7 @@ extension Block {
       tooltips: tooltips,
       forceWrapping: forceWrapping,
       accessibilityElement: accessibilityElement,
+      accessibilityCustomActions: accessibilityCustomActions,
       reuseId: reuseId,
       path: path,
       isEmpty: isEmpty,
@@ -287,6 +293,7 @@ extension DecoratingBlock {
       && actions == nil
       && doubleTapActions == nil
       && longTapActions == nil
+      && accessibilityCustomActions.isEmpty
       && boundary.allCornersAreApproximatelyEqualToZero()
       && border == nil
   }

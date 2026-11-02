@@ -27,14 +27,7 @@ extension DivActionsHolder {
   fileprivate func makeActions(
     context: DivBlockModelingContext
   ) -> NonEmptyArray<UserInterfaceAction>? {
-    let allActions = (actions ?? action.asArray()).uiActions(context: context)
-
-    if let menuAction = allActions.first(where: { $0.payload.isMenu }) {
-      // ignore other actions
-      return NonEmptyArray(menuAction)
-    }
-
-    return NonEmptyArray(allActions)
+    (actions ?? action.asArray()).tapUIActions(context: context)
   }
 }
 
@@ -77,12 +70,5 @@ extension Block {
       path: context.path,
       captureFocusOnAction: actionsHolder.resolveCaptureFocusOnAction(context.expressionResolver)
     )
-  }
-}
-
-extension UserInterfaceAction.Payload {
-  fileprivate var isMenu: Bool {
-    if case .menu = self { return true }
-    return false
   }
 }

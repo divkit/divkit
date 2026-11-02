@@ -2,6 +2,19 @@ import LayoutKit
 import VGSL
 
 extension DivAccessibility {
+  func resolveMenu(context: DivBlockModelingContext) -> [AccessibilityCustomAction] {
+    let expressionResolver = context.expressionResolver
+    guard let menu, resolveMode(expressionResolver) != .exclude else { return [] }
+
+    return menu.compactMap { item in
+      guard let actions = item.actions.tapUIActions(context: context) else { return nil }
+      return AccessibilityCustomAction(
+        name: item.resolveLabel(expressionResolver) ?? "",
+        actions: actions
+      )
+    }
+  }
+
   func resolve(
     _ expressionResolver: ExpressionResolver,
     id: String?,

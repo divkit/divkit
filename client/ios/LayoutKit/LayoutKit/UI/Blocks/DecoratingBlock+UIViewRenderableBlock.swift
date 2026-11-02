@@ -54,6 +54,7 @@ extension DecoratingBlock {
       visibilityParams: visibilityParams,
       tooltips: tooltips,
       accessibility: accessibilityElement,
+      accessibilityCustomActions: accessibilityCustomActions,
       reuseId: reuseId,
       path: path,
       isFocused: isFocused,
@@ -135,6 +136,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       let visibilityParams: VisibilityParams?
       let tooltips: [BlockTooltip]
       let accessibility: AccessibilityElement?
+      let accessibilityCustomActions: [AccessibilityCustomAction]
       let reuseId: String?
       let path: UIElementPath?
       let isFocused: Bool?
@@ -162,6 +164,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         visibilityParams: VisibilityParams?,
         tooltips: [BlockTooltip],
         accessibility: AccessibilityElement?,
+        accessibilityCustomActions: [AccessibilityCustomAction],
         reuseId: String?,
         path: UIElementPath?,
         isFocused: Bool?,
@@ -188,6 +191,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         self.visibilityParams = visibilityParams
         self.tooltips = tooltips
         self.accessibility = accessibility
+        self.accessibilityCustomActions = accessibilityCustomActions
         self.reuseId = reuseId
         self.path = path
         self.isFocused = isFocused
@@ -218,6 +222,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     var visibilityParams: VisibilityParams? { box.visibilityParams }
     var tooltips: [BlockTooltip] { box.tooltips }
     var accessibility: AccessibilityElement? { box.accessibility }
+    var accessibilityCustomActions: [AccessibilityCustomAction] { box.accessibilityCustomActions }
     var reuseId: String? { box.reuseId }
     var path: UIElementPath? { box.path }
     var isFocused: Bool? { box.isFocused }
@@ -277,6 +282,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
       visibilityParams: VisibilityParams?,
       tooltips: [BlockTooltip],
       accessibility: AccessibilityElement?,
+      accessibilityCustomActions: [AccessibilityCustomAction],
       reuseId: String?,
       path: UIElementPath?,
       isFocused: Bool?,
@@ -304,6 +310,7 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
         visibilityParams: visibilityParams,
         tooltips: tooltips,
         accessibility: accessibility,
+        accessibilityCustomActions: accessibilityCustomActions,
         reuseId: reuseId,
         path: path,
         isFocused: isFocused,
@@ -611,6 +618,9 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     applyAccessibilityFromScratch(model.accessibility)
     model.actions?
       .forEach { applyAccessibility($0.accessibilityElement) }
+    accessibilityCustomActions = model.accessibilityCustomActions.isEmpty
+      ? nil
+      : model.accessibilityCustomActions.map(makeUIAccessibilityCustomAction)
 
     if #available(iOS 17.0, *), EnvironmentVars.isUITesting {
       // Expose the child to XCTest without changing the wrapper's VoiceOver semantics.
@@ -905,6 +915,17 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
   private func captureFocusIfNeeded() {
     if model.captureFocusOnAction {
       observer?.clearFocus()
+    }
+  }
+
+  private func makeUIAccessibilityCustomAction(
+    _ action: AccessibilityCustomAction
+  ) -> UIAccessibilityCustomAction {
+    UIAccessibilityCustomAction(name: action.name) { [weak self] _ in
+      guard let self else { return false }
+      captureFocusIfNeeded()
+      action.actions.asArray().perform(sendingFrom: self)
+      return true
     }
   }
 

@@ -67,4 +67,22 @@ extension [DivAction] {
   func nonEmptyUIActions(context: DivBlockModelingContext) -> NonEmptyArray<UserInterfaceAction>? {
     NonEmptyArray(uiActions(context: context))
   }
+
+  func tapUIActions(context: DivBlockModelingContext) -> NonEmptyArray<UserInterfaceAction>? {
+    let allActions = uiActions(context: context)
+
+    if let menuAction = allActions.first(where: { $0.payload.isMenu }) {
+      // ignore other actions
+      return NonEmptyArray(menuAction)
+    }
+
+    return NonEmptyArray(allActions)
+  }
+}
+
+extension UserInterfaceAction.Payload {
+  fileprivate var isMenu: Bool {
+    if case .menu = self { return true }
+    return false
+  }
 }

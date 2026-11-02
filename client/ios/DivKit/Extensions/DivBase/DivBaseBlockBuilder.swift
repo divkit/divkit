@@ -191,6 +191,13 @@ final class DivBaseBlockBuilder {
       customParams: customAccessibilityParams
     )
 
+    let accessibilityCustomActions = div.accessibility?.resolveMenu(context: context) ?? []
+    // Tap actions may be applied to an outer wrapper or be absent, so the menu block
+    // needs its own flag. Passed only with the menu: a non-nil value forces wrapping.
+    let captureFocusOnAction = accessibilityCustomActions.isEmpty
+      ? nil
+      : (div as? DivActionsHolder)?.resolveCaptureFocusOnAction(expressionResolver)
+
     block = try block
       .addingDecorations(
         boundary: boundary,
@@ -199,8 +206,10 @@ final class DivBaseBlockBuilder {
         visibilityParams: visibilityParams,
         tooltips: div.tooltips.makeTooltips(context: context),
         accessibilityElement: accessibilityElement,
+        accessibilityCustomActions: accessibilityCustomActions,
         path: context.path,
-        isFocused: isFocused
+        isFocused: isFocused,
+        captureFocusOnAction: captureFocusOnAction
       )
 
     return self

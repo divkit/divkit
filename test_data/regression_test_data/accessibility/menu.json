@@ -1,0 +1,289 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "accessibility/menu",
+    "variables": [
+      {
+        "name": "last_action",
+        "type": "string",
+        "value": "none"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "top": 16
+          },
+          "items": [
+            {
+              "type": "container",
+              "paddings": {
+                "top": 16,
+                "bottom": 16
+              },
+              "margins": {
+                "left": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "accessibility": {
+                "description": "Это Элемент 1",
+                "menu": [
+                  {
+                    "label": "Действие 1",
+                    "actions": [
+                      {
+                        "log_id": "action_1",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "last_action",
+                          "value": {
+                            "type": "string",
+                            "value": "action_1"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Отключённое действие",
+                    "actions": [
+                      {
+                        "log_id": "disabled_action",
+                        "is_enabled": false,
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "last_action",
+                          "value": {
+                            "type": "string",
+                            "value": "disabled_action"
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Действие с меню",
+                    "actions": [
+                      {
+                        "log_id": "ignored_action",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "last_action",
+                          "value": {
+                            "type": "string",
+                            "value": "ignored_action"
+                          }
+                        }
+                      },
+                      {
+                        "log_id": "menu_action",
+                        "menu_items": [
+                          {
+                            "text": "Пункт меню",
+                            "action": {
+                              "log_id": "menu_item",
+                              "typed": {
+                                "type": "set_variable",
+                                "variable_name": "last_action",
+                                "value": {
+                                  "type": "string",
+                                  "value": "menu_item"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "actions": [
+                {
+                  "log_id": "tap",
+                  "typed": {
+                    "type": "set_variable",
+                    "variable_name": "last_action",
+                    "value": {
+                      "type": "string",
+                      "value": "tap"
+                    }
+                  }
+                }
+              ],
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Элемент 1",
+                  "margins": {
+                    "left": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "font_size": 16,
+                  "font_weight": "medium",
+                  "text_alignment_horizontal": "center"
+                },
+                {
+                  "type": "container",
+                  "orientation": "horizontal",
+                  "margins": {
+                    "left": 8,
+                    "right": 8
+                  },
+                  "items": [
+                    {
+                      "type": "button",
+                      "text": "Действие 1",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "margins": {
+                        "left": 8,
+                        "right": 8
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#1A000000"
+                        }
+                      ],
+                      "accessibility": {
+                        "mode": "exclude"
+                      },
+                      "actions": [
+                        {
+                          "log_id": "action_1",
+                          "typed": {
+                            "type": "set_variable",
+                            "variable_name": "last_action",
+                            "value": {
+                              "type": "string",
+                              "value": "action_1"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "button",
+                      "text": "Действие с меню",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "margins": {
+                        "left": 8,
+                        "right": 8
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#1A000000"
+                        }
+                      ],
+                      "accessibility": {
+                        "mode": "exclude"
+                      },
+                      "actions": [
+                        {
+                          "log_id": "ignored_action",
+                          "typed": {
+                            "type": "set_variable",
+                            "variable_name": "last_action",
+                            "value": {
+                              "type": "string",
+                              "value": "ignored_action"
+                            }
+                          }
+                        },
+                        {
+                          "log_id": "menu_action",
+                          "menu_items": [
+                            {
+                              "text": "Пункт меню",
+                              "action": {
+                                "log_id": "menu_item",
+                                "typed": {
+                                  "type": "set_variable",
+                                  "variable_name": "last_action",
+                                  "value": {
+                                    "type": "string",
+                                    "value": "menu_item"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "margins": {
+                "left": 16,
+                "right": 16
+              },
+              "font_size": 16,
+              "text": "Последнее действие: @{last_action}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

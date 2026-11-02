@@ -30,6 +30,7 @@ final class DecoratingBlock: WrapperBlock {
   let visibilityParams: VisibilityParams?
   let tooltips: [BlockTooltip]
   let accessibilityElement: AccessibilityElement?
+  let accessibilityCustomActions: [AccessibilityCustomAction]
   let reuseId: String
   let path: UIElementPath?
   let isFocused: Bool
@@ -87,6 +88,7 @@ final class DecoratingBlock: WrapperBlock {
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip] = [],
     accessibilityElement: AccessibilityElement? = nil,
+    accessibilityCustomActions: [AccessibilityCustomAction] = [],
     reuseId: String? = nil,
     path: UIElementPath? = nil,
     isFocused: Bool = false,
@@ -112,6 +114,7 @@ final class DecoratingBlock: WrapperBlock {
     self.visibilityParams = visibilityParams
     self.tooltips = tooltips
     self.accessibilityElement = accessibilityElement
+    self.accessibilityCustomActions = accessibilityCustomActions
     self.reuseId = reuseId ?? DecoratingBlock.defaultReuseId
     self.path = path
     self.isFocused = isFocused
@@ -166,6 +169,7 @@ final class DecoratingBlock: WrapperBlock {
       && visibilityParams == other.visibilityParams
       && tooltips == other.tooltips
       && accessibilityElement == other.accessibilityElement
+      && accessibilityCustomActions == other.accessibilityCustomActions
       && reuseId == other.reuseId
       && isEmpty == other.isEmpty
       && path == other.path
@@ -204,6 +208,7 @@ extension DecoratingBlock {
     visibilityParams: VisibilityParams? = nil,
     tooltips: [BlockTooltip]? = nil,
     accessibilityElement: AccessibilityElement? = nil,
+    accessibilityCustomActions: [AccessibilityCustomAction]? = nil,
     reuseId: String? = nil,
     path: UIElementPath? = nil,
     isFocused: Bool? = nil,
@@ -230,6 +235,7 @@ extension DecoratingBlock {
       visibilityParams: visibilityParams ?? self.visibilityParams,
       tooltips: tooltips ?? self.tooltips,
       accessibilityElement: accessibilityElement ?? self.accessibilityElement,
+      accessibilityCustomActions: accessibilityCustomActions ?? self.accessibilityCustomActions,
       reuseId: reuseId ?? self.reuseId,
       path: path ?? self.path,
       isFocused: isFocused ?? self.isFocused,

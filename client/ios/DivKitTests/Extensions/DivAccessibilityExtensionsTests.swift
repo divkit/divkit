@@ -1,6 +1,6 @@
 @testable import DivKit
 import DivKitTestsSupport
-import LayoutKit
+@testable import LayoutKit
 import VGSL
 import XCTest
 
@@ -149,6 +149,115 @@ final class DivAccessibilityExtensionsTests: XCTestCase {
 
     assertEqual(element, expectedElement)
   }
+
+  func test_resolveMenu_KeepsOrderAndLabels() {
+    let actions = resolveMenu([
+      menuItem("First"),
+      menuItem("Second"),
+    ])
+
+    XCTAssertEqual(actions.map(\.name), ["First", "Second"])
+  }
+
+  func test_resolveMenu_SkipsItemWithAllActionsDisabled() {
+    let actions = resolveMenu([
+      menuItem("Item", actions: [divAction(isEnabled: false, logId: "disabled")]),
+    ])
+
+    XCTAssertTrue(actions.isEmpty)
+  }
+
+  func test_resolveMenu_DropsDisabledActions() {
+    let actions = resolveMenu([
+      menuItem("Item", actions: [
+        divAction(isEnabled: false, logId: "disabled"),
+        divAction(logId: "enabled"),
+      ]),
+    ])
+
+    XCTAssertEqual(actions.first?.actions.asArray().count, 1)
+  }
+
+  func test_resolveMenu_SkipsItemWithEmptyActions() {
+    let actions = resolveMenu([
+      menuItem("Item", actions: []),
+    ])
+
+    XCTAssertTrue(actions.isEmpty)
+  }
+
+  func test_resolveMenu_WithModeExclude_ReturnsEmpty() {
+    let actions = DivAccessibility(
+      menu: [menuItem("Item")],
+      mode: .value(.exclude)
+    ).resolveMenu(context: .default)
+
+    XCTAssertTrue(actions.isEmpty)
+  }
+
+  func test_resolveMenu_KeepsOnlyMenuAction() {
+    let actions = resolveMenu([
+      menuItem("Item", actions: [divAction(logId: "other"), menuAction()]),
+    ])
+
+    let commandActions = actions.first?.actions.asArray() ?? []
+    XCTAssertEqual(commandActions.count, 1)
+    guard case .menu = commandActions.first?.payload else {
+      return XCTFail("Expected the menu action")
+    }
+  }
+
+  func test_makeBlock_MenuReachesDecoratingBlock() throws {
+    let block = try divContainer(
+      accessibility: DivAccessibility(
+        description: .value("Card"),
+        menu: [menuItem("Item")]
+      ),
+      items: [divText(text: "Text")]
+    ).value.makeBlock(context: .default)
+
+    XCTAssertEqual(
+      (block as? DecoratingBlock)?.accessibilityCustomActions.map(\.name),
+      ["Item"]
+    )
+  }
+
+  func test_makeBlock_MenuUsesCaptureFocus_WithoutActions() throws {
+    let blocks = try decoratingBlocks(divSeparator(
+      accessibility: DivAccessibility(menu: [menuItem("Item")]),
+      captureFocusOnAction: false
+    ))
+
+    let menuBlock = try XCTUnwrap(blocks.first { !$0.accessibilityCustomActions.isEmpty })
+    XCTAssertFalse(menuBlock.captureFocusOnAction)
+  }
+
+  func test_makeBlock_MenuUsesCaptureFocus_WithShadow() throws {
+    let blocks = try decoratingBlocks(divSeparator(
+      accessibility: DivAccessibility(menu: [menuItem("Item")]),
+      actions: [divAction(logId: "tap")],
+      border: DivBorder(hasShadow: .value(true)),
+      captureFocusOnAction: false
+    ))
+
+    let menuBlock = try XCTUnwrap(blocks.first { !$0.accessibilityCustomActions.isEmpty })
+    let tapBlock = try XCTUnwrap(blocks.first { $0.actions != nil })
+    XCTAssertFalse(menuBlock === tapBlock, "Shadow should split menu and tap actions")
+    XCTAssertFalse(menuBlock.captureFocusOnAction)
+    XCTAssertFalse(tapBlock.captureFocusOnAction)
+  }
+
+  func test_makeBlock_TapKeepsOnlyMenuAction() throws {
+    let blocks = try decoratingBlocks(divSeparator(
+      actions: [divAction(logId: "other"), menuAction()]
+    ))
+
+    let tapActions = try XCTUnwrap(blocks.compactMap(\.actions).first).asArray()
+    XCTAssertEqual(tapActions.count, 1)
+    guard case .menu = tapActions.first?.payload else {
+      return XCTFail("Expected the menu action")
+    }
+  }
 }
 
 extension DivAccessibility {
@@ -167,4 +276,34 @@ extension DivAccessibility {
       )
     )
   }
+}
+
+private func menuAction() -> DivAction {
+  DivAction(
+    logId: .value("menu"),
+    menuItems: [DivAction.MenuItem(action: divAction(logId: "item"), text: .value("Item"))]
+  )
+}
+
+private func decoratingBlocks(_ div: Div) throws -> [DecoratingBlock] {
+  var blocks: [DecoratingBlock] = []
+  var block: Block? = try div.value.makeBlock(context: .default)
+  while let current = block {
+    if let decoratingBlock = current as? DecoratingBlock {
+      blocks.append(decoratingBlock)
+    }
+    block = (current as? WrapperBlock)?.child
+  }
+  return blocks
+}
+
+private func menuItem(
+  _ label: String,
+  actions: [DivAction] = [divAction(logId: "action")]
+) -> DivAccessibilityMenuItem {
+  DivAccessibilityMenuItem(actions: actions, label: .value(label))
+}
+
+private func resolveMenu(_ menu: [DivAccessibilityMenuItem]) -> [AccessibilityCustomAction] {
+  DivAccessibility(menu: menu).resolveMenu(context: .default)
 }

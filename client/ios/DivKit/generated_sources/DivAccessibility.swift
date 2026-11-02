@@ -31,6 +31,7 @@ public final class DivAccessibility: Sendable {
   public let description: Expression<String>?
   public let hint: Expression<String>?
   public let isChecked: Expression<Bool>?
+  public let menu: [DivAccessibilityMenuItem]?
   public let mode: Expression<Mode> // default value: default
   public let muteAfterAction: Expression<Bool> // default value: false
   public let stateDescription: Expression<String>?
@@ -65,6 +66,7 @@ public final class DivAccessibility: Sendable {
       description: try dictionary.getOptionalExpressionField("description", context: context),
       hint: try dictionary.getOptionalExpressionField("hint", context: context),
       isChecked: try dictionary.getOptionalExpressionField("is_checked", context: context),
+      menu: try dictionary.getOptionalArray("menu", transform: { (dict: [String: Any]) in try? DivAccessibilityMenuItem(dictionary: dict, context: context) }),
       mode: try dictionary.getOptionalExpressionField("mode", context: context),
       muteAfterAction: try dictionary.getOptionalExpressionField("mute_after_action", context: context),
       stateDescription: try dictionary.getOptionalExpressionField("state_description", context: context),
@@ -76,6 +78,7 @@ public final class DivAccessibility: Sendable {
     description: Expression<String>? = nil,
     hint: Expression<String>? = nil,
     isChecked: Expression<Bool>? = nil,
+    menu: [DivAccessibilityMenuItem]? = nil,
     mode: Expression<Mode>? = nil,
     muteAfterAction: Expression<Bool>? = nil,
     stateDescription: Expression<String>? = nil,
@@ -84,6 +87,7 @@ public final class DivAccessibility: Sendable {
     self.description = description
     self.hint = hint
     self.isChecked = isChecked
+    self.menu = menu
     self.mode = mode ?? .value(.default)
     self.muteAfterAction = muteAfterAction ?? .value(false)
     self.stateDescription = stateDescription
@@ -102,13 +106,14 @@ extension DivAccessibility: Equatable {
       return false
     }
     guard
+      lhs.menu == rhs.menu,
       lhs.mode == rhs.mode,
-      lhs.muteAfterAction == rhs.muteAfterAction,
-      lhs.stateDescription == rhs.stateDescription
+      lhs.muteAfterAction == rhs.muteAfterAction
     else {
       return false
     }
     guard
+      lhs.stateDescription == rhs.stateDescription,
       lhs.type == rhs.type
     else {
       return false
@@ -125,6 +130,7 @@ extension DivAccessibility: Serializable {
     result["description"] = description?.toValidSerializationValue()
     result["hint"] = hint?.toValidSerializationValue()
     result["is_checked"] = isChecked?.toValidSerializationValue()
+    result["menu"] = menu?.map { $0.toDictionary() }
     result["mode"] = mode.toValidSerializationValue()
     result["mute_after_action"] = muteAfterAction.toValidSerializationValue()
     result["state_description"] = stateDescription?.toValidSerializationValue()
