@@ -274,6 +274,7 @@
         "web"
       ],
       "automated": [
+        "ios",
         "web"
       ],
       "tags": [

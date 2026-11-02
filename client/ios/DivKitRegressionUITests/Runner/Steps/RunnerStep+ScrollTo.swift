@@ -28,12 +28,8 @@ extension RunnerExecutor {
     guard container.waitUntilVisible(timeout: runnerDefaultTimeout) else {
       throw ScrollToError.containerNotVisible(target: step.container)
     }
-    let destinationID: String = switch step.destination {
-    case let .divID(id): id
-    }
-
     for attempt in 0...maxSwipes {
-      let query = container.descendants(matching: .any).matching(identifier: destinationID)
+      let query = targetQuery(step.destination, in: container)
       let count = query.count
       guard count <= 1 else {
         throw ScrollToError.ambiguousDestination(target: step.destination, matchCount: count)

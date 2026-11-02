@@ -60,6 +60,10 @@ final class TabListItemCell: UICollectionViewCell {
 
   var model: TabTitleViewModel! {
     didSet {
+      if EnvironmentVars.isUITesting {
+        accessibilityLabel = model.text.string
+      }
+
       if textLabel.attributedText !== model.text {
         textLabel.attributedText = model.text
       }

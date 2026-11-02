@@ -4,10 +4,7 @@ func resolveTarget(
   _ target: RunnerTarget,
   in root: XCUIElement
 ) throws -> XCUIElement {
-  let query: XCUIElementQuery = switch target {
-  case let .divID(id):
-    root.descendants(matching: .any).matching(identifier: id)
-  }
+  let query = targetQuery(target, in: root)
 
   let element = query.firstMatch
   guard element.wait(timeout: runnerDefaultTimeout, condition: { $0.exists }) else {
@@ -22,6 +19,18 @@ func resolveTarget(
     )
   }
   return element
+}
+
+func targetQuery(
+  _ target: RunnerTarget,
+  in root: XCUIElement
+) -> XCUIElementQuery {
+  switch target {
+  case let .divID(id):
+    root.descendants(matching: .any).matching(identifier: id)
+  case let .text(text):
+    root.descendants(matching: .any).matching(NSPredicate(format: "label == %@", text))
+  }
 }
 
 private enum TargetResolutionError: LocalizedError {

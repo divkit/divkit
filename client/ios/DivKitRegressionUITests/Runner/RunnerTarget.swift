@@ -2,6 +2,7 @@ import Foundation
 
 enum RunnerTarget: Decodable, CustomStringConvertible {
   case divID(String)
+  case text(String)
 
   private enum CodingKeys: String, CodingKey {
     case type
@@ -9,16 +10,23 @@ enum RunnerTarget: Decodable, CustomStringConvertible {
 
   private enum TargetType: String, Decodable {
     case divID = "div_id"
+    case text
   }
 
   private struct DivIDPayload: Decodable {
     let id: String
   }
 
+  private struct TextPayload: Decodable {
+    let text: String
+  }
+
   var description: String {
     switch self {
     case let .divID(value):
       "div_id=\(value)"
+    case let .text(value):
+      "text=\(value.debugDescription)"
     }
   }
 
@@ -38,6 +46,17 @@ enum RunnerTarget: Decodable, CustomStringConvertible {
         )
       }
       self = .divID(payload.id)
+    case .text:
+      let payload = try TextPayload(from: decoder)
+      guard !payload.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        throw DecodingError.dataCorrupted(
+          .init(
+            codingPath: decoder.codingPath,
+            debugDescription: "target text must not be empty"
+          )
+        )
+      }
+      self = .text(payload.text)
     }
   }
 }

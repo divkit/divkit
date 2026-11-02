@@ -15734,6 +15734,7 @@
   "test_data/interactive_snapshot_test_data/div-tabs/patch_tabs_transactional_broken.json":"divkit/public/test_data/interactive_snapshot_test_data/div-tabs/patch_tabs_transactional_broken.json",
   "test_data/interactive_snapshot_test_data/div-tabs/patch_tabs_transactional_success.json":"divkit/public/test_data/interactive_snapshot_test_data/div-tabs/patch_tabs_transactional_success.json",
   "test_data/interactive_snapshot_test_data/div-tabs/select-elements.json":"divkit/public/test_data/interactive_snapshot_test_data/div-tabs/select-elements.json",
+  "test_data/interactive_snapshot_test_data/div-tabs/swipe-restricted.json":"divkit/public/test_data/interactive_snapshot_test_data/div-tabs/swipe-restricted.json",
   "test_data/interactive_snapshot_test_data/div-text/background-image-blur.json":"divkit/public/test_data/interactive_snapshot_test_data/div-text/background-image-blur.json",
   "test_data/interactive_snapshot_test_data/div-text/text-mask.json":"divkit/public/test_data/interactive_snapshot_test_data/div-text/text-mask.json",
   "test_data/interactive_snapshot_test_data/div-text/text-properties.json":"divkit/public/test_data/interactive_snapshot_test_data/div-text/text-properties.json",

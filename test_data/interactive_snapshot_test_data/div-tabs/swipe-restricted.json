@@ -1,0 +1,119 @@
+{
+  "description": "Tab swipe restricted: headers switch tabs, content swipes do not",
+  "platforms": [
+    "ios"
+  ],
+  "div_data": {
+    "templates": {
+      "tab_content": {
+        "type": "text",
+        "$id": "content_id",
+        "$text": "content_text",
+        "height": {
+          "type": "fixed",
+          "value": 240
+        },
+        "font_size": 24,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center"
+      }
+    },
+    "card": {
+      "log_id": "tab_swipe_restricted",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "tabs",
+            "id": "restricted_tabs",
+            "selected_tab": 0,
+            "switch_tabs_by_content_swipe_enabled": 0,
+            "items": [
+              {
+                "title": "Tab 0",
+                "div": {
+                  "type": "tab_content",
+                  "content_id": "tab_0_content",
+                  "content_text": "Tab 0 content"
+                }
+              },
+              {
+                "title": "Tab 1",
+                "div": {
+                  "type": "tab_content",
+                  "content_id": "tab_1_content",
+                  "content_text": "Tab 1 content"
+                }
+              },
+              {
+                "title": "Tab 2",
+                "div": {
+                  "type": "tab_content",
+                  "content_id": "tab_2_content",
+                  "content_text": "Tab 2 content"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "tab_0_content"
+      },
+      "text": "Tab 0 content"
+    },
+    {
+      "type": "tap",
+      "target": {
+        "type": "text",
+        "text": "Tab 1"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "tab_1_content"
+      },
+      "text": "Tab 1 content"
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "restricted_tabs"
+      },
+      "direction": "left"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "tab_1_content"
+      },
+      "text": "Tab 1 content"
+    },
+    {
+      "type": "swipe",
+      "target": {
+        "type": "div_id",
+        "id": "restricted_tabs"
+      },
+      "direction": "right"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "tab_1_content"
+      },
+      "text": "Tab 1 content"
+    }
+  ]
+}

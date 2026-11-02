@@ -18,13 +18,13 @@ extension RunnerStep {
       var points: (from: CGVector, to: CGVector) {
         switch self {
         case .up:
-          (.init(dx: 0.5, dy: 0.75), .init(dx: 0.5, dy: 0.25))
+          (.init(dx: 0.5, dy: 0.9), .init(dx: 0.5, dy: 0.1))
         case .down:
-          (.init(dx: 0.5, dy: 0.25), .init(dx: 0.5, dy: 0.75))
+          (.init(dx: 0.5, dy: 0.1), .init(dx: 0.5, dy: 0.9))
         case .left:
-          (.init(dx: 0.75, dy: 0.5), .init(dx: 0.25, dy: 0.5))
+          (.init(dx: 0.9, dy: 0.5), .init(dx: 0.1, dy: 0.5))
         case .right:
-          (.init(dx: 0.25, dy: 0.5), .init(dx: 0.75, dy: 0.5))
+          (.init(dx: 0.1, dy: 0.5), .init(dx: 0.9, dy: 0.5))
         }
       }
     }

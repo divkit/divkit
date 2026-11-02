@@ -106,10 +106,10 @@ class InteractiveScreenshotTestData(
                     )
                 }
                 val from = when (val value = step.getString(SWIPE_DIRECTION)) {
-                    "left" -> PointF(0.75f, 0.5f)
-                    "right" -> PointF(0.25f, 0.5f)
-                    "up" -> PointF(0.5f, 0.75f)
-                    "down" -> PointF(0.5f, 0.25f)
+                    "left" -> PointF(0.9f, 0.5f)
+                    "right" -> PointF(0.1f, 0.5f)
+                    "up" -> PointF(0.5f, 0.9f)
+                    "down" -> PointF(0.5f, 0.1f)
                     else -> throw JSONException("Unsupported swipe direction: $value")
                 }
                 val to = PointF(1f - from.x, 1f - from.y)
