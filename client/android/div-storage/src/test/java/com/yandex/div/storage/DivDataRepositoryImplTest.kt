@@ -76,6 +76,7 @@ class DivDataRepositoryImplTest {
 
     private val templateContainer = mock<TemplatesContainer> {
         on { getEnvironment(any()) } doReturn parsingEnvironment
+        on { getStoredEnvironment(any()) } doReturn parsingEnvironment
     }
 
     private val errorLogger = mock<ParsingErrorLogger>()
@@ -206,6 +207,43 @@ class DivDataRepositoryImplTest {
         underTest.get(ids)
 
         assertEquals(5, errors.allValues.size)
+    }
+
+    @Test
+    fun `getAll() keeps order of put cards`() {
+        val underTest = underTest
+        val ids = List(20) { "card_$it" }
+        whenever(divStorage.loadData(any(), any())) doReturn LoadDataResult(emptyList())
+        underTest.put(DivDataRepository.Payload(ids.map { RawDataAndMetadata(it, JSONObject()) }))
+
+        assertEquals(ids, underTest.getAll().resultData.map { it.id })
+    }
+
+    @Test
+    fun `getAll() returns card once after get() restored it`() {
+        val underTest = underTest
+        whenever(divStorage.loadData(any(), any())) doReturn
+                LoadDataResult(listOf(RestoredRawData("card", JSONObject(), groupId = "group")))
+        whenever(templateContainer.getStoredEnvironment(any())).doReturn(null, parsingEnvironment)
+        underTest.getAll()
+        underTest.get(listOf("card"))
+
+        assertEquals(listOf("card"), underTest.getAll().resultData.map { it.id })
+    }
+
+    @Test
+    fun `get() keeps card put while loading it`() {
+        val underTest = underTest
+        whenever(divStorage.loadData(any(), any())).doAnswer {
+            val fresh = RawDataAndMetadata("card", JSONObject(), JSONObject().put("v", "fresh"))
+            underTest.put(DivDataRepository.Payload(listOf(fresh)))
+            val old = RestoredRawData("card", JSONObject(), JSONObject().put("v", "old"), "group")
+            LoadDataResult(listOf(old))
+        }
+        underTest.get(listOf("card"))
+
+        val card = underTest.get(listOf("card")).resultData.single()
+        assertEquals("fresh", card.metadata?.optString("v"))
     }
 
     private fun getStorageException(id: String): StorageException =

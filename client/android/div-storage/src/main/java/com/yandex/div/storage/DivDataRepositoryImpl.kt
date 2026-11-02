@@ -15,6 +15,7 @@ import com.yandex.div.storage.templates.TemplatesContainer
 import com.yandex.div2.DivData
 import org.json.JSONObject
 import java.util.Calendar
+import java.util.Collections
 import javax.inject.Provider
 
 internal class DivDataRepositoryImpl(
@@ -25,9 +26,12 @@ internal class DivDataRepositoryImpl(
         private val divParsingHistogramProxy: Provider<DivParsingHistogramProxy>,
         private val cardErrorFactory: CardErrorLoggerFactory,
 ) : DivDataRepository {
-    private val inMemoryData = mutableMapOf<String, DivDataRepository.DivDataWithMeta>()
+    private val inMemoryData =
+            Collections.synchronizedMap(linkedMapOf<String, DivDataRepository.DivDataWithMeta>())
 
+    @Volatile
     private var areCardsSynchronizedWithInMemory = false
+    @Volatile
     private var cardsWithErrors = mapOf<String, List<DivDataRepositoryException>>()
 
     @AnyThread
@@ -43,6 +47,7 @@ internal class DivDataRepositoryImpl(
                     groupId, payload.templates.asJSONObject(), payload.sourceType
             )
         } else emptyList()
+        val environment = templateContainer.getEnvironment(groupId)
 
         val parseStarted = HistogramClock.uptime()
 
@@ -50,8 +55,7 @@ internal class DivDataRepositoryImpl(
         val validPayload = ArrayList<RawDataAndMetadata>(payload.divs.size)
 
         payload.divs.forEach { rawData ->
-            val parsingEnvironment = templateContainer
-                    .getEnvironment(groupId)
+            val parsingEnvironment = environment
                     .includeCardContext(rawData.id, groupId, rawData.metadata)
             val divData = try {
                 parseRawDivData(
@@ -114,24 +118,33 @@ internal class DivDataRepositoryImpl(
     @AnyThread
     override fun getAll(): DivDataRepositoryResult {
         if (areCardsSynchronizedWithInMemory && cardsWithErrors.isEmpty()) {
-            return DivDataRepositoryResult(inMemoryData.values.toList(), emptyList())
+            return DivDataRepositoryResult(inMemoryValues(), emptyList())
         }
 
         val (cardsToRequest, cardsToExclude) = if (areCardsSynchronizedWithInMemory) {
             cardsWithErrors.keys to emptySet<String>()
         } else {
-            emptySet<String>() to inMemoryData.keys.minus(cardsWithErrors.keys)
+            emptySet<String>() to synchronized(inMemoryData) {
+                inMemoryData.keys.minus(cardsWithErrors.keys)
+            }
         }
 
         val storageResults = loadFromStorage(cardsToRequest, cardsToExclude)
-        val resultsWithInMemory = storageResults.addData(inMemoryData.values)
-
-        storageResults.resultData.forEach { inMemoryData[it.id] = it }
+        val loaded = cache(storageResults.resultData)
+        val loadedIds = loaded.mapTo(HashSet()) { it.id }
+        val resultsWithInMemory = storageResults.copy(
+                resultData = loaded + inMemoryValues().filterNot { it.id in loadedIds })
         areCardsSynchronizedWithInMemory = true
 
         cardsWithErrors = storageResults.errors.groupBy { it.cardId }.filterKeysNotNull()
 
         return resultsWithInMemory
+    }
+
+    private fun inMemoryValues() = synchronized(inMemoryData) { inMemoryData.values.toList() }
+
+    private fun cache(cards: List<DivDataRepository.DivDataWithMeta>) = synchronized(inMemoryData) {
+        cards.map { card -> inMemoryData.getOrPut(card.id) { card } }
     }
 
     private fun <K, V> Map<K?, V>.filterKeysNotNull(): Map<K, V> {
@@ -161,8 +174,8 @@ internal class DivDataRepositoryImpl(
 
         if (idsToLoad.isNotEmpty()) {
             val storageResults = loadFromStorage(idsToLoad, emptySet())
-            storageResults.resultData.forEach { inMemoryData[it.id] = it }
-            return storageResults.addData(inMemoryResults)
+            val loaded = cache(storageResults.resultData)
+            return storageResults.copy(resultData = loaded + inMemoryResults)
         }
         return DivDataRepositoryResult(inMemoryResults, emptyList())
     }
@@ -171,18 +184,19 @@ internal class DivDataRepositoryImpl(
         val exceptions = mutableListOf<DivDataRepositoryException>()
         val (rawData, errors) = divStorage.loadData(ids.toList(), idsToExclude.toList())
         exceptions.addAll(errors.toDivDataRepositoryExceptions())
-        val dataByGroups = rawData.associateBy { it.groupId }
-
-        dataByGroups.keys.forEach { groupId ->
-            templateContainer.getEnvironment(groupId)
-        }
+        val environments = rawData.map { it.groupId }.toSet()
+                .associateWith { templateContainer.getStoredEnvironment(it) }
 
         val parseStarted = HistogramClock.uptime()
 
         val results = ArrayList<DivDataRepository.DivDataWithMeta>(ids.size)
         rawData.forEach {
-            val parsingEnvironment = templateContainer
-                    .getEnvironment(it.groupId)
+            val environment = environments.getValue(it.groupId) ?: run {
+                exceptions.add(DivDataRepositoryException.StorageException(DivStorageErrorException(
+                        "Failed to load templates of group ${it.groupId}.", cardId = it.id)))
+                return@forEach
+            }
+            val parsingEnvironment = environment
                     .includeCardContext(it.id, it.groupId, it.metadata)
             val divData = try {
                 parseRawDivData(

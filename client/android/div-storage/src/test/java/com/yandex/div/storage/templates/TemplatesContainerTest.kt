@@ -1,7 +1,9 @@
 package com.yandex.div.storage.templates
 
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.DivStorage
+import com.yandex.div.storage.DivStorageErrorException
 import com.yandex.div2.DivTemplate
 import org.intellij.lang.annotations.Language
 import org.json.JSONObject
@@ -12,6 +14,10 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.FutureTask
+import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -20,6 +26,7 @@ private const val GROUP_1 = "group_1"
 private const val GROUP_2 = "group_2"
 private const val SOURCE_TYPE = "source_A"
 private const val TEMPLATES_COUNT = 3
+private const val TIMEOUT_SECONDS = 5L
 
 class TemplatesContainerTest {
 
@@ -101,6 +108,16 @@ class TemplatesContainerTest {
         on { restoredData } doAnswer { templateReferences.toList() }
     }
 
+    private val failedReferences = DivStorage.LoadDataResult<DivStorage.TemplateReference>(
+        emptyList(),
+        listOf(DivStorageErrorException()),
+    )
+
+    private val failedTemplates = DivStorage.LoadDataResult<RawTemplateData>(
+        emptyList(),
+        listOf(DivStorageErrorException()),
+    )
+
     private val divStorage = mock<DivStorage> {
         on { readTemplateReferences() } doReturn templateReferencesResult
         on { readTemplates(any()) } doAnswer { invocation ->
@@ -128,9 +145,11 @@ class TemplatesContainerTest {
 
     private val underTest = createUnderTest()
 
-    private fun createUnderTest() = TemplatesContainer(
+    private fun createUnderTest(
+        errorLogger: ParsingErrorLogger = ParsingErrorLogger { throw it },
+    ) = TemplatesContainer(
         divStorage,
-        { throw it },
+        errorLogger,
         mock(),
         { parsingHistogramProxy },
         mock(),
@@ -200,6 +219,75 @@ class TemplatesContainerTest {
         }
 
         verify(divStorage, times(1)).readTemplates(any())
+    }
+
+    @Test
+    fun `concurrent environment request waits for template references`() {
+        addToStorage(GROUP_1, underTest.addTemplates(GROUP_1, templateData1, SOURCE_TYPE))
+        val requested = CountDownLatch(1)
+        val released = CountDownLatch(1)
+        whenever(divStorage.readTemplateReferences()).doAnswer {
+            requested.countDown()
+            released.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            templateReferencesResult
+        }
+        val container = createUnderTest()
+
+        val first = FutureTask { container.getEnvironment(GROUP_1) }
+        Thread(first).start()
+        requested.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        val second = FutureTask { container.getEnvironment(GROUP_1) }
+        Thread(second).apply { start() }.awaitBlockedOrFinished()
+        released.countDown()
+
+        assertEquals(TEMPLATES_COUNT, first.awaitResult().templatesCount())
+        assertEquals(TEMPLATES_COUNT, second.awaitResult().templatesCount())
+    }
+
+    @Test
+    fun `template references are reloaded after storage error`() {
+        addToStorage(GROUP_1, underTest.addTemplates(GROUP_1, templateData1, SOURCE_TYPE))
+        whenever(divStorage.readTemplateReferences())
+            .doReturn(failedReferences, templateReferencesResult)
+        val container = createUnderTest(errorLogger = {})
+        container.getEnvironment(GROUP_1)
+
+        assertEquals(TEMPLATES_COUNT, container.getEnvironment(GROUP_1).templatesCount())
+    }
+
+    @Test
+    fun `templates are reloaded after storage error`() {
+        val savedTemplates = underTest.addTemplates(GROUP_1, templateData1, SOURCE_TYPE)
+        addToStorage(GROUP_1, savedTemplates)
+        val hashes = savedTemplates.map { it.hash }.toSet()
+        val storedTemplates = divStorage.readTemplates(hashes)
+        whenever(divStorage.readTemplates(hashes)).doReturn(failedTemplates, storedTemplates)
+        val container = createUnderTest(errorLogger = {})
+        container.getEnvironment(GROUP_1)
+
+        assertEquals(TEMPLATES_COUNT, container.getEnvironment(GROUP_1).templatesCount())
+    }
+
+    @Test
+    fun `added templates are available when template references fail to load`() {
+        whenever(divStorage.readTemplateReferences()).doReturn(failedReferences)
+        val container = createUnderTest(errorLogger = {})
+
+        container.addTemplates(GROUP_1, templateData1, SOURCE_TYPE)
+
+        assertEquals(TEMPLATES_COUNT, container.getEnvironment(GROUP_1).templatesCount())
+    }
+
+    private fun DivParsingEnvironment.templatesCount() =
+        mutableMapOf<String, DivTemplate>().also { templates.takeSnapshot(it) }.size
+
+    private fun <T> FutureTask<T>.awaitResult() = get(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+
+    private fun Thread.awaitBlockedOrFinished() {
+        val deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(TIMEOUT_SECONDS)
+        while (isAlive && state != Thread.State.BLOCKED && System.nanoTime() < deadline) {
+            Thread.yield()
+        }
     }
 
     private fun assertCollectionsEqual(expected: Collection<String>, actual: List<String>) {

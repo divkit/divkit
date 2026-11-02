@@ -130,44 +130,34 @@ internal class AndroidDatabaseOpenHelper(
         private val histogramRecorder: HistogramRecorder,
         private val databaseOpenTracker: DatabaseOpenTracker,
     ) {
-        private var readableUsersCount = 0
-        private var readableDatabase: SQLiteDatabase? = null
-
-        private var writableUsersCount = 0
-        private var writableDatabase: SQLiteDatabase? = null
+        private var usersCount = 0
+        private var database: SQLiteDatabase? = null
 
         @Synchronized
         fun openWritableDatabase(): SQLiteDatabase {
             databaseOpenTracker.measureOpen {
-                writableDatabase = databaseHelper.writableDatabase
+                database = databaseHelper.writableDatabase
             }?.let(histogramRecorder::reportDatabaseOpenTime)
-            writableUsersCount++
-            return writableDatabase!!
+            usersCount++
+            return database!!
         }
 
         @Synchronized
         fun openReadableDatabase(): SQLiteDatabase {
             databaseOpenTracker.measureOpen {
-                readableDatabase = databaseHelper.readableDatabase
+                database = databaseHelper.readableDatabase
             }?.let(histogramRecorder::reportDatabaseOpenTime)
-            readableUsersCount++
-            return readableDatabase!!
+            usersCount++
+            return database!!
         }
 
         @Synchronized
         fun closeDatabase(db: SQLiteDatabase) {
-            if (db == writableDatabase) {
-                if (writableUsersCount > 0) {
-                    writableUsersCount--
+            if (db == database) {
+                if (usersCount > 0) {
+                    usersCount--
                 }
-                if (writableUsersCount == 0) {
-                    db.close()
-                }
-            } else if (db == readableDatabase) {
-                if (readableUsersCount > 0) {
-                    readableUsersCount--
-                }
-                if (readableUsersCount == 0) {
+                if (usersCount == 0) {
                     db.close()
                 }
             } else {

@@ -44,7 +44,7 @@ internal class TemplatesContainer(
             parsingHistogramProxy,)
     private val groupTemplateReferences =
             mutableMapOf<GroupId, TemplateReferenceResolver>()
-    private val templateEnvironments = mutableMapOf<GroupId, DivParsingEnvironment>()
+    private val templateEnvironments = ConcurrentHashMap<GroupId, DivParsingEnvironment>()
     private val messageDigest: MessageDigest? by lazy {
         try {
             MessageDigest.getInstance("MD5")
@@ -54,17 +54,24 @@ internal class TemplatesContainer(
         }
     }
 
-    fun getEnvironment(groupId: String): DivParsingEnvironment {
-        loadIfNeeded()
-        return templateEnvironments.getOrPut(groupId) { createEnvBy(groupId) }
-    }
+    fun getEnvironment(groupId: String): DivParsingEnvironment =
+            getStoredEnvironment(groupId) ?: createEmptyEnv(errorLogger)
+
+    fun getStoredEnvironment(groupId: String): DivParsingEnvironment? =
+            templateEnvironments[groupId] ?: synchronized(this) { loadEnvironment(groupId) }
 
     @WorkerThread
     fun explainMissingTemplate(
             cardId: String?, groupId: String, templateId: String
     ): ErrorExplanation {
-        val templateHash = groupTemplateReferences[groupId]?.resolveTemplateHash(templateId)
-        val templateProvider = templateEnvironments[groupId]?.templates
+        val templateHash: String?
+        val templateProvider: CachingTemplateProvider<DivTemplate>?
+        val supportedGroups: Set<GroupId>
+        synchronized(this) {
+            templateHash = groupTemplateReferences[groupId]?.resolveTemplateHash(templateId)
+            templateProvider = templateEnvironments[groupId]?.templates
+            supportedGroups = groupTemplateReferences.keys.toSet()
+        }
         val shortReason: String
         val details = StringBuilder()
         val exceptions = mutableListOf<DivStorageErrorException>()
@@ -96,9 +103,9 @@ internal class TemplatesContainer(
             // Template is missing at in-memory cache, let's then check persistent cache.
             !templateStored() -> {
                 details.append(
-                        "supported responses: ${groupTemplateReferences.keys.joinToString()}"
+                        "supported responses: ${supportedGroups.joinToString()}"
                 )
-                if (!groupTemplateReferences.keys.contains(groupId)) {
+                if (groupId !in supportedGroups) {
                     shortReason = "cached, but not loaded into memory"
                 } else {
                     shortReason = "cached, but loaded partially"
@@ -175,8 +182,10 @@ internal class TemplatesContainer(
                 return@forEach
             }
         }
-        templateEnvironments[groupId] = env
-        groupTemplateReferences[groupId] = TemplateReferenceResolver(errorLogger)
+        synchronized(this) {
+            templateEnvironments[groupId] = env
+            groupTemplateReferences[groupId] = TemplateReferenceResolver(errorLogger)
+        }
         return results
     }
 
@@ -194,11 +203,10 @@ internal class TemplatesContainer(
         } else emptySet()
     }
 
-    private fun loadIfNeeded() {
+    private fun loadIfNeeded(): Boolean {
         if (templateReferencesLoaded) {
-            return
+            return true
         }
-        templateReferencesLoaded = true
         val loadResult = divStorage.readTemplateReferences()
         loadResult.errors.forEach {
             errorLogger.logError(it)
@@ -210,13 +218,23 @@ internal class TemplatesContainer(
             }
             references.add(it)
         }
+        templateReferencesLoaded = loadResult.errors.isEmpty()
+        return templateReferencesLoaded
     }
 
-    private fun createEnvBy(groupId: String): DivParsingEnvironment {
-        val referenceResolver: TemplateReferenceResolver = getTemplates(groupId)
+    private fun loadEnvironment(groupId: String): DivParsingEnvironment? {
+        templateEnvironments[groupId]?.let { return it }
+        if (!loadIfNeeded()) return null
+        val env = createEnvBy(groupId) ?: return null
+        templateEnvironments[groupId] = env
+        return env
+    }
+
+    private fun createEnvBy(groupId: String): DivParsingEnvironment? {
+        val referenceResolver = groupTemplateReferences[groupId]
                 ?: return createEmptyEnv(errorLogger)
 
-        val templatesByHash: Map<TemplateHash, DivTemplate> = templatesPool.load(referenceResolver)
+        val templatesByHash = templatesPool.load(referenceResolver) ?: return null
         val env = createEmptyEnv(errorLogger)
         val templatesById = HashMap<String, DivTemplate>(templatesByHash.size)
         templatesByHash.forEach { (hash, json) ->
@@ -227,11 +245,6 @@ internal class TemplatesContainer(
 
         env.templates.putAll(templatesById)
         return env
-    }
-
-    private fun getTemplates(groupId: String): TemplateReferenceResolver? {
-        loadIfNeeded()
-        return groupTemplateReferences[groupId]
     }
 
     private fun calculateTemplateHashes(json: JSONObject): MutableMap<TemplateId, TemplateHash> {
@@ -245,9 +258,8 @@ internal class TemplatesContainer(
 
     private fun calculateJsonChecksum(json: JSONObject): String? {
         val input = json.toString().toByteArray(Charsets.UTF_8)
-        val md5bytes = synchronized(this) {
-            messageDigest?.digest(input)
-        } ?: return null
+        val digest = messageDigest ?: return null
+        val md5bytes = synchronized(digest) { digest.digest(input) }
         return BigInteger(1, md5bytes).toString(16).padStart(length = 32, padChar = '0')
     }
 }
@@ -262,19 +274,19 @@ private class CommonTemplatesPool(
     private val commonTemplates = ConcurrentHashMap<TemplateHash, DivTemplate>()
     private val env: DivParsingEnvironment = createEmptyEnv(logger)
 
-    fun load(templateReferences: TemplateReferenceResolver): Map<TemplateHash, DivTemplate> {
+    fun load(templateReferences: TemplateReferenceResolver): Map<TemplateHash, DivTemplate>? {
         val templateHashes = templateReferences.templateHashes
         val nonLoaded = templateHashes.toMutableSet()
                 .apply { removeAll(commonTemplates.keys) }
-        if (nonLoaded.isNotEmpty()) {
-            loadFromStorage(env, templateReferences, nonLoaded)
+        if (nonLoaded.isNotEmpty() && !loadFromStorage(env, templateReferences, nonLoaded)) {
+            return null
         }
         return commonTemplates.filter { templateHashes.contains(it.key) }
     }
 
     private fun loadFromStorage(env: DivParsingEnvironment,
                                 templateReferences: TemplateReferenceResolver,
-                                templateHashes: Set<String>) {
+                                templateHashes: Set<String>): Boolean {
         val loadingStarted = HistogramClock.uptime()
         val loadResult = divStorage.readTemplates(templateHashes)
         histogramRecorder.reportTemplateLoadedTime(HistogramClock.uptime() - loadingStarted)
@@ -312,6 +324,7 @@ private class CommonTemplatesPool(
             }
             commonTemplates[hash] = template
         }
+        return loadResult.errors.isEmpty()
     }
 
     fun put(templateHash: TemplateHash, template: DivTemplate) {

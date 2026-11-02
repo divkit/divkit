@@ -2923,6 +2923,7 @@
   "client/android/div-storage/src/main/java/com/yandex/div/storage/util/LazyProvider.kt":"divkit/public/client/android/div-storage/src/main/java/com/yandex/div/storage/util/LazyProvider.kt",
   "client/android/div-storage/src/main/java/com/yandex/div/storage/util/SqlExtensions.kt":"divkit/public/client/android/div-storage/src/main/java/com/yandex/div/storage/util/SqlExtensions.kt",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/DivDataRepositoryImplTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/DivDataRepositoryImplTest.kt",
+  "client/android/div-storage/src/test/java/com/yandex/div/storage/DivDataRepositoryTemplatesLoadingTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/DivDataRepositoryTemplatesLoadingTest.kt",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/DivDataRepositoryTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/DivDataRepositoryTest.kt",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/DivDatabaseStorageTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/DivDatabaseStorageTest.kt",
   "client/android/div-storage/src/test/java/com/yandex/div/storage/DivStorageErrorTest.kt":"divkit/public/client/android/div-storage/src/test/java/com/yandex/div/storage/DivStorageErrorTest.kt",

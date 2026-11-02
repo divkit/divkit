@@ -103,4 +103,35 @@ class AndroidDatabaseOpenHelperTest {
 
         db3.close()
     }
+
+    @Test
+    fun `reader keeps database open when writer closes`() {
+        val reader = underTest.readableDatabase
+        underTest.writableDatabase.close()
+
+        reader.rawQuery("SELECT 1", null).close()
+
+        reader.close()
+    }
+
+    @Test
+    fun `writer keeps database open when reader closes`() {
+        val writer = underTest.writableDatabase
+        underTest.readableDatabase.close()
+
+        writer.rawQuery("SELECT 1", null).close()
+
+        writer.close()
+    }
+
+    @Test
+    fun `database is closed when readers and writers are closed`() {
+        val reader = underTest.readableDatabase
+        val writer = underTest.writableDatabase
+
+        reader.close()
+        writer.close()
+
+        assertFailsWith<Exception> { writer.rawQuery("SELECT 1", null) }
+    }
 }
