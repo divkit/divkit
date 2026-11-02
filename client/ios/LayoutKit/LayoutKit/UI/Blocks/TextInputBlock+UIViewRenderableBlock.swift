@@ -89,6 +89,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var isInputFocused = false
   private var keyboardHeight: CGFloat?
   private var maxLength: Int?
+  private var hasPendingMaskedInputUpdate = false
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -530,35 +531,47 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       typo: typo,
       signal: userInputPipe.signal
     )
-    maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] range in
-      guard let self, let range else { return }
-      DispatchQueue.main.async {
-        self.multiLineInput.selectedRange = range
-        if let textFieldPosition = self.singleLineInput.position(
-          from: self.singleLineInput.beginningOfDocument,
-          offset: range.location
-        ), self.singleLineInput.selectedTextRange?.start != textFieldPosition {
-          self.singleLineInput.selectedTextRange = self.singleLineInput.textRange(
-            from: textFieldPosition,
-            to: textFieldPosition
-          )
-        }
-      }
+    maskedViewModel?.$cursorPosition.currentAndNewValues.addObserver { [weak self] _ in
+      self?.scheduleMaskedInputUpdate()
     }.dispose(in: disposePool)
     maskedViewModel?.$rawText.currentAndNewValues.addObserver { [weak self] input in
       guard let self else { return }
       self.rawTextValue.value = input
     }.dispose(in: disposePool)
 
-    maskedViewModel?.$formattedText.currentAndNewValues
-      .addObserver { [weak self] input in
-        guard let self else { return }
-        DispatchQueue.main.async {
-          self.setTextData(input)
-          self.textValue.value = input
-          self.updateHintVisibility()
-        }
-      }.dispose(in: disposePool)
+    maskedViewModel?.$formattedText.currentAndNewValues.addObserver { [weak self] _ in
+      self?.scheduleMaskedInputUpdate()
+    }.dispose(in: disposePool)
+  }
+
+  private func scheduleMaskedInputUpdate() {
+    guard !hasPendingMaskedInputUpdate else { return }
+    hasPendingMaskedInputUpdate = true
+    DispatchQueue.main.async { [weak self] in
+      self?.applyMaskedInputUpdate()
+    }
+  }
+
+  private func applyMaskedInputUpdate() {
+    hasPendingMaskedInputUpdate = false
+    guard let maskedViewModel else { return }
+    let text = maskedViewModel.formattedText
+    let cursorPosition = maskedViewModel.cursorPosition
+    setTextData(text)
+    textValue.value = text
+    updateHintVisibility()
+    guard let cursorPosition else { return }
+    multiLineInput.selectedRange = cursorPosition
+    if singleLineInput.selectedNSRange != cursorPosition,
+       let textFieldPosition = singleLineInput.position(
+         from: singleLineInput.beginningOfDocument,
+         offset: cursorPosition.location
+       ) {
+      singleLineInput.selectedTextRange = singleLineInput.textRange(
+        from: textFieldPosition,
+        to: textFieldPosition
+      )
+    }
   }
 
   private func startKeyboardTracking() {
@@ -713,20 +726,12 @@ extension TextInputBlockView {
     range: Range<String.Index>,
     text: String
   ) -> Bool {
-    if maskedViewModel != nil {
-      let lowerBound = self.currentText.distance(
-        from: self.currentText.startIndex,
-        to: range.lowerBound
-      )
-      let upperBound = self.currentText.distance(
-        from: self.currentText.startIndex,
-        to: range.upperBound
-      )
-      let offsetRange = lowerBound..<upperBound
+    if let maskedViewModel {
+      let offsetRange = maskedInputEditRange(range, viewModel: maskedViewModel)
       if text == "" {
-        if range.isEmpty {
-          if range.lowerBound > currentText.startIndex {
-            userInputPipe.send(.clear(pos: lowerBound))
+        if offsetRange.isEmpty {
+          if offsetRange.lowerBound > 0 {
+            userInputPipe.send(.clear(pos: offsetRange.lowerBound))
           }
         } else {
           userInputPipe
@@ -758,6 +763,24 @@ extension TextInputBlockView {
     }
 
     return true
+  }
+
+  private func maskedInputEditRange(
+    _ range: Range<String.Index>,
+    viewModel: MaskedInputViewModel
+  ) -> Range<Int> {
+    let modelText = viewModel.formattedText
+    if hasPendingMaskedInputUpdate,
+       let cursorPosition = viewModel.cursorPosition,
+       let cursor = Range(cursorPosition, in: modelText)?.lowerBound {
+      let offset = modelText.distance(from: modelText.startIndex, to: cursor)
+      return offset..<offset
+    }
+    let text = currentText
+    let length = modelText.count
+    let lowerBound = min(text.distance(from: text.startIndex, to: range.lowerBound), length)
+    let upperBound = min(text.distance(from: text.startIndex, to: range.upperBound), length)
+    return lowerBound..<upperBound
   }
 }
 
