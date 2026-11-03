@@ -1,5 +1,6 @@
 package com.yandex.div.compose.screenshot
 
+import com.dropbox.differ.SimpleImageComparator
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.LosslessWebPImageIoFormat
 import com.github.takahirom.roborazzi.RoborazziOptions
@@ -22,7 +23,8 @@ fun createRoborazziRule(): TestRule = RoborazziRule(
     options = RoborazziRule.Options(
         roborazziOptions = RoborazziOptions(
             compareOptions = RoborazziOptions.CompareOptions(
-                changeThreshold = 0.005f
+                changeThreshold = 0.001f,
+                imageComparator = SimpleImageComparator(maxDistance = 0.015f),
             ),
             recordOptions = RoborazziOptions.RecordOptions(
                 imageIoFormat = LosslessWebPImageIoFormat()
