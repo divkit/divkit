@@ -14,12 +14,14 @@ import com.yandex.div2.DivBackground
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivExtension
+import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivFunction
 import com.yandex.div2.DivLayoutProvider
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTextAlignmentVertical
 import com.yandex.div2.DivTextGradient
 import com.yandex.div2.DivTextRangeBackground
 import com.yandex.div2.DivTextRangeBorder
@@ -143,6 +145,7 @@ fun text(
     textColor: Color? = null,
     textColorExpression: Expression<Int>? = null,
     textGradient: DivTextGradient? = null,
+    truncate: DivText.Truncate = DivText.Truncate.END,
     truncatePolicy: DivText.TruncatePolicy = DivText.TruncatePolicy.GRAPHEME,
     tooltips: List<DivTooltip>? = null,
     transform: DivTransform? = null,
@@ -195,6 +198,7 @@ fun text(
             selectedActions = selectedActions,
             text = text,
             textGradient = textGradient,
+            truncate = constant(truncate),
             truncatePolicy = constant(truncatePolicy),
             textColor = textColorExpression
                 ?: textColor?.let { constant(it.value) }
@@ -217,7 +221,13 @@ fun textImage(
     url: String,
     start: Int = 0,
     preloadRequired: Boolean = false,
+    height: Long = 20,
+    alignmentVertical: DivTextAlignmentVertical = DivTextAlignmentVertical.CENTER,
+    description: String? = null,
 ) = DivText.Image(
+    accessibility = description?.let { DivText.Image.Accessibility(description = constant(it)) },
+    alignmentVertical = constant(alignmentVertical),
+    height = DivFixedSize(value = constant(height)),
     preloadRequired = constant(preloadRequired),
     start = constant(start.toLong()),
     url = constant(url.toUri())
@@ -227,20 +237,28 @@ fun textRange(
     start: Long = 0,
     end: Long? = null,
     actions: List<DivAction>? = null,
+    alignmentVertical: Expression<DivTextAlignmentVertical>? = null,
     background: DivTextRangeBackground? = null,
+    baselineOffset: Expression<Double> = constant(0.0),
     border: DivTextRangeBorder? = null,
     mask: DivTextRangeMask? = null,
     textColor: Int? = null,
+    fontSize: Long? = null,
     fontSizeUnit: DivSizeUnit = DivSizeUnit.SP,
-    lineHeight: Long? = null,
+    lineHeight: Expression<Long>? = null,
+    topOffset: Expression<Long>? = null,
 ) = DivText.Range(
     actions = actions,
+    alignmentVertical = alignmentVertical,
     background = background,
+    baselineOffset = baselineOffset,
     border = border,
     end = end?.let { constant(it) },
+    fontSize = fontSize?.let { constant(it) },
     fontSizeUnit = constant(fontSizeUnit),
-    lineHeight = lineHeight?.let { constant(it) },
+    lineHeight = lineHeight,
     mask = mask,
     start = constant(start),
     textColor = textColor?.let(::constant),
+    topOffset = topOffset,
 )

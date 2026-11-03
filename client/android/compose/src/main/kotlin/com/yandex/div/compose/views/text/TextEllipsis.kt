@@ -420,7 +420,14 @@ private fun AnnotatedText.truncatedTo(
     val offsets = TruncatedTextOffsetMapper(length, softBreaks)
     return AnnotatedText(
         text = buildTruncatedAnnotatedString(length, ellipsis, softBreaks),
-        decorations = mapTruncatedDecorations(length, ellipsis, offsets),
+        decorations = mapTruncatedRanges(
+            decorations, ellipsis.decorations, offsets,
+            TextRangeDecoration::start, TextRangeDecoration::end,
+        ) { decoration, start, end -> decoration.copy(start = start, end = end) },
+        metrics = mapTruncatedRanges(
+            metrics, ellipsis.metrics, offsets,
+            TextRangeMetrics::start, TextRangeMetrics::end,
+        ) { range, start, end -> range.copy(start = start, end = end) },
     )
 }
 
@@ -437,17 +444,7 @@ private fun AnnotatedText.buildTruncatedAnnotatedString(
             if (sourceSegment.lastOrNull() == SOFT_HYPHEN) {
                 // An explicit newline no longer draws a discretionary hyphen. Retain its glyph
                 // and all annotations at the same offset when freezing that original break.
-                val annotations = mutableListOf<AnnotatedString.Range<out AnnotatedString.Annotation>>()
-                sourceSegment.mapAnnotations { annotation ->
-                    annotations += annotation
-                    annotation
-                }
-                append(
-                    AnnotatedString(
-                        text = sourceSegment.text.dropLast(1) + VISIBLE_HYPHEN,
-                        annotations = annotations,
-                    )
-                )
+                append(sourceSegment.replacingChars(mapOf(sourceSegment.lastIndex to VISIBLE_HYPHEN)))
             } else {
                 append(sourceSegment)
             }
@@ -461,26 +458,23 @@ private fun AnnotatedText.buildTruncatedAnnotatedString(
     }
 }
 
-private fun AnnotatedText.mapTruncatedDecorations(
-    length: Int,
-    ellipsis: AnnotatedText,
+private inline fun <T> mapTruncatedRanges(
+    ranges: List<T>,
+    ellipsisRanges: List<T>,
     offsets: TruncatedTextOffsetMapper,
-): List<TextRangeDecoration> {
-    val result = ArrayList<TextRangeDecoration>(decorations.size + ellipsis.decorations.size)
-    for (decoration in decorations) {
-        val decorationEnd = decoration.end.coerceAtMost(length)
-        if (decoration.start < decorationEnd) {
-            result += decoration.copy(
-                start = offsets.mapStart(decoration.start),
-                end = offsets.mapEnd(decorationEnd),
-            )
+    start: (T) -> Int,
+    end: (T) -> Int,
+    copy: (T, Int, Int) -> T,
+): List<T> {
+    val result = ArrayList<T>(ranges.size + ellipsisRanges.size)
+    for (range in ranges) {
+        val rangeEnd = end(range).coerceAtMost(offsets.sourceLength)
+        if (start(range) < rangeEnd) {
+            result += copy(range, offsets.mapStart(start(range)), offsets.mapEnd(rangeEnd))
         }
     }
-    for (decoration in ellipsis.decorations) {
-        result += decoration.copy(
-            start = offsets.mapEllipsis(decoration.start),
-            end = offsets.mapEllipsis(decoration.end),
-        )
+    for (range in ellipsisRanges) {
+        result += copy(range, offsets.mapEllipsis(start(range)), offsets.mapEllipsis(end(range)))
     }
     return result
 }
@@ -488,7 +482,7 @@ private fun AnnotatedText.mapTruncatedDecorations(
 internal const val SOFT_HYPHEN = '\u00AD'
 internal const val DEFAULT_ELLIPSIS = "\u2026"
 
-private const val VISIBLE_HYPHEN = '\u2010'
+internal const val VISIBLE_HYPHEN = '\u2010'
 private const val LEFT_TO_RIGHT_MARK = '\u200E'
 private const val RIGHT_TO_LEFT_MARK = '\u200F'
 
@@ -505,7 +499,7 @@ private data class SoftBreak(
 )
 
 private class TruncatedTextOffsetMapper(
-    private val sourceLength: Int,
+    val sourceLength: Int,
     private val softBreaks: List<SoftBreak>,
 ) {
     fun mapStart(offset: Int): Int {

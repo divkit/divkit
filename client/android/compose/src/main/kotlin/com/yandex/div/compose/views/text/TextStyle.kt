@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.isSpecified
 import com.yandex.div.compose.expressions.observedColorValue
@@ -56,12 +57,7 @@ internal fun DivText.observeTextStyle(
         fontFeatureSettings = fontFeatureSettings,
         fontVariationSettings = fontVariationSettings,
     )
-    val textStyle = if (ranges.isNullOrEmpty() && images.isNullOrEmpty() && ellipsis?.ranges.isNullOrEmpty()) {
-        rememberExactLineHeight(baseStyle)
-    } else {
-        baseStyle
-    }
-    return textStyle.copy(
+    return rememberExactLineHeight(baseStyle).copy(
         hyphens = hyphens,
         shadow = textShadow?.observeShadow(baseStyle.color.alpha),
         textDecoration = observedTextDecoration(strike, underline)
@@ -82,9 +78,7 @@ private fun rememberExactLineHeight(textStyle: TextStyle): TextStyle {
             // Compose's nonlinear SP scaling preserves the line-height/font-size ratio.
             // At scale 2 and density 1, 20sp/30sp becomes 34px/51px instead of 34px/38px.
             // EM preserves the independently converted line height.
-            val multiplier = lineHeightPx / fontSizePx
-            // Prevent rounding from adding a pixel when Compose applies ceil(lineHeight).
-            if (multiplier * fontSizePx > lineHeightPx) multiplier.nextDown().em else multiplier.em
+            exactLineHeight(lineHeightPx, fontSizePx)
         } else {
             textStyle.lineHeight
         }
@@ -111,4 +105,10 @@ internal fun DivText.observeFocusedTextStyle(
     val focusedColor = focusedTextColor ?: return textStyle
     if (focusState?.value != true) return textStyle
     return textStyle.copy(color = focusedColor.observedColorValue())
+}
+
+internal fun exactLineHeight(lineHeightPx: Float, fontSizePx: Float): TextUnit {
+    val multiplier = lineHeightPx / fontSizePx
+    // Prevent rounding from adding a pixel when Compose applies ceil(lineHeight).
+    return if (multiplier * fontSizePx > lineHeightPx) multiplier.nextDown().em else multiplier.em
 }

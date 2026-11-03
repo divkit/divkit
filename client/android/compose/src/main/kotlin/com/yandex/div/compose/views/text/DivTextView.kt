@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.IntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.SideEffect
@@ -23,6 +24,7 @@ import androidx.compose.ui.layout.LayoutModifier
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.MeasureResult
 import androidx.compose.ui.layout.MeasureScope
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
 import androidx.compose.ui.semantics.contentDescription
@@ -34,13 +36,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.isSpecified
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.observedEnabledActions
 import com.yandex.div.compose.context.LocalDivViewContext
@@ -53,6 +56,7 @@ import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivText
+import kotlin.math.roundToInt
 
 @Composable
 internal fun DivTextView(
@@ -90,7 +94,7 @@ private fun BasicText(
     val textStyle = data.observeTextStyle(fontSize, horizontalAlignment, hyphens, textMetrics)
     val inlineImages = data.observeInlineImages(text, fontSize, textMetrics, textStyle)
     val gradientBrush = data.textGradient?.observedValue()
-    val customEllipsis = data.observeCustomEllipsis(gradientBrush, fontSize, textStyle.color.alpha)
+    val customEllipsis = data.observeCustomEllipsis(gradientBrush, fontSize, textStyle)
     if (data.hasActionLinks()) {
         CompositionLocalProvider(LocalViewConfiguration provides rememberExactTouchTargetViewConfiguration()) {
             RenderTextContent(
@@ -154,12 +158,12 @@ private fun RenderTextContent(
     } else {
         truncate.toTextOverflow()
     }
-    val annotatedText = buildAnnotatedText(
+    val annotatedText = data.buildAnnotatedText(
         text = text,
         ranges = data.ranges,
         gradientBrush = gradientBrush,
         baseFontSize = fontSize,
-        baseTextColorAlpha = baseTextStyle.color.alpha,
+        textStyle = baseTextStyle,
         inlineImages = inlineImages,
     )
     val needsMeasuredEndEllipsis = customEllipsis == null && shouldMeasureEndEllipsis(
@@ -272,7 +276,7 @@ private fun RenderMeasuredText(
         inlineContent = inlineContent,
         layoutResult = layoutResult,
     )
-    RenderBasicText(rendering, textStyle, maxLines, inlineContent, layoutResult)
+    RenderBasicText(rendering, textStyle, maxLines, layoutResult)
 }
 
 @Composable
@@ -284,7 +288,9 @@ private fun RenderAnnotatedText(
     maxLines: Int,
 ) {
     val inlineContent = rememberInlineContent(inlineImages)
-    if (annotatedText.decorations.isEmpty()) {
+    if (annotatedText.hasLineMetrics(textStyle, inlineContent)) {
+        RenderTextLines(annotatedText, inlineContent, textStyle, overflow, maxLines)
+    } else if (annotatedText.decorations.isEmpty()) {
         BasicText(
             text = annotatedText.text,
             inlineContent = inlineContent,
@@ -308,6 +314,81 @@ private fun RenderAnnotatedText(
         )
     }
 }
+
+@Composable
+private fun RenderTextLines(
+    annotatedText: AnnotatedText,
+    inlineContent: Map<String, InlineTextContent>,
+    textStyle: TextStyle,
+    overflow: TextOverflow,
+    maxLines: Int,
+) {
+    val measurer = rememberTextMeasurer()
+    val availableWidth = remember { mutableIntStateOf(Constraints.Infinity) }
+    val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+    val singleLine = maxLines == 1 &&
+        (overflow == TextOverflow.StartEllipsis || overflow == TextOverflow.MiddleEllipsis)
+    val onTextLayout = remember(singleLine) {
+        { layout: TextLayoutResult ->
+            availableWidth.intValue = if (singleLine) Constraints.Infinity else layout.layoutInput.constraints.maxWidth
+            layoutResult.value = layout
+        }
+    }
+    val intrinsics = remember(measurer, annotatedText, textStyle, inlineContent) {
+        SourceTextIntrinsics(measurer, annotatedText.text, textStyle, annotatedText.text.placeholders(inlineContent))
+    }
+    val lines = rememberLineMetricsText(annotatedText, textStyle, inlineContent, measurer, availableWidth, maxLines)
+    val modifier = if (lines.text.text.text == annotatedText.text.text) {
+        intrinsics
+    } else {
+        intrinsics.semantics { contentDescription = annotatedText.text.text }
+    }
+    BasicText(
+        modifier = modifier.drawTextRangeDecorations(layoutResult, lines.text.decorations),
+        text = lines.text.text,
+        inlineContent = lines.inlineContent,
+        style = textStyle,
+        overflow = overflow,
+        maxLines = maxLines,
+        onTextLayout = onTextLayout,
+    )
+}
+
+@Composable
+private fun rememberLineMetricsText(
+    text: AnnotatedText,
+    style: TextStyle,
+    inlineContent: Map<String, InlineTextContent>,
+    measurer: TextMeasurer,
+    availableWidth: IntState,
+    maxLines: Int,
+): TextLines {
+    val density = LocalDensity.current
+    val fontSizePx = with(density) { style.fontSize.toPx() }
+    val lineHeightPx = when {
+        style.lineHeight.isEm -> (style.lineHeight.value * fontSizePx).roundToInt()
+        style.lineHeight.isSpecified -> with(density) { style.lineHeight.roundToPx() }
+        else -> null
+    }
+    val needsLayout = lineHeightPx != null || text.metrics.any { it.needsLayout }
+    val width = if (needsLayout) availableWidth.intValue else Constraints.Infinity
+    return remember(text, style, inlineContent, measurer, width, fontSizePx, lineHeightPx, maxLines) {
+        val naturalStyle = style.copy(lineHeight = TextUnit.Unspecified, lineHeightStyle = null)
+        val measure = { value: AnnotatedString ->
+            measurer.measure(
+                text = value,
+                style = naturalStyle,
+                constraints = Constraints(maxWidth = width),
+                placeholders = value.placeholders(inlineContent),
+            )
+        }
+        val layout = if (needsLayout) measure(text.text.withParagraphsAtLineFeeds()) else null
+        val lines = text.withLineMetrics(layout, lineHeightPx, fontSizePx, style.hyphens, maxLines, measure)
+        TextLines(lines.text, inlineContent.alignedToLines(text.text, lines.lines))
+    }
+}
+
+private class TextLines(val text: AnnotatedText, val inlineContent: Map<String, InlineTextContent>)
 
 // Native ellipsis can split words, inline images, or complex grapheme clusters.
 // Measure the end offset ourselves when any of these need to be preserved.
@@ -369,15 +450,21 @@ private fun rememberEllipsizedTextRendering(
     }
     // Intrinsic-size containers must keep measuring the full text to avoid repeated truncation.
     val intrinsics = remember(measurer, sourceText, measuredStyle, inlineContent) {
-        UntruncatedTextIntrinsics(
+        SourceTextIntrinsics(
             measurer, sourceText.text, measuredStyle, sourceText.text.placeholders(inlineContent),
         )
     }
-    return ellipsisResult.toTextRendering(
+    val rendering = ellipsisResult.toTextRendering(
         sourceText = sourceText,
+        inlineContent = inlineContent,
         modifier = intrinsics.semantics { contentDescription = sourceText.text.text },
         onTextLayout = onTextLayout,
     )
+    if (!rendering.text.hasLineMetrics(textStyle, inlineContent)) {
+        return rendering
+    }
+    val lines = rememberLineMetricsText(rendering.text, textStyle, inlineContent, measurer, availableWidth, maxLines)
+    return rendering.copy(text = lines.text, inlineContent = lines.inlineContent)
 }
 
 @Composable
@@ -385,15 +472,14 @@ private fun RenderBasicText(
     rendering: TextRendering,
     textStyle: TextStyle,
     maxLines: Int,
-    inlineContent: Map<String, InlineTextContent>,
     layoutResult: MutableState<TextLayoutResult?>,
 ) {
     val textModifier = rendering.modifier.drawTextRangeDecorations(layoutResult, rendering.text.decorations)
-    if (rendering.text.text.hasAnnotations() || inlineContent.isNotEmpty()) {
+    if (rendering.text.text.hasAnnotations() || rendering.inlineContent.isNotEmpty()) {
         BasicText(
             modifier = textModifier,
             text = rendering.text.text,
-            inlineContent = inlineContent,
+            inlineContent = rendering.inlineContent,
             style = textStyle,
             overflow = rendering.overflow,
             maxLines = maxLines,
@@ -413,12 +499,14 @@ private fun RenderBasicText(
 
 private fun TextEllipsisResult.toTextRendering(
     sourceText: AnnotatedText,
+    inlineContent: Map<String, InlineTextContent>,
     modifier: Modifier,
     onTextLayout: (TextLayoutResult) -> Unit,
 ): TextRendering {
     return when (this) {
         TextEllipsisResult.UseNativeRendering -> TextRendering(
             text = sourceText,
+            inlineContent = inlineContent,
             overflow = TextOverflow.Ellipsis,
             modifier = modifier,
             onTextLayout = onTextLayout,
@@ -426,6 +514,7 @@ private fun TextEllipsisResult.toTextRendering(
 
         is TextEllipsisResult.Render -> TextRendering(
             text = text,
+            inlineContent = inlineContent,
             overflow = TextOverflow.Clip,
             modifier = modifier,
             onTextLayout = onTextLayout,
@@ -436,6 +525,7 @@ private fun TextEllipsisResult.toTextRendering(
 /** Parameters passed to BasicText after selecting native or measured ellipsis rendering. */
 private data class TextRendering(
     val text: AnnotatedText,
+    val inlineContent: Map<String, InlineTextContent>,
     val overflow: TextOverflow,
     val modifier: Modifier,
     val onTextLayout: (TextLayoutResult) -> Unit,
@@ -445,7 +535,7 @@ private data class TextRendering(
 private fun DivText.observeCustomEllipsis(
     gradientBrush: Brush?,
     fontSize: Int,
-    textColorAlpha: Float,
+    textStyle: TextStyle,
 ): AnnotatedText? {
     val ellipsis = ellipsis?.takeIf { maxLines != null }
     val ellipsisText = ellipsis?.text?.observedValue()
@@ -458,7 +548,7 @@ private fun DivText.observeCustomEllipsis(
             ranges = ellipsis.ranges,
             gradientBrush = gradientBrush,
             baseFontSize = fontSize,
-            baseTextColorAlpha = textColorAlpha,
+            textStyle = textStyle,
             actions = ellipsis.actions
         ) ?: AnnotatedText(AnnotatedString(ellipsisText), emptyList())
     } else {
@@ -467,10 +557,10 @@ private fun DivText.observeCustomEllipsis(
 }
 
 // Only the maximum intrinsic width is overridden: it is the single intrinsic that both changes with
-// truncation and is queried by the containers (`width(IntrinsicSize.Max)`). Truncation always cuts
-// inside the last allowed line, so the ellipsized text keeps the same line count and reports the
-// same heights as the full one.
-private class UntruncatedTextIntrinsics(
+// truncation or line splitting and is queried by the containers (`width(IntrinsicSize.Max)`).
+// Truncation always cuts inside the last allowed line, so the ellipsized text keeps the same line
+// count and reports the same heights as the full one.
+private class SourceTextIntrinsics(
     private val measurer: TextMeasurer,
     private val text: AnnotatedString,
     private val style: TextStyle,
@@ -488,12 +578,12 @@ private class UntruncatedTextIntrinsics(
 }
 
 @Composable
-private fun buildAnnotatedText(
+private fun DivText.buildAnnotatedText(
     text: String,
     ranges: List<DivText.Range>?,
     gradientBrush: Brush?,
     baseFontSize: Int,
-    baseTextColorAlpha: Float,
+    textStyle: TextStyle,
     actions: List<DivAction>? = null,
     inlineImages: List<InlineImageData> = emptyList()
 ): AnnotatedText? {
@@ -507,9 +597,9 @@ private fun buildAnnotatedText(
     val offsets = builder.appendTextWithInlineImages(text, inlineImages)
     builder.addTextGradient(gradientBrush)
     builder.addTextActions(actions, 0, builder.length)
-    builder.addTextRanges(ranges, length, offsets, baseFontSize, baseTextColorAlpha, decorations)
+    val metrics = builder.addTextRanges(this, ranges, length, offsets, baseFontSize, textStyle.color.alpha, decorations)
     builder.maskDecoratedRanges(decorations)
-    return AnnotatedText(builder.toAnnotatedString(), decorations)
+    return AnnotatedText(builder.toAnnotatedString(), decorations, rememberRangeMetrics(metrics, textStyle))
 }
 
 private fun AnnotatedString.Builder.addTextGradient(gradientBrush: Brush?) {
@@ -534,13 +624,15 @@ private fun AnnotatedString.Builder.addTextActions(
 @Composable
 @NonRestartableComposable
 private fun AnnotatedString.Builder.addTextRanges(
+    data: DivText,
     ranges: List<DivText.Range>?,
     textLength: Int,
     offsets: OriginalTextOffsets,
     baseFontSize: Int,
     baseTextColorAlpha: Float,
     decorations: MutableList<TextRangeDecoration>,
-) {
+): List<RangeMetricsInput> {
+    val metrics = mutableListOf<RangeMetricsInput>()
     val length = textLength.toLong()
     ranges?.forEach { range ->
         val start = range.start.observedValue().coerceIn(0L, length)
@@ -549,16 +641,17 @@ private fun AnnotatedString.Builder.addTextRanges(
             val decorationStart = offsets.rangeStart(start.toInt())
             val decorationEnd = offsets.rangeEnd(end.toInt())
             val decoration = range.observeDecoration(decorationStart, decorationEnd)
-            addStyle(
-                style = range.observeSpanStyle(
-                    baseFontSize,
-                    baseTextColorAlpha,
-                    decoration?.hidesText == true,
-                ),
-                start = decorationStart,
-                end = decorationEnd,
+            val fontSizeUnit = range.observeFontSizeUnit()
+            val spanStyle = range.observeSpanStyle(
+                data,
+                baseFontSize,
+                baseTextColorAlpha,
+                fontSizeUnit,
+                decoration?.hidesText == true,
             )
+            addStyle(spanStyle, decorationStart, decorationEnd)
             if (decoration != null) decorations += decoration
+            metrics += range.observeMetrics(decorationStart, decorationEnd, spanStyle, fontSizeUnit)
             val rangeActions = range.actions.observedEnabledActions()
             if (rangeActions.isNotEmpty()) {
                 // Added after the whole text link so that it wins the hit test: a tap reaches the
@@ -568,6 +661,7 @@ private fun AnnotatedString.Builder.addTextRanges(
             }
         }
     }
+    return metrics
 }
 
 @Composable
@@ -616,8 +710,32 @@ private fun DivText.Ellipsis.reportUnsupportedProperties() {
     }
 }
 
+internal fun AnnotatedString.replacingChars(chars: Map<Int, Char>): AnnotatedString {
+    if (chars.isEmpty()) return this
+    val annotations = mutableListOf<AnnotatedString.Range<out AnnotatedString.Annotation>>()
+    mapAnnotations { annotation ->
+        annotations += annotation
+        annotation
+    }
+    val text = text.toCharArray()
+    chars.forEach { (offset, char) -> text[offset] = char }
+    return AnnotatedString(String(text), annotations)
+}
+
 internal fun AnnotatedString.hasAnnotations(): Boolean {
     return spanStyles.isNotEmpty() || paragraphStyles.isNotEmpty() || hasLinkAnnotations(0, length)
+}
+
+private fun AnnotatedText.hasLineMetrics(
+    style: TextStyle,
+    inlineContent: Map<String, InlineTextContent>,
+): Boolean {
+    val changesFontMetrics = inlineContent.isNotEmpty() || text.spanStyles.any { it.item.changesFontMetrics() }
+    return metrics.isNotEmpty() || (style.lineHeight.isSpecified && changesFontMetrics)
+}
+
+private fun SpanStyle.changesFontMetrics(): Boolean {
+    return fontSize.isSpecified || fontFamily != null || fontWeight != null
 }
 
 private fun String.hasComplexGraphemes(): Boolean {

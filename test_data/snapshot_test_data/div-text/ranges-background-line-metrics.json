@@ -1,0 +1,138 @@
+{
+  "description": "Range backgrounds over shifted glyphs, line feeds under max_lines and trailing spaces; right-aligned lines split by a range line_height",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "metrics_text": {
+      "type": "text",
+      "font_size": 24,
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "metrics_text",
+              "text": "Shifted text",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 12,
+                  "font_size": 32,
+                  "baseline_offset": -16,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                },
+                {
+                  "start": 1,
+                  "end": 2
+                }
+              ]
+            },
+            {
+              "type": "metrics_text",
+              "text": "Partly shifted",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 14,
+                  "font_size": 32,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                },
+                {
+                  "start": 0,
+                  "end": 6,
+                  "baseline_offset": -16
+                }
+              ]
+            },
+            {
+              "type": "metrics_text",
+              "text": "Shifted without size",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 20,
+                  "baseline_offset": -16,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "metrics_text",
+              "text": "First\nSecond\nThird",
+              "line_height": 32,
+              "max_lines": 5,
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 5,
+                  "font_size": 20,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "metrics_text",
+              "text": "Text            ",
+              "max_lines": 2,
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 14,
+                  "background": {
+                    "type": "solid",
+                    "color": "#FFB3B3"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "metrics_text",
+              "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod",
+              "text_alignment_horizontal": "right",
+              "ranges": [
+                {
+                  "start": 64,
+                  "end": 71,
+                  "line_height": 36
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

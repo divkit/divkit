@@ -127,9 +127,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     "div-text/ellipsis-with-image.json",
     "div-text/ellipsis_builder.json",
 
-    // div-text.range.line_height not supported
-    "div-text/line-height/multi-line-text-with-image.json",
-
     // div-text.image_builder not supported
     "div-text/image_builder.json",
 
@@ -141,18 +138,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
 
     // div-text.range_builder not supported
     "div-text/range_builder.json",
-
-    // div-text.range.top_offset not supported
-    "div-text/ranges-line-height-top-offset.json",
-
-    // div-text.ranges.top_offset not supported
-    "div-text/ranges-intersection-top-offset.json",
-
-    // div-text.range.baseline_offset not supported
-    "div-text/text_range_baseline_offset.json",
-
-    // div-text.range.alignment_vertical not supported
-    "div-text/text_range_vertical_alignment.json",
 
     // test div-customs required
     "div-size/match-parent/overlap/height/platform-wrap-content-container-height.json",

@@ -6,11 +6,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +29,9 @@ import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,6 +64,7 @@ internal data class InlineImageData(
     val contentHeight: Dp,
     val contentAlignment: Alignment,
     val verticalAlignment: PlaceholderVerticalAlign,
+    val alignsToLine: Boolean = false,
     val baselineOffset: Dp,
     val descentPlaceholderHeight: TextUnit?,
     val colorFilter: ColorFilter?,
@@ -115,6 +122,7 @@ internal fun DivText.observeInlineImages(
         val accessibilityRole = image.accessibility?.type.toRole()
         val baselineOffsetTextUnit = baselineOffset?.toTextUnit()
         val isLineHeightConstrained = lineHeight?.let { it < height.textUnit } == true
+        val alignsToLine = isLineHeightConstrained && verticalAlignment != PlaceholderVerticalAlign.AboveBaseline
         val placeholderHeight = when {
             baselineOffsetTextUnit != null && lineHeight == null && lineMetrics != null ->
                 maxTextUnit(
@@ -122,14 +130,13 @@ internal fun DivText.observeInlineImages(
                     addTextUnits(height.textUnit, baselineOffsetTextUnit),
                 )
             !isLineHeightConstrained -> height.textUnit
-            verticalAlignment == PlaceholderVerticalAlign.AboveBaseline -> fontSize ?: height.textUnit
-            else -> lineHeight ?: height.textUnit
+            alignsToLine -> 0.sp
+            else -> fontSize ?: height.textUnit
         }
-        val placeholderVerticalAlignment = when {
-            baselineOffsetTextUnit != null -> PlaceholderVerticalAlign.AboveBaseline
-            isLineHeightConstrained && verticalAlignment != PlaceholderVerticalAlign.AboveBaseline ->
-                PlaceholderVerticalAlign.Top
-            else -> verticalAlignment
+        val placeholderVerticalAlignment = if (baselineOffsetTextUnit != null || isLineHeightConstrained) {
+            PlaceholderVerticalAlign.AboveBaseline
+        } else {
+            verticalAlignment
         }
         val descentPlaceholderHeight = if (baselineOffsetTextUnit != null &&
             lineHeight == null && lineMetrics != null
@@ -156,6 +163,7 @@ internal fun DivText.observeInlineImages(
             contentHeight = height.dp,
             contentAlignment = alignment.toContentAlignment(),
             verticalAlignment = placeholderVerticalAlignment,
+            alignsToLine = alignsToLine,
             baselineOffset = baselineOffset?.dp ?: 0.dp,
             descentPlaceholderHeight = descentPlaceholderHeight,
             colorFilter = tintColor?.let { toColorFilter(it, image.tintMode.observedValue()) },
@@ -197,6 +205,24 @@ internal fun rememberInlineContent(images: List<InlineImageData>): Map<String, I
             }
         }
     }
+}
+
+private val LocalLineBounds = compositionLocalOf<IntRange?> { null }
+
+internal fun Map<String, InlineTextContent>.alignedToLines(
+    text: AnnotatedString,
+    lines: List<TextLineBounds>,
+): Map<String, InlineTextContent> {
+    val aligned = text.getStringAnnotations(0, text.length).mapNotNull { annotation ->
+        val content = this[annotation.item] ?: return@mapNotNull null
+        val line = lines.find { annotation.start < it.end } ?: return@mapNotNull null
+        annotation.item to InlineTextContent(content.placeholder) { alternateText ->
+            CompositionLocalProvider(LocalLineBounds provides line.top..line.bottom) {
+                content.children(alternateText)
+            }
+        }
+    }
+    return if (aligned.isEmpty()) this else this + aligned
 }
 
 internal fun AnnotatedString.Builder.appendTextWithInlineImages(
@@ -257,10 +283,12 @@ private fun InlineImage(image: InlineImageData) {
         ),
         onState = component.debugConfiguration.imagePainterStateListener,
     )
+    val lineBounds = LocalLineBounds.current?.takeIf { image.alignsToLine }
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             modifier = Modifier
                 .align(image.contentAlignment)
+                .alignedTo(image, lineBounds)
                 .requiredSize(image.contentWidth, image.contentHeight)
                 .offset(y = -image.baselineOffset)
                 .inlineImageAccessibility(image),
@@ -269,6 +297,15 @@ private fun InlineImage(image: InlineImageData) {
             contentScale = ContentScale.FillBounds,
             colorFilter = image.colorFilter,
         )
+    }
+}
+
+private fun Modifier.alignedTo(image: InlineImageData, lineBounds: IntRange?): Modifier {
+    if (lineBounds == null) return wrapContentSize(image.contentAlignment, unbounded = true)
+    return wrapContentSize(Alignment.TopStart, unbounded = true).offset {
+        val size = IntSize(0, image.contentHeight.roundToPx())
+        val space = IntSize(0, lineBounds.last - lineBounds.first)
+        IntOffset(0, lineBounds.first + image.contentAlignment.align(size, space, LayoutDirection.Ltr).y)
     }
 }
 

@@ -79,7 +79,7 @@ class DivTextLineHeightTest {
     @Test
     fun `range line height overrides the standalone height for its paragraph`() {
         // Arrange
-        val ranges = listOf(textRange(start = 2, end = 4, fontSizeUnit = DivSizeUnit.PX, lineHeight = 60))
+        val ranges = listOf(textRange(start = 2, end = 4, fontSizeUnit = DivSizeUnit.PX, lineHeight = constant(60)))
 
         // Act
         val textView = renderText(text = "a\nb\nc", lineHeight = 40, ranges = ranges)

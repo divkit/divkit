@@ -43,6 +43,7 @@ import kotlin.math.roundToInt
 internal data class AnnotatedText(
     val text: androidx.compose.ui.text.AnnotatedString,
     val decorations: List<TextRangeDecoration>,
+    val metrics: List<TextRangeMetrics> = emptyList(),
 )
 
 @Immutable
@@ -52,9 +53,14 @@ internal data class TextRangeDecoration(
     val background: RangeBackground?,
     val border: RangeBorder?,
     val mask: RangeMask?,
+    val followsGlyphs: Boolean = false,
+    val glyphBoxes: List<GlyphBox> = emptyList(),
 ) {
     val hidesText: Boolean get() = mask != null
 }
+
+@Immutable
+internal data class GlyphBox(val start: Int, val end: Int, val ascentPx: Int, val descentPx: Int)
 
 @Immutable
 internal sealed interface RangeBackground {
@@ -110,8 +116,9 @@ internal fun DivText.Range.observeDecoration(start: Int, end: Int): TextRangeDec
     val mask = mask?.observeMask()
     if (background == null && border?.stroke == null && mask == null) return null
 
-    return remember(start, end, background, border, mask) {
-        TextRangeDecoration(start, end, background, border, mask)
+    val followsGlyphs = fontSize != null && mask == null
+    return remember(start, end, background, border, mask, followsGlyphs) {
+        TextRangeDecoration(start, end, background, border, mask, followsGlyphs)
     }
 }
 
@@ -266,7 +273,7 @@ private fun buildDecorationGeometry(
     decoration: TextRangeDecoration,
     particleDrawing: ParticleDrawing?,
 ): DecorationGeometry? {
-    val lineRects = layout.lineRects(decoration.start, decoration.end)
+    val lineRects = layout.lineRects(decoration.start, decoration.end, decoration.glyphBoxes)
     if (lineRects.isEmpty()) return null
 
     val backgroundPath = when (val background = decoration.background) {
@@ -289,13 +296,13 @@ private fun buildDecorationGeometry(
     return DecorationGeometry(decoration, lineRects, backgroundPath, borderPath, borderStroke, particleDrawing)
 }
 
-private fun TextLayoutResult.lineRects(start: Int, end: Int): List<RangeLine> {
+private fun TextLayoutResult.lineRects(start: Int, end: Int, glyphBoxes: List<GlyphBox>): List<RangeLine> {
     if (lineCount == 0) return emptyList()
 
     val lastLine = lineCount - 1
     val renderedTextEnd = getLineEnd(
         lastLine,
-        visibleEnd = layoutInput.overflow == TextOverflow.Ellipsis && isLineEllipsized(lastLine),
+        visibleEnd = layoutInput.overflow == TextOverflow.Ellipsis && hasVisualOverflow,
     )
     val safeStart = start.coerceIn(0, renderedTextEnd)
     val safeEnd = end.coerceIn(safeStart, renderedTextEnd)
@@ -313,7 +320,10 @@ private fun TextLayoutResult.lineRects(start: Int, end: Int): List<RangeLine> {
         }
         if (lineStart >= lineEnd) return@mapNotNull null
 
-        val rects = selectionRects(lineStart, lineEnd, getLineTop(line), getLineBottom(line))
+        val glyphBox = glyphBoxes.find { it.start < lineEnd && it.end > lineStart }
+        val top = glyphBox?.let { getLineBaseline(line) - it.ascentPx } ?: getLineTop(line)
+        val bottom = glyphBox?.let { getLineBaseline(line) + it.descentPx } ?: getLineBottom(line)
+        val rects = selectionRects(lineStart, lineEnd, top, bottom)
         if (rects.isEmpty()) return@mapNotNull null
 
         val startBox = getBoundingBox(lineStart)

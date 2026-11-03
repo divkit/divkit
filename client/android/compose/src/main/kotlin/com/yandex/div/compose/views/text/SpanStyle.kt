@@ -9,39 +9,39 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.observeShadow
 import com.yandex.div.compose.text.letterSpacing
 import com.yandex.div.compose.text.observedTextDecoration
 import com.yandex.div.compose.text.rememberFontFamily
 import com.yandex.div.compose.text.toFontWeight
+import com.yandex.div.compose.utils.observeShadow
 import com.yandex.div.compose.utils.toTextUnit
+import com.yandex.div2.DivFontWeight
+import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivText
 
 @Composable
 internal fun DivText.Range.observeSpanStyle(
+    text: DivText,
     baseFontSize: Int,
     baseTextColorAlpha: Float,
+    fontSizeUnit: DivSizeUnit,
     isTextMasked: Boolean,
 ): SpanStyle {
     val rangeFontSize = fontSize?.observedIntValue()
     val rangeFontWeight = fontWeight?.observedValue()
     val rangeFontWeightValue = fontWeightValue?.observedIntValue()
-    val spanFontSize = rangeFontSize?.toTextUnit(fontSizeUnit.observedValue())
+    val spanFontSize = rangeFontSize?.toTextUnit(fontSizeUnit)
         ?: TextUnit.Unspecified
     val spanLetterSpacing = letterSpacing?.observedFloatValue()?.let {
         letterSpacing(it, rangeFontSize ?: baseFontSize)
     } ?: TextUnit.Unspecified
-    val spanFontFamily = rememberFontFamily(
-        fontFamily = fontFamily?.observedValue(),
-        fontWeight = rangeFontWeight,
-        fontWeightValue = rangeFontWeightValue,
-        fontVariationSettings = fontVariationSettings?.observedValue(),
-    )
+    val spanFontFamily = observeFontFamily(text, rangeFontWeight, rangeFontWeightValue)
     val spanBrush = if (isTextMasked) {
         null
     } else {
@@ -59,6 +59,24 @@ internal fun DivText.Range.observeSpanStyle(
         textDecoration = if (isTextMasked) null else observedTextDecoration(strike, underline),
         shadow = if (isTextMasked) null else textShadow?.observeShadow(baseTextColorAlpha),
         fontFeatureSettings = fontFeatureSettings?.observedValue()?.takeIf { it.isNotBlank() },
+    )
+}
+
+@Composable
+private fun DivText.Range.observeFontFamily(
+    text: DivText,
+    rangeFontWeight: DivFontWeight?,
+    rangeFontWeightValue: Int?,
+): FontFamily? {
+    val hasFontWeight = rangeFontWeight != null || rangeFontWeightValue != null
+    if (fontFamily == null && !hasFontWeight && fontVariationSettings == null) {
+        return null
+    }
+    return rememberFontFamily(
+        fontFamily = (fontFamily ?: text.fontFamily)?.observedValue(),
+        fontWeight = if (hasFontWeight) rangeFontWeight else text.fontWeight?.observedValue(),
+        fontWeightValue = if (hasFontWeight) rangeFontWeightValue else text.fontWeightValue?.observedIntValue(),
+        fontVariationSettings = fontVariationSettings?.observedValue(),
     )
 }
 

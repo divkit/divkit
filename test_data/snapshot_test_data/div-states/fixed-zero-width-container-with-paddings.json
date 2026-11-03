@@ -1,6 +1,7 @@
 {
   "description": "A fixed zero-width container with paddings inside div-state must not expose its content",
   "platforms": [
+    "android",
     "ios"
   ],
   "card": {

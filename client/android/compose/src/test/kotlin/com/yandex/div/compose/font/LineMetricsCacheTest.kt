@@ -42,7 +42,7 @@ class LineMetricsCacheTest {
     fun `metrics are measured from the font`() {
         val metrics = getOrCreate()
 
-        assertEquals(LineMetrics(ascent = 15.sp, descent = 4.sp, heightPx = 38f), metrics)
+        assertEquals(LineMetrics(ascent = 15.sp, descent = 4.sp, ascentPx = 30, descentPx = 8, fontAscentPx = 29.6875f), metrics)
     }
 
     @Test

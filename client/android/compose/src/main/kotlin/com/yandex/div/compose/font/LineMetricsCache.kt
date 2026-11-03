@@ -20,8 +20,12 @@ import dev.zacsweers.metro.Inject
 internal data class LineMetrics(
     val ascent: TextUnit,
     val descent: TextUnit,
-    val heightPx: Float,
-)
+    val ascentPx: Int,
+    val descentPx: Int,
+    val fontAscentPx: Float,
+) {
+    val heightPx: Float get() = (ascentPx + descentPx).toFloat()
+}
 
 @DivContextScope
 internal class LineMetricsCache @Inject constructor() {
@@ -79,7 +83,9 @@ internal class LineMetricsCache @Inject constructor() {
             LineMetrics(
                 ascent = (-metrics.ascent).toSp(),
                 descent = metrics.descent.toSp(),
-                heightPx = (metrics.descent - metrics.ascent).toFloat(),
+                ascentPx = -metrics.ascent,
+                descentPx = metrics.descent,
+                fontAscentPx = -paint.ascent(),
             )
         }
     }
