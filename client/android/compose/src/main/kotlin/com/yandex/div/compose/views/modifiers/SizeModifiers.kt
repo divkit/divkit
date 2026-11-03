@@ -51,7 +51,10 @@ internal fun Modifier.size(
     val width = data.width
     val isImage = div is Div.Image || div is Div.GifImage
     if (isImage && aspectRatio != null && width is DivSize.WrapContent) {
-        return wrapWidth(width.value, horizontalAlignment)
+        return wrapWidth(
+            width = width.value,
+            alignment = horizontalAlignment?.toHorizontalAlignment() ?: defaultHorizontalAlignment,
+        )
             .imageAspectRatio(
                 ratio = aspectRatio,
                 height = data.height,
@@ -71,6 +74,7 @@ internal fun Modifier.size(
         .width(
             width = width,
             horizontalAlignment = horizontalAlignment,
+            defaultHorizontalAlignment = defaultHorizontalAlignment,
             fillMatchParent = fillMatchParentWidth,
             matchParentMax = matchParentMaxWidth,
         )
@@ -81,6 +85,7 @@ internal fun Modifier.size(
             height(
                 height = data.height,
                 verticalAlignment = data.alignmentVertical?.observedValue(),
+                defaultVerticalAlignment = defaultVerticalAlignment,
                 fillMatchParent = fillMatchParentHeight,
                 matchParentMax = matchParentMaxHeight,
             )
@@ -91,10 +96,11 @@ internal fun Modifier.size(
 private fun Modifier.width(
     width: DivSize,
     horizontalAlignment: DivAlignmentHorizontal? = null,
+    defaultHorizontalAlignment: Alignment.Horizontal,
     fillMatchParent: Boolean,
     matchParentMax: Dp,
 ): Modifier {
-    val align = horizontalAlignment?.toHorizontalAlignment() ?: Alignment.Start
+    val align = horizontalAlignment?.toHorizontalAlignment() ?: defaultHorizontalAlignment
     return when (width) {
         is DivSize.MatchParent -> applySizeBounds(
             width.value.minSize,
@@ -104,7 +110,7 @@ private fun Modifier.width(
             .applyIf(matchParentMax.isSpecified) { widthIn(max = matchParentMax) }
             .applyIf(fillMatchParent) { fillMaxWidth() }
 
-        is DivSize.WrapContent -> wrapWidth(width.value, horizontalAlignment)
+        is DivSize.WrapContent -> wrapWidth(width.value, align)
             .applySizeBounds(width.value.minSize, width.value.maxSize, isWidth = true)
 
         is DivSize.Fixed -> wrapContentWidth(align = align, unbounded = true)
@@ -113,9 +119,9 @@ private fun Modifier.width(
 }
 
 @Composable
-private fun Modifier.wrapWidth(width: DivWrapContentSize, alignment: DivAlignmentHorizontal?): Modifier =
+private fun Modifier.wrapWidth(width: DivWrapContentSize, alignment: Alignment.Horizontal): Modifier =
     wrapContentWidth(
-        align = alignment?.toHorizontalAlignment() ?: Alignment.Start,
+        align = alignment,
         unbounded = width.constrained?.observedValue() != true,
     )
 
@@ -123,10 +129,11 @@ private fun Modifier.wrapWidth(width: DivWrapContentSize, alignment: DivAlignmen
 private fun Modifier.height(
     height: DivSize,
     verticalAlignment: DivAlignmentVertical? = null,
+    defaultVerticalAlignment: Alignment.Vertical,
     fillMatchParent: Boolean,
     matchParentMax: Dp,
 ): Modifier {
-    val align = verticalAlignment?.toVerticalAlignment() ?: Alignment.Top
+    val align = verticalAlignment?.toVerticalAlignment() ?: defaultVerticalAlignment
     return when (height) {
         is DivSize.MatchParent -> applySizeBounds(
             height.value.minSize,

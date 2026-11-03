@@ -1,0 +1,369 @@
+{
+  "description": "Overflowing fixed-size children inherit alignment on both axes, including whole linear groups.",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {},
+  "card": {
+    "log_id": "fixed_child_overflow_alignment",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 200
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#E5E5E5"
+            }
+          ],
+          "items": [
+            {
+              "type": "container",
+              "id": "clipping_parent",
+              "orientation": "overlap",
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "center",
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "clip_to_bounds": true,
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 66
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "items": [
+                {
+                  "type": "container",
+                  "id": "overflowing_child",
+                  "orientation": "vertical",
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 76
+                  },
+                  "items": [
+                    {
+                      "type": "container",
+                      "id": "red_square",
+                      "orientation": "overlap",
+                      "width": {
+                        "type": "fixed",
+                        "value": 32
+                      },
+                      "height": {
+                        "type": "fixed",
+                        "value": 32
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#FF3B30"
+                        }
+                      ],
+                      "items": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "horizontal_clipping_parent",
+              "orientation": "overlap",
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "center",
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "clip_to_bounds": true,
+              "width": {
+                "type": "fixed",
+                "value": 66
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "margins": {
+                "left": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "items": [
+                {
+                  "type": "container",
+                  "id": "horizontal_overflowing_child",
+                  "orientation": "horizontal",
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "width": {
+                    "type": "fixed",
+                    "value": 76
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "items": [
+                    {
+                      "type": "container",
+                      "id": "horizontal_red_square",
+                      "orientation": "overlap",
+                      "width": {
+                        "type": "fixed",
+                        "value": 32
+                      },
+                      "height": {
+                        "type": "fixed",
+                        "value": 32
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#FF3B30"
+                        }
+                      ],
+                      "items": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "horizontal_linear_clipping_parent",
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "end",
+              "content_alignment_vertical": "center",
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "clip_to_bounds": true,
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "margins": {
+                "left": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "items": [
+                {
+                  "type": "container",
+                  "id": "first_horizontal_linear_child",
+                  "orientation": "overlap",
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "width": {
+                    "type": "fixed",
+                    "value": 70
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "items": [
+                    {
+                      "type": "container",
+                      "orientation": "overlap",
+                      "width": {
+                        "type": "fixed",
+                        "value": 20
+                      },
+                      "height": {
+                        "type": "fixed",
+                        "value": 20
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#007AFF"
+                        }
+                      ],
+                      "items": []
+                    }
+                  ]
+                },
+                {
+                  "type": "container",
+                  "id": "second_horizontal_linear_child",
+                  "orientation": "overlap",
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "width": {
+                    "type": "fixed",
+                    "value": 70
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "items": [
+                    {
+                      "type": "container",
+                      "orientation": "overlap",
+                      "width": {
+                        "type": "fixed",
+                        "value": 20
+                      },
+                      "height": {
+                        "type": "fixed",
+                        "value": 20
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#34C759"
+                        }
+                      ],
+                      "items": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "id": "vertical_linear_clipping_parent",
+              "orientation": "vertical",
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "bottom",
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "clip_to_bounds": true,
+              "width": {
+                "type": "fixed",
+                "value": 60
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "margins": {
+                "left": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "items": [
+                {
+                  "type": "container",
+                  "id": "first_vertical_linear_child",
+                  "orientation": "overlap",
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "width": {
+                    "type": "fixed",
+                    "value": 60
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 70
+                  },
+                  "items": [
+                    {
+                      "type": "container",
+                      "orientation": "overlap",
+                      "width": {
+                        "type": "fixed",
+                        "value": 20
+                      },
+                      "height": {
+                        "type": "fixed",
+                        "value": 20
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#AF52DE"
+                        }
+                      ],
+                      "items": []
+                    }
+                  ]
+                },
+                {
+                  "type": "container",
+                  "id": "second_vertical_linear_child",
+                  "orientation": "overlap",
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "width": {
+                    "type": "fixed",
+                    "value": 60
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 70
+                  },
+                  "items": [
+                    {
+                      "type": "container",
+                      "orientation": "overlap",
+                      "width": {
+                        "type": "fixed",
+                        "value": 20
+                      },
+                      "height": {
+                        "type": "fixed",
+                        "value": 20
+                      },
+                      "background": [
+                        {
+                          "type": "solid",
+                          "color": "#FF9500"
+                        }
+                      ],
+                      "items": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

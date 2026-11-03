@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.collection.CollectionItems
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
@@ -45,16 +46,18 @@ internal fun ContainerVerticalView(modifier: Modifier, data: DivContainer) {
     val items = data.observeItems()
     val visibleItems = items.observeVisible()
 
-    val hasOnlyFixedHeightItems = visibleItems.isNotEmpty() &&
-        visibleItems.all { it.value().height is DivSize.Fixed }
     val sizing = observeVerticalChildrenSizing(data, items, visibleItems)
+    val canAlignMainAxisOverflow = canAlignMainAxisOverflow(
+        data.height,
+        verticalAlignment,
+        visibleItems,
+        items.components,
+    )
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
-        // Measure fixed children as one column so centered overflow is clipped symmetrically.
-        .applyIf(
-            hasOnlyFixedHeightItems && verticalAlignment == DivContentAlignmentVertical.CENTER
-        ) {
+        // Measure unbounded children as one column so the overflowing group keeps its alignment.
+        .applyIf(canAlignMainAxisOverflow) {
             wrapContentHeight(
                 align = defaultVerticalAlignment,
                 unbounded = true,
@@ -138,6 +141,34 @@ private fun observeVerticalChildrenSizing(
         needsCrossAxisIntrinsicSize = needsCrossAxisIntrinsicSize,
         hasCrossAxisSizingChild = hasCrossAxisSizingChild,
     )
+}
+
+@Composable
+private fun canAlignMainAxisOverflow(
+    containerSize: DivSize,
+    alignment: DivContentAlignmentVertical,
+    items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
+): Boolean {
+    if (containerSize is DivSize.WrapContent) return false
+    if (items.isEmpty()) return false
+    when (alignment) {
+        DivContentAlignmentVertical.CENTER,
+        DivContentAlignmentVertical.BOTTOM -> Unit
+        else -> return false
+    }
+    return items.all { item ->
+        item.value().height.canMeasureMainAxisUnbounded(components?.get(item))
+    }
+}
+
+@Composable
+private fun DivSize.canMeasureMainAxisUnbounded(component: DivLocalComponent?): Boolean = when (this) {
+    is DivSize.Fixed -> true
+    is DivSize.MatchParent -> false
+    is DivSize.WrapContent -> (component?.let {
+        value.constrained?.observedValue(component = it)
+    } ?: value.constrained?.observedValue()) != true
 }
 
 @Composable

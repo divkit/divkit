@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
@@ -46,13 +47,17 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
     val visibleItems = items.observeVisible()
 
     val supportsMainAxisWeight = !data.width.isWrapContent
-    val hasOnlyFixedWidthItems = visibleItems.isNotEmpty() &&
-        visibleItems.all { it.value().width is DivSize.Fixed }
     val isCrossAxisWrapContent = data.height is DivSize.WrapContent
     var foundWeightedChildren = false
     var totalWeightedChildrenMargins = 0.dp
     var needsCrossAxisIntrinsicSize = false
     var foundCrossAxisSizingChild = false
+    val canAlignMainAxisOverflow = canAlignMainAxisOverflow(
+        data.width,
+        horizontalAlignment,
+        visibleItems,
+        items.components,
+    )
     for (item in visibleItems) {
         val child = item.value()
         if (supportsMainAxisWeight && child.width.isMatchParent) {
@@ -76,10 +81,8 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
 
     val containerModifier = modifier
         .adaptiveContainerPadding(data.paddings, horizontalAlignment, verticalAlignment)
-        // Measure fixed children as one row so centered overflow is clipped symmetrically.
-        .applyIf(
-            hasOnlyFixedWidthItems && horizontalAlignment == DivContentAlignmentHorizontal.CENTER
-        ) {
+        // Measure unbounded children as one row so the overflowing group keeps its alignment.
+        .applyIf(canAlignMainAxisOverflow) {
             wrapContentWidth(
                 align = defaultHorizontalAlignment,
                 unbounded = true,
@@ -128,6 +131,35 @@ internal fun ContainerHorizontalView(modifier: Modifier, data: DivContainer) {
             )
         }
     }
+}
+
+@Composable
+private fun canAlignMainAxisOverflow(
+    containerSize: DivSize,
+    alignment: DivContentAlignmentHorizontal,
+    items: List<Div>,
+    components: Map<Div, DivLocalComponent>?,
+): Boolean {
+    if (containerSize is DivSize.WrapContent) return false
+    if (items.isEmpty()) return false
+    when (alignment) {
+        DivContentAlignmentHorizontal.CENTER,
+        DivContentAlignmentHorizontal.RIGHT,
+        DivContentAlignmentHorizontal.END -> Unit
+        else -> return false
+    }
+    return items.all { item ->
+        item.value().width.canMeasureMainAxisUnbounded(components?.get(item))
+    }
+}
+
+@Composable
+private fun DivSize.canMeasureMainAxisUnbounded(component: DivLocalComponent?): Boolean = when (this) {
+    is DivSize.Fixed -> true
+    is DivSize.MatchParent -> false
+    is DivSize.WrapContent -> (component?.let {
+        value.constrained?.observedValue(component = it)
+    } ?: value.constrained?.observedValue()) != true
 }
 
 @Composable
