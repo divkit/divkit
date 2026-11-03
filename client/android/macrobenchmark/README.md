@@ -53,8 +53,11 @@ The HTML test report is under `build/reports/androidTests/connected/`.
 `Div.CompositionMs` and `Div.RenderEffectsMs` use the first-render durations from
 `HistogramBridge`, matching `DivCompose.Render.Composition.Cold` and
 `DivCompose.Render.Effects.Cold` in `ComposePerformanceTest`. Composition covers
-the measured composable content; render effects cover the interval from its
-completion to the reporter's `DisposableEffect`. These are not GPU effect timings.
+the measured composable content; render effects cover the interval from the end of
+applying its changes (`DivCompose.Render.ApplyChanges.Cold`) to the reporter's
+trailing `DisposableEffect`. Builds before DIVKIT-10725 include applying changes in
+`Div.RenderEffectsMs`, so do not compare it across that change. These are not GPU
+effect timings.
 The bridge writes the durations as Perfetto counters in microseconds, and the test
 converts them to milliseconds. Missing counters fail the test. Both metrics are
 included in the comparison report alongside trace-section timings.

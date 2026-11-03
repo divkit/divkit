@@ -1064,6 +1064,7 @@
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/focus/InputFocusTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/focus/InputFocusTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/font/DivFontFamilyCacheTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/font/DivFontFamilyCacheTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/font/LineMetricsCacheTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/font/LineMetricsCacheTest.kt",
+  "client/android/compose/src/test/kotlin/com/yandex/div/compose/histogram/DivViewHistogramReporterTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/histogram/DivViewHistogramReporterTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImageNetworkRestorationTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImageNetworkRestorationTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImagePreviewDecoderTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImagePreviewDecoderTest.kt",
   "client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImageRequestFactoryTest.kt":"divkit/public/client/android/compose/src/test/kotlin/com/yandex/div/compose/images/ImageRequestFactoryTest.kt",

@@ -18,6 +18,7 @@ import com.yandex.div.compose.DivView
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div2.DivData
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
@@ -134,6 +135,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
                     override val isEnabled = true
                     override val componentName = ""
                     override val histogramBridge = this@DivComposeBenchmarkActivity.histogramBridge
+                    override val prepareFilter = HistogramFilter.ON
                 },
                 imageLoaderConfiguration = object : ImageLoaderConfiguration {
                     override val reportErrors = false

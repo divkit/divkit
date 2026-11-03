@@ -12,6 +12,7 @@ import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.bindRootFocus
 import com.yandex.div2.DivData
+import kotlin.time.measureTimedValue
 
 /**
  * A composable that builds its own layout according to the provided [DivData].
@@ -34,8 +35,8 @@ fun DivView(
     data: DivData,
     modifier: Modifier = Modifier
 ) {
-    val viewContext = divContext.getViewContext(data)
-    viewContext.component.histogramReporter.measure {
+    val (viewContext, prepareDuration) = measureTimedValue { divContext.getViewContext(data) }
+    viewContext.component.histogramReporter.measure(prepareDuration) {
         val localComponent = viewContext.rootLocalComponent
         val boundModifier = modifier.bindRootFocus(viewContext.component.focusBindingStorage)
         viewContext.onComposition()

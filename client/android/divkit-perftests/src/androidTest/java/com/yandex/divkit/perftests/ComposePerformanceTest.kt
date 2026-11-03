@@ -24,8 +24,12 @@ class ComposePerformanceTest : BasePerformanceTest() {
 
     @PerfTestParameter(
         importantMetrics = [
+            "DivCompose.Render.Prepare.Cold",
+            "DivCompose.Render.Prepare.Warm",
             "DivCompose.Render.Composition.Cold",
             "DivCompose.Render.Composition.Warm",
+            "DivCompose.Render.ApplyChanges.Cold",
+            "DivCompose.Render.ApplyChanges.Warm",
             "DivCompose.Render.Effects.Cold",
             "DivCompose.Render.Effects.Warm",
             "DivCompose.Render.Total.Cold",
@@ -45,8 +49,12 @@ class ComposePerformanceTest : BasePerformanceTest() {
 
     @PerfTestParameter(
         importantMetrics = [
+            "DivCompose.Render.Prepare.Cold",
+            "DivCompose.Render.Prepare.Warm",
             "DivCompose.Render.Composition.Cold",
             "DivCompose.Render.Composition.Warm",
+            "DivCompose.Render.ApplyChanges.Cold",
+            "DivCompose.Render.ApplyChanges.Warm",
             "DivCompose.Render.Effects.Cold",
             "DivCompose.Render.Effects.Warm",
             "DivCompose.Render.Total.Cold",
@@ -66,8 +74,12 @@ class ComposePerformanceTest : BasePerformanceTest() {
 
     @PerfTestParameter(
         importantMetrics = [
+            "DivCompose.Render.Prepare.Cold",
+            "DivCompose.Render.Prepare.Warm",
             "DivCompose.Render.Composition.Cold",
             "DivCompose.Render.Composition.Warm",
+            "DivCompose.Render.ApplyChanges.Cold",
+            "DivCompose.Render.ApplyChanges.Warm",
             "DivCompose.Render.Effects.Cold",
             "DivCompose.Render.Effects.Warm",
             "DivCompose.Render.Total.Cold",

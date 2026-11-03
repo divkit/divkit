@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalView
 import com.yandex.div.compose.di.DivViewScope
+import com.yandex.div.histogram.HistogramFilter
 import dev.zacsweers.metro.Inject
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration
@@ -17,27 +18,39 @@ import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
 @DivViewScope
-internal class DivViewHistogramReporter @Inject constructor(
-    private val configuration: DivHistogramConfiguration
+internal class DivViewHistogramReporter(
+    private val configuration: DivHistogramConfiguration,
+    private val timeSource: TimeSource,
 ) {
+    private var prepareDuration: Duration? = null
     private var compositionStartedTime: TimeMark? = null
     private var compositionFinishedTime: TimeMark? = null
+    private var changesAppliedTime: TimeMark? = null
     private var compositionDuration: Duration? = null
+    private var applyChangesDuration: Duration? = null
     private var effectsDuration: Duration? = null
     private var totalDuration: Duration? = null
     private var state = "Cold"
     private var counter by mutableIntStateOf(0)
 
+    @Inject
+    constructor(configuration: DivHistogramConfiguration) :
+        this(configuration, TimeSource.Monotonic)
+
     @Composable
     @SuppressLint("ComposableNaming")
-    inline fun measure(content: @Composable () -> Unit) {
+    inline fun measure(prepareDuration: Duration, content: @Composable () -> Unit) {
         if (!configuration.isEnabled) {
             content()
             return
         }
 
         key(counter) {
-            onCompositionStarted()
+            onCompositionStarted(prepareDuration)
+            DisposableEffect(Unit) {
+                onChangesApplied()
+                onDispose {}
+            }
             content()
             onCompositionFinished()
         }
@@ -65,10 +78,11 @@ internal class DivViewHistogramReporter @Inject constructor(
         counter++
     }
 
-    private fun now() = TimeSource.Monotonic.markNow()
+    private fun now() = timeSource.markNow()
 
-    private fun onCompositionStarted() {
+    private fun onCompositionStarted(prepareDuration: Duration) {
         reset()
+        this.prepareDuration = prepareDuration
         compositionStartedTime = now()
     }
 
@@ -79,16 +93,29 @@ internal class DivViewHistogramReporter @Inject constructor(
         }
     }
 
+    private fun onChangesApplied() {
+        changesAppliedTime = now()
+        if (applyChangesDuration == null) {
+            applyChangesDuration = compositionFinishedTime?.elapsedNow()
+        }
+    }
+
     private fun onEffectsApplied() {
         if (effectsDuration == null) {
-            effectsDuration = compositionFinishedTime?.elapsedNow()
+            effectsDuration = changesAppliedTime?.elapsedNow()
         }
     }
 
     private fun onDrawFinished() {
         if (totalDuration == null) {
             totalDuration = compositionStartedTime?.elapsedNow()
+            report(
+                name = "DivCompose.Render.Prepare",
+                duration = prepareDuration,
+                filter = configuration.prepareFilter
+            )
             report(name = "DivCompose.Render.Composition", duration = compositionDuration)
+            report(name = "DivCompose.Render.ApplyChanges", duration = applyChangesDuration)
             report(name = "DivCompose.Render.Effects", duration = effectsDuration)
             report(name = "DivCompose.Render.Total", duration = totalDuration)
             state = "Warm"
@@ -96,19 +123,26 @@ internal class DivViewHistogramReporter @Inject constructor(
     }
 
     private fun reset() {
+        prepareDuration = null
         compositionStartedTime = null
         compositionFinishedTime = null
+        changesAppliedTime = null
         compositionDuration = null
+        applyChangesDuration = null
         effectsDuration = null
         totalDuration = null
     }
 
-    private fun report(name: String, duration: Duration?) {
-        if (duration == null) {
+    private fun report(
+        name: String,
+        duration: Duration?,
+        filter: HistogramFilter = HistogramFilter.ON,
+    ) {
+        val componentName = configuration.componentName
+        if (duration == null || !filter.report(componentName.ifEmpty { null })) {
             return
         }
 
-        val componentName = configuration.componentName
         val name = if (componentName.isEmpty()) name else "$componentName.$name"
         configuration.histogramBridge.recordTimeHistogram(
             "$name.$state",
