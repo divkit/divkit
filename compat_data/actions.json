@@ -233,6 +233,12 @@
           "version_added": "33.8.0",
           "partial_implementation": true,
           "notes": "Supported only for galleries and pagers."
+        },
+        "ios": {
+          "version_added": "33.10.0"
+        },
+        "web": {
+          "version_added": "33.10.0"
         }
       }
     },
@@ -431,6 +437,9 @@
       "compat": {
         "android": {
           "version_added": "33.7.0"
+        },
+        "web": {
+          "version_added": "33.10.0"
         }
       }
     }

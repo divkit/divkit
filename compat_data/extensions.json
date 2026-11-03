@@ -105,6 +105,9 @@
       "compat": {
         "android": {
           "version_added": "33.7.0"
+        },
+        "web": {
+          "version_added": "33.10.0"
         }
       }
     },
