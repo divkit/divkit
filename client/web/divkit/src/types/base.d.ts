@@ -4,7 +4,7 @@ import type { Border } from './border';
 import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
 import type { Dimension } from './sizes';
-import type { Action, AnimatorDirection, AnimatorRepeatCount, BooleanInt, DisappearAction, DivFunction, DivVariable, Interpolation, VariableTrigger, VisibilityAction } from '../../typings/common';
+import type { Action, DivTimer, AnimatorDirection, AnimatorRepeatCount, BooleanInt, DisappearAction, DivFunction, DivVariable, Interpolation, VariableTrigger, VisibilityAction } from '../../typings/common';
 import type { Focus } from './focus';
 import type { Animation } from './animation';
 
@@ -222,5 +222,6 @@ export interface DivBaseData {
     variables?: DivVariable[];
     variable_triggers?: VariableTrigger[];
     animators?: Animator[];
+    timers?: DivTimer[];
     functions?: DivFunction[];
 }

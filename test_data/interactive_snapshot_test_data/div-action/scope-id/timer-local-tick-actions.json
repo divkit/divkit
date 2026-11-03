@@ -1,0 +1,103 @@
+{
+  "description": "Timer duration, value, tick actions and end actions use owner variables",
+  "platforms": [
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "timer_local_tick_actions",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "id": "tick_scope",
+            "variables": [
+              {
+                "name": "elapsed",
+                "type": "integer",
+                "value": -1
+              },
+              {
+                "name": "ticks",
+                "type": "integer",
+                "value": 0
+              },
+              {
+                "name": "finished",
+                "type": "integer",
+                "value": 0
+              },
+              {
+                "name": "duration",
+                "type": "integer",
+                "value": 100
+              }
+            ],
+            "timers": [
+              {
+                "id": "tick_timer",
+                "duration": "@{duration}",
+                "tick_interval": 50,
+                "value_variable": "elapsed",
+                "tick_actions": [
+                  {
+                    "log_id": "update_ticks",
+                    "typed": {
+                      "type": "set_variable",
+                      "variable_name": "ticks",
+                      "value": {
+                        "type": "integer",
+                        "value": "@{ticks + 1}"
+                      }
+                    }
+                  }
+                ],
+                "end_actions": [
+                  {
+                    "log_id": "update_finished",
+                    "typed": {
+                      "type": "set_variable",
+                      "variable_name": "finished",
+                      "value": {
+                        "type": "integer",
+                        "value": "@{finished + 1}"
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "text": "Tick: @{elapsed}, @{ticks > 0}, @{finished}"
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "start_local_ticks",
+        "scope_id": "tick_scope",
+        "typed": {
+          "type": "timer",
+          "id": "tick_timer",
+          "action": "start"
+        }
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 250
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "tick_scope"
+      },
+      "text": "Tick: 100, true, 1"
+    }
+  ]
+}

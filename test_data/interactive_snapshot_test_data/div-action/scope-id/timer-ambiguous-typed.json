@@ -1,0 +1,189 @@
+{
+  "description": "Typed timer actions reject ambiguous timer IDs in the root and selected scope",
+  "platforms": [
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "timer_owner": {
+        "type": "text",
+        "variables": [
+          {
+            "name": "elapsed",
+            "type": "integer",
+            "value": -1
+          },
+          {
+            "name": "finished",
+            "type": "integer",
+            "value": 0
+          },
+          {
+            "name": "duration",
+            "type": "integer",
+            "value": 60000
+          }
+        ],
+        "timers": [
+          {
+            "id": "shared_timer",
+            "duration": "@{duration}",
+            "value_variable": "elapsed",
+            "end_actions": [
+              {
+                "log_id": "set_finished",
+                "typed": {
+                  "type": "set_variable",
+                  "variable_name": "finished",
+                  "value": {
+                    "type": "integer",
+                    "value": "@{finished + 1}"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "$id": "scope_id",
+        "$text": "status_text"
+      }
+    },
+    "card": {
+      "log_id": "timer_ambiguous_typed",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "id": "all_scopes",
+            "items": [
+              {
+                "type": "text",
+                "id": "root_status",
+                "text": "Root: @{elapsed}, @{finished}"
+              },
+              {
+                "type": "container",
+                "id": "left_scope",
+                "items": [
+                  {
+                    "type": "timer_owner",
+                    "scope_id": "left_timer",
+                    "status_text": "left_timer: @{elapsed}, @{finished}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Left scope"
+                  }
+                ]
+              },
+              {
+                "type": "timer_owner",
+                "scope_id": "right_scope",
+                "status_text": "right_scope: @{elapsed}, @{finished}"
+              }
+            ]
+          }
+        }
+      ],
+      "variables": [
+        {
+          "name": "elapsed",
+          "type": "integer",
+          "value": -1
+        },
+        {
+          "name": "finished",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "duration",
+          "type": "integer",
+          "value": 60000
+        }
+      ],
+      "timers": [
+        {
+          "id": "shared_timer",
+          "duration": "@{duration}",
+          "value_variable": "elapsed",
+          "end_actions": [
+            {
+              "log_id": "set_finished",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "finished",
+                "value": {
+                  "type": "integer",
+                  "value": "@{finished + 1}"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "ambiguous_in_scope",
+        "scope_id": "all_scopes",
+        "typed": {
+          "type": "timer",
+          "id": "shared_timer",
+          "action": "start"
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "start_shared_timer_0",
+        "typed": {
+          "type": "timer",
+          "id": "shared_timer",
+          "action": "start"
+        }
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "start_shared_timer_1",
+        "scope_id": "missing_scope",
+        "typed": {
+          "type": "timer",
+          "id": "shared_timer",
+          "action": "start"
+        }
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "root_status"
+      },
+      "text": "Root: -1, 0"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "left_timer"
+      },
+      "text": "left_timer: -1, 0"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "right_scope"
+      },
+      "text": "right_scope: -1, 0"
+    }
+  ]
+}

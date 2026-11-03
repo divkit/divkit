@@ -1,0 +1,150 @@
+{
+  "description": "A unique nested timer is found globally but not outside the selected subtree",
+  "platforms": [
+    "web"
+  ],
+  "div_data": {
+    "templates": {
+      "timer_owner": {
+        "type": "text",
+        "variables": [
+          {
+            "name": "elapsed",
+            "type": "integer",
+            "value": -1
+          },
+          {
+            "name": "finished",
+            "type": "integer",
+            "value": 0
+          },
+          {
+            "name": "duration",
+            "type": "integer",
+            "value": 60000
+          }
+        ],
+        "timers": [
+          {
+            "id": "shared_timer",
+            "duration": "@{duration}",
+            "value_variable": "elapsed",
+            "end_actions": [
+              {
+                "log_id": "set_finished",
+                "typed": {
+                  "type": "set_variable",
+                  "variable_name": "finished",
+                  "value": {
+                    "type": "integer",
+                    "value": "@{finished + 1}"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "$id": "scope_id",
+        "$text": "status_text"
+      }
+    },
+    "card": {
+      "log_id": "timer_unique_lookup",
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "id": "all_scopes",
+            "items": [
+              {
+                "type": "container",
+                "id": "left_scope",
+                "items": [
+                  {
+                    "type": "timer_owner",
+                    "scope_id": "left_timer",
+                    "status_text": "left_timer: @{elapsed}, @{finished}"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Left scope"
+                  }
+                ]
+              },
+              {
+                "type": "timer_owner",
+                "scope_id": "unique_scope",
+                "status_text": "Unique: @{elapsed}, @{finished}",
+                "timers": [
+                  {
+                    "id": "unique_timer",
+                    "duration": "@{duration}",
+                    "value_variable": "elapsed",
+                    "end_actions": [
+                      {
+                        "log_id": "set_finished",
+                        "typed": {
+                          "type": "set_variable",
+                          "variable_name": "finished",
+                          "value": {
+                            "type": "integer",
+                            "value": "@{finished + 1}"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "start_unique_timer_20",
+        "scope_id": "left_scope",
+        "typed": {
+          "type": "timer",
+          "id": "unique_timer",
+          "action": "start"
+        }
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "unique_scope"
+      },
+      "text": "Unique: -1, 0"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "start_unique_timer_22",
+        "url": "div-action://timer?id=unique_timer&action=start"
+      }
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "stop_unique_timer_23",
+        "url": "div-action://timer?id=unique_timer&action=stop"
+      }
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "unique_scope"
+      },
+      "text": "Unique: 0, 1"
+    }
+  ]
+}

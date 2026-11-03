@@ -6,7 +6,7 @@ import { type LogError, wrapError } from './wrapError';
 
 interface TimerState {
     state: 'stopped' | 'running' | 'paused';
-    definition: DivTimer;
+    definition: MaybeMissing<DivTimer>;
     duration?: number;
     tick?: number;
     durationTimeout?: number;
@@ -34,6 +34,7 @@ type SetVariableValueFunc = (name: string, value: unknown) => void;
 
 export class TimersController {
     private readonly timers: Map<string, TimerState> = new Map();
+    private destroyed = false;
     private readonly logError: LogError;
     private readonly applyVars: ApplyVarsFunc;
     private readonly hasVariableWithType: HasVariableWithTypeFunc;
@@ -74,14 +75,17 @@ export class TimersController {
     }
 
     destroy(): void {
+        this.destroyed = true;
+        this.awaitActions = [];
         document.removeEventListener('visibilitychange', this.visibilityHandler);
 
         for (const [_id, timer] of this.timers) {
+            timer.state = 'stopped';
             this.stopTimerTimeouts(timer);
         }
     }
 
-    createTimer(timer: DivTimer) {
+    createTimer(timer: MaybeMissing<DivTimer>) {
         if (!timer?.id) {
             this.logError(wrapError(new Error('Missing timer id')));
             return;
@@ -101,7 +105,15 @@ export class TimersController {
         });
     }
 
+    hasTimer(id: string): boolean {
+        return this.timers.has(id);
+    }
+
     execTimerAction(id: string | null | undefined, action: string | null | undefined) {
+        if (this.destroyed) {
+            return;
+        }
+
         if (!id || !action || !this.timers.has(id) || !AVAIL_ACTIONS.has(action)) {
             this.logError(wrapError(new Error('Incorrect timer action'), {
                 additional: {
@@ -153,6 +165,10 @@ export class TimersController {
     }
 
     private startOrResume(timer: TimerState): void {
+        if (this.destroyed) {
+            return;
+        }
+
         timer.state = 'running';
         timer.hold = false;
 
@@ -263,6 +279,10 @@ export class TimersController {
     }
 
     private stop(timer: TimerState): void {
+        if (this.destroyed) {
+            return;
+        }
+
         if (timer.state === 'stopped') {
             this.logError(wrapError(new Error('The timer has already been stopped')));
             return;

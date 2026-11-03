@@ -1,0 +1,223 @@
+{
+  "description": "Timer actions search for a card timer within scope_id",
+  "platforms": [
+    "web"
+  ],
+  "div_data": {
+    "card": {
+      "log_id": "timer_scope_id_test",
+      "variables": [
+        {
+          "name": "typed_timer_finished",
+          "type": "boolean",
+          "value": false
+        },
+        {
+          "name": "url_timer_finished",
+          "type": "boolean",
+          "value": false
+        }
+      ],
+      "timers": [
+        {
+          "id": "typed_timer",
+          "duration": 50,
+          "end_actions": [
+            {
+              "log_id": "typed_timer_finished",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "typed_timer_finished",
+                "value": {
+                  "type": "boolean",
+                  "value": true
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "url_timer",
+          "duration": 50,
+          "end_actions": [
+            {
+              "log_id": "url_timer_finished",
+              "typed": {
+                "type": "set_variable",
+                "variable_name": "url_timer_finished",
+                "value": {
+                  "type": "boolean",
+                  "value": true
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "container",
+            "items": [
+              {
+                "type": "text",
+                "id": "duplicate_scope",
+                "text": "First scope"
+              },
+              {
+                "type": "text",
+                "id": "duplicate_scope",
+                "text": "Second scope"
+              },
+              {
+                "type": "text",
+                "id": "typed_status",
+                "text": "Typed timer finished: @{typed_timer_finished}"
+              },
+              {
+                "type": "text",
+                "id": "url_status",
+                "text": "URL timer finished: @{url_timer_finished}"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "ambiguous_typed_timer",
+        "scope_id": "duplicate_scope",
+        "typed": {
+          "type": "timer",
+          "id": "typed_timer",
+          "action": "start"
+        }
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 250
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "typed_status"
+      },
+      "text": "Typed timer finished: false"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "scoped_typed_timer",
+        "scope_id": "typed_status",
+        "typed": {
+          "type": "timer",
+          "id": "typed_timer",
+          "action": "start"
+        }
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 250
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "typed_status"
+      },
+      "text": "Typed timer finished: false"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "missing_typed_timer_scope",
+        "scope_id": "missing_scope",
+        "typed": {
+          "type": "timer",
+          "id": "typed_timer",
+          "action": "start"
+        }
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 250
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "typed_status"
+      },
+      "text": "Typed timer finished: true"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "ambiguous_url_timer",
+        "scope_id": "duplicate_scope",
+        "url": "div-action://timer?id=url_timer&action=start"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 250
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "url_status"
+      },
+      "text": "URL timer finished: false"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "scoped_url_timer",
+        "scope_id": "url_status",
+        "url": "div-action://timer?id=url_timer&action=start"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 250
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "url_status"
+      },
+      "text": "URL timer finished: false"
+    },
+    {
+      "type": "div_action",
+      "action": {
+        "log_id": "missing_url_timer_scope",
+        "scope_id": "missing_scope",
+        "url": "div-action://timer?id=url_timer&action=start"
+      }
+    },
+    {
+      "type": "wait",
+      "duration_ms": 250
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "url_status"
+      },
+      "text": "URL timer finished: true"
+    }
+  ]
+}

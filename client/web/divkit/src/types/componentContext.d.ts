@@ -1,4 +1,5 @@
 import type { Readable } from 'svelte/store';
+import type { TimersController } from '../utils/timers';
 import type { Action, DivExtension, TemplateContext } from '../../typings/common';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
@@ -76,6 +77,7 @@ export interface ComponentContext<T extends DivBaseData = DivBaseData> {
     parentContext?: ComponentContext;
     id: string;
     animators?: Record<string, MaybeMissing<Animator>>;
+    timersController?: TimersController;
     runningAnimators?: Map<string, AnimatorInstance>;
     shownTooltips?: Set<string>;
     states?: Record<string, StateSetter[]>;

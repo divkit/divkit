@@ -28,6 +28,7 @@
         ComponentCallback,
         CustomActionCallback,
         DivBase,
+        DivTimer,
         DivJson,
         ErrorCallback,
         Platform,
@@ -243,7 +244,7 @@
     const awaitingGlobalVariables = new Map<string, Writable<any>>();
     const awaitingGlobalVariablesFacades = new Map<string, Variable>();
 
-    let timersController: TimersController | null = null;
+    const allTimersControllers = new Set<TimersController>();
 
     const allRunningAnimators: Set<AnimatorInstance> = new Set();
 
@@ -1285,6 +1286,57 @@
         }
     }
 
+    function findTimer(
+        scope: ComponentContext,
+        timerId: string,
+        isScopeFound: boolean
+    ): TimersController | undefined {
+        const found = new Set<TimersController>();
+        const walk = (context: ComponentContext) => {
+            if (context.children) {
+                for (const child of context.children) {
+                    walk(child);
+                }
+            }
+            if (context.timersController?.hasTimer(timerId)) {
+                found.add(context.timersController);
+            }
+        };
+        walk(scope);
+
+        if (found.size === 1) {
+            return [...found][0];
+        } else if (found.size > 1) {
+            scope.logError(wrapError(new Error(`Timer with id '${timerId}' is ambiguous${isScopeFound ? ' in scope' : ''}`), {
+                additional: {
+                    count: found.size
+                }
+            }));
+        } else {
+            scope.logError(wrapError(new Error(`Timer with id '${timerId}' not found${isScopeFound ? ' in scope' : ''}`)));
+        }
+    }
+
+    function callTimerAction(
+        timerId: string | null | undefined,
+        action: string | null | undefined,
+        scope: ComponentContext,
+        isScopeFound: boolean,
+        log: LogError
+    ): void {
+        if (!timerId) {
+            log(wrapError(new Error('Incorrect timer action'), {
+                additional: {
+                    id: timerId,
+                    action
+                }
+            }));
+            return;
+        }
+
+        findTimer(scope, timerId, isScopeFound)?.execTimerAction(timerId, action);
+    }
+
     function findTooltip(
         scope: ComponentContext,
         tooltipId: string,
@@ -1338,7 +1390,7 @@
         const typedType = actionTyped?.type;
 
         const actionUrl = action.url ? String(action.url) : '';
-        const urlType = actionUrl.startsWith('div-action://') ? /^div-action:\/\/(.+)($|\?)/.exec(actionUrl)?.[0] : '';
+        const urlType = /^div-action:\/\/([^?]+)/.exec(actionUrl)?.[1];
 
         const isNewLogic =
             typedType === 'focus_element' ||
@@ -1364,7 +1416,9 @@
             typedType === 'show_tooltip' ||
             typedType === 'hide_tooltip' ||
             urlType === 'show_tooltip' ||
-            urlType === 'hide_tooltip';
+            urlType === 'hide_tooltip' ||
+            typedType === 'timer' ||
+            urlType === 'timer';
 
         let scopeContext = rootComponentContext;
         let isScopeFound = false;
@@ -1573,16 +1627,7 @@
                     break;
                 }
                 case 'timer': {
-                    if (timersController) {
-                        timersController.execTimerAction(actionTyped.id, actionTyped.action);
-                    } else {
-                        log(wrapError(new Error('Incorrect timer action'), {
-                            additional: {
-                                id: actionTyped.id,
-                                action: actionTyped.action
-                            }
-                        }));
-                    }
+                    callTimerAction(actionTyped.id, actionTyped.action, scopeContext, isScopeFound, log);
                     break;
                 }
                 case 'download': {
@@ -1741,16 +1786,7 @@
                         const timerAction = params.get('action');
                         const id = params.get('id');
 
-                        if (timersController) {
-                            timersController.execTimerAction(id, timerAction);
-                        } else {
-                            log(wrapError(new Error('Incorrect timer action'), {
-                                additional: {
-                                    id,
-                                    action: timerAction
-                                }
-                            }));
-                        }
+                        callTimerAction(id, timerAction, scopeContext, isScopeFound, log);
                         break;
                     case 'video': {
                         const target = findComponentContextWithInfo(scopeContext, params.get('id'), 'video', isScopeFound);
@@ -2214,6 +2250,23 @@
         return customFunctions;
     }
 
+    function initTimers(context: ComponentContext, timers: MaybeMissing<DivTimer>[] | undefined): void {
+        if (!Array.isArray(timers) || !timers.length || typeof document === 'undefined') {
+            return;
+        }
+
+        const controller = new TimersController({
+            logError: context.logError,
+            applyVars: json => context.getJsonWithVars(json),
+            hasVariableWithType: (name, type) => context.getVariable(name)?.getType() === type,
+            setVariableValue: (name, value) => context.getVariable(name)?.setValue(value),
+            execAnyActions: (actions, opts) => context.execAnyActions(actions, opts)
+        });
+        context.timersController = controller;
+        allTimersControllers.add(controller);
+        timers.forEach(timer => controller.createTimer(timer));
+    }
+
     function produceComponentContext(from?: ComponentContext | undefined): ComponentContext {
         const ctx: ComponentContext = {
             id: '',
@@ -2351,6 +2404,10 @@
                             },
                             {}
                         );
+                }
+
+                if (!opts.fake && !componentContext.fakeElement) {
+                    initTimers(componentContext, childProcessedJson.timers);
                 }
 
                 if (opts.fake) {
@@ -2509,6 +2566,10 @@
                 return this.viewInfo[name];
             },
             destroy() {
+                if (ctx.timersController) {
+                    ctx.timersController.destroy();
+                    allTimersControllers.delete(ctx.timersController);
+                }
                 const set = componentContextMap.get(ctx.id);
                 if (set) {
                     set.delete(ctx);
@@ -2661,25 +2722,6 @@
     setContext<EnabledCtxValue>(ENABLED_CTX, {
         isEnabled: constStore(true)
     });
-
-    function hasVariableWithType(name: string, type: VariableType): boolean {
-        const instance = variables.get(name);
-
-        return instance?.getType() === type;
-    }
-
-    function setVariableValue(name: string, value: unknown): void {
-        const variableInstance = variables.get(name);
-        if (variableInstance) {
-            variableInstance.setValue(value);
-        } else {
-            logError(wrapError(new Error('Cannot find variable'), {
-                additional: {
-                    name
-                }
-            }));
-        }
-    }
 
     function constructProperty(
         variable: MaybeMissing<DivPropertyVariable>,
@@ -2931,23 +2973,13 @@
         processVariableTriggers(undefined, json?.card?.variable_triggers);
     };
 
-    const timers = json?.card?.timers;
-    if (timers && typeof document !== 'undefined') {
-        const controller = timersController = new TimersController({
-            logError,
-            applyVars: json => getJsonWithVars(logError, json),
-            hasVariableWithType,
-            setVariableValue,
-            execAnyActions
-        });
-        timers.forEach(timer => controller.createTimer(timer));
-    }
-
     $: states = json?.card?.states;
     const rootComponentContext = produceComponentContext();
     if (Array.isArray(json.card?.functions)) {
         rootComponentContext.customFunctions = prepareCustomFunctions(json.card.functions);
     }
+
+    initTimers(rootComponentContext, json.card?.timers);
 
     let rootStateComponentContext: ComponentContext | undefined;
     $: if (states && !hasError && !hasIdError) {
@@ -3010,9 +3042,10 @@
             instance.stop();
         }
 
-        if (timersController) {
-            timersController.destroy();
+        for (const controller of allTimersControllers) {
+            controller.destroy();
         }
+        allTimersControllers.clear();
 
         tooltips.forEach(info => {
             if (info.timeoutId) {
