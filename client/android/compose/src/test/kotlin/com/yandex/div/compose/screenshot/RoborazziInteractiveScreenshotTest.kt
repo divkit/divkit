@@ -18,13 +18,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.platform.ViewConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isFocused
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -35,10 +38,10 @@ import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziTaskType
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.provideRoborazziContext
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
+import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.internal.DivDebugConfiguration
@@ -90,19 +93,22 @@ class RoborazziInteractiveScreenshotTest(
     private val expectedErrorCount = configuration.runtimeErrorCount
     private val painterTracker = ImagePainterTracker()
     private val reporter = TestReporter().apply { failOnError = expectedErrorCount == null }
-    private val testScope = TestScope(UnconfinedTestDispatcher())
+    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testScope = TestScope(testDispatcher)
 
     private val divContext = DivContext(
         baseContext = getApplicationContext(),
-        configuration = DivConfiguration(
-            extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler()),
-            fontSourceProvider = TestFontSourceProvider(),
-            imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext()),
-            reporter = reporter,
-        ),
+        configuration = divConfiguration {
+            extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler())
+            fontSourceProvider = TestFontSourceProvider()
+            imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext())
+            networkClient = LocalNetworkClient()
+            reporter = this@RoborazziInteractiveScreenshotTest.reporter
+        },
         debugConfiguration = DivDebugConfiguration(
             coroutineScope = testScope,
             imagePainterStateListener = painterTracker::onStateChanged,
+            ioDispatcher = testDispatcher,
             timeSource = testScope.testScheduler.timeSource,
         )
     )
@@ -129,15 +135,15 @@ class RoborazziInteractiveScreenshotTest(
                 LocalLayoutDirection provides configuration.baseConfiguration.layoutDirection
             ) {
                 viewConfiguration = LocalViewConfiguration.current
+                // Keep the view composed: a pager can have zero height before its next layout pass.
+                Box(
+                    modifier = Modifier
+                        .onSizeChanged { isViewEmpty = it.width == 0 || it.height == 0 },
+                ) {
+                    DivView(data = data)
+                }
                 if (isViewEmpty) {
-                    Text("<Empty>")
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .onSizeChanged { isViewEmpty = it.width == 0 || it.height == 0 },
-                    ) {
-                        DivView(data = data)
-                    }
+                    Text("<Empty>", modifier = Modifier.testTag(EMPTY_VIEW_TAG))
                 }
             }
         }
@@ -159,8 +165,6 @@ class RoborazziInteractiveScreenshotTest(
                 is Step.VerifySnapshot -> verifySnapshot(step, index, recordedSnapshotNames)
                 is Step.Wait -> wait(step)
             }
-
-            isViewEmpty = false
         }
 
         composeRule.waitForIdle()
@@ -219,10 +223,18 @@ class RoborazziInteractiveScreenshotTest(
             outputDirectoryPath = "${options.compareOptions.outputDirectoryPath}/interactive/" +
                     "${configuration.baseConfiguration.name}/step$index",
         )
-        val target = step.id?.let {
-            composeRule.onNodeWithTag(it, useUnmergedTree = true)
-                .assertExists("Failed to find screenshot target with div_id '$it'")
-        } ?: composeRule.onRoot()
+
+        val id = step.id
+        val target = when {
+            id != null ->
+                composeRule
+                    .onNodeWithTag(id, useUnmergedTree = true)
+                    .assertExists("Failed to find screenshot target: $id")
+
+            onNodeWithTag(EMPTY_VIEW_TAG).isDisplayed() -> onNodeWithTag(EMPTY_VIEW_TAG)
+            else -> composeRule.onRoot()
+        }
+
         target.captureRoboImage(
             filePath = getScreenshotFilePath(
                 "interactive/${configuration.baseConfiguration.name}/${step.name}"
@@ -270,3 +282,5 @@ class RoborazziInteractiveScreenshotTest(
         fun cases() = cases
     }
 }
+
+private const val EMPTY_VIEW_TAG = "empty_view"
