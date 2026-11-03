@@ -1,7 +1,6 @@
 # DivKit for iOS client library
 
 [![SwiftPM](https://img.shields.io/badge/SPM-supported-DE5C43)](https://github.com/divkit/divkit-ios)
-[![CocoaPods](https://img.shields.io/badge/CocoaPods-supported-DE5C43)](https://github.com/divkit/divkit-ios/tree/main/Specs)
 ![Size](https://img.shields.io/badge/ipa%20size-~6%20MB-blue)
 
 ## How it works
@@ -20,18 +19,9 @@ Although DivKit produces UIKit views, it can be easily used in SwiftUI apps (see
 
 ## Installing DivKit
 
-DivKit supports [Swift Package Manager](https://www.swift.org/package-manager/) and [CocoaPods](https://cocoapods.org/).
+Install DivKit with [Swift Package Manager](https://www.swift.org/package-manager/) using this repository: https://github.com/divkit/divkit-ios.git.
 
-Use this repository to install DivKit using Swift Package Manager: https://github.com/divkit/divkit-ios.git.
-
-Add `DivKit` pod into your application `Podfile` to install DivKit using CocoaPods:
-```
-source 'https://github.com/divkit/divkit-ios.git'
-
-target 'MyApp' do
-  pod 'DivKit'
-end
-```
+New DivKit versions are no longer published to CocoaPods. Previously published pods remain available; see [Specs](https://github.com/divkit/divkit-ios/tree/main/Specs) for the last published versions.
 
 ## DivKit Project
 
