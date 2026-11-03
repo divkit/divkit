@@ -12,7 +12,7 @@ import com.yandex.div2.DivSize
 fun pager(
     id: String? = null,
     itemBuilder: DivCollectionItemBuilder? = null,
-    items: List<Div> = emptyList(),
+    items: List<Div>? = emptyList(),
     height: DivSize = wrapContent(),
     width: DivSize = matchParent(),
     defaultItem: Long = 0,
@@ -20,9 +20,11 @@ fun pager(
     layoutMode: DivPagerLayoutMode = DivPagerLayoutMode.PageContentSize(DivPageContentSize()),
     orientation: DivPager.Orientation = DivPager.Orientation.HORIZONTAL,
     scrollAxisAlignment: DivPager.ItemAlignment = DivPager.ItemAlignment.CENTER,
+    itemCountVariable: String? = null,
 ): Div.Pager = Div.Pager(DivPager(
     defaultItem = constant(defaultItem),
     infiniteScroll = constant(infiniteScroll),
+    itemCountVariable = itemCountVariable,
     id = id,
     itemBuilder = itemBuilder,
     items = items,

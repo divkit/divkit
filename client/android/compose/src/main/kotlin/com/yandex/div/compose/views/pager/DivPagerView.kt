@@ -3,6 +3,7 @@ package com.yandex.div.compose.views.pager
 import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,6 +19,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.rememberAndStoreState
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.compose.utils.observedValue
+import com.yandex.div.compose.variables.mutableStateFromIntegerVariable
 import com.yandex.div.compose.views.modifiers.constrainUnboundedMax
 import com.yandex.div.compose.views.modifiers.onMeasureConstraints
 import com.yandex.div2.Div
@@ -30,6 +32,16 @@ internal fun DivPagerView(
 ) {
     val collectionItems = data.observeStaticItems(data.items)
     val items = collectionItems.observeVisible()
+
+    data.itemCountVariable?.let { variableName ->
+        val countState = mutableStateFromIntegerVariable(variableName)
+        SideEffect {
+            val count = items.size.toLong()
+            if (countState != null && countState.value != count) {
+                countState.value = count
+            }
+        }
+    }
 
     if (items.isEmpty()) {
         LocalDivViewContext.current.pagerStateStorage.rememberAndStoreState(

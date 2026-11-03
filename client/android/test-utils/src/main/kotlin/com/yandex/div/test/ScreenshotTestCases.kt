@@ -196,7 +196,6 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-gallery/state-preservation-with-variables.json",
     "div-gallery/wrap-content-height-after-scroll.json",
     "div-input/capture-focus-on-action.json",
-    "div-pager/item_count.json",
     "div-pager/item_count_builder.json",
     "div-pager/multi-page-scroll.json",
     "div-state/multiple-root-state-switching.json",

@@ -1,5 +1,5 @@
 {
-  "description": "",
+  "description": "Pager updates item_count_variable when an item is hidden and restored",
   "platforms": [
     "android",
     "ios",
@@ -178,7 +178,8 @@
                   {
                     "type": "text",
                     "text": "Item count: @{count}",
-                    "font_size": 32
+                    "font_size": 32,
+                    "id": "item_count_text"
                   },
                   {
                     "type": "text",
@@ -218,6 +219,14 @@
       "name": "step0"
     },
     {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "item_count_text"
+      },
+      "text": "Item count: 3"
+    },
+    {
       "type": "div_action",
       "action": {
         "url": "div-action://set_variable?name=is_visible&value=false",
@@ -229,6 +238,14 @@
       "name": "step1"
     },
     {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "item_count_text"
+      },
+      "text": "Item count: 2"
+    },
+    {
       "type": "div_action",
       "action": {
         "url": "div-action://set_variable?name=is_visible&value=true",
@@ -238,6 +255,14 @@
     {
       "type": "verify_snapshot",
       "name": "step2"
+    },
+    {
+      "type": "verify_text",
+      "target": {
+        "type": "div_id",
+        "id": "item_count_text"
+      },
+      "text": "Item count: 3"
     }
   ]
 }
