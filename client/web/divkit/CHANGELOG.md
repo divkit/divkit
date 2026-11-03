@@ -1,3 +1,11 @@
+## 33.10.0 (November 2, 2026)
+
+* Added `multi_page_scroll` support to the Web pager, with continuous cyclic inertia for infinite pagers.
+* Added support for `duration` in typed `scroll` actions.
+* Added typed `extension_action` for extensions, including Lottie `start` and `stop` commands. Start rewinds and plays the animation; Stop rewinds and leaves it stopped.
+* Fixed errors and repeated actions of `variable_triggers` in elements with `transition_in`, `transition_out` or `transition_change` inside a `state` and in the pages of a `pager` with `infinite_scroll`.
+
+
 ## 33.9.0 (October 26, 2026)
 
 * The `select_all_on_focus` property for `input` now works with `focus` action as well.
