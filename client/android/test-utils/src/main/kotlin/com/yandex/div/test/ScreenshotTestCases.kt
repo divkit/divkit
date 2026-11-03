@@ -92,7 +92,6 @@ val composeDeviceScreenshotCases = setOf(
 )
 
 val composeRoborazziIgnoredScreenshotCases = setOf(
-
     // div-container.aspect not fully supported
     "div-container/aspect/wrap_content-width-horizontal.json",
     "div-container/aspect/wrap_content-width-overlap.json",
@@ -182,29 +181,23 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
 )
 
 val composeIgnoredInteractiveScreenshotCases = setOf(
+    // Image blur uses RenderScript, which is not supported in Robolectric.
+    "div-image/blur.json",
+    "div-text/background-image-blur.json",
+
     "div-action/custom-action.json",
-    "div-action/focus-revealed-element.json",
     "div-action/scope-id/focus-element.json",
     "div-action/scope-id/set-cursor-position.json",
     "div-container/item-builder-actions.json",
-    "div-container/separators.json",
-    "div-container/specific-properties.json",
-    "div-container/visibility_actions_visible_block.json",
-    "div-container/wrap/separators.json",
     "div-extension/gesture.json",
-    "div-gallery/expand-collapse-default.json",
     "div-gallery/item-builder.json",
-    "div-gallery/items_visibility.json",
     "div-gallery/state-change-action-synchronization.json",
     "div-gallery/state-change-variable-synchronization.json",
     "div-gallery/state-preservation-with-variables.json",
     "div-gallery/wrap-content-height-after-scroll.json",
-    "div-image/blur.json",
     "div-input/capture-focus-on-action.json",
     "div-pager/item_count.json",
     "div-pager/item_count_builder.json",
     "div-pager/multi-page-scroll.json",
     "div-state/multiple-root-state-switching.json",
-    "div-text/background-image-blur.json",
-    "div-transform/rotation-after-rebind.json",
 )
