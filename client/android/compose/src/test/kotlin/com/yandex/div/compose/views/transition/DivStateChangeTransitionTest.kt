@@ -16,7 +16,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.setContent
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data

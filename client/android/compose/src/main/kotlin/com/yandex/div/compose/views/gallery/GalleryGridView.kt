@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize

@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div2.DivSize

@@ -4,7 +4,7 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.timers.TimerStorage
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div2.DivActionTimer
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class TimerActionHandler @Inject constructor(
     private val reporter: DivReporter,

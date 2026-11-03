@@ -31,7 +31,7 @@ import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.internal.DivDebugConfiguration

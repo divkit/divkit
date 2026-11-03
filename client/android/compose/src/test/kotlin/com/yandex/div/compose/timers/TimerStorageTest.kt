@@ -637,10 +637,10 @@ class TimerStorageTest {
     private fun init(vararg timers: DivTimer) {
         timerStorage = TimerStorage(
             data = data(states = emptyList(), timers = timers.asList()),
-            actionHandler = { actionHandler },
+            actionHandler = lazy { actionHandler },
             mainCoroutineScope = testScope,
             reporter = reporter,
-            rootLocalComponent = {
+            rootLocalComponent = lazy {
                 mockLocalComponent(
                     variableController = variableController,
                 )

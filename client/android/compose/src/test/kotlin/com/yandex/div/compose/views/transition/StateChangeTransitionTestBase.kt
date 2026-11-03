@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.custom.DivCustomViewFactory
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler

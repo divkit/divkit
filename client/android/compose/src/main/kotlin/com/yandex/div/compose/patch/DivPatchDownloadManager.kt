@@ -3,8 +3,8 @@ package com.yandex.div.compose.patch
 import android.net.Uri
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
-import com.yandex.div.compose.dagger.DivViewScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivViewScope
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 

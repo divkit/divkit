@@ -1,7 +1,7 @@
 package com.yandex.div.compose.scroll
 
-import com.yandex.div.compose.dagger.DivViewScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivViewScope
+import dev.zacsweers.metro.Inject
 
 /**
  * Keeps all currently composed targets for each id, including duplicates.

@@ -12,19 +12,18 @@ import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.collection.CollectionItemScopeStorage
 import com.yandex.div.compose.context.CompositionKeyStorage
 import com.yandex.div.compose.context.DivLocalComponentStorage
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.dagger.Names
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.DivViewScope
+import com.yandex.div.compose.di.Names
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.internal.patch.DivPatchApply
 import com.yandex.div.internal.patch.DivPatchMap
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
-import com.yandex.yatagan.Lazy
-import javax.inject.Inject
-import javax.inject.Named
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 
 /**
  * Coordinates patch application with Compose updates: keeps old component aliases until the
@@ -52,7 +51,7 @@ internal class DivPatchCoordinator @Inject constructor(
     )
 
     fun applyPatch(patch: DivPatch, onApplied: () -> Unit = {}): Boolean {
-        val rootLocalComponent = rootLocalComponent.get()
+        val rootLocalComponent = rootLocalComponent.value
         val patchApply = DivPatchApply(
             patch = DivPatchMap(patch),
             errorLogger = { rootLocalComponent.reporter.reportError(it) },

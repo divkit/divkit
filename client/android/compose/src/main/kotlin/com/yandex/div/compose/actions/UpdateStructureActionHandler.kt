@@ -5,7 +5,7 @@ import com.yandex.div.data.Variable
 import com.yandex.div.internal.actions.UpdateStructureHelper
 import com.yandex.div.internal.variables.evaluateAsPrimitive
 import com.yandex.div2.DivActionUpdateStructure
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class UpdateStructureActionHandler @Inject constructor(
     private val reporter: DivReporter

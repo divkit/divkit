@@ -2,19 +2,19 @@ package com.yandex.div.compose.patch
 
 import android.net.Uri
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivContextScope
-import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.di.DivContextScope
+import com.yandex.div.compose.di.Names
 import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div.core.network.DivNetworkRequest
 import com.yandex.div.core.network.readBytes
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div2.DivPatch
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
+import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.io.IOException
-import javax.inject.Inject
-import javax.inject.Named
 
 @DivContextScope
 internal class DefaultPatchDownloader @Inject constructor(

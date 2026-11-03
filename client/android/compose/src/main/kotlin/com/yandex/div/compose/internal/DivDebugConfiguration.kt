@@ -1,14 +1,10 @@
 package com.yandex.div.compose.internal
 
 import coil3.compose.AsyncImagePainter
-import com.yandex.div.compose.dagger.Names
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.yatagan.Module
-import com.yandex.yatagan.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Named
 import kotlin.time.TimeSource
 
 /**
@@ -20,7 +16,6 @@ import kotlin.time.TimeSource
  * @see com.yandex.div.compose.DivContext
  */
 @InternalApi
-@Module
 class DivDebugConfiguration(
 
     /**
@@ -31,8 +26,6 @@ class DivDebugConfiguration(
     /**
      * Overrides the default [kotlinx.coroutines.Dispatchers.IO].
      */
-    @get:Provides
-    @get:Named(Names.IO_DISPATCHER)
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 
     /**
@@ -46,13 +39,8 @@ class DivDebugConfiguration(
      * Provide custom value (e.g. TestCoroutineScheduler.timeSource) to mock the time source in
      * tests.
      */
-    @get:Provides
     val timeSource: TimeSource = TimeSource.Monotonic,
 ) {
-    @get:Provides
-    internal val configuration: DivDebugConfiguration
-        get() = this
-
     companion object {
         val Default = DivDebugConfiguration()
     }

@@ -5,8 +5,8 @@ import com.yandex.div.data.Variable
 import com.yandex.div.internal.util.clone
 import com.yandex.div.internal.variables.evaluateAsPrimitive
 import com.yandex.div2.DivActionDictSetValue
+import dev.zacsweers.metro.Inject
 import org.json.JSONObject
-import javax.inject.Inject
 
 internal class DictSetValueActionHandler @Inject constructor(
     private val reporter: DivReporter

@@ -16,7 +16,7 @@ import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.IntSize
 import com.yandex.div.compose.context.DivViewContext
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase

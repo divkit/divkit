@@ -28,6 +28,7 @@ ksp = "2.3.11"
 lottie = "6.7.1"
 markwon = "4.6.2"
 metalava = "0.5.0"
+metro = "0.11.3"  # Keep Java 17 and Kotlin language/API level 2.2 compatibility.
 mockito-kotlin = "6.4.0"
 okhttp = "4.12.0"
 protobuf = "4.35.1"
@@ -209,4 +210,5 @@ kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "ko
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

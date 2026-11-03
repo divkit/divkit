@@ -3,7 +3,6 @@ package com.yandex.div.compose
 import android.net.Uri
 import com.yandex.div.compose.actions.DivExternalActionHandler
 import com.yandex.div.compose.custom.DivCustomViewFactory
-import com.yandex.div.compose.dagger.Names
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.font.DefaultFontSourceProvider
 import com.yandex.div.compose.font.DivFontSourceProvider
@@ -19,9 +18,6 @@ import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div2.DivExtension
-import com.yandex.yatagan.Module
-import com.yandex.yatagan.Provides
-import javax.inject.Named
 
 /**
  * Entry point of DivKit `compose` library. Provides configuration for composing [DivView]s.
@@ -36,53 +32,35 @@ import javax.inject.Named
  *        DivView(data = data)
  *    }
  */
-@Module
 class DivConfiguration private constructor(
-    @get:Provides
     val actionHandler: DivExternalActionHandler,
 
-    @get:Provides
     val animationsEnabledProvider: DivAnimationsEnabledProvider,
 
-    @get:Provides
     val customViewFactories: Map<String, DivCustomViewFactory>,
 
-    @get:Provides
     val extensionHandlers: Map<String, DivExtensionHandler>,
 
-    @get:Provides
     val fontSourceProvider: DivFontSourceProvider,
 
-    @get:Provides
     val histogramConfiguration: DivHistogramConfiguration,
 
-    @get:Provides
     val imageLoaderConfiguration: ImageLoaderConfiguration,
 
     val patchDownloader: DivPatchDownloader?,
 
-    @get:Provides
     val playerFactory: DivVideoPlayerFactory,
 
-    @get:Provides
     val networkClient: DivNetworkClient,
 
-    @get:Provides
     val reporter: DivReporter,
 
-    @get:Provides
-    @get:Named(Names.HOST_VARIABLES)
     val variableController: DivVariableController,
 
-    @get:Provides
     val videoPreloader: DivVideoPreloader,
 
     val wildcardExtensionHandlers: Map<String, DivExtensionHandler>,
 ) {
-    @get:Provides
-    internal val configuration: DivConfiguration
-        get() = this
-
     internal val wildcardExtensions: List<Pair<DivExtension, DivExtensionHandler>> =
         wildcardExtensionHandlers.map { (id, handler) -> DivExtension(id = id) to handler }
 

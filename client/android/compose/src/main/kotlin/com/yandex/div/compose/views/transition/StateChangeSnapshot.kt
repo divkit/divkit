@@ -17,7 +17,7 @@ import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalGraphicsContext
 import androidx.compose.ui.unit.IntOffset
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div2.DivAppearanceTransition
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope

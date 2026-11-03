@@ -9,9 +9,9 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalView
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
+import dev.zacsweers.metro.Inject
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource

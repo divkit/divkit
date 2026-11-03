@@ -1,4 +1,4 @@
-package com.yandex.div.compose.dagger
+package com.yandex.div.compose.di
 
 import androidx.compose.runtime.MutableState
 import com.yandex.div.compose.actions.ActionMenuHolder
@@ -26,15 +26,13 @@ import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.compose.visibility.VisibilityActionTracker
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div2.DivData
-import com.yandex.yatagan.BindsInstance
-import com.yandex.yatagan.Component
-import com.yandex.yatagan.Lazy
-import javax.inject.Named
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.Provides
 
 @DivViewScope
-@Component(
-    isRoot = false,
-    modules = [DivViewModule::class]
+@GraphExtension(
+    bindingContainers = [DivViewModule::class]
 )
 internal interface DivViewComponent {
 
@@ -72,10 +70,10 @@ internal interface DivViewComponent {
 
     fun localComponent(): DivLocalComponent.Builder
 
-    @Component.Builder
+    @GraphExtension.Factory
     interface Builder {
         fun build(
-            @BindsInstance data: DivData
+            @Provides data: DivData
         ): DivViewComponent
     }
 }

@@ -6,9 +6,9 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.declaresLocalScope
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.declaresLocalScope
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.utils.reportError

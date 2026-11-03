@@ -2,12 +2,12 @@ package com.yandex.div.compose.internal
 
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.DivViewContextStorage
-import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.di.DivContextScope
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Provides access to the features not intended to be used in production environment.

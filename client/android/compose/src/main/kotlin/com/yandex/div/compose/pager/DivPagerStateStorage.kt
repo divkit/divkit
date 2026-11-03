@@ -7,13 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateMap
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.render.common.tree.NearestItemSearch
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivPager
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivViewScope
 internal class DivPagerStateStorage @Inject constructor() {

@@ -67,7 +67,6 @@ tasks.register<Jar>("replJar") {
 @Suppress("AvoidDuplicateDependencies")
 dependencies {
     api(project(":core"))
-    implementation(libs.javax)
 
     "generatorCompileOnly"(project(":core"))
     "generatorImplementation"(libs.kotlinpoet)

@@ -1,9 +1,9 @@
 package com.yandex.div.compose.context
 
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div2.DivBase
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivViewScope
 internal class DivLocalComponentStorage @Inject constructor() {

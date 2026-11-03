@@ -2,9 +2,9 @@ package com.yandex.div.compose.images
 
 import androidx.compose.runtime.mutableStateMapOf
 import coil3.request.ImageRequest
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div2.DivBase
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Snapshot-backed storage that tracks per-image loading state inside a single

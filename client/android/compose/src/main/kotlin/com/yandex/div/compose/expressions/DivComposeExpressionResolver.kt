@@ -1,7 +1,7 @@
 package com.yandex.div.compose.expressions
 
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivLocalScope
+import com.yandex.div.compose.di.DivLocalScope
 import com.yandex.div.compose.variables.VariableAndConstantProvider
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.ObserverList
@@ -26,7 +26,7 @@ import com.yandex.div.json.invalidValue
 import com.yandex.div.json.missingVariable
 import com.yandex.div.json.resolveFailed
 import com.yandex.div.json.typeMismatch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivLocalScope
 internal class DivComposeExpressionResolver private constructor(

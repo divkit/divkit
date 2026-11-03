@@ -3,10 +3,10 @@ package com.yandex.div.compose.actions
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Provides access to the current context menu.

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.WithDivKey
-import com.yandex.div.compose.dagger.WithLocalComponent
+import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isRtlLayout

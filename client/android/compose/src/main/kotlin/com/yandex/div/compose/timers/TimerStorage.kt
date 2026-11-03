@@ -4,15 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.DivViewScope
+import com.yandex.div.compose.di.Names
 import com.yandex.div2.DivData
-import com.yandex.yatagan.Lazy
-import kotlinx.coroutines.CoroutineScope
-import javax.inject.Inject
-import javax.inject.Named
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlin.time.TimeSource
+import kotlinx.coroutines.CoroutineScope
 
 @DivViewScope
 internal class TimerStorage @Inject constructor(
@@ -36,7 +35,7 @@ internal class TimerStorage @Inject constructor(
         }
 
     init {
-        val localComponent = rootLocalComponent.get()
+        val localComponent = rootLocalComponent.value
         data.timers.orEmpty().forEach { timer ->
             val id = timer.id
             if (this.timers.containsKey(id)) {

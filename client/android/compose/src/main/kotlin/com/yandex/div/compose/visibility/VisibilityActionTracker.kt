@@ -5,19 +5,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
-import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.di.DivViewScope
+import com.yandex.div.compose.di.Names
 import com.yandex.div.compose.host.LocalDivViewHost
 import com.yandex.div.internal.util.duration
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivSightAction
 import com.yandex.div2.DivVisibilityAction
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-import javax.inject.Named
 
 @DivViewScope
 internal class VisibilityActionTracker @Inject constructor(

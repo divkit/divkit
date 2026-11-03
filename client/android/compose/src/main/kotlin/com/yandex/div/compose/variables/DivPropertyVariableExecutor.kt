@@ -3,14 +3,13 @@ package com.yandex.div.compose.variables
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.dagger.DivLocalScope
+import com.yandex.div.compose.di.DivLocalScope
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.core.Disposable
 import com.yandex.div.internal.data.PropertyVariableExecutor
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivAction
-import com.yandex.yatagan.Lazy
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivLocalScope
 internal class DivPropertyVariableExecutor @Inject constructor(
@@ -31,7 +30,7 @@ internal class DivPropertyVariableExecutor @Inject constructor(
         actions: List<DivAction>,
         newValue: Any,
     ) {
-        actionHandler.get().handle(
+        actionHandler.value.handle(
             context = DivActionHandlingContext(
                 cardId = actionHandlingContext.cardId,
                 expressionResolver = expressionResolver.withPropertyNewValueVariable(

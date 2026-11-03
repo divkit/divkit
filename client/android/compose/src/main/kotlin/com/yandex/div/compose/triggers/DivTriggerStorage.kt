@@ -5,12 +5,12 @@ import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.dagger.DivLocalScope
+import com.yandex.div.compose.di.DivLocalScope
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivTrigger.Mode
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivLocalScope
 internal class DivTriggerStorage @Inject constructor(

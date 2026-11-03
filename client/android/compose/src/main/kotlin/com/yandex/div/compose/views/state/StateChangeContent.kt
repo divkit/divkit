@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.transition.LocalStateChangeTransitionContext
 import com.yandex.div.compose.views.transition.StateChangeTransitionScene

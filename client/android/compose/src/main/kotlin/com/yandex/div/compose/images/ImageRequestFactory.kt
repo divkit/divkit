@@ -8,8 +8,8 @@ import coil3.request.transformations
 import coil3.size.Precision
 import coil3.size.Scale
 import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.dagger.DivContextScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivContextScope
+import dev.zacsweers.metro.Inject
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.math.max
 

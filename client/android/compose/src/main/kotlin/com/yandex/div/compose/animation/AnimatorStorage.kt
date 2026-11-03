@@ -7,11 +7,11 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.MotionDurationScale
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivAnimator
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

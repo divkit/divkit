@@ -4,8 +4,8 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivViewScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivViewScope
+import dev.zacsweers.metro.Inject
 
 @DivViewScope
 internal class FocusBindingStorage @Inject constructor(

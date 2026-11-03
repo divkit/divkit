@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.compose.context.DivViewContext
-import com.yandex.div.compose.dagger.DivContextComponent
-import com.yandex.div.compose.dagger.YataganDivContextComponent
+import com.yandex.div.compose.di.DivConfigurationModule
+import com.yandex.div.compose.di.DivContextComponent
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.patch.DivPatcher
@@ -15,6 +15,7 @@ import com.yandex.div.compose.tooltips.DivTooltipController
 import com.yandex.div.core.annotations.ExperimentalApi
 import com.yandex.div.core.annotations.InternalApi
 import com.yandex.div2.DivData
+import dev.zacsweers.metro.createGraphFactory
 
 /**
  * An implementation of [android.content.Context] that must be used for composing [DivView]s.
@@ -103,9 +104,8 @@ private fun createComponent(
     configuration: DivConfiguration,
     debugConfiguration: DivDebugConfiguration
 ): DivContextComponent {
-    return YataganDivContextComponent.builder().build(
+    return createGraphFactory<DivContextComponent.Builder>().build(
         baseContext = baseContext,
-        configuration = configuration,
-        debugConfiguration = debugConfiguration
+        configuration = DivConfigurationModule(configuration, debugConfiguration),
     )
 }

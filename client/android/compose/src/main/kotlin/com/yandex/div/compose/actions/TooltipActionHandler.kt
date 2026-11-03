@@ -4,7 +4,7 @@ import com.yandex.div.compose.tooltips.TooltipStateStorage
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div2.DivActionHideTooltip
 import com.yandex.div2.DivActionShowTooltip
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class TooltipActionHandler @Inject constructor(
     private val tooltipStateStorage: TooltipStateStorage

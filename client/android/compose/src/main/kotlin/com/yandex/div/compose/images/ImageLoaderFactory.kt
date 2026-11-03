@@ -3,10 +3,10 @@ package com.yandex.div.compose.images
 import android.content.Context
 import coil3.ImageLoader
 import coil3.request.allowHardware
-import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.di.DivContextScope
 import com.yandex.div.internal.coil.GifDecoderFactory
 import com.yandex.div.internal.coil.svg.addSvgDecoderFactoryIfAvailable
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivContextScope
 internal class ImageLoaderFactory @Inject constructor(

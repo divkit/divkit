@@ -1,10 +1,10 @@
 package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.compose.focus.FocusBindingStorage
 import com.yandex.div2.DivActionSetCursorPosition
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivViewScope
 internal class SetCursorPositionActionHandler @Inject constructor(

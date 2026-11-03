@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
-import com.yandex.div.compose.dagger.DivContextScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivContextScope
+import dev.zacsweers.metro.Inject
 
 @Immutable
 internal data class LineMetrics(

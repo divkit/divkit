@@ -11,7 +11,7 @@ import androidx.compose.runtime.DisposableEffect
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.snapOffset
 import com.yandex.div.compose.pager.snappedItem

@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.Dp
 import coil3.compose.rememberAsyncImagePainter
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.rememberImageRequest

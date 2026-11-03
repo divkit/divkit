@@ -3,8 +3,8 @@ package com.yandex.div.compose.video
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import com.yandex.div.compose.dagger.DivViewScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivViewScope
+import dev.zacsweers.metro.Inject
 
 /**
  * Maps `div-video` ids to their [DivVideoPlayer] instances for a single

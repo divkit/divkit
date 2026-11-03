@@ -4,7 +4,7 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.video.VideoPlayerStorage
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div2.DivActionVideo
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class VideoActionHandler @Inject constructor(
     private val videoPlayerStorage: VideoPlayerStorage,

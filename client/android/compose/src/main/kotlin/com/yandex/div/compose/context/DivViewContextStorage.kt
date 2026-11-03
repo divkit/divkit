@@ -1,8 +1,8 @@
 package com.yandex.div.compose.context
 
-import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.di.DivContextScope
 import com.yandex.div2.DivData
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivContextScope
 internal class DivViewContextStorage @Inject constructor() {

@@ -7,7 +7,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.DivLayoutProvider
 

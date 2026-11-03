@@ -9,8 +9,8 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionArrayInsertValue
 import com.yandex.div2.DivActionArrayRemoveValue
 import com.yandex.div2.DivActionArraySetValue
+import dev.zacsweers.metro.Inject
 import org.json.JSONArray
-import javax.inject.Inject
 
 internal class ArrayActionsHandler @Inject constructor(
     private val reporter: DivReporter

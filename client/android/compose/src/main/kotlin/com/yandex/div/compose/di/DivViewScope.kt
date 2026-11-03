@@ -1,6 +1,6 @@
-package com.yandex.div.compose.dagger
+package com.yandex.div.compose.di
 
-import javax.inject.Scope
+import dev.zacsweers.metro.Scope
 
 @Scope
 @Retention(AnnotationRetention.RUNTIME)

@@ -10,7 +10,7 @@ import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.network.HttpException
 import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.internal.NetworkRestorationController
 import java.io.InterruptedIOException
 import java.net.ConnectException

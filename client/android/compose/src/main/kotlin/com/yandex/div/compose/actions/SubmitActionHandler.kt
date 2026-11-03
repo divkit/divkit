@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivLocalComponentStorage
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.compose.utils.children
 import com.yandex.div.core.network.DivNetworkClient
 import com.yandex.div.core.network.DivNetworkRequest
@@ -14,9 +14,8 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionSubmit
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivData
-import com.yandex.yatagan.Lazy
+import dev.zacsweers.metro.Inject
 import java.io.IOException
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @DivViewScope
@@ -86,7 +85,7 @@ internal class SubmitActionHandler @Inject constructor(
     }
 
     private fun handleActions(context: DivActionHandlingContext, actions: List<DivAction>) {
-        actionHandler.get().handle(
+        actionHandler.value.handle(
             context = context,
             actions = actions,
             source = DivActionSource.SUBMIT,

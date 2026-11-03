@@ -6,7 +6,7 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.withFrameNanos
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.hasElement
 import com.yandex.div.compose.variables.mutableStateFromBooleanVariable

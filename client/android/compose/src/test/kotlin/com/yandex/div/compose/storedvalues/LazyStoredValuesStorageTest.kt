@@ -26,7 +26,7 @@ class LazyStoredValuesStorageTest {
         cardId = "test",
         clock = timeSource.asClock(origin = Instant.fromEpochMilliseconds(0)),
         reporter = reporter,
-        repository = { repository }
+        repository = lazy { repository }
     )
 
     @Test

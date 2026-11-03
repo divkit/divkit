@@ -7,7 +7,7 @@ import com.yandex.div.internal.storedvalues.StoredValueParser
 import com.yandex.div.internal.storedvalues.toStoredValue
 import com.yandex.div.internal.storedvalues.toStoredValueScope
 import com.yandex.div2.DivActionSetStoredValue
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class SetStoredValueActionHandler @Inject constructor(
     private val reporter: DivReporter,

@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivEdgeInsets

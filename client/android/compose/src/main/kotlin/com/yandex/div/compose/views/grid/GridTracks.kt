@@ -9,8 +9,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.aspect
 import com.yandex.div.compose.utils.observeHorizontalInsets

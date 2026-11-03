@@ -2,8 +2,8 @@ package com.yandex.div.compose.preload
 
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
-import com.yandex.div.compose.dagger.DivContextScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivContextScope
+import dev.zacsweers.metro.Inject
 
 @DivContextScope
 internal class CustomResourcePreloader @Inject constructor(

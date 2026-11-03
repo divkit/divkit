@@ -5,12 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.rememberCoroutineScope
-import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.di.DivViewScope
+import com.yandex.div.compose.di.Names
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import javax.inject.Inject
-import javax.inject.Named
 
 /**
  * Provides the coroutine scope of the current DivView composition to cached view components.

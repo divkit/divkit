@@ -4,7 +4,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.patch.copyForPatch
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data

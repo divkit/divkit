@@ -37,7 +37,7 @@ class DivComposeExpressionResolverTest {
     )
 
     private val propertyVariableExecutor = DivPropertyVariableExecutor(
-        actionHandler = { mock() },
+        actionHandler = lazy { mock() },
         actionHandlingContext = mock(),
         expressionResolver = expressionResolver
     )

@@ -6,7 +6,7 @@ import androidx.core.content.getSystemService
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.internal.actions.resolveClipData
 import com.yandex.div2.DivActionCopyToClipboard
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class CopyToClipboardActionHandler @Inject constructor(
     private val context: Context,

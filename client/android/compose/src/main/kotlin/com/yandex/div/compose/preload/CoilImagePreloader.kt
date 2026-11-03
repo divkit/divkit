@@ -4,13 +4,13 @@ import android.net.Uri
 import coil3.ImageLoader
 import coil3.request.ErrorResult
 import coil3.request.SuccessResult
-import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.di.DivContextScope
 import com.yandex.div.compose.images.ImageRequestFactory
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBackground
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

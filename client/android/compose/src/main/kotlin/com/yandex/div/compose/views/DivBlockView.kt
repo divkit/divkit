@@ -14,8 +14,8 @@ import com.yandex.div.compose.animation.WithAnimatorTarget
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.context.expressionResolver
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.WithLocalComponent
+import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler

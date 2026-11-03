@@ -16,7 +16,7 @@ import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
 import com.yandex.div.data.Variable

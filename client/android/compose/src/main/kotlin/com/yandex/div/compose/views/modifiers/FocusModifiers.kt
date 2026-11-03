@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.focus.FocusBindingStorage
 import com.yandex.div.compose.views.inheritFocusVisibility

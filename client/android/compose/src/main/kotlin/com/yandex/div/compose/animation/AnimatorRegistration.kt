@@ -7,8 +7,8 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div2.DivAnimator
 import com.yandex.div2.DivBase
 

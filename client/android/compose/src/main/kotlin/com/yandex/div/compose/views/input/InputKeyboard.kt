@@ -15,8 +15,8 @@ import androidx.compose.ui.platform.PlatformTextInputInterceptor
 import androidx.compose.ui.text.input.ImeAction
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.observedEnabledActions
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputMask

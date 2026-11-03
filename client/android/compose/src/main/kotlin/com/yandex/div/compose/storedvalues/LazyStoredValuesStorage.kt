@@ -1,8 +1,8 @@
 package com.yandex.div.compose.storedvalues
 
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.di.DivViewScope
+import com.yandex.div.compose.di.Names
 import com.yandex.div.data.StoredValue
 import com.yandex.div.evaluable.ScopedStoredValueProvider
 import com.yandex.div.internal.storedvalues.StoredValueException
@@ -10,12 +10,11 @@ import com.yandex.div.internal.storedvalues.StoredValueScope
 import com.yandex.div.internal.storedvalues.StoredValuesRepository
 import com.yandex.div.internal.storedvalues.StoredValuesStorage
 import com.yandex.div.internal.variables.variableValueToEvaluableValue
-import com.yandex.yatagan.Lazy
-import javax.inject.Inject
-import javax.inject.Named
-import org.json.JSONException
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
+import org.json.JSONException
 
 @DivViewScope
 @OptIn(ExperimentalTime::class)
@@ -28,7 +27,7 @@ internal class LazyStoredValuesStorage @Inject constructor(
 
     private val storage by lazy {
         StoredValuesStorage(
-            repository = repository.get(),
+            repository = repository.value,
             currentTimeMillis = { clock.now().toEpochMilliseconds() },
         )
     }

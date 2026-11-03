@@ -9,8 +9,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivContextScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivContextScope
+import dev.zacsweers.metro.Inject
 
 /**
  * In-memory cache that deduplicates [FontFamily] instances built from the same

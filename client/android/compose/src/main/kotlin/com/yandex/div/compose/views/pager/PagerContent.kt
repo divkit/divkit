@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.pager.PagerAlignment

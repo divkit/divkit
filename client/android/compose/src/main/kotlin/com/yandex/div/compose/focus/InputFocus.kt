@@ -11,8 +11,8 @@ import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import com.yandex.div.compose.DivContext
-import com.yandex.div.compose.dagger.DivContextScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivContextScope
+import dev.zacsweers.metro.Inject
 
 /**
  * Focused text inputs of all views in a [DivContext].

@@ -15,8 +15,8 @@ import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.DivActions
 import com.yandex.div.compose.actions.any
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivAction
 

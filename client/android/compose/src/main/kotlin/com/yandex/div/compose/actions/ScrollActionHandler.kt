@@ -1,14 +1,14 @@
 package com.yandex.div.compose.actions
 
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.compose.scroll.ScrollTarget
 import com.yandex.div.compose.scroll.ScrollTargetStorage
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div2.DivActionScrollBy
 import com.yandex.div2.DivActionScrollDestination
 import com.yandex.div2.DivActionScrollTo
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivViewScope
 internal class ScrollActionHandler @Inject constructor(

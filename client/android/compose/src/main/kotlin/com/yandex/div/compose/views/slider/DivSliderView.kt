@@ -23,7 +23,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.Constraints
 import com.yandex.div.compose.R
 import com.yandex.div.compose.context.animationsEnabled
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull

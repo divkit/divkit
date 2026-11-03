@@ -11,7 +11,7 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.mockLocalComponent
 import org.junit.runner.RunWith
 import kotlin.test.Test

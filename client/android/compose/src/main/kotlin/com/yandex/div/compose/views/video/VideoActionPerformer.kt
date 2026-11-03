@@ -9,7 +9,7 @@ import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.internal.VideoEventSource
 import com.yandex.div.compose.internal.VideoEventSource.Event
 import com.yandex.div.compose.video.DivVideoPlayer

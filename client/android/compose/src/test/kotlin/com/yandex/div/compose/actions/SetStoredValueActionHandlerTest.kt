@@ -28,7 +28,7 @@ class SetStoredValueActionHandlerTest {
         cardId = actionHandlerEnvironment.context.cardId,
         clock = Clock.System,
         reporter = reporter,
-        repository = { TestStoredValuesRepository() }
+        repository = lazy { TestStoredValuesRepository() }
     )
 
     private val reporter: TestReporter

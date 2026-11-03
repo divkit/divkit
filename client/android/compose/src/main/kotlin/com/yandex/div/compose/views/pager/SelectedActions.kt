@@ -11,9 +11,9 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.pager.PagerLayoutSnapshot
 import com.yandex.div.compose.pager.mainAxisViewportSize
 import com.yandex.div.compose.pager.snappedItem

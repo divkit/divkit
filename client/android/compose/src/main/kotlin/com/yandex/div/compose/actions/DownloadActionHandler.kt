@@ -7,8 +7,7 @@ import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionDownload
 import com.yandex.div2.DivDownloadCallbacks
-import com.yandex.yatagan.Lazy
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class DownloadActionHandler @Inject constructor(
     private val actionHandler: Lazy<DivActionHandler>,
@@ -49,14 +48,14 @@ internal class DownloadActionHandler @Inject constructor(
         downloadManager.download(
             url,
             onSuccess = {
-                actionHandler.get().handle(
+                actionHandler.value.handle(
                     context = context,
                     actions = onSuccessActions.orEmpty(),
                     source = DivActionSource.PATCH,
                 )
             },
             onFail = {
-                actionHandler.get().handle(
+                actionHandler.value.handle(
                     context = context,
                     actions = onFailActions.orEmpty(),
                     source = DivActionSource.PATCH,

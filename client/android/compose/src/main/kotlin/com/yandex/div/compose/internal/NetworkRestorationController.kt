@@ -6,10 +6,10 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.annotation.MainThread
-import com.yandex.div.compose.dagger.DivContextScope
-import com.yandex.div.compose.dagger.Names
-import javax.inject.Inject
-import javax.inject.Named
+import com.yandex.div.compose.di.DivContextScope
+import com.yandex.div.compose.di.Names
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

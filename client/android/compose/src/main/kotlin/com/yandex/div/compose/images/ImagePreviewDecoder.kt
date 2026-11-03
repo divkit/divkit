@@ -2,8 +2,8 @@ package com.yandex.div.compose.images
 
 import android.util.Base64
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivContextScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivContextScope
+import dev.zacsweers.metro.Inject
 
 private const val PREVIEW_IS_NOT_BASE64_IMAGE = "Preview doesn't contain base64 image"
 

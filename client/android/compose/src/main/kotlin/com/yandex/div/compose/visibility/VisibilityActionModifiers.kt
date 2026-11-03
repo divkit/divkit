@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivBase

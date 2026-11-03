@@ -4,7 +4,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.haptics.HapticFeedbackStorage
 import com.yandex.div2.DivActionHaptic
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class HapticActionHandler @Inject constructor(
     private val hapticFeedbackStorage: HapticFeedbackStorage,

@@ -4,8 +4,8 @@ import com.yandex.div.compose.PreloadMode
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.context.DivViewContextFactory
 import com.yandex.div.compose.custom.DivCustomEnvironment
-import com.yandex.div.compose.dagger.DivContextScope
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivContextScope
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.state.resolveActiveState
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
@@ -14,7 +14,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

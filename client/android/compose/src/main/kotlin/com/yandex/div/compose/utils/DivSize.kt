@@ -2,8 +2,8 @@ package com.yandex.div.compose.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivSize

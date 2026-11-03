@@ -6,12 +6,12 @@ import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.withFrameNanos
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.missingVariable
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.math.roundToInt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

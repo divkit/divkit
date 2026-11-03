@@ -44,8 +44,8 @@ import androidx.compose.ui.unit.DpSize
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.observedEnabledActions
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.LocalComponent
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.reportError

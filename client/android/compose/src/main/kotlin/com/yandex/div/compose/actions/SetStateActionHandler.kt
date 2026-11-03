@@ -6,7 +6,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PathFormatException
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div2.DivActionSetState
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class SetStateActionHandler @Inject constructor(
     private val reporter: DivReporter,

@@ -9,9 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.geometry.Rect
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div2.DivTooltip
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Tracks tooltips currently requested to be shown for a given [com.yandex.div.compose.DivView].

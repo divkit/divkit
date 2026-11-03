@@ -3,14 +3,14 @@ package com.yandex.div.compose.preload
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.animation.AnimationConfiguration
-import com.yandex.div.compose.dagger.DivContextScope
+import com.yandex.div.compose.di.DivContextScope
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorage
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivExtension
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope

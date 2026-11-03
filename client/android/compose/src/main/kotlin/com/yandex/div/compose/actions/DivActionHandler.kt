@@ -2,7 +2,7 @@ package com.yandex.div.compose.actions
 
 import android.net.Uri
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.internal.actions.DivScrollActionParser
 import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.actions.isDivAction
@@ -13,8 +13,8 @@ import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivDisappearAction
 import com.yandex.div2.DivDownloadCallbacks
 import com.yandex.div2.DivSightAction
+import dev.zacsweers.metro.Inject
 import org.json.JSONObject
-import javax.inject.Inject
 
 @DivViewScope
 internal class DivActionHandler @Inject constructor(

@@ -1,8 +1,9 @@
-package com.yandex.div.compose.dagger
+package com.yandex.div.compose.di
 
 import android.content.Context
 import coil3.ImageLoader
 import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.animation.AnimationConfiguration
 import com.yandex.div.compose.context.DivViewContextFactory
 import com.yandex.div.compose.context.DivViewContextStorage
 import com.yandex.div.compose.custom.DivCustomViewFactory
@@ -11,28 +12,26 @@ import com.yandex.div.compose.focus.InputFocus
 import com.yandex.div.compose.font.DivFontFamilyCache
 import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.font.LineMetricsCache
+import com.yandex.div.compose.images.ImagePreviewDecoder
 import com.yandex.div.compose.images.ImageRequestFactory
 import com.yandex.div.compose.images.ImageRequestListener
-import com.yandex.div.compose.images.ImagePreviewDecoder
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
-import com.yandex.div.compose.animation.AnimationConfiguration
 import com.yandex.div.compose.patch.DivPatcher
 import com.yandex.div.compose.preload.DivPreloader
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorageFactory
 import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.yatagan.BindsInstance
-import com.yandex.yatagan.Component
-import javax.inject.Named
+import dev.zacsweers.metro.DependencyGraph
+import dev.zacsweers.metro.Includes
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.Provides
 import kotlinx.coroutines.CoroutineScope
 
 @DivContextScope
-@Component(
-    modules = [
-        DivConfiguration::class,
+@DependencyGraph(
+    bindingContainers = [
         DivContextModule::class,
-        DivDebugConfiguration::class,
     ]
 )
 internal interface DivContextComponent {
@@ -67,12 +66,11 @@ internal interface DivContextComponent {
 
     fun viewComponent(): DivViewComponent.Builder
 
-    @Component.Builder
+    @DependencyGraph.Factory
     interface Builder {
         fun build(
-            @BindsInstance baseContext: Context,
-            @BindsInstance configuration: DivConfiguration,
-            @BindsInstance debugConfiguration: DivDebugConfiguration
+            @Provides baseContext: Context,
+            @Includes configuration: DivConfigurationModule,
         ): DivContextComponent
     }
 }

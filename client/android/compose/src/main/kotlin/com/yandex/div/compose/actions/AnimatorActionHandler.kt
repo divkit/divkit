@@ -3,7 +3,7 @@ package com.yandex.div.compose.actions
 import com.yandex.div.compose.animation.AnimatorStorage
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivActionAnimatorStop
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class AnimatorActionHandler @Inject constructor(
     private val animatorStorage: AnimatorStorage,

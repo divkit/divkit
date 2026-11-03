@@ -2,9 +2,9 @@ package com.yandex.div.compose.state
 
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.core.state.DivStatePath
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivViewScope
 internal class DivStateStorage @Inject constructor() {

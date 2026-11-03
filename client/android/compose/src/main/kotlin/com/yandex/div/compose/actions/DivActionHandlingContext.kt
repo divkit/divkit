@@ -1,11 +1,11 @@
 package com.yandex.div.compose.actions
 
-import com.yandex.div.compose.dagger.DivLocalScope
-import com.yandex.div.compose.dagger.Names
+import com.yandex.div.compose.di.DivLocalScope
+import com.yandex.div.compose.di.Names
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivSightAction
-import javax.inject.Inject
-import javax.inject.Named
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 
 /**
  * Context passed to action handlers. Provides access to DivKit components

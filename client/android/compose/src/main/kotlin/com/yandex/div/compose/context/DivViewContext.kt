@@ -7,9 +7,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.animation.observe
 import com.yandex.div.compose.collection.CollectionItemScopeStorage
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.DivViewComponent
-import com.yandex.div.compose.dagger.declaresLocalScope
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.DivViewComponent
+import com.yandex.div.compose.di.declaresLocalScope
 import com.yandex.div.compose.haptics.bind
 import com.yandex.div.compose.layoutprovider.observe
 import com.yandex.div.compose.pager.DivPagerStateStorage
@@ -49,7 +49,7 @@ internal class DivViewContext(
         get() = component.pagerStateStorage
 
     val rootLocalComponent: DivLocalComponent
-        get() = component.rootLocalComponent.get()
+        get() = component.rootLocalComponent.value
 
     val stateStorage: DivStateStorage
         get() = component.stateStorage

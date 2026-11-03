@@ -1,7 +1,7 @@
 package com.yandex.div.compose.views.grid
 
 import androidx.compose.runtime.Composable
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivBase

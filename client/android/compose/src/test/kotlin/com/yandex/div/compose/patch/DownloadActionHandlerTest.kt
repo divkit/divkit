@@ -59,7 +59,7 @@ class DownloadActionHandlerTest {
     )
 
     private val actionHandler = DownloadActionHandler(
-        actionHandler = { environment.actionHandler },
+        actionHandler = lazy { environment.actionHandler },
         downloadManager = downloadManager,
     )
 

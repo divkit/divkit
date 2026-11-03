@@ -19,7 +19,7 @@ import coil3.request.ErrorResult
 import coil3.request.ImageRequest
 import coil3.request.ImageResult
 import coil3.request.SuccessResult
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.internal.NetworkRestorationController
 import com.yandex.div.compose.mockLocalComponent

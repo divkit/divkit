@@ -1,4 +1,4 @@
-package com.yandex.div.compose.dagger
+package com.yandex.div.compose.di
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -19,13 +19,12 @@ import com.yandex.div.compose.variables.VariableAndConstantProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
-import com.yandex.yatagan.BindsInstance
-import com.yandex.yatagan.Component
+import dev.zacsweers.metro.GraphExtension
+import dev.zacsweers.metro.Provides
 
 @DivLocalScope
-@Component(
-    isRoot = false,
-    modules = [
+@GraphExtension(
+    bindingContainers = [
         DivLocalModule::class
     ]
 )
@@ -42,11 +41,11 @@ internal interface DivLocalComponent {
     val variableAdapter: DivVariableAdapter
     val variableProvider: VariableAndConstantProvider
 
-    @Component.Builder
+    @GraphExtension.Factory
     interface Builder {
         fun build(
-            @BindsInstance functionProvider: FunctionProviderDecorator,
-            @BindsInstance variableProvider: VariableAndConstantProvider
+            @Provides functionProvider: FunctionProviderDecorator,
+            @Provides variableProvider: VariableAndConstantProvider
         ): DivLocalComponent
     }
 }

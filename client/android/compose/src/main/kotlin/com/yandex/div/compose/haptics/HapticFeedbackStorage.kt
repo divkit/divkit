@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.platform.LocalHapticFeedback
-import com.yandex.div.compose.dagger.DivViewScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivViewScope
+import dev.zacsweers.metro.Inject
 
 @DivViewScope
 internal class HapticFeedbackStorage @Inject constructor() {

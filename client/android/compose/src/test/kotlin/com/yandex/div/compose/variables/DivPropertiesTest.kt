@@ -17,7 +17,7 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable

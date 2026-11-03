@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import com.yandex.div.compose.collection.observeStaticItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.rememberAndStoreState

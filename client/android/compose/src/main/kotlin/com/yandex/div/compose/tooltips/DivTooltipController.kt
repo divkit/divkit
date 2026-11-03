@@ -2,10 +2,10 @@ package com.yandex.div.compose.tooltips
 
 import androidx.compose.runtime.snapshotFlow
 import com.yandex.div.compose.DivView
-import com.yandex.div.compose.dagger.DivViewScope
-import com.yandex.div.compose.dagger.Names
-import javax.inject.Inject
-import javax.inject.Named
+import com.yandex.div.compose.di.DivViewScope
+import com.yandex.div.compose.di.Names
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Named
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow

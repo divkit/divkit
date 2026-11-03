@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivSize

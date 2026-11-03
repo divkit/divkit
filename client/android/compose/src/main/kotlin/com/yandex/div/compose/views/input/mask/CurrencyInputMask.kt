@@ -2,7 +2,7 @@ package com.yandex.div.compose.views.input.mask
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivCurrencyInputMask
 import java.text.DecimalFormat

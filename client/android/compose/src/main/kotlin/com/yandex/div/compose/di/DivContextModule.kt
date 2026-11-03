@@ -1,4 +1,4 @@
-package com.yandex.div.compose.dagger
+package com.yandex.div.compose.di
 
 import android.content.Context
 import android.content.ContextWrapper
@@ -18,18 +18,17 @@ import com.yandex.div.internal.storedvalues.StoredValuesRepository
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.storedvalues.StoredValuesRepositoryImpl
-import com.yandex.yatagan.Binds
-import com.yandex.yatagan.Lazy
-import com.yandex.yatagan.Module
-import com.yandex.yatagan.Provides
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.Provides
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import javax.inject.Named
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
 
-@Module
+@BindingContainer
 internal interface DivContextModule {
 
     @Binds
@@ -75,7 +74,7 @@ internal interface DivContextModule {
             configuration: DivConfiguration,
             defaultPatchDownloader: Lazy<DefaultPatchDownloader>,
         ): DivPatchDownloader {
-            return configuration.patchDownloader ?: defaultPatchDownloader.get()
+            return configuration.patchDownloader ?: defaultPatchDownloader.value
         }
 
         @DivContextScope

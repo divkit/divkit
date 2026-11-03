@@ -1,4 +1,4 @@
-package com.yandex.div.compose.dagger
+package com.yandex.div.compose.di
 
 internal object Names {
     const val CARD_ID = "card_id"

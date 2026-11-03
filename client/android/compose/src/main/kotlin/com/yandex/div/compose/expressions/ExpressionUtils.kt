@@ -3,7 +3,7 @@ package com.yandex.div.compose.expressions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.toColor
 import com.yandex.div.json.expressions.Expression
 import kotlin.reflect.KClass

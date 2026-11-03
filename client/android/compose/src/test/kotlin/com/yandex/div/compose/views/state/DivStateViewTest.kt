@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.compose.mockViewContext

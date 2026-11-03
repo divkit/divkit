@@ -4,8 +4,8 @@ import androidx.compose.animation.core.Easing
 import androidx.compose.runtime.withFrameNanos
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.utils.toEasing
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.ExpressionResolver

@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateOf
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.DivLocalScope
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalScope
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlin.reflect.KClass
 
 /**

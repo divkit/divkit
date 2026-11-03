@@ -3,8 +3,8 @@ package com.yandex.div.compose.text
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.snapshots.SnapshotStateMap
-import com.yandex.div.compose.dagger.DivViewScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivViewScope
+import dev.zacsweers.metro.Inject
 
 /**
  * The texts of the text elements of a view that have an id: a validator of an input names its label by

@@ -7,7 +7,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.scroll.ScrollTarget
 import com.yandex.div.compose.utils.scroll.toScrollOverflow
 import com.yandex.div.render.common.scroll.DivScrollActionUtils

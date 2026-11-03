@@ -3,8 +3,8 @@ package com.yandex.div.compose.images
 import coil3.request.ErrorResult
 import coil3.request.ImageRequest
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.dagger.DivContextScope
-import javax.inject.Inject
+import com.yandex.div.compose.di.DivContextScope
+import dev.zacsweers.metro.Inject
 
 @DivContextScope
 internal class ImageRequestListener @Inject constructor(

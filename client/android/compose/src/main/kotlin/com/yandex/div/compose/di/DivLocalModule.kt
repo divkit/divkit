@@ -1,11 +1,11 @@
-package com.yandex.div.compose.dagger
+package com.yandex.div.compose.di
 
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.yatagan.Binds
-import com.yandex.yatagan.Module
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
 
-@Module
+@BindingContainer
 internal interface DivLocalModule {
 
     @Binds

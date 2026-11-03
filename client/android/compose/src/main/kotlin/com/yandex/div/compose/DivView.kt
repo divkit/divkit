@@ -5,7 +5,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.state.WithRootStatePath
 import com.yandex.div.compose.tooltips.TooltipsHost
 import com.yandex.div.compose.utils.reportError

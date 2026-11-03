@@ -1,10 +1,10 @@
 package com.yandex.div.compose.context
 
-import com.yandex.div.compose.dagger.DivContextScope
-import com.yandex.div.compose.dagger.DivViewComponent
+import com.yandex.div.compose.di.DivContextScope
+import com.yandex.div.compose.di.DivViewComponent
 import com.yandex.div2.DivData
-import javax.inject.Inject
-import javax.inject.Provider
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Provider
 
 @DivContextScope
 internal class DivViewContextFactory @Inject constructor(
@@ -13,7 +13,7 @@ internal class DivViewContextFactory @Inject constructor(
 ) {
     fun getOrCreate(data: DivData): DivViewContext {
         return storage.get(data) ?: DivViewContext(
-            component = viewComponentBuilderProvider.get().build(data = data),
+            component = viewComponentBuilderProvider().build(data = data),
         ).also { storage.put(data, it) }
     }
 }

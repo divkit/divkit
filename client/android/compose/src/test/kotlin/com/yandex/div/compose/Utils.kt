@@ -6,7 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.context.DivViewContext
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.expressions.ExpressionCache
 import com.yandex.div.compose.internal.DivDebugConfiguration

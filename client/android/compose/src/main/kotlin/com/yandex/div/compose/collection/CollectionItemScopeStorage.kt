@@ -1,14 +1,14 @@
 package com.yandex.div.compose.collection
 
 import com.yandex.div.compose.context.DivViewContext
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.DivViewScope
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.compose.patch.collectDivs
 import com.yandex.div.internal.core.copy
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 /**
  * Keeps the item scopes of a collection owner — an element rendered through `observeItems()` —

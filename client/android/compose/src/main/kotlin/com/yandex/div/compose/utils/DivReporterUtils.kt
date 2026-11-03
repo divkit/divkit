@@ -5,7 +5,7 @@ package com.yandex.div.compose.utils
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 
 @Composable
 internal fun reportError(message: String) {

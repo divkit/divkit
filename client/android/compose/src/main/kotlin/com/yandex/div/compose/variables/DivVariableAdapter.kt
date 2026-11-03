@@ -1,12 +1,12 @@
 package com.yandex.div.compose.variables
 
-import com.yandex.div.compose.dagger.DivLocalScope
+import com.yandex.div.compose.di.DivLocalScope
 import com.yandex.div.data.Variable
 import com.yandex.div.internal.variables.toVariable
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivVariable
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 @DivLocalScope
 internal class DivVariableAdapter @Inject constructor(

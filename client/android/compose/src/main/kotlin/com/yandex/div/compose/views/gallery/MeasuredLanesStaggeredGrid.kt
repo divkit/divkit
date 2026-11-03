@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.constrainWidth
-import com.yandex.div.compose.dagger.DivLocalComponent
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.isScrollAxisBounded

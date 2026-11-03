@@ -1,4 +1,4 @@
-package com.yandex.div.compose.dagger
+package com.yandex.div.compose.di
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -11,12 +11,12 @@ import com.yandex.div.evaluable.function.GeneratedBuiltinFunctionProvider
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
 import com.yandex.div2.DivData
-import com.yandex.yatagan.Binds
-import com.yandex.yatagan.Module
-import com.yandex.yatagan.Provides
-import javax.inject.Named
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.Named
+import dev.zacsweers.metro.Provides
 
-@Module
+@BindingContainer
 internal interface DivViewModule {
 
     @Binds

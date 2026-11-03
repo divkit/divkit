@@ -5,7 +5,7 @@ import com.yandex.div.internal.actions.DivUntypedAction
 import com.yandex.div.internal.variables.castAndSetValue
 import com.yandex.div.internal.variables.evaluate
 import com.yandex.div2.DivActionSetVariable
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 internal class SetVariableActionHandler @Inject constructor(
     private val reporter: DivReporter

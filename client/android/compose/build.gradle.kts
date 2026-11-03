@@ -3,7 +3,7 @@ import dev.detekt.gradle.Detekt
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.metro)
     alias(libs.plugins.roborazzi)
     id("divkit.convention.abi-validation")
 }
@@ -42,9 +42,6 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
-    implementation(libs.yatagan.api.public)
-
-    ksp(libs.yatagan.processor.ksp)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 

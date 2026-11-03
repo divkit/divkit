@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
-import com.yandex.div.compose.dagger.LocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.compose.setContent

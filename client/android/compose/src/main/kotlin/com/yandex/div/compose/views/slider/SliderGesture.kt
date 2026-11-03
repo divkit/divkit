@@ -10,8 +10,8 @@ import androidx.compose.ui.input.pointer.PointerInputChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.util.fastFirstOrNull
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.dagger.DivLocalComponent
-import com.yandex.div.compose.dagger.handleActions
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.handleActions
 import com.yandex.div2.DivAction
 import kotlinx.coroutines.CoroutineScope
 import kotlin.math.abs
