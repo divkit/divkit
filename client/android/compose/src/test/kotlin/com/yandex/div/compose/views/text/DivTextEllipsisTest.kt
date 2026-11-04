@@ -1,5 +1,6 @@
 package com.yandex.div.compose.views.text
 
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
@@ -9,6 +10,8 @@ import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.TestReporter
@@ -17,22 +20,30 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.animatedTextGradient
+import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixed
+import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.matchParent
+import com.yandex.div.test.data.separator
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.textImage
+import com.yandex.div.test.data.textRange
 import com.yandex.div.test.data.wrapContent
 import com.yandex.div2.Div
+import com.yandex.div2.DivContainer
+import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTextRangeBackground
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 // Truncation is driven by real text measurement, which the legacy Robolectric graphics
@@ -106,6 +117,7 @@ class DivTextEllipsisTest {
                 id = "text",
                 text = constant("Text"),
                 maxLines = 1,
+                autoEllipsize = constant(true),
                 ellipsis = ellipsis(constant("… more")),
                 height = fixed(0),
                 width = fixed(100),
@@ -361,6 +373,437 @@ class DivTextEllipsisTest {
     }
 
     @Test
+    fun `auto_ellipsize ellipsizes the text at the container height`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                height = fixed(30),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(1, layout.lineCount)
+        assertTrue(layout.isLineEllipsized(0))
+    }
+
+    @Test
+    fun `text with max_lines is not ellipsized at the container height without auto_ellipsize`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                maxLines = 3,
+                height = fixed(30),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(3, layout.lineCount)
+        assertFalse(layout.isLineEllipsized(2))
+    }
+
+    @Test
+    fun `text is ellipsized when auto_ellipsize changes`() {
+        val variable = Variable.BooleanVariable("auto_ellipsize", false)
+        variableController.declare(variable)
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                autoEllipsize = booleanExpression("@{auto_ellipsize}"),
+                height = fixed(30),
+            )
+        )
+        assertFalse(textLayout().isLineEllipsized(0))
+
+        variable.set(true)
+
+        assertTrue(textLayout().isLineEllipsized(0))
+    }
+
+    @Test
+    fun `custom ellipsis is not appended at the container height without auto_ellipsize`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                maxLines = 3,
+                ellipsis = ellipsis(constant("… more")),
+                height = fixed(30),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("first\nsecond\nthird")
+    }
+
+    @Test
+    fun `word ellipsis is not appended at the container height without auto_ellipsize`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                maxLines = 3,
+                truncatePolicy = DivText.TruncatePolicy.WORD,
+                height = fixed(30),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("first\nsecond\nthird")
+    }
+
+    @Test
+    fun `word ellipsis is appended at the container height with auto_ellipsize`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("alpha beta gamma delta"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                truncatePolicy = DivText.TruncatePolicy.WORD,
+                width = fixed(150),
+                height = fixed(30),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("alpha beta…")
+    }
+
+    @Test
+    fun `text is clipped without ellipsis at the container height when truncate is none`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                truncate = DivText.Truncate.NONE,
+                height = fixed(30),
+            )
+        )
+
+        assertFalse(textLayout().isLineEllipsized(0))
+    }
+
+    @Test
+    fun `custom ellipsis is not appended at the container height when truncate is none`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                truncate = DivText.Truncate.NONE,
+                ellipsis = ellipsis(constant("… more")),
+                height = fixed(30),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("first\nsecond\nthird")
+    }
+
+    @Test
+    fun `start ellipsis is drawn on the only line that fits the container with auto_ellipsize`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("alpha beta gamma delta epsilon zeta eta theta"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                truncate = DivText.Truncate.START,
+                width = fixed(150),
+                height = fixed(30),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(1, layout.lineCount)
+        assertTrue(layout.isLineEllipsized(0))
+    }
+
+    @Test
+    fun `middle ellipsis is drawn on the only line that fits the container with auto_ellipsize`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("alpha beta gamma delta epsilon zeta eta theta"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                truncate = DivText.Truncate.MIDDLE,
+                width = fixed(150),
+                height = fixed(30),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(1, layout.lineCount)
+        assertTrue(layout.isLineEllipsized(0))
+    }
+
+    @Test
+    fun `middle ellipsis is drawn on the only line that fits the container in text with range color`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("alpha beta gamma delta epsilon zeta eta theta"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                truncate = DivText.Truncate.MIDDLE,
+                ranges = listOf(textRange(end = 5, textColor = 0xFFFF0000.toInt())),
+                width = fixed(150),
+                height = fixed(30),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(1, layout.lineCount)
+        assertTrue(layout.isLineEllipsized(0))
+    }
+
+    @Test
+    fun `middle ellipsis is drawn on the only line that fits the container in text with range background`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("alpha beta gamma delta epsilon zeta eta theta"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                truncate = DivText.Truncate.MIDDLE,
+                ranges = listOf(
+                    textRange(
+                        end = 5,
+                        background = DivTextRangeBackground.Solid(DivSolidBackground(color = constant(0xFFFF0000.toInt()))),
+                    )
+                ),
+                width = fixed(150),
+                height = fixed(30),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(1, layout.lineCount)
+        assertTrue(layout.isLineEllipsized(0))
+    }
+
+    @Test
+    fun `middle ellipsis is not limited to one line when two lines fit the container`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("alpha beta gamma delta epsilon zeta eta theta"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                truncate = DivText.Truncate.MIDDLE,
+                width = fixed(150),
+                height = fixed(55),
+            )
+        )
+
+        val layout = textLayout()
+        assertTrue(layout.lineCount > 1)
+        assertFalse(layout.isLineEllipsized(0))
+    }
+
+    @Test
+    fun `middle ellipsis is drawn when min_hidden_lines crops the text to one line`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("alpha beta gamma delta epsilon zeta eta theta"),
+                fontSize = 20,
+                maxLines = 1,
+                minHiddenLines = constant(1),
+                truncate = DivText.Truncate.MIDDLE,
+                width = fixed(150),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(1, layout.lineCount)
+        assertTrue(layout.isLineEllipsized(0))
+    }
+
+    @Test
+    fun `auto_ellipsize ellipsizes the text that min_hidden_lines does not crop`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird\nfourth"),
+                fontSize = 20,
+                maxLines = 2,
+                minHiddenLines = constant(2),
+                autoEllipsize = constant(true),
+                height = fixed(75),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(3, layout.lineCount)
+        assertTrue(layout.isLineEllipsized(2))
+    }
+
+    @Test
+    fun `custom ellipsis is appended at the container height with auto_ellipsize`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                autoEllipsize = constant(true),
+                ellipsis = ellipsis(constant("… more")),
+                height = fixed(30),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("first… more")
+    }
+
+    @Test
+    fun `text is not cropped when it hides no more lines than min_hidden_lines`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                maxLines = 1,
+                minHiddenLines = constant(2),
+            )
+        )
+
+        assertEquals(3, textLayout().lineCount)
+    }
+
+    @Test
+    fun `text is cropped to max_lines when it hides more lines than min_hidden_lines`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird\nfourth"),
+                maxLines = 1,
+                minHiddenLines = constant(2),
+            )
+        )
+
+        val layout = textLayout()
+        assertEquals(1, layout.lineCount)
+        assertTrue(layout.isLineEllipsized(0))
+    }
+
+    @Test
+    fun `text is cropped when min_hidden_lines changes`() {
+        val variable = Variable.IntegerVariable("min_hidden_lines", 3)
+        variableController.declare(variable)
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird\nfourth"),
+                maxLines = 1,
+                minHiddenLines = intExpression("@{min_hidden_lines}"),
+            )
+        )
+        assertEquals(4, textLayout().lineCount)
+
+        variable.set(2)
+
+        assertEquals(1, textLayout().lineCount)
+    }
+
+    @Test
+    fun `text is not cropped when min_hidden_lines exceeds the integer range`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird\nfourth"),
+                maxLines = 1,
+                minHiddenLines = constant(4294967298),
+            )
+        )
+
+        assertEquals(4, textLayout().lineCount)
+    }
+
+    @Test
+    fun `custom ellipsis is appended when min_hidden_lines crops the text`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird\nfourth"),
+                maxLines = 1,
+                minHiddenLines = constant(2),
+                ellipsis = ellipsis(constant("… more")),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("first… more")
+    }
+
+    @Test
+    fun `text cropped by min_hidden_lines fits a taller custom ellipsis`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird\nfourth"),
+                fontSize = 12,
+                maxLines = 1,
+                minHiddenLines = constant(2),
+                ellipsis = DivText.Ellipsis(
+                    text = constant("… more"),
+                    ranges = listOf(textRange(fontSize = 48)),
+                ),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("first… more")
+        val layout = textLayout()
+        assertEquals(1, layout.lineCount)
+        assertTrue(nodeHeight("text") >= layout.getLineBottom(0))
+    }
+
+    @Test
+    fun `custom ellipsis is not appended when min_hidden_lines keeps all lines`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                maxLines = 1,
+                minHiddenLines = constant(2),
+                ellipsis = ellipsis(constant("… more")),
+            )
+        )
+
+        rule.onNodeWithTag("text").assertTextEquals("first\nsecond\nthird")
+    }
+
+    @Test
+    fun `text cropped by min_hidden_lines has the intrinsic height of max_lines lines`() {
+        setContent(
+            container(
+                items = listOf(
+                    intrinsicHeightContainer(
+                        id = "cropped",
+                        text = text(
+                            text = constant("first\nsecond\nthird\nfourth"),
+                            maxLines = 1,
+                            minHiddenLines = constant(2),
+                        )
+                    ),
+                    intrinsicHeightContainer(
+                        id = "reference",
+                        text = text(text = constant("first"))
+                    )
+                )
+            )
+        )
+
+        assertEquals(nodeHeight("reference"), nodeHeight("cropped"))
+    }
+
+    @Test
     fun `unsupported ellipsis properties are reported`() {
         reporter.failOnError = false
 
@@ -388,7 +831,21 @@ class DivTextEllipsisTest {
         items = listOf(text(text = constant("S"), width = matchParent()), text)
     )
 
+    private fun intrinsicHeightContainer(id: String, text: Div) = container(
+        id = id,
+        orientation = DivContainer.Orientation.HORIZONTAL,
+        items = listOf(text, separator(height = matchParent()))
+    )
+
     private fun nodeWidth(id: String) = rule.onNodeWithTag(id).fetchSemanticsNode().size.width
+
+    private fun nodeHeight(id: String) = rule.onNodeWithTag(id).fetchSemanticsNode().size.height
+
+    private fun textLayout(): TextLayoutResult {
+        val layouts = mutableListOf<TextLayoutResult>()
+        rule.onNodeWithTag("text").performSemanticsAction(SemanticsActions.GetTextLayoutResult) { it(layouts) }
+        return layouts.single()
+    }
 
     private fun setContent(content: Div) {
         rule.setContent(configuration = configuration, data = data(content))

@@ -982,6 +982,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/SpanStyle.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/SpanStyle.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextEllipsis.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextEllipsis.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextEllipsisResult.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextEllipsisResult.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextHeightLimit.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextHeightLimit.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextLineMetrics.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextLineMetrics.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextStyle.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/text/TextStyle.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/transition/StateChangeAnimatedValues.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/transition/StateChangeAnimatedValues.kt",

@@ -28,6 +28,7 @@ import org.robolectric.annotation.GraphicsMode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import kotlin.test.assertTrue
 
 // Ellipsis actions are attached to the ellipsis appended by truncation, which is driven by real
 // text measurement: without NATIVE the text always reports as fitting and nothing is truncated.
@@ -160,6 +161,46 @@ class DivTextActionsTest {
         rule.onNodeWithTag("text").performFirstLinkClick()
 
         assertEquals(actionData(url = "test://range"), actionHandler.handledAction)
+    }
+
+    @Test
+    fun `tap below the text height does not trigger a hidden range action`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                maxLines = 3,
+                height = fixed(30),
+                ranges = listOf(
+                    textRange(start = 13, end = 18, actions = listOf(action(url = "test://hidden")))
+                ),
+            )
+        )
+
+        rule.onNodeWithTag("text").performTouchInput { click(Offset(5f, 60f)) }
+
+        assertTrue(actionHandler.handledActions.isEmpty())
+    }
+
+    @Test
+    fun `tap on a visible range triggers its action when later lines are clipped`() {
+        setContent(
+            text(
+                id = "text",
+                text = constant("first\nsecond\nthird"),
+                fontSize = 20,
+                maxLines = 3,
+                height = fixed(30),
+                ranges = listOf(
+                    textRange(start = 0, end = 5, actions = listOf(action(url = "test://visible")))
+                ),
+            )
+        )
+
+        clickFirstLink()
+
+        assertEquals(actionData(url = "test://visible"), actionHandler.handledAction)
     }
 
     @Test
