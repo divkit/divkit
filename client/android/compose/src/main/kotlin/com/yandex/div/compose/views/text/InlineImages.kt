@@ -35,9 +35,10 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yandex.div.compose.collection.observeBuilderDataElements
 import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.expressions.observedFloatValue
-import com.yandex.div.compose.expressions.observedIntValue
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
@@ -79,18 +80,18 @@ internal fun DivText.observeInlineImages(
     textMetrics: ObservedTextMetrics,
     textStyle: TextStyle,
 ): List<InlineImageData> {
-    val images = images ?: return emptyList()
-    val positionedImages = images.mapIndexedNotNull { index, image ->
-        val start = image.start.observedValue()
+    val images = observeSourceImages() ?: return emptyList()
+    val positionedImages = images.mapIndexedNotNull { index, (image, component) ->
+        val start = image.start.observedValue(component = component)
         if (start > text.length) {
             return@mapIndexedNotNull null
         }
 
-        val position = when (image.indexingDirection.observedValue()) {
+        val position = when (image.indexingDirection.observedValue(component = component)) {
             DivText.Image.IndexingDirection.NORMAL -> start.toInt()
             DivText.Image.IndexingDirection.REVERSED -> text.length - start.toInt()
         }
-        PositionedImage(image, index, position)
+        PositionedImage(image, component, index, position)
     }
     if (positionedImages.isEmpty()) {
         return emptyList()
@@ -107,18 +108,20 @@ internal fun DivText.observeInlineImages(
     )
     return sortedImages.map { positionedImage ->
         val image = positionedImage.image
-        val baselineOffset = image.baselineOffset?.observedFloatValue()
+        val component = positionedImage.component
+        val baselineOffset = image.baselineOffset?.observedValue(component = component)?.toFloat()
         val alignment = if (baselineOffset == null) {
-            image.alignmentVertical.observedValue()
+            image.alignmentVertical.observedValue(component = component)
         } else {
             DivTextAlignmentVertical.BASELINE
         }
         val verticalAlignment = alignment.toPlaceholderVerticalAlign()
-        val tintColor = image.tintColor?.observedValue()
-        val width = image.width.observedImageSize()
-        val height = image.height.observedImageSize()
-        val url = image.url.observedValue()
-        val accessibilityDescription = image.accessibility?.description?.observedValue()
+        val tintColor = image.tintColor?.observedValue(component = component)
+        val width = image.width.observedImageSize(component)
+        val height = image.height.observedImageSize(component)
+        val url = image.url.observedValue(component = component)
+        val accessibilityDescription =
+            image.accessibility?.description?.observedValue(component = component)
         val accessibilityRole = image.accessibility?.type.toRole()
         val baselineOffsetTextUnit = baselineOffset?.toTextUnit()
         val isLineHeightConstrained = lineHeight?.let { it < height.textUnit } == true
@@ -166,11 +169,52 @@ internal fun DivText.observeInlineImages(
             alignsToLine = alignsToLine,
             baselineOffset = baselineOffset?.dp ?: 0.dp,
             descentPlaceholderHeight = descentPlaceholderHeight,
-            colorFilter = tintColor?.let { toColorFilter(it, image.tintMode.observedValue()) },
+            colorFilter = tintColor?.let {
+                toColorFilter(it, image.tintMode.observedValue(component = component))
+            },
             accessibilityDescription = accessibilityDescription,
             accessibilityRole = accessibilityRole,
         )
     }
+}
+
+/**
+ * The images of the text with the scope each one is resolved in: the ones its `image_builder`
+ * builds, or the static `images` otherwise.
+ */
+@Composable
+private fun DivText.observeSourceImages(): List<ScopedImage>? {
+    val component = LocalComponent.current
+    imageBuilder?.let { return it.observeBuiltImages(component) }
+    val images = images ?: return null
+    return remember(images, component) { images.map { ScopedImage(it, component) } }
+}
+
+/**
+ * The images this builder builds, each with the scope of its `data` element.
+ */
+@Composable
+private fun DivText.ImageBuilder.observeBuiltImages(parent: DivLocalComponent): List<ScopedImage> {
+    return observeBuilderDataElements(
+        propertyName = "image_builder",
+        elements = data.observedValue(),
+        dataElementName = dataElementName,
+        parent = parent,
+    ) { element ->
+        observeSelectedImage(element.component)?.let { ScopedImage(it, element.component) }
+    }
+}
+
+@Composable
+private fun DivText.ImageBuilder.observeSelectedImage(
+    component: DivLocalComponent,
+): DivText.Image? {
+    for (prototype in prototypes) {
+        if (prototype.selector.observedValue(component = component)) {
+            return prototype.image
+        }
+    }
+    return null
 }
 
 @Composable
@@ -318,9 +362,9 @@ private fun Modifier.inlineImageAccessibility(image: InlineImageData): Modifier 
 }
 
 @Composable
-private fun DivFixedSize.observedImageSize(): ObservedImageSize {
-    val value = value.observedIntValue()
-    val unit = unit.observedValue()
+private fun DivFixedSize.observedImageSize(component: DivLocalComponent): ObservedImageSize {
+    val value = value.observedValue(component = component).toInt()
+    val unit = unit.observedValue(component = component)
     return ObservedImageSize(
         textUnit = value.toTextUnit(unit),
         dp = value.toFloat().toDp(unit),
@@ -360,8 +404,14 @@ private data class ObservedImageSize(
     val dp: Dp,
 )
 
+private data class ScopedImage(
+    val image: DivText.Image,
+    val component: DivLocalComponent,
+)
+
 private data class PositionedImage(
     val image: DivText.Image,
+    val component: DivLocalComponent,
     val sourceIndex: Int,
     val position: Int,
 )

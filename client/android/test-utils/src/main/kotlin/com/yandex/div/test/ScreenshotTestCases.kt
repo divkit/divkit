@@ -121,9 +121,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     "div-text/ellipsis-with-image.json",
     "div-text/ellipsis_builder.json",
 
-    // div-text.image_builder not supported
-    "div-text/image_builder.json",
-
     // markdown extension not supported
     "div-text/markdown-extension.json",
 

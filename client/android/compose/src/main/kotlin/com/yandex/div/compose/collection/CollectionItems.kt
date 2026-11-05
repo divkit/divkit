@@ -1,7 +1,6 @@
 package com.yandex.div.compose.collection
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
@@ -11,20 +10,12 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.declaresLocalScope
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.triggers.observe
-import com.yandex.div.compose.utils.reportError
-import com.yandex.div.compose.utils.reportWarning
-import com.yandex.div.internal.core.INDEX_VARIABLE_NAME
-import com.yandex.div.json.typeMismatch
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivVisibility
-import org.json.JSONObject
-
-private const val INDEX_NAME_RESERVED_MESSAGE =
-    "Item builder data element name 'index' is reserved for the item index"
 
 internal class CollectionItems(
     val items: List<Div>,
@@ -109,22 +100,13 @@ private fun DivCollectionItemBuilder.observeBuiltItems(
     owner: DivBase,
     parent: DivLocalComponent,
 ): CollectionItems {
-    if (isDataElementShadowedByIndex) {
-        reportWarning(INDEX_NAME_RESERVED_MESSAGE)
-    }
-    val elements = data.observedValue()
-    val elementKeys = remember(elements) {
-        List(elements.length()) { index -> "${elements.get(index)}:$index" }
-    }
-    val selectedItems = ArrayList<SelectedCollectionItem>(elements.length())
-    for (index in 0 until elements.length()) {
-        val elementKey = elementKeys[index]
-        val item = key(elementKey) {
-            observeSelectedItem(parent, elements.get(index), index, elementKey)
-        }
-        if (item != null) {
-            selectedItems += item
-        }
+    val selectedItems = observeBuilderDataElements(
+        propertyName = "item_builder",
+        elements = data.observedValue(),
+        dataElementName = dataElementName,
+        parent = parent,
+    ) { element ->
+        observeSelectedItem(element)
     }
     val viewContext = LocalDivViewContext.current
     val idCounts = selectedItems.mapNotNull { it.id }.groupingBy { it }.eachCount()
@@ -154,30 +136,12 @@ private fun DivCollectionItemBuilder.observeBuiltItems(
 
 @Composable
 private fun DivCollectionItemBuilder.observeSelectedItem(
-    parent: DivLocalComponent,
-    element: Any,
-    index: Int,
-    elementKey: String,
+    element: BuilderDataElement,
 ): SelectedCollectionItem? {
-    if (element !is JSONObject) {
-        reportError(remember(index, element) { typeMismatch(index, element) })
-        return null
-    }
-    val viewContext = LocalDivViewContext.current
-    val constants = remember(elementKey) { itemConstants(element, index) }
-    val component = remember(viewContext, parent, elementKey) {
-        viewContext.createLocalComponent(
-            parent,
-            ItemVariableProvider(parent.variableProvider, constants),
-        )
-    }
-    DisposableEffect(component) {
-        onDispose { component.expressionResolver.clearObservers() }
-    }
-    val prototype = observeSelectedPrototype(component) ?: return null
-    val id = prototype.id?.observedValue(component = component)
-    return remember(elementKey, prototype, id) {
-        SelectedCollectionItem(prototype, id, elementKey, constants)
+    val prototype = observeSelectedPrototype(element.component) ?: return null
+    val id = prototype.id?.observedValue(component = element.component)
+    return remember(element.key, prototype, id) {
+        SelectedCollectionItem(prototype, id, element.key, element.constants)
     }
 }
 
@@ -192,17 +156,6 @@ private fun DivCollectionItemBuilder.observeSelectedPrototype(
     }
     return null
 }
-
-/**
- * The item index shadows a data element named `index`, as in the View renderer.
- */
-private val DivCollectionItemBuilder.isDataElementShadowedByIndex: Boolean
-    get() = dataElementName == INDEX_VARIABLE_NAME
-
-private fun DivCollectionItemBuilder.itemConstants(
-    element: JSONObject,
-    index: Int,
-): Map<String, Any> = mapOf(dataElementName to element, INDEX_VARIABLE_NAME to index.toLong())
 
 internal data class SelectedCollectionItem(
     val prototype: DivCollectionItemBuilder.Prototype,

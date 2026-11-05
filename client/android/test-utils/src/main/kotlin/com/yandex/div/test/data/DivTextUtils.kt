@@ -130,6 +130,7 @@ fun text(
     hoverStartActions: List<DivAction>? = null,
     hoverEndActions: List<DivAction>? = null,
     id: String? = null,
+    imageBuilder: DivText.ImageBuilder? = null,
     images: List<DivText.Image>? = null,
     layoutProvider: DivLayoutProvider? = null,
     lineHeight: Long? = null,
@@ -187,6 +188,7 @@ fun text(
             hoverStartActions = hoverStartActions,
             hoverEndActions = hoverEndActions,
             id = id,
+            imageBuilder = imageBuilder,
             images = images,
             layoutProvider = layoutProvider,
             lineHeight = lineHeight?.let { constant(it) },
@@ -204,9 +206,7 @@ fun text(
             textGradient = textGradient,
             truncate = constant(truncate),
             truncatePolicy = constant(truncatePolicy),
-            textColor = textColorExpression
-                ?: textColor?.let { constant(it.value) }
-                ?: constant(0xFF000000.toInt()),
+            textColor = textColorExpression ?: constant(textColor?.value ?: 0xFF000000.toInt()),
             tooltips = tooltips,
             transform = transform,
             transitionIn = transitionIn,

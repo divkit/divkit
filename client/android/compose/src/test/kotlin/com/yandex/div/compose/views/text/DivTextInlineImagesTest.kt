@@ -22,17 +22,22 @@ import com.yandex.div.data.Variable
 import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.animatedTextGradient
+import com.yandex.div.test.data.arrayExpression
+import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.doubleExpression
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.throwingErrorLogger
 import com.yandex.div.test.data.uriExpression
 import com.yandex.div2.Div
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivText
+import org.json.JSONArray
 import org.junit.Rule
 import org.junit.runner.RunWith
 import kotlin.test.Test
@@ -364,6 +369,127 @@ class DivTextInlineImagesTest {
         assertEquals(zeroOffsetHeight, negativeOffsetHeight)
     }
 
+    @Test
+    fun `images follow builder data`() {
+        val positions = Variable.ArrayVariable("positions", jsonArray(jsonObject("pos" to 0)))
+        variableController.declare(positions)
+        rule.setContent(
+            configuration = configuration,
+            data = data(textWithImageBuilder(imageBuilder(arrayExpression("@{positions}")))),
+        )
+
+        positions.set(jsonArray(jsonObject("pos" to 3)))
+
+        assertEquals("abc\u2060\u2060", renderedText())
+    }
+
+    @Test
+    fun `builder images replace static images`() {
+        rule.setContent(
+            configuration = configuration,
+            data = data(
+                textWithImageBuilder(
+                    imageBuilder = imageBuilder(constant(jsonArray(jsonObject("pos" to 3)))),
+                    images = listOf(inlineImage(constant(0L))),
+                )
+            ),
+        )
+
+        assertEquals("abc\u2060\u2060", renderedText())
+    }
+
+    @Test
+    fun `builder selector reacts to card variable`() {
+        val isShown = Variable.BooleanVariable("is_shown", false)
+        variableController.declare(isShown)
+        rule.setContent(
+            configuration = configuration,
+            data = data(
+                textWithImageBuilder(
+                    imageBuilder(
+                        data = constant(jsonArray(jsonObject("pos" to 3))),
+                        selector = booleanExpression("@{is_shown}"),
+                    )
+                )
+            ),
+        )
+
+        isShown.set(true)
+
+        assertEquals("abc\u2060\u2060", renderedText())
+    }
+
+    @Test
+    fun `builder image reads its data element`() {
+        rule.setContent(
+            configuration = configuration,
+            data = data(
+                textWithImageBuilder(
+                    imageBuilder(
+                        data = constant(jsonArray(jsonObject("pos" to 0, "title" to "Star"))),
+                        image = inlineImage(
+                            start = intExpression("@{it.getInteger('pos')}"),
+                            accessibility = DivText.Image.Accessibility(
+                                description = expression("@{it.getString('title')}"),
+                            ),
+                        ),
+                    )
+                )
+            ),
+        )
+
+        rule.onNodeWithContentDescription("Star", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun `replaced card exposes builder element under new data element name`() {
+        val elements = constant(jsonArray(jsonObject("pos" to 0, "title" to "Star")))
+        fun card(dataElementName: String) = data(
+            textWithImageBuilder(
+                imageBuilder(
+                    data = elements,
+                    dataElementName = dataElementName,
+                    image = inlineImage(
+                        start = constant(0L),
+                        accessibility = DivText.Image.Accessibility(
+                            description = expression("@{$dataElementName.getString('title')}"),
+                        ),
+                    ),
+                )
+            )
+        )
+        val currentData = mutableStateOf(card("it"))
+        rule.setContentWithDivContext(configuration) {
+            DivView(currentData.value)
+        }
+        rule.onNodeWithContentDescription("Star", useUnmergedTree = true).assertExists()
+
+        rule.runOnIdle { currentData.value = card("row") }
+
+        rule.onNodeWithContentDescription("Star", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun `builder element without matching prototype adds no image`() {
+        val elements = jsonArray(
+            jsonObject("pos" to 0, "kind" to "chess"),
+            jsonObject("pos" to 3, "kind" to "star"),
+        )
+        rule.setContent(
+            configuration = configuration,
+            data = data(
+                textWithImageBuilder(
+                    imageBuilder(
+                        data = constant(elements),
+                        selector = booleanExpression("@{it.getString('kind') == 'star'}"),
+                    )
+                )
+            ),
+        )
+
+        assertEquals("abc\u2060\u2060", renderedText())
+    }
+
     private fun renderedText(): String {
         rule.waitForIdle()
         return rule.onNodeWithTag("text")
@@ -395,6 +521,27 @@ class DivTextInlineImagesTest {
         start = start,
         url = url,
         width = width,
+    )
+
+    private fun imageBuilder(
+        data: Expression<JSONArray>,
+        selector: Expression<Boolean> = constant(true),
+        image: DivText.Image = inlineImage(intExpression("@{it.getInteger('pos')}")),
+        dataElementName: String = "it",
+    ) = DivText.ImageBuilder(
+        data = data,
+        dataElementName = dataElementName,
+        prototypes = listOf(DivText.ImageBuilder.Prototype(image = image, selector = selector)),
+    )
+
+    private fun textWithImageBuilder(
+        imageBuilder: DivText.ImageBuilder,
+        images: List<DivText.Image>? = null,
+    ) = text(
+        id = "text",
+        imageBuilder = imageBuilder,
+        images = images,
+        text = constant("abc"),
     )
 
     private fun indexingDirectionExpression(
