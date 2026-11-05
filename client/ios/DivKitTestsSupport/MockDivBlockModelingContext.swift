@@ -14,7 +14,8 @@ extension DivBlockModelingContext {
     blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
     extensionHandlers: [DivExtensionHandler] = [],
     scheduler: Scheduling? = nil,
-    variableStorage: DivVariableStorage? = nil
+    variableStorage: DivVariableStorage? = nil,
+    flagsInfo: DivFlagsInfo = .default
   ) {
     self = DivBlockModelingContext(
       cardId: cardId,
@@ -23,7 +24,8 @@ extension DivBlockModelingContext {
       imageHolderFactory: FakeImageHolderFactory(),
       extensionHandlers: extensionHandlers,
       variablesStorage: DivVariablesStorage(outerStorage: variableStorage),
-      scheduler: scheduler
+      scheduler: scheduler,
+      flagsInfo: flagsInfo
     ).modifying(
       cardLogId: cardId.rawValue
     )

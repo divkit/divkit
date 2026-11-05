@@ -5,6 +5,10 @@ import VGSL
 extension DivGifImage: DivBlockModeling, DivImageProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     let context = modifiedContextParentPath(context)
+    if gifUrl == nil, context.flagsInfo.hideImagesWithoutUrl {
+      context.lastVisibleBoundsCache.onBecomeInvisible(context.path)
+      return EmptyBlock.zeroSized
+    }
     return try applyBaseProperties(
       to: { try makeBaseBlock(context: context) },
       context: context,

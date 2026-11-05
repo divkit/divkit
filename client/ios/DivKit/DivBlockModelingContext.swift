@@ -77,7 +77,8 @@ public struct DivBlockModelingContext {
     imageHolderFactory: DivImageHolderFactory,
     extensionHandlers: [DivExtensionHandler] = [],
     variablesStorage: DivVariablesStorage = DivVariablesStorage(),
-    scheduler: Scheduling? = nil
+    scheduler: Scheduling? = nil,
+    flagsInfo: DivFlagsInfo = .default
   ) {
     self.init(
       viewId: DivViewId(cardId: cardId, additionalId: additionalId),
@@ -89,7 +90,7 @@ public struct DivBlockModelingContext {
       imageHolderFactory: imageHolderFactory,
       divCustomBlockFactory: nil,
       fontProvider: nil,
-      flagsInfo: .default,
+      flagsInfo: flagsInfo,
       extensionHandlers: extensionHandlers.dictionary,
       functionsStorage: nil,
       variablesStorage: variablesStorage,

@@ -57,6 +57,8 @@ public struct DivFlagsInfo: Encodable, Equatable, Sendable {
   /// Kept for source compatibility.
   public let useUntypedTemplateResolver: Bool
 
+  public let hideImagesWithoutUrl: Bool
+
   /// Creates an instance of `DivFlagsInfo`.
   public init(
     useUrlHandlerForVisibilityActions: Bool = false,
@@ -67,7 +69,8 @@ public struct DivFlagsInfo: Encodable, Equatable, Sendable {
     defaultTextAutoEllipsize: Bool = true,
     fontCacheEnabled: Bool = true,
     variationFontWeightOverrideEnabled: Bool = true,
-    useUntypedTemplateResolver: Bool = false
+    useUntypedTemplateResolver: Bool = false,
+    hideImagesWithoutUrl: Bool = false
   ) {
     self.useUrlHandlerForVisibilityActions = useUrlHandlerForVisibilityActions
     self.imageBlurPreferMetal = imageBlurPreferMetal
@@ -78,6 +81,7 @@ public struct DivFlagsInfo: Encodable, Equatable, Sendable {
     self.fontCacheEnabled = fontCacheEnabled
     self.variationFontWeightOverrideEnabled = variationFontWeightOverrideEnabled
     self.useUntypedTemplateResolver = useUntypedTemplateResolver
+    self.hideImagesWithoutUrl = hideImagesWithoutUrl
   }
 }
 
@@ -92,6 +96,7 @@ extension DivFlagsInfo: Decodable {
     case fontCacheEnabled
     case variationFontWeightOverrideEnabled
     case useUntypedTemplateResolver
+    case hideImagesWithoutUrl
   }
 
   public init(from decoder: Decoder) throws {
@@ -141,5 +146,10 @@ extension DivFlagsInfo: Decodable {
       Bool.self,
       forKey: .useUntypedTemplateResolver
     ) ?? Self.default.useUntypedTemplateResolver
+
+    self.hideImagesWithoutUrl = try container.decodeIfPresent(
+      Bool.self,
+      forKey: .hideImagesWithoutUrl
+    ) ?? Self.default.hideImagesWithoutUrl
   }
 }
