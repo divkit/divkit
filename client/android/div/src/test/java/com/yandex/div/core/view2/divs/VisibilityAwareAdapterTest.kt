@@ -9,6 +9,8 @@ import com.yandex.div.internal.core.toBlock
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.constant
+import com.yandex.div.test.data.gifImage
+import com.yandex.div.test.data.image
 import com.yandex.div.test.data.text
 import com.yandex.div2.DivVisibility
 import org.junit.runner.RunWith
@@ -190,9 +192,49 @@ class VisibilityAwareAdapterTest {
         verifyRemoved(1)
     }
 
-    private fun adapter(items: List<DivBlock>) = TestAdapter(items).apply {
+    @Test
+    fun `images without url are excluded when hideImagesWithoutUrl is set`() {
+        val visibleItem = item(DivVisibility.VISIBLE)
+        val imageWithUrl = image(imageUrl = "empty://").toBlock(resolver, path)
+
+        val adapter = adapter(
+            listOf(visibleItem, imageWithoutUrl(), gifWithoutUrl(), imageWithUrl),
+            hideImagesWithoutUrl = true,
+        )
+
+        assertEquals(listOf(visibleItem, imageWithUrl), adapter.visibleItems)
+    }
+
+    @Test
+    fun `added images without url are excluded when hideImagesWithoutUrl is set`() {
+        val adapter = adapter(listOf(item(DivVisibility.VISIBLE)), hideImagesWithoutUrl = true)
+
+        adapter.addItems(1, listOf(imageWithoutUrl(), gifWithoutUrl()))
+
+        assertEquals(1, adapter.itemCount)
+        verifyNoInteractions(observer)
+    }
+
+    @Test
+    fun `images without url are kept by default`() {
+        val image = imageWithoutUrl()
+        val gif = gifWithoutUrl()
+
+        val adapter = adapter(listOf(image, gif))
+
+        assertEquals(listOf(image, gif), adapter.visibleItems)
+    }
+
+    private fun adapter(
+        items: List<DivBlock>,
+        hideImagesWithoutUrl: Boolean = false,
+    ) = TestAdapter(items, hideImagesWithoutUrl).apply {
         registerAdapterDataObserver(observer)
     }
+
+    private fun imageWithoutUrl() = image().toBlock(resolver, path)
+
+    private fun gifWithoutUrl() = gifImage().toBlock(resolver, path)
 
     private fun verifyInserted(position: Int, count: Int) {
         verify(observer).onItemRangeInserted(position, count)
@@ -221,7 +263,8 @@ class VisibilityAwareAdapterTest {
 
     private class TestAdapter(
         items: List<DivBlock>,
-    ) : VisibilityAwareAdapter<RecyclerView.ViewHolder>(items) {
+        hideImagesWithoutUrl: Boolean,
+    ) : VisibilityAwareAdapter<RecyclerView.ViewHolder>(items, hideImagesWithoutUrl) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = mock()
 

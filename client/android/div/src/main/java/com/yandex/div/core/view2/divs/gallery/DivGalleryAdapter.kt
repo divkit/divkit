@@ -9,7 +9,8 @@ import com.yandex.div.internal.core.DivBlock
 internal class DivGalleryAdapter(
     items: List<DivBlock>,
     private val itemBinding: CollectionItemBinding<DivGalleryViewHolder>,
-) : DivCollectionAdapter<DivGalleryViewHolder>(items) {
+    hideImagesWithoutUrl: Boolean,
+) : DivCollectionAdapter<DivGalleryViewHolder>(items, hideImagesWithoutUrl) {
 
     var orientation = RecyclerView.HORIZONTAL
     var columnCount = 1

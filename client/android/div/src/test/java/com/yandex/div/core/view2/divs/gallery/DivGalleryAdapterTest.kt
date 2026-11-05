@@ -118,6 +118,7 @@ class DivGalleryAdapterTest {
     private fun adapter(itemCount: Int) = DivGalleryAdapter(
         items = List(itemCount) { item() },
         itemBinding = DefaultCollectionItemBinding(createHolder = { mock() }),
+        hideImagesWithoutUrl = false,
     ).apply {
         registerAdapterDataObserver(observer)
     }

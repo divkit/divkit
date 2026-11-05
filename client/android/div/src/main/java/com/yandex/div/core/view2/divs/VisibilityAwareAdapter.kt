@@ -8,6 +8,7 @@ import com.yandex.div2.DivVisibility
 
 internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     initialItems: List<DivBlock>,
+    private val hideImagesWithoutUrl: Boolean,
 ) : RecyclerView.Adapter<VH>(), ExpressionSubscriber {
 
     val items: List<DivBlock>
@@ -18,14 +19,14 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
      *
      * Includes both [DivVisibility.VISIBLE] and [DivVisibility.INVISIBLE] items, since the latter
      * must reserve layout space (mirrors `View.INVISIBLE` behavior applied by `DivBaseBinder`).
-     * Only [DivVisibility.GONE] items are excluded.
+     * Only [DivVisibility.GONE] items and, with `hideImagesWithoutUrl`, images without URL are excluded.
      */
     val visibleItems: List<DivBlock>
         get() = buildVisibleItemList()
 
     private val itemList = initialItems.toMutableList()
     private val visibleItemList = mutableListOf<DivBlock>()
-    private val itemReservesSpaceList = initialItems.map { item -> item.reservesSpace }.toMutableList()
+    private val itemReservesSpaceList = initialItems.map { item -> item.reservesSpace() }.toMutableList()
     private var isVisibleItemListValid = false
 
     override val subscriptions = mutableListOf<Disposable>()
@@ -51,7 +52,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     ) {
         onBeforeItemsChange()
         val visiblePosition = visiblePositionOf(position)
-        val addedItemsReserveSpace = items.map { item -> item.reservesSpace }
+        val addedItemsReserveSpace = items.map { item -> item.reservesSpace() }
         itemList.addAll(position, items)
         itemReservesSpaceList.addAll(position, addedItemsReserveSpace)
         isVisibleItemListValid = false
@@ -94,7 +95,7 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     }
 
     private fun updateItemVisibility(position: Int, visibility: DivVisibility = itemList[position].visibility) {
-        val reservesSpace = visibility != DivVisibility.GONE
+        val reservesSpace = itemList[position].reservesSpace(visibility)
         val wasReservingSpace = itemReservesSpaceList[position]
         if (reservesSpace == wasReservingSpace) {
             return
@@ -124,10 +125,10 @@ internal abstract class VisibilityAwareAdapter<VH : RecyclerView.ViewHolder>(
     protected open fun notifyRawItemChanged(position: Int) = notifyItemChanged(position)
 
     protected open fun onBeforeItemsChange() = Unit
+
+    private fun DivBlock.reservesSpace(visibility: DivVisibility = this.visibility) =
+        visibility != DivVisibility.GONE && !(hideImagesWithoutUrl && div.isImageWithoutUrl)
 }
 
 private val DivBlock.visibility: DivVisibility
     get() = div.value().visibility.evaluate(expressionResolver)
-
-private val DivBlock.reservesSpace: Boolean
-    get() = visibility != DivVisibility.GONE

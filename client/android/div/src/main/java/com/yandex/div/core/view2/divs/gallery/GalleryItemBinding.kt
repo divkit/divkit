@@ -30,7 +30,11 @@ internal class GalleryItemBinding(
             itemAt = { createdAdapter.visibleItems.getOrNull(it) },
             nativeViewTypes = { (0 until createdAdapter.itemCount).map(createdAdapter::getItemViewType).toSet() },
         )
-        createdAdapter = DivGalleryAdapter(items, prebinding)
+        createdAdapter = DivGalleryAdapter(
+            items,
+            prebinding,
+            divView.div2Component.compatibilityFeatures.hideImagesWithoutUrl,
+        )
         adapter = createdAdapter
     }
 

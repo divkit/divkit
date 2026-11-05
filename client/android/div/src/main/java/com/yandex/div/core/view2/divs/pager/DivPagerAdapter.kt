@@ -16,7 +16,8 @@ internal class DivPagerAdapter(
     private val itemBinding: CollectionItemBinding<DivPagerViewHolder>,
     private val pageTranslations: SparseArray<Float>,
     private val pagerView: DivPagerView,
-) : DivCollectionAdapter<DivPagerViewHolder>(items) {
+    hideImagesWithoutUrl: Boolean,
+) : DivCollectionAdapter<DivPagerViewHolder>(items, hideImagesWithoutUrl) {
 
     private val beforeItemsChangeListeners = mutableListOf<() -> Unit>()
     private val virtualItemCountChangedListeners = mutableListOf<(Int) -> Unit>()

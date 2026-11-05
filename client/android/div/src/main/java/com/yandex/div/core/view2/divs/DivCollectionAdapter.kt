@@ -8,7 +8,8 @@ import com.yandex.div.internal.core.DivBlock
 
 internal abstract class DivCollectionAdapter<VH: DivCollectionViewHolder>(
     items: List<DivBlock>,
-) : VisibilityAwareAdapter<VH>(items) {
+    hideImagesWithoutUrl: Boolean,
+) : VisibilityAwareAdapter<VH>(items, hideImagesWithoutUrl) {
 
     private var ids = items.getItemIds()
 

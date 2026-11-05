@@ -85,6 +85,8 @@ public class DivConfiguration {
     private final DivVariableController mDivVariableController;
     @NonNull
     private final DivAnimationsEnabledProvider mAnimationsEnabledProvider;
+    @NonNull
+    private final DivCompatibilityFeatures mCompatibilityFeatures;
 
     private final boolean mTapBeaconsEnabled;
     private final boolean mVisibilityBeaconsEnabled;
@@ -156,7 +158,8 @@ public class DivConfiguration {
             float recyclerScrollInterceptionAngle,
             boolean renderEffectEnabled,
             boolean deferredVideoPlayerCreationEnabled,
-            @NonNull DivAnimationsEnabledProvider animationsEnabledProvider
+            @NonNull DivAnimationsEnabledProvider animationsEnabledProvider,
+            @NonNull DivCompatibilityFeatures compatibilityFeatures
     ) {
         mImageLoader = imageLoader;
         mActionHandler = actionHandler;
@@ -203,6 +206,7 @@ public class DivConfiguration {
         mRenderEffectEnabled = renderEffectEnabled;
         mDeferredVideoPlayerCreationEnabled = deferredVideoPlayerCreationEnabled;
         mAnimationsEnabledProvider = animationsEnabledProvider;
+        mCompatibilityFeatures = compatibilityFeatures;
     }
 
     @Provides
@@ -484,6 +488,12 @@ public class DivConfiguration {
         return mAnimationsEnabledProvider;
     }
 
+    @Provides
+    @NonNull
+    public DivCompatibilityFeatures getCompatibilityFeatures() {
+        return mCompatibilityFeatures;
+    }
+
     @NonNull
     public DivVariableController getDivVariableController() {
         return mDivVariableController;
@@ -566,6 +576,8 @@ public class DivConfiguration {
                 Experiment.DEFER_VIDEO_PLAYER_CREATION_ENABLED.getDefaultValue();
         @NonNull
         private DivAnimationsEnabledProvider mAnimationsEnabledProvider = DivAnimationsEnabledProvider.DEFAULT;
+        @NonNull
+        private DivCompatibilityFeatures mCompatibilityFeatures = new DivCompatibilityFeatures();
 
         public Builder(@NonNull DivImageLoader imageLoader) {
             mImageLoader = imageLoader;
@@ -873,6 +885,15 @@ public class DivConfiguration {
             return this;
         }
 
+        /**
+         * Opt-in features for markup that relies on earlier DivKit versions, see {@link DivCompatibilityFeatures}.
+         */
+        @NonNull
+        public Builder compatibilityFeatures(@NonNull DivCompatibilityFeatures features) {
+            mCompatibilityFeatures = features;
+            return this;
+        }
+
         @NonNull
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
@@ -927,7 +948,8 @@ public class DivConfiguration {
                     mRecyclerScrollInterceptionAngle,
                     mRenderEffectEnabled,
                     mDeferredVideoPlayerCreationEnabled,
-                    mAnimationsEnabledProvider);
+                    mAnimationsEnabledProvider,
+                    mCompatibilityFeatures);
         }
     }
 }

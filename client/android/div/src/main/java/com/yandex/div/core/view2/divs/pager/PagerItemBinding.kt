@@ -44,7 +44,13 @@ internal class PagerItemBinding(
             nativeViewTypes = { (0 until createdAdapter.itemCount).map(createdAdapter::getItemViewType).toSet() },
             onPreparedItemConsumed = { holder, block -> holder.updatePageLayout(block) },
         )
-        createdAdapter = DivPagerAdapter(items, prebinding, pageTranslations, pagerView)
+        createdAdapter = DivPagerAdapter(
+            items,
+            prebinding,
+            pageTranslations,
+            pagerView,
+            divView.div2Component.compatibilityFeatures.hideImagesWithoutUrl,
+        )
         adapter = createdAdapter
     }
 

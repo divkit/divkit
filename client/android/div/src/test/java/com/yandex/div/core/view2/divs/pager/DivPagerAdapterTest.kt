@@ -432,6 +432,7 @@ class DivPagerAdapterTest {
         itemBinding = DefaultCollectionItemBinding(createHolder = { mock() }),
         pageTranslations = SparseArray(),
         pagerView = pagerView,
+        hideImagesWithoutUrl = false,
     ).apply {
         registerAdapterDataObserver(observer)
     }

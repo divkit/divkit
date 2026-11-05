@@ -7,6 +7,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import androidx.transition.Visibility
+import com.yandex.div.core.DivCompatibilityFeatures
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.equalsToConstant
@@ -33,6 +34,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
 import com.yandex.div.json.expressions.isConstant
 import com.yandex.div.json.expressions.isConstantOrNull
+import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivInput
@@ -47,6 +49,7 @@ internal class DivBaseBinder @Inject constructor(
     private val divFocusBinder: DivFocusBinder,
     private val divAccessibilityBinder: DivAccessibilityBinder,
     private val layoutParamsBinder: DivLayoutParamsBinder,
+    private val compatibilityFeatures: DivCompatibilityFeatures = DivCompatibilityFeatures(),
 ) {
 
     fun bindView(view: View, divBlock: DivBlock, oldDivBlock: DivBlock?, divView: Div2View) {
@@ -84,7 +87,7 @@ internal class DivBaseBinder @Inject constructor(
 
         bindNextFocus(divView, div, oldDiv, resolver, subscriber)
         bindFocusActions(div.focus?.onFocus, div.focus?.onBlur, resolver, divView)
-        bindVisibility(divView, div, oldDiv, resolver, subscriber)
+        bindVisibility(divView, divBlock.div, oldDivBlock?.div, resolver, subscriber)
         bindTransform(div, oldDiv, resolver, subscriber)
 
         div.tooltips?.let { tooltipController.mapTooltip(this, it) }
@@ -381,12 +384,19 @@ internal class DivBaseBinder @Inject constructor(
 
     private fun View.bindVisibility(
         divView: Div2View,
-        newDiv: DivBase,
-        oldDiv: DivBase?,
+        div: Div,
+        oldDiv: Div?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        if (newDiv.visibility.equalsToConstant(oldDiv?.visibility)) {
+        val newDiv = div.value()
+        if (div.isHiddenWithoutUrl) {
+            applyVisibility(divView, newDiv, resolver, firstApply = true, DivVisibility.GONE)
+            return
+        }
+
+        val wasHidden = oldDiv?.isHiddenWithoutUrl == true
+        if (!wasHidden && newDiv.visibility.equalsToConstant(oldDiv?.value()?.visibility)) {
             return
         }
 
@@ -401,15 +411,18 @@ internal class DivBaseBinder @Inject constructor(
         )
     }
 
+    private val Div.isHiddenWithoutUrl get() = compatibilityFeatures.hideImagesWithoutUrl && isImageWithoutUrl
+
     private fun View.applyVisibility(
         divView: Div2View,
         newDiv: DivBase,
         resolver: ExpressionResolver,
-        firstApply: Boolean
+        firstApply: Boolean,
+        divVisibility: DivVisibility = newDiv.visibility.evaluate(resolver),
     ) {
         val divTransitionHandler = divView.viewComponent.transitionHandler
 
-        val newVisibility = when (newDiv.visibility.evaluate(resolver)) {
+        val newVisibility = when (divVisibility) {
             DivVisibility.VISIBLE -> View.VISIBLE
             DivVisibility.INVISIBLE -> View.INVISIBLE
             DivVisibility.GONE -> View.GONE
@@ -527,3 +540,10 @@ internal class DivBaseBinder @Inject constructor(
         isFocusableInTouchMode = div.focus != null
     }
 }
+
+internal val Div.isImageWithoutUrl: Boolean
+    get() = when (this) {
+        is Div.Image -> value.imageUrl == null
+        is Div.GifImage -> value.gifUrl == null
+        else -> false
+    }

@@ -10,6 +10,7 @@ import com.yandex.div.core.Div2Logger;
 import com.yandex.div.core.DivActionHandler;
 import com.yandex.div.core.DivActionPerformer;
 import com.yandex.div.core.DivAnimationsEnabledProvider;
+import com.yandex.div.core.DivCompatibilityFeatures;
 import com.yandex.div.core.DivConfiguration;
 import com.yandex.div.core.DivCreationTracker;
 import com.yandex.div.core.DivCustomContainerChildFactory;
@@ -137,6 +138,9 @@ public interface Div2Component {
 
     @NonNull
     DivAnimationsEnabledController getAnimationsEnabledController();
+
+    @NonNull
+    DivCompatibilityFeatures getCompatibilityFeatures();
 
     @NonNull
     PerformanceDependentSessionProfiler getPerformanceDependentSessionProfiler();
