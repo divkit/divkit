@@ -160,7 +160,7 @@ internal class DivTreeWalk<T> private constructor(
 
             var children = this.children
             if (children == null) {
-                children = item.div.getItems(item.expressionResolver, item.path)
+                children = item.div.getChildBlocks(item.expressionResolver, item.path)
                 this.children = children
             }
 
@@ -174,7 +174,7 @@ internal class DivTreeWalk<T> private constructor(
     }
 }
 
-private fun Div.getItems(resolver: ExpressionResolver, path: DivStatePath): List<DivBlock> {
+internal fun Div.getChildBlocks(resolver: ExpressionResolver, path: DivStatePath): List<DivBlock> {
     return when (this) {
         is Div.Text -> emptyList()
         is Div.Image -> emptyList()

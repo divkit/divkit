@@ -1,11 +1,18 @@
 package com.yandex.div.core.util
 
+import com.yandex.div.core.actions.actionTargetBlockLocator
+import com.yandex.div.core.dagger.DivDataComponent
 import com.yandex.div.core.expression.ExpressionResolverImpl
 import com.yandex.div.core.expression.ExpressionsRuntime
 import com.yandex.div.core.expression.local.RuntimeStore
 import com.yandex.div.core.state.DivPathUtils.fromState
+import com.yandex.div.core.state.DivStateManager
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.internal.core.DivBlock
+import com.yandex.div.internal.core.DivBlockLocator
+import com.yandex.div.internal.core.DivBlockSearchEnvironment
+import com.yandex.div.internal.core.buildItems
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
@@ -14,217 +21,44 @@ import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
+import com.yandex.div2.DivData
+import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 import org.json.JSONArray
 import org.json.JSONObject
-import org.junit.Test
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class DivBlockLocatorTest {
+class ViewDivBlockSearchEnvironmentTest {
 
     private val resolver = ExpressionResolver.EMPTY
 
     @Test
-    fun `unique matching target is returned without scope`() {
-        val target = text(id = "target", text = "Target")
-
-        val result = findTarget(root = container(items = listOf(target)))
-
-        assertSame(target, result.getOrThrow().div)
-    }
-
-    @Test
-    fun `matches filters blocks with the same id`() {
-        val target = text(id = "target", text = "Target")
-        val root = container(items = listOf(
-            container(id = "target"),
-            target,
-        ))
-
-        val result = findTarget(root = root, matches = { block -> block.div is Div.Text })
-
-        assertSame(target, result.getOrThrow().div)
-    }
-
-    @Test
-    fun `missing target is reported`() {
-        val result = findTarget(root = container())
-
-        assertFailure("Element with id 'target' not found", result)
-    }
-
-    @Test
-    fun `missing state is reported`() {
-        val locator = DivBlockLocator(
-            state = null,
-            rootResolver = resolver,
-            activeStates = ActiveStateProvider { emptySet() },
-        )
-
-        val result = locator.findTarget(
-            divId = "target",
-            scopeId = null,
-            actionResolver = resolver,
-            matches = { true },
-        )
-
-        assertFailure("Element with id 'target' not found", result)
-    }
-
-    @Test
-    fun `duplicate target is reported`() {
-        val root = container(items = listOf(
-            text(id = "target", text = "First"),
-            text(id = "target", text = "Second"),
-        ))
-
-        val result = findTarget(root = root)
-
-        assertFailure("Element with id 'target' is ambiguous", result)
-    }
-
-    @Test
-    fun `scope selects target from its subtree`() {
-        val targetInsideScope = text(id = "target", text = "Inside")
-        val root = container(items = listOf(
-            text(id = "target", text = "Outside"),
-            container(id = "scope", items = listOf(targetInsideScope)),
-        ))
-
-        val result = findTarget(root = root, scopeId = "scope")
-
-        assertSame(targetInsideScope, result.getOrThrow().div)
-    }
-
-    @Test
-    fun `target outside existing scope is not returned`() {
-        val root = container(items = listOf(
-            text(id = "target", text = "Outside"),
-            container(id = "scope"),
-        ))
-
-        val result = findTarget(root = root, scopeId = "scope")
-
-        assertFailure("Element with id 'target' not found in scope", result)
-    }
-
-    @Test
-    fun `duplicate target inside scope is reported`() {
-        val root = container(items = listOf(container(
-            id = "scope",
-            items = listOf(
-                text(id = "target", text = "First"),
-                text(id = "target", text = "Second"),
-            ),
+    fun `reused action locator selects target from the newly active state`() {
+        val selectedTarget = text(id = "target", text = "Selected")
+        val card = data(state(id = "switcher", states = listOf(
+            state(stateId = "initial", div = text(id = "target", text = "Initial")),
+            state(stateId = "selected", div = selectedTarget),
         )))
+        val stateManager = DivStateManager("card", mock())
+        val component = mock<DivDataComponent> { on { this.stateManager } doReturn stateManager }
+        val divView = mock<Div2View> {
+            on { divData } doReturn card
+            on { stateId } doReturn 0L
+            on { expressionResolver } doReturn resolver
+            on { dataComponent } doReturn component
+        }
+        val locator = requireNotNull(divView.actionTargetBlockLocator())
+        locator.findTarget("target", null, resolver, matches = { true }).getOrThrow()
+        stateManager.updateStates(DivStatePath.parse("0/switcher/selected"), temporary = true)
 
-        val result = findTarget(root = root, scopeId = "scope")
+        val result = locator.findTarget("target", null, resolver, matches = { true })
 
-        assertFailure("Element with id 'target' is ambiguous in scope", result)
-    }
-
-    @Test
-    fun `duplicate scope is reported`() {
-        val root = container(items = listOf(
-            container(id = "scope"),
-            container(id = "scope"),
-        ))
-
-        val result = findTarget(root = root, scopeId = "scope")
-
-        assertFailure("Scope with id 'scope' is ambiguous", result)
-    }
-
-    @Test
-    fun `missing scope warns and falls back to unique target`() {
-        val target = text(id = "target", text = "Target")
-        val warnings = mutableListOf<Throwable>()
-
-        val result = findTarget(
-            root = container(items = listOf(target)),
-            scopeId = "scope",
-            reportWarning = warnings::add,
-        )
-
-        assertSame(target, result.getOrThrow().div)
-        assertEquals("Scope with id 'scope' not found", warnings.single().message)
-    }
-
-    @Test
-    fun `active state selects one of duplicate targets`() {
-        val activeTarget = text(id = "target", text = "Active")
-        val root = state(id = "state", states = listOf(
-            state(stateId = "active", div = activeTarget),
-            state(stateId = "inactive", div = text(id = "target", text = "Inactive")),
-        ))
-
-        val result = findTarget(
-            root = root,
-            activeStatePaths = setOf(DivStatePath.parse("0/state/active")),
-        )
-
-        assertSame(activeTarget, result.getOrThrow().div)
-    }
-
-    @Test
-    fun `nested active states select one of duplicate targets`() {
-        val activeTarget = text(id = "target", text = "Active")
-        val innerState = state(id = "inner", states = listOf(
-            state(stateId = "active", div = activeTarget),
-            state(stateId = "inactive", div = text(id = "target", text = "Inner inactive")),
-        ))
-        val root = state(id = "outer", states = listOf(
-            state(stateId = "active", div = innerState),
-            state(stateId = "inactive", div = text(id = "target", text = "Outer inactive")),
-        ))
-
-        val result = findTarget(
-            root = root,
-            activeStatePaths = setOf(
-                DivStatePath.parse("0/outer/active"),
-                DivStatePath.parse("0/outer/active/inner/active"),
-            ),
-        )
-
-        assertSame(activeTarget, result.getOrThrow().div)
-    }
-
-    @Test
-    fun `unique target in inactive state remains addressable`() {
-        val inactiveTarget = text(id = "target", text = "Inactive")
-        val root = state(id = "state", states = listOf(
-            state(stateId = "active", div = container()),
-            state(stateId = "inactive", div = inactiveTarget),
-        ))
-
-        val result = findTarget(
-            root = root,
-            activeStatePaths = setOf(DivStatePath.parse("0/state/active")),
-        )
-
-        assertSame(inactiveTarget, result.getOrThrow().div)
-    }
-
-    @Test
-    fun `duplicate targets only in inactive state are not returned`() {
-        val root = state(id = "state", states = listOf(
-            state(stateId = "active", div = container()),
-            state(stateId = "inactive", div = container(items = listOf(
-                text(id = "target", text = "First"),
-                text(id = "target", text = "Second"),
-            ))),
-        ))
-
-        val result = findTarget(
-            root = root,
-            activeStatePaths = setOf(DivStatePath.parse("0/state/active")),
-        )
-
-        assertFailure("Element with id 'target' not found", result)
+        assertSame(selectedTarget, result.getOrThrow().div)
     }
 
     @Test
@@ -245,11 +79,9 @@ class DivBlockLocatorTest {
             .map { block -> block.path.fullPath }
             .toList()
         val locator = DivBlockLocator(
-            state = cardState,
-            rootResolver = resolver,
-            activeStates = ActiveStateProvider {
-                setOf(DivStatePath.parse("0/state/active"))
-            },
+            environment = createEnvironment(
+                cardState, resolver, activeStates = setOf(DivStatePath.parse("0/state/active")),
+            ),
         )
 
         val result = locator.findTarget(
@@ -282,6 +114,36 @@ class DivBlockLocatorTest {
         )
 
         assertTrue("scope#1" in result.getOrThrow().path.fullPath)
+    }
+
+    @Test
+    fun `generated model fallback preserves paths from the View item builder`() {
+        val resolvers = createRepeatedResolvers()
+        val card = data(
+            container(
+                id = "root",
+                itemBuilder = DivCollectionItemBuilder(
+                    data = constant(JSONArray("[{}, {}]")),
+                    prototypes = listOf(
+                        DivCollectionItemBuilder.Prototype(
+                            div = text(text = "Item"),
+                            id = constant("item"),
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val cardState = card.states.single()
+        val root = cardState.div as Div.Container
+        val items = root.value.buildItems(resolvers.root, DivStatePath.fromState(cardState))
+        val locator = DivBlockLocator(createEnvironment(cardState, resolvers.root))
+
+        val paths = items.map {
+            locator.resolveDivPath(it.div, it.expressionResolver, it.path).getOrThrow().fullPath
+        }
+
+        assertEquals(listOf("0:root/item#0", "0:root/item#1"), paths)
+        assertEquals(items.map { it.path.fullPath }, paths)
     }
 
     @Test
@@ -341,8 +203,39 @@ class DivBlockLocatorTest {
         assertSame(rightTarget, result.getOrThrow().div)
     }
 
+    @Test
+    fun `runtime paths are converted to typed paths and unsupported paths are ignored`() {
+        val store = mock<RuntimeStore>()
+        val actionResolver = mock<ExpressionResolverImpl>()
+        bindStore(store, actionResolver)
+        whenever(store.getUniquePathsAndRuntimes()).thenReturn(linkedMapOf(
+            "" to ExpressionsRuntime(actionResolver),
+            "unsupported/root" to ExpressionsRuntime(actionResolver),
+            "0:root/right/source" to ExpressionsRuntime(actionResolver),
+        ))
+        val environment = ViewDivBlockSearchEnvironment(mock())
+
+        val paths = environment.findPathsFor(actionResolver)
+
+        assertEquals(listOf("0:root/right/source"), paths.map { it.fullPath })
+    }
+
+    @Test
+    fun `walk includes the origin and preserves depth first search order`() {
+        val root = container(id = "root", items = listOf(
+            container(id = "left", items = listOf(text(id = "nested", text = "Nested"))),
+            text(id = "right", text = "Right"),
+        ))
+        val environment = createEnvironment(data(root).states.single(), resolver)
+
+        val ids = environment.findDescendants(environment.rootBlock()!!).map { it.div.value().id }
+
+        assertEquals(listOf("root", "left", "nested", "right"), ids)
+    }
+
     private fun findTarget(
         root: Div,
+        divId: String? = "target",
         scopeId: String? = null,
         activeStatePaths: Set<DivStatePath> = emptySet(),
         rootResolver: ExpressionResolver = resolver,
@@ -351,12 +244,10 @@ class DivBlockLocatorTest {
         reportWarning: (Throwable) -> Unit = {},
     ): Result<DivBlock> {
         val locator = DivBlockLocator(
-            state = data(root).states.single(),
-            rootResolver = rootResolver,
-            activeStates = ActiveStateProvider { activeStatePaths },
+            environment = createEnvironment(data(root).states.single(), rootResolver, activeStatePaths),
         )
         return locator.findTarget(
-            divId = "target",
+            divId = divId,
             scopeId = scopeId,
             actionResolver = actionResolver,
             matches = matches,
@@ -400,6 +291,21 @@ class DivBlockLocatorTest {
     private fun bindStore(store: RuntimeStore, vararg resolvers: ExpressionResolverImpl) {
         resolvers.forEach { resolver ->
             whenever(resolver.runtimeStore).thenReturn(store)
+        }
+    }
+
+    private fun createEnvironment(
+        state: DivData.State,
+        rootResolver: ExpressionResolver,
+        activeStates: Set<DivStatePath> = emptySet(),
+    ): DivBlockSearchEnvironment {
+        val environment = ViewDivBlockSearchEnvironment(mock())
+        return object : DivBlockSearchEnvironment by environment {
+            override fun activeStatesPaths(): Set<DivStatePath> = activeStates
+
+            override fun rootBlock(): DivBlock {
+                return DivBlock.create(state.div, rootResolver, DivStatePath.fromState(state))
+            }
         }
     }
 

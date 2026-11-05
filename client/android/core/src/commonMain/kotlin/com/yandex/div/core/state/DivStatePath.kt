@@ -152,6 +152,13 @@ public data class DivStatePath @InternalApi constructor(
 
     public fun isRootPath(): Boolean = states.isEmpty()
 
+    /** Returns whether this full path is a segment prefix of [other], including equality. */
+    @InternalApi
+    public fun isSubsetOf(other: DivStatePath): Boolean {
+        return namespace == other.namespace &&
+            path.size <= other.path.size && path.indices.all { path[it] == other.path[it] }
+    }
+
     public fun isAncestorOf(other: DivStatePath): Boolean {
         if (topLevelStateId != other.topLevelStateId || namespace != other.namespace) {
             return false

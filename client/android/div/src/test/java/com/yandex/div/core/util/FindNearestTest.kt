@@ -4,6 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.mockExpressionResolver
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.test.data.container
+import com.yandex.div.test.data.custom
 import com.yandex.div.test.data.indicator
 import com.yandex.div.test.data.pager
 import com.yandex.div2.Div
@@ -38,6 +39,18 @@ class FindNearestTest {
         val root = container(items = listOf(near, indicator, far))
 
         assertSame(near.value, nearestPager(root))
+    }
+
+    @Test
+    fun `pager inside a custom element is excluded from nearest pager lookup`() {
+        val hiddenPager = pager()
+        val root = container(items = listOf(
+            custom(type = "custom", items = listOf(hiddenPager)),
+            indicator,
+            container(items = listOf(far)),
+        ))
+
+        assertSame(far.value, nearestPager(root))
     }
 
     private fun nearestPager(root: Div): DivPager? = findNearest<DivPager>(

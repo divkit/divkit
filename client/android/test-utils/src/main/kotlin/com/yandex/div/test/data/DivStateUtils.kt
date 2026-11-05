@@ -18,10 +18,12 @@ fun state(
     transitionAnimationSelector: DivTransitionSelector = DivTransitionSelector.STATE_CHANGE,
     transitionOut: DivAppearanceTransition? = null,
     width: DivSize = matchParent(),
+    divId: String? = null,
 ): Div.State {
     return Div.State(
         DivState(
             defaultStateId = defaultStateId,
+            divId = divId,
             height = height,
             extensions = extensions,
             id = id,
