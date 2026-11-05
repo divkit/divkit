@@ -93,6 +93,26 @@ final class TextInputBlockTests: XCTestCase {
     }
   }
 
+  func test_maskedInput_keepsTypingOrder_whenKeystrokeArrivesDuringViewUpdate() {
+    for multiLineMode in [false, true] {
+      let input = makeMaskedInput(multiLineMode: multiLineMode)
+      input.type("1")
+      drainMainQueue()
+
+      input.type("0")
+      onNextAttributedTextChange(of: multiLineMode ? UITextView.self : UITextField.self) {
+        input.type("2")
+      }
+      drainMainQueue()
+      drainMainQueue()
+
+      let mode = "multiLineMode: \(multiLineMode)"
+      XCTAssertEqual(input.rawText, "102", mode)
+      XCTAssertEqual(input.displayedText, "+7 (102) ", mode)
+      XCTAssertEqual(input.selectedRange, NSRange(location: 7, length: 0), mode)
+    }
+  }
+
   func test_maskedInput_insertsAtCaret_whenKeystrokesOutpaceViewUpdate() {
     let input = makeMaskedInput()
     input.type("123456")
@@ -192,6 +212,24 @@ final class TextInputBlockTests: XCTestCase {
     let drained = expectation(description: "main queue drained")
     DispatchQueue.main.async { drained.fulfill() }
     wait(for: [drained], timeout: 1)
+  }
+
+  private func onNextAttributedTextChange(
+    of inputClass: AnyClass,
+    perform action: @escaping () -> Void
+  ) {
+    typealias Setter = @convention(c) (AnyObject, Selector, NSAttributedString?) -> Void
+    let selector = NSSelectorFromString("setAttributedText:")
+    let method = class_getInstanceMethod(inputClass, selector)!
+    let implementation = method_getImplementation(method)
+    let setter = unsafeBitCast(implementation, to: Setter.self)
+    let hook: @convention(block) (AnyObject, NSAttributedString?) -> Void = { object, text in
+      method_setImplementation(method, implementation)
+      action()
+      setter(object, selector, text)
+    }
+    method_setImplementation(method, imp_implementationWithBlock(hook))
+    addTeardownBlock { method_setImplementation(method, implementation) }
   }
 }
 

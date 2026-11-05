@@ -90,6 +90,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var keyboardHeight: CGFloat?
   private var maxLength: Int?
   private var hasPendingMaskedInputUpdate = false
+  private var isApplyingMaskedInputUpdate = false
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -555,6 +556,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private func applyMaskedInputUpdate() {
     hasPendingMaskedInputUpdate = false
     guard let maskedViewModel else { return }
+    isApplyingMaskedInputUpdate = true
+    defer { isApplyingMaskedInputUpdate = false }
     let text = maskedViewModel.formattedText
     let cursorPosition = maskedViewModel.cursorPosition
     setTextData(text)
@@ -770,7 +773,7 @@ extension TextInputBlockView {
     viewModel: MaskedInputViewModel
   ) -> Range<Int> {
     let modelText = viewModel.formattedText
-    if hasPendingMaskedInputUpdate,
+    if hasPendingMaskedInputUpdate || isApplyingMaskedInputUpdate,
        let cursorPosition = viewModel.cursorPosition,
        let cursor = Range(cursorPosition, in: modelText)?.lowerBound {
       let offset = modelText.distance(from: modelText.startIndex, to: cursor)
