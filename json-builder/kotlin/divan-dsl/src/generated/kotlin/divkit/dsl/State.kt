@@ -67,6 +67,7 @@ data class State internal constructor(
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             stateIdVariable = additive.stateIdVariable ?: properties.stateIdVariable,
             states = additive.states ?: properties.states,
+            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -233,6 +234,10 @@ data class State internal constructor(
          */
         val states: Property<List<Item>>?,
         /**
+         * List of timers.
+         */
+        val timers: Property<List<Timer>>?,
+        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -331,6 +336,7 @@ data class State internal constructor(
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("state_id_variable", stateIdVariable)
             result.tryPutProperty("states", states)
+            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -447,6 +453,7 @@ data class State internal constructor(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -500,6 +507,7 @@ fun DivScope.state(
     selectedActions: List<Action>? = null,
     stateIdVariable: String? = null,
     states: List<State.Item>? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -551,6 +559,7 @@ fun DivScope.state(
         selectedActions = valueOrNull(selectedActions),
         stateIdVariable = valueOrNull(stateIdVariable),
         states = valueOrNull(states),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -604,6 +613,7 @@ fun DivScope.state(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -657,6 +667,7 @@ fun DivScope.stateProps(
     selectedActions: List<Action>? = null,
     stateIdVariable: String? = null,
     states: List<State.Item>? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -707,6 +718,7 @@ fun DivScope.stateProps(
     selectedActions = valueOrNull(selectedActions),
     stateIdVariable = valueOrNull(stateIdVariable),
     states = valueOrNull(states),
+    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -759,6 +771,7 @@ fun DivScope.stateProps(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -812,6 +825,7 @@ fun TemplateScope.stateRefs(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     stateIdVariable: ReferenceProperty<String>? = null,
     states: ReferenceProperty<List<State.Item>>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -862,6 +876,7 @@ fun TemplateScope.stateRefs(
     selectedActions = selectedActions,
     stateIdVariable = stateIdVariable,
     states = states,
+    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -914,6 +929,7 @@ fun TemplateScope.stateRefs(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -967,6 +983,7 @@ fun State.override(
     selectedActions: List<Action>? = null,
     stateIdVariable: String? = null,
     states: List<State.Item>? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1018,6 +1035,7 @@ fun State.override(
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         stateIdVariable = valueOrNull(stateIdVariable) ?: properties.stateIdVariable,
         states = valueOrNull(states) ?: properties.states,
+        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -1071,6 +1089,7 @@ fun State.override(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1124,6 +1143,7 @@ fun State.defer(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     stateIdVariable: ReferenceProperty<String>? = null,
     states: ReferenceProperty<List<State.Item>>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1175,6 +1195,7 @@ fun State.defer(
         selectedActions = selectedActions ?: properties.selectedActions,
         stateIdVariable = stateIdVariable ?: properties.stateIdVariable,
         states = states ?: properties.states,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1228,6 +1249,7 @@ fun State.defer(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1281,6 +1303,7 @@ fun State.modify(
     selectedActions: Property<List<Action>>? = null,
     stateIdVariable: Property<String>? = null,
     states: Property<List<State.Item>>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1332,6 +1355,7 @@ fun State.modify(
         selectedActions = selectedActions ?: properties.selectedActions,
         stateIdVariable = stateIdVariable ?: properties.stateIdVariable,
         states = states ?: properties.states,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1413,6 +1437,7 @@ fun State.evaluate(
         selectedActions = properties.selectedActions,
         stateIdVariable = properties.stateIdVariable,
         states = properties.states,
+        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -1466,6 +1491,7 @@ fun State.evaluate(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1519,6 +1545,7 @@ fun Component<State>.override(
     selectedActions: List<Action>? = null,
     stateIdVariable: String? = null,
     states: List<State.Item>? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1571,6 +1598,7 @@ fun Component<State>.override(
         selectedActions = valueOrNull(selectedActions),
         stateIdVariable = valueOrNull(stateIdVariable),
         states = valueOrNull(states),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1624,6 +1652,7 @@ fun Component<State>.override(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1677,6 +1706,7 @@ fun Component<State>.defer(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     stateIdVariable: ReferenceProperty<String>? = null,
     states: ReferenceProperty<List<State.Item>>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1729,6 +1759,7 @@ fun Component<State>.defer(
         selectedActions = selectedActions,
         stateIdVariable = stateIdVariable,
         states = states,
+        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -1811,6 +1842,7 @@ fun Component<State>.evaluate(
         selectedActions = null,
         stateIdVariable = null,
         states = null,
+        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -1864,6 +1896,7 @@ fun Component<State>.evaluate(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param stateIdVariable The name of the variable that stores the ID for the current state. If the variable changes, the active state will also change. The variable is prioritized over the default_state_id parameter.
  * @param states States. Each element can have a few states with a different layout. Transition between states is performed using [special scheme](../../interaction) of the [action](div-action.md) element.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1917,6 +1950,7 @@ fun Component<State>.modify(
     selectedActions: Property<List<Action>>? = null,
     stateIdVariable: Property<String>? = null,
     states: Property<List<State.Item>>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1969,6 +2003,7 @@ fun Component<State>.modify(
         selectedActions = selectedActions,
         stateIdVariable = stateIdVariable,
         states = states,
+        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,

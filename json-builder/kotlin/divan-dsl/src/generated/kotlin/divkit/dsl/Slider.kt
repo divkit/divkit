@@ -67,6 +67,7 @@ data class Slider internal constructor(
             thumbValueVariable = additive.thumbValueVariable ?: properties.thumbValueVariable,
             tickMarkActiveStyle = additive.tickMarkActiveStyle ?: properties.tickMarkActiveStyle,
             tickMarkInactiveStyle = additive.tickMarkInactiveStyle ?: properties.tickMarkInactiveStyle,
+            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             trackActiveStyle = additive.trackActiveStyle ?: properties.trackActiveStyle,
             trackInactiveStyle = additive.trackInactiveStyle ?: properties.trackInactiveStyle,
@@ -233,6 +234,10 @@ data class Slider internal constructor(
          */
         val tickMarkInactiveStyle: Property<Drawable>?,
         /**
+         * List of timers.
+         */
+        val timers: Property<List<Timer>>?,
+        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -333,6 +338,7 @@ data class Slider internal constructor(
             result.tryPutProperty("thumb_value_variable", thumbValueVariable)
             result.tryPutProperty("tick_mark_active_style", tickMarkActiveStyle)
             result.tryPutProperty("tick_mark_inactive_style", tickMarkInactiveStyle)
+            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("track_active_style", trackActiveStyle)
             result.tryPutProperty("track_inactive_style", trackInactiveStyle)
@@ -531,6 +537,7 @@ data class Slider internal constructor(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -585,6 +592,7 @@ fun DivScope.slider(
     thumbValueVariable: String? = null,
     tickMarkActiveStyle: Drawable? = null,
     tickMarkInactiveStyle: Drawable? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     trackActiveStyle: Drawable? = null,
     trackInactiveStyle: Drawable? = null,
@@ -637,6 +645,7 @@ fun DivScope.slider(
         thumbValueVariable = valueOrNull(thumbValueVariable),
         tickMarkActiveStyle = valueOrNull(tickMarkActiveStyle),
         tickMarkInactiveStyle = valueOrNull(tickMarkInactiveStyle),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         trackActiveStyle = valueOrNull(trackActiveStyle),
         trackInactiveStyle = valueOrNull(trackInactiveStyle),
@@ -691,6 +700,7 @@ fun DivScope.slider(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -745,6 +755,7 @@ fun DivScope.sliderProps(
     thumbValueVariable: String? = null,
     tickMarkActiveStyle: Drawable? = null,
     tickMarkInactiveStyle: Drawable? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     trackActiveStyle: Drawable? = null,
     trackInactiveStyle: Drawable? = null,
@@ -796,6 +807,7 @@ fun DivScope.sliderProps(
     thumbValueVariable = valueOrNull(thumbValueVariable),
     tickMarkActiveStyle = valueOrNull(tickMarkActiveStyle),
     tickMarkInactiveStyle = valueOrNull(tickMarkInactiveStyle),
+    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     trackActiveStyle = valueOrNull(trackActiveStyle),
     trackInactiveStyle = valueOrNull(trackInactiveStyle),
@@ -849,6 +861,7 @@ fun DivScope.sliderProps(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -903,6 +916,7 @@ fun TemplateScope.sliderRefs(
     thumbValueVariable: ReferenceProperty<String>? = null,
     tickMarkActiveStyle: ReferenceProperty<Drawable>? = null,
     tickMarkInactiveStyle: ReferenceProperty<Drawable>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     trackActiveStyle: ReferenceProperty<Drawable>? = null,
     trackInactiveStyle: ReferenceProperty<Drawable>? = null,
@@ -954,6 +968,7 @@ fun TemplateScope.sliderRefs(
     thumbValueVariable = thumbValueVariable,
     tickMarkActiveStyle = tickMarkActiveStyle,
     tickMarkInactiveStyle = tickMarkInactiveStyle,
+    timers = timers,
     tooltips = tooltips,
     trackActiveStyle = trackActiveStyle,
     trackInactiveStyle = trackInactiveStyle,
@@ -1007,6 +1022,7 @@ fun TemplateScope.sliderRefs(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -1061,6 +1077,7 @@ fun Slider.override(
     thumbValueVariable: String? = null,
     tickMarkActiveStyle: Drawable? = null,
     tickMarkInactiveStyle: Drawable? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     trackActiveStyle: Drawable? = null,
     trackInactiveStyle: Drawable? = null,
@@ -1113,6 +1130,7 @@ fun Slider.override(
         thumbValueVariable = valueOrNull(thumbValueVariable) ?: properties.thumbValueVariable,
         tickMarkActiveStyle = valueOrNull(tickMarkActiveStyle) ?: properties.tickMarkActiveStyle,
         tickMarkInactiveStyle = valueOrNull(tickMarkInactiveStyle) ?: properties.tickMarkInactiveStyle,
+        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         trackActiveStyle = valueOrNull(trackActiveStyle) ?: properties.trackActiveStyle,
         trackInactiveStyle = valueOrNull(trackInactiveStyle) ?: properties.trackInactiveStyle,
@@ -1167,6 +1185,7 @@ fun Slider.override(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -1221,6 +1240,7 @@ fun Slider.defer(
     thumbValueVariable: ReferenceProperty<String>? = null,
     tickMarkActiveStyle: ReferenceProperty<Drawable>? = null,
     tickMarkInactiveStyle: ReferenceProperty<Drawable>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     trackActiveStyle: ReferenceProperty<Drawable>? = null,
     trackInactiveStyle: ReferenceProperty<Drawable>? = null,
@@ -1273,6 +1293,7 @@ fun Slider.defer(
         thumbValueVariable = thumbValueVariable ?: properties.thumbValueVariable,
         tickMarkActiveStyle = tickMarkActiveStyle ?: properties.tickMarkActiveStyle,
         tickMarkInactiveStyle = tickMarkInactiveStyle ?: properties.tickMarkInactiveStyle,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         trackActiveStyle = trackActiveStyle ?: properties.trackActiveStyle,
         trackInactiveStyle = trackInactiveStyle ?: properties.trackInactiveStyle,
@@ -1327,6 +1348,7 @@ fun Slider.defer(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -1381,6 +1403,7 @@ fun Slider.modify(
     thumbValueVariable: Property<String>? = null,
     tickMarkActiveStyle: Property<Drawable>? = null,
     tickMarkInactiveStyle: Property<Drawable>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     trackActiveStyle: Property<Drawable>? = null,
     trackInactiveStyle: Property<Drawable>? = null,
@@ -1433,6 +1456,7 @@ fun Slider.modify(
         thumbValueVariable = thumbValueVariable ?: properties.thumbValueVariable,
         tickMarkActiveStyle = tickMarkActiveStyle ?: properties.tickMarkActiveStyle,
         tickMarkInactiveStyle = tickMarkInactiveStyle ?: properties.tickMarkInactiveStyle,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         trackActiveStyle = trackActiveStyle ?: properties.trackActiveStyle,
         trackInactiveStyle = trackInactiveStyle ?: properties.trackInactiveStyle,
@@ -1513,6 +1537,7 @@ fun Slider.evaluate(
         thumbValueVariable = properties.thumbValueVariable,
         tickMarkActiveStyle = properties.tickMarkActiveStyle,
         tickMarkInactiveStyle = properties.tickMarkInactiveStyle,
+        timers = properties.timers,
         tooltips = properties.tooltips,
         trackActiveStyle = properties.trackActiveStyle,
         trackInactiveStyle = properties.trackInactiveStyle,
@@ -1567,6 +1592,7 @@ fun Slider.evaluate(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -1621,6 +1647,7 @@ fun Component<Slider>.override(
     thumbValueVariable: String? = null,
     tickMarkActiveStyle: Drawable? = null,
     tickMarkInactiveStyle: Drawable? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     trackActiveStyle: Drawable? = null,
     trackInactiveStyle: Drawable? = null,
@@ -1674,6 +1701,7 @@ fun Component<Slider>.override(
         thumbValueVariable = valueOrNull(thumbValueVariable),
         tickMarkActiveStyle = valueOrNull(tickMarkActiveStyle),
         tickMarkInactiveStyle = valueOrNull(tickMarkInactiveStyle),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         trackActiveStyle = valueOrNull(trackActiveStyle),
         trackInactiveStyle = valueOrNull(trackInactiveStyle),
@@ -1728,6 +1756,7 @@ fun Component<Slider>.override(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -1782,6 +1811,7 @@ fun Component<Slider>.defer(
     thumbValueVariable: ReferenceProperty<String>? = null,
     tickMarkActiveStyle: ReferenceProperty<Drawable>? = null,
     tickMarkInactiveStyle: ReferenceProperty<Drawable>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     trackActiveStyle: ReferenceProperty<Drawable>? = null,
     trackInactiveStyle: ReferenceProperty<Drawable>? = null,
@@ -1835,6 +1865,7 @@ fun Component<Slider>.defer(
         thumbValueVariable = thumbValueVariable,
         tickMarkActiveStyle = tickMarkActiveStyle,
         tickMarkInactiveStyle = tickMarkInactiveStyle,
+        timers = timers,
         tooltips = tooltips,
         trackActiveStyle = trackActiveStyle,
         trackInactiveStyle = trackInactiveStyle,
@@ -1916,6 +1947,7 @@ fun Component<Slider>.evaluate(
         thumbValueVariable = null,
         tickMarkActiveStyle = null,
         tickMarkInactiveStyle = null,
+        timers = null,
         tooltips = null,
         trackActiveStyle = null,
         trackInactiveStyle = null,
@@ -1970,6 +2002,7 @@ fun Component<Slider>.evaluate(
  * @param thumbValueVariable Name of the variable to store the pointer's current value.
  * @param tickMarkActiveStyle Style of active serifs.
  * @param tickMarkInactiveStyle Style of inactive serifs.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param trackActiveStyle Style of the active part of a scale.
  * @param trackInactiveStyle Style of the inactive part of a scale.
@@ -2024,6 +2057,7 @@ fun Component<Slider>.modify(
     thumbValueVariable: Property<String>? = null,
     tickMarkActiveStyle: Property<Drawable>? = null,
     tickMarkInactiveStyle: Property<Drawable>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     trackActiveStyle: Property<Drawable>? = null,
     trackInactiveStyle: Property<Drawable>? = null,
@@ -2077,6 +2111,7 @@ fun Component<Slider>.modify(
         thumbValueVariable = thumbValueVariable,
         tickMarkActiveStyle = tickMarkActiveStyle,
         tickMarkInactiveStyle = tickMarkInactiveStyle,
+        timers = timers,
         tooltips = tooltips,
         trackActiveStyle = trackActiveStyle,
         trackInactiveStyle = trackInactiveStyle,

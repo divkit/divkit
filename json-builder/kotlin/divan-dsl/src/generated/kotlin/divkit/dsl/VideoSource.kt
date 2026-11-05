@@ -18,6 +18,8 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
+ * Description of one media file. Contains a link to the source, MIME type, bitrate, and resolution.
+ * 
  * Can be created using the method [videoSource].
  * 
  * Required parameters: `url, type, mime_type`.

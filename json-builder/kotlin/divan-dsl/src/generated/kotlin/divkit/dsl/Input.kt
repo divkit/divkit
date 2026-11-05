@@ -79,6 +79,7 @@ data class Input internal constructor(
             textAlignmentVertical = additive.textAlignmentVertical ?: properties.textAlignmentVertical,
             textColor = additive.textColor ?: properties.textColor,
             textVariable = additive.textVariable ?: properties.textVariable,
+            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -302,6 +303,10 @@ data class Input internal constructor(
          */
         val textVariable: Property<String>?,
         /**
+         * List of timers.
+         */
+        val timers: Property<List<Timer>>?,
+        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -410,6 +415,7 @@ data class Input internal constructor(
             result.tryPutProperty("text_alignment_vertical", textAlignmentVertical)
             result.tryPutProperty("text_color", textColor)
             result.tryPutProperty("text_variable", textVariable)
+            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -537,6 +543,7 @@ data class Input internal constructor(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -602,6 +609,7 @@ fun DivScope.input(
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -665,6 +673,7 @@ fun DivScope.input(
         textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
         textVariable = valueOrNull(textVariable),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -730,6 +739,7 @@ fun DivScope.input(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -795,6 +805,7 @@ fun DivScope.inputProps(
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -857,6 +868,7 @@ fun DivScope.inputProps(
     textAlignmentVertical = valueOrNull(textAlignmentVertical),
     textColor = valueOrNull(textColor),
     textVariable = valueOrNull(textVariable),
+    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -921,6 +933,7 @@ fun DivScope.inputProps(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -986,6 +999,7 @@ fun TemplateScope.inputRefs(
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1048,6 +1062,7 @@ fun TemplateScope.inputRefs(
     textAlignmentVertical = textAlignmentVertical,
     textColor = textColor,
     textVariable = textVariable,
+    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -1112,6 +1127,7 @@ fun TemplateScope.inputRefs(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1177,6 +1193,7 @@ fun Input.override(
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1240,6 +1257,7 @@ fun Input.override(
         textAlignmentVertical = valueOrNull(textAlignmentVertical) ?: properties.textAlignmentVertical,
         textColor = valueOrNull(textColor) ?: properties.textColor,
         textVariable = valueOrNull(textVariable) ?: properties.textVariable,
+        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -1305,6 +1323,7 @@ fun Input.override(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1370,6 +1389,7 @@ fun Input.defer(
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1433,6 +1453,7 @@ fun Input.defer(
         textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textVariable = textVariable ?: properties.textVariable,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1498,6 +1519,7 @@ fun Input.defer(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1563,6 +1585,7 @@ fun Input.modify(
     textAlignmentVertical: Property<AlignmentVertical>? = null,
     textColor: Property<Color>? = null,
     textVariable: Property<String>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1626,6 +1649,7 @@ fun Input.modify(
         textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textVariable = textVariable ?: properties.textVariable,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1755,6 +1779,7 @@ fun Input.evaluate(
         textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textVariable = properties.textVariable,
+        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -1820,6 +1845,7 @@ fun Input.evaluate(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1885,6 +1911,7 @@ fun Component<Input>.override(
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
     textVariable: String? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1949,6 +1976,7 @@ fun Component<Input>.override(
         textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
         textVariable = valueOrNull(textVariable),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -2014,6 +2042,7 @@ fun Component<Input>.override(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2079,6 +2108,7 @@ fun Component<Input>.defer(
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
     textVariable: ReferenceProperty<String>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -2143,6 +2173,7 @@ fun Component<Input>.defer(
         textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textVariable = textVariable,
+        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -2273,6 +2304,7 @@ fun Component<Input>.evaluate(
         textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textVariable = null,
+        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -2338,6 +2370,7 @@ fun Component<Input>.evaluate(
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color.
  * @param textVariable Name of text storage variable.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2403,6 +2436,7 @@ fun Component<Input>.modify(
     textAlignmentVertical: Property<AlignmentVertical>? = null,
     textColor: Property<Color>? = null,
     textVariable: Property<String>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -2467,6 +2501,7 @@ fun Component<Input>.modify(
         textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textVariable = textVariable,
+        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,

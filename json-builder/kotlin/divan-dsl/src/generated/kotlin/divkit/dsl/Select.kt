@@ -64,6 +64,7 @@ data class Select internal constructor(
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             textColor = additive.textColor ?: properties.textColor,
+            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -193,6 +194,9 @@ data class Select internal constructor(
          * External margins from the element stroke.
          */
         val margins: Property<EdgeInsets>?,
+        /**
+         * List of options available for selection.
+         */
         val options: Property<List<Option>>?,
         /**
          * Internal margins from the element stroke.
@@ -215,6 +219,10 @@ data class Select internal constructor(
          * Default value: `#FF000000`.
          */
         val textColor: Property<Color>?,
+        /**
+         * List of timers.
+         */
+        val timers: Property<List<Timer>>?,
         /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
@@ -309,6 +317,7 @@ data class Select internal constructor(
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("text_color", textColor)
+            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -397,11 +406,13 @@ data class Select internal constructor(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -452,6 +463,7 @@ fun DivScope.select(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -500,6 +512,7 @@ fun DivScope.select(
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         textColor = valueOrNull(textColor),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -544,11 +557,13 @@ fun DivScope.select(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -599,6 +614,7 @@ fun DivScope.selectProps(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -646,6 +662,7 @@ fun DivScope.selectProps(
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     textColor = valueOrNull(textColor),
+    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -689,11 +706,13 @@ fun DivScope.selectProps(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -744,6 +763,7 @@ fun TemplateScope.selectRefs(
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     textColor: ReferenceProperty<Color>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -791,6 +811,7 @@ fun TemplateScope.selectRefs(
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     textColor = textColor,
+    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -834,11 +855,13 @@ fun TemplateScope.selectRefs(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -889,6 +912,7 @@ fun Select.override(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -937,6 +961,7 @@ fun Select.override(
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         textColor = valueOrNull(textColor) ?: properties.textColor,
+        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -981,11 +1006,13 @@ fun Select.override(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1036,6 +1063,7 @@ fun Select.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     textColor: ReferenceProperty<Color>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1084,6 +1112,7 @@ fun Select.defer(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         textColor = textColor ?: properties.textColor,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1128,11 +1157,13 @@ fun Select.defer(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1183,6 +1214,7 @@ fun Select.modify(
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<Action>>? = null,
     textColor: Property<Color>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1231,6 +1263,7 @@ fun Select.modify(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         textColor = textColor ?: properties.textColor,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1323,6 +1356,7 @@ fun Select.evaluate(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         textColor = textColor ?: properties.textColor,
+        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -1367,11 +1401,13 @@ fun Select.evaluate(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1422,6 +1458,7 @@ fun Component<Select>.override(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1471,6 +1508,7 @@ fun Component<Select>.override(
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         textColor = valueOrNull(textColor),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1515,11 +1553,13 @@ fun Component<Select>.override(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1570,6 +1610,7 @@ fun Component<Select>.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     textColor: ReferenceProperty<Color>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1619,6 +1660,7 @@ fun Component<Select>.defer(
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         textColor = textColor,
+        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -1712,6 +1754,7 @@ fun Component<Select>.evaluate(
         rowSpan = rowSpan,
         selectedActions = null,
         textColor = textColor,
+        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -1756,11 +1799,13 @@ fun Component<Select>.evaluate(
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Measured in units set in `font_size_unit`.
  * @param margins External margins from the element stroke.
+ * @param options List of options available for selection.
  * @param paddings Internal margins from the element stroke.
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param textColor Text color.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1811,6 +1856,7 @@ fun Component<Select>.modify(
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<Action>>? = null,
     textColor: Property<Color>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1860,6 +1906,7 @@ fun Component<Select>.modify(
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         textColor = textColor,
+        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,

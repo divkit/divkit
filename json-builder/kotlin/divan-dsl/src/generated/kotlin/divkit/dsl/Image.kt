@@ -73,6 +73,7 @@ data class Image internal constructor(
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             scale = additive.scale ?: properties.scale,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
+            timers = additive.timers ?: properties.timers,
             tintColor = additive.tintColor ?: properties.tintColor,
             tintMode = additive.tintMode ?: properties.tintMode,
             tooltips = additive.tooltips ?: properties.tooltips,
@@ -269,6 +270,10 @@ data class Image internal constructor(
          */
         val selectedActions: Property<List<Action>>?,
         /**
+         * List of timers.
+         */
+        val timers: Property<List<Timer>>?,
+        /**
          * New color of a contour image.
          */
         val tintColor: Property<Color>?,
@@ -376,6 +381,7 @@ data class Image internal constructor(
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("scale", scale)
             result.tryPutProperty("selected_actions", selectedActions)
+            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tint_color", tintColor)
             result.tryPutProperty("tint_mode", tintMode)
             result.tryPutProperty("tooltips", tooltips)
@@ -438,6 +444,7 @@ data class Image internal constructor(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -498,6 +505,7 @@ fun DivScope.image(
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
+    timers: List<Timer>? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
     tooltips: List<Tooltip>? = null,
@@ -556,6 +564,7 @@ fun DivScope.image(
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
+        timers = valueOrNull(timers),
         tintColor = valueOrNull(tintColor),
         tintMode = valueOrNull(tintMode),
         tooltips = valueOrNull(tooltips),
@@ -616,6 +625,7 @@ fun DivScope.image(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -676,6 +686,7 @@ fun DivScope.imageProps(
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
+    timers: List<Timer>? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
     tooltips: List<Tooltip>? = null,
@@ -733,6 +744,7 @@ fun DivScope.imageProps(
     rowSpan = valueOrNull(rowSpan),
     scale = valueOrNull(scale),
     selectedActions = valueOrNull(selectedActions),
+    timers = valueOrNull(timers),
     tintColor = valueOrNull(tintColor),
     tintMode = valueOrNull(tintMode),
     tooltips = valueOrNull(tooltips),
@@ -792,6 +804,7 @@ fun DivScope.imageProps(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -852,6 +865,7 @@ fun TemplateScope.imageRefs(
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tintColor: ReferenceProperty<Color>? = null,
     tintMode: ReferenceProperty<BlendMode>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -909,6 +923,7 @@ fun TemplateScope.imageRefs(
     rowSpan = rowSpan,
     scale = scale,
     selectedActions = selectedActions,
+    timers = timers,
     tintColor = tintColor,
     tintMode = tintMode,
     tooltips = tooltips,
@@ -968,6 +983,7 @@ fun TemplateScope.imageRefs(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1028,6 +1044,7 @@ fun Image.override(
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
+    timers: List<Timer>? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
     tooltips: List<Tooltip>? = null,
@@ -1086,6 +1103,7 @@ fun Image.override(
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         scale = valueOrNull(scale) ?: properties.scale,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
+        timers = valueOrNull(timers) ?: properties.timers,
         tintColor = valueOrNull(tintColor) ?: properties.tintColor,
         tintMode = valueOrNull(tintMode) ?: properties.tintMode,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
@@ -1146,6 +1164,7 @@ fun Image.override(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1206,6 +1225,7 @@ fun Image.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tintColor: ReferenceProperty<Color>? = null,
     tintMode: ReferenceProperty<BlendMode>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1264,6 +1284,7 @@ fun Image.defer(
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = selectedActions ?: properties.selectedActions,
+        timers = timers ?: properties.timers,
         tintColor = tintColor ?: properties.tintColor,
         tintMode = tintMode ?: properties.tintMode,
         tooltips = tooltips ?: properties.tooltips,
@@ -1324,6 +1345,7 @@ fun Image.defer(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1384,6 +1406,7 @@ fun Image.modify(
     rowSpan: Property<Int>? = null,
     scale: Property<ImageScale>? = null,
     selectedActions: Property<List<Action>>? = null,
+    timers: Property<List<Timer>>? = null,
     tintColor: Property<Color>? = null,
     tintMode: Property<BlendMode>? = null,
     tooltips: Property<List<Tooltip>>? = null,
@@ -1442,6 +1465,7 @@ fun Image.modify(
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = selectedActions ?: properties.selectedActions,
+        timers = timers ?: properties.timers,
         tintColor = tintColor ?: properties.tintColor,
         tintMode = tintMode ?: properties.tintMode,
         tooltips = tooltips ?: properties.tooltips,
@@ -1544,6 +1568,7 @@ fun Image.evaluate(
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = properties.selectedActions,
+        timers = properties.timers,
         tintColor = tintColor ?: properties.tintColor,
         tintMode = tintMode ?: properties.tintMode,
         tooltips = properties.tooltips,
@@ -1604,6 +1629,7 @@ fun Image.evaluate(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1664,6 +1690,7 @@ fun Component<Image>.override(
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
+    timers: List<Timer>? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
     tooltips: List<Tooltip>? = null,
@@ -1723,6 +1750,7 @@ fun Component<Image>.override(
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
+        timers = valueOrNull(timers),
         tintColor = valueOrNull(tintColor),
         tintMode = valueOrNull(tintMode),
         tooltips = valueOrNull(tooltips),
@@ -1783,6 +1811,7 @@ fun Component<Image>.override(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -1843,6 +1872,7 @@ fun Component<Image>.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tintColor: ReferenceProperty<Color>? = null,
     tintMode: ReferenceProperty<BlendMode>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
@@ -1902,6 +1932,7 @@ fun Component<Image>.defer(
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = selectedActions,
+        timers = timers,
         tintColor = tintColor,
         tintMode = tintMode,
         tooltips = tooltips,
@@ -2005,6 +2036,7 @@ fun Component<Image>.evaluate(
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = null,
+        timers = null,
         tintColor = tintColor,
         tintMode = tintMode,
         tooltips = null,
@@ -2065,6 +2097,7 @@ fun Component<Image>.evaluate(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param timers List of timers.
  * @param tintColor New color of a contour image.
  * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -2125,6 +2158,7 @@ fun Component<Image>.modify(
     rowSpan: Property<Int>? = null,
     scale: Property<ImageScale>? = null,
     selectedActions: Property<List<Action>>? = null,
+    timers: Property<List<Timer>>? = null,
     tintColor: Property<Color>? = null,
     tintMode: Property<BlendMode>? = null,
     tooltips: Property<List<Tooltip>>? = null,
@@ -2184,6 +2218,7 @@ fun Component<Image>.modify(
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = selectedActions,
+        timers = timers,
         tintColor = tintColor,
         tintMode = tintMode,
         tooltips = tooltips,

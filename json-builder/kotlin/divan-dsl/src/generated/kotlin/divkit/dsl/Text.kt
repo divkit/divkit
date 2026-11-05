@@ -89,6 +89,7 @@ data class Text internal constructor(
             textGradient = additive.textGradient ?: properties.textGradient,
             textShadow = additive.textShadow ?: properties.textShadow,
             tightenWidth = additive.tightenWidth ?: properties.tightenWidth,
+            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -346,6 +347,10 @@ data class Text internal constructor(
          */
         val tightenWidth: Property<Boolean>?,
         /**
+         * List of timers.
+         */
+        val timers: Property<List<Timer>>?,
+        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -475,6 +480,7 @@ data class Text internal constructor(
             result.tryPutProperty("text_gradient", textGradient)
             result.tryPutProperty("text_shadow", textShadow)
             result.tryPutProperty("tighten_width", tightenWidth)
+            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -1130,6 +1136,7 @@ data class Text internal constructor(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1207,6 +1214,7 @@ fun DivScope.text(
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
     tightenWidth: Boolean? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1282,6 +1290,7 @@ fun DivScope.text(
         textGradient = valueOrNull(textGradient),
         textShadow = valueOrNull(textShadow),
         tightenWidth = valueOrNull(tightenWidth),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1357,6 +1366,7 @@ fun DivScope.text(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1434,6 +1444,7 @@ fun DivScope.textProps(
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
     tightenWidth: Boolean? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1508,6 +1519,7 @@ fun DivScope.textProps(
     textGradient = valueOrNull(textGradient),
     textShadow = valueOrNull(textShadow),
     tightenWidth = valueOrNull(tightenWidth),
+    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -1582,6 +1594,7 @@ fun DivScope.textProps(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1659,6 +1672,7 @@ fun TemplateScope.textRefs(
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
     tightenWidth: ReferenceProperty<Boolean>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1733,6 +1747,7 @@ fun TemplateScope.textRefs(
     textGradient = textGradient,
     textShadow = textShadow,
     tightenWidth = tightenWidth,
+    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -1807,6 +1822,7 @@ fun TemplateScope.textRefs(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1884,6 +1900,7 @@ fun Text.override(
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
     tightenWidth: Boolean? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1959,6 +1976,7 @@ fun Text.override(
         textGradient = valueOrNull(textGradient) ?: properties.textGradient,
         textShadow = valueOrNull(textShadow) ?: properties.textShadow,
         tightenWidth = valueOrNull(tightenWidth) ?: properties.tightenWidth,
+        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -2034,6 +2052,7 @@ fun Text.override(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2111,6 +2130,7 @@ fun Text.defer(
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
     tightenWidth: ReferenceProperty<Boolean>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -2186,6 +2206,7 @@ fun Text.defer(
         textGradient = textGradient ?: properties.textGradient,
         textShadow = textShadow ?: properties.textShadow,
         tightenWidth = tightenWidth ?: properties.tightenWidth,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -2261,6 +2282,7 @@ fun Text.defer(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2338,6 +2360,7 @@ fun Text.modify(
     textGradient: Property<TextGradient>? = null,
     textShadow: Property<Shadow>? = null,
     tightenWidth: Property<Boolean>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -2413,6 +2436,7 @@ fun Text.modify(
         textGradient = textGradient ?: properties.textGradient,
         textShadow = textShadow ?: properties.textShadow,
         tightenWidth = tightenWidth ?: properties.tightenWidth,
+        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -2558,6 +2582,7 @@ fun Text.evaluate(
         textGradient = properties.textGradient,
         textShadow = properties.textShadow,
         tightenWidth = tightenWidth ?: properties.tightenWidth,
+        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -2633,6 +2658,7 @@ fun Text.evaluate(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2710,6 +2736,7 @@ fun Component<Text>.override(
     textGradient: TextGradient? = null,
     textShadow: Shadow? = null,
     tightenWidth: Boolean? = null,
+    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -2786,6 +2813,7 @@ fun Component<Text>.override(
         textGradient = valueOrNull(textGradient),
         textShadow = valueOrNull(textShadow),
         tightenWidth = valueOrNull(tightenWidth),
+        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -2861,6 +2889,7 @@ fun Component<Text>.override(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2938,6 +2967,7 @@ fun Component<Text>.defer(
     textGradient: ReferenceProperty<TextGradient>? = null,
     textShadow: ReferenceProperty<Shadow>? = null,
     tightenWidth: ReferenceProperty<Boolean>? = null,
+    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -3014,6 +3044,7 @@ fun Component<Text>.defer(
         textGradient = textGradient,
         textShadow = textShadow,
         tightenWidth = tightenWidth,
+        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -3160,6 +3191,7 @@ fun Component<Text>.evaluate(
         textGradient = null,
         textShadow = null,
         tightenWidth = tightenWidth,
+        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -3235,6 +3267,7 @@ fun Component<Text>.evaluate(
  * @param textGradient Gradient color applied to text glyphs. It has priority over `text_color` and `focused_text_color`; range text colors and masks replace it locally. Inline images and `image_builder` aren't glyphs and don't receive the gradient. Text shadows, underlines, and strikethroughs keep their own colors. An animated gradient stays visible without movement when its `duration` is `0` or global animations are disabled.
  * @param textShadow Parameters of the shadow applied to the text.
  * @param tightenWidth Limit the text width to the maximum line width. Applies only when the width is set to `wrap_content`, `constrained=true`, and `max_size` is specified.
+ * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -3312,6 +3345,7 @@ fun Component<Text>.modify(
     textGradient: Property<TextGradient>? = null,
     textShadow: Property<Shadow>? = null,
     tightenWidth: Property<Boolean>? = null,
+    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -3388,6 +3422,7 @@ fun Component<Text>.modify(
         textGradient = textGradient,
         textShadow = textShadow,
         tightenWidth = tightenWidth,
+        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
