@@ -89,10 +89,17 @@ public protocol TooltipManager: AnyObject, TooltipActionPerformer, RenderingDele
 
   /// Sets handler for the tooltip view UI events.
   func setHandler(_ handler: @escaping (UIActionEvent) -> Void)
+
+  /// Sets handler for tooltip close events.
+  @MainActor
+  func setCloseHandler(_ handler: @escaping (TooltipIdentity) -> Void)
 }
 
 extension TooltipManager {
   public func setHandler(_: @escaping (UIActionEvent) -> Void) {}
+
+  @MainActor
+  public func setCloseHandler(_: @escaping (TooltipIdentity) -> Void) {}
 }
 
 public class DefaultTooltipManager: TooltipManager {
@@ -308,6 +315,10 @@ public class DefaultTooltipManager: TooltipManager {
 
   private typealias ShowOutcome = (shown: Bool, next: TooltipStates.ShowRequest?)
 
+  private final class CloseHandlerBox {
+    var handler: ((TooltipIdentity) -> Void)?
+  }
+
   private struct WeakBlockView {
     weak var view: BlockView?
 
@@ -321,6 +332,7 @@ public class DefaultTooltipManager: TooltipManager {
   private var viewsById: [BlockViewID: WeakBlockView] = [:]
 
   private var handleAction: (UIActionEvent) -> Void
+  private let closeHandlerBox = CloseHandlerBox()
   private var existingAnchorViews = WeakCollection<TooltipAnchorView>()
   private var stateStore = TooltipStates()
   private var previousOrientation = UIDevice.current.orientation
@@ -415,6 +427,11 @@ public class DefaultTooltipManager: TooltipManager {
 
   public func setHandler(_ handler: @escaping (UIActionEvent) -> Void) {
     handleAction = handler
+  }
+
+  @MainActor
+  public func setCloseHandler(_ handler: @escaping (TooltipIdentity) -> Void) {
+    closeHandlerBox.handler = handler
   }
 
   @MainActor
@@ -528,13 +545,17 @@ public class DefaultTooltipManager: TooltipManager {
     let view = TooltipContainerView(
       tooltip: tooltip,
       handleAction: handleAction,
-      onCloseAction: { [weak self] in
-        guard let self, let view = weakView else { return }
-        guard stateStore.remove(key, ifShowing: view) != nil else { return }
-        presenter.onClosed(
-          tooltipID: tooltip.params.id,
-          hasRemainingModals: stateStore.hasOpenModals
-        )
+      onCloseAction: { [weak self, closeHandlerBox] in
+        if let self, let view = weakView,
+           stateStore.remove(key, ifShowing: view) != nil {
+          presenter.onClosed(
+            tooltipID: tooltip.params.id,
+            hasRemainingModals: stateStore.hasOpenModals
+          )
+        }
+        DispatchQueue.main.async {
+          closeHandlerBox.handler?(key)
+        }
       },
       getViewById: { [weak self] in
         self?.viewsById[$0]?.view

@@ -58,11 +58,15 @@ struct TooltipManagerTests {
   func factoryViewWithoutContentSize_isClosed() async {
     let content = MockClosingTooltipView(size: nil)
     let manager = makeManager(content: content, providesSize: true)
+    var closedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler { closedIdentities.append($0) }
 
     let shown = await manager.showTooltip(info: tooltipInfo)
 
     #expect(!shown)
     #expect(content.closeCount == 1)
+    await drainMainQueue()
+    #expect(closedIdentities.isEmpty)
   }
 
   @Test(arguments: [CGSize.zero, CGSize(width: 50, height: 0), CGSize(width: 0, height: 30)])
@@ -186,9 +190,34 @@ struct TooltipManagerTests {
   }
 
   @Test
+  func tapOnTooltip_reportsCloseOnce() async throws {
+    let content = MockClosingTooltipView()
+    let manager = makeManager(content: content)
+    var closedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler { closedIdentities.append($0) }
+    #expect(await manager.showTooltip(info: tooltipInfo))
+    let container = try #require(await manager.currentTooltipView() as? TooltipContainerView)
+    let point = content.convert(
+      CGPoint(x: content.bounds.midX, y: content.bounds.midY),
+      to: container
+    )
+
+    _ = container.hitTest(point, with: nil)
+    _ = container.hitTest(point, with: nil)
+
+    #expect(await waitUntil { closedIdentities.count == 1 })
+    #expect(container.superview == nil)
+    #expect(content.closeCount == 1)
+    await drainMainQueue()
+    #expect(closedIdentities == [tooltipInfo.identity])
+  }
+
+  @Test
   func tapOutside_closesContentOnce() async {
     let content = MockClosingTooltipView()
     let manager = makeManager(content: content, mode: .nonModal)
+    var closedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler { closedIdentities.append($0) }
     #expect(await manager.showTooltip(info: tooltipInfo))
     let container = await manager.currentTooltipView() as? TooltipContainerView
 
@@ -196,16 +225,24 @@ struct TooltipManagerTests {
     await drainMainQueue()
 
     #expect(content.closeCount == 1)
+    #expect(await waitUntil { closedIdentities.count == 1 })
+    await drainMainQueue()
+    #expect(closedIdentities == [tooltipInfo.identity])
   }
 
   @Test
   func duration_closesContentOnce() async {
     let content = MockClosingTooltipView()
     let manager = makeManager(content: content, duration: 0.001)
+    var closedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler { closedIdentities.append($0) }
     #expect(await manager.showTooltip(info: tooltipInfo))
 
     #expect(await waitUntil { content.closeCount == 1 })
     #expect(content.closeCount == 1)
+    #expect(await waitUntil { closedIdentities.count == 1 })
+    await drainMainQueue()
+    #expect(closedIdentities == [tooltipInfo.identity])
   }
 
   @Test
@@ -243,32 +280,63 @@ struct TooltipManagerTests {
   }
 
   @Test
-  func reset_closesContentOnce() async {
+  func reset_reportsCloseOnceAfterReleasingWindowResources() async {
+    let mainWindow = UIWindow(frame: hostBounds)
+    let modalWindow = UIWindow(frame: hostBounds)
+    let presenter = WindowTooltipPresenter(
+      tooltipWindowManager: TooltipWindowManager(
+        mainWindow: mainWindow,
+        modalWindow: modalWindow
+      )
+    )
+    let manager: TooltipManager = DefaultTooltipManager(presenter: presenter)
     let content = MockClosingTooltipView()
-    let manager = makeManager(content: content)
+    let anchorView = MockTooltipAnchorView(
+      frame: anchorFrame,
+      tooltips: [makeTooltip(viewFactory: { content })]
+    )
+    mainWindow.addSubview(anchorView)
+    manager.tooltipAnchorViewAdded(anchorView: anchorView)
+    var closedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler { [weak windowManager = presenter.tooltipWindowManager] in
+      #expect(windowManager == nil)
+      #expect(modalWindow.isHidden)
+      #expect(modalWindow.rootViewController == nil)
+      closedIdentities.append($0)
+    }
     #expect(await manager.showTooltip(info: tooltipInfo))
+    #expect(presenter.tooltipWindowManager != nil)
+    #expect(!modalWindow.isHidden)
 
     manager.reset()
     manager.reset()
+    await drainMainQueue()
 
     #expect(content.closeCount == 1)
+    #expect(closedIdentities == [tooltipInfo.identity])
   }
 
   @Test
   func managerDeinit_closesVisibleContent() async {
     let content = MockClosingTooltipView()
     var manager: DefaultTooltipManager? = makeManager(content: content)
+    var closedIdentities = [TooltipIdentity]()
+    manager?.setCloseHandler { closedIdentities.append($0) }
     #expect(await manager?.showTooltip(info: tooltipInfo) == true)
 
     manager = nil
 
     #expect(content.closeCount == 1)
+    await drainMainQueue()
+    #expect(closedIdentities == [tooltipInfo.identity])
   }
 
   @Test
   func containerResize_closesContentOnce() async {
     let content = MockClosingTooltipView()
     let manager = makeManager(content: content)
+    var closedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler { closedIdentities.append($0) }
     #expect(await manager.showTooltip(info: tooltipInfo))
     let container = await manager.currentTooltipView() as? TooltipContainerView
     container?.layoutSubviews()
@@ -280,6 +348,9 @@ struct TooltipManagerTests {
     container?.layoutSubviews()
 
     #expect(content.closeCount == 1)
+    #expect(await waitUntil { closedIdentities.count == 1 })
+    await drainMainQueue()
+    #expect(closedIdentities == [tooltipInfo.identity])
   }
 
   @Test
@@ -359,6 +430,8 @@ struct TooltipManagerTests {
   @Test
   func closingModalReplacedBeforeCloseAnimationEnds_keepsReplacementVisible() async {
     let window = ModalWindows()
+    var closedIdentities = [TooltipIdentity]()
+    window.manager.setCloseHandler { closedIdentities.append($0) }
     let contentA = MockClosingTooltipView()
     let contentB = MockClosingTooltipView()
     let longFadeOut = TransitioningAnimation(
@@ -384,6 +457,8 @@ struct TooltipManagerTests {
 
     // The container is released once its close animation has completed.
     #expect(await waitUntil(timeout: 3) { weakContainerA == nil })
+    #expect(await waitUntil { closedIdentities.count == 1 })
+    #expect(closedIdentities == [tooltipInfo.identity])
     #expect(window.presenter.closedCount == 0)
     #expect(!window.modalWindow.isHidden)
     #expect(window.isShowing(contentB))
@@ -393,6 +468,8 @@ struct TooltipManagerTests {
     window.manager.hideTooltip(identity: tooltipInfo.identity)
     #expect(await waitUntil(timeout: 3) { window.modalWindow.isHidden })
     #expect(window.modalWindow.rootViewController == nil)
+    #expect(await waitUntil { closedIdentities.count == 2 })
+    #expect(closedIdentities == [tooltipInfo.identity, tooltipInfo.identity])
     #expect(window.presenter.closedCount == 1)
     #expect(contentB.closeCount == 1)
   }
@@ -451,6 +528,127 @@ struct TooltipManagerTests {
     #expect(created.view == nil)
   }
 
+  @Test
+  func closeHandler_reportsScopedIdentityOnceAfterViewRemoval() async {
+    let hostView = TestTooltipHostView(bounds: hostBounds)
+    let manager = DefaultTooltipManager(externalView: hostView)
+    let info = TooltipInfo(
+      id: tooltipInfo.id,
+      showsOnStart: false,
+      multiple: false,
+      scopePath: "card"
+    )
+    let content = MockClosingTooltipView()
+    let anchorView = MockTooltipAnchorView(
+      frame: anchorFrame,
+      tooltips: [makeTooltip(viewFactory: { content })]
+    )
+    anchorView.path = UIElementPath(parent: "card", child: "anchor")
+    hostView.addAnchorView(anchorView)
+    manager.tooltipAnchorViewAdded(anchorView: anchorView)
+    weak var container: UIView?
+    var closedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler {
+      #expect(Thread.isMainThread)
+      #expect(container?.superview == nil)
+      closedIdentities.append($0)
+    }
+
+    #expect(await manager.showTooltip(info: info))
+    container = await manager.currentTooltipView()
+    #expect(container?.superview != nil)
+    #expect(closedIdentities.isEmpty)
+
+    manager.hideTooltip(identity: info.identity)
+    manager.hideTooltip(identity: info.identity)
+    #expect(closedIdentities.isEmpty)
+    #expect(await waitUntil { closedIdentities.count == 1 })
+    manager.reset()
+    await drainMainQueue()
+
+    #expect(closedIdentities == [info.identity])
+  }
+
+  @Test(arguments: [false, true])
+  func closeHandler_registeredAfterShow_receivesClose(replacesHandler: Bool) async {
+    let content = MockClosingTooltipView()
+    let manager = makeManager(content: content)
+    var previousClosedIdentities = [TooltipIdentity]()
+    if replacesHandler {
+      manager.setCloseHandler { previousClosedIdentities.append($0) }
+    }
+    #expect(await manager.showTooltip(info: tooltipInfo))
+    var closedIdentities = [TooltipIdentity]()
+
+    manager.setCloseHandler { closedIdentities.append($0) }
+    manager.hideTooltip(identity: tooltipInfo.identity)
+
+    #expect(await waitUntil { closedIdentities.count == 1 })
+    await drainMainQueue()
+    #expect(previousClosedIdentities.isEmpty)
+    #expect(closedIdentities == [tooltipInfo.identity])
+  }
+
+  @Test
+  func closeHandler_replacedBeforeDelivery_receivesPendingClose() async {
+    let content = MockClosingTooltipView()
+    let manager = makeManager(content: content)
+    var previousClosedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler { previousClosedIdentities.append($0) }
+    #expect(await manager.showTooltip(info: tooltipInfo))
+    var closedIdentities = [TooltipIdentity]()
+
+    manager.reset()
+    manager.setCloseHandler { closedIdentities.append($0) }
+    await drainMainQueue()
+
+    #expect(previousClosedIdentities.isEmpty)
+    #expect(closedIdentities == [tooltipInfo.identity])
+  }
+
+  @Test
+  func closeHandler_canShowNextTooltipAfterReset() async {
+    let hostView = TestTooltipHostView(bounds: hostBounds)
+    let manager = DefaultTooltipManager(externalView: hostView)
+    let first = MockClosingTooltipView()
+    let second = MockClosingTooltipView()
+    let nextInfo = TooltipInfo(id: "next_tooltip", showsOnStart: false, multiple: false)
+    let anchorView = MockTooltipAnchorView(
+      frame: anchorFrame,
+      tooltips: [
+        makeTooltip(viewFactory: { first }),
+        BlockTooltip(
+          viewSource: .factory(key: 1) { second },
+          params: BlockTooltipParams(
+            id: nextInfo.id,
+            mode: .modal,
+            duration: 0,
+            closeByTapOutside: true
+          ),
+          offset: .zero,
+          position: .center
+        ),
+      ]
+    )
+    hostView.addAnchorView(anchorView)
+    manager.tooltipAnchorViewAdded(anchorView: anchorView)
+    var closedIdentities = [TooltipIdentity]()
+    manager.setCloseHandler { [weak manager] identity in
+      closedIdentities.append(identity)
+      guard identity == tooltipInfo.identity else { return }
+      manager?.showTooltip(info: nextInfo)
+    }
+    #expect(await manager.showTooltip(info: tooltipInfo))
+
+    manager.reset()
+    #expect(await waitUntil { second.isDescendant(of: hostView.coordinateSpace) })
+    #expect(closedIdentities == [tooltipInfo.identity])
+    #expect(second.closeCount == 0)
+    manager.reset()
+    await drainMainQueue()
+    #expect(closedIdentities == [tooltipInfo.identity, nextInfo.identity])
+  }
+
   // MARK: show / hide / reset while a show is in progress
 
   @Test
@@ -486,6 +684,8 @@ struct TooltipManagerTests {
   @Test
   func showHide_discardsTheShowAndNextShowWorksAsUsual() async {
     let fixture = GatedFixture()
+    var closedIdentities = [TooltipIdentity]()
+    fixture.manager.setCloseHandler { closedIdentities.append($0) }
     let content1 = MockClosingTooltipView()
 
     let first = fixture.show()
@@ -496,6 +696,8 @@ struct TooltipManagerTests {
     #expect(await first.value == false)
     #expect(content1.closeCount == 1)
     #expect(fixture.shownContainerCount == 0)
+    await drainMainQueue()
+    #expect(closedIdentities.isEmpty)
 
     fixture.useSecondFactory()
     let content2 = MockClosingTooltipView()
@@ -505,6 +707,9 @@ struct TooltipManagerTests {
     #expect(await second.value == true)
     #expect(fixture.shownContainerCount == 1)
     fixture.manager.hideTooltip(identity: tooltipInfo.identity)
+    #expect(await waitUntil { closedIdentities.count == 1 })
+    await drainMainQueue()
+    #expect(closedIdentities == [tooltipInfo.identity])
   }
 
   @Test
@@ -763,6 +968,7 @@ private final class MockUnsizedClosingTooltipView: UIView, VisibleBoundsTracking
 
 private final class MockTooltipAnchorView: UIView, TooltipAnchorView {
   var tooltips: [BlockTooltip]
+  var path: UIElementPath?
 
   init(frame: CGRect, tooltips: [BlockTooltip]) {
     self.tooltips = tooltips
