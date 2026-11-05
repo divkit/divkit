@@ -10420,6 +10420,7 @@
   "client/multiplatform/gradle/wrapper/gradle-wrapper.properties":"divkit/public/client/multiplatform/gradle/wrapper/gradle-wrapper.properties",
   "client/multiplatform/gradlew":"divkit/public/client/multiplatform/gradlew",
   "client/multiplatform/gradlew.bat":"divkit/public/client/multiplatform/gradlew.bat",
+  "client/multiplatform/pods.xcconfig":"divkit/public/client/multiplatform/pods.xcconfig",
   "client/multiplatform/sample/app/build.gradle.kts":"divkit/public/client/multiplatform/sample/app/build.gradle.kts",
   "client/multiplatform/sample/app/src/androidMain/AndroidManifest.xml":"divkit/public/client/multiplatform/sample/app/src/androidMain/AndroidManifest.xml",
   "client/multiplatform/sample/app/src/androidMain/kotlin/com/yandex/divkit/multiplaform/sample/MainActivity.kt":"divkit/public/client/multiplatform/sample/app/src/androidMain/kotlin/com/yandex/divkit/multiplaform/sample/MainActivity.kt",
