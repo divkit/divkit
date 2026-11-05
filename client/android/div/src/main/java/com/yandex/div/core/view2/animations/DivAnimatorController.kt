@@ -13,6 +13,7 @@ import com.yandex.div.core.view2.divs.widgets.DivHolderView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivActionAnimatorStart
 import com.yandex.div2.DivAnimator
+import com.yandex.div2.DivCount
 import javax.inject.Inject
 
 @DivViewScope
@@ -22,6 +23,7 @@ internal class DivAnimatorController @Inject constructor(
 ) {
 
     private val runningAnimators = mutableMapOf<Pair<String, String>, Animator>()
+    private val endingAnimators = mutableSetOf<Pair<String, String>>()
     private var animationsEnabledSubscription: Disposable? = null
 
     fun startAnimator(
@@ -33,8 +35,13 @@ internal class DivAnimatorController @Inject constructor(
         val animatorId = action.animatorId
         val animator = findAnimator(targetView, animatorId) ?: return
         val animatorKey = scopeId to animatorId
+        if (animatorKey in endingAnimators) return
         if (animatorKey in runningAnimators) {
             runningAnimators.remove(animatorKey)?.cancel()
+        }
+        if (!animationsEnabledController.isEnabled()) {
+            endImmediately(animatorKey, animator, action, resolver)
+            return
         }
 
         val variableAnimator = DivVariableAnimatorBuilder.build(divView, animator, action, resolver) ?: return
@@ -43,6 +50,24 @@ internal class DivAnimatorController @Inject constructor(
         runningAnimators[animatorKey] = variableAnimator
         subscribeToAnimationsEnabled()
         variableAnimator.start()
+    }
+
+    private fun endImmediately(
+        animatorKey: Pair<String, String>,
+        animator: DivAnimator,
+        action: DivActionAnimatorStart,
+        resolver: ExpressionResolver
+    ) {
+        if ((action.repeatCount ?: animator.value().repeatCount) is DivCount.Infinity) return
+        val variableAnimator = DivVariableAnimatorBuilder.build(divView, animator, action, resolver) ?: return
+        // end_actions run synchronously inside end(); the key guards against an end action
+        // that restarts an animator of the chain being ended.
+        endingAnimators += animatorKey
+        try {
+            variableAnimator.end()
+        } finally {
+            endingAnimators -= animatorKey
+        }
     }
 
     private fun subscribeToAnimationsEnabled() {
