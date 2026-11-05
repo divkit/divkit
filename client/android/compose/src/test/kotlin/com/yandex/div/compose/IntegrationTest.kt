@@ -112,8 +112,6 @@ private class Reporter(private val logger: IntegrationTestLogger) : DivReporter(
 private val ignoredFiles = listOf(
     "action_before_bind.json",
     "action_same_id_in_states.json",
-    "item_builder_variable_triggers.json",
-    "local-triggers-gallery-with-item-builder.json",
     "local-triggers-states.json",
     "local-triggers-tabs.json",
     "no_scope_duplicate_instance_errors.json",

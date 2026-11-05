@@ -19,6 +19,7 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivGallery
 import com.yandex.div2.DivVisibility
 import org.json.JSONObject
 
@@ -33,6 +34,10 @@ internal class CollectionItems(
 
 @Composable
 internal fun DivContainer.observeItems(): CollectionItems =
+    observeCollectionItems(this, items, itemBuilder)
+
+@Composable
+internal fun DivGallery.observeItems(): CollectionItems =
     observeCollectionItems(this, items, itemBuilder)
 
 /**
@@ -142,9 +147,7 @@ private fun DivCollectionItemBuilder.observeBuiltItems(
         CollectionItems(
             items = items.map { it.div },
             components = items.associate { it.div to it.component },
-            triggerComponents = items
-                .filter { !it.div.value().variableTriggers.isNullOrEmpty() }
-                .map { it.component },
+            triggerComponents = items.flatMap { it.triggerComponents },
         )
     }
 }

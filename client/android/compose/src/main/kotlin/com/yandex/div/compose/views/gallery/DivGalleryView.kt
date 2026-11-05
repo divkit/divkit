@@ -2,7 +2,7 @@ package com.yandex.div.compose.views.gallery
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.collection.observeStaticItems
+import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
@@ -19,7 +19,7 @@ internal fun DivGalleryView(
     val modifier = modifier.applyIf(data.restrictParentScroll.observedValue()) {
         restrictParentScroll(isHorizontal = properties.isHorizontal)
     }
-    val collectionItems = data.observeStaticItems(data.items)
+    val collectionItems = data.observeItems()
     val items = collectionItems.observeVisible()
 
     if (properties.columnCount > 1) {

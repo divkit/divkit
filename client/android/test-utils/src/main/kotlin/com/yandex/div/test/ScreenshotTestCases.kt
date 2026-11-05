@@ -111,12 +111,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     // match_parent min_size next to wrap_content constrained siblings not supported, DIVKIT-10714
     "div-container/match-parent-min-size-with-constrained-siblings.json",
 
-    // div-gallery.item_builder not supported
-    "div-gallery/item-builder/item-builder.json",
-    "div-gallery/item-builder/item-builder-with-local-variables.json",
-    "div-gallery/item-builder/nested-builders.json",
-    "div-gallery/item-builder/non-unique-matched-selectors.json",
-
     // div-pager.item_builder not supported
     "div-pager/item-builder/item-builder.json",
     "div-pager/item-builder/item-builder-with-local-variables.json",
@@ -175,7 +169,6 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-action/scope-id/set-cursor-position.json",
     "div-container/item-builder-actions.json",
     "div-extension/gesture.json",
-    "div-gallery/item-builder.json",
     "div-gallery/state-change-action-synchronization.json",
     "div-gallery/state-change-variable-synchronization.json",
     "div-gallery/state-preservation-with-variables.json",

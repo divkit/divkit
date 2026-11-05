@@ -29,7 +29,7 @@ internal class DivLocalComponentStorage @Inject constructor() {
         removedItems.removeAll(items.values.toSet())
         removedItems.forEach { item ->
             item.component?.let { component ->
-                component.triggerStorage.stopObserving()
+                component.triggerStorage.clearObservers()
                 component.expressionResolver.clearObservers()
             }
         }

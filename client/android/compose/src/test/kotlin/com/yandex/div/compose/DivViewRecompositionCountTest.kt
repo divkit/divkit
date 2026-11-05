@@ -269,6 +269,35 @@ class DivViewRecompositionCountTest {
     }
 
     @Test
+    fun `gallery item_builder item is recomposed once when item_spacing is changed`() {
+        setContent(
+            gallery(
+                extensions = compositionCounter("gallery"),
+                itemBuilder = itemBuilder(
+                    data = jsonArray(jsonObject()),
+                    prototypes = listOf(
+                        prototype(
+                            div = text(
+                                extensions = compositionCounter("item"),
+                                text = "Item"
+                            )
+                        )
+                    )
+                ),
+                itemSpacing = intExpression("@{counter}")
+            )
+        )
+
+        counter.set(10)
+        rule.waitForIdle()
+
+        assertCompositions(
+            "gallery" to 1,
+            "item" to 2
+        )
+    }
+
+    @Test
     fun `items are not recomposed when container background is changed`() {
         setContent(
             container(

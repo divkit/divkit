@@ -12,9 +12,9 @@ import dev.zacsweers.metro.Inject
 
 /**
  * Keeps the item scopes of a collection owner — an element rendered through `observeItems()` —
- * while the owner belongs to the card. As in the View renderer, a resolved item id preserves its
- * scope within a prototype; anonymous items use their data and index instead. Scopes survive
- * leaving and re-entering composition, and are released when data or a patch removes them.
+ * while the owner belongs to the card. As in the View renderer, a resolved prototype id preserves
+ * the item scope within a prototype; anonymous items use their data and index instead. Scopes
+ * survive leaving and re-entering composition, and are released when data or a patch removes them.
  */
 @DivViewScope
 internal class CollectionItemScopeStorage @Inject constructor() {
@@ -64,14 +64,23 @@ internal class CollectionItemScopeStorage @Inject constructor() {
             duplicateIndex,
             item.elementKey.takeIf { item.id == null },
         )
-        val scope = builderScopes(owner, parent).items.getOrPut(key) {
+        val scopes = builderScopes(owner, parent)
+        val scope = scopes.items.getOrPut(key) {
             val variables = ItemVariableProvider(parent.variableProvider, item.constants)
             val component = viewContext.createLocalComponent(parent, variables)
-            val div = item.prototype.div.copy(item.id)
+            val prototypeDiv = item.prototype.div
+            val div = prototypeDiv.copy(item.id ?: prototypeDiv.value().id)
+            val ownComponent = viewContext.getOwnComponent(div.value(), component)
             CollectionItem(
                 div = div,
-                component = viewContext.getOwnComponent(div.value(), component),
+                component = ownComponent,
                 itemComponent = component,
+                triggerComponents = scopes.triggerComponents(
+                    item.prototype,
+                    div,
+                    ownComponent,
+                    viewContext,
+                ),
                 variables = variables,
                 elementKey = item.elementKey,
             )
@@ -151,6 +160,23 @@ internal class CollectionItemScopeStorage @Inject constructor() {
     private fun builderScopes(owner: DivBase, parent: DivLocalComponent): BuilderScopes =
         builders.getOrPut(owner) { HashMap() }.getOrPut(parent) { BuilderScopes() }
 
+    /**
+     * The scopes that declare triggers among [div], built from [prototype], and its descendants.
+     * The scopes of the descendants are created here only when [prototype] declares triggers below
+     * its root.
+     */
+    private fun BuilderScopes.triggerComponents(
+        prototype: DivCollectionItemBuilder.Prototype,
+        div: Div,
+        component: DivLocalComponent,
+        viewContext: DivViewContext,
+    ): List<DivLocalComponent> = when {
+        nestedTriggers.getOrPut(prototype) { prototype.div.hasNestedTriggers() } ->
+            buildList { viewContext.collectTriggerComponents(div, component, this) }
+        div.value().variableTriggers.isNullOrEmpty() -> emptyList()
+        else -> listOf(component)
+    }
+
     private data class ItemKey(
         val prototype: DivCollectionItemBuilder.Prototype,
         val id: String?,
@@ -160,17 +186,20 @@ internal class CollectionItemScopeStorage @Inject constructor() {
 
     private class BuilderScopes {
         val items = HashMap<ItemKey, CollectionItem>()
+        val nestedTriggers = HashMap<DivCollectionItemBuilder.Prototype, Boolean>()
     }
 }
 
 /**
  * A generated child and its retained item bindings, with a separate scope for its own
- * declarations.
+ * declarations. [triggerComponents] are the scopes of the child and of its descendants that
+ * declare triggers.
  */
 internal class CollectionItem(
     val div: Div,
     val component: DivLocalComponent,
     private val itemComponent: DivLocalComponent,
+    val triggerComponents: List<DivLocalComponent>,
     private val variables: ItemVariableProvider,
     private var elementKey: String,
 ) {
@@ -188,4 +217,39 @@ internal class CollectionItem(
             variables.update(item.constants)
         }
     }
+}
+
+/**
+ * Adds the scopes that declare triggers among [div] and the descendants reached through
+ * [persistentChildren], creating the scopes of those descendants.
+ */
+private fun DivViewContext.collectTriggerComponents(
+    div: Div,
+    component: DivLocalComponent,
+    result: MutableList<DivLocalComponent>,
+) {
+    if (!div.value().variableTriggers.isNullOrEmpty()) result += component
+    div.persistentChildren().forEach { child ->
+        collectTriggerComponents(child, getOwnComponent(child.value(), component), result)
+    }
+}
+
+/**
+ * Whether a descendant reached through [persistentChildren] declares triggers.
+ */
+private fun Div.hasNestedTriggers(): Boolean = persistentChildren().any { child ->
+    !child.value().variableTriggers.isNullOrEmpty() || child.hasNestedTriggers()
+}
+
+/**
+ * The static items of a collection owner without `item_builder`; other elements have none.
+ */
+private fun Div.persistentChildren(): List<Div> = when (this) {
+    is Div.Container -> value.items.takeIf { value.itemBuilder == null }.orEmpty()
+    is Div.Gallery -> value.items.takeIf { value.itemBuilder == null }.orEmpty()
+    is Div.Grid -> value.items.orEmpty()
+    is Div.Pager -> value.items.takeIf { value.itemBuilder == null }.orEmpty()
+    is Div.Custom, is Div.GifImage, is Div.Image, is Div.Indicator, is Div.Input,
+    is Div.Select, is Div.Separator, is Div.Slider, is Div.State, is Div.Switch,
+    is Div.Tabs, is Div.Text, is Div.Video -> emptyList()
 }

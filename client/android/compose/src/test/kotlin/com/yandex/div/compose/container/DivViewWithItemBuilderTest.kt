@@ -43,6 +43,7 @@ import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnitValue
 import com.yandex.div2.DivVariable
+import com.yandex.div2.DivVisibility
 import com.yandex.div2.IntegerVariable
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -198,7 +199,7 @@ class DivViewWithItemBuilderTest {
     }
 
     @Test
-    fun `prototype without id drops the element id`() {
+    fun `prototype without id keeps the element id`() {
         setContent(
             container(
                 itemBuilder = itemBuilder(
@@ -208,7 +209,26 @@ class DivViewWithItemBuilderTest {
             )
         )
 
-        rule.onNodeWithText("built").assertExists()
+        rule.onNodeWithTag("element").assertTextEquals("built")
+    }
+
+    @Test
+    fun `prototype id overrides the element id`() {
+        setContent(
+            container(
+                itemBuilder = itemBuilder(
+                    data = jsonArray(jsonObject()),
+                    prototypes = listOf(
+                        prototype(
+                            div = text(id = "element", text = "built"),
+                            id = constant("prototype")
+                        )
+                    )
+                )
+            )
+        )
+
+        rule.onNodeWithTag("prototype").assertTextEquals("built")
         rule.onNodeWithTag("element").assertDoesNotExist()
     }
 
@@ -385,6 +405,45 @@ class DivViewWithItemBuilderTest {
         step.set(2)
 
         rule.onNodeWithText("item").assertExists()
+    }
+
+    @Test
+    fun `nested trigger of a gone item fires`() {
+        val counter = Variable.IntegerVariable("counter", 0)
+        val result = Variable.StringVariable("result", "initial")
+        variableController.declare(counter, result)
+        setContent(
+            container(
+                itemBuilder = itemBuilder(
+                    data = jsonArray(jsonObject()),
+                    prototypes = listOf(
+                        prototype(
+                            div = container(
+                                items = listOf(
+                                    text(
+                                        text = "item",
+                                        triggers = listOf(
+                                            trigger(
+                                                action = action(
+                                                    url = "div-action://set_variable" +
+                                                        "?name=result&value=fired"
+                                                ),
+                                                condition = "@{counter > 0}"
+                                            )
+                                        )
+                                    )
+                                ),
+                                visibility = constant(DivVisibility.GONE)
+                            )
+                        )
+                    )
+                )
+            )
+        )
+
+        counter.set(1)
+
+        assertEquals("fired", result.getValue())
     }
 
     @Test

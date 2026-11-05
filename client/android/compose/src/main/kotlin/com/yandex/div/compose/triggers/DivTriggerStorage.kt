@@ -12,6 +12,11 @@ import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivTrigger.Mode
 import dev.zacsweers.metro.Inject
 
+/**
+ * The triggers of a scope. They are observed while at least one observer is attached: an element
+ * observes its own scope while it is composed, and the collection owner that built it observes the
+ * same scope while the owner is composed.
+ */
 @DivLocalScope
 internal class DivTriggerStorage @Inject constructor(
     private val actionHandler: DivActionHandler,
@@ -57,28 +62,36 @@ internal class DivTriggerStorage @Inject constructor(
     }
 
     private val items = mutableListOf<Item>()
-    private var isActive = false
+    private var observerCount = 0
 
     fun add(trigger: DivTrigger) {
         val item = Item(trigger, expressionResolver, this::handle)
         items.add(item)
 
-        if (isActive) {
+        if (observerCount > 0) {
             item.startObserving()
         }
     }
 
     fun startObserving() {
-        if (!isActive) {
+        if (observerCount++ == 0) {
             items.forEach { it.startObserving() }
-            isActive = true
         }
     }
 
     fun stopObserving() {
-        if (isActive) {
+        if (observerCount > 0 && --observerCount == 0) {
             items.forEach { it.stopObserving() }
-            isActive = false
+        }
+    }
+
+    /**
+     * Stops observing whatever observers remain: the scope is released.
+     */
+    fun clearObservers() {
+        if (observerCount > 0) {
+            observerCount = 0
+            items.forEach { it.stopObserving() }
         }
     }
 

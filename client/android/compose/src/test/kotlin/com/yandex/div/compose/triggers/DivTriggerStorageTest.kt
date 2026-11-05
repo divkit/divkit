@@ -174,6 +174,61 @@ class DivTriggerStorageTest {
         verifyNoInteractions(actionHandler)
     }
 
+    @Test
+    fun `keeps observing while another observer remains`() {
+        val variable = Variable.BooleanVariable("condition", false)
+        variableController.declare(variable)
+        triggerStorage.add(trigger(action = action, condition = "@{condition}"))
+        triggerStorage.startObserving()
+        triggerStorage.startObserving()
+
+        triggerStorage.stopObserving()
+        variable.set(true)
+
+        verifyTriggered()
+    }
+
+    @Test
+    fun `stops observing when the last observer stops`() {
+        val variable = Variable.BooleanVariable("condition", false)
+        variableController.declare(variable)
+        triggerStorage.add(trigger(action = action, condition = "@{condition}"))
+        triggerStorage.startObserving()
+        triggerStorage.startObserving()
+
+        triggerStorage.stopObserving()
+        triggerStorage.stopObserving()
+        variable.set(true)
+
+        verifyNoInteractions(actionHandler)
+    }
+
+    @Test
+    fun `clearObservers stops observing for every observer`() {
+        val variable = Variable.BooleanVariable("condition", false)
+        variableController.declare(variable)
+        triggerStorage.add(trigger(action = action, condition = "@{condition}"))
+        triggerStorage.startObserving()
+        triggerStorage.startObserving()
+
+        triggerStorage.clearObservers()
+        variable.set(true)
+
+        verifyNoInteractions(actionHandler)
+    }
+
+    @Test
+    fun `late stopObserving after clearObservers does not block the next observer`() {
+        triggerStorage.startObserving()
+        triggerStorage.clearObservers()
+        triggerStorage.stopObserving()
+
+        triggerStorage.startObserving()
+        triggerStorage.add(trigger(action = action, condition = "@{true}"))
+
+        verifyTriggered()
+    }
+
     private fun verifyTriggered() {
         verify(actionHandler).handle(actionHandlingContext, listOf(action), DivActionSource.TRIGGER)
         clearInvocations(actionHandler)
