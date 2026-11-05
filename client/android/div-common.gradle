@@ -9,8 +9,8 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInteger()
         targetSdk = libs.versions.android.targetSdk.get().toInteger()
 
-        versionName = divkitVersion.baseVersionName
-        versionCode = divkitVersion.versionCode
+        versionName = rootProject.divkitVersion.baseVersionName
+        versionCode = rootProject.divkitVersion.versionCode
 
         vectorDrawables.useSupportLibrary = true
     }

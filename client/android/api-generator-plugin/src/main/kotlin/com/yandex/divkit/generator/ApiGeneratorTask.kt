@@ -48,7 +48,7 @@ abstract class ApiGeneratorTask : DefaultTask() {
         logger.lifecycle("Process schemas: ${schemasDirectory.get().asFile.absolutePath}")
 
         exec.exec {
-            workingDir = workingDirectory.get().asFile
+            workingDir = this@ApiGeneratorTask.workingDirectory.get().asFile
             commandLine(exec.resolvePythonExecutableName())
             args(
                 "-m", "api_generator",
@@ -68,8 +68,5 @@ private fun ExecOperations.resolvePythonExecutableName(): String {
 
 private val PYTHON_EXECUTABLE_VARIANTS = arrayOf(
     "python3",
-    "python3.exe",
-    "python",
-    "python.exe",
-    "py"
+    "python"
 )

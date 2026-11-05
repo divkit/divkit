@@ -14,7 +14,7 @@ val androidCompileSdk = libs.versions.android.compileSdk.map(String::toInt)
 val androidMinSdk = libs.versions.android.minSdk.map(String::toInt)
 
 // TODO(gulevsky): remove withGroovyBuilder once com.yandex.div.gradle.Version class becomes available
-val divkitVersion: Any by rootProject.extra
+val divkitVersion = rootProject.extra["divkitVersion"] as Any
 version = divkitVersion.withGroovyBuilder {
     getProperty("baseVersionName") as String
 }

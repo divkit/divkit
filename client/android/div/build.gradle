@@ -28,7 +28,7 @@ android {
 }
 
 androidComponents.onVariants(androidComponents.selector().all()) {
-    def versionName = divkitVersion.getVersionNameForBuildType(buildType)
+    def versionName = rootProject.divkitVersion.getVersionNameForBuildType(buildType)
     buildConfigFields.put("VERSION_NAME", new BuildConfigField("String", JsonOutput.toJson(versionName), null))
 }
 

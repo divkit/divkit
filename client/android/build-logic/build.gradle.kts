@@ -18,7 +18,7 @@ dependencies {
     implementation(libs.nexusPublishPlugin)
 }
 
-val detektRules by sourceSets.creating
+val detektRules = sourceSets.create("detektRules")
 
 dependencies {
     add(detektRules.compileOnlyConfigurationName, "dev.detekt:detekt-api:${libs.versions.detekt.get()}")

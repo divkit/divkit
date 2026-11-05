@@ -7,6 +7,8 @@ plugins {
 kotlin {
     android {
         namespace = "com.yandex.div.logging"
+
+        withHostTest {}
     }
     sourceSets {
         commonMain.dependencies {

@@ -7,5 +7,7 @@ plugins {
 kotlin {
     android {
         namespace = "com.yandex.div.assertion"
+
+        withHostTest {}
     }
 }

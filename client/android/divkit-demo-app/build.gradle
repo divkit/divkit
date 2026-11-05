@@ -15,7 +15,7 @@ apply from: "${project.projectDir}/../div-common.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 
 repositories {
-    maven { url 'https://repo.gradle.org/gradle/libs-releases' }
+    maven { url = 'https://repo.gradle.org/gradle/libs-releases' }
 }
 
 android {
@@ -31,8 +31,8 @@ android {
     }
 
     defaultConfig {
-        versionCode = divkitVersion.versionCode + divkitVersion.buildNumber
-        buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
+        versionCode = rootProject.divkitVersion.versionCode + rootProject.divkitVersion.buildNumber
+        buildConfigField "int", "BUILD_NUMBER", "${rootProject.divkitVersion.buildNumber}"
         buildConfigField "String", "METRICA_API_KEY", JsonOutput.toJson(providers.gradleProperty("metricaApiKey").getOrElse(""))
         buildConfigField "String", "HTTP_HEADERS", JsonOutput.toJson(providers.gradleProperty("httpHeaders").getOrElse("{}"))
 
@@ -182,9 +182,9 @@ if (gradle.ext.screenshotComparisonEnabled) {
 }
 
 base {
-    archivesName = divkitVersion.buildNumber != 0 ?
-            "${project.name}-v${divkitVersion.baseVersionName}-b${divkitVersion.buildNumber}" :
-            "${project.name}-v${divkitVersion.baseVersionName}"
+    archivesName = rootProject.divkitVersion.buildNumber != 0 ?
+            "${project.name}-v${rootProject.divkitVersion.baseVersionName}-b${rootProject.divkitVersion.buildNumber}" :
+            "${project.name}-v${rootProject.divkitVersion.baseVersionName}"
 }
 
 FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {

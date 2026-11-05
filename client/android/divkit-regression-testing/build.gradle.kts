@@ -11,7 +11,7 @@ android {
 
     sourceSets {
         getByName("main") {
-            assets.srcDirs("../../test_data/regression_test_data")
+            assets.directories.add("../../test_data/regression_test_data")
         }
     }
 
