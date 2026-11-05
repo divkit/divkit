@@ -2,7 +2,7 @@ package com.yandex.div.compose.storedvalues
 
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.di.DivContextScope
-import com.yandex.div.internal.storedvalues.StoredValuesRepository
+import com.yandex.div.storage.common.StoredValuesRepository
 import dev.zacsweers.metro.Inject
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime

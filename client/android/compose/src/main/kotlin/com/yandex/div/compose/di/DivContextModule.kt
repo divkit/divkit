@@ -14,9 +14,9 @@ import com.yandex.div.compose.patch.DefaultPatchDownloader
 import com.yandex.div.compose.patch.DivPatchDownloader
 import com.yandex.div.compose.preload.CoilImagePreloader
 import com.yandex.div.compose.preload.ImagePreloader
-import com.yandex.div.internal.storedvalues.StoredValuesRepository
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.DivStorageComponent
+import com.yandex.div.storage.common.StoredValuesRepository
 import com.yandex.div.storage.storedvalues.StoredValuesRepositoryImpl
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
