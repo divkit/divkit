@@ -158,7 +158,6 @@ val composeIgnoredInteractiveScreenshotCases = setOf(
     "div-action/custom-action.json",
     "div-action/scope-id/focus-element.json",
     "div-action/scope-id/set-cursor-position.json",
-    "div-container/item-builder-actions.json",
     "div-extension/gesture.json",
     "div-gallery/state-change-action-synchronization.json",
     "div-gallery/state-change-variable-synchronization.json",

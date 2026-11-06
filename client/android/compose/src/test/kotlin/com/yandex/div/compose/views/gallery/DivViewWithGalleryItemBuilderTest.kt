@@ -653,6 +653,29 @@ class DivViewWithGalleryItemBuilderTest {
     }
 
     @Test
+    fun `items start with fresh local state when a patch replaces the gallery with the same builder`() {
+        variableController.declare(Variable.ArrayVariable("elements", elements(1)))
+        val items = itemBuilder(
+            data = arrayExpression("@{elements}"),
+            prototypes = listOf(prototype(
+                div = editableItem(),
+                id = expression("@{it.getString('id')}")
+            ))
+        )
+        val target = {
+            gallery(height = fixed(50), id = "target", itemBuilder = items, width = fixed(300))
+        }
+        val card = data(container(items = listOf(target())))
+        setContent(card)
+        rule.onNodeWithTag("item0").performClick()
+        rule.onNodeWithTag("item0").assertTextEquals("changed item0 0")
+
+        applyPatch(card, DivPatch.Change("target", listOf(target())))
+
+        rule.onNodeWithTag("item0").assertTextEquals("initial item0 0")
+    }
+
+    @Test
     fun `item observers are released when the data is emptied`() {
         val elements = Variable.ArrayVariable("elements", jsonArray())
         variableController.declare(elements)

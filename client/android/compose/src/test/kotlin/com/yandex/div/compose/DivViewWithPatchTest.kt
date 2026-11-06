@@ -37,6 +37,7 @@ import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.itemBuilder
 import com.yandex.div.test.data.jsonArray
 import com.yandex.div.test.data.jsonObject
+import com.yandex.div.test.data.pager
 import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.state
 import com.yandex.div.test.data.text
@@ -45,6 +46,7 @@ import com.yandex.div.test.data.trigger
 import com.yandex.div.test.data.variable
 import com.yandex.div.test.data.wrapContent
 import com.yandex.div2.Div
+import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPageContentSize
@@ -56,6 +58,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
+import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -847,6 +850,63 @@ class DivViewWithPatchTest {
         rule.onNodeWithTag("item").assertTextEquals("initial")
     }
 
+    @Test
+    fun `builder items start with fresh state when a patch replaces their container with the same builder`() {
+        val items = itemBuilder(
+            data = jsonArray(jsonObject()),
+            prototypes = listOf(prototype(id = constant("item"), div = text(
+                text = expression("@{local}"),
+                variables = listOf(variable("local", "initial")),
+                action = action(url = "div-action://set_variable?name=local&value=changed")
+            )))
+        )
+        val target = { container(id = "target", itemBuilder = items) }
+        val data = data(target())
+        setContent(data)
+        rule.onNodeWithTag("item").performClick()
+        rule.onNodeWithTag("item").assertTextEquals("changed")
+
+        applyPatch(data, DivPatch(changes = listOf(DivPatch.Change("target", listOf(target())))))
+
+        rule.onNodeWithTag("item").assertTextEquals("initial")
+    }
+
+    @Test
+    fun `builder pages keep local state when a patch copies their pager`() {
+        val data = data(pager(
+            itemBuilder = editablePages(count = 2),
+            items = listOf(text(id = "target", text = "before")),
+            width = fixed(200)
+        ))
+        setContent(data)
+        rule.onNodeWithTag("page0").performClick()
+        rule.onNodeWithTag("page0").assertTextEquals("changed")
+        val pager = rule.onNode(hasScrollToIndexAction())
+
+        assertTrue(applyPatch(data, DivPatch(
+            changes = listOf(DivPatch.Change("target", listOf(text(text = "after")))),
+            mode = constant(DivPatch.Mode.TRANSACTIONAL)
+        )))
+        pager.performScrollToIndex(1)
+        pager.performScrollToIndex(0)
+
+        rule.onNodeWithTag("page0").assertTextEquals("changed")
+    }
+
+    @Test
+    fun `builder pages start with fresh state when a patch replaces their pager with the same builder`() {
+        val pages = editablePages(count = 1)
+        val target = { pager(id = "target", itemBuilder = pages, width = fixed(200)) }
+        val data = data(target())
+        setContent(data)
+        rule.onNodeWithTag("page0").performClick()
+        rule.onNodeWithTag("page0").assertTextEquals("changed")
+
+        applyPatch(data, DivPatch(changes = listOf(DivPatch.Change("target", listOf(target())))))
+
+        rule.onNodeWithTag("page0").assertTextEquals("initial")
+    }
+
     private fun galleryAfterTarget(): List<Div> = listOf(
         text(id = "target", text = "Before"),
         gallery(id = "gallery", width = fixed(200), height = fixed(100), items = List(10) {
@@ -879,4 +939,14 @@ class DivViewWithPatchTest {
     private fun applyPatch(data: DivData, patch: DivPatch): Boolean = rule.runOnIdle {
         runBlocking { divContext.patcher.applyPatch(data, patch) }
     }
+
+    private fun editablePages(count: Int): DivCollectionItemBuilder = itemBuilder(
+        data = JSONArray(List(count) { jsonObject("id" to "page$it") }),
+        prototypes = listOf(prototype(id = expression("@{it.getString('id')}"), div = text(
+            text = expression("@{local}"),
+            variables = listOf(variable("local", "initial")),
+            action = action(url = "div-action://set_variable?name=local&value=changed"),
+            width = fixed(200)
+        )))
+    )
 }
