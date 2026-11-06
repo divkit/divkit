@@ -19,6 +19,7 @@
     "actions"
   ],
   "platforms": [
+    "android",
     "ios"
   ]
 }

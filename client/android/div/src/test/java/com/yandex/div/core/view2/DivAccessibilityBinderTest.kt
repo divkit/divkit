@@ -31,6 +31,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import org.mockito.kotlin.mock
 
 @RunWith(AndroidJUnit4::class)
 class DivAccessibilityBinderTest {
@@ -38,6 +39,7 @@ class DivAccessibilityBinderTest {
     private val binder = DivAccessibilityBinder(
         enabled = true,
         accessibilityStateProvider = AccessibilityStateProvider(true),
+        actionBinder = mock(),
     )
     private val view = TextView(ApplicationProvider.getApplicationContext())
 
@@ -74,6 +76,7 @@ class DivAccessibilityBinderTest {
                 a11yConfigurationEnabled = false,
                 forceAccessibilityEnable = true,
             ),
+            actionBinder = mock(),
         )
 
         bind(
@@ -234,6 +237,7 @@ class DivAccessibilityBinderTest {
         val disabledBinder = DivAccessibilityBinder(
             enabled = false,
             accessibilityStateProvider = AccessibilityStateProvider(true),
+            actionBinder = mock(),
         )
         view.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
         bind(
@@ -310,6 +314,7 @@ class DivAccessibilityBinderTest {
             oldDiv,
             ExpressionResolver.EMPTY,
             targetView.expressionSubscriber,
+            divView = mock(),
         )
     }
 

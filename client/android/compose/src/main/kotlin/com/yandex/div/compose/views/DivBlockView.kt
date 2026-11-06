@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import com.yandex.div.compose.actions.WithAccessibilityMenuScope
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.animation.WithAnimatorTarget
 import com.yandex.div.compose.context.LocalDivViewContext
@@ -66,18 +67,20 @@ internal inline fun DivBlockView(
             WithAnimatorTarget(divBase) {
                 val visibility = divBase.visibility.observedValue()
                 if (visibility == DivVisibility.GONE) return@WithAnimatorTarget
-                VisibleDivBlockView(
-                    data = data,
-                    modifier = modifier,
-                    applyMargins = applyMargins,
-                    visibility = visibility,
-                    defaultHorizontalAlignment = defaultHorizontalAlignment,
-                    defaultVerticalAlignment = defaultVerticalAlignment,
-                    suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
-                    matchParentMaxWidth = matchParentMaxWidth,
-                    matchParentMaxHeight = matchParentMaxHeight,
-                    blockTapPropagation = blockTapPropagation,
-                )
+                WithAccessibilityMenuScope(divBase, visibility) {
+                    VisibleDivBlockView(
+                        data = data,
+                        modifier = modifier,
+                        applyMargins = applyMargins,
+                        visibility = visibility,
+                        defaultHorizontalAlignment = defaultHorizontalAlignment,
+                        defaultVerticalAlignment = defaultVerticalAlignment,
+                        suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
+                        matchParentMaxWidth = matchParentMaxWidth,
+                        matchParentMaxHeight = matchParentMaxHeight,
+                        blockTapPropagation = blockTapPropagation,
+                    )
+                }
             }
         }
     }

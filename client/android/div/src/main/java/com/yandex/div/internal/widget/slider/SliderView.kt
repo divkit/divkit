@@ -253,7 +253,7 @@ open class SliderView @JvmOverloads constructor(
     var thumbSecondaryValue: Float? = null
         private set
 
-    private val a11yHelper = SliderAccessibilityHelper(this)
+    internal val a11yHelper = SliderAccessibilityHelper(this)
 
     /**
      * Set the value of thumb secondary.

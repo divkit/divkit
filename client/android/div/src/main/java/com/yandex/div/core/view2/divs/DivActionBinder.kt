@@ -382,6 +382,15 @@ internal class DivActionBinder @Inject constructor(
         }
     }
 
+    internal fun handleAccessibilityClick(
+        target: View,
+        actions: List<DivAction>,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+    ) {
+        actionPerformer.performBulkActions(target, actions, resolver, divView)
+    }
+
     private inline fun prepareMenu(
         target: View,
         action: DivAction,

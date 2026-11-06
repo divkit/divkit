@@ -2,10 +2,12 @@ package com.yandex.div.compose.views.modifiers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsPropertyReceiver
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -45,12 +47,13 @@ internal fun Modifier.accessibility(data: DivBase): Modifier {
     val role = if (accessibility.type != Type.AUTO) type.role else data.defaultRole
 
     val isMerge = mode == Mode.MERGE
+    val menu = accessibility.observeMenu(data)
 
-    if (!accessibility.hasSemantics(type, role, isMerge)) {
+    if (!accessibility.hasSemantics(type, role, isMerge) && menu.isEmpty()) {
         return this
     }
 
-    val properties = accessibility.observeSemanticsProperties(type, role)
+    val properties = accessibility.observeSemanticsProperties(type, role, menu)
     return when {
         !isMerge -> semantics(properties = properties)
         data.keepsControlSemanticsOnMerge -> semantics(mergeDescendants = true, properties = properties)
@@ -62,11 +65,15 @@ internal fun Modifier.accessibility(data: DivBase): Modifier {
 private fun DivAccessibility.observeSemanticsProperties(
     type: Type,
     role: Role?,
+    menu: List<CustomAccessibilityAction>,
 ): SemanticsPropertyReceiver.() -> Unit {
     val contentDescription = observeContentDescription()
     val stateDescription = stateDescription?.observedValue()
     val isChecked = if (type.isCheckable) isChecked?.observedValue() else null
     return {
+        if (menu.isNotEmpty()) {
+            customActions = menu
+        }
         contentDescription?.let { this.contentDescription = it }
         stateDescription?.let { this.stateDescription = it }
         isChecked?.let { toggleableState = if (it) ToggleableState.On else ToggleableState.Off }

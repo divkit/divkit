@@ -3,6 +3,7 @@ package com.yandex.div.test.data
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivInputFilter
@@ -26,8 +27,10 @@ fun input(
     textVariable: String,
     validators: List<DivInputValidator>? = null,
     visibility: Expression<DivVisibility> = constant(DivVisibility.VISIBLE),
+    accessibility: DivAccessibility? = null,
 ): Div = Div.Input(
     DivInput(
+        accessibility = accessibility,
         autocapitalization = autocapitalization,
         enterKeyActions = enterKeyActions,
         enterKeyType = enterKeyType,

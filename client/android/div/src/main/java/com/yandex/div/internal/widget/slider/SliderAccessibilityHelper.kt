@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.customview.widget.ExploreByTouchHelper
 import com.yandex.div.R
+import com.yandex.div.internal.widget.AccessibilityMenuAction
 import com.yandex.div.internal.widget.slider.SliderView.Companion.boundsHeight
 import com.yandex.div.internal.widget.slider.SliderView.Companion.boundsWidth
 import com.yandex.div.internal.widget.slider.SliderView.Thumb
@@ -27,6 +28,19 @@ internal class SliderAccessibilityHelper(private val slider: SliderView) : Explo
 
     private val bounds = Rect()
     private val step get() = max(((slider.maxValue - slider.minValue) * 0.05).roundToInt(), 1)
+
+    private var menus = emptyList<AccessibilityMenuAction>()
+    private var menusSecondary = emptyList<AccessibilityMenuAction>()
+
+    fun setMenu(actions: List<AccessibilityMenuAction>) {
+        menus = actions
+        invalidateRoot()
+    }
+
+    fun setMenuSecondary(actions: List<AccessibilityMenuAction>) {
+        menusSecondary = actions
+        invalidateRoot()
+    }
 
     init {
         ViewCompat.setAccessibilityDelegate(slider, this)
@@ -61,7 +75,7 @@ internal class SliderAccessibilityHelper(private val slider: SliderView) : Explo
                 RANGE_TYPE_INT,
                 slider.minValue,
                 slider.maxValue,
-                virtualViewId.toThumbValue()
+                virtualViewId.thumbValue
             )
 
             val description = StringBuilder()
@@ -71,6 +85,11 @@ internal class SliderAccessibilityHelper(private val slider: SliderView) : Explo
 
             addAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_FORWARD)
             addAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_SCROLL_BACKWARD)
+            virtualViewId.menu.forEach {
+                if (it.isAvailable()) {
+                    addAction(it.info)
+                }
+            }
 
             updateBounds(virtualViewId)
             setBoundsInParent(bounds)
@@ -78,6 +97,9 @@ internal class SliderAccessibilityHelper(private val slider: SliderView) : Explo
     }
 
     override fun onPerformActionForVirtualView(virtualViewId: Int, action: Int, arguments: Bundle?): Boolean {
+        virtualViewId.menu.firstOrNull { it.info.id == action }?.let {
+            return it.perform()
+        }
         val value = when (action) {
             android.R.id.accessibilityActionSetProgress -> {
                 if (arguments?.containsKey(AccessibilityNodeInfoCompat.ACTION_ARGUMENT_PROGRESS_VALUE) != true) {
@@ -86,13 +108,20 @@ internal class SliderAccessibilityHelper(private val slider: SliderView) : Explo
                 arguments.getFloat(AccessibilityNodeInfoCompat.ACTION_ARGUMENT_PROGRESS_VALUE)
             }
 
-            AccessibilityNodeInfoCompat.ACTION_SCROLL_FORWARD -> virtualViewId.toThumbValue() + step
-            AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD -> virtualViewId.toThumbValue() - step
+            AccessibilityNodeInfoCompat.ACTION_SCROLL_FORWARD -> virtualViewId.thumbValue + step
+            AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD -> virtualViewId.thumbValue - step
             else -> return false
         }
         setThumbValue(virtualViewId, value)
         return true
     }
+
+    private val Int.menu: List<AccessibilityMenuAction>
+        get() = when (this) {
+            THUMB_VIRTUAL_VIEW_ID -> menus
+            SECONDARY_THUMB_VIRTUAL_VIEW_ID -> menusSecondary
+            else -> emptyList()
+        }
 
     private fun startOrEndDescription(virtualViewId: Int): String {
         return when {
@@ -117,7 +146,7 @@ internal class SliderAccessibilityHelper(private val slider: SliderView) : Explo
             }
         }
 
-        val position = slider.getPositionInView(index.toThumbValue())
+        val position = slider.getPositionInView(index.thumbValue)
         bounds.apply {
             left = position
             right = position + width
@@ -140,11 +169,10 @@ internal class SliderAccessibilityHelper(private val slider: SliderView) : Explo
         }
     }
 
-    private fun Int.toThumbValue(): Float {
-        return if (this == THUMB_VIRTUAL_VIEW_ID) {
+    private val Int.thumbValue: Float
+        get() = if (this == THUMB_VIRTUAL_VIEW_ID) {
             slider.thumbValue
         } else {
             slider.thumbSecondaryValue ?: slider.thumbValue
         }
-    }
 }

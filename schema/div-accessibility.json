@@ -55,6 +55,7 @@
       },
       "$description": "translations.json#/div_accessibility_menu",
       "platforms": [
+        "android",
         "ios"
       ]
     },

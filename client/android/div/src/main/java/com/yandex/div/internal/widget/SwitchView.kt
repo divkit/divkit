@@ -54,22 +54,26 @@ internal open class SwitchView(context: Context) : FrameLayout(context) {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         if (ViewCompat.getAccessibilityDelegate(this) == null) {
-            val defaultDelegate = object : AccessibilityDelegateCompat() {
-                override fun onInitializeAccessibilityNodeInfo(
-                    host: View,
-                    info: AccessibilityNodeInfoCompat
-                ) {
-                    super.onInitializeAccessibilityNodeInfo(host, info)
-                    info.className = "android.widget.Switch"
-                    info.isCheckable = true
-                    info.isChecked = (host as? SwitchView)?.isChecked == true
-                }
-            }
-            ViewCompat.setAccessibilityDelegate(this, defaultDelegate)
+            ViewCompat.setAccessibilityDelegate(this, createDefaultAccessibilityDelegate())
         }
     }
 
     override fun getAccessibilityClassName(): CharSequence = "android.widget.Switch"
+
+    fun createDefaultAccessibilityDelegate(): AccessibilityDelegateCompat {
+        // Menu binding may run before attach; its delegate must wrap the same default state.
+        return object : AccessibilityDelegateCompat() {
+            override fun onInitializeAccessibilityNodeInfo(
+                host: View,
+                info: AccessibilityNodeInfoCompat,
+            ) {
+                super.onInitializeAccessibilityNodeInfo(host, info)
+                info.className = host.accessibilityClassName
+                info.isCheckable = true
+                info.isChecked = (host as? SwitchView)?.isChecked == true
+            }
+        }
+    }
 
     override fun isEnabled(): Boolean = switch.isEnabled
     override fun setEnabled(enabled: Boolean) {

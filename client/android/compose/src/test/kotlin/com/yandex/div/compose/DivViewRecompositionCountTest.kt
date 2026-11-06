@@ -29,6 +29,7 @@ import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.solidBackground
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.variable
+import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivExtension
@@ -83,6 +84,21 @@ class DivViewRecompositionCountTest {
             "item1" to 1,
             "item2" to 1
         )
+    }
+
+    @Test
+    fun `items without menus are not recomposed when container becomes invisible`() {
+        val visibility = Variable.StringVariable("visibility", "visible")
+        variableController.declare(visibility)
+        setContent(container(
+            visibility = visibilityExpression("@{visibility}"),
+            items = listOf(text(extensions = compositionCounter("item"), text = "Item")),
+        ))
+
+        rule.runOnIdle { visibility.setValueDirectly("invisible") }
+        rule.waitForIdle()
+
+        assertCompositions("item" to 1)
     }
 
     @Test

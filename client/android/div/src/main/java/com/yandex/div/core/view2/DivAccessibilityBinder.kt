@@ -9,6 +9,7 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
 import com.yandex.div.core.util.AccessibilityStateProvider
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
+import com.yandex.div.core.view2.divs.DivActionBinder
 import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.expressions.equalsToConstant
@@ -38,6 +39,7 @@ import javax.inject.Inject
 internal class DivAccessibilityBinder @Inject constructor(
     @ExperimentFlag(ACCESSIBILITY_ENABLED) val enabled: Boolean,
     private val accessibilityStateProvider: AccessibilityStateProvider,
+    private val actionBinder: DivActionBinder,
 ) {
 
     fun bind(
@@ -46,8 +48,10 @@ internal class DivAccessibilityBinder @Inject constructor(
         oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
+        divView: Div2View,
     ) {
-        if (newDiv.accessibility == null && oldDiv?.accessibility == null) {
+        if (newDiv.accessibility == null && oldDiv?.accessibility == null &&
+            (newDiv as? DivSlider)?.secondaryValueAccessibility?.menu.isNullOrEmpty()) {
             // Shortcut for empty accessibility binding
             if (enabled) {
                 view.applyMode(newDiv)
@@ -60,6 +64,7 @@ internal class DivAccessibilityBinder @Inject constructor(
         view.bindMode(newDiv, oldDiv, resolver, subscriber)
         view.bindStateDescription(newDiv, oldDiv, resolver, subscriber)
         view.bindCheckedState(newDiv, oldDiv, resolver, subscriber)
+        AccessibilityMenuBinding(view, newDiv, resolver, divView, actionBinder).bind(subscriber)
     }
 
     // region Type
@@ -297,7 +302,12 @@ internal class DivAccessibilityBinder @Inject constructor(
         val type = divBase.accessibility?.type?.toAccessibilityType(divBase)
         if (type != AccessibilityType.CHECK_BOX && type != AccessibilityType.RADIO_BUTTON) return
 
-        val currentDelegate = ViewCompat.getAccessibilityDelegate(this) as? ExtensiveAccessibilityDelegate
+        val delegate = ViewCompat.getAccessibilityDelegate(this)
+        val currentDelegate = (if (delegate is AccessibilityMenuDelegate) {
+            delegate.original
+        } else {
+            delegate
+        }) as? ExtensiveAccessibilityDelegate
         currentDelegate?.setChecked(isChecked)
     }
 

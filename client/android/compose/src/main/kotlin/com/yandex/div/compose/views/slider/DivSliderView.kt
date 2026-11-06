@@ -12,9 +12,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.MeasurePolicy
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
@@ -29,6 +31,7 @@ import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.views.modifiers.observeContentDescription
+import com.yandex.div.compose.views.modifiers.observeMenu
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivSlider
 import kotlinx.coroutines.CoroutineScope
@@ -157,21 +160,25 @@ private fun SliderThumbNodes(
     scope: CoroutineScope,
 ) {
     val description = data.accessibility?.observeContentDescription()
+    val menu = data.accessibility?.observeMenu(data).orEmpty()
     val secondary = state.secondary
     if (secondary == null) {
-        SliderThumbNode(state.main, state.range, description, isEnabled, scope)
+        SliderThumbNode(state.main, state.range, description, isEnabled, scope, menu)
         return
     }
     val start = joinDescription(
         description,
         stringResource(R.string.div_slider_range_start),
     )
-    SliderThumbNode(state.main, state.range, start, isEnabled, scope)
+    SliderThumbNode(state.main, state.range, start, isEnabled, scope, menu)
     val secondaryAccessibility = data.secondaryValueAccessibility
     if (secondaryAccessibility?.mode?.observedValue() == DivAccessibility.Mode.EXCLUDE) return
     val end = secondaryAccessibility?.observeContentDescription()
         ?: joinDescription(description, stringResource(R.string.div_slider_range_end))
-    SliderThumbNode(secondary, state.range, end, isEnabled, scope)
+    SliderThumbNode(
+        secondary, state.range, end, isEnabled, scope,
+        secondaryAccessibility?.observeMenu(data).orEmpty(),
+    )
 }
 
 @Composable
@@ -181,10 +188,14 @@ private fun SliderThumbNode(
     description: String?,
     isEnabled: Boolean,
     scope: CoroutineScope,
+    menu: List<CustomAccessibilityAction>,
 ) {
     val value = thumb.variable.value
     Box(
         Modifier.semantics {
+            if (isEnabled && menu.isNotEmpty()) {
+                customActions = menu
+            }
             description?.let { contentDescription = it }
             stateDescription = value.toString()
             progressBarRangeInfo = ProgressBarRangeInfo(

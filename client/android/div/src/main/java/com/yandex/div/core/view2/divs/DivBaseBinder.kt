@@ -78,7 +78,7 @@ internal class DivBaseBinder @Inject constructor(
         bindAlignment(div, oldDiv, resolver, subscriber)
         divView.dataComponent.layoutProviderBinder
             .bind(this, div.layoutProvider, oldDiv?.layoutProvider, resolver, divView)
-        bindAccessibility(div, oldDiv, resolver, subscriber)
+        bindAccessibility(div, oldDiv, resolver, subscriber, divView)
         bindAlpha(div, oldDiv, resolver, subscriber)
 
         bindBackground(div, oldDiv, resolver, divView, subscriber, true, backgroundUnderlay, null)
@@ -214,8 +214,9 @@ internal class DivBaseBinder @Inject constructor(
         newDiv: DivBase,
         oldDiv: DivBase?,
         resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber
-    ) = divAccessibilityBinder.bind(this, newDiv, oldDiv, resolver, subscriber)
+        subscriber: ExpressionSubscriber,
+        divView: Div2View,
+    ) = divAccessibilityBinder.bind(this, newDiv, oldDiv, resolver, subscriber, divView)
 
     //endregion
 
