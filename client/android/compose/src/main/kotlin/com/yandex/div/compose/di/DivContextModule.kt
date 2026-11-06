@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import coil3.ImageLoader
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivReporter
+import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.images.ImageLoaderFactory
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.patch.DefaultPatchDownloader
@@ -18,6 +19,7 @@ import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.DivStorageComponent
 import com.yandex.div.storage.common.StoredValuesRepository
 import com.yandex.div.storage.storedvalues.StoredValuesRepositoryImpl
+import com.yandex.div2.DivExtension
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.Named
@@ -93,6 +95,15 @@ internal interface DivContextModule {
             return StoredValuesRepositoryImpl(
                 rawJsonRepository = storageComponent.rawJsonRepository
             )
+        }
+
+        @DivContextScope
+        @Provides
+        fun provideWildcardExtensions(
+            configuration: DivConfiguration,
+        ): List<Pair<DivExtension, DivExtensionHandler>> {
+            return configuration.wildcardExtensionHandlers
+                .map { (id, handler) -> DivExtension(id = id) to handler }
         }
     }
 }

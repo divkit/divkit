@@ -14,7 +14,6 @@ import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.font.LineMetricsCache
 import com.yandex.div.compose.images.ImagePreviewDecoder
 import com.yandex.div.compose.images.ImageRequestFactory
-import com.yandex.div.compose.images.ImageRequestListener
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.patch.DivPatcher
@@ -22,6 +21,7 @@ import com.yandex.div.compose.preload.DivPreloader
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorageFactory
 import com.yandex.div.compose.video.DivVideoPlayerFactory
 import com.yandex.div.core.expression.variables.DivVariableController
+import com.yandex.div2.DivExtension
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Includes
 import dev.zacsweers.metro.Named
@@ -48,7 +48,6 @@ internal interface DivContextComponent {
     val imageLoader: ImageLoader
     val imagePreviewDecoder: ImagePreviewDecoder
     val imageRequestFactory: ImageRequestFactory
-    val imageRequestListener: ImageRequestListener
     val inputFocus: InputFocus
     val lineMetricsCache: LineMetricsCache
     val patcher: DivPatcher
@@ -57,6 +56,7 @@ internal interface DivContextComponent {
     val storedValuesStorageFactory: DivStoredValuesStorageFactory
     val viewContextFactory: DivViewContextFactory
     val viewContextStorage: DivViewContextStorage
+    val wildcardExtensions: List<Pair<DivExtension, DivExtensionHandler>>
 
     @get:Named(Names.MAIN_COROUTINE_SCOPE)
     val mainCoroutineScope: CoroutineScope

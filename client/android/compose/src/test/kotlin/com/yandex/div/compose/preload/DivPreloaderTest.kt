@@ -127,14 +127,14 @@ class DivPreloaderTest {
         imagePreloader = imagePreloader,
         customPreloader = CustomResourcePreloader(mapOf("test" to customFactory)),
         extensionPreloader = ExtensionPreloader(
-            handlers = mapOf(
+            animationConfiguration = divContext.component.animationConfiguration,
+            extensionHandlers = mapOf(
                 "lottie" to extensionHandler,
                 "other" to extensionHandler,
                 "tag" to extensionHandler,
             ),
-            configuration = divContext.component.configuration,
             reporter = TestReporter(),
-            animationConfiguration = divContext.component.animationConfiguration,
+            wildcardExtensions = divContext.component.wildcardExtensions,
         ),
         videoPreloader = object : DivVideoPreloader {
             override suspend fun preloadVideoWithResult(sources: List<Uri>): PreloadResult {
@@ -271,10 +271,10 @@ class DivPreloaderTest {
             }
         }
         val legacyPreloader = ExtensionPreloader(
-            handlers = mapOf("legacy" to legacyHandler),
-            configuration = divContext.component.configuration,
-            reporter = TestReporter(),
             animationConfiguration = divContext.component.animationConfiguration,
+            extensionHandlers = mapOf("legacy" to legacyHandler),
+            reporter = TestReporter(),
+            wildcardExtensions = divContext.component.wildcardExtensions,
         )
 
         val div = separator(extensions = listOf(DivExtension(id = "legacy")))

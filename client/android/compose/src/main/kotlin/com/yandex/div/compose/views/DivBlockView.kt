@@ -149,7 +149,7 @@ private fun extensions(div: DivBase): List<Pair<DivExtension, DivExtensionHandle
         ?.filter { it.isEnabled.observedValue() }
         ?.map { it to component.extensionHandlers[it.id] }
         .orEmpty()
-    val wildcardExtensions = component.configuration.wildcardExtensions
+    val wildcardExtensions = component.wildcardExtensions
     return if (wildcardExtensions.isEmpty()) extensions else wildcardExtensions + extensions
 }
 

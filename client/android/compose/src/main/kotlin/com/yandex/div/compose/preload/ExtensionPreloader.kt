@@ -1,6 +1,5 @@
 package com.yandex.div.compose.preload
 
-import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.animation.AnimationConfiguration
 import com.yandex.div.compose.di.DivContextScope
@@ -17,20 +16,20 @@ import kotlinx.coroutines.coroutineScope
 
 @DivContextScope
 internal class ExtensionPreloader @Inject constructor(
-    private val handlers: Map<String, @JvmSuppressWildcards DivExtensionHandler>,
-    private val configuration: DivConfiguration,
-    private val reporter: DivReporter,
     private val animationConfiguration: AnimationConfiguration,
+    private val extensionHandlers: Map<String, @JvmSuppressWildcards DivExtensionHandler>,
+    private val reporter: DivReporter,
+    private val wildcardExtensions: List<Pair<DivExtension, DivExtensionHandler>>,
 ) {
     suspend fun preloadExtensions(
         div: Div,
         resolver: ExpressionResolver,
         storedValuesStorage: DivStoredValuesStorage,
     ): PreloadResult = coroutineScope {
-        val extensions: List<Pair<DivExtension, DivExtensionHandler>> =
-            div.value().extensions.orEmpty().mapNotNull { extension ->
-                handlers[extension.id]?.let { extension to it }
-            } + configuration.wildcardExtensions
+        val extensions = div.value().extensions.orEmpty()
+            .mapNotNull { extension ->
+                extensionHandlers[extension.id]?.let { extension to it }
+            } + wildcardExtensions
         extensions.map { (extension, handler) ->
             val environment = DivExtensionEnvironment(
                 data = div,

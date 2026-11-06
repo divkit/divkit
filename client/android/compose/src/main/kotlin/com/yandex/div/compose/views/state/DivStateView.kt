@@ -42,8 +42,8 @@ internal fun DivStateView(
     val parentContentActive = transitionContext.contentActive
     val modifier = if (data.clipToBounds.observedValue()) {
         modifier.clipToBounds(
-            data,
-            divContext.component.configuration.wildcardExtensions.isNotEmpty(),
+            data = data,
+            hasWildcardExtensions = divContext.component.wildcardExtensions.isNotEmpty(),
         )
     } else {
         modifier

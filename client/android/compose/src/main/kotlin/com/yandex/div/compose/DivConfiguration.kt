@@ -17,7 +17,6 @@ import com.yandex.div.compose.video.DivVideoPreloader
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.core.network.DivNetworkClient
-import com.yandex.div2.DivExtension
 
 /**
  * Entry point of DivKit `compose` library. Provides configuration for composing [DivView]s.
@@ -34,35 +33,20 @@ import com.yandex.div2.DivExtension
  */
 class DivConfiguration private constructor(
     val actionHandler: DivExternalActionHandler,
-
     val animationsEnabledProvider: DivAnimationsEnabledProvider,
-
     val customViewFactories: Map<String, DivCustomViewFactory>,
-
     val extensionHandlers: Map<String, DivExtensionHandler>,
-
     val fontSourceProvider: DivFontSourceProvider,
-
     val histogramConfiguration: DivHistogramConfiguration,
-
     val imageLoaderConfiguration: ImageLoaderConfiguration,
-
     val patchDownloader: DivPatchDownloader?,
-
     val playerFactory: DivVideoPlayerFactory,
-
     val networkClient: DivNetworkClient,
-
     val reporter: DivReporter,
-
     val variableController: DivVariableController,
-
     val videoPreloader: DivVideoPreloader,
-
     val wildcardExtensionHandlers: Map<String, DivExtensionHandler>,
 ) {
-    internal val wildcardExtensions: List<Pair<DivExtension, DivExtensionHandler>> =
-        wildcardExtensionHandlers.map { (id, handler) -> DivExtension(id = id) to handler }
 
     @Deprecated(
         message = "Use divConfiguration { ... } or DivConfiguration.Builder instead.",

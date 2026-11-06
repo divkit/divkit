@@ -18,8 +18,8 @@ internal fun DivContainerView(
 ) {
     val modifier = if (data.clipToBounds.observedValue()) {
         modifier.clipToBounds(
-            data,
-            divContext.component.configuration.wildcardExtensions.isNotEmpty(),
+            data = data,
+            hasWildcardExtensions = divContext.component.wildcardExtensions.isNotEmpty(),
         )
     } else {
         modifier
