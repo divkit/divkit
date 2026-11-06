@@ -16246,6 +16246,7 @@
   "test_data/regression_test_data/timers/endless-timer.json":"divkit/public/test_data/regression_test_data/timers/endless-timer.json",
   "test_data/regression_test_data/timers/typed-common-timer.json":"divkit/public/test_data/regression_test_data/timers/typed-common-timer.json",
   "test_data/regression_test_data/tooltips-with-tap-outside-properties.json":"divkit/public/test_data/regression_test_data/tooltips-with-tap-outside-properties.json",
+  "test_data/regression_test_data/tooltips/tooltip-non-modal-keep-on-tap-outside.json":"divkit/public/test_data/regression_test_data/tooltips/tooltip-non-modal-keep-on-tap-outside.json",
   "test_data/regression_test_data/tooltips/tooltip-positions.json":"divkit/public/test_data/regression_test_data/tooltips/tooltip-positions.json",
   "test_data/regression_test_data/tooltips/tooltip-touch-transparency.json":"divkit/public/test_data/regression_test_data/tooltips/tooltip-touch-transparency.json",
   "test_data/regression_test_data/tooltips/tooltip-with-bring-to-top-view.json":"divkit/public/test_data/regression_test_data/tooltips/tooltip-with-bring-to-top-view.json",

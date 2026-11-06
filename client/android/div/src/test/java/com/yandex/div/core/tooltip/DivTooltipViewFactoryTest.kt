@@ -1,7 +1,10 @@
 package com.yandex.div.core.tooltip
 
 import android.app.Activity
+import android.graphics.Point
+import android.graphics.Rect
 import android.os.Build
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -83,6 +86,8 @@ class DivTooltipViewFactoryTest {
         on { isEnabled() } doReturn false
     }
     private val onTouchOutside = mock<() -> Unit>()
+    private val substratePoint = Point(50, 100)
+    private val tooltipPoint = Point(150, 325)
     private val factory = DivTooltipViewFactory(builder, accessibility, visibilityTracker, animations)
     private val div = Div.Text(DivText(text = "tooltip".asExpression()))
     private var shownTooltip: DivTooltipView? = null
@@ -186,6 +191,39 @@ class DivTooltipViewFactoryTest {
     }
 
     @Test
+    fun `tap on substrate keeps popup and reaches card when close by outside tap is disabled`() {
+        val cardEvents = mutableListOf<Int>()
+        rootView.setOnTouchListener { _, event ->
+            cardEvents.add(event.actionMasked)
+            true
+        }
+        val popup = showSubstrateTooltip(closeByTapOutside = false)
+
+        tapPopup(popup, substratePoint)
+
+        assertTrue(popup.isShowing)
+        assertEquals(listOf(MotionEvent.ACTION_DOWN, MotionEvent.ACTION_UP), cardEvents)
+    }
+
+    @Test
+    fun `tap on substrate dismisses popup when close by outside tap is enabled`() {
+        val popup = showSubstrateTooltip(closeByTapOutside = true)
+
+        tapPopup(popup, substratePoint)
+
+        assertFalse(popup.isShowing)
+    }
+
+    @Test
+    fun `tap on tooltip passes through and dismisses popup when close by outside tap is disabled`() {
+        val popup = showSubstrateTooltip(closeByTapOutside = false)
+
+        tapPopup(popup, tooltipPoint)
+
+        assertFalse(popup.isShowing)
+    }
+
+    @Test
     @Config(sdk = [Build.VERSION_CODES.Q])
     fun `substrate popup fills screen without clipping`() {
         val popup = showTooltip(substrateDiv = div)
@@ -258,6 +296,31 @@ class DivTooltipViewFactoryTest {
         shownTooltip = tooltip
         tooltip.show {}
         return shadowOf(RuntimeEnvironment.getApplication()).latestPopupWindow
+    }
+
+    private fun showSubstrateTooltip(closeByTapOutside: Boolean): PopupWindow {
+        val substrate = View(activity).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+            )
+        }
+        container.setViews(substrate = substrate, bringToTop = null, tooltip = tooltipView)
+        val popup = showTooltip(closeByTapOutside = closeByTapOutside, substrateDiv = div)
+        shadowOf(Looper.getMainLooper()).idle()
+        container.setTooltipPosition(x = 100, y = 300, width = 100, height = 50)
+        shadowOf(Looper.getMainLooper()).idle()
+        assertEquals(Rect(100, 300, 200, 350), Rect().also(tooltipView::getHitRect))
+        return popup
+    }
+
+    private fun tapPopup(popup: PopupWindow, point: Point) {
+        val popupRoot = popup.contentView.parent as View
+        listOf(MotionEvent.ACTION_DOWN, MotionEvent.ACTION_UP).forEach { action ->
+            val event = MotionEvent.obtain(0, 0, action, point.x.toFloat(), point.y.toFloat(), 0)
+            popupRoot.dispatchTouchEvent(event)
+            event.recycle()
+        }
     }
 
     private fun tooltipData(

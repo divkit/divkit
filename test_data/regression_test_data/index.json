@@ -3809,6 +3809,38 @@
       "case_id": 486
     },
     {
+      "title": "Non-modal tooltip is not closed by tap outside",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ],
+      "tags": [
+        "Tooltips"
+      ],
+      "steps": [
+        "Tap 'Without substrate'",
+        "Tap 'Card button'",
+        "Tap an empty area of the card",
+        "Tap 'Close' in the tooltip",
+        "Tap 'With substrate'",
+        "Tap 'Card button'",
+        "Tap an empty area of the card",
+        "Tap 'Close' in the tooltip"
+      ],
+      "expected_results": [
+        "Tooltip without substrate is shown",
+        "Card button taps counter increases, the tooltip stays open",
+        "The tooltip stays open",
+        "The tooltip is closed",
+        "Tooltip with substrate is shown",
+        "Card button taps counter increases, the tooltip and the substrate stay open",
+        "The tooltip and the substrate stay open",
+        "The tooltip and the substrate are closed"
+      ],
+      "file": "tooltips/tooltip-non-modal-keep-on-tap-outside.json"
+    },
+    {
       "title": "Tooltip with bring to top view",
       "platforms": [
         "android",

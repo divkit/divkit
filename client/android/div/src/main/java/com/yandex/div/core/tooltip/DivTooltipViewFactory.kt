@@ -81,11 +81,13 @@ internal class DivTooltipViewFactory @Inject constructor(
         onTouchOutside: () -> Unit,
     ) {
         val isModal = data.divTooltip.mode is DivTooltipMode.Modal
-        val touchTranslationCoordinator = TouchTranslationCoordinator(
-            TouchTranslator(data.anchor),
-            popupWindow,
-        )
         val isOutsideTouchable = data.divTooltip.closeByTapOutside.evaluate(data.anchorResolver)
+        val touchTranslationCoordinator = TouchTranslationCoordinator(
+            touchTranslator = TouchTranslator(data.anchor),
+            popup = popupWindow,
+            tooltipContainer = container,
+            closeByTapOutside = isOutsideTouchable,
+        )
         val touchListener = PopupWindowTouchListener(
             tooltipContainer = container,
             isModal = isModal,

@@ -1,0 +1,229 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 12,
+        "right": 16,
+        "bottom": 12
+      },
+      "margins": {
+        "top": 12
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "tooltip_non_modal_keep_on_tap_outside",
+    "variables": [
+      {
+        "type": "integer",
+        "name": "card_taps",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Card button taps: @{card_taps}",
+              "font_size": 16
+            },
+            {
+              "type": "button",
+              "text": "Card button",
+              "actions": [
+                {
+                  "log_id": "card_tap",
+                  "url": "div-action://set_variable?name=card_taps&value=@{card_taps + 1}"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "Without substrate",
+                  "actions": [
+                    {
+                      "log_id": "show_without_substrate",
+                      "url": "div-action://show_tooltip?id=without_substrate"
+                    }
+                  ],
+                  "tooltips": [
+                    {
+                      "id": "without_substrate",
+                      "position": "bottom",
+                      "duration": 0,
+                      "offset": {
+                        "x": {
+                          "value": 0
+                        },
+                        "y": {
+                          "value": 4
+                        }
+                      },
+                      "mode": {
+                        "type": "non_modal"
+                      },
+                      "close_by_tap_outside": false,
+                      "div": {
+                        "type": "container",
+                        "width": {
+                          "type": "fixed",
+                          "value": 220
+                        },
+                        "paddings": {
+                          "left": 12,
+                          "top": 12,
+                          "right": 12,
+                          "bottom": 12
+                        },
+                        "border": {
+                          "corner_radius": 8
+                        },
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#D8E4F0"
+                          }
+                        ],
+                        "items": [
+                          {
+                            "type": "text",
+                            "text": "Tooltip without substrate",
+                            "font_size": 14
+                          },
+                          {
+                            "type": "button",
+                            "text": "Close",
+                            "actions": [
+                              {
+                                "log_id": "hide_without_substrate",
+                                "url": "div-action://hide_tooltip?id=without_substrate"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "margins": {
+                    "top": 12,
+                    "right": 8
+                  }
+                },
+                {
+                  "type": "button",
+                  "text": "With substrate",
+                  "actions": [
+                    {
+                      "log_id": "show_with_substrate",
+                      "url": "div-action://show_tooltip?id=with_substrate"
+                    }
+                  ],
+                  "tooltips": [
+                    {
+                      "id": "with_substrate",
+                      "position": "bottom",
+                      "duration": 0,
+                      "offset": {
+                        "x": {
+                          "value": 0
+                        },
+                        "y": {
+                          "value": 4
+                        }
+                      },
+                      "mode": {
+                        "type": "non_modal"
+                      },
+                      "close_by_tap_outside": false,
+                      "div": {
+                        "type": "container",
+                        "width": {
+                          "type": "fixed",
+                          "value": 220
+                        },
+                        "paddings": {
+                          "left": 12,
+                          "top": 12,
+                          "right": 12,
+                          "bottom": 12
+                        },
+                        "border": {
+                          "corner_radius": 8
+                        },
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#D8E4F0"
+                          }
+                        ],
+                        "items": [
+                          {
+                            "type": "text",
+                            "text": "Tooltip with substrate",
+                            "font_size": 14
+                          },
+                          {
+                            "type": "button",
+                            "text": "Close",
+                            "actions": [
+                              {
+                                "log_id": "hide_with_substrate",
+                                "url": "div-action://hide_tooltip?id=with_substrate"
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      "substrate_div": {
+                        "type": "container",
+                        "height": {
+                          "type": "match_parent"
+                        },
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#4000"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
