@@ -1,7 +1,10 @@
 package com.yandex.div.test.data
 
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
+import com.yandex.div2.DivExtension
+import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivPageContentSize
 import com.yandex.div2.DivPageSize
 import com.yandex.div2.DivPager
@@ -21,12 +24,16 @@ fun pager(
     orientation: DivPager.Orientation = DivPager.Orientation.HORIZONTAL,
     scrollAxisAlignment: DivPager.ItemAlignment = DivPager.ItemAlignment.CENTER,
     itemCountVariable: String? = null,
+    extensions: List<DivExtension>? = null,
+    itemSpacing: Expression<Long> = constant(0L),
 ): Div.Pager = Div.Pager(DivPager(
     defaultItem = constant(defaultItem),
+    extensions = extensions,
     infiniteScroll = constant(infiniteScroll),
     itemCountVariable = itemCountVariable,
     id = id,
     itemBuilder = itemBuilder,
+    itemSpacing = DivFixedSize(value = itemSpacing),
     items = items,
     height = height,
     width = width,

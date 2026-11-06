@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import com.yandex.div.compose.collection.observeStaticItems
+import com.yandex.div.compose.collection.observeItems
 import com.yandex.div.compose.collection.observeVisible
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.DivLocalComponent
@@ -30,7 +30,7 @@ internal fun DivPagerView(
     modifier: Modifier,
     data: DivPager,
 ) {
-    val collectionItems = data.observeStaticItems(data.items)
+    val collectionItems = data.observeItems()
     val items = collectionItems.observeVisible()
 
     data.itemCountVariable?.let { variableName ->

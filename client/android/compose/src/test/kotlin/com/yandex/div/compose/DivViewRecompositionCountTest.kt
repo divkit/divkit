@@ -18,11 +18,13 @@ import com.yandex.div.test.data.colorExpression
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
+import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.gallery
 import com.yandex.div.test.data.intExpression
 import com.yandex.div.test.data.itemBuilder
 import com.yandex.div.test.data.jsonArray
 import com.yandex.div.test.data.jsonObject
+import com.yandex.div.test.data.pager
 import com.yandex.div.test.data.prototype
 import com.yandex.div.test.data.solidBackground
 import com.yandex.div.test.data.text
@@ -294,6 +296,36 @@ class DivViewRecompositionCountTest {
         assertCompositions(
             "gallery" to 1,
             "item" to 2
+        )
+    }
+
+    @Test
+    fun `pager item_builder page is not recomposed when item_spacing is changed`() {
+        setContent(
+            pager(
+                extensions = compositionCounter("pager"),
+                height = fixed(100),
+                itemBuilder = itemBuilder(
+                    data = jsonArray(jsonObject()),
+                    prototypes = listOf(
+                        prototype(
+                            div = text(
+                                extensions = compositionCounter("item"),
+                                text = "Item"
+                            )
+                        )
+                    )
+                ),
+                itemSpacing = intExpression("@{counter}")
+            )
+        )
+
+        counter.set(10)
+        rule.waitForIdle()
+
+        assertCompositions(
+            "pager" to 1,
+            "item" to 1
         )
     }
 

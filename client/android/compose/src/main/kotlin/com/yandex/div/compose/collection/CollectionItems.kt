@@ -15,6 +15,7 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGallery
+import com.yandex.div2.DivPager
 import com.yandex.div2.DivVisibility
 
 internal class CollectionItems(
@@ -29,6 +30,10 @@ internal fun DivContainer.observeItems(): CollectionItems =
 
 @Composable
 internal fun DivGallery.observeItems(): CollectionItems =
+    observeCollectionItems(this, items, itemBuilder)
+
+@Composable
+internal fun DivPager.observeItems(): CollectionItems =
     observeCollectionItems(this, items, itemBuilder)
 
 /**
