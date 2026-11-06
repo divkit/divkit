@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.font.LineMetrics
 import com.yandex.div.compose.utils.toPx
@@ -98,10 +98,10 @@ private fun resolveRangeMetrics(
 }
 
 @Composable
-internal fun DivText.Range.observeFontSizeUnit(): DivSizeUnit {
+internal fun DivText.Range.observeFontSizeUnit(component: DivLocalComponent): DivSizeUnit {
     val usesUnit = fontSize != null || lineHeight != null || topOffset != null ||
         (baselineOffset as? Expression.ConstantExpression)?.value != 0.0
-    return if (usesUnit) fontSizeUnit.observedValue() else DivSizeUnit.SP
+    return if (usesUnit) fontSizeUnit.observedValue(component) else DivSizeUnit.SP
 }
 
 @Composable
@@ -110,15 +110,16 @@ internal fun DivText.Range.observeMetrics(
     end: Int,
     spanStyle: SpanStyle,
     fontSizeUnit: DivSizeUnit,
+    component: DivLocalComponent,
 ): RangeMetricsInput {
-    val baselineOffsetPx = baselineOffset.observedFloatValue().toPx(fontSizeUnit).roundToInt()
+    val baselineOffsetPx = baselineOffset.observedValue(component).toFloat().toPx(fontSizeUnit).roundToInt()
     return RangeMetricsInput(
         start = start,
         end = end,
         spanStyle = spanStyle,
-        lineHeightPx = lineHeight?.observedValue()?.toPx(fontSizeUnit)?.roundToInt()?.takeIf { it > 0 },
-        topOffsetPx = topOffset?.observedValue()?.toPx(fontSizeUnit)?.roundToInt(),
+        lineHeightPx = lineHeight?.observedValue(component)?.toPx(fontSizeUnit)?.roundToInt()?.takeIf { it > 0 },
+        topOffsetPx = topOffset?.observedValue(component)?.toPx(fontSizeUnit)?.roundToInt(),
         baselineOffsetPx = baselineOffsetPx,
-        alignment = if (baselineOffsetPx == 0) alignmentVertical?.observedValue() else null,
+        alignment = if (baselineOffsetPx == 0) alignmentVertical?.observedValue(component) else null,
     )
 }

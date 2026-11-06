@@ -121,9 +121,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     // div-text.tighten_width not supported
     "div-text/maxwidth-tight-text.json",
 
-    // div-text.range_builder not supported
-    "div-text/range_builder.json",
-
     // test div-customs required
     "div-size/match-parent/overlap/height/platform-wrap-content-container-height.json",
     "div-size/match-parent/overlap/custom-with-fixed-size.json",

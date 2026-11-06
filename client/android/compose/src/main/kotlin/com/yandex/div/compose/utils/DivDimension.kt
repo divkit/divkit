@@ -2,6 +2,8 @@ package com.yandex.div.compose.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div2.DivDimension
@@ -12,6 +14,6 @@ internal fun DivDimension.observedDpValue(): Dp {
 }
 
 @Composable
-internal fun DivDimension.observedPxValue(): Float {
-    return value.observedPxValue(unit)
+internal fun DivDimension.observedPxValue(component: DivLocalComponent = LocalComponent.current): Float {
+    return value.observedPxValue(unit, component)
 }

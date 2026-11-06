@@ -2,6 +2,8 @@ package com.yandex.div.compose.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.json.expressions.Expression
@@ -26,17 +28,26 @@ internal fun Expression<Long>.observedDpValue(unit: Expression<DivSizeUnit>): Dp
 
 @Composable
 @JvmName("observedPxValueDouble")
-internal fun Expression<Double>.observedPxValue(unit: Expression<DivSizeUnit>): Float {
-    return observedFloatValue().toPx(unit.observedValue())
+internal fun Expression<Double>.observedPxValue(
+    unit: Expression<DivSizeUnit>,
+    component: DivLocalComponent = LocalComponent.current,
+): Float {
+    return observedValue(component).toFloat().toPx(unit.observedValue(component))
 }
 
 @Composable
 @JvmName("observedPxValueLong")
-internal fun Expression<Long>.observedPxValue(unit: Expression<DivSizeUnit>): Float {
-    return observedValue().toPx(unit.observedValue())
+internal fun Expression<Long>.observedPxValue(
+    unit: Expression<DivSizeUnit>,
+    component: DivLocalComponent = LocalComponent.current,
+): Float {
+    return observedValue(component).toPx(unit.observedValue(component))
 }
 
 @Composable
-internal fun Expression<Long>.observedPxValue(unit: DivSizeUnit): Float {
-    return observedValue().toPx(unit)
+internal fun Expression<Long>.observedPxValue(
+    unit: DivSizeUnit,
+    component: DivLocalComponent = LocalComponent.current,
+): Float {
+    return observedValue(component).toPx(unit)
 }

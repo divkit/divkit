@@ -10,6 +10,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.em
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
@@ -121,9 +123,10 @@ internal fun letterSpacing(letterSpacing: Float, fontSize: Int): TextUnit {
 internal fun observedTextDecoration(
     strike: Expression<DivLineStyle>?,
     underline: Expression<DivLineStyle>?,
+    component: DivLocalComponent = LocalComponent.current,
 ): TextDecoration? {
-    val hasStrike = strike?.observedValue() == DivLineStyle.SINGLE
-    val hasUnderline = underline?.observedValue() == DivLineStyle.SINGLE
+    val hasStrike = strike?.observedValue(component) == DivLineStyle.SINGLE
+    val hasUnderline = underline?.observedValue(component) == DivLineStyle.SINGLE
     return when {
         hasStrike && hasUnderline -> TextDecoration.combine(
             listOf(TextDecoration.LineThrough, TextDecoration.Underline)

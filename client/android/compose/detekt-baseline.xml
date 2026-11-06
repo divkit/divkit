@@ -28,7 +28,7 @@
     <ID>CognitiveComplexMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawHorizontalWrapSeparators</ID>
     <ID>CognitiveComplexMethod:WrapSeparatorDrawing.kt:internal fun DrawScope.drawVerticalWrapSeparators</ID>
     <ID>ComplexCondition:DivTextView.kt:ellipsis != null &amp;&amp; ellipsisText != null &amp;&amp; (!ellipsis.isPlain() || ellipsisText != DEFAULT_ELLIPSIS)</ID>
-    <ID>ComplexCondition:DivTextView.kt:gradientBrush == null &amp;&amp; ranges.isNullOrEmpty() &amp;&amp; actions.isNullOrEmpty() &amp;&amp; inlineImages.isEmpty()</ID>
+    <ID>ComplexCondition:DivTextView.kt:gradientBrush == null &amp;&amp; ranges.isEmpty() &amp;&amp; actions.isNullOrEmpty() &amp;&amp; inlineImages.isEmpty()</ID>
     <ID>ComplexCondition:GridTracks.kt:ConfiguredAxisTracks$isWrapContent || availableSize == Constraints.Infinity || !canResolveConstrainedWeights || weights.none { it &gt; 0f }</ID>
     <ID>ForbiddenComment:HorizontalContainerLayout.kt:// TODO: Needs warning match_parent child and wrap_content container.</ID>
     <ID>ForbiddenComment:VerticalContainerLayout.kt:// TODO: Needs warning match_parent child and wrap_content container.</ID>

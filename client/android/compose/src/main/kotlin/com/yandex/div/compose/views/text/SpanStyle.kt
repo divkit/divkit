@@ -11,8 +11,7 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
-import com.yandex.div.compose.expressions.observedColorValue
-import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.text.letterSpacing
@@ -20,6 +19,7 @@ import com.yandex.div.compose.text.observedTextDecoration
 import com.yandex.div.compose.text.rememberFontFamily
 import com.yandex.div.compose.text.toFontWeight
 import com.yandex.div.compose.utils.observeShadow
+import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.utils.toTextUnit
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSizeUnit
@@ -32,20 +32,21 @@ internal fun DivText.Range.observeSpanStyle(
     baseTextColorAlpha: Float,
     fontSizeUnit: DivSizeUnit,
     isTextMasked: Boolean,
+    component: DivLocalComponent,
 ): SpanStyle {
-    val rangeFontSize = fontSize?.observedIntValue()
-    val rangeFontWeight = fontWeight?.observedValue()
-    val rangeFontWeightValue = fontWeightValue?.observedIntValue()
+    val rangeFontSize = fontSize?.observedValue(component)?.toInt()
+    val rangeFontWeight = fontWeight?.observedValue(component)
+    val rangeFontWeightValue = fontWeightValue?.observedValue(component)?.toInt()
     val spanFontSize = rangeFontSize?.toTextUnit(fontSizeUnit)
         ?: TextUnit.Unspecified
-    val spanLetterSpacing = letterSpacing?.observedFloatValue()?.let {
+    val spanLetterSpacing = letterSpacing?.observedValue(component)?.toFloat()?.let {
         letterSpacing(it, rangeFontSize ?: baseFontSize)
     } ?: TextUnit.Unspecified
-    val spanFontFamily = observeFontFamily(text, rangeFontWeight, rangeFontWeightValue)
+    val spanFontFamily = observeFontFamily(text, rangeFontWeight, rangeFontWeightValue, component)
     val spanBrush = if (isTextMasked) {
         null
     } else {
-        textColor?.observedColorValue()?.let { color ->
+        textColor?.observedValue(component)?.toColor()?.let { color ->
             remember(color) { SolidColorShaderBrush(color) }
         }
     }
@@ -56,9 +57,9 @@ internal fun DivText.Range.observeSpanStyle(
         fontFamily = spanFontFamily,
         fontWeight = rangeFontWeight.toFontWeight(rangeFontWeightValue),
         letterSpacing = spanLetterSpacing,
-        textDecoration = if (isTextMasked) null else observedTextDecoration(strike, underline),
-        shadow = if (isTextMasked) null else textShadow?.observeShadow(baseTextColorAlpha),
-        fontFeatureSettings = fontFeatureSettings?.observedValue()?.takeIf { it.isNotBlank() },
+        textDecoration = if (isTextMasked) null else observedTextDecoration(strike, underline, component),
+        shadow = if (isTextMasked) null else textShadow?.observeShadow(baseTextColorAlpha, component),
+        fontFeatureSettings = fontFeatureSettings?.observedValue(component)?.takeIf { it.isNotBlank() },
     )
 }
 
@@ -67,16 +68,17 @@ private fun DivText.Range.observeFontFamily(
     text: DivText,
     rangeFontWeight: DivFontWeight?,
     rangeFontWeightValue: Int?,
+    component: DivLocalComponent,
 ): FontFamily? {
     val hasFontWeight = rangeFontWeight != null || rangeFontWeightValue != null
     if (fontFamily == null && !hasFontWeight && fontVariationSettings == null) {
         return null
     }
     return rememberFontFamily(
-        fontFamily = (fontFamily ?: text.fontFamily)?.observedValue(),
+        fontFamily = fontFamily?.observedValue(component) ?: text.fontFamily?.observedValue(),
         fontWeight = if (hasFontWeight) rangeFontWeight else text.fontWeight?.observedValue(),
         fontWeightValue = if (hasFontWeight) rangeFontWeightValue else text.fontWeightValue?.observedIntValue(),
-        fontVariationSettings = fontVariationSettings?.observedValue(),
+        fontVariationSettings = fontVariationSettings?.observedValue(component),
     )
 }
 

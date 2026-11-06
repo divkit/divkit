@@ -22,11 +22,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.ResolvedTextDirection
 import androidx.compose.ui.text.style.TextOverflow
-import com.yandex.div.compose.expressions.observedColorValue
-import com.yandex.div.compose.expressions.observedFloatValue
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.observedPxValue
+import com.yandex.div.compose.utils.toColor
 import com.yandex.div.compose.visibility.onDivVisibilityChanged
 import com.yandex.div.render.common.text.TextRangeCloudBackground
 import com.yandex.div.render.common.text.TextRangeParticleSystem
@@ -108,12 +108,16 @@ internal data class RangePaddings(
 )
 
 @Composable
-internal fun DivText.Range.observeDecoration(start: Int, end: Int): TextRangeDecoration? {
+internal fun DivText.Range.observeDecoration(
+    start: Int,
+    end: Int,
+    component: DivLocalComponent,
+): TextRangeDecoration? {
     if (background == null && border == null && mask == null) return null
 
-    val background = background?.observeBackground()
-    val border = if (background is RangeBackground.Cloud) null else border?.observeBorder()
-    val mask = mask?.observeMask()
+    val background = background?.observeBackground(component)
+    val border = if (background is RangeBackground.Cloud) null else border?.observeBorder(component)
+    val mask = mask?.observeMask(component)
     if (background == null && border?.stroke == null && mask == null) return null
 
     val followsGlyphs = fontSize != null && mask == null
@@ -123,17 +127,17 @@ internal fun DivText.Range.observeDecoration(start: Int, end: Int): TextRangeDec
 }
 
 @Composable
-private fun DivTextRangeBackground.observeBackground(): RangeBackground {
+private fun DivTextRangeBackground.observeBackground(component: DivLocalComponent): RangeBackground {
     return when (this) {
         is DivTextRangeBackground.Solid -> {
-            val color = value.color.observedColorValue()
+            val color = value.color.observedValue(component).toColor()
             remember(color) { RangeBackground.Solid(color) }
         }
 
         is DivTextRangeBackground.Cloud -> {
-            val color = value.color.observedColorValue()
-            val cornerRadiusPx = value.cornerRadius.observedPxValue(DivSizeUnit.DP)
-            val paddingsPx = value.paddings.observePaddings()
+            val color = value.color.observedValue(component).toColor()
+            val cornerRadiusPx = value.cornerRadius.observedPxValue(DivSizeUnit.DP, component)
+            val paddingsPx = value.paddings.observePaddings(component)
             remember(color, cornerRadiusPx, paddingsPx) {
                 RangeBackground.Cloud(color, cornerRadiusPx, paddingsPx)
             }
@@ -142,32 +146,32 @@ private fun DivTextRangeBackground.observeBackground(): RangeBackground {
 }
 
 @Composable
-private fun DivTextRangeBorder.observeBorder(): RangeBorder {
-    val cornerRadiusPx = cornerRadius?.observedPxValue(DivSizeUnit.DP) ?: 0f
+private fun DivTextRangeBorder.observeBorder(component: DivLocalComponent): RangeBorder {
+    val cornerRadiusPx = cornerRadius?.observedPxValue(DivSizeUnit.DP, component) ?: 0f
     val stroke = stroke?.let { stroke ->
-        val color = stroke.color.observedColorValue()
-        val widthPx = stroke.width.observedPxValue(stroke.unit)
+        val color = stroke.color.observedValue(component).toColor()
+        val widthPx = stroke.width.observedPxValue(stroke.unit, component)
         remember(color, widthPx) { RangeStroke(color, widthPx) }
     }
     return remember(cornerRadiusPx, stroke) { RangeBorder(cornerRadiusPx, stroke) }
 }
 
 @Composable
-private fun DivTextRangeMask.observeMask(): RangeMask? {
+private fun DivTextRangeMask.observeMask(component: DivLocalComponent): RangeMask? {
     return when (this) {
         is DivTextRangeMask.Solid -> {
-            if (!value.isEnabled.observedValue()) return null
-            val color = value.color.observedColorValue()
+            if (!value.isEnabled.observedValue(component)) return null
+            val color = value.color.observedValue(component).toColor()
             remember(color) { RangeMask.Solid(color) }
         }
 
         is DivTextRangeMask.Particles -> {
-            if (!value.isEnabled.observedValue()) return null
-            val color = value.color.observedColorValue()
-            val densityValue = value.density.observedFloatValue()
-            val isAnimated = value.isAnimated.observedValue()
+            if (!value.isEnabled.observedValue(component)) return null
+            val color = value.color.observedValue(component).toColor()
+            val densityValue = value.density.observedValue(component).toFloat()
+            val isAnimated = value.isAnimated.observedValue(component)
             val particleSize = value.particleSize
-            val particleSizePx = particleSize.value.observedPxValue(particleSize.unit)
+            val particleSizePx = particleSize.value.observedPxValue(particleSize.unit, component)
             remember(color, densityValue, isAnimated, particleSizePx) {
                 RangeMask.Particles(color, densityValue, isAnimated, particleSizePx)
             }
@@ -176,17 +180,17 @@ private fun DivTextRangeMask.observeMask(): RangeMask? {
 }
 
 @Composable
-private fun DivEdgeInsets?.observePaddings(): RangePaddings {
+private fun DivEdgeInsets?.observePaddings(component: DivLocalComponent): RangePaddings {
     this ?: return ZERO_RANGE_PADDINGS
 
-    val unit = unit.observedValue()
-    val topPx = top.observedPxValue(unit)
-    val bottomPx = bottom.observedPxValue(unit)
+    val unit = unit.observedValue(component)
+    val topPx = top.observedPxValue(unit, component)
+    val bottomPx = bottom.observedPxValue(unit, component)
     val leftPx: Float
     val rightPx: Float
     if (start != null || end != null) {
-        val startPx = start?.observedPxValue(unit) ?: 0f
-        val endPx = end?.observedPxValue(unit) ?: 0f
+        val startPx = start?.observedPxValue(unit, component) ?: 0f
+        val endPx = end?.observedPxValue(unit, component) ?: 0f
         if (isRtlLayout) {
             leftPx = endPx
             rightPx = startPx
@@ -195,8 +199,8 @@ private fun DivEdgeInsets?.observePaddings(): RangePaddings {
             rightPx = endPx
         }
     } else {
-        leftPx = left.observedPxValue(unit)
-        rightPx = right.observedPxValue(unit)
+        leftPx = left.observedPxValue(unit, component)
+        rightPx = right.observedPxValue(unit, component)
     }
     return remember(leftPx, topPx, rightPx, bottomPx) {
         RangePaddings(leftPx, topPx, rightPx, bottomPx)

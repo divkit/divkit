@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.DpSize
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.actions.observedEnabledActions
 import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
@@ -130,7 +131,8 @@ private fun rememberExactTouchTargetViewConfiguration(): ViewConfiguration {
 }
 
 private fun DivText.hasActionLinks(): Boolean {
-    return ranges.hasActions() || ellipsis?.actions != null || ellipsis?.ranges.hasActions()
+    val rangesHaveActions = rangeBuilder?.prototypes?.any { it.range.actions != null } ?: ranges.hasActions()
+    return rangesHaveActions || ellipsis?.actions != null || ellipsis?.ranges.hasActions()
 }
 
 private fun List<DivText.Range>?.hasActions(): Boolean = this?.any { it.actions != null } == true
@@ -155,7 +157,7 @@ private fun RenderTextContent(
     val truncatePolicy = data.observeTruncatePolicy(truncates, customEllipsis, truncate)
     val annotatedText = data.buildAnnotatedText(
         text = text,
-        ranges = data.ranges,
+        ranges = data.observeSourceRanges(),
         gradientBrush = gradientBrush,
         baseFontSize = fontSize,
         textStyle = baseTextStyle,
@@ -584,7 +586,7 @@ private fun DivText.observeCustomEllipsis(
         ellipsis.reportUnsupportedProperties()
         buildAnnotatedText(
             text = ellipsisText,
-            ranges = ellipsis.ranges,
+            ranges = ellipsis.ranges.rememberScopedRanges(),
             gradientBrush = gradientBrush,
             baseFontSize = fontSize,
             textStyle = textStyle,
@@ -617,14 +619,14 @@ private class SourceTextIntrinsics(
 @Composable
 private fun DivText.buildAnnotatedText(
     text: String,
-    ranges: List<DivText.Range>?,
+    ranges: List<ScopedRange>,
     gradientBrush: Brush?,
     baseFontSize: Int,
     textStyle: TextStyle,
     actions: List<DivAction>? = null,
     inlineImages: List<InlineImageData> = emptyList()
 ): AnnotatedText? {
-    if (gradientBrush == null && ranges.isNullOrEmpty() && actions.isNullOrEmpty() && inlineImages.isEmpty()) {
+    if (gradientBrush == null && ranges.isEmpty() && actions.isNullOrEmpty() && inlineImages.isEmpty()) {
         return null
     }
 
@@ -662,7 +664,7 @@ private fun AnnotatedString.Builder.addTextActions(
 @NonRestartableComposable
 private fun AnnotatedString.Builder.addTextRanges(
     data: DivText,
-    ranges: List<DivText.Range>?,
+    ranges: List<ScopedRange>,
     textLength: Int,
     offsets: OriginalTextOffsets,
     baseFontSize: Int,
@@ -671,30 +673,31 @@ private fun AnnotatedString.Builder.addTextRanges(
 ): List<RangeMetricsInput> {
     val metrics = mutableListOf<RangeMetricsInput>()
     val length = textLength.toLong()
-    ranges?.forEach { range ->
-        val start = range.start.observedValue().coerceIn(0L, length)
-        val end = range.end.observedValue(length).coerceIn(start, length)
+    ranges.forEach { (range, component) ->
+        val start = range.start.observedValue(component).coerceIn(0L, length)
+        val end = (range.end?.observedValue(component) ?: length).coerceIn(start, length)
         if (start < end) {
             val decorationStart = offsets.rangeStart(start.toInt())
             val decorationEnd = offsets.rangeEnd(end.toInt())
-            val decoration = range.observeDecoration(decorationStart, decorationEnd)
-            val fontSizeUnit = range.observeFontSizeUnit()
+            val decoration = range.observeDecoration(decorationStart, decorationEnd, component)
+            val fontSizeUnit = range.observeFontSizeUnit(component)
             val spanStyle = range.observeSpanStyle(
                 data,
                 baseFontSize,
                 baseTextColorAlpha,
                 fontSizeUnit,
                 decoration?.hidesText == true,
+                component,
             )
             addStyle(spanStyle, decorationStart, decorationEnd)
             if (decoration != null) decorations += decoration
-            metrics += range.observeMetrics(decorationStart, decorationEnd, spanStyle, fontSizeUnit)
-            val rangeActions = range.actions.observedEnabledActions()
+            metrics += range.observeMetrics(decorationStart, decorationEnd, spanStyle, fontSizeUnit, component)
+            val rangeActions = range.actions.observedEnabledActions(component)
             if (rangeActions.isNotEmpty()) {
                 // Added after the whole text link so that it wins the hit test: a tap reaches the
                 // topmost link only, like on iOS where the range actions replace the ones of the
                 // ellipsis. The View renderer instead runs every action span under the tap.
-                addLink(rememberActionsLink(rangeActions), decorationStart, decorationEnd)
+                addLink(rememberActionsLink(rangeActions, component), decorationStart, decorationEnd)
             }
         }
     }
@@ -718,13 +721,15 @@ private fun AnnotatedString.Builder.maskDecoratedRanges(decorations: List<TextRa
 // a span and its long tap actions are unreachable there. The View renderer runs both: TextView
 // performs the click of the element before handing the touch to the movement method.
 @Composable
-private fun rememberActionsLink(actions: List<DivAction>): LinkAnnotation.Clickable {
-    val localComponent = LocalComponent.current
-    return remember(actions) {
+private fun rememberActionsLink(
+    actions: List<DivAction>,
+    component: DivLocalComponent = LocalComponent.current,
+): LinkAnnotation.Clickable {
+    return remember(actions, component) {
         LinkAnnotation.Clickable(
             tag = ACTIONS_LINK_TAG,
             linkInteractionListener = {
-                localComponent.handleActions(actions, DivActionSource.TAP)
+                component.handleActions(actions, DivActionSource.TAP)
             }
         )
     }

@@ -2,6 +2,8 @@ package com.yandex.div.compose.actions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
@@ -189,6 +191,8 @@ private fun observedActions(
 }
 
 @Composable
-internal fun List<DivAction>?.observedEnabledActions(): List<DivAction> {
-    return this?.filter { it.isEnabled.observedValue() } ?: emptyList()
+internal fun List<DivAction>?.observedEnabledActions(
+    component: DivLocalComponent = LocalComponent.current,
+): List<DivAction> {
+    return this?.filter { it.isEnabled.observedValue(component) } ?: emptyList()
 }
