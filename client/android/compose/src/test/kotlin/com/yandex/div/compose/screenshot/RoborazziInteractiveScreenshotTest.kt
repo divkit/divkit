@@ -1,50 +1,21 @@
 package com.yandex.div.compose.screenshot
 
 import android.graphics.PointF
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toAndroidRectF
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalViewConfiguration
-import androidx.compose.ui.platform.ViewConfiguration
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.hasAnyDescendant
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isFocused
-import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.longClick
-import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipe
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.RoborazziTaskType
-import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.provideRoborazziContext
-import com.yandex.div.compose.DivContext
-import com.yandex.div.compose.DivView
-import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.divConfiguration
-import com.yandex.div.compose.extensions.DivExtensionEnvironment
-import com.yandex.div.compose.extensions.DivExtensionHandler
-import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.test.INTERACTIVE_SCREENSHOT_CASES_PATH
 import com.yandex.div.test.ScreenshotTests
 import com.yandex.div.test.composeIgnoredInteractiveScreenshotCases
@@ -52,12 +23,8 @@ import com.yandex.div.test.crossplatform.InteractiveScreenshotTestData.Step
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
 import com.yandex.div.test.crossplatform.clipSwipeToBounds
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Rule
 import org.junit.experimental.categories.Category
-import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -84,77 +51,29 @@ import kotlin.time.Duration.Companion.milliseconds
 @Category(ScreenshotTests::class)
 @Config(qualifiers = "w360dp-h728dp-xxhdpi")
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class RoborazziInteractiveScreenshotTest(
     parsingResult: ParsingResult<InteractiveScreenshotTestConfiguration>
 ) {
     private val configuration = parsingResult.getOrThrow()
     private val expectedErrorCount = configuration.runtimeErrorCount
-    private val painterTracker = ImagePainterTracker()
-    private val reporter = TestReporter().apply { failOnError = expectedErrorCount == null }
-    private val testDispatcher = UnconfinedTestDispatcher()
-    private val testScope = TestScope(testDispatcher)
-
-    private val divContext = DivContext(
-        baseContext = getApplicationContext(),
-        configuration = divConfiguration {
-            extensionHandlers = mapOf("markdown" to SolidBackgroundExtensionHandler())
-            fontSourceProvider = TestFontSourceProvider()
-            imageLoaderConfiguration = LocalImageLoaderConfiguration(getApplicationContext())
-            networkClient = LocalNetworkClient()
-            reporter = this@RoborazziInteractiveScreenshotTest.reporter
-        },
-        debugConfiguration = DivDebugConfiguration(
-            coroutineScope = testScope,
-            imagePainterStateListener = painterTracker::onStateChanged,
-            ioDispatcher = testDispatcher,
-            timeSource = testScope.testScheduler.timeSource,
-        )
-    )
-
-    private val composeRule = createComposeRule().apply {
-        registerIdlingResource(painterTracker)
-    }
 
     @get:Rule
-    val rule: RuleChain = RuleChain
-        .outerRule(composeRule)
-        .around(createRoborazziRule())
+    val contentRule = ComposeContentRoborazziRule(failOnError = expectedErrorCount == null)
 
-    private lateinit var viewConfiguration: ViewConfiguration
+    private val composeRule get() = contentRule.composeRule
 
     @Test
     fun test() {
-        val data = configuration.baseConfiguration.parseDivData()
-        var isViewEmpty by mutableStateOf(false)
-
-        composeRule.setContent {
-            CompositionLocalProvider(
-                LocalContext provides divContext,
-                LocalLayoutDirection provides configuration.baseConfiguration.layoutDirection
-            ) {
-                viewConfiguration = LocalViewConfiguration.current
-                // Keep the view composed: a pager can have zero height before its next layout pass.
-                Box(
-                    modifier = Modifier
-                        .onSizeChanged { isViewEmpty = it.width == 0 || it.height == 0 },
-                ) {
-                    DivView(data = data)
-                }
-                if (isViewEmpty) {
-                    Text("<Empty>", modifier = Modifier.testTag(EMPTY_VIEW_TAG))
-                }
-            }
-        }
+        val data = contentRule.setContent(configuration.baseConfiguration)
 
         val recordedSnapshotNames = mutableSetOf<String>()
         configuration.steps.forEachIndexed { index, step ->
-            composeRule.waitForIdle()
+            contentRule.waitForIdle()
 
             when (step) {
                 is Step.Action ->
-                    divContext.debugFeatures.performAction(data = data, action = step.action)
+                    contentRule.divContext.debugFeatures.performAction(data, step.action)
 
                 is Step.Tap -> performTap(step.id)
                 is Step.DoubleTap -> onNodeWithTag(step.id).performTouchInput { doubleClick() }
@@ -167,12 +86,12 @@ class RoborazziInteractiveScreenshotTest(
             }
         }
 
-        composeRule.waitForIdle()
+        contentRule.waitForIdle()
         expectedErrorCount?.let { verifyExpectedErrors(it) }
     }
 
     private fun verifyExpectedErrors(count: Int) {
-        val errors = reporter.errors
+        val errors = contentRule.reporter.errors
         assertEquals(count, errors.size, "Expected $count error(s), got: $errors")
     }
 
@@ -180,7 +99,7 @@ class RoborazziInteractiveScreenshotTest(
 
     private fun performTap(id: String) {
         onNodeWithTag(id).performClick()
-        composeRule.mainClock.advanceTimeBy(viewConfiguration.doubleTapTimeoutMillis)
+        composeRule.mainClock.advanceTimeBy(contentRule.viewConfiguration.doubleTapTimeoutMillis)
     }
 
     private fun performSwipe(step: Step.Swipe) {
@@ -224,40 +143,19 @@ class RoborazziInteractiveScreenshotTest(
                     "${configuration.baseConfiguration.name}/step$index",
         )
 
-        val id = step.id
-        val target = when {
-            id != null ->
-                composeRule
-                    .onNodeWithTag(id, useUnmergedTree = true)
-                    .assertExists("Failed to find screenshot target: $id")
-
-            onNodeWithTag(EMPTY_VIEW_TAG).isDisplayed() -> onNodeWithTag(EMPTY_VIEW_TAG)
-            else -> composeRule.onRoot()
-        }
-
-        target.captureRoboImage(
-            filePath = getScreenshotFilePath(
-                "interactive/${configuration.baseConfiguration.name}/${step.name}"
-            ),
+        contentRule.captureScreenshot(
+            fileName = "interactive/${configuration.baseConfiguration.name}/${step.name}",
+            id = step.id,
             roborazziOptions = options.copy(taskType = taskType, compareOptions = compareOptions),
         )
     }
 
     private fun wait(step: Step.Wait) {
-        testScope.testScheduler.advanceTimeBy(step.delay.milliseconds)
-        testScope.testScheduler.runCurrent()
-        composeRule.mainClock.advanceTimeBy(milliseconds = step.delay)
-    }
-
-    private class SolidBackgroundExtensionHandler : DivExtensionHandler {
-        @Composable
-        override fun Content(
-            modifier: Modifier,
-            environment: DivExtensionEnvironment,
-            content: @Composable (Modifier) -> Unit
-        ) {
-            content(modifier.background(Color.Red))
+        contentRule.testScope.testScheduler.run {
+            advanceTimeBy(step.delay.milliseconds)
+            runCurrent()
         }
+        composeRule.mainClock.advanceTimeBy(milliseconds = step.delay)
     }
 
     companion object {
@@ -282,5 +180,3 @@ class RoborazziInteractiveScreenshotTest(
         fun cases() = cases
     }
 }
-
-private const val EMPTY_VIEW_TAG = "empty_view"
