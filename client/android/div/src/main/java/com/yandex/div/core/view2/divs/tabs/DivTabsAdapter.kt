@@ -51,7 +51,7 @@ internal class DivTabsAdapter(
         get() = mPager.currentItem
         set(value) {
             if (field != value) {
-                mPager.setCurrentItem(value, true)
+                mPager.scrollToItem(value, duration = null)
             }
         }
 

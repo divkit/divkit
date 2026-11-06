@@ -9,13 +9,16 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.rule.ActivityTestRule
+import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.view.scrollTo
 import com.yandex.div.view.swipeLeft
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import kotlin.math.roundToInt
 
 internal fun gallery(f: DivGallerySteps.() -> Unit) = f(DivGallerySteps())
@@ -23,7 +26,10 @@ internal fun gallery(f: DivGallerySteps.() -> Unit) = f(DivGallerySteps())
 @StepsDsl
 class DivGallerySteps: DivTestAssetSteps() {
 
-    private val gallery = onView(isAssignableFrom(RecyclerView::class.java))
+    private val gallery = onView(allOf(
+        isAssignableFrom(RecyclerView::class.java),
+        not(withParent(isAssignableFrom(ViewPager2::class.java))),
+    ))
 
     fun ActivityTestRule<*>.buildContainer(): Unit = step("Build container") {
         buildContainer(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)

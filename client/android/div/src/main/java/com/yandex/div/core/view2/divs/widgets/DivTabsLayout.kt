@@ -16,6 +16,13 @@ internal class DivTabsLayout @JvmOverloads constructor(
     DivHolderView<DivBlock.Tabs> by DivHolderViewMixin(),
     DivScrollActionHolder {
 
+    override fun release() {
+        super<DivHolderView>.release()
+        divTabsAdapter?.release()
+        divTabsAdapter = null
+        viewPager.release()
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         onBoundsChanged(w, h)

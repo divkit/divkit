@@ -6,6 +6,7 @@
     <item name="div_gallery_item_index" type="id"/>
     <item name="div_tabs_block" type="id"/>
     <item name="div_tabs_pager_container" type="id"/>
+    <item name="div_tabs_view_pager" type="id"/>
     <item name="overflow_menu" type="id"/>
     <item name="load_references_tag" type="id"/>
 

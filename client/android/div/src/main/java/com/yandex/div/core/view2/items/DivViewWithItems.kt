@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.items
 
 import android.util.DisplayMetrics
 import android.view.View
-import androidx.viewpager.widget.ViewPager.SCROLL_STATE_IDLE
 import com.yandex.div.core.util.isLayoutRtl
 import com.yandex.div.core.view2.divs.availableHeight
 import com.yandex.div.core.view2.divs.availableWidth
@@ -214,17 +213,23 @@ internal sealed class DivViewWithItems(view: View) {
     internal class Tabs(private val view: DivTabsLayout) : DivViewWithItems(view) {
 
         override val itemCount: Int
-            get() = view.viewPager.adapter?.count ?: 0
+            get() = view.viewPager.adapter?.itemCount ?: 0
 
         override fun setCurrentItem(index: Int, animated: Boolean, duration: Int?) {
             checkItem(index, itemCount) {
-                val viewPager = view.viewPager
-                val smoothScroll = animated && viewPager.scrollState == SCROLL_STATE_IDLE
-                viewPager.setCurrentItem(index, smoothScroll)
+                val scrollDuration = if (animated) {
+                    duration
+                } else {
+                    0
+                }
+                view.viewPager.scrollToItem(index, scrollDuration)
             }
         }
 
-        override fun getNearestItem(direction: ScrollDirection) = view.viewPager.currentItem + direction.value
+        override fun getNearestItem(direction: ScrollDirection): Int {
+            val currentItem = view.viewPager.currentItem
+            return currentItem + direction.value
+        }
 
         override fun scrollToTheEnd(animated: Boolean, duration: Int?) =
             setCurrentItem(itemCount - 1, animated, duration)

@@ -216,6 +216,7 @@ internal class DivTabsBinder @Inject constructor(
         list: List<DivSimpleTab>,
         tabToSelect: Int? = null,
     ) {
+        divTabsAdapter?.release()
         val eventManager = DivTabsEventManager(
             divBlock,
             actionPerformer,
@@ -230,14 +231,6 @@ internal class DivTabsBinder @Inject constructor(
         } else {
             HeightCalculatorFactory(::MaxCardHeightCalculator)
         }
-        val selectedTab = viewPager.currentItem
-        val currentTab = viewPager.currentItem
-        if (currentTab == selectedTab) {
-            // Tab view could be not laid out at this point, so post display event
-            UiThreadHandler.postOnMainThread {
-                eventManager.onPageDisplayed(currentTab)
-            }
-        }
         val activeStateTracker = DivTabsActiveStateTracker(divBlock, divView, div2Logger)
         val adapter = DivTabsAdapter(
             viewPool, this, getTabbedCardLayoutIds(), heightCalculatorFactory, isDynamicHeight,
@@ -248,6 +241,12 @@ internal class DivTabsBinder @Inject constructor(
         adapter.selectedTab =
             tabToSelect ?: divBlock.divValue.selectedTab.evaluate(divBlock.expressionResolver).toIntSafely()
         divTabsAdapter = adapter
+        // Tab view could be not laid out at this point, so post display event.
+        UiThreadHandler.postOnMainThread {
+            if (divTabsAdapter === adapter) {
+                eventManager.onPageDisplayed(viewPager.currentItem)
+            }
+        }
     }
 
     private fun getDisabledScrollPages(lastPageNumber: Int, isSwipeEnabled: Boolean): MutableSet<Int> {

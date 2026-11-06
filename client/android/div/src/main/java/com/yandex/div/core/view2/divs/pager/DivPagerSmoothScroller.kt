@@ -18,6 +18,7 @@ import kotlin.math.roundToInt
 internal class DivPagerSmoothScroller(
     private val viewPager: ViewPager2,
     private val recyclerView: RecyclerView,
+    private val shouldAnimateDefaultScroll: (Int) -> Boolean = { true },
 ) {
     private var virtualItemCount = 0
     private var currentFakeDrag: FakeDrag? = null
@@ -88,7 +89,9 @@ internal class DivPagerSmoothScroller(
             currentFakeDrag = drag
             drag.start()
         } else {
-            viewPager.setCurrentItem(request.index, request.duration == null)
+            viewPager.setCurrentItem(
+                request.index, request.duration == null && shouldAnimateDefaultScroll(request.index),
+            )
         }
     }
 

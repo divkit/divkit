@@ -1,8 +1,5 @@
 package com.yandex.div.internal.widget.tabs;
 
-import static com.yandex.div.core.util.ViewsKt.isLayoutRtl;
-
-import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.SparseArray;
 import android.view.View;
@@ -12,9 +9,9 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.collection.ArrayMap;
 import androidx.core.view.ViewCompat;
-import androidx.viewpager.widget.PagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 import androidx.viewpager.widget.ViewPager;
 import com.yandex.div.core.annotations.InternalApi;
 import com.yandex.div.core.font.DivTypefaceProvider;
@@ -28,13 +25,14 @@ import com.yandex.div.json.expressions.ExpressionResolver;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+
+import kotlin.Unit;
 
 /**
  * A UI component that renders a tabbed view. For input it takes {@link BaseDivTabbedCardUi.Input}
  * with list {@link TAB_DATA}. Each {@link TAB_DATA} gets converted into a stateful object
- * {@link TAB_VIEW} with the general management from {@link PagerAdapter}.
+ * {@link TAB_VIEW} with the general management from {@link RecyclerView.Adapter}.
  *
  * @param <TAB_DATA> data source for a tab; it must provide tab's title and whatever other data
  * @param <TAB_VIEW> stateful object that wraps actual view; can be just a plain View
@@ -62,107 +60,14 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
     @Nullable
     private HeightCalculator mViewPagerHeightCalculator;
     @NonNull
-    private final Map<ViewGroup, Binding> mBindings = new ArrayMap<>();
-    /**
-     * mBindingByPosition is populated both by PagerAdapter.instantiateItem() and
-     * measureTabHeight() so that tab bindings created by one can be reused by other.
-     * Unlike mBindingByPosition mBindings contains only items created by PagerAdapter.
-     */
-    @NonNull
-    private final Map<Integer, Binding> mBindingByPosition = new ArrayMap<>();
-    @NonNull
     private final String mTabHeaderTag;
     @NonNull
     private final String mTabItemTag;
     @NonNull
     private final ActiveTabClickListener<ACTION> mActiveTabClickListener;
 
-    private final PagerAdapter mPagerAdapter = new PagerAdapter() {
-        private static final String KEY_CHILD_STATES = "div_tabs_child_states";
-        @Nullable
-        private SparseArray<Parcelable> mChildStates;
-
-        @Override
-        public int getCount() {
-            return mCurrentData == null ? 0 : mCurrentData.getTabs().size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return object == view;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            if (isLayoutRtl(mPager)) {
-                position = getCount() - position - 1;
-            }
-            Log.d(TAG, "instantiateItem pos " + position);
-            ViewGroup child;
-            Binding binding = mBindingByPosition.get(position);
-            if (binding != null) {
-                // Binding was already created on measuring step.
-                child = binding.mContainer;
-                Assert.assertNull(binding.mContainer.getParent());
-            } else {
-                child = mViewPool.obtain(mTabItemTag);
-                TAB_DATA tabData = mCurrentData.getTabs().get(position);
-                binding = new Binding(child, tabData);
-                mBindingByPosition.put(position, binding);
-            }
-            container.addView(child);
-            mBindings.put(child, binding);
-            if (position == mPager.getCurrentItem()) {
-                binding.bind();
-            }
-            if (mChildStates != null) {
-                child.restoreHierarchyState(mChildStates);
-            }
-
-            return child;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            if (isLayoutRtl(mPager)) {
-                position = getCount() - position - 1;
-            }
-            ViewGroup view = (ViewGroup) object;
-            mBindings.remove(view).unbind();
-            mBindingByPosition.remove(position);
-
-            Log.d(TAG, "destroyItem pos " + position);
-            container.removeView(view);
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
-        }
-
-        @NonNull
-        @Override
-        public Parcelable saveState() {
-            SparseArray<Parcelable> childStates = new SparseArray<>(mBindings.size());
-            for (ViewGroup child : mBindings.keySet()) {
-                child.saveHierarchyState(childStates);
-            }
-            Bundle bundle = new Bundle();
-            bundle.putSparseParcelableArray(KEY_CHILD_STATES, childStates);
-            return bundle;
-        }
-
-        @Override
-        public void restoreState(@Nullable Parcelable state, @Nullable ClassLoader loader) {
-            if (!(state instanceof Bundle)) {
-                mChildStates = null;
-                return;
-            }
-            Bundle stateBundle = ((Bundle) state);
-            stateBundle.setClassLoader(getClass().getClassLoader());
-            mChildStates = stateBundle.getSparseParcelableArray(KEY_CHILD_STATES);
-        }
-    };
+    private final TabsPagerAdapter<TAB_DATA, TAB_VIEW> mPagerAdapter;
+    private final TabPagesBinder<TAB_DATA, TAB_VIEW> mPagesBinder;
 
     /**
      * Details on actual listener calls.
@@ -225,9 +130,26 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         mAbstractTabBar.setViewPool(viewPool, mTabHeaderTag);
 
         mPager = Views.findViewAndCast(mView, tabbedCardConfig.getCardPagerContainerId());
+        mPagesBinder = new TabPagesBinder<>(
+            new TabPageFactory<>(viewPool, mTabItemTag, this::bindTabData, tabView -> {
+                unbindTabData(tabView);
+                return Unit.INSTANCE;
+            }),
+            mPager::getCurrentItem
+        );
+        mPagerAdapter = new TabsPagerAdapter<>(mPagesBinder);
+        initializePager(tabbedCardConfig, extendedListener, activeTabsTracker);
+
+        final int pageContainerHelperId = tabbedCardConfig.getCardPagerContainerHelperId();
+        mViewPagerFixedSizeLayout = Views.findViewAndCast(mView, pageContainerHelperId);
+        initializeViewPagerFixedSizeLayout();
+    }
+
+    private void initializePager(@NonNull TabbedCardConfig tabbedCardConfig,
+                                 @Nullable ViewPager.OnPageChangeListener extendedListener,
+                                 @NonNull ViewPager.OnPageChangeListener activeTabsTracker) {
         ViewCompat.setLayoutDirection(mPager, mPager.getResources().getConfiguration().getLayoutDirection());
-        mPager.setAdapter(null);
-        mPager.clearOnPageChangeListeners();
+        mPager.release();
         mPager.addOnPageChangeListener(new PagerChangeListener());
         ViewPager.OnPageChangeListener customPageChangeListener = mAbstractTabBar.getCustomPageChangeListener();
         if (customPageChangeListener != null) {
@@ -239,11 +161,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         mPager.addOnPageChangeListener(activeTabsTracker);
         mPager.setScrollEnabled(tabbedCardConfig.isViewPagerScrollable());
         mPager.setEdgeScrollEnabled(tabbedCardConfig.isViewPagerEdgeScrollable());
-        mPager.setPageTransformer(false, new DataBindingTransformer());
-
-        final int pageContainerHelperId = tabbedCardConfig.getCardPagerContainerHelperId();
-        mViewPagerFixedSizeLayout = Views.findViewAndCast(mView, pageContainerHelperId);
-        initializeViewPagerFixedSizeLayout();
+        mPager.getViewPager().setPageTransformer(new DataBindingTransformer());
     }
 
     private void initializeViewPagerFixedSizeLayout() {
@@ -257,42 +175,33 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
     }
 
     protected void setData(@Nullable Input<TAB_DATA> data, @NonNull ExpressionResolver resolver, @NonNull ExpressionSubscriber subscriber) {
+        mPager.cancelScroll();
         final int newPos = findCorrespondingTab(mPager.getCurrentItem(), data);
-
-        mBindingByPosition.clear();
-        mCurrentData = data; // actually this changes mPagerAdapter contents
-        if (mPager.getAdapter() != null) {
-            mInSetData = true;
-            try {
-                mPagerAdapter.notifyDataSetChanged(); // need to be called before abstractTabBar.setData, or we get crash
-            } finally {
-                mInSetData = false;
+        mInSetData = true;
+        try {
+            mPagesBinder.clear();
+            mCurrentData = data;
+            List<? extends TAB_DATA> tabs = data == null ? Collections.emptyList() : data.getTabs();
+            mPagerAdapter.updateData(tabs);
+            mAbstractTabBar.setData(tabs, newPos, resolver, subscriber);
+            if (mPager.getAdapter() == null) {
+                // ViewPager2 restores its pending position here.
+                mPager.setAdapter(mPagerAdapter);
+            } else if (!tabs.isEmpty() && newPos != NO_POS) {
+                mPager.scrollToItem(newPos, 0);
             }
+        } finally {
+            mInSetData = false;
         }
-
-        List<? extends TAB_DATA> tabs;
-        if (data == null) {
-            tabs = Collections.emptyList();
-        } else {
-            tabs = data.getTabs();
+        if (getTabCount() > 0) {
+            mAbstractTabBar.manuallyScroll(mPager.getCurrentItem());
         }
-
-        mAbstractTabBar.setData(tabs, newPos, resolver, subscriber); // this also changes ViewPager position, so should go before setAdapter
-
-        // if it is the first launch - set adapter and use nested restore state functionality
-        // pager.setAdapter has side effect of restoring correct ViewPager position, so don't call setCurrentItem or tabBar.setData after it
-        if (mPager.getAdapter() == null) {
-            mPager.setAdapter(mPagerAdapter);
-        } else {
-            if (!tabs.isEmpty() && newPos != NO_POS) {
-                mPager.setCurrentItem(newPos);
-                // Normally pager notifies title bar about every tab change, but not this time, since
-                // we might not actually change current item value.
-                mAbstractTabBar.manuallyScroll(newPos);
-            }
-        }
-
         requestViewPagerLayout();
+    }
+
+    public void release() {
+        mPager.release();
+        mPagesBinder.clear();
     }
 
     public void setDisabledScrollPages(@NonNull Set<Integer> disabledPages) {
@@ -371,15 +280,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
             return tabHeight + collapsiblePaddingBottom;
         }
 
-        Binding binding = mBindingByPosition.get(tabIndex);
-        if (binding == null) {
-            tabView = mViewPool.obtain(mTabItemTag);
-            binding = new Binding(tabView, tab);
-            mBindingByPosition.put(tabIndex, binding);
-        } else {
-            tabView = binding.mContainer;
-        }
-        binding.bind();
+        tabView = mPagesBinder.bindByContainerHeightRequest(tabIndex, tab).getContainer();
         tabView.forceLayout();
         int resolvedMeasureSpec = resolveHeightMeasureSpec(heightMeasureSpec, tab);
         tabView.measure(
@@ -506,10 +407,13 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
     private class BaseTabTitleBarHost implements AbstractTabBar.Host<ACTION> {
         @Override
         public void setCurrentPage(int pos, boolean muteEvents) {
+            if (mInSetData) {
+                return;
+            }
             if (muteEvents) {
                 mTabTitleBarIgnoreScrollEvents = true;
             }
-            mPager.setCurrentItem(pos);
+            mPager.scrollToItem(pos, null);
         }
 
         @Override
@@ -581,7 +485,7 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
         }
     }
 
-    private class DataBindingTransformer implements ViewPager.PageTransformer {
+    private class DataBindingTransformer implements ViewPager2.PageTransformer {
         @Override
         public void transformPage(View page, float position) {
             if (mInSetData) {
@@ -593,41 +497,8 @@ public abstract class BaseDivTabbedCardUi<TAB_DATA extends BaseDivTabbedCardUi.I
             }
 
             if (position > -1.0f && position < 1.0f) {
-                Binding binding = mBindings.get(page);
-                if (binding != null) {
-                    binding.bind();
-                }
+                mPagesBinder.bindBySwipeTransitionRequest(page);
             }
-        }
-    }
-
-    private class Binding {
-        @NonNull
-        private final ViewGroup mContainer;
-        @NonNull
-        private final TAB_DATA mData;
-
-        @Nullable
-        private TAB_VIEW mView;
-
-        private Binding(@NonNull ViewGroup container, @NonNull TAB_DATA data) {
-            mContainer = container;
-            mData = data;
-        }
-
-        void bind() {
-            if (mView != null) {
-                return;
-            }
-            mView = bindTabData(mContainer, mData);
-        }
-
-        void unbind() {
-            if (mView == null) {
-                return;
-            }
-            unbindTabData(mView);
-            mView = null;
         }
     }
 

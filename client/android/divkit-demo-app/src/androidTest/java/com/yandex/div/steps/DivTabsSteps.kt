@@ -7,7 +7,7 @@ import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.utils.ViewPagerActions
 import com.yandex.div.utils.runOnView
 import com.yandex.test.util.Report.step
@@ -20,7 +20,7 @@ internal fun divTabs(f: DivTabsSteps.() -> Unit) = f(DivTabsSteps())
 internal class DivTabsSteps : DivTestAssetSteps() {
 
     val selectedTab: Int
-        get() = tabs().runOnView<ViewPager, Int> { it.currentItem } ?: -1
+        get() = tabs().runOnView<ViewPager2, Int> { it.currentItem } ?: -1
 
     fun ActivityTestRule<*>.buildContainer(): Unit = step("Build container") {
         buildContainer(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, isScrollable = true)
@@ -37,7 +37,7 @@ internal class DivTabsSteps : DivTestAssetSteps() {
     fun assert(f: DivTabsAssertions.() -> Unit) = f(DivTabsAssertions())
 }
 
-private fun tabs() = onView(isAssignableFrom(ViewPager::class.java))
+private fun tabs() = onView(isAssignableFrom(ViewPager2::class.java))
 
 @StepsDsl
 internal class DivTabsAssertions {

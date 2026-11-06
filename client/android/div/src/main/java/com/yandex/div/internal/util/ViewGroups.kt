@@ -4,7 +4,7 @@ import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
+import com.yandex.div.internal.widget.tabs.ScrollableViewPager
 import com.yandex.div.R
 
 /**
@@ -33,7 +33,7 @@ internal fun ViewGroup.hasScrollableChildUnder(event: MotionEvent): Boolean {
     for (i in 0 until childCount) {
         val childAt = getChildAt(i)
         if (childAt.id == R.id.div_tabs_block && Views.hitTest(childAt, rawX, rawY)
-                && (Views.findViewAndCast(childAt, R.id.div_tabs_pager_container) as ViewPager).isScrollableViewPagerUnder(rawX, rawY, scrollDir)) {
+                && (Views.findViewAndCast(childAt, R.id.div_tabs_pager_container) as ScrollableViewPager).isScrollableViewPagerUnder(rawX, rawY, scrollDir)) {
             return true
         }
         if (childAt is RecyclerView && childAt.isScrollableRecyclerUnder(rawX, rawY, scrollDir)) {
@@ -44,7 +44,7 @@ internal fun ViewGroup.hasScrollableChildUnder(event: MotionEvent): Boolean {
     return false
 }
 
-private fun ViewPager.isScrollableViewPagerUnder(rawX: Float, rawY: Float, scrollDir: Int): Boolean {
+private fun ScrollableViewPager.isScrollableViewPagerUnder(rawX: Float, rawY: Float, scrollDir: Int): Boolean {
     if (canScrollMore(scrollDir)) return true
 
     // this viewpager tab may have scrollable children
@@ -89,7 +89,7 @@ private fun RecyclerView.canScrollMore(scrollDir: Int): Boolean {
  * @param scrollDir should be one of [ItemTouchHelper.LEFT] etc
  * @return true if the view can be scrolled into that direction
  */
-private fun ViewPager.canScrollMore(scrollDir: Int): Boolean {
+private fun ScrollableViewPager.canScrollMore(scrollDir: Int): Boolean {
     if (scrollDir < 0) { // means direction is undefined yet
         return true
     }

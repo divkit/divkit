@@ -7,7 +7,6 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
-import com.yandex.div.internal.widget.tabs.ScrollableViewPager
 import com.yandex.divkit.demo.Container
 
 internal class UiReadyChecker {
@@ -36,7 +35,6 @@ internal class UiReadyChecker {
                     layoutManager?.isSmoothScrolling != true
             }
             is ViewPager2 -> scrollState == ViewPager2.SCROLL_STATE_IDLE
-            is ScrollableViewPager -> scrollState == ViewPager.SCROLL_STATE_IDLE
             is ViewPager -> !isFakeDragging
             else -> true
         }

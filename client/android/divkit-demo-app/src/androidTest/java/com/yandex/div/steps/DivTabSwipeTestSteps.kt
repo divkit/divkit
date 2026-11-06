@@ -10,6 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
 import com.yandex.div.view.scrollTo
 import com.yandex.div.view.tap
+import com.yandex.div.utils.ViewPagerActions
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matchers.allOf
@@ -25,11 +26,11 @@ class DivTabSwipeTestSteps : DivTestAssetSteps() {
     }
 
     fun swipeTabLeft(): Unit = step("Swipe tab left") {
-        tab.perform(swipeLeft())
+        tab.perform(swipeLeft(), ViewPagerActions.waitForIdle())
     }
 
     fun swipeTabRight(): Unit = step("Swipe tab right") {
-        tab.perform(swipeRight())
+        tab.perform(swipeRight(), ViewPagerActions.waitForIdle())
     }
 
     fun clickOnHeader(header: String) = step("Click on header \"$header\"") {
@@ -44,7 +45,7 @@ class DivTabSwipeTestSteps : DivTestAssetSteps() {
     internal fun assert(f: DivTabSwipeAssertions.() -> Unit) = f(DivTabSwipeAssertions())
 }
 
-private val tab get() = onView(withResourceName("div_tabs_pager_container"))
+private val tab get() = onView(withResourceName("div_tabs_view_pager"))
 
 @StepsDsl
 class DivTabSwipeAssertions() {
