@@ -1,8 +1,8 @@
 package com.yandex.divkit.multiplatform
 
 import androidx.compose.runtime.Composable
-import cocoapods.DivKitKMP.DivKitKMPFacade
 import com.yandex.divkit.multiplatform.dependencies.DivKitDependencies
+import divkit.interop.DivKitKMPFacade
 import kotlinx.cinterop.ExperimentalForeignApi
 
 @OptIn(ExperimentalForeignApi::class)

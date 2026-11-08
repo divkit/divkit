@@ -1,5 +1,0 @@
-target 'Example' do
-  use_frameworks!
-
-  pod 'DivKitKMP', :path => '../'
-end

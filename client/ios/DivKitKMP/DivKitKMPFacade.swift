@@ -1,7 +1,6 @@
 #if os(iOS)
-import UIKit
-
 import DivKit
+import UIKit
 
 internal import VGSLUI
 internal import DivKitExtensions

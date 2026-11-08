@@ -32,7 +32,12 @@ kotlin {
             implementation(libs.compose.runtime)
             implementation(libs.compose.ui)
 
-            implementation(project(":divkit-multiplatform"))
+            val mavenVersion = providers.gradleProperty("divkitMavenVersion").orNull
+            if (mavenVersion == null) {
+                implementation(project(":divkit-multiplatform"))
+            } else {
+                implementation("com.yandex.divkit.multiplatform:divkit-multiplatform:$mavenVersion")
+            }
         }
 
         androidMain.dependencies {

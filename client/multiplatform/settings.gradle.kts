@@ -12,6 +12,12 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
+        providers.gradleProperty("divkitMavenRepository").orNull?.let { repository ->
+            exclusiveContent {
+                forRepository { maven(repository) }
+                filter { includeGroup("com.yandex.divkit.multiplatform") }
+            }
+        }
         google()
         mavenCentral()
     }

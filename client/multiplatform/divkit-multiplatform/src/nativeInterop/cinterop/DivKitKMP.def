@@ -1,0 +1,4 @@
+language = Objective-C
+package = divkit.interop
+headers = UIKit/UIKit.h DivKitKMP-Swift.h
+headerFilter = DivKitKMP-Swift.h

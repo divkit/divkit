@@ -8,10 +8,6 @@ final class DivKitKMPView: UIView {
     divView.intrinsicContentSize
   }
 
-  override func sizeThatFits(_ size: CGSize) -> CGSize {
-    divView.sizeThatFits(size)
-  }
-
   private let divView: DivView
   private var current: (cardId: String, json: String) = ("", "")
 
@@ -22,8 +18,20 @@ final class DivKitKMPView: UIView {
     addSubview(divView)
   }
 
-  required init?(coder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  override func sizeThatFits(_ size: CGSize) -> CGSize {
+    divView.sizeThatFits(size)
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    divView.frame = bounds
+    divView.onVisibleBoundsChanged(to: bounds)
   }
 
   func updateSourceIfNeeded(jsonString: String, cardId: String) {
@@ -36,13 +44,6 @@ final class DivKitKMPView: UIView {
       ),
       shouldResetPreviousCardData: true
     )
-  }
-
-  override func layoutSubviews() {
-    super.layoutSubviews()
-
-    divView.frame = bounds
-    divView.onVisibleBoundsChanged(to: bounds)
   }
 }
 #endif

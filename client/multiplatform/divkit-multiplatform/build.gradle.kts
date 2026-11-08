@@ -1,8 +1,10 @@
+import org.jetbrains.kotlin.konan.target.HostManager
+import org.jetbrains.kotlin.konan.target.KonanTarget
+
 plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.compose)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.cocoapods)
     alias(libs.plugins.kotlin.multiplatform)
 
     id("divkit.convention.android-publishing-module")
@@ -24,19 +26,27 @@ kotlin {
             baseName = "divkit-multiplatform"
             isStatic = true
         }
-    }
-
-    cocoapods {
-        version = "1.0"
-        ios.deploymentTarget = "13.0"
-
-        framework {
-            baseName = "divkit-multiplatform"
+        val sdk = if (iosTarget.konanTarget == KonanTarget.IOS_ARM64) "iphoneos" else "iphonesimulator"
+        val arch = if (iosTarget.konanTarget == KonanTarget.IOS_X64) "x86_64" else "arm64"
+        val spmBuildDir = layout.buildDirectory.dir("spm/${iosTarget.name}")
+        val headersDir = spmBuildDir.map { it.dir("headers") }
+        val buildBridge = tasks.register<Exec>("buildDivKitKMP${iosTarget.name.replaceFirstChar { it.uppercase() }}") {
+            group = "build"
+            description = "Builds the current DivKit Swift package for ${iosTarget.name} cinterop."
+            onlyIf { HostManager.hostIsMac }
+            // Xcode tracks Swift sources and toolchain changes in its own incremental build.
+            commandLine(
+                "bash", project.file("scripts/build-spm-bridge.sh"),
+                sdk, arch, spmBuildDir.get().asFile.absolutePath
+            )
         }
-
-        pod("DivKitKMP") {
-            source = path(project.file("../divkit-multiplatform/DivKitKMP"))
-            extraOpts += listOf("-compiler-option", "-fmodules")
+        val interop = iosTarget.compilations.getByName("main").cinterops.create("DivKitKMP") {
+            definitionFile.set(project.file("src/nativeInterop/cinterop/DivKitKMP.def"))
+            includeDirs(headersDir)
+        }
+        tasks.named(interop.interopProcessingTaskName) {
+            dependsOn(buildBridge)
+            inputs.file(headersDir.map { it.file("DivKitKMP-Swift.h") })
         }
     }
 
