@@ -1,76 +1,77 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    id("divkit.convention.abi-validation")
+    id("divkit.convention.library-kmp")
+    id("divkit.convention.publishing-module-kmp")
 }
 
-apply(from = "../publish-java.gradle")
+val generateFunctionProvider = tasks.register<JavaExec>("generateFunctionProvider") {
+    val generatorCompilation = kotlin.jvm().compilations.getByName("generator")
+    val outputDir = layout.buildDirectory.dir("generated/functionProvider/commonMain/kotlin")
+    classpath = generatorCompilation.output.allOutputs + generatorCompilation.runtimeDependencyFiles
+    mainClass.set("com.yandex.div.evaluable.function.BuiltinFunctionProviderGenerator")
+    workingDir(outputDir)
+    outputs.dir(outputDir)
+    outputs.cacheIf { true }
+
+    doFirst {
+        outputDir.get().asFile.run {
+            deleteRecursively()
+            mkdirs()
+        }
+    }
+}
 
 kotlin {
-    jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
-}
+    android {
+        namespace = "com.yandex.div.evaluable"
+    }
 
-val buildDir = layout.buildDirectory
-val generatorOutputDir = buildDir.dir("generated/sources/java")
-
-sourceSets {
-    main {
-        java {
-            srcDir(generatorOutputDir)
+    jvm {
+        compilations.create("generator") {
+            defaultSourceSet {
+                kotlin.srcDir("src/commonMain/kotlin")
+                dependencies {
+                    implementation(project(":core"))
+                    implementation(libs.kotlinpoet)
+                }
+            }
         }
     }
-    create("generator") {
-        java {
-            srcDir("src/main/java")
-            srcDir("src/generator/java")
+
+    sourceSets {
+        commonMain {
+            kotlin.srcDir(generateFunctionProvider)
+            dependencies {
+                api(project(":core"))
+            }
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+        jvmTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.mockito.kotlin)
         }
     }
-}
-
-tasks.register<JavaExec>("generateFunctionProvider") {
-    classpath = sourceSets["generator"].runtimeClasspath
-    mainClass.set("com.yandex.div.evaluable.function.BuiltinFunctionProviderGenerator")
-    workingDir(generatorOutputDir)
-    outputs.dir(generatorOutputDir)
-    outputs.cacheIf { true }
-}
-
-tasks.named("compileKotlin") {
-    dependsOn("generateFunctionProvider")
-}
-
-tasks.named("sourcesJar") {
-    dependsOn("generateFunctionProvider")
 }
 
 tasks.named("metalavaGenerateSignature") {
-    dependsOn("generateFunctionProvider")
+    dependsOn(generateFunctionProvider)
 }
 
 tasks.named("metalavaCheckCompatibility") {
-    dependsOn("generateFunctionProvider")
+    dependsOn(generateFunctionProvider)
 }
 
 tasks.register<Jar>("replJar") {
-    dependsOn("testClasses")
-    from(buildDir.dir("classes/kotlin/test"))
-    from(buildDir.dir("classes/kotlin/main"))
-    from({
-        configurations.named("runtimeClasspath").get().map { if (it.isDirectory) it else zipTree(it) }
-    })
+    val jvmCompilations = kotlin.jvm().compilations
+    val runtimeClasspath = configurations.named("jvmRuntimeClasspath")
+    dependsOn(runtimeClasspath)
+    from(jvmCompilations.getByName("test").output.classesDirs)
+    from(jvmCompilations.getByName("main").output.classesDirs)
+    from({ runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) } })
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
         attributes("Main-Class" to "com.yandex.div.evaluable.repl.EvaluableRepl")
     }
     archiveClassifier.set("repl")
-}
-
-@Suppress("AvoidDuplicateDependencies")
-dependencies {
-    api(project(":core"))
-
-    "generatorCompileOnly"(project(":core"))
-    "generatorImplementation"(libs.kotlinpoet)
-
-    testImplementation(libs.kotlin.test)
-    testImplementation(libs.mockito.kotlin)
 }
