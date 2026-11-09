@@ -50,6 +50,7 @@
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { isImageWithoutUrl } from '../../utils/isImageWithoutUrl';
     import { visibilityAction } from '../../use/visibilityAction';
     import { genClassName } from '../../utils/genClassName';
     import { devtool, type DevtoolResult } from '../../use/devtool';
@@ -277,7 +278,10 @@
     $: jsonAccessibility = componentContext.getDerivedFromVars(componentContext.json.accessibility);
     $: jsonBackground = componentContext.getDerivedFromVars(componentContext.json.background);
     $: jsonActionAnimation = componentContext.getDerivedFromVars(componentContext.json.action_animation);
-    $: jsonVisibility = componentContext.getDerivedFromVars(componentContext.json.visibility);
+    $: hiddenWithoutUrl = rootCtx.hideImagesWithoutUrl && isImageWithoutUrl(componentContext.json);
+    $: jsonVisibility = componentContext.getDerivedFromVars(
+        hiddenWithoutUrl ? 'gone' : componentContext.json.visibility
+    );
     $: jsonTransform = componentContext.getDerivedFromVars(componentContext.json.transform);
     $: jsonTransformations = componentContext.getDerivedFromVars(componentContext.json.transformations);
     $: jsonCaptureFocusOnAction = componentContext.getDerivedFromVars(componentContext.json.capture_focus_on_action);
@@ -866,7 +870,8 @@
         const nextVisibility = correctVisibility($jsonVisibility, visibility);
 
         if (prevVisibility !== nextVisibility) {
-            if (isVisibilityInited && (visibility === 'visible' || nextVisibility === 'visible')) {
+            if (!hiddenWithoutUrl && isVisibilityInited &&
+                (visibility === 'visible' || nextVisibility === 'visible')) {
                 visibility = nextVisibility;
                 onVisibilityChange(nextVisibility);
             } else {

@@ -16,6 +16,7 @@
     import type { Variable } from '../../expressions/variable';
     import type { Overflow } from '../../../typings/common';
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { isImageWithoutUrl } from '../../utils/isImageWithoutUrl';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm } from '../../utils/pxToEm';
     import { makeStyle } from '../../utils/makeStyle';
@@ -320,7 +321,7 @@
 
         items.forEach(item => {
             children.push(item.getDerivedFromVars({
-                visibility: item.json.visibility
+                visibility: rootCtx.hideImagesWithoutUrl && isImageWithoutUrl(item.json) ? 'gone' : item.json.visibility
             }));
         });
 

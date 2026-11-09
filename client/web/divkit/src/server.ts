@@ -20,6 +20,7 @@ export function render(opts: {
     direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    hideImagesWithoutUrl?: boolean;
     pagerChildrenClipEnabled?: boolean;
     videoPlayerProvider?: VideoPlayerProviderServer;
 }) {

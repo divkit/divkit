@@ -417,6 +417,14 @@ Number, optional. 0 by default.
 
 Affects the formatting of dates.
 
+#### hideImagesWithoutUrl
+
+Boolean, optional. `false` by default.
+
+When `true`, `image` elements with an absent or `null` `image_url` and `gif` elements with an absent or `null` `gif_url` behave as if `visibility` were `gone`: they take no layout space, including margins, and do not run `visibility_change` animations or `visibility_actions`. The flag adds no error reports.
+
+This also hides images that only have a preview, placeholder, or extension content. Use `empty://` as the URL to keep their space and content. Empty strings, expressions (including expressions that evaluate to an empty value or fail), and image loading errors keep their existing behavior. Image backgrounds and images embedded in text are unaffected.
+
 #### pagerChildrenClipEnabled
 
 Boolean, optional. `true` by default.

@@ -49,6 +49,7 @@ export function render(opts: {
     customComponents?: Map<string, CustomComponentDescription> | undefined;
     store?: Store;
     weekStartDay?: number;
+    hideImagesWithoutUrl?: boolean;
     pagerChildrenClipEnabled?: boolean;
     pagerMouseDragEnabled?: boolean;
     videoPlayerProvider?: VideoPlayerProviderClient;

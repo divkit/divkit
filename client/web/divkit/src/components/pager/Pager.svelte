@@ -70,6 +70,7 @@
     import type { EdgeInsets } from '../../types/edgeInserts';
 
     import { ROOT_CTX, type RootCtxValue } from '../../context/root';
+    import { isImageWithoutUrl } from '../../utils/isImageWithoutUrl';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEmWithUnits } from '../../utils/pxToEm';
@@ -310,7 +311,7 @@
                 item.getDerivedFromVars({
                     width: item.json.width,
                     height: item.json.height,
-                    visibility: item.json.visibility
+                    visibility: rootCtx.hideImagesWithoutUrl && isImageWithoutUrl(item.json) ? 'gone' : item.json.visibility
                 })
             );
         });

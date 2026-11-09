@@ -42,6 +42,7 @@ export function render(opts: {
     direction?: Direction;
     store?: Store;
     weekStartDay?: number;
+    hideImagesWithoutUrl?: boolean;
     pagerChildrenClipEnabled?: boolean;
     pagerMouseDragEnabled?: boolean;
     videoPlayerProvider?: VideoPlayerProviderClient;

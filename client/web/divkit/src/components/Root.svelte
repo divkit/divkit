@@ -120,6 +120,7 @@
     export let customComponents: Map<string, CustomComponentDescription> | undefined = undefined;
     export let direction: Direction = 'ltr';
     export let store: Store | undefined = undefined;
+    export let hideImagesWithoutUrl = false;
     export let pagerChildrenClipEnabled = true;
     export let pagerMouseDragEnabled = true;
     export let weekStartDay = 0;
@@ -2572,6 +2573,7 @@
         processVariableTriggers,
         isRunning,
         setRunning,
+        hideImagesWithoutUrl,
         pagerChildrenClipEnabled,
         pagerMouseDragEnabled,
         registerInstance,

@@ -61,6 +61,7 @@ export interface RootCtxValue {
     isDesktop: Readable<boolean>;
     direction: Readable<Direction>;
     customComponents: Map<string, CustomComponentDescription> | undefined;
+    hideImagesWithoutUrl: boolean;
     pagerChildrenClipEnabled: boolean;
     pagerMouseDragEnabled: boolean;
     videoPlayerProvider?: VideoPlayerProvider | undefined;
