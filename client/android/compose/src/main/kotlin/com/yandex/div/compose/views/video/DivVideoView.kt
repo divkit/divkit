@@ -8,6 +8,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.FixedScale
@@ -29,6 +30,8 @@ import com.yandex.div.compose.video.DivVideoSource
 import com.yandex.div.compose.video.registerPlayer
 import com.yandex.div2.DivVideo
 import com.yandex.div2.DivVideoScale
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
 import com.yandex.div2.DivVideoSource as Div2VideoSource
 
 @Composable
@@ -73,19 +76,24 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
     }
 }
 
+/**
+ * Two-way binding of `elapsed_time_variable`: the variable seeks the player and the player's progress
+ * is written to the variable. A position the player reported is not seeked back.
+ */
 @Composable
 private fun ObserveElapsedTimeVariable(player: DivVideoPlayer, variableName: String) {
     val variableState = mutableStateFromIntegerVariable(variableName) ?: return
-
-    LaunchedEffect(player) {
-        player.currentTimeMs.collect { timeMs ->
-            variableState.value = timeMs
+    LaunchedEffect(player, variableState) {
+        var reportedTimeMs: Long? = null
+        launch {
+            snapshotFlow { variableState.value }.collect { timeMs ->
+                if (timeMs != reportedTimeMs) player.seek(timeMs)
+            }
         }
-    }
-
-    LaunchedEffect(variableState.value) {
-        if (variableState.value != player.currentTimeMs.value) {
-            player.seek(variableState.value)
+        // Subscribed before the launched seek runs, so a synchronous seek acknowledgement is seen.
+        player.currentTimeMs.drop(1).collect { timeMs ->
+            reportedTimeMs = timeMs
+            variableState.value = timeMs
         }
     }
 }
