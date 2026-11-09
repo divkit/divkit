@@ -65,7 +65,6 @@ data class Gallery internal constructor(
             scrollMode = additive.scrollMode ?: properties.scrollMode,
             scrollbar = additive.scrollbar ?: properties.scrollbar,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
-            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -227,10 +226,6 @@ data class Gallery internal constructor(
          */
         val selectedActions: Property<List<Action>>?,
         /**
-         * List of timers.
-         */
-        val timers: Property<List<Timer>>?,
-        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -321,7 +316,6 @@ data class Gallery internal constructor(
             result.tryPutProperty("scroll_mode", scrollMode)
             result.tryPutProperty("scrollbar", scrollbar)
             result.tryPutProperty("selected_actions", selectedActions)
-            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -404,7 +398,6 @@ data class Gallery internal constructor(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -455,7 +448,6 @@ fun DivScope.gallery(
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -504,7 +496,6 @@ fun DivScope.gallery(
         scrollMode = valueOrNull(scrollMode),
         scrollbar = valueOrNull(scrollbar),
         selectedActions = valueOrNull(selectedActions),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -555,7 +546,6 @@ fun DivScope.gallery(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -606,7 +596,6 @@ fun DivScope.galleryProps(
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -654,7 +643,6 @@ fun DivScope.galleryProps(
     scrollMode = valueOrNull(scrollMode),
     scrollbar = valueOrNull(scrollbar),
     selectedActions = valueOrNull(selectedActions),
-    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -704,7 +692,6 @@ fun DivScope.galleryProps(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -755,7 +742,6 @@ fun TemplateScope.galleryRefs(
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -803,7 +789,6 @@ fun TemplateScope.galleryRefs(
     scrollMode = scrollMode,
     scrollbar = scrollbar,
     selectedActions = selectedActions,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -853,7 +838,6 @@ fun TemplateScope.galleryRefs(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -904,7 +888,6 @@ fun Gallery.override(
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -953,7 +936,6 @@ fun Gallery.override(
         scrollMode = valueOrNull(scrollMode) ?: properties.scrollMode,
         scrollbar = valueOrNull(scrollbar) ?: properties.scrollbar,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
-        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -1004,7 +986,6 @@ fun Gallery.override(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1055,7 +1036,6 @@ fun Gallery.defer(
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1104,7 +1084,6 @@ fun Gallery.defer(
         scrollMode = scrollMode ?: properties.scrollMode,
         scrollbar = scrollbar ?: properties.scrollbar,
         selectedActions = selectedActions ?: properties.selectedActions,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1155,7 +1134,6 @@ fun Gallery.defer(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1206,7 +1184,6 @@ fun Gallery.modify(
     scrollMode: Property<Gallery.ScrollMode>? = null,
     scrollbar: Property<Gallery.Scrollbar>? = null,
     selectedActions: Property<List<Action>>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1255,7 +1232,6 @@ fun Gallery.modify(
         scrollMode = scrollMode ?: properties.scrollMode,
         scrollbar = scrollbar ?: properties.scrollbar,
         selectedActions = selectedActions ?: properties.selectedActions,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1348,7 +1324,6 @@ fun Gallery.evaluate(
         scrollMode = scrollMode ?: properties.scrollMode,
         scrollbar = scrollbar ?: properties.scrollbar,
         selectedActions = properties.selectedActions,
-        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -1399,7 +1374,6 @@ fun Gallery.evaluate(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1450,7 +1424,6 @@ fun Component<Gallery>.override(
     scrollMode: Gallery.ScrollMode? = null,
     scrollbar: Gallery.Scrollbar? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1500,7 +1473,6 @@ fun Component<Gallery>.override(
         scrollMode = valueOrNull(scrollMode),
         scrollbar = valueOrNull(scrollbar),
         selectedActions = valueOrNull(selectedActions),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1551,7 +1523,6 @@ fun Component<Gallery>.override(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1602,7 +1573,6 @@ fun Component<Gallery>.defer(
     scrollMode: ReferenceProperty<Gallery.ScrollMode>? = null,
     scrollbar: ReferenceProperty<Gallery.Scrollbar>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1652,7 +1622,6 @@ fun Component<Gallery>.defer(
         scrollMode = scrollMode,
         scrollbar = scrollbar,
         selectedActions = selectedActions,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -1746,7 +1715,6 @@ fun Component<Gallery>.evaluate(
         scrollMode = scrollMode,
         scrollbar = scrollbar,
         selectedActions = null,
-        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -1797,7 +1765,6 @@ fun Component<Gallery>.evaluate(
  * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
  * @param scrollbar Scrollbar behavior. Hidden by default. When choosing a gallery size, keep in mind that the scrollbar may have a different height and width depending on the platform and user settings. <li>`none` — the scrollbar is hidden.</li><li>`auto` — the scrollbar is shown if there isn't enough space and it needs to be displayed on the current platform.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1848,7 +1815,6 @@ fun Component<Gallery>.modify(
     scrollMode: Property<Gallery.ScrollMode>? = null,
     scrollbar: Property<Gallery.Scrollbar>? = null,
     selectedActions: Property<List<Action>>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1898,7 +1864,6 @@ fun Component<Gallery>.modify(
         scrollMode = scrollMode,
         scrollbar = scrollbar,
         selectedActions = selectedActions,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,

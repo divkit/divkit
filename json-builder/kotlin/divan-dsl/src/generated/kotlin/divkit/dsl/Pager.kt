@@ -65,7 +65,6 @@ data class Pager internal constructor(
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             scrollAxisAlignment = additive.scrollAxisAlignment ?: properties.scrollAxisAlignment,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
-            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -227,10 +226,6 @@ data class Pager internal constructor(
          */
         val selectedActions: Property<List<Action>>?,
         /**
-         * List of timers.
-         */
-        val timers: Property<List<Timer>>?,
-        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -321,7 +316,6 @@ data class Pager internal constructor(
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("scroll_axis_alignment", scrollAxisAlignment)
             result.tryPutProperty("selected_actions", selectedActions)
-            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -388,7 +382,6 @@ data class Pager internal constructor(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -439,7 +432,6 @@ fun DivScope.pager(
     rowSpan: Int? = null,
     scrollAxisAlignment: Pager.ItemAlignment? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -488,7 +480,6 @@ fun DivScope.pager(
         rowSpan = valueOrNull(rowSpan),
         scrollAxisAlignment = valueOrNull(scrollAxisAlignment),
         selectedActions = valueOrNull(selectedActions),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -539,7 +530,6 @@ fun DivScope.pager(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -590,7 +580,6 @@ fun DivScope.pagerProps(
     rowSpan: Int? = null,
     scrollAxisAlignment: Pager.ItemAlignment? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -638,7 +627,6 @@ fun DivScope.pagerProps(
     rowSpan = valueOrNull(rowSpan),
     scrollAxisAlignment = valueOrNull(scrollAxisAlignment),
     selectedActions = valueOrNull(selectedActions),
-    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -688,7 +676,6 @@ fun DivScope.pagerProps(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -739,7 +726,6 @@ fun TemplateScope.pagerRefs(
     rowSpan: ReferenceProperty<Int>? = null,
     scrollAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -787,7 +773,6 @@ fun TemplateScope.pagerRefs(
     rowSpan = rowSpan,
     scrollAxisAlignment = scrollAxisAlignment,
     selectedActions = selectedActions,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -837,7 +822,6 @@ fun TemplateScope.pagerRefs(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -888,7 +872,6 @@ fun Pager.override(
     rowSpan: Int? = null,
     scrollAxisAlignment: Pager.ItemAlignment? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -937,7 +920,6 @@ fun Pager.override(
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         scrollAxisAlignment = valueOrNull(scrollAxisAlignment) ?: properties.scrollAxisAlignment,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
-        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -988,7 +970,6 @@ fun Pager.override(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1039,7 +1020,6 @@ fun Pager.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     scrollAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1088,7 +1068,6 @@ fun Pager.defer(
         rowSpan = rowSpan ?: properties.rowSpan,
         scrollAxisAlignment = scrollAxisAlignment ?: properties.scrollAxisAlignment,
         selectedActions = selectedActions ?: properties.selectedActions,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1139,7 +1118,6 @@ fun Pager.defer(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1190,7 +1168,6 @@ fun Pager.modify(
     rowSpan: Property<Int>? = null,
     scrollAxisAlignment: Property<Pager.ItemAlignment>? = null,
     selectedActions: Property<List<Action>>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1239,7 +1216,6 @@ fun Pager.modify(
         rowSpan = rowSpan ?: properties.rowSpan,
         scrollAxisAlignment = scrollAxisAlignment ?: properties.scrollAxisAlignment,
         selectedActions = selectedActions ?: properties.selectedActions,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1324,7 +1300,6 @@ fun Pager.evaluate(
         rowSpan = rowSpan ?: properties.rowSpan,
         scrollAxisAlignment = scrollAxisAlignment ?: properties.scrollAxisAlignment,
         selectedActions = properties.selectedActions,
-        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -1375,7 +1350,6 @@ fun Pager.evaluate(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1426,7 +1400,6 @@ fun Component<Pager>.override(
     rowSpan: Int? = null,
     scrollAxisAlignment: Pager.ItemAlignment? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1476,7 +1449,6 @@ fun Component<Pager>.override(
         rowSpan = valueOrNull(rowSpan),
         scrollAxisAlignment = valueOrNull(scrollAxisAlignment),
         selectedActions = valueOrNull(selectedActions),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1527,7 +1499,6 @@ fun Component<Pager>.override(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1578,7 +1549,6 @@ fun Component<Pager>.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     scrollAxisAlignment: ReferenceProperty<Pager.ItemAlignment>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1628,7 +1598,6 @@ fun Component<Pager>.defer(
         rowSpan = rowSpan,
         scrollAxisAlignment = scrollAxisAlignment,
         selectedActions = selectedActions,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -1714,7 +1683,6 @@ fun Component<Pager>.evaluate(
         rowSpan = rowSpan,
         scrollAxisAlignment = scrollAxisAlignment,
         selectedActions = null,
-        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -1765,7 +1733,6 @@ fun Component<Pager>.evaluate(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scrollAxisAlignment Alignment of pager pages along the scroll direction. In horizontal pager:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li></p><p>In vertical pager:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li>. For edge alignment, the margin from the edge of the parent equals the value of the corresponding padding.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1816,7 +1783,6 @@ fun Component<Pager>.modify(
     rowSpan: Property<Int>? = null,
     scrollAxisAlignment: Property<Pager.ItemAlignment>? = null,
     selectedActions: Property<List<Action>>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1866,7 +1832,6 @@ fun Component<Pager>.modify(
         rowSpan = rowSpan,
         scrollAxisAlignment = scrollAxisAlignment,
         selectedActions = selectedActions,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,

@@ -71,7 +71,6 @@ data class GifImage internal constructor(
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             scale = additive.scale ?: properties.scale,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
-            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -257,10 +256,6 @@ data class GifImage internal constructor(
          */
         val selectedActions: Property<List<Action>>?,
         /**
-         * List of timers.
-         */
-        val timers: Property<List<Timer>>?,
-        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -357,7 +352,6 @@ data class GifImage internal constructor(
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("scale", scale)
             result.tryPutProperty("selected_actions", selectedActions)
-            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -416,7 +410,6 @@ data class GifImage internal constructor(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -473,7 +466,6 @@ fun DivScope.gifImage(
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -528,7 +520,6 @@ fun DivScope.gifImage(
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -585,7 +576,6 @@ fun DivScope.gifImage(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -642,7 +632,6 @@ fun DivScope.gifImageProps(
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -696,7 +685,6 @@ fun DivScope.gifImageProps(
     rowSpan = valueOrNull(rowSpan),
     scale = valueOrNull(scale),
     selectedActions = valueOrNull(selectedActions),
-    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -752,7 +740,6 @@ fun DivScope.gifImageProps(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -809,7 +796,6 @@ fun TemplateScope.gifImageRefs(
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -863,7 +849,6 @@ fun TemplateScope.gifImageRefs(
     rowSpan = rowSpan,
     scale = scale,
     selectedActions = selectedActions,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -919,7 +904,6 @@ fun TemplateScope.gifImageRefs(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -976,7 +960,6 @@ fun GifImage.override(
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1031,7 +1014,6 @@ fun GifImage.override(
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         scale = valueOrNull(scale) ?: properties.scale,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
-        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -1088,7 +1070,6 @@ fun GifImage.override(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1145,7 +1126,6 @@ fun GifImage.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1200,7 +1180,6 @@ fun GifImage.defer(
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = selectedActions ?: properties.selectedActions,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1257,7 +1236,6 @@ fun GifImage.defer(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1314,7 +1292,6 @@ fun GifImage.modify(
     rowSpan: Property<Int>? = null,
     scale: Property<ImageScale>? = null,
     selectedActions: Property<List<Action>>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1369,7 +1346,6 @@ fun GifImage.modify(
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = selectedActions ?: properties.selectedActions,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1464,7 +1440,6 @@ fun GifImage.evaluate(
         rowSpan = rowSpan ?: properties.rowSpan,
         scale = scale ?: properties.scale,
         selectedActions = properties.selectedActions,
-        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -1521,7 +1496,6 @@ fun GifImage.evaluate(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1578,7 +1552,6 @@ fun Component<GifImage>.override(
     rowSpan: Int? = null,
     scale: ImageScale? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1634,7 +1607,6 @@ fun Component<GifImage>.override(
         rowSpan = valueOrNull(rowSpan),
         scale = valueOrNull(scale),
         selectedActions = valueOrNull(selectedActions),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1691,7 +1663,6 @@ fun Component<GifImage>.override(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1748,7 +1719,6 @@ fun Component<GifImage>.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     scale: ReferenceProperty<ImageScale>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1804,7 +1774,6 @@ fun Component<GifImage>.defer(
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = selectedActions,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -1900,7 +1869,6 @@ fun Component<GifImage>.evaluate(
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = null,
-        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -1957,7 +1925,6 @@ fun Component<GifImage>.evaluate(
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2014,7 +1981,6 @@ fun Component<GifImage>.modify(
     rowSpan: Property<Int>? = null,
     scale: Property<ImageScale>? = null,
     selectedActions: Property<List<Action>>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -2070,7 +2036,6 @@ fun Component<GifImage>.modify(
         rowSpan = rowSpan,
         scale = scale,
         selectedActions = selectedActions,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,

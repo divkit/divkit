@@ -91,7 +91,6 @@
 ### Web Client
 * Added `multi_page_scroll` support to the Web pager, with continuous cyclic inertia for infinite pagers.
 * Added support for `duration` in typed `scroll` actions.
-* Added support for component-level `timers` with local variables and timer lookup within `scope_id`.
 * Added the `extensionsForAllComponents` render option to apply extensions to every component without declaring them in JSON, with optional constructor parameters per registration.
 * Added typed `extension_action` for extensions, including Lottie `start` and `stop` commands. Start rewinds and plays the animation; Stop rewinds and leaves it stopped.
 * Fixed errors and repeated actions of `variable_triggers` in elements with `transition_in`, `transition_out` or `transition_change` inside a `state` and in the pages of a `pager` with `infinite_scroll`.

@@ -55,7 +55,6 @@ data class Custom internal constructor(
             reuseId = additive.reuseId ?: properties.reuseId,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
-            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -169,10 +168,6 @@ data class Custom internal constructor(
          */
         val selectedActions: Property<List<Action>>?,
         /**
-         * List of timers.
-         */
-        val timers: Property<List<Timer>>?,
-        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -253,7 +248,6 @@ data class Custom internal constructor(
             result.tryPutProperty("reuse_id", reuseId)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
-            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -296,7 +290,6 @@ data class Custom internal constructor(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -337,7 +330,6 @@ fun DivScope.custom(
     reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -376,7 +368,6 @@ fun DivScope.custom(
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -417,7 +408,6 @@ fun DivScope.custom(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -458,7 +448,6 @@ fun DivScope.customProps(
     reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -496,7 +485,6 @@ fun DivScope.customProps(
     reuseId = valueOrNull(reuseId),
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
-    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -536,7 +524,6 @@ fun DivScope.customProps(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -577,7 +564,6 @@ fun TemplateScope.customRefs(
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -615,7 +601,6 @@ fun TemplateScope.customRefs(
     reuseId = reuseId,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -655,7 +640,6 @@ fun TemplateScope.customRefs(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -696,7 +680,6 @@ fun Custom.override(
     reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -735,7 +718,6 @@ fun Custom.override(
         reuseId = valueOrNull(reuseId) ?: properties.reuseId,
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
-        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -776,7 +758,6 @@ fun Custom.override(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -817,7 +798,6 @@ fun Custom.defer(
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -856,7 +836,6 @@ fun Custom.defer(
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -897,7 +876,6 @@ fun Custom.defer(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -938,7 +916,6 @@ fun Custom.modify(
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<Action>>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -977,7 +954,6 @@ fun Custom.modify(
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1038,7 +1014,6 @@ fun Custom.evaluate(
         reuseId = reuseId ?: properties.reuseId,
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
-        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -1079,7 +1054,6 @@ fun Custom.evaluate(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1120,7 +1094,6 @@ fun Component<Custom>.override(
     reuseId: String? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1160,7 +1133,6 @@ fun Component<Custom>.override(
         reuseId = valueOrNull(reuseId),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1201,7 +1173,6 @@ fun Component<Custom>.override(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1242,7 +1213,6 @@ fun Component<Custom>.defer(
     reuseId: ReferenceProperty<String>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1282,7 +1252,6 @@ fun Component<Custom>.defer(
         reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -1344,7 +1313,6 @@ fun Component<Custom>.evaluate(
         reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = null,
-        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -1385,7 +1353,6 @@ fun Component<Custom>.evaluate(
  * @param reuseId ID for the div object structure. Used to optimize block reuse. See [block reuse](../../reuse/reuse.md).
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1426,7 +1393,6 @@ fun Component<Custom>.modify(
     reuseId: Property<String>? = null,
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<Action>>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1466,7 +1432,6 @@ fun Component<Custom>.modify(
         reuseId = reuseId,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,

@@ -62,7 +62,6 @@ data class Tabs internal constructor(
             switchTabsByContentSwipeEnabled = additive.switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
             tabTitleDelimiter = additive.tabTitleDelimiter ?: properties.tabTitleDelimiter,
             tabTitleStyle = additive.tabTitleStyle ?: properties.tabTitleStyle,
-            timers = additive.timers ?: properties.timers,
             titlePaddings = additive.titlePaddings ?: properties.titlePaddings,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
@@ -212,10 +211,6 @@ data class Tabs internal constructor(
          */
         val tabTitleStyle: Property<TabTitleStyle>?,
         /**
-         * List of timers.
-         */
-        val timers: Property<List<Timer>>?,
-        /**
          * Indents in the tab name.
          * Default value: `{"left": 12,"right": 12,"top": 0,"bottom": 8}`.
          */
@@ -308,7 +303,6 @@ data class Tabs internal constructor(
             result.tryPutProperty("switch_tabs_by_content_swipe_enabled", switchTabsByContentSwipeEnabled)
             result.tryPutProperty("tab_title_delimiter", tabTitleDelimiter)
             result.tryPutProperty("tab_title_style", tabTitleStyle)
-            result.tryPutProperty("timers", timers)
             result.tryPutProperty("title_paddings", titlePaddings)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
@@ -637,7 +631,6 @@ data class Tabs internal constructor(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -686,7 +679,6 @@ fun DivScope.tabs(
     switchTabsByContentSwipeEnabled: Boolean? = null,
     tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
-    timers: List<Timer>? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -733,7 +725,6 @@ fun DivScope.tabs(
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
         tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
         tabTitleStyle = valueOrNull(tabTitleStyle),
-        timers = valueOrNull(timers),
         titlePaddings = valueOrNull(titlePaddings),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -782,7 +773,6 @@ fun DivScope.tabs(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -831,7 +821,6 @@ fun DivScope.tabsProps(
     switchTabsByContentSwipeEnabled: Boolean? = null,
     tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
-    timers: List<Timer>? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -877,7 +866,6 @@ fun DivScope.tabsProps(
     switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
     tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
     tabTitleStyle = valueOrNull(tabTitleStyle),
-    timers = valueOrNull(timers),
     titlePaddings = valueOrNull(titlePaddings),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
@@ -925,7 +913,6 @@ fun DivScope.tabsProps(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -974,7 +961,6 @@ fun TemplateScope.tabsRefs(
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
     tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -1020,7 +1006,6 @@ fun TemplateScope.tabsRefs(
     switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
     tabTitleDelimiter = tabTitleDelimiter,
     tabTitleStyle = tabTitleStyle,
-    timers = timers,
     titlePaddings = titlePaddings,
     tooltips = tooltips,
     transform = transform,
@@ -1068,7 +1053,6 @@ fun TemplateScope.tabsRefs(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1117,7 +1101,6 @@ fun Tabs.override(
     switchTabsByContentSwipeEnabled: Boolean? = null,
     tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
-    timers: List<Timer>? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -1164,7 +1147,6 @@ fun Tabs.override(
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled) ?: properties.switchTabsByContentSwipeEnabled,
         tabTitleDelimiter = valueOrNull(tabTitleDelimiter) ?: properties.tabTitleDelimiter,
         tabTitleStyle = valueOrNull(tabTitleStyle) ?: properties.tabTitleStyle,
-        timers = valueOrNull(timers) ?: properties.timers,
         titlePaddings = valueOrNull(titlePaddings) ?: properties.titlePaddings,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
@@ -1213,7 +1195,6 @@ fun Tabs.override(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1262,7 +1243,6 @@ fun Tabs.defer(
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
     tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -1309,7 +1289,6 @@ fun Tabs.defer(
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
         tabTitleDelimiter = tabTitleDelimiter ?: properties.tabTitleDelimiter,
         tabTitleStyle = tabTitleStyle ?: properties.tabTitleStyle,
-        timers = timers ?: properties.timers,
         titlePaddings = titlePaddings ?: properties.titlePaddings,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
@@ -1358,7 +1337,6 @@ fun Tabs.defer(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1407,7 +1385,6 @@ fun Tabs.modify(
     switchTabsByContentSwipeEnabled: Property<Boolean>? = null,
     tabTitleDelimiter: Property<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: Property<Tabs.TabTitleStyle>? = null,
-    timers: Property<List<Timer>>? = null,
     titlePaddings: Property<EdgeInsets>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
@@ -1454,7 +1431,6 @@ fun Tabs.modify(
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
         tabTitleDelimiter = tabTitleDelimiter ?: properties.tabTitleDelimiter,
         tabTitleStyle = tabTitleStyle ?: properties.tabTitleStyle,
-        timers = timers ?: properties.timers,
         titlePaddings = titlePaddings ?: properties.titlePaddings,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
@@ -1535,7 +1511,6 @@ fun Tabs.evaluate(
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?: properties.switchTabsByContentSwipeEnabled,
         tabTitleDelimiter = properties.tabTitleDelimiter,
         tabTitleStyle = properties.tabTitleStyle,
-        timers = properties.timers,
         titlePaddings = properties.titlePaddings,
         tooltips = properties.tooltips,
         transform = properties.transform,
@@ -1584,7 +1559,6 @@ fun Tabs.evaluate(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1633,7 +1607,6 @@ fun Component<Tabs>.override(
     switchTabsByContentSwipeEnabled: Boolean? = null,
     tabTitleDelimiter: Tabs.TabTitleDelimiter? = null,
     tabTitleStyle: Tabs.TabTitleStyle? = null,
-    timers: List<Timer>? = null,
     titlePaddings: EdgeInsets? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
@@ -1681,7 +1654,6 @@ fun Component<Tabs>.override(
         switchTabsByContentSwipeEnabled = valueOrNull(switchTabsByContentSwipeEnabled),
         tabTitleDelimiter = valueOrNull(tabTitleDelimiter),
         tabTitleStyle = valueOrNull(tabTitleStyle),
-        timers = valueOrNull(timers),
         titlePaddings = valueOrNull(titlePaddings),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
@@ -1730,7 +1702,6 @@ fun Component<Tabs>.override(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -1779,7 +1750,6 @@ fun Component<Tabs>.defer(
     switchTabsByContentSwipeEnabled: ReferenceProperty<Boolean>? = null,
     tabTitleDelimiter: ReferenceProperty<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: ReferenceProperty<Tabs.TabTitleStyle>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     titlePaddings: ReferenceProperty<EdgeInsets>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
@@ -1827,7 +1797,6 @@ fun Component<Tabs>.defer(
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
         tabTitleDelimiter = tabTitleDelimiter,
         tabTitleStyle = tabTitleStyle,
-        timers = timers,
         titlePaddings = titlePaddings,
         tooltips = tooltips,
         transform = transform,
@@ -1909,7 +1878,6 @@ fun Component<Tabs>.evaluate(
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
         tabTitleDelimiter = null,
         tabTitleStyle = null,
-        timers = null,
         titlePaddings = null,
         tooltips = null,
         transform = null,
@@ -1958,7 +1926,6 @@ fun Component<Tabs>.evaluate(
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
  * @param tabTitleDelimiter Design style of separators between tab titles.
  * @param tabTitleStyle Design style of tab titles.
- * @param timers List of timers.
  * @param titlePaddings Indents in the tab name.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
@@ -2007,7 +1974,6 @@ fun Component<Tabs>.modify(
     switchTabsByContentSwipeEnabled: Property<Boolean>? = null,
     tabTitleDelimiter: Property<Tabs.TabTitleDelimiter>? = null,
     tabTitleStyle: Property<Tabs.TabTitleStyle>? = null,
-    timers: Property<List<Timer>>? = null,
     titlePaddings: Property<EdgeInsets>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
@@ -2055,7 +2021,6 @@ fun Component<Tabs>.modify(
         switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled,
         tabTitleDelimiter = tabTitleDelimiter,
         tabTitleStyle = tabTitleStyle,
-        timers = timers,
         titlePaddings = titlePaddings,
         tooltips = tooltips,
         transform = transform,

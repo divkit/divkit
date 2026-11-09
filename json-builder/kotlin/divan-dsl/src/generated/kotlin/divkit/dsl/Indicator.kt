@@ -64,7 +64,6 @@ data class Indicator internal constructor(
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             shape = additive.shape ?: properties.shape,
             spaceBetweenCenters = additive.spaceBetweenCenters ?: properties.spaceBetweenCenters,
-            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -227,10 +226,6 @@ data class Indicator internal constructor(
         @DeprecatedApi("Marked as deprecated in the JSON schema")
         val spaceBetweenCenters: Property<FixedSize>?,
         /**
-         * List of timers.
-         */
-        val timers: Property<List<Timer>>?,
-        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -320,7 +315,6 @@ data class Indicator internal constructor(
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("shape", shape)
             result.tryPutProperty("space_between_centers", spaceBetweenCenters)
-            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -380,7 +374,6 @@ data class Indicator internal constructor(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -430,7 +423,6 @@ fun DivScope.indicator(
     selectedActions: List<Action>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: Shape? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: FixedSize? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -478,7 +470,6 @@ fun DivScope.indicator(
         selectedActions = valueOrNull(selectedActions),
         shape = valueOrNull(shape),
         spaceBetweenCenters = valueOrNull(spaceBetweenCenters),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -528,7 +519,6 @@ fun DivScope.indicator(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -578,7 +568,6 @@ fun DivScope.indicatorProps(
     selectedActions: List<Action>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: Shape? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: FixedSize? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -625,7 +614,6 @@ fun DivScope.indicatorProps(
     selectedActions = valueOrNull(selectedActions),
     shape = valueOrNull(shape),
     spaceBetweenCenters = valueOrNull(spaceBetweenCenters),
-    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -674,7 +662,6 @@ fun DivScope.indicatorProps(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -724,7 +711,6 @@ fun TemplateScope.indicatorRefs(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: ReferenceProperty<Shape>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: ReferenceProperty<FixedSize>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -771,7 +757,6 @@ fun TemplateScope.indicatorRefs(
     selectedActions = selectedActions,
     shape = shape,
     spaceBetweenCenters = spaceBetweenCenters,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -820,7 +805,6 @@ fun TemplateScope.indicatorRefs(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -870,7 +854,6 @@ fun Indicator.override(
     selectedActions: List<Action>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: Shape? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: FixedSize? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -918,7 +901,6 @@ fun Indicator.override(
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         shape = valueOrNull(shape) ?: properties.shape,
         spaceBetweenCenters = valueOrNull(spaceBetweenCenters) ?: properties.spaceBetweenCenters,
-        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -968,7 +950,6 @@ fun Indicator.override(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1018,7 +999,6 @@ fun Indicator.defer(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: ReferenceProperty<Shape>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: ReferenceProperty<FixedSize>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1066,7 +1046,6 @@ fun Indicator.defer(
         selectedActions = selectedActions ?: properties.selectedActions,
         shape = shape ?: properties.shape,
         spaceBetweenCenters = spaceBetweenCenters ?: properties.spaceBetweenCenters,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1116,7 +1095,6 @@ fun Indicator.defer(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1166,7 +1144,6 @@ fun Indicator.modify(
     selectedActions: Property<List<Action>>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: Property<Shape>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: Property<FixedSize>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1214,7 +1191,6 @@ fun Indicator.modify(
         selectedActions = selectedActions ?: properties.selectedActions,
         shape = shape ?: properties.shape,
         spaceBetweenCenters = spaceBetweenCenters ?: properties.spaceBetweenCenters,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -1294,7 +1270,6 @@ fun Indicator.evaluate(
         selectedActions = properties.selectedActions,
         shape = properties.shape,
         spaceBetweenCenters = properties.spaceBetweenCenters,
-        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -1344,7 +1319,6 @@ fun Indicator.evaluate(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1394,7 +1368,6 @@ fun Component<Indicator>.override(
     selectedActions: List<Action>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: Shape? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: FixedSize? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1443,7 +1416,6 @@ fun Component<Indicator>.override(
         selectedActions = valueOrNull(selectedActions),
         shape = valueOrNull(shape),
         spaceBetweenCenters = valueOrNull(spaceBetweenCenters),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1493,7 +1465,6 @@ fun Component<Indicator>.override(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1543,7 +1514,6 @@ fun Component<Indicator>.defer(
     selectedActions: ReferenceProperty<List<Action>>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: ReferenceProperty<Shape>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: ReferenceProperty<FixedSize>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -1592,7 +1562,6 @@ fun Component<Indicator>.defer(
         selectedActions = selectedActions,
         shape = shape,
         spaceBetweenCenters = spaceBetweenCenters,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -1673,7 +1642,6 @@ fun Component<Indicator>.evaluate(
         selectedActions = null,
         shape = null,
         spaceBetweenCenters = null,
-        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -1723,7 +1691,6 @@ fun Component<Indicator>.evaluate(
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param shape Indicator shape.
  * @param spaceBetweenCenters Spacing between indicator centers.
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1773,7 +1740,6 @@ fun Component<Indicator>.modify(
     selectedActions: Property<List<Action>>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") shape: Property<Shape>? = null,
     @DeprecatedApi("Marked as deprecated in the JSON schema") spaceBetweenCenters: Property<FixedSize>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -1822,7 +1788,6 @@ fun Component<Indicator>.modify(
         selectedActions = selectedActions,
         shape = shape,
         spaceBetweenCenters = spaceBetweenCenters,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,

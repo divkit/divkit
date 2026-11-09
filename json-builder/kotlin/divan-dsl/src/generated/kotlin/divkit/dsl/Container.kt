@@ -74,7 +74,6 @@ data class Container internal constructor(
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             separator = additive.separator ?: properties.separator,
-            timers = additive.timers ?: properties.timers,
             tooltips = additive.tooltips ?: properties.tooltips,
             transform = additive.transform ?: properties.transform,
             transformations = additive.transformations ?: properties.transformations,
@@ -274,10 +273,6 @@ data class Container internal constructor(
          */
         val separator: Property<Separator>?,
         /**
-         * List of timers.
-         */
-        val timers: Property<List<Timer>>?,
-        /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
          */
         val tooltips: Property<List<Tooltip>>?,
@@ -377,7 +372,6 @@ data class Container internal constructor(
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("separator", separator)
-            result.tryPutProperty("timers", timers)
             result.tryPutProperty("tooltips", tooltips)
             result.tryPutProperty("transform", transform)
             result.tryPutProperty("transformations", transformations)
@@ -516,7 +510,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -575,7 +568,6 @@ fun DivScope.row(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -632,7 +624,6 @@ fun DivScope.row(
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     separator = separator,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -691,7 +682,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -750,7 +740,6 @@ fun DivScope.row(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -807,7 +796,6 @@ fun DivScope.row(
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     separator = separator,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -866,7 +854,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -925,7 +912,6 @@ fun DivScope.column(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -982,7 +968,6 @@ fun DivScope.column(
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     separator = separator,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -1041,7 +1026,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1100,7 +1084,6 @@ fun DivScope.column(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1157,7 +1140,6 @@ fun DivScope.column(
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     separator = separator,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -1216,7 +1198,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1275,7 +1256,6 @@ fun DivScope.stack(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1332,7 +1312,6 @@ fun DivScope.stack(
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     separator = separator,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -1391,7 +1370,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1450,7 +1428,6 @@ fun DivScope.stack(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1507,7 +1484,6 @@ fun DivScope.stack(
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     separator = separator,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -1567,7 +1543,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1627,7 +1602,6 @@ fun DivScope.container(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1685,7 +1659,6 @@ fun DivScope.container(
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         separator = valueOrNull(separator),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -1746,7 +1719,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1806,7 +1778,6 @@ fun DivScope.containerProps(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -1863,7 +1834,6 @@ fun DivScope.containerProps(
     rowSpan = valueOrNull(rowSpan),
     selectedActions = valueOrNull(selectedActions),
     separator = valueOrNull(separator),
-    timers = valueOrNull(timers),
     tooltips = valueOrNull(tooltips),
     transform = valueOrNull(transform),
     transformations = valueOrNull(transformations),
@@ -1923,7 +1893,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -1983,7 +1952,6 @@ fun TemplateScope.containerRefs(
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     separator: ReferenceProperty<Container.Separator>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -2040,7 +2008,6 @@ fun TemplateScope.containerRefs(
     rowSpan = rowSpan,
     selectedActions = selectedActions,
     separator = separator,
-    timers = timers,
     tooltips = tooltips,
     transform = transform,
     transformations = transformations,
@@ -2100,7 +2067,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2160,7 +2126,6 @@ fun Container.override(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -2218,7 +2183,6 @@ fun Container.override(
         rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         separator = valueOrNull(separator) ?: properties.separator,
-        timers = valueOrNull(timers) ?: properties.timers,
         tooltips = valueOrNull(tooltips) ?: properties.tooltips,
         transform = valueOrNull(transform) ?: properties.transform,
         transformations = valueOrNull(transformations) ?: properties.transformations,
@@ -2279,7 +2243,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2339,7 +2302,6 @@ fun Container.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     separator: ReferenceProperty<Container.Separator>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -2397,7 +2359,6 @@ fun Container.defer(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         separator = separator ?: properties.separator,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -2458,7 +2419,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2518,7 +2478,6 @@ fun Container.modify(
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<Action>>? = null,
     separator: Property<Container.Separator>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -2576,7 +2535,6 @@ fun Container.modify(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = selectedActions ?: properties.selectedActions,
         separator = separator ?: properties.separator,
-        timers = timers ?: properties.timers,
         tooltips = tooltips ?: properties.tooltips,
         transform = transform ?: properties.transform,
         transformations = transformations ?: properties.transformations,
@@ -2672,7 +2630,6 @@ fun Container.evaluate(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectedActions = properties.selectedActions,
         separator = properties.separator,
-        timers = properties.timers,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transformations = properties.transformations,
@@ -2733,7 +2690,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2793,7 +2749,6 @@ fun Component<Container>.override(
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
     separator: Container.Separator? = null,
-    timers: List<Timer>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transformations: List<Transformation>? = null,
@@ -2852,7 +2807,6 @@ fun Component<Container>.override(
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
         separator = valueOrNull(separator),
-        timers = valueOrNull(timers),
         tooltips = valueOrNull(tooltips),
         transform = valueOrNull(transform),
         transformations = valueOrNull(transformations),
@@ -2913,7 +2867,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -2973,7 +2926,6 @@ fun Component<Container>.defer(
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     separator: ReferenceProperty<Container.Separator>? = null,
-    timers: ReferenceProperty<List<Timer>>? = null,
     tooltips: ReferenceProperty<List<Tooltip>>? = null,
     transform: ReferenceProperty<Transform>? = null,
     transformations: ReferenceProperty<List<Transformation>>? = null,
@@ -3032,7 +2984,6 @@ fun Component<Container>.defer(
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         separator = separator,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
@@ -3129,7 +3080,6 @@ fun Component<Container>.evaluate(
         rowSpan = rowSpan,
         selectedActions = null,
         separator = null,
-        timers = null,
         tooltips = null,
         transform = null,
         transformations = null,
@@ -3190,7 +3140,6 @@ On the web, support for the `aspect-ratio` CSS property is required to use this 
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Separators are centered on the cross axis and don't depend on content_alignment_horizontal and content_alignment_vertical. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param timers List of timers.
  * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
  * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
  * @param transformations Array of transformations to be applied to the element in sequence.
@@ -3250,7 +3199,6 @@ fun Component<Container>.modify(
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<Action>>? = null,
     separator: Property<Container.Separator>? = null,
-    timers: Property<List<Timer>>? = null,
     tooltips: Property<List<Tooltip>>? = null,
     transform: Property<Transform>? = null,
     transformations: Property<List<Transformation>>? = null,
@@ -3309,7 +3257,6 @@ fun Component<Container>.modify(
         rowSpan = rowSpan,
         selectedActions = selectedActions,
         separator = separator,
-        timers = timers,
         tooltips = tooltips,
         transform = transform,
         transformations = transformations,
