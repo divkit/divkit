@@ -7,6 +7,7 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.SideEffect
@@ -48,7 +49,6 @@ import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
@@ -94,6 +94,7 @@ private fun BasicText(
         truncates = lineLimits.truncates,
         gradientBrush = gradientBrush,
         fontSize = fontSize,
+        textMetrics = textMetrics,
         textStyle = textStyle,
     )
     if (data.hasActionLinks()) {
@@ -130,12 +131,13 @@ private fun rememberExactTouchTargetViewConfiguration(): ViewConfiguration {
     }
 }
 
-private fun DivText.hasActionLinks(): Boolean {
-    val rangesHaveActions = rangeBuilder?.prototypes?.any { it.range.actions != null } ?: ranges.hasActions()
-    return rangesHaveActions || ellipsis?.actions != null || ellipsis?.ranges.hasActions()
-}
+private fun DivText.hasActionLinks(): Boolean =
+    hasRangeActions(ranges, rangeBuilder) || ellipsis?.hasActionLinks() == true
 
-private fun List<DivText.Range>?.hasActions(): Boolean = this?.any { it.actions != null } == true
+private fun DivText.Ellipsis.hasActionLinks(): Boolean = actions != null || hasRangeActions(ranges, rangeBuilder)
+
+private fun hasRangeActions(ranges: List<DivText.Range>?, rangeBuilder: DivText.RangeBuilder?): Boolean =
+    rangeBuilder?.prototypes?.any { it.range.actions != null } ?: ranges?.any { it.actions != null } ?: false
 
 @Composable
 private fun RenderTextContent(
@@ -145,13 +147,14 @@ private fun RenderTextContent(
     baseTextStyle: TextStyle,
     inlineImages: List<InlineImageData>,
     gradientBrush: Brush?,
-    customEllipsis: AnnotatedText?,
+    ellipsis: CustomEllipsis?,
     lineLimits: TextLineLimits,
     focusState: State<Boolean>?,
     modifier: Modifier,
     alignment: Alignment,
     selectable: Boolean,
 ) {
+    val customEllipsis = ellipsis?.text
     val truncates = lineLimits.truncates
     val truncate = data.observeTruncate(truncates, customEllipsis)
     val truncatePolicy = data.observeTruncatePolicy(truncates, customEllipsis, truncate)
@@ -172,7 +175,7 @@ private fun RenderTextContent(
     )
     val textStyle = data.observeFocusedTextStyle(baseTextStyle, focusState)
     val needsMeasuredText = customEllipsis != null || needsMeasuredEndEllipsis
-    val inlineContent = rememberInlineContent(inlineImages)
+    val inlineContent = rememberInlineContent(inlineImages + ellipsis?.images.orEmpty())
     val sourceText = annotatedText ?: AnnotatedText(AnnotatedString(text), emptyList())
     val textModifier = Modifier.textHeightLimit(
         limits = if (needsMeasuredText) lineLimits.copy(minHiddenLines = 0) else lineLimits,
@@ -576,26 +579,38 @@ private fun DivText.observeCustomEllipsis(
     truncates: Boolean,
     gradientBrush: Brush?,
     fontSize: Int,
+    textMetrics: ObservedTextMetrics,
     textStyle: TextStyle,
-): AnnotatedText? {
+): CustomEllipsis? {
     val ellipsis = ellipsis?.takeIf { truncates }
     val ellipsisText = ellipsis?.text?.observedValue()
     return if (ellipsis != null && ellipsisText != null &&
         (!ellipsis.isPlain() || ellipsisText != DEFAULT_ELLIPSIS)
     ) {
-        ellipsis.reportUnsupportedProperties()
-        buildAnnotatedText(
+        val images = observeInlineImages(
+            ellipsisText, fontSize, textMetrics, textStyle,
+            images = ellipsis.images, imageBuilder = ellipsis.imageBuilder,
+        ).map { it.copy(id = "ellipsis-${it.id}") }
+        val text = buildAnnotatedText(
             text = ellipsisText,
-            ranges = ellipsis.ranges.rememberScopedRanges(),
+            ranges = observeSourceRanges(ranges = ellipsis.ranges, rangeBuilder = ellipsis.rangeBuilder),
             gradientBrush = gradientBrush,
             baseFontSize = fontSize,
             textStyle = textStyle,
-            actions = ellipsis.actions
+            actions = ellipsis.actions,
+            inlineImages = images,
         ) ?: AnnotatedText(AnnotatedString(ellipsisText), emptyList())
+        CustomEllipsis(text, images)
     } else {
         null
     }
 }
+
+@Immutable
+private data class CustomEllipsis(
+    val text: AnnotatedText,
+    val images: List<InlineImageData>,
+)
 
 // Keep the untruncated width for containers using width(IntrinsicSize.Max). Intrinsic heights
 // come from the rendered text, including any larger font in its custom ellipsis.
@@ -737,19 +752,6 @@ private fun rememberActionsLink(
 
 private fun DivText.Ellipsis.isPlain(): Boolean {
     return ranges == null && rangeBuilder == null && images == null && imageBuilder == null && actions == null
-}
-
-@Composable
-private fun DivText.Ellipsis.reportUnsupportedProperties() {
-    if (images != null) {
-        reportError("Text ellipsis property not supported: images")
-    }
-    if (imageBuilder != null) {
-        reportError("Text ellipsis property not supported: image_builder")
-    }
-    if (rangeBuilder != null) {
-        reportError("Text ellipsis property not supported: range_builder")
-    }
 }
 
 internal fun AnnotatedString.replacingChars(chars: Map<Int, Char>): AnnotatedString {

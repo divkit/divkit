@@ -111,10 +111,6 @@ val composeRoborazziIgnoredScreenshotCases = setOf(
     // match_parent min_size next to wrap_content constrained siblings not supported, DIVKIT-10714
     "div-container/match-parent-min-size-with-constrained-siblings.json",
 
-    // div-text ellipsis images not supported
-    "div-text/ellipsis-with-image.json",
-    "div-text/ellipsis_builder.json",
-
     // markdown extension not supported
     "div-text/markdown-extension.json",
 

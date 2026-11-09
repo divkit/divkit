@@ -9,6 +9,7 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.text.TextLayoutResult
@@ -20,6 +21,7 @@ import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.animatedTextGradient
+import com.yandex.div.test.data.arrayExpression
 import com.yandex.div.test.data.booleanExpression
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
@@ -27,17 +29,22 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.expression
 import com.yandex.div.test.data.fixed
 import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.matchParent
 import com.yandex.div.test.data.separator
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.textImage
 import com.yandex.div.test.data.textRange
+import com.yandex.div.test.data.uriExpression
 import com.yandex.div.test.data.wrapContent
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextRangeBackground
+import org.json.JSONArray
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
@@ -55,11 +62,10 @@ class DivTextEllipsisTest {
     @get:Rule
     val rule = createComposeRule()
 
-    private val reporter = TestReporter()
     private val variableController = DivVariableController()
 
     private val configuration = DivConfiguration(
-        reporter = reporter,
+        reporter = TestReporter(),
         variableController = variableController
     )
 
@@ -804,26 +810,170 @@ class DivTextEllipsisTest {
     }
 
     @Test
-    fun `unsupported ellipsis properties are reported`() {
-        reporter.failOnError = false
-
+    fun `ellipsis image is placed in the custom ellipsis`() {
         setContent(
-            text(
-                id = "text",
-                text = constant("A very long text that does not fit into a single line"),
-                maxLines = 1,
-                ellipsis = DivText.Ellipsis(
+            longText(
+                DivText.Ellipsis(
                     text = constant("… more"),
-                    images = listOf(textImage(url = "https://divkit.tech/image.png"))
-                ),
-                width = fixed(100)
+                    images = listOf(textImage(url = "https://divkit.tech/image.png", start = 1)),
+                )
             )
         )
 
-        assertEquals(listOf("Text ellipsis property not supported: images"), reporter.errors)
+        rule.onNodeWithTag("text").assert(textEndsWith("…\u2060\u2060 more"))
+    }
+
+    @Test
+    fun `ellipsis image does not replace the text image with the same index`() {
+        setContent(
+            longText(
+                ellipsis = DivText.Ellipsis(
+                    text = constant("… more"),
+                    images = listOf(textImage(url = "https://divkit.tech/ellipsis.png", description = "Ellipsis")),
+                ),
+                images = listOf(textImage(url = "https://divkit.tech/text.png", description = "Text")),
+            )
+        )
+
+        rule.onNodeWithContentDescription("Text", useUnmergedTree = true).assertExists()
+        rule.onNodeWithContentDescription("Ellipsis", useUnmergedTree = true).assertExists()
+    }
+
+    @Test
+    fun `ellipsis image builder builds images from data`() {
+        setContent(
+            longText(
+                DivText.Ellipsis(
+                    text = constant("… more"),
+                    imageBuilder = imageBuilder(constant(jsonArray(jsonObject("pos" to 1)))),
+                )
+            )
+        )
+
+        rule.onNodeWithTag("text").assert(textEndsWith("…\u2060\u2060 more"))
+    }
+
+    @Test
+    fun `ellipsis image builder replaces static ellipsis images`() {
+        setContent(
+            longText(
+                DivText.Ellipsis(
+                    text = constant("… more"),
+                    imageBuilder = imageBuilder(constant(jsonArray(jsonObject("pos" to 1)))),
+                    images = listOf(textImage(url = "https://divkit.tech/image.png", start = 6)),
+                )
+            )
+        )
+
+        rule.onNodeWithTag("text").assert(textEndsWith("…\u2060\u2060 more"))
+    }
+
+    @Test
+    fun `ellipsis images follow builder data`() {
+        val source = Variable.ArrayVariable("source", jsonArray(jsonObject("pos" to 1)))
+        variableController.declare(source)
+        setContent(
+            longText(
+                DivText.Ellipsis(
+                    text = constant("… more"),
+                    imageBuilder = imageBuilder(arrayExpression("@{source}")),
+                )
+            )
+        )
+
+        source.set(jsonArray(jsonObject("pos" to 6)))
+
+        rule.onNodeWithTag("text").assert(textEndsWith("… more\u2060\u2060"))
+    }
+
+    @Test
+    fun `ellipsis range builder builds ranges from data`() {
+        setContent(
+            longText(
+                DivText.Ellipsis(
+                    text = constant("… more"),
+                    rangeBuilder = rangeBuilder(constant(jsonArray(jsonObject("start" to 2, "end" to 6)))),
+                )
+            )
+        )
+
+        assertEquals(listOf("more"), styledTexts())
+    }
+
+    @Test
+    fun `ellipsis range builder replaces static ellipsis ranges`() {
+        setContent(
+            longText(
+                DivText.Ellipsis(
+                    text = constant("… more"),
+                    rangeBuilder = rangeBuilder(constant(jsonArray(jsonObject("start" to 2, "end" to 6)))),
+                    ranges = listOf(textRange(start = 0, end = 1, fontSize = 20)),
+                )
+            )
+        )
+
+        assertEquals(listOf("more"), styledTexts())
+    }
+
+    @Test
+    fun `ellipsis ranges follow builder data`() {
+        val source = Variable.ArrayVariable("source", jsonArray(jsonObject("start" to 2, "end" to 6)))
+        variableController.declare(source)
+        setContent(
+            longText(
+                DivText.Ellipsis(
+                    text = constant("… more"),
+                    rangeBuilder = rangeBuilder(arrayExpression("@{source}")),
+                )
+            )
+        )
+
+        source.set(jsonArray(jsonObject("start" to 2, "end" to 4)))
+
+        assertEquals(listOf("mo"), styledTexts())
     }
 
     private fun ellipsis(text: Expression<String>) = DivText.Ellipsis(text = text)
+
+    private fun longText(ellipsis: DivText.Ellipsis, images: List<DivText.Image>? = null) = text(
+        id = "text",
+        text = constant("A very long text that does not fit into a single line"),
+        images = images,
+        maxLines = 1,
+        ellipsis = ellipsis,
+        width = fixed(100),
+    )
+
+    private fun imageBuilder(data: Expression<JSONArray>) = DivText.ImageBuilder(
+        data = data,
+        prototypes = listOf(
+            DivText.ImageBuilder.Prototype(
+                image = DivText.Image(
+                    start = intExpression("@{it.getInteger('pos')}"),
+                    url = uriExpression("https://divkit.tech/image.png"),
+                ),
+            )
+        ),
+    )
+
+    private fun rangeBuilder(data: Expression<JSONArray>) = DivText.RangeBuilder(
+        data = data,
+        prototypes = listOf(
+            DivText.RangeBuilder.Prototype(
+                range = DivText.Range(
+                    end = intExpression("@{it.getInteger('end')}"),
+                    fontWeight = constant(DivFontWeight.BOLD),
+                    start = intExpression("@{it.getInteger('start')}"),
+                ),
+            )
+        ),
+    )
+
+    private fun styledTexts(): List<String> {
+        rule.waitForIdle()
+        val text = rule.onNodeWithTag("text").fetchSemanticsNode().config[SemanticsProperties.Text].single()
+        return text.spanStyles.map { text.text.substring(it.start, it.end) }
+    }
 
     private fun intrinsicWidthContainer(id: String, text: Div) = container(
         id = id,

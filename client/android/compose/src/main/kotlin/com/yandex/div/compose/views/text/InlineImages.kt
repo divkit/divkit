@@ -73,15 +73,21 @@ internal data class InlineImageData(
     val accessibilityRole: Role?,
 )
 
+/**
+ * The inline images placed in [text]: the ones [imageBuilder] builds, or the static [images] otherwise.
+ * Both default to the ones of this text; its custom ellipsis passes its own.
+ */
 @Composable
 internal fun DivText.observeInlineImages(
     text: String,
     baseFontSize: Int,
     textMetrics: ObservedTextMetrics,
     textStyle: TextStyle,
+    images: List<DivText.Image>? = this.images,
+    imageBuilder: DivText.ImageBuilder? = this.imageBuilder,
 ): List<InlineImageData> {
-    val images = observeSourceImages() ?: return emptyList()
-    val positionedImages = images.mapIndexedNotNull { index, (image, component) ->
+    val sourceImages = observeSourceImages(images, imageBuilder) ?: return emptyList()
+    val positionedImages = sourceImages.mapIndexedNotNull { index, (image, component) ->
         val start = image.start.observedValue(component = component)
         if (start > text.length) {
             return@mapIndexedNotNull null
@@ -179,14 +185,17 @@ internal fun DivText.observeInlineImages(
 }
 
 /**
- * The images of the text with the scope each one is resolved in: the ones its `image_builder`
- * builds, or the static `images` otherwise.
+ * The images with the scope each one is resolved in: the ones [imageBuilder] builds, or the static
+ * [images] otherwise.
  */
 @Composable
-private fun DivText.observeSourceImages(): List<ScopedImage>? {
+private fun observeSourceImages(
+    images: List<DivText.Image>?,
+    imageBuilder: DivText.ImageBuilder?,
+): List<ScopedImage>? {
     val component = LocalComponent.current
     imageBuilder?.let { return it.observeBuiltImages(component) }
-    val images = images ?: return null
+    images ?: return null
     return remember(images, component) { images.map { ScopedImage(it, component) } }
 }
 

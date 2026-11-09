@@ -17,10 +17,14 @@ internal data class ScopedRange(
 )
 
 /**
- * The ranges of the text: the ones its `range_builder` builds, or the static `ranges` otherwise.
+ * The ranges of the text: the ones [rangeBuilder] builds, or the static [ranges] otherwise. Both default
+ * to the ones of this text; its custom ellipsis passes its own.
  */
 @Composable
-internal fun DivText.observeSourceRanges(): List<ScopedRange> {
+internal fun DivText.observeSourceRanges(
+    ranges: List<DivText.Range>? = this.ranges,
+    rangeBuilder: DivText.RangeBuilder? = this.rangeBuilder,
+): List<ScopedRange> {
     val component = LocalComponent.current
     rangeBuilder?.let { return it.observeBuiltRanges(component) }
     return ranges.rememberScopedRanges()

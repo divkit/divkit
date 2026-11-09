@@ -13,15 +13,21 @@ import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
 import com.yandex.div.compose.setContent
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.fixed
+import com.yandex.div.test.data.intExpression
+import com.yandex.div.test.data.jsonArray
+import com.yandex.div.test.data.jsonObject
 import com.yandex.div.test.data.text
 import com.yandex.div.test.data.textRange
+import com.yandex.div.test.data.uriExpression
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivText
+import org.json.JSONArray
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.GraphicsMode
@@ -335,6 +341,61 @@ class DivTextActionsTest {
 
         assertEquals(actionData(url = "test://ellipsis_range"), actionHandler.handledAction)
     }
+
+    @Test
+    fun `tap on a built ellipsis range triggers its actions with its data element`() {
+        setContent(
+            truncatedText(
+                ellipsis = DivText.Ellipsis(
+                    rangeBuilder = rangeBuilder(
+                        data = constant(jsonArray(jsonObject("start" to 2, "end" to 6, "id" to "more"))),
+                        actions = listOf(action(url = uriExpression("test://@{it.getString('id')}"))),
+                    ),
+                    text = constant("… more")
+                )
+            )
+        )
+
+        rule.onNodeWithTag("text").performFirstLinkClick()
+
+        assertEquals(actionData(url = "test://more"), actionHandler.handledAction)
+    }
+
+    @Test
+    fun `tap next to a built ellipsis range triggers element actions`() {
+        setContent(
+            truncatedText(
+                action = action(url = "test://element"),
+                ellipsis = DivText.Ellipsis(
+                    rangeBuilder = rangeBuilder(
+                        data = constant(jsonArray(jsonObject("start" to 5, "end" to 6))),
+                        actions = listOf(action(url = "test://range")),
+                    ),
+                    text = constant("… more")
+                )
+            )
+        )
+        val rangeBounds = requireNotNull(rule.onNodeWithTag("text").getFirstLinkBounds())
+
+        rule.onNodeWithTag("text").performTouchInput {
+            click(Offset(rangeBounds.left - 10f, rangeBounds.center.y))
+        }
+
+        assertEquals(actionData(url = "test://element"), actionHandler.handledAction)
+    }
+
+    private fun rangeBuilder(data: Expression<JSONArray>, actions: List<DivAction>) = DivText.RangeBuilder(
+        data = data,
+        prototypes = listOf(
+            DivText.RangeBuilder.Prototype(
+                range = DivText.Range(
+                    actions = actions,
+                    end = intExpression("@{it.getInteger('end')}"),
+                    start = intExpression("@{it.getInteger('start')}"),
+                ),
+            )
+        ),
+    )
 
     private fun truncatedText(
         action: DivAction? = null,
