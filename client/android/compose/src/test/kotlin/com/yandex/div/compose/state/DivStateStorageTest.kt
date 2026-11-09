@@ -2,10 +2,12 @@ package com.yandex.div.compose.state
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.core.state.DivStatePath
-import org.junit.runner.RunWith
+import com.yandex.div.test.data.action
+import com.yandex.div.test.data.state
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivStateStorageTest {
@@ -29,7 +31,7 @@ class DivStateStorageTest {
 
         storage.setActiveState(DivStatePath.parse("0/footer/compact"))
 
-        assertEquals(emptyList<String>(), received)
+        assertEquals(emptyList(), received)
     }
 
     @Test
@@ -40,7 +42,7 @@ class DivStateStorageTest {
 
         storage.setActiveState(DivStatePath.parse("0/menu/main"))
 
-        assertEquals(emptyList<String>(), received)
+        assertEquals(emptyList(), received)
     }
 
     @Test
@@ -48,6 +50,33 @@ class DivStateStorageTest {
         storage.setActiveState(DivStatePath.parse("0/menu/main"))
 
         assertEquals("main", storage.getActiveState(rootPath, "menu"))
+    }
+
+    @Test
+    fun `swipe dismissal is isolated for different composition keys`() {
+        val state = state(
+            stateId = "main",
+            swipeOutActions = listOf(action(url = "divkit-test://swipe")),
+        )
+        val first = storage.getSwipeOutState(1L, state)
+        first?.value = true
+
+        val second = storage.getSwipeOutState(2L, state)
+
+        assertEquals(false, second?.value)
+    }
+
+    @Test
+    fun `clear resets swipe dismissal`() {
+        val state = state(
+            stateId = "main",
+            swipeOutActions = listOf(action(url = "divkit-test://swipe")),
+        )
+        storage.getSwipeOutState(1L, state)?.value = true
+
+        storage.clear()
+
+        assertEquals(false, storage.getSwipeOutState(1L, state)?.value)
     }
 
     @Test

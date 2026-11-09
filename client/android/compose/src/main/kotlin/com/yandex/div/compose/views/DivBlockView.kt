@@ -13,15 +13,9 @@ import com.yandex.div.compose.actions.WithAccessibilityMenuScope
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.animation.WithAnimatorTarget
 import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.context.expressionResolver
-import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
-import com.yandex.div.compose.extensions.DivExtensionEnvironment
-import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.utils.observeInsets
-import com.yandex.div.compose.utils.reportError
 import com.yandex.div.compose.views.container.DivContainerView
 import com.yandex.div.compose.views.gallery.DivGalleryView
 import com.yandex.div.compose.views.grid.DivGridView
@@ -40,8 +34,6 @@ import com.yandex.div.compose.views.text.DivTextView
 import com.yandex.div.compose.views.transition.WithStateChangeTransition
 import com.yandex.div.compose.views.video.DivVideoView
 import com.yandex.div2.Div
-import com.yandex.div2.DivBase
-import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVisibility
 
 /**
@@ -111,8 +103,7 @@ internal fun VisibleDivBlockView(
     )
     WithActionMenu(actions, modifier, menuOffset) { contentModifier ->
         WithStateChangeTransition(data, visibility) { stateChangeTransition ->
-            val extensions = extensions(divBase)
-            val decoratedModifier = contentModifier.apply(
+            val decoration = Modifier.apply(
                 data,
                 actions = actions,
                 margins = margins,
@@ -128,76 +119,16 @@ internal fun VisibleDivBlockView(
                 matchParentMaxHeight = matchParentMaxHeight,
                 blockTapPropagation = blockTapPropagation,
             )
-            if (extensions.isEmpty()) {
-                BaseView(data = data, modifier = decoratedModifier, focusState = focusState)
+            val decorator = DivContentDecorator(data, decoration)
+            if (data is Div.State) {
+                DivStateView(contentModifier, data.value, decorator)
             } else {
-                BaseViewWithExtensions(
-                    data = data,
-                    extensions = extensions,
-                    modifier = decoratedModifier,
-                    focusState = focusState,
-                )
+                decorator.Content(contentModifier) { modifier ->
+                    BaseView(data, modifier, focusState)
+                }
             }
         }
     }
-}
-
-@Composable
-private fun extensions(div: DivBase): List<Pair<DivExtension, DivExtensionHandler?>> {
-    val component = divContext.component
-    val extensions = div.extensions
-        ?.filter { it.isEnabled.observedValue() }
-        ?.map { it to component.extensionHandlers[it.id] }
-        .orEmpty()
-    val wildcardExtensions = component.wildcardExtensions
-    return if (wildcardExtensions.isEmpty()) extensions else wildcardExtensions + extensions
-}
-
-@Composable
-private fun BaseViewWithExtensions(
-    data: Div,
-    extensions: List<Pair<DivExtension, DivExtensionHandler?>>,
-    modifier: Modifier,
-    focusState: State<Boolean>?,
-) {
-    val first = extensions.firstOrNull()
-    if (first == null) {
-        BaseView(data = data, modifier = modifier, focusState = focusState)
-        return
-    }
-
-    val (extension, extensionHandler) = first
-    if (extensionHandler == null) {
-        reportError("No handler for extension: ${extension.id}")
-        BaseViewWithExtensions(
-            data = data,
-            extensions = extensions.drop(1),
-            modifier = modifier,
-            focusState = focusState,
-        )
-        return
-    }
-    val storedValuesStorage = LocalDivViewContext.current.component.storedValuesStorage
-
-    extensionHandler.Content(
-        modifier = modifier,
-        environment = DivExtensionEnvironment(
-            data = data,
-            extension = extension,
-            expressionResolver = expressionResolver,
-            reporter = LocalComponent.current.reporter,
-            animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState(),
-            storedValuesStorage = storedValuesStorage,
-        ),
-        content = { modifier ->
-            BaseViewWithExtensions(
-                data = data,
-                extensions = extensions.drop(1),
-                modifier = modifier,
-                focusState = focusState,
-            )
-        }
-    )
 }
 
 @Composable
@@ -220,7 +151,7 @@ private fun BaseView(
         is Div.Select -> DivSelectView(modifier, data.value)
         is Div.Separator -> DivSeparatorView(modifier.applyPaddings(data), data.value)
         is Div.Slider -> DivSliderView(modifier.applyPaddings(data), data.value)
-        is Div.State -> DivStateView(modifier, data.value)
+        is Div.State -> DivStateView(modifier, data.value, DivContentDecorator(data))
         is Div.Switch -> DivSwitchView(modifier, data.value)
         is Div.Tabs -> DivTabsView(modifier, data.value)
         is Div.Text -> DivTextView(modifier.applyPaddings(data), data.value, focusState)

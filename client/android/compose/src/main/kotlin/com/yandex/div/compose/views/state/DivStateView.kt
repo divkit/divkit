@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,82 +17,118 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.state.LocalDivStatePath
 import com.yandex.div.compose.state.findState
 import com.yandex.div.compose.utils.applyIf
-import com.yandex.div.compose.utils.combineAlignment
+import com.yandex.div.compose.utils.isWrapContent
 import com.yandex.div.compose.utils.reportError
-import com.yandex.div.compose.utils.toHorizontalAlignment
-import com.yandex.div.compose.utils.toVerticalAlignment
+import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.variables.mutableStateFromStringVariable
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.compose.views.DivContentDecorator
 import com.yandex.div.compose.views.modifiers.clipToBounds
 import com.yandex.div.compose.views.modifiers.padding
 import com.yandex.div.compose.views.transition.LocalStateChangeTransitionContext
 import com.yandex.div.compose.views.transition.containsStateChangeTransitions
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivState
-import com.yandex.div2.DivSize
 import com.yandex.div2.DivTransitionSelector
 
 @Composable
 internal fun DivStateView(
     modifier: Modifier,
-    data: DivState
+    data: DivState,
+    decorator: DivContentDecorator,
 ) {
-    val transitionContext = LocalStateChangeTransitionContext.current
-    val parentContentActive = transitionContext.contentActive
-    val modifier = if (data.clipToBounds.observedValue()) {
-        modifier.clipToBounds(
-            data = data,
-            hasWildcardExtensions = divContext.component.wildcardExtensions.isNotEmpty(),
+    ResolveDivState(data) { parentPath, divId, activeState ->
+        val viewContext = LocalDivViewContext.current
+        val swipeOutState = viewContext.stateStorage.getSwipeOutState(
+            compositionKey = viewContext.compositionKeyStorage.get(data),
+            state = activeState,
+        )
+        if (swipeOutState?.value == true) {
+            return@ResolveDivState
+        }
+
+        val transitionContentState = remember { StateChangeContentState(activeState) }
+
+        SwipeOutBox(
+            state = activeState,
+            modifier = modifier,
+            onSwipeOut = { swipeOutState?.value = true },
+        ) { parentModifier ->
+            decorator.Content(parentModifier) { contentModifier ->
+                StateContent(
+                    contentModifier,
+                    data,
+                    parentPath,
+                    divId,
+                    activeState,
+                    transitionContentState,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun StateContent(
+    modifier: Modifier,
+    data: DivState,
+    parentPath: DivStatePath,
+    divId: String,
+    activeState: DivState.State,
+    transitionContentState: StateChangeContentState,
+) {
+    val contentModifier = modifier
+        .applyIf(data.clipToBounds.observedValue()) {
+            clipToBounds(
+                data = data,
+                hasWildcardExtensions = divContext.component.wildcardExtensions.isNotEmpty(),
+            )
+        }
+        .padding(data.paddings)
+    val parentContentActive = LocalStateChangeTransitionContext.current.contentActive
+    val activeStateData = activeState.div?.value()
+    val contentAlignment = toAlignment(
+        activeStateData?.alignmentHorizontal.observedValue(DivAlignmentHorizontal.START),
+        activeStateData?.alignmentVertical.observedValue(DivAlignmentVertical.TOP),
+    )
+    val transitionsEnabled = data.transitionAnimationSelector.observedValue().allowsStateChange()
+    val animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState()
+    val committedState = transitionContentState.committedState
+    val transitionsAvailable = transitionsEnabled && animationsEnabled
+    val (activeStateHasTransitions, committedStateHasTransitions) = rememberTransitionPresence(
+        transitionsAvailable,
+        activeState = activeState,
+        committedState = committedState,
+    )
+    val useTransitionContent = transitionContentState.shouldUseTransitionContent(
+        activeState = activeState,
+        transitionsAvailable = transitionsAvailable,
+        activeStateHasTransitions = activeStateHasTransitions,
+        committedStateHasTransitions = committedStateHasTransitions,
+    )
+
+    if (useTransitionContent) {
+        val transitionModifier = Modifier
+            .applyIf(!data.width.isWrapContent) { fillMaxWidth() }
+            .applyIf(!data.height.isWrapContent) { fillMaxHeight() }
+        TransitioningStateContent(
+            modifier = contentModifier,
+            transitionModifier = transitionModifier,
+            initialState = committedState,
+            activeState = activeState,
+            parentPath = parentPath,
+            divId = divId,
+            parentContentActive = parentContentActive,
+            contentAlignment = contentAlignment,
+            onTransitionFinished = transitionContentState::onTransitionFinished,
         )
     } else {
-        modifier
+        RegularStateContent(contentModifier, contentAlignment, parentPath, divId, activeState)
     }
-
-    ResolveDivState(data) { parentPath, divId, activeState ->
-        val activeDivData = activeState.div?.value()
-        val contentAlignment = combineAlignment(
-            activeDivData?.alignmentHorizontal?.observedValue()?.toHorizontalAlignment() ?: Alignment.Start,
-            activeDivData?.alignmentVertical?.observedValue()?.toVerticalAlignment() ?: Alignment.Top,
-        )
-        val contentModifier = modifier.padding(data.paddings)
-        val transitionsEnabled = data.transitionAnimationSelector.observedValue().allowsStateChange()
-        val animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState()
-        val transitionContentState = remember { StateChangeContentState(activeState) }
-        val committedState = transitionContentState.committedState
-        val transitionsAvailable = transitionsEnabled && animationsEnabled
-        val (activeStateHasTransitions, committedStateHasTransitions) = rememberTransitionPresence(
-            transitionsAvailable,
-            activeState = activeState,
-            committedState = committedState,
-        )
-        val useTransitionContent = transitionContentState.shouldUseTransitionContent(
-            activeState = activeState,
-            transitionsAvailable = transitionsAvailable,
-            activeStateHasTransitions = activeStateHasTransitions,
-            committedStateHasTransitions = committedStateHasTransitions,
-        )
-
-        if (useTransitionContent) {
-            val transitionModifier = Modifier
-                .applyIf(data.width !is DivSize.WrapContent) { fillMaxWidth() }
-                .applyIf(data.height !is DivSize.WrapContent) { fillMaxHeight() }
-            TransitioningStateContent(
-                modifier = contentModifier,
-                transitionModifier = transitionModifier,
-                initialState = committedState,
-                activeState = activeState,
-                parentPath = parentPath,
-                divId = divId,
-                parentContentActive = parentContentActive,
-                contentAlignment = contentAlignment,
-                onTransitionFinished = transitionContentState::onTransitionFinished,
-            )
-        } else {
-            RegularStateContent(contentModifier, contentAlignment, parentPath, divId, activeState)
-        }
-        SideEffect {
-            transitionContentState.updateAfterComposition(activeState, useTransitionContent)
-        }
+    SideEffect {
+        transitionContentState.updateAfterComposition(activeState, useTransitionContent)
     }
 }
 

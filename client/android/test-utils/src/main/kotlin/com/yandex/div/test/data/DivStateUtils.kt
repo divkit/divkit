@@ -2,6 +2,7 @@ package com.yandex.div.test.data
 
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
+import com.yandex.div2.DivAction
 import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivSize
@@ -39,9 +40,11 @@ fun state(
 fun state(
     div: Div? = null,
     stateId: String,
+    swipeOutActions: List<DivAction>? = null,
 ): DivState.State {
     return DivState.State(
         div = div,
         stateId = stateId,
+        swipeOutActions = swipeOutActions,
     )
 }
