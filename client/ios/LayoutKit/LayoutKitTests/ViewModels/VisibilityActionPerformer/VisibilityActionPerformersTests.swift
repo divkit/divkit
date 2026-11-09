@@ -7,33 +7,7 @@ final class VisibilityActionPerformerTests: XCTestCase {
   private let view = TestView()
   private let scheduler = TestTimerScheduler()
 
-  private lazy var actionPerformers: VisibilityActionPerformers! = {
-    let actionView = UIView()
-    view.addSubview(actionView)
-    return VisibilityActionPerformers(
-      visibilityParams: VisibilityParams(
-        actions: [
-          VisibilityAction(
-            uiAction: UserInterfaceAction(payload: .empty, path: "test"),
-            requiredDuration: requiredDuration,
-            targetPercentage: 50,
-            limiter: ActionLimiter(
-              canSend: { [unowned self] in self.actionCount < maxActionCount },
-              markSent: { [unowned self] in self.actionCount += 1 }
-            ),
-            actionType: actionType
-          ),
-        ],
-        isVisible: isVisible,
-        lastVisibleArea: Property(
-          getter: { self.lastVisibleArea },
-          setter: { self.lastVisibleArea = $0 }
-        ),
-        scheduler: scheduler
-      ),
-      actionSender: actionView
-    )
-  }()
+  private lazy var actionPerformers: VisibilityActionPerformers! = makeActionPerformers()
 
   private var actionType = VisibilityActionType.appear
   private var isVisible = true
@@ -41,6 +15,7 @@ final class VisibilityActionPerformerTests: XCTestCase {
   private var maxActionCount = 100
   private var actionCount = 0
   private var requiredDuration = TimeInterval(10)
+  private var pendingTimer: PendingVisibilityTimer?
 
   func test_onVisibleBoundsChanged_UpdatesLastVisibleArea_PartiallyVisible() {
     actionPerformers.onVisibleBoundsChanged(to: rect(100, 50), bounds: rect(100, 100))
@@ -205,6 +180,114 @@ final class VisibilityActionPerformerTests: XCTestCase {
     actionPerformers = nil
 
     XCTAssertFalse(scheduler.timers.first!.isValid)
+  }
+
+  func test_ResumesPendingTimer_WhenRecreated() {
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 60), bounds: rect(100, 100))
+    scheduler.timers.first?.fireDate = Date(timeIntervalSinceNow: 5)
+
+    actionPerformers = makeActionPerformers()
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 60), bounds: rect(100, 100))
+
+    XCTAssertEqual(scheduler.timers.count, 2)
+    XCTAssertEqual(scheduler.timers.last?.timeInterval ?? 0, 5, accuracy: 1)
+
+    runTimers()
+
+    XCTAssertEqual(view.eventCount, 1)
+  }
+
+  func test_RestartsTimer_WhenPausedLongAgo() {
+    lastVisibleArea = 60
+    pendingTimer = PendingVisibilityTimer(
+      timer: TestTimer(timeInterval: 10, block: {}, repeating: false),
+      pause: (Date(timeIntervalSinceNow: -1), 5)
+    )
+
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 60), bounds: rect(100, 100))
+
+    XCTAssertEqual(scheduler.timers.map(\.timeInterval), [10])
+  }
+
+  func test_DoesNotRestartTimer_WhenRecreatedAfterAction() {
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 60), bounds: rect(100, 100))
+    runTimers()
+
+    actionPerformers = makeActionPerformers()
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 60), bounds: rect(100, 100))
+    runTimers()
+
+    XCTAssertEqual(scheduler.timers.count, 1)
+    XCTAssertEqual(view.eventCount, 1)
+  }
+
+  func test_DoesNotResumeTimer_WhenRecreatedAfterDisappearing() {
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 60), bounds: rect(100, 100))
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 0), bounds: rect(100, 100))
+
+    actionPerformers = makeActionPerformers()
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 0), bounds: rect(100, 100))
+    runTimers()
+
+    XCTAssertEqual(scheduler.timers.count, 1)
+    XCTAssertEqual(view.eventCount, 0)
+  }
+
+  func test_DoesNotResumeTimer_WhenPreviousPerformersAreAlive() {
+    let previousPerformers = actionPerformers!
+    previousPerformers.onVisibleBoundsChanged(to: rect(100, 60), bounds: rect(100, 100))
+
+    actionPerformers = makeActionPerformers()
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 60), bounds: rect(100, 100))
+    withExtendedLifetime(previousPerformers) { runTimers() }
+
+    XCTAssertEqual(scheduler.timers.count, 1)
+    XCTAssertEqual(view.eventCount, 1)
+  }
+
+  func test_ResumesPendingDisappearTimer_WhenRecreated() {
+    actionType = .disappear
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 100), bounds: rect(100, 100))
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 0), bounds: rect(100, 100))
+
+    actionPerformers = makeActionPerformers()
+    actionPerformers.onVisibleBoundsChanged(to: rect(100, 0), bounds: rect(100, 100))
+    runTimers()
+
+    XCTAssertEqual(scheduler.timers.count, 2)
+    XCTAssertEqual(view.eventCount, 1)
+  }
+
+  private func makeActionPerformers() -> VisibilityActionPerformers {
+    let actionView = UIView()
+    view.addSubview(actionView)
+    return VisibilityActionPerformers(
+      visibilityParams: VisibilityParams(
+        actions: [
+          VisibilityAction(
+            uiAction: UserInterfaceAction(payload: .empty, path: "test"),
+            requiredDuration: requiredDuration,
+            targetPercentage: 50,
+            limiter: ActionLimiter(
+              canSend: { [unowned self] in self.actionCount < maxActionCount },
+              markSent: { [unowned self] in self.actionCount += 1 }
+            ),
+            actionType: actionType,
+            pendingTimer: Property(
+              getter: { self.pendingTimer },
+              setter: { self.pendingTimer = $0 }
+            )
+          ),
+        ],
+        isVisible: isVisible,
+        lastVisibleArea: Property(
+          getter: { self.lastVisibleArea },
+          setter: { self.lastVisibleArea = $0 }
+        ),
+        scheduler: scheduler
+      ),
+      actionSender: actionView
+    )
   }
 
   private func runTimers() {

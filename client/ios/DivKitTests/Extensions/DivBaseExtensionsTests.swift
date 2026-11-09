@@ -503,6 +503,36 @@ final class DivBaseExtensionsTests: XCTestCase {
   }
 
   @MainActor
+  func test_WhenBlockViewIsRecreated_ResumesPendingVisibilityAction() async {
+    let context = DivBlockModelingContext(scheduler: timer)
+    let div = divText(
+      text: "text",
+      visibilityActions: [
+        DivVisibilityAction(
+          logId: .value("show"),
+          visibilityDuration: .value(1000)
+        ),
+      ]
+    )
+    let performer = UIActionEventPerformerMock()
+
+    var view: BlockView? = await showBlockView(makeBlock(div, context: context), in: performer)
+    timer.timers.first?.fireDate = Date(timeIntervalSinceNow: 5)
+    view?.removeFromSuperview()
+    view = nil
+    await skipMainRunLoopCycles(1)
+
+    _ = await showBlockView(makeBlock(div, context: context), in: performer)
+
+    XCTAssertEqual(timer.timers.count, 2)
+    XCTAssertEqual(timer.timers.last?.timeInterval ?? 0, 5, accuracy: 1)
+
+    timer.timers.filter(\.isValid).forEach { $0.fire() }
+
+    XCTAssertEqual(performer.callCount, 1)
+  }
+
+  @MainActor
   func test_WhenBlockHasVisibilityAndDisappearAction_DoNotShareVisibilityCounter() async throws {
     let context = DivBlockModelingContext(scheduler: timer)
 
@@ -728,6 +758,18 @@ final class DivBaseExtensionsTests: XCTestCase {
 
     XCTAssertEqual(result, 1)
   }
+}
+
+@MainActor
+private func showBlockView(_ block: Block, in superview: UIView) async -> BlockView {
+  let rect = CGRect(origin: .zero, size: CGSize(squareDimension: 20))
+  let view = block.makeBlockView()
+  superview.addSubview(view)
+  view.frame = rect
+  view.layoutIfNeeded()
+  view.onVisibleBoundsChanged(from: rect, to: rect)
+  await skipMainRunLoopCycles(view.visibilityHierarchyDepth())
+  return view
 }
 
 private func makeBlock(

@@ -5,6 +5,7 @@ import VGSL
 final class VisibilityActionPerformers {
   private let visibilityParams: VisibilityParams
   private let actionPerformers: [VisibilityActionPerformer]
+  private var isTracking = false
 
   init(
     visibilityParams: VisibilityParams,
@@ -27,7 +28,8 @@ final class VisibilityActionPerformers {
           #endif
         },
         type: action.actionType,
-        timerScheduler: visibilityParams.scheduler
+        timerScheduler: visibilityParams.scheduler,
+        pendingTimer: action.pendingTimer
       )
     }
   }
@@ -39,10 +41,11 @@ final class VisibilityActionPerformers {
       (!visibilityParams.isVisible || bounds.isEmpty) ?
       0 : min(Int(to.area * 100 / bounds.area), 100)
 
-    guard visibleAreaPercentageAfter != visibleAreaPercentageBefore else {
+    guard visibleAreaPercentageAfter != visibleAreaPercentageBefore || !isTracking else {
       return
     }
 
+    isTracking = true
     visibilityParams.lastVisibleArea.value = visibleAreaPercentageAfter
 
     for performer in actionPerformers {

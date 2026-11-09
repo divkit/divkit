@@ -6,6 +6,7 @@ final class DivLastVisibleBoundsCache {
   private let lock = AllocatedUnfairLock()
 
   private var storage: [UIElementPath: Int] = [:]
+  private var timers: [UIElementPath: PendingVisibilityTimer] = [:]
   private var invisibleElements = Set<UIElementPath>()
 
   init() {}
@@ -19,6 +20,18 @@ final class DivLastVisibleBoundsCache {
   func updateLastVisibleArea(for path: UIElementPath, area: Int) {
     lock.withLock {
       storage[path] = area
+    }
+  }
+
+  func visibilityTimer(for path: UIElementPath) -> PendingVisibilityTimer? {
+    lock.withLock {
+      timers[path]
+    }
+  }
+
+  func updateVisibilityTimer(for path: UIElementPath, timer: PendingVisibilityTimer?) {
+    lock.withLock {
+      timers[path] = timer
     }
   }
 
@@ -46,6 +59,7 @@ final class DivLastVisibleBoundsCache {
   func reset() {
     lock.withLock {
       storage.removeAll()
+      timers.removeAll()
     }
   }
 
@@ -53,6 +67,11 @@ final class DivLastVisibleBoundsCache {
     for (path, _) in storage {
       if path.starts(with: prefix) {
         storage[path] = nil
+      }
+    }
+    for (path, _) in timers {
+      if path.starts(with: prefix) {
+        timers[path] = nil
       }
     }
   }

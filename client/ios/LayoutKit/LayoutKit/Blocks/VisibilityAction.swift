@@ -1,5 +1,6 @@
 import CoreGraphics
 import Foundation
+import VGSL
 
 public struct VisibilityAction {
   public let logId: String?
@@ -9,6 +10,7 @@ public struct VisibilityAction {
   let targetPercentage: Int
   let limiter: ActionLimiter
   let actionType: VisibilityActionType
+  let pendingTimer: Property<PendingVisibilityTimer?>
 
   public init(
     logId: String? = nil,
@@ -16,7 +18,8 @@ public struct VisibilityAction {
     requiredDuration: TimeInterval,
     targetPercentage: Int,
     limiter: ActionLimiter,
-    actionType: VisibilityActionType
+    actionType: VisibilityActionType,
+    pendingTimer: Property<PendingVisibilityTimer?> = Property()
   ) {
     self.logId = logId
     self.uiAction = uiAction
@@ -24,7 +27,13 @@ public struct VisibilityAction {
     self.targetPercentage = targetPercentage
     self.limiter = limiter
     self.actionType = actionType
+    self.pendingTimer = pendingTimer
   }
+}
+
+public struct PendingVisibilityTimer {
+  let timer: TimerType
+  let pause: (date: Date, remainingDuration: TimeInterval)?
 }
 
 extension VisibilityAction: Equatable {

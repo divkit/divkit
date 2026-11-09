@@ -3,6 +3,7 @@ import DivKitTestsSupport
 import LayoutKit
 import Testing
 import UIKit
+import VGSL
 
 @MainActor
 @Suite
@@ -246,6 +247,32 @@ struct DivViewTests {
   }
 
   @Test
+  func visibilityActions_pendingWhileGalleryReloads_performedOnce() async {
+    let reporter = ActionReporter()
+    let components = DivKitComponents(reporter: reporter)
+    let divView = DivView(divKitComponents: components)
+    divView.frame = testFrame
+    await divView.setSource(.init(kind: .json(pendingVisibilityGallery), cardId: "card"))
+    components.forceUpdate()
+    divView.appear()
+    await skipMainRunLoopCycles(divView.visibilityHierarchyDepth())
+    delay(0.15)
+
+    divView.applyPatch(
+      DivPatch(changes: [
+        DivPatch.Change(id: "placeholder", items: [galleryItem("new1"), galleryItem("new2")]),
+      ]),
+      cardId: "card"
+    )
+    components.forceUpdate()
+    divView.forceLayout()
+    await skipMainRunLoopCycles(divView.visibilityHierarchyDepth())
+    delay(0.6)
+
+    #expect(reporter.logIds.filter { $0 == "banner_show" }.count == 1)
+  }
+
+  @Test
   func tooltipAnchor_receivesTooltipOfNewData() async {
     await divView.setData(tooltipData(text: "a"))
     divView.forceLayout()
@@ -297,7 +324,7 @@ struct DivViewTests {
         "height": ["type": "fixed", "value": 100],
         "item_spacing": 0,
         "layout_mode": ["type": "percentage", "page_width": ["type": "percentage", "value": 100.0]],
-        "items": Array(repeating: item, count: 5),
+        "items": Array(repeating: item, times: 5),
       ]]]],
     ]), cardId: "scroll"))
     components.forceUpdate()
@@ -357,8 +384,18 @@ private func tooltipData(text: String) -> DivData {
   )
 }
 
-private func delay() {
-  RunLoop.current.run(until: Date().addingTimeInterval(0.01))
+private func delay(_ seconds: TimeInterval = 0.01) {
+  RunLoop.current.run(until: Date().addingTimeInterval(seconds))
+}
+
+private final class ActionReporter: DivReporter {
+  private(set) var logIds: [String] = []
+
+  func reportError(cardId _: DivCardID, error _: DivError) {}
+
+  func reportAction(cardId _: DivCardID, info: DivActionInfo) {
+    logIds.append(info.logId)
+  }
 }
 
 private final class GalleryScrollEventHost: UIView, GalleryScrollEventHandling {
@@ -372,6 +409,37 @@ private final class GalleryScrollEventHost: UIView, GalleryScrollEventHandling {
 private let testFrame = CGRect(x: 0, y: 0, width: 100, height: 100)
 private let appearPath = UIElementPath("card") + "0" + "text" + "appear" + "appear_action"
 private let disappearPath = UIElementPath("card") + "0" + "text" + "disappear" + "disappear_action"
+
+private func galleryItem(_ id: String) -> Div {
+  divText(
+    id: id,
+    text: id,
+    width: .divFixedSize(DivFixedSize(value: .value(40))),
+    height: .divFixedSize(DivFixedSize(value: .value(100)))
+  )
+}
+
+private let pendingVisibilityGallery: [String: Any] = {
+  let item: (String) -> [String: Any] = { id in
+    [
+      "type": "text", "id": id, "text": id,
+      "width": ["type": "fixed", "value": 40],
+      "height": ["type": "fixed", "value": 100],
+    ]
+  }
+  var banner = item("banner")
+  banner["visibility_actions"] = [[
+    "log_id": "banner_show", "visibility_percentage": 50,
+    "visibility_duration": 300, "log_limit": 1,
+  ]]
+  return ["card": ["log_id": "card", "states": [["state_id": 0, "div": [
+    "type": "gallery", "id": "gallery", "orientation": "horizontal",
+    "width": ["type": "match_parent"],
+    "height": ["type": "fixed", "value": 100],
+    "item_spacing": 0,
+    "items": [item("first"), banner, item("placeholder")],
+  ]]]]]
+}()
 
 private let appearTestData = divData(
   divText(

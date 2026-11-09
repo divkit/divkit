@@ -1,5 +1,6 @@
 import Foundation
 import LayoutKit
+import VGSL
 
 protocol DivVisibilityActionBase: DivActionBase {
   var actionType: VisibilityActionType { get }
@@ -62,7 +63,13 @@ extension DivVisibilityActionBase {
           context.visibilityCounter.incrementCount(for: path)
         }
       ),
-      actionType: actionType
+      actionType: actionType,
+      pendingTimer: Property(
+        getter: { context.lastVisibleBoundsCache.visibilityTimer(for: path) },
+        setter: {
+          context.lastVisibleBoundsCache.updateVisibilityTimer(for: path, timer: $0)
+        }
+      )
     )
   }
 }

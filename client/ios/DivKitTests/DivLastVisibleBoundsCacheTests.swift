@@ -1,5 +1,5 @@
 @testable @_spi(Internal) import DivKit
-import LayoutKit
+@testable import LayoutKit
 import XCTest
 
 final class DivLastVisibleBoundsCacheTests: XCTestCase {
@@ -66,5 +66,39 @@ final class DivLastVisibleBoundsCacheTests: XCTestCase {
 
     XCTAssertEqual(cache.lastVisibleArea(for: "root"), 50)
     XCTAssertEqual(cache.lastVisibleArea(for: "root" + "container"), 75)
+  }
+
+  func test_updateVisibilityTimer_PutsTimer() {
+    let timer = makeTimer()
+
+    cache.updateVisibilityTimer(for: "path", timer: timer)
+
+    XCTAssertTrue(cache.visibilityTimer(for: "path")?.timer === timer.timer)
+  }
+
+  func test_dropVisibleBounds_RemovesTimersWithGivenPrefix() {
+    let timer = makeTimer()
+    cache.updateVisibilityTimer(for: "root" + "container" + "appear", timer: timer)
+    cache.updateVisibilityTimer(for: "another_root" + "appear", timer: timer)
+
+    cache.dropVisibleBounds(prefix: "root" + "container")
+
+    XCTAssertNil(cache.visibilityTimer(for: "root" + "container" + "appear"))
+    XCTAssertTrue(cache.visibilityTimer(for: "another_root" + "appear")?.timer === timer.timer)
+  }
+
+  func test_reset_RemovesTimers() {
+    cache.updateVisibilityTimer(for: "path", timer: makeTimer())
+
+    cache.reset()
+
+    XCTAssertNil(cache.visibilityTimer(for: "path"))
+  }
+
+  private func makeTimer() -> PendingVisibilityTimer {
+    PendingVisibilityTimer(
+      timer: TestTimer(timeInterval: 1, block: {}, repeating: false),
+      pause: nil
+    )
   }
 }
