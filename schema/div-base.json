@@ -57,16 +57,6 @@
       "$ref": "div-alignment-horizontal.json",
       "$description": "translations.json#/div_base_alignment_horizontal"
     },
-    "timers": {
-      "type": "array",
-      "items": {
-        "$ref": "div-timer.json"
-      },
-      "$description": "translations.json#/div_data_timers",
-      "platforms": [
-        "web"
-      ]
-    },
     "animators": {
       "type": "array",
       "items": {
