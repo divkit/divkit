@@ -1,3 +1,113 @@
+## 33.11.0
+
+### Android Client
+* A `div-slider` thumb value outside `min_value`..`max_value` is clamped and written back to `thumb_value_variable` and `thumb_secondary_value_variable` in the Compose renderer, including when the range changes.
+* Actions that address an element by `id` in the Compose renderer report an ambiguous `id` instead of using the element registered last.
+* Added `DataObject.of` and `DataArray.of` to create dicts and arrays from maps and lists. Nested dicts and arrays are kept as is, without copying.
+* Added `DivCompose.Render.Prepare` and `DivCompose.Render.ApplyChanges` histograms to the Compose renderer: the preparation of the card context before composition and applying composition changes, including disposal of the content they replace. `DivCompose.Render.Prepare` is reported when `DivHistogramConfiguration.prepareFilter` allows it, off by default. `DivCompose.Render.Effects` now starts after the changes are applied.
+* Added `DivConfiguration.Builder.compatibilityFeatures` and `DivCompatibilityFeatures.hideImagesWithoutUrl`. When enabled, `div-image` without `image_url` and `div-gif-image` without `gif_url` are laid out as `visibility: gone` instead of showing a placeholder.
+* Added custom keyboard and D-pad focus navigation with `focus.next_focus_ids` in the Compose renderer.
+* Added focused text colors in the Compose renderer.
+* Added support for `hover_start_actions` and `hover_end_actions` in the Compose renderer.
+* Added support for gallery `scroll_to` and `scroll_by` actions, including `duration`, in the Compose renderer.
+* Added support for gallery item selection and offset scrolling via URLs in the Compose renderer.
+* Added support for number animators and animator control actions in the Android Compose renderer.
+* Added support for pager `item_count_variable` in the Compose renderer.
+* Added support for pager `scroll_to` and `scroll_by` actions, including `duration`, in the Compose renderer.
+* Added support for pager page selection via URLs (`set_current_item`, `set_next_item`, `set_previous_item`, `scroll_to_start`, `scroll_to_end`, `scroll_to_item_id`) in the Compose renderer.
+* Added support for tabs `scroll_to` and `scroll_by` actions and the tab selection URLs (`set_current_item`, `set_next_item`, `set_previous_item`, `scroll_to_start`, `scroll_to_end`, `scroll_to_item_id`) in the Compose renderer.
+* Added the `render-common` module for rendering utilities shared by the View and Compose renderers.
+* Added wildcard extension handlers that are applied to every element without declaring `extensions` in the layout: `DivConfiguration.Builder.wildcardExtension` and `wildcardExtensionHandlers` in the Compose renderer.
+* An element built by `item_builder` from a prototype without `id` keeps its own `id` in the Compose renderer.
+* Array getters now report an out of bounds error for negative indexes, matching iOS and Web.
+* Batched repeated visibility cleanup during asynchronous binding while preserving callback boundaries.
+* Fixed `div-storage` cards restored without templates and database access errors when the repository is used from several threads. A card whose templates fail to load from the database is now returned as an error and is reloaded on the next request.
+* Fixed `div-text` `line_height` of text with ranges or images in the Compose renderer: lines keep the requested height.
+* Fixed `div-text` ranges without a font family or weight resetting the text font in the Compose renderer.
+* Fixed a crash when changing image URLs in the Compose renderer.
+* Fixed action menu appearance and positioning in the Compose renderer.
+* Fixed an issue where a tooltip substrate did not cover system bars on Android.
+* Fixed asymmetric clipping of centered fixed-size items that overflow containers in the Compose renderer.
+* Fixed child alignment in `div-state` in the Compose renderer.
+* Fixed clipping of taller items after scrolling a `wrap_content` gallery.
+* Fixed escaping of strings in `toString` for dicts and arrays, matching iOS and Web.
+* Fixed inherited content alignment for overflowing fixed-size children in the Compose renderer.
+* Fixed outdated visibility transitions hiding views after a newer visible state.
+* Fixed resolving the visibility, alignment, spans, sizes and margins of `div-gallery`, `div-grid` and `div-pager` children with their own `variables` or `functions` in the Compose renderer; `variable_triggers` of such children now work while the child is scrolled out or `gone`.
+* Fixed sizing of `match_parent` items in galleries with multiple rows or columns.
+* Fixed the `div-select` popup alignment and width in the Compose renderer.
+* In the Android View renderer, `animator_start` applies the animator's end value and runs `end_actions` immediately when animations are disabled, instead of being ignored.
+* In the Android View renderer, the `focus_element` action also requests screen-reader focus when touch exploration is enabled.
+* Optimized repeated window attachment of unchanged static Div trees.
+* Prepared internal stored-values storage for Kotlin Multiplatform.
+* Reduced Compose wrapper overhead by inlining helper composables.
+* Removed JVM API from `core` module.
+* Reverted synchronous execution of zero-duration visibility and disappear actions.
+* Supported `div-text` `auto_ellipsize` property in the Compose renderer. Text with `max_lines` no longer gets a cropping marker at the container height unless `auto_ellipsize` is enabled.
+* Supported `div-text` `min_hidden_lines` property in the Compose renderer.
+* Supported `image_builder` in `div-text` in the Compose renderer.
+* Supported `item_builder` in `div-container` in the Compose renderer.
+* Supported `item_builder` in `div-gallery` in the Compose renderer.
+* Supported `line_height`, `top_offset`, `baseline_offset` and `alignment_vertical` of `div-text` ranges in the Compose renderer.
+* Supported `secondary_value_accessibility` of `div-slider` in the Compose renderer: its description names the second thumb and `mode: exclude` hides it.
+* Supported `validator.label_id` of `div-input` in the Compose renderer: while a validator fails, accessibility services announce the text of its label as the error of the input.
+* Supported fade, scale, slide, and set `transition_in` and `transition_out` for state changes in the Compose renderer.
+* Supported the `multiple` option for repeated tooltip display in the Compose renderer.
+* Supported the `set_cursor_position` action in the Compose renderer: it focuses the input with the given `id` and selects the given range of the text it shows, the formatted text of a masked input included.
+* `JsonObject` and `JsonArray` are now compared by reference: they are equal only if they wrap the same JSON object or array.
+* `accessibility.type` and `accessibility.state_description` of `div-slider` are not applied in the Compose renderer: the thumbs are announced as sliders with their values.
+* `div-evaluable` now represents dict and array values with `DataObject` and `DataArray` classes. Dict and array values passed to the evaluator through `VariableProvider`, `StoredValueProvider` or custom functions must now be `DataObject` and `DataArray`; `JSONObject` and `JSONArray` are no longer recognized.
+* `div-slider` ranges in the Compose renderer cut the track with square edges, as in the View renderer, instead of rounding the track pieces between ranges.
+* `div-slider` thumbs are separate accessibility nodes in the Compose renderer: each reports its value and range, can be adjusted by accessibility services in steps of five percent and is described by the slider `accessibility`, with "Range start" and "Range end" for the two thumbs of a range.
+* `getOptDictFromArray` now returns an empty dict for out of bounds indexes instead of an error, matching iOS and Web.
+* `toString` for dicts now prints whole numbers without a fractional part, e.g. `{"number":2}`, matching iOS and Web.
+* `variable_triggers` declared on static children of an element built by `item_builder` work while the element is scrolled out or `gone` in the Compose renderer.
+
+### iOS Client
+* Added `DivFlagsInfo.hideImagesWithoutUrl`. When enabled, `div-image` without `image_url` and `div-gif-image` without `gif_url` are skipped, as in versions before 33.0, instead of showing a placeholder.
+* Added `TooltipManager.setCloseHandler(_:)` to receive the tooltip identity when closing completes,.
+* Added `accessibility.menu`: named commands that VoiceOver offers in the Actions rotor of the element. Double tap still runs the element's regular `actions`.
+* Added configurable animation duration for `scroll_to` and `scroll_by` actions in galleries, pagers, and tabs.
+* Added support for extension actions, including Lottie `start` and `stop` commands that can be sent before the animation is displayed.
+* After the animation and view removal.
+* And `contains(_:)` on `GalleryViewLayout.Page` and `PagerViewLayout.Page` are no longer public.
+* As on Android.
+* Content when all items are `match_parent` across the scroll axis: such items now define the.
+* Cross-axis size by their content and then fill it, preserving their own min and max sizes,.
+* DivKit pods, including `DivKitKMP`, are no longer published to CocoaPods. Use Swift Package Manager to install new versions; previously published pods remain available.
+* Fixed `formatDateAsLocal`, `formatDateAsUTC` and their `WithLocale` variants returning an ordinal day (e.g. `15th`) instead of a zero-padded day for patterns with three or more `d` letters on iOS 27.
+* Fixed `match_parent` items across the scroll axis of a gallery or pager that wraps its.
+* Fixed `paddings.start` and `paddings.end` being ignored in `div-gallery` and `div-pager`. `paddings.left` and `paddings.right` are no longer mirrored in RTL layout.
+* Fixed caret jumping, wrong character order and a crash on fast typing in masked input.
+* Fixed compiler warnings when building DivKit with Xcode 27.
+* Pager pages that do not fit across the scroll axis are now aligned according to.
+* Relative `scroll_by` and scroll URL actions now use the current view position, including when interrupting an animation. Requests applied before layout use the stored position.
+* Reworked the `LayoutKit` gallery and pager layout in terms of the scroll axis instead of.
+* Sample apps now depend on DivKit 33 and target iOS 15, so they build with Xcode 27.
+* Width and height, removing duplicated horizontal and vertical code paths.
+* `GalleryViewModel.intrinsicSize`, `GalleryViewModel.intrinsicPagerSize(forWidth:layoutMode:)`.
+* `cross_axis_alignment` and their own alignment instead of being pinned to the leading edge.
+
+### Web Client
+* Added `multi_page_scroll` support to the Web pager, with continuous cyclic inertia for infinite pagers.
+* Added support for `duration` in typed `scroll` actions.
+* Added the `extensionsForAllComponents` render option to apply extensions to every component without declaring them in JSON, with optional constructor parameters per registration.
+* Added typed `extension_action` for extensions, including Lottie `start` and `stop` commands. Start rewinds and plays the animation; Stop rewinds and leaves it stopped.
+* Fixed errors and repeated actions of `variable_triggers` in elements with `transition_in`, `transition_out` or `transition_change` inside a `state` and in the pages of a `pager` with `infinite_scroll`.
+* Fixed server-rendered text losing its size, line height, line limit and color before hydration.
+* Fixed the `lottie` extension playing an animation with `is_playing: false`, also when `is_playing` becomes false while the animation is loading.
+* Fixed the `lottie` extension showing the animation of a previous `lottie_url` and playing an animation after its element is removed.
+* The `lottie` extension pauses an animation while it is out of view and resumes it once it is back in view.
+* The `lottie` extension starts and pauses animations itself, so the animations of a player other than `lottie-web` need `play` and `pause`.
+* `lottieExtensionBuilder` also accepts `{ loadPlayer }` to load the player lazily, together with the first animation file.
+
+### Kotlin JSON Builder
+* Entities no longer expose `@JsonAnyGetter`/`getJsonProperties()`; `ObjectMapper` inclusion and ordering settings and module-registered serializers do not affect DSL entities anymore.
+* Optimized JSON serialization of Kotlin DSL entities: generated Jackson serializers replace `@JsonAnyGetter`, making serialization up to 2.4× faster with up to 4× less memory allocated.
+* Template components are now serialized with the `type` field first, followed by their properties in insertion order.
+* `preloadRequired` parameters of `image`, `gifImage`, `imageBackground`, `video` and `textImage` builders are marked with `@DeprecatedApi`. The `preload_required` property will be removed in DivKit 34.
+
+
 ## 33.10.0
 
 ### Android Client

@@ -1,3 +1,18 @@
+## 33.11.0 (November 9, 2026)
+
+* Added `multi_page_scroll` support to the Web pager, with continuous cyclic inertia for infinite pagers.
+* Added support for `duration` in typed `scroll` actions.
+* Added the `extensionsForAllComponents` render option to apply extensions to every component without declaring them in JSON, with optional constructor parameters per registration.
+* Added typed `extension_action` for extensions, including Lottie `start` and `stop` commands. Start rewinds and plays the animation; Stop rewinds and leaves it stopped.
+* Fixed errors and repeated actions of `variable_triggers` in elements with `transition_in`, `transition_out` or `transition_change` inside a `state` and in the pages of a `pager` with `infinite_scroll`.
+* Fixed server-rendered text losing its size, line height, line limit and color before hydration.
+* Fixed the `lottie` extension playing an animation with `is_playing: false`, also when `is_playing` becomes false while the animation is loading.
+* Fixed the `lottie` extension showing the animation of a previous `lottie_url` and playing an animation after its element is removed.
+* The `lottie` extension pauses an animation while it is out of view and resumes it once it is back in view.
+* The `lottie` extension starts and pauses animations itself, so the animations of a player other than `lottie-web` need `play` and `pause`.
+* `lottieExtensionBuilder` also accepts `{ loadPlayer }` to load the player lazily, together with the first animation file.
+
+
 ## 33.10.0 (November 2, 2026)
 
 * Added `multi_page_scroll` support to the Web pager, with continuous cyclic inertia for infinite pagers.
