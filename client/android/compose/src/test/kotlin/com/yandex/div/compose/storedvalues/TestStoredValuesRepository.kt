@@ -1,17 +1,17 @@
 package com.yandex.div.compose.storedvalues
 
-import com.yandex.div.core.json.JsonObject
-import com.yandex.div.storage.common.StoredValuesRepository
+import com.yandex.div.internal.storedvalues.StoredValuesRepository
+import org.json.JSONObject
 
 class TestStoredValuesRepository : StoredValuesRepository {
-    private val _values = mutableMapOf<String, JsonObject>()
-    val values: Map<String, JsonObject> get() = _values
+    private val _values = mutableMapOf<String, JSONObject>()
+    val values: Map<String, JSONObject> get() = _values
 
-    override fun get(id: String): JsonObject? {
+    override fun get(id: String): JSONObject? {
         return _values[id]
     }
 
-    override fun put(id: String, value: JsonObject) {
+    override fun put(id: String, value: JSONObject) {
         _values[id] = value
     }
 

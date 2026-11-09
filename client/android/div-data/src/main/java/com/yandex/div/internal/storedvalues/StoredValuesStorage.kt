@@ -1,8 +1,6 @@
 package com.yandex.div.internal.storedvalues
 
 import com.yandex.div.core.annotations.InternalApi
-import com.yandex.div.core.json.asJsonObject
-import com.yandex.div.core.json.asOrgJsonObject
 import com.yandex.div.data.StoredValue
 import com.yandex.div.data.StoredValue.ArrayStoredValue
 import com.yandex.div.data.StoredValue.BooleanStoredValue
@@ -15,7 +13,6 @@ import com.yandex.div.data.StoredValue.Type.Converter
 import com.yandex.div.data.StoredValue.UrlStoredValue
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.Url
-import com.yandex.div.storage.common.StoredValuesRepository
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -31,7 +28,7 @@ class StoredValuesStorage(
         cardId: String
     ): StoredValue? {
         val id = formatId(name = name, scope = scope, cardId = cardId)
-        val jsonValue = repository.get(id)?.asOrgJsonObject() ?: return null
+        val jsonValue = repository.get(id) ?: return null
 
         if (isExpired(jsonValue) || isExpiredLegacy(jsonValue)) {
             repository.remove(id)
@@ -56,7 +53,7 @@ class StoredValuesStorage(
     ) {
         repository.put(
             id = formatId(name = value.name, scope = scope, cardId = cardId),
-            value = value.toJSONObject(lifetime).asJsonObject()
+            value = value.toJSONObject(lifetime)
         )
     }
 

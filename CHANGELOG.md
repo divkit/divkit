@@ -39,7 +39,6 @@
 * In the Android View renderer, `animator_start` applies the animator's end value and runs `end_actions` immediately when animations are disabled, instead of being ignored.
 * In the Android View renderer, the `focus_element` action also requests screen-reader focus when touch exploration is enabled.
 * Optimized repeated window attachment of unchanged static Div trees.
-* Prepared internal stored-values storage for Kotlin Multiplatform.
 * Reduced Compose wrapper overhead by inlining helper composables.
 * Removed JVM API from `core` module.
 * Reverted synchronous execution of zero-duration visibility and disappear actions.
