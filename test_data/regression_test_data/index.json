@@ -5066,16 +5066,24 @@
     {
       "title": "Masked input autocomplete cursor position",
       "platforms": [
-        "ios"
+        "android",
+        "ios",
+        "web"
       ],
       "tags": [
         "DivInput"
       ],
       "steps": [
-        "Observe the pre-filled phone number in the input field"
+        "Observe the pre-filled phone number in the input field",
+        "Tap the end of the input",
+        "Press Backspace twice",
+        "Type 1 and 2"
       ],
       "expected_results": [
-        "The cursor is positioned at the end of the formatted text after autocomplete fills the masked phone input"
+        "The input shows +7 (900) 123-45-67",
+        "The cursor is positioned at the end of the formatted text",
+        "The last two digits are deleted",
+        "The input shows +7 (900) 123-45-12"
       ],
       "file": "input/masked_input_autocomplete_cursor.json",
       "case_id": 533

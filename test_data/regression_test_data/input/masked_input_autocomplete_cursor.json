@@ -1,7 +1,9 @@
 {
   "description": "DIVKIT-9723: Verify cursor position stays at end of formatted text after autocomplete fills a masked phone input",
   "platforms": [
-    "ios"
+    "android",
+    "ios",
+    "web"
   ],
   "templates": {
     "input_field": {
@@ -79,7 +81,7 @@
                 "pattern_elements": [
                   {
                     "key": "#",
-                    "regex": "\\d",
+                    "regex": "\\\\d",
                     "placeholder": "_"
                   }
                 ],
