@@ -28,6 +28,7 @@ internal class VariableControllerImpl(
     private val onChangeObservers = ConcurrentHashMap<String, ObserverList<(Variable) -> Unit>>()
     private val onRemoveObservers = ConcurrentHashMap<String, ObserverList<(Variable) -> Unit>>()
 
+    // Use toMutableList() for snapshots: toList() can race with removals on a singleton map.
     private val onAnyVariableChangeObservers = ConcurrentHashMap<ExpressionResolver, (Variable) -> Unit>()
     private val notifyVariableChangedCallback = { v : Variable -> notifyVariableChanged(v) }
     private val declarationObserver = object : DeclarationObserver {
@@ -137,7 +138,7 @@ internal class VariableControllerImpl(
 
     private fun notifyVariableChanged(v: Variable) {
         doOnMainThread {
-            onAnyVariableChangeObservers.values.toList().forEach { callback -> callback.invoke(v) }
+            onAnyVariableChangeObservers.values.toMutableList().forEach { callback -> callback.invoke(v) }
             onChangeObservers[v.name]?.forEach {
                 it.invoke(v)
             }
@@ -174,7 +175,7 @@ internal class VariableControllerImpl(
     private fun onVariableRemoved(variable: Variable) {
         variable.removeObserver(notifyVariableChangedCallback)
         onRemoveObservers[variable.name]?.forEach { it.invoke(variable) }
-        onAnyVariableChangeObservers.values.toList().forEach { callback ->
+        onAnyVariableChangeObservers.values.toMutableList().forEach { callback ->
             callback.invoke(variable)
             variable.removeObserver(callback)
         }
@@ -238,6 +239,6 @@ internal class VariableControllerImpl(
     }
 
     override fun captureAll(): List<Variable> {
-        return variables.values.toList()
+        return variables.values.toMutableList()
     }
 }

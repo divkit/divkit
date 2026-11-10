@@ -15,6 +15,7 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.setContent
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -65,6 +66,7 @@ class DivTextEllipsisTest {
     private val variableController = DivVariableController()
 
     private val configuration = DivConfiguration(
+        imageLoaderConfiguration = TestImageLoaderConfiguration(),
         reporter = TestReporter(),
         variableController = variableController
     )
