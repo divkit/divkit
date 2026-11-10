@@ -346,7 +346,16 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     in parentView: UIView,
     isActive: Bool
   ) {
+    guard sliderModel.valueRange != 0 else {
+      for view in rangeViews {
+        view.isHidden = true
+        view.frame = .zero
+      }
+      return
+    }
+
     for (view, model) in zip(rangeViews, models) {
+      view.isHidden = false
       let rangeOfValues = CGFloat(model.end - model.start) / CGFloat(sliderModel.valueRange)
       let rangeWidth = parentView.frame
         .width * rangeOfValues - (model.margins.left + model.margins.right)
@@ -431,7 +440,9 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     case .leftToRight:
       thumbProgress = progress - CGFloat(sliderModel.minValue)
     case .rightToLeft:
-      thumbProgress = CGFloat(sliderModel.maxValue) - progress
+      thumbProgress = sliderModel.valueRange == 0
+        ? 1
+        : CGFloat(sliderModel.maxValue) - progress
     @unknown default:
       assertionFailure("Unknown layoutDirection (UserInterfaceLayoutDirection)")
     }

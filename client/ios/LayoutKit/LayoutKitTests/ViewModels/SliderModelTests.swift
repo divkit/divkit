@@ -4,6 +4,20 @@ import Testing
 
 @Suite
 struct SliderModelTests {
+  @Test(arguments: [3, 4, -996, -1000])
+  func nonIncreasingRangeCollapsesToMinimum(maxValue: Int) {
+    let model = makeSliderModel(minValue: 4, maxValue: maxValue)
+
+    #expect(model.minValue == 4)
+    #expect(model.maxValue == 4)
+    #expect(model.valueRange == 0)
+    #expect(model.stepSize == 1)
+    #expect(model.nearestValue(4) == 4)
+    #expect(model.nearestMinValue(4) == 4)
+    #expect(model.marksConfiguration.modelConfiguration.minValue == 4)
+    #expect(model.marksConfiguration.modelConfiguration.maxValue == 4)
+  }
+
   @Test(
     arguments: [
       (0, 999, 1),

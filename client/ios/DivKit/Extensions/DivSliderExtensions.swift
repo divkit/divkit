@@ -78,7 +78,7 @@ extension DivSlider: DivBlockModeling {
     )
 
     let minValue = resolveMinValue(expressionResolver)
-    let maxValue = resolveMaxValue(expressionResolver)
+    let maxValue = max(minValue, resolveMaxValue(expressionResolver))
 
     let marksConfiguration = MarksConfigurationModel(
       minValue: CGFloat(minValue),
@@ -97,7 +97,12 @@ extension DivSlider: DivBlockModeling {
       minValue: minValue,
       maxValue: maxValue,
       marksConfiguration: marksConfiguration,
-      ranges: makeRanges(ranges, with: context),
+      ranges: makeRanges(
+        ranges,
+        minValue: minValue,
+        maxValue: maxValue,
+        with: context
+      ),
       layoutDirection: context.layoutDirection,
       path: context.path,
       isEnabled: resolveIsEnabled(expressionResolver),
@@ -113,12 +118,15 @@ extension DivSlider: DivBlockModeling {
 
   private func makeRanges(
     _ ranges: [DivSlider.Range]?,
+    minValue: Int,
+    maxValue: Int,
     with context: DivBlockModelingContext
   ) -> [SliderModel.RangeModel] {
-    let expressionResolver = context.expressionResolver
+    guard minValue != maxValue else {
+      return []
+    }
 
-    let minValue = resolveMinValue(expressionResolver)
-    let maxValue = resolveMaxValue(expressionResolver)
+    let expressionResolver = context.expressionResolver
 
     var sliderRanges: [SliderModel.RangeModel] = (ranges ?? []).map { range in
       SliderModel.RangeModel(

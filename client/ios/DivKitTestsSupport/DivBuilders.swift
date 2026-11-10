@@ -600,6 +600,40 @@ public func divTabsItem(
   )
 }
 
+public func divSlider(
+  id: String? = nil,
+  maxValue: Int? = nil,
+  minValue: Int? = nil,
+  ranges: [DivSlider.Range]? = nil,
+  thumbSecondaryValueVariable: String? = nil,
+  thumbStyle: DivDrawable? = nil,
+  thumbValueVariable: String? = nil,
+  trackActiveStyle: DivDrawable? = nil,
+  trackInactiveStyle: DivDrawable? = nil,
+  width: DivSize? = nil
+) -> Div {
+  .divSlider(DivSlider(
+    id: id,
+    maxValue: maxValue.map { .value($0) },
+    minValue: minValue.map { .value($0) },
+    ranges: ranges,
+    thumbSecondaryValueVariable: thumbSecondaryValueVariable,
+    thumbStyle: thumbStyle ?? sliderShapeDrawable(),
+    thumbValueVariable: thumbValueVariable,
+    trackActiveStyle: trackActiveStyle ?? sliderShapeDrawable(),
+    trackInactiveStyle: trackInactiveStyle ?? sliderShapeDrawable(),
+    width: width
+  ))
+}
+
+private func sliderShapeDrawable() -> DivDrawable {
+  .divShapeDrawable(
+    DivShapeDrawable(
+      shape: .divRoundedRectangleShape(DivRoundedRectangleShape())
+    )
+  )
+}
+
 public func fixedSize(_ value: Int) -> DivSize {
   .divFixedSize(DivFixedSize(value: .value(value)))
 }

@@ -1,0 +1,153 @@
+{
+  "description": "max_value <= default min_value (0) collapses the slider to a point: only the thumb is shown, at the leading edge, with no track and no tick marks. max_value = 1 stays a valid range.",
+  "platforms": [
+    "ios"
+  ],
+  "templates": {
+    "case_title": {
+      "type": "text",
+      "font_size": 16,
+      "line_height": 20,
+      "font_weight": "medium",
+      "margins": {
+        "bottom": 8
+      }
+    },
+    "sample_slider": {
+      "type": "slider",
+      "width": {
+        "type": "match_parent"
+      },
+      "margins": {
+        "bottom": 24
+      },
+      "thumb_style": {
+        "type": "shape_drawable",
+        "color": "#FFCC00",
+        "stroke": {
+          "color": "#ffffff",
+          "width": 3
+        },
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 32
+          },
+          "item_width": {
+            "type": "fixed",
+            "value": 32
+          },
+          "corner_radius": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      },
+      "track_active_style": {
+        "type": "shape_drawable",
+        "color": "#FFCC00",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 6
+          }
+        }
+      },
+      "track_inactive_style": {
+        "type": "shape_drawable",
+        "color": "#20000000",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 6
+          }
+        }
+      },
+      "tick_mark_active_style": {
+        "type": "shape_drawable",
+        "color": "#FFCC00",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 8
+          },
+          "item_width": {
+            "type": "fixed",
+            "value": 8
+          },
+          "corner_radius": {
+            "type": "fixed",
+            "value": 4
+          }
+        }
+      },
+      "tick_mark_inactive_style": {
+        "type": "shape_drawable",
+        "color": "#66000000",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 8
+          },
+          "item_width": {
+            "type": "fixed",
+            "value": 8
+          },
+          "corner_radius": {
+            "type": "fixed",
+            "value": 4
+          }
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "top": 16,
+            "bottom": 16,
+            "left": 16,
+            "right": 16
+          },
+          "items": [
+            {
+              "type": "case_title",
+              "text": "max_value = 0"
+            },
+            {
+              "type": "sample_slider",
+              "max_value": 0
+            },
+            {
+              "type": "case_title",
+              "text": "max_value = 1"
+            },
+            {
+              "type": "sample_slider",
+              "max_value": 1
+            },
+            {
+              "type": "case_title",
+              "text": "max_value = -1"
+            },
+            {
+              "type": "sample_slider",
+              "max_value": -1
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -188,12 +188,19 @@ public struct SliderModel: Equatable {
     pressStartActions: [UserInterfaceAction],
     pressEndActions: [UserInterfaceAction]
   ) {
+    let maxValue = max(minValue, maxValue)
     self.firstThumb = firstThumb
     self.secondThumb = secondThumb
     self.minValue = minValue
     self.maxValue = maxValue
-    self.marksModelConfiguration = marksConfiguration
-    self.ranges = ranges
+    self.marksModelConfiguration = MarksConfigurationModel(
+      minValue: CGFloat(minValue),
+      maxValue: CGFloat(maxValue),
+      activeMark: marksConfiguration.activeMark,
+      inactiveMark: marksConfiguration.inactiveMark,
+      layoutDirection: marksConfiguration.layoutDirection
+    )
+    self.ranges = minValue == maxValue ? [] : ranges
     self.layoutDirection = layoutDirection
     self.path = path
     self.isEnabled = isEnabled

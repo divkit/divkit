@@ -99,6 +99,10 @@ final class MarksLayer: CALayer {
     in ctx: CGContext
   ) {
     let range = maxValue - minValue
+    guard range > 0 else {
+      return
+    }
+
     let maxWidth = bounds.width - configuration.horizontalInset
     let spaceWidth = maxWidth / range * marksStep
     let markConfiguration = markConfiguration(for: style)
