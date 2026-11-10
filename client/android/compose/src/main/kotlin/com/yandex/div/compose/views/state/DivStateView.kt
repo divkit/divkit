@@ -23,8 +23,10 @@ import com.yandex.div.compose.utils.toAlignment
 import com.yandex.div.compose.variables.mutableStateFromStringVariable
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.DivContentDecorator
+import com.yandex.div.compose.views.DivVisibilityState
 import com.yandex.div.compose.views.modifiers.clipToBounds
 import com.yandex.div.compose.views.modifiers.padding
+import com.yandex.div.compose.views.observeDivVisibility
 import com.yandex.div.compose.views.transition.LocalStateChangeTransitionContext
 import com.yandex.div.compose.views.transition.containsStateChangeTransitions
 import com.yandex.div.core.state.DivStatePath
@@ -39,6 +41,7 @@ internal fun DivStateView(
     data: DivState,
     decorator: DivContentDecorator,
 ) {
+    val boundaryVisibility = remember { DivVisibilityState() }
     ResolveDivState(data) { parentPath, divId, activeState ->
         val viewContext = LocalDivViewContext.current
         val swipeOutState = viewContext.stateStorage.getSwipeOutState(
@@ -64,6 +67,7 @@ internal fun DivStateView(
                     divId,
                     activeState,
                     transitionContentState,
+                    boundaryVisibility,
                 )
             }
         }
@@ -78,6 +82,7 @@ private fun StateContent(
     divId: String,
     activeState: DivState.State,
     transitionContentState: StateChangeContentState,
+    boundaryVisibility: DivVisibilityState,
 ) {
     val contentModifier = modifier
         .applyIf(data.clipToBounds.observedValue()) {
@@ -86,6 +91,7 @@ private fun StateContent(
                 hasWildcardExtensions = divContext.component.wildcardExtensions.isNotEmpty(),
             )
         }
+        .observeDivVisibility(boundaryVisibility)
         .padding(data.paddings)
     val parentContentActive = LocalStateChangeTransitionContext.current.contentActive
     val activeStateData = activeState.div?.value()
@@ -121,6 +127,7 @@ private fun StateContent(
             parentPath = parentPath,
             divId = divId,
             parentContentActive = parentContentActive,
+            boundaryVisibility = boundaryVisibility,
             contentAlignment = contentAlignment,
             onTransitionFinished = transitionContentState::onTransitionFinished,
         )

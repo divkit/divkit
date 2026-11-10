@@ -11,6 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -26,6 +27,8 @@ import com.yandex.div.compose.extensions.DivExtensionEnvironment
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.mockLocalComponent
 import com.yandex.div.compose.setContentWithDivContext
+import com.yandex.div.compose.views.DivVisibilityState
+import com.yandex.div.compose.views.observeDivVisibility
 import com.yandex.div.core.DivAnimationsEnabledProvider
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -73,6 +76,7 @@ abstract class StateChangeTransitionTestBase {
                     },
                     label = "Test state content",
                 ) { isIncoming ->
+                    val boundaryVisibility = remember { DivVisibilityState() }
                     CompositionLocalProvider(
                         LocalStateChangeTransitionContext provides StateChangeTransitionContext(
                             scope = StateChangeTransitionScope(
@@ -80,6 +84,7 @@ abstract class StateChangeTransitionTestBase {
                                 exitScope = this,
                                 enteringIds = setOf(INCOMING_ID),
                                 exitingIds = setOf(OUTGOING_ID),
+                                boundaryVisibility = boundaryVisibility,
                             )
                         )
                     ) {
@@ -89,6 +94,7 @@ abstract class StateChangeTransitionTestBase {
                             Modifier
                                 .applyStateChangeTransition(data, DivVisibility.VISIBLE)
                                 .modifier
+                                .observeDivVisibility(boundaryVisibility)
                                 .semantics { contentDescription = label }
                         )
                     }

@@ -17,6 +17,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.IntSize
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.views.DivVisibilityState
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -27,6 +28,7 @@ internal class StateChangeTransitionScope(
     val exitScope: AnimatedVisibilityScope,
     val enteringIds: Set<String>,
     val exitingIds: Set<String>,
+    val boundaryVisibility: DivVisibilityState,
     val commonIds: Set<String> = emptySet(),
     val transitionState: StateChangeTransitionState = StateChangeTransitionState(),
     val scene: StateChangeTransitionScene = StateChangeTransitionScene(),

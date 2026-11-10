@@ -1,6 +1,7 @@
 package com.yandex.div.compose.views.state
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.MutableTransitionState
@@ -24,6 +25,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.views.DivBlockView
+import com.yandex.div.compose.views.DivVisibilityState
 import com.yandex.div.compose.views.transition.LocalStateChangeTransitionContext
 import com.yandex.div.compose.views.transition.StateChangeTransitionScene
 import com.yandex.div.compose.views.transition.StateChangeTransitionScope
@@ -46,6 +48,7 @@ internal fun TransitioningStateContent(
     parentPath: DivStatePath,
     divId: String,
     parentContentActive: Boolean,
+    boundaryVisibility: DivVisibilityState,
     contentAlignment: Alignment,
     onTransitionFinished: () -> Unit,
 ) {
@@ -53,7 +56,7 @@ internal fun TransitioningStateContent(
         mutableStateListOf(StateChangeContentEntry(initialState, initiallyVisible = true))
     }
     val scene = remember { StateChangeTransitionScene() }
-    UpdateStateChangeEntries(entries, activeState)
+    UpdateStateChangeEntries(entries, activeState, boundaryVisibility)
     val orderedEntries = entries.sortedBy { it.contentActive }
 
     StateChangeContentLayout(
@@ -71,6 +74,7 @@ internal fun TransitioningStateContent(
                     parentPath = parentPath,
                     divId = divId,
                     scene = scene,
+                    boundaryVisibility = boundaryVisibility,
                     contentAlignment = contentAlignment,
                     onRemoved = {
                         entries.remove(entry)
@@ -91,6 +95,7 @@ private fun StateChangeContentEntry.Content(
     parentPath: DivStatePath,
     divId: String,
     scene: StateChangeTransitionScene,
+    boundaryVisibility: DivVisibilityState,
     contentAlignment: Alignment,
     onRemoved: () -> Unit,
 ) {
@@ -115,14 +120,11 @@ private fun StateChangeContentEntry.Content(
                 enter = EnterTransition.None,
                 exit = ExitTransition.None,
             ) enterContent@ {
-                val transitionScope = StateChangeTransitionScope(
+                val transitionScope = rememberTransitionScope(
                     enterScope = this@enterContent,
                     exitScope = this@exitContent,
-                    enteringIds = enteringIds,
-                    exitingIds = exitingIds,
-                    commonIds = commonIds,
-                    transitionState = transitionState,
                     scene = scene,
+                    boundaryVisibility = boundaryVisibility,
                 )
                 if (this@Content.contentActive) {
                     Box(
@@ -152,6 +154,28 @@ private fun StateChangeContentEntry.Content(
 }
 
 @Composable
+private fun StateChangeContentEntry.rememberTransitionScope(
+    enterScope: AnimatedVisibilityScope,
+    exitScope: AnimatedVisibilityScope,
+    scene: StateChangeTransitionScene,
+    boundaryVisibility: DivVisibilityState,
+): StateChangeTransitionScope = remember(
+    enterScope, exitScope, enteringIds, exitingIds, commonIds,
+    transitionState, scene, boundaryVisibility,
+) {
+    StateChangeTransitionScope(
+        enterScope = enterScope,
+        exitScope = exitScope,
+        enteringIds = enteringIds,
+        exitingIds = exitingIds,
+        commonIds = commonIds,
+        transitionState = transitionState,
+        scene = scene,
+        boundaryVisibility = boundaryVisibility,
+    )
+}
+
+@Composable
 internal fun BoxScope.RetainedStateInteractionBarrier() {
     Box(
         Modifier
@@ -170,18 +194,22 @@ internal fun BoxScope.RetainedStateInteractionBarrier() {
 private fun UpdateStateChangeEntries(
     entries: MutableList<StateChangeContentEntry>,
     activeState: DivState.State,
+    boundaryVisibility: DivVisibilityState,
 ) {
     val divViewContext = LocalDivViewContext.current
     val parentComponent = LocalComponent.current
     val contentVisible = LocalStateChangeTransitionContext.current.contentVisible
+    boundaryVisibility.invalidation
     val previousIds = entries
         .lastOrNull { it.contentActive }
         ?.takeIf { it.state.stateId != activeState.stateId }
         ?.transitionState
         ?.snapshotRenderedIds()
     SideEffect {
-        entries.updateActiveState(activeState, previousIds) {
-            if (contentVisible) {
+        val boundaryVisible = boundaryVisibility.currentVisibility() ?: return@SideEffect
+        val visible = boundaryVisible && contentVisible
+        entries.updateActiveState(activeState, if (visible) previousIds else emptySet()) {
+            if (visible) {
                 it.visibleStateTransitionIds(divViewContext, parentComponent)
             } else {
                 emptySet()

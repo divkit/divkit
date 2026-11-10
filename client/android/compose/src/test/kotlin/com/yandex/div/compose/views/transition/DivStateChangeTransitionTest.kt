@@ -18,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.setContent
+import com.yandex.div.compose.views.DivVisibilityState
+import com.yandex.div.compose.views.observeDivVisibility
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.state
@@ -94,6 +96,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                     enter = EnterTransition.None,
                     exit = ExitTransition.None,
                 ) {
+                    val boundaryVisibility = remember { DivVisibilityState() }
                     CompositionLocalProvider(
                         LocalStateChangeTransitionContext provides StateChangeTransitionContext(
                             scope = StateChangeTransitionScope(
@@ -101,6 +104,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                                 exitScope = this,
                                 enteringIds = setOf(INCOMING_ID),
                                 exitingIds = emptySet(),
+                                boundaryVisibility = boundaryVisibility,
                             )
                         )
                     ) {
@@ -109,7 +113,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                             DivVisibility.VISIBLE,
                         )
                         SideEffect { appearanceAlpha = transition.appearanceAlpha }
-                        Box(transition.modifier)
+                        Box(transition.modifier.observeDivVisibility(boundaryVisibility))
                     }
                 }
             }
@@ -167,6 +171,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                     enter = EnterTransition.None,
                     exit = ExitTransition.None,
                 ) {
+                    val boundaryVisibility = remember { DivVisibilityState() }
                     CompositionLocalProvider(
                         LocalStateChangeTransitionContext provides StateChangeTransitionContext(
                             scope = StateChangeTransitionScope(
@@ -175,6 +180,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                                 enteringIds = setOf(INCOMING_ID),
                                 exitingIds = emptySet(),
                                 transitionState = transitionState,
+                                boundaryVisibility = boundaryVisibility,
                             )
                         )
                     ) {
@@ -182,7 +188,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                             data,
                             DivVisibility.VISIBLE,
                         )
-                        Box(transition.modifier)
+                        Box(transition.modifier.observeDivVisibility(boundaryVisibility))
                     }
                 }
             }
@@ -477,6 +483,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                     enter = EnterTransition.None,
                     exit = ExitTransition.None,
                 ) {
+                    val boundaryVisibility = remember { DivVisibilityState() }
                     CompositionLocalProvider(
                         LocalStateChangeTransitionContext provides StateChangeTransitionContext(
                             scope = StateChangeTransitionScope(
@@ -485,6 +492,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                                 enteringIds = emptySet(),
                                 exitingIds = setOf(OUTGOING_ID),
                                 transitionState = transitionState,
+                                boundaryVisibility = boundaryVisibility,
                             )
                         )
                     ) {
@@ -492,7 +500,7 @@ class DivStateChangeTransitionTest : StateChangeTransitionTestBase() {
                             Modifier.applyStateChangeTransition(
                                 data,
                                 DivVisibility.VISIBLE,
-                            ).modifier
+                            ).modifier.observeDivVisibility(boundaryVisibility)
                         )
                     }
                 }

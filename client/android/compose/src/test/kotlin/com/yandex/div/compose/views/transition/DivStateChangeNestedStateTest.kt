@@ -1,7 +1,12 @@
 package com.yandex.div.compose.views.transition
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.yandex.div.compose.extensions.DivExtensionEnvironment
+import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.constant
@@ -13,6 +18,7 @@ import com.yandex.div.test.data.text
 import com.yandex.div.test.data.trigger
 import com.yandex.div.test.data.typedValue
 import com.yandex.div.test.data.variable
+import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.DivAppearanceTransition
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivScaleTransition
@@ -22,10 +28,170 @@ import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivStateChangeNestedStateTest : StateChangeTransitionTestBase() {
+    private val ancestorVisibility = Variable.StringVariable(VISIBILITY_VARIABLE, "visible")
+    private val nestedStateVariable = Variable.StringVariable(NESTED_STATE_VARIABLE, OUTGOING)
+    private val boundaryComposedIds = mutableSetOf<String>()
+    private val boundaryTracker = TrackingExtensionHandler(boundaryComposedIds)
+
+    @Test
+    fun `initially invisible wrapped state has no rendered transition ids`() {
+        ancestorVisibility.set("invisible")
+        renderWrappedNestedState()
+
+        composeRule.runOnIdle {
+            assertEquals(
+                emptySet(),
+                boundaryTracker.transitionStateOf(OUTGOING_ID).snapshotRenderedIds(),
+            )
+        }
+    }
+
+    @Test
+    fun `hiding wrapped state in same update does not retain outgoing snapshot`() {
+        renderWrappedNestedState()
+
+        composeRule.runOnIdle {
+            ancestorVisibility.set("invisible")
+            nestedStateVariable.set(INCOMING)
+        }
+        settleNestedStateChange()
+
+        composeRule.runOnIdle {
+            assertTrue(boundaryTracker.transitionStateOf(OUTGOING_ID).snapshots.exiting.isEmpty())
+            assertEquals(
+                emptySet(),
+                boundaryTracker.transitionStateOf(INCOMING_ID).snapshotRenderedIds(),
+            )
+        }
+    }
+
+    @Test
+    fun `showing wrapped state in same update retains only visible incoming ids`() {
+        ancestorVisibility.set("invisible")
+        renderWrappedNestedState()
+
+        composeRule.runOnIdle {
+            ancestorVisibility.set("visible")
+            nestedStateVariable.set(INCOMING)
+        }
+        settleNestedStateChange()
+
+        composeRule.runOnIdle {
+            assertTrue(boundaryTracker.transitionStateOf(OUTGOING_ID).snapshots.exiting.isEmpty())
+            assertEquals(
+                setOf(INCOMING_ID),
+                boundaryTracker.transitionStateOf(INCOMING_ID).snapshotRenderedIds(),
+            )
+        }
+    }
+
+    @Test
+    fun `hidden wrapped state drops previously rendered transition ids`() {
+        renderWrappedNestedState()
+        composeRule.runOnIdle { ancestorVisibility.set("invisible") }
+        composeRule.waitForIdle()
+
+        nestedStateVariable.set(INCOMING)
+        settleNestedStateChange()
+
+        composeRule.runOnIdle {
+            assertTrue(boundaryTracker.transitionStateOf(OUTGOING_ID).snapshots.exiting.isEmpty())
+        }
+    }
+
+    @Test
+    fun `regular nested state isolates outer scope and starts its own incoming transition`() {
+        var nestedScope: StateChangeTransitionScope? = null
+        val handler = object : DivExtensionHandler {
+            @Composable
+            override fun Content(
+                modifier: Modifier,
+                environment: DivExtensionEnvironment,
+                content: @Composable (Modifier) -> Unit,
+            ) {
+                val scope = LocalStateChangeTransitionContext.current.scope
+                SideEffect { nestedScope = scope }
+                content(modifier)
+            }
+        }
+        val extension = DivExtension(id = TRACKING_EXTENSION_ID)
+        renderStateChange(
+            selector = DivTransitionSelector.STATE_CHANGE,
+            outgoing = container(items = listOf(
+                text(text = "Sibling", transitionOut = fade(TRANSITION_DURATION_MS)),
+                state(
+                    id = "nested",
+                    stateIdVariable = NESTED_STATE_VARIABLE,
+                    states = listOf(
+                        state(
+                            stateId = OUTGOING,
+                            div = text(text = OUTGOING, extensions = listOf(extension)),
+                        ),
+                        state(stateId = INCOMING, div = text(
+                            text = INCOMING,
+                            id = INCOMING_ID,
+                            extensions = listOf(extension),
+                            transitionIn = fade(TRANSITION_DURATION_MS),
+                        )),
+                    ),
+                ),
+            )),
+            extraVariables = listOf(nestedStateVariable),
+            extensionHandlers = mapOf(TRACKING_EXTENSION_ID to handler),
+        )
+        assertNull(nestedScope)
+
+        nestedStateVariable.set(INCOMING)
+        settleNestedStateChange()
+
+        assertEquals(setOf(INCOMING_ID), assertNotNull(nestedScope).enteringIds)
+    }
+
+    private fun renderWrappedNestedState() {
+        val extension = DivExtension(id = TRACKING_EXTENSION_ID)
+        val nested = state(
+            id = "nested",
+            stateIdVariable = NESTED_STATE_VARIABLE,
+            states = listOf(
+                state(stateId = OUTGOING, div = text(
+                    text = OUTGOING,
+                    id = OUTGOING_ID,
+                    extensions = listOf(extension),
+                    transitionOut = fade(TRANSITION_DURATION_MS),
+                )),
+                state(stateId = INCOMING, div = text(
+                    text = INCOMING,
+                    id = INCOMING_ID,
+                    extensions = listOf(extension),
+                    transitionIn = fade(TRANSITION_DURATION_MS),
+                )),
+            ),
+        )
+        renderStateChange(
+            selector = DivTransitionSelector.STATE_CHANGE,
+            outgoing = container(
+                visibility = visibilityExpression("@{$VISIBILITY_VARIABLE}"),
+                items = listOf(container(items = listOf(container(items = listOf(nested))))),
+            ),
+            extraVariables = listOf(ancestorVisibility, nestedStateVariable),
+            extensionHandlers = mapOf(TRACKING_EXTENSION_ID to boundaryTracker),
+        )
+    }
+
+    private fun settleNestedStateChange() {
+        composeRule.waitForIdle()
+        composeRule.mainClock.advanceTimeByFrame()
+        composeRule.mainClock.advanceTimeByFrame()
+        composeRule.mainClock.advanceTimeByFrame()
+        composeRule.waitForIdle()
+    }
+
     @Test
     fun `new nested content in retained state does not start variable triggers`() {
         val composedIds = mutableSetOf<String>()

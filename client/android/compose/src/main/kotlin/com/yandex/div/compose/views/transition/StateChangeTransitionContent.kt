@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibility
 
+private val neutralStateChangeTransition = StateChangeTransitionModifier()
+
 @Composable
 internal fun WithStateChangeTransition(
     data: Div,
@@ -14,9 +16,14 @@ internal fun WithStateChangeTransition(
     content: @Composable (StateChangeTransitionModifier) -> Unit,
 ) {
     val transitionContext = LocalStateChangeTransitionContext.current
+    val scope = transitionContext.scope
+    if (scope == null) {
+        content(neutralStateChangeTransition)
+        return
+    }
     val contentVisible = transitionContext.contentVisible &&
         visibility == DivVisibility.VISIBLE
-    TrackRenderedStateTransitionId(data, contentVisible)
+    TrackRenderedStateTransitionId(data, contentVisible, scope)
     val stateChangeTransition = Modifier.applyStateChangeTransition(
         data = data.value(),
         visibility = visibility,
@@ -59,14 +66,19 @@ private fun Div.hasStateChangeTransitionChildren(): Boolean = when (this) {
 private fun TrackRenderedStateTransitionId(
     data: Div,
     contentVisible: Boolean,
+    scope: StateChangeTransitionScope,
 ) {
     if (!contentVisible) return
 
     val id = data.value().id ?: return
-    val transitionState = LocalStateChangeTransitionContext.current.scope?.transitionState ?: return
+    val transitionState = scope.transitionState
+    val boundaryVisibility = scope.boundaryVisibility
 
-    DisposableEffect(transitionState, id) {
-        transitionState.registerRenderedId(id)
-        onDispose { transitionState.unregisterRenderedId(id) }
+    DisposableEffect(transitionState, id, boundaryVisibility, boundaryVisibility.invalidation) {
+        val registered = boundaryVisibility.currentVisibility() == true
+        if (registered) transitionState.registerRenderedId(id)
+        onDispose {
+            if (registered) transitionState.unregisterRenderedId(id)
+        }
     }
 }
