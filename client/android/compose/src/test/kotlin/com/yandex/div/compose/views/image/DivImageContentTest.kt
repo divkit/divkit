@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.core.graphics.createBitmap
@@ -27,6 +26,7 @@ import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.request.ImageRequest
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.DivViewContext
@@ -41,17 +41,17 @@ import com.yandex.div.test.data.image
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivExtension
+import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Rule
 import org.junit.runner.RunWith
-import java.util.concurrent.CopyOnWriteArrayList
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -182,7 +182,7 @@ class DivImageContentTest {
             val viewContext = currentViewContext.value
             val actualPreviewHandler = previewHandler ?: LocalAsyncImagePreviewHandler.current
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalDivViewContext provides viewContext,
                 LocalComponent provides viewContext.rootLocalComponent,
                 LocalInspectionMode provides (previewHandler != null),

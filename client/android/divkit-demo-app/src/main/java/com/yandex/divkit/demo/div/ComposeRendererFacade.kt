@@ -3,12 +3,16 @@ package com.yandex.divkit.demo.div
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.net.toUri
 import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.yandex.div.DivDataTag
+import com.yandex.div.compose.DivContext as ComposeDivContext
+import com.yandex.div.compose.DivView as ComposeDivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
@@ -29,8 +33,6 @@ import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
-import com.yandex.div.compose.DivContext as ComposeDivContext
-import com.yandex.div.compose.DivView as ComposeDivView
 
 @OptIn(InternalApi::class)
 class ComposeRendererFacade(
@@ -40,8 +42,10 @@ class ComposeRendererFacade(
 
     private val hostVariableController = variableController
 
+    private val platformContext = ContextThemeWrapper(container.context, R.style.Div_Theme_Demo)
+
     private val divContext = ComposeDivContext(
-        baseContext = ContextThemeWrapper(container.context, R.style.Div_Theme_Demo),
+        baseContext = platformContext,
         configuration = divConfiguration {
             animationsEnabledProvider = Container.animationsEnabledProvider
             extensionHandlers = mapOf(
@@ -56,7 +60,7 @@ class ComposeRendererFacade(
         }
     )
 
-    private val composeView = ComposeView(divContext).apply {
+    private val composeView = ComposeView(platformContext).apply {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
@@ -69,8 +73,10 @@ class ComposeRendererFacade(
     init {
         container.addView(composeView, 0)
         composeView.setContent {
-            divData.value?.let { data ->
-                ComposeDivView(data = data)
+            CompositionLocalProvider(LocalDivContext provides divContext) {
+                divData.value?.let { data ->
+                    ComposeDivView(data = data)
+                }
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.yandex.div.compose.views.gallery
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasScrollToIndexAction
@@ -15,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
@@ -58,6 +58,9 @@ import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibility
 import com.yandex.div2.ItemIdDestination
 import com.yandex.div2.StrVariable
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.junit.Rule
@@ -66,9 +69,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithGalleryItemBuilderTest {
@@ -749,7 +749,7 @@ class DivViewWithGalleryItemBuilderTest {
 
     private fun setContent(card: DivData) {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(card)
             }
         }

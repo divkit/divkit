@@ -6,7 +6,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -15,6 +14,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
@@ -34,12 +34,12 @@ import com.yandex.div.test.data.uriExpression
 import com.yandex.div.test.data.variable
 import com.yandex.div2.DivData
 import com.yandex.div2.DivEvaluableType
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivPropertiesTest {
@@ -221,7 +221,7 @@ class DivPropertiesTest {
         )
         rule.setContent {
             CompositionLocalProvider(
-                LocalContext provides context,
+                LocalDivContext provides context,
                 LocalDivViewContext provides context.getViewContext(card),
                 LocalComponent provides context.getViewContext(card).rootLocalComponent,
                 content = content

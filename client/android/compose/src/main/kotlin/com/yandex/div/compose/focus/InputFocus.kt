@@ -8,9 +8,9 @@ import androidx.compose.ui.node.CompositionLocalConsumerModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.node.currentValueOf
 import androidx.compose.ui.platform.InspectorInfo
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.di.DivContextScope
 import dev.zacsweers.metro.Inject
 
@@ -41,7 +41,7 @@ internal class InputFocus @Inject constructor() {
         override fun onFocusEvent(focusState: FocusState) {
             if (!focusState.isFocused) return forget()
 
-            val inputFocus = (currentValueOf(LocalContext) as DivContext).component.inputFocus
+            val inputFocus = currentValueOf(LocalDivContext).component.inputFocus
             inputFocus.focusedInputs += this
             this.inputFocus = inputFocus
         }

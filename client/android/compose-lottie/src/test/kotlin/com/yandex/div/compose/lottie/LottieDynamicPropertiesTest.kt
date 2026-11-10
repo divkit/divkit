@@ -24,20 +24,21 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.lottie.DivLottieResourceLoader
 import com.yandex.div.test.data.data
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivImage
-import org.json.JSONObject
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotSame
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
+import org.json.JSONObject
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class LottieDynamicPropertiesTest {
@@ -185,7 +186,7 @@ class LottieDynamicPropertiesTest {
             recompose?.value
             val baseContext = LocalContext.current
             val context = remember(baseContext) { DivContext(baseContext, configuration) }
-            CompositionLocalProvider(LocalContext provides context) {
+            CompositionLocalProvider(LocalDivContext provides context) {
                 DivView(data = data.value, modifier = modifier)
             }
         }

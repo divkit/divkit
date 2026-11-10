@@ -89,7 +89,7 @@ fun ComposeContentTestRule.setContentWithDivContext(
             configuration = configuration,
             debugConfiguration = debugConfiguration
         )
-        CompositionLocalProvider(LocalContext provides divContext) {
+        CompositionLocalProvider(LocalDivContext provides divContext) {
             content()
         }
     }

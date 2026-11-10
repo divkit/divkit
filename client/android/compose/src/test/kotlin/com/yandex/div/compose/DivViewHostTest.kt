@@ -2,13 +2,18 @@ package com.yandex.div.compose
 
 import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.visibility.CheckVisibilityCallback
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.image
+import com.yandex.div.test.data.text
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -16,8 +21,6 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.shadows.ShadowLooper
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -282,6 +285,16 @@ class DivViewHostTest {
         composeRule.waitForIdle()
 
         assertEquals(emptySet(), capturedUrls)
+    }
+
+    @Test
+    fun `content without preload data receives the host DivContext`() {
+        val host = createHost()
+        attachToActivity(host)
+
+        host.setContent { DivView(data(text(text = "Hosted card"))) }
+
+        composeRule.onNodeWithText("Hosted card").assertIsDisplayed()
     }
 
     private fun createHost(): DivViewHost = DivViewHost(createDivContext())

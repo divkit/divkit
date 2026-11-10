@@ -2,7 +2,6 @@ package com.yandex.div.compose.views.modifiers
 
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.input.key.Key
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsFocused
@@ -16,6 +15,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.setContent
@@ -31,12 +31,12 @@ import com.yandex.div.test.data.text
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivPatch
-import org.junit.Rule
-import org.junit.runner.RunWith
-import org.robolectric.RuntimeEnvironment
 import kotlin.test.Test
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
+import org.junit.Rule
+import org.junit.runner.RunWith
+import org.robolectric.RuntimeEnvironment
 
 @RunWith(AndroidJUnit4::class)
 class FocusModifiersTest {
@@ -182,7 +182,7 @@ class FocusModifiersTest {
             text(id = "target", text = "Target", focus = DivFocus()),
         )))
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(card)
             }
         }

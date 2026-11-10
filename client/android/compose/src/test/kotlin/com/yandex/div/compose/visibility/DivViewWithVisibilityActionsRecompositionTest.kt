@@ -2,6 +2,7 @@ package com.yandex.div.compose.visibility
 
 import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -10,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.core.expression.variables.DivVariableController
@@ -24,14 +26,14 @@ import com.yandex.div.test.data.visibilityAction
 import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.DivActionTyped
 import com.yandex.div2.DivData
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestScope
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.math.min
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithVisibilityActionsRecompositionTest {
@@ -136,9 +138,11 @@ class DivViewWithVisibilityActionsRecompositionTest {
 
     private fun setContent(data: DivData) {
         activity.setContentView(
-            ComposeView(divContext).apply {
+            ComposeView(divContext.component.baseContext).apply {
                 setContent {
-                    DivView(data)
+                    CompositionLocalProvider(LocalDivContext provides divContext) {
+                        DivView(data)
+                    }
                 }
             }
         )

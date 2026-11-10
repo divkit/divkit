@@ -30,6 +30,7 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
@@ -100,7 +101,9 @@ class ComposeContentRoborazziRule(failOnError: Boolean = true) : TestRule {
         val data = configuration.parseDivData()
         composeRule.setContent {
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                // Keep the platform theme used by the existing screenshot goldens.
+                LocalContext provides divContext.component.baseContext,
+                LocalDivContext provides divContext,
                 LocalLayoutDirection provides configuration.layoutDirection
             ) {
                 viewConfiguration = LocalViewConfiguration.current

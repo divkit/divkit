@@ -1,9 +1,9 @@
 package com.yandex.div.compose.views.image
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import coil3.transform.Transformation
-import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.reportWarning
@@ -15,7 +15,7 @@ internal fun List<DivFilter>?.observedTransformations(): List<Transformation> {
         return emptyList()
     }
 
-    val context = divContext
+    val context = LocalContext.current
     val density = LocalDensity.current.density
 
     return mapNotNull { filter ->

@@ -7,6 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.font.LineMetricsCache
 import com.yandex.div.evaluable.types.Color
@@ -15,10 +16,10 @@ import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.text
 import com.yandex.div2.Div
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivTextFontMeasurementTest {
@@ -79,7 +80,7 @@ class DivTextFontMeasurementTest {
         rule.setContent {
             val divContext = DivContext(baseContext = LocalContext.current, configuration = configuration)
             cache = divContext.component.lineMetricsCache
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data = divData)
             }
         }

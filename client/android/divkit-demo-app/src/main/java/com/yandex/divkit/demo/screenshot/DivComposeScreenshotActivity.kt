@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.ContextThemeWrapper
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import coil3.ComponentRegistry
 import coil3.EventListener
@@ -19,6 +20,7 @@ import coil3.request.Options
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
@@ -39,6 +41,8 @@ class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
     private lateinit var divContext: DivContext
     private lateinit var container: ViewGroup
 
+    private lateinit var platformContext: ContextThemeWrapper
+
     val imageLoadingTracker = ComposeImageLoadingTracker()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +52,9 @@ class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
     }
 
     override fun prepare() {
+        platformContext = ContextThemeWrapper(this, R.style.Div_Theme_Demo)
         divContext = DivContext(
-            baseContext = ContextThemeWrapper(this, R.style.Div_Theme_Demo),
+            baseContext = platformContext,
             configuration = divConfiguration {
                 fontSourceProvider = ComposeFontSourceProvider()
                 imageLoaderConfiguration = TestImageLoaderConfiguration(
@@ -68,11 +73,13 @@ class DivComposeScreenshotActivity : DivDataScreenshotActivity() {
         }
         val data = DivData(environment, json.getJSONObject("card"))
 
-        val view = ComposeView(divContext).apply {
+        val view = ComposeView(platformContext).apply {
             tag = SCREENSHOT_VIEW_TAG
             configuration.applyTo(this)
             setContent {
-                DivView(data = data)
+                CompositionLocalProvider(LocalDivContext provides divContext) {
+                    DivView(data = data)
+                }
             }
             removeAutofocusForOldApis()
         }

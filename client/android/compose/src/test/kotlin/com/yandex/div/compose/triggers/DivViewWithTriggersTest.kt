@@ -2,6 +2,7 @@ package com.yandex.div.compose.triggers
 
 import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -10,6 +11,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -26,11 +28,11 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTrigger
 import com.yandex.div2.DivVariable
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithTriggersTest {
@@ -228,9 +230,11 @@ class DivViewWithTriggersTest {
 
     private fun setContent(data: DivData) {
         activity.setContentView(
-            ComposeView(divContext).apply {
+            ComposeView(divContext.component.baseContext).apply {
                 setContent {
-                    DivView(data)
+                    CompositionLocalProvider(LocalDivContext provides divContext) {
+                        DivView(data)
+                    }
                 }
             }
         )

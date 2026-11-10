@@ -1,7 +1,6 @@
 package com.yandex.div.compose.views.input
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
@@ -14,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.data.Variable
@@ -35,12 +35,12 @@ import com.yandex.div2.DivInputValidator
 import com.yandex.div2.DivInputValidatorExpression
 import com.yandex.div2.DivInputValidatorRegex
 import com.yandex.div2.DivPatch
-import kotlinx.coroutines.runBlocking
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import kotlinx.coroutines.runBlocking
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivInputValidatorLabelTest {
@@ -302,7 +302,7 @@ class DivInputValidatorLabelTest {
 
     private fun setContent(data: DivData) {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data)
             }
         }

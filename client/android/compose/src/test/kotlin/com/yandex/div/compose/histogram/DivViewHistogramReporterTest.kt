@@ -10,7 +10,6 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.node.ModifierNodeElement
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.v2.createComposeRule
@@ -21,6 +20,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.core.histogram.HistogramBridge
 import com.yandex.div.core.histogram.NoOpHistogramBridge
@@ -221,7 +221,7 @@ class DivViewHistogramReporterTest {
 
         rule.setContent {
             view = LocalView.current
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data = data)
             }
         }

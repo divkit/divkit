@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -15,6 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.custom.DivCustomEnvironment
 import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
@@ -35,12 +35,12 @@ import com.yandex.div2.DivActionSetStoredValue
 import com.yandex.div2.DivExtension
 import com.yandex.div2.DivVariable
 import com.yandex.div2.StrVariable
-import org.junit.Rule
-import org.junit.runner.RunWith
 import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivStoredValuesStorageIntegrationTest {
@@ -201,7 +201,7 @@ class DivStoredValuesStorageIntegrationTest {
 
     private fun setContent(divContext: DivContext, data: com.yandex.div2.DivData) {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data)
             }
         }

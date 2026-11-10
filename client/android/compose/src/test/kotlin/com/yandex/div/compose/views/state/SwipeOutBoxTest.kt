@@ -16,6 +16,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
@@ -331,7 +332,10 @@ class SwipeOutBoxTest {
 
     private fun showCard(card: DivData) {
         composeRule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(
+                LocalContext provides divContext.component.baseContext,
+                LocalDivContext provides divContext,
+            ) {
                 if (mounted.value) {
                     DivView(card)
                 }

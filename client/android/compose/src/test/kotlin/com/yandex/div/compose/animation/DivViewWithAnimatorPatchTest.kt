@@ -1,7 +1,6 @@
 package com.yandex.div.compose.animation
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -11,6 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.animatorStartAction
 import com.yandex.div.test.data.container
@@ -22,12 +22,12 @@ import com.yandex.div.test.data.variable
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
-import kotlinx.coroutines.runBlocking
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
+import kotlinx.coroutines.runBlocking
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithAnimatorPatchTest {
@@ -97,7 +97,7 @@ class DivViewWithAnimatorPatchTest {
 
     private fun setContent(data: DivData) {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data)
             }
         }

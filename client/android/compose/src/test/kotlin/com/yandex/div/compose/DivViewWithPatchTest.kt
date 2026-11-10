@@ -7,7 +7,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
@@ -275,7 +274,7 @@ class DivViewWithPatchTest {
         val data = data(text(id = "target", text = "Before"))
         val visible = mutableStateOf(true)
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 if (visible.value) DivView(data)
             }
         }
@@ -721,7 +720,7 @@ class DivViewWithPatchTest {
         var patchOnMove = false
         var applied = false
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data, Modifier.pointerInput(Unit) {
                     awaitPointerEventScope {
                         while (true) {
@@ -930,7 +929,7 @@ class DivViewWithPatchTest {
 
     private fun setContent(data: DivData) {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data)
             }
         }

@@ -1,7 +1,6 @@
 package com.yandex.div.compose
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -29,12 +28,12 @@ import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivInputMask
 import com.yandex.div2.DivPatch
+import kotlin.test.Test
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.RuntimeEnvironment
-import kotlin.test.Test
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivViewSetCursorPositionTest {
@@ -194,7 +193,7 @@ class DivViewSetCursorPositionTest {
     private fun setContent(div: Div): DivData {
         val card = data(div)
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(card)
             }
         }

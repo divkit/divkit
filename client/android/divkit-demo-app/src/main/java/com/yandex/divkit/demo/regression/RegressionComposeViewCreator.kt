@@ -4,9 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.view.ContextThemeWrapper
 import android.view.View
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.DivView as ComposeDivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.extensions.pinchtozoom.PinchToZoomExtensionHandler
 import com.yandex.div.compose.extensions.shimmer.ShimmerExtensionHandler
@@ -28,7 +31,6 @@ import com.yandex.divkit.demo.div.NestedScrollViewFactory
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.font.ComposeFontSourceProvider
 import com.yandex.divkit.regression.utils.AssetReader
-import com.yandex.div.compose.DivView as ComposeDivView
 
 class RegressionComposeViewCreator(context: Context) {
     private val assetReader = AssetReader(context)
@@ -40,8 +42,9 @@ class RegressionComposeViewCreator(context: Context) {
     ) {
         val (templatesJson, cardJson) = assetReader.readScenarioJson(scenarioPath)
         val divData = mutableStateOf(parseDivData(templatesJson, cardJson))
+        val platformContext = ContextThemeWrapper(activity, R.style.Div_Theme_Demo)
         val divContext = DivContext(
-            baseContext = ContextThemeWrapper(activity, R.style.Div_Theme_Demo),
+            baseContext = platformContext,
             configuration = divConfiguration {
                 actionHandler = RegressionComposeActionHandler(assetReader, divData)
                 animationsEnabledProvider = Container.animationsEnabledProvider
@@ -76,9 +79,11 @@ class RegressionComposeViewCreator(context: Context) {
                 playerFactory = ViewBasedDivVideoPlayerFactory(ExoDivPlayerFactory(activity))
             }
         )
-        val view = ComposeView(divContext).apply {
+        val view = ComposeView(platformContext).apply {
             setContent {
-                ComposeDivView(data = divData.value)
+                CompositionLocalProvider(LocalDivContext provides divContext) {
+                    ComposeDivView(data = divData.value)
+                }
             }
         }
         onBound(view)

@@ -12,6 +12,7 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestImageLoaderConfiguration
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actions.observedActions
@@ -41,10 +42,10 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivLayoutProvider
 import com.yandex.div2.DivTransform
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 /**
  * For optimal performance, we need to make sure that on recomposition equal modifiers are created
@@ -244,7 +245,7 @@ class ModifierEqualityTest {
             )
             val viewContext = divContext.getViewContext(data(content = div))
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalDivViewContext provides viewContext,
                 LocalComponent provides viewContext.rootLocalComponent
             ) {

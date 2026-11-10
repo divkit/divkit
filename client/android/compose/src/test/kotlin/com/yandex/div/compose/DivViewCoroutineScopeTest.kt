@@ -3,7 +3,6 @@ package com.yandex.div.compose
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -98,7 +97,7 @@ class DivViewCoroutineScopeTest {
     fun `recomposition preserves scope and in-flight work`() {
         val recompose = mutableStateOf(false)
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(
                     data = card,
                     modifier = Modifier.testTag(if (recompose.value) "After" else "Before"),
@@ -118,7 +117,7 @@ class DivViewCoroutineScopeTest {
 
     private fun setContent() {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 if (isVisible.value) {
                     DivView(card)
                 }

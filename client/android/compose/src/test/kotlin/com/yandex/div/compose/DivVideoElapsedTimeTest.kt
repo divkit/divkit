@@ -160,7 +160,10 @@ class DivVideoElapsedTimeTest {
 
     private fun setContent(div: Div) {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides context) {
+            CompositionLocalProvider(
+                LocalContext provides context.component.baseContext,
+                LocalDivContext provides context,
+            ) {
                 if (visible.value) DivView(data = data(div))
             }
         }
@@ -171,7 +174,8 @@ class DivVideoElapsedTimeTest {
     private fun setVideoView() {
         rule.setContent {
             CompositionLocalProvider(
-                LocalContext provides context,
+                LocalContext provides context.component.baseContext,
+                LocalDivContext provides context,
                 LocalDivViewContext provides viewContext,
                 LocalComponent provides localComponent.value,
             ) {

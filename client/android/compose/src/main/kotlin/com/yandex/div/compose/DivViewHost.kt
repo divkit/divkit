@@ -47,7 +47,7 @@ class DivViewHost(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
 ) {
-    val composeView = ComposeView(divContext, attrs, defStyleAttr)
+    val composeView = ComposeView(divContext.component.baseContext, attrs, defStyleAttr)
 
     private val callbacks = mutableSetOf<CheckVisibilityCallback>()
     private val contentUnboundCallbacks = mutableSetOf<() -> Unit>()
@@ -102,7 +102,10 @@ class DivViewHost(
 
     private fun setHostContent(content: @Composable () -> Unit) {
         composeView.setContent {
-            CompositionLocalProvider(LocalDivViewHost provides this) {
+            CompositionLocalProvider(
+                LocalDivContext provides divContext,
+                LocalDivViewHost provides this,
+            ) {
                 content()
             }
         }

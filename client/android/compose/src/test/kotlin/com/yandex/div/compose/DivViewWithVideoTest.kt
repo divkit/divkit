@@ -26,15 +26,15 @@ import com.yandex.div.test.data.text
 import com.yandex.div.test.data.video
 import com.yandex.div.test.data.videoSource
 import com.yandex.div2.Div
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithVideoTest {
@@ -95,7 +95,7 @@ class DivViewWithVideoTest {
                 baseContext = LocalContext.current,
                 configuration = configuration,
             )
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 Box {
                     if (visible.value) {
                         DivView(data = divData)

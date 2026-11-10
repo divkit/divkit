@@ -36,6 +36,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.views.gallery.scroll.GalleryScrollDestination
 import com.yandex.div.compose.views.gallery.scroll.galleryScrollLayout
@@ -1309,7 +1310,7 @@ class GalleryScrollTest {
                 configuration = configuration,
             )
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalLayoutDirection provides layoutDirection,
             ) {
                 DivView(data = galleryData)

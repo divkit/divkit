@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.toSize
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actions.DivActionSource
@@ -414,7 +415,7 @@ class PagerScrollTest {
         composeRule.setContent {
             divContext = DivContext(baseContext = LocalContext.current, configuration = configuration)
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalLayoutDirection provides layoutDirection,
             ) {
                 DivView(data = pagerData)

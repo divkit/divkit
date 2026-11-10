@@ -3,6 +3,7 @@ package com.yandex.div.compose
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
@@ -26,6 +27,12 @@ import com.yandex.div.test.data.visibilityExpression
 import com.yandex.div2.Div
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTooltip
+import kotlin.test.AfterTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNull
+import kotlin.test.assertTrue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -34,12 +41,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.junit.Rule
 import org.junit.runner.RunWith
-import kotlin.test.AfterTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivTooltipControllerTest {
@@ -143,17 +144,19 @@ class DivTooltipControllerTest {
             },
         )
         activity.setContentView(
-            ComposeView(divContext).apply {
+            ComposeView(divContext.component.baseContext).apply {
                 setContent {
-                    DivView(
-                        data(
-                            text(
-                                text = "Anchor",
-                                visibility = visibilityExpression("@{visibility}"),
-                                tooltips = listOf(tooltip(TOOLTIP_ID, "Tooltip text")),
+                    CompositionLocalProvider(LocalDivContext provides divContext) {
+                        DivView(
+                            data(
+                                text(
+                                    text = "Anchor",
+                                    visibility = visibilityExpression("@{visibility}"),
+                                    tooltips = listOf(tooltip(TOOLTIP_ID, "Tooltip text")),
+                                )
                             )
                         )
-                    )
+                    }
                 }
             }
         )
@@ -174,16 +177,18 @@ class DivTooltipControllerTest {
         var result: List<Boolean>? = null
         val divContext = DivContext(activity, divConfiguration { reporter = TestReporter() })
         activity.setContentView(
-            ComposeView(divContext).apply {
+            ComposeView(divContext.component.baseContext).apply {
                 setContent {
-                    DivView(data(anchor()))
-                    DisposableEffect(Unit) {
-                        val controller = requireNotNull(divContext.getTooltipController(CARD_ID))
-                        result = listOf(
-                            controller.showTooltip(TOOLTIP_ID, multiple = false),
-                            controller.cancelTooltips(),
-                        )
-                        onDispose { }
+                    CompositionLocalProvider(LocalDivContext provides divContext) {
+                        DivView(data(anchor()))
+                        DisposableEffect(Unit) {
+                            val controller = requireNotNull(divContext.getTooltipController(CARD_ID))
+                            result = listOf(
+                                controller.showTooltip(TOOLTIP_ID, multiple = false),
+                                controller.cancelTooltips(),
+                            )
+                            onDispose { }
+                        }
                     }
                 }
             }
@@ -360,8 +365,10 @@ class DivTooltipControllerTest {
             visibility = visibilityExpression("@{visibility}"),
             tooltips = listOf(tooltip(TOOLTIP_ID, "Tooltip text")),
         ))
-        activity.setContentView(ComposeView(divContext).apply {
-            setContent { DivView(card) }
+        activity.setContentView(ComposeView(divContext.component.baseContext).apply {
+            setContent {
+                CompositionLocalProvider(LocalDivContext provides divContext) { DivView(card) }
+            }
         })
         rule.onNodeWithText("Anchor").assertIsDisplayed()
         controller(divContext).showTooltip(TOOLTIP_ID, multiple = false)
@@ -543,8 +550,10 @@ class DivTooltipControllerTest {
     private fun setControlledContent(content: @Composable () -> Unit): DivContext {
         val divContext = DivContext(activity, divConfiguration { reporter = TestReporter() })
         activity.setContentView(
-            ComposeView(divContext).apply {
-                setContent(content)
+            ComposeView(divContext.component.baseContext).apply {
+                setContent {
+                    CompositionLocalProvider(LocalDivContext provides divContext, content)
+                }
             }
         )
         rule.waitForIdle()

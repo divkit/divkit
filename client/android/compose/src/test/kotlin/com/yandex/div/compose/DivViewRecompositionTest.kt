@@ -2,6 +2,7 @@ package com.yandex.div.compose
 
 import android.view.View
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
@@ -20,10 +21,10 @@ import com.yandex.div.test.data.text
 import com.yandex.div.test.data.typedValue
 import com.yandex.div.test.data.variable
 import com.yandex.div2.DivData
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivViewRecompositionTest {
@@ -170,9 +171,11 @@ class DivViewRecompositionTest {
 
     private fun setContent(data: State<DivData>) {
         activity.setContentView(
-            ComposeView(divContext).apply {
+            ComposeView(divContext.component.baseContext).apply {
                 setContent {
-                    DivView(data.value)
+                    CompositionLocalProvider(LocalDivContext provides divContext) {
+                        DivView(data.value)
+                    }
                 }
             }
         )

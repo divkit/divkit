@@ -1,12 +1,12 @@
 package com.yandex.div.compose.collection
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actionData
@@ -32,6 +32,10 @@ import com.yandex.div2.Div
 import com.yandex.div2.DivCollectionItemBuilder
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -40,10 +44,6 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.spy
 import org.mockito.kotlin.whenever
 import org.robolectric.ParameterizedRobolectricTestRunner
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 /**
  * Observers that built items add to card variables are released together with the items, whatever
@@ -95,7 +95,7 @@ class DivViewWithItemBuilderScopeTest(private val case: Case) {
             text(text = "sibling")
         )))
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) { DivView(card) }
+            CompositionLocalProvider(LocalDivContext provides divContext) { DivView(card) }
         }
         rule.waitForIdle()
         val cardObservers = observers.toSet()

@@ -2,7 +2,6 @@ package com.yandex.div.compose.video.viewbased
 
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -10,6 +9,7 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.actions.DivActionData
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivExternalActionHandler
@@ -22,6 +22,8 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.video
 import com.yandex.div.test.data.videoSource
 import com.yandex.div2.DivVideoScale
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -31,8 +33,6 @@ import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class ViewBasedVideoActionsTest {
@@ -299,7 +299,7 @@ class ViewBasedVideoActionsTest {
 
     private fun setContent() {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 if (visible.value) DivView(data = divData.value)
             }
         }

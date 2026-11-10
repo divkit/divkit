@@ -10,10 +10,11 @@ import androidx.test.core.app.ApplicationProvider
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieResult
-import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivConfiguration
+import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.lottie.DivLottieResourceLoader
 import com.yandex.div.test.data.data
 import com.yandex.div2.Div
@@ -44,7 +45,7 @@ class LottieUrlChangeTest {
         rule.setContent {
             val baseContext = LocalContext.current
             val context = remember(baseContext) { DivContext(baseContext, configuration) }
-            CompositionLocalProvider(LocalContext provides context) { DivView(currentData.value) }
+            CompositionLocalProvider(LocalDivContext provides context) { DivView(currentData.value) }
         }
         rule.waitUntil { errors.isNotEmpty() }
         Assert.assertEquals(listOf("Failed to load Lottie composition from $FIRST_URL: first failed"), errors)
@@ -68,7 +69,7 @@ class LottieUrlChangeTest {
         rule.setContent {
             val baseContext = LocalContext.current
             val context = remember(baseContext) { DivContext(baseContext, configuration) }
-            CompositionLocalProvider(LocalContext provides context) { DivView(currentData.value) }
+            CompositionLocalProvider(LocalDivContext provides context) { DivView(currentData.value) }
         }
         rule.waitUntil { errors.size == 1 }
 
@@ -93,7 +94,7 @@ class LottieUrlChangeTest {
         Assert.assertEquals(listOf(FIRST_URL), loader.loadedUrls)
 
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides context) { DivView(data) }
+            CompositionLocalProvider(LocalDivContext provides context) { DivView(data) }
         }
         rule.waitForIdle()
 

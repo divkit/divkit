@@ -9,6 +9,7 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.test.data.action
@@ -23,11 +24,11 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivActionScrollDestination
 import com.yandex.div2.DivData
 import com.yandex.div2.IndexDestination
-import org.junit.Rule
-import org.junit.runner.RunWith
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
+import org.junit.Rule
+import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DivTabsScrollActionsTest {
@@ -193,7 +194,7 @@ class DivTabsScrollActionsTest {
         val configuration = divConfiguration { reporter = this@DivTabsScrollActionsTest.reporter }
         rule.setContent {
             divContext = DivContext(baseContext = LocalContext.current, configuration = configuration)
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data = tabsData)
             }
         }

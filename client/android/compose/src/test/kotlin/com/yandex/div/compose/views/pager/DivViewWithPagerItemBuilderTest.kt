@@ -1,7 +1,6 @@
 package com.yandex.div.compose.views.pager
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasScrollToIndexAction
@@ -14,6 +13,7 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestExternalActionHandler
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.actions.DivActionSource
@@ -47,11 +47,11 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import com.yandex.div2.DivVisibility
 import com.yandex.div2.ItemIdDestination
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import org.json.JSONArray
 import org.junit.Rule
 import org.junit.runner.RunWith
-import kotlin.test.Test
-import kotlin.test.assertEquals
 
 private const val PAGE_WIDTH = 300
 
@@ -212,7 +212,7 @@ class DivViewWithPagerItemBuilderTest {
 
     private fun setContent(card: DivData) {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(card)
             }
         }

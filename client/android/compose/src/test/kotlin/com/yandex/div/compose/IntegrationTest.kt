@@ -1,7 +1,6 @@
 package com.yandex.div.compose
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
@@ -15,11 +14,11 @@ import com.yandex.div.test.crossplatform.IntegrationTestCaseParser
 import com.yandex.div.test.crossplatform.IntegrationTestLogger
 import com.yandex.div.test.crossplatform.ParsingResult
 import com.yandex.div.test.crossplatform.ParsingUtils
+import java.io.File
+import kotlin.test.Test
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
-import java.io.File
-import kotlin.test.Test
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>) {
@@ -48,7 +47,7 @@ class IntegrationTest(testCaseParsingResult: ParsingResult<IntegrationTestCase>)
         )
 
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data = divData)
             }
         }

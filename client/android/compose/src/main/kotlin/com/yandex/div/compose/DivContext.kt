@@ -1,7 +1,6 @@
 package com.yandex.div.compose
 
 import android.content.Context
-import android.content.ContextWrapper
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.di.DivConfigurationModule
@@ -18,7 +17,9 @@ import com.yandex.div2.DivData
 import dev.zacsweers.metro.createGraphFactory
 
 /**
- * An implementation of [android.content.Context] that must be used for composing [DivView]s.
+ * Dependencies and shared state for composing [DivView]s.
+ *
+ * Provide this context through [LocalDivContext] or use [DivViewHost].
  *
  * Example usage:
  *
@@ -27,7 +28,7 @@ import dev.zacsweers.metro.createGraphFactory
  */
 class DivContext private constructor(
     internal val component: DivContextComponent
-) : ContextWrapper(component.baseContext) {
+) {
 
     /**
      * Creates a [DivContext] with provided [DivConfiguration].

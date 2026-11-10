@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -39,6 +38,9 @@ import com.yandex.div.test.data.variable
 import com.yandex.div2.DivData
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivTrigger
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.kotlin.clearInvocations
@@ -47,9 +49,6 @@ import org.mockito.kotlin.reset
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.robolectric.RuntimeEnvironment
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
 class DivViewClearFocusTest {
@@ -186,7 +185,7 @@ class DivViewClearFocusTest {
     @Test
     fun `clear focus preserves host input outside the card`() {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 Column {
                     BasicTextField(value = "Host", onValueChange = {}, modifier = Modifier.testTag("host"))
                     DivView(card)
@@ -418,7 +417,7 @@ class DivViewClearFocusTest {
         val currentData = mutableStateOf(card)
         rule.setContent {
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalSoftwareKeyboardController provides keyboard,
             ) {
                 DivView(currentData.value)
@@ -445,7 +444,7 @@ class DivViewClearFocusTest {
         val currentData = mutableStateOf(card)
         rule.setContent {
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalSoftwareKeyboardController provides keyboard,
             ) {
                 DivView(currentData.value)
@@ -464,7 +463,7 @@ class DivViewClearFocusTest {
     private fun setContent(modifier: Modifier = Modifier, data: DivData = card) {
         rule.setContent {
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalSoftwareKeyboardController provides currentKeyboard.value,
                 LocalFocusManager provides (currentFocusManager.value ?: LocalFocusManager.current),
             ) {
@@ -480,7 +479,7 @@ class DivViewClearFocusTest {
         reporter.failOnError = false
         rule.setContent {
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalSoftwareKeyboardController provides keyboard,
             ) {
                 Column {

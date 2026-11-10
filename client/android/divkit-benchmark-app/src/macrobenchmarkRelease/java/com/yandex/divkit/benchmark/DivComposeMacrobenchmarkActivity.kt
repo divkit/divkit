@@ -6,6 +6,7 @@ import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.platform.ComposeView
@@ -15,6 +16,7 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
@@ -66,23 +68,25 @@ class DivComposeMacrobenchmarkActivity : AppCompatActivity() {
             }
 
             Trace.beginAsyncSection("Div.Draw", TRACE_COOKIE)
-            val composeView = ComposeView(divContext)
+            val composeView = ComposeView(this@DivComposeMacrobenchmarkActivity)
             var firstDraw = true
             composeView.setContent {
-                DivView(
-                    data = data,
-                    modifier = Modifier.safeDrawingPadding().drawWithContent {
-                        drawContent()
-                        if (firstDraw) {
-                            firstDraw = false
-                            composeView.post {
-                                Trace.endAsyncSection("Div.Draw", TRACE_COOKIE)
-                                Trace.endAsyncSection("Div.Total", TRACE_COOKIE)
-                                root.contentDescription = "DivView rendered"
+                CompositionLocalProvider(LocalDivContext provides divContext) {
+                    DivView(
+                        data = data,
+                        modifier = Modifier.safeDrawingPadding().drawWithContent {
+                            drawContent()
+                            if (firstDraw) {
+                                firstDraw = false
+                                composeView.post {
+                                    Trace.endAsyncSection("Div.Draw", TRACE_COOKIE)
+                                    Trace.endAsyncSection("Div.Total", TRACE_COOKIE)
+                                    root.contentDescription = "DivView rendered"
+                                }
                             }
                         }
-                    }
-                )
+                    )
+                }
             }
             root.addView(composeView)
         }

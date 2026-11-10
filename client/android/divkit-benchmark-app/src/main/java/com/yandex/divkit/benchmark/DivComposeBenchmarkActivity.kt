@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.platform.ComposeView
@@ -15,6 +16,7 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.histogram.DivHistogramConfiguration
 import com.yandex.div.compose.images.ImageLoaderConfiguration
 import com.yandex.div.data.DivParsingEnvironment
@@ -24,6 +26,9 @@ import com.yandex.div2.DivData
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.benchmark.perf.PerfMetricReporter
 import com.yandex.divkit.regression.utils.AssetReader
+import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -31,9 +36,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
-import java.util.concurrent.TimeUnit
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 /**
  * Start activity with default data:
@@ -61,7 +63,7 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
         }
 
         divContext = createDivContext()
-        composeView = ComposeView(divContext).apply {
+        composeView = ComposeView(this).apply {
             rootLayout.addView(this)
         }
         frameTotalMetric = FrameTotalMetric(window)
@@ -147,13 +149,15 @@ class DivComposeBenchmarkActivity : AppCompatActivity() {
 
     private fun setContent(data: DivData) {
         composeView.setContent {
-            DivView(
-                data = data,
-                modifier = Modifier.safeDrawingPadding().drawWithContent {
-                    frameTotalMetric.onDraw(composeView.drawingTime)
-                    drawContent()
-                }
-            )
+            CompositionLocalProvider(LocalDivContext provides divContext) {
+                DivView(
+                    data = data,
+                    modifier = Modifier.safeDrawingPadding().drawWithContent {
+                        frameTotalMetric.onDraw(composeView.drawingTime)
+                        drawContent()
+                    }
+                )
+            }
         }
     }
 

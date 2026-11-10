@@ -2,6 +2,7 @@ package com.yandex.div.compose.focus
 
 import android.widget.LinearLayout
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsFocused
@@ -15,6 +16,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.setContentWithDivContext
@@ -25,11 +27,11 @@ import com.yandex.div.test.data.data
 import com.yandex.div.test.data.input
 import com.yandex.div.test.data.text
 import com.yandex.div2.DivFocus
+import kotlin.test.Test
 import org.junit.Rule
 import org.junit.rules.ExternalResource
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import kotlin.test.Test
 
 @RunWith(AndroidJUnit4::class)
 class InputFocusTest {
@@ -80,9 +82,16 @@ class InputFocusTest {
     @Test
     fun `clearing reaches input in another ComposeView`() {
         setContent {
+            val divContext = LocalDivContext.current
             AndroidView(factory = { context ->
                 LinearLayout(context).apply {
-                    addView(ComposeView(context).apply { setContent { DivView(data(input(textVariable = "input"))) } })
+                    addView(ComposeView(context).apply {
+                        setContent {
+                            CompositionLocalProvider(LocalDivContext provides divContext) {
+                                DivView(data(input(textVariable = "input")))
+                            }
+                        }
+                    })
                 }
             })
         }

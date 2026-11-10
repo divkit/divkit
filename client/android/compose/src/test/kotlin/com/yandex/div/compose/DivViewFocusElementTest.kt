@@ -1,7 +1,6 @@
 package com.yandex.div.compose
 
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotFocused
 import androidx.compose.ui.test.hasSetTextAction
@@ -19,13 +18,13 @@ import com.yandex.div.test.data.variable
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivPatch
-import org.junit.Rule
-import org.junit.runner.RunWith
-import org.robolectric.RuntimeEnvironment
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlinx.coroutines.runBlocking
+import org.junit.Rule
+import org.junit.runner.RunWith
+import org.robolectric.RuntimeEnvironment
 
 @RunWith(AndroidJUnit4::class)
 class DivViewFocusElementTest {
@@ -104,7 +103,7 @@ class DivViewFocusElementTest {
 
     private fun setContent() {
         rule.setContent {
-            CompositionLocalProvider(LocalContext provides divContext) {
+            CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(card)
             }
         }

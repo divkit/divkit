@@ -1,6 +1,7 @@
 package com.yandex.div.compose
 
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.test.assertIsDisplayed
@@ -430,9 +431,11 @@ class DivViewWithTooltipsTest {
     private fun setContent(content: Div) {
         divData = data(content)
         activity.setContentView(
-            ComposeView(context = divContext).apply {
+            ComposeView(context = divContext.component.baseContext).apply {
                 setContent {
-                    DivView(divData)
+                    CompositionLocalProvider(LocalDivContext provides divContext) {
+                        DivView(divData)
+                    }
                 }
             }
         )

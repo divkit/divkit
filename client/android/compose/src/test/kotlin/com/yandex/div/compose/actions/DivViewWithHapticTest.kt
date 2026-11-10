@@ -4,7 +4,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -13,11 +12,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
+import com.yandex.div.compose.LocalDivContext
 import com.yandex.div.compose.TestReporter
 import com.yandex.div.test.data.action
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.hapticAction
 import com.yandex.div.test.data.text
+import kotlin.test.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,7 +26,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.robolectric.RuntimeEnvironment
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4::class)
 class DivViewWithHapticTest {
@@ -81,7 +81,7 @@ class DivViewWithHapticTest {
     private fun setContent() {
         rule.setContent {
             CompositionLocalProvider(
-                LocalContext provides divContext,
+                LocalDivContext provides divContext,
                 LocalHapticFeedback provides currentFeedback.value
             ) {
                 if (isVisible.value) {
