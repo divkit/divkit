@@ -226,8 +226,9 @@ internal class ExpressionResolverImpl(
                 expressionObservers[expr]?.forEach { it.invoke() }
             }
         }
-        variableController.restoreSubscriptions()
     }
+
+    internal fun restoreSubscriptions() = variableController.restoreSubscriptions()
 
     internal fun withConstants(pathSegment: String,
                                constants: ConstantsProvider): ExpressionResolverImpl {

@@ -29,11 +29,17 @@ internal class ExpressionsRuntime(
     }
 
     fun updateSubscriptions() {
-        if (unsubscribed) {
-            unsubscribed = false
-            expressionResolver.subscribeOnVariables()
-        }
+        if (subscribe()) restoreSubscriptions()
     }
+
+    fun subscribe(): Boolean {
+        if (!unsubscribed) return false
+        unsubscribed = false
+        expressionResolver.subscribeOnVariables()
+        return true
+    }
+
+    fun restoreSubscriptions() = expressionResolver.restoreSubscriptions()
 
     internal fun cleanup(divView: Div2View?) {
         if (!unsubscribed) {
