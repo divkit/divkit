@@ -137,7 +137,7 @@ extension UIView {
   /// inside `body` go through `animateTransition`, which lifts the suppression
   /// for its own animation only, so nested `div-state` switches and
   /// `transition_in` of new views keep animating with their own parameters.
-  static func withoutInheritedAnimation(_ body: () -> Void) {
+  public static func withoutInheritedAnimation(_ body: () -> Void) {
     guard inheritedAnimationDuration > 0 else {
       body()
       return
