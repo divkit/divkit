@@ -2,10 +2,8 @@ package com.yandex.div.compose.views.image
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
@@ -29,7 +27,7 @@ import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
 import com.yandex.div.compose.images.rememberImageRequest
 import com.yandex.div.compose.images.rememberNetworkRestoringImagePainter
-import com.yandex.div.compose.views.modifiers.image.imageContentSize
+import com.yandex.div.compose.views.modifiers.image.imageContent
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivImage
@@ -134,37 +132,23 @@ internal fun DivImageContent(
     }
 
     Box(
-        modifier = backgroundModifier.imageContentSize(
-            data, imagePainter, previewPainter, contentScale, hasPlaceholder,
+        modifier = backgroundModifier.imageContent(
+            data = data,
+            imagePainter = imagePainter,
+            previewPainter = previewPainter,
+            contentScale = contentScale,
+            hasPlaceholder = hasPlaceholder,
+            alignment = alignment,
+            colorFilter = colorFilter,
         )
-    ) {
-        if (previewPainter != null) {
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = previewPainter,
-                contentDescription = null,
-                contentScale = contentScale,
-                alignment = alignment,
-                colorFilter = colorFilter
-            )
-        }
-
-        if (imagePainter != null) {
-            Image(
-                modifier = Modifier.fillMaxSize(),
-                painter = imagePainter,
-                contentDescription = null,
-                contentScale = contentScale,
-                alignment = alignment,
-                colorFilter = colorFilter
-            )
-            DisposableEffect(imageStateStorage, data, imageRequest, imagePainter) {
-                if (isPainterLoaded && successfulRequestRef.value === imageRequest) {
-                    imageStateStorage.markLoaded(data, imageRequest)
-                }
-                onDispose {
-                    imageStateStorage.reset(data, imageRequest)
-                }
+    )
+    if (imagePainter != null) {
+        DisposableEffect(imageStateStorage, imageRequest, imagePainter) {
+            if (isPainterLoaded && successfulRequestRef.value === imageRequest) {
+                imageStateStorage.markLoaded(data, imageRequest)
+            }
+            onDispose {
+                imageStateStorage.reset(data, imageRequest)
             }
         }
     }
