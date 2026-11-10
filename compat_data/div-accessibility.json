@@ -82,6 +82,15 @@
           "version_added": "31.12.0"
         }
       }
+    },
+    {
+      "id": "accessibility_menu",
+      "name": "accessibility <code>menu</code> property",
+      "compat": {
+        "ios": {
+          "version_added": "33.11.0"
+        }
+      }
     }
   ]
 }

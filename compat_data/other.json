@@ -180,6 +180,18 @@
           "version_added": "32.49.0"
         }
       }
+    },
+    {
+      "id": "hide_images_without_url",
+      "name": "<code>hideImagesWithoutUrl</code> option to hide images without a URL",
+      "compat": {
+        "android": {
+          "version_added": "33.11.0"
+        },
+        "ios": {
+          "version_added": "33.11.0"
+        }
+      }
     }
   ]
 }
