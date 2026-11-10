@@ -1,4 +1,8 @@
 pluginManagement {
+    def internalRepositories = file('../repositories.settings.internal.gradle')
+    if (internalRepositories.exists()) {
+        settings.apply from: internalRepositories
+    }
     repositories {
         mavenCentral()
     }
