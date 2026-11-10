@@ -12,8 +12,10 @@ import androidx.compose.ui.platform.LocalView
 import com.yandex.div.compose.di.DivViewScope
 import com.yandex.div.histogram.HistogramFilter
 import dev.zacsweers.metro.Inject
-import java.util.concurrent.TimeUnit
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
@@ -155,7 +157,7 @@ internal class DivViewHistogramReporter(
     }
 }
 
-private val timeUnit = TimeUnit.MICROSECONDS
-private val minValue = timeUnit.convert(1L, TimeUnit.MILLISECONDS)
-private val maxValue = timeUnit.convert(10L, TimeUnit.SECONDS)
+private val timeUnit = DurationUnit.MICROSECONDS
+private val minValue = 1.milliseconds.inWholeMicroseconds
+private val maxValue = 10.seconds.inWholeMicroseconds
 private const val bucketCount = 50

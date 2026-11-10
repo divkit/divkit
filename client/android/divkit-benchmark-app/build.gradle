@@ -70,6 +70,12 @@ android {
     }
 }
 
+androidComponents {
+    beforeVariants(selector().withBuildType('macrobenchmarkRelease')) { variant ->
+        variant.enableUnitTest = true
+    }
+}
+
 dependencies {
     implementation project(path: ':assertion')
     implementation project(path: ':compose')

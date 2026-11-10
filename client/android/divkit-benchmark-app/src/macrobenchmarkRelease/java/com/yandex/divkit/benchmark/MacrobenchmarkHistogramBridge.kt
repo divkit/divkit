@@ -2,9 +2,10 @@ package com.yandex.divkit.benchmark
 
 import android.os.Trace
 import androidx.annotation.RequiresApi
-import com.yandex.div.histogram.HistogramBridge
+import com.yandex.div.core.histogram.HistogramBridge
 import com.yandex.divkit.benchmark.div.histogram.LoggingHistogramBridge
-import java.util.concurrent.TimeUnit
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @RequiresApi(29)
 internal class MacrobenchmarkHistogramBridge(
@@ -16,7 +17,7 @@ internal class MacrobenchmarkHistogramBridge(
         duration: Long,
         min: Long,
         max: Long,
-        unit: TimeUnit,
+        unit: DurationUnit,
         bucketCount: Int
     ) {
         val counter = when (name) {
@@ -27,7 +28,7 @@ internal class MacrobenchmarkHistogramBridge(
         if (counter != null) {
             // The histogram already contains the duration; a trace slice here would
             // measure the callback instead. Counters store the original microseconds.
-            Trace.setCounter(counter, unit.toMicros(duration))
+            Trace.setCounter(counter, duration.toDuration(unit).inWholeMicroseconds)
         }
         delegate.recordTimeHistogram(name, duration, min, max, unit, bucketCount)
     }

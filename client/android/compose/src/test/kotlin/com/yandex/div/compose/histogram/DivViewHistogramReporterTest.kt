@@ -22,19 +22,25 @@ import com.yandex.div.compose.DivConfiguration
 import com.yandex.div.compose.DivContext
 import com.yandex.div.compose.DivView
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.histogram.HistogramBridge
+import com.yandex.div.core.histogram.HistogramBridge
+import com.yandex.div.core.histogram.NoOpHistogramBridge
 import com.yandex.div.histogram.HistogramFilter
-import com.yandex.div.histogram.NoOpHistogramBridge
 import com.yandex.div.test.data.data
 import com.yandex.div.test.data.text
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.mockito.Mockito.CALLS_REAL_METHODS
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.microseconds
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.DurationUnit
 import kotlin.time.TestTimeSource
+import kotlin.time.toDuration
+import com.yandex.div.histogram.HistogramBridge as LegacyHistogramBridge
 
 @RunWith(AndroidJUnit4::class)
 class DivViewHistogramReporterTest {
@@ -253,6 +259,54 @@ class DivViewHistogramReporterTest {
         assertEquals(emptyList(), histogramBridge.histograms)
     }
 
+    @Test
+    fun `core bridge receives histogram bucket settings in microseconds`() {
+        val bridge = mock<HistogramBridge>()
+        val reporter = DivViewHistogramReporter(
+            configuration = createConfiguration(isEnabled = true, histogramBridge = bridge),
+            timeSource = timeSource
+        )
+
+        rule.setContent {
+            view = LocalView.current
+            reporter.measure(prepareDuration = 1234.microseconds) {}
+        }
+        drawFrame()
+
+        verify(bridge).recordTimeHistogram(
+            name = "DivCompose.Render.Prepare.Cold",
+            duration = 1234,
+            min = 1000,
+            max = 10_000_000,
+            unit = DurationUnit.MICROSECONDS,
+            bucketCount = 50
+        )
+    }
+
+    @Test
+    fun `legacy bridge receives render histograms through its TimeUnit callback`() {
+        val bridge = mock<LegacyHistogramBridge>(defaultAnswer = CALLS_REAL_METHODS)
+        val reporter = DivViewHistogramReporter(
+            configuration = createConfiguration(isEnabled = true, histogramBridge = bridge),
+            timeSource = timeSource
+        )
+
+        rule.setContent {
+            view = LocalView.current
+            reporter.measure(prepareDuration = 1234.microseconds) {}
+        }
+        drawFrame()
+
+        verify(bridge).recordTimeHistogram(
+            name = "DivCompose.Render.Prepare.Cold",
+            duration = 1234,
+            min = 1000,
+            max = 10_000_000,
+            unit = TimeUnit.MICROSECONDS,
+            bucketCount = 50
+        )
+    }
+
     private fun drawFrame() {
         rule.runOnIdle { view.viewTreeObserver.dispatchOnDraw() }
         rule.waitForIdle()
@@ -273,11 +327,12 @@ class DivViewHistogramReporterTest {
         isEnabled: Boolean,
         componentName: String = "",
         prepareFilter: HistogramFilter = HistogramFilter.ON,
+        histogramBridge: HistogramBridge = this.histogramBridge,
     ): DivHistogramConfiguration {
         return object : DivHistogramConfiguration {
             override val isEnabled = isEnabled
             override val componentName = componentName
-            override val histogramBridge = this@DivViewHistogramReporterTest.histogramBridge
+            override val histogramBridge = histogramBridge
             override val prepareFilter = prepareFilter
         }
     }
@@ -290,10 +345,10 @@ class DivViewHistogramReporterTest {
             duration: Long,
             min: Long,
             max: Long,
-            unit: TimeUnit,
+            unit: DurationUnit,
             bucketCount: Int
         ) {
-            histograms += name to unit.toMicros(duration)
+            histograms += name to duration.toDuration(unit).inWholeMicroseconds
         }
     }
 

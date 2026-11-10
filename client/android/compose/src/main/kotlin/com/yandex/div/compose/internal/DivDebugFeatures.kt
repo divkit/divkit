@@ -47,7 +47,7 @@ class DivDebugFeatures @Inject internal constructor(
      *
      * Has no effect if histograms are disabled.
      *
-     * @see com.yandex.div.histogram.HistogramConfiguration
+     * @see com.yandex.div.compose.histogram.DivHistogramConfiguration
      */
     fun forceRecomposition(data: DivData) {
         viewContextStorage.get(data)?.component?.histogramReporter?.forceRecomposition()

@@ -26,12 +26,12 @@ android {
 }
 
 dependencies {
+    api(project(":core"))
     api(project(":div-data"))
 
     implementation(project(":coil-core"))
     implementation(project(":div-core"))
     implementation(project(":div-evaluable"))
-    implementation(project(":div-histogram"))
     implementation(project(":div-storage"))
     implementation(project(":logging"))
     implementation(project(":render-common"))
@@ -45,6 +45,7 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 
+    testImplementation(project(":div-histogram"))
     testImplementation(project(":fonts"))
     testImplementation(project(":test-utils"))
 

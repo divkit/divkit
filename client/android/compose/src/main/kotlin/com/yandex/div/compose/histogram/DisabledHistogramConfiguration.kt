@@ -1,6 +1,6 @@
 package com.yandex.div.compose.histogram
 
-import com.yandex.div.histogram.NoOpHistogramBridge
+import com.yandex.div.core.histogram.NoOpHistogramBridge
 
 internal object DisabledHistogramConfiguration : DivHistogramConfiguration {
     override val isEnabled = false
