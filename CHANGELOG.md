@@ -1,3 +1,10 @@
+## 32.61.7
+
+# Android Client:
+* Fixed a crash caused by the built-in SVG loader delivering image callbacks off the main thread, for example for SVG images in `div-text` and `div-tabs` title delimiters.
+* Fixed pager page sizes and aspect-ratio heights during initial measurement, rebind, and resize while preserving wrap-content sizing for neighbouring pages.
+
+
 ## 32.61.5
 
 # iOS Client:
