@@ -174,6 +174,21 @@ class DivComposeExpressionResolverTest {
     }
 
     @Test
+    fun `observed value changes when another observer evaluates a new expression`() {
+        val variable = Variable.IntegerVariable("value", 10)
+        variableController.declare(variable)
+        expression("@{value}").observe(expressionResolver) {
+            evaluate("@{value + 1}")
+        }
+        var value: String? = null
+        expression("@{value * 2}").observe(expressionResolver) { value = it }
+
+        variable.set(20)
+
+        assertEquals("40", value)
+    }
+
+    @Test
     fun `observed value changes when local variable is declared later`() {
         val reporter = TestReporter().apply { failOnError = false }
         val resolver = createExpressionResolver(

@@ -162,7 +162,7 @@ internal class DivComposeExpressionResolver private constructor(
 
     private fun onVariableChanged(variable: Variable) {
         if (variableProvider.isConstant(variable.name)) return
-        varToExpressions[variable.name]?.forEach { expression ->
+        varToExpressions[variable.name]?.toList()?.forEach { expression ->
             expressionObservers[expression]?.forEach { observer ->
                 observer()
             }
