@@ -59,11 +59,15 @@ private fun observeCollectionItems(
             return CollectionItems(staticItems, components = null, triggerComponents = emptyList())
         }
     }
+    val viewContext = LocalDivViewContext.current
     val component = LocalComponent.current
     val collectionItems = if (itemBuilder == null) {
-        val viewContext = LocalDivViewContext.current
-        viewContext.collectionItemScopeStorage
-            .getOrCreateStaticItems(owner, items.orEmpty(), component, viewContext)
+        viewContext.component.collectionItemScopeStorage.getOrCreateStaticItems(
+            owner = owner,
+            items = items.orEmpty(),
+            parent = component,
+            viewContext = viewContext
+        )
     } else {
         itemBuilder.observeBuiltItems(owner, component)
     }
@@ -115,8 +119,9 @@ private fun DivCollectionItemBuilder.observeBuiltItems(
     }
     val viewContext = LocalDivViewContext.current
     val idCounts = selectedItems.mapNotNull { it.id }.groupingBy { it }.eachCount()
+    val collectionItemScopeStorage = viewContext.component.collectionItemScopeStorage
     val items = selectedItems.mapIndexed { index, item ->
-        viewContext.collectionItemScopeStorage.getOrCreateItem(
+        collectionItemScopeStorage.getOrCreateItem(
             owner = owner,
             parent = parent,
             item = item,
@@ -125,9 +130,10 @@ private fun DivCollectionItemBuilder.observeBuiltItems(
         )
     }
     SideEffect {
-        val removedDivs =
-            viewContext.collectionItemScopeStorage.retainItems(owner, parent, items)
-        if (removedDivs.isNotEmpty()) viewContext.releaseComponents(removedDivs)
+        val removedDivs = collectionItemScopeStorage.retainItems(owner, parent, items)
+        if (removedDivs.isNotEmpty()) {
+            viewContext.releaseComponents(removedDivs)
+        }
         items.forEach { it.notifyChanges() }
     }
     return remember(items) {

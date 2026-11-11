@@ -11,11 +11,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.yandex.div.compose.TestReporter
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.mockLocalComponent
-import com.yandex.div.compose.mockViewContext
 import com.yandex.div.compose.setContent
 import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.state.WithRootStatePath
@@ -42,19 +40,19 @@ import kotlin.test.assertEquals
 @OptIn(DivModelInternalApi::class)
 @RunWith(AndroidJUnit4::class)
 class DivStateViewTest {
+
     @get:Rule
     val composeRule = createComposeRule()
 
     private val reporter = TestReporter()
-    private val variableController = DivVariableController()
     private val storage = DivStateStorage()
+    private val variableController = DivVariableController()
 
     private val localComponent = mockLocalComponent(
         reporter = reporter,
-        variableController = variableController
+        stateStorage = storage,
+        variableController = variableController,
     )
-
-    private val viewContext = mockViewContext(stateStorage = storage)
 
     @Test
     fun `resolves state by stateIdVariable`() {
@@ -345,10 +343,7 @@ class DivStateViewTest {
 
     private fun setContent(content: @Composable () -> Unit) {
         composeRule.setContent {
-            CompositionLocalProvider(
-                LocalComponent provides localComponent,
-                LocalDivViewContext provides viewContext,
-            ) {
+            CompositionLocalProvider(LocalComponent provides localComponent) {
                 WithRootStatePath(rootStateId = 0L) {
                     content()
                 }

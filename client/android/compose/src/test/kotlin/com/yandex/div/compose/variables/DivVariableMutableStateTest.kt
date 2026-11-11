@@ -23,7 +23,11 @@ import kotlin.test.assertNull
 class DivVariableMutableStateTest {
     private val reporter = TestReporter()
     private val variableController = DivVariableController()
-    private val localComponent = mockLocalComponent(reporter, variableController)
+
+    private val localComponent = mockLocalComponent(
+        reporter = reporter,
+        variableController = variableController
+    )
 
     @get:Rule
     val composeRule = createComposeRule()

@@ -13,8 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.OrientedLazyList
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
@@ -85,7 +85,7 @@ private fun BoxWithConstraintsScope.ScrollableGalleryView(
         layoutDirection = LocalLayoutDirection.current,
     )
 
-    val viewContext = LocalDivViewContext.current
+    val compositionKeyStorage = LocalComponent.current.compositionKeyStorage
     OrientedLazyList(
         isHorizontal = isHorizontal,
         modifier = Modifier.galleryScrollbar(
@@ -100,7 +100,10 @@ private fun BoxWithConstraintsScope.ScrollableGalleryView(
         crossAxisAlignment = crossAlignment,
         flingBehavior = flingBehavior,
     ) {
-        items(count = items.size, key = { viewContext.compositionKeyStorage.get(items[it].value()) }) { index ->
+        items(
+            count = items.size,
+            key = { compositionKeyStorage.get(items[it].value()) },
+        ) { index ->
             ScrollableChildItem(
                 data = items[index],
                 component = components?.get(items[index]),

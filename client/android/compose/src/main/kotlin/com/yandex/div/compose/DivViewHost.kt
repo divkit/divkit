@@ -80,8 +80,9 @@ class DivViewHost(
     ) {
         cancelPreload()
         if (preloadMode != PreloadMode.DISABLED) {
-            preloadJob = divContext.component.mainCoroutineScope.launch {
-                divContext.component.preloader.preload(data, preloadMode)
+            val component = divContext.component
+            preloadJob = component.mainCoroutineScope.launch {
+                component.preloader.preload(data, preloadMode)
             }
         }
         setHostContent(content)

@@ -17,7 +17,6 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedValue
@@ -28,17 +27,19 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivFocus
 
 @Composable
-internal fun Modifier.bindRootFocus(storage: FocusBindingStorage): Modifier {
+internal fun Modifier.bindRootFocus(focusBindingStorage: FocusBindingStorage): Modifier {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     val binding = remember { FocusBindingStorage.Binding() }
-    DisposableEffect(storage, focusManager, keyboardController) {
-        storage.register(binding, focusManager, keyboardController)
-        onDispose { storage.unregister(binding) }
+    DisposableEffect(focusBindingStorage, focusManager, keyboardController) {
+        focusBindingStorage.register(binding, focusManager, keyboardController)
+        onDispose { focusBindingStorage.unregister(binding) }
     }
     return Modifier
         .onFocusChanged { binding.hasFocus = it.hasFocus }
-        .focusProperties { onEnter = { if (storage.isClearing) cancelFocusChange() } }
+        .focusProperties {
+            onEnter = { if (focusBindingStorage.isClearing) cancelFocusChange() }
+        }
         .focusGroup()
         .then(this)
 }
@@ -74,7 +75,7 @@ internal fun Modifier.focus(
 private fun Modifier.nextFocusIds(ids: DivFocus.NextFocusIds?): Modifier {
     if (ids == null) return this
 
-    val storage = LocalDivViewContext.current.component.focusBindingStorage
+    val storage = LocalComponent.current.focusBindingStorage
     val forward = ids.forward?.observedValue()
     val right = ids.right?.observedValue()
     val down = ids.down?.observedValue()
@@ -95,8 +96,11 @@ internal fun Modifier.bindFocusTarget(
     requester: FocusRequester = remember { FocusRequester() },
     input: FocusBindingStorage.InputText? = null,
 ): Modifier {
-    if (id == null) return this.focusRequester(requester)
-    val storage = LocalDivViewContext.current.component.focusBindingStorage
+    if (id == null) {
+        return focusRequester(requester)
+    }
+
+    val storage = LocalComponent.current.focusBindingStorage
     DisposableEffect(storage, id, requester, input) {
         val target = if (input == null) {
             FocusBindingStorage.Target(requester)
@@ -106,7 +110,7 @@ internal fun Modifier.bindFocusTarget(
         storage.register(id, target)
         onDispose { storage.unregister(id, target) }
     }
-    return this.focusRequester(requester)
+    return focusRequester(requester)
 }
 
 private val Div.isFocusable: Boolean
@@ -123,7 +127,10 @@ private fun Modifier.observeFocusChanges(data: Div, state: MutableState<Boolean>
             state.value = isFocused
             val actions = if (isFocused) focus?.onFocus else focus?.onBlur
             actions?.let {
-                component.handleActions(it, if (isFocused) DivActionSource.FOCUS else DivActionSource.BLUR)
+                component.handleActions(
+                    actions = it,
+                    source = if (isFocused) DivActionSource.FOCUS else DivActionSource.BLUR,
+                )
             }
         }
     }
@@ -131,5 +138,5 @@ private fun Modifier.observeFocusChanges(data: Div, state: MutableState<Boolean>
     DisposableEffect(state) {
         onDispose { currentOnFocusChanged(false) }
     }
-    return this.onFocusChanged { onFocusChanged(it.isFocused) }
+    return onFocusChanged { onFocusChanged(it.isFocused) }
 }

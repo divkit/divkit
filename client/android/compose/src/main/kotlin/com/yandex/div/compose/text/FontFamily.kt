@@ -19,8 +19,9 @@ internal fun rememberFontFamily(
     fontWeightValue: Int?,
     fontVariationSettings: JSONObject? = null,
 ): FontFamily {
-    val provider = divContext.component.fontSourceProvider
-    val cache = divContext.component.fontFamilyCache
+    val component = divContext.component
+    val provider = component.fontSourceProvider
+    val cache = component.fontFamilyCache
     return remember(fontFamily, fontWeight, fontWeightValue, fontVariationSettings) {
         val weight = fontWeight.toFontWeight(fontWeightValue) ?: FontWeight.Normal
         val variations = buildFontVariationSettings(fontWeight, fontWeightValue, fontVariationSettings)
@@ -43,7 +44,8 @@ internal fun rememberTypeface(
     val family = rememberFontFamily(fontFamily, fontWeight, fontWeightValue, fontVariationSettings)
     val resolver = LocalFontFamilyResolver.current
     return remember(family, resolver) {
-        resolver.resolveAsTypeface(family, fontWeight.toFontWeight(fontWeightValue) ?: FontWeight.Normal).value
+        resolver.resolveAsTypeface(family, fontWeight.toFontWeight(fontWeightValue)
+            ?: FontWeight.Normal).value
     }
 }
 

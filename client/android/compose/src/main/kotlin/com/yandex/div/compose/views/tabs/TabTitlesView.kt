@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.yandex.div.compose.context.animationsEnabled
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -49,7 +49,6 @@ import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div2.DivTabs
 import kotlinx.coroutines.flow.first
-import kotlin.collections.first
 import kotlin.math.roundToInt
 
 @Composable
@@ -209,7 +208,7 @@ private fun ScrollableTitleRow(
 
 @Composable
 private fun CenterTitleRow(listState: LazyListState, selectedIndex: Int, activeTitleTaps: Int) {
-    val animated = animationsEnabled
+    val isAnimated = LocalComponent.current.animationConfiguration.isEnabled
     LaunchedEffect(selectedIndex, activeTitleTaps) {
         val info = snapshotFlow { listState.layoutInfo }
             .first { it.visibleItemsInfo.isNotEmpty() }
@@ -218,7 +217,7 @@ private fun CenterTitleRow(listState: LazyListState, selectedIndex: Int, activeT
             ?: info.visibleItemsInfo.first().size
 
         val centeringOffset = (viewport - itemSize) / 2
-        if (animated) {
+        if (isAnimated) {
             listState.animateScrollToItem(selectedIndex, scrollOffset = -centeringOffset)
         } else {
             listState.scrollToItem(selectedIndex, scrollOffset = -centeringOffset)

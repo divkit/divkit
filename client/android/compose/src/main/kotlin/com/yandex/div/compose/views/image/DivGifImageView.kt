@@ -2,7 +2,7 @@ package com.yandex.div.compose.views.image
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.observedContentScale
@@ -14,7 +14,6 @@ internal fun DivGifImageView(
     modifier: Modifier,
     data: DivGifImage
 ) {
-    val previewDecoder = divContext.component.imagePreviewDecoder
     DivImageContent(
         modifier = modifier,
         data = data,
@@ -26,7 +25,8 @@ internal fun DivGifImageView(
         ),
         placeholderColor = data.placeholderColor.observedColorValue(),
         preview = {
-            data.preview?.observedValue(transform = previewDecoder::decodePreview)
+            val component = LocalComponent.current
+            data.preview?.observedValue(transform = component.imagePreviewDecoder::decodePreview)
                 ?: data.previewUrl?.observedValue()
         }
     )

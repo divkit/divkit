@@ -5,7 +5,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.DivReporter
-import com.yandex.div.compose.actions.DivActionHandler
 import com.yandex.div.compose.actions.DivActionHandlingContext
 import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.compose.context.LocalDivViewContext
@@ -28,9 +27,8 @@ import dev.zacsweers.metro.Provides
         DivLocalModule::class
     ]
 )
-internal interface DivLocalComponent {
+internal interface DivLocalComponent : DivViewDependencies {
 
-    val actionHandler: DivActionHandler
     val actionHandlingContext: DivActionHandlingContext
     val expressionCache: ExpressionCache
     val expressionResolver: DivComposeExpressionResolver
@@ -58,9 +56,7 @@ internal fun DivLocalComponent.handleActions(
 }
 
 /**
-
  * An element with its own variables, functions or triggers is resolved in its own scope.
-
  */
 internal val DivBase.declaresLocalScope: Boolean
     get() = !variables.isNullOrEmpty() || !functions.isNullOrEmpty() ||
@@ -71,20 +67,24 @@ internal val LocalComponent = staticCompositionLocalOf<DivLocalComponent> {
 }
 
 @Composable
-internal inline fun WithLocalComponent(data: DivBase, crossinline content: @Composable () -> Unit) {
+internal inline fun WithLocalComponent(
+    data: DivBase,
+    crossinline content: @Composable () -> Unit
+) {
     if (!data.declaresLocalScope) {
         return content()
     }
 
-    val localComponent = LocalDivViewContext.current.getLocalComponent(
-        data,
-        parentComponent = LocalComponent.current
+    val parentComponent = LocalComponent.current
+    val component = LocalDivViewContext.current.getLocalComponent(
+        data = data,
+        parentComponent = parentComponent
     )
-    if (localComponent === LocalComponent.current) {
+    if (component === parentComponent) {
         return content()
     }
-    localComponent.triggerStorage.observe()
-    CompositionLocalProvider(LocalComponent provides localComponent) {
+    component.triggerStorage.observe()
+    CompositionLocalProvider(LocalComponent provides component) {
         content()
     }
 }

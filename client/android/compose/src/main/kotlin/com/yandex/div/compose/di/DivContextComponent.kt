@@ -1,27 +1,19 @@
 package com.yandex.div.compose.di
 
 import android.content.Context
-import coil3.ImageLoader
 import com.yandex.div.compose.DivConfiguration
-import com.yandex.div.compose.animation.AnimationConfiguration
 import com.yandex.div.compose.context.DivViewContextFactory
 import com.yandex.div.compose.context.DivViewContextStorage
-import com.yandex.div.compose.custom.DivCustomViewFactory
 import com.yandex.div.compose.extensions.DivExtensionHandler
 import com.yandex.div.compose.focus.InputFocus
 import com.yandex.div.compose.font.DivFontFamilyCache
 import com.yandex.div.compose.font.DivFontSourceProvider
 import com.yandex.div.compose.font.LineMetricsCache
-import com.yandex.div.compose.images.ImagePreviewDecoder
 import com.yandex.div.compose.images.ImageRequestFactory
-import com.yandex.div.compose.internal.DivDebugConfiguration
 import com.yandex.div.compose.internal.DivDebugFeatures
 import com.yandex.div.compose.patch.DivPatcher
 import com.yandex.div.compose.preload.DivPreloader
 import com.yandex.div.compose.storedvalues.DivStoredValuesStorageFactory
-import com.yandex.div.compose.video.DivVideoPlayerFactory
-import com.yandex.div.core.expression.variables.DivVariableController
-import com.yandex.div2.DivExtension
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Includes
 import dev.zacsweers.metro.Named
@@ -34,35 +26,25 @@ import kotlinx.coroutines.CoroutineScope
         DivContextModule::class,
     ]
 )
-internal interface DivContextComponent {
+internal interface DivContextComponent : DivContextDependencies {
 
-    val animationConfiguration: AnimationConfiguration
     val baseContext: Context
     val configuration: DivConfiguration
-    val customViewFactories: Map<String, DivCustomViewFactory>
-    val debugConfiguration: DivDebugConfiguration
     val debugFeatures: DivDebugFeatures
     val extensionHandlers: Map<String, DivExtensionHandler>
     val fontSourceProvider: DivFontSourceProvider
     val fontFamilyCache: DivFontFamilyCache
-    val imageLoader: ImageLoader
-    val imagePreviewDecoder: ImagePreviewDecoder
     val imageRequestFactory: ImageRequestFactory
     val inputFocus: InputFocus
     val lineMetricsCache: LineMetricsCache
     val patcher: DivPatcher
-    val playerFactory: DivVideoPlayerFactory
     val preloader: DivPreloader
     val storedValuesStorageFactory: DivStoredValuesStorageFactory
     val viewContextFactory: DivViewContextFactory
     val viewContextStorage: DivViewContextStorage
-    val wildcardExtensions: List<Pair<DivExtension, DivExtensionHandler>>
 
     @get:Named(Names.MAIN_COROUTINE_SCOPE)
     val mainCoroutineScope: CoroutineScope
-
-    @get:Named(Names.HOST_VARIABLES)
-    val variableController: DivVariableController
 
     fun viewComponent(): DivViewComponent.Builder
 

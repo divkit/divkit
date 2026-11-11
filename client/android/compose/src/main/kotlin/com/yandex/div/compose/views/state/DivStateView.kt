@@ -10,9 +10,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.context.expressionResolver
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.state.LocalDivStatePath
 import com.yandex.div.compose.state.findState
@@ -43,9 +41,9 @@ internal fun DivStateView(
 ) {
     val boundaryVisibility = remember { DivVisibilityState() }
     ResolveDivState(data) { parentPath, divId, activeState ->
-        val viewContext = LocalDivViewContext.current
-        val swipeOutState = viewContext.stateStorage.getSwipeOutState(
-            compositionKey = viewContext.compositionKeyStorage.get(data),
+        val component = LocalComponent.current
+        val swipeOutState = component.stateStorage.getSwipeOutState(
+            compositionKey = component.compositionKeyStorage.get(data),
             state = activeState,
         )
         if (swipeOutState?.value == true) {
@@ -84,11 +82,12 @@ private fun StateContent(
     transitionContentState: StateChangeContentState,
     boundaryVisibility: DivVisibilityState,
 ) {
+    val component = LocalComponent.current
     val contentModifier = modifier
         .applyIf(data.clipToBounds.observedValue()) {
             clipToBounds(
                 data = data,
-                hasWildcardExtensions = divContext.component.wildcardExtensions.isNotEmpty(),
+                hasWildcardExtensions = component.wildcardExtensions.isNotEmpty(),
             )
         }
         .observeDivVisibility(boundaryVisibility)
@@ -100,7 +99,7 @@ private fun StateContent(
         activeStateData?.alignmentVertical.observedValue(DivAlignmentVertical.TOP),
     )
     val transitionsEnabled = data.transitionAnimationSelector.observedValue().allowsStateChange()
-    val animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState()
+    val animationsEnabled = component.animationConfiguration.isEnabledAsState()
     val committedState = transitionContentState.committedState
     val transitionsAvailable = transitionsEnabled && animationsEnabled
     val (activeStateHasTransitions, committedStateHasTransitions) = rememberTransitionPresence(
@@ -235,10 +234,9 @@ private fun DivTransitionSelector.allowsStateChange(): Boolean {
 private fun DivState.rememberActiveState(
     parentPath: DivStatePath
 ): DivState.State? {
-    val stateStorage = LocalDivViewContext.current.stateStorage
-    val resolver = expressionResolver
+    val component = LocalComponent.current
+    val stateStorage = component.stateStorage
     val divId = id
-
     val variableState = stateIdVariable?.let { mutableStateFromStringVariable(it) }
     val storedStateId = divId?.let { stateStorage.getActiveState(parentPath, it) }
 
@@ -249,12 +247,12 @@ private fun DivState.rememberActiveState(
         }
     }
 
+    val expressionResolver = component.expressionResolver
     val activeStateId = variableState?.value
         ?: storedStateId
-        ?: remember(defaultStateId, resolver) {
-            defaultStateId?.evaluate(resolver)
+        ?: remember(defaultStateId, expressionResolver) {
+            defaultStateId?.evaluate(expressionResolver)
         }
-
     return resolveState(activeStateId)
 }
 

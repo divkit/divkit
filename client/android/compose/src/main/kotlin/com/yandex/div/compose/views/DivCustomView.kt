@@ -2,10 +2,8 @@ package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.custom.DivCustomEnvironment
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.DivCustom
 
@@ -14,19 +12,19 @@ internal fun DivCustomView(
     modifier: Modifier,
     data: DivCustom
 ) {
+    val component = LocalComponent.current
     val customType = data.customType
-    val factory = divContext.component.customViewFactories[customType]
+    val factory = component.customViewFactories[customType]
     if (factory == null) {
         reportError("No custom view factory for custom_type: $customType")
         return
     }
 
     val childItems = data.items.orEmpty()
-    val storedValuesStorage = LocalDivViewContext.current.component.storedValuesStorage
     val environment = DivCustomEnvironment(
         data = data,
-        expressionResolver = expressionResolver,
-        storedValuesStorage = storedValuesStorage,
+        expressionResolver = component.expressionResolver,
+        storedValuesStorage = component.storedValuesStorage,
         items = {
             for (child in childItems) {
                 DivBlockView(child)

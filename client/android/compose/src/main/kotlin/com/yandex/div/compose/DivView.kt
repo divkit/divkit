@@ -36,16 +36,17 @@ fun DivView(
     modifier: Modifier = Modifier
 ) {
     val (viewContext, prepareDuration) = measureTimedValue { divContext.getViewContext(data) }
-    viewContext.component.histogramReporter.measure(prepareDuration) {
+    val component = viewContext.component
+    component.histogramReporter.measure(prepareDuration) {
         val localComponent = viewContext.rootLocalComponent
-        val boundModifier = modifier.bindRootFocus(viewContext.component.focusBindingStorage)
+        val boundModifier = modifier.bindRootFocus(component.focusBindingStorage)
         viewContext.onComposition()
 
         CompositionLocalProvider(
             LocalDivViewContext provides viewContext,
             LocalComponent provides localComponent
         ) {
-            val states = viewContext.states
+            val states = component.states.value
             if (states.size > 1) {
                 reportError("Multiple root states not supported")
             }

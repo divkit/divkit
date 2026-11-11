@@ -22,8 +22,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.constrainHeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.yandex.div.compose.context.animationsEnabled
-import com.yandex.div.compose.context.expressionResolver
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -49,10 +48,11 @@ internal fun DivTabsView(
         return
     }
 
-    val resolver = expressionResolver
+    val component = LocalComponent.current
+    val expressionResolver = component.expressionResolver
     val state = rememberDivTabsState(
-        initialIndex = remember(data.selectedTab, resolver) {
-            data.selectedTab.evaluate(resolver).toInt()
+        initialIndex = remember(data.selectedTab, expressionResolver) {
+            data.selectedTab.evaluate(expressionResolver).toInt()
                 .coerceIn(0, (items.size - 1).coerceAtLeast(0))
         },
         tabCount = items.size,
@@ -60,8 +60,11 @@ internal fun DivTabsView(
 
     val style = data.tabTitleStyle ?: DEFAULT_TAB_TITLE_STYLE
     val animationType = style.animationType.observedValue()
-    val titleAnimation = if (animationsEnabled) {
-        TabTitleAnimation(type = animationType, durationMillis = style.animationDuration.observedIntValue())
+    val titleAnimation = if (component.animationConfiguration.isEnabled) {
+        TabTitleAnimation(
+            type = animationType,
+            durationMillis = style.animationDuration.observedIntValue(),
+        )
     } else {
         null
     }

@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.yandex.div.compose.actions.DivActionSource
-import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
@@ -29,13 +28,13 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observedPxValue
 import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
-import com.yandex.div.internal.tooltip.hasTooltipActions
 import com.yandex.div.internal.tooltip.TouchEventDispatcher
+import com.yandex.div.internal.tooltip.hasTooltipActions
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTooltip
 import com.yandex.div2.DivTooltipMode
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Renders a single tooltip as a [Popup] positioned relative to its registered anchor.
@@ -59,39 +58,39 @@ internal fun TooltipPopup(
     onHidden: () -> Unit,
     onDismissed: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val underlyingView = LocalView.current.rootView
     val tooltip = anchorEntry.tooltip
     TooltipDurationEffect(tooltip, isVisible, onDismissRequested)
 
-    val enterTransition = if (animationsEnabled) tooltip.observedEnterTransition() else EnterTransition.None
-    val exitTransition = if (animationsEnabled) tooltip.observedExitTransition() else ExitTransition.None
-    val exitTransitionDuration = if (exitTransition == ExitTransition.None) {
-        0
+    val animationsEnabled = LocalComponent.current.animationConfiguration.isEnabled
+    val enterTransition = if (animationsEnabled) {
+        tooltip.observedEnterTransition()
     } else {
-        tooltip.animationOut?.duration?.observedIntValue() ?: DEFAULT_TOOLTIP_TRANSITION_DURATION_MS
+        EnterTransition.None
     }
-    LaunchedEffect(tooltip.id, isVisible, exitTransitionDuration) {
-        if (!isVisible) {
-            delay(exitTransitionDuration.milliseconds)
-            onHidden()
-        }
+    val exitTransition = if (animationsEnabled) {
+        tooltip.observedExitTransition()
+    } else {
+        ExitTransition.None
     }
+    TooltipExitEffect(tooltip, isVisible, exitTransition, onHidden)
 
+    val context = LocalContext.current
+    val underlyingView = LocalView.current.rootView
     val isModal = tooltip.mode is DivTooltipMode.Modal
     val touchDispatcher = remember(underlyingView, isModal) {
         if (isModal) null else TouchEventDispatcher { underlyingView }::dispatch
     }
     val closeByTapOutside = tooltip.closeByTapOutside.observedValue()
-    val positionProvider = anchorEntry.observedPositionProvider(fullScreen = tooltip.substrateDiv != null)
+    val positionProvider = anchorEntry.observedPositionProvider(
+        fullScreen = tooltip.substrateDiv != null
+    )
     val onTapOutside = rememberTapOutsideHandler(
         actions = tooltip.tapOutsideActions,
         closeByTapOutside = closeByTapOutside,
         onDismiss = onDismissRequested
     )
-
     Popup(
-        properties = tooltipPopupProperties(isModal, closeByTapOutside),
+        properties = popupProperties(isModal, closeByTapOutside),
         popupPositionProvider = positionProvider,
         onDismissRequest = onTapOutside,
     ) {
@@ -114,7 +113,7 @@ internal fun TooltipPopup(
     }
 }
 
-private fun tooltipPopupProperties(isModal: Boolean, closeByTapOutside: Boolean) = PopupProperties(
+private fun popupProperties(isModal: Boolean, closeByTapOutside: Boolean) = PopupProperties(
     focusable = isModal,
     dismissOnBackPress = true,
     dismissOnClickOutside = closeByTapOutside || isModal,
@@ -149,15 +148,39 @@ private fun TooltipDurationEffect(
 }
 
 @Composable
-private fun TooltipAnchorEntry.observedPositionProvider(fullScreen: Boolean) = TooltipPositionProvider(
-    position = tooltip.position.observedValue(),
-    anchorBounds = bounds.value,
-    offset = IntOffset(
-        x = tooltip.offset?.x?.observedPxValue()?.toInt() ?: 0,
-        y = tooltip.offset?.y?.observedPxValue()?.toInt() ?: 0,
-    ),
-    fullScreen = fullScreen,
-)
+private fun TooltipExitEffect(
+    tooltip: DivTooltip,
+    isVisible: Boolean,
+    exitTransition: ExitTransition,
+    onHidden: () -> Unit,
+) {
+    val duration = if (exitTransition == ExitTransition.None) {
+        0
+    } else {
+        tooltip.animationOut?.duration?.observedIntValue() ?: DEFAULT_TOOLTIP_TRANSITION_DURATION_MS
+    }
+    LaunchedEffect(tooltip.id, isVisible, duration) {
+        if (!isVisible) {
+            delay(duration.milliseconds)
+            onHidden()
+        }
+    }
+}
+
+@Composable
+private fun TooltipAnchorEntry.observedPositionProvider(
+    fullScreen: Boolean
+): TooltipPositionProvider {
+    return TooltipPositionProvider(
+        position = tooltip.position.observedValue(),
+        anchorBounds = bounds.value,
+        offset = IntOffset(
+            x = tooltip.offset?.x?.observedPxValue()?.toInt() ?: 0,
+            y = tooltip.offset?.y?.observedPxValue()?.toInt() ?: 0,
+        ),
+        fullScreen = fullScreen,
+    )
+}
 
 @Composable
 private fun TooltipPopupContent(

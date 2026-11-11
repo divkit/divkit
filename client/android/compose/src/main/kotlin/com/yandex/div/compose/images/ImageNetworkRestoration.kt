@@ -9,7 +9,6 @@ import androidx.compose.runtime.remember
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.network.HttpException
-import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.internal.NetworkRestorationController
 import java.io.InterruptedIOException
@@ -24,14 +23,15 @@ internal fun rememberNetworkRestoringImagePainter(
     model: Any?,
     onState: ((AsyncImagePainter.State) -> Unit)? = null,
 ): AsyncImagePainter = key(model) {
-    val networkRestorationController = LocalComponent.current.networkRestorationController
+    val component = LocalComponent.current
+    val networkRestorationController = component.networkRestorationController
     val restoration = remember(networkRestorationController) {
         ImageNetworkRestoration(networkRestorationController)
     }
     restoration.beginInputUpdate()
     val painter = rememberAsyncImagePainter(
         model = model,
-        imageLoader = divContext.component.imageLoader,
+        imageLoader = component.imageLoader,
         onState = { state ->
             restoration.onState(state)
             onState?.invoke(state)

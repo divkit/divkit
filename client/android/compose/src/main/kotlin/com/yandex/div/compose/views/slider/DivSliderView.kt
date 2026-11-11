@@ -24,7 +24,6 @@ import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.Constraints
 import com.yandex.div.compose.R
-import com.yandex.div.compose.context.animationsEnabled
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
@@ -53,15 +52,15 @@ internal fun DivSliderView(modifier: Modifier, data: DivSlider) {
 
     val isEnabled = data.isEnabled.observedValue()
     val isRtlLayout = isRtlLayout
-    val animationsEnabled = animationsEnabled
     val coroutineScope = rememberCoroutineScope()
     val focusRequester = if (data.focus != null) remember { FocusRequester() } else null
-    val localComponent = LocalComponent.current
-    val pressHandler = remember(data.pressStartActions, data.pressEndActions, localComponent, focusRequester) {
-        SliderPressHandler(data.pressStartActions, data.pressEndActions, localComponent, focusRequester)
+    val component = LocalComponent.current
+    val pressHandler = remember(data.pressStartActions, data.pressEndActions, component, focusRequester) {
+        SliderPressHandler(data.pressStartActions, data.pressEndActions, component, focusRequester)
     }
     val thumbWidth = styles.maxTickOrThumbWidth
     val hasTickMarks = styles.hasTickMarks
+    val animationsEnabled = component.animationConfiguration.isEnabled
     val gestureHandler = remember(
         state, thumbWidth, hasTickMarks, isRtlLayout, animationsEnabled, coroutineScope, pressHandler
     ) {

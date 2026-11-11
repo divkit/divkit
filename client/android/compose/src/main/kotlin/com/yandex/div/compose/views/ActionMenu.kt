@@ -36,8 +36,9 @@ internal inline fun WithActionMenu(
 
     val menuHolder = LocalDivViewContext.current.component.actionMenuHolder
     val menuAction = menuHolder.expandedMenuAction
-    if (menuAction != null && actions?.any { it.hasMenuAction(menuAction) } == true
-        && menuAction.isEnabled.observedValue()
+    if (menuAction != null &&
+        actions.any { it.hasMenuAction(menuAction) } &&
+        menuAction.isEnabled.observedValue()
     ) {
         Box(modifier) {
             content(Modifier)
@@ -81,4 +82,3 @@ private fun List<DivAction>?.hasMenuItems(): Boolean {
 private fun List<DivAction>?.hasMenuAction(action: DivAction): Boolean {
     return this?.contains(action) ?: false
 }
-

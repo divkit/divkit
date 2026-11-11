@@ -291,7 +291,7 @@ private class ImageLoadedCaptureExtensionHandler : DivExtensionHandler {
         content: @Composable (modifier: Modifier) -> Unit
     ) {
         val data = environment.data.value()
-        val isLoaded = LocalDivViewContext.current.component.imageStateStorage.isLoaded(data)
+        val isLoaded = LocalComponent.current.imageStateStorage.isLoaded(data)
         SideEffect {
             observedData = data
             isCurrentImageLoaded = isLoaded

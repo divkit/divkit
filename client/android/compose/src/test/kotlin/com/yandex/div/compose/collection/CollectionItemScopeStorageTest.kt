@@ -32,11 +32,12 @@ import kotlin.test.assertSame
 @RunWith(ParameterizedRobolectricTestRunner::class)
 class CollectionItemScopeStorageTest(private val case: Case) {
     private val divContext = DivContext(
-        getApplicationContext(),
-        DivConfiguration(reporter = TestReporter())
+        baseContext = getApplicationContext(),
+        configuration = DivConfiguration(reporter = TestReporter())
     )
+
     private val viewContext = divContext.getViewContext(data(text(text = "card")))
-    private val storage = viewContext.collectionItemScopeStorage
+    private val storage = viewContext.component.collectionItemScopeStorage
     private val parent = viewContext.rootLocalComponent
 
     @Test

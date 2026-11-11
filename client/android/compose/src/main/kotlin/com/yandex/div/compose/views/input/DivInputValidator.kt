@@ -63,7 +63,9 @@ private fun ReportMissingLabel(labelId: String, viewContext: DivViewContext) {
     }
 }
 
-private fun DivViewContext.hasElement(id: String): Boolean = states.any { it.div.hasElement(id) }
+private fun DivViewContext.hasElement(id: String): Boolean {
+    return component.states.value.any { it.div.hasElement(id) }
+}
 
 @Composable
 private fun DivInputValidator.Regex.isValid(text: String): Boolean {

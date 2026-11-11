@@ -3,7 +3,6 @@ package com.yandex.div.compose.visibility
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.yandex.div.compose.actions.DivActionHandlingContext
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -28,11 +27,17 @@ private fun Modifier.visibilityActions(actions: List<DivVisibilityAction>): Modi
         return this
     }
 
-    val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
-    val actionHandlingContext = LocalComponent.current.actionHandlingContext
+    val component = LocalComponent.current
+    val actionHandlingContext = component.actionHandlingContext
+    val visibilityActionTracker = component.visibilityActionTracker
     var modifier = this
     actions
-        .filter { shouldRegisterVisibilityCallback(actionHandlingContext, it) }
+        .filter {
+            visibilityActionTracker.shouldRegisterVisibilityCallback(
+                context = actionHandlingContext,
+                action = it,
+            )
+        }
         .forEach { action ->
             modifier = modifier.onDivVisibilityChanged(
                 minFractionVisible = action.visibilityPercentage.observedValue() / 100f
@@ -53,11 +58,17 @@ private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifi
         return this
     }
 
-    val visibilityActionTracker = LocalDivViewContext.current.visibilityActionTracker
-    val actionHandlingContext = LocalComponent.current.actionHandlingContext
+    val component = LocalComponent.current
+    val actionHandlingContext = component.actionHandlingContext
+    val visibilityActionTracker = component.visibilityActionTracker
     var modifier = this
     actions
-        .filter { shouldRegisterVisibilityCallback(actionHandlingContext, it) }
+        .filter {
+            visibilityActionTracker.shouldRegisterVisibilityCallback(
+                context = actionHandlingContext,
+                action = it,
+            )
+        }
         .forEach { action ->
             modifier = modifier.onDivVisibilityChanged(
                 minFractionVisible = action.visibilityPercentage.observedValue() / 100f
@@ -73,11 +84,11 @@ private fun Modifier.disappearActions(actions: List<DivDisappearAction>): Modifi
 }
 
 @Composable
-private fun shouldRegisterVisibilityCallback(
+private fun VisibilityActionTracker.shouldRegisterVisibilityCallback(
     context: DivActionHandlingContext,
     action: DivSightAction
 ): Boolean {
-    return !LocalDivViewContext.current.visibilityActionTracker.isLimitReached(
+    return !isLimitReached(
         context = context,
         action = action,
         limit = action.logLimit.observedIntValue()

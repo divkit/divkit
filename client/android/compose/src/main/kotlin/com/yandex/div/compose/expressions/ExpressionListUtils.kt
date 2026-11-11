@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import com.yandex.div.compose.context.expressionResolver
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.json.expressions.ConstantExpressionList
 import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div.json.expressions.ExpressionResolver
 
 @Composable
 internal fun <T : Any> ExpressionList<T>.observedValue(): List<T> {
-    val expressionResolver = expressionResolver
+    val expressionResolver = LocalComponent.current.expressionResolver
     return when (this) {
         is ConstantExpressionList -> evaluate(expressionResolver)
         else -> {

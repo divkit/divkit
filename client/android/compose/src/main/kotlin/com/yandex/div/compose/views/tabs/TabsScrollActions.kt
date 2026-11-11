@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.context.DivViewCoroutineScopeProvider
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.scroll.ScrollTarget
 import com.yandex.div.compose.utils.scroll.toScrollOverflow
@@ -31,10 +30,10 @@ internal fun BindTabsScrollActions(
 ) {
     if (id == null) return
 
-    val component = LocalDivViewContext.current.component
+    val component = LocalComponent.current
     val targetStorage = component.scrollTargetStorage
     val coroutineScopeProvider = component.coroutineScopeProvider
-    val reporter = LocalComponent.current.reporter
+    val reporter = component.reporter
     val currentAnimation by rememberUpdatedState(animation)
     DisposableEffect(id, items, state) {
         val selector = state?.let { TabSelector(it, items, coroutineScopeProvider) { currentAnimation } }

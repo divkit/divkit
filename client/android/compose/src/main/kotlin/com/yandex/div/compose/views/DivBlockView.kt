@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.actions.WithAccessibilityMenuScope
 import com.yandex.div.compose.actions.observedActions
 import com.yandex.div.compose.animation.WithAnimatorTarget
-import com.yandex.div.compose.context.LocalDivViewContext
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
@@ -40,7 +40,7 @@ internal inline fun DivBlockView(
     modifier: Modifier = Modifier,
     layoutParams: DivBlockLayoutParams = DivBlockLayoutParams.Default,
 ) {
-    key(LocalDivViewContext.current.compositionKeyStorage.get(data.value())) {
+    key(LocalComponent.current.compositionKeyStorage.get(data.value())) {
         val divBase = data.value()
         WithLocalComponent(divBase) {
             WithAnimatorTarget(divBase) {

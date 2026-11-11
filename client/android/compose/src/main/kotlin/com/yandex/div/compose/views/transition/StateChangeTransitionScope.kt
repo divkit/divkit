@@ -79,8 +79,6 @@ internal class StateChangeTransitionState {
 
     fun snapshotRenderedIds(): Set<String> = renderedIdCounts.keys.toSet()
 
-    val renderedIds: Set<String> get() = renderedIdCounts.keys
-
     fun registerOverlay(id: String, layer: GraphicsLayer, visualState: StateChangeVisualState) {
         val overlay = StateChangeOverlay(layer, visualState)
         val index = overlayIndices[id]
@@ -237,7 +235,6 @@ private fun Div.collectVisibleStateTransitionIds(
     if (visibility != DivVisibility.VISIBLE) return
 
     data.id?.let(destination::add)
-    if (this is Div.State) return
 
     when (this) {
         is Div.Container -> value.items.orEmpty().forEach {
@@ -255,7 +252,6 @@ private fun Div.collectVisibleStateTransitionIds(
         is Div.Tabs -> value.items.forEach {
             it.div.collectVisibleStateTransitionIds(destination, divViewContext, localComponent)
         }
-        is Div.State,
         is Div.Custom,
         is Div.GifImage,
         is Div.Image,
@@ -264,6 +260,7 @@ private fun Div.collectVisibleStateTransitionIds(
         is Div.Select,
         is Div.Separator,
         is Div.Slider,
+        is Div.State,
         is Div.Switch,
         is Div.Text,
         is Div.Video -> Unit

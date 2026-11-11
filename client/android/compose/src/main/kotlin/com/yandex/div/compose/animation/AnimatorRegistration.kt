@@ -6,8 +6,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
-import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.DivReporter
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div2.DivAnimator
 import com.yandex.div2.DivBase
@@ -26,23 +25,24 @@ internal fun WithAnimatorTarget(data: DivBase, content: @Composable () -> Unit) 
         return
     }
 
-    val localComponent = LocalComponent.current
+    val component = LocalComponent.current
     val owners = if (animators.isEmpty()) {
         parentOwners
     } else {
-        remember(data, localComponent, parentOwners) {
-            listOf(AnimatorOwner(animators, localComponent)) + parentOwners
+        remember(animators, parentOwners) {
+            listOf(
+                AnimatorOwner(animators = animators, reporter = component.reporter)
+            ) + parentOwners
         }
     }
     if (registersTarget) {
-        val storage = LocalDivViewContext.current.component.animatorStorage
+        val animatorStorage = component.animatorStorage
         val token = remember { Any() }
-
         SideEffect {
-            storage.registerTarget(token, data.id, owners, localComponent)
+            animatorStorage.registerTarget(token, data.id, owners, component)
         }
-        DisposableEffect(storage, token) {
-            onDispose { storage.unregisterTarget(token) }
+        DisposableEffect(animatorStorage, token) {
+            onDispose { animatorStorage.unregisterTarget(token) }
         }
     }
 
@@ -55,12 +55,12 @@ internal fun WithAnimatorTarget(data: DivBase, content: @Composable () -> Unit) 
 
 internal data class AnimatorOwner(
     val animators: List<DivAnimator>,
-    val localComponent: DivLocalComponent,
+    private val reporter: DivReporter,
 ) {
     fun findAnimator(id: String): DivAnimator? {
         val matches = animators.filter { it.value().id == id }
         if (matches.size > 1) {
-            localComponent.reporter.reportError("Animator with id '$id' is ambiguous")
+            reporter.reportError("Animator with id '$id' is ambiguous")
         }
         return matches.singleOrNull()
     }

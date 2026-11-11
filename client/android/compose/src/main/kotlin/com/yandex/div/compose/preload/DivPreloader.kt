@@ -38,7 +38,7 @@ internal class DivPreloader @Inject constructor(
         val downloadAll = mode == PreloadMode.ACTIVE_STATE_ONLY || mode == PreloadMode.ALL
 
         val viewContext = viewContextFactory.getOrCreate(data)
-        val states = viewContext.states
+        val states = viewContext.component.states.value
         val statesToPreload = if (activeStateOnly) {
             listOfNotNull(states.firstOrNull())
         } else {
@@ -70,7 +70,7 @@ internal class DivPreloader @Inject constructor(
         val resolver = localComponent.expressionResolver
         val preloads = mutableListOf<Deferred<PreloadResult>>()
         preloads += async { imagePreloader.preloadImages(div, resolver, downloadAll) }
-        val storedValuesStorage = viewContext.component.storedValuesStorage
+        val storedValuesStorage = localComponent.storedValuesStorage
         preloads += async {
             extensionPreloader.preloadExtensions(div, resolver, storedValuesStorage)
         }
@@ -88,7 +88,7 @@ internal class DivPreloader @Inject constructor(
                 div = div,
                 activeStateOnly = activeStateOnly,
                 resolver = resolver,
-                stateStorage = viewContext.stateStorage,
+                stateStorage = localComponent.stateStorage,
                 parentPath = parentPath,
             ).map { (child, childPath) ->
                 visitDiv(
@@ -142,7 +142,9 @@ internal class DivPreloader @Inject constructor(
         resolver: ExpressionResolver,
         downloadAll: Boolean,
     ): PreloadResult {
-        if (!downloadAll && !div.value.preloadRequired.evaluate(resolver)) return PreloadResult(true)
+        if (!downloadAll && !div.value.preloadRequired.evaluate(resolver)) {
+            return PreloadResult(true)
+        }
         val sources = div.value.videoSources?.map { it.url.evaluate(resolver) }
             ?: return PreloadResult(true)
         return videoPreloader.preloadVideoWithResult(sources)

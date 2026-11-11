@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.reportError
 import com.yandex.div2.DivLayoutProvider
@@ -20,8 +19,9 @@ internal fun Modifier.layoutProvider(layoutProvider: DivLayoutProvider): Modifie
         return this
     }
 
-    val storage = LocalDivViewContext.current.component.layoutProviderStorage
-    val expressionResolver = LocalComponent.current.expressionResolver
+    val component = LocalComponent.current
+    val storage = component.layoutProviderStorage
+    val expressionResolver = component.expressionResolver
     val widthVariable = remember(widthVariableName, expressionResolver) {
         widthVariableName?.let { storage.getVariableHandler(it, expressionResolver) }
     }

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.ColorFilter
-import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedColorValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.observedContentScale
@@ -18,7 +18,6 @@ internal fun DivImageView(
     modifier: Modifier,
     data: DivImage
 ) {
-    val previewDecoder = divContext.component.imagePreviewDecoder
     val colorFilter = data.tintColor?.observedValue()?.let {
         toColorFilter(it, data.tintMode.observedValue())
     }
@@ -35,7 +34,10 @@ internal fun DivImageView(
         transformations = data.filters.observedTransformations(),
         colorFilter = colorFilter,
         highPriorityPreviewShow = data.highPriorityPreviewShow,
-        preview = { data.preview?.observedValue(transform = previewDecoder::decodePreview) }
+        preview = {
+            val component = LocalComponent.current
+            data.preview?.observedValue(transform = component.imagePreviewDecoder::decodePreview)
+        }
     )
 }
 

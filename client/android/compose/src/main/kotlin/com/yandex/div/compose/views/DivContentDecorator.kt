@@ -2,9 +2,7 @@ package com.yandex.div.compose.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.context.expressionResolver
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.extensions.DivExtensionEnvironment
@@ -55,16 +53,16 @@ internal class DivContentDecorator(
             return
         }
 
-        val storedValuesStorage = LocalDivViewContext.current.component.storedValuesStorage
+        val component = LocalComponent.current
         extensionHandler.Content(
             modifier = modifier,
             environment = DivExtensionEnvironment(
                 data = data,
                 extension = extension,
-                expressionResolver = expressionResolver,
-                reporter = LocalComponent.current.reporter,
-                animationsEnabled = divContext.component.animationConfiguration.isEnabledAsState(),
-                storedValuesStorage = storedValuesStorage,
+                expressionResolver = component.expressionResolver,
+                reporter = component.reporter,
+                animationsEnabled = component.animationConfiguration.isEnabledAsState(),
+                storedValuesStorage = component.storedValuesStorage,
             ),
             content = { modifier ->
                 WithExtensions(

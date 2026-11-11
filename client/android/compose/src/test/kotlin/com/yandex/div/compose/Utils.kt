@@ -5,7 +5,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import com.yandex.div.compose.actions.DivActionHandlingContext
-import com.yandex.div.compose.context.DivViewContext
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.expressions.DivComposeExpressionResolver
 import com.yandex.div.compose.expressions.ExpressionCache
@@ -41,20 +40,12 @@ internal fun rootVariableProvider(
     variableController: DivVariableController = DivVariableController(),
 ): ScopedVariableProvider = ScopedVariableProvider(variableController, parent = null)
 
-internal fun mockViewContext(
-    stateStorage: DivStateStorage = DivStateStorage(),
-    visibilityActionTracker: VisibilityActionTracker = mock()
-): DivViewContext {
-    return mock<DivViewContext> {
-        on { this.stateStorage } doReturn stateStorage
-        on { this.visibilityActionTracker } doReturn visibilityActionTracker
-    }
-}
-
 internal fun mockLocalComponent(
     reporter: DivReporter = TestReporter(),
-    variableController: DivVariableController = DivVariableController(),
     networkRestorationController: NetworkRestorationController? = null,
+    stateStorage: DivStateStorage = DivStateStorage(),
+    variableController: DivVariableController = DivVariableController(),
+    visibilityActionTracker: VisibilityActionTracker = mock(),
 ): DivLocalComponent {
     val variableProvider = rootVariableProvider(variableController)
     val expressionResolver = createExpressionResolver(
@@ -71,7 +62,9 @@ internal fun mockLocalComponent(
         on { this.expressionCache } doReturn expressionCache
         on { this.expressionResolver } doReturn expressionResolver
         on { this.reporter } doReturn reporter
+        on { this.stateStorage } doReturn stateStorage
         on { this.variableProvider } doReturn variableProvider
+        on { this.visibilityActionTracker } doReturn visibilityActionTracker
         networkRestorationController?.let {
             on { this.networkRestorationController } doReturn it
         }

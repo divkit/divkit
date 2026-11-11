@@ -14,8 +14,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.FixedScale
 import androidx.compose.ui.platform.LocalDensity
 import coil3.compose.rememberAsyncImagePainter
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.context.divContext
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -36,7 +36,7 @@ import com.yandex.div2.DivVideoSource as Div2VideoSource
 
 @Composable
 internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
-    val component = divContext.component
+    val component = LocalComponent.current
     val config = data.observedConfig()
     if (config.sources.isEmpty() && data.playerSettingsPayload == null) {
         reportError(
@@ -51,7 +51,7 @@ internal fun DivVideoView(modifier: Modifier, data: DivVideo) {
     }
 
     data.id?.let {
-        LocalDivViewContext.current.component.videoPlayerStorage.registerPlayer(it, player)
+        component.videoPlayerStorage.registerPlayer(it, player)
     }
 
     ObserveVideoActions(player, data)

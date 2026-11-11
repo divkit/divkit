@@ -27,6 +27,7 @@ import com.yandex.div.compose.actions.DivActionSource
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.render.common.pager.PagerItemWindow
 import com.yandex.div.test.data.action
+import com.yandex.div.test.data.change
 import com.yandex.div.test.data.constant
 import com.yandex.div.test.data.container
 import com.yandex.div.test.data.data
@@ -626,15 +627,24 @@ class DivViewWithPatchTest {
         setContent(data)
 
         rule.runOnIdle {
-            val viewContext = divContext.getViewContext(data)
-            val key = viewContext.compositionKeyStorage.get(parent.value())
+            val compositionKeyStorage = divContext.getViewContext(data).component
+                .compositionKeyStorage
+            val key = compositionKeyStorage.get(parent.value())
             runBlocking {
-                divContext.patcher.applyPatch(data, DivPatch(changes = listOf(DivPatch.Change(
-                    "target", listOf(text(text = "After"))
-                ))))
+                divContext.patcher.applyPatch(
+                    data = data,
+                    patch = DivPatch(
+                        changes = listOf(
+                            change(
+                                id = "target",
+                                items = listOf(text(text = "After")),
+                            )
+                        )
+                    )
+                )
             }
 
-            assertEquals(key, viewContext.compositionKeyStorage.get(parent.value()))
+            assertEquals(key, compositionKeyStorage.get(parent.value()))
         }
     }
 

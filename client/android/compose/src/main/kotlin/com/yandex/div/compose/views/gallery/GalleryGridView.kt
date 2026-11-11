@@ -13,8 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.utils.scroll.AdjustScrollToItem
 import com.yandex.div.compose.utils.scroll.ScrollableChildItem
 import com.yandex.div.compose.utils.scroll.scrollAxisContentSize
@@ -87,7 +87,7 @@ private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
     gridState: LazyStaggeredGridState,
     properties: GalleryProperties,
 ) {
-    val viewContext = LocalDivViewContext.current
+    val compositionKeyStorage = LocalComponent.current.compositionKeyStorage
     val crossAlignment = properties.crossContentAlignment.toCrossAxisAlignment()
     val maxItemSize = properties.contentPadding.scrollAxisContentSize(
         viewportSize = maxWidth,
@@ -110,7 +110,10 @@ private fun BoxWithConstraintsScope.GalleryLazyHorizontalStaggeredGrid(
         horizontalItemSpacing = properties.itemSpacing,
         verticalArrangement = Arrangement.spacedBy(properties.crossSpacing),
     ) {
-        items(count = items.size, key = { viewContext.compositionKeyStorage.get(items[it].value()) }) { index ->
+        items(
+            count = items.size,
+            key = { compositionKeyStorage.get(items[it].value()) },
+        ) { index ->
             ScrollableChildItem(
                 data = items[index],
                 component = components?.get(items[index]),
@@ -130,7 +133,7 @@ private fun BoxWithConstraintsScope.GalleryLazyVerticalStaggeredGrid(
     gridState: LazyStaggeredGridState,
     properties: GalleryProperties,
 ) {
-    val viewContext = LocalDivViewContext.current
+    val compositionKeyStorage = LocalComponent.current.compositionKeyStorage
     val crossAlignment = properties.crossContentAlignment.toCrossAxisAlignment()
     val maxItemSize = properties.contentPadding.scrollAxisContentSize(
         viewportSize = maxHeight,
@@ -153,7 +156,10 @@ private fun BoxWithConstraintsScope.GalleryLazyVerticalStaggeredGrid(
         verticalItemSpacing = properties.itemSpacing,
         horizontalArrangement = Arrangement.spacedBy(properties.crossSpacing),
     ) {
-        items(count = items.size, key = { viewContext.compositionKeyStorage.get(items[it].value()) }) { index ->
+        items(
+            count = items.size,
+            key = { compositionKeyStorage.get(items[it].value()) },
+        ) { index ->
             ScrollableChildItem(
                 data = items[index],
                 component = components?.get(items[index]),

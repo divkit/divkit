@@ -6,7 +6,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import com.yandex.div.compose.DivException
 import com.yandex.div.compose.animation.observe
-import com.yandex.div.compose.collection.CollectionItemScopeStorage
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.DivViewComponent
 import com.yandex.div.compose.di.declaresLocalScope
@@ -14,48 +13,30 @@ import com.yandex.div.compose.haptics.bind
 import com.yandex.div.compose.layoutprovider.observe
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.patch.observe
-import com.yandex.div.compose.state.DivStateStorage
 import com.yandex.div.compose.timers.observe
 import com.yandex.div.compose.triggers.observe
 import com.yandex.div.compose.variables.ScopedVariableProvider
 import com.yandex.div.compose.variables.VariableAndConstantProvider
-import com.yandex.div.compose.visibility.VisibilityActionTracker
 import com.yandex.div.compose.visibility.bind
 import com.yandex.div.core.expression.variables.DivVariableController
 import com.yandex.div.internal.expressions.FunctionProviderDecorator
 import com.yandex.div.internal.expressions.toLocalFunctions
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
-import com.yandex.div2.DivData
 
 internal class DivViewContext(
     internal val component: DivViewComponent
 ) {
     private var compositionCount = 0
 
-    val states: List<DivData.State>
-        get() = component.states.value
-
     val rootDiv: Div?
-        get() = states.firstOrNull()?.div
-
-    val collectionItemScopeStorage: CollectionItemScopeStorage
-        get() = component.collectionItemScopeStorage
-
-    val compositionKeyStorage: CompositionKeyStorage
-        get() = component.compositionKeyStorage
+        get() = component.states.value.firstOrNull()?.div
 
     val pagerStateStorage: DivPagerStateStorage
         get() = component.pagerStateStorage
 
     val rootLocalComponent: DivLocalComponent
         get() = component.rootLocalComponent.value
-
-    val stateStorage: DivStateStorage
-        get() = component.stateStorage
-
-    val visibilityActionTracker: VisibilityActionTracker
-        get() = component.visibilityActionTracker
 
     init {
         component.data.variableTriggers.orEmpty().forEach(rootLocalComponent.triggerStorage::add)
@@ -74,15 +55,17 @@ internal class DivViewContext(
             onDispose { compositionCount-- }
         }
 
-        // must be attached before other components since other components could rely on
-        // the coroutine scope
-        component.coroutineScopeProvider.attach()
-        component.animatorStorage.observe()
-        visibilityActionTracker.bind()
-        component.hapticFeedbackStorage.bind()
-        component.layoutProviderStorage.observe()
-        component.patchCoordinator.observe()
-        component.timerStorage.observe()
+        component.apply {
+            // must be attached before other components since other components could rely on
+            // the coroutine scope
+            coroutineScopeProvider.attach()
+            animatorStorage.observe()
+            hapticFeedbackStorage.bind()
+            layoutProviderStorage.observe()
+            patchCoordinator.observe()
+            timerStorage.observe()
+            visibilityActionTracker.bind()
+        }
         rootLocalComponent.triggerStorage.observe()
     }
 

@@ -38,12 +38,13 @@ internal fun BindPagerScrollActions(
 ) {
     if (id == null) return
 
-    val component = LocalDivViewContext.current.component
+    val component = LocalComponent.current
     val targetStorage = component.scrollTargetStorage
-    val coroutineScopeProvider = component.coroutineScopeProvider
-    val reporter = LocalComponent.current.reporter
+    val reporter = component.reporter
     DisposableEffect(id, items, layout) {
-        val scrolls = layout?.let { PagerScrolls(it, items, coroutineScopeProvider) }
+        val scrolls = layout?.let {
+            PagerScrolls(it, items, component.coroutineScopeProvider)
+        }
         val target = ScrollTarget(
             items = items,
             scrollTo = { index, animated, _, duration -> scrolls?.scrollTo(index, animated, duration) },

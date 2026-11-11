@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
-import com.yandex.div.compose.context.animationsEnabled
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedFloatValue
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
@@ -24,7 +24,8 @@ internal fun Modifier.actionAnimation(
     animation: DivAnimation,
     interactionSource: MutableInteractionSource,
 ): Modifier {
-    val animationName = if (animationsEnabled) {
+    val component = LocalComponent.current
+    val animationName = if (component.animationConfiguration.isEnabled) {
         animation.name.observedValue()
     } else {
         DivAnimation.Name.NO_ANIMATION

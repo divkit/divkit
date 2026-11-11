@@ -64,9 +64,15 @@ class DivTabsScrollActionsTest {
         val pageStart = pageLeft("Page 1")
         rule.mainClock.autoAdvance = false
 
-        perform(action(typed = scrollToAction(
-            "tabs", DivActionScrollDestination.Index(IndexDestination(constant(2L))), duration = constant(10_000L),
-        )))
+        perform(
+            action(
+                typed = scrollToAction(
+                    id = "tabs",
+                    destination = DivActionScrollDestination.Index(IndexDestination(constant(2L))),
+                    duration = constant(10_000L),
+                )
+            )
+        )
         rule.mainClock.advanceTimeBy(5_000)
 
         assertNotEquals(pageStart, pageLeft("Page 3"), absoluteTolerance = 0.5f)
@@ -193,7 +199,10 @@ class DivTabsScrollActionsTest {
         )
         val configuration = divConfiguration { reporter = this@DivTabsScrollActionsTest.reporter }
         rule.setContent {
-            divContext = DivContext(baseContext = LocalContext.current, configuration = configuration)
+            divContext = DivContext(
+                baseContext = LocalContext.current,
+                configuration = configuration,
+            )
             CompositionLocalProvider(LocalDivContext provides divContext) {
                 DivView(data = tabsData)
             }

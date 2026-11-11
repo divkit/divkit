@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalViewConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.DivLocalComponent
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.pager.DivPagerStateStorage
 import com.yandex.div.compose.pager.PagerAlignment
@@ -77,8 +77,10 @@ internal fun PagerContent(
     crossAxisBounded: Boolean,
     stateStorage: DivPagerStateStorage
 ) {
-    val viewContext = LocalDivViewContext.current
-    val itemKeys = remember(items) { items.map { viewContext.compositionKeyStorage.get(it.value()) } }
+    val compositionKeyStorage = LocalComponent.current.compositionKeyStorage
+    val itemKeys = remember(items) {
+        items.map { compositionKeyStorage.get(it.value()) }
+    }
     val initialDefaultItem = remember { defaultItem }
     val density = LocalDensity.current
     val snapPosition = scrollAxisAlignment.toSnapPosition()

@@ -1,13 +1,13 @@
 package com.yandex.div.compose.images
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.net.ConnectivityManager
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.core.graphics.createBitmap
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import coil3.ComponentRegistry
@@ -19,6 +19,7 @@ import coil3.request.ErrorResult
 import coil3.request.ImageRequest
 import coil3.request.ImageResult
 import coil3.request.SuccessResult
+import com.yandex.div.compose.context.divContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.divConfiguration
 import com.yandex.div.compose.internal.NetworkRestorationController
@@ -30,6 +31,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.whenever
 import org.robolectric.Shadows
 import org.robolectric.shadows.ShadowNetwork
 import java.net.UnknownHostException
@@ -285,6 +288,7 @@ class ImageNetworkRestorationTest {
                 imageLoaderConfiguration = this@ImageNetworkRestorationTest.imageLoaderConfiguration
             }
         ) {
+            whenever(localComponent.imageLoader) doReturn divContext.component.imageLoader
             CompositionLocalProvider(LocalComponent provides localComponent) {
                 content()
             }
@@ -299,8 +303,10 @@ class ImageNetworkRestorationTest {
     }
 
     private fun successResult(request: ImageRequest): SuccessResult {
-        val bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-        return SuccessResult(image = bitmap.asImage(), request = request)
+        return SuccessResult(
+            image = createBitmap(1, 1).asImage(),
+            request = request,
+        )
     }
 
     private fun networkErrorResult(request: ImageRequest): ErrorResult {

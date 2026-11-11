@@ -19,9 +19,7 @@ import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
 import coil3.transform.Transformation
-import com.yandex.div.compose.context.LocalDivViewContext
-import com.yandex.div.compose.context.divContext
-import com.yandex.div.compose.context.expressionResolver
+import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.images.ImageRequestParams
 import com.yandex.div.compose.images.isValidImageUri
@@ -45,9 +43,9 @@ internal fun DivImageContent(
     highPriorityPreviewShow: Expression<Boolean>? = null,
     preview: @Composable () -> Any?
 ) {
-    val component = divContext.component
+    val component = LocalComponent.current
     val imageStateListener = rememberImageStateListener(data)
-    val imageStateStorage = LocalDivViewContext.current.component.imageStateStorage
+    val imageStateStorage = component.imageStateStorage
     val imageRequestParams = if (imageUrl?.isValidImageUri() == true) {
         ImageRequestParams(
             data = imageUrl,
@@ -156,12 +154,10 @@ internal fun DivImageContent(
 
 @Composable
 private fun rememberImageStateListener(data: DivBase): ((AsyncImagePainter.State) -> Unit)? {
-    val component = divContext.component
+    val component = LocalComponent.current
     val painterStateListener = component.debugConfiguration.imagePainterStateListener
     val animation = (data as? DivImage)?.appearanceAnimation ?: return painterStateListener
-    val appearanceAnimation = LocalDivViewContext.current.component.imageStateStorage
-        .getAppearanceAnimation(data)
-    val resolver = expressionResolver
+    val appearanceAnimation = component.imageStateStorage.getAppearanceAnimation(data)
     val scope = rememberCoroutineScope()
     DisposableEffect(appearanceAnimation) {
         onDispose { appearanceAnimation.stop() }
@@ -172,7 +168,7 @@ private fun rememberImageStateListener(data: DivBase): ((AsyncImagePainter.State
             appearanceAnimation.onImageLoaded(
                 dataSource = state.result.dataSource,
                 animation = animation,
-                resolver = resolver,
+                resolver = component.expressionResolver,
                 animationsEnabled = component.animationConfiguration.isEnabled,
                 scope = scope,
             )
