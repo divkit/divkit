@@ -10,6 +10,7 @@ import com.yandex.div.compose.context.WithDivKey
 import com.yandex.div.compose.di.DivLocalComponent
 import com.yandex.div.compose.di.WithLocalComponent
 import com.yandex.div.compose.expressions.observedValue
+import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -48,18 +49,20 @@ internal inline fun ScrollableChildItem(
                 DivBlockView(
                     data = data,
                     modifier = contentModifier,
-                    defaultHorizontalAlignment = if (isHorizontal) {
-                        Alignment.Start
-                    } else {
-                        childCrossAlignment.toHorizontalAlignment()
-                    },
-                    defaultVerticalAlignment = if (isHorizontal) {
-                        childCrossAlignment.toVerticalAlignment()
-                    } else {
-                        Alignment.Top
-                    },
-                    matchParentMaxWidth = matchParentMaxWidth,
-                    matchParentMaxHeight = matchParentMaxHeight,
+                    layoutParams = DivBlockLayoutParams(
+                        defaultHorizontalAlignment = if (isHorizontal) {
+                            Alignment.Start
+                        } else {
+                            childCrossAlignment.toHorizontalAlignment()
+                        },
+                        defaultVerticalAlignment = if (isHorizontal) {
+                            childCrossAlignment.toVerticalAlignment()
+                        } else {
+                            Alignment.Top
+                        },
+                        matchParentMaxWidth = matchParentMaxWidth,
+                        matchParentMaxHeight = matchParentMaxHeight,
+                    ),
                 )
             }
         }

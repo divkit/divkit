@@ -4,9 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.key
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.yandex.div.compose.actions.WithAccessibilityMenuScope
@@ -36,22 +34,11 @@ import com.yandex.div.compose.views.video.DivVideoView
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibility
 
-/**
- * [matchParentMaxWidth] and [matchParentMaxHeight] bound the size, including margins, that a
- * match_parent element fills when the parent measures it with unbounded constraints, e.g. a gallery
- * item along the scroll axis. The element resolves them against its own min_size and max_size.
- */
 @Composable
 internal inline fun DivBlockView(
     data: Div,
     modifier: Modifier = Modifier,
-    applyMargins: Boolean = true,
-    defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
-    defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
-    suppressMatchParentIntrinsics: Boolean = false,
-    matchParentMaxWidth: Dp = Dp.Unspecified,
-    matchParentMaxHeight: Dp = Dp.Unspecified,
-    blockTapPropagation: Boolean = false,
+    layoutParams: DivBlockLayoutParams = DivBlockLayoutParams.Default,
 ) {
     key(LocalDivViewContext.current.compositionKeyStorage.get(data.value())) {
         val divBase = data.value()
@@ -63,14 +50,8 @@ internal inline fun DivBlockView(
                     VisibleDivBlockView(
                         data = data,
                         modifier = modifier,
-                        applyMargins = applyMargins,
+                        layoutParams = layoutParams,
                         visibility = visibility,
-                        defaultHorizontalAlignment = defaultHorizontalAlignment,
-                        defaultVerticalAlignment = defaultVerticalAlignment,
-                        suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
-                        matchParentMaxWidth = matchParentMaxWidth,
-                        matchParentMaxHeight = matchParentMaxHeight,
-                        blockTapPropagation = blockTapPropagation,
                     )
                 }
             }
@@ -82,21 +63,13 @@ internal inline fun DivBlockView(
 internal fun VisibleDivBlockView(
     data: Div,
     modifier: Modifier,
-    applyMargins: Boolean,
+    layoutParams: DivBlockLayoutParams,
     visibility: DivVisibility,
-    fillMatchParentWidth: Boolean = true,
-    fillMatchParentHeight: Boolean = true,
-    defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
-    defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
-    suppressMatchParentIntrinsics: Boolean = false,
-    matchParentMaxWidth: Dp = Dp.Unspecified,
-    matchParentMaxHeight: Dp = Dp.Unspecified,
-    blockTapPropagation: Boolean = false,
 ) {
     val divBase = data.value()
     val focusState = rememberFocusState(divBase)
     val actions = data.observedActions()
-    val margins = if (applyMargins) divBase.margins?.observeInsets() else null
+    val margins = if (layoutParams.applyMargins) divBase.margins?.observeInsets() else null
     val menuOffset = DpOffset(
         x = 0.dp,
         y = -(margins?.calculateBottomPadding() ?: 0.dp),
@@ -105,19 +78,12 @@ internal fun VisibleDivBlockView(
         WithStateChangeTransition(data, visibility) { stateChangeTransition ->
             val decoration = Modifier.apply(
                 data,
+                layoutParams = layoutParams,
                 actions = actions,
                 margins = margins,
                 visibility = visibility,
                 focusState = focusState,
                 stateChangeTransition = stateChangeTransition,
-                fillMatchParentWidth = fillMatchParentWidth,
-                fillMatchParentHeight = fillMatchParentHeight,
-                defaultHorizontalAlignment = defaultHorizontalAlignment,
-                defaultVerticalAlignment = defaultVerticalAlignment,
-                suppressMatchParentIntrinsics = suppressMatchParentIntrinsics,
-                matchParentMaxWidth = matchParentMaxWidth,
-                matchParentMaxHeight = matchParentMaxHeight,
-                blockTapPropagation = blockTapPropagation,
             )
             val decorator = DivContentDecorator(data, decoration)
             if (data is Div.State) {

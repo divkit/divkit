@@ -27,6 +27,7 @@ import com.yandex.div.compose.di.handleActions
 import com.yandex.div.compose.expressions.observedIntValue
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observedPxValue
+import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.internal.tooltip.hasTooltipActions
 import com.yandex.div.internal.tooltip.TouchEventDispatcher
@@ -202,7 +203,7 @@ private fun TooltipPopupContent(
         ) {
             DivBlockView(
                 data = substrate,
-                blockTapPropagation = handlesSubstrateTaps,
+                layoutParams = DivBlockLayoutParams(blockTapPropagation = handlesSubstrateTaps),
             )
         }
         BringToTop(tooltip.bringToTopId, Modifier.matchParentSize())
@@ -213,7 +214,10 @@ private fun TooltipPopupContent(
             exit = exitTransition,
         ) {
             TooltipLifecycleEffect(tooltip.id, onShown, onDismissed)
-            DivBlockView(data = tooltip.div, blockTapPropagation = true)
+            DivBlockView(
+                data = tooltip.div,
+                layoutParams = DivBlockLayoutParams(blockTapPropagation = true),
+            )
         }
     }
 }

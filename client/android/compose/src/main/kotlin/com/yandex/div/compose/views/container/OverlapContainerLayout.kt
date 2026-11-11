@@ -28,6 +28,7 @@ import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.observedDpValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
+import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.VisibleDivBlockView
 import com.yandex.div2.Div
@@ -74,14 +75,16 @@ internal fun ContainerOverlapView(modifier: Modifier, data: DivContainer) {
                     WithLocalComponent(items.components?.get(item)) {
                         DivBlockView(
                             data = item,
-                            defaultHorizontalAlignment = defaultHorizontalAlignment,
-                            defaultVerticalAlignment = defaultVerticalAlignment,
                             modifier = Modifier.align(
                                 item.resolveOverlapChildAlignment(
                                     defaultHorizontal = horizontalAlignment,
                                     defaultVertical = verticalAlignment,
                                 )
-                            )
+                            ),
+                            layoutParams = DivBlockLayoutParams(
+                                defaultHorizontalAlignment = defaultHorizontalAlignment,
+                                defaultVerticalAlignment = defaultVerticalAlignment,
+                            ),
                         )
                     }
                 }
@@ -167,12 +170,14 @@ private fun MatchParentOverlapChild(
                 VisibleDivBlockView(
                     data = div,
                     modifier = Modifier,
-                    applyMargins = true,
+                    layoutParams = DivBlockLayoutParams(
+                        fillMatchParentWidth = !(isWidthWrapContent && child.matchParentWidth),
+                        fillMatchParentHeight = !(isHeightWrapContent && child.matchParentHeight),
+                        defaultHorizontalAlignment = defaultHorizontal
+                            .toCrossAxisHorizontalAlignment(),
+                        defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment(),
+                    ),
                     visibility = visibility,
-                    fillMatchParentWidth = !(isWidthWrapContent && child.matchParentWidth),
-                    fillMatchParentHeight = !(isHeightWrapContent && child.matchParentHeight),
-                    defaultHorizontalAlignment = defaultHorizontal.toCrossAxisHorizontalAlignment(),
-                    defaultVerticalAlignment = defaultVertical.toCrossAxisVerticalAlignment(),
                 )
             }
         }

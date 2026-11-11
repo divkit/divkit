@@ -1,6 +1,9 @@
 package com.yandex.div.compose.views.modifiers
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -13,7 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
+import androidx.compose.ui.unit.isUnspecified
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.applyIfNotNull
@@ -22,47 +28,44 @@ import com.yandex.div.compose.utils.observedAspectRatio
 import com.yandex.div.compose.utils.observedValue
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
+import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.modifiers.image.imageAspectRatio
 import com.yandex.div2.Div
-import com.yandex.div2.DivAlignmentHorizontal
-import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnitValue
 import com.yandex.div2.DivWrapContentSize
 
 /**
- * [matchParentMaxWidth] and [matchParentMaxHeight] bound the size a match_parent element fills when
- * the parent measures it with unbounded constraints, e.g. a gallery item along the scroll axis.
- * The element's own min_size and max_size take precedence over them.
+ * [DivBlockLayoutParams.matchParentMaxWidth] and [DivBlockLayoutParams.matchParentMaxHeight]
+ * bound the size, including margins, that a match_parent element fills when the parent measures
+ * it with unbounded constraints, e.g. a gallery item along the scroll axis. The element's own
+ * min_size and max_size take precedence over them.
  */
 @Composable
 internal fun Modifier.size(
     div: Div,
-    fillMatchParentWidth: Boolean = true,
-    fillMatchParentHeight: Boolean = true,
-    matchParentMaxWidth: Dp = Dp.Unspecified,
-    matchParentMaxHeight: Dp = Dp.Unspecified,
-    defaultHorizontalAlignment: Alignment.Horizontal = Alignment.Start,
-    defaultVerticalAlignment: Alignment.Vertical = Alignment.Top,
+    layoutParams: DivBlockLayoutParams,
+    margins: PaddingValues?,
 ): Modifier {
+    val matchParentMaxWidth = layoutParams.matchParentMaxWidth
+        .excludeMargins(margins, isWidth = true)
+    val matchParentMaxHeight = layoutParams.matchParentMaxHeight
+        .excludeMargins(margins, isWidth = false)
     val data = div.value()
     val aspectRatio = data.observedAspectRatio()
-    val horizontalAlignment = data.alignmentHorizontal?.observedValue()
+    val horizontalAlignment = data.alignmentHorizontal?.observedValue()?.toHorizontalAlignment()
+        ?: layoutParams.defaultHorizontalAlignment
     val width = data.width
     val isImage = div is Div.Image || div is Div.GifImage
     if (isImage && aspectRatio != null && width is DivSize.WrapContent) {
-        return wrapWidth(
-            width = width.value,
-            alignment = horizontalAlignment?.toHorizontalAlignment() ?: defaultHorizontalAlignment,
-        )
+        val verticalAlignment = data.alignmentVertical?.observedValue()?.toVerticalAlignment()
+            ?: layoutParams.defaultVerticalAlignment
+        return wrapWidth(width = width.value, alignment = horizontalAlignment)
             .imageAspectRatio(
                 ratio = aspectRatio,
                 height = data.height,
-                alignment = combineAlignment(
-                    horizontalAlignment?.toHorizontalAlignment() ?: defaultHorizontalAlignment,
-                    data.alignmentVertical?.observedValue()?.toVerticalAlignment() ?: defaultVerticalAlignment,
-                ),
-                fillMatchParentHeight = fillMatchParentHeight,
+                alignment = combineAlignment(horizontalAlignment, verticalAlignment),
+                fillMatchParentHeight = layoutParams.fillMatchParentHeight,
                 matchParentMaxHeight = matchParentMaxHeight,
                 // DivImageView keeps the measured width and derives height from aspect,
                 // even for fixed/match_parent height. DivGifImageView can resize width.
@@ -74,19 +77,19 @@ internal fun Modifier.size(
         .width(
             width = width,
             horizontalAlignment = horizontalAlignment,
-            defaultHorizontalAlignment = defaultHorizontalAlignment,
-            fillMatchParent = fillMatchParentWidth,
+            fillMatchParent = layoutParams.fillMatchParentWidth,
             matchParentMax = matchParentMaxWidth,
         )
         .applyIfNotNull(aspectRatio) { ratio ->
             aspectRatio(ratio)
         }
         .applyIf(aspectRatio == null) {
+            val verticalAlignment = data.alignmentVertical?.observedValue()?.toVerticalAlignment()
+                ?: layoutParams.defaultVerticalAlignment
             height(
                 height = data.height,
-                verticalAlignment = data.alignmentVertical?.observedValue(),
-                defaultVerticalAlignment = defaultVerticalAlignment,
-                fillMatchParent = fillMatchParentHeight,
+                verticalAlignment = verticalAlignment,
+                fillMatchParent = layoutParams.fillMatchParentHeight,
                 matchParentMax = matchParentMaxHeight,
             )
         }
@@ -95,12 +98,10 @@ internal fun Modifier.size(
 @Composable
 private fun Modifier.width(
     width: DivSize,
-    horizontalAlignment: DivAlignmentHorizontal? = null,
-    defaultHorizontalAlignment: Alignment.Horizontal,
+    horizontalAlignment: Alignment.Horizontal,
     fillMatchParent: Boolean,
     matchParentMax: Dp,
 ): Modifier {
-    val align = horizontalAlignment?.toHorizontalAlignment() ?: defaultHorizontalAlignment
     return when (width) {
         is DivSize.MatchParent -> applySizeBounds(
             width.value.minSize,
@@ -110,30 +111,32 @@ private fun Modifier.width(
             .applyIf(matchParentMax.isSpecified) { widthIn(max = matchParentMax) }
             .applyIf(fillMatchParent) { fillMaxWidth() }
 
-        is DivSize.WrapContent -> wrapWidth(width.value, align)
+        is DivSize.WrapContent -> wrapWidth(width.value, horizontalAlignment)
             .applySizeBounds(width.value.minSize, width.value.maxSize, isWidth = true)
 
-        is DivSize.Fixed -> wrapContentWidth(align = align, unbounded = true)
+        is DivSize.Fixed -> wrapContentWidth(align = horizontalAlignment, unbounded = true)
             .requiredWidth(width.value.observedValue())
     }
 }
 
 @Composable
-private fun Modifier.wrapWidth(width: DivWrapContentSize, alignment: Alignment.Horizontal): Modifier =
-    wrapContentWidth(
+private fun Modifier.wrapWidth(
+    width: DivWrapContentSize,
+    alignment: Alignment.Horizontal,
+): Modifier {
+    return wrapContentWidth(
         align = alignment,
         unbounded = width.constrained?.observedValue() != true,
     )
+}
 
 @Composable
 private fun Modifier.height(
     height: DivSize,
-    verticalAlignment: DivAlignmentVertical? = null,
-    defaultVerticalAlignment: Alignment.Vertical,
+    verticalAlignment: Alignment.Vertical,
     fillMatchParent: Boolean,
     matchParentMax: Dp,
 ): Modifier {
-    val align = verticalAlignment?.toVerticalAlignment() ?: defaultVerticalAlignment
     return when (height) {
         is DivSize.MatchParent -> applySizeBounds(
             height.value.minSize,
@@ -145,11 +148,11 @@ private fun Modifier.height(
 
         is DivSize.WrapContent -> {
             val isConstrained = height.value.constrained?.observedValue() == true
-            wrapContentHeight(align = align, unbounded = !isConstrained)
+            wrapContentHeight(align = verticalAlignment, unbounded = !isConstrained)
                 .applySizeBounds(height.value.minSize, height.value.maxSize, isWidth = false)
         }
 
-        is DivSize.Fixed -> wrapContentHeight(align = align, unbounded = true)
+        is DivSize.Fixed -> wrapContentHeight(align = verticalAlignment, unbounded = true)
             .requiredHeight(height.value.observedValue())
     }
 }
@@ -169,4 +172,15 @@ private fun Modifier.applySizeBounds(
     } else {
         heightIn(min = min ?: Dp.Unspecified, max = max ?: Dp.Unspecified)
     }
+}
+
+// A match_parent bound covers the element together with its margins.
+private fun Dp.excludeMargins(margins: PaddingValues?, isWidth: Boolean): Dp {
+    if (isUnspecified || margins == null) return this
+    val marginsSum = if (isWidth) {
+        margins.calculateStartPadding(LayoutDirection.Ltr) + margins.calculateEndPadding(LayoutDirection.Ltr)
+    } else {
+        margins.calculateTopPadding() + margins.calculateBottomPadding()
+    }
+    return (this - marginsSum).coerceAtLeast(0.dp)
 }

@@ -20,6 +20,7 @@ import com.yandex.div.compose.context.LocalDivViewContext
 import com.yandex.div.compose.di.LocalComponent
 import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.observeInsets
+import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.data.Variable
 import com.yandex.div.test.data.accessibility
 import com.yandex.div.test.data.action
@@ -269,9 +270,10 @@ class ModifierEqualityTest {
     private fun Div.modifier(): Modifier {
         return Modifier.apply(
             div = this,
+            layoutParams = DivBlockLayoutParams(),
             actions = observedActions(),
-            visibility = value().visibility.observedValue(),
             margins = value().margins?.observeInsets(),
+            visibility = value().visibility.observedValue(),
             focusState = rememberFocusState(value()),
         )
     }

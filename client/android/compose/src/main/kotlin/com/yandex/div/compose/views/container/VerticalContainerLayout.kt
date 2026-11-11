@@ -26,6 +26,7 @@ import com.yandex.div.compose.utils.observeIsConstrained
 import com.yandex.div.compose.utils.observeVerticalInsets
 import com.yandex.div.compose.utils.observeVerticalMarginsSum
 import com.yandex.div.compose.utils.toDp
+import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.modifiers.fixedIntrinsics
 import com.yandex.div.compose.views.modifiers.horizontalPaddings
@@ -206,17 +207,21 @@ private fun ColumnScope.VerticalChildItem(
         DivBlockView(
             data = div,
             modifier = modifier,
-            applyMargins = false,
-            defaultHorizontalAlignment = defaultHorizontalAlignment,
-            defaultVerticalAlignment = defaultVerticalAlignment,
+            layoutParams = DivBlockLayoutParams(
+                applyMargins = false,
+                defaultHorizontalAlignment = defaultHorizontalAlignment,
+                defaultVerticalAlignment = defaultVerticalAlignment,
+            ),
         )
         if (bottom > 0.dp) Spacer(Modifier.height(bottom))
     } else {
         DivBlockView(
             data = div,
             modifier = modifier,
-            defaultHorizontalAlignment = defaultHorizontalAlignment,
-            defaultVerticalAlignment = defaultVerticalAlignment,
+            layoutParams = DivBlockLayoutParams(
+                defaultHorizontalAlignment = defaultHorizontalAlignment,
+                defaultVerticalAlignment = defaultVerticalAlignment,
+            ),
         )
     }
 }

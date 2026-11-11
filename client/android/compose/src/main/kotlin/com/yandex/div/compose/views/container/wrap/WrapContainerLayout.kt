@@ -27,6 +27,7 @@ import com.yandex.div.compose.expressions.observedValue
 import com.yandex.div.compose.utils.applyIf
 import com.yandex.div.compose.utils.isRtlLayout
 import com.yandex.div.compose.utils.observedDpValue
+import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div.compose.views.container.SeparatorVisibility
 import com.yandex.div.compose.views.container.adaptiveContainerPadding
@@ -88,14 +89,16 @@ internal fun ContainerWrapHorizontalView(modifier: Modifier, data: DivContainer)
                 WithLocalComponent(items.components?.get(item)) {
                     DivBlockView(
                         data = item,
-                        // Match View's horizontal line gravity. Wrap children do not inherit the
-                        // container's vertical content alignment.
-                        defaultHorizontalAlignment = defaultHorizontalAlignment,
                         modifier = observeVerticalChildModifier(
                             item = item,
                             defaultAlignment = defaultVerticalAlignment,
                             alignByBaseline = alignByBaseline,
                         ).trackChildPlacement(separatorGeometry, index),
+                        layoutParams = DivBlockLayoutParams(
+                            // Match View's horizontal line gravity. Wrap children do not inherit
+                            // the container's vertical content alignment.
+                            defaultHorizontalAlignment = defaultHorizontalAlignment,
+                        ),
                     )
                 }
             }
@@ -149,12 +152,14 @@ internal fun ContainerWrapVerticalView(modifier: Modifier, data: DivContainer) {
                     val childAlignment = item.observeHorizontalChildAlignment()
                     DivBlockView(
                         data = item,
-                        // Match View's vertical line gravity. Wrap children do not inherit the
-                        // container's horizontal content alignment.
-                        defaultVerticalAlignment = defaultVerticalAlignment,
                         modifier = Modifier
                             .align(childAlignment ?: defaultHorizontalAlignment)
                             .trackChildPlacement(separatorGeometry, index),
+                        layoutParams = DivBlockLayoutParams(
+                            // Match View's vertical line gravity. Wrap children do not inherit
+                            // the container's horizontal content alignment.
+                            defaultVerticalAlignment = defaultVerticalAlignment,
+                        ),
                     )
                 }
             }

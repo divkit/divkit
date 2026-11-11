@@ -25,6 +25,7 @@ import com.yandex.div.compose.utils.isWrapContent
 import com.yandex.div.compose.utils.observedAlignment
 import com.yandex.div.compose.utils.toHorizontalAlignment
 import com.yandex.div.compose.utils.toVerticalAlignment
+import com.yandex.div.compose.views.DivBlockLayoutParams
 import com.yandex.div.compose.views.DivBlockView
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivGrid
@@ -72,7 +73,9 @@ internal fun DivGridView(modifier: Modifier, data: DivGrid) {
                                 rowSpan = rowSpan,
                                 alignment = divBase.toGridItemAlignment()
                             ),
-                        suppressMatchParentIntrinsics = true,
+                        layoutParams = DivBlockLayoutParams(
+                            suppressMatchParentIntrinsics = true,
+                        ),
                     )
                 }
             }

@@ -881,6 +881,7 @@
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/video/DivVideoPreloader.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/video/DivVideoPreloader.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/video/VideoPlayerStorage.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/video/VideoPlayerStorage.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/ActionMenu.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/ActionMenu.kt",
+  "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/DivBlockLayoutParams.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/DivBlockLayoutParams.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/DivBlockView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/DivBlockView.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/DivContentDecorator.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/DivContentDecorator.kt",
   "client/android/compose/src/main/kotlin/com/yandex/div/compose/views/DivCustomView.kt":"divkit/public/client/android/compose/src/main/kotlin/com/yandex/div/compose/views/DivCustomView.kt",

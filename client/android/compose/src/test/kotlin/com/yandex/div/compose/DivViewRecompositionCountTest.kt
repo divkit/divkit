@@ -259,22 +259,20 @@ class DivViewRecompositionCountTest {
     }
 
     @Test
-    fun `static gallery item is recomposed once when item_spacing is changed`() {
+    fun `static gallery item is not recomposed when item_spacing is changed`() {
         setContent(galleryWithSpacing(variables = null))
 
         counter.set(10)
         rule.waitForIdle()
 
-        // The spacing is read inside the gallery node; the lazy item content is invoked again
-        // with the new list of visible items.
         assertCompositions(
             "gallery" to 1,
-            "item" to 2
+            "item" to 1
         )
     }
 
     @Test
-    fun `scoped static gallery item is recomposed once when item_spacing is changed`() {
+    fun `scoped static gallery item is not recomposed when item_spacing is changed`() {
         setContent(galleryWithSpacing(variables = listOf(variable("local", "value"))))
 
         counter.set(10)
@@ -282,12 +280,12 @@ class DivViewRecompositionCountTest {
 
         assertCompositions(
             "gallery" to 1,
-            "item" to 2
+            "item" to 1
         )
     }
 
     @Test
-    fun `gallery item_builder item is recomposed once when item_spacing is changed`() {
+    fun `gallery item_builder item is not recomposed when item_spacing is changed`() {
         setContent(
             gallery(
                 extensions = compositionCounter("gallery"),
@@ -311,7 +309,7 @@ class DivViewRecompositionCountTest {
 
         assertCompositions(
             "gallery" to 1,
-            "item" to 2
+            "item" to 1
         )
     }
 
